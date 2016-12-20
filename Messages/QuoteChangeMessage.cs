@@ -108,6 +108,12 @@ namespace StockSharp.Messages
 		public bool IsByLevel1 { get; set; }
 
 		/// <summary>
+		/// The quote change contains filtered quotes.
+		/// </summary>
+		[Browsable(false)]
+		public bool IsFiltered { get; set; }
+
+		/// <summary>
 		/// Trading security currency.
 		/// </summary>
 		[DataMember]
@@ -140,6 +146,8 @@ namespace StockSharp.Messages
 				ServerTime = ServerTime,
 				IsSorted = IsSorted,
 				Currency = Currency,
+				IsByLevel1 = IsByLevel1,
+				IsFiltered = IsFiltered,
 			};
 
 			this.CopyExtensionInfo(clone);

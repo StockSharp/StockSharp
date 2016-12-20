@@ -36,77 +36,6 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
-		private sealed class QuoteChangeDepthBuilder
-		{
-			private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = new Dictionary<SecurityId, QuoteChangeMessage>();
-
-			private readonly string _securityCode;
-			private readonly string _boardCode;
-
-			public QuoteChangeDepthBuilder(string securityCode, string boardCode)
-			{
-				_securityCode = securityCode;
-				_boardCode = boardCode;
-			}
-
-			public QuoteChangeMessage Process(QuoteChangeMessage message)
-			{
-				_feeds[message.SecurityId] = message;
-
-				var bids = _feeds.SelectMany(f => f.Value.Bids).ToArray();
-				var asks = _feeds.SelectMany(f => f.Value.Asks).ToArray();
-
-				return new QuoteChangeMessage
-				{
-					SecurityId = new SecurityId
-					{
-						SecurityCode = _securityCode,
-						BoardCode = _boardCode
-					},
-					ServerTime = message.ServerTime,
-					LocalTime = message.LocalTime,
-					Bids = bids,
-					Asks = asks
-				};
-			}
-		}
-
-		private sealed class Level1DepthBuilder
-		{
-			private readonly SecurityId _securityId;
-
-			public bool HasDepth { get; set; }
-
-			public Level1DepthBuilder(SecurityId securityId)
-			{
-				_securityId = securityId;
-			}
-
-			public QuoteChangeMessage Process(Level1ChangeMessage message)
-			{
-				if (HasDepth)
-					return null;
-
-				var bidPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
-				var askPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
-
-				if (bidPrice == null && askPrice == null)
-					return null;
-
-				var bidVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidVolume);
-				var askVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskVolume);
-
-				return new QuoteChangeMessage
-				{
-					SecurityId = _securityId,
-					ServerTime = message.ServerTime,
-					LocalTime = message.LocalTime,
-					Bids = bidPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, bidPrice.Value, bidVolume ?? 0) },
-					Asks = askPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, askPrice.Value, askVolume ?? 0) },
-				};
-			}
-		}
-
 		private class TimeAdapter : MessageAdapterWrapper
 		{
 			private readonly Connector _parent;
@@ -233,36 +162,11 @@ namespace StockSharp.Algo
 
 		private readonly Dictionary<Security, IOrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, IOrderLogMarketDepthBuilder>();
 		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
-		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
-		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new SynchronizedDictionary<string, QuoteChangeDepthBuilder>(StringComparer.InvariantCultureIgnoreCase);
+		
 		private readonly ResetMessage _disposeMessage = new ResetMessage();
 
 		private string AssociatedBoardCode => Adapter.AssociatedBoardCode;
-
-		private bool IsAssociated(string boardCode)
-		{
-			return /*boardCode.IsEmpty() || */boardCode.CompareIgnoreCase(AssociatedBoardCode);
-		}
-
-		private SecurityId CreateAssociatedId(SecurityId securityId)
-		{
-			return new SecurityId
-			{
-				SecurityCode = securityId.SecurityCode,
-				BoardCode = AssociatedBoardCode,
-				SecurityType = securityId.SecurityType,
-				Bloomberg = securityId.Bloomberg,
-				Cusip = securityId.Cusip,
-				IQFeed = securityId.IQFeed,
-				InteractiveBrokers = securityId.InteractiveBrokers,
-				Isin = securityId.Isin,
-				Native = securityId.Native,
-				Plaza = securityId.Plaza,
-				Ric = securityId.Ric,
-				Sedol = securityId.Sedol,
-			};
-		}
-
+		
 		private void AdapterOnNewOutMessage(Message message)
 		{
 			if (message.IsBack)
@@ -772,27 +676,17 @@ namespace StockSharp.Algo
 
 			if (originalMsg.IsSubscribe)
 			{
-				if (originalMsg.DataType == _filteredMarketDepth)
-					GetFilteredMarketDepthInfo(security).Init(GetMarketDepth(security), _entityCache.GetOrders(security, OrderStates.Active).Select(o => o.ToMessage()));
+				if (error == null)
+					RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
 				else
-				{
-					if (error == null)
-						RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
-					else
-						RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
-				}
+					RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
 			}
 			else
 			{
-				if (originalMsg.DataType == _filteredMarketDepth)
-					_filteredMarketDepths.Remove(security);
+				if (error == null)
+					RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
 				else
-				{
-					if (error == null)
-						RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
-					else
-						RaiseMarketDataUnSubscriptionFailed(security, originalMsg, error);
-				}
+					RaiseMarketDataUnSubscriptionFailed(security, originalMsg, error);
 			}
 		}
 
@@ -1120,11 +1014,6 @@ namespace StockSharp.Algo
 			RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
 		}
 
-		private Level1DepthBuilder GetBuilder(SecurityId securityId)
-		{
-			return _level1DepthBuilders.SafeAdd(securityId, c => new Level1DepthBuilder(c));
-		}
-
 		/// <summary>
 		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
 		/// </summary>
@@ -1229,20 +1118,18 @@ namespace StockSharp.Algo
 		{
 			if (MarketDepthChanged != null || MarketDepthsChanged != null)
 			{
-				var marketDepth = GetMarketDepth(security);
+				var marketDepth = GetMarketDepth(security, message.IsFiltered);
 
 				message.ToMarketDepth(marketDepth, GetSecurity);
 
-				if (_subscriptionManager.IsFilteredMarketDepthRegistered(security))
-					GetFilteredMarketDepthInfo(security).Process(message);
-
-				RaiseMarketDepthChanged(marketDepth);
+				if (!message.IsFiltered)
+					RaiseMarketDepthChanged(marketDepth);
 			}
 			else
 			{
 				lock (_marketDepths.SyncRoot)
 				{
-					var info = _marketDepths.SafeAdd(security, key => new MarketDepthInfo(EntityFactory.CreateMarketDepth(security)));
+					var info = _marketDepths.SafeAdd(Tuple.Create(security, message.IsFiltered), key => new MarketDepthInfo(EntityFactory.CreateMarketDepth(security)));
 
 					info.First.LocalTime = message.LocalTime;
 					info.First.LastChangeTime = message.ServerTime;
@@ -1251,6 +1138,9 @@ namespace StockSharp.Algo
 					info.Third = message.Asks;
 				}
 			}
+
+			if (message.IsFiltered)
+				return;
 
 			var bestBid = message.GetBestBid();
 			var bestAsk = message.GetBestAsk();
@@ -1364,13 +1254,11 @@ namespace StockSharp.Algo
 							innerSecurity.LocalTime = message.LocalTime;
 							innerSecurity.LastChangeTime = message.ServerTime;
 						}
-
+						
 						RaiseSecuritiesChanged(changedSecurities.Keys.ToArray());
 					}
 				}
 			}
-
-			CreateAssociatedSecurityQuotes(message);
 		}
 
 		private void ProcessOrderLogMessage(Security security, ExecutionMessage message)
@@ -1538,12 +1426,6 @@ namespace StockSharp.Algo
 							_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o1) => s.DerivedOrder = o1));
 						else
 							order.DerivedOrder = derivedOrder;
-					}
-
-					if (message.OrderState == OrderStates.Active || message.OrderState == OrderStates.Done)
-					{
-						var info = _filteredMarketDepths.TryGetValue(order.Security);
-						info?.Process(message);
 					}
 
 					if (isNew)

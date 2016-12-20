@@ -115,6 +115,7 @@
     <Compile Include="Export\Database\CandleTable.cs" />
     <Compile Include="Export\Database\SecurityTable.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
+    <Compile Include="FilteredMarketDepthAdapter.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
     <Compile Include="Indicators\MoneyFlowIndex.cs" />

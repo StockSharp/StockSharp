@@ -17,6 +17,7 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -28,8 +29,6 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
-		private const MarketDataTypes _filteredMarketDepth = (MarketDataTypes)(-1);
-
 		private sealed class SubscriptionManager
 		{
 			//private sealed class ContinuousInfo : Tuple<ContinuousSecurity, MarketDataMessage>
@@ -45,7 +44,6 @@ namespace StockSharp.Algo
 			private readonly SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>> _pendingSubscriptions = new SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>>();
 			private readonly SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>> _subscribers = new SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>>();
 			//private readonly SynchronizedLinkedList<ContinuousInfo> _continuousSecurities = new SynchronizedLinkedList<ContinuousInfo>();
-			private readonly CachedSynchronizedDictionary<Security, int> _registeredFilteredMarketDepths = new CachedSynchronizedDictionary<Security, int>();
 			private readonly Connector _connector;
 
 			public SubscriptionManager(Connector connector)
@@ -58,10 +56,8 @@ namespace StockSharp.Algo
 
 			public void ClearCache()
 			{
-
 				_subscribers.Clear();
 				//_continuousSecurities.Clear();
-				_registeredFilteredMarketDepths.Clear();
 				_registeredPortfolios.Clear();
 			}
 
@@ -149,43 +145,6 @@ namespace StockSharp.Algo
 					_registeredPortfolios.Remove(portfolio);
 					_connector.OnUnRegisterPortfolio(portfolio);
 				}
-			}
-
-			public void RegisterFilteredMarketDepth(Security security)
-			{
-				if (security == null)
-					throw new ArgumentNullException(nameof(security));
-
-				//if (TrySubscribe(_registeredFilteredMarketDepths, security))
-				//	_connector.OnRegisterFilteredMarketDepth(security);
-
-				Subscribe(security, new MarketDataMessage
-				{
-					DataType = MarketDataTypes.MarketDepth,
-					TransactionId = _connector.TransactionIdGenerator.GetNextId(),
-					IsSubscribe = true,
-				}.FillSecurityInfo(_connector, security));
-			}
-
-			public void UnRegisterFilteredMarketDepth(Security security)
-			{
-				if (security == null)
-					throw new ArgumentNullException(nameof(security));
-
-				//if (TryUnSubscribe(_registeredFilteredMarketDepths, security))
-				//	_connector.OnUnRegisterFilteredMarketDepth(security);
-
-				UnSubscribe(security, new MarketDataMessage
-				{
-					DataType = MarketDataTypes.MarketDepth,
-					TransactionId = _connector.TransactionIdGenerator.GetNextId(),
-					IsSubscribe = false,
-				}.FillSecurityInfo(_connector, security));
-			}
-
-			public bool IsFilteredMarketDepthRegistered(Security security)
-			{
-				return _registeredFilteredMarketDepths.ContainsKey(security);
 			}
 
 			public Security ProcessResponse(long originalTransactionId, out MarketDataMessage message)
@@ -352,19 +311,22 @@ namespace StockSharp.Algo
 		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		public void RegisterFilteredMarketDepth(Security security)
 		{
-			_subscriptionManager.RegisterFilteredMarketDepth(security);
-		}
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
 
-		//private void OnRegisterFilteredMarketDepth(Security security)
-		//{
-		//	// при подписке на отфильтрованный стакан необходимо заполнить его
-		//	// первоначальное состояние в пототке обработки всех остальных сообщений
-		//	SendOutMessage(new MarketDataMessage
-		//	{
-		//		IsSubscribe = true,
-		//		DataType = _filteredMarketDepth
-		//	}.FillSecurityInfo(this, security));	
-		//}
+			var quotes = GetMarketDepth(security).ToMessage();
+			var executions = _entityCache
+				.GetOrders(security, OrderStates.Active)
+				.Select(o => o.ToMessage())
+				.ToArray();
+
+			SubscribeMarketData(security, new MarketDataMessage
+			{
+				DataType = FilteredMarketDepthAdapter.FilteredMarketDepth,
+				IsSubscribe = true,
+				Arg = Tuple.Create(quotes, executions)
+			});
+		}
 
 		/// <summary>
 		/// To stop getting filtered quotes by the instrument.
@@ -372,17 +334,8 @@ namespace StockSharp.Algo
 		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
 		public void UnRegisterFilteredMarketDepth(Security security)
 		{
-			_subscriptionManager.UnRegisterFilteredMarketDepth(security);
+			UnSubscribeMarketData(security, FilteredMarketDepthAdapter.FilteredMarketDepth);
 		}
-
-		//private void OnUnRegisterFilteredMarketDepth(Security security)
-		//{
-		//	SendOutMessage(new MarketDataMessage
-		//	{
-		//		IsSubscribe = false,
-		//		DataType = _filteredMarketDepth
-		//	}.FillSecurityInfo(this, security));
-		//}
 
 		/// <summary>
 		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IConnector.NewTrades"/>.

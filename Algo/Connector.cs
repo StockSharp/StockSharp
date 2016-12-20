@@ -24,8 +24,6 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Latency;
 	using StockSharp.Algo.PnL;
@@ -55,121 +53,6 @@ namespace StockSharp.Algo
 			MemoryStatistics.Instance.Values.Add(_messageStat);
 		}
 
-		private sealed class FilteredMarketDepthInfo
-		{
-			private readonly Dictionary<Tuple<Sides, decimal>, Dictionary<long, decimal>> _executions = new Dictionary<Tuple<Sides, decimal>, Dictionary<long, decimal>>();
-			private readonly Dictionary<Tuple<Sides, decimal>, decimal> _ownVolumes = new Dictionary<Tuple<Sides, decimal>, decimal>();
-
-			private readonly MarketDepth _depth;
-
-			private QuoteChangeMessage _quote;
-			private bool _needUpdate;
-
-			public FilteredMarketDepthInfo(MarketDepth depth)
-			{
-				if (depth == null)
-					throw new ArgumentNullException(nameof(depth));
-
-				_depth = depth;
-			}
-
-			public void Init(MarketDepth source, IEnumerable<ExecutionMessage> orders)
-			{
-				if (source == null)
-					throw new ArgumentNullException(nameof(source));
-
-				orders.ForEach(Process);
-
-				_depth.Update(Filter(source.Bids), Filter(source.Asks), true, source.LastChangeTime);
-			}
-
-			private IEnumerable<Quote> Filter(IEnumerable<Quote> quotes)
-			{
-				return quotes
-					.Select(quote =>
-					{
-						var res = quote.Clone();
-						var key = Tuple.Create(res.OrderDirection, res.Price);
-
-						var own = _ownVolumes.TryGetValue2(key);
-						if (own != null)
-							res.Volume -= own.Value;
-
-						return res.Volume <= 0 ? null : res;
-					})
-					.Where(q => q != null);
-			}
-
-			public void Process(QuoteChangeMessage message)
-			{
-				if (message == null)
-					throw new ArgumentNullException(nameof(message));
-
-				_quote = new QuoteChangeMessage
-				{
-					LocalTime = message.LocalTime,
-					ServerTime = message.ServerTime,
-					ExtensionInfo = message.ExtensionInfo,
-					Bids = message.Bids,
-					Asks = message.Asks,
-					IsSorted = message.IsSorted,
-				};
-				_needUpdate = true;
-			}
-
-			public void Process(ExecutionMessage message)
-			{
-				if (!message.HasOrderInfo())
-					throw new ArgumentException(nameof(message));
-
-				var key = Tuple.Create(message.Side, message.OrderPrice);
-
-				switch (message.OrderState)
-				{
-					case OrderStates.Done:
-					case OrderStates.Failed:
-					{
-						var items = _executions.TryGetValue(key);
-
-						if (items == null)
-							break;
-
-						items.Remove(message.OriginalTransactionId);
-
-						if (items.Count == 0)
-							_executions.Remove(key);
-
-						break;
-					}
-
-					case OrderStates.Active:
-					{
-						if (message.Balance != null)
-							_executions.SafeAdd(key)[message.OriginalTransactionId] = message.Balance.Value;
-
-						break;
-					}
-				}
-
-				if (_executions.ContainsKey(key))
-					_ownVolumes[key] = _executions[key].Sum(o => o.Value);
-				else
-					_ownVolumes.Remove(key);
-			}
-
-			public MarketDepth GetDepth()
-			{
-				if (!_needUpdate)
-					return _depth;
-
-				_needUpdate = false;
-				_depth.Update(Filter(_quote.Bids.Select(c => c.ToQuote(_depth.Security))), Filter(_quote.Asks.Select(c => c.ToQuote(_depth.Security))), _quote.IsSorted, _quote.ServerTime);
-				_depth.LocalTime = _quote.LocalTime;
-
-				return _depth;
-			}
-		}
-
 		private class MarketDepthInfo : RefTriple<MarketDepth, IEnumerable<QuoteChange>, IEnumerable<QuoteChange>>
 		{
 			public MarketDepthInfo(MarketDepth depth)
@@ -182,8 +65,7 @@ namespace StockSharp.Algo
 
 		private readonly EntityCache _entityCache = new EntityCache();
 
-		private readonly SynchronizedDictionary<Security, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Security, MarketDepthInfo>();
-		private readonly SynchronizedDictionary<Security, FilteredMarketDepthInfo> _filteredMarketDepths = new SynchronizedDictionary<Security, FilteredMarketDepthInfo>();
+		private readonly SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Tuple<Security, bool>, MarketDepthInfo>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
@@ -762,12 +644,7 @@ namespace StockSharp.Algo
 			return position;
 		}
 
-		/// <summary>
-		/// To get the quotes order book.
-		/// </summary>
-		/// <param name="security">The instrument by which an order book should be got.</param>
-		/// <returns>Order book.</returns>
-		public MarketDepth GetMarketDepth(Security security)
+		private MarketDepth GetMarketDepth(Security security, bool isFiltered)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -778,7 +655,9 @@ namespace StockSharp.Algo
 
 			lock (_marketDepths.SyncRoot)
 			{
-				if (!_marketDepths.TryGetValue(security, out info))
+				var key = Tuple.Create(security, isFiltered);
+
+				if (!_marketDepths.TryGetValue(key, out info))
 				{
 					isNew = true;
 
@@ -788,7 +667,7 @@ namespace StockSharp.Algo
 					if (CreateDepthFromOrdersLog)
 						info.First.MaxDepth = int.MaxValue;
 
-					_marketDepths.Add(security, info);
+					_marketDepths.Add(key, info);
 				}
 				else
 				{
@@ -808,10 +687,20 @@ namespace StockSharp.Algo
 				}
 			}
 
-			if (isNew)
+			if (isNew && !isFiltered)
 				RaiseNewMarketDepth(info.First);
 
 			return info.First;
+		}
+
+		/// <summary>
+		/// To get the quotes order book.
+		/// </summary>
+		/// <param name="security">The instrument by which an order book should be got.</param>
+		/// <returns>Order book.</returns>
+		public MarketDepth GetMarketDepth(Security security)
+		{
+			return GetMarketDepth(security, false);
 		}
 
 		/// <summary>
@@ -821,18 +710,7 @@ namespace StockSharp.Algo
 		/// <returns>Filtered order book.</returns>
 		public MarketDepth GetFilteredMarketDepth(Security security)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (!_subscriptionManager.IsFilteredMarketDepthRegistered(security))
-				throw new InvalidOperationException(LocalizedStrings.Str1097Params.Put(security.Id));
-
-			return GetFilteredMarketDepthInfo(security).GetDepth();
-		}
-
-		private FilteredMarketDepthInfo GetFilteredMarketDepthInfo(Security security)
-		{
-			return _filteredMarketDepths.SafeAdd(security, s => new FilteredMarketDepthInfo(EntityFactory.CreateMarketDepth(s)));
+			return GetMarketDepth(security, true);
 		}
 
 		/// <summary>
@@ -1461,7 +1339,6 @@ namespace StockSharp.Algo
 
 			_securityValues.Clear();
 			_sessionStates.Clear();
-			_filteredMarketDepths.Clear();
 			_olBuilders.Clear();
 
 			SendInMessage(new ResetMessage());
