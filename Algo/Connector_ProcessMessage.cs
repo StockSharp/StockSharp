@@ -244,26 +244,6 @@ namespace StockSharp.Algo
 			return /*boardCode.IsEmpty() || */boardCode.CompareIgnoreCase(AssociatedBoardCode);
 		}
 
-		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
-		{
-			if (!CreateAssociatedSecurity)
-				return;
-
-			if (quoteMsg.SecurityId.IsDefault())
-				return;
-
-			if (IsAssociated(quoteMsg.SecurityId.BoardCode))
-				return;
-
-			var builder = _quoteChangeDepthBuilders
-				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
-
-			quoteMsg = builder.Process(quoteMsg);
-
-			var security = LookupSecurity(quoteMsg.SecurityId);
-			ProcessQuotesMessage(security, quoteMsg);
-		}
-
 		private SecurityId CreateAssociatedId(SecurityId securityId)
 		{
 			return new SecurityId
@@ -1060,13 +1040,6 @@ namespace StockSharp.Algo
 
 			if (message.OriginalTransactionId != 0)
 				_lookupResult.Add(security);
-
-			if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
-			{
-				var clone = (SecurityMessage)message.Clone();
-				clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-				ProcessSecurityMessage(clone);
-			}
 		}
 
 		private void ProcessSecurityLookupResultMessage(SecurityLookupResultMessage message)
@@ -1145,14 +1118,6 @@ namespace StockSharp.Algo
 			}
 
 			RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
-
-			if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
-			{
-				// обновление BestXXX для ALL из конкретных тикеров
-				var clone = (Level1ChangeMessage)message.Clone();
-				clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-				ProcessLevel1ChangeMessage(clone);
-			}
 		}
 
 		private Level1DepthBuilder GetBuilder(SecurityId securityId)
@@ -1769,13 +1734,6 @@ namespace StockSharp.Algo
 						case ExecutionTypes.OrderLog:
 							ProcessOrderLogMessage(security, message);
 							break;
-					}
-
-					if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
-					{
-						var clone = (ExecutionMessage)message.Clone();
-						clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-						ProcessExecutionMessage(clone);
 					}
 
 					break;
