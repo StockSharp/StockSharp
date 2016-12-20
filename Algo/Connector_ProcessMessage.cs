@@ -261,7 +261,7 @@ namespace StockSharp.Algo
 			quoteMsg = builder.Process(quoteMsg);
 
 			var security = LookupSecurity(quoteMsg.SecurityId);
-			ProcessQuotesMessage(security, quoteMsg, false);
+			ProcessQuotesMessage(security, quoteMsg);
 		}
 
 		private SecurityId CreateAssociatedId(SecurityId securityId)
@@ -661,7 +661,7 @@ namespace StockSharp.Algo
 				switch (message.Type)
 				{
 					case MessageTypes.QuoteChange:
-						ProcessQuotesMessage((QuoteChangeMessage)message, false);
+						ProcessQuotesMessage((QuoteChangeMessage)message);
 						break;
 
 					case MessageTypes.Board:
@@ -1146,18 +1146,6 @@ namespace StockSharp.Algo
 
 			RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
 
-			if (CreateDepthFromLevel1)
-			{
-				// генерация стакана из Level1
-				var quoteMsg = GetBuilder(message.SecurityId).Process(message);
-
-				if (quoteMsg != null)
-				{
-					ProcessQuotesMessage(security, quoteMsg, true);
-					CreateAssociatedSecurityQuotes(quoteMsg);
-				}
-			}
-
 			if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
 			{
 				// обновление BestXXX для ALL из конкретных тикеров
@@ -1265,14 +1253,14 @@ namespace StockSharp.Algo
 				RaiseNewsChanged(news.Item1);
 		}
 
-		private void ProcessQuotesMessage(QuoteChangeMessage message, bool fromLevel1)
+		private void ProcessQuotesMessage(QuoteChangeMessage message)
 		{
 			var security = LookupSecurity(message.SecurityId);
 
-			ProcessQuotesMessage(security, message, fromLevel1);
+			ProcessQuotesMessage(security, message);
 		}
 
-		private void ProcessQuotesMessage(Security security, QuoteChangeMessage message, bool fromLevel1)
+		private void ProcessQuotesMessage(Security security, QuoteChangeMessage message)
 		{
 			if (MarketDepthChanged != null || MarketDepthsChanged != null)
 			{
@@ -1301,6 +1289,7 @@ namespace StockSharp.Algo
 
 			var bestBid = message.GetBestBid();
 			var bestAsk = message.GetBestAsk();
+			var fromLevel1 = message.IsByLevel1;
 
 			if (!fromLevel1 && (bestBid != null || bestAsk != null))
 			{
@@ -1416,9 +1405,6 @@ namespace StockSharp.Algo
 				}
 			}
 
-			if (CreateDepthFromLevel1)
-				GetBuilder(message.SecurityId).HasDepth = true;
-
 			CreateAssociatedSecurityQuotes(message);
 		}
 
@@ -1450,7 +1436,7 @@ namespace StockSharp.Algo
 					if (updated)
 					{
 						RaiseNewMessage(builder.Depth.Clone());
-						ProcessQuotesMessage(security, builder.Depth, false);
+						ProcessQuotesMessage(security, builder.Depth);
 					}
 				}
 				catch (Exception ex)

@@ -118,6 +118,7 @@
     <Compile Include="Indicators\Covariance.cs" />
     <Compile Include="Indicators\MoneyFlowIndex.cs" />
     <Compile Include="ExtendedInfoStorageMessageAdapter.cs" />
+    <Compile Include="Level1DepthBuilderAdapter.cs" />
     <Compile Include="Storages\IExtendedInfoStorage.cs" />
     <Compile Include="Storages\INativeIdStorage.cs" />
     <Compile Include="OfflineMessageAdapter.cs" />

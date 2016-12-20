@@ -17,6 +17,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
@@ -99,6 +100,12 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str285Key, true)]
 		[MainCategory]
 		public bool IsSorted { get; set; }
+
+		/// <summary>
+		/// The quote change was build by level1.
+		/// </summary>
+		[Browsable(false)]
+		public bool IsByLevel1 { get; set; }
 
 		/// <summary>
 		/// Trading security currency.
