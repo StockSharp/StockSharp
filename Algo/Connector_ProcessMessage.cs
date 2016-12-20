@@ -382,6 +382,15 @@ namespace StockSharp.Algo
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
 
+					if (_supportLevel1DepthBuilder)
+						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdaper = true };
+
+					if (_supportAssociatedSecurity)
+						_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
+
+					if (_supportFilteredMarketDepth)
+						_inAdapter = new FilteredMarketDepthAdapter(_inAdapter) { OwnInnerAdaper = true };
+
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 				}
 			}
@@ -400,54 +409,171 @@ namespace StockSharp.Algo
 				if (_supportOffline == value)
 					return;
 
-				_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
-
 				if (value)
-				{
-					var storageAdapter = _inAdapter as StorageMessageAdapter;
-					if (storageAdapter != null)
-					{
-						storageAdapter.OwnInnerAdaper = false;
-						storageAdapter.Dispose();
-
-						var offlineAdapter = new OfflineMessageAdapter(storageAdapter.InnerAdapter) { OwnInnerAdaper = true };
-
-						_inAdapter = StorageAdapter = new StorageMessageAdapter(offlineAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
-					}
-					else
-						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
-				}
+					EnableAdapter(a => new OfflineMessageAdapter(a) { OwnInnerAdaper = true }, typeof(StorageMessageAdapter), false);
 				else
-				{
-					var offlineAdapter = _inAdapter as OfflineMessageAdapter;
-
-					if (offlineAdapter != null)
-					{
-						_inAdapter = offlineAdapter.InnerAdapter;
-
-						offlineAdapter.OwnInnerAdaper = false;
-						offlineAdapter.Dispose();
-					}
-					else
-					{
-						var storageAdapter = (StorageMessageAdapter)_inAdapter;
-
-						offlineAdapter = (OfflineMessageAdapter)storageAdapter.InnerAdapter;
-
-						storageAdapter.OwnInnerAdaper = false;
-						storageAdapter.Dispose();
-
-						offlineAdapter.OwnInnerAdaper = false;
-						offlineAdapter.Dispose();
-
-						_inAdapter = StorageAdapter = new StorageMessageAdapter(offlineAdapter.InnerAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
-					}
-				}
-
-				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+					DisableAdapter<OfflineMessageAdapter>();
 
 				_supportOffline = value;
 			}
+		}
+
+		private bool _supportFilteredMarketDepth;
+
+		/// <summary>
+		/// Use <see cref="FilteredMarketDepthAdapter"/>.
+		/// </summary>
+		public bool SupportFilteredMarketDepth
+		{
+			get { return _supportFilteredMarketDepth; }
+			set
+			{
+				if (_supportFilteredMarketDepth == value)
+					return;
+
+				if (value)
+					EnableAdapter(a => new FilteredMarketDepthAdapter(a) { OwnInnerAdaper = true }, typeof(Level1DepthBuilderAdapter));
+				else
+					DisableAdapter<FilteredMarketDepthAdapter>();
+
+				_supportFilteredMarketDepth = value;
+			}
+		}
+
+		private bool _supportAssociatedSecurity;
+
+		/// <summary>
+		/// Use <see cref="AssociatedSecurityAdapter"/>.
+		/// </summary>
+		public bool SupportAssociatedSecurity
+		{
+			get { return _supportAssociatedSecurity; }
+			set
+			{
+				if (_supportAssociatedSecurity == value)
+					return;
+
+				if (value)
+					EnableAdapter(a => new AssociatedSecurityAdapter(a) { OwnInnerAdaper = true }, typeof(Level1DepthBuilderAdapter));
+				else
+					DisableAdapter<AssociatedSecurityAdapter>();
+
+				_supportAssociatedSecurity = value;
+			}
+		}
+
+		private bool _supportLevel1DepthBuilder;
+
+		/// <summary>
+		/// Use <see cref="Level1DepthBuilderAdapter"/>.
+		/// </summary>
+		public bool SupportLevel1DepthBuilder
+		{
+			get { return _supportLevel1DepthBuilder; }
+			set
+			{
+				if (_supportLevel1DepthBuilder == value)
+					return;
+
+				if (value)
+					EnableAdapter(a => new Level1DepthBuilderAdapter(a) { OwnInnerAdaper = true }, typeof(AssociatedSecurityAdapter), false);
+				else
+					DisableAdapter<Level1DepthBuilderAdapter>();
+
+				_supportLevel1DepthBuilder = value;
+			}
+		}
+
+		private Tuple<IMessageAdapterWrapper, IMessageAdapterWrapper, IMessageAdapterWrapper> GetAdapter(Type type)
+		{
+			var adapter = _inAdapter as IMessageAdapterWrapper;
+
+			if (adapter == null)
+				return null;
+
+			var prev = adapter.InnerAdapter as IMessageAdapterWrapper;
+			var next = (IMessageAdapterWrapper)null;
+
+			while (true)
+			{
+				if (adapter.GetType() == type)
+					return Tuple.Create(prev, adapter, next);
+
+				next = adapter;
+				adapter = prev;
+
+				if (adapter == null)
+					return null;
+
+				prev = adapter.InnerAdapter as IMessageAdapterWrapper;
+			}
+		}
+
+		private Tuple<IMessageAdapterWrapper, IMessageAdapterWrapper, IMessageAdapterWrapper> GetAdapter<T>()
+			where T : IMessageAdapterWrapper
+		{
+			return GetAdapter(typeof(T));
+		}
+
+		private void EnableAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create, Type type = null, bool after = true)
+		{
+			if (_inAdapter == null)
+				return;
+
+			var tuple = type != null ? GetAdapter(type) : null;
+
+			if (tuple != null)
+			{
+				if (after)
+				{
+					var adapterWrapper = (MessageAdapterWrapper)tuple.Item2;
+					var nextWrapper = (MessageAdapterWrapper)tuple.Item3;
+
+					nextWrapper.InnerAdapter = create(adapterWrapper);
+				}
+				else
+				{
+					var adapterWrapper = (MessageAdapterWrapper)tuple.Item1;
+					var nextWrapper = (MessageAdapterWrapper)tuple.Item2;
+
+					nextWrapper.InnerAdapter = create(adapterWrapper);
+				}
+			}
+			else
+			{
+				_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+
+				_inAdapter = create(_inAdapter);
+				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+			}
+		}
+
+		private void DisableAdapter<T>()
+			where T : IMessageAdapterWrapper
+		{
+			var tuple = GetAdapter<T>();
+
+			if (tuple == null)
+				return;
+
+			var adapter = tuple.Item2;
+			var adapterWrapper = (MessageAdapterWrapper)adapter;
+
+			var next = tuple.Item3;
+			var nextWrapper = (MessageAdapterWrapper)next;
+
+			if (next == null)
+			{
+				adapterWrapper.NewOutMessage -= AdapterOnNewOutMessage;
+
+				_inAdapter = adapterWrapper.InnerAdapter;
+				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+			}
+			else
+				nextWrapper.InnerAdapter = adapterWrapper.InnerAdapter;
+
+			adapterWrapper.OwnInnerAdaper = false;
+			adapterWrapper.Dispose();
 		}
 
 		private void InnerAdaptersOnAdded(IMessageAdapter adapter)

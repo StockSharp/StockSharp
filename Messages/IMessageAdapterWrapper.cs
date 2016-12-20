@@ -31,7 +31,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Underlying adapter.
 		/// </summary>
-		IMessageAdapter InnerAdapter { get; }
+		IMessageAdapter InnerAdapter { get; set; }
 	}
 
 	/// <summary>
@@ -39,6 +39,8 @@ namespace StockSharp.Messages
 	/// </summary>
 	public abstract class MessageAdapterWrapper : Cloneable<IMessageChannel>, IMessageAdapterWrapper
 	{
+		private IMessageAdapter _innerAdapter;
+
 		/// <summary>
 		/// Initialize <see cref="MessageAdapterWrapper"/>.
 		/// </summary>
@@ -49,13 +51,30 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(innerAdapter));
 
 			InnerAdapter = innerAdapter;
-			InnerAdapter.NewOutMessage += OnInnerAdapterNewOutMessage;
 		}
 
 		/// <summary>
 		/// Underlying adapter.
 		/// </summary>
-		public IMessageAdapter InnerAdapter { get; }
+		public IMessageAdapter InnerAdapter
+		{
+			get { return _innerAdapter; }
+			set
+			{
+				if (_innerAdapter == value)
+					return;
+
+				if(_innerAdapter != null)
+					_innerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;
+
+				_innerAdapter = value;
+
+				if (_innerAdapter == null)
+					throw new ArgumentException();
+
+				_innerAdapter.NewOutMessage += OnInnerAdapterNewOutMessage;
+			}
+		}
 
 		/// <summary>
 		/// Control <see cref="InnerAdapter"/> lifetime.

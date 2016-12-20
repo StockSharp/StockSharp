@@ -392,14 +392,22 @@ namespace StockSharp.Algo
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str200Key)]
 		[DescriptionLoc(LocalizedStrings.Str201Key)]
-		public bool CreateDepthFromLevel1 { get; set; }
+		public bool CreateDepthFromLevel1
+		{
+			get { return SupportLevel1DepthBuilder; }
+			set { SupportLevel1DepthBuilder = value; }
+		}
 
 		/// <summary>
 		/// Create a combined security for securities from different boards.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str197Key)]
 		[DescriptionLoc(LocalizedStrings.Str198Key)]
-		public bool CreateAssociatedSecurity { get; set; }
+		public bool CreateAssociatedSecurity
+		{
+			get { return SupportAssociatedSecurity; }
+			set { SupportAssociatedSecurity = value; }
+		}
 
 		/// <summary>
 		/// The number of errors passed through the <see cref="Connector.Error"/> event.
