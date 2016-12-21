@@ -259,7 +259,7 @@ namespace StockSharp.Messages
 				default:
 				{
 					var candleMsg = message as CandleMessage;
-					return candleMsg?.OpenTime;
+					return candleMsg?.CloseTime;
 				}
 			}
 		}
