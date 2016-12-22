@@ -14,7 +14,7 @@
 | --- |:---:|
 | Blackwood/Fusion | Stable |
 | BarChart | beta |
-| CQG | Alfa |
+| CQG | Alpha |
 | E*Trade | Stable |
 | FIX | Stable |
 | IQFeed | Stable |
