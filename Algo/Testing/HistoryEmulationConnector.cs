@@ -459,9 +459,6 @@ namespace StockSharp.Algo.Testing
 								if (!UseExternalCandleSource)
 									break;
 
-								// change current time before the candle will be processed
-								base.OnProcessMessage(message);
-
 								var seriesList = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
 
 								if (seriesList == null)

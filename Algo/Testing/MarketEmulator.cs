@@ -940,7 +940,10 @@ namespace StockSharp.Algo.Testing
 						foreach (var trade in pair.Value.Item2)
 							Process(trade, result);
 
-						result.AddRange(pair.Value.Item1);
+						// change current time before the candle will be processed
+						result.Add(new TimeMessage { LocalTime = message.LocalTime });
+
+                        result.AddRange(pair.Value.Item1);
 					}
 				}
 			}
