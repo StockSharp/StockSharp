@@ -484,15 +484,15 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private Tuple<IMessageAdapterWrapper, IMessageAdapterWrapper, IMessageAdapterWrapper> GetAdapter(Type type)
+		private Tuple<IMessageAdapter, IMessageAdapter, IMessageAdapter> GetAdapter(Type type)
 		{
-			var adapter = _inAdapter as IMessageAdapterWrapper;
+			var adapter = _inAdapter;
 
 			if (adapter == null)
 				return null;
 
-			var prev = adapter.InnerAdapter as IMessageAdapterWrapper;
-			var next = (IMessageAdapterWrapper)null;
+			var prev = (adapter as IMessageAdapterWrapper)?.InnerAdapter;
+			var next = (IMessageAdapter)null;
 
 			while (true)
 			{
@@ -505,11 +505,11 @@ namespace StockSharp.Algo
 				if (adapter == null)
 					return null;
 
-				prev = adapter.InnerAdapter as IMessageAdapterWrapper;
+				prev = (adapter as IMessageAdapterWrapper)?.InnerAdapter;
 			}
 		}
 
-		private Tuple<IMessageAdapterWrapper, IMessageAdapterWrapper, IMessageAdapterWrapper> GetAdapter<T>()
+		private Tuple<IMessageAdapter, IMessageAdapter, IMessageAdapter> GetAdapter<T>()
 			where T : IMessageAdapterWrapper
 		{
 			return GetAdapter(typeof(T));
@@ -522,30 +522,44 @@ namespace StockSharp.Algo
 
 			var tuple = type != null ? GetAdapter(type) : null;
 
-			if (tuple != null)
+			if (tuple?.Item2 != null)
 			{
 				if (after)
 				{
-					var adapterWrapper = (MessageAdapterWrapper)tuple.Item2;
-					var nextWrapper = (MessageAdapterWrapper)tuple.Item3;
+					var adapterWrapper = tuple.Item2;
+					var nextWrapper = tuple.Item3 as IMessageAdapterWrapper;
 
-					nextWrapper.InnerAdapter = create(adapterWrapper);
+					if (nextWrapper != null)
+					{
+						nextWrapper.InnerAdapter = create(adapterWrapper);
+					}
+					else
+						AddAdapter(create);
 				}
 				else
 				{
-					var adapterWrapper = (MessageAdapterWrapper)tuple.Item1;
-					var nextWrapper = (MessageAdapterWrapper)tuple.Item2;
+					var prevWrapper = tuple.Item1;
+					var nextWrapper = tuple.Item2 as IMessageAdapterWrapper;
 
-					nextWrapper.InnerAdapter = create(adapterWrapper);
+					if (prevWrapper == null)
+						throw new InvalidOperationException("Adapter wrapper can not be added to the beginning of the chain.");
+
+					if (nextWrapper == null)
+						throw new InvalidOperationException($"Next adapter must implement the {nameof(IMessageAdapterWrapper)} interface.");
+
+					nextWrapper.InnerAdapter = create(prevWrapper);
 				}
 			}
 			else
-			{
-				_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+				AddAdapter(create);
+		}
 
-				_inAdapter = create(_inAdapter);
-				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
-			}
+		private void AddAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create)
+		{
+			_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+
+			_inAdapter = create(_inAdapter);
+			_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 		}
 
 		private void DisableAdapter<T>()
