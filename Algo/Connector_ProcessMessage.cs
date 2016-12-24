@@ -521,31 +521,29 @@ namespace StockSharp.Algo
 				return;
 
 			var tuple = type != null ? GetAdapter(type) : null;
+			var adapter = tuple?.Item2;
 
-			if (tuple?.Item2 != null)
+			if (adapter != null)
 			{
 				if (after)
 				{
-					var adapterWrapper = tuple.Item2;
 					var nextWrapper = tuple.Item3 as IMessageAdapterWrapper;
 
 					if (nextWrapper != null)
-					{
-						nextWrapper.InnerAdapter = create(adapterWrapper);
-					}
+						nextWrapper.InnerAdapter = create(adapter);
 					else
 						AddAdapter(create);
 				}
 				else
 				{
 					var prevWrapper = tuple.Item1;
-					var nextWrapper = tuple.Item2 as IMessageAdapterWrapper;
+					var nextWrapper = adapter as IMessageAdapterWrapper;
 
 					if (prevWrapper == null)
 						throw new InvalidOperationException("Adapter wrapper can not be added to the beginning of the chain.");
 
 					if (nextWrapper == null)
-						throw new InvalidOperationException($"Next adapter must implement the {nameof(IMessageAdapterWrapper)} interface.");
+						throw new InvalidOperationException(LocalizedStrings.TypeNotImplemented.Put(adapter.GetType(), nameof(IMessageAdapterWrapper)));
 
 					nextWrapper.InnerAdapter = create(prevWrapper);
 				}
