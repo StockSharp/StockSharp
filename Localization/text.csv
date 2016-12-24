@@ -3807,8 +3807,8 @@ XamlStr428;Send request;Отправить запрос
 XamlStr429;Send license request to the broker;Отправить запрос на получение лицензии брокеру
 XamlStr430;Sent orders;Отправленные заявки
 XamlStr431;Filtered {0} from {1};Отфильтровано {0} из {1}
-XamlStr432;Report;Отчет
-XamlStr433;Reports;Отчеты
+Report;Report;Отчет
+Reports;Reports;Отчеты
 XamlStr435;Ask (time);Оффер (время)
 XamlStr436;Ask (volume);Оффер (объем)
 XamlStr437;Ask (own);Оффер (свое)

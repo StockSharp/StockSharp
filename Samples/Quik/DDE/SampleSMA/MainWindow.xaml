@@ -76,7 +76,7 @@
 				<Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="7" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 				<Button x:Name="CancelOrders" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="8" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr422}" Click="CancelOrdersClick" />
 				<Button x:Name="Start" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="9" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Str2421}" Click="StartClick" />
-				<Button x:Name="Report" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="10" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr432}" Click="ReportClick" />
+				<Button x:Name="Report" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="10" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Report}" Click="ReportClick" />
 			</Grid>
 		</Grid>
 		

@@ -32,8 +32,8 @@
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
 			</Button>
 			<ToggleButton x:Name="Scanner" Grid.Column="1" Click="ScannerClick" Content="{x:Static loc:LocalizedStrings.Scanner}" />
-			<ToggleButton x:Name="Level1" Grid.Column="2" Content="Level1" IsEnabled="False" Click="Level1Click" />
-			<ToggleButton x:Name="Reports" Grid.Column="3" Content="{x:Static loc:LocalizedStrings.XamlStr433}" IsEnabled="False" Click="ReportsClick" />
+			<ToggleButton x:Name="Level1" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Level1}" IsEnabled="False" Click="Level1Click" />
+			<ToggleButton x:Name="Reports" Grid.Column="3" Content="{x:Static loc:LocalizedStrings.Reports}" IsEnabled="False" Click="ReportsClick" />
 			<ToggleButton x:Name="Options" Grid.Column="4" IsEnabled="False" Click="OptionsClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Options}" />...</TextBlock>
 			</ToggleButton>

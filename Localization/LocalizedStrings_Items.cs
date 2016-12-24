@@ -38000,22 +38000,22 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Report
 		/// </summary>
-		public const string XamlStr432Key = "XamlStr432";
+		public const string ReportKey = "Report";
 
 		/// <summary>
 		/// Report
 		/// </summary>
-		public static string XamlStr432 => GetString(XamlStr432Key);
+		public static string Report => GetString(ReportKey);
 
 		/// <summary>
 		/// Reports
 		/// </summary>
-		public const string XamlStr433Key = "XamlStr433";
+		public const string ReportsKey = "Reports";
 
 		/// <summary>
 		/// Reports
 		/// </summary>
-		public static string XamlStr433 => GetString(XamlStr433Key);
+		public static string Reports => GetString(ReportsKey);
 
 		/// <summary>
 		/// Ask (time)

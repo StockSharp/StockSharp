@@ -31,7 +31,7 @@
 			<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Grid.Row="0" Click="StartBtnClick" />
 			<ProgressBar x:Name="TestingProcess" Grid.Column="1" Grid.Row="0" />
 
-			<Button x:Name="Report" Content="{x:Static loc:LocalizedStrings.XamlStr432}" Grid.Row="0" Width="75" IsEnabled="False" Click="ReportClick" Grid.Column="2" Margin="0,0,0,-1" />
+			<Button x:Name="Report" Content="{x:Static loc:LocalizedStrings.Report}" Grid.Row="0" Width="75" IsEnabled="False" Click="ReportClick" Grid.Column="2" Margin="0,0,0,-1" />
 		</Grid>
 		
 		<Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
