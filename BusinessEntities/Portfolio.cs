@@ -69,7 +69,7 @@ namespace StockSharp.BusinessEntities
 		/// Margin leverage.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str542Key)]
+		[DisplayNameLoc(LocalizedStrings.LeverageKey)]
 		[DescriptionLoc(LocalizedStrings.Str261Key, true)]
 		[MainCategory]
 		[Nullable]

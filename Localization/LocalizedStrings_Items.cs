@@ -5240,12 +5240,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Leverage
 		/// </summary>
-		public const string Str542Key = "Str542";
+		public const string LeverageKey = "Leverage";
 
 		/// <summary>
 		/// Leverage
 		/// </summary>
-		public static string Str542 => GetString(Str542Key);
+		public static string Leverage => GetString(LeverageKey);
 
 		/// <summary>
 		/// Stock exchange board, for which the current portfolio is active.
@@ -43436,5 +43436,95 @@ namespace StockSharp.Localization
 		/// Scanner
 		/// </summary>
 		public static string Scanner => GetString(ScannerKey);
+
+		/// <summary>
+		/// Country
+		/// </summary>
+		public const string CountryKey = "Country";
+
+		/// <summary>
+		/// Country
+		/// </summary>
+		public static string Country => GetString(CountryKey);
+
+		/// <summary>
+		/// E-mail address
+		/// </summary>
+		public const string EmailAddressKey = "EmailAddress";
+
+		/// <summary>
+		/// E-mail address
+		/// </summary>
+		public static string EmailAddress => GetString(EmailAddress);
+
+		/// <summary>
+		/// Phone
+		/// </summary>
+		public const string PhoneKey = "Phone";
+
+		/// <summary>
+		/// Phone
+		/// </summary>
+		public static string Phone => GetString(PhoneKey);
+
+		/// <summary>
+		/// Web site
+		/// </summary>
+		public const string WebSiteKey = "WebSite";
+
+		/// <summary>
+		/// Web site
+		/// </summary>
+		public static string WebSite => GetString(WebSiteKey);
+
+		/// <summary>
+		/// Skype
+		/// </summary>
+		public const string SkypeKey = "Skype";
+
+		/// <summary>
+		/// Skype
+		/// </summary>
+		public static string Skype => GetString(SkypeKey);
+
+		/// <summary>
+		/// City
+		/// </summary>
+		public const string CityKey = "City";
+
+		/// <summary>
+		/// City
+		/// </summary>
+		public static string City => GetString(CityKey);
+
+		/// <summary>
+		/// Gender
+		/// </summary>
+		public const string GenderKey = "Gender";
+
+		/// <summary>
+		/// Gender
+		/// </summary>
+		public static string Gender => GetString(GenderKey);
+
+		/// <summary>
+		/// Zip code
+		/// </summary>
+		public const string ZipCodeKey = "ZipCode";
+
+		/// <summary>
+		/// Zip code
+		/// </summary>
+		public static string ZipCode => GetString(ZipCodeKey);
+
+		/// <summary>
+		/// Deposit
+		/// </summary>
+		public const string DepositKey = "Deposit";
+
+		/// <summary>
+		/// Deposit
+		/// </summary>
+		public static string Deposit => GetString(DepositKey);
 	}
 }

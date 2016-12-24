@@ -520,7 +520,7 @@ Str538;Registration;Регистрация
 Str539;Combination;Сведение
 Str540Params; per trade {0}; на сделку {0}
 Str541;Portfolio, describing the trading account and the size of its generated commission.;Портфель, описывающий торговый счет и размер сгенерированной комиссии по нему.
-Str542;Leverage;Плечо
+Leverage;Leverage;Плечо
 Str544;Exchange board, for which the current portfolio is active.;Биржевая площадка, для которой действует данный портфель.
 Str545;Anonymous account;Анонимный счет
 Str546;Security (shares, futures, options etc.).;Инструмент (акция, фьючерс, опцион и т.д.).
@@ -4377,6 +4377,15 @@ DownloadUpdates;New version of the application available. Download updates?;До
 InstallUpdates;Updates are downloaded. Install updates now?;Обновления загружены. Установить обновления сейчас?
 ShowBoardColumn;Show Board column;Показывать столбец Площадка
 Scanner;Scanner;Сканер
+Country;Country;Страна
+EmailAddress;E-mail address;Адрес электронной почты
+Phone;Phone;Телефон
+WebSite;Web site;Сайт
+Skype;Skype;Skype
+City;City;Город
+Gender;Gender;Пол
+Deposit;Deposit;Депозит
+ZipCode;Zip code;Почтовый индекс
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7385,12 +7394,6 @@ DocStr3026;The identifier from which you need to receive the news;Идентиф
 DocStr3027;Last news;Последние новости
 DocStr3028;The profile information;Информация о профиле
 DocStr3029;Password (not filled in when obtaining from the server);Пароль (не заполняется при получении с сервера)
-DocStr3030;E-mail address;Адрес электронной почты
-DocStr3031;Phone;Номер телефона
-DocStr3032;Web site;Сайт
-DocStr3033;Skype;Skype
-DocStr3034;City;Город
-DocStr3035;Gender;Пол
 DocStr3036;Is the mailout enabled;Включена ли рассылка
 DocStr3037;The interface describing the registration service;Интерфейс, описывающий сервис регистрации
 DocStr3038;To start the registration;Начать процедуру регистрации
@@ -8030,7 +8033,6 @@ DocStr3674;Fifteen second time frame;Пятнадцати секундный т�
 DocStr3675;Thirty second time frame;Тридцати секундный тайм-фрейм
 DocStr3676;Two minute time frame;Двух минутный тайм-фрейм
 DocStr3677;Three minute time frame;Трех минутный тайм-фрейм
-DocStr3678;Country;Страна
 DocStr3679;Work hours;Часы работы
 DocStr3680;The contact identifier;Идентификатор контакта
 DocStr3681;Information about the instrument on the specific board;Информация об инструменте на конкретной площадке
