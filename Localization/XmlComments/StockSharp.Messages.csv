@@ -972,6 +972,8 @@ P:StockSharp.Messages.QuoteChangeMessage.Bids/summary;Str282
 P:StockSharp.Messages.QuoteChangeMessage.Asks/summary;Str284
 P:StockSharp.Messages.QuoteChangeMessage.ServerTime/summary;Str168
 P:StockSharp.Messages.QuoteChangeMessage.IsSorted/summary;DocStr4445
+P:StockSharp.Messages.QuoteChangeMessage.IsByLevel1/summary;DocStr9427
+P:StockSharp.Messages.QuoteChangeMessage.IsFiltered/summary;DocStr9428
 P:StockSharp.Messages.QuoteChangeMessage.Currency/summary;Str382
 M:StockSharp.Messages.QuoteChangeMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.QuoteChangeMessage.Clone/summary;DocStr643

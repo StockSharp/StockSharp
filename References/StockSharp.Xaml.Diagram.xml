@@ -740,11 +740,11 @@
             To remove all incoming and outgoing connections.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.GetSocket(StockSharp.Xaml.Diagram.DiagramElement)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.GetSocket(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            To get the connection by the message sender object.
+            To get the connection by the message source socket.
             </summary>
-      <param name="sender">Sender.</param>
+      <param name="socket">Source socket.</param>
       <returns>Connection.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.GetSourceElements(StockSharp.Xaml.Diagram.DiagramSocket)">
@@ -774,12 +774,25 @@
             </summary>
       <param name="socket">Socket.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramElement,System.DateTimeOffset,System.Object)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
             To call the event <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput" />.
             </summary>
-      <param name="sender">Initiator.</param>
+      <param name="value">Output value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramSocket,System.DateTimeOffset,System.Object)">
+      <summary>
+            To call the event <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput" />.
+            </summary>
+      <param name="outputSocket">Output socket.</param>
       <param name="time">Time.</param>
+      <param name="value">Value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramSocket,System.Object)">
+      <summary>
+            To call the event <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput" />.
+            </summary>
+      <param name="outputSocket">Output socket.</param>
       <param name="value">Value.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(System.DateTimeOffset,System.Object)">
@@ -1331,19 +1344,6 @@
             The socket disconnection event.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue">
-      <summary>
-            To get the value for the connection.
-            </summary>
-      <returns>Value.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue``1">
-      <summary>
-            To get the value for the connection.
-            </summary>
-      <typeparam name="T">Data type.</typeparam>
-      <returns>Value.</returns>
-    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.PropertyChanged">
       <summary>
             The connection properties value change event.
@@ -1584,13 +1584,13 @@
             Value.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramElement,System.DateTimeOffset,StockSharp.Xaml.Diagram.DiagramSocket)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramSocket,System.DateTimeOffset,System.Object)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketValue" />.
             </summary>
-      <param name="sender">The element sender of the value.</param>
-      <param name="time">Time.</param>
       <param name="socket">Connection.</param>
+      <param name="time">Time.</param>
+      <param name="value">Value.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.GetValue``1">
       <summary>

@@ -13590,3 +13590,58 @@ DocStr9386;Market data request finished;Окончание запроса рын
 DocStr9387;Save the identifier as a permanent;Сохранить идентификатор как постоянный
 DocStr9388;Native identifier can be stored;Системные идентификаторы могут быть сохранены
 DocStr9389;Remove external sockets;Удалить внешние сокеты
+DocStr9390;Associated security adapter;Associated security adapter
+DocStr9391;Filtered market depth adapter;Filtered market depth adapter
+DocStr9392;Filtered market depth data type;Filtered market depth data type
+DocStr9393;Level1 depth builder adapter;Level1 depth builder adapter
+DocStr9394;List of trade objects, received from the CSV storage;List of trade objects, received from the CSV storage
+DocStr9395;Entity type;Entity type
+DocStr9396;CSV file name;CSV file name
+DocStr9397;CSV encoding;CSV encoding
+DocStr9398;Save object into storage;Save object into storage
+DocStr9399;Trade object;Trade object
+DocStr9400;Get key from trade object;Get key from trade object
+DocStr9401;The key;The key
+DocStr9402;Write data into CSV;Write data into CSV
+DocStr9403;Read data from CSV;Read data from CSV
+DocStr9404;Add list of trade objects;Add list of trade objects
+DocStr9405;List of trade objects;List of trade objects
+DocStr9406;Regulartory attribute that applies to all US Commodity (Futures) Exchanges, provided to allow client to comply with CFTC Tag 50 Rules;Regulartory attribute that applies to all US Commodity (Futures) Exchanges, provided to allow client to comply with CFTC Tag 50 Rules
+DocStr9407;Pegged-to-benchmark orders: this attribute will contain the conId of the contract against which the order will be pegged;Pegged-to-benchmark orders: this attribute will contain the conId of the contract against which the order will be pegged
+DocStr9408;Pegged-to-benchmark orders: indicates whether the order's pegged price should increase or decreases;Pegged-to-benchmark orders: indicates whether the order's pegged price should increase or decreases
+DocStr9409;Pegged-to-benchmark orders: amount by which the order's pegged price should move;Pegged-to-benchmark orders: amount by which the order's pegged price should move
+DocStr9410;Pegged-to-benchmark orders: the amount the reference contract needs to move to adjust the pegged order;Pegged-to-benchmark orders: the amount the reference contract needs to move to adjust the pegged order
+DocStr9411;Pegged-to-benchmark orders: the exchange against which we want to observe the reference contract;Pegged-to-benchmark orders: the exchange against which we want to observe the reference contract
+DocStr9412;Adjusted Stop orders: the parent order will be adjusted to the given type when the adjusted trigger price is penetrated;Adjusted Stop orders: the parent order will be adjusted to the given type when the adjusted trigger price is penetrated
+DocStr9413;Adjusted Stop orders: specifies the stop price of the adjusted (STP) parent;Adjusted Stop orders: specifies the stop price of the adjusted (STP) parent
+DocStr9414;Adjusted Stop orders: specifies the stop limit price of the adjusted (STPL LMT) parent;Adjusted Stop orders: specifies the stop limit price of the adjusted (STPL LMT) parent
+DocStr9415;Adjusted Stop orders: specifies the trailing amount of the adjusted (TRAIL) parent;Adjusted Stop orders: specifies the trailing amount of the adjusted (TRAIL) parent
+DocStr9416;Adjusted Stop orders: specifies where the trailing unit is an amount (set to 0) or a percentage (set to 1);Adjusted Stop orders: specifies where the trailing unit is an amount (set to 0) or a percentage (set to 1)
+DocStr9417;Indicates whether or not conditions will also be valid outside Regular Trading Hours;Indicates whether or not conditions will also be valid outside Regular Trading Hours
+DocStr9418;Conditions can determine if an order should become active or canceled;Conditions can determine if an order should become active or canceled
+DocStr9419;To start the instruments scanner based on specified parameters. The results will come through the {0} event;To start the instruments scanner based on specified parameters. The results will come through the {0} event
+DocStr9420;Subscription id;Subscription id
+DocStr9421;To stop the instruments scanner;To stop the instruments scanner
+DocStr9422;>Subscription id, received from {0};>Subscription id, received from {0}
+DocStr9423;To subscribe to receive market reports for the specified instrument. The results will come through the {0} event;To subscribe to receive market reports for the specified instrument. The results will come through the {0} event
+DocStr9424;To unsubscribe from receive market reports;To unsubscribe from receive market reports
+DocStr9425;To subscribe to receive the estimated option values. The results will come through the {0} event;To subscribe to receive the estimated option values. The results will come through the {0} event
+DocStr9426;To unsubscribe from receive the estimated option values;To unsubscribe from receive the estimated option values
+DocStr9427;The quote change was build by level1;The quote change was build by level1
+DocStr9428;The quote change contains filtered quotes;The quote change contains filtered quotes
+DocStr9429;To get the connection by the message source socket;To get the connection by the message source socket
+DocStr9430;Source socket;Source socket
+DocStr9431;Output value;Output value
+DocStr9432;Output socket;Output socket
+DocStr9433;The window for browsing application information;The window for browsing application information
+DocStr9434;Gets the updater application path;Gets the updater application path
+DocStr9435;Gets the title property, which is display in the About dialogs window title;Gets the title property, which is display in the About dialogs window title
+DocStr9436;Gets the application's version information to show;Gets the application's version information to show
+DocStr9437;Gets the description about the application;Gets the description about the application
+DocStr9438;Gets the product's full name;Gets the product's full name
+DocStr9439;Gets the copyright information for the product;Gets the copyright information for the product
+DocStr9440;Gets the product's company name;Gets the product's company name
+DocStr9441;Gets the link uri that is the navigation target of the link;Gets the link uri that is the navigation target of the link
+DocStr9442;Gets if this AutomaticUpdater has hidden this form and preparing to install an update;Gets if this AutomaticUpdater has hidden this form and preparing to install an update
+DocStr9443;AutomaticUpdater extension methods;AutomaticUpdater extension methods
+DocStr9444;Create {0};Create {0}

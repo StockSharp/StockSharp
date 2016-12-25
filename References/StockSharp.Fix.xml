@@ -384,7 +384,7 @@
       <param name="reader">Data reader.</param>
       <returns>Whether the data was successfully processed.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.String,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})">
+    <member name="M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.Security.SecureString,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixServer" />.
             </summary>
