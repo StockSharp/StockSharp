@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.Security;
 
 	using Ecng.Common;
 
@@ -90,7 +91,7 @@ namespace StockSharp.Community
 		/// </summary>
 		public void Login()
 		{
-			Login(Credentials.Email, Credentials.Password.To<string>());
+			Login(Credentials.Email, Credentials.Password);
 		}
 
 		/// <summary>
@@ -98,7 +99,7 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <param name="login">Login.</param>
 		/// <param name="password">Password.</param>
-		public void Login(string login, string password)
+		public void Login(string login, SecureString password)
 		{
 			if (login.IsEmpty())
 				throw new ArgumentNullException(nameof(login));
@@ -106,7 +107,7 @@ namespace StockSharp.Community
 			if (password.IsEmpty())
 				throw new ArgumentNullException(nameof(password));
 
-			var sessionId = Invoke(f => f.Login(login, password));
+			var sessionId = Invoke(f => f.Login(login, password.To<string>()));
 
 			sessionId.ToErrorCode().ThrowIfError();
 
