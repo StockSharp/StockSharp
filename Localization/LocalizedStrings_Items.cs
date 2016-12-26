@@ -43526,5 +43526,25 @@ namespace StockSharp.Localization
 		/// Deposit
 		/// </summary>
 		public static string Deposit => GetString(DepositKey);
+
+		/// <summary>
+		/// Start date (candles)
+		/// </summary>
+		public const string StartDateCandlesKey = nameof(StartDateCandles);
+
+		/// <summary>
+		/// Start date (candles)
+		/// </summary>
+		public static string StartDateCandles => GetString(StartDateCandlesKey);
+
+		/// <summary>
+		/// Start date (ticks)
+		/// </summary>
+		public const string StartDateTicksKey = nameof(StartDateTicks);
+
+		/// <summary>
+		/// Start date (ticks)
+		/// </summary>
+		public static string StartDateTicks => GetString(StartDateTicksKey);
 	}
 }
