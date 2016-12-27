@@ -14,6 +14,7 @@ namespace StockSharp.Algo
 		private sealed class Level1DepthBuilder
 		{
 			private readonly SecurityId _securityId;
+			private decimal? _bidPrice, _askPrice, _bidVolume, _askVolume;
 
 			public bool HasDepth { get; set; }
 
@@ -35,6 +36,14 @@ namespace StockSharp.Algo
 
 				var bidVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidVolume);
 				var askVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskVolume);
+
+				if (_bidPrice == bidPrice && _askPrice == askPrice && _bidVolume == bidVolume && _askVolume == askVolume)
+					return null;
+
+				_bidPrice = bidPrice;
+				_askPrice = askPrice;
+				_bidVolume = bidVolume;
+				_askVolume = askVolume;
 
 				return new QuoteChangeMessage
 				{
@@ -67,6 +76,10 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+					_level1DepthBuilders.Clear();
+					break;
+
 				case MessageTypes.Level1Change:
 				{
 					var level1Msg = (Level1ChangeMessage)message;
