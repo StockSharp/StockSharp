@@ -19,15 +19,19 @@ namespace StockSharp.Algo.Storages
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+	using Ecng.Configuration;
+	using Ecng.Interop;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -426,6 +430,205 @@ namespace StockSharp.Algo.Storages
 		internal static DateTimeOffset Truncate(this DateTimeOffset time)
 		{
 			return time.Truncate(TimeSpan.TicksPerMillisecond);
+		}
+
+		/// <summary>
+		/// Synchronize securities with storage.
+		/// </summary>
+		/// <param name="drives">Storage drives.</param>
+		/// <param name="entityRegistry">Extity registry.</param>
+		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
+		/// <param name="addLog">The handler through which a new log message be passed.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+		public static void SynchronizeSecurities(this IEnumerable<IMarketDataDrive> drives, IEntityRegistry entityRegistry, Action<Security> newSecurity,
+			Action<int, int> updateProgress, Action<LogMessage> addLog, Func<bool> isCancelled)
+		{
+			if (drives == null)
+				throw new ArgumentNullException(nameof(drives));
+
+			if (entityRegistry == null)
+				throw new ArgumentNullException(nameof(entityRegistry));
+
+			if (newSecurity == null)
+				throw new ArgumentNullException(nameof(newSecurity));
+
+			if (updateProgress == null)
+				throw new ArgumentNullException(nameof(updateProgress));
+
+			if (addLog == null)
+				throw new ArgumentNullException(nameof(addLog));
+
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
+
+			var securityPaths = new List<string>();
+			var progress = 0;
+
+			foreach (var dir in drives.Select(drive => drive.Path).Distinct())
+			{
+				foreach (var letterDir in InteropHelper.GetDirectories(dir))
+				{
+					if (isCancelled())
+						break;
+
+					var name = Path.GetFileName(letterDir);
+
+					if (name == null || name.Length != 1)
+						continue;
+
+					securityPaths.AddRange(InteropHelper.GetDirectories(letterDir));
+				}
+
+				if (isCancelled())
+					break;
+			}
+
+			if (isCancelled())
+				return;
+
+			// кол-во проходов по директории для создания инструмента
+			var iterCount = securityPaths.Count;
+
+			updateProgress(0, iterCount);
+
+			var logSource = ConfigManager.GetService<LogManager>().Application;
+
+			var securityIdGenerator = new SecurityIdGenerator();
+
+			var securities = entityRegistry.Securities.ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
+
+			foreach (var securityPath in securityPaths)
+			{
+				if (isCancelled())
+					break;
+
+				var securityId = Path.GetFileName(securityPath).FolderNameToSecurityId();
+
+				var isNew = false;
+
+				var security = securities.TryGetValue(securityId);
+
+				if (security == null)
+				{
+					var firstDataFile =
+						Directory.EnumerateDirectories(securityPath)
+							.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
+								.Concat(Directory.EnumerateFiles(d, "*.csv"))
+								.OrderBy(f => Path.GetExtension(f).CompareIgnoreCase(".bin") ? 0 : 1))
+							.FirstOrDefault();
+
+					if (firstDataFile != null)
+					{
+						var id = securityIdGenerator.Split(securityId);
+
+						decimal priceStep;
+
+						if (Path.GetExtension(firstDataFile).CompareIgnoreCase(".bin"))
+						{
+							try
+							{
+								priceStep = File.ReadAllBytes(firstDataFile).Range(6, 16).To<decimal>();
+							}
+							catch (Exception ex)
+							{
+								throw new InvalidOperationException(LocalizedStrings.Str2929Params.Put(firstDataFile), ex);
+							}
+						}
+						else
+							priceStep = 0.01m;
+
+						security = new Security
+						{
+							Id = securityId,
+							PriceStep = priceStep,
+							Name = id.SecurityCode,
+							Code = id.SecurityCode,
+							Board = ExchangeBoard.GetOrCreateBoard(id.BoardCode),
+						};
+
+						securities.Add(securityId, security);
+
+						entityRegistry.Securities.Save(security);
+						newSecurity(security);
+
+						isNew = true;
+					}
+				}
+
+				updateProgress(progress++, iterCount);
+
+				if (isNew)
+					addLog(new LogMessage(logSource, TimeHelper.NowWithOffset, LogLevels.Info, LocalizedStrings.Str2930Params.Put(security)));
+			}
+		}
+
+		/// <summary>
+		/// Clear dates cache for storages.
+		/// </summary>
+		/// <param name="drives">Storage drives.</param>
+		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
+		/// <param name="addLog">The handler through which a new log message be passed.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+		public static void ClearDatesCache(this IEnumerable<IMarketDataDrive> drives, Action<int, int> updateProgress, Action<LogMessage> addLog, Func<bool> isCancelled)
+		{
+			if (drives == null)
+				throw new ArgumentNullException(nameof(drives));
+
+			if (addLog == null)
+				throw new ArgumentNullException(nameof(addLog));
+
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
+
+			//var dataTypes = new[]
+			//{
+			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick),
+			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog),
+			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order),
+			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade),
+			//	Tuple.Create(typeof(QuoteChangeMessage), (object)null),
+			//	Tuple.Create(typeof(Level1ChangeMessage), (object)null),
+			//	Tuple.Create(typeof(NewsMessage), (object)null)
+			//};
+
+			var logSource = ConfigManager.GetService<LogManager>().Application;
+			var formats = Enumerator.GetValues<StorageFormats>().ToArray();
+			var progress = 0;
+
+			var marketDataDrives = drives as IMarketDataDrive[] ?? drives.ToArray();
+			var iterCount = marketDataDrives.Sum(d => d.AvailableSecurities.Count()); // кол-во сбросов кэша дат
+
+			updateProgress(progress, iterCount);
+
+			foreach (var drive in marketDataDrives)
+			{
+				foreach (var secId in drive.AvailableSecurities)
+				{
+					foreach (var format in formats)
+					{
+						foreach (var dataType in drive.GetAvailableDataTypes(secId, format))
+						{
+							if (isCancelled())
+								break;
+
+							drive
+								.GetStorageDrive(secId, dataType.MessageType, dataType.Arg, format)
+								.ClearDatesCache();
+						}
+					}
+
+					if (isCancelled())
+						break;
+
+					updateProgress(progress++, iterCount);
+
+					addLog(new LogMessage(logSource, TimeHelper.NowWithOffset, LogLevels.Info, LocalizedStrings.Str2931Params.Put(secId, drive.Path)));
+				}
+
+				if (isCancelled())
+					break;
+			}
 		}
 	}
 }
