@@ -43546,5 +43546,35 @@ namespace StockSharp.Localization
 		/// Start date (ticks)
 		/// </summary>
 		public static string StartDateTicks => GetString(StartDateTicksKey);
+
+		/// <summary>
+		/// You need to select the remote storage.
+		/// </summary>
+		public const string NeedToSelectRemoteStorageKey = nameof(NeedToSelectRemoteStorage);
+
+		/// <summary>
+		/// You need to select the remote storage.
+		/// </summary>
+		public static string NeedToSelectRemoteStorage => GetString(NeedToSelectRemoteStorageKey);
+
+		/// <summary>
+		/// Remote storage
+		/// </summary>
+		public const string RemoteStorageKey = "RemoteStorage";
+
+		/// <summary>
+		/// Remote storage
+		/// </summary>
+		public static string RemoteStorage => GetString(RemoteStorageKey);
+
+		/// <summary>
+		/// The specified server is unavailable.
+		/// </summary>
+		public const string ServerUnavailableKey = "ServerUnavailable";
+
+		/// <summary>
+		/// The specified server is unavailable.
+		/// </summary>
+		public static string ServerUnavailable => GetString(ServerUnavailableKey);
 	}
 }

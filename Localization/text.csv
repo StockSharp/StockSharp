@@ -4388,6 +4388,9 @@ Deposit;Deposit;Депозит
 ZipCode;Zip code;Почтовый индекс
 StartDateCandles;Start date (candles);Дата начала (свечи)
 StartDateTicks;Start date (ticks);Дата начала (тики)
+NeedToSelectRemoteStorage;You need to select the remote storage.;Необходимо выбрать удаленное хранилище.
+RemoteStorage;Remote storage;Удаленное хранилище
+ServerUnavailable;The specified server is unavailable.;Указанный сервер недоступен.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
