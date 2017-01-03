@@ -2818,6 +2818,11 @@ namespace StockSharp.Algo
 				case "SUR":
 				case "RUR":
 					return CurrencyTypes.RUB;
+				case "PLD":
+				case "PLT":
+				case "GLD":
+				case "SLV":
+					return null;
 				default:
 					return name.To<CurrencyTypes>();
 			}
