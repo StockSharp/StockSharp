@@ -49,6 +49,8 @@ namespace StockSharp.Community
 		{
 		}
 
+		private static bool IsEnglish => LocalizedStrings.ActiveLanguage != Languages.Russian;
+
 		private int? _smsCount;
 
 		/// <summary>
@@ -96,12 +98,22 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To send an email message.
 		/// </summary>
-		/// <param name="caption">The message title.</param>
-		/// <param name="message">Message body.</param>
-		public void SendEmail(string caption, string message)
+		/// <param name="title">The message title.</param>
+		/// <param name="body">Message body.</param>
+		public void SendEmail(string title, string body)
 		{
-			ValidateError(Invoke(f => f.SendEmail(SessionId, caption, message)));
+			ValidateError(Invoke(f => f.SendEmail(SessionId, title, body)));
 			EmailCount--;
+		}
+
+		/// <summary>
+		/// To send an message.
+		/// </summary>
+		/// <param name="title">The message title.</param>
+		/// <param name="body">Message body.</param>
+		public void SendMessage(string title, string body)
+		{
+			ValidateError(Invoke(f => f.SendMessage(SessionId, title, body, IsEnglish)));
 		}
 
 		/// <summary>
@@ -137,7 +149,7 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews2(TryGetSession ?? Guid.Empty, LocalizedStrings.ActiveLanguage != Languages.Russian, 0));
+			var news = Invoke(f => f.GetNews2(TryGetSession ?? Guid.Empty, IsEnglish, 0));
 
 			//if (news.Length <= 0)
 			//	return;

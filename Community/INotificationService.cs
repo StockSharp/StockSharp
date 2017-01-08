@@ -53,11 +53,22 @@ namespace StockSharp.Community
 		/// To send an email message.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="caption">The message title.</param>
-		/// <param name="message">Message body.</param>
+		/// <param name="title">The message title.</param>
+		/// <param name="body">Message body.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
-		byte SendEmail(Guid sessionId, string caption, string message);
+		byte SendEmail(Guid sessionId, string title, string body);
+
+		/// <summary>
+		/// To send an message.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="title">The message title.</param>
+		/// <param name="body">Message body.</param>
+		/// <param name="isEnglish">Message in English.</param>
+		/// <returns>The execution result code.</returns>
+		[OperationContract]
+		byte SendMessage(Guid sessionId, string title, string body, bool isEnglish);
 
 		/// <summary>
 		/// To get the latest news.
