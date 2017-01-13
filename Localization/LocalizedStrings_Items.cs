@@ -43576,5 +43576,35 @@ namespace StockSharp.Localization
 		/// The specified server is unavailable.
 		/// </summary>
 		public static string ServerUnavailable => GetString(ServerUnavailableKey);
+
+		/// <summary>
+		/// Suggestions
+		/// </summary>
+		public const string SuggestionsKey = "Suggestions";
+
+		/// <summary>
+		/// Suggestions
+		/// </summary>
+		public static string Suggestions => GetString(SuggestionsKey);
+
+		/// <summary>
+		/// Do you have any questions or suggestions? Contact us now!
+		/// </summary>
+		public const string DoYouHaveQuestionsOrSuggestionsKey = "DoYouHaveQuestionsOrSuggestions";
+
+		/// <summary>
+		/// Do you have any questions or suggestions? Contact us now!
+		/// </summary>
+		public static string DoYouHaveQuestionsOrSuggestions => GetString(DoYouHaveQuestionsOrSuggestionsKey);
+
+		/// <summary>
+		/// Do not show again
+		/// </summary>
+		public const string DoNotShowAgainKey = "DoNotShowAgain";
+
+		/// <summary>
+		/// Do not show again
+		/// </summary>
+		public static string DoNotShowAgain => GetString(DoNotShowAgainKey);
 	}
 }
