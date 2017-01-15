@@ -12653,7 +12653,7 @@ DocStr8372;To add a menu item for the table;Добавить пункт меню
 DocStr8373;The menu item;Пункт меню
 DocStr8374;The list items selection mode. The default is {0};Режим выделения элементов списка. По-умолчанию равен {0}
 DocStr8375;To show main columns with statistical data;Показать основные колонки со статистическими данными
-DocStr8376;Events of double-clicking the mouse on the selected instrument;События двойного нажатия мышкой на выбранный инструмент
+DocStr8376;Event of double-clicking the mouse on the selected instrument;События двойного нажатия мышкой на выбранный инструмент
 DocStr8377;The selected instrument change events;События изменения выбранного инструмента
 DocStr8378;The table change event;Событие изменения таблицы
 DocStr8379;The current filter by the instrument;Текущий фильтр по инструменту
@@ -12698,7 +12698,7 @@ DocStr8419;To show the Test Progress column;Показывать столбец 
 DocStr8420;To show the Name Strategy column;Показывать столбец Название стратегии
 DocStr8421;The selected strategy;Выбранная стратегия
 DocStr8422;Selected strategies;Выбранные стратегии
-DocStr8423;Events of double-clicking the mouse on the selected strategy;События двойного нажатия мышкой на выбранную стратегию
+DocStr8423;Event of double-clicking the mouse on the selected strategy;События двойного нажатия мышкой на выбранную стратегию
 DocStr8424;The selected strategies change event;Событие изменения выбранных стратегий
 DocStr8425;The key for {0}, by which a localized name will be obtained;Ключ для {0}, по которому будет получено локализованное название
 DocStr8426;The component to select a platform for the application;Компонент для выбора платформы для приложения
@@ -13598,22 +13598,22 @@ DocStr9386;Market data request finished;Окончание запроса рын
 DocStr9387;Save the identifier as a permanent;Сохранить идентификатор как постоянный
 DocStr9388;Native identifier can be stored;Системные идентификаторы могут быть сохранены
 DocStr9389;Remove external sockets;Удалить внешние сокеты
-DocStr9390;Associated security adapter;Associated security adapter
-DocStr9391;Filtered market depth adapter;Filtered market depth adapter
-DocStr9392;Filtered market depth data type;Filtered market depth data type
-DocStr9393;Level1 depth builder adapter;Level1 depth builder adapter
-DocStr9394;List of trade objects, received from the CSV storage;List of trade objects, received from the CSV storage
-DocStr9395;Entity type;Entity type
-DocStr9396;CSV file name;CSV file name
-DocStr9397;CSV encoding;CSV encoding
-DocStr9398;Save object into storage;Save object into storage
-DocStr9399;Trade object;Trade object
-DocStr9400;Get key from trade object;Get key from trade object
-DocStr9401;The key;The key
-DocStr9402;Write data into CSV;Write data into CSV
-DocStr9403;Read data from CSV;Read data from CSV
-DocStr9404;Add list of trade objects;Add list of trade objects
-DocStr9405;List of trade objects;List of trade objects
+DocStr9390;Associated security adapter;Адаптер ассоциированных инструментов
+DocStr9391;Filtered market depth adapter;Адаптер, фильтрующий стакан
+DocStr9392;Filtered market depth data type;Тип фильтрации стакана
+DocStr9393;Level1 depth builder adapter;Адаптер, строящий стакан из Level1
+DocStr9394;List of trade objects, received from the CSV storage;Список торговых объектов, полученных из CSV хранилища
+DocStr9395;Entity type;Тип объекта
+DocStr9396;CSV file name;Название CSV файла
+DocStr9397;CSV encoding;CSV кодировка
+DocStr9398;Save object into storage;Сохранить объект в хранилище
+DocStr9399;Trade object;Торговый объект
+DocStr9400;Get key from trade object;Получить ключ из торгового объекта
+DocStr9401;The key;Ключ
+DocStr9402;Write data into CSV;Записать данные в CSV
+DocStr9403;Read data from CSV;Считать данные из CSV
+DocStr9404;Add list of trade objects;Добавить список торговых объектов
+DocStr9405;List of trade objects;Список торговых объектов
 DocStr9406;Regulartory attribute that applies to all US Commodity (Futures) Exchanges, provided to allow client to comply with CFTC Tag 50 Rules;Regulartory attribute that applies to all US Commodity (Futures) Exchanges, provided to allow client to comply with CFTC Tag 50 Rules
 DocStr9407;Pegged-to-benchmark orders: this attribute will contain the conId of the contract against which the order will be pegged;Pegged-to-benchmark orders: this attribute will contain the conId of the contract against which the order will be pegged
 DocStr9408;Pegged-to-benchmark orders: indicates whether the order's pegged price should increase or decreases;Pegged-to-benchmark orders: indicates whether the order's pegged price should increase or decreases
@@ -13627,29 +13627,43 @@ DocStr9415;Adjusted Stop orders: specifies the trailing amount of the adjusted (
 DocStr9416;Adjusted Stop orders: specifies where the trailing unit is an amount (set to 0) or a percentage (set to 1);Adjusted Stop orders: specifies where the trailing unit is an amount (set to 0) or a percentage (set to 1)
 DocStr9417;Indicates whether or not conditions will also be valid outside Regular Trading Hours;Indicates whether or not conditions will also be valid outside Regular Trading Hours
 DocStr9418;Conditions can determine if an order should become active or canceled;Conditions can determine if an order should become active or canceled
-DocStr9419;To start the instruments scanner based on specified parameters. The results will come through the {0} event;To start the instruments scanner based on specified parameters. The results will come through the {0} event
-DocStr9420;Subscription id;Subscription id
-DocStr9421;To stop the instruments scanner;To stop the instruments scanner
-DocStr9422;>Subscription id, received from {0};>Subscription id, received from {0}
-DocStr9423;To subscribe to receive market reports for the specified instrument. The results will come through the {0} event;To subscribe to receive market reports for the specified instrument. The results will come through the {0} event
-DocStr9424;To unsubscribe from receive market reports;To unsubscribe from receive market reports
-DocStr9425;To subscribe to receive the estimated option values. The results will come through the {0} event;To subscribe to receive the estimated option values. The results will come through the {0} event
+DocStr9419;To start the instruments scanner based on specified parameters. The results will come through the {0} event;Запустить сканер инструментов для заданных параметров. Результаты будут приходить через событие {0}
+DocStr9420;Subscription id;Идентификатор подписки
+DocStr9421;To stop the instruments scanner;Остановить сканер инструментов
+DocStr9422;Subscription id, received from {0};Идентификатор подписки, полученный из {0}
+DocStr9423;To subscribe to receive market reports for the specified instrument. The results will come through the {0} event;Подписаться на получение рыночных отчетов для инструмента. Результаты будут приходить через событие {0}
+DocStr9424;To unsubscribe from receive market reports;Отписаться от рыночных отчетов
+DocStr9425;To subscribe to receive the estimated option values. The results will come through the {0} event;Подписаться на получение расчетных значений опционов. Результаты будут приходить через событие {0}
 DocStr9426;To unsubscribe from receive the estimated option values;To unsubscribe from receive the estimated option values
-DocStr9427;The quote change was build by level1;The quote change was build by level1
-DocStr9428;The quote change contains filtered quotes;The quote change contains filtered quotes
-DocStr9429;To get the connection by the message source socket;To get the connection by the message source socket
-DocStr9430;Source socket;Source socket
-DocStr9431;Output value;Output value
-DocStr9432;Output socket;Output socket
-DocStr9433;The window for browsing application information;The window for browsing application information
-DocStr9434;Gets the updater application path;Gets the updater application path
-DocStr9435;Gets the title property, which is display in the About dialogs window title;Gets the title property, which is display in the About dialogs window title
-DocStr9436;Gets the application's version information to show;Gets the application's version information to show
-DocStr9437;Gets the description about the application;Gets the description about the application
-DocStr9438;Gets the product's full name;Gets the product's full name
-DocStr9439;Gets the copyright information for the product;Gets the copyright information for the product
-DocStr9440;Gets the product's company name;Gets the product's company name
-DocStr9441;Gets the link uri that is the navigation target of the link;Gets the link uri that is the navigation target of the link
-DocStr9442;Gets if this AutomaticUpdater has hidden this form and preparing to install an update;Gets if this AutomaticUpdater has hidden this form and preparing to install an update
-DocStr9443;AutomaticUpdater extension methods;AutomaticUpdater extension methods
-DocStr9444;Create {0};Create {0}
+DocStr9427;The quote change was build by level1;Изменения стакана были сделаны level1 данными
+DocStr9428;The quote change contains filtered quotes;Изменения стакана содержат отфильтрованных котировки
+DocStr9429;To get the connection by the message source socket;Получить соединение по сообщению исходного сокета
+DocStr9430;Source socket;Исходный сокет
+DocStr9431;Output value;Исходящее значение
+DocStr9432;Output socket;Исходящий сокет
+DocStr9433;The window for browsing application information;Окно для отображения информации о приложении
+DocStr9434;Gets the updater application path;Получить путь приложения
+DocStr9435;Gets the title property, which is display in the {0} title;Получить заголовок, которые будет отображаться в {0}
+DocStr9436;Gets the application's version information to show;Получить версию приложения
+DocStr9437;Gets the description about the application;Получить описание приложения
+DocStr9438;Gets the product's full name;Получить полное название продукта
+DocStr9439;Gets the copyright information for the product;Получить копирайт информацию
+DocStr9440;Gets the product's company name;Получить название компании
+DocStr9441;Gets the link uri that is the navigation target of the link;Получить адрес ссылки приложения
+DocStr9442;Gets if this {0} has hidden this form and preparing to install an update;Gets if this {0} has hidden this form and preparing to install an update
+DocStr9443;AutomaticUpdater extension methods;Методы-расширения для AutomaticUpdater
+DocStr9444;Create {0};Создать {0}
+DocStr9445;Synchronize securities with storage;Синхронизовать инструменты с хранилищем
+DocStr9446;Storage drives;Хранилища
+DocStr9448;The handler through which a progress change will be passed;Обработчик, куда будет передаваться прогресс работы
+DocStr9449;The handler through which a new log message be passed;Обработчик, куда будут передаваться лог-сообщения
+DocStr9450;Clear dates cache for storages;Очистить кэш дат хранилищ
+DocStr9451;To send an message;Отправить сообщение
+DocStr9452;Message in English;Сообщение на английском
+DocStr9453;Initialize dialect;Инициализировать диалект
+DocStr9454;The FIX dialect;FIX диалект
+DocStr9455;Suggestions window;Окно для отправки предложений
+DocStr9456;Do not show this window again;Больше не показывать окно
+DocStr9457;Owner window;Владелец окна
+DocStr9458;Handler will be called after the window was showed;Обработчик будет вызван после показа окна
+DocStr9459;Event of double-clicking the mouse on the selected item;Событие двойного клика мышкой

@@ -1592,6 +1592,13 @@
       <param name="time">Time.</param>
       <param name="value">Value.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketValue" />.
+            </summary>
+      <param name="socket">Connection.</param>
+      <param name="value">Value.</param>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.GetValue``1">
       <summary>
             To get the value for the connection.

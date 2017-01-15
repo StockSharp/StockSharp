@@ -118,6 +118,16 @@ M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor/summary;DocStr29
 M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor/summary;DocStr1
+T:StockSharp.Xaml.SuggestionsWindow/summary;DocStr9455
+F:StockSharp.Xaml.SuggestionsWindow.OkCommand/summary;DocStr8459
+P:StockSharp.Xaml.SuggestionsWindow.NotificationClient/summary;DocStr3070
+P:StockSharp.Xaml.SuggestionsWindow.DoNotShowAgain/summary;DocStr9456
+M:StockSharp.Xaml.SuggestionsWindow.#ctor/summary;DocStr1
+M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})/summary;Str2933
+M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})/param/owner;DocStr9457
+M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})/param/handled;DocStr9458
+M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})/param/delay;Delay
+M:StockSharp.Xaml.SuggestionsWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityLookupWindow/summary;DocStr9348
 M:StockSharp.Xaml.SecurityLookupWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.SecurityLookupWindow.ShowAllOption/summary;DocStr9362
@@ -136,6 +146,7 @@ M:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.#ctor(DevEx
 P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility/summary;DocStr8993
 E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler/summary;DocStr8994
 E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged/summary;DocStr8995
+E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick/summary;DocStr9459
 M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor/summary;DocStr1
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)/summary;DocStr8996
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)/param/oldValue;DocStr8997

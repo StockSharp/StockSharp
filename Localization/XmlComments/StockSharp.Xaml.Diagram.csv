@@ -450,6 +450,9 @@ M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.Diagr
 M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramSocket,System.DateTimeOffset,System.Object)/param/socket;Str3143
 M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramSocket,System.DateTimeOffset,System.Object)/param/time;Time
 M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramSocket,System.DateTimeOffset,System.Object)/param/value;Str3099
+M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/summary;DocStr1
+M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/socket;Str3143
+M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/value;Str3099
 M:StockSharp.Xaml.Diagram.DiagramSocketValue.GetValue``1/summary;DocStr8010
 M:StockSharp.Xaml.Diagram.DiagramSocketValue.GetValue``1/typeparam/T;DocStr1145
 M:StockSharp.Xaml.Diagram.DiagramSocketValue.GetValue``1/returns;Str3099

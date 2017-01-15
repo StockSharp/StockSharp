@@ -19,7 +19,7 @@
     </member>
     <member name="P:StockSharp.Xaml.AboutWindow.ProductTitle">
       <summary>
-            Gets the title property, which is display in the About dialogs window title.
+            Gets the title property, which is display in the <see cref="T:StockSharp.Xaml.AboutWindow" /> title.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.AboutWindow.Version">
@@ -54,7 +54,7 @@
     </member>
     <member name="P:StockSharp.Xaml.AboutWindow.ClosingForInstall">
       <summary>
-            Gets if this AutomaticUpdater has hidden this form and preparing to install an update.
+            Gets if this <see cref="T:wyDay.Controls.AutomaticUpdater" /> has hidden this form and preparing to install an update.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.AboutWindow.#ctor">
@@ -615,6 +615,46 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor" />.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.SuggestionsWindow">
+      <summary>
+            Suggestions window.
+            </summary>
+      <summary>
+            SuggestionsWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SuggestionsWindow.OkCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SuggestionsWindow.NotificationClient">
+      <summary>
+            The client for access to the StockSharp notification service.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SuggestionsWindow.DoNotShowAgain">
+      <summary>
+            Do not show this window again.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SuggestionsWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SuggestionsWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})">
+      <summary>
+            Show.
+            </summary>
+      <param name="owner">Owner window.</param>
+      <param name="handled">Handler will be called after the window was showed.</param>
+      <param name="delay">Delay.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SuggestionsWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.SecurityLookupWindow">
       <summary>
             The instrument search window.
@@ -703,6 +743,11 @@
     <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged">
       <summary>
             Layout changed event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick">
+      <summary>
+            Event of double-clicking the mouse on the selected item.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor">
@@ -3926,7 +3971,7 @@
     </member>
     <member name="E:StockSharp.Xaml.SecurityPicker.SecurityDoubleClick">
       <summary>
-            Events of double-clicking the mouse on the selected instrument.
+            Event of double-clicking the mouse on the selected instrument.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.SecurityPicker.SecuritySelected">
@@ -4334,7 +4379,7 @@
     </member>
     <member name="E:StockSharp.Xaml.StrategiesStatisticsPanel.StrategyDoubleClick">
       <summary>
-            Events of double-clicking the mouse on the selected strategy.
+            Event of double-clicking the mouse on the selected strategy.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.StrategiesStatisticsPanel.SelectionChanged">

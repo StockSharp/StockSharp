@@ -40,6 +40,11 @@
             Время заключения сделки.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousDealColumns.MomentNs">
+      <summary>
+            Время заключения сделки, наносекунды.
+            </summary>
+    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousDealColumns.Position">
       <summary>
             Кол-во позиций по инструменту на рынке после сделки.
@@ -137,6 +142,11 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.Moment">
       <summary>
             Время изменения состояния заявки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.MomentNs">
+      <summary>
+            Время изменения состояния заявки, наносекунды.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.Status">
@@ -2410,11 +2420,6 @@
             Признак расчета в долларах.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaBaseContractsParamsColumns.UsdRateCurvRadius">
-      <summary>
-            Радиус кривизны курса валюты.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseContractsParamsColumns.Somc">
       <summary>
             Ставка ГО по непокрытым продажам (в рублях).
@@ -2584,11 +2589,6 @@
             Цена минимального шага.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaFuturesParamsColumns.BaseGo">
-      <summary>
-            Базовое ГО.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFuturesParamsColumns.ExpDate">
       <summary>
             Дата экспирации.
@@ -2643,21 +2643,6 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaOptionsParamsColumns.SettlPrice">
       <summary>
             Расчетная цена.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaOptionsParamsColumns.BaseGOSell">
-      <summary>
-            Базовое ГО на продажу.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaOptionsParamsColumns.SynthBaseGO">
-      <summary>
-            Базовое ГО по синтетической позиции на продажу.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaOptionsParamsColumns.BaseGOBuy">
-      <summary>
-            Базовое ГО на покупку.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaVirtualFuturesParamsColumns">
@@ -5698,11 +5683,6 @@
             Списанный сбор.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.FeeReserve">
-      <summary>
-            Заблокированный резерв сбора под заявки.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.LimitSpotBuy">
       <summary>
             Лимит на Покупку Спотов.
@@ -5735,24 +5715,9 @@
             Наличие установленных денежного и залогового лимитов.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.Premium">
-      <summary>
-            Премия.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.PremiumOrderReserve">
-      <summary>
-            Резерв премии под заявки.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.BalanceMoney">
       <summary>
             Сальдо денежных торговых переводов за текущую сессию.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.VmOrderReserve">
-      <summary>
-            Сумма, зарезервированная под отрицательную ВМ по заявкам.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.MoneyPledgeAmount">

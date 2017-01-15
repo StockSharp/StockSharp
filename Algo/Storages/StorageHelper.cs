@@ -436,7 +436,7 @@ namespace StockSharp.Algo.Storages
 		/// Synchronize securities with storage.
 		/// </summary>
 		/// <param name="drives">Storage drives.</param>
-		/// <param name="entityRegistry">Extity registry.</param>
+		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
 		/// <param name="addLog">The handler through which a new log message be passed.</param>

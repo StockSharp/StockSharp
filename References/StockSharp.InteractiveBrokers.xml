@@ -1748,7 +1748,7 @@
       <summary>
             To stop the instruments scanner.
             </summary>
-      <param name="transactionId">&gt;Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.</param>
+      <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports)">
       <summary>
@@ -1762,7 +1762,7 @@
       <summary>
             To unsubscribe from receive market reports.
             </summary>
-      <param name="transactionId">&gt;Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports)" />.</param>
+      <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports)" />.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)">
       <summary>
@@ -1778,7 +1778,7 @@
       <summary>
             To unsubscribe from receive the estimated option values.
             </summary>
-      <param name="transactionId">&gt;Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)" />.</param>
+      <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)" />.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
       <summary>
