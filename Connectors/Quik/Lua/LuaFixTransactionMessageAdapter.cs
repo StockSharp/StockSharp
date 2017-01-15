@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Quik.Lua
 {
-	using System.IO;
 	using System.Security;
 
 	using Ecng.Common;
@@ -67,12 +66,11 @@ namespace StockSharp.Quik.Lua
 		/// <summary>
 		/// Create FIX protocol dialect.
 		/// </summary>
-		/// <param name="stream">Stream.</param>
-		/// <param name="idGenerator">Sequence id generator.</param>
+		/// <param name="dialect">The FIX dialect.</param>
 		/// <returns>The dialect.</returns>
-		protected override IFixDialect CreateDialect(Stream stream, IncrementalIdGenerator idGenerator)
+		protected override IFixDialect CreateDialect(FixDialects dialect)
 		{
-			return new LuaDialect(SenderCompId, TargetCompId, stream, idGenerator, HeartbeatInterval, IsResetCounter, Login, Password, CreateOrderCondition);
+			return new LuaDialect(CreateOrderCondition);
 		}
 	}
 }

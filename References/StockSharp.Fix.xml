@@ -9,26 +9,38 @@
             Base class describing the dialect of the FIX protocol.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseDialect.#ctor(System.String,System.String,System.IO.Stream,System.Text.Encoding,Ecng.Common.IncrementalIdGenerator,System.String,StockSharp.Fix.FixFormats,System.TimeSpan,System.Boolean,System.String,System.Security.SecureString,System.TimeZoneInfo,System.String,System.String,System.String,System.String)">
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.#ctor(System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)">
       <summary>
             Initialize <see cref="T:StockSharp.Fix.Dialects.BaseDialect" />.
             </summary>
-      <param name="senderCompId">Sender ID.</param>
-      <param name="targetCompId">Target ID.</param>
-      <param name="stream">Stream.</param>
       <param name="encoding">Encoding.</param>
-      <param name="idGenerator">Sequence id generator.</param>
       <param name="version">FIX version.</param>
       <param name="format">FIX protocol format.</param>
-      <param name="heartbeatInterval">Heartbeat interval.</param>
-      <param name="isResetCounter">Should the number counter be cleared.</param>
-      <param name="login">Login.</param>
-      <param name="password">Password.</param>
-      <param name="timeZone">Information about the time zone where the exchange is located.</param>
-      <param name="timeStampFormat">UTC time stamp format.</param>
-      <param name="timeFormat">UTC time format.</param>
-      <param name="dateFormat">UTC date format.</param>
-      <param name="exchangeBoard">Board, where securities are traded.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.Encoding">
+      <summary>
+            Encoding.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.SenderCompId">
+      <summary>
+            Sender ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TargetCompId">
+      <summary>
+            Target ID.
+            </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeStampFormat">
       <summary>
@@ -45,9 +57,24 @@
             UTC date format.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.IsResetCounter">
+      <summary>
+            Should the number counter be cleared.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.HeartbeatInterval">
+      <summary>
+            Heartbeat interval.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeZone">
       <summary>
             Information about the time zone where the exchange is located.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.ExchangeBoard">
+      <summary>
+            Board, where securities are traded.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.HasPosition">
@@ -99,6 +126,14 @@
       <summary>
             Native identifier can be stored.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
+      <summary>
+            Initialize dialect.
+            </summary>
+      <param name="writer">The recorder of data in the FIX protocol format.</param>
+      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
+      <param name="idGenerator">Sequence id generator.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
       <summary>
@@ -174,15 +209,26 @@
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseDialect.DisposeManaged">
-      <summary>
-            Release resources.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.SecuritiesSinglePacket">
       <summary>
             Security message contain information for all requested securities.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.InitSecId(StockSharp.Messages.SecurityMessage,System.String,System.String,System.String,System.String)">
+      <summary>
+      </summary>
+      <param name="message">
+      </param>
+      <param name="symbol">
+      </param>
+      <param name="securityExchange">
+      </param>
+      <param name="idSource">
+      </param>
+      <param name="idValue">
+      </param>
+      <returns>
+      </returns>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.ReadExecutionReport(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.ExecutionReport,System.String,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
       <summary>
@@ -213,19 +259,10 @@
             The default implementation of <see cref="T:StockSharp.Fix.Dialects.IFixDialect" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.DefaultDialect.#ctor(System.String,System.String,System.IO.Stream,Ecng.Common.IncrementalIdGenerator,System.TimeSpan,System.Boolean,System.String,System.Security.SecureString,System.TimeZoneInfo,System.Func{StockSharp.Messages.OrderCondition})">
+    <member name="M:StockSharp.Fix.Dialects.DefaultDialect.#ctor(System.Func{StockSharp.Messages.OrderCondition})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.DefaultDialect" />.
             </summary>
-      <param name="senderCompId">Sender ID.</param>
-      <param name="targetCompId">Target ID.</param>
-      <param name="stream">Stream.</param>
-      <param name="idGenerator">Sequence id generator.</param>
-      <param name="heartbeatInterval">Heartbeat interval.</param>
-      <param name="isResetCounter">Should the number counter be cleared.</param>
-      <param name="login">Login.</param>
-      <param name="password">Password.</param>
-      <param name="timeZone">Information about the time zone where the exchange is located.</param>
       <param name="createOrderCondition">Order condition creating handler.</param>
     </member>
     <member name="P:StockSharp.Fix.Dialects.DefaultDialect.ConvertToLatin">
@@ -273,14 +310,69 @@
             The interface describing the dialect of the FIX protocol.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Writer">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Encoding">
       <summary>
-            The recorder of data in the FIX protocol format.
+            Encoding.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Reader">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Format">
       <summary>
-            The reader of data recorded in the FIX protocol format.
+            FIX protocol format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.SenderCompId">
+      <summary>
+            Sender ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TargetCompId">
+      <summary>
+            Target ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeStampFormat">
+      <summary>
+            UTC time stamp format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeFormat">
+      <summary>
+            UTC time format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.DateFormat">
+      <summary>
+            UTC date format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter">
+      <summary>
+            Should the number counter be cleared.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.HeartbeatInterval">
+      <summary>
+            Heartbeat interval.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeZone">
+      <summary>
+            Information about the time zone where the exchange is located.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.ExchangeBoard">
+      <summary>
+            Board, where securities are traded.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.SecurityLookup">
@@ -322,6 +414,14 @@
       <summary>
             Native identifier can be stored.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
+      <summary>
+            Initialize dialect.
+            </summary>
+      <param name="writer">The recorder of data in the FIX protocol format.</param>
+      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
+      <param name="idGenerator">Sequence id generator.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)">
       <summary>
@@ -4473,6 +4573,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.UnderlyingSecurityID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SecurityReqID">
       <summary>
       </summary>
@@ -5309,12 +5413,11 @@
             </summary>
       <param name="message">Message.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateDialect(System.IO.Stream,Ecng.Common.IncrementalIdGenerator)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <summary>
             Create FIX protocol dialect.
             </summary>
-      <param name="stream">Stream.</param>
-      <param name="idGenerator">Sequence id generator.</param>
+      <param name="dialect">The FIX dialect.</param>
       <returns>The dialect.</returns>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.Address">
