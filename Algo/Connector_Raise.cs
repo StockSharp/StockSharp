@@ -133,6 +133,11 @@ namespace StockSharp.Algo
 		public event Action<long, Exception> MassOrderCancelFailed;
 
 		/// <summary>
+		/// Failed order status request event.
+		/// </summary>
+		public event Action<long, Exception> OrderStatusFailed;
+
+		/// <summary>
 		/// Stop-order registration errors event.
 		/// </summary>
 		public event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
@@ -426,6 +431,11 @@ namespace StockSharp.Algo
 		private void RaiseMassOrderCancelFailed(long transactionId, Exception error)
 		{
 			MassOrderCancelFailed?.Invoke(transactionId, error);
+		}
+
+		private void RaiseOrderStatusFailed(long transactionId, Exception error)
+		{
+			OrderStatusFailed?.Invoke(transactionId, error);
 		}
 
 		private void RaiseNewSecurity(Security security)

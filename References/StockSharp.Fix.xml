@@ -3899,6 +3899,11 @@
             Maximum quantity (e.g. number of shares) within an order to be shown on the exchange floor at any given time.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.MassStatusReqId">
+      <summary>
+            Required if responding to and if provided on the <see cref="F:StockSharp.Fix.Native.FixMessages.OrderMassStatusRequest" /> message.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Price">
       <summary>
             Price per unit of quantity (e.g. per share).
@@ -4002,6 +4007,11 @@
     <member name="F:StockSharp.Fix.Native.ExecutionReport.ExecId">
       <summary>
             Unique identifier of execution message as assigned by sell-side (broker, exchange, ECN).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.OrdStatusReqId">
+      <summary>
+            Required if responding to and if provided on the <see cref="F:StockSharp.Fix.Native.FixMessages.OrderStatusRequest" /> message.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.FastPMap">

@@ -1020,6 +1020,7 @@ P:StockSharp.Fix.Native.ExecutionReport.CumQty/summary;DocStr8789
 P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestamp/summary;DocStr8790
 P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestampType/summary;DocStr8791
 P:StockSharp.Fix.Native.ExecutionReport.MaxFloor/summary;DocStr9139
+P:StockSharp.Fix.Native.ExecutionReport.MassStatusReqId/summary;DocStr9461
 F:StockSharp.Fix.Native.ExecutionReport.Price/summary;DocStr8792
 F:StockSharp.Fix.Native.ExecutionReport.Symbol/summary;DocStr8793
 F:StockSharp.Fix.Native.ExecutionReport.SecurityExchange/summary;DocStr8794
@@ -1043,6 +1044,7 @@ F:StockSharp.Fix.Native.ExecutionReport.LastQty/summary;DocStr8801
 F:StockSharp.Fix.Native.ExecutionReport.Commission/summary;XamlStr249
 F:StockSharp.Fix.Native.ExecutionReport.Text/summary;DocStr8802
 F:StockSharp.Fix.Native.ExecutionReport.ExecId/summary;DocStr8803
+F:StockSharp.Fix.Native.ExecutionReport.OrdStatusReqId/summary;DocStr9461
 T:StockSharp.Fix.Native.FastPMap/summary;DocStr8938
 M:StockSharp.Fix.Native.FastPMap.#ctor/summary;DocStr1
 M:StockSharp.Fix.Native.FastPMap.Reset/summary;Str3282

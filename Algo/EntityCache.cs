@@ -338,6 +338,7 @@ namespace StockSharp.Algo
 		}
 
 		public bool IsMassCancelation(long transactionId) => _massCancelationTransactions.Contains(transactionId);
+		public bool IsOrderStatusRequest(long transactionId) => _orderStatusTransactions.Contains(transactionId);
 
 		public void AddOrderByCancelationId(Order order, long transactionId)
 		{
@@ -789,7 +790,7 @@ namespace StockSharp.Algo
 		public long GetTransactionId(long originalTransactionId)
 		{
 			// ExecMsg.OriginalTransactionId == OrderStatMsg.TransactionId when orders info requested by OrderStatMsg
-			return _orderStatusTransactions.Contains(originalTransactionId) || IsMassCancelation(originalTransactionId) ? 0 : originalTransactionId;
+			return IsOrderStatusRequest(originalTransactionId) || IsMassCancelation(originalTransactionId) ? 0 : originalTransactionId;
 		}
 
 		public Order GetOrder(ExecutionMessage message, out long transactionId)

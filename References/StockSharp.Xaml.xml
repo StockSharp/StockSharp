@@ -2897,6 +2897,11 @@
             Mass order cancellation event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.OrderStatusFailed">
+      <summary>
+            Failed order status request event.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewStopOrders">
       <summary>
             Stop-orders received.

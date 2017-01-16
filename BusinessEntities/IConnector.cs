@@ -99,6 +99,11 @@ namespace StockSharp.BusinessEntities
 		event Action<long, Exception> MassOrderCancelFailed;
 
 		/// <summary>
+		/// Failed order status request event.
+		/// </summary>
+		event Action<long, Exception> OrderStatusFailed;
+
+		/// <summary>
 		/// Stop-order registration errors event.
 		/// </summary>
 		event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;

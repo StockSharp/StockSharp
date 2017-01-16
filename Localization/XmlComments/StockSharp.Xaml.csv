@@ -595,6 +595,7 @@ E:StockSharp.Xaml.GuiConnector`1.OrdersRegisterFailed/summary;DocStr873
 E:StockSharp.Xaml.GuiConnector`1.OrdersCancelFailed/summary;DocStr874
 E:StockSharp.Xaml.GuiConnector`1.MassOrderCanceled/summary;DocStr9027
 E:StockSharp.Xaml.GuiConnector`1.MassOrderCancelFailed/summary;DocStr9027
+E:StockSharp.Xaml.GuiConnector`1.OrderStatusFailed/summary;DocStr9460
 E:StockSharp.Xaml.GuiConnector`1.NewStopOrders/summary;DocStr870
 E:StockSharp.Xaml.GuiConnector`1.StopOrdersChanged/summary;DocStr870
 E:StockSharp.Xaml.GuiConnector`1.StopOrdersRegisterFailed/summary;DocStr875

@@ -3708,6 +3708,7 @@ E:StockSharp.Algo.Connector.OrdersRegisterFailed/summary;DocStr873
 E:StockSharp.Algo.Connector.OrdersCancelFailed/summary;DocStr874
 E:StockSharp.Algo.Connector.MassOrderCanceled/summary;DocStr9027
 E:StockSharp.Algo.Connector.MassOrderCancelFailed/summary;DocStr9028
+E:StockSharp.Algo.Connector.OrderStatusFailed/summary;DocStr9460
 E:StockSharp.Algo.Connector.StopOrdersRegisterFailed/summary;DocStr875
 E:StockSharp.Algo.Connector.StopOrdersCancelFailed/summary;DocStr876
 E:StockSharp.Algo.Connector.NewSecurities/summary;DocStr877

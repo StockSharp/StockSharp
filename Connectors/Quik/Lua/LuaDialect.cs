@@ -15,9 +15,6 @@ namespace StockSharp.Quik.Lua
 		{
 			TimeZone = TimeHelper.Moscow;
 
-			SecurityLookup = true;
-			PortfolioLookup = true;
-			OrderLookup = true;
 			SecuritiesSinglePacket = true;
 		}
 

@@ -1724,6 +1724,12 @@ namespace StockSharp.Algo
 						break;
 					}
 
+					if (message.Error != null && _entityCache.IsOrderStatusRequest(message.OriginalTransactionId))
+					{
+						RaiseOrderStatusFailed(message.OriginalTransactionId, message.Error);
+						break;
+					}
+
 					long transactionId;
 					var order = _entityCache.GetOrder(message, out transactionId);
 

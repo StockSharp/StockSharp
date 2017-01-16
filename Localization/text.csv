@@ -13667,3 +13667,5 @@ DocStr9456;Do not show this window again;Больше не показывать 
 DocStr9457;Owner window;Владелец окна
 DocStr9458;Handler will be called after the window was showed;Обработчик будет вызван после показа окна
 DocStr9459;Event of double-clicking the mouse on the selected item;Событие двойного клика мышкой
+DocStr9460;Failed order status request event;Событие ошибки запроса состояния завок
+DocStr9461;Required if responding to and if provided on the {0} message;Указывается, если сообщение является ответом на {0}
