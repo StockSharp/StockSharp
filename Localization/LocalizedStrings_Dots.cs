@@ -5,7 +5,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// 
 		/// </summary>
-		public const string Dot = "Dot";
+		public const string Dot = nameof(Dot);
 
 		private static string AppendDot(string value)
 		{

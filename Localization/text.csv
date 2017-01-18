@@ -842,8 +842,8 @@ Str882;Trade volume.;Объем сделки.
 Str883;Trade (frequency);Сделка (частота)
 Str884;Risk-rule, tracking orders execution frequency.;Риск-правило, отслеживающее частоту совершения сделок.
 Str885;Interval, during which trades quantity will be monitored.;Интервал, в пределах которого будет отслеживать количество сделок.
-Str886;Anonymous;Анонимно
-Str887;User;Пользовательский
+Anonymous;Anonymous;Анонимно
+Custom;Custom;Пользовательский
 Str888Params;Type of data '{0}' is not supported.;Тип данных '{0}' не поддерживается.
 Str889;Conditional order does not have a condition.;Условная заявка не имеет условие.
 Str890;Security information is missing.;Отсутствует информация по инструменту.

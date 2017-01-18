@@ -1,5 +1,21 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) IConnector.OrderStatusFailed
+* (bug) CQG fixes.
+* (bug) InteractiveBrokers fixes.
+* (feature) SampleIB. Options, Scanner.
+* (feature) Plaza. v5.3
+* (feature) Twime. V2.1
+* (feature) FIX connector. Dialect refactoring.
+* (feature) FixServer. Passwords. String -> SecureString.
+* (bug) Quik lua. Fix http://stocksharp.ru/forum/7023/problema-s-opredelenie-sostoyaniya-instrumenta/
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/285
+* (feature) AboutWindow
+* (bug) HistoryEmulationConnector. Process candle time fixes. https://github.com/StockSharp/StockSharp/issues/283
+* (bug) Commission rules fixes.
+* (bug) Fix http://stocksharp.ru/forum/7015/stocksharpxamlcharting-shablony-securitygrid-oshibka-v-kolonkah/
+
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
 
