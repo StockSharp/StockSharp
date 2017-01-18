@@ -1,5 +1,11 @@
 StockSharp Data (Hydra) Change log
 ========================
+###current:
+* (feature) Import pane refactoring.
+* (bug) Fix http://stocksharp.ru/forum/7013/oshibka-sohraneniya-tikovyh-dannyh-s-finama-v-formate-bin/
+* (feature) Options desk.
+* (feature) Options. Volatility smile chart.
+
 ###v4.3.19.5:
 * (bug) http://stocksharp.ru/posts/m/37591/
 
