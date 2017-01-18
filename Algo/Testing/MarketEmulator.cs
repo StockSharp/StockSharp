@@ -459,7 +459,7 @@ namespace StockSharp.Algo.Testing
 					.Add(Level1Fields.MinPrice, ShrinkPrice((decimal)(price - priceOffset), priceStep))
 					.Add(Level1Fields.MaxPrice, ShrinkPrice((decimal)(price + priceOffset), priceStep));
 
-				_parent.UpdateLevel1Info(level1Msg, result);
+				_parent.UpdateLevel1Info(level1Msg, result, true);
 			}
 
 			private void UpdateSecurityDefinition(Level1ChangeMessage message)
@@ -1650,7 +1650,7 @@ namespace StockSharp.Algo.Testing
 
 					retVal.AddRange(GetEmulator(level1Msg.SecurityId).Process(message));
 
-					UpdateLevel1Info(level1Msg, retVal);
+					UpdateLevel1Info(level1Msg, retVal, false);
 					break;
 				}
 
@@ -1771,7 +1771,7 @@ namespace StockSharp.Algo.Testing
 			return _portfolios.SafeAdd(portfolioName, key => new PortfolioEmulator(this, key), out isNew);
 		}
 
-		private void UpdateLevel1Info(Level1ChangeMessage level1Msg, ICollection<Message> retVal)
+		private void UpdateLevel1Info(Level1ChangeMessage level1Msg, ICollection<Message> retVal, bool addToResult)
 		{
 			var marginChanged = false;
 			var state = _secStates.SafeAdd(level1Msg.SecurityId);
@@ -1801,7 +1801,8 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			retVal.Add(level1Msg);
+			if (addToResult)
+				retVal.Add(level1Msg);
 
 			if (!marginChanged)
 				return;
