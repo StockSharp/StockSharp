@@ -8410,22 +8410,22 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Anonymous
 		/// </summary>
-		public const string Str886Key = nameof(Str886);
+		public const string AnonymousKey = nameof(Anonymous);
 
 		/// <summary>
 		/// Anonymous
 		/// </summary>
-		public static string Str886 => GetString(Str886Key);
+		public static string Anonymous => GetString(AnonymousKey);
 
 		/// <summary>
-		/// User
+		/// Custom
 		/// </summary>
-		public const string Str887Key = nameof(Str887);
+		public const string CustomKey = nameof(Custom);
 
 		/// <summary>
-		/// User
+		/// Custom
 		/// </summary>
-		public static string Str887 => GetString(Str887Key);
+		public static string Custom => GetString(CustomKey);
 
 		/// <summary>
 		/// Type of data '{0}' is not supported.
