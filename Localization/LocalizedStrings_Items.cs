@@ -43606,5 +43606,15 @@ namespace StockSharp.Localization
 		/// Do not show again
 		/// </summary>
 		public static string DoNotShowAgain => GetString(DoNotShowAgainKey);
+
+		/// <summary>
+		/// Credentials
+		/// </summary>
+		public const string CredentialsKey = nameof(Credentials);
+
+		/// <summary>
+		/// Credentials
+		/// </summary>
+		public static string Credentials => GetString(CredentialsKey);
 	}
 }
