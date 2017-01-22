@@ -43608,13 +43608,23 @@ namespace StockSharp.Localization
 		public static string DoNotShowAgain => GetString(DoNotShowAgainKey);
 
 		/// <summary>
-		/// Credentials
+		/// Contact us
 		/// </summary>
-		public const string CredentialsKey = nameof(Credentials);
+		public const string ContactUsKey = nameof(ContactUs);
 
 		/// <summary>
-		/// Credentials
+		/// Contact us
 		/// </summary>
-		public static string Credentials => GetString(CredentialsKey);
+		public static string ContactUs => GetString(ContactUsKey);
+
+		/// <summary>
+		/// Thank you for the valuable feedback. We will reply shortly.
+		/// </summary>
+		public const string ThankYouForFeedbackKey = nameof(ThankYouForFeedback);
+
+		/// <summary>
+		/// Thank you for the valuable feedback. We will reply shortly.
+		/// </summary>
+		public static string ThankYouForFeedback => GetString(ThankYouForFeedbackKey);
 	}
 }
