@@ -703,6 +703,26 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs">
+      <summary>
+            Contains event data for <see cref="E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Column">
+      <summary>
+            Column.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row">
+      <summary>
+            Value.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.GridControl.BaseGridControl">
       <summary>
             The grid control.
@@ -1930,6 +1950,155 @@
     <member name="M:StockSharp.Xaml.OptionDesk.InitializeComponent">
       <summary>
             InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.OptionDeskRow">
+      <summary>
+            The board row.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide">
+      <summary>
+            Information <see cref="F:StockSharp.Messages.OptionTypes.Call" /> or <see cref="F:StockSharp.Messages.OptionTypes.Put" /> of board row.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Row">
+      <summary>
+            The board row.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.BestBidPrice">
+      <summary>
+            The best buy price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.BestAskPrice">
+      <summary>
+            The best buy price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Volume">
+      <summary>
+            Volume per session.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.TheorPrice">
+      <summary>
+            Theoretical price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.MaxOpenInterest">
+      <summary>
+            Reserved.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Option">
+      <summary>
+            Information about the option.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Delta">
+      <summary>
+            Option delta.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Gamma">
+      <summary>
+            Option gamma.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Theta">
+      <summary>
+            Option theta.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Vega">
+      <summary>
+            Option vega.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Rho">
+      <summary>
+            Option rho.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.OpenInterest">
+      <summary>
+            Open interest.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.PnL">
+      <summary>
+            Profitability of an option contract.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.MaxVolume">
+      <summary>
+            Reserved.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>A string that represents the current object.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.OptionDeskRow.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.OptionDeskRow" />.
+            </summary>
+      <param name="underlyingAsset">Underlying asset.</param>
+      <param name="call">Call option.</param>
+      <param name="put">Put option.</param>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.Strike">
+      <summary>
+            Option strike price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.ImpliedVolatility">
+      <summary>
+            Option volatility (implied).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.HistoricalVolatility">
+      <summary>
+            Option volatility (historic).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.PnL">
+      <summary>
+            Profitability of an option contract.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.MaxImpliedVolatility">
+      <summary>
+            Reserved.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.MaxHistoricalVolatility">
+      <summary>
+            Reserved.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.MaxPnL">
+      <summary>
+            Reserved.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.UnderlyingAsset">
+      <summary>
+            Information about the underlying asset.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.Call">
+      <summary>
+            Option parameters <see cref="F:StockSharp.Messages.OptionTypes.Call" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.Put">
+      <summary>
+            Option parameters <see cref="F:StockSharp.Messages.OptionTypes.Put" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.OrderLogGrid">
