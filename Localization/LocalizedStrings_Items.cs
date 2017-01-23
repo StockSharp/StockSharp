@@ -43626,5 +43626,15 @@ namespace StockSharp.Localization
 		/// Thank you for the valuable feedback. We will reply shortly.
 		/// </summary>
 		public static string ThankYouForFeedback => GetString(ThankYouForFeedbackKey);
+
+		/// <summary>
+		/// Login and password must be specified.
+		/// </summary>
+		public const string LoginAndPasswordMustBeSpecifiedKey = nameof(LoginAndPasswordMustBeSpecified);
+
+		/// <summary>
+		/// Login and password must be specified.
+		/// </summary>
+		public static string LoginAndPasswordMustBeSpecified => GetString(LoginAndPasswordMustBeSpecifiedKey);
 	}
 }

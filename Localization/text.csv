@@ -4396,6 +4396,7 @@ DoYouHaveQuestionsOrSuggestions;Do you have any questions or suggestions? Contac
 DoNotShowAgain;Do not show again;Больше не показывать
 ContactUs;Contact us;Напишите нам
 ThankYouForFeedback;Thank you for the valuable feedback. We will reply shortly.;Спасибо за ваше обращение. Мы ответим вам в ближайшее время.
+LoginAndPasswordMustBeSpecified;Login and password must be specified.;Логин и пароль должны быть указаны.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
