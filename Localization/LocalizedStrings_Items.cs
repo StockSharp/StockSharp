@@ -43636,5 +43636,25 @@ namespace StockSharp.Localization
 		/// Login and password must be specified.
 		/// </summary>
 		public static string LoginAndPasswordMustBeSpecified => GetString(LoginAndPasswordMustBeSpecifiedKey);
+
+		/// <summary>
+		/// Add option
+		/// </summary>
+		public const string AddOptionKey = nameof(AddOption);
+
+		/// <summary>
+		/// Add option
+		/// </summary>
+		public static string AddOption => GetString(AddOptionKey);
+
+		/// <summary>
+		/// Remove option
+		/// </summary>
+		public const string RemoveOptionKey = nameof(RemoveOption);
+
+		/// <summary>
+		/// Remove option
+		/// </summary>
+		public static string RemoveOption => GetString(RemoveOptionKey);
 	}
 }
