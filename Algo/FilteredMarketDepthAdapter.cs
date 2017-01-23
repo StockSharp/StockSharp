@@ -47,7 +47,8 @@ namespace StockSharp.Algo
 
 						return res.Volume <= 0 ? null : res;
 					})
-					.Where(q => q != null);
+					.Where(q => q != null)
+					.ToArray();
 			}
 
 			public QuoteChangeMessage Process(QuoteChangeMessage message)
