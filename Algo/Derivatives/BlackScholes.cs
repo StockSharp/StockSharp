@@ -61,6 +61,38 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="BlackScholes"/>.
+		/// </summary>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		protected BlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider)
+		{
+			if (underlyingAsset == null)
+				throw new ArgumentNullException(nameof(underlyingAsset));
+
+			if (dataProvider == null)
+				throw new ArgumentNullException(nameof(dataProvider));
+
+			_underlyingAsset = underlyingAsset;
+			DataProvider = dataProvider;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BlackScholes"/>.
+		/// </summary>
+		/// <param name="option">Options contract.</param>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		public BlackScholes(Security option, Security underlyingAsset, IMarketDataProvider dataProvider)
+			: this(underlyingAsset, dataProvider)
+		{
+			if (option == null)
+				throw new ArgumentNullException(nameof(option));
+
+			Option = option;
+		}
+
+		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; }

@@ -123,6 +123,18 @@ namespace StockSharp.Algo.Derivatives
 			_innerModels = new InnerModelList(this);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BasketBlackScholes"/>.
+		/// </summary>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		public BasketBlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider)
+			: base(underlyingAsset, dataProvider)
+		{
+			_innerModels = new InnerModelList(this);
+			_underlyingAsset = underlyingAsset;
+		}
+
 		private readonly InnerModelList _innerModels;
 
 		/// <summary>
