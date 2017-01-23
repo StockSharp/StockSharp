@@ -4028,6 +4028,9 @@ P:StockSharp.Algo.Derivatives.BasketBlackScholes.IInnerModelList.Item(StockSharp
 M:StockSharp.Algo.Derivatives.BasketBlackScholes.#ctor(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/summary;DocStr1
 M:StockSharp.Algo.Derivatives.BasketBlackScholes.#ctor(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/securityProvider;DocStr972
 M:StockSharp.Algo.Derivatives.BasketBlackScholes.#ctor(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/dataProvider;DocStr973
+M:StockSharp.Algo.Derivatives.BasketBlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/summary;DocStr1
+M:StockSharp.Algo.Derivatives.BasketBlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/underlyingAsset;UnderlyingAsset
+M:StockSharp.Algo.Derivatives.BasketBlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/dataProvider;DocStr973
 P:StockSharp.Algo.Derivatives.BasketBlackScholes.InnerModels/summary;DocStr991
 P:StockSharp.Algo.Derivatives.BasketBlackScholes.UnderlyingAssetPosition/summary;DocStr992
 P:StockSharp.Algo.Derivatives.BasketBlackScholes.Option/summary;OptionsContract
@@ -4149,6 +4152,13 @@ M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Sec
 M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/option;OptionsContract
 M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/securityProvider;DocStr972
 M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/dataProvider;DocStr973
+M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/summary;DocStr1
+M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/underlyingAsset;UnderlyingAsset
+M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/dataProvider;DocStr973
+M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/summary;DocStr1
+M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/option;OptionsContract
+M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/underlyingAsset;UnderlyingAsset
+M:StockSharp.Algo.Derivatives.BlackScholes.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/dataProvider;DocStr973
 P:StockSharp.Algo.Derivatives.BlackScholes.SecurityProvider/summary;DocStr972
 P:StockSharp.Algo.Derivatives.BlackScholes.DataProvider/summary;DocStr973
 P:StockSharp.Algo.Derivatives.BlackScholes.Option/summary;OptionsContract
@@ -4524,7 +4534,7 @@ M:StockSharp.Algo.Latency.LatencyManager.Save(Ecng.Serialization.SettingsStorage
 T:StockSharp.Algo.AuthorizationModes/summary;DocStr1259
 F:StockSharp.Algo.AuthorizationModes.Anonymous/summary;DocStr1260
 F:StockSharp.Algo.AuthorizationModes.Windows/summary;DocStr1261
-F:StockSharp.Algo.AuthorizationModes.Custom/summary;Str3725
+F:StockSharp.Algo.AuthorizationModes.Custom/summary;Custom
 F:StockSharp.Algo.AuthorizationModes.Community/summary;DocStr1262
 T:StockSharp.Algo.IMarketRuleContainer/summary;DocStr1362
 P:StockSharp.Algo.IMarketRuleContainer.ProcessState/summary;DocStr1367

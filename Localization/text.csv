@@ -13674,3 +13674,14 @@ DocStr9458;Handler will be called after the window was showed;Обработчи
 DocStr9459;Event of double-clicking the mouse on the selected item;Событие двойного клика мышкой
 DocStr9460;Failed order status request event;Событие ошибки запроса состояния завок
 DocStr9461;Required if responding to and if provided on the {0} message;Указывается, если сообщение является ответом на {0}
+DocStr9462;UTC time stamp parser;Парсер временной метки в формате UTC
+DocStr9463;UTC time parser;Парсер даты в формате UTC
+DocStr9464;UTC date parser;Парсер времени в формате UTC
+DocStr9465;Parser for {0} field;Парсер для поля {0}
+DocStr9466;Date parser;Парсер даты
+DocStr9467;Date and time parser;Парсер даты и времени
+DocStr9468;Time parser;Парсер времени
+DocStr9469;Time parser. Required if data will be transfed as string;Парсер времени. Требуется, если данные транслируются ввиде строки
+DocStr9470;Contains event data for {0};Содержит данные события для {0}
+DocStr9471;Call option;Call опцион
+DocStr9472;Put option;Put опцион
