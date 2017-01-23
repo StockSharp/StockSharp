@@ -42,19 +42,19 @@
             Target ID.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeStampFormat">
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeStampParser">
       <summary>
-            UTC time stamp format.
+            UTC time stamp parser.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeFormat">
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.TimeParser">
       <summary>
-            UTC time format.
+            UTC time parser.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseDialect.DateFormat">
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.DateParser">
       <summary>
-            UTC date format.
+            UTC date parser.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.IsResetCounter">
@@ -230,14 +230,14 @@
       <returns>
       </returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseDialect.ReadExecutionReport(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.ExecutionReport,System.String,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.ReadExecutionReport(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.ExecutionReport,Ecng.Common.FastDateTimeParser,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
       <summary>
             Read the <see cref="F:StockSharp.Fix.Native.FixMessages.ExecutionReport" /> message.
             </summary>
       <param name="reader">The reader of data recorded in the FIX protocol format.</param>
       <param name="report">
         <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.</param>
-      <param name="transactTimeFormat">Format for <see cref="F:StockSharp.Fix.Native.FixTags.TransactTime" /> field.</param>
+      <param name="transactTimeParser">Parser for <see cref="F:StockSharp.Fix.Native.FixTags.TransactTime" /> field.</param>
       <param name="extraTagProcess">
       </param>
       <returns>
@@ -340,19 +340,19 @@
             Target ID.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeStampFormat">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeStampParser">
       <summary>
-            UTC time stamp format.
+            UTC time stamp parser.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeFormat">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeParser">
       <summary>
-            UTC time format.
+            UTC time parser.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.DateFormat">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.DateParser">
       <summary>
-            UTC date format.
+            UTC date parser.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter">
@@ -664,19 +664,19 @@
             Information about the time zone where the exchange is located.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixSession.DateFormat">
+    <member name="P:StockSharp.Fix.FixSession.DateParser">
       <summary>
-            Date format.
+            Date parser.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixSession.DateTimeFormat">
+    <member name="P:StockSharp.Fix.FixSession.DateTimeParser">
       <summary>
-            Date and time format.
+            Date and time parser.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixSession.TimeFormat">
+    <member name="P:StockSharp.Fix.FixSession.TimeParser">
       <summary>
-            Time format.
+            Time parser.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixSession.ReadTimeout">
@@ -819,19 +819,19 @@
             </summary>
       <returns>The next tag. The -1 indicates the end of data.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDateTime(System.String)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDateTime(Ecng.Common.FastDateTimeParser)">
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadTimeSpan(System.String)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadTimeSpan(Ecng.Common.FastTimeSpanParser)">
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
@@ -1012,21 +1012,21 @@
       <param name="value">
         <see cref="T:System.Decimal" /> value.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.DateTime,System.String)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.DateTime,Ecng.Common.FastDateTimeParser)">
       <summary>
             To record the <see cref="T:System.DateTime" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.TimeSpan,System.String)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
             To record the <see cref="T:System.TimeSpan" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.String)">
       <summary>
@@ -4975,21 +4975,21 @@
       <param name="value">
         <see cref="T:System.Decimal" /> value.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.DateTime,System.String)">
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.DateTime,Ecng.Common.FastDateTimeParser)">
       <summary>
             To record the <see cref="T:System.DateTime" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.TimeSpan,System.String)">
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
             To record the <see cref="T:System.TimeSpan" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.String)">
       <summary>
@@ -5091,19 +5091,19 @@
             </summary>
       <returns>The next tag. The -1 indicates the end of data.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDateTime(System.String)">
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDateTime(Ecng.Common.FastDateTimeParser)">
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTimeSpan(System.String)">
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTimeSpan(Ecng.Common.FastTimeSpanParser)">
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
@@ -5200,21 +5200,21 @@
       <param name="value">
         <see cref="T:System.Decimal" /> value.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.DateTime,System.String)">
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.DateTime,Ecng.Common.FastDateTimeParser)">
       <summary>
             To record the <see cref="T:System.DateTime" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.TimeSpan,System.String)">
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
             To record the <see cref="T:System.TimeSpan" /> value.
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.String)">
       <summary>
@@ -5282,19 +5282,19 @@
             </summary>
       <returns>Data log.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadDateTime(System.String)">
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadDateTime(Ecng.Common.FastDateTimeParser)">
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadTimeSpan(System.String)">
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadTimeSpan(Ecng.Common.FastTimeSpanParser)">
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="format">Time format.</param>
+      <param name="parser">Time parser. Required if data will be transfed as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>

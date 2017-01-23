@@ -10,7 +10,7 @@ namespace StockSharp.Quik.Lua
 
 	static class LuaFixExtensions
 	{
-		public static void WriteOrderCondition(this IFixWriter writer, QuikOrderCondition condition, string dateTimeFormat)
+		public static void WriteOrderCondition(this IFixWriter writer, QuikOrderCondition condition, FastDateTimeParser dateTimeParser)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(nameof(writer));
@@ -75,10 +75,10 @@ namespace StockSharp.Quik.Lua
 			if (condition.ActiveTime != null)
 			{
 				writer.Write((FixTags)LuaFixTags.ActiveTimeFrom);
-				writer.Write(condition.ActiveTime.Min.UtcDateTime, dateTimeFormat);
+				writer.Write(condition.ActiveTime.Min.UtcDateTime, dateTimeParser);
 
 				writer.Write((FixTags)LuaFixTags.ActiveTimeTo);
-				writer.Write(condition.ActiveTime.Max.UtcDateTime, dateTimeFormat);
+				writer.Write(condition.ActiveTime.Max.UtcDateTime, dateTimeParser);
 			}
 
 			if (condition.ConditionOrderId != null)
@@ -124,7 +124,7 @@ namespace StockSharp.Quik.Lua
 			}
 		}
 
-		public static bool ReadOrderCondition(this IFixReader reader, FixTags tag, TimeZoneInfo timeZone, string dateTimeFormat, Func<QuikOrderCondition> getCondition)
+		public static bool ReadOrderCondition(this IFixReader reader, FixTags tag, TimeZoneInfo timeZone, FastDateTimeParser dateTimeParser, Func<QuikOrderCondition> getCondition)
 		{
 			if (getCondition == null)
 				throw new ArgumentNullException(nameof(getCondition));
@@ -162,13 +162,13 @@ namespace StockSharp.Quik.Lua
 					if (getCondition().ActiveTime == null)
 						getCondition().ActiveTime = new Range<DateTimeOffset>();
 
-					getCondition().ActiveTime.Min = reader.ReadDateTime(dateTimeFormat).ToDateTimeOffset(timeZone);
+					getCondition().ActiveTime.Min = reader.ReadDateTime(dateTimeParser).ToDateTimeOffset(timeZone);
 					return true;
 				case LuaFixTags.ActiveTimeTo:
 					if (getCondition().ActiveTime == null)
 						getCondition().ActiveTime = new Range<DateTimeOffset>();
 
-					getCondition().ActiveTime.Max = reader.ReadDateTime(dateTimeFormat).ToDateTimeOffset(timeZone);
+					getCondition().ActiveTime.Max = reader.ReadDateTime(dateTimeParser).ToDateTimeOffset(timeZone);
 					return true;
 				case LuaFixTags.ConditionOrderId:
 					getCondition().ConditionOrderId = reader.ReadLong();

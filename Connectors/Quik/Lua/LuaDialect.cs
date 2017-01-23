@@ -49,7 +49,7 @@ namespace StockSharp.Quik.Lua
 		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
 		protected override void WriteOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
 		{
-			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition, TimeStampFormat);
+			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition, TimeStampParser);
 		}
 
 		/// <summary>
@@ -61,7 +61,7 @@ namespace StockSharp.Quik.Lua
 		/// <returns>Успешно ли обработаны данные.</returns>
 		protected override bool ReadOrderCondition(IFixReader reader, FixTags tag, Func<OrderCondition> getCondition)
 		{
-			return reader.ReadOrderCondition(tag, TimeZone, TimeStampFormat, () => (QuikOrderCondition)getCondition());
+			return reader.ReadOrderCondition(tag, TimeZone, TimeStampParser, () => (QuikOrderCondition)getCondition());
 		}
 	}
 }

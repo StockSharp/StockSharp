@@ -92,12 +92,12 @@ namespace StockSharp.Quik.Lua
 
 			protected override bool ReadOrderCondition(IFixReader reader, FixTags tag, Func<OrderCondition> getCondition)
 			{
-				return reader.ReadOrderCondition(tag, TimeHelper.Moscow, TransactionSession.DateTimeFormat, () => (QuikOrderCondition)getCondition());
+				return reader.ReadOrderCondition(tag, TimeHelper.Moscow, TransactionSession.DateTimeParser, () => (QuikOrderCondition)getCondition());
 			}
 
 			protected override void WriterFixOrderCondition(IFixWriter writer, ExecutionMessage message)
 			{
-				writer.WriteOrderCondition((QuikOrderCondition)message.Condition, TransactionSession.DateTimeFormat);
+				writer.WriteOrderCondition((QuikOrderCondition)message.Condition, TransactionSession.DateTimeParser);
 			}
 		}
 
