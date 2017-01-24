@@ -41,6 +41,17 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="Black"/>.
+		/// </summary>
+		/// <param name="option">Options contract.</param>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		public Black(Security option, Security underlyingAsset, IMarketDataProvider dataProvider)
+			: base(option, underlyingAsset, dataProvider)
+		{
+		}
+
+		/// <summary>
 		/// The dividend amount on shares.
 		/// </summary>
 		public override decimal Dividend

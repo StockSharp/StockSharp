@@ -175,11 +175,14 @@ namespace SampleOptionQuoting
 
 			var expiryDate = new DateTime(2014, 09, 15);
 
-			Desk.MarketDataProvider = Connector;
-			Desk.SecurityProvider = Connector;
-			Desk.CurrentTime = new DateTime(2014, 08, 15);
+			var model = new OptionDeskModel
+			{
+				MarketDataProvider = Connector
+			};
 
-			Desk.Options = new[]
+			Desk.Model = model;
+
+			model.Add(new[]
 			{
 				CreateStrike(05000, 10, 60, OptionTypes.Call, expiryDate, asset, 100),
 				CreateStrike(10000, 10, 53, OptionTypes.Call, expiryDate, asset, 343),
@@ -204,9 +207,9 @@ namespace SampleOptionQuoting
 				CreateStrike(45000, 10, 37, OptionTypes.Put, expiryDate, asset, 67),
 				CreateStrike(50000, 454, 39, OptionTypes.Put, expiryDate, asset, null),
 				CreateStrike(55000, 10, 41, OptionTypes.Put, expiryDate, asset, 334)
-			};
+			});
 
-			Desk.RefreshOptions();
+			model.Refresh(new DateTime(2014, 08, 15));
 
 			//
 			// draw test data on the smile chart
@@ -214,7 +217,7 @@ namespace SampleOptionQuoting
 			var puts = SmileChart.CreateSmile("RIM4 (Put)", Colors.DarkRed);
 			var calls = SmileChart.CreateSmile("RIM4 (Call)", Colors.DarkGreen);
 
-			foreach (var option in Desk.Options)
+			foreach (var option in model.Options)
 			{
 				if (option.Strike == null || option.ImpliedVolatility == null)
 					continue;
