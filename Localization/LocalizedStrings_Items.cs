@@ -3248,12 +3248,12 @@ namespace StockSharp.Localization
 		public static string Str298 => GetString(Str298Key);
 
 		/// <summary>
-		/// Volatility (historic)
+		/// Volatility (historical)
 		/// </summary>
 		public const string Str299Key = nameof(Str299);
 
 		/// <summary>
-		/// Volatility (historic)
+		/// Volatility (historical)
 		/// </summary>
 		public static string Str299 => GetString(Str299Key);
 
@@ -14588,12 +14588,12 @@ namespace StockSharp.Localization
 		public static string Str1531 => GetString(Str1531Key);
 
 		/// <summary>
-		/// Option volatility (historic).
+		/// Option volatility (historical).
 		/// </summary>
 		public const string Str1532Key = nameof(Str1532);
 
 		/// <summary>
-		/// Option volatility (historic).
+		/// Option volatility (historical).
 		/// </summary>
 		public static string Str1532 => GetString(Str1532Key);
 

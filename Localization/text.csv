@@ -321,7 +321,7 @@ Str295;Bids volume;Объем бидов
 Str296;Number of bids;Количество бидов
 Str297;Ask volume;Объем офферов
 Str298;Number of asks;Количество офферов
-Str299;Volatility (historic);Волатильность (историческая)
+Str299;Volatility (historical);Волатильность (историческая)
 Delta;Delta;Дельта
 Gamma;Gamma;Гамма
 Vega;Vega;Вега
@@ -1459,7 +1459,7 @@ Str1528;Profitability of an option contract.;Прибыльность опцио
 Options;Options;Опционы
 Str1530;AND Call and Put not found.;И Call и Put не найдены.
 Str1531;Option volatility (implied).;Волатильность (подразумеваемая) опциона.
-Str1532;Option volatility (historic).;Волатильность (историческая) опциона.
+Str1532;Option volatility (historical).;Волатильность (историческая) опциона.
 Str1533;Information about the underlying asset.;Информация о базовом активе.
 Str1534;Call option parameters.;Параметры Call опциона.
 Str1535;Put option parameters.;Параметры Put опциона.
@@ -6499,7 +6499,7 @@ DocStr2112;The adapter, executing messages in {0};Адаптер, исполня
 DocStr2113;The number of processed messages;Число обработанных сообщений
 DocStr2114;The message, informing about the emulator state change;Сообщение, информирующее об изменении состояния эмулятора
 DocStr2115;The state been transferred;Передаваемое состояние
-DocStr2116;The emulational connection. It uses historic data and/or occasionally generated;Эмуляционное подключение. Использует исторические данные и/или случайно сгенерированные
+DocStr2116;The emulational connection. It uses historical data and/or occasionally generated;Эмуляционное подключение. Использует исторические данные и/или случайно сгенерированные
 DocStr2117;Instruments, which will be sent through the {0} event;Инструменты, которые будут переданы через событие {0}
 DocStr2118;Portfolios, which will be sent through the {0} event;Портфели, которые будут переданы через событие {0}
 DocStr2119;To start the emulation;Запустить эмуляцию
@@ -7846,7 +7846,7 @@ DocStr3472;Allows client to request snapshot market data;Allows client to reques
 DocStr3473;Market Data Off - used in conjunction with RTVolume Generic tick type causes only volume data to be sent;Market Data Off - used in conjunction with RTVolume Generic tick type causes only volume data to be sent
 DocStr3474;After calling this method, market data for the specified Id will stop flowing;After calling this method, market data for the specified Id will stop flowing
 DocStr3475;used for reqHistoricalData;used for reqHistoricalData
-DocStr3476;To subscribe for instrument historic values geting at specified intervals;Подписаться на получение исторических значений инструмента с заданной периодичностью
+DocStr3476;To subscribe for instrument historical values geting at specified intervals;Подписаться на получение исторических значений инструмента с заданной периодичностью
 DocStr3477;The message about subscription or unsubscription for market data;Сообщение о подписке или отписки на маркет-данные
 DocStr3478;The market data field. Following values are supported: {0};Поле маркет-данных. Поддерживаются следующие значения: {0}
 DocStr3479;To get data only by the trading time. By default the trading time is used;Получать данные только по торговому времени. По-умолчанию используется торговое время
