@@ -43656,5 +43656,15 @@ namespace StockSharp.Localization
 		/// Remove option
 		/// </summary>
 		public static string RemoveOption => GetString(RemoveOptionKey);
+
+		/// <summary>
+		/// Evaluate greeks
+		/// </summary>
+		public const string EvaluateGreeksKey = nameof(EvaluateGreeks);
+
+		/// <summary>
+		/// Evaluate greeks
+		/// </summary>
+		public static string EvaluateGreeks => GetString(EvaluateGreeksKey);
 	}
 }
