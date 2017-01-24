@@ -119,8 +119,8 @@
 				  - правило на событие изменения заявки.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие появления сделок по заявке.
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrade(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
+				  - правило на событие появления сделки по заявке.
 			  </listItem>
 		  </list>
 		  <para>
@@ -288,8 +288,8 @@
 				</listItem>
 		  	    
 		  	    <listItem>
-			        <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewMyTrades(StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-			  	    - правило на событие появление новых сделок.
+			        <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewMyTrade(StockSharp.BusinessEntities.IConnector)</codeEntityReference>
+			  	    - правило на событие появление новой сделки.
 			    </listItem>
 		  	    <listItem>
 		  	  	    <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewOrder(StockSharp.BusinessEntities.IConnector)</codeEntityReference>

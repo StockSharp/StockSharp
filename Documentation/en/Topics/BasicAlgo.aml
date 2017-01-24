@@ -58,7 +58,7 @@ Console.WriteLine(trader.GetMarketDepth(someSecurity).GetFilteredQuotes(OrderDir
 trader.GetMarketDepth(someSecurity).Invert(someSecurity.MinStepSize);</code>
 			  </content>
 		  </step>-->
-		  <step>
+		  <!--<step>
 			  <content>
 				  <para>
 					  To calculate the market price by instrument through the 
@@ -67,7 +67,7 @@ trader.GetMarketDepth(someSecurity).Invert(someSecurity.MinStepSize);</code>
 var someSecurity = trader.Securities.First();
 Console.WriteLine(someSecurity.GetMarketPrice(OrderDirections.Buy));</code>
 			  </content>
-		  </step>
+		  </step>-->
 		  <step>
 			  <content>
 				  <para>

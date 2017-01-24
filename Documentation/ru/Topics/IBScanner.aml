@@ -4,12 +4,12 @@
     <introduction>
       <para>
       	Платформа <token>ib</token> предоставляет возможность создания специального сканера инструментов по заданным критериям. Сканер создается через метод
-      	<codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)</codeEntityReference> c аргументом <legacyItalic>isSubscribe = true</legacyItalic>.
+      	<codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)</codeEntityReference>.
       	Инструменты, которые будут удовлетворять критериям выборки, будут приходить через событие <codeEntityReference qualifyHint="true">E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults</codeEntityReference>.
       </para>
       <para>
-      	Чтобы удалить сканер необходимо вызвать метод <codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)</codeEntityReference> c аргументом <legacyItalic>isSubscribe = false</legacyItalic>,
-      	куда нужно передать тот же объект настроек, что был ранее передан при создании сканера.
+      	Чтобы удалить сканер необходимо вызвать метод <codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeScanner(System.Int64)</codeEntityReference>,
+      	куда нужно передать идентификатор подписки, полученный ранее при создании сканера.
       </para>
     </introduction>
   </developerConceptualDocument>

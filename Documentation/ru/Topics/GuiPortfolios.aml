@@ -10,7 +10,7 @@
   			</listItem>
   			
   			<listItem>
-  				<para>Комбинированный список с кнопкой, которая открывает окно со списком портфелей - <codeEntityReference>T:StockSharp.Xaml.PortfolioEditor</codeEntityReference>.</para>
+  				<para>Комбинированный список с кнопкой, которая открывает окно со списком портфелей - <codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PortfolioEditor</codeEntityReference>.</para>
   			</listItem>
   			
   			<listItem>

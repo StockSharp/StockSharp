@@ -102,7 +102,7 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Twime.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.ru</CopyrightHref>
-    <CopyrightText>&amp;#169%3b 2016 - StockSharp LLC</CopyrightText>
+    <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
     <FeedbackEMailAddress>info%40stocksharp.ru</FeedbackEMailAddress>
     <FeedbackEMailLinkText>отзыв</FeedbackEMailLinkText>
     <ApiFilter>
@@ -149,6 +149,7 @@
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
     <BuildLogFile>doc_log.log</BuildLogFile>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional

@@ -88,7 +88,7 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Xaml.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.com</CopyrightHref>
-    <CopyrightText>&amp;#169%3b 2016 - StockSharp LLC</CopyrightText>
+    <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
     <FeedbackEMailAddress>info%40stocksharp.com</FeedbackEMailAddress>
     <FeedbackEMailLinkText>feedback</FeedbackEMailLinkText>
     <ApiFilter>

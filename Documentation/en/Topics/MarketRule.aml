@@ -118,8 +118,8 @@
 				  - the rule for the event of the order change.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - the rule for the event of the trades occurrence by the order.
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrade(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
+				  - the rule for the event of the trade occurrence by the order.
 			  </listItem>
 		  </list>
 		  <para>
@@ -287,8 +287,8 @@
 				</listItem>
 		  	    
 		  	    <listItem>
-			        <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewMyTrades(StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-			  	    - the rule for the event of the new trades occurrence.
+			        <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewMyTrade(StockSharp.BusinessEntities.IConnector)</codeEntityReference>
+			  	    - the rule for the event of the new trade occurrence.
 			    </listItem>
 		  	    <listItem>
 		  	  	    <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewOrder(StockSharp.BusinessEntities.IConnector)</codeEntityReference>

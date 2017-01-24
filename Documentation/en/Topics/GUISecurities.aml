@@ -16,7 +16,7 @@
   			
   			<listItem>
   				<para>Компоненты для поиска и выбора инструментов - <codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference>, 
-  				<codeEntityReference>T:StockSharp.Xaml.SecurityPickerWindow</codeEntityReference> и <codeEntityReference>T:StockSharp.Xaml.SecurityEditor</codeEntityReference>.
+  				<codeEntityReference>T:StockSharp.Xaml.SecurityPickerWindow</codeEntityReference> и <codeEntityReference>T:StockSharp.Xaml.PropertyGrid.SecurityEditor</codeEntityReference>.
   				</para>
   			</listItem>
   			

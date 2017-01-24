@@ -54,7 +54,7 @@ var googleHistorySource = new GoogleHistorySource();
   					<listItem>
   					<para>
   					Next, it is necessary to update the instrument storage. The
-  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.GoogleHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})</codeEntityReference>
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.GoogleHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})</codeEntityReference>
   					method is used for it. In fact, this method records to the <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExtensionInfo</codeEntityReference>
   					property the instrument and site codes used in Google Finance, which will be used to download data by the instrument. Note that the first argument of the
   					method is of the <codeEntityReference>T:StockSharp.Algo.Storages.ISecurityStorage</codeEntityReference> type - this interface has been implemented
@@ -82,7 +82,7 @@ googleHistorySource.Refresh(googleSecurityStorage, security, s => {}, () => fals
 				<para>
 				In the last argument it is necessary to specify a function that returns the market data. At that the function must return a value of the
 				<legacyBold>IEnumerable&lt;Message&gt;</legacyBold> type and take a parameter of the <codeEntityReference>T:System.DateTimeOffset</codeEntityReference> type.
-				In our case, the method that requests the candles from Google Finance is used - <codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.GoogleHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>.
+				In our case, the method that requests the candles from Google Finance is used - <codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.GoogleHistorySource.GetCandles(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>.
 				</para>
 				<para>
 				The data will be downloaded after the connector’s start, and the values of the 

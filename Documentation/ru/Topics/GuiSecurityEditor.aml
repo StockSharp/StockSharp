@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 <introduction>
 
-      <para><codeEntityReference>T:StockSharp.Xaml.SecurityEditor</codeEntityReference> - визуальный компонент для поиска инструмента. 
+      <para><codeEntityReference>T:StockSharp.Xaml.PropertyGrid.SecurityEditor</codeEntityReference> - визуальный компонент для поиска инструмента. 
       Состоит из комбинированного списка и кнопки, которая открывает окно поиска инструмента 
       <link xlink:href="3dc4f866-ab4e-4c74-a627-13727abdb966">SecurityPickerWindow</link>. Выбранный инструмент отображается в текстовом поле комбинированного списка.
       </para> 
@@ -14,13 +14,13 @@
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityEditor.SecurityProvider</codeEntityReference> - поставщик информации об инструментах.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProvider</codeEntityReference> - поставщик информации об инструментах.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityEditor.SelectedSecurity</codeEntityReference> - выбранный инструмент.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SelectedSecurity</codeEntityReference> - выбранный инструмент.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityEditor.Text</codeEntityReference> - текст (id инструмента), отображаемый в поле комбинированного списка.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.PropertyGrid.SecurityEditor.Text</codeEntityReference> - текст (id инструмента), отображаемый в поле комбинированного списка.</para>
   			</listItem>
 		</list>
 		

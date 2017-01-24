@@ -4,13 +4,13 @@
     <introduction>
       <para>
       	The <token>ib</token> platform provides the ability to create a special instruments scanner by specified criteria. The scanner is created through the
-      	<codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)</codeEntityReference>
-      	method with the <legacyItalic>isSubscribe = true</legacyItalic> argument. The instruments that will meet the selection criteria, will be coming through the
+      	<codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)</codeEntityReference>
+      	method. The instruments that will meet the selection criteria, will be coming through the
       	<codeEntityReference qualifyHint="true">E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults</codeEntityReference> event.
       </para>
       <para>
-      	To remove the scanner you should call the <codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)</codeEntityReference>
-      	method with the <legacyItalic>isSubscribe = false</legacyItalic> argument, where you need to pass the same settings object that was previously passed when the scanner created.
+      	To remove the scanner you should call the <codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeScanner(System.Int64)</codeEntityReference>
+      	method with subscription identifier, that was previously received when the scanner created.
       </para>
     </introduction>
   </developerConceptualDocument>
