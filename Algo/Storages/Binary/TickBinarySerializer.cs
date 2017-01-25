@@ -281,7 +281,7 @@ namespace StockSharp.Algo.Storages.Binary
 				//LocalTime = metaInfo.FirstTime,
 				ExecutionType = ExecutionTypes.Tick,
 				SecurityId = SecurityId,
-				TradeId = metaInfo.FirstId,
+				TradeId = metaInfo.FirstId == 0 ? (long?)null : metaInfo.FirstId,
 				TradeVolume = volume,
 				OriginSide = orderDirection,
 				TradePrice = price,
