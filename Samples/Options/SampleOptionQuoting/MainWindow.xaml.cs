@@ -243,7 +243,8 @@ namespace SampleOptionQuoting
 				Board = ExchangeBoard.Forts,
 				UnderlyingSecurityId = asset.Id,
 				LastTrade = lastTrade == null ? null : new Trade { Price = lastTrade.Value },
-				Volume = RandomGen.GetInt(10000)
+				Volume = RandomGen.GetInt(10000),
+				Type = SecurityTypes.Option
 			};
 
 			s.BestBid = new Quote(s, s.StepPrice ?? 1m * RandomGen.GetInt(100), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Buy);
