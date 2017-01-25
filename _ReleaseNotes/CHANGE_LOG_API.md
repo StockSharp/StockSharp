@@ -15,6 +15,8 @@ StockSharp API Change log
 * (bug) HistoryEmulationConnector. Process candle time fixes. https://github.com/StockSharp/StockSharp/issues/283
 * (bug) Commission rules fixes.
 * (bug) Fix http://stocksharp.ru/forum/7015/stocksharpxamlcharting-shablony-securitygrid-oshibka-v-kolonkah/
+* (feature) MyTradeGrid. PnL and Position columns.
+* (feature) OptionDesk control refactoring.
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279

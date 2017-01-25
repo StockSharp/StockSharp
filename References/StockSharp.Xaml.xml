@@ -275,6 +275,70 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.OptionDeskModel">
+      <summary>
+            Option desk model.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskModel.EvaluateFildes">
+      <summary>
+            Evaluate greek fields.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskModel.Options">
+      <summary>
+            Strike options.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskModel.Rows">
+      <summary>
+            Option desk rows.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskModel.MarketDataProvider">
+      <summary>
+            The market data provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskModel.UnderlyingAsset">
+      <summary>
+            Underlying asset.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskModel.UseBlackModel">
+      <summary>
+            To use the model <see cref="T:StockSharp.Algo.Derivatives.Black" /> instead of <see cref="T:StockSharp.Algo.Derivatives.IBlackScholes" /> model. The default is off.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.OptionDeskModel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.OptionDeskModel" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.OptionDeskModel.Add(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})">
+      <summary>
+            Add options.
+            </summary>
+      <param name="securities">Options to add.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.OptionDeskModel.Remove(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})">
+      <summary>
+            Remove options.
+            </summary>
+      <param name="securities">Options to remove.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.OptionDeskModel.Clear">
+      <summary>
+            Clear.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.OptionDeskModel.Refresh(System.Nullable{System.DateTimeOffset},System.Nullable{System.Decimal})">
+      <summary>
+            To update the desk values.
+            </summary>
+      <param name="currentTime">The current time.</param>
+      <param name="assetPrice">The current price of the underlying asset. If it is set, then <see cref="T:StockSharp.Algo.Derivatives.IBlackScholes" /> uses this price.</param>
+    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor">
       <summary>
             Editor for <see cref="T:StockSharp.Algo.Commissions.CommissionRule" />.
@@ -1895,57 +1959,15 @@
             OptionDesk
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.OptionDesk.Model">
+      <summary>
+            Option desk model.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.OptionDesk.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.OptionDesk" />.
             </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.OptionDesk.SecurityProvider">
-      <summary>
-            The provider of information about instruments.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.OptionDesk.MarketDataProvider">
-      <summary>
-            The market data provider.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.OptionDesk.CurrentTime">
-      <summary>
-            Current time. If it is set, then <see cref="T:StockSharp.Algo.Derivatives.IBlackScholes" /> uses this time.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.OptionDesk.AssetPrice">
-      <summary>
-            The current price of the underlying asset. If it is set, then <see cref="T:StockSharp.Algo.Derivatives.IBlackScholes" /> uses this price.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.OptionDesk.UseBlackModel">
-      <summary>
-            To use the model <see cref="T:StockSharp.Algo.Derivatives.Black" /> instead of <see cref="T:StockSharp.Algo.Derivatives.IBlackScholes" /> model. The default is off.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.OptionDesk.Options">
-      <summary>
-            Strike options.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.OptionDesk.RefreshOptions">
-      <summary>
-            To update the board values.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.OptionDesk.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.OptionDesk.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.OptionDesk.InitializeComponent">
       <summary>
@@ -1954,17 +1976,17 @@
     </member>
     <member name="T:StockSharp.Xaml.OptionDeskRow">
       <summary>
-            The board row.
+            The option desk row.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide">
       <summary>
-            Information <see cref="F:StockSharp.Messages.OptionTypes.Call" /> or <see cref="F:StockSharp.Messages.OptionTypes.Put" /> of board row.
+            Information <see cref="F:StockSharp.Messages.OptionTypes.Call" /> or <see cref="F:StockSharp.Messages.OptionTypes.Put" /> of option desk row.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Row">
       <summary>
-            The board row.
+            The option desk row.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.BestBidPrice">
@@ -2037,6 +2059,26 @@
             Reserved.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ImpliedVolatilityBestBid">
+      <summary>
+            Option volatility (implied) for best bid.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ImpliedVolatilityBestAsk">
+      <summary>
+            Option volatility (implied) for best ask.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ImpliedVolatilityLastTrade">
+      <summary>
+            Option volatility (implied) for last trade.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.HistoricalVolatility">
+      <summary>
+            Option volatility (historical).
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString">
       <summary>
             Returns a string that represents the current object.
@@ -2056,22 +2098,22 @@
             Option strike price.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.OptionDeskRow.ImpliedVolatility">
-      <summary>
-            Option volatility (implied).
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.OptionDeskRow.HistoricalVolatility">
-      <summary>
-            Option volatility (historic).
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.OptionDeskRow.PnL">
       <summary>
             Profitability of an option contract.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.OptionDeskRow.MaxImpliedVolatility">
+    <member name="P:StockSharp.Xaml.OptionDeskRow.MaxImpliedVolatilityBestBid">
+      <summary>
+            Reserved.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.MaxImpliedVolatilityBestAsk">
+      <summary>
+            Reserved.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OptionDeskRow.MaxImpliedVolatilityLastTrade">
       <summary>
             Reserved.
             </summary>
