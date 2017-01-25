@@ -177,7 +177,8 @@ namespace SampleOptionQuoting
 
 			var model = new OptionDeskModel
 			{
-				MarketDataProvider = Connector
+				MarketDataProvider = Connector,
+				UnderlyingAsset = asset,
 			};
 
 			Desk.Model = model;
