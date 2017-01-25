@@ -1559,7 +1559,7 @@
     </member>
     <member name="F:StockSharp.InteractiveBrokers.CandleDataTypes.HistoricalVolatility">
       <summary>
-            Volatility (historic).
+            Volatility (historical).
             </summary>
     </member>
     <member name="F:StockSharp.InteractiveBrokers.CandleDataTypes.YieldAsk">

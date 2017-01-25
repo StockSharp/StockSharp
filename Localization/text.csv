@@ -13686,3 +13686,17 @@ DocStr9469;Time parser. Required if data will be transfed as string;Парсер
 DocStr9470;Contains event data for {0};Содержит данные события для {0}
 DocStr9471;Call option;Call опцион
 DocStr9472;Put option;Put опцион
+DocStr9476;Evaluate greek fields;Вычислять греки
+DocStr9477;Option desk rows;Строкаи доски опционов
+DocStr9479;Add options;Добавить опционы
+DocStr9480;Options to add;Опционы для добавления
+DocStr9481;Remove options;Удалить опционы
+DocStr9482;Options to remove;Опционы для удаления
+DocStr9483;Clear;Очистить
+DocStr9484;Option desk model;Модель доски опционов
+DocStr9485;To update the desk values;Обновить значения доски
+DocStr9486;The option desk row;Строка доски опционов
+DocStr9487;Information {0} or {1} of option desk row;Information {0} or {1} of option desk row
+DocStr9488;Option volatility (implied) for best bid;Подразумеваемая волатильность (лучший бид)
+DocStr9489;Option volatility (implied) for best ask;Подразумеваемая волатильность (лучший оффер)
+DocStr9490;Option volatility (implied) for last trade;Подразумеваемая волатильность (последняя цена)

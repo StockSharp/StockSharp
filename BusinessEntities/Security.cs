@@ -1037,7 +1037,7 @@ namespace StockSharp.BusinessEntities
 
 		//[DataMember]
 		/// <summary>
-		/// Volatility (historic).
+		/// Volatility (historical).
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]

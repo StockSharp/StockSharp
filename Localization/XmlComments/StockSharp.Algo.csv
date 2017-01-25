@@ -4108,6 +4108,10 @@ M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,S
 M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/option;OptionsContract
 M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/securityProvider;DocStr972
 M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/dataProvider;DocStr973
+M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/summary;DocStr1
+M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/option;OptionsContract
+M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/underlyingAsset;UnderlyingAsset
+M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider)/param/dataProvider;DocStr973
 P:StockSharp.Algo.Derivatives.Black.Dividend/summary;DocStr971
 M:StockSharp.Algo.Derivatives.Black.Premium(System.DateTimeOffset,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/summary;DocStr954
 M:StockSharp.Algo.Derivatives.Black.Premium(System.DateTimeOffset,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/param/currentTime;DocStr955

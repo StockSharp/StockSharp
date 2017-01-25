@@ -152,7 +152,7 @@ namespace StockSharp.Messages
 		AsksCount,
 
 		/// <summary>
-		/// Volatility (historic).
+		/// Volatility (historical).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str299Key)]

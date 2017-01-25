@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The emulational connection. It uses historic data and/or occasionally generated.
+	/// The emulational connection. It uses historical data and/or occasionally generated.
 	/// </summary>
 	public class HistoryEmulationConnector : BaseEmulationConnector, IExternalCandleSource
 	{
