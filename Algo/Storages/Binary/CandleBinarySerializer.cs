@@ -89,7 +89,7 @@ namespace StockSharp.Algo.Storages.Binary
 		private readonly object _arg;
 
 		public CandleBinarySerializer(SecurityId securityId, object arg)
-			: base(securityId, 74, MarketDataVersions.Version54)
+			: base(securityId, 74, MarketDataVersions.Version55)
 		{
 			if (arg == null)
 				throw new ArgumentNullException(nameof(arg));
@@ -314,6 +314,11 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WriteVolume(level.BuyVolume, metaInfo, SecurityId);
 					writer.WriteVolume(level.SellVolume, metaInfo, SecurityId);
 
+					if (metaInfo.Version >= MarketDataVersions.Version55)
+					{
+						writer.WriteVolume(level.TotalVolume, metaInfo, SecurityId);
+					}
+
 					var volumes = level.BuyVolumes;
 
 					if (volumes == null)
@@ -461,6 +466,9 @@ namespace StockSharp.Algo.Storages.Binary
 						BuyVolume = reader.ReadVolume(metaInfo),
 						SellVolume = reader.ReadVolume(metaInfo)
 					};
+
+					if (metaInfo.Version >= MarketDataVersions.Version55)
+						priceLevel.TotalVolume = reader.ReadVolume(metaInfo);
 
 					if (reader.Read())
 					{
