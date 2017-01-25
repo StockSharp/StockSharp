@@ -17,6 +17,7 @@ StockSharp API Change log
 * (bug) Fix http://stocksharp.ru/forum/7015/stocksharpxamlcharting-shablony-securitygrid-oshibka-v-kolonkah/
 * (feature) MyTradeGrid. PnL and Position columns.
 * (feature) OptionDesk control refactoring.
+* (bug) Oanda. Transaction fixes.
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
