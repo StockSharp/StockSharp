@@ -43676,5 +43676,25 @@ namespace StockSharp.Localization
 		/// Finished
 		/// </summary>
 		public static string Finished => GetString(FinishedKey);
+
+		/// <summary>
+		/// Send logs
+		/// </summary>
+		public const string SendLogsKey = nameof(SendLogs);
+
+		/// <summary>
+		/// Send logs
+		/// </summary>
+		public static string SendLogs => GetString(SendLogsKey);
+
+		/// <summary>
+		/// Can not create logs file.
+		/// </summary>
+		public const string CanNotCreateLogsFileKey = nameof(CanNotCreateLogsFile);
+
+		/// <summary>
+		/// Can not create logs file.
+		/// </summary>
+		public static string CanNotCreateLogsFile => GetString(CanNotCreateLogsFileKey);
 	}
 }
