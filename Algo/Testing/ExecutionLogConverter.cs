@@ -289,8 +289,13 @@ namespace StockSharp.Algo.Testing
 
 			if (!_volumeStepUpdated)
 			{
-				_securityDefinition.VolumeStep = tick.SafeGetVolume().GetDecimalInfo().EffectiveScale.GetPriceStep();
-				_volumeStepUpdated = true;
+				var tickVolume = tick.TradeVolume;
+
+				if (tickVolume != null)
+				{
+					_securityDefinition.VolumeStep = tickVolume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
+					_volumeStepUpdated = true;
+				}
 			}
 
 			//if (tick.ExecutionType != ExecutionTypes.Tick)
