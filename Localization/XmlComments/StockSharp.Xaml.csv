@@ -138,6 +138,7 @@ T:StockSharp.Xaml.SuggestionsWindow/summary;DocStr9455
 F:StockSharp.Xaml.SuggestionsWindow.OkCommand/summary;DocStr8459
 P:StockSharp.Xaml.SuggestionsWindow.NotificationClient/summary;DocStr3070
 P:StockSharp.Xaml.SuggestionsWindow.DoNotShowAgain/summary;DocStr9456
+P:StockSharp.Xaml.SuggestionsWindow.Link/summary;DocStr9491
 M:StockSharp.Xaml.SuggestionsWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})/summary;Str2933
 M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})/param/owner;DocStr9457
