@@ -701,6 +701,11 @@
             Do not show this window again.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.SuggestionsWindow.Link">
+      <summary>
+            Link to file.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.SuggestionsWindow.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SuggestionsWindow" />.
@@ -1981,7 +1986,7 @@
     </member>
     <member name="T:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide">
       <summary>
-            Information <see cref="F:StockSharp.Messages.OptionTypes.Call" /> or <see cref="F:StockSharp.Messages.OptionTypes.Put" /> of option desk row.
+        <see cref="F:StockSharp.Messages.OptionTypes.Call" /> or <see cref="F:StockSharp.Messages.OptionTypes.Put" /> side of the row.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Row">

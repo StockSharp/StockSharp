@@ -13699,7 +13699,8 @@ DocStr9483;Clear;Очистить
 DocStr9484;Option desk model;Модель доски опционов
 DocStr9485;To update the desk values;Обновить значения доски
 DocStr9486;The option desk row;Строка доски опционов
-DocStr9487;Information {0} or {1} of option desk row;Information {0} or {1} of option desk row
+DocStr9487;{0} or {1} side of the row;{0} или {1} сторона строки
 DocStr9488;Option volatility (implied) for best bid;Подразумеваемая волатильность (лучший бид)
 DocStr9489;Option volatility (implied) for best ask;Подразумеваемая волатильность (лучший оффер)
 DocStr9490;Option volatility (implied) for last trade;Подразумеваемая волатильность (последняя цена)
+DocStr9491;Link to file;Ссылка на файл
