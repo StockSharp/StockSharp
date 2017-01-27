@@ -331,14 +331,14 @@ namespace StockSharp.Algo.Strategies
 
 				if (_connector != null)
 				{
-					_connector.NewOrders -= OnConnectorNewOrders;
-					_connector.OrdersChanged -= OnConnectorOrdersChanged;
-					_connector.OrdersRegisterFailed -= OnConnectorOrdersRegisterFailed;
-					_connector.OrdersCancelFailed -= ProcessCancelOrderFails;
-					_connector.NewStopOrders -= OnConnectorNewOrders;
-					_connector.StopOrdersChanged -= OnConnectorStopOrdersChanged;
-					_connector.StopOrdersRegisterFailed -= OnConnectorStopOrdersRegisterFailed;
-					_connector.StopOrdersCancelFailed -= ProcessCancelOrderFails;
+					_connector.NewOrder -= OnConnectorNewOrder;
+					_connector.OrderChanged -= OnConnectorOrderChanged;
+					_connector.OrderRegisterFailed -= OnConnectorOrderRegisterFailed;
+					_connector.OrderCancelFailed -= ProcessCancelOrderFail;
+					_connector.NewStopOrder -= OnConnectorNewOrder;
+					_connector.StopOrderChanged -= OnConnectorStopOrderChanged;
+					_connector.StopOrderRegisterFailed -= OnConnectorStopOrderRegisterFailed;
+					_connector.StopOrderCancelFailed -= ProcessCancelOrderFail;
 					_connector.NewMyTrades -= OnConnectorNewMyTrades;
 					_connector.PositionsChanged -= OnConnectorPositionsChanged;
 					_connector.NewMessage -= OnConnectorNewMessage;
@@ -351,14 +351,14 @@ namespace StockSharp.Algo.Strategies
 
 				if (_connector != null)
 				{
-					_connector.NewOrders += OnConnectorNewOrders;
-					_connector.OrdersChanged += OnConnectorOrdersChanged;
-					_connector.OrdersRegisterFailed += OnConnectorOrdersRegisterFailed;
-					_connector.OrdersCancelFailed += ProcessCancelOrderFails;
-					_connector.NewStopOrders += OnConnectorNewOrders;
-					_connector.StopOrdersChanged += OnConnectorStopOrdersChanged;
-					_connector.StopOrdersRegisterFailed += OnConnectorStopOrdersRegisterFailed;
-					_connector.StopOrdersCancelFailed += ProcessCancelOrderFails;
+					_connector.NewOrder += OnConnectorNewOrder;
+					_connector.OrderChanged += OnConnectorOrderChanged;
+					_connector.OrderRegisterFailed += OnConnectorOrderRegisterFailed;
+					_connector.OrderCancelFailed += ProcessCancelOrderFail;
+					_connector.NewStopOrder += OnConnectorNewOrder;
+					_connector.StopOrderChanged += OnConnectorStopOrderChanged;
+					_connector.StopOrderRegisterFailed += OnConnectorStopOrderRegisterFailed;
+					_connector.StopOrderCancelFailed += ProcessCancelOrderFail;
 					_connector.NewMyTrades += OnConnectorNewMyTrades;
 					_connector.PositionsChanged += OnConnectorPositionsChanged;
 					_connector.NewMessage += OnConnectorNewMessage;
@@ -1313,12 +1313,12 @@ namespace StockSharp.Algo.Strategies
 
 				nOrder.State = nOrder.State.CheckModification(OrderStates.Failed);
 
-				var fails = new[] { new OrderFail { Order = nOrder, Error = excp, ServerTime = CurrentTime } };
+				var fail = new OrderFail { Order = nOrder, Error = excp, ServerTime = CurrentTime };
 
 				if (nOrder.Type == OrderTypes.Conditional)
-					OnConnectorStopOrdersRegisterFailed(fails);
+					OnConnectorStopOrderRegisterFailed(fail);
 				else
-					OnConnectorOrdersRegisterFailed(fails);
+					OnConnectorOrderRegisterFailed(fail);
 			}
 		}
 
@@ -2131,54 +2131,35 @@ namespace StockSharp.Algo.Strategies
 			AddMyTrades(trades);
 		}
 
-		private void OnConnectorNewOrders(IEnumerable<Order> orders)
+		private void OnConnectorNewOrder(Order order)
 		{
 			if (_idStr == null)
 				_idStr = Id.ToString();
 
-			orders = orders.Where(o => !_ordersInfo.ContainsKey(o) && o.UserOrderId == _idStr).ToArray();
-
-			if (orders.IsEmpty())
-				return;
-
-			foreach (var order in orders)
-			{
+			if (!_ordersInfo.ContainsKey(order) && order.UserOrderId == _idStr)
 				AttachOrder(order);
-			}
 		}
 
-		private void OnConnectorOrdersChanged(IEnumerable<Order> orders)
+		private void OnConnectorOrderChanged(Order order)
 		{
-			orders = orders.Where(IsOwnOrder).ToArray();
-
-			if (orders.IsEmpty())
-				return;
-
-			TryInvoke(() =>
-			{
-				foreach (var order in orders)
-				{
-					ProcessOrder(order, true);
-				}
-			});
+			if (IsOwnOrder(order))
+				TryInvoke(() => ProcessOrder(order, true));
 		}
 
-		private void OnConnectorStopOrdersChanged(IEnumerable<Order> orders)
+		private void OnConnectorStopOrderChanged(Order order)
 		{
-			orders = orders.Where(IsOwnOrder).ToArray();
-
-			if (!orders.IsEmpty())
-				TryInvoke(() => OnStopOrdersChanged(orders));
+			if (IsOwnOrder(order))
+				TryInvoke(() => OnStopOrdersChanged(new[] { order }));
 		}
 
-		private void OnConnectorOrdersRegisterFailed(IEnumerable<OrderFail> fails)
+		private void OnConnectorOrderRegisterFailed(OrderFail fail)
 		{
-			ProcessRegisterOrderFails(fails, OnOrderRegisterFailed);
+			ProcessRegisterOrderFail(fail, OnOrderRegisterFailed);
 		}
 
-		private void OnConnectorStopOrdersRegisterFailed(IEnumerable<OrderFail> fails)
+		private void OnConnectorStopOrderRegisterFailed(OrderFail fail)
 		{
-			ProcessRegisterOrderFails(fails, OnStopOrderRegisterFailed);
+			ProcessRegisterOrderFail(fail, OnStopOrderRegisterFailed);
 		}
 
 		private void OnConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
@@ -2442,58 +2423,46 @@ namespace StockSharp.Algo.Strategies
 			TryInvoke(() => StopOrderCancelFailed?.Invoke(fail));
 		}
 
-		private void ProcessCancelOrderFails(IEnumerable<OrderFail> fails)
+		private void ProcessCancelOrderFail(OrderFail fail)
 		{
-			foreach (var fail in fails)
-			{
-				var order = fail.Order;
-
-				lock (_ordersInfo.SyncRoot)
-				{
-					var info = _ordersInfo.TryGetValue(order);
-
-					if (info == null || !info.IsOwn)
-						continue;
-
-					info.IsCanceled = false;
-				}
-
-				this.AddErrorLog(LocalizedStrings.Str1402Params, order.GetTraceId(), fail.Error);
-
-				if (order.Type == OrderTypes.Conditional)
-					StopOrderCancelFailed?.Invoke(fail);
-				else
-					OrderCancelFailed?.Invoke(fail);
-
-				StatisticManager.AddFailedOrderCancel(fail);
-			}
-		}
-
-		private void ProcessRegisterOrderFails(IEnumerable<OrderFail> fails, Action<OrderFail> evt)
-		{
-			var failedOrders = new List<OrderFail>();
+			var order = fail.Order;
 
 			lock (_ordersInfo.SyncRoot)
 			{
-				foreach (var fail in fails)
-				{
-					var info = _ordersInfo.TryGetValue(fail.Order);
+				var info = _ordersInfo.TryGetValue(order);
 
-					if (info == null)
-						continue;
+				if (info == null || !info.IsOwn)
+					return;
 
-					info.RegistrationFail = fail;
-					failedOrders.Add(fail);
-				}
+				info.IsCanceled = false;
 			}
 
-			foreach (var fail in failedOrders)
+			this.AddErrorLog(LocalizedStrings.Str1402Params, order.GetTraceId(), fail.Error);
+
+			if (order.Type == OrderTypes.Conditional)
+				StopOrderCancelFailed?.Invoke(fail);
+			else
+				OrderCancelFailed?.Invoke(fail);
+
+			StatisticManager.AddFailedOrderCancel(fail);
+		}
+
+		private void ProcessRegisterOrderFail(OrderFail fail, Action<OrderFail> evt)
+		{
+			lock (_ordersInfo.SyncRoot)
 			{
-				this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.GetTraceId(), fail.Error.Message);
-				//SlippageManager.RegisterFailed(fail);
+				var info = _ordersInfo.TryGetValue(fail.Order);
+
+				if (info == null)
+					return;
+
+				info.RegistrationFail = fail;
 			}
 
-			TryInvoke(() => failedOrders.ForEach(evt));
+			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.GetTraceId(), fail.Error.Message);
+			//SlippageManager.RegisterFailed(fail);
+
+			TryInvoke(() => evt?.Invoke(fail));
 		}
 
 		/// <summary>
