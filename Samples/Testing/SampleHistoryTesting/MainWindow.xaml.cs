@@ -482,7 +482,7 @@ namespace SampleHistoryTesting
 						return;
 
 					// fill level1 values
-					connector.SendInMessage(level1Info);
+					connector.HistoryMessageAdapter.SendOutMessage(level1Info);
 
 					if (emulationInfo.HistorySource != null)
 					{
