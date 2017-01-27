@@ -133,6 +133,7 @@ namespace StockSharp.Algo
 			UpdateSecurityLastQuotes = UpdateSecurityByLevel1 = true;
 
 			CreateDepthFromLevel1 = true;
+			SupportFilteredMarketDepth = true;
 
 			if (initManagers)
 			{
