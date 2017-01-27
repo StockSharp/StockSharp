@@ -122,10 +122,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">The message.</param>
-		protected override void OnInnerAdapterNewOutMessage(Message message)
+		/// <param name="message">Message.</param>
+		public override void SendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -142,7 +142,7 @@ namespace StockSharp.Algo
 						clone.DataType = MarketDataTypes.MarketDepth;
 						clone.Arg = null;
 
-						SendInMessage(clone);
+						base.SendInMessage(clone);
 
 						var data = (Tuple<QuoteChangeMessage, ExecutionMessage[]>)mdMsg.Arg;
 						var info = _filteredMarketDepths.SafeAdd(mdMsg.SecurityId, s => new FilteredMarketDepthInfo(data.Item2));
@@ -155,14 +155,26 @@ namespace StockSharp.Algo
 						var clone = (MarketDataMessage)mdMsg.Clone();
 						clone.DataType = MarketDataTypes.MarketDepth;
 
-						SendInMessage(clone);
+						base.SendInMessage(clone);
 
 						_filteredMarketDepths.Remove(mdMsg.SecurityId);
 					}
 
-					break;
+					return;
 				}
+			}
 
+			base.SendInMessage(message);
+		}
+
+		/// <summary>
+		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected override void OnInnerAdapterNewOutMessage(Message message)
+		{
+			switch (message.Type)
+			{
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
