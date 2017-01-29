@@ -18,6 +18,8 @@ StockSharp API Change log
 * (feature) MyTradeGrid. PnL and Position columns.
 * (feature) OptionDesk control refactoring.
 * (bug) Oanda. Transaction fixes.
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/282
+* (feature) Strategy. NewMyTrades -> NewMyTrade
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279

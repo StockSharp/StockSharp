@@ -9,7 +9,7 @@
             The strategy of the automatic position protection.
             </summary>
             <remarks>
-            New trades come in strategy via <see cref="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})"/>. They are automatically protected by <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy"/>. Also, <see cref="T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy"/> turns over stops in case of position flipping.
+            New trades come in strategy via <see cref="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade(StockSharp.BusinessEntities.MyTrade)"/>. They are automatically protected by <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy"/>. Also, <see cref="T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy"/> turns over stops in case of position flipping.
             </remarks>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.#ctor">
@@ -56,7 +56,7 @@
         </member>
         <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.MyTradesStrategy">
             <summary>
-            The strategy which new trades are automatically passed to <see cref="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})"/>.
+            The strategy which new trades are automatically passed to <see cref="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade(StockSharp.BusinessEntities.MyTrade)"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.OnStarted">
@@ -71,12 +71,13 @@
             <param name="position">Position.</param>
             <returns>The protective strategy. If <see langword="null" /> will be returned then the position protection is ignored.</returns>
         </member>
-        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Protect(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.MyTrade,System.Decimal})">
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Protect(StockSharp.BusinessEntities.MyTrade,System.Decimal)">
             <summary>
-            Protect trades.
+            Protect position.
             </summary>
-            <param name="trades">Trades. The protected trade is specified by the key, volume to be protected is specified by the value.</param>
-            <returns>Protective strategies.</returns>
+            <param name="trade">The protected trade.</param>
+            <param name="volume">Volume to be protected is specified by the value.</param>
+            <returns>Protective strategy.</returns>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Sort(System.Collections.Generic.IEnumerable{System.Linq.IGrouping{System.Tuple{StockSharp.Messages.Sides,System.Decimal},StockSharp.Algo.Strategies.Protective.IProtectiveStrategy}})">
             <summary>
@@ -85,19 +86,11 @@
             <param name="strategies">Protective strategies in unsorted order.</param>
             <returns>Protective strategies in sorted order.</returns>
         </member>
-        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.GetProtectiveTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade},System.Decimal)">
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade(StockSharp.BusinessEntities.MyTrade)">
             <summary>
-            To get from all trades those that must be protected.
+            To process trade to correct the protective strategies volume.
             </summary>
-            <param name="trades">New trades.</param>
-            <param name="maxVolume">The maximum volume that must be protected.</param>
-            <returns>Trades that must be protected.</returns>
-        </member>
-        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})">
-            <summary>
-            To process trades to correct the protective strategies volume.
-            </summary>
-            <param name="trades">Trades.</param>
+            <param name="trade">Trade.</param>
         </member>
         <member name="T:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy">
             <summary>

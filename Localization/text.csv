@@ -13704,3 +13704,15 @@ DocStr9488;Option volatility (implied) for best bid;Подразумеваема
 DocStr9489;Option volatility (implied) for best ask;Подразумеваемая волатильность (лучший оффер)
 DocStr9490;Option volatility (implied) for last trade;Подразумеваемая волатильность (последняя цена)
 DocStr9491;Link to file;Ссылка на файл
+DocStr9492;Protect position;Защищаемая позиция
+DocStr9493;The protected trade;Защищаемая сделка
+DocStr9494;Volume to be protected is specified by the value;Защищаемый объем
+DocStr9495;Protective strategy;Защитная стратегия
+DocStr9496;To process trade to correct the protective strategies volume;Обработать сделку для расчета защищаемого объема
+DocStr9497;The event of new trade occurrence;Событие появления новой сделки
+DocStr9498;The method, called at strategy position change;Метод, вызываемый при изменении позиции
+DocStr9499;The strategy position change;Изменение позиции стратегии
+DocStr9500;The method, called at occurrence of new strategy trade;Метод, вызываемый при появлении новой сделки стратегии
+DocStr9501;New trade of a strategy;Новая сделка стратегии
+DocStr9502;To create a rule for the event of occurrence new strategy trade;Создать правило на появление новой сделки стратегии
+DocStr9503;The startegy, based on which trade occurrence will be traced;Стратегия, созданная на основе сделки
