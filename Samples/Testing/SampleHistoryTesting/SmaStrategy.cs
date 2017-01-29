@@ -71,8 +71,8 @@ namespace SampleHistoryTesting
 				.Apply(this);
 
 			this
-				.WhenNewMyTrades()
-				.Do(trades => _myTrades.AddRange(trades))
+				.WhenNewMyTrade()
+				.Do(trade => _myTrades.Add(trade))
 				.Apply(this);
 
 			// store current values for short and long

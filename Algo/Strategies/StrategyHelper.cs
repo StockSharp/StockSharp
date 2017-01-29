@@ -364,7 +364,7 @@ namespace StockSharp.Algo.Strategies
 		private sealed class EquityStrategy : Strategy
 		{
 			private readonly Dictionary<DateTimeOffset, Order[]> _orders;
-			private readonly Dictionary<Tuple<Security, Portfolio>, Strategy> _childStrategies = new Dictionary<Tuple<Security, Portfolio>, Strategy>();
+			private readonly Dictionary<Tuple<Security, Portfolio>, Strategy> _childStrategies;
 
 			public EquityStrategy(IEnumerable<Order> orders, IDictionary<Security, decimal> openedPositions)
 			{
@@ -543,23 +543,23 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		private sealed class NewMyTradesStrategyRule : StrategyRule<IEnumerable<MyTrade>>
+		private sealed class NewMyTradeStrategyRule : StrategyRule<MyTrade>
 		{
-			public NewMyTradesStrategyRule(Strategy strategy)
+			public NewMyTradeStrategyRule(Strategy strategy)
 				: base(strategy)
 			{
 				Name = LocalizedStrings.Str1251 + " " + strategy;
-				Strategy.NewMyTrades += OnStrategyNewMyTrades;
+				Strategy.NewMyTrade += OnStrategyNewMyTrade;
 			}
 
-			private void OnStrategyNewMyTrades(IEnumerable<MyTrade> myTrades)
+			private void OnStrategyNewMyTrade(MyTrade trade)
 			{
-				Activate(myTrades);
+				Activate(trade);
 			}
 
 			protected override void DisposeManaged()
 			{
-				Strategy.NewMyTrades -= OnStrategyNewMyTrades;
+				Strategy.NewMyTrade -= OnStrategyNewMyTrade;
 				base.DisposeManaged();
 			}
 		}
@@ -678,13 +678,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To create a rule for the event of occurrence new strategy trades.
+		/// To create a rule for the event of occurrence new strategy trade.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which trades occurrence will be traced.</param>
+		/// <param name="strategy">The startegy, based on which trade occurrence will be traced.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Strategy, IEnumerable<MyTrade>> WhenNewMyTrades(this Strategy strategy)
+		public static MarketRule<Strategy, MyTrade> WhenNewMyTrade(this Strategy strategy)
 		{
-			return new NewMyTradesStrategyRule(strategy);
+			return new NewMyTradeStrategyRule(strategy);
 		}
 
 		/// <summary>

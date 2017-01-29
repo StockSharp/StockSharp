@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Strategies
 				item.StopOrderChanged += _parent.OnChildStopOrderChanged;
 				item.StopOrderRegisterFailed += _parent.OnChildStopOrderRegisterFailed;
 				item.StopOrderCancelFailed += _parent.OnChildStopOrderCancelFailed;
-				item.NewMyTrades += _parent.AddMyTrades;
+				item.NewMyTrade += _parent.AddMyTrade;
 				item.OrderReRegistering += _parent.OnOrderReRegistering;
 				item.StopOrderReRegistering += _parent.OnStopOrderReRegistering;
 				item.ProcessStateChanged += OnChildProcessStateChanged;
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Strategies
 				item.Orders.ForEach(_parent.ProcessOrder);
 
 				if (!item.MyTrades.IsEmpty())
-					_parent.AddMyTrades(item.MyTrades);
+					item.MyTrades.ForEach(_parent.AddMyTrade);
 
 				//_parent._orderFails.AddRange(item.OrderFails);
 
@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Strategies
 				item.StopOrderRegisterFailed -= _parent.OnChildStopOrderRegisterFailed;
 				item.StopOrderCancelFailed -= _parent.OnChildStopOrderCancelFailed;
 				item.StopOrderCanceling -= _parent.OnStopOrderCanceling;
-				item.NewMyTrades -= _parent.AddMyTrades;
+				item.NewMyTrade -= _parent.AddMyTrade;
 				item.OrderReRegistering -= _parent.OnOrderReRegistering;
 				item.StopOrderReRegistering -= _parent.OnStopOrderReRegistering;
 				item.ProcessStateChanged -= OnChildProcessStateChanged;
@@ -339,8 +339,8 @@ namespace StockSharp.Algo.Strategies
 					_connector.StopOrderChanged -= OnConnectorStopOrderChanged;
 					_connector.StopOrderRegisterFailed -= OnConnectorStopOrderRegisterFailed;
 					_connector.StopOrderCancelFailed -= ProcessCancelOrderFail;
-					_connector.NewMyTrades -= OnConnectorNewMyTrades;
-					_connector.PositionsChanged -= OnConnectorPositionsChanged;
+					_connector.NewMyTrade -= OnConnectorNewMyTrade;
+					_connector.PositionChanged -= OnConnectorPositionChanged;
 					_connector.NewMessage -= OnConnectorNewMessage;
 					_connector.ValuesChanged -= OnConnectorValuesChanged;
 					//_connector.NewTrades -= OnConnectorNewTrades;
@@ -359,8 +359,8 @@ namespace StockSharp.Algo.Strategies
 					_connector.StopOrderChanged += OnConnectorStopOrderChanged;
 					_connector.StopOrderRegisterFailed += OnConnectorStopOrderRegisterFailed;
 					_connector.StopOrderCancelFailed += ProcessCancelOrderFail;
-					_connector.NewMyTrades += OnConnectorNewMyTrades;
-					_connector.PositionsChanged += OnConnectorPositionsChanged;
+					_connector.NewMyTrade += OnConnectorNewMyTrade;
+					_connector.PositionChanged += OnConnectorPositionChanged;
 					_connector.NewMessage += OnConnectorNewMessage;
 					_connector.ValuesChanged += OnConnectorValuesChanged;
 					//_connector.NewTrades += OnConnectorNewTrades;
@@ -569,7 +569,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// <see cref="Strategy.Position"/> change event.
+		/// <see cref="Position"/> change event.
 		/// </summary>
 		public event Action PositionChanged;
 
@@ -586,7 +586,7 @@ namespace StockSharp.Algo.Strategies
 		public TimeSpan? Latency { get; private set; }
 
 		/// <summary>
-		/// <see cref="Strategy.Latency"/> change event.
+		/// <see cref="Latency"/> change event.
 		/// </summary>
 		public event Action LatencyChanged;
 
@@ -635,12 +635,12 @@ namespace StockSharp.Algo.Strategies
 		public ISynchronizedCollection<IStrategyParam> Parameters => _parameters;
 
 		/// <summary>
-		/// <see cref="Strategy.Parameters"/> change event.
+		/// <see cref="Parameters"/> change event.
 		/// </summary>
 		public event Action ParametersChanged;
 
 		/// <summary>
-		/// To call events <see cref="Strategy.ParametersChanged"/> and <see cref="Strategy.PropertyChanged"/>.
+		/// To call events <see cref="ParametersChanged"/> and <see cref="PropertyChanged"/>.
 		/// </summary>
 		/// <param name="name">Parameter name.</param>
 		protected internal void RaiseParametersChanged(string name)
@@ -1138,9 +1138,9 @@ namespace StockSharp.Algo.Strategies
 		public event Action<OrderFail> StopOrderCancelFailed;
 
 		/// <summary>
-		/// The event of new trades occurrence.
+		/// The event of new trade occurrence.
 		/// </summary>
-		public event Action<IEnumerable<MyTrade>> NewMyTrades;
+		public event Action<MyTrade> NewMyTrade;
 
 		/// <summary>
 		/// The event of strategy connection change.
@@ -1160,7 +1160,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The event of strategy position change.
 		/// </summary>
-		public event Action<IEnumerable<Position>> PositionsChanged;
+		public event Action<Position> PositionChanged2;
 
 		/// <summary>
 		/// The event of error occurrence in the strategy.
@@ -1564,7 +1564,7 @@ namespace StockSharp.Algo.Strategies
 
 			AttachOrder(order);
 
-			OnConnectorNewMyTrades(myTrades);
+			myTrades.ForEach(OnConnectorNewMyTrade);
 		}
 
 		private void AttachOrder(Order order)
@@ -1613,7 +1613,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
-		public override DateTimeOffset CurrentTime => Connector == null ? TimeHelper.NowWithOffset : Connector.CurrentTime;
+		public override DateTimeOffset CurrentTime => Connector?.CurrentTime ?? TimeHelper.NowWithOffset;
 
 		/// <summary>
 		/// To call the event <see cref="ILogSource.Log"/>.
@@ -1831,21 +1831,21 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// The method, called at strategy positions change.
+		/// The method, called at strategy position change.
 		/// </summary>
-		/// <param name="positions">The strategy positions change.</param>
-		protected virtual void OnPositionsChanged(IEnumerable<Position> positions)
+		/// <param name="position">The strategy position change.</param>
+		protected virtual void OnPositionChanged(Position position)
 		{
-			PositionsChanged?.Invoke(positions);
+			PositionChanged2?.Invoke(position);
 		}
 
 		/// <summary>
-		/// The method, called at occurrence of new strategy trades.
+		/// The method, called at occurrence of new strategy trade.
 		/// </summary>
-		/// <param name="trades">New trades of a strategy.</param>
-		protected virtual void OnNewMyTrades(IEnumerable<MyTrade> trades)
+		/// <param name="trade">New trade of a strategy.</param>
+		protected virtual void OnNewMyTrade(MyTrade trade)
 		{
-			NewMyTrades?.Invoke(trades);
+			NewMyTrade?.Invoke(trade);
 		}
 
 		/// <summary>
@@ -1978,7 +1978,7 @@ namespace StockSharp.Algo.Strategies
 					ProcessOrder(derivedOrder);
 
 					//заявка могла придти позже сделок по ней
-					OnConnectorNewMyTrades(SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder));
+					SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder).ForEach(OnConnectorNewMyTrade);
 				}
 			}
 		}
@@ -2102,33 +2102,32 @@ namespace StockSharp.Algo.Strategies
 				RaisePnLChanged();
 		}
 
-		private void OnConnectorPositionsChanged(IEnumerable<Position> positions)
+		private void OnConnectorPositionChanged(Position position)
 		{
-			Position[] changedPositions;
+			Position changedPosition = null;
 
 			var basketPortfolio = Portfolio as BasketPortfolio;
 			if (basketPortfolio != null)
 			{
 				var innerPfs = basketPortfolio.InnerPortfolios;
-				changedPositions = positions.Where(pos => innerPfs.Contains(pos.Portfolio)).ToArray();
+
+				if (innerPfs.Contains(position.Portfolio))
+					changedPosition = position;
 			}
 			else
 			{
-				changedPositions = positions.Where(p => p.Portfolio == Portfolio).ToArray();
+				if (position.Portfolio == Portfolio)
+					changedPosition = position;
 			}
 
-			if (changedPositions.Length > 0)
-				TryInvoke(() => OnPositionsChanged(changedPositions));
+			if (changedPosition != null)
+				TryInvoke(() => OnPositionChanged(changedPosition));
 		}
 
-		private void OnConnectorNewMyTrades(IEnumerable<MyTrade> trades)
+		private void OnConnectorNewMyTrade(MyTrade trade)
 		{
-			trades = trades.Where(t => IsOwnOrder(t.Order)).ToArray();
-
-			if (trades.IsEmpty())
-				return;
-			
-			AddMyTrades(trades);
+			if (IsOwnOrder(trade.Order))
+				AddMyTrade(trade);
 		}
 
 		private void OnConnectorNewOrder(Order order)
@@ -2177,69 +2176,54 @@ namespace StockSharp.Algo.Strategies
 			PnLManager.ProcessMessage(msg);
 		}
 
-		private void AddMyTrades(IEnumerable<MyTrade> trades)
+		private void AddMyTrade(MyTrade trade)
 		{
-			var filteredTrades = _myTrades.SyncGet(set =>
-			{
-				var newTrades = trades.Where(t => !set.Contains(t)).ToArray();
-				set.AddRange(newTrades);
-				return newTrades;
-			});
-
-			if (filteredTrades.IsEmpty())
+			if (_myTrades.Contains(trade))
 				return;
 
 			if (WaitAllTrades)
 			{
-				foreach (var trade in filteredTrades)
+				lock (_ordersInfo.SyncRoot)
 				{
-					lock (_ordersInfo.SyncRoot)
-					{
-						var info = _ordersInfo.TryGetValue(trade.Order);
-						if (info == null || !info.IsOwn)
-							continue;
-
+					var info = _ordersInfo.TryGetValue(trade.Order);
+					if (info?.IsOwn == true)
 						info.ReceivedVolume += trade.Trade.Volume;
-					}
 				}
 			}
 
-			TryInvoke(() => OnNewMyTrades(filteredTrades));
+			TryInvoke(() => OnNewMyTrade(trade));
 
 			var isComChanged = false;
 			var isPnLChanged = false;
 			decimal? pos = null;
 			var isSlipChanged = false;
 
-			foreach (var trade in filteredTrades)
+			this.AddInfoLog(LocalizedStrings.Str1398Params,
+				trade.Order.Direction,
+				(trade.Trade.Id == 0 ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
+				trade.Trade.Price, trade.Trade.Volume, trade.Order.TransactionId);
+
+			if (trade.Commission != null)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1398Params,
-					trade.Order.Direction,
-					(trade.Trade.Id == 0 ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
-					trade.Trade.Price, trade.Trade.Volume, trade.Order.TransactionId);
-
-				if (trade.Commission != null)
-				{
-					Commission = trade.Commission;
-					isComChanged = true;
-				}
-
-				UpdatePnLManager(trade.Trade.Security);
-
-				var tradeInfo = PnLManager.ProcessMessage(trade.ToMessage());
-				if (tradeInfo.PnL != 0)
-					isPnLChanged = true;
-
-				pos = PositionManager.ProcessMessage(trade.ToMessage());
-
-				if (trade.Slippage != null)
-				{
-					Slippage += trade.Slippage;
-					isSlipChanged = true;
-				}
-
-				StatisticManager.AddMyTrade(tradeInfo);
+				Commission = trade.Commission;
+				isComChanged = true;
 			}
+
+			UpdatePnLManager(trade.Trade.Security);
+
+			var tradeInfo = PnLManager.ProcessMessage(trade.ToMessage());
+			if (tradeInfo.PnL != 0)
+				isPnLChanged = true;
+
+			pos = PositionManager.ProcessMessage(trade.ToMessage());
+
+			if (trade.Slippage != null)
+			{
+				Slippage += trade.Slippage;
+				isSlipChanged = true;
+			}
+
+			StatisticManager.AddMyTrade(tradeInfo);
 
 			TryInvoke(() =>
 			{
@@ -2256,10 +2240,10 @@ namespace StockSharp.Algo.Strategies
 					RaiseSlippageChanged();
 			});
 
-			foreach (var trade in filteredTrades)
-			{
-				ProcessRisk(trade.ToMessage());
-			}
+			//foreach (var trade in filteredTrades)
+			//{
+			ProcessRisk(trade.ToMessage());
+			//}
 		}
 
 		private void RaiseSlippageChanged()
