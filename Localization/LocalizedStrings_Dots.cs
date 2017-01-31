@@ -351,5 +351,25 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string VersionDot => AppendDot(Version);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string TemplateDot => AppendDot(Template);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string CsvHeaderDot => AppendDot(CsvHeader);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3526Dot => AppendDot(Str3526);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str135Dot => AppendDot(Str135);
 	}
 }

@@ -43696,5 +43696,35 @@ namespace StockSharp.Localization
 		/// Can not create logs file.
 		/// </summary>
 		public static string CanNotCreateLogsFile => GetString(CanNotCreateLogsFileKey);
+
+		/// <summary>
+		/// CSV
+		/// </summary>
+		public const string CSVKey = nameof(CSV);
+
+		/// <summary>
+		/// CSV
+		/// </summary>
+		public static string CSV => GetString(CSVKey);
+
+		/// <summary>
+		/// Trailing delta
+		/// </summary>
+		public const string TrailingDeltaKey = nameof(TrailingDelta);
+
+		/// <summary>
+		/// Trailing delta
+		/// </summary>
+		public static string TrailingDelta => GetString(TrailingDeltaKey);
+
+		/// <summary>
+		/// Trailing reference price
+		/// </summary>
+		public const string TrailingReferencePriceKey = nameof(TrailingReferencePrice);
+
+		/// <summary>
+		/// Trailing reference price
+		/// </summary>
+		public static string TrailingReferencePrice => GetString(TrailingReferencePriceKey);
 	}
 }

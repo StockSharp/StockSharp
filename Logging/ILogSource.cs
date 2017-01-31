@@ -17,6 +17,7 @@ namespace StockSharp.Logging
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -90,9 +91,12 @@ namespace StockSharp.Logging
 		/// Source name (to distinguish in log files).
 		/// </summary>
 		[ReadOnly(true)]
-		[CategoryLoc(LocalizedStrings.LoggingKey)]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str7Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str7Key,
+			GroupName = LocalizedStrings.LoggingKey,
+			Order = 0)]
 		public virtual string Name
 		{
 			get { return _name; }
@@ -132,9 +136,12 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// The logging level. The default is set to <see cref="LogLevels.Inherit"/>.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.LoggingKey)]
-		[DisplayNameLoc(LocalizedStrings.Str9Key)]
-		[DescriptionLoc(LocalizedStrings.Str9Key, true)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str9Key,
+			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.LoggingKey,
+			Order = 1)]
 		public virtual LogLevels LogLevel { get; set; } = LogLevels.Inherit;
 
 		/// <summary>

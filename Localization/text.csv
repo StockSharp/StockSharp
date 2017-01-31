@@ -4403,6 +4403,9 @@ EvaluateGreeks;Evaluate greeks;Вычислять греки
 Finished;Finished;Завершена
 SendLogs;Send logs;Отправить логи
 CanNotCreateLogsFile;Can not create logs file.;Неудалось создать архив с логами.
+CSV;CSV;CSV
+TrailingDelta;Trailing delta;Дельта скольжения
+TrailingReferencePrice;Trailing reference price;Цена активации скольжения
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
