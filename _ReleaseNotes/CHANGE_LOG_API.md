@@ -20,6 +20,8 @@ StockSharp API Change log
 * (bug) Oanda. Transaction fixes.
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/282
 * (feature) Strategy. NewMyTrades -> NewMyTrade
+* (feature) MyTradeGrid. UserOrderId column.
+* (bug) ConnectorWindow. Fix ToolbarImageStyle resource not found issue.
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
