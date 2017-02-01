@@ -2407,7 +2407,7 @@ Str2573;Delta percentage;Delta в процентах
 Str2574;Delta expressed as a percentage.;Delta выражена в процентах.
 Str2575;Trigger field;Поле срабатывания
 Str2576;Trigger field.;Поле срабатывания.
-Str2577;Trailing stop begins tracking once the price reaches ReferencePrice.;Trailing стоп начинает слежение, как только цена достигает ReferencePrice.
+Str2577;Trailing stop begins tracking once the price reaches {0}.;Trailing стоп начинает слежение, как только цена достигает {0}.
 Str2578Params;Order '{0}' side is not supported.;Направление заявки '{0}' не поддерживается.
 Str2579Params;Incorrect type of order '{0}'.;Неверный тип заявки '{0}'.
 Str2580;Wrong data received.;Получены неверные данные.

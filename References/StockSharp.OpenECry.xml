@@ -226,7 +226,7 @@
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.ReferencePrice">
       <summary>
-            Trailing stop begins tracking once the price reaches ReferencePrice.
+            Trailing stop begins tracking once the price reaches <see cref="P:StockSharp.OpenECry.OpenECryOrderCondition.ReferencePrice" />.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.SplitVolume">
