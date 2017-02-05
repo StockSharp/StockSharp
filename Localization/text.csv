@@ -13719,3 +13719,4 @@ DocStr9500;The method, called at occurrence of new strategy trade;Метод, в
 DocStr9501;New trade of a strategy;Новая сделка стратегии
 DocStr9502;To create a rule for the event of occurrence new strategy trade;Создать правило на появление новой сделки стратегии
 DocStr9503;The startegy, based on which trade occurrence will be traced;Стратегия, созданная на основе сделки
+DocStr9504;Show splash screen;Показать окно-заставку

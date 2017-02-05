@@ -593,6 +593,7 @@ P:StockSharp.Xaml.SplashScreenControl.AppName/summary;DocStr8427
 F:StockSharp.Xaml.SplashScreenControl.AppIconProperty/summary;DocStr29
 P:StockSharp.Xaml.SplashScreenControl.AppIcon/summary;DocStr8078
 M:StockSharp.Xaml.SplashScreenControl.#ctor/summary;DocStr1
+M:StockSharp.Xaml.SplashScreenControl.Show/summary;DocStr9504
 M:StockSharp.Xaml.SplashScreenControl.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.StorageFormatComboBox/summary;DocStr8305
 M:StockSharp.Xaml.StorageFormatComboBox.#ctor/summary;DocStr1

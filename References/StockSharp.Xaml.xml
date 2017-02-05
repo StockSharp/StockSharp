@@ -2873,6 +2873,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SplashScreenControl" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.SplashScreenControl.Show">
+      <summary>
+            Show splash screen.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.SplashScreenControl.InitializeComponent">
       <summary>
             InitializeComponent

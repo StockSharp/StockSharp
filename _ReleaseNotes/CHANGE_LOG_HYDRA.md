@@ -1,5 +1,10 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.20.1:
+* (bug) Hydra freezed while start up. http://stocksharp.ru/posts/m/39082/
+* (bug) Splash screen fix http://stocksharp.ru/posts/m/39083/
+* (bug) Hydra. Show credentials fix.
+
 ###v4.3.20:
 * (feature) Import pane refactoring.
 * (bug) Fix http://stocksharp.ru/forum/7013/oshibka-sohraneniya-tikovyh-dannyh-s-finama-v-formate-bin/
