@@ -140,10 +140,17 @@ namespace SampleMultiConnection
 			if (Connector.StorageAdapter == null)
 				return;
 
-			entityRegistry.Init();
+			try
+			{
+				entityRegistry.Init();
 
-			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
-			Connector.StorageAdapter.Load();
+				Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
+				Connector.StorageAdapter.Load();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(this, ex.ToString());
+			}
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(entityRegistry));
 		}
