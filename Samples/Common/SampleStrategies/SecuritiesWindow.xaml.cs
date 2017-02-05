@@ -56,7 +56,10 @@ namespace SampleStrategies
 
 			var newOrder = new OrderWindow
 			{
-				Order = new Order { Security = SecurityPicker.SelectedSecurity },
+				Order = new Order
+				{
+					Security = SecurityPicker.SelectedSecurity
+				},
 				SecurityProvider = connector,
 				MarketDataProvider = connector,
 				Portfolios = new PortfolioDataSource(connector),
@@ -81,7 +84,10 @@ namespace SampleStrategies
 				connector.RegisterMarketDepth(security);
 
 				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
+				var wnd = new QuotesWindow
+				{
+					Title = security.Id + " " + LocalizedStrings.MarketDepth
+				};
 				wnd.MakeHideable();
 				return wnd;
 			});
@@ -124,7 +130,13 @@ namespace SampleStrategies
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "IS" } };
+			var wnd = new SecurityLookupWindow
+			{
+				Criteria = new Security
+				{
+					Code = "IS"
+				}
+			};
 
 			if (!wnd.ShowModal(this))
 				return;
@@ -132,9 +144,9 @@ namespace SampleStrategies
 			MainWindow.Instance.Connector.LookupSecurities(wnd.Criteria);
 		}
 
-        private void QuotingClick(object sender, RoutedEventArgs e)
-        {
-            ////TODO
-        }
-    }
+		private void QuotingClick(object sender, RoutedEventArgs e)
+		{
+			////TODO
+		}
+	}
 }
