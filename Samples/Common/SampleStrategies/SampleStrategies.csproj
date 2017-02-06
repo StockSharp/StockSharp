@@ -100,14 +100,14 @@
     <Compile Include="QuotesWindow.xaml.cs">
       <DependentUpon>QuotesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="QuotingWindow.xaml.cs">
+      <DependentUpon>QuotingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SecuritiesWindow.xaml.cs">
       <DependentUpon>SecuritiesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StopOrdersWindow.xaml.cs">
-      <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TradesWindow.xaml.cs">
-      <DependentUpon>TradesWindow.xaml</DependentUpon>
+    <Compile Include="StrategiesWindow.xaml.cs">
+      <DependentUpon>StrategiesWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -137,17 +137,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="QuotingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SecuritiesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="StopOrdersWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="StrategiesWindow.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TradesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -143,10 +143,5 @@ namespace SampleStrategies
 
 			MainWindow.Instance.Connector.LookupSecurities(wnd.Criteria);
 		}
-
-		private void QuotingClick(object sender, RoutedEventArgs e)
-		{
-			////TODO
-		}
 	}
 }

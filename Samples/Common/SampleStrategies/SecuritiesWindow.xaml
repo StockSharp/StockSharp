@@ -31,10 +31,7 @@
 				<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick">
 					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
 				</Button>
-                <Button x:Name="Quoting" Width="100" IsEnabled="False" Click="QuotingClick">
-                    <TextBlock> <Run Text="Quoting" />...</TextBlock>
-                </Button>
-         </StackPanel>
+			</StackPanel>
 		</Grid>
 	</Grid>
 </Window>

@@ -37,7 +37,7 @@
 				var side = position.CurrentValue > 0 ? Sides.Buy : Sides.Sell;
 
 				var trades = MainWindow.Instance.Connector.MyTrades.Where(t => t.Trade.Security.Code == position.Security.Code && t.Order.Direction == side).ToList();
-				List<decimal> prices = new List<decimal>();
+				var prices = new List<decimal>();
 
 				// Выбираем цены последних сделок, которые будут использованы для расчета средневзвешенной цены позиции.
 				for (var i = trades.Count() - 1; i >= 0; i--)
@@ -115,14 +115,13 @@
 
 				ProtectionButton.Content = "Protection on";
 			}
-
 		}
 
 		private void PortfolioGrid_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
 		{
 			var position = PortfolioGrid.SelectedPosition as Position;
 
-			if (position == null || position.Security == null || position.CurrentValue == 0)
+			if (position?.Security == null || position.CurrentValue == 0)
 			{
 				ProtectionButton.IsEnabled = false;
 			}
@@ -140,7 +139,6 @@
 				{
 					ProtectionButton.Content = "Protection on";
 				}
-
 			}
 		}
 	}

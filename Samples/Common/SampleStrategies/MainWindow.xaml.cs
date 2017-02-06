@@ -26,6 +26,8 @@ namespace SampleStrategies
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Storages.Csv;
@@ -33,21 +35,22 @@ namespace SampleStrategies
 	using StockSharp.Logging;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
-
-	using MoreLinq;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
 		private bool _isConnected;
 
 		public readonly Connector Connector;
+		public readonly LogManager LogManager;
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
-		private readonly StopOrderWindow _stopOrdersWindow = new StopOrderWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
-		private readonly TradesWindow _tradesWindow = new TradesWindow();
+		private readonly StrategiesWindow _strategiesWindow = new StrategiesWindow();
+
+		public static MainWindow Instance { get; private set; }
 
 		private const string _settingsFile = "connection.xml";
 
@@ -56,17 +59,17 @@ namespace SampleStrategies
 			InitializeComponent();
 			Instance = this;
 
-			Title = Title.Put("Multi connection");
+			Title = Title.Put(LocalizedStrings.Str1355);
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
-			_tradesWindow.MakeHideable();
+			_strategiesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
 			LogManager = new LogManager();
 			LogManager.Listeners.Add(new FileLogListener("sample.log"));
+			LogManager.Listeners.Add(new GuiLogListener(Monitor));
 
 			var entityRegistry = new CsvEntityRegistry("Data");
 
@@ -114,12 +117,11 @@ namespace SampleStrategies
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 			};
 
-
 			Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-			Connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
+			//Connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
 
 			Connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-			Connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
+			//Connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
 			Connector.NewMyTrades += trades =>
 			{
 				_myTradesWindow.TradeGrid.Trades.AddRange(trades);
@@ -181,15 +183,13 @@ namespace SampleStrategies
 		{
 			_ordersWindow.DeleteHideable();
 			_myTradesWindow.DeleteHideable();
-			_tradesWindow.DeleteHideable();
+			_strategiesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 
 			_securitiesWindow.Close();
-			_tradesWindow.Close();
+			_strategiesWindow.Close();
 			_myTradesWindow.Close();
-			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 
@@ -199,10 +199,6 @@ namespace SampleStrategies
 
 			base.OnClosing(e);
 		}
-
-		public static MainWindow Instance { get; private set; }
-
-		public LogManager LogManager { set; get; }
 
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
@@ -252,14 +248,9 @@ namespace SampleStrategies
 			ShowOrHide(_ordersWindow);
 		}
 
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
+		private void ShowStrategiesClick(object sender, RoutedEventArgs e)
 		{
-			ShowOrHide(_stopOrdersWindow);
-		}
-
-		private void ShowTradesClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_tradesWindow);
+			ShowOrHide(_strategiesWindow);
 		}
 
 		private void ShowMyTradesClick(object sender, RoutedEventArgs e)
