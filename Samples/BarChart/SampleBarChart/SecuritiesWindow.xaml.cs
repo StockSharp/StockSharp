@@ -41,6 +41,12 @@ namespace SampleBarChart
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			var trader = MainWindow.Instance.Trader;
 			if (trader != null)
 			{

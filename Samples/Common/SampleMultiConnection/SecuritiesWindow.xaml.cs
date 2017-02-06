@@ -22,6 +22,8 @@ namespace SampleMultiConnection
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -38,6 +40,12 @@ namespace SampleMultiConnection
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			var connector = MainWindow.Instance.Connector;
 
 			if (connector != null)

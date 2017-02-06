@@ -21,6 +21,8 @@ namespace SampleAsyncTransactions
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -37,6 +39,12 @@ namespace SampleAsyncTransactions
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			var trader = MainWindow.Instance.Trader;
 			if (trader != null)
 			{

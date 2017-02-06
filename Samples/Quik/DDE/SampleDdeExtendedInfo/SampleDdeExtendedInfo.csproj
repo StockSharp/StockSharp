@@ -83,6 +83,9 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\..\References\Ecng.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\..\..\References\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />

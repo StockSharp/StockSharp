@@ -15,10 +15,13 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleSterling
 {
+	using System;
 	using System.Windows;
 	
 	using Ecng.Collections;
 	using Ecng.Xaml;
+
+	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -36,6 +39,23 @@ namespace SampleSterling
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			_tradesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			base.OnClosed(e);
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)

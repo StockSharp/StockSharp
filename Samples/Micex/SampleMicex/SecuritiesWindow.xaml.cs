@@ -22,6 +22,8 @@ namespace SampleMicex
 	using Ecng.Common;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -38,6 +40,12 @@ namespace SampleMicex
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			if (_initialized)
 			{
 				MainWindow.Instance.Trader.MarketDepthChanged -= TraderOnMarketDepthChanged;

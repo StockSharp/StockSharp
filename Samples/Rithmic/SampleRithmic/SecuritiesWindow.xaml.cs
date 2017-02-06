@@ -23,6 +23,8 @@ namespace SampleRithmic
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -50,6 +52,17 @@ namespace SampleRithmic
 				TimeSpan.FromDays(30)
 			};
 			CandlesPeriods.SelectedIndex = 1;
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			base.OnClosed(e);
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)

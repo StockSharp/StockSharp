@@ -22,6 +22,8 @@ namespace SampleBlackwood
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -54,6 +56,12 @@ namespace SampleBlackwood
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			var trader = MainWindow.Instance.Trader;
 			if (trader != null)
 			{

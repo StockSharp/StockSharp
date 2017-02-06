@@ -53,6 +53,12 @@ namespace SampleIB
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			if (Trader != null)
 			{
 				if (_initialized)
