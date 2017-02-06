@@ -24,7 +24,6 @@ namespace StockSharp.Algo.Strategies.Reporting
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Strategies;
-
 	using StockSharp.Localization;
 
 	/// <summary>

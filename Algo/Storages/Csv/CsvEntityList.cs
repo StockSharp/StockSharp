@@ -165,7 +165,7 @@ namespace StockSharp.Algo.Storages.Csv
 			Registry.TryCreateTimer();
 		}
 
-		internal void ReadItems()
+		internal void ReadItems(List<Exception> errors)
 		{
 			if (!File.Exists(_fileName))
 				return;
@@ -178,11 +178,21 @@ namespace StockSharp.Algo.Storages.Csv
 
 					while (reader.NextLine())
 					{
-						var item = Read(reader);
-						var key = GetKey(item);
+						try
+						{
+							var item = Read(reader);
+							var key = GetKey(item);
 
-						_items.Add(key, item);
-						Add(item);
+							_items.Add(key, item);
+							Add(item);
+						}
+						catch (Exception ex)
+						{
+							if (errors.Count < 10)
+								errors.Add(ex);
+							else
+								break;
+						}
 					}
 				}
 			});

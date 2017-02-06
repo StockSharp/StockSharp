@@ -152,12 +152,22 @@ namespace StockSharp.Algo.Storages.Csv
 				return item.Code;
 			}
 
+			private Exchange GetExchange(string exchangeCode)
+			{
+				var exchange = Registry.Exchanges.ReadById(exchangeCode);
+
+				if (exchange == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(exchangeCode));
+
+				return exchange;
+			}
+
 			protected override ExchangeBoard Read(FastCsvReader reader)
 			{
 				var board = new ExchangeBoard
 				{
 					Code = reader.ReadString(),
-					Exchange = Registry.Exchanges.ReadById(reader.ReadString()),
+					Exchange = GetExchange(reader.ReadString()),
 					ExpiryTime = reader.ReadString().ToTime(),
 					//IsSupportAtomicReRegister = reader.ReadBool(),
 					//IsSupportMarketOrders = reader.ReadBool(),
@@ -288,6 +298,16 @@ namespace StockSharp.Algo.Storages.Csv
 				return item.Id;
 			}
 
+			private ExchangeBoard GetBoard(string boardCode)
+			{
+				var board = Registry.ExchangeBoards.ReadById(boardCode);
+
+				if (board == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
+
+				return board;
+			}
+
 			protected override Security Read(FastCsvReader reader)
 			{
 				var security = new Security
@@ -297,7 +317,7 @@ namespace StockSharp.Algo.Storages.Csv
 					Code = reader.ReadString(),
 					Class = reader.ReadString(),
 					ShortName = reader.ReadString(),
-					Board = Registry.ExchangeBoards.ReadById(reader.ReadString()),
+					Board = GetBoard(reader.ReadString()),
 					UnderlyingSecurityId = reader.ReadString(),
 					PriceStep = reader.ReadNullableDecimal(),
 					VolumeStep = reader.ReadNullableDecimal(),
@@ -396,12 +416,17 @@ namespace StockSharp.Algo.Storages.Csv
 				return portfolio;
 			}
 
-			private ExchangeBoard GetBoard(string code)
+			private ExchangeBoard GetBoard(string boardCode)
 			{
-				if (code.IsEmpty())
+				if (boardCode.IsEmpty())
 					return null;
 
-				return Registry.ExchangeBoards.ReadById(code);
+				var board = Registry.ExchangeBoards.ReadById(boardCode);
+
+				if (board == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
+
+				return board;
 			}
 
 			protected override void Write(CsvFileWriter writer, Portfolio data)
@@ -437,6 +462,26 @@ namespace StockSharp.Algo.Storages.Csv
 				return Tuple.Create(item.Portfolio, item.Security);
 			}
 
+			private Portfolio GetPortfolio(string id)
+			{
+				var portfolio = Registry.Portfolios.ReadById(id);
+
+				if (portfolio == null)
+					throw new InvalidOperationException(LocalizedStrings.Str3622Params.Put(id));
+
+				return portfolio;
+			}
+
+			private Security GetSecurity(string id)
+			{
+				var security = Registry.Securities.ReadById(id);
+
+				if (security == null)
+					throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id));
+
+				return security;
+			}
+
 			protected override Position Read(FastCsvReader reader)
 			{
 				var pfName = reader.ReadString();
@@ -444,8 +489,8 @@ namespace StockSharp.Algo.Storages.Csv
 
 				var position = new Position
 				{
-					Portfolio = Registry.Portfolios.ReadById(pfName),
-					Security = Registry.Securities.ReadById(secId),
+					Portfolio = GetPortfolio(pfName),
+					Security = GetSecurity(secId),
 					DepoName = reader.ReadString(),
 					LimitType = reader.ReadNullableEnum<TPlusLimits>(),
 					BeginValue = reader.ReadNullableDecimal(),
@@ -648,7 +693,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				try
 				{
-					list.ReadItems();
+					list.ReadItems(errors);
 				}
 				catch (Exception ex)
 				{
