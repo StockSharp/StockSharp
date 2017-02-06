@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-        Title="{x:Static loc:LocalizedStrings.Str1355}" Height="300" Width="300">
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        Title="{x:Static loc:LocalizedStrings.Str1355}" Height="300" Width="700">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition />
@@ -17,8 +18,16 @@
 								  ExecuteStart="Dashboard_OnExecuteStart"
 								  ExecuteStop="Dashboard_OnExecuteStop"/>
 
-		<Button x:Name="Quoting" Width="100" Grid.Row="2" Click="QuotingClick">
-			<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Str1264}" />...</TextBlock>
-		</Button>
+		<StackPanel Grid.Row="2" Orientation="Horizontal">
+			<Button x:Name="Quoting" Width="100" Click="QuotingClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Str1264}" />...</TextBlock>
+			</Button>
+
+			<TextBlock Margin="5,0,0,0"><Run Text="{x:Static loc:LocalizedStrings.TakeProfit}" />:</TextBlock>
+			<dxe:SpinEdit x:Name="TakeProfit" Margin="5,0,0,0" IsFloatValue="True" MinValue="0" Width="100" />
+
+			<TextBlock Margin="5,0,0,0"><Run Text="{x:Static loc:LocalizedStrings.StopLoss}" />:</TextBlock>
+			<dxe:SpinEdit x:Name="StopLoss" Margin="5,0,0,0" IsFloatValue="True" MinValue="0" Width="100" />
+		</StackPanel>
 	</Grid>
 </Window>

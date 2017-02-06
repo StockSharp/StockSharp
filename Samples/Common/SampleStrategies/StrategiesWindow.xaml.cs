@@ -8,6 +8,7 @@
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Strategies;
+	using StockSharp.Algo.Strategies.Protective;
 	using StockSharp.Algo.Strategies.Quoting;
 
 	public partial class StrategiesWindow
@@ -31,12 +32,16 @@
 		}
 
 		private readonly ObservableCollectionEx<StrategyItem> _items = new ObservableCollectionEx<StrategyItem>();
+		private readonly ThreadSafeObservableCollection<StrategyItem> _itemsTs;
 
 		public StrategiesWindow()
 		{
 			InitializeComponent();
 
 			Dashboard.ItemsSource = _items;
+			TakeProfit.EditValue = StopLoss.EditValue = 0m;
+
+			_itemsTs = new ThreadSafeObservableCollection<StrategyItem>(_items);
 		}
 
 		private void QuotingClick(object sender, RoutedEventArgs e)
@@ -56,11 +61,43 @@
 				Connector = MainWindow.Instance.Connector
 			};
 
-			MainWindow.Instance.LogManager.Sources.Add(quoting);
+			if ((decimal?)TakeProfit.EditValue > 0 || (decimal?)StopLoss.EditValue > 0)
+			{
+				var tp = (decimal?)TakeProfit.EditValue;
+				var sl = (decimal?)StopLoss.EditValue;
 
-			_items.Add(new StrategyItem($"Quoting {quoting.Security} {wnd.Side} Vol={wnd.Volume}", quoting));
+				quoting
+					.WhenNewMyTrade()
+					.Do(trade =>
+					{
+						var tpStrategy = tp == null ? null : new TakeProfitStrategy(trade, tp.Value);
+						var slStrategy = sl == null ? null : new StopLossStrategy(trade, sl.Value);
 
-			quoting.Start();
+						if (tpStrategy != null && slStrategy != null)
+						{
+							var strategy = new TakeProfitStopLossStrategy(tpStrategy, slStrategy);
+							AddStrategy($"TPSL {trade.Trade.Price} Vol={trade.Trade.Volume}", strategy);
+						}
+						else if (tpStrategy != null)
+						{
+							AddStrategy($"TP {trade.Trade.Price} Vol={trade.Trade.Volume}", tpStrategy);
+						}
+						else if (slStrategy != null)
+						{
+							AddStrategy($"SL {trade.Trade.Price} Vol={trade.Trade.Volume}", slStrategy);
+						}
+					})
+					.Apply(quoting);
+			}
+
+			AddStrategy($"Quoting {quoting.Security} {wnd.Side} Vol={wnd.Volume}", quoting);
+		}
+
+		private void AddStrategy(string name, Strategy strategy)
+		{
+			_itemsTs.Add(new StrategyItem(name, strategy));
+			MainWindow.Instance.LogManager.Sources.Add(strategy);
+			strategy.Start();
 		}
 
 		private bool Dashboard_OnCanExecuteStart(object arg)
