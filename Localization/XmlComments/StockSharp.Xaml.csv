@@ -45,6 +45,10 @@ M:StockSharp.Xaml.BaseApplication.OnStartup(System.Windows.StartupEventArgs)/sum
 M:StockSharp.Xaml.BaseApplication.OnStartup(System.Windows.StartupEventArgs)/param/e;Str347
 M:StockSharp.Xaml.BaseApplication.EditProxySettings(System.Windows.Window)/summary;DocStr8075
 M:StockSharp.Xaml.BaseApplication.EditProxySettings(System.Windows.Window)/param/owner;DocStr8907
+T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter/summary;DocStr9307
+P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StartedImage/summary;DocStr9505
+P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppingImage/summary;DocStr9505
+P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage/summary;DocStr9505
 T:StockSharp.Xaml.Converters.SeriesToStringConverter/summary;DocStr9307
 T:StockSharp.Xaml.DataSourcePanel/summary;DocStr9358
 P:StockSharp.Xaml.DataSourcePanel.ItemsSource/summary;DocStr9159
@@ -134,6 +138,15 @@ M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor/summary;DocStr29
 M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor/summary;DocStr1
+T:StockSharp.Xaml.StrategiesDashboard/summary;DocStr9506
+F:StockSharp.Xaml.StrategiesDashboard.StartCommand/summary;DocStr8459
+F:StockSharp.Xaml.StrategiesDashboard.StopCommand/summary;DocStr8459
+M:StockSharp.Xaml.StrategiesDashboard.#ctor/summary;DocStr1
+E:StockSharp.Xaml.StrategiesDashboard.CanExecuteStart/summary;DocStr9507
+E:StockSharp.Xaml.StrategiesDashboard.CanExecuteStop/summary;DocStr9507
+E:StockSharp.Xaml.StrategiesDashboard.ExecuteStart/summary;DocStr9508
+E:StockSharp.Xaml.StrategiesDashboard.ExecuteStop/summary;DocStr9508
+M:StockSharp.Xaml.StrategiesDashboard.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SuggestionsWindow/summary;DocStr9455
 F:StockSharp.Xaml.SuggestionsWindow.OkCommand/summary;DocStr8459
 P:StockSharp.Xaml.SuggestionsWindow.NotificationClient/summary;DocStr3070

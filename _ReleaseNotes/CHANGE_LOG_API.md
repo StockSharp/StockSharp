@@ -22,6 +22,8 @@ StockSharp API Change log
 * (feature) Strategy. NewMyTrades -> NewMyTrade
 * (feature) MyTradeGrid. UserOrderId column.
 * (bug) ConnectorWindow. Fix ToolbarImageStyle resource not found issue.
+* (feature) StrategiesDashboard
+* (feature) SampleStrategies
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279

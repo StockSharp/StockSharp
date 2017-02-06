@@ -13720,3 +13720,7 @@ DocStr9501;New trade of a strategy;Новая сделка стратегии
 DocStr9502;To create a rule for the event of occurrence new strategy trade;Создать правило на появление новой сделки стратегии
 DocStr9503;The startegy, based on which trade occurrence will be traced;Стратегия, созданная на основе сделки
 DocStr9504;Show splash screen;Показать окно-заставку
+DocStr9505;{0} for the {1} state;{0} для состояния {1}
+DocStr9506;Strategies dashboard;Панель управления стратегиями
+DocStr9507;Can execute {0};Можно ли выполнить {0}
+DocStr9508;Event raised when {0} executed;Событие вызывается при исполнении {0}

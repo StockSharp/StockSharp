@@ -237,6 +237,26 @@
             </summary>
       <param name="owner">Parent window.</param>
     </member>
+    <member name="T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter">
+      <summary>
+        <see cref="T:StockSharp.Algo.ProcessStates" /> to <see cref="T:System.Windows.Media.ImageSource" /> converter.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StartedImage">
+      <summary>
+        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Started" /> state.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppingImage">
+      <summary>
+        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Stopping" /> state.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage">
+      <summary>
+        <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Stopped" /> state.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Converters.SeriesToStringConverter">
       <summary>
         <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
@@ -677,6 +697,52 @@
     <member name="M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.StrategiesDashboard">
+      <summary>
+            Strategies dashboard.
+            </summary>
+      <summary>
+            StrategiesDashboard
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.StrategiesDashboard.StartCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.StrategiesDashboard.StopCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.StrategiesDashboard.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.StrategiesDashboard" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.StrategiesDashboard.CanExecuteStart">
+      <summary>
+            Can execute <see cref="F:StockSharp.Xaml.StrategiesDashboard.StartCommand" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.StrategiesDashboard.CanExecuteStop">
+      <summary>
+            Can execute <see cref="F:StockSharp.Xaml.StrategiesDashboard.StopCommand" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.StrategiesDashboard.ExecuteStart">
+      <summary>
+            Event raised when <see cref="F:StockSharp.Xaml.StrategiesDashboard.StartCommand" /> executed.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.StrategiesDashboard.ExecuteStop">
+      <summary>
+            Event raised when <see cref="F:StockSharp.Xaml.StrategiesDashboard.StopCommand" /> executed.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.StrategiesDashboard.InitializeComponent">
+      <summary>
+            InitializeComponent
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.SuggestionsWindow">
