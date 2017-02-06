@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleStrategies
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Windows;
@@ -25,8 +24,6 @@ namespace SampleStrategies
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
@@ -110,7 +107,6 @@ namespace SampleStrategies
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 			};
 
-
 			// subscribe on error of market data subscription event
 			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
 			{
@@ -118,43 +114,29 @@ namespace SampleStrategies
 			};
 
 			Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-			//Connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
 
-			Connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-			//Connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
+			Connector.NewOrder += order =>
+			{
+				_ordersWindow.OrderGrid.Orders.Add(order);
+				_securitiesWindow.ProcessOrder(order);
+			};
+			Connector.OrderChanged += _securitiesWindow.ProcessOrder;
+			
 			Connector.NewMyTrades += trades =>
 			{
 				_myTradesWindow.TradeGrid.Trades.AddRange(trades);
 			};
 
-			Connector.NewPortfolios += portfolios =>
+			Connector.NewPortfolio += portfolio =>
 			{
-				_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-				portfolios.ForEach(p => Connector.RegisterPortfolio(p));
-			};
-
-			Connector.PortfoliosChanged += portfolios =>
-			{
-				this.GuiAsync(() => _portfoliosWindow.PortfolioGrid.RefreshData());
+				_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+				Connector.RegisterPortfolio(portfolio);
 			};
 
 			Connector.NewPositions += positions =>
 			{
 				_portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 			};
-
-			Connector.PositionsChanged += positions =>
-			{
-				this.GuiAsync(() => _portfoliosWindow.PortfolioGrid.RefreshData());
-			};
-
-			// subscribe on error of order registration event
-			Connector.OrdersRegisterFailed += OrdersFailed;
-			Connector.StopOrdersRegisterFailed += OrdersFailed;
-
-			// subscribe on error of order cancelling event
-			Connector.OrdersCancelFailed += OrdersFailed;
-			Connector.StopOrdersCancelFailed += OrdersFailed;
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
@@ -216,15 +198,6 @@ namespace SampleStrategies
 			{
 				Connector.Disconnect();
 			}
-		}
-
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
-		{
-			this.GuiAsync(() =>
-			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
-			});
 		}
 
 		private void ChangeConnectStatus(bool isConnected)

@@ -143,5 +143,10 @@ namespace SampleStrategies
 
 			MainWindow.Instance.Connector.LookupSecurities(wnd.Criteria);
 		}
+
+		public void ProcessOrder(Order order)
+		{
+			_quotesWindows.TryGetValue(order.Security)?.DepthCtrl.ProcessOrder(order);
+		}
 	}
 }
