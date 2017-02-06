@@ -121,10 +121,13 @@ namespace SampleSmartSMA
 								ProcessCandle(candle);
 						});
 
-						_trader.NewSecurities += securities =>
+						_trader.NewSecurity += security =>
 						{
+							if (security.Code != "LKOH")
+								return;
+
 							// находим нужную бумагу
-							var lkoh = securities.FirstOrDefault(s => s.Code == "LKOH");
+							var lkoh = security;
 
 							if (lkoh != null)
 							{
@@ -137,14 +140,13 @@ namespace SampleSmartSMA
 							}
 						};
 
-						_trader.NewMyTrades += trades =>
+						_trader.NewMyTrade += trade =>
 						{
 							if (_strategy != null)
 							{
 								// найти те сделки, которые совершила стратегия скользящей средней
-								trades = trades.Where(t => _strategy.Orders.Any(o => o == t.Order));
-
-								_trades.Trades.AddRange(trades);
+								if (_strategy.Orders.Contains(trade.Order))
+									_trades.Trades.Add(trade);
 							}
 						};
 
@@ -197,15 +199,6 @@ namespace SampleSmartSMA
 				_trader.Disconnect();
 			}
 		}
-
-		//private void OrdersFailed(IEnumerable<OrderFail> fails)
-		//{
-		//	this.GuiAsync(() =>
-		//	{
-		//		foreach (var fail in fails)
-		//			MessageBox.Show(this, fail.Error.ToString(), "Ошибка регистрации заявки");
-		//	});
-		//}
 
 		private void ChangeConnectStatus(bool isConnected)
 		{

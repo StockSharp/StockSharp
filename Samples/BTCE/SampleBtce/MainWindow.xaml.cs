@@ -16,14 +16,11 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleBtce
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Btce;
@@ -141,34 +138,29 @@ namespace SampleBtce
 					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-					
-					Trader.NewPortfolios += portfolios =>
+					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+					Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+					Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+
+					Trader.NewPortfolio += portfolio =>
 					{
-						// регистрирует портфели на обновление данных
-						portfolios.ForEach(Trader.RegisterPortfolio);
+						// subscribe on portfolio updates
+						Trader.RegisterPortfolio(portfolio);
 
-						_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+						_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 					};
-					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
-					// подписываемся на событие о неудачной регистрации заявок
-					Trader.OrdersRegisterFailed += OrdersFailed;
-					// подписываемся на событие о неудачном снятии заявок
-					Trader.OrdersCancelFailed += OrdersFailed;
-
-					// подписываемся на событие о неудачной регистрации стоп-заявок
-					Trader.StopOrdersRegisterFailed += OrdersFailed;
-					// подписываемся на событие о неудачном снятии стоп-заявок
-					Trader.StopOrdersCancelFailed += OrdersFailed;
+					// subscribe on error of order registration event
+					Trader.OrderRegisterFailed += OrderFailed;
+					// subscribe on error of order cancelling event
+					Trader.OrderCancelFailed += OrderFailed;
 
 					Trader.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
-					// устанавливаем поставщик маркет-данных
+					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
@@ -190,12 +182,11 @@ namespace SampleBtce
 			}
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

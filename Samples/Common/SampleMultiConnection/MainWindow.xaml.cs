@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleMultiConnection
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Windows;
@@ -107,23 +106,25 @@ namespace SampleMultiConnection
 			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-			Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-			Connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
+			Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+			Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
 
-			Connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-			Connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-			Connector.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+			Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+			Connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+			Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
 			
-			Connector.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-			Connector.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+			Connector.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+			Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 			// subscribe on error of order registration event
-			Connector.OrdersRegisterFailed += OrdersFailed;
-			Connector.StopOrdersRegisterFailed += OrdersFailed;
-
+			Connector.OrderRegisterFailed += OrderFailed;
 			// subscribe on error of order cancelling event
-			Connector.OrdersCancelFailed += OrdersFailed;
-			Connector.StopOrdersCancelFailed += OrdersFailed;
+			Connector.OrderCancelFailed += OrderFailed;
+
+			// subscribe on error of stop-order registration event
+			Connector.StopOrderRegisterFailed += OrderFailed;
+			// subscribe on error of stop-order cancelling event
+			Connector.StopOrderCancelFailed += OrderFailed;
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
@@ -198,12 +199,11 @@ namespace SampleMultiConnection
 			}
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

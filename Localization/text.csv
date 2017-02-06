@@ -13694,10 +13694,10 @@ DocStr9471;Call option;Call опцион
 DocStr9472;Put option;Put опцион
 DocStr9476;Evaluate greek fields;Вычислять греки
 DocStr9477;Option desk rows;Строкаи доски опционов
-DocStr9479;Add options;Добавить опционы
-DocStr9480;Options to add;Опционы для добавления
-DocStr9481;Remove options;Удалить опционы
-DocStr9482;Options to remove;Опционы для удаления
+DocStr9479;Add option;Добавить опцион
+DocStr9480;Option to add;Опцион для добавления
+DocStr9481;Remove option;Удалить опцион
+DocStr9482;Option to remove;Опцион для удаления
 DocStr9483;Clear;Очистить
 DocStr9484;Option desk model;Модель доски опционов
 DocStr9485;To update the desk values;Обновить значения доски

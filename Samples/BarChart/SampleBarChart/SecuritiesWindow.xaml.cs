@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleBarChart
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Windows;
 
 	using Ecng.Collections;
@@ -47,7 +46,7 @@ namespace SampleBarChart
 			{
 				if (_initialized)
 				{
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 				}
 
 				_quotesWindows.ForEach(pair =>
@@ -107,21 +106,18 @@ namespace SampleBarChart
 
 				var trader = MainWindow.Instance.Trader;
 
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
+				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void HistoryTicksClick(object sender, RoutedEventArgs e)

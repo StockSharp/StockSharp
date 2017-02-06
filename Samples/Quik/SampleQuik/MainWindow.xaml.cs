@@ -21,8 +21,6 @@ namespace SampleQuik
 	using System.Security;
 	using System.Windows;
 
-	using MoreLinq;
-
 	using Ecng.Common;
 	using Ecng.Xaml;
 
@@ -30,7 +28,6 @@ namespace SampleQuik
 	using StockSharp.Quik;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
-	using StockSharp.Messages;
 
 	public partial class MainWindow
 	{
@@ -166,17 +163,17 @@ namespace SampleQuik
 					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.OrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str153)));
-					Trader.OrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-					Trader.StopOrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str153)));
-					Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+					Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+					Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+					Trader.NewStopOrder += order => _stopOrderWindow.OrderGrid.Orders.Add(order);
+					Trader.OrderRegisterFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str153));
+					Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981));
+					Trader.StopOrderRegisterFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str153));
+					Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981));
+					Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 					Trader.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));

@@ -16,8 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleSterling
 {
 	using System.Windows;
-	using System.Collections.Generic;
-	using System.Linq;
 	
 	using Ecng.Collections;
 	using Ecng.Xaml;
@@ -141,33 +139,27 @@ namespace SampleSterling
 
 				var trader = MainWindow.Instance.Trader;
 
-				trader.NewTrades += TraderOnNewTrades;
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				trader.NewTrade += TraderOnNewTrade;
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
+				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
 			}
 		}
 
-		private void TraderOnNewTrades(IEnumerable<Trade> trades)
+		private void TraderOnNewTrade(Trade trade)
 		{
-			foreach (var group in trades.GroupBy(t => t.Security))
-			{
-				var wnd = _tradesWindows.TryGetValue(group.Key);
+			var wnd = _tradesWindows.TryGetValue(trade.Security);
 
-				if (wnd != null)
-					wnd.TradeGrid.Trades.AddRange(group);
-			}
+			if (wnd != null)
+				wnd.TradeGrid.Trades.Add(trade);
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 	}
 }

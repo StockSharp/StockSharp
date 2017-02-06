@@ -64,10 +64,10 @@ P:StockSharp.Xaml.OptionDeskModel.MarketDataProvider/summary;DocStr973
 P:StockSharp.Xaml.OptionDeskModel.UnderlyingAsset/summary;UnderlyingAsset
 P:StockSharp.Xaml.OptionDeskModel.UseBlackModel/summary;DocStr8222
 M:StockSharp.Xaml.OptionDeskModel.#ctor/summary;DocStr1
-M:StockSharp.Xaml.OptionDeskModel.Add(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/summary;DocStr9479
-M:StockSharp.Xaml.OptionDeskModel.Add(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/securities;DocStr9480
-M:StockSharp.Xaml.OptionDeskModel.Remove(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/summary;DocStr9481
-M:StockSharp.Xaml.OptionDeskModel.Remove(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/securities;DocStr9482
+M:StockSharp.Xaml.OptionDeskModel.Add(StockSharp.BusinessEntities.Security)/summary;DocStr9479
+M:StockSharp.Xaml.OptionDeskModel.Add(StockSharp.BusinessEntities.Security)/param/security;DocStr9480
+M:StockSharp.Xaml.OptionDeskModel.Remove(StockSharp.BusinessEntities.Security)/summary;DocStr9481
+M:StockSharp.Xaml.OptionDeskModel.Remove(StockSharp.BusinessEntities.Security)/param/security;DocStr9482
 M:StockSharp.Xaml.OptionDeskModel.Clear/summary;DocStr9483
 M:StockSharp.Xaml.OptionDeskModel.Refresh(System.Nullable{System.DateTimeOffset},System.Nullable{System.Decimal})/summary;DocStr9485
 M:StockSharp.Xaml.OptionDeskModel.Refresh(System.Nullable{System.DateTimeOffset},System.Nullable{System.Decimal})/param/currentTime;DocStr955

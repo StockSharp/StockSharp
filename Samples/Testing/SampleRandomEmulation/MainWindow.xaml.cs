@@ -133,9 +133,9 @@ namespace SampleRandomEmulation
 				Connector = _connector,
 			};
 
-			_connector.NewSecurities += securities =>
+			_connector.NewSecurity += s =>
 			{
-				if (securities.All(s => s != security))
+				if (s != security)
 					return;
 
 				// fill level1 values

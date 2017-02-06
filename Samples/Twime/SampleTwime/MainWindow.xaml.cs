@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleTwime
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
 
@@ -133,29 +132,29 @@ namespace SampleTwime
 				Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-				Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-				Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-				Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-				Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
+				Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+				Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+				Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+				Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
 
-				Trader.NewPortfolios += portfolios =>
+				Trader.NewPortfolio += portfolio =>
 				{
 					// subscribe on portfolio updates
 					//portfolios.ForEach(Trader.RegisterPortfolio);
 
-					_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+					_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 				};
-				Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+				Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 				// subscribe on error of order registration event
-				Trader.OrdersRegisterFailed += OrdersFailed;
+				Trader.OrderRegisterFailed += OrderFailed;
 				// subscribe on error of order cancelling event
-				Trader.OrdersCancelFailed += OrdersFailed;
+				Trader.OrderCancelFailed += OrderFailed;
 
 				// subscribe on error of stop-order registration event
-				Trader.StopOrdersRegisterFailed += OrdersFailed;
+				Trader.StopOrderRegisterFailed += OrderFailed;
 				// subscribe on error of stop-order cancelling event
-				Trader.StopOrdersCancelFailed += OrdersFailed;
+				Trader.StopOrderCancelFailed += OrderFailed;
 
 				Trader.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
@@ -185,12 +184,11 @@ namespace SampleTwime
 			}
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

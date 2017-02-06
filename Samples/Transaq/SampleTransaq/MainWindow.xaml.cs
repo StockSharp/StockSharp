@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleTransaq
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Net;
 	using System.Windows;
@@ -153,24 +152,24 @@ namespace SampleTransaq
 					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-					
-					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+					Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+					Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+					Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+
+					Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 					// подписываемся на событие о неудачной регистрации заявок
-					Trader.OrdersRegisterFailed += OrdersFailed;
+					Trader.OrderRegisterFailed += OrderFailed;
 					// подписываемся на событие о неудачном снятии заявок
-					Trader.OrdersCancelFailed += OrdersFailed;
+					Trader.OrderCancelFailed += OrderFailed;
 
 					// подписываемся на событие о неудачной регистрации стоп-заявок
-					Trader.StopOrdersRegisterFailed += OrdersFailed;
+					Trader.StopOrderRegisterFailed += OrderFailed;
 					// подписываемся на событие о неудачном снятии стоп-заявок
-					Trader.StopOrdersCancelFailed += OrdersFailed;
+					Trader.StopOrderCancelFailed += OrderFailed;
 
 					Trader.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
@@ -206,12 +205,11 @@ namespace SampleTransaq
 			}
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

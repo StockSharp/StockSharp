@@ -183,32 +183,29 @@ namespace SampleOptionQuoting
 
 			Desk.Model = model;
 
-			model.Add(new[]
-			{
-				CreateStrike(05000, 10, 60, OptionTypes.Call, expiryDate, asset, 100),
-				CreateStrike(10000, 10, 53, OptionTypes.Call, expiryDate, asset, 343),
-				CreateStrike(15000, 10, 47, OptionTypes.Call, expiryDate, asset, 3454),
-				CreateStrike(20000, 78, 42, OptionTypes.Call, expiryDate, asset, null),
-				CreateStrike(25000, 32, 35, OptionTypes.Call, expiryDate, asset, 100),
-				CreateStrike(30000, 3245, 32, OptionTypes.Call, expiryDate, asset, 55),
-				CreateStrike(35000, 3454, 37, OptionTypes.Call, expiryDate, asset, 456),
-				CreateStrike(40000, 34, 45, OptionTypes.Call, expiryDate, asset, 4),
-				CreateStrike(45000, 3566, 51, OptionTypes.Call, expiryDate, asset, 67),
-				CreateStrike(50000, 454, 57, OptionTypes.Call, expiryDate, asset, null),
-				CreateStrike(55000, 10, 59, OptionTypes.Call, expiryDate, asset, 334),
+			model.Add(CreateStrike(05000, 10, 60, OptionTypes.Call, expiryDate, asset, 100));
+			model.Add(CreateStrike(10000, 10, 53, OptionTypes.Call, expiryDate, asset, 343));
+			model.Add(CreateStrike(15000, 10, 47, OptionTypes.Call, expiryDate, asset, 3454));
+			model.Add(CreateStrike(20000, 78, 42, OptionTypes.Call, expiryDate, asset, null));
+			model.Add(CreateStrike(25000, 32, 35, OptionTypes.Call, expiryDate, asset, 100));
+			model.Add(CreateStrike(30000, 3245, 32, OptionTypes.Call, expiryDate, asset, 55));
+			model.Add(CreateStrike(35000, 3454, 37, OptionTypes.Call, expiryDate, asset, 456));
+			model.Add(CreateStrike(40000, 34, 45, OptionTypes.Call, expiryDate, asset, 4));
+			model.Add(CreateStrike(45000, 3566, 51, OptionTypes.Call, expiryDate, asset, 67));
+			model.Add(CreateStrike(50000, 454, 57, OptionTypes.Call, expiryDate, asset, null));
+			model.Add(CreateStrike(55000, 10, 59, OptionTypes.Call, expiryDate, asset, 334));
 
-				CreateStrike(05000, 10, 50, OptionTypes.Put, expiryDate, asset, 100),
-				CreateStrike(10000, 10, 47, OptionTypes.Put, expiryDate, asset, 343),
-				CreateStrike(15000, 6788, 42, OptionTypes.Put, expiryDate, asset, 3454),
-				CreateStrike(20000, 10, 37, OptionTypes.Put, expiryDate, asset, null),
-				CreateStrike(25000, 567, 32, OptionTypes.Put, expiryDate, asset, 100),
-				CreateStrike(30000, 4577, 30, OptionTypes.Put, expiryDate, asset, 55),
-				CreateStrike(35000, 67835, 32, OptionTypes.Put, expiryDate, asset, 456),
-				CreateStrike(40000, 13245, 35, OptionTypes.Put, expiryDate, asset, 4),
-				CreateStrike(45000, 10, 37, OptionTypes.Put, expiryDate, asset, 67),
-				CreateStrike(50000, 454, 39, OptionTypes.Put, expiryDate, asset, null),
-				CreateStrike(55000, 10, 41, OptionTypes.Put, expiryDate, asset, 334)
-			});
+			model.Add(CreateStrike(05000, 10, 50, OptionTypes.Put, expiryDate, asset, 100));
+			model.Add(CreateStrike(10000, 10, 47, OptionTypes.Put, expiryDate, asset, 343));
+			model.Add(CreateStrike(15000, 6788, 42, OptionTypes.Put, expiryDate, asset, 3454));
+			model.Add(CreateStrike(20000, 10, 37, OptionTypes.Put, expiryDate, asset, null));
+			model.Add(CreateStrike(25000, 567, 32, OptionTypes.Put, expiryDate, asset, 100));
+			model.Add(CreateStrike(30000, 4577, 30, OptionTypes.Put, expiryDate, asset, 55));
+			model.Add(CreateStrike(35000, 67835, 32, OptionTypes.Put, expiryDate, asset, 456));
+			model.Add(CreateStrike(40000, 13245, 35, OptionTypes.Put, expiryDate, asset, 4));
+			model.Add(CreateStrike(45000, 10, 37, OptionTypes.Put, expiryDate, asset, 67));
+			model.Add(CreateStrike(50000, 454, 39, OptionTypes.Put, expiryDate, asset, null));
+			model.Add(CreateStrike(55000, 10, 41, OptionTypes.Put, expiryDate, asset, 334));
 
 			model.Refresh(new DateTime(2014, 08, 15));
 
@@ -283,48 +280,51 @@ namespace SampleOptionQuoting
 			PosChart.SecurityProvider = Connector;
 
 			// fill underlying asset's list
-			Connector.NewSecurities += securities =>
-				_assets.AddRange(securities.Where(s => s.Type == SecurityTypes.Future));
-
-			Connector.SecuritiesChanged += securities =>
+			Connector.NewSecurity += security =>
 			{
-				if ((PosChart.AssetPosition != null && securities.Contains(PosChart.AssetPosition.Security)) || PosChart.Positions.Cache.Select(p => p.Security).Intersect(securities).Any())
+				if (security.Type == SecurityTypes.Future)
+					_assets.Add(security);
+			};
+
+			Connector.SecurityChanged += security =>
+			{
+				if ((PosChart.AssetPosition != null && PosChart.AssetPosition.Security == security) || PosChart.Positions.Cache.Select(p => p.Security).Contains(security))
 					_isDirty = true;
 			};
 
 			// subscribing on tick prices and updating asset price
-			Connector.NewTrades += trades =>
+			Connector.NewTrade += trade =>
 			{
 				var assetPos = PosChart.AssetPosition;
-				if (assetPos != null && trades.Any(t => t.Security == assetPos.Security))
+				if (assetPos != null && trade.Security == assetPos.Security)
 					_isDirty = true;
 			};
 
-			Connector.NewPositions += positions => this.GuiAsync(() =>
+			Connector.NewPosition += position => this.GuiAsync(() =>
 			{
 				var asset = SelectedAsset;
 
 				if (asset == null)
 					return;
 
-				var assetPos = positions.FirstOrDefault(p => p.Security == asset);
-				var newPos = positions.Where(p => p.Security.UnderlyingSecurityId == asset.Id).ToArray();
+				var assetPos = position.Security == asset;
+				var newPos = position.Security.UnderlyingSecurityId == asset.Id;
 
-				if (assetPos == null && newPos.Length == 0)
+				if (!assetPos && !newPos)
 					return;
 
-				if (assetPos != null)
-					PosChart.AssetPosition = assetPos;
+				if (assetPos)
+					PosChart.AssetPosition = position;
 
-				if (newPos.Length > 0)
-					PosChart.Positions.AddRange(newPos);
+				if (newPos)
+					PosChart.Positions.Add(position);
 
 				RefreshChart();
 			});
 
-			Connector.PositionsChanged += positions => this.GuiAsync(() =>
+			Connector.PositionChanged += position => this.GuiAsync(() =>
 			{
-				if ((PosChart.AssetPosition != null && positions.Contains(PosChart.AssetPosition)) || positions.Intersect(PosChart.Positions.Cache).Any())
+				if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
 					RefreshChart();
 			});
 

@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleStrategies
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 
@@ -44,7 +43,7 @@ namespace SampleStrategies
 			if (connector != null)
 			{
 				if (_initialized)
-					connector.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					connector.MarketDepthChanged -= TraderOnMarketDepthChanged;
 			}
 
 			base.OnClosed(e);
@@ -99,8 +98,8 @@ namespace SampleStrategies
 
 			if (!_initialized)
 			{
-				TraderOnMarketDepthsChanged(new[] { connector.GetMarketDepth(SecurityPicker.SelectedSecurity) });
-				connector.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				TraderOnMarketDepthChanged(connector.GetMarketDepth(SecurityPicker.SelectedSecurity));
+				connector.MarketDepthChanged += TraderOnMarketDepthChanged;
 				_initialized = true;
 			}
 		}
@@ -117,15 +116,12 @@ namespace SampleStrategies
 				connector.RegisterSecurity(security);
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)

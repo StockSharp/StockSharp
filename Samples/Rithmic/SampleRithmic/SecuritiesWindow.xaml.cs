@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleRithmic
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
@@ -143,8 +142,8 @@ namespace SampleRithmic
 
 			if (!_initialized)
 			{
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 				_initialized = true;
 			}
 		}
@@ -166,15 +165,12 @@ namespace SampleRithmic
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 	}
 }

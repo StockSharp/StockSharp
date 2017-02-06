@@ -51,7 +51,7 @@ namespace SampleIQFeed
 				if (_initialized)
 				{
 					trader.ValuesChanged -= TraderOnValuesChanged;
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 				}
 
 				_quotesWindows.ForEach(pair =>
@@ -140,9 +140,9 @@ namespace SampleIQFeed
 				var trader = MainWindow.Instance.Trader;
 
 				trader.ValuesChanged += TraderOnValuesChanged;
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
+				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
 			}
 		}
 
@@ -163,15 +163,12 @@ namespace SampleIQFeed
 			wnd.Level1Grid.Messages.Add(msg);
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void HistoryLevel1Click(object sender, RoutedEventArgs e)

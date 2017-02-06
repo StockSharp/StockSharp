@@ -23,8 +23,6 @@ namespace SampleAlfaCandles
 	using Ecng.Common;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.AlfaDirect;
@@ -66,7 +64,7 @@ namespace SampleAlfaCandles
 			_trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-			_trader.NewSecurities += securities =>
+			_trader.NewSecurity += security =>
 			{
 				// начинаем получать текущие сделки (для построения свечек в реальном времени)
 
@@ -77,7 +75,7 @@ namespace SampleAlfaCandles
 
 			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
-			_trader.NewPortfolios += portfolios => portfolios.ForEach(_trader.RegisterPortfolio);
+			_trader.NewPortfolio += _trader.RegisterPortfolio;
 
 			_trader.Connected += () =>
 			{

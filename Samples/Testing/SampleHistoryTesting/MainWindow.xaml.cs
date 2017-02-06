@@ -476,9 +476,9 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(strategy);
 
-				connector.NewSecurities += securities =>
+				connector.NewSecurity += s =>
 				{
-					if (securities.All(s => s != security))
+					if (s != security)
 						return;
 
 					// fill level1 values

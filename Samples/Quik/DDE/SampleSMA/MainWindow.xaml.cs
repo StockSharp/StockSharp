@@ -115,30 +115,29 @@ namespace SampleSMA
 					{
 						_candleManager = new CandleManager(_trader);
 
-						_trader.NewSecurities += securities =>
+						_trader.NewSecurity += security =>
 						{
+							if (!security.Code.CompareIgnoreCase("LKOH"))
+								return;
+
 							// находим нужную бумагу
-							var lkoh = securities.FirstOrDefault(s => s.Code == "LKOH");
+							var lkoh = security;
 
-							if (lkoh != null)
+							_lkoh = lkoh;
+
+							this.GuiAsync(() =>
 							{
-								_lkoh = lkoh;
-
-								this.GuiAsync(() =>
-								{
-									Start.IsEnabled = true;
-								});
-							}
+								Start.IsEnabled = true;
+							});
 						};
 
-						_trader.NewMyTrades += trades =>
+						_trader.NewMyTrade += trade =>
 						{
 							if (_strategy != null)
 							{
 								// найти те сделки, которые совершила стратегия скользящей средней
-								trades = trades.Where(t => _strategy.Orders.Any(o => o == t.Order));
-
-								Trades.Trades.AddRange(trades);
+								if (_strategy.Orders.Contains(trade.Order))
+									Trades.Trades.Add(trade);
 							}
 						};
 

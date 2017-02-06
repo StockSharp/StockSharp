@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleITCH
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Windows;
 
 	using Ecng.Collections;
@@ -45,7 +44,7 @@ namespace SampleITCH
 			if (trader != null)
 			{
 				if (_initialized)
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 
 				_quotesWindows.SyncDo(d =>
 				{
@@ -122,21 +121,18 @@ namespace SampleITCH
 
 			if (!_initialized)
 			{
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 				_initialized = true;
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 	}
 }

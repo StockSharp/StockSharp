@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleAsyncTransactions
 {
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
 
@@ -86,17 +85,17 @@ namespace SampleAsyncTransactions
 
 				Portfolios.Portfolios = new PortfolioDataSource(Trader);
 
-				Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+				Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 
 				// подписываемся на событие о неудачной регистрации заявок
-				Trader.OrdersRegisterFailed += OrdersFailed;
+				Trader.OrderRegisterFailed += OrderFailed;
 				// подписываемся на событие о неудачном снятии заявок
-				Trader.OrdersCancelFailed += OrdersFailed;
+				Trader.OrderCancelFailed += OrderFailed;
 
 				// подписываемся на событие о неудачной регистрации стоп-заявок
-				Trader.StopOrdersRegisterFailed += OrdersFailed;
+				Trader.StopOrderRegisterFailed += OrderFailed;
 				// подписываемся на событие о неудачном снятии стоп-заявок
-				Trader.StopOrdersCancelFailed += OrdersFailed;
+				Trader.StopOrderCancelFailed += OrderFailed;
 
 				// добавляем экспорт дополнительных колонок из стакана (своя покупка и продажа)
 				Trader.QuotesTable.Columns.Add(DdeQuoteColumns.OwnBidVolume);
@@ -109,12 +108,11 @@ namespace SampleAsyncTransactions
 			}
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2982);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

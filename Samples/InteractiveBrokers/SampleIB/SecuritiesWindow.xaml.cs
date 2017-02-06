@@ -56,7 +56,7 @@ namespace SampleIB
 			if (Trader != null)
 			{
 				if (_initialized)
-					Trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					Trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 
 				if (_scannerId != null)
 				{
@@ -148,21 +148,18 @@ namespace SampleIB
 
 			if (!_initialized)
 			{
-				TraderOnMarketDepthsChanged(new[] { Trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
-				Trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				TraderOnMarketDepthChanged(Trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
+				Trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 				_initialized = true;
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)

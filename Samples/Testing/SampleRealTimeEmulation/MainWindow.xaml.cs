@@ -17,7 +17,6 @@ namespace SampleRealTimeEmulation
 {
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Linq;
 	using System.Net;
 	using System.Security;
 	using System.Windows;
@@ -164,17 +163,17 @@ namespace SampleRealTimeEmulation
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 					});
 
-					_connector.NewMarketDepths += OnDepths;
-					_connector.MarketDepthsChanged += OnDepths;
+					_connector.NewMarketDepth += OnDepth;
+					_connector.MarketDepthChanged += OnDepth;
 
-					_connector.NewPortfolios += PortfolioGrid.Portfolios.AddRange;
-					_connector.NewPositions += PortfolioGrid.Positions.AddRange;
+					_connector.NewPortfolio += PortfolioGrid.Portfolios.Add;
+					_connector.NewPosition += PortfolioGrid.Positions.Add;
 
-					_connector.NewOrders += OrderGrid.Orders.AddRange;
-					_connector.NewMyTrades += TradeGrid.Trades.AddRange;
+					_connector.NewOrder += OrderGrid.Orders.Add;
+					_connector.NewMyTrade += TradeGrid.Trades.Add;
 
 					// subscribe on error of order registration event
-					_connector.OrdersRegisterFailed += OrdersFailed;
+					_connector.OrderRegisterFailed += OrderFailed;
 
 					_candleManager.Processing += (s, candle) =>
 					{
@@ -201,25 +200,19 @@ namespace SampleRealTimeEmulation
 				_connector.Disconnect();
 		}
 
-		private void OnDepths(IEnumerable<MarketDepth> depths)
+		private void OnDepth(MarketDepth depth)
 		{
-			if (_security == null)
-				return;
-
-			var depth = depths.FirstOrDefault(d => d.Security == _security);
-
-			if (depth == null)
+			if (depth.Security != _security)
 				return;
 
 			DepthControl.UpdateDepth(depth);
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

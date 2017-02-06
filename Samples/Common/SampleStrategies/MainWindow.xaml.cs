@@ -113,7 +113,7 @@ namespace SampleStrategies
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 			};
 
-			Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+			Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 
 			Connector.NewOrder += order =>
 			{
@@ -122,10 +122,7 @@ namespace SampleStrategies
 			};
 			Connector.OrderChanged += _securitiesWindow.ProcessOrder;
 			
-			Connector.NewMyTrades += trades =>
-			{
-				_myTradesWindow.TradeGrid.Trades.AddRange(trades);
-			};
+			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
 			Connector.NewPortfolio += portfolio =>
 			{
@@ -133,10 +130,7 @@ namespace SampleStrategies
 				Connector.RegisterPortfolio(portfolio);
 			};
 
-			Connector.NewPositions += positions =>
-			{
-				_portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
-			};
+			Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;

@@ -16,14 +16,11 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleSterling
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Sterling;
@@ -137,29 +134,28 @@ namespace SampleSterling
 					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders));
-					Trader.NewPortfolios += portfolios =>
+					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+					Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+					Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+					Trader.NewPortfolio += portfolio =>
 					{
+						_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+
 						// subscribe on portfolio updates
-						portfolios.ForEach(Trader.RegisterPortfolio);
-
-						_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+						Trader.RegisterPortfolio(portfolio);
 					};
-
-					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 					// subscribe on error of order registration event
-					Trader.OrdersRegisterFailed += OrdersFailed;
+					Trader.OrderRegisterFailed += OrderFailed;
 					// subscribe on error of order cancelling event
-					Trader.OrdersCancelFailed += OrdersFailed;
+					Trader.OrderCancelFailed += OrderFailed;
 
 					// subscribe on error of stop-order registration event
-					Trader.StopOrdersRegisterFailed += OrdersFailed;
+					Trader.StopOrderRegisterFailed += OrderFailed;
 					// subscribe on error of stop-order cancelling event
-					Trader.StopOrdersCancelFailed += OrdersFailed;
+					Trader.StopOrderCancelFailed += OrderFailed;
 
 					Trader.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
@@ -187,15 +183,11 @@ namespace SampleSterling
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-				{
-					var msg = fail.Error.ToString();
-					MessageBox.Show(this, msg, LocalizedStrings.Str153);
-				}
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

@@ -153,9 +153,9 @@ namespace SampleHistoryTestingParallel
 
 			logManager.Sources.Add(connector);
 
-			connector.NewSecurities += securities =>
+			connector.NewSecurity += s =>
 			{
-				if (securities.All(s => s != security))
+				if (s != security)
 					return;
 
 				// fill level1 values

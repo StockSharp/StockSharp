@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleQuik
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 
@@ -44,7 +43,7 @@ namespace SampleQuik
 			if (trader != null)
 			{
 				if (_initialized)
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 			}
 
 			base.OnClosed(e);
@@ -112,8 +111,8 @@ namespace SampleQuik
 
 			if (!_initialized)
 			{
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 				_initialized = true;
 
 				// запросить котировки по всем стаканам сразу
@@ -131,15 +130,12 @@ namespace SampleQuik
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void Level1Click(object sender, RoutedEventArgs e)

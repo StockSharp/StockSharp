@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleBitStamp
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 
@@ -43,7 +42,7 @@ namespace SampleBitStamp
 			if (trader != null)
 			{
 				if (_initialized)
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 			}
 
 			base.OnClosed(e);
@@ -99,8 +98,8 @@ namespace SampleBitStamp
 
 			if (!_initialized)
 			{
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(security) });
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 				_initialized = true;
 			}
 		}
@@ -122,15 +121,12 @@ namespace SampleBitStamp
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 	}
 }

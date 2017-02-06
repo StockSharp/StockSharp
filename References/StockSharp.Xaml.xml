@@ -335,17 +335,17 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.OptionDeskModel" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.OptionDeskModel.Add(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})">
+    <member name="M:StockSharp.Xaml.OptionDeskModel.Add(StockSharp.BusinessEntities.Security)">
       <summary>
-            Add options.
+            Add option.
             </summary>
-      <param name="securities">Options to add.</param>
+      <param name="security">Option to add.</param>
     </member>
-    <member name="M:StockSharp.Xaml.OptionDeskModel.Remove(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})">
+    <member name="M:StockSharp.Xaml.OptionDeskModel.Remove(StockSharp.BusinessEntities.Security)">
       <summary>
-            Remove options.
+            Remove option.
             </summary>
-      <param name="securities">Options to remove.</param>
+      <param name="security">Option to remove.</param>
     </member>
     <member name="M:StockSharp.Xaml.OptionDeskModel.Clear">
       <summary>
