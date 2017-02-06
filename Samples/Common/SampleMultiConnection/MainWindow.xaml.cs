@@ -143,14 +143,14 @@ namespace SampleMultiConnection
 			try
 			{
 				entityRegistry.Init();
-
-				Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
-				Connector.StorageAdapter.Load();
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(this, ex.ToString());
 			}
+
+			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
+			Connector.StorageAdapter.Load();
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(entityRegistry));
 		}
