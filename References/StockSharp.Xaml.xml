@@ -1286,7 +1286,7 @@
       <summary>
             To set edited exchange.
             </summary>
-      <param name="exchangeName">The code of edited exchange. The exchange for editing is loaded from <see cref="T:StockSharp.BusinessEntities.IExchangeInfoProvider" />.</param>
+      <param name="exchangeName">The code of edited exchange. The exchange for editing is loaded from <see cref="T:StockSharp.Algo.Storages.IExchangeInfoProvider" />.</param>
     </member>
     <member name="M:StockSharp.Xaml.ExchangesPanel.InitializeComponent">
       <summary>

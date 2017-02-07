@@ -116,6 +116,7 @@
     <Compile Include="Export\Database\SecurityTable.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="Storages\IExchangeInfoProvider.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
     <Compile Include="Indicators\MoneyFlowIndex.cs" />
@@ -307,7 +308,6 @@
     <Compile Include="Storages\Csv\QuoteCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TickCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TransactionCsvSerializer.cs" />
-    <Compile Include="Storages\ExchangeInfoProvider.cs" />
     <Compile Include="Storages\ExchangeList.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="IMarketRuleContainer.cs" />

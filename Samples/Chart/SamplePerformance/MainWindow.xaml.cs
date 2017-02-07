@@ -61,6 +61,8 @@ namespace SamplePerformance
 		private bool _dataIsLoaded;
 		private TimeFrameCandle _lastCandle;
 
+		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
 		private MyMovingAverage _indicator;
 		private readonly MyMovingAverage _fpsAverage;
 
@@ -160,7 +162,7 @@ namespace SamplePerformance
 			{
 				Id = _securityId,
 				PriceStep = _priceStep,
-				Board = ExchangeBoard.GetBoard(id.BoardCode)
+				Board = _exchangeInfoProvider.GetExchangeBoard(id.BoardCode)
 			};
 
 			Chart.Reset(new IChartElement[] { _candleElement });

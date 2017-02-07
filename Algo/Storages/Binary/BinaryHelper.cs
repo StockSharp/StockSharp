@@ -24,7 +24,6 @@ namespace StockSharp.Algo.Storages.Binary
 
 	using MoreLinq;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -386,13 +385,13 @@ namespace StockSharp.Algo.Storages.Binary
 			return Encoding.UTF8.GetString(reader.ReadArray(len).To<BitArray>().To<byte[]>());
 		}
 
-		public static TimeSpan GetTimeZone<TMetaInfo>(this BinaryMetaInfo<TMetaInfo> metaInfo, bool isUtc, SecurityId securityId)
+		public static TimeSpan GetTimeZone<TMetaInfo>(this BinaryMetaInfo<TMetaInfo> metaInfo, bool isUtc, SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
 			where TMetaInfo : BinaryMetaInfo<TMetaInfo>
 		{
 			if (isUtc)
 				return metaInfo.ServerOffset;
 
-			var board = ExchangeBoard.GetBoard(securityId.BoardCode);
+			var board = exchangeInfoProvider.GetExchangeBoard(securityId.BoardCode);
 
 			return board == null ? metaInfo.LocalOffset : board.TimeZone.BaseUtcOffset;
 		}

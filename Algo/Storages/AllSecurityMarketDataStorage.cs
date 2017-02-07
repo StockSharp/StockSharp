@@ -40,9 +40,16 @@ namespace StockSharp.Algo.Storages
 		}
 
 		private readonly Security _security;
+		private readonly IExchangeInfoProvider _exchangeInfoProvider;
 		private readonly BasketMarketDataStorage<T> _basket;
 
-		public AllSecurityMarketDataStorage(Security security, object arg, Func<T, DateTimeOffset> getTime, Func<T, Security> getSecurity, Func<Security, IMarketDataDrive, IMarketDataStorage<T>> getStorage, IMarketDataStorageDrive drive)
+		public AllSecurityMarketDataStorage(Security security,
+			object arg,
+			Func<T, DateTimeOffset> getTime,
+			Func<T, Security> getSecurity,
+			Func<Security, IMarketDataDrive, IMarketDataStorage<T>> getStorage, 
+			IMarketDataStorageDrive drive,
+			IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -59,7 +66,11 @@ namespace StockSharp.Algo.Storages
 			if (drive == null)
 				throw new ArgumentNullException(nameof(drive));
 
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
 			_security = security;
+			_exchangeInfoProvider = exchangeInfoProvider;
 			_getTime = getTime;
 
 			_arg = arg;
@@ -81,7 +92,7 @@ namespace StockSharp.Algo.Storages
 
 					var clone = security.Clone();
 					clone.Id = s;
-					clone.Board = ExchangeBoard.GetOrCreateBoard(idInfo.BoardCode);
+					clone.Board = _exchangeInfoProvider.GetOrCreateBoard(idInfo.BoardCode);
 					return clone;
 				});
 
@@ -188,8 +199,9 @@ namespace StockSharp.Algo.Storages
 			Func<TMessage, Security> getSecurity,
 			Func<TEntity, DateTimeOffset> getEntityTime,
 			Func<Security, IMarketDataDrive, IMarketDataStorage<TMessage>> getStorage,
-			IMarketDataStorageDrive drive)
-			: base(security, arg, getTime, getSecurity, getStorage, drive)
+			IMarketDataStorageDrive drive,
+			IExchangeInfoProvider exchangeInfoProvider)
+			: base(security, arg, getTime, getSecurity, getStorage, drive, exchangeInfoProvider)
 		{
 			if (getEntityTime == null)
 				throw new ArgumentNullException(nameof(getEntityTime));

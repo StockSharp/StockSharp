@@ -1587,13 +1587,6 @@
             The helper class that is used to access to specific Interactive Brokers information via <see cref="P:StockSharp.Messages.IExtendableEntity.ExtensionInfo" />.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.Extensions.GetRoutingBoard(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To get the exchange board of orders fulfilment for the instrument.
-            </summary>
-      <param name="security">Security.</param>
-      <returns>The exchange board of orders fulfilment. If the board does not exist then <see langword="null" /> will be returned.</returns>
-    </member>
     <member name="M:StockSharp.InteractiveBrokers.Extensions.GetClientId(StockSharp.BusinessEntities.MyTrade)">
       <summary>
             To get the customer identifier.

@@ -88,8 +88,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
-		public QuoteBinarySerializer(SecurityId securityId)
-			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version52)
+		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
+			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version52, exchangeInfoProvider)
 		{
 		}
 
@@ -195,7 +195,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset);
+			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 

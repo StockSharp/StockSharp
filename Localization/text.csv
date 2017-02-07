@@ -13724,3 +13724,7 @@ DocStr9505;{0} for the {1} state;{0} для состояния {1}
 DocStr9506;Strategies dashboard;Панель управления стратегиями
 DocStr9507;Can execute {0};Можно ли выполнить {0}
 DocStr9508;Event raised when {0} executed;Событие вызывается при исполнении {0}
+DocStr9509;Exchanges and trading boards provider;Провайдер бирж и торговых площадок
+DocStr9510;The in memory provider of stocks and trade boards;Провайдер бирж и торговых площадок, хранящий данные в памяти
+DocStr9511;The storage based provider of stocks and trade boards;Провайдер бирж и торговых площадок, использующий хранилище
+DocStr9512;Board to check;Площадка для проверки

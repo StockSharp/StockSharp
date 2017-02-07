@@ -339,9 +339,6 @@ F:StockSharp.InteractiveBrokers.CandleDataTypes.YieldBid/summary;DocStr3591
 F:StockSharp.InteractiveBrokers.CandleDataTypes.YieldBidAsk/summary;DocStr3592
 F:StockSharp.InteractiveBrokers.CandleDataTypes.YieldLast/summary;DocStr3593
 T:StockSharp.InteractiveBrokers.Extensions/summary;DocStr3594
-M:StockSharp.InteractiveBrokers.Extensions.GetRoutingBoard(StockSharp.BusinessEntities.Security)/summary;DocStr3595
-M:StockSharp.InteractiveBrokers.Extensions.GetRoutingBoard(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
-M:StockSharp.InteractiveBrokers.Extensions.GetRoutingBoard(StockSharp.BusinessEntities.Security)/returns;DocStr3596
 M:StockSharp.InteractiveBrokers.Extensions.GetClientId(StockSharp.BusinessEntities.MyTrade)/summary;DocStr3597
 M:StockSharp.InteractiveBrokers.Extensions.GetClientId(StockSharp.BusinessEntities.MyTrade)/param/trade;OwnTrade
 M:StockSharp.InteractiveBrokers.Extensions.GetClientId(StockSharp.BusinessEntities.MyTrade)/returns;DocStr3598

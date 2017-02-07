@@ -88,8 +88,8 @@ namespace StockSharp.Algo.Storages.Binary
 	{
 		private readonly object _arg;
 
-		public CandleBinarySerializer(SecurityId securityId, object arg)
-			: base(securityId, 74, MarketDataVersions.Version55)
+		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
+			: base(securityId, 74, MarketDataVersions.Version55, exchangeInfoProvider)
 		{
 			if (arg == null)
 				throw new ArgumentNullException(nameof(arg));
@@ -379,7 +379,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var prevTime = metaInfo.FirstTime;
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version49;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
-			var timeZone = metaInfo.GetTimeZone(isUtc, SecurityId);
+			var timeZone = metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider);
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
 
 			var lastOffset = metaInfo.FirstServerOffset;

@@ -114,6 +114,8 @@ namespace StockSharp.Algo
 			_storageRegistry = storageRegistry;
 
 			InitAdapter();
+
+			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
 		}
 
 		/// <summary>
@@ -125,6 +127,8 @@ namespace StockSharp.Algo
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true, bool supportOffline = false)
 		{
+			_entityCache.ExchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
 			_supportOffline = supportOffline;
 			ReConnectionSettings = new ReConnectionSettings();
 
@@ -1224,7 +1228,7 @@ namespace StockSharp.Algo
 			var security = _entityCache.TryAddSecurity(id, idStr =>
 			{
 				var idInfo = SecurityIdGenerator.Split(idStr);
-				return Tuple.Create(idInfo.SecurityCode, ExchangeBoard.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode)));
+				return Tuple.Create(idInfo.SecurityCode, _entityCache.ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode)));
 			}, out isNew);
 
 			var isChanged = changeSecurity(security);

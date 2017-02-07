@@ -409,8 +409,8 @@ namespace StockSharp.Algo.Storages.Binary
 			{ Level1Fields.VolumeStep,				1 << 25 },
 		};
 
-		public Level1BinarySerializer(SecurityId securityId)
-			: base(securityId, 50, MarketDataVersions.Version54)
+		public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version54, exchangeInfoProvider)
 		{
 		}
 
@@ -868,7 +868,7 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				var prevTime = metaInfo.FirstTime;
 				var lastOffset = metaInfo.FirstServerOffset;
-				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset);
+				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset);
 				metaInfo.FirstTime = prevTime;
 				metaInfo.FirstServerOffset = lastOffset;
 
@@ -1086,7 +1086,7 @@ namespace StockSharp.Algo.Storages.Binary
 					{
 						var prevTime = metaInfo.FirstFieldTime;
 						var lastOffset = metaInfo.FirstServerOffset;
-						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset));
+						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset));
 						metaInfo.FirstFieldTime = prevTime;
 						metaInfo.FirstServerOffset = lastOffset;
 						break;

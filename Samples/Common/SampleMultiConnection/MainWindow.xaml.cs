@@ -153,7 +153,7 @@ namespace SampleMultiConnection
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
 			Connector.StorageAdapter.Load();
 
-			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(entityRegistry));
+			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

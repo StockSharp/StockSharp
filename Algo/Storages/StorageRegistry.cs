@@ -579,6 +579,23 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
+		/// <summary>
+		/// Exchanges and trading boards provider.
+		/// </summary>
+		public IExchangeInfoProvider ExchangeInfoProvider
+		{
+			get { return _exchangeInfoProvider; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				_exchangeInfoProvider = value;
+			}
+		}
+
 		/// <summary>
 		/// To add the tick trades storage.
 		/// </summary>
@@ -768,7 +785,7 @@ namespace StockSharp.Algo.Storages
 				else if (security is IndexSecurity)
 					return new IndexSecurityMarketDataStorage<QuoteChangeMessage>((IndexSecurity)security, null, d => ToSecurity(d.SecurityId), (s, d) => GetQuoteMessageStorage(s, d, format), key.Item2);
 				else if (security.Board == ExchangeBoard.Associated)
-					return new ConvertableAllSecurityMarketDataStorage<QuoteChangeMessage, MarketDepth>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), md => md.LastChangeTime, (s, d) => GetQuoteMessageStorage(s, d, format), key.Item2);
+					return new ConvertableAllSecurityMarketDataStorage<QuoteChangeMessage, MarketDepth>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), md => md.LastChangeTime, (s, d) => GetQuoteMessageStorage(s, d, format), key.Item2, ExchangeInfoProvider);
 				else
 				{
 					IMarketDataSerializer<QuoteChangeMessage> serializer;
@@ -776,7 +793,7 @@ namespace StockSharp.Algo.Storages
 					switch (format)
 					{
 						case StorageFormats.Binary:
-							serializer = new QuoteBinarySerializer(key.Item1);
+							serializer = new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider);
 							break;
 						case StorageFormats.Csv:
 							serializer = new MarketDepthCsvSerializer(key.Item1);
@@ -831,14 +848,14 @@ namespace StockSharp.Algo.Storages
 			return _level1Storages.SafeAdd(Tuple.Create(securityId, (drive ?? DefaultDrive).GetStorageDrive(securityId, typeof(Level1ChangeMessage), null, format)), key =>
 			{
 				if (security.Board == ExchangeBoard.Associated)
-					return new AllSecurityMarketDataStorage<Level1ChangeMessage>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), (s, d) => GetLevel1MessageStorage(s, d, format), key.Item2);
+					return new AllSecurityMarketDataStorage<Level1ChangeMessage>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), (s, d) => GetLevel1MessageStorage(s, d, format), key.Item2, ExchangeInfoProvider);
 
 				IMarketDataSerializer<Level1ChangeMessage> serializer;
 
 				switch (format)
 				{
 					case StorageFormats.Binary:
-						serializer = new Level1BinarySerializer(key.Item1);
+						serializer = new Level1BinarySerializer(key.Item1, ExchangeInfoProvider);
 						break;
 					case StorageFormats.Csv:
 						serializer = new Level1CsvSerializer(key.Item1);
@@ -942,7 +959,7 @@ namespace StockSharp.Algo.Storages
 						else if (security is IndexSecurity)
 							return new IndexSecurityMarketDataStorage<ExecutionMessage>((IndexSecurity)security, null, d => ToSecurity(d.SecurityId), (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive);
 						else if (security.Board == ExchangeBoard.Associated)
-							return new ConvertableAllSecurityMarketDataStorage<ExecutionMessage, Trade>(security, null, t => t.ServerTime, t => ToSecurity(t.SecurityId), t => t.Time, (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive);
+							return new ConvertableAllSecurityMarketDataStorage<ExecutionMessage, Trade>(security, null, t => t.ServerTime, t => ToSecurity(t.SecurityId), t => t.Time, (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive, ExchangeInfoProvider);
 						else
 						{
 							IMarketDataSerializer<ExecutionMessage> serializer;
@@ -950,7 +967,7 @@ namespace StockSharp.Algo.Storages
 							switch (format)
 							{
 								case StorageFormats.Binary:
-									serializer = new TickBinarySerializer(key.Item1);
+									serializer = new TickBinarySerializer(key.Item1, ExchangeInfoProvider);
 									break;
 								case StorageFormats.Csv:
 									serializer = new TickCsvSerializer(key.Item1);
@@ -969,7 +986,7 @@ namespace StockSharp.Algo.Storages
 						switch (format)
 						{
 							case StorageFormats.Binary:
-								serializer = new TransactionBinarySerializer(secId);
+								serializer = new TransactionBinarySerializer(secId, ExchangeInfoProvider);
 								break;
 							case StorageFormats.Csv:
 								serializer = new TransactionCsvSerializer(secId);
@@ -987,7 +1004,7 @@ namespace StockSharp.Algo.Storages
 						switch (format)
 						{
 							case StorageFormats.Binary:
-								serializer = new OrderLogBinarySerializer(secId);
+								serializer = new OrderLogBinarySerializer(secId, ExchangeInfoProvider);
 								break;
 							case StorageFormats.Csv:
 								serializer = new OrderLogCsvSerializer(secId);
@@ -1040,13 +1057,13 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1018);
 		}
 
-		private static Security ToSecurity(SecurityId securityId)
+		private Security ToSecurity(SecurityId securityId)
 		{
 			return new Security
 			{
 				Id = securityId.ToStringId(),
 				Code = securityId.SecurityCode,
-				Board = ExchangeBoard.GetOrCreateBoard(securityId.BoardCode)
+				Board = ExchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode)
 			};
 		}
 
@@ -1078,7 +1095,7 @@ namespace StockSharp.Algo.Storages
 				switch (format)
 				{
 					case StorageFormats.Binary:
-						serializer = new NewsBinarySerializer();
+						serializer = new NewsBinarySerializer(ExchangeInfoProvider);
 						break;
 					case StorageFormats.Csv:
 						serializer = new NewsCsvSerializer();
@@ -1093,15 +1110,20 @@ namespace StockSharp.Algo.Storages
 
 		private class SecurityStorage : Disposable, ISecurityStorage
 		{
+			private readonly StorageRegistry _parent;
 			private const string _format = "{Id};{Type};{Decimals};{PriceStep};{VolumeStep};{Multiplier};{Name};{ShortName};{UnderlyingSecurityId};{Class};{Currency};{OptionType};{Strike};{BinaryOptionType}";
 			private readonly string _file;
 			private readonly CachedSynchronizedSet<Security> _securities = new CachedSynchronizedSet<Security>();
 
-			public SecurityStorage(IMarketDataDrive drive)
+			public SecurityStorage(StorageRegistry parent, IMarketDataDrive drive)
 			{
+				if (parent == null)
+					throw new ArgumentNullException(nameof(parent));
+
 				if (drive == null)
 					throw new ArgumentNullException(nameof(drive));
 
+				_parent = parent;
 				_file = Path.Combine(drive.Path, "instruments.csv");
 				Load();
 			}
@@ -1133,7 +1155,7 @@ namespace StockSharp.Algo.Storages
 
 						var id = idGen.Split(security.Id);
 						security.Code = id.SecurityCode;
-						security.Board = ExchangeBoard.GetOrCreateBoard(id.BoardCode);
+						security.Board = _parent.ExchangeInfoProvider.GetOrCreateBoard(id.BoardCode);
 
 						_securities.Add(security);
 					}
@@ -1221,7 +1243,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The instruments storage.</returns>
 		public ISecurityStorage GetSecurityStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return _securityStorages.SafeAdd(drive ?? DefaultDrive, key => new SecurityStorage(key));
+			return _securityStorages.SafeAdd(drive ?? DefaultDrive, key => new SecurityStorage(this, key));
 		}
 	}
 }

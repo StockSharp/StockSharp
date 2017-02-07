@@ -242,8 +242,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
-		public TransactionBinarySerializer(SecurityId securityId)
-			: base(securityId, 200, MarketDataVersions.Version59)
+		public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
+			: base(securityId, 200, MarketDataVersions.Version59, exchangeInfoProvider)
 		{
 		}
 
@@ -494,7 +494,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			var serverTime = reader.ReadTime(ref prevTime, true, true, metaInfo.GetTimeZone(true, SecurityId), true, ref lastOffset);
+			var serverTime = reader.ReadTime(ref prevTime, true, true, metaInfo.GetTimeZone(true, SecurityId, ExchangeInfoProvider), true, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 

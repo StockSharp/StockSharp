@@ -32,6 +32,11 @@ namespace StockSharp.Algo.Storages
 		IMarketDataDrive DefaultDrive { get; }
 
 		/// <summary>
+		/// Exchanges and trading boards provider.
+		/// </summary>
+		IExchangeInfoProvider ExchangeInfoProvider { get; }
+
+		/// <summary>
 		/// To get news storage.
 		/// </summary>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>

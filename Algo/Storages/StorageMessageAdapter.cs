@@ -357,9 +357,9 @@ namespace StockSharp.Algo.Storages
 					var security = _entityRegistry.Securities.ReadBySecurityId(secMsg.SecurityId);
 
 					if (security == null)
-						security = secMsg.ToSecurity();
+						security = secMsg.ToSecurity(_storageRegistry.ExchangeInfoProvider);
 					else
-						security.ApplyChanges(secMsg);
+						security.ApplyChanges(secMsg, _storageRegistry.ExchangeInfoProvider);
 
 					_entityRegistry.Securities.Save(security);
 					break;
@@ -371,7 +371,7 @@ namespace StockSharp.Algo.Storages
 
 					if (board == null)
 					{
-						board = ExchangeBoard.GetOrCreateBoard(boardMsg.Code, code =>
+						board = _storageRegistry.ExchangeInfoProvider.GetOrCreateBoard(boardMsg.Code, code =>
 						{
 							var exchange = boardMsg.ToExchange(new Exchange { Name = boardMsg.ExchangeCode });
 							return boardMsg.ToBoard(new ExchangeBoard { Code = code, Exchange = exchange });
@@ -393,7 +393,7 @@ namespace StockSharp.Algo.Storages
 					var portfolio = _entityRegistry.Portfolios.ReadById(portfolioMsg.PortfolioName)
 							?? new Portfolio { Name = portfolioMsg.PortfolioName };
 
-					portfolioMsg.ToPortfolio(portfolio);
+					portfolioMsg.ToPortfolio(portfolio, _storageRegistry.ExchangeInfoProvider);
 					_entityRegistry.Portfolios.Save(portfolio);
 
 					break;
@@ -405,7 +405,7 @@ namespace StockSharp.Algo.Storages
 					var portfolio = _entityRegistry.Portfolios.ReadById(portfolioMsg.PortfolioName)
 							?? new Portfolio { Name = portfolioMsg.PortfolioName };
 
-					portfolio.ApplyChanges(portfolioMsg);
+					portfolio.ApplyChanges(portfolioMsg, _storageRegistry.ExchangeInfoProvider);
 					_entityRegistry.Portfolios.Save(portfolio);
 
 					break;
@@ -488,7 +488,7 @@ namespace StockSharp.Algo.Storages
 			{
 				Id = securityId.ToStringId(),
 				Code = securityId.SecurityCode,
-				Board = ExchangeBoard.GetOrCreateBoard(securityId.BoardCode),
+				Board = _storageRegistry.ExchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
 				//ExtensionInfo = new Dictionary<object, object>()
 			};
 

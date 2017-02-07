@@ -24,6 +24,7 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -615,8 +616,9 @@ namespace StockSharp.Algo
 		/// To convert the message into instrument.
 		/// </summary>
 		/// <param name="message">Message.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Security.</returns>
-		public static Security ToSecurity(this SecurityMessage message)
+		public static Security ToSecurity(this SecurityMessage message, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -625,7 +627,7 @@ namespace StockSharp.Algo
 			{
 				Id = message.SecurityId.ToStringId(),
 				Code = message.SecurityId.SecurityCode,
-				Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode),
+				Board = exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode),
 				Type = message.SecurityType ?? message.SecurityId.SecurityType,
 				Strike = message.Strike,
 				OptionType = message.OptionType,
@@ -881,10 +883,11 @@ namespace StockSharp.Algo
 		{
 			private readonly IEnumerable<TMessage> _messages;
 			private readonly Security _security;
+			private readonly IExchangeInfoProvider _exchangeInfoProvider;
 			//private readonly object _candleArg;
 			private readonly Type _candleType;
 
-			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security)
+			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider)
 			{
 				if (messages == null)
 					throw new ArgumentNullException(nameof(messages));
@@ -894,10 +897,11 @@ namespace StockSharp.Algo
 
 				_messages = messages;
 				_security = security;
+				_exchangeInfoProvider = exchangeInfoProvider;
 			}
 			
-			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, Type candleType)
-				: this (messages, security)
+			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider, Type candleType)
+				: this(messages, security, exchangeInfoProvider)
 			{
 				_candleType = candleType;
 				//_candleArg = candleArg;
@@ -943,7 +947,7 @@ namespace StockSharp.Algo
 						return message.To<QuoteChangeMessage>().ToMarketDepth(_security).To<TEntity>();
 
 					case MessageTypes.News:
-						return message.To<NewsMessage>().ToNews().To<TEntity>();
+						return message.To<NewsMessage>().ToNews(_exchangeInfoProvider).To<TEntity>();
 
 					default:
 					{
@@ -965,11 +969,12 @@ namespace StockSharp.Algo
 		/// <typeparam name="TEntity">The type of trading object.</typeparam>
 		/// <param name="messages">Messages.</param>
 		/// <param name="security">Security.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Trading objects.</returns>
-		public static IEnumerable<TEntity> ToEntities<TMessage, TEntity>(this IEnumerable<TMessage> messages, Security security)
+		public static IEnumerable<TEntity> ToEntities<TMessage, TEntity>(this IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider = null)
 			where TMessage : Message
 		{
-			return new ToEntitiesEnumerable<TMessage, TEntity>(messages, security);
+			return new ToEntitiesEnumerable<TMessage, TEntity>(messages, security, exchangeInfoProvider);
 		}
 
 		/// <summary>
@@ -982,7 +987,7 @@ namespace StockSharp.Algo
 		/// <returns>Trading objects.</returns>
 		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<CandleMessage> messages, Security security, Type candleType = null)
 		{
-			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, candleType ?? typeof(TCandle));
+			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, null, candleType ?? typeof(TCandle));
 		}
 
 		/// <summary>
@@ -1506,8 +1511,9 @@ namespace StockSharp.Algo
 		/// Cast <see cref="NewsMessage"/> to the <see cref="News"/>.
 		/// </summary>
 		/// <param name="message">Message.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>News.</returns>
-		public static News ToNews(this NewsMessage message)
+		public static News ToNews(this NewsMessage message, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			return new News
 			{
@@ -1517,7 +1523,7 @@ namespace StockSharp.Algo
 				Story = message.Story,
 				Url = message.Url,
 				Headline = message.Headline,
-				Board = message.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(message.BoardCode),
+				Board = message.BoardCode.IsEmpty() ? null : exchangeInfoProvider?.GetOrCreateBoard(message.BoardCode),
 				LocalTime = message.LocalTime,
 				Security = message.SecurityId == null ? null : new Security
 				{
@@ -1531,8 +1537,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="message">Message.</param>
 		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Portfolio.</returns>
-		public static Portfolio ToPortfolio(this PortfolioMessage message, Portfolio portfolio)
+		public static Portfolio ToPortfolio(this PortfolioMessage message, Portfolio portfolio, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -1540,7 +1547,7 @@ namespace StockSharp.Algo
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
-			portfolio.Board = message.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(message.BoardCode);
+			portfolio.Board = message.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 
 			if (message.Currency != null)
 				portfolio.Currency = message.Currency;

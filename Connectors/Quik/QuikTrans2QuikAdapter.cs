@@ -27,6 +27,7 @@ namespace StockSharp.Quik
 	using Ecng.Serialization;
 	using Ecng.Xaml.DevExp;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Quik.Native;
@@ -41,6 +42,7 @@ namespace StockSharp.Quik
 	{
 		private readonly Regex _changeOrdersRegex = new Regex(@"ID:(?<order>\s\d+)", RegexOptions.Compiled);
 		private readonly SynchronizedDictionary<long, Transaction> _transactions = new SynchronizedDictionary<long, Transaction>();
+		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
 		private ApiWrapper _api;
 
@@ -250,7 +252,7 @@ namespace StockSharp.Quik
 
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
-					RegisterTransaction(regMsg.CreateRegisterTransaction(SecurityClassInfo, SingleSlash));
+					RegisterTransaction(regMsg.CreateRegisterTransaction(_exchangeInfoProvider, SecurityClassInfo, SingleSlash));
 					break;
 
 				case MessageTypes.OrderReplace:

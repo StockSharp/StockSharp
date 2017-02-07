@@ -203,8 +203,11 @@ namespace SampleHistoryTesting
 
 			var timeFrame = TimeSpan.FromMinutes(TimeFrame.SelectedIndex == 0 ? 1 : 5);
 
+			var nativeIdStorage = new InMemoryNativeIdStorage();
+			var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
 			var secCode = id.SecurityCode;
-			var board = ExchangeBoard.GetOrCreateBoard(id.BoardCode);
+			var board = exchangeInfoProvider.GetOrCreateBoard(id.BoardCode);
 
 			// create test security
 			var security = new Security
@@ -214,11 +217,9 @@ namespace SampleHistoryTesting
 				Board = board,
 			};
 
-			var nativeIdStorage = new InMemoryNativeIdStorage();
-
 			if (FinamCandlesCheckBox.IsChecked == true)
 			{
-				_finamHistorySource.Refresh(new FinamSecurityStorage(security), nativeIdStorage, security, s => {}, () => false);
+				_finamHistorySource.Refresh(new FinamSecurityStorage(security), nativeIdStorage, exchangeInfoProvider, security, s => {}, () => false);
 			}
 
 			// create backtesting modes

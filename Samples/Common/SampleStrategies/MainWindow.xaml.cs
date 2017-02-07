@@ -28,7 +28,6 @@ namespace SampleStrategies
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Storages.Csv;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
@@ -152,7 +151,7 @@ namespace SampleStrategies
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
 			//Connector.StorageAdapter.Load();
 
-			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(entityRegistry));
+			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

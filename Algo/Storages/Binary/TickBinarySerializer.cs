@@ -103,8 +103,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
-		public TickBinarySerializer(SecurityId securityId)
-			: base(securityId, 50, MarketDataVersions.Version54)
+		public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version54, exchangeInfoProvider)
 		{
 		}
 
@@ -272,7 +272,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset);
+			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 

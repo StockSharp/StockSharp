@@ -21,7 +21,7 @@ namespace StockSharp.Quik
 	using Ecng.Common;
 
 	using StockSharp.Algo;
-	using StockSharp.BusinessEntities;
+	using StockSharp.Algo.Storages;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -55,7 +55,7 @@ namespace StockSharp.Quik
 			return transaction;
 		}
 
-		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, /*string orderAccount,*/ IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, bool singleSlash)
+		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, IExchangeInfoProvider exchangeInfoProvider, /*string orderAccount,*/ IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, bool singleSlash)
 		{
 			if (securityClassInfo == null)
 				throw new ArgumentNullException(nameof(securityClassInfo));
@@ -68,8 +68,8 @@ namespace StockSharp.Quik
 			if (boardCode?.EndsWith("emu", StringComparison.InvariantCultureIgnoreCase) == true)
 				boardCode = boardCode.Substring(0, boardCode.Length - 3);
 
-			var board = ExchangeBoard.GetOrCreateBoard(boardCode);
-			var needDepoAccount = board.IsMicex || board.IsUxStock;
+			var board = exchangeInfoProvider.GetOrCreateBoard(boardCode);
+			var needDepoAccount = board.IsMicex() || board.IsUxStock();
 
 			//if (needDepoAccount)
 			//{

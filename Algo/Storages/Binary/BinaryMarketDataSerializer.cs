@@ -384,20 +384,25 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		protected BinaryMarketDataSerializer(SecurityId securityId, int dataSize, Version version)
+		protected BinaryMarketDataSerializer(SecurityId securityId, int dataSize, Version version, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (securityId == null)
 				throw new ArgumentNullException(nameof(securityId));
+
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			SecurityId = securityId;
 			DataSize = dataSize;
 
 			Version = version;
+			ExchangeInfoProvider = exchangeInfoProvider;
 		}
 
 		protected SecurityId SecurityId { get; private set; }
 		protected int DataSize { get; private set; }
 		protected Version Version { get; set; }
+		protected IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 		public StorageFormats Format => StorageFormats.Binary;
 

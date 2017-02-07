@@ -1706,8 +1706,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">Securities.</param>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Instruments filtered.</returns>
-		public static IEnumerable<Security> FilterSecurities(this Connector connector, SecurityLookupMessage criteria)
+		public static IEnumerable<Security> FilterSecurities(this Connector connector, SecurityLookupMessage criteria, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
@@ -1715,7 +1716,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			var security = connector.GetSecurityCriteria(criteria);
+			var security = connector.GetSecurityCriteria(criteria, exchangeInfoProvider);
 
 			return connector.Securities.Filter(security);
 		}
@@ -1725,14 +1726,18 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Search criterion.</returns>
-		public static Security GetSecurityCriteria(this Connector connector, SecurityLookupMessage criteria)
+		public static Security GetSecurityCriteria(this Connector connector, SecurityLookupMessage criteria, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
+
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			var stocksharpId = criteria.SecurityId.SecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
 				                   ? string.Empty
@@ -1746,7 +1751,7 @@ namespace StockSharp.Algo
 				Type = criteria.SecurityType,
 				ExpiryDate = criteria.ExpiryDate,
 				ExternalId = criteria.SecurityId.ToExternalId(),
-				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(criteria.SecurityId.BoardCode),
+				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetOrCreateBoard(criteria.SecurityId.BoardCode),
 				ShortName = criteria.ShortName,
 				Decimals = criteria.Decimals,
 				PriceStep = criteria.PriceStep,
@@ -1757,7 +1762,7 @@ namespace StockSharp.Algo
 				BinaryOptionType = criteria.BinaryOptionType,
 				Currency = criteria.Currency,
 				SettlementDate = criteria.SettlementDate,
-				UnderlyingSecurityId = (criteria.UnderlyingSecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty())
+				UnderlyingSecurityId = criteria.UnderlyingSecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
 					? null
 					: connector.SecurityIdGenerator.GenerateId(criteria.UnderlyingSecurityCode, criteria.SecurityId.BoardCode),
 			};
@@ -2198,7 +2203,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <param name="message">Portfolio change message.</param>
-		public static void ApplyChanges(this Portfolio portfolio, PortfolioChangeMessage message)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public static void ApplyChanges(this Portfolio portfolio, PortfolioChangeMessage message, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -2206,8 +2212,11 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
 			if (!message.BoardCode.IsEmpty())
-				portfolio.Board = ExchangeBoard.GetOrCreateBoard(message.BoardCode);
+				portfolio.Board = exchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 
 			foreach (var change in message.Changes)
 			{
@@ -2562,7 +2571,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="message">Meta info.</param>
-		public static void ApplyChanges(this Security security, SecurityMessage message)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public static void ApplyChanges(this Security security, SecurityMessage message, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -2570,13 +2580,16 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
 			if (!message.SecurityId.SecurityCode.IsEmpty())
 				security.Code = message.SecurityId.SecurityCode;
 
 			if (message.Currency != null)
 				security.Currency = message.Currency;
 
-			security.Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
+			security.Board = exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode);
 
 			if (message.ExpiryDate != null)
 				security.ExpiryDate = message.ExpiryDate;
@@ -3709,6 +3722,84 @@ namespace StockSharp.Algo
 				str = LocalizedStrings.Ticks;
 
 			return str;
+		}
+
+		/// <summary>
+		/// To get a board by its code. If board with the passed name does not exist, then it will be created.
+		/// </summary>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		/// <param name="code">Board code.</param>
+		/// <param name="createBoard">The handler creating a board, if it is not found. If the value is <see langword="null" />, then the board is created by default initialization.</param>
+		/// <returns>Exchange board.</returns>
+		public static ExchangeBoard GetOrCreateBoard(this IExchangeInfoProvider exchangeInfoProvider, string code, Func<string, ExchangeBoard> createBoard = null)
+		{
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
+			if (code.IsEmpty())
+				throw new ArgumentNullException(nameof(code));
+
+			//if (code.CompareIgnoreCase("RTS"))
+			//	return ExchangeBoard.Forts;
+
+			var board = exchangeInfoProvider.GetExchangeBoard(code);
+
+			if (board != null)
+				return board;
+
+			if (createBoard == null)
+			{
+				var exchange = exchangeInfoProvider.GetExchange(code);
+
+				if (exchange == null)
+				{
+					exchange = new Exchange { Name = code };
+					exchangeInfoProvider.Save(exchange);
+				}
+
+				board = new ExchangeBoard
+				{
+					Code = code,
+					Exchange = exchange
+				};
+			}
+			else
+			{
+				board = createBoard(code);
+
+				if (exchangeInfoProvider.GetExchange(board.Exchange.Name) == null)
+					exchangeInfoProvider.Save(board.Exchange);
+			}
+
+			exchangeInfoProvider.Save(board);
+
+			return board;
+		}
+
+		/// <summary>
+		/// Is MICEX board.
+		/// </summary>
+		/// <param name="board">Board to check.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMicex(this ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			return board.Exchange == Exchange.Moex && board != ExchangeBoard.Forts;
+		}
+
+		/// <summary>
+		/// Is the UX exchange stock market board.
+		/// </summary>
+		/// <param name="board">Board to check.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsUxStock(this ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			return board.Exchange == Exchange.Ux && board != ExchangeBoard.Ux;
 		}
 	}
 }

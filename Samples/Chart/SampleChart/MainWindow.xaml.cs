@@ -54,6 +54,7 @@ namespace SampleChart
 			PriceStep = _priceStep,
 			Board = ExchangeBoard.Forts
 		};
+		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
 		private int _timeframe;
 
@@ -162,7 +163,7 @@ namespace SampleChart
 			{
 				Id = SecurityId.Text,
 				PriceStep = _priceStep,
-				Board = ExchangeBoard.GetBoard(id.BoardCode)
+				Board = _exchangeInfoProvider.GetExchangeBoard(id.BoardCode)
 			};
 
 			Chart.Reset(new IChartElement[] { _candleElement1 });

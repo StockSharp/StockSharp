@@ -29,6 +29,7 @@ namespace StockSharp.Quik.Lua
 	using MoreLinq;
 
 	using StockSharp.Algo;
+	using StockSharp.Algo.Storages;
 	using StockSharp.Fix;
 	using StockSharp.Fix.Native;
 	using StockSharp.Logging;
@@ -121,6 +122,11 @@ namespace StockSharp.Quik.Lua
 				LogLevel = LogLevels.Info;
 			}
 		}
+
+		/// <summary>
+		/// Провайдер бирж и торговых площадок.
+		/// </summary>
+		public IExchangeInfoProvider ExchangeInfoProvider { get; } = new InMemoryExchangeInfoProvider();
 
 		/// <summary>
 		/// Создать <see cref="LuaFixServer"/>.
@@ -254,7 +260,7 @@ namespace StockSharp.Quik.Lua
 			{
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
-					RegisterTransaction(regMsg.CreateRegisterTransaction(_securityClassInfo, SingleSlash), message.Type, regMsg.TransactionId, regMsg.OrderType);
+					RegisterTransaction(regMsg.CreateRegisterTransaction(ExchangeInfoProvider, _securityClassInfo, SingleSlash), message.Type, regMsg.TransactionId, regMsg.OrderType);
 					break;
 
 				case MessageTypes.OrderReplace:

@@ -436,19 +436,25 @@ namespace StockSharp.Algo.Storages
 		/// Synchronize securities with storage.
 		/// </summary>
 		/// <param name="drives">Storage drives.</param>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
 		/// <param name="addLog">The handler through which a new log message be passed.</param>
 		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
-		public static void SynchronizeSecurities(this IEnumerable<IMarketDataDrive> drives, IEntityRegistry entityRegistry, Action<Security> newSecurity,
+		public static void SynchronizeSecurities(this IEnumerable<IMarketDataDrive> drives,
+			ISecurityStorage securityStorage, IExchangeInfoProvider exchangeInfoProvider,
+			Action<Security> newSecurity,
 			Action<int, int> updateProgress, Action<LogMessage> addLog, Func<bool> isCancelled)
 		{
 			if (drives == null)
 				throw new ArgumentNullException(nameof(drives));
 
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
+			if (securityStorage == null)
+				throw new ArgumentNullException(nameof(securityStorage));
+
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			if (newSecurity == null)
 				throw new ArgumentNullException(nameof(newSecurity));
@@ -496,7 +502,7 @@ namespace StockSharp.Algo.Storages
 
 			var securityIdGenerator = new SecurityIdGenerator();
 
-			var securities = entityRegistry.Securities.ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
+			var securities = securityStorage.LookupAll().ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
 
 			foreach (var securityPath in securityPaths)
 			{
@@ -544,12 +550,12 @@ namespace StockSharp.Algo.Storages
 							PriceStep = priceStep,
 							Name = id.SecurityCode,
 							Code = id.SecurityCode,
-							Board = ExchangeBoard.GetOrCreateBoard(id.BoardCode),
+							Board = exchangeInfoProvider.GetOrCreateBoard(id.BoardCode),
 						};
 
 						securities.Add(securityId, security);
 
-						entityRegistry.Securities.Save(security);
+						securityStorage.Save(security);
 						newSecurity(security);
 
 						isNew = true;

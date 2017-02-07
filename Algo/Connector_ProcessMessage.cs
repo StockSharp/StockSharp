@@ -1046,14 +1046,14 @@ namespace StockSharp.Algo
 
 		private void ProcessSessionMessage(SessionMessage message)
 		{
-			var board = ExchangeBoard.GetOrCreateBoard(message.BoardCode);
+			var board = _entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 			_sessionStates[board] = message.State;
 			SessionStateChanged?.Invoke(board, message.State);
 		}
 
 		private void ProcessBoardMessage(BoardMessage message)
 		{
-			ExchangeBoard.GetOrCreateBoard(message.Code, code =>
+			_entityCache.ExchangeInfoProvider.GetOrCreateBoard(message.Code, code =>
 			{
 				var exchange = message.ToExchange(EntityFactory.CreateExchange(message.ExchangeCode));
 				return message.ToBoard(EntityFactory.CreateBoard(code, exchange));
@@ -1066,7 +1066,7 @@ namespace StockSharp.Algo
 
 			var security = GetSecurity(secId, s =>
 			{
-				s.ApplyChanges(message);
+				s.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
 				return true;
 			});
 
@@ -1088,7 +1088,7 @@ namespace StockSharp.Algo
 				if (criteria != null)
 				{
 					_securityLookups.Remove(message.OriginalTransactionId);
-					result = this.FilterSecurities(criteria).ToArray();
+					result = this.FilterSecurities(criteria, _entityCache.ExchangeInfoProvider).ToArray();
 				}
 			}
 
@@ -1187,7 +1187,7 @@ namespace StockSharp.Algo
 		{
 			GetPortfolio(message.PortfolioName, p =>
 			{
-				message.ToPortfolio(p);
+				message.ToPortfolio(p, _entityCache.ExchangeInfoProvider);
 				return true;
 			});
 		}
@@ -1196,7 +1196,7 @@ namespace StockSharp.Algo
 		{
 			GetPortfolio(message.PortfolioName, portfolio =>
 			{
-				portfolio.ApplyChanges(message);
+				portfolio.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
 				return true;
 			});
 		}

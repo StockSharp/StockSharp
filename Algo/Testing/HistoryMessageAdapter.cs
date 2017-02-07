@@ -272,7 +272,7 @@ namespace StockSharp.Algo.Testing
 
 					var securities = lookupMsg.SecurityId.IsDefault() 
 							? SecurityProvider.LookupAll() 
-							: SecurityProvider.Lookup(lookupMsg.ToSecurity());
+							: SecurityProvider.Lookup(lookupMsg.ToSecurity(StorageRegistry.ExchangeInfoProvider));
 
 					securities.ForEach(security =>
 					{

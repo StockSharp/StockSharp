@@ -98,12 +98,13 @@
       <param name="securities">Securities.</param>
       <returns>Changes of market data.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.FinVizHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.FinVizHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -123,12 +124,13 @@
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.DukasCopySource" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -181,12 +183,13 @@
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.GainCapitalSource" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -249,12 +252,13 @@
             The maximum number of attempts to login to the site. The default is 10.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -309,12 +313,13 @@
             Password.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -366,12 +371,13 @@
       <param name="to">End date.</param>
       <returns>Historical rate.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -675,12 +681,13 @@
             </summary>
       <returns>WCF channel.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -721,12 +728,13 @@
             The interface of the loader of information about instruments.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.ISecurityDownloader.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.ISecurityDownloader.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -778,12 +786,13 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -891,12 +900,13 @@
       <param name="to">End period.</param>
       <returns>Downloaded candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -951,12 +961,13 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -999,11 +1010,12 @@
             The helper class that filling fields in <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> and <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" /> based on information from the site http://www.micex.ru.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Boolean)">
+    <member name="M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,StockSharp.Algo.Storages.IExchangeInfoProvider,System.Boolean)">
       <summary>
             To get securities for the instrument code.
             </summary>
       <param name="code">Instrument code.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="isDownload">Whether to download information from the site, if it is not found locally.</param>
       <returns>Found securities.</returns>
     </member>
@@ -1041,10 +1053,11 @@
       <param name="date">Date of competition.</param>
       <returns>Trades of the participant.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Rts.Competition.#ctor">
+    <member name="M:StockSharp.Algo.History.Russian.Rts.Competition.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Russian.Rts.Competition" />.
             </summary>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.Rts.Competition.AllYears">
       <summary>
@@ -1226,12 +1239,13 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -1280,12 +1294,13 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.XigniteHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.XigniteHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -1328,12 +1343,13 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.YahooHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
       <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>

@@ -24,6 +24,7 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -247,6 +248,20 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(value));
 
 				_entityFactory = value;
+			}
+		}
+
+		private IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
+		public IExchangeInfoProvider ExchangeInfoProvider
+		{
+			get { return _exchangeInfoProvider; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				_exchangeInfoProvider = value;
 			}
 		}
 
@@ -742,7 +757,7 @@ namespace StockSharp.Algo
 				news.Story = message.Story;
 
 			if (!message.BoardCode.IsEmpty())
-				news.Board = ExchangeBoard.GetOrCreateBoard(message.BoardCode);
+				news.Board = ExchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 
 			if (message.Url != null)
 				news.Url = message.Url;
@@ -914,17 +929,20 @@ namespace StockSharp.Algo
 
 				var info = idConvert(key);
 
+				var code = info.Item1;
+				var board = info.Item2;
+
 				if (s.Board == null)
-					s.Board = info.Item2;
+					s.Board = board;
 
 				if (s.Code.IsEmpty())
-					s.Code = info.Item1;
+					s.Code = code;
 
 				if (s.Name.IsEmpty())
-					s.Name = info.Item1;
+					s.Name = code;
 
-				if (s.Class.IsEmpty())
-					s.Class = info.Item2.Code;
+				//if (s.Class.IsEmpty())
+				//	s.Class = board.Code;
 
 				return s;
 			}, out isNew);

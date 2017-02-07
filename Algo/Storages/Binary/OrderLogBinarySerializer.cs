@@ -172,8 +172,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 	class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
-		public OrderLogBinarySerializer(SecurityId securityId)
-			: base(securityId, 200, MarketDataVersions.Version52)
+		public OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
+			: base(securityId, 200, MarketDataVersions.Version52, exchangeInfoProvider)
 		{
 		}
 
@@ -376,7 +376,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset);
+			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 
