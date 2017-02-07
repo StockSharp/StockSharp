@@ -268,7 +268,13 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="storage">Market data storage.</param>
 		/// <remarks>
-		/// This method is used to load statistics, orders and trades. The data storage shall include the following parameters: 1. Settings (SettingsStorage) � statistics settings. 2. Statistics(SettingsStorage) � saved state of statistics. 3. Orders (IDictionary[Order, IEnumerable[MyTrade]]) � orders and corresponding trades. 4. Positions (IEnumerable[Position]) � strategy positions. If any of the parameters is missing, data will not be restored.
+		/// This method is used to load statistics, orders and trades.
+		/// The data storage shall include the following parameters:
+		/// 1. Settings (SettingsStorage) - statistics settings.
+		/// 2. Statistics(SettingsStorage) - saved state of statistics.
+		/// 3. Orders (IDictionary[Order, IEnumerable[MyTrade]]) - orders and corresponding trades.
+		/// 4. Positions (IEnumerable[Position]) - strategy positions.
+		/// If any of the parameters is missing, data will not be restored.
 		/// </remarks>
 		public static void LoadState(this Strategy strategy, SettingsStorage storage)
 		{

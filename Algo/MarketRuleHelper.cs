@@ -2260,7 +2260,7 @@ namespace StockSharp.Algo
 		/// <param name="container">The rules container.</param>
 		/// <param name="rule">Rule.</param>
 		/// <param name="checkCanFinish">To check the possibility of rule suspension.</param>
-		/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" /> � if a rule can not be currently deleted.</returns>
+		/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" />, if a rule can not be currently deleted.</returns>
 		public static bool TryRemoveRule(this IMarketRuleContainer container, IMarketRule rule, bool checkCanFinish = true)
 		{
 			if (container == null)

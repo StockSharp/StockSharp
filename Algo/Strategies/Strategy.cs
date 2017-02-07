@@ -861,7 +861,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<TimeSpan> _ordersKeepTime;
 
 		/// <summary>
-		/// The time for storing <see cref="Strategy.Orders"/> � <see cref="Strategy.StopOrders"/> orders in memory. By default it equals to 2 days. If value is set in <see cref="TimeSpan.Zero"/>, orders will not be deleted.
+		/// The time for storing <see cref="Orders"/> and <see cref="StopOrders"/> orders in memory. By default it equals to 2 days. If value is set in <see cref="TimeSpan.Zero"/>, orders will not be deleted.
 		/// </summary>
 		[Browsable(false)]
 		public TimeSpan OrdersKeepTime

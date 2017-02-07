@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// �Rapid� EMA period. The default value is 2.
+		/// 'Rapid' EMA period. The default value is 2.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str793Key)]
 		[DescriptionLoc(LocalizedStrings.Str794Key)]
@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Indicators
 		public int FastSCPeriod { get; set; }
 
 		/// <summary>
-		/// �Slow� EMA period. The default value is 30.
+		/// 'Slow' EMA period. The default value is 30.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str795Key)]
 		[DescriptionLoc(LocalizedStrings.Str796Key)]

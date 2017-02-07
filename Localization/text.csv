@@ -5581,7 +5581,7 @@ DocStr1183;DI-;DI-
 DocStr1184;The complex value of the indicator {0}, derived as result of calculation;Комплексное значение индикатора {0}, которое получается в результате вычисления
 DocStr1185;http://ta.mql4.com/indicators/oscillators/ichimoku;http://ta.mql4.com/indicators/oscillators/ichimoku
 DocStr1186;The implementation of the lines of Ishimoku KInko Khayo indicator (Tenkan, Kijun, Senkou Span B);Реализация одной из линий индикатора Ишимоку Кинко Хайо (Tenkan, Kijun, Senkou Span B)
-DocStr1187;Momentum Simple = C - C-n Where C- closing price of previous period. Where �-n � closing price N periods ago;Momentum Simple = C - C-n Где C- цена закрытия текущего периода. Где С-n - цена закрытия N периодов назад
+DocStr1187;Momentum Simple = C - C-n Where C- closing price of previous period. Where C-n - closing price N periods ago;Momentum Simple = C - C-n Где C- цена закрытия текущего периода. Где С-n - цена закрытия N периодов назад
 DocStr1188;The weight-average part of indicator {0};Средневзвешанная часть индикатора {0}
 DocStr1189;The signaling part of indicator {0};Сигнальная часть индикатора {0}
 DocStr1190;To get price components to select the maximal value;Получить компоненты цен для выбора максимального значения
@@ -5599,8 +5599,8 @@ DocStr1201;Lower line;Нижняя линия
 DocStr1202;The shift width. Specified as percentage from 0 to 1. The default equals to 0.25;Ширина сдвига. Задается в процентах от 0 до 1. По-умолчанию равно 0.25
 DocStr1203;Hull Moving Average;Скользящая средняя Халла (Hull Moving Average)
 DocStr1204;Variables initial initialization;Начальная инициализация переменных
-DocStr1205;�Rapid� EMA period. The default value is 2;"Период ""быстрой"" EMA. Значение по умолчанию 2"
-DocStr1206;�Slow� EMA period. The default value is 30;"Период ""медленной"" EMA. Значение по умолчанию 30"
+DocStr1205;'Rapid' EMA period. The default value is 2;"Период ""быстрой"" EMA. Значение по умолчанию 2"
+DocStr1206;'Slow' EMA period. The default value is 30;"Период ""медленной"" EMA. Значение по умолчанию 30"
 DocStr1207;NickRypockTrailingReverse (Nick Rypock Trailing reverse);NickRypockTrailingReverse (Nick Rypock Trailing reverse)
 DocStr1208;The trend direction;Направление тренда
 DocStr1209;Optimal Tracking;Optimal Tracking
@@ -5804,7 +5804,7 @@ DocStr1406;The maximal number of indicators values;Максимальное ко
 DocStr1407;Extension class for indicators;Вспомогательный класс для работы с индикаторами
 DocStr1408;To get the current value of the indicator;Получить текущее значение индикатора
 DocStr1409;The current value;Текущее значение
-DocStr1410;To get the indicator value by the index (0 � last value);Получить значение индикатора по индексу (0 - последнее значение)
+DocStr1410;To get the indicator value by the index (0 - last value);Получить значение индикатора по индексу (0 - последнее значение)
 DocStr1411;The value index;Индекс значения
 DocStr1412;To renew the indicator with candle closing price {0};Обновить индикатор ценой закрытия свечи {0}
 DocStr1413;To renew the indicator with numeric value;Обновить индикатор числовым значением
@@ -6084,7 +6084,7 @@ DocStr1689;The current number of errors;Текущее количество ош
 DocStr1690;To cancel active orders at stop. Is On by default;Снимать активные заявки при остановке. По-умолчанию включено
 DocStr1691;Orders, registered within the strategy framework;Заявки, зарегистрированные в рамках стратегии
 DocStr1692;Stop-orders, registered within the strategy framework;Стоп-заявки, зарегистрированные в рамках стратегии
-DocStr1693;The time for storing {0} � {1} orders in memory. By default it equals to 2 days. If value is set in {2}, orders will not be deleted;Время хранения заявок {0} и {1} в памяти. По-умолчанию равно 2-ум дням. Если значение установлено в {2}, то заявки не будут удаляться
+DocStr1693;The time for storing {0} and {1} orders in memory. By default it equals to 2 days. If value is set in {2}, orders will not be deleted;Время хранения заявок {0} и {1} в памяти. По-умолчанию равно 2-ум дням. Если значение установлено в {2}, то заявки не будут удаляться
 DocStr1694;Trades, matched during the strategy operation;Сделки, прошедшие в течении работы стратегии
 DocStr1695;Orders with errors, registered within the strategy;Заявки с ошибками, зарегистрированные в рамках стратегии
 DocStr1696;If the value is set 0, the parameter is ignored;Если значение установлено в 0, то параметр игнорируется
@@ -6174,7 +6174,7 @@ DocStr1780;To get the strategy operation mode (initialization or trade);Полу
 DocStr1781;If initialization is performed - {0}, otherwise - {1};Если выполняется инициализация - {0}, иначе - {1}
 DocStr1782;To set the strategy operation mode (initialization or trade);Установить режим работы стратегии (инициализация или торговля)
 DocStr1783;To restore the strategy state;Восстановить состояние стратегии
-DocStr1784;This method is used to load statistics, orders and trades. The data storage shall include the following parameters: 1. Settings (SettingsStorage) � statistics settings. 2. Statistics(SettingsStorage) � saved state of statistics. 3. Orders (IDictionary[Order, IEnumerable[MyTrade]]) � orders and corresponding trades. 4. Positions (IEnumerable[Position]) � strategy positions. If any of the parameters is missing, data will not be restored;Данный метод используется для загрузки статистики, заявок и сделок. Хранилище данных должно содержать следующие параметры: 1. Settings (SettingsStorage) - настройки стратегии. 2. Statistics(SettingsStorage) - сохраненное состояние статистики. 3. Orders (IDictionary[Order, IEnumerable[MyTrade]]) - заявки и сделки по ним. 4. Positions (IEnumerable[Position]) - позиции стратегии. При отсутствии одного из параметров соответствующие данные восстанавливаться не будут
+DocStr1784;This method is used to load statistics, orders and trades. The data storage shall include the following parameters: 1. Settings (SettingsStorage) - statistics settings. 2. Statistics(SettingsStorage) - saved state of statistics. 3. Orders (IDictionary[Order, IEnumerable[MyTrade]]) - orders and corresponding trades. 4. Positions (IEnumerable[Position]) - strategy positions. If any of the parameters is missing, data will not be restored;Данный метод используется для загрузки статистики, заявок и сделок. Хранилище данных должно содержать следующие параметры: 1. Settings (SettingsStorage) - настройки стратегии. 2. Statistics(SettingsStorage) - сохраненное состояние статистики. 3. Orders (IDictionary[Order, IEnumerable[MyTrade]]) - заявки и сделки по ним. 4. Positions (IEnumerable[Position]) - позиции стратегии. При отсутствии одного из параметров соответствующие данные восстанавливаться не будут
 DocStr1785;To get market data value for the strategy instrument;Получить значение маркет-данных для инструмента стратегии
 DocStr1786;The type of the market data field value;Тип значения поля маркет-данных
 DocStr1787;To get market price for the instrument by maximal and minimal possible prices;Получить рыночную цену для инструмента по максимально и минимально возможным ценам
@@ -6415,7 +6415,7 @@ DocStr2022;To process rules in suspended mode (for example, create several rules
 DocStr2023;The action to be processed at suspended rules. For example, to add several rules simultaneously;Действие, которое необходимо обработать при остановленных правилах. Например, добавить одновременно несколько правил
 DocStr2024;To delete a rule. If a rule is executed at the time when this method is called, it will not be deleted;Удалить правило. Если правило выполняется в момент вызова данного метода, то оно не будет удалено
 DocStr2025;To check the possibility of rule suspension;Проверять возможность остановки правила
-DocStr2026;{0}, if a rule was successfully deleted, {1} � if a rule can not be currently deleted;{0}, если правило было успешно удалено, {1} - если правило нельзя удалить в текущий момент
+DocStr2026;{0}, if a rule was successfully deleted, {1}, if a rule can not be currently deleted;{0}, если правило было успешно удалено, {1} - если правило нельзя удалить в текущий момент
 DocStr2027;To delete the rule and all opposite rules. If the rule is executed at the time when this method is called, it will not be deleted;Удалить правило и все противоположные правила. Если правило выполняется в момент вызова данного метода, то оно не будет удалено
 DocStr2028;To make rules mutually exclusive;Сделать правила взаимо исключающими
 DocStr2029;First rule;Первое правило
@@ -6880,7 +6880,7 @@ DocStr2488;To add a change to the collection, if value is other than 0 and {0};�
 DocStr2489;To convert the currency type into the name in the MICEX format;Преобразовать тип валюты в название в формате ММВБ
 DocStr2490;Currency type;Тип валюты
 DocStr2491;The currency name in the MICEX format;Название валюты в формате ММВБ
-DocStr2492;To �onvert the currency name in the MICEX format into {0};Преобразовать название валюты в формате ММВБ в {0}
+DocStr2492;To convert the currency name in the MICEX format into {0};Преобразовать название валюты в формате ММВБ в {0}
 DocStr2493;Currency type. If the value is empty, {0} will be returned;Тип валюты. Если название валюты пустое, то будет возвращено {0}
 DocStr2494;Get period for schedule;Получить период для режима
 DocStr2495;Trading schedule;Режим торгов

@@ -2817,7 +2817,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To �onvert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
+		/// To convert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
 		/// </summary>
 		/// <param name="name">The currency name in the MICEX format.</param>
 		/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>

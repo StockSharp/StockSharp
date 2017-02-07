@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// To get the indicator value by the index (0 � last value).
+		/// To get the indicator value by the index (0 - last value).
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="index">The value index.</param>
@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// To get the indicator value by the index (0 � last value).
+		/// To get the indicator value by the index (0 - last value).
 		/// </summary>
 		/// <typeparam name="T">Value type.</typeparam>
 		/// <param name="indicator">Indicator.</param>
