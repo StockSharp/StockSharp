@@ -916,7 +916,7 @@ namespace StockSharp.Algo.Storages
 					switch (format)
 					{
 						case StorageFormats.Binary:
-							serializer = typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg);
+							serializer = typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg, ExchangeInfoProvider);
 							break;
 						case StorageFormats.Csv:
 							serializer = typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg, null);
