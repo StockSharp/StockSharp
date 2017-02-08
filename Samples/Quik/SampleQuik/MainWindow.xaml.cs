@@ -38,7 +38,7 @@ namespace SampleQuik
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrderWindow _stopOrderWindow = new StopOrderWindow();
+		private readonly StopOrderWindow _stopOrdersWindow = new StopOrderWindow();
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -53,7 +53,7 @@ namespace SampleQuik
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrderWindow.MakeHideable();
+			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
@@ -68,13 +68,13 @@ namespace SampleQuik
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrderWindow.DeleteHideable();
+			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
-			_stopOrderWindow.Close();
+			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 
@@ -167,10 +167,10 @@ namespace SampleQuik
 					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
 					Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
 					Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-					Trader.NewStopOrder += order => _stopOrderWindow.OrderGrid.Orders.Add(order);
-					Trader.OrderRegisterFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str153));
+					Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981));
-					Trader.StopOrderRegisterFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str153));
+					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 					Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981));
 					Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
@@ -227,7 +227,7 @@ namespace SampleQuik
 
 		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
 		{
-			ShowOrHide(_stopOrderWindow);
+			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private static void ShowOrHide(Window window)

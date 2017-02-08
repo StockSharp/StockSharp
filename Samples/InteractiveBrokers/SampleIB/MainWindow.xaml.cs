@@ -144,7 +144,7 @@ namespace SampleIB
 						Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 						// subscribe on error of order registration event
-						Trader.OrderRegisterFailed += OrderFailed;
+						Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 						// subscribe on error of order cancelling event
 						Trader.OrderCancelFailed += OrderFailed;
 

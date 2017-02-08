@@ -117,12 +117,12 @@ namespace SampleMultiConnection
 			Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 			// subscribe on error of order registration event
-			Connector.OrderRegisterFailed += OrderFailed;
+			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 			// subscribe on error of order cancelling event
 			Connector.OrderCancelFailed += OrderFailed;
 
 			// subscribe on error of stop-order registration event
-			Connector.StopOrderRegisterFailed += OrderFailed;
+			Connector.OrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 			// subscribe on error of stop-order cancelling event
 			Connector.StopOrderCancelFailed += OrderFailed;
 

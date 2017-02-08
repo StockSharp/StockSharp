@@ -173,7 +173,7 @@ namespace SampleRealTimeEmulation
 					_connector.NewMyTrade += TradeGrid.Trades.Add;
 
 					// subscribe on error of order registration event
-					_connector.OrderRegisterFailed += OrderFailed;
+					_connector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
 
 					_candleManager.Processing += (s, candle) =>
 					{
@@ -206,14 +206,6 @@ namespace SampleRealTimeEmulation
 				return;
 
 			DepthControl.UpdateDepth(depth);
-		}
-
-		private void OrderFailed(OrderFail fail)
-		{
-			this.GuiAsync(() =>
-			{
-				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
-			});
 		}
 
 		private void ChangeConnectStatus(bool isConnected)

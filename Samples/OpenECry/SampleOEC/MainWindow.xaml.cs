@@ -156,12 +156,12 @@ namespace SampleOEC
 					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 					// subscribe on error of order registration event
-					Trader.OrderRegisterFailed += OrderFailed;
+					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of order cancelling event
 					Trader.OrderCancelFailed += OrderFailed;
 
 					// subscribe on error of stop-order registration event
-					Trader.StopOrderRegisterFailed += OrderFailed;
+					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of stop-order cancelling event
 					Trader.StopOrderCancelFailed += OrderFailed;
 

@@ -168,7 +168,7 @@ namespace SamplePlaza
 						Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 						// подписываемся на событие о неудачной регистрации заявок
-						Trader.OrderRegisterFailed += OrderFailed;
+						Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 						// подписываемся на событие о неудачном снятии заявок
 						Trader.OrderCancelFailed += OrderFailed;
 

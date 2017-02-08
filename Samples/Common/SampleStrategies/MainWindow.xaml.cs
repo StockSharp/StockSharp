@@ -64,7 +64,7 @@ namespace SampleStrategies
 			_portfoliosWindow.MakeHideable();
 
 			LogManager = new LogManager();
-			LogManager.Listeners.Add(new FileLogListener("sample.log"));
+			LogManager.Listeners.Add(new FileLogListener("Data\\sample.log"));
 			LogManager.Listeners.Add(new GuiLogListener(Monitor));
 
 			var entityRegistry = new CsvEntityRegistry("Data");
@@ -119,8 +119,13 @@ namespace SampleStrategies
 				_ordersWindow.OrderGrid.Orders.Add(order);
 				_securitiesWindow.ProcessOrder(order);
 			};
+
+			// display order as own volume in quotes window
 			Connector.OrderChanged += _securitiesWindow.ProcessOrder;
-			
+
+			// put the registration error into order's table
+			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
 			Connector.NewPortfolio += portfolio =>

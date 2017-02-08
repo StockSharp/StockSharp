@@ -150,12 +150,12 @@ namespace SampleSmart
 					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 					// подписываемся на событие о неудачной регистрации заявок
-					Trader.OrderRegisterFailed += OrderFailed;
+					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// подписываемся на событие о неудачном снятии заявок
 					Trader.OrderCancelFailed += OrderFailed;
 
 					// подписываемся на событие о неудачной регистрации стоп-заявок
-					Trader.StopOrderRegisterFailed += OrderFailed;
+					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 					// подписываемся на событие о неудачном снятии стоп-заявок
 					Trader.StopOrderCancelFailed += OrderFailed;
 
