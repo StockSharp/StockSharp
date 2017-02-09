@@ -4616,6 +4616,11 @@
             Время последнего обновления котировки.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaAggregationColumns.MomentNs">
+      <summary>
+            Время последнего обновления котировки, наносекунды.
+            </summary>
+    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAggregationColumns.Direction">
       <summary>
             Направление котировки. // 1 - покупка, 2 - продажа
@@ -5413,6 +5418,11 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaCommonDerivativeColumns.DealTime">
       <summary>
             Дата и время последней сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaCommonDerivativeColumns.DealTimeNs">
+      <summary>
+            Дата и время последней сделки, наносекунды.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaCommonDerivativeColumns.MinPrice">

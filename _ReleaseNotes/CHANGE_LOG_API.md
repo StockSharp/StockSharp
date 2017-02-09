@@ -24,6 +24,8 @@ StockSharp API Change log
 * (bug) ConnectorWindow. Fix ToolbarImageStyle resource not found issue.
 * (feature) StrategiesDashboard
 * (feature) SampleStrategies
+* (feature) Plaza. Nanoseconds support.
+* (feature) TraderHelper. IsSystem -> IsPlazaSystem
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279

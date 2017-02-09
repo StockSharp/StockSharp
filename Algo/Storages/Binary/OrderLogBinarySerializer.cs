@@ -439,7 +439,7 @@ namespace StockSharp.Algo.Storages.Binary
 				else
 				{
 					if (execMsg.OrderStatus != null)
-						execMsg.IsSystem = execMsg.OrderStatus.Value.IsSystem();
+						execMsg.IsSystem = execMsg.OrderStatus.Value.IsPlazaSystem();
 				}
 			}
 

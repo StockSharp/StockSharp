@@ -6939,9 +6939,9 @@ M:StockSharp.Algo.TraderHelper.IsGtc(System.DateTimeOffset)/returns;DocStr8664
 M:StockSharp.Algo.TraderHelper.GetPlazaTimeInForce(System.Int64)/summary;DocStr8665
 M:StockSharp.Algo.TraderHelper.GetPlazaTimeInForce(System.Int64)/param/status;DocStr8666
 M:StockSharp.Algo.TraderHelper.GetPlazaTimeInForce(System.Int64)/returns;DocStr608
-M:StockSharp.Algo.TraderHelper.IsSystem(System.Int64)/summary;DocStr8667
-M:StockSharp.Algo.TraderHelper.IsSystem(System.Int64)/param/status;DocStr8666
-M:StockSharp.Algo.TraderHelper.IsSystem(System.Int64)/returns;DocStr8668
+M:StockSharp.Algo.TraderHelper.IsPlazaSystem(System.Int64)/summary;DocStr8667
+M:StockSharp.Algo.TraderHelper.IsPlazaSystem(System.Int64)/param/status;DocStr8666
+M:StockSharp.Algo.TraderHelper.IsPlazaSystem(System.Int64)/returns;DocStr8668
 M:StockSharp.Algo.TraderHelper.ToReadableString(StockSharp.Algo.DataType)/summary;DocStr9355
 M:StockSharp.Algo.TraderHelper.ToReadableString(StockSharp.Algo.DataType)/param/dt;DocStr8766
 M:StockSharp.Algo.TraderHelper.ToReadableString(StockSharp.Algo.DataType)/returns;DocStr9356

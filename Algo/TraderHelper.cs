@@ -3672,11 +3672,11 @@ namespace StockSharp.Algo
 		/// <returns><see cref="TimeInForce"/>.</returns>
 		public static TimeInForce? GetPlazaTimeInForce(this long status)
 		{
-			if (status.HasBits(0x01))
+			if (status.HasBits(0x1))
 				return TimeInForce.PutInQueue;
-			else if (status.HasBits(0x02))
+			else if (status.HasBits(0x2))
 				return TimeInForce.CancelBalance;
-			else if (status.HasBits(0x00080000))
+			else if (status.HasBits(0x80000))
 				return TimeInForce.MatchOrCancel;
 
 			return null;
@@ -3687,9 +3687,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="status">Bits flag.</param>
 		/// <returns><see langword="true"/> if an order is system, otherwise, <see langword="false"/>.</returns>
-		public static bool IsSystem(this long status)
+		public static bool IsPlazaSystem(this long status)
 		{
-			return !status.HasBits(0x04);
+			return !status.HasBits(0x4);
 		}
 
 		/// <summary>
