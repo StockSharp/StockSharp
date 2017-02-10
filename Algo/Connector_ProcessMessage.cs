@@ -1605,6 +1605,12 @@ namespace StockSharp.Algo
 			}
 			else
 			{
+				if (message.OriginalTransactionId == 0)
+				{
+					this.AddErrorLog("Unknown error response for order {0}: {1}.", o, message.Error);
+					return;
+				}
+
 				foreach (var tuple in _entityCache.ProcessOrderFailMessage(o, security, message))
 				{
 					var fail = tuple.Item1;

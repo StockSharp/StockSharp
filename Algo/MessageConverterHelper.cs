@@ -314,8 +314,9 @@ namespace StockSharp.Algo
 		/// To convert the error description into message.
 		/// </summary>
 		/// <param name="fail">Error detais.</param>
+		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
-		public static ExecutionMessage ToMessage(this OrderFail fail)
+		public static ExecutionMessage ToMessage(this OrderFail fail, long originalTransactionId)
 		{
 			if (fail == null)
 				throw new ArgumentNullException(nameof(fail));
@@ -325,7 +326,7 @@ namespace StockSharp.Algo
 				OrderId = fail.Order.Id,
 				OrderStringId = fail.Order.StringId,
 				TransactionId = fail.Order.TransactionId,
-				OriginalTransactionId = fail.Order.TransactionId,
+				OriginalTransactionId = originalTransactionId,
 				SecurityId = fail.Order.Security.ToSecurityId(),
 				PortfolioName = fail.Order.Portfolio.Name,
 				Error = fail.Error,

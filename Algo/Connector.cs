@@ -763,7 +763,7 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(order, ex);
+				SendOrderFailed(order, ex, order.TransactionId);
 			}
 		}
 
@@ -826,8 +826,8 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(oldOrder, ex);
-				SendOrderFailed(newOrder, ex);
+				SendOrderFailed(oldOrder, ex, newOrder.TransactionId);
+				SendOrderFailed(newOrder, ex, newOrder.TransactionId);
 			}
 		}
 
@@ -893,11 +893,11 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(oldOrder1, ex);
-				SendOrderFailed(newOrder1, ex);
+				SendOrderFailed(oldOrder1, ex, newOrder1.TransactionId);
+				SendOrderFailed(newOrder1, ex, newOrder1.TransactionId);
 
-				SendOrderFailed(oldOrder2, ex);
-				SendOrderFailed(newOrder2, ex);
+				SendOrderFailed(oldOrder2, ex, newOrder2.TransactionId);
+				SendOrderFailed(newOrder2, ex, newOrder2.TransactionId);
 			}
 		}
 
@@ -907,31 +907,33 @@ namespace StockSharp.Algo
 		/// <param name="order">Order to cancel.</param>
 		public void CancelOrder(Order order)
 		{
+			long transactionId = 0;
+
 			try
 			{
 				this.AddOrderInfoLog(order, "CancelOrder");
 
 				CheckOnOld(order);
 
-				var transactionId = TransactionIdGenerator.GetNextId();
+				transactionId = TransactionIdGenerator.GetNextId();
 				_entityCache.AddOrderByCancelationId(order, transactionId);
 
 				OnCancelOrder(order, transactionId);
 			}
 			catch (Exception ex)
 			{
-				SendOrderFailed(order, ex);
+				SendOrderFailed(order, ex, transactionId);
 			}
 		}
 
-		private void SendOrderFailed(Order order, Exception error)
+		private void SendOrderFailed(Order order, Exception error, long originalTransactionId)
 		{
 			SendOutMessage(new OrderFail
 			{
 				Order = order,
 				Error = error,
 				ServerTime = CurrentTime,
-			}.ToMessage());
+			}.ToMessage(originalTransactionId));
 		}
 
 		private static void CheckOnNew(Order order, bool checkVolume = true, bool checkTransactionId = true)
