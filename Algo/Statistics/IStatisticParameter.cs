@@ -108,7 +108,7 @@ namespace StockSharp.Algo.Statistics
 					return;
 
 				_name = value;
-				this.Notify("Name");
+				this.Notify(nameof(Name));
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace StockSharp.Algo.Statistics
 		private void RaiseValueChanged()
 		{
 			ValueChanged?.Invoke();
-			this.Notify("Value");
+			this.Notify(nameof(Value));
 		}
 
 		/// <summary>
@@ -196,7 +196,7 @@ namespace StockSharp.Algo.Statistics
 		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			Value = storage.GetValue("Value", default(TValue));
+			Value = storage.GetValue(nameof(Value), default(TValue));
 		}
 	
 		/// <summary>
@@ -205,7 +205,7 @@ namespace StockSharp.Algo.Statistics
 		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Value", Value);
+			storage.SetValue(nameof(Value), Value);
 		}
 	}
 }

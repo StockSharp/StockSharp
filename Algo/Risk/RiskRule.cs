@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Risk
 			protected set
 			{
 				_title = value;
-				NotifyChanged("Title");
+				NotifyChanged(nameof(Title));
 			}
 		}
 
@@ -331,8 +331,7 @@ namespace StockSharp.Algo.Risk
 						removingPos.Add(pair.Key);
 					}
 
-					if (removingPos != null)
-						removingPos.ForEach(t => _posOpenTime.Remove(t));
+					removingPos?.ForEach(t => _posOpenTime.Remove(t));
 
 					return removingPos != null;
 				}
