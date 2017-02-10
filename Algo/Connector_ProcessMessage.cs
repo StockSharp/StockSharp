@@ -89,19 +89,26 @@ namespace StockSharp.Algo
 							_marketTimer = ThreadingHelper
 								.Timer(() =>
 								{
-									// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
-									// No need to put _marketTimeMessage again, if it still in queue.
-
-									lock (_marketTimerSync)
+									try
 									{
-										if (_marketTimer == null || !_isMarketTimeHandled)
-											return;
+										// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
+										// No need to put _marketTimeMessage again, if it still in queue.
 
-										_isMarketTimeHandled = false;
+										lock (_marketTimerSync)
+										{
+											if (_marketTimer == null || !_isMarketTimeHandled)
+												return;
+
+											_isMarketTimeHandled = false;
+										}
+
+										_marketTimeMessage.LocalTime = TimeHelper.Now;
+										RaiseNewOutMessage(_marketTimeMessage);
 									}
-
-									_marketTimeMessage.LocalTime = TimeHelper.Now;
-									RaiseNewOutMessage(_marketTimeMessage);
+									catch (Exception ex)
+									{
+										ex.LogError();
+									}
 								})
 								.Interval(_parent.MarketTimeChangedInterval);
 						}
