@@ -2,7 +2,7 @@
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+		xmlns:exd="clr-namespace:Ecng.Xaml.DevExp;assembly=Ecng.Xaml.DevExp"
 		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="110" Width="512">
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -18,8 +18,8 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<ex:EndPointEditor x:Name="TransactionAddress" Grid.Column="0" Grid.Row="0" />
-		<ex:EndPointEditor x:Name="RecoveryAddress" Grid.Column="1" Grid.Row="0" />
+		<exd:EndPointEditor x:Name="TransactionAddress" Grid.Column="0" Grid.Row="0" />
+		<exd:EndPointEditor x:Name="RecoveryAddress" Grid.Column="1" Grid.Row="0" />
 		<TextBox x:Name="Login" Grid.Column="2" Grid.Row="0" />
 		<TextBox x:Name="PortfolioName" Grid.Column="3" Grid.Row="0" />
 

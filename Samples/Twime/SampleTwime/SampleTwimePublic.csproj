@@ -114,6 +114,9 @@
     <Reference Include="DevExpress.Xpf.LayoutControl.v15.2">
       <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v15.2.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Xaml.DevExp">
+      <HintPath>..\..\..\References\Ecng.Xaml.DevExp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
