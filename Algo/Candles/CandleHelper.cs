@@ -29,6 +29,7 @@ namespace StockSharp.Algo.Candles
 
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -1104,22 +1105,29 @@ namespace StockSharp.Algo.Candles
 
 			return ThreadingHelper.Timer(() =>
 			{
-				if (connector.ConnectionState != ConnectionStates.Connected)
-					return;
-
-				lock (registeredSeries.SyncRoot)
+				try
 				{
-					foreach (var series in registeredSeries.Cache)
+					if (connector.ConnectionState != ConnectionStates.Connected)
+						return;
+
+					lock (registeredSeries.SyncRoot)
 					{
-						var tf = (TimeSpan)series.Arg;
-						var time = connector.CurrentTime;
-						var bounds = tf.GetCandleBounds(time, series.Security.Board);
+						foreach (var series in registeredSeries.Cache)
+						{
+							var tf = (TimeSpan)series.Arg;
+							var time = connector.CurrentTime;
+							var bounds = tf.GetCandleBounds(time, series.Security.Board);
 
-						var beginTime = (time - bounds.Min) < offset ? (bounds.Min - tf) : bounds.Min;
-						var finishTime = bounds.Max;
+							var beginTime = (time - bounds.Min) < offset ? (bounds.Min - tf) : bounds.Min;
+							var finishTime = bounds.Max;
 
-						requestNewCandles(series, new Range<DateTimeOffset>(beginTime, finishTime));
+							requestNewCandles(series, new Range<DateTimeOffset>(beginTime, finishTime));
+						}
 					}
+				}
+				catch (Exception ex)
+				{
+					ex.LogError();
 				}
 			})
 			.Interval(interval);

@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -79,7 +80,17 @@ namespace StockSharp.Algo.Storages
 				_fields = fields;
 
 				ThreadingHelper
-					.Timer(OnFlush)
+					.Timer(() =>
+					{
+						try
+						{
+							OnFlush();
+						}
+						catch (Exception ex)
+						{
+							ex.LogError();
+						}
+					})
 					.Interval(TimeSpan.FromSeconds(5));
 			}
 

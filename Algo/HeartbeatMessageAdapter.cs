@@ -20,6 +20,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	class RestoredConnectMessage : ConnectMessage
@@ -86,7 +87,17 @@ namespace StockSharp.Algo
 						lock (_timeSync)
 						{
 							_canSendTime = true;
-							_heartBeatTimer = ThreadingHelper.Timer(OnHeartbeatTimer).Interval(InnerAdapter.HeartbeatInterval);	
+							_heartBeatTimer = ThreadingHelper.Timer(() =>
+							{
+								try
+								{
+									OnHeartbeatTimer();
+								}
+								catch (Exception ex)
+								{
+									ex.LogError();
+								}
+							}).Interval(InnerAdapter.HeartbeatInterval);	
 						}
 					}
 					else

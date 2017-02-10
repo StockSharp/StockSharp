@@ -24,6 +24,8 @@ namespace StockSharp.Community
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Logging;
+
 	/// <summary>
 	/// The client for access to <see cref="IStrategyService"/>.
 	/// </summary>
@@ -148,9 +150,17 @@ namespace StockSharp.Community
 				_backtests.Add(backtest.Id, backtest);
 			}
 
-			_refreshTimer = ThreadingHelper
-				.Timer(Refresh)
-				.Interval(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+			_refreshTimer = ThreadingHelper.Timer(() =>
+			{
+				try
+				{
+					Refresh();
+				}
+				catch (Exception ex)
+				{
+					ex.LogError();
+				}
+			}).Interval(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
 		}
 
 		private void Refresh()

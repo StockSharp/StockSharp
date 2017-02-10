@@ -713,50 +713,53 @@ namespace StockSharp.Algo.Storages.Csv
 					return;
 
 				_flushTimer = ThreadingHelper
-					.Timer(() => CultureInfo.InvariantCulture.DoInCulture(OnFlush))
+					.Timer(() =>
+					{
+						try
+						{
+							CultureInfo.InvariantCulture.DoInCulture(OnFlush);
+						}
+						catch (Exception ex)
+						{
+							ex.LogError("Flush CSV entity registry error: {0}");
+						}
+					})
 					.Interval(_flushInterval);
 			}
 		}
 
 		private void OnFlush()
 		{
+			lock (_syncRoot)
+			{
+				if (_isFlushing)
+					return;
+
+				_isFlushing = true;
+			}
+
+			var canStop = true;
+
 			try
+			{
+				foreach (dynamic list in _csvLists)
+					canStop &= list.Flush();
+			}
+			finally
 			{
 				lock (_syncRoot)
 				{
-					if (_isFlushing)
-						return;
+					_isFlushing = false;
 
-					_isFlushing = true;
-				}
-
-				var canStop = true;
-
-				try
-				{
-					foreach (dynamic list in _csvLists)
-						canStop &= list.Flush();
-				}
-				finally
-				{
-					lock (_syncRoot)
+					if (canStop)
 					{
-						_isFlushing = false;
-
-						if (canStop)
+						if (_flushTimer != null)
 						{
-							if (_flushTimer != null)
-							{
-								_flushTimer.Dispose();
-								_flushTimer = null;
-							}
+							_flushTimer.Dispose();
+							_flushTimer = null;
 						}
 					}
 				}
-			}
-			catch (Exception ex)
-			{
-				ex.LogError("Flush CSV entity registry error: {0}");
 			}
 		}
 	}
