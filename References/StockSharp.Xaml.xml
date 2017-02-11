@@ -720,6 +720,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.StrategiesDashboard" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboard.Items">
+      <summary>
+            Items.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.StrategiesDashboard.CanExecuteStart">
       <summary>
             Can execute <see cref="F:StockSharp.Xaml.StrategiesDashboard.StartCommand" />.
@@ -744,6 +749,46 @@
       <summary>
             InitializeComponent
             </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.StrategiesDashboardItem">
+      <summary>
+            Row item for <see cref="T:StockSharp.Xaml.StrategiesDashboard" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.Name">
+      <summary>
+            Display name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.Strategy">
+      <summary>
+            Strategy.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.Tag">
+      <summary>
+            Tag.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.StrategiesDashboardItem.#ctor(System.String,StockSharp.Algo.Strategies.Strategy,System.Object)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.StrategiesDashboardItem" />.
+            </summary>
+      <param name="name">Display name.</param>
+      <param name="strategy">Strategy.</param>
+      <param name="tag">Tag.</param>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.OrdersCount">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.TradesCount">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.PnLChange">
+      <summary>
+      </summary>
     </member>
     <member name="T:StockSharp.Xaml.SuggestionsWindow">
       <summary>

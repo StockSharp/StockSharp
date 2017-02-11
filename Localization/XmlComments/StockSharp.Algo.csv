@@ -6200,9 +6200,10 @@ M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.M
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Order)/summary;DocStr2137
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Order)/param/order;Str504
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Order)/returns;Str3166
-M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail)/summary;DocStr2138
-M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail)/param/fail;DocStr325
-M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail)/returns;Str3166
+M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/summary;DocStr2138
+M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/param/fail;DocStr325
+M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/param/originalTransactionId;OriginalTrasactionId
+M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/returns;Str3166
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Trade)/summary;DocStr2139
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Trade)/param/trade;TickTrade
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Trade)/returns;Str3166

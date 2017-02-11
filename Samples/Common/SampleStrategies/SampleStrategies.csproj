@@ -100,8 +100,8 @@
     <Compile Include="QuotesWindow.xaml.cs">
       <DependentUpon>QuotesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="QuotingWindow.xaml.cs">
-      <DependentUpon>QuotingWindow.xaml</DependentUpon>
+    <Compile Include="StrategyAddWindow.xaml.cs">
+      <DependentUpon>StrategyAddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SecuritiesWindow.xaml.cs">
       <DependentUpon>SecuritiesWindow.xaml</DependentUpon>
@@ -137,7 +137,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="QuotingWindow.xaml">
+    <Page Include="StrategyAddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

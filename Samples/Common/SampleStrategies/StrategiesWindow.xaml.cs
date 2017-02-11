@@ -1,52 +1,26 @@
 ﻿namespace SampleStrategies
 {
-	using System;
 	using System.Windows;
 
-	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Strategies.Protective;
 	using StockSharp.Algo.Strategies.Quoting;
+	using StockSharp.BusinessEntities;
+	using StockSharp.Xaml;
 
 	public partial class StrategiesWindow
 	{
-		private class StrategyItem
-		{
-			public string Name { get; }
-			public Strategy Strategy { get; }
-
-			public StrategyItem(string name, Strategy strategy)
-			{
-				if (name.IsEmpty())
-					throw new ArgumentNullException(nameof(name));
-
-				if (strategy == null)
-					throw new ArgumentNullException(nameof(strategy));
-
-				Name = name;
-				Strategy = strategy;
-			}
-		}
-
-		private readonly ObservableCollectionEx<StrategyItem> _items = new ObservableCollectionEx<StrategyItem>();
-		private readonly ThreadSafeObservableCollection<StrategyItem> _itemsTs;
-
 		public StrategiesWindow()
 		{
 			InitializeComponent();
-
-			Dashboard.ItemsSource = _items;
-			TakeProfit.EditValue = StopLoss.EditValue = 0m;
-
-			_itemsTs = new ThreadSafeObservableCollection<StrategyItem>(_items);
 		}
 
 		private void QuotingClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new QuotingWindow
+			var wnd = new StrategyAddWindow
 			{
 				//Security = SecurityPicker.SelectedSecurity,
 			};
@@ -54,70 +28,72 @@
 			if (!wnd.ShowModal(this))
 				return;
 
-			var quoting = new MarketQuotingStrategy(wnd.Side, wnd.Volume)
-			{
-				Security = wnd.Security,
-				Portfolio = wnd.Portfolio,
-				Connector = MainWindow.Instance.Connector
-			};
+			var security = wnd.Security;
+			var portfolio = wnd.Portfolio;
 
-			if ((decimal?)TakeProfit.EditValue > 0 || (decimal?)StopLoss.EditValue > 0)
+			var quoting = new MarketQuotingStrategy(wnd.Side, wnd.Volume);
+
+			if (wnd.TakeProfit > 0 || wnd.StopLoss > 0)
 			{
-				var tp = (decimal?)TakeProfit.EditValue;
-				var sl = (decimal?)StopLoss.EditValue;
+				var tp = wnd.TakeProfit;
+				var sl = wnd.StopLoss;
 
 				quoting
 					.WhenNewMyTrade()
 					.Do(trade =>
 					{
-						var tpStrategy = tp == null ? null : new TakeProfitStrategy(trade, tp.Value);
-						var slStrategy = sl == null ? null : new StopLossStrategy(trade, sl.Value);
+						var tpStrategy = tp == 0 ? null : new TakeProfitStrategy(trade, tp);
+						var slStrategy = sl == 0 ? null : new StopLossStrategy(trade, sl);
 
 						if (tpStrategy != null && slStrategy != null)
 						{
 							var strategy = new TakeProfitStopLossStrategy(tpStrategy, slStrategy);
-							AddStrategy($"TPSL {trade.Trade.Price} Vol={trade.Trade.Volume}", strategy);
+							AddStrategy($"TPSL {trade.Trade.Price} Vol={trade.Trade.Volume}", strategy, security, portfolio);
 						}
 						else if (tpStrategy != null)
 						{
-							AddStrategy($"TP {trade.Trade.Price} Vol={trade.Trade.Volume}", tpStrategy);
+							AddStrategy($"TP {trade.Trade.Price} Vol={trade.Trade.Volume}", tpStrategy, security, portfolio);
 						}
 						else if (slStrategy != null)
 						{
-							AddStrategy($"SL {trade.Trade.Price} Vol={trade.Trade.Volume}", slStrategy);
+							AddStrategy($"SL {trade.Trade.Price} Vol={trade.Trade.Volume}", slStrategy, security, portfolio);
 						}
 					})
 					.Apply(quoting);
 			}
 
-			AddStrategy($"Quoting {quoting.Security} {wnd.Side} Vol={wnd.Volume}", quoting);
+			AddStrategy($"Quoting {quoting.Security} {wnd.Side} Vol={wnd.Volume}", quoting, security, portfolio);
 		}
 
-		private void AddStrategy(string name, Strategy strategy)
+		private void AddStrategy(string name, Strategy strategy, Security security, Portfolio portfolio)
 		{
-			_itemsTs.Add(new StrategyItem(name, strategy));
+			strategy.Security = security;
+			strategy.Portfolio = portfolio;
+			strategy.Connector = MainWindow.Instance.Connector;
+
+			Dashboard.Items.Add(new StrategiesDashboardItem(name, strategy, null));
 			MainWindow.Instance.LogManager.Sources.Add(strategy);
 			strategy.Start();
 		}
 
-		private bool Dashboard_OnCanExecuteStart(object arg)
+		private bool Dashboard_OnCanExecuteStart(StrategiesDashboardItem item)
 		{
-			return ((StrategyItem)arg).Strategy.ProcessState == ProcessStates.Stopped;
+			return item?.Strategy.ProcessState == ProcessStates.Stopped;
 		}
 
-		private bool Dashboard_OnCanExecuteStop(object arg)
+		private bool Dashboard_OnCanExecuteStop(StrategiesDashboardItem item)
 		{
-			return ((StrategyItem)arg).Strategy.ProcessState == ProcessStates.Started;
+			return item?.Strategy.ProcessState == ProcessStates.Started;
 		}
 
-		private void Dashboard_OnExecuteStart(object arg)
+		private void Dashboard_OnExecuteStart(StrategiesDashboardItem item)
 		{
-			((StrategyItem)arg).Strategy.Start();
+			item.Strategy.Start();
 		}
 
-		private void Dashboard_OnExecuteStop(object arg)
+		private void Dashboard_OnExecuteStop(StrategiesDashboardItem item)
 		{
-			((StrategyItem)arg).Strategy.Stop();
+			item.Strategy.Stop();
 		}
 	}
 }

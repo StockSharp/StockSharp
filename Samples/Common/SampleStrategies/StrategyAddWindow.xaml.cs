@@ -8,14 +8,16 @@
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
-	public partial class QuotingWindow
+	public partial class StrategyAddWindow
 	{
-		public QuotingWindow()
+		public StrategyAddWindow()
 		{
 			InitializeComponent();
 
 			SecurityCtrl.SecurityProvider = MainWindow.Instance.Connector;
 			PortfolioCtrl.Portfolios = new PortfolioDataSource(MainWindow.Instance.Connector);
+
+			TakeProfit = StopLoss = 0m;
 		}
 
 		public Security Security
@@ -34,6 +36,18 @@
 		{
 			get { return (decimal?)AmountCtrl.EditValue ?? 0; }
 			set { AmountCtrl.EditValue = value; }
+		}
+
+		public decimal TakeProfit
+		{
+			get { return (decimal?)TakeProfitCtrl.EditValue ?? 0; }
+			set { TakeProfitCtrl.EditValue = value; }
+		}
+
+		public decimal StopLoss
+		{
+			get { return (decimal?)StopLossCtrl.EditValue ?? 0; }
+			set { StopLossCtrl.EditValue = value; }
 		}
 
 		public Sides Side

@@ -13728,3 +13728,4 @@ DocStr9509;Exchanges and trading boards provider;Провайдер бирж и 
 DocStr9510;The in memory provider of stocks and trade boards;Провайдер бирж и торговых площадок, хранящий данные в памяти
 DocStr9511;The storage based provider of stocks and trade boards;Провайдер бирж и торговых площадок, использующий хранилище
 DocStr9512;Board to check;Площадка для проверки
+DocStr9513;Row item for {0};Строка для {0}
