@@ -333,7 +333,10 @@ namespace StockSharp.Algo.Derivatives
 
 			return assetPrice == null
 				? null
-				: allStrikes.OrderBy(s => Math.Abs((decimal)(s.Strike - assetPrice))).FirstOrDefault();
+				: allStrikes
+					.Where(s => s.Strike != null)
+					.OrderBy(s => Math.Abs((decimal)(s.Strike.Value - assetPrice)))
+					.FirstOrDefault();
 		}
 
 		/// <summary>
@@ -348,6 +351,7 @@ namespace StockSharp.Algo.Derivatives
 			var group = underlyingAsset
 				.GetDerivatives(provider, expirationDate)
 				.Filter(OptionTypes.Call)
+				.Where(s => s.Strike != null)
 				.GroupBy(s => s.ExpiryDate)
 				.FirstOrDefault();
 
@@ -355,7 +359,7 @@ namespace StockSharp.Algo.Derivatives
 				throw new InvalidOperationException(LocalizedStrings.Str708);
 
 			var orderedStrikes = group.OrderBy(s => s.Strike).Take(2).ToArray();
-			return (decimal)(orderedStrikes[1].Strike - orderedStrikes[0].Strike);
+			return orderedStrikes[1].Strike.Value - orderedStrikes[0].Strike.Value;
 		}
 
 		/// <summary>
@@ -384,7 +388,10 @@ namespace StockSharp.Algo.Derivatives
 
 			var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
-			return allStrikes.Where(s => s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike);
+			if (cs == null)
+				return Enumerable.Empty<Security>();
+
+			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike);
 		}
 
 		/// <summary>
@@ -413,7 +420,10 @@ namespace StockSharp.Algo.Derivatives
 
 			var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
-			return allStrikes.Where(s => s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike);
+			if (cs == null)
+				return Enumerable.Empty<Security>();
+
+			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike);
 		}
 
 		/// <summary>
@@ -469,12 +479,15 @@ namespace StockSharp.Algo.Derivatives
 			
 			option.CheckOption();
 
+			if (option.Strike == null)
+				return null;
+
 			var assetPrice = option.GetUnderlyingAsset(securityProvider).GetCurrentPrice(dataProvider);
 
 			if (assetPrice == null)
 				return null;
 
-			return ((decimal)((option.OptionType == OptionTypes.Call) ? assetPrice - option.Strike : option.Strike - assetPrice)).Max(0);
+			return ((decimal)(option.OptionType == OptionTypes.Call ? assetPrice - option.Strike : option.Strike - assetPrice)).Max(0);
 		}
 
 		/// <summary>
