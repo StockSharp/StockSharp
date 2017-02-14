@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// The base data source for <see cref="ICandleBuilder"/>, which receives data from the external storage.
 	/// </summary>
 	/// <typeparam name="TSourceValue">The source data type (for example, <see cref="Trade"/>).</typeparam>
-	public abstract class StorageCandleBuilderSource<TSourceValue> : ConvertableCandleBuilderSource<TSourceValue>, IStorageCandleSource
+	public abstract class StorageCandleBuilderSource<TSourceValue> : BaseCandleBuilderSource, IStorageCandleSource
 	{
 		[DebuggerDisplay("{Series} {Reader}")]
 		private sealed class SeriesInfo
@@ -189,6 +189,13 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
+		/// <summary>
+		/// To convert <typeparam ref="TSourceValue"/> to <see cref="ICandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="value">New source data.</param>
+		/// <returns>Data in format <see cref="ICandleBuilder"/>.</returns>
+		protected abstract ICandleBuilderSourceValue Convert(TSourceValue value);
+
 		private void OnLoading()
 		{
 			try
@@ -217,7 +224,7 @@ namespace StockSharp.Algo.Candles.Compression
 							}
 
 							if (values.Count > 0)
-								NewSourceValues(info.Series, values);
+								RaiseProcessing(info.Series, values.Select(Convert));
 						}
 					}
 
@@ -279,6 +286,16 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			return StorageRegistry.GetTradeStorage(security, Drive);
 		}
+
+		/// <summary>
+		/// To convert <typeparam ref="TSourceValue"/> to <see cref="ICandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="value">New source data.</param>
+		/// <returns>Data in format <see cref="ICandleBuilder"/>.</returns>
+		protected override ICandleBuilderSourceValue Convert(Trade value)
+		{
+			return new TradeCandleBuilderSourceValue(value);
+		}
 	}
 
 	/// <summary>
@@ -286,11 +303,15 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class MarketDepthStorageCandleBuilderSource : StorageCandleBuilderSource<MarketDepth>
 	{
+		private readonly DepthCandleSourceTypes _type;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDepthStorageCandleBuilderSource"/>.
 		/// </summary>
-		public MarketDepthStorageCandleBuilderSource()
+		/// <param name="type">Type of candle depth based data.</param>
+		public MarketDepthStorageCandleBuilderSource(DepthCandleSourceTypes type)
 		{
+			_type = type;
 		}
 
 		/// <summary>
@@ -301,6 +322,16 @@ namespace StockSharp.Algo.Candles.Compression
 		protected override IMarketDataStorage<MarketDepth> GetStorage(Security security)
 		{
 			return StorageRegistry.GetMarketDepthStorage(security, Drive);
+		}
+
+		/// <summary>
+		/// To convert <typeparam ref="TSourceValue"/> to <see cref="ICandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="value">New source data.</param>
+		/// <returns>Data in format <see cref="ICandleBuilder"/>.</returns>
+		protected override ICandleBuilderSourceValue Convert(MarketDepth value)
+		{
+			return new DepthCandleBuilderSourceValue(value, _type);
 		}
 	}
 
@@ -345,6 +376,16 @@ namespace StockSharp.Algo.Candles.Compression
 				return Enumerable.Empty<Range<DateTimeOffset>>();
 
 			return StorageRegistry.GetOrderLogStorage(series.Security, Drive).GetRanges();
+		}
+
+		/// <summary>
+		/// To convert <typeparam ref="TSourceValue"/> to <see cref="ICandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="value">New source data.</param>
+		/// <returns>Data in format <see cref="ICandleBuilder"/>.</returns>
+		protected override ICandleBuilderSourceValue Convert(Trade value)
+		{
+			return new TradeCandleBuilderSourceValue(value);
 		}
 
 		/// <summary>

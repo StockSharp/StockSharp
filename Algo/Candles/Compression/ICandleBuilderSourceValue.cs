@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="TradeCandleBuilderSourceValue.Trade"/>.
+	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="Trade"/>.
 	/// </summary>
 	[DebuggerDisplay("{Trade}")]
 	public class TradeCandleBuilderSourceValue : ICandleBuilderSourceValue
@@ -119,18 +119,79 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
+	/// Types of candle depth based data.
+	/// </summary>
+	public enum DepthCandleSourceTypes
+	{
+		/// <summary>
+		/// Best bid.
+		/// </summary>
+		BestBid,
+
+		/// <summary>
+		/// Best ask.
+		/// </summary>
+		BestAsk,
+
+		/// <summary>
+		/// Spread middle.
+		/// </summary>
+		Middle,
+	}
+
+	/// <summary>
 	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="MarketDepth"/>.
 	/// </summary>
 	[DebuggerDisplay("{Depth}")]
 	public class DepthCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
+		private readonly decimal _price;
+		private readonly decimal _volume;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DepthCandleBuilderSourceValue"/>.
 		/// </summary>
 		/// <param name="depth">Market depth.</param>
-		public DepthCandleBuilderSourceValue(MarketDepth depth)
+		/// <param name="type">Type of candle depth based data.</param>
+		public DepthCandleBuilderSourceValue(MarketDepth depth, DepthCandleSourceTypes type)
 		{
 			Depth = depth;
+			Type = type;
+
+			var pair = Depth.BestPair;
+
+			if (pair != null)
+			{
+				switch (Type)
+				{
+					case DepthCandleSourceTypes.BestBid:
+						var bid = pair.Bid;
+
+						if (bid != null)
+						{
+							_price = bid.Price;
+							_volume = bid.Volume;
+						}
+
+						break;
+					case DepthCandleSourceTypes.BestAsk:
+						var ask = pair.Ask;
+
+						if (ask != null)
+						{
+							_price = ask.Price;
+							_volume = ask.Volume;
+						}
+
+						break;
+					case DepthCandleSourceTypes.Middle:
+						_price = pair.MiddlePrice ?? 0;
+						//_volume = pair.Bid.Volume;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
 		}
 
 		/// <summary>
@@ -138,20 +199,18 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public MarketDepth Depth { get; }
 
+		/// <summary>
+		/// Type of candle depth based data.
+		/// </summary>
+		public DepthCandleSourceTypes Type { get; }
+
 		Security ICandleBuilderSourceValue.Security => Depth.Security;
 
 		DateTimeOffset ICandleBuilderSourceValue.Time => Depth.LastChangeTime;
 
-		decimal ICandleBuilderSourceValue.Price
-		{
-			get
-			{
-				var pair = Depth.BestPair;
-				return pair == null ? 0 : pair.MiddlePrice ?? 0;
-			}
-		}
+		decimal ICandleBuilderSourceValue.Price => _price;
 
-		decimal ICandleBuilderSourceValue.Volume => Depth.TotalBidsVolume - Depth.TotalAsksVolume;
+		decimal ICandleBuilderSourceValue.Volume => _volume;
 
 		Sides? ICandleBuilderSourceValue.OrderDirection => null;
 	}

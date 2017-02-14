@@ -272,11 +272,11 @@ namespace StockSharp.Algo.Candles
 			return manager;
 		}
 
-		private sealed class CandleEnumerable<TValue> : SimpleEnumerable<Candle>//, IEnumerableEx<Candle>
+		private sealed class CandleEnumerable : SimpleEnumerable<Candle>//, IEnumerableEx<Candle>
 		{
-			private sealed class CandleEnumerator : SimpleEnumerator<Candle>
+			private sealed class CandleEnumerator<TValue> : SimpleEnumerator<Candle>
 			{
-				private sealed class EnumeratorCandleBuilderSource : ConvertableCandleBuilderSource<TValue>
+				private sealed class EnumeratorCandleBuilderSource : BaseCandleBuilderSource
 				{
 					private readonly Security _security;
 
@@ -310,22 +310,24 @@ namespace StockSharp.Algo.Candles
 						RaiseStopped(series);
 					}
 
-					public void PushNewValue(CandleSeries series, TValue value)
+					public void PushNewValue(CandleSeries series, ICandleBuilderSourceValue value)
 					{
-						NewSourceValues(series, new[] { value });
+						RaiseProcessing(series, new[] { value });
 					}
 				}
 
 				private readonly CandleSeries _series;
+				private readonly Func<TValue, ICandleBuilderSourceValue> _converter;
 				private bool _isNewCandle;
 				private readonly IEnumerator<TValue> _valuesEnumerator;
 				private readonly EnumeratorCandleBuilderSource _builderSource;
 				private Candle _lastCandle;
 				private readonly CandleManager _candleManager;
 
-				public CandleEnumerator(CandleSeries series, IEnumerable<TValue> values)
+				public CandleEnumerator(CandleSeries series, IEnumerable<TValue> values, Func<TValue, ICandleBuilderSourceValue> converter)
 				{
 					_series = series;
+					_converter = converter;
 
 					_valuesEnumerator = values.GetEnumerator();
 
@@ -359,7 +361,7 @@ namespace StockSharp.Algo.Candles
 						if (!_valuesEnumerator.MoveNext())
 							break;
 
-						_builderSource.PushNewValue(_series, _valuesEnumerator.Current);
+						_builderSource.PushNewValue(_series, _converter(_valuesEnumerator.Current));
 					}
 
 					if (_isNewCandle)
@@ -392,20 +394,25 @@ namespace StockSharp.Algo.Candles
 				}
 			}
 
-			//private readonly IEnumerableEx<TValue> _values;
-
-			public CandleEnumerable(CandleSeries series, IEnumerable<TValue> values)
-				: base(() => new CandleEnumerator(series, values))
+			public CandleEnumerable(CandleSeries series, IEnumerable<Trade> values)
+				: base(() => new CandleEnumerator<Trade>(series, values, t => new TradeCandleBuilderSourceValue(t)))
 			{
 				if (series == null)
 					throw new ArgumentNullException(nameof(series));
 
 				if (values == null)
 					throw new ArgumentNullException(nameof(values));
-				//_values = values;
 			}
 
-			//int IEnumerableEx.Count => _values.Count;
+			public CandleEnumerable(CandleSeries series, IEnumerable<MarketDepth> depths, DepthCandleSourceTypes type)
+				: base(() => new CandleEnumerator<MarketDepth>(series, depths, d => new DepthCandleBuilderSourceValue(d, type)))
+			{
+				if (series == null)
+					throw new ArgumentNullException(nameof(series));
+
+				if (depths == null)
+					throw new ArgumentNullException(nameof(depths));
+			}
 		}
 
 		/// <summary>
@@ -434,7 +441,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<Trade> trades, CandleSeries series)
 		{
-			return new CandleEnumerable<Trade>(series, trades);
+			return new CandleEnumerable(series, trades);
 		}
 
 		/// <summary>
@@ -456,10 +463,11 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
+		/// <param name="type">Type of candle depth based data.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series)
+		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series, DepthCandleSourceTypes type)
 		{
-			return new CandleEnumerable<MarketDepth>(series, depths);
+			return new CandleEnumerable(series, depths, type);
 		}
 
 		/// <summary>
@@ -467,12 +475,13 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
+		/// <param name="type">Type of candle depth based data.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series)
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, DepthCandleSourceTypes type)
 		{
 			return depths
 				.ToEntities<QuoteChangeMessage, MarketDepth>(series.Security)
-				.ToCandles(series)
+				.ToCandles(series, type)
 				.ToMessages<Candle, CandleMessage>();
 		}
 

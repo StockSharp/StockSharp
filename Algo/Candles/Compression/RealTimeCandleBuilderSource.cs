@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// The base data source for <see cref="ICandleBuilder"/> which receives data from <see cref="IConnector"/>.
 	/// </summary>
 	/// <typeparam name="T">The source data type (for example, <see cref="Trade"/>).</typeparam>
-	public abstract class RealTimeCandleBuilderSource<T> : ConvertableCandleBuilderSource<T>
+	public abstract class RealTimeCandleBuilderSource<T> : BaseCandleBuilderSource
 	{
 		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<CandleSeries>> _registeredSeries = new SynchronizedDictionary<Security, CachedSynchronizedList<CandleSeries>>();
 		private readonly OrderedPriorityQueue<DateTimeOffset, CandleSeries> _seriesByDates = new OrderedPriorityQueue<DateTimeOffset, CandleSeries>();
@@ -125,6 +125,13 @@ namespace StockSharp.Algo.Candles.Compression
 		protected abstract IEnumerable<T> GetSecurityValues(Security security);
 
 		/// <summary>
+		/// To convert <typeparam ref="T"/> to <see cref="ICandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="value">New source data.</param>
+		/// <returns>Data in format <see cref="ICandleBuilder"/>.</returns>
+		protected abstract ICandleBuilderSourceValue Convert(T value);
+
+		/// <summary>
 		/// Synchronously to add new data received from <see cref="Connector"/>.
 		/// </summary>
 		/// <param name="values">New data.</param>
@@ -133,7 +140,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (_registeredSeries.Count == 0)
 				return;
 
-			foreach (var group in Convert(values).GroupBy(v => v.Security))
+			foreach (var group in values.Select(Convert).GroupBy(v => v.Security))
 			{
 				var security = group.Key;
 
@@ -150,7 +157,7 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					if (series.IsNew)
 					{
-						RaiseProcessing(series, Convert(GetSecurityValues(security)).OrderBy(v => v.Time));
+						RaiseProcessing(series, GetSecurityValues(security).Select(Convert).OrderBy(v => v.Time));
 						series.IsNew = false;
 					}
 					else
@@ -240,6 +247,16 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
+		/// To convert <typeparam ref="TSourceValue"/> to <see cref="ICandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="value">New source data.</param>
+		/// <returns>Data in format <see cref="ICandleBuilder"/>.</returns>
+		protected override ICandleBuilderSourceValue Convert(Trade value)
+		{
+			return new TradeCandleBuilderSourceValue(value);
+		}
+
+		/// <summary>
 		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
@@ -254,13 +271,17 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class MarketDepthCandleBuilderSource : RealTimeCandleBuilderSource<MarketDepth>
 	{
+		private readonly DepthCandleSourceTypes _type;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDepthCandleBuilderSource"/>.
 		/// </summary>
 		/// <param name="connector">The connection through which changed order books will be received using the event <see cref="IConnector.MarketDepthsChanged"/>.</param>
-		public MarketDepthCandleBuilderSource(IConnector connector)
+		/// <param name="type">Type of candle depth based data.</param>
+		public MarketDepthCandleBuilderSource(IConnector connector, DepthCandleSourceTypes type)
 			: base(connector)
 		{
+			_type = type;
 			Connector.MarketDepthsChanged += OnMarketDepthsChanged;
 		}
 
@@ -303,6 +324,16 @@ namespace StockSharp.Algo.Candles.Compression
 		protected override IEnumerable<MarketDepth> GetSecurityValues(Security security)
 		{
 			return Enumerable.Empty<MarketDepth>();
+		}
+
+		/// <summary>
+		/// To convert <typeparam ref="TSourceValue"/> to <see cref="ICandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="value">New source data.</param>
+		/// <returns>Data in format <see cref="ICandleBuilder"/>.</returns>
+		protected override ICandleBuilderSourceValue Convert(MarketDepth value)
+		{
+			return new DepthCandleBuilderSourceValue(value, _type);
 		}
 
 		private void OnMarketDepthsChanged(IEnumerable<MarketDepth> depths)

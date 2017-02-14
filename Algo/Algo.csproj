@@ -155,7 +155,7 @@
     <Compile Include="Candles\Compression\ICandleBuilderSourceList.cs" />
     <Compile Include="Candles\Compression\StorageCandleBuilderSource.cs" />
     <Compile Include="Candles\Compression\CandleBuilderContainer.cs" />
-    <Compile Include="Candles\Compression\ConvertableCandleBuilderSource.cs" />
+    <Compile Include="Candles\Compression\RawConvertableCandleBuilderSource.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
