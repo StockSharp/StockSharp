@@ -1092,9 +1092,9 @@ namespace StockSharp.Algo.Candles.Compression
 				CloseVolume = value.Volume,
 				LowVolume = value.Volume,
 				HighVolume = value.Volume,
-				TotalVolume = value.Volume,
+				TotalVolume = value.Volume ?? 0,
 
-				TotalPrice = value.Price * value.Volume,
+				TotalPrice = value.Price * (value.Volume ?? 1),
 
 				Type = pnfCandle == null ? PnFTypes.X : (pnfCandle.Type == PnFTypes.X ? PnFTypes.O : PnFTypes.X),
 			};
@@ -1168,12 +1168,18 @@ namespace StockSharp.Algo.Candles.Compression
 			else
 				candle.LowPrice = candle.ClosePrice;
 
-			candle.TotalPrice += value.Price * value.Volume;
+			if (value.Volume != null)
+			{
+				var volume = value.Volume.Value;
 
-			candle.LowVolume = (candle.LowVolume ?? 0m).Min(value.Volume);
-			candle.HighVolume = (candle.HighVolume ?? 0m).Max(value.Volume);
-			candle.CloseVolume = value.Volume;
-			candle.TotalVolume += value.Volume;
+				candle.TotalPrice += value.Price * volume;
+
+				candle.LowVolume = (candle.LowVolume ?? 0m).Min(volume);
+				candle.HighVolume = (candle.HighVolume ?? 0m).Max(volume);
+				candle.CloseVolume = volume;
+				candle.TotalVolume += volume;
+			}
+			
 			candle.CloseTime = value.Time;
 		}
 	}
@@ -1277,12 +1283,12 @@ namespace StockSharp.Algo.Candles.Compression
 				ClosePrice = closePrice,
 				HighPrice = Math.Max(openPrice, closePrice),
 				LowPrice = Math.Min(openPrice, closePrice),
-				TotalPrice = openPrice * value.Volume,
+				TotalPrice = openPrice * (value.Volume ?? 1),
 				OpenVolume = value.Volume,
 				CloseVolume = value.Volume,
 				HighVolume = value.Volume,
 				LowVolume = value.Volume,
-				TotalVolume = value.Volume,
+				TotalVolume = value.Volume ?? 1,
 				Security = series.Security,
 				OpenTime = value.Time,
 				CloseTime = value.Time,
@@ -1298,14 +1304,19 @@ namespace StockSharp.Algo.Candles.Compression
 			candle.HighPrice = Math.Max(candle.HighPrice, value.Price);
 			candle.LowPrice = Math.Min(candle.LowPrice, value.Price);
 
-			candle.HighVolume = Math.Max(candle.HighVolume ?? 0m, value.Volume);
-			candle.LowVolume = Math.Min(candle.LowVolume ?? 0m, value.Volume);
+			if (value.Volume != null)
+			{
+				var volume = value.Volume.Value;
 
-			candle.CloseVolume = value.Volume;
+				candle.HighVolume = Math.Max(candle.HighVolume ?? 0m, volume);
+				candle.LowVolume = Math.Min(candle.LowVolume ?? 0m, volume);
 
-			candle.TotalPrice += value.Price * value.Volume;
-			candle.TotalVolume += value.Volume;
+				candle.CloseVolume = volume;
 
+				candle.TotalPrice += value.Price * volume;
+				candle.TotalVolume += volume;
+			}
+		
 			if (value.OrderDirection != null)
 				candle.RelativeVolume += value.OrderDirection == Sides.Buy ? value.Volume : -value.Volume;
 

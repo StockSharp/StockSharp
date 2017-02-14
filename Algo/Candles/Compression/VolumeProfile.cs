@@ -148,21 +148,26 @@ namespace StockSharp.Algo.Candles.Compression
 			//if (side == null)
 			//	throw new ArgumentException(nameof(value));
 
-			level.TotalVolume += value.Volume;
+			if (value.Volume == null)
+				return;
+
+			var volume = value.Volume.Value;
+
+			level.TotalVolume += volume;
 
 			if (value.OrderDirection == Sides.Buy)
 			{
-				level.BuyVolume += value.Volume;
+				level.BuyVolume += volume;
 				level.BuyCount++;
 
-				((List<decimal>)level.BuyVolumes).Add(value.Volume);
+				((List<decimal>)level.BuyVolumes).Add(volume);
 			}
 			else if (value.OrderDirection == Sides.Sell)
 			{
-				level.SellVolume += value.Volume;
+				level.SellVolume += volume;
 				level.SellCount++;
 
-				((List<decimal>)level.SellVolumes).Add(value.Volume);
+				((List<decimal>)level.SellVolumes).Add(volume);
 			}
 		}
 

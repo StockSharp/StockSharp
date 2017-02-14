@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Volume.
 		/// </summary>
-		decimal Volume { get; }
+		decimal? Volume { get; }
 
 		/// <summary>
 		/// Order side.
@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		decimal ICandleBuilderSourceValue.Price => Trade.Price;
 
-		decimal ICandleBuilderSourceValue.Volume => Trade.Volume;
+		decimal? ICandleBuilderSourceValue.Volume => Trade.Volume == 0 ? (decimal?)null : Trade.Volume;
 
 		Sides? ICandleBuilderSourceValue.OrderDirection => Trade.OrderDirection;
 	}
@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		decimal ICandleBuilderSourceValue.Price => Tick.TradePrice ?? 0;
 
-		decimal ICandleBuilderSourceValue.Volume => Tick.TradeVolume ?? 0;
+		decimal? ICandleBuilderSourceValue.Volume => Tick.TradeVolume;
 
 		Sides? ICandleBuilderSourceValue.OrderDirection => Tick.OriginSide;
 	}
@@ -146,7 +146,7 @@ namespace StockSharp.Algo.Candles.Compression
 	public class DepthCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
 		private readonly decimal _price;
-		private readonly decimal _volume;
+		private readonly decimal? _volume;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DepthCandleBuilderSourceValue"/>.
@@ -210,7 +210,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		decimal ICandleBuilderSourceValue.Price => _price;
 
-		decimal ICandleBuilderSourceValue.Volume => _volume;
+		decimal? ICandleBuilderSourceValue.Volume => _volume;
 
 		Sides? ICandleBuilderSourceValue.OrderDirection => null;
 	}

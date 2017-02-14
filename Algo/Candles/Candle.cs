@@ -482,7 +482,6 @@ namespace StockSharp.Algo.Candles
 			ThrowIfFinished();
 
 			var price = value.Price;
-			var volume = value.Volume;
 			var time = value.Time;
 
 			if (price < _lowPrice)
@@ -498,16 +497,22 @@ namespace StockSharp.Algo.Candles
 			}
 
 			_closePrice = price;
-			_totalPrice += price * volume;
 
-			_lowVolume = (_lowVolume ?? 0m).Min(volume);
-			_highVolume = (_highVolume ?? 0m).Max(volume);
-			_closeVolume = volume;
-			_totalVolume += volume;
+			if (value.Volume != null)
+			{
+				var volume = value.Volume.Value;
 
-			var dir = value.OrderDirection;
-			if (dir != null)
-				_relativeVolume = (_relativeVolume ?? 0) + (dir.Value == Sides.Buy ? volume : -volume);
+				_totalPrice += price * volume;
+
+				_lowVolume = (_lowVolume ?? 0m).Min(volume);
+				_highVolume = (_highVolume ?? 0m).Max(volume);
+				_closeVolume = volume;
+				_totalVolume += volume;
+
+				var dir = value.OrderDirection;
+				if (dir != null)
+					_relativeVolume = (_relativeVolume ?? 0) + (dir.Value == Sides.Buy ? volume : -volume);
+			}
 
 			_closeTime = time;
 		}
