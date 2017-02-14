@@ -18,11 +18,8 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
-	using System.ServiceModel;
 
-	using Ecng.Net;
 	using Ecng.Common;
 	using Ecng.Collections;
 
