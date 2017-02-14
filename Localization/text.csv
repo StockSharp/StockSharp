@@ -687,7 +687,6 @@ Str725;OI (trade);ОИ (сделка)
 Str726;Beginning time;Время начала
 Str727;Ending time;Время окончания
 Str728;Index, built from a combination of several securities through a mathematical formula.;Индекс, построенный из комбинации нескольких инструментов через математическую формулу.
-Str729;Volume profile.;Профайл объема.
 Str730;Chaikin volatility.;Волатильность Чайкина.
 Str731;Moving Average.;Скользящая средняя.
 Str732;Rate of change.;Скорость изменения.
@@ -2663,7 +2662,7 @@ Str2835;All securities;Все инструменты
 Str2836;Script parameters.;Параметры скрипта.
 Str2838;Path to data.;Путь к данным.
 Str2839;Intraday volume;Объем внутри дня
-Str2840;Volume profile;Профиль объема
+VolumeProfile;Volume profile;Профиль объема
 Str2842;CSV import settings;Настройки импорта из CSV
 Str2843;Full path to CSV file.;Полный путь к CSV файлу.
 Str2844;Column separator;Разделитель колонок

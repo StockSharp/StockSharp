@@ -6858,16 +6858,6 @@ namespace StockSharp.Localization
 		public static string Str728 => GetString(Str728Key);
 
 		/// <summary>
-		/// Volume profile.
-		/// </summary>
-		public const string Str729Key = nameof(Str729);
-
-		/// <summary>
-		/// Volume profile.
-		/// </summary>
-		public static string Str729 => GetString(Str729Key);
-
-		/// <summary>
 		/// Chaikin volatility.
 		/// </summary>
 		public const string Str730Key = nameof(Str730);
@@ -26610,12 +26600,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Volume profile
 		/// </summary>
-		public const string Str2840Key = nameof(Str2840);
+		public const string VolumeProfileKey = nameof(VolumeProfile);
 
 		/// <summary>
 		/// Volume profile
 		/// </summary>
-		public static string Str2840 => GetString(Str2840Key);
+		public static string VolumeProfile => GetString(VolumeProfileKey);
 
 		/// <summary>
 		/// Import settings from CSV
