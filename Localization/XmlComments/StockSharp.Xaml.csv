@@ -475,9 +475,6 @@ P:StockSharp.Xaml.OrderLogGrid.LogItems/summary;DocStr4035
 P:StockSharp.Xaml.OrderLogGrid.SelectedLogItem/summary;DocStr8231
 P:StockSharp.Xaml.OrderLogGrid.SelectedLogItems/summary;DocStr8232
 M:StockSharp.Xaml.OrderLogGrid.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.ISecurityWindow/summary;DocStr8180
-P:StockSharp.Xaml.ISecurityWindow.ValidateId/summary;DocStr8181
-P:StockSharp.Xaml.ISecurityWindow.Security/summary;DocStr2831
 T:StockSharp.Xaml.MarketDataGrid/summary;DocStr8233
 E:StockSharp.Xaml.MarketDataGrid.DataLoading/summary;DocStr8236
 E:StockSharp.Xaml.MarketDataGrid.DataLoaded/summary;DocStr8237
@@ -582,8 +579,8 @@ P:StockSharp.Xaml.RiskWindow.Rules/summary;DocStr8125
 M:StockSharp.Xaml.RiskWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityCreateWindow/summary;DocStr8290
 M:StockSharp.Xaml.SecurityCreateWindow.#ctor/summary;DocStr1
-P:StockSharp.Xaml.SecurityCreateWindow.ValidateId/summary;DocStr8181
-P:StockSharp.Xaml.SecurityCreateWindow.Security/summary;DocStr2831
+P:StockSharp.Xaml.SecurityCreateWindow.Security/summary;DocStr9524
+P:StockSharp.Xaml.SecurityCreateWindow.Securities/summary;DocStr9525
 M:StockSharp.Xaml.SecurityCreateWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityGrid/summary;DocStr8293
 M:StockSharp.Xaml.SecurityGrid.#ctor/summary;DocStr1

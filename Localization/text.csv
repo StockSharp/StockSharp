@@ -6715,14 +6715,14 @@ DocStr2324;The code of currency to be converted;Код валюты, из кот
 DocStr2325;The rate;Курс
 DocStr2326;To get the conversion rate for the specified date;Получить курс конвертации одной валюту в другую на определенную дату
 DocStr2327;The rate date;Дата курса
-DocStr2328;To create from regular order book a sparse on, with minimal price step of {0}. {1};Создать из обычного стакана разреженный с минимальным шагом цены равный {0}. {1}
+DocStr2328;To create from regular order book a sparse on, with minimal price step of {0};Создать из обычного стакана разреженный с минимальным шагом цены равный {0}
 DocStr2329;The regular order book;Обычный стакан
 DocStr2330;The sparse order book;Разреженный стакан
-DocStr2331;To create from regular order book a sparse one. {0};Создать из обычного стакана разреженный. {0}
-DocStr2332;To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair. {0};Создать из пары котировок разреженную коллекцию котировок, которая будет входить в диапазон между парой. {0}
+DocStr2331;To create from regular order book a sparse one;Создать из обычного стакана разреженный
+DocStr2332;To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair;Создать из пары котировок разреженную коллекцию котировок, которая будет входить в диапазон между парой
 DocStr2333;The pair of regular quotes;Пара обычных котировок
 DocStr2334;The sparse collection of quotes;Разреженная коллекция котировок
-DocStr2335;To create the sparse collection of quotes from regular quotes. {0};Создать из обычных котировок разреженную коллекцию котировок. {0}
+DocStr2335;To create the sparse collection of quotes from regular quotes;Создать из обычных котировок разреженную коллекцию котировок
 DocStr2336;Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers);Обычные котировки. Коллекция должна содержать одинаково направленные котировки (только биды или только оффера)
 DocStr2337;To merge the initial order book and its sparse representation;Объединить первоначальный стакан, и его разреженное представление
 DocStr2338;The initial order book;Первоначальный стакан
@@ -13728,3 +13728,10 @@ DocStr9510;The in memory provider of stocks and trade boards;Провайдер 
 DocStr9511;The storage based provider of stocks and trade boards;Провайдер бирж и торговых площадок, использующий хранилище
 DocStr9512;Board to check;Площадка для проверки
 DocStr9513;Row item for {0};Строка для {0}
+DocStr9514;Types of candle depth based data;Типы стаканных данных
+DocStr9515;Type of candle depth based data;Тип стаканных данных
+DocStr9516;To convert {0} to {1};Преобразовать {0} в {1}
+DocStr9520;In sparsed book shown quotes with no active orders. The volume of these quotes is 0;В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0
+DocStr9523;In sparsed collection shown quotes with no active orders. The volume of these quotes is 0;В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
+DocStr9524;Security to edit;Инструмент для редактирования
+DocStr9525;Securities to edit;Инструменты для редактирования

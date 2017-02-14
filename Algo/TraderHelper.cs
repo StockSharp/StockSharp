@@ -561,10 +561,10 @@ namespace StockSharp.Algo
 
 		/// <summary>
 		/// To create from regular order book a sparse on, with minimal price step of <see cref="Security.PriceStep"/>.
-		/// <remarks>
-		///             В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		///             </remarks>.
 		/// </summary>
+		/// <remarks>
+		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
 		/// <param name="depth">The regular order book.</param>
 		/// <returns>The sparse order book.</returns>
 		public static MarketDepth Sparse(this MarketDepth depth)
@@ -577,10 +577,10 @@ namespace StockSharp.Algo
 
 		/// <summary>
 		/// To create from regular order book a sparse one.
-		/// <remarks>
-		/// В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		/// </remarks>.
 		/// </summary>
+		/// <remarks>
+		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
 		/// <param name="depth">The regular order book.</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse order book.</returns>
@@ -593,7 +593,7 @@ namespace StockSharp.Algo
 			var asks = depth.Asks.Sparse(priceStep);
 
 			var pair = depth.BestPair;
-			var spreadQuotes = pair == null ? Enumerable.Empty<Quote>() : pair.Sparse(priceStep).ToArray();
+			var spreadQuotes = pair?.Sparse(priceStep).ToArray() ?? Enumerable.Empty<Quote>();
 
 			return new MarketDepth(depth.Security).Update(
 				bids.Concat(spreadQuotes.Where(q => q.OrderDirection == Sides.Buy)),
@@ -602,10 +602,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair.<remarks>
-		///             В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		///             </remarks>.
+		/// To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair.
 		/// </summary>
+		/// <remarks>
+		/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
 		/// <param name="pair">The pair of regular quotes.</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
@@ -657,10 +658,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To create the sparse collection of quotes from regular quotes. <remarks>
-		///             В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		///             </remarks>.
+		/// To create the sparse collection of quotes from regular quotes.
 		/// </summary>
+		/// <remarks>
+		/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
 		/// <param name="quotes">Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers).</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>

@@ -328,7 +328,7 @@ F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.PopupText/summary;DocStr8459
 F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.PopupHtml/summary;DocStr8459
 T:StockSharp.InteractiveBrokers.CandleDataTypes/summary;DocStr3589
 F:StockSharp.InteractiveBrokers.CandleDataTypes.Trades/summary;DocStr3572
-F:StockSharp.InteractiveBrokers.CandleDataTypes.Midpoint/summary;Str501
+F:StockSharp.InteractiveBrokers.CandleDataTypes.Midpoint/summary;SpreadMiddle
 F:StockSharp.InteractiveBrokers.CandleDataTypes.Bid/summary;Str565
 F:StockSharp.InteractiveBrokers.CandleDataTypes.Ask/summary;BestAsk
 F:StockSharp.InteractiveBrokers.CandleDataTypes.BidAsk/summary;DocStr2627
