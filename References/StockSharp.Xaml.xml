@@ -2297,21 +2297,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.ISecurityWindow">
-      <summary>
-            The interface that describes a window for trading instrument creating or editing.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.ISecurityWindow.ValidateId">
-      <summary>
-            The handler checking the entered identifier availability for <see cref="P:StockSharp.Xaml.ISecurityWindow.Security" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.ISecurityWindow.Security">
-      <summary>
-            Security.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.MarketDataGrid">
       <summary>
             The table of available market data.
@@ -2812,14 +2797,14 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityCreateWindow" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SecurityCreateWindow.ValidateId">
-      <summary>
-            The handler checking the entered identifier availability for <see cref="P:StockSharp.Xaml.SecurityCreateWindow.Security" />.
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.SecurityCreateWindow.Security">
       <summary>
-            Security.
+            Security to edit.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityCreateWindow.Securities">
+      <summary>
+            Securities to edit
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityCreateWindow.InitializeComponent">

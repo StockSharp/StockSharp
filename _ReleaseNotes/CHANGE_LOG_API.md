@@ -26,6 +26,11 @@ StockSharp API Change log
 * (feature) SampleStrategies
 * (feature) Plaza. Nanoseconds support.
 * (feature) TraderHelper. IsSystem -> IsPlazaSystem
+* (feature) ICandleBuilderSourceValue. Volume is nullable.
+* (feature) Candles. Removed ConvertableCandleBuilderSource.
+* (feature) Ecng. Removed Xceed ref.
+* (feature) Currency conversion. Moved to Messages.
+* (feature) SecurityCreateWindow. Multi securities edit mode.
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
