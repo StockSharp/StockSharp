@@ -17,9 +17,17 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Linq;
+	using System.ServiceModel;
+
+	using Ecng.Common;
+	using Ecng.Collections;
+	using Ecng.Net;
 
 	using MoreLinq;
+
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Extension class.
@@ -437,5 +445,65 @@ namespace StockSharp.Messages
 
 		//	return adapter;
 		//}
+
+		private static readonly ChannelFactory<IDailyInfoSoap> _dailyInfoFactory = new ChannelFactory<IDailyInfoSoap>(new BasicHttpBinding(), new EndpointAddress("http://www.cbr.ru/dailyinfowebserv/dailyinfo.asmx"));
+		private static readonly Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>> _rateInfo = new Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>>();
+
+		/// <summary>
+		/// To convert one currency to another.
+		/// </summary>
+		/// <param name="currencyFrom">The currency to be converted.</param>
+		/// <param name="currencyTypeTo">The code of the target currency.</param>
+		/// <returns>Converted currency.</returns>
+		public static Currency Convert(this Currency currencyFrom, CurrencyTypes currencyTypeTo)
+		{
+			if (currencyFrom == null)
+				throw new ArgumentNullException(nameof(currencyFrom));
+
+			return new Currency { Type = currencyTypeTo, Value = currencyFrom.Value * currencyFrom.Type.Convert(currencyTypeTo) };
+		}
+
+		/// <summary>
+		/// To get the conversion rate for converting one currency to another.
+		/// </summary>
+		/// <param name="from">The code of currency to be converted.</param>
+		/// <param name="to">The code of the target currency.</param>
+		/// <returns>The rate.</returns>
+		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to)
+		{
+			return from.Convert(to, DateTime.Today);
+		}
+
+		/// <summary>
+		/// To get the conversion rate for the specified date.
+		/// </summary>
+		/// <param name="from">The code of currency to be converted.</param>
+		/// <param name="to">The code of the target currency.</param>
+		/// <param name="date">The rate date.</param>
+		/// <returns>The rate.</returns>
+		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to, DateTime date)
+		{
+			if (from == to)
+				return 1;
+
+			var info = _rateInfo.SafeAdd(date, key =>
+			{
+				var i = _dailyInfoFactory.Invoke(c => c.GetCursOnDate(key));
+				return i.Tables[0].Rows.Cast<DataRow>().ToDictionary(r => r[4].To<CurrencyTypes>(), r => r[2].To<decimal>());
+			});
+
+			if (from != CurrencyTypes.RUB && !info.ContainsKey(from))
+				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(from), nameof(@from));
+
+			if (to != CurrencyTypes.RUB && !info.ContainsKey(to))
+				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(to), nameof(to));
+
+			if (from == CurrencyTypes.RUB)
+				return 1 / info[to];
+			else if (to == CurrencyTypes.RUB)
+				return info[from];
+			else
+				return info[from] / info[to];
+		}
 	}
 }

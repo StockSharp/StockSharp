@@ -403,7 +403,6 @@
     <Compile Include="Latency\LatencyManager.cs" />
     <Compile Include="PnL\PnLManager.cs" />
     <Compile Include="Positions\PositionManager.cs" />
-    <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="PnL\IPnLManager.cs" />
     <Compile Include="Positions\IPositionManager.cs" />
     <Compile Include="Slippage\SlippageManager.cs" />

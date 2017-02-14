@@ -47,6 +47,9 @@
     <Reference Include="Ecng.Interop">
       <HintPath>..\References\Ecng.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Net">
+      <HintPath>..\References\Ecng.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Reflection">
       <HintPath>..\References\Ecng.Reflection.dll</HintPath>
     </Reference>
@@ -68,6 +71,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +91,7 @@
     <Compile Include="DisconnectMessage.cs" />
     <Compile Include="ExecutionMessage.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="MarketDataFinishedMessage.cs" />
     <Compile Include="IExtendableEntity.cs" />
     <Compile Include="IMessageAdapter.cs" />
