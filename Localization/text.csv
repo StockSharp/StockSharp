@@ -480,7 +480,7 @@ Str497;Size of price spread.;Размер спреда по цене.
 Str498;Volume spread;Спреда по объему
 Str499;Size of volume spread. If value is negative, then best ask has a larger volume than best bid.;Размер спреда по объему. Если значение отрицательное, значит лучший оффер имеет больший объем, чем лучший бид.
 Str500;Spread;Спред
-Str501;Spread middle.;Середина спреда.
+SpreadMiddle;Spread middle;Середина спреда
 Str502;Own trade;Собственная сделка
 Str503;Information about own trade.;Информация о собственной сделке.
 Str504;Order;Заявка

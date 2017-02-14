@@ -4830,22 +4830,22 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Spread
 		/// </summary>
-		public const string Str500Key = nameof(Str500);
+		public const string SpreadKey = nameof(Spread);
 
 		/// <summary>
 		/// Spread
 		/// </summary>
-		public static string Str500 => GetString(Str500Key);
+		public static string Spread => GetString(SpreadKey);
 
 		/// <summary>
-		/// Spread middle.
+		/// Spread middle
 		/// </summary>
-		public const string Str501Key = nameof(Str501);
+		public const string SpreadMiddleKey = nameof(SpreadMiddle);
 
 		/// <summary>
-		/// Spread middle.
+		/// Spread middle
 		/// </summary>
-		public static string Str501 => GetString(Str501Key);
+		public static string SpreadMiddle => GetString(SpreadMiddleKey);
 
 		/// <summary>
 		/// Own trade

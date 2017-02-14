@@ -91,12 +91,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// The middle of spread. Is <see langword="null" />, if one of the quotes is empty.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str500Key)]
-		[DescriptionLoc(LocalizedStrings.Str501Key)]
+		[DisplayNameLoc(LocalizedStrings.SpreadKey)]
+		[DescriptionLoc(LocalizedStrings.SpreadMiddleKey, true)]
 		public decimal? MiddlePrice => _isFull ? (Bid.Price + SpreadPrice / 2) : null;
 
 		/// <summary>
-		/// Quotes pair has <see cref="MarketDepthPair.Bid"/> and <see cref="MarketDepthPair.Ask"/>.
+		/// Quotes pair has <see cref="Bid"/> and <see cref="Ask"/>.
 		/// </summary>
 		public bool IsFull => _isFull;
 

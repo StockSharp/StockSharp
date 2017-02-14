@@ -42,7 +42,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Spread middle.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str500Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.SpreadKey)]
 		[EnumMember]
 		Middle,
 	}
