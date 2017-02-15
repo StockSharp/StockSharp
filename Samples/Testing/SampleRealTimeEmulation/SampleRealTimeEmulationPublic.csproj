@@ -47,6 +47,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -142,14 +143,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\IQFeed\IQFeed.csproj">
-      <Project>{F3068408-9764-432E-8FB4-596B308EDB4F}</Project>
-      <Name>IQFeed</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\SmartCom\SmartCom.csproj">
-      <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
-      <Name>SmartCom</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>
@@ -165,6 +158,10 @@
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Configuration\ConfigurationPublic.csproj">
+      <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>
+      <Name>ConfigurationPublic</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>

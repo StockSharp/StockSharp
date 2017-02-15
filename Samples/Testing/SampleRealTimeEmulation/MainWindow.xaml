@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:sx="http://schemas.stocksharp.com/xaml"
-        xmlns:ss="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
-        Title="{x:Static loc:LocalizedStrings.XamlStr561}" Height="800" Width="1050">
+        Title="{x:Static loc:LocalizedStrings.XamlStr561}" Height="800" SizeToContent="Width">
 
 	<Grid>
 		<Grid.RowDefinitions>
@@ -15,7 +14,7 @@
 
 		<Grid Grid.Row="0">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition MinWidth="500" Width="*" />
+				<ColumnDefinition MinWidth="400" Width="*" />
 				<ColumnDefinition MinWidth="250" MaxWidth="260" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition MinWidth="300" Width="Auto" />
@@ -44,7 +43,6 @@
 			</Grid>
 			<!--End chart and chart control grid-->
 
-
 			<sx:MarketDepthControl x:Name="DepthControl" Grid.Column="1" MaxDepth="10" />
 
 			<GridSplitter Grid.Row="0" Grid.Column="2" Width="3"
@@ -52,113 +50,37 @@
 			              VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
 			<Grid Grid.Column="3">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
+					<RowDefinition Height="5" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
-				<Grid Grid.ColumnSpan="2">
+				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="5" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="5" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="5" />
+						<ColumnDefinition Width="Auto" />
 					</Grid.ColumnDefinitions>
 
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-					</Grid.RowDefinitions>
+					<Button x:Name="SettingsBtn" Grid.Column="0" Width="100" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" />
 
-					<RadioButton x:Name="SmartCom" Grid.Row="0" Grid.Column="0" GroupName="Connector" IsChecked="True"
-					             VerticalAlignment="Center">
-						SmartCOM
-					</RadioButton>
-					<RadioButton x:Name="IQFeed" Grid.Row="1" Grid.Column="0" GroupName="Connector" VerticalAlignment="Center">IQFeed</RadioButton>
+					<Button x:Name="ConnectBtn" Grid.Column="2" Width="100" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 
-					<Grid Grid.Row="0" Grid.Column="1" IsEnabled="{Binding ElementName=SmartCom, Path=IsChecked}">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="*" />
-						</Grid.ColumnDefinitions>
-
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
-
-						<TextBlock Grid.Column="0" Grid.Row="0"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
-						<TextBox x:Name="Login" Text="" Grid.Column="1" Grid.Row="0" />
-
-						<TextBlock Grid.Column="0" Grid.Row="1"><Run Text="{x:Static loc:LocalizedStrings.Password}" />:</TextBlock>
-						<PasswordBox x:Name="Password" Password="" Grid.Column="1" Grid.Row="1" />
-
-						<Label Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.XamlStr651}" />
-						<ss:SmartComAddressComboBox x:Name="Address" Grid.Column="1" Grid.Row="2" Width="200" />
-					</Grid>
-
-					<Grid Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=IQFeed, Path=IsChecked}">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="*" />
-						</Grid.ColumnDefinitions>
-
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
-
-						<TextBlock Grid.Row="0" Grid.Column="0">
-							<Run Text="{x:Static loc:LocalizedStrings.Str2122}" />:
-						</TextBlock>
-						<TextBox x:Name="Level1AddressCtrl" Grid.Row="0" Grid.Column="1" Width="Auto" />
-
-						<TextBlock Grid.Row="1" Grid.Column="0">
-							<Run Text="{x:Static loc:LocalizedStrings.Str2124}" />:
-						</TextBlock>
-						<TextBox x:Name="Level2AddressCtrl" Grid.Row="1" Grid.Column="1" Width="Auto" />
-
-						<TextBlock Grid.Row="2" Grid.Column="0">
-							<Run Text="{x:Static loc:LocalizedStrings.Str2126}" />:
-						</TextBlock>
-						<TextBox x:Name="LookupAddressCtrl" Grid.Row="2" Grid.Column="1" Width="Auto" />
-					</Grid>
-				</Grid>
-
-				<Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="3"
-				        Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-
-				<!--<TextBlock Grid.Column="0" Grid.Row="4">
-					<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
-				</TextBlock>-->
-				<Grid Grid.Column="1" Grid.Row="4">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*" />
-						<!--<ColumnDefinition Width="Auto" />-->
-					</Grid.ColumnDefinitions>
-
-					<!--<sx:SecurityEditor x:Name="SecurityEditor" SecuritySelected="SecurityEditor_OnSecuritySelected" />-->
-					<Button x:Name="Find" Width="100" Grid.Column="0" IsEnabled="False" Click="FindClick">
+					<Button x:Name="Find" Width="100" Grid.Column="4" IsEnabled="False" Click="FindClick">
 						<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
+					</Button>
+
+					<Button x:Name="NewOrder" Grid.Column="6" Width="100" Click="NewOrder_OnClick">
+						<TextBlock Text="{x:Static loc:LocalizedStrings.Str504}" />
 					</Button>
 				</Grid>
 
-				<Button x:Name="NewOrder" Grid.Column="0" Grid.Row="5" Height="25" Grid.ColumnSpan="2" Width="100"
-				        Click="NewOrder_OnClick">
-					<TextBlock Text="{x:Static loc:LocalizedStrings.Str504}" />
-				</Button>
-
-				<sx:PortfolioGrid x:Name="PortfolioGrid" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="6" />
+				<sx:PortfolioGrid x:Name="PortfolioGrid" Grid.Row="2" />
 			</Grid>
 		</Grid>
 

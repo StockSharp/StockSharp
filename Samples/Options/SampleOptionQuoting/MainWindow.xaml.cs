@@ -18,6 +18,7 @@ namespace SampleOptionQuoting
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.IO;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
@@ -26,30 +27,37 @@ namespace SampleOptionQuoting
 
 	using Ecng.ComponentModel;
 	using Ecng.Common;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	//using StockSharp.Plaza;
-	using StockSharp.Quik;
 	using StockSharp.Algo.Derivatives;
 	using StockSharp.Algo.Strategies.Derivatives;
+	using StockSharp.Configuration;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 
 	public partial class MainWindow
 	{
-		private class FakeConnector : Connector, IMarketDataProvider
+		private class DummyProvider : CollectionSecurityProvider, IMarketDataProvider
 		{
-			public FakeConnector(IEnumerable<Security> securities)
+			public DummyProvider(IEnumerable<Security> securities)
+				: base(securities)
 			{
-				Securities = securities;
 			}
 
-			public override IEnumerable<Security> Securities { get; }
+			event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> IMarketDataProvider.ValuesChanged
+			{
+				add { }
+				remove { }
+			}
 
-			public override DateTimeOffset CurrentTime => DateTime.Now;
+			MarketDepth IMarketDataProvider.GetMarketDepth(Security security)
+			{
+				return null;
+			}
 
 			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field)
 			{
@@ -113,7 +121,8 @@ namespace SampleOptionQuoting
 		//private PlazaTrader _trader;
 		private bool _isDirty;
 
-		public IConnector Connector;
+		public readonly Connector Connector = new Connector();
+		private const string _settingsFile = "connection.xml";
 
 		public MainWindow()
 		{
@@ -144,7 +153,7 @@ namespace SampleOptionQuoting
 
 			var asset = new Security { Id = "RIM4@FORTS" };
 
-			Connector = new FakeConnector(new[] { asset });
+			var dummyProvider = new DummyProvider(new[] { asset });
 
 			PosChart.AssetPosition = new Position
 			{
@@ -152,8 +161,8 @@ namespace SampleOptionQuoting
 				CurrentValue = -1,
 			};
 
-			PosChart.MarketDataProvider = Connector;
-			PosChart.SecurityProvider = Connector;
+			PosChart.MarketDataProvider = dummyProvider;
+			PosChart.SecurityProvider = dummyProvider;
 
 			var expDate = new DateTime(2014, 6, 14);
 
@@ -177,7 +186,7 @@ namespace SampleOptionQuoting
 
 			var model = new OptionDeskModel
 			{
-				MarketDataProvider = Connector,
+				MarketDataProvider = dummyProvider,
 				UnderlyingAsset = asset,
 			};
 
@@ -224,61 +233,12 @@ namespace SampleOptionQuoting
 			}
 
 			Instance = this;
+
+			InitConnector();
 		}
 
-		private static Security CreateStrike(decimal strike, decimal oi, decimal iv, OptionTypes type, DateTime expiryDate, Security asset, decimal? lastTrade)
+		private void InitConnector()
 		{
-			var s = new Security
-			{
-				Code = "RI {0} {1}".Put(type == OptionTypes.Call ? 'C' : 'P', strike),
-				Strike = strike,
-				OpenInterest = oi,
-				ImpliedVolatility = iv,
-				HistoricalVolatility = iv,
-				OptionType = type,
-				ExpiryDate = expiryDate,
-				Board = ExchangeBoard.Forts,
-				UnderlyingSecurityId = asset.Id,
-				LastTrade = lastTrade == null ? null : new Trade { Price = lastTrade.Value },
-				Volume = RandomGen.GetInt(10000),
-				Type = SecurityTypes.Option
-			};
-
-			s.BestBid = new Quote(s, s.StepPrice ?? 1m * RandomGen.GetInt(100), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Buy);
-			s.BestAsk = new Quote(s, s.BestBid.Price.Max(s.StepPrice ?? 1m * RandomGen.GetInt(100)), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Sell);
-
-			return s;
-		}
-
-		public static MainWindow Instance { get; private set; }
-
-		protected override void OnClosing(CancelEventArgs e)
-		{
-			Connector?.Dispose();
-
-			base.OnClosing(e);
-		}
-
-		private void ConnectClick(object sender, RoutedEventArgs e)
-		{
-			if (Connector != null && !(Connector is FakeConnector))
-				return;
-
-			PosChart.Positions.Clear();
-			PosChart.AssetPosition = null;
-			PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
-
-			// create connection
-			Connector = new QuikTrader();
-
-			//_trader = new PlazaTrader { IsCGate = true };
-			//_trader.Tables.Add(_trader.TableRegistry.Volatility);
-
-			Portfolio.Portfolios = new PortfolioDataSource(Connector);
-
-			PosChart.MarketDataProvider = Connector;
-			PosChart.SecurityProvider = Connector;
-
 			// fill underlying asset's list
 			Connector.NewSecurity += security =>
 			{
@@ -327,6 +287,72 @@ namespace SampleOptionQuoting
 				if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
 					RefreshChart();
 			});
+
+			try
+			{
+				if (File.Exists(_settingsFile))
+					Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+			}
+			catch
+			{
+			}
+		}
+
+		private void SettingsClick(object sender, RoutedEventArgs e)
+		{
+			if (Connector.Configure(this))
+				new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+		}
+
+		private static Security CreateStrike(decimal strike, decimal oi, decimal iv, OptionTypes type, DateTime expiryDate, Security asset, decimal? lastTrade)
+		{
+			var s = new Security
+			{
+				Code = "RI {0} {1}".Put(type == OptionTypes.Call ? 'C' : 'P', strike),
+				Strike = strike,
+				OpenInterest = oi,
+				ImpliedVolatility = iv,
+				HistoricalVolatility = iv,
+				OptionType = type,
+				ExpiryDate = expiryDate,
+				Board = ExchangeBoard.Forts,
+				UnderlyingSecurityId = asset.Id,
+				LastTrade = lastTrade == null ? null : new Trade { Price = lastTrade.Value },
+				Volume = RandomGen.GetInt(10000),
+				Type = SecurityTypes.Option
+			};
+
+			s.BestBid = new Quote(s, s.StepPrice ?? 1m * RandomGen.GetInt(100), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Buy);
+			s.BestAsk = new Quote(s, s.BestBid.Price.Max(s.StepPrice ?? 1m * RandomGen.GetInt(100)), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Sell);
+
+			return s;
+		}
+
+		public static MainWindow Instance { get; private set; }
+
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			Connector?.Dispose();
+
+			base.OnClosing(e);
+		}
+
+		private void ConnectClick(object sender, RoutedEventArgs e)
+		{
+			//if (Connector != null && !(Connector is FakeConnector))
+			//	return;
+
+			PosChart.Positions.Clear();
+			PosChart.AssetPosition = null;
+			PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
+
+			//_trader = new PlazaTrader { IsCGate = true };
+			//_trader.Tables.Add(_trader.TableRegistry.Volatility);
+
+			Portfolio.Portfolios = new PortfolioDataSource(Connector);
+
+			PosChart.MarketDataProvider = Connector;
+			PosChart.SecurityProvider = Connector;
 
 			Connector.Connect();
 		}
