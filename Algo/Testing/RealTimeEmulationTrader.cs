@@ -180,8 +180,8 @@ namespace StockSharp.Algo.Testing
 
 			if (_ownAdapter)
 			{
-				MarketDataAdapter.Log -= RaiseLog;
-				MarketDataAdapter.Dispose();
+				UnderlyngMarketDataAdapter.Log -= RaiseLog;
+				UnderlyngMarketDataAdapter.Dispose();
 			}
 
 			base.DisposeManaged();
