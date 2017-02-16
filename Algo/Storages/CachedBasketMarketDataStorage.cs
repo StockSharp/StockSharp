@@ -196,13 +196,20 @@ namespace StockSharp.Algo.Storages
 			if (_messageQueue.Count == 0 && !_isInitialized)
 				return false;
 
-			if (_isChanged)
+			var isChanged = _isChanged;
+
+			if (isChanged)
 				_moveNextSyncRoot.WaitSignal();
 
 			Message message;
 
-			if (!_messageQueue.TryDequeue(out message))
-				return _isChanged;
+			if (!isChanged)
+			{
+				if (!_messageQueue.TryDequeue(out message))
+					return false;
+			}
+			else
+				message = _messageQueue.Dequeue().Value;
 
 			var serverTime = message.GetServerTime();
 
