@@ -237,7 +237,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},P={PortfolioName},Changes={Changes.Select(c => c.ToString()).Join(",")}";
+			return base.ToString() + $",Sec={SecurityId},P={PortfolioName},CL={ClientCode},Changes={Changes.Select(c => c.ToString()).Join(",")}";
 		}
 	}
 }

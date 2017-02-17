@@ -996,6 +996,7 @@ namespace StockSharp.Algo
 					position.DepoName = depoName;
 					position.LimitType = limitType;
 					position.Description = description;
+					position.ClientCode = clientCode;
 					_positions.Add(key, position);
 				}
 			}
