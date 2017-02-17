@@ -1140,6 +1140,7 @@ F:StockSharp.Fix.Native.FixTags.CxlRejReason/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityDesc/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.HeartBtInt/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ClientID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.MinQty/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MaxFloor/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TestReqID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.QuoteID/summary;DocStr8459
@@ -1150,6 +1151,7 @@ F:StockSharp.Fix.Native.FixTags.BidPx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OfferPx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.BidSize/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OfferSize/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.PrevClosePx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ResetSeqNumFlag/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoRelatedSym/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.Headline/summary;DocStr8459
@@ -1184,6 +1186,8 @@ F:StockSharp.Fix.Native.FixTags.SecurityReqID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityRequestType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityResponseID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SecurityResponseType/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.HighPx/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.LowPx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TradingSessionID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TradSesStatus/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NumberOfOrders/summary;DocStr8459
@@ -1304,6 +1308,14 @@ P:StockSharp.Fix.Native.MDEntry.SecurityId/summary;SecurityId
 P:StockSharp.Fix.Native.MDEntry.OtherValue/summary;DocStr3287
 P:StockSharp.Fix.Native.MDEntry.Currency/summary;Currency
 P:StockSharp.Fix.Native.MDEntry.NumberOfOrders/summary;DocStr9283
+P:StockSharp.Fix.Native.MDEntry.OpenPrice/summary;Str79
+P:StockSharp.Fix.Native.MDEntry.OpenSize/summary;DocStr636
+P:StockSharp.Fix.Native.MDEntry.HighPrice/summary;XamlStr830
+P:StockSharp.Fix.Native.MDEntry.HighSize/summary;DocStr638
+P:StockSharp.Fix.Native.MDEntry.LowPrice/summary;XamlStr831
+P:StockSharp.Fix.Native.MDEntry.LowSize/summary;DocStr9531
+P:StockSharp.Fix.Native.MDEntry.ClosePrice/summary;ClosingPrice
+P:StockSharp.Fix.Native.MDEntry.CloseSize/summary;DocStr637
 T:StockSharp.Fix.Native.TextFixReader/summary;DocStr3331
 M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr1
 M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr3198

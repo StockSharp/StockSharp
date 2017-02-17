@@ -4427,6 +4427,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MinQty">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MaxFloor">
       <summary>
       </summary>
@@ -4464,6 +4468,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.OfferSize">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.PrevClosePx">
       <summary>
       </summary>
     </member>
@@ -4600,6 +4608,14 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SecurityResponseType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.HighPx">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LowPx">
       <summary>
       </summary>
     </member>
@@ -5071,6 +5087,46 @@
     <member name="P:StockSharp.Fix.Native.MDEntry.NumberOfOrders">
       <summary>
             Number of orders.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.OpenPrice">
+      <summary>
+            Opening price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.OpenSize">
+      <summary>
+            Volume at open.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.HighPrice">
+      <summary>
+            Highest price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.HighSize">
+      <summary>
+            Volume at high.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.LowPrice">
+      <summary>
+            Lowest price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.LowSize">
+      <summary>
+            Volume at low
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.ClosePrice">
+      <summary>
+            Closing price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.CloseSize">
+      <summary>
+            Volume at close.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.TextFixReader">

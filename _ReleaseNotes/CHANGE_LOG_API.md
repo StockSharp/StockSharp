@@ -36,6 +36,8 @@ StockSharp API Change log
 * (bug) FIX server. Candle subscription fixes.
 * (bug) FIX server. Invalid authorization handling fix.
 * (bug) FIX server. Security list error response fix.
+* (bug) PortfolioGrid refresh fix.
+* (feature) FIX connector. Candles support.
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279

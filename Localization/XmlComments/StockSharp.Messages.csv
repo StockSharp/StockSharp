@@ -26,13 +26,13 @@ P:StockSharp.Messages.CandleMessage.HighTime/summary;CandleHighTime
 P:StockSharp.Messages.CandleMessage.LowTime/summary;CandleLowTime
 P:StockSharp.Messages.CandleMessage.CloseTime/summary;DocStr632
 P:StockSharp.Messages.CandleMessage.OpenPrice/summary;Str79
-P:StockSharp.Messages.CandleMessage.HighPrice/summary;Str81
-P:StockSharp.Messages.CandleMessage.LowPrice/summary;Str83
+P:StockSharp.Messages.CandleMessage.HighPrice/summary;XamlStr830
+P:StockSharp.Messages.CandleMessage.LowPrice/summary;XamlStr831
 P:StockSharp.Messages.CandleMessage.ClosePrice/summary;ClosingPrice
 P:StockSharp.Messages.CandleMessage.OpenVolume/summary;DocStr636
 P:StockSharp.Messages.CandleMessage.CloseVolume/summary;DocStr637
 P:StockSharp.Messages.CandleMessage.HighVolume/summary;DocStr638
-P:StockSharp.Messages.CandleMessage.LowVolume/summary;Str2451
+P:StockSharp.Messages.CandleMessage.LowVolume/summary;DocStr9531
 P:StockSharp.Messages.CandleMessage.RelativeVolume/summary;DocStr640
 P:StockSharp.Messages.CandleMessage.TotalVolume/summary;DocStr2547
 P:StockSharp.Messages.CandleMessage.OpenInterest/summary;Str150
@@ -1011,8 +1011,8 @@ F:StockSharp.Messages.Level1Fields.BestAsk/summary;BestAsk
 F:StockSharp.Messages.Level1Fields.ImpliedVolatility/summary;Str293
 F:StockSharp.Messages.Level1Fields.TheorPrice/summary;Str294
 F:StockSharp.Messages.Level1Fields.OpenInterest/summary;Str150
-F:StockSharp.Messages.Level1Fields.MinPrice/summary;Str83
-F:StockSharp.Messages.Level1Fields.MaxPrice/summary;Str81
+F:StockSharp.Messages.Level1Fields.MinPrice/summary;PriceMin
+F:StockSharp.Messages.Level1Fields.MaxPrice/summary;PriceMax
 F:StockSharp.Messages.Level1Fields.BidsVolume/summary;Str295
 F:StockSharp.Messages.Level1Fields.BidsCount/summary;Str296
 F:StockSharp.Messages.Level1Fields.AsksVolume/summary;DocStr3715

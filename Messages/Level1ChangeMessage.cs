@@ -110,14 +110,14 @@ namespace StockSharp.Messages
 		OpenInterest,
 
 		/// <summary>
-		/// Minimum price.
+		/// Price (min).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.PriceMinKey)]
 		MinPrice,
 
 		/// <summary>
-		/// Maximum price.
+		/// Price (max).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.PriceMaxKey)]
