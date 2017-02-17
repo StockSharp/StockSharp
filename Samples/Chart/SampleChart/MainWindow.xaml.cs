@@ -96,11 +96,11 @@ namespace SampleChart
 			//{
 			//	case DevExpress.Xpf.Core.Theme.Office2016BlackName:
 			//	case DevExpress.Xpf.Core.Theme.MetropolisDarkName:
-			//		Chart.ChartTheme = "ExpressionDark";
+			//		Chart.ChartTheme = ChartThemes.ExpressionDark;
 			//		break;
 			//	case DevExpress.Xpf.Core.Theme.Office2016WhiteName:
 			//	case DevExpress.Xpf.Core.Theme.MetropolisLightName:
-			//		Chart.ChartTheme = "Chrome";
+			//		Chart.ChartTheme = ChartThemes.Chrome;
 			//		break;
 			//}
 		}
