@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Testing
 					PortfolioName = _portfolio.Name
 				}.TryAdd(PositionChangeTypes.BeginValue, _portfolio.BeginValue));
 			}
-			else if (message.Adapter == MarketDataAdapter)
+			else if (message.Adapter == MarketDataAdapter || message.Adapter?.Parent == MarketDataAdapter)
 			{
 				switch (message.Type)
 				{
@@ -133,7 +133,9 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Disconnect:
 					case MessageTypes.MarketData:
 					case MessageTypes.SecurityLookupResult:
+					case MessageTypes.Session:
 						break;
+
 					default:
 						TransactionAdapter.SendInMessage(message);
 						break;

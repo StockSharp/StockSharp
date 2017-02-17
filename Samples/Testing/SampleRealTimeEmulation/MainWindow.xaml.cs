@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleRealTimeEmulation
 {
+	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
@@ -45,20 +46,25 @@ namespace SampleRealTimeEmulation
 		private readonly LogManager _logManager;
 		private CandleManager _candleManager;
 		private CandleSeries _candleSeries;
-		private readonly RealTimeEmulationTrader<IMessageAdapter> _connector;
+		private RealTimeEmulationTrader<IMessageAdapter> _connector;
 		private bool _isConnected;
 		private Security _security;
 		private CandleSeries _tempCandleSeries; // used to determine if chart settings have changed and new chart is needed
 
 		private const string _settingsFile = "connection.xml";
 
-		private readonly Connector _realConnector = new Connector();
+		private readonly BasketMessageAdapter _realAdapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			CandleSettingsEditor.SettingsChanged += CandleSettingsChanged;
+			CandleSettingsEditor.Settings = new CandleSeries
+			{
+				CandleType = typeof(TimeFrameCandle),
+				Arg = TimeSpan.FromMinutes(5),
+			};
+            CandleSettingsEditor.SettingsChanged += CandleSettingsChanged;
 
 			_logManager = new LogManager();
 			_logManager.Listeners.Add(new GuiLogListener(Log));
@@ -69,9 +75,6 @@ namespace SampleRealTimeEmulation
 			_candlesElem = new ChartCandleElement();
 			area.Elements.Add(_candlesElem);
 
-			_connector = new RealTimeEmulationTrader<IMessageAdapter>(_realConnector.Adapter);
-			_logManager.Sources.Add(_connector);
-
 			InitConnector();
 
 			GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(ProcessCandles);
@@ -79,6 +82,22 @@ namespace SampleRealTimeEmulation
 
 		private void InitConnector()
 		{
+			_connector?.Dispose();
+
+			try
+			{
+				if (File.Exists(_settingsFile))
+					_realAdapter.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+
+				_realAdapter.InnerAdapters.ForEach(a => a.RemoveTransactionalSupport());
+			}
+			catch
+			{
+			}
+
+			_connector = new RealTimeEmulationTrader<IMessageAdapter>(_realAdapter);
+			_logManager.Sources.Add(_connector);
+
 			_connector.EmulationAdapter.Emulator.Settings.TimeZone = TimeHelper.Est;
 			_connector.EmulationAdapter.Emulator.Settings.ConvertTime = true;
 
@@ -141,16 +160,12 @@ namespace SampleRealTimeEmulation
 
 			// subscribe on error of market data subscription event
 			_connector.MarketDataSubscriptionFailed += (security, msg, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+			{
+				if (error == null)
+					return;
 
-			try
-			{
-				if (File.Exists(_settingsFile))
-					_realConnector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
-			}
-			catch
-			{
-			}
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+			};
 		}
 
 		private void CandleSettingsChanged()
@@ -172,8 +187,10 @@ namespace SampleRealTimeEmulation
 
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
-			if (_realConnector.Configure(this))
-				new XmlSerializer<SettingsStorage>().Serialize(_realConnector.Save(), _settingsFile);
+			if (_realAdapter.Configure(this))
+				new XmlSerializer<SettingsStorage>().Serialize(_realAdapter.Save(), _settingsFile);
+
+			InitConnector();
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
