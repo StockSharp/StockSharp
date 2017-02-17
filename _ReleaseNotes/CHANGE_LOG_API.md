@@ -32,6 +32,10 @@ StockSharp API Change log
 * (feature) Currency conversion. Moved to Messages.
 * (feature) SecurityCreateWindow. Multi securities edit mode.
 * (feature) OrderStatusMessage. From and To params.
+* (feature) SampleFIX. Candles support.
+* (bug) FIX server. Candle subscription fixes.
+* (bug) FIX server. Invalid authorization handling fix.
+* (bug) FIX server. Security list error response fix.
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
