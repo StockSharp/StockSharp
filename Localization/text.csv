@@ -4405,6 +4405,12 @@ CanNotCreateLogsFile;Can not create logs file.;Неудалось создать
 CSV;CSV;CSV
 TrailingDelta;Trailing delta;Дельта скольжения
 TrailingReferencePrice;Trailing reference price;Цена активации скольжения
+FixServer;FIX server;Сервер, работающий через FIX протокол
+HydraFixServer;FIX server, spread live and historical market data.;Сервер, распространяющий live и исторические данные через FIX протокол.
+CandleMaxDays;Candle max days;Количество дней для свечей
+CandleMaxDaysDescription;The maximum number of days available to download historical candles.;Максимальное количество дней, доступных для загрузки истории свечей.
+TickMaxDays;Tick max days;Количество дней для тиков
+TickMaxDaysDescription;The maximum number of days available to download historical tick data.;Максимальное количество дней, доступных для загрузки истории тиковых данных.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12894,7 +12900,7 @@ DocStr8610;Convert directory name to the date;Преобразовать имя 
 DocStr8611;The date;Дата
 DocStr8612;Convert the date to directory name;Преобразовать дату в имя директории
 DocStr8613;Storage based message adapter;Адаптер сообщений, использующий хранилище
-DocStr8614;Total days to load stored data;Общее количество сохраненных дней
+DocStr8614;Max days to load stored data;Дней для загрузки данных
 DocStr8615;Load save data from storage;Загрузить сохраненные данные из хранилища
 DocStr8616;Read instrument by indentifier;Загрузить инструмент по идентификатору
 DocStr8617;Instrument storage collection;Хранилище коллекции инструментов
