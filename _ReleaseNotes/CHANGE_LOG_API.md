@@ -31,6 +31,7 @@ StockSharp API Change log
 * (feature) Ecng. Removed Xceed ref.
 * (feature) Currency conversion. Moved to Messages.
 * (feature) SecurityCreateWindow. Multi securities edit mode.
+* (feature) OrderStatusMessage. From and To params.
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
