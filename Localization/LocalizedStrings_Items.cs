@@ -1138,42 +1138,42 @@ namespace StockSharp.Localization
 		public static string Str80 => GetString(Str80Key);
 
 		/// <summary>
-		/// Maximum price
+		/// Highest price
 		/// </summary>
-		public const string Str81Key = nameof(Str81);
+		public const string HighestPriceKey = nameof(HighestPrice);
 
 		/// <summary>
-		/// Maximum price
+		/// Highest price
 		/// </summary>
-		public static string Str81 => GetString(Str81Key);
+		public static string HighestPrice => GetString(HighestPriceKey);
 
 		/// <summary>
-		/// Maximum price of a candle.
+		/// Highest price of a candle.
 		/// </summary>
 		public const string Str82Key = nameof(Str82);
 
 		/// <summary>
-		/// Maximum price of a candle.
+		/// Highest price of a candle.
 		/// </summary>
 		public static string Str82 => GetString(Str82Key);
 
 		/// <summary>
-		/// Minimum price
+		/// Lowest price
 		/// </summary>
-		public const string Str83Key = nameof(Str83);
+		public const string LowestPriceKey = nameof(LowestPrice);
 
 		/// <summary>
-		/// Minimum price
+		/// Lowest price
 		/// </summary>
-		public static string Str83 => GetString(Str83Key);
+		public static string LowestPrice => GetString(LowestPriceKey);
 
 		/// <summary>
-		/// Minimum price of a candle.
+		/// Lowest price of a candle.
 		/// </summary>
 		public const string Str84Key = nameof(Str84);
 
 		/// <summary>
-		/// Minimum price of a candle.
+		/// Lowest price of a candle.
 		/// </summary>
 		public static string Str84 => GetString(Str84Key);
 

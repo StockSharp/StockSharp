@@ -113,19 +113,19 @@ namespace StockSharp.Messages
 		public decimal OpenPrice { get; set; }
 
 		/// <summary>
-		/// Maximum price.
+		/// Highest price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str81Key)]
+		[DisplayNameLoc(LocalizedStrings.HighestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str82Key)]
 		[MainCategory]
 		public decimal HighPrice { get; set; }
 
 		/// <summary>
-		/// Minimum price.
+		/// Lowest price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str83Key)]
+		[DisplayNameLoc(LocalizedStrings.LowestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str84Key)]
 		[MainCategory]
 		public decimal LowPrice { get; set; }
@@ -161,7 +161,7 @@ namespace StockSharp.Messages
 		public decimal? HighVolume { get; set; }
 
 		/// <summary>
-		/// Minimum volume.
+		/// Volume at low.
 		/// </summary>
 		[DataMember]
 		[Nullable]

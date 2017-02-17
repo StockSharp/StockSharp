@@ -110,10 +110,10 @@ CandleLowTime;Time of candle low;Время минимума свечи
 CandleCloseTime;Time of candle close;Время закрытия свечи
 Str79;Opening price;Цена открытия
 Str80;Candle opening price.;Цена открытия свечи.
-Str81;Maximum price;Максимальная цена
-Str82;Maximum price of a candle.;Максимальная цена свечи.
-Str83;Minimum price;Минимальная цена
-Str84;Minimum price of a candle.;Минимальная цена свечи.
+HighestPrice;Highest price;Максимальная цена
+Str82;Highest price of a candle.;Максимальная цена свечи.
+LowestPrice;Lowest price;Минимальная цена
+Str84;Lowest price of a candle.;Минимальная цена свечи.
 ClosingPrice;Closing price;Цена закрытия
 Str86;Candle closing price.;Цена закрытия свечи.
 Volume;Volume;Объем

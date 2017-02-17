@@ -160,10 +160,10 @@ namespace StockSharp.Algo.Candles
 		private decimal _highPrice;
 
 		/// <summary>
-		/// Maximum price.
+		/// Highest price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str81Key)]
+		[DisplayNameLoc(LocalizedStrings.HighestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str82Key)]
 		public decimal HighPrice
 		{
@@ -178,10 +178,10 @@ namespace StockSharp.Algo.Candles
 		private decimal _lowPrice;
 
 		/// <summary>
-		/// Minimum price.
+		/// Lowest price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str83Key)]
+		[DisplayNameLoc(LocalizedStrings.LowestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str84Key)]
 		public decimal LowPrice
 		{
@@ -260,7 +260,7 @@ namespace StockSharp.Algo.Candles
 		private decimal? _lowVolume;
 
 		/// <summary>
-		/// Minimum volume.
+		/// Volume at low.
 		/// </summary>
 		[DataMember]
 		public decimal? LowVolume

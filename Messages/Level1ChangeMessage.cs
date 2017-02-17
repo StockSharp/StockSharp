@@ -113,14 +113,14 @@ namespace StockSharp.Messages
 		/// Minimum price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str83Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.PriceMinKey)]
 		MinPrice,
 
 		/// <summary>
 		/// Maximum price.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str81Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.PriceMaxKey)]
 		MaxPrice,
 
 		/// <summary>
