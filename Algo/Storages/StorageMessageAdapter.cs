@@ -146,7 +146,7 @@ namespace StockSharp.Algo.Storages
 		private TimeSpan _daysLoad;
 
 		/// <summary>
-		/// Total days to load stored data.
+		/// Max days to load stored data.
 		/// </summary>
 		public TimeSpan DaysLoad
 		{
