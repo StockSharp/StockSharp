@@ -18,12 +18,14 @@ namespace SampleFix
 	using System;
 	using System.Linq;
 	using System.Windows;
+	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Fix;
 	using StockSharp.Messages;
@@ -38,6 +40,18 @@ namespace SampleFix
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
+
+			CandlesPeriods.ItemsSource = new[]
+			{
+				TimeSpan.FromTicks(1),
+				TimeSpan.FromMinutes(1),
+				TimeSpan.FromMinutes(5),
+				//TimeSpan.FromMinutes(30),
+				TimeSpan.FromHours(1),
+				TimeSpan.FromDays(1),
+				TimeSpan.FromDays(7),
+				TimeSpan.FromDays(30)
+			};
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -61,6 +75,8 @@ namespace SampleFix
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
 			Quotes.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
+
+			TryEnableCandles();
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -158,6 +174,24 @@ namespace SampleFix
 				return;
 
 			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
+		}
+
+		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			TryEnableCandles();
+		}
+
+		private void TryEnableCandles()
+		{
+			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
+		}
+
+		private void CandlesClick(object sender, RoutedEventArgs e)
+		{
+			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+			var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
+
+			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
 		}
 	}
 }
