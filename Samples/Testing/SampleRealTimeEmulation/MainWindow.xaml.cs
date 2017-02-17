@@ -245,6 +245,7 @@ namespace SampleRealTimeEmulation
 
 			_connector.RegisterMarketDepth(security);
 			_connector.RegisterTrades(security);
+			_connector.RegisterSecurity(security);
 
 			_candleSeries = new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg);
 			_candleManager.Start(_candleSeries);
