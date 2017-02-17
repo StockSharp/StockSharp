@@ -9,6 +9,7 @@ P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Parameters/summary;DocStr790
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Category/summary;DocStr7906
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Description/summary;DocStr7907
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Revision/summary;DocStr9071
+P:StockSharp.Xaml.Diagram.CompositionDiagramElement.PublishedId/summary;DocStr9530
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable/summary;DocStr7914
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Type/summary;DocStr9200
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors/summary;DocStr7915
@@ -40,7 +41,7 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Undo/summary;DocStr9268
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.CanRedo/summary;DocStr9267
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.CanRedo/returns;DocStr8459
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Redo/summary;DocStr9269
-M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId/summary;DocStr9227
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId(System.Nullable{System.Guid})/summary;DocStr9227
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/returns;DocStr1116

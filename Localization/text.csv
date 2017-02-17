@@ -13741,3 +13741,8 @@ DocStr9520;In sparsed book shown quotes with no active orders. The volume of the
 DocStr9523;In sparsed collection shown quotes with no active orders. The volume of these quotes is 0;В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
 DocStr9524;Security to edit;Инструмент для редактирования
 DocStr9525;Securities to edit;Инструменты для редактирования
+DocStr9526;Determine the {0} is candle data type;Определить, является ли тип данных {0} свечой
+DocStr9527;The data type;Тип данных
+DocStr9528;{0}, if data type is candle, otherwise, {1};{0}, если тип данных является свечой, иначе, {1}
+DocStr9529;Convert {0} message to {1} criteria;Преобразовать сообщение {0} в критерий поиска {1}
+DocStr9530;The published strategy identifier;Идентификатор опубликованной стратегии

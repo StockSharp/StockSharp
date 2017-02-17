@@ -866,6 +866,8 @@ F:StockSharp.Messages.OrderStatus.Cancelled/summary;DocStr4416
 F:StockSharp.Messages.OrderStatus.Matched/summary;DocStr4417
 F:StockSharp.Messages.OrderStatus.RejectedBySystem/summary;DocStr4418
 T:StockSharp.Messages.OrderStatusMessage/summary;DocStr4419
+P:StockSharp.Messages.OrderStatusMessage.From/summary;Str344
+P:StockSharp.Messages.OrderStatusMessage.To/summary;Str346
 M:StockSharp.Messages.OrderStatusMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderStatusMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.OrderStatusMessage.Clone/returns;DocStr1116

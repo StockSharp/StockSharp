@@ -59,6 +59,11 @@
             The content revision.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.PublishedId">
+      <summary>
+            The published strategy identifier.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable">
       <summary>
             Is it possible to edit a composite element diagram.
@@ -172,7 +177,7 @@
             Restore the state of some models to after the current state.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId(System.Nullable{System.Guid})">
       <summary>
             Update <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" /> for composition elements.
             </summary>
