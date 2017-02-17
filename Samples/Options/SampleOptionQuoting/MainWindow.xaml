@@ -27,9 +27,14 @@
 		</Grid.RowDefinitions>
 
 		<Button x:Name="SettingsBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" />
-		<Button x:Name="Connect" Content="{x:Static loc:LocalizedStrings.XamlStr666}" Grid.Row="0" Grid.Column="1" Click="ConnectClick" />
+        <Button x:Name="ConnectBtn" Content="{x:Static loc:LocalizedStrings.XamlStr666}" Grid.Row="0" Grid.Column="1" Click="ConnectClick" />
 
-		<TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock Grid.Column="3" VerticalAlignment="Center">
+					<Run Text="{x:Static loc:LocalizedStrings.EvaluateGreeks}" />:
+        </TextBlock>
+        <xaml:Level1FieldsComboBox x:Name="Level1FieldsCtrl" Grid.Column="4" Grid.ColumnSpan="2" EditValueChanged="Level1FieldsCtrl_OnEditValueChanged"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
 			<Run Text="{x:Static loc:LocalizedStrings.UnderlyingAsset}"/>:
 		</TextBlock>
 		<ComboBox x:Name="Assets" Grid.Column="1" Grid.Row="2" DisplayMemberPath="Code" SelectionChanged="Assets_OnSelectionChanged" />
