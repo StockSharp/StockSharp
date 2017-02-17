@@ -158,6 +158,16 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Determine the <paramref name="type"/> is candle data type.
+		/// </summary>
+		/// <param name="type">The data type.</param>
+		/// <returns><see langword="true" />, if data type is candle, otherwise, <see langword="false" />.</returns>
+		public static bool IsCandleDataType(this MarketDataTypes type)
+		{
+			return _candleDataTypes.ContainsValue(type);
+		}
+
+		/// <summary>
 		/// To convert the type of candles <see cref="MarketDataTypes"/> into type of message <see cref="MessageTypes"/>.
 		/// </summary>
 		/// <param name="type">The candles type.</param>
@@ -581,6 +591,43 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Convert <see cref="SecurityLookupMessage"/> message to <see cref="Security"/> criteria.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		/// <returns>Criteria.</returns>
+		public static Security ToLookupCriteria(this SecurityLookupMessage message, IExchangeInfoProvider exchangeInfoProvider)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
+			return new Security
+			{
+				Code = message.SecurityId.SecurityCode,
+				Board = message.SecurityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetExchangeBoard(message.SecurityId.BoardCode),
+				ExternalId = message.SecurityId.ToExternalId(),
+				Name = message.Name,
+				Class = message.Class,
+				Type = message.SecurityType,
+				ExpiryDate = message.ExpiryDate,
+				ShortName = message.ShortName,
+				VolumeStep = message.VolumeStep,
+				Multiplier = message.Multiplier,
+				PriceStep = message.PriceStep,
+				Decimals = message.Decimals,
+				Currency = message.Currency,
+				SettlementDate = message.SettlementDate,
+				OptionType = message.OptionType,
+				Strike = message.Strike,
+				BinaryOptionType = message.BinaryOptionType,
+				UnderlyingSecurityId = message.UnderlyingSecurityCode.IsEmpty() ? null : _defaultGenerator.GenerateId(message.UnderlyingSecurityCode, message.SecurityId.BoardCode)
+			};
+		}
+
+		/// <summary>
 		/// Convert <see cref="Security"/> criteria to <see cref="SecurityLookupMessage"/>.
 		/// </summary>
 		/// <param name="criteria">Criteria.</param>
@@ -623,6 +670,9 @@ namespace StockSharp.Algo
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
+
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			return new Security
 			{

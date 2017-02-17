@@ -43716,5 +43716,65 @@ namespace StockSharp.Localization
 		/// Trailing reference price
 		/// </summary>
 		public static string TrailingReferencePrice => GetString(TrailingReferencePriceKey);
+
+		/// <summary>
+		/// FIX server
+		/// </summary>
+		public const string FixServerKey = nameof(FixServer);
+
+		/// <summary>
+		/// FIX server
+		/// </summary>
+		public static string FixServer => GetString(FixServerKey);
+
+		/// <summary>
+		/// FIX server, spread live and historical market data.
+		/// </summary>
+		public const string HydraFixServerKey = nameof(HydraFixServer);
+
+		/// <summary>
+		/// FIX server, spread live and historical market data.
+		/// </summary>
+		public static string HydraFixServer => GetString(HydraFixServerKey);
+
+		/// <summary>
+		/// Candle max days
+		/// </summary>
+		public const string CandleMaxDaysKey = nameof(CandleMaxDays);
+
+		/// <summary>
+		/// Candle max days
+		/// </summary>
+		public static string CandleMaxDays => GetString(CandleMaxDaysKey);
+
+		/// <summary>
+		/// The maximum number of days available to download historical candles.
+		/// </summary>
+		public const string CandleMaxDaysDescriptionKey = nameof(CandleMaxDaysDescription);
+
+		/// <summary>
+		/// The maximum number of days available to download historical candles.
+		/// </summary>
+		public static string CandleMaxDaysDescription => GetString(CandleMaxDaysDescriptionKey);
+
+		/// <summary>
+		/// Tick max days
+		/// </summary>
+		public const string TickMaxDaysKey = nameof(TickMaxDays);
+
+		/// <summary>
+		/// Tick max days
+		/// </summary>
+		public static string TickMaxDays => GetString(TickMaxDaysKey);
+
+		/// <summary>
+		/// The maximum number of days available to download historical tick data.
+		/// </summary>
+		public const string TickMaxDaysDescriptionKey = nameof(TickMaxDaysDescription);
+
+		/// <summary>
+		/// The maximum number of days available to download historical tick data.
+		/// </summary>
+		public static string TickMaxDaysDescription => GetString(TickMaxDaysDescriptionKey);
 	}
 }

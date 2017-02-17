@@ -39,7 +39,7 @@ namespace SampleTransaq
 			_candleSeries = candleSeries;
 			_trader = MainWindow.Instance.Trader;
 
-			Chart.ChartTheme = "ExpressionDark";
+			Chart.ChartTheme = ChartThemes.ExpressionDark;
 
 			var area = new ChartArea();
 			Chart.Areas.Add(area);

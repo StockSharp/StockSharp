@@ -375,39 +375,39 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// To convert string representation of the candle argument into typified.
 		/// </summary>
-		/// <param name="type">The type of candle message.</param>
+		/// <param name="messageType">The type of candle message.</param>
 		/// <param name="str">The string representation of the argument.</param>
 		/// <returns>Argument.</returns>
-		public static object ToCandleArg(this Type type, string str)
+		public static object ToCandleArg(this Type messageType, string str)
 		{
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
 
 			if (str.IsEmpty())
 				throw new ArgumentNullException(nameof(str));
 
-			if (type == typeof(TimeFrameCandleMessage))
+			if (messageType == typeof(TimeFrameCandleMessage))
 			{
 				return str.Replace('-', ':').To<TimeSpan>();
 			}
-			else if (type == typeof(TickCandleMessage))
+			else if (messageType == typeof(TickCandleMessage))
 			{
 				return str.To<int>();
 			}
-			else if (type == typeof(VolumeCandleMessage))
+			else if (messageType == typeof(VolumeCandleMessage))
 			{
 				return str.To<decimal>();
 			}
-			else if (type == typeof(RangeCandleMessage) || type == typeof(RenkoCandleMessage))
+			else if (messageType == typeof(RangeCandleMessage) || messageType == typeof(RenkoCandleMessage))
 			{
 				return str.To<Unit>();
 			}
-			else if (type == typeof(PnFCandleMessage))
+			else if (messageType == typeof(PnFCandleMessage))
 			{
 				return str.To<PnFArg>();
 			}
 			else
-				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 		}
 
 		/// <summary>

@@ -129,13 +129,13 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// To get the candles storage the specified instrument.
 		/// </summary>
-		/// <param name="candleType">The candle type.</param>
+		/// <param name="candleMessageType">The type of candle message.</param>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">Candle arg.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The candles storage.</returns>
-		IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+		IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleMessageType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the <see cref="ExecutionMessage"/> storage the specified instrument.

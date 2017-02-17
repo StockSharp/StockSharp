@@ -102,6 +102,7 @@ namespace SampleRealTimeEmulation
 			_connector.EmulationAdapter.Emulator.Settings.ConvertTime = true;
 
 			SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_connector);
+			SecurityPicker.MarketDataProvider = _connector;
 
 			_candleManager = new CandleManager(_connector);
 
@@ -245,6 +246,7 @@ namespace SampleRealTimeEmulation
 
 			_connector.RegisterMarketDepth(security);
 			_connector.RegisterTrades(security);
+			_connector.RegisterSecurity(security);
 
 			_candleSeries = new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg);
 			_candleManager.Start(_candleSeries);
