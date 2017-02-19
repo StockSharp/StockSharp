@@ -154,7 +154,7 @@ DerivedString;Derived (string);Производная (строка)
 DerivedStringDesc;Derived order ID (string value).;Идентификатор производной заявки (строковое значение).
 Price;Price;Цена
 OrderPrice;Order price.;Цена заявки.
-OrderVolume;Number of contracts in an order.;Количество контрактов в заявке.
+OrderVolume;Number of contracts in the order.;Количество контрактов в заявке.
 VisibleVolume;Visible volume;Видимый объем
 Str127;Visible quantity of contracts in order.;Видимое количество контрактов в заявке.
 Str128;Direction;Направление
@@ -577,7 +577,7 @@ Str603;Security IDs in other systems;Идентификаторы инструм
 TickTrade;Tick trade.;Тиковая сделка.
 Str605;Trade time.;Время совершения сделки.
 Str606;Trade received local time.;Локальное время получения сделки.
-TradeVolume;Number of contracts in a trade.;Количество контрактов в сделке.
+TradeVolume;Number of contracts in the trade.;Количество контрактов в сделке.
 Str608;Order side (buy or sell), which led to the trade.;Направление заявки (покупка или продажа), которая привела к сделке.
 SystemTrade;System trade;Системная сделка
 IsSystemTrade;Is a system trade.;Является ли сделка системной.

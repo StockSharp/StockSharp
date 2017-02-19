@@ -102,7 +102,7 @@ namespace StockSharp.BusinessEntities
 		public DateTimeOffset LocalTime { get; set; }
 
 		/// <summary>
-		/// Number of contracts in a trade.
+		/// Number of contracts in the trade.
 		/// </summary>
 		[DataMember]
 		[Display(

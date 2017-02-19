@@ -1578,12 +1578,12 @@ namespace StockSharp.Localization
 		public static string OrderPrice => GetString(OrderPriceKey);
 
 		/// <summary>
-		/// Number of contracts in an order.
+		/// Number of contracts in the order.
 		/// </summary>
 		public const string OrderVolumeKey = nameof(OrderVolume);
 
 		/// <summary>
-		/// Number of contracts in an order.
+		/// Number of contracts in the order.
 		/// </summary>
 		public static string OrderVolume => GetString(OrderVolumeKey);
 
@@ -5808,12 +5808,12 @@ namespace StockSharp.Localization
 		public static string Str606 => GetString(Str606Key);
 
 		/// <summary>
-		/// Number of contracts in a trade.
+		/// Number of contracts in the trade.
 		/// </summary>
 		public const string TradeVolumeKey = nameof(TradeVolume);
 
 		/// <summary>
-		/// Number of contracts in a trade.
+		/// Number of contracts in the trade.
 		/// </summary>
 		public static string TradeVolume => GetString(TradeVolumeKey);
 

@@ -40,7 +40,7 @@ namespace StockSharp.Messages
 		public decimal Price { get; set; }
 
 		/// <summary>
-		/// Number of contracts in an order.
+		/// Number of contracts in the order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]

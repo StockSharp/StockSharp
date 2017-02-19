@@ -298,7 +298,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _volume;
 
 		/// <summary>
-		/// Number of contracts in an order.
+		/// Number of contracts in the order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
