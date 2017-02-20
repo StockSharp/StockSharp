@@ -39,6 +39,7 @@ namespace SampleOptionQuoting
 	using StockSharp.Algo.Strategies.Derivatives;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
@@ -173,8 +174,15 @@ namespace SampleOptionQuoting
 
 				_isDirty = false;
 
-				RefreshSmile();
-				RefreshChart();
+				try
+				{
+					RefreshSmile();
+					RefreshChart();
+				}
+				catch (Exception excp)
+				{
+					excp.LogError();
+				}
 			};
 			timer.Start();
 
@@ -513,14 +521,8 @@ namespace SampleOptionQuoting
 
 			var options = asset.GetDerivatives(Connector);
 
-			// TODO remove
-			options = Connector.Securities.Where(s => s.Type == SecurityTypes.Option && s.Id.StartsWith("RI") && s.ExpiryDate > DateTime.Today);
-
 			foreach (var security in options)
 			{
-				// TODO remove
-				security.UnderlyingSecurityId = asset.Id; 
-
 				_model.Add(security);
 				_options.Add(security);
 			}
