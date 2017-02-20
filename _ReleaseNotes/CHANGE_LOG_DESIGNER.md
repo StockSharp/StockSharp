@@ -1,5 +1,16 @@
 StockSharp Designer Change log
 ========================
+###current:
+* (bug) Fix splash screen http://stocksharp.ru/posts/m/39084/
+* (feature) Option basic strategy.
+* (bug) Fix grouped market depth. http://stocksharp.ru/posts/m/38969/
+* (feature) Multi external sockets for C# strategy. 
+* (bug) Fix storage window layout http://stocksharp.ru/posts/m/39137/
+* (bug) Partial fix small tf candles http://stocksharp.ru/posts/m/39176/
+* (feature) Storage format and data type added into ribbon http://stocksharp.ru/posts/m/39177/
+* (bug) Gallery identifiers fix http://stocksharp.ru/posts/m/39180/
+* (bug) Crash fix http://stocksharp.ru/posts/m/39181/
+
 ###v4.3.19.4:
 * (bug) FIX connection establish fix http://stocksharp.ru/posts/m/37571/
 * (bug) x86 launch fix http://stocksharp.ru/posts/m/37572/
