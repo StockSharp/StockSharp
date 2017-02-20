@@ -930,7 +930,7 @@
             Chart drawing data item.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Time">
+    <member name="P:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.TimeStamp">
       <summary>
             The time stamp of the new data generation.
             </summary>
@@ -944,12 +944,12 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartCandleElement,System.Object,System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle,System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
       <summary>
             Put the candle data.
             </summary>
       <param name="element">The chart element representing a candle.</param>
-      <param name="candleArg">Candle arg.</param>
+      <param name="candle">Candle.</param>
       <param name="openPrice">Opening price.</param>
       <param name="highPrice">Highest price.</param>
       <param name="lowPrice">Lowest price.</param>
@@ -957,27 +957,18 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartCandleElement,System.Object,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Tuple{System.Decimal,System.Decimal}[],System.Nullable{System.Decimal})">
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Tuple{System.Decimal,System.Decimal}[],System.Nullable{System.Decimal})">
       <summary>
             Put the candle data.
             </summary>
       <param name="element">The chart element representing a candle.</param>
-      <param name="candleArg">Candle arg.</param>
+      <param name="candle">Candle.</param>
       <param name="openPrice">Opening price.</param>
       <param name="highPrice">Highest price.</param>
       <param name="lowPrice">Lowest price.</param>
       <param name="closePrice">Closing price.</param>
       <param name="priceLevels">Price levels.</param>
       <param name="priceStep">Minimum price step.</param>
-      <returns>
-        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartCandleElement,System.Tuple{System.Object,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Tuple{System.Decimal,System.Decimal}[],System.Nullable{System.Decimal}})">
-      <summary>
-            Put the candle data.
-            </summary>
-      <param name="element">The chart element representing a candle.</param>
-      <param name="candle">The candle data.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
@@ -1004,19 +995,10 @@
             Put the trade data.
             </summary>
       <param name="element">The chart element representing orders.</param>
-      <param name="tradeId">Trade ID.</param>
+      <param name="orderId">Order ID.</param>
       <param name="side">Order side (buy or sell).</param>
-      <param name="price">Trade price.</param>
-      <param name="volume">Number of contracts in a trade.</param>
-      <returns>
-        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartOrderElement,System.Tuple{System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal})">
-      <summary>
-            Put the order data.
-            </summary>
-      <param name="element">The chart element representing orders.</param>
-      <param name="order">The order value.</param>
+      <param name="price">Order price.</param>
+      <param name="volume">Number of contracts in the order.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
@@ -1037,16 +1019,7 @@
       <param name="tradeId">Trade ID.</param>
       <param name="side">Order side (buy or sell).</param>
       <param name="price">Trade price.</param>
-      <param name="volume">Number of contracts in a trade.</param>
-      <returns>
-        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Tuple{System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal})">
-      <summary>
-            Put the order data.
-            </summary>
-      <param name="element">The chart element representing trades.</param>
-      <param name="trade">The trade value.</param>
+      <param name="volume">Number of contracts in the trade.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
@@ -1077,7 +1050,7 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" />.
             </summary>
-      <param name="offset">The time stamp of the new data generation.</param>
+      <param name="timeStamp">The time stamp of the new data generation.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
@@ -1705,7 +1678,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanelOrderSettings.Volume">
       <summary>
-            Number of contracts in an order.
+            Number of contracts in the order.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanelOrderSettings.Load(Ecng.Serialization.SettingsStorage)">

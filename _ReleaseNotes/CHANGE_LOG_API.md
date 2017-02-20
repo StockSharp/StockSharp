@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.21:
 * (feature) IConnector.OrderStatusFailed
 * (bug) CQG fixes.
 * (bug) InteractiveBrokers fixes.
@@ -38,6 +38,8 @@ StockSharp API Change log
 * (bug) FIX server. Security list error response fix.
 * (bug) PortfolioGrid refresh fix.
 * (feature) FIX connector. Candles support.
+* (bug) CandleSettingsEditor fix. https://github.com/StockSharp/StockSharp/issues/290
+* (bug) Fix http://stocksharp.ru/forum/8058/problemy-s-sootvetstviem-neskolkih-kodov-klienta-i-torgovogo-scheta-v-kvike/
 
 ###v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
