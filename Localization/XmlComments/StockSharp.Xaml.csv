@@ -381,7 +381,7 @@ P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity/summary;Continuous
 M:StockSharp.Xaml.ContinuousSecurityWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.CredentialsWindow/summary;DocStr8182
 M:StockSharp.Xaml.CredentialsWindow.#ctor/summary;DocStr1
-P:StockSharp.Xaml.CredentialsWindow.Email/summary;DocStr36
+P:StockSharp.Xaml.CredentialsWindow.Email/summary;Email
 P:StockSharp.Xaml.CredentialsWindow.Password/summary;Password
 P:StockSharp.Xaml.CredentialsWindow.AutoLogon/summary;XamlStr78
 P:StockSharp.Xaml.CredentialsWindow.IsLoggedIn/summary;DocStr8183

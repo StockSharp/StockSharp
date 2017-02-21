@@ -43776,5 +43776,45 @@ namespace StockSharp.Localization
 		/// The maximum number of days available to download historical tick data.
 		/// </summary>
 		public static string TickMaxDaysDescription => GetString(TickMaxDaysDescriptionKey);
+
+		/// <summary>
+		/// Sound
+		/// </summary>
+		public const string SoundKey = nameof(Sound);
+
+		/// <summary>
+		/// Sound
+		/// </summary>
+		public static string Sound => GetString(SoundKey);
+
+		/// <summary>
+		/// Popup window
+		/// </summary>
+		public const string PopupKey = nameof(Popup);
+
+		/// <summary>
+		/// Popup window
+		/// </summary>
+		public static string Popup => GetString(PopupKey);
+
+		/// <summary>
+		/// SMS
+		/// </summary>
+		public const string SmsKey = nameof(Sms);
+
+		/// <summary>
+		/// SMS
+		/// </summary>
+		public static string Sms => GetString(SmsKey);
+
+		/// <summary>
+		/// Log file
+		/// </summary>
+		public const string LogFileKey = nameof(LogFile);
+
+		/// <summary>
+		/// Log file
+		/// </summary>
+		public static string LogFile => GetString(LogFileKey);
 	}
 }

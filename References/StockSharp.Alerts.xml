@@ -281,7 +281,7 @@
     </member>
     <member name="F:StockSharp.Alerts.AlertNotifications.Log">
       <summary>
-            Logging.
+            Log file.
             </summary>
     </member>
     <member name="T:StockSharp.Alerts.IAlertNotificationService">

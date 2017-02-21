@@ -82,7 +82,7 @@ M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Bool
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32})/returns;DocStr9090
 T:StockSharp.Community.IAuthenticationService/summary;DocStr2997
 M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/summary;DocStr2963
-M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/param/email;DocStr36
+M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/param/email;Email
 M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/param/password;Password
 M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/returns;DocStr138
 M:StockSharp.Community.IAuthenticationService.Logout(System.Guid)/summary;DocStr2964
@@ -301,7 +301,7 @@ M:StockSharp.Community.ProfileClient.GetUserProfile(System.Int64)/param/userId;D
 M:StockSharp.Community.ProfileClient.GetUserProfile(System.Int64)/returns;DocStr9036
 T:StockSharp.Community.ServerCredentials/summary;DocStr3074
 M:StockSharp.Community.ServerCredentials.#ctor/summary;DocStr1
-P:StockSharp.Community.ServerCredentials.Email/summary;DocStr36
+P:StockSharp.Community.ServerCredentials.Email/summary;Email
 P:StockSharp.Community.ServerCredentials.Password/summary;Password
 P:StockSharp.Community.ServerCredentials.AutoLogon/summary;XamlStr78
 M:StockSharp.Community.ServerCredentials.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

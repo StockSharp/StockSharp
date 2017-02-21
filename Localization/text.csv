@@ -3601,7 +3601,7 @@ XamlStr94;Register orders by click;Выставлять заявки с граф
 XamlStr97;Generator (depth);Генератор (стакан)
 XamlStr98;Size of market depth. Can be trimmed if size in storage is bigger than specified;Глубина стакана. Обрезается, если глубина в хранилище больше указанной
 Year;Year;Год
-Speech;Speech;Голос
+Speech;Speech;Речь
 XamlStr106;Graphical monitoring;Графический мониторинг
 XamlStr108;Yes;Да
 XamlStr109;Data;Данные
@@ -4411,6 +4411,10 @@ CandleMaxDays;Candle max days;Количество дней для свечей
 CandleMaxDaysDescription;The maximum number of days available to download historical candles.;Максимальное количество дней, доступных для загрузки истории свечей.
 TickMaxDays;Tick max days;Количество дней для тиков
 TickMaxDaysDescription;The maximum number of days available to download historical tick data.;Максимальное количество дней, доступных для загрузки истории тиковых данных.
+Sound;Sound;Звук
+Popup;Popup window;Всплывающее окно
+Sms;SMS;SMS
+LogFile;Log file;Лог-файл
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -4443,12 +4447,6 @@ DocStr28;Panel schema parameter modification;Панель редактирова
 DocStr29;{0} for {1};{0} для {1}
 DocStr30;Schema modification window;Окно редактирования схемы
 DocStr31;Alert types;Типы сигналов
-DocStr32;Sound;Звуковой
-DocStr33;Speech;Речевой
-DocStr34;Popup window;Всплывающим окном
-DocStr35;SMS;SMS
-DocStr36;Email;Email
-DocStr37;Logging;Логированием
 DocStr38;A strongly-typed resource class, for looking up localized strings, etc;A strongly-typed resource class, for looking up localized strings, etc
 DocStr39;Returns the cached ResourceManager instance used by this class;Returns the cached ResourceManager instance used by this class
 DocStr40;Overrides the current thread's CurrentUICulture property for all resource lookups using this strongly typed resource class;Overrides the current thread's CurrentUICulture property for all resource lookups using this strongly typed resource class
