@@ -471,7 +471,7 @@
     </member>
     <member name="F:StockSharp.Transaq.TransaqAddresses.FinamDemo">
       <summary>
-            Финам демо сервер. IP адрес 78.41.194.72, порт 3939.
+            Финам демо сервер. IP адрес tr1-demo5.finam.ru, порт 3939.
             </summary>
     </member>
     <member name="F:StockSharp.Transaq.TransaqAddresses.FinamReal1">

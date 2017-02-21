@@ -1,5 +1,9 @@
 StockSharp API Change log
 ========================
+###current:
+* (bug) SampleOptionsQuoting fix.
+* (bug) Transaq. Demo address fix.
+
 ###v4.3.21:
 * (feature) IConnector.OrderStatusFailed
 * (bug) CQG fixes.
