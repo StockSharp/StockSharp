@@ -41298,6 +41298,16 @@ namespace StockSharp.Localization
 		public static string TemplateTxtLevel1 => GetString(TemplateTxtLevel1Key);
 
 		/// <summary>
+		/// Options greeks txt export template.
+		/// </summary>
+		public const string TemplateTxtOptionsKey = nameof(TemplateTxtOptions);
+
+		/// <summary>
+		/// Options greeks txt export template.
+		/// </summary>
+		public static string TemplateTxtOptions => GetString(TemplateTxtOptionsKey);
+
+		/// <summary>
 		/// Order log txt export template.
 		/// </summary>
 		public const string TemplateTxtOrderLogKey = nameof(TemplateTxtOrderLog);
@@ -41376,6 +41386,16 @@ namespace StockSharp.Localization
 		/// Level1 template
 		/// </summary>
 		public static string TemplateLevel1 => GetString(TemplateLevel1Key);
+
+		/// <summary>
+		/// Greeks template
+		/// </summary>
+		public const string TemplateOptionsKey = nameof(TemplateOptions);
+
+		/// <summary>
+		/// Greeks template
+		/// </summary>
+		public static string TemplateOptions => GetString(TemplateOptionsKey);
 
 		/// <summary>
 		/// Order log template

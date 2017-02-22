@@ -4158,6 +4158,7 @@ TemplateTxtDepth;Depth txt export template.;Шаблон экспорта в txt
 TemplateTxtTick;Ticks txt export template.;Шаблон экспорта в txt для тиков.
 TemplateTxtCandle;Candles txt export template.;Шаблон экспорта в txt для свечей.
 TemplateTxtLevel1;Level1 txt export template.;Шаблон экспорта в txt для level1.
+TemplateTxtOptions;Options greeks txt export template.;Шаблон экспорта в txt для опционных греков.
 TemplateTxtOrderLog;Order log txt export template.;Шаблон экспорта в txt для лога заявок.
 TemplateTxtTransaction;Transactions txt export template.;Шаблон экспорта в txt для транзакций.
 TemplateTxtSecurity;Security txt export template.;Шаблон экспорта в txt для инструментов.
@@ -4166,6 +4167,7 @@ TemplateDepth;Depth template;Шаблон стаканов
 TemplateTick;Ticks template;Шаблон тиков
 TemplateCandle;Candles template;Шаблон свечей
 TemplateLevel1;Level1 template;Шаблон level1
+TemplateOptions;Greeks template;Шаблон греков
 TemplateOrderLog;Order log template;Шаблон лога заявок
 TemplateTransaction;Transactions template;Шаблон транзакций
 TemplateSecurity;Security template;Шаблон инструментов
