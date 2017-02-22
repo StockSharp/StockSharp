@@ -287,16 +287,15 @@ namespace StockSharp.Algo.Storages
 						{
 							this.AddInfoLog("Loading {0}", loadDate.Date);
 
-							using (var enumerator = _basketStorage.Load(loadDate.UtcDateTime.Date))
-							{
-								// storage for the specified date contains only time messages and clearing events
-								var noData = !enumerator.DataTypes.Except(messageTypes).Any();
+							var messages = _basketStorage.Load(loadDate.UtcDateTime.Date);
 
-								if (noData)
-									EnqueueMessages(loadDate, startTime, token, GetSimpleTimeLine(loadDate).GetEnumerator());
-								else
-									EnqueueMessages(loadDate, startTime, token, enumerator);
-							}
+							// storage for the specified date contains only time messages and clearing events
+							var noData = !messages.DataTypes.Except(messageTypes).Any();
+
+							if (noData)
+								EnqueueMessages(loadDate, startTime, token, GetSimpleTimeLine(loadDate));
+							else
+								EnqueueMessages(loadDate, startTime, token, messages);
 						}
 
 						loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
@@ -315,14 +314,15 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private void EnqueueMessages(DateTimeOffset loadDate, DateTimeOffset startTime, CancellationToken token, IEnumerator<Message> enumerator)
+		private void EnqueueMessages(DateTimeOffset loadDate, DateTimeOffset startTime, CancellationToken token, IEnumerable<Message> messages)
 		{
 			var checkFromTime = loadDate.Date == StartDate.Date && loadDate.TimeOfDay != TimeSpan.Zero;
 			var checkToTime = loadDate.Date == StopDate.Date;
 
-			while (enumerator.MoveNext() && !_isChanged && !token.IsCancellationRequested)
+			foreach (var msg in messages)
 			{
-				var msg = enumerator.Current;
+				if (_isChanged || token.IsCancellationRequested)
+					break;
 
 				var serverTime = msg.GetServerTime();
 

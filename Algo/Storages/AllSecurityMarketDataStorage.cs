@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Storages
 	using System.IO;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Interop;
 
 	using StockSharp.Algo.Candles;
@@ -31,14 +30,6 @@ namespace StockSharp.Algo.Storages
 	class AllSecurityMarketDataStorage<T> : IMarketDataStorage<T>, IMarketDataStorageInfo<T>
 		where T : Message
 	{
-		private sealed class BasketEnumerable : SimpleEnumerable<T>
-		{
-			public BasketEnumerable(Func<IEnumerator<T>> createEnumerator)
-				: base(createEnumerator)
-			{
-			}
-		}
-
 		private readonly Security _security;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider;
 		private readonly BasketMarketDataStorage<T> _basket;
@@ -171,7 +162,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
 		public IEnumerable<T> Load(DateTime date)
 		{
-			return new BasketEnumerable(() => _basket.Load(date));
+			return _basket.Load(date);
 		}
 
 		private readonly Func<T, DateTimeOffset> _getTime;
