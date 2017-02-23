@@ -119,7 +119,7 @@ namespace StockSharp.Algo.Derivatives
 			}
 			else
 			{
-				return provider.LookupById(derivative.UnderlyingSecurityId);
+				return !derivative.UnderlyingSecurityId.IsEmpty() ? provider.LookupById(derivative.UnderlyingSecurityId) : derivative;
 			}
 		}
 
