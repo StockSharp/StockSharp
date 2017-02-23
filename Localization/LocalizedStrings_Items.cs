@@ -43856,5 +43856,15 @@ namespace StockSharp.Localization
 		/// Market depth panel
 		/// </summary>
 		public static string MarketDepthPanel => GetString(MarketDepthPanelKey);
+
+		/// <summary>
+		/// Underlying asset position
+		/// </summary>
+		public const string UnderlyingAssetPositionKey = nameof(UnderlyingAssetPosition);
+
+		/// <summary>
+		/// Underlying asset position
+		/// </summary>
+		public static string UnderlyingAssetPosition => GetString(UnderlyingAssetPositionKey);
 	}
 }
