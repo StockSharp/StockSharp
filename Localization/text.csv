@@ -4417,6 +4417,9 @@ Sound;Sound;Звук
 Popup;Popup window;Всплывающее окно
 Sms;SMS;SMS
 LogFile;Log file;Лог-файл
+NeedToAddMarketDepthPanel;Need to add the market depth panel;Необходимо добавить панель стакана
+MarketDepthPanel;Market depth panel;Панель стакана
+UnderlyingAssetPosition;Underlying asset position;Позиция по базовому активу
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
