@@ -53,13 +53,13 @@ namespace StockSharp.Algo.Storages
 			Exchanges = new ExchangeList(storage) { BulkLoad = true };
 			ExchangeBoards = new ExchangeBoardList(storage) { BulkLoad = true };
 			Securities = new SecurityList(this);
-			Trades = new TradeList(storage);
-			MyTrades = new MyTradeList(storage);
-			Orders = new OrderList(storage);
-			OrderFails = new OrderFailList(storage);
+			//Trades = new TradeList(storage);
+			//MyTrades = new MyTradeList(storage);
+			//Orders = new OrderList(storage);
+			//OrderFails = new OrderFailList(storage);
 			Portfolios = new PortfolioList(storage);
 			Positions = new PositionList(storage);
-			News = new NewsList(storage);
+			//News = new NewsList(storage);
 		}
 
 		/// <summary>
@@ -92,30 +92,30 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public virtual IStoragePositionList Positions { get; }
 
-		/// <summary>
-		/// The list of own trades.
-		/// </summary>
-		public virtual IStorageEntityList<MyTrade> MyTrades { get; }
+		///// <summary>
+		///// The list of own trades.
+		///// </summary>
+		//public virtual IStorageEntityList<MyTrade> MyTrades { get; }
 
-		/// <summary>
-		/// The list of tick trades.
-		/// </summary>
-		public virtual IStorageEntityList<Trade> Trades { get; }
+		///// <summary>
+		///// The list of tick trades.
+		///// </summary>
+		//public virtual IStorageEntityList<Trade> Trades { get; }
 
-		/// <summary>
-		/// The list of orders.
-		/// </summary>
-		public virtual IStorageEntityList<Order> Orders { get; }
+		///// <summary>
+		///// The list of orders.
+		///// </summary>
+		//public virtual IStorageEntityList<Order> Orders { get; }
 
-		/// <summary>
-		/// The list of orders registration and cancelling errors.
-		/// </summary>
-		public virtual IStorageEntityList<OrderFail> OrderFails { get; }
+		///// <summary>
+		///// The list of orders registration and cancelling errors.
+		///// </summary>
+		//public virtual IStorageEntityList<OrderFail> OrderFails { get; }
 
-		/// <summary>
-		/// The list of news.
-		/// </summary>
-		public virtual IStorageEntityList<News> News { get; }
+		///// <summary>
+		///// The list of news.
+		///// </summary>
+		//public virtual IStorageEntityList<News> News { get; }
 
 		/// <summary>
 		/// The time delayed action.
@@ -130,13 +130,13 @@ namespace StockSharp.Algo.Storages
 				Exchanges.DelayAction = _delayAction;
 				ExchangeBoards.DelayAction = _delayAction;
 				Securities.DelayAction = _delayAction;
-				Trades.DelayAction = _delayAction;
-				MyTrades.DelayAction = _delayAction;
-				Orders.DelayAction = _delayAction;
-				OrderFails.DelayAction = _delayAction;
+				//Trades.DelayAction = _delayAction;
+				//MyTrades.DelayAction = _delayAction;
+				//Orders.DelayAction = _delayAction;
+				//OrderFails.DelayAction = _delayAction;
 				Portfolios.DelayAction = _delayAction;
 				Positions.DelayAction = _delayAction;
-				News.DelayAction = _delayAction;
+				//News.DelayAction = _delayAction;
 			}
 		}
 	}

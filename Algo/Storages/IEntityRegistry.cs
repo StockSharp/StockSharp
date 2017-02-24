@@ -59,29 +59,29 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		IStoragePositionList Positions { get; }
 
-		/// <summary>
-		/// The list of own trades.
-		/// </summary>
-		IStorageEntityList<MyTrade> MyTrades { get; }
+		///// <summary>
+		///// The list of own trades.
+		///// </summary>
+		//IStorageEntityList<MyTrade> MyTrades { get; }
 
-		/// <summary>
-		/// The list of tick trades.
-		/// </summary>
-		IStorageEntityList<Trade> Trades { get; }
+		///// <summary>
+		///// The list of tick trades.
+		///// </summary>
+		//IStorageEntityList<Trade> Trades { get; }
 
-		/// <summary>
-		/// The list of orders.
-		/// </summary>
-		IStorageEntityList<Order> Orders { get; }
+		///// <summary>
+		///// The list of orders.
+		///// </summary>
+		//IStorageEntityList<Order> Orders { get; }
 
-		/// <summary>
-		/// The list of orders registration and cancelling errors.
-		/// </summary>
-		IStorageEntityList<OrderFail> OrderFails { get; }
+		///// <summary>
+		///// The list of orders registration and cancelling errors.
+		///// </summary>
+		//IStorageEntityList<OrderFail> OrderFails { get; }
 
-		/// <summary>
-		/// The list of news.
-		/// </summary>
-		IStorageEntityList<News> News { get; }
+		///// <summary>
+		///// The list of news.
+		///// </summary>
+		//IStorageEntityList<News> News { get; }
 	}
 }
