@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Storages.Csv
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
-	using System.Text;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -19,7 +18,6 @@ namespace StockSharp.Algo.Storages.Csv
 		where T : class
 	{
 		private readonly string _fileName;
-		private readonly Encoding _encoding;
 
 		private readonly CachedSynchronizedDictionary<object, T> _items = new CachedSynchronizedDictionary<object, T>();
 		private readonly List<T> _addedItems = new List<T>();
@@ -38,8 +36,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="registry">The CSV storage of trading objects.</param>
 		/// <param name="fileName">CSV file name.</param>
-		/// <param name="encoding">CSV encoding.</param>
-		protected CsvEntityList(CsvEntityRegistry registry, string fileName, Encoding encoding)
+		protected CsvEntityList(CsvEntityRegistry registry, string fileName)
 		{
 			if (registry == null)
 				throw new ArgumentNullException(nameof(registry));
@@ -47,18 +44,17 @@ namespace StockSharp.Algo.Storages.Csv
 			if (fileName == null)
 				throw new ArgumentNullException(nameof(fileName));
 
-			if (encoding == null)
-				throw new ArgumentNullException(nameof(encoding));
-
 			Registry = registry;
 
-			_fileName = System.IO.Path.Combine(Registry.Path, fileName);
-			_encoding = encoding;
+			_fileName = Path.Combine(Registry.Path, fileName);
 		}
 
 		#region IStorageEntityList<T>
 
-		DelayAction IStorageEntityList<T>.DelayAction { get; set; }
+		/// <summary>
+		/// The time delayed action.
+		/// </summary>
+		public DelayAction DelayAction { get; set; }
 
 		T IStorageEntityList<T>.ReadById(object id)
 		{
@@ -174,7 +170,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				using (var stream = new FileStream(_fileName, FileMode.OpenOrCreate))
 				{
-					var reader = new FastCsvReader(stream, _encoding);
+					var reader = new FastCsvReader(stream, Registry.Encoding);
 
 					while (reader.NextLine())
 					{
@@ -244,7 +240,7 @@ namespace StockSharp.Algo.Storages.Csv
 				if (append)
 					stream.Position = stream.Length;
 
-				using (var writer = new CsvFileWriter(stream, _encoding))
+				using (var writer = new CsvFileWriter(stream, Registry.Encoding))
 				{
 					foreach (var item in items)
 						Write(writer, item);

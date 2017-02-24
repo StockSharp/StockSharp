@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Storages.Csv
 		sealed class ExchangeCsvList : CsvEntityList<Exchange>
 		{
 			public ExchangeCsvList(CsvEntityRegistry registry)
-				: base(registry, "exchange.csv", Encoding.UTF8)
+				: base(registry, "exchange.csv")
 			{
 			}
 
@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Storages.Csv
 		sealed class ExchangeBoardCsvList : CsvEntityList<ExchangeBoard>
 		{
 			public ExchangeBoardCsvList(CsvEntityRegistry registry)
-				: base(registry, "exchangeboard.csv", Encoding.UTF8)
+				: base(registry, "exchangeboard.csv")
 			{
 			}
 
@@ -213,7 +213,7 @@ namespace StockSharp.Algo.Storages.Csv
 				using (var stream = new MemoryStream())
 				{
 					serializer.Serialize(item, stream);
-					return Encoding.UTF8.GetString(stream.ToArray()).Remove(Environment.NewLine).Replace("\"", "'");
+					return Registry.Encoding.GetString(stream.ToArray()).Remove(Environment.NewLine).Replace("\"", "'");
 				}
 			}
 
@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Storages.Csv
 					return null;
 
 				var serializer = (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem>());
-				var bytes = Encoding.UTF8.GetBytes(value.Replace("'", "\""));
+				var bytes = Registry.Encoding.GetBytes(value.Replace("'", "\""));
 
 				using (var stream = new MemoryStream(bytes))
 					return serializer.Deserialize(stream);
@@ -234,7 +234,7 @@ namespace StockSharp.Algo.Storages.Csv
 		sealed class SecurityCsvList : CsvEntityList<Security>, IStorageSecurityList
 		{
 			public SecurityCsvList(CsvEntityRegistry registry)
-				: base(registry, "security.csv", Encoding.UTF8)
+				: base(registry, "security.csv")
 			{
 				((ICollectionEx<Security>)this).AddedRange += s => _added?.Invoke(s);
 				((ICollectionEx<Security>)this).RemovedRange += s => _removed?.Invoke(s);
@@ -385,7 +385,7 @@ namespace StockSharp.Algo.Storages.Csv
 		sealed class PortfolioCsvList : CsvEntityList<Portfolio>
 		{
 			public PortfolioCsvList(CsvEntityRegistry registry)
-				: base(registry, "portfolio.csv", Encoding.UTF8)
+				: base(registry, "portfolio.csv")
 			{
 			}
 
@@ -453,7 +453,7 @@ namespace StockSharp.Algo.Storages.Csv
 		sealed class PositionCsvList : CsvEntityList<Position>, IStoragePositionList
 		{
 			public PositionCsvList(CsvEntityRegistry registry)
-				: base(registry, "position.csv", Encoding.UTF8)
+				: base(registry, "position.csv")
 			{
 			}
 
@@ -575,6 +575,23 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public IStorage Storage { get; }
 
+		private Encoding _encoding = Encoding.UTF8;
+
+		/// <summary>
+		/// Encoding.
+		/// </summary>
+		public Encoding Encoding
+		{
+			get { return _encoding; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				_encoding = value;
+			}
+		}
+
 		/// <summary>
 		/// The time delayed action.
 		/// </summary>
@@ -585,16 +602,11 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				_delayAction = value;
 
-				Exchanges.DelayAction = _delayAction;
-				ExchangeBoards.DelayAction = _delayAction;
-				Securities.DelayAction = _delayAction;
-				//Trades.DelayAction = _delayAction;
-				//MyTrades.DelayAction = _delayAction;
-				//Orders.DelayAction = _delayAction;
-				//OrderFails.DelayAction = _delayAction;
-				//Portfolios.DelayAction = _delayAction;
-				//Positions.DelayAction = _delayAction;
-				//News.DelayAction = _delayAction;
+				_exchanges.DelayAction = _delayAction;
+				_exchangeBoards.DelayAction = _delayAction;
+				_securities.DelayAction = _delayAction;
+				_positions.DelayAction = _delayAction;
+				_portfolios.DelayAction = _delayAction;
 			}
 		}
 
@@ -624,33 +636,9 @@ namespace StockSharp.Algo.Storages.Csv
 		public IStoragePositionList Positions => _positions;
 
 		/// <summary>
-		/// The list of own trades.
-		/// </summary>
-		public IStorageEntityList<MyTrade> MyTrades { get { throw new NotSupportedException(); } }
-
-		/// <summary>
-		/// The list of tick trades.
-		/// </summary>
-		public IStorageEntityList<Trade> Trades { get { throw new NotSupportedException(); } }
-
-		/// <summary>
-		/// The list of orders.
-		/// </summary>
-		public IStorageEntityList<Order> Orders { get { throw new NotSupportedException(); } }
-
-		/// <summary>
-		/// The list of orders registration and cancelling errors.
-		/// </summary>
-		public IStorageEntityList<OrderFail> OrderFails { get { throw new NotSupportedException(); } }
-
-		/// <summary>
-		/// The list of news.
-		/// </summary>
-		public IStorageEntityList<News> News { get { throw new NotSupportedException(); } }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvEntityRegistry"/>.
 		/// </summary>
+		/// <param name="path">The path to data directory.</param>
 		public CsvEntityRegistry(string path)
 		{
 			if (path == null)
