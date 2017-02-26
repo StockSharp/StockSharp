@@ -66,13 +66,25 @@ namespace StockSharp.Algo.Storages.Csv
 			return _items.CachedValues.Skip(Count - count).Take(count);
 		}
 
+		private object GetNormalizedKey(T entity)
+		{
+			var key = GetKey(entity);
+
+			var str = key as string;
+
+			if (str != null)
+				return str.ToLowerInvariant();
+
+			return key;
+		}
+
 		/// <summary>
 		/// Save object into storage.
 		/// </summary>
 		/// <param name="entity">Trade object.</param>
 		public void Save(T entity)
 		{
-			var key = GetKey(entity);
+			var key = GetNormalizedKey(entity);
 			var item = _items.TryGetValue(key);
 
 			if (item == null)
@@ -112,7 +124,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			base.OnAdded(item);
 
-			if (_items.TryAdd(GetKey(item), item))
+			if (_items.TryAdd(GetNormalizedKey(item), item))
 				Write(item);
 		}
 
@@ -124,7 +136,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			base.OnRemoved(item);
 
-			_items.Remove(GetKey(item));
+			_items.Remove(GetNormalizedKey(item));
 			Write();
 		}
 
@@ -177,7 +189,7 @@ namespace StockSharp.Algo.Storages.Csv
 						try
 						{
 							var item = Read(reader);
-							var key = GetKey(item);
+							var key = GetNormalizedKey(item);
 
 							_items.Add(key, item);
 							Add(item);
