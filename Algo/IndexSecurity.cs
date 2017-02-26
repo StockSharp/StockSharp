@@ -46,7 +46,7 @@ namespace StockSharp.Algo
 		protected IndexSecurity()
 		{
 			Type = SecurityTypes.Index;
-			Board = ExchangeBoard.Associated;
+			//Board = ExchangeBoard.Associated;
 		}
 
 		/// <summary>
