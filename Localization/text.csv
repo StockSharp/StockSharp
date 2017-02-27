@@ -1377,10 +1377,10 @@ Login;Login;Логин
 Password;Password;Пароль
 Str1449;No transition was specified.;Не указан ни один переход.
 Str1450;Some securities are not filled in.;Некоторые инструменты не заполнены.
-Str1451;Some securities are composite.;Некоторые инструменты являются составными.
+Str1451;Security '{0}' is composite.;Инструмент '{0}' являются составным.
 Str1452;Some dates are not filled in.;Некоторые даты не заполнены.
-Str1453;Some securities are doubled.;Некоторые инструменты дублируются.
-Str1454;Some dates are doubled.;Некоторые даты дублируются.
+Str1453;Security '{0}' is doubled.;Инструмент '{0}' дублируется.
+Str1454;Date '{0}' is doubled.;Дата '{0}' дублируется.
 Str1455;Continuous futures contract built.;Непрерывный фьючерс перестроен.
 Str1456;Insufficient data to automaitcally form a continuous futures contract.;Недостаточно данных для автоматического построения непрерывного фьючерса.
 Str1457;Exit;Выйти

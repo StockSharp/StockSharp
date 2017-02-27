@@ -13768,12 +13768,12 @@ namespace StockSharp.Localization
 		public static string Str1450 => GetString(Str1450Key);
 
 		/// <summary>
-		/// Some securities are composite.
+		/// Security '{0}' is composite.
 		/// </summary>
 		public const string Str1451Key = nameof(Str1451);
 
 		/// <summary>
-		/// Some securities are composite.
+		/// Security '{0}' is composite.
 		/// </summary>
 		public static string Str1451 => GetString(Str1451Key);
 
@@ -13788,22 +13788,22 @@ namespace StockSharp.Localization
 		public static string Str1452 => GetString(Str1452Key);
 
 		/// <summary>
-		/// Some securities are doubled.
+		/// Security '{0}' is doubled.
 		/// </summary>
 		public const string Str1453Key = nameof(Str1453);
 
 		/// <summary>
-		/// Some securities are doubled.
+		/// Security '{0}' is doubled.
 		/// </summary>
 		public static string Str1453 => GetString(Str1453Key);
 
 		/// <summary>
-		/// Some dates are doubled.
+		/// Date '{0}' is doubled.
 		/// </summary>
 		public const string Str1454Key = nameof(Str1454);
 
 		/// <summary>
-		/// Some dates are doubled.
+		/// Date '{0}' is doubled.
 		/// </summary>
 		public static string Str1454 => GetString(Str1454Key);
 
