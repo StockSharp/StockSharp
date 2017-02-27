@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 		T IStorageEntityList<T>.ReadById(object id)
 		{
-			return _items.TryGetValue(id);
+			return _items.TryGetValue(NormalizedKey(id));
 		}
 
 		IEnumerable<T> IStorageEntityList<T>.ReadLasts(int count)
@@ -68,8 +68,11 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private object GetNormalizedKey(T entity)
 		{
-			var key = GetKey(entity);
+			return NormalizedKey(GetKey(entity));
+		}
 
+		private static object NormalizedKey(object key)
+		{
 			var str = key as string;
 
 			if (str != null)
@@ -84,8 +87,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="entity">Trade object.</param>
 		public void Save(T entity)
 		{
-			var key = GetNormalizedKey(entity);
-			var item = _items.TryGetValue(key);
+			var item = _items.TryGetValue(GetNormalizedKey(entity));
 
 			if (item == null)
 				Add(entity);
