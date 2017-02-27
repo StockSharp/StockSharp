@@ -2008,7 +2008,7 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			return baseCode.GetFortsJumps(from, to, code => provider.LookupByCode(code).FirstOrDefault(), throwIfNotExists);
+			return baseCode.GetFortsJumps(from, to, code => provider.LookupByCode(code).FirstOrDefault(s => s.Code.CompareIgnoreCase(code)), throwIfNotExists);
 		}
 
 		/// <summary>
