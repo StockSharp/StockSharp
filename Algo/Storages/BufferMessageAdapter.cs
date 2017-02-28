@@ -104,6 +104,11 @@ namespace StockSharp.Algo.Storages
 			//		return Enumerable.Empty<TMarketData>();
 			//	});
 			//}
+
+			public void Clear()
+			{
+				_data.Clear();
+			}
 		}
 
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _ticksBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
@@ -113,7 +118,7 @@ namespace StockSharp.Algo.Storages
 		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>();
-		private readonly HashSet<Tuple<SecurityId, DataType>> _subscriptions = new HashSet<Tuple<SecurityId, DataType>>();
+		private readonly SynchronizedSet<Tuple<SecurityId, DataType>> _subscriptions = new SynchronizedSet<Tuple<SecurityId, DataType>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BufferMessageAdapter"/>.
@@ -137,8 +142,9 @@ namespace StockSharp.Algo.Storages
 		/// <returns>If subscription was just created, return <see langword="true" />, otherwise <see langword="false" />.</returns>
 		public bool Subscribe(SecurityId securityId, DataType dataType)
 		{
-			return _subscriptions.Add(Tuple.Create(securityId, dataType));
+			return _subscriptions.TryAdd(Tuple.Create(securityId, dataType));
 		}
+
 		/// <summary>
 		/// Update filter with remove a subscription.
 		/// </summary>
@@ -148,6 +154,14 @@ namespace StockSharp.Algo.Storages
 		public bool UnSubscribe(SecurityId securityId, DataType dataType)
 		{
 			return _subscriptions.Remove(Tuple.Create(securityId, dataType));
+		}
+
+		/// <summary>
+		/// Remove all subscriptions.
+		/// </summary>
+		public void ClearSubscriptions()
+		{
+			_subscriptions.Clear();
 		}
 
 		/// <summary>
@@ -226,6 +240,20 @@ namespace StockSharp.Algo.Storages
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_subscriptions.Clear();
+					_ticksBuffer.Clear();
+					_level1Buffer.Clear();
+					_candleBuffer.Clear();
+					_orderLogBuffer.Clear();
+					_orderBooksBuffer.Clear();
+					_transactionsBuffer.Clear();
+					_newsBuffer.Clear();
+					//SendOutMessage(new ResetMessage());
+					break;
+				}
+
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
 
