@@ -479,7 +479,7 @@ Str496;Price spread;Спред по цене
 Str497;Size of price spread.;Размер спреда по цене.
 Str498;Volume spread;Спреда по объему
 Str499;Size of volume spread. If value is negative, then best ask has a larger volume than best bid.;Размер спреда по объему. Если значение отрицательное, значит лучший оффер имеет больший объем, чем лучший бид.
-Str500;Spread;Спред
+Spread;Spread;Спред
 SpreadMiddle;Spread middle;Середина спреда
 Str502;Own trade;Собственная сделка
 Str503;Information about own trade.;Информация о собственной сделке.
@@ -4420,6 +4420,14 @@ LogFile;Log file;Лог-файл
 NeedToAddMarketDepthPanel;Need to add the market depth panel;Необходимо добавить панель стакана
 MarketDepthPanel;Market depth panel;Панель стакана
 UnderlyingAssetPosition;Underlying asset position;Позиция по базовому активу
+TotalBidsPrice;Total price size by bids;Общий ценовой размер по бидам
+TotalAsksPrice;Total price size by offers;Общий ценовой размер по офферам
+TotalBidsVolume;Bids total volume;Общий объем по бидам
+TotalAsksVolume;Asks total volume;Общий объем по офферам
+TotalVolume;Total volume;Общий объем
+TotalPrice;Total price size;Общий ценовой размер
+TotalQuotesCount;Total quotes count;Общее количество котировок
+MaxDepthOfBook;Maximum depth of book;Максимальная глубина стакана
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

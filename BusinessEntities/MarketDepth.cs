@@ -59,6 +59,7 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The default value is 100. If the exceeded the maximum depth the event <see cref="MarketDepth.QuoteOutOfDepth"/> will triggered.
 		/// </remarks>
+		[DisplayNameLoc(LocalizedStrings.MaxDepthOfBookKey)]
 		public int MaxDepth
 		{
 			get { return _maxDepth; }
@@ -126,6 +127,8 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str281Key)]
+		[DescriptionLoc(LocalizedStrings.Str282Key)]
 		public Quote[] Bids 
 		{
 			get
@@ -152,6 +155,8 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str283Key)]
+		[DescriptionLoc(LocalizedStrings.Str284Key)]
 		public Quote[] Asks 
 		{ 
 			get
@@ -175,26 +180,31 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Trading security currency.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
 		/// The best bid. If the order book does not contain bids, will be returned <see langword="null" />.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str291Key)]
 		public Quote BestBid { get; private set; }
 
 		/// <summary>
 		/// The best ask. If the order book does not contain asks, will be returned <see langword="null" />.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str292Key)]
 		public Quote BestAsk { get; private set; }
 
 		/// <summary>
 		/// The best pair. If the order book is empty, will be returned <see langword="null" />.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.BestPairKey)]
 		public MarketDepthPair BestPair => GetPair(0);
 
 		/// <summary>
 		/// To get the total price size by bids.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalBidsPriceKey)]
 		public decimal TotalBidsPrice
 		{
 			get
@@ -207,6 +217,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To get the total price size by offers.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalAsksPriceKey)]
 		public decimal TotalAsksPrice
 		{
 			get
@@ -219,6 +230,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get bids total volume.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalBidsVolumeKey)]
 		public decimal TotalBidsVolume
 		{
 			get
@@ -231,6 +243,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get asks total volume.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalAsksVolumeKey)]
 		public decimal TotalAsksVolume
 		{
 			get
@@ -243,6 +256,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get total volume.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalVolumeKey)]
 		public decimal TotalVolume
 		{
 			get
@@ -255,6 +269,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To get the total price size.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
 		public decimal TotalPrice
 		{
 			get
@@ -267,6 +282,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Total quotes count (bids + asks).
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalQuotesCountKey)]
 		public int Count
 		{
 			get
@@ -281,6 +297,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Depth of book.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str1197Key)]
 		public int Depth
 		{
 			get { return _depth; }

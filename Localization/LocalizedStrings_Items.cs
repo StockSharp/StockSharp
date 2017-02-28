@@ -43866,5 +43866,85 @@ namespace StockSharp.Localization
 		/// Underlying asset position
 		/// </summary>
 		public static string UnderlyingAssetPosition => GetString(UnderlyingAssetPositionKey);
+
+		/// <summary>
+		/// Total price size by bids
+		/// </summary>
+		public const string TotalBidsPriceKey = nameof(TotalBidsPrice);
+
+		/// <summary>
+		/// Total price size by bids
+		/// </summary>
+		public static string TotalBidsPrice => GetString(TotalBidsPriceKey);
+
+		/// <summary>
+		/// Total price size by offers
+		/// </summary>
+		public const string TotalAsksPriceKey = nameof(TotalAsksPrice);
+
+		/// <summary>
+		/// Total price size by offers
+		/// </summary>
+		public static string TotalAsksPrice => GetString(TotalAsksPriceKey);
+
+		/// <summary>
+		/// Bids total volume
+		/// </summary>
+		public const string TotalBidsVolumeKey = nameof(TotalBidsVolume);
+
+		/// <summary>
+		/// Bids total volume
+		/// </summary>
+		public static string TotalBidsVolume => GetString(TotalBidsVolumeKey);
+
+		/// <summary>
+		/// Asks total volume
+		/// </summary>
+		public const string TotalAsksVolumeKey = nameof(TotalAsksVolume);
+
+		/// <summary>
+		/// Asks total volume
+		/// </summary>
+		public static string TotalAsksVolume => GetString(TotalAsksVolumeKey);
+
+		/// <summary>
+		/// Total volume
+		/// </summary>
+		public const string TotalVolumeKey = nameof(TotalVolume);
+
+		/// <summary>
+		/// Total volume
+		/// </summary>
+		public static string TotalVolume => GetString(TotalVolumeKey);
+
+		/// <summary>
+		/// Total price size
+		/// </summary>
+		public const string TotalPriceKey = nameof(TotalPrice);
+
+		/// <summary>
+		/// Total price size
+		/// </summary>
+		public static string TotalPrice => GetString(TotalPriceKey);
+
+		/// <summary>
+		/// Total quotes count
+		/// </summary>
+		public const string TotalQuotesCountKey = nameof(TotalQuotesCount);
+
+		/// <summary>
+		/// Total quotes count
+		/// </summary>
+		public static string TotalQuotesCount => GetString(TotalQuotesCountKey);
+
+		/// <summary>
+		/// Maximum depth of book
+		/// </summary>
+		public const string MaxDepthOfBookKey = nameof(MaxDepthOfBook);
+
+		/// <summary>
+		/// Maximum depth of book
+		/// </summary>
+		public static string MaxDepthOfBook => GetString(MaxDepthOfBookKey);
 	}
 }
