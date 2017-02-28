@@ -780,30 +780,21 @@ namespace StockSharp.Algo.Storages
 
 			return _depthStorages.SafeAdd(Tuple.Create(securityId, (drive ?? DefaultDrive).GetStorageDrive(securityId, typeof(QuoteChangeMessage), null, format)), key =>
 			{
-				if (security is ContinuousSecurity)
-					return new ConvertableContinuousSecurityMarketDataStorage<QuoteChangeMessage, MarketDepth>((ContinuousSecurity)security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), md => md.ToMessage(), md => md.LastChangeTime, (s, d) => GetQuoteMessageStorage(s, d, format), key.Item2);
-				else if (security is IndexSecurity)
-					return new IndexSecurityMarketDataStorage<QuoteChangeMessage>((IndexSecurity)security, null, d => ToSecurity(d.SecurityId), (s, d) => GetQuoteMessageStorage(s, d, format), key.Item2);
-				else if (security.Board == ExchangeBoard.Associated)
-					return new ConvertableAllSecurityMarketDataStorage<QuoteChangeMessage, MarketDepth>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), md => md.LastChangeTime, (s, d) => GetQuoteMessageStorage(s, d, format), key.Item2, ExchangeInfoProvider);
-				else
+				IMarketDataSerializer<QuoteChangeMessage> serializer;
+
+				switch (format)
 				{
-					IMarketDataSerializer<QuoteChangeMessage> serializer;
-
-					switch (format)
-					{
-						case StorageFormats.Binary:
-							serializer = new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider);
-							break;
-						case StorageFormats.Csv:
-							serializer = new MarketDepthCsvSerializer(key.Item1);
-							break;
-						default:
-							throw new ArgumentOutOfRangeException(nameof(format));
-					}
-
-					return new MarketDepthStorage(security, key.Item2, serializer);
+					case StorageFormats.Binary:
+						serializer = new QuoteBinarySerializer(key.Item1, ExchangeInfoProvider);
+						break;
+					case StorageFormats.Csv:
+						serializer = new MarketDepthCsvSerializer(key.Item1);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(format));
 				}
+
+				return new MarketDepthStorage(security, key.Item2, serializer);
 			});
 		}
 
@@ -895,38 +886,21 @@ namespace StockSharp.Algo.Storages
 
 			return _candleStorages.SafeAdd(Tuple.Create(securityId, (drive ?? DefaultDrive).GetStorageDrive(securityId, candleMessageType, arg, format)), key =>
 			{
-				if (security is ContinuousSecurity)
+				IMarketDataSerializer serializer;
+
+				switch (format)
 				{
-					var type = typeof(CandleContinuousSecurityMarketDataStorage<>).Make(candleMessageType);
-
-					Func<CandleMessage, DateTimeOffset> getTime = c => c.OpenTime;
-					Func<CandleMessage, Security> getSecurity = c => ToSecurity(c.SecurityId);
-					//Func<Candle, CandleMessage> toMessage = c => c.ToMessage();
-					//Func<Candle, DateTime> getEntityTime = c => c.OpenTime;
-					Func<Security, IMarketDataDrive, IMarketDataStorage<CandleMessage>> getStorage = (s, d) => GetCandleMessageStorage(candleMessageType, s, arg, d, format);
-
-					return type.CreateInstance<IMarketDataStorage<CandleMessage>>((ContinuousSecurity)security, arg, getTime, getSecurity, getStorage, key.Item2);
+					case StorageFormats.Binary:
+						serializer = typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg, ExchangeInfoProvider);
+						break;
+					case StorageFormats.Csv:
+						serializer = typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg, null);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(format));
 				}
-				else if (security is IndexSecurity)
-					return new IndexSecurityMarketDataStorage<CandleMessage>((IndexSecurity)security, arg, c => ToSecurity(c.SecurityId), (s, d) => GetCandleMessageStorage(candleMessageType, s, arg, d, format), key.Item2);
-				else
-				{
-					IMarketDataSerializer serializer;
 
-					switch (format)
-					{
-						case StorageFormats.Binary:
-							serializer = typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg, ExchangeInfoProvider);
-							break;
-						case StorageFormats.Csv:
-							serializer = typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg, null);
-							break;
-						default:
-							throw new ArgumentOutOfRangeException(nameof(format));
-					}
-
-					return typeof(CandleStorage<,>).Make(candleMessageType, candleMessageType.ToCandleType()).CreateInstance<IMarketDataStorage<CandleMessage>>(security, arg, key.Item2, serializer);
-				}
+				return typeof(CandleStorage<,>).Make(candleMessageType, candleMessageType.ToCandleType()).CreateInstance<IMarketDataStorage<CandleMessage>>(security, arg, key.Item2, serializer);
 			});
 		}
 
@@ -954,30 +928,21 @@ namespace StockSharp.Algo.Storages
 				{
 					case ExecutionTypes.Tick:
 					{
-						if (security is ContinuousSecurity)
-							return new ConvertableContinuousSecurityMarketDataStorage<ExecutionMessage, Trade>((ContinuousSecurity)security, null, t => t.ServerTime, t => ToSecurity(t.SecurityId), t => t.ToMessage(), t => t.Time, (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive);
-						else if (security is IndexSecurity)
-							return new IndexSecurityMarketDataStorage<ExecutionMessage>((IndexSecurity)security, null, d => ToSecurity(d.SecurityId), (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive);
-						else if (security.Board == ExchangeBoard.Associated)
-							return new ConvertableAllSecurityMarketDataStorage<ExecutionMessage, Trade>(security, null, t => t.ServerTime, t => ToSecurity(t.SecurityId), t => t.Time, (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive, ExchangeInfoProvider);
-						else
+						IMarketDataSerializer<ExecutionMessage> serializer;
+
+						switch (format)
 						{
-							IMarketDataSerializer<ExecutionMessage> serializer;
-
-							switch (format)
-							{
-								case StorageFormats.Binary:
-									serializer = new TickBinarySerializer(key.Item1, ExchangeInfoProvider);
-									break;
-								case StorageFormats.Csv:
-									serializer = new TickCsvSerializer(key.Item1);
-									break;
-								default:
-									throw new ArgumentOutOfRangeException(nameof(format));
-							}
-
-							return new TradeStorage(security, mdDrive, serializer);
+							case StorageFormats.Binary:
+								serializer = new TickBinarySerializer(key.Item1, ExchangeInfoProvider);
+								break;
+							case StorageFormats.Csv:
+								serializer = new TickCsvSerializer(key.Item1);
+								break;
+							default:
+								throw new ArgumentOutOfRangeException(nameof(format));
 						}
+
+						return new TradeStorage(security, mdDrive, serializer);
 					}
 					case ExecutionTypes.Transaction:
 					{
@@ -1026,7 +991,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="Candle.Arg"/>.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
 		/// <param name="drive">Storage.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>Market-data storage.</returns>
