@@ -302,17 +302,26 @@ namespace StockSharp.Algo.Storages
 			get { return _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct(); }
 		}
 
-		Type IMarketDataStorage.DataType
+		/// <summary>
+		/// The type of market-data, operated by given storage.
+		/// </summary>
+		public virtual Type DataType
 		{
 			get { throw new NotSupportedException(); }
 		}
 
-		Security IMarketDataStorage.Security
+		/// <summary>
+		/// The instrument, operated by the external storage.
+		/// </summary>
+		public virtual Security Security
 		{
 			get { throw new NotSupportedException(); }
 		}
 
-		object IMarketDataStorage.Arg
+		/// <summary>
+		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.
+		/// </summary>
+		public virtual object Arg
 		{
 			get { throw new NotSupportedException(); }
 		}

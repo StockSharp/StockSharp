@@ -18,15 +18,20 @@ namespace StockSharp.Algo.Storages
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Linq;
 
 	using Ecng.Collections;
 
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
-	class IndexSecurityMarketDataStorage<T> : IMarketDataStorage<T>
+	/// <summary>
+	/// The aggregator-storage, allowing to load data simultaneously market data for <see cref="IndexSecurity"/>.
+	/// </summary>
+	/// <typeparam name="T">Message type.</typeparam>
+	public class IndexSecurityMarketDataStorage<T> : BasketMarketDataStorage<T>
+		where T : Message
 	{
 		private sealed class IndexMarketDataEnumerator : IEnumerator<T>
 		{
@@ -82,11 +87,15 @@ namespace StockSharp.Algo.Storages
 			object IEnumerator.Current => Current;
 		}
 
-		private readonly Func<Security, IMarketDataDrive, IMarketDataStorage<T>> _getStorage;
-		private readonly IndexSecurity _security;
-		private readonly Func<T, Security> _getSecurity;
+		//private readonly Func<Security, IMarketDataDrive, IMarketDataStorage<T>> _getStorage;
+		//private readonly Func<T, Security> _getSecurity;
 
-		public IndexSecurityMarketDataStorage(IndexSecurity security, object arg, Func<T, Security> getSecurity, Func<Security, IMarketDataDrive, IMarketDataStorage<T>> getStorage, IMarketDataStorageDrive drive)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IndexSecurityMarketDataStorage{T}"/>.
+		/// </summary>
+		/// <param name="security">The index, built of instruments. For example, to specify spread at arbitrage or pair trading.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.</param>
+		public IndexSecurityMarketDataStorage(IndexSecurity security, object arg)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -94,121 +103,128 @@ namespace StockSharp.Algo.Storages
 			if (security.InnerSecurities.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(security));
 
-			if (getSecurity == null)
-				throw new ArgumentNullException(nameof(getSecurity));
+			//if (getSecurity == null)
+			//	throw new ArgumentNullException(nameof(getSecurity));
 
-			if (getStorage == null)
-				throw new ArgumentNullException(nameof(getStorage));
+			//if (getStorage == null)
+			//	throw new ArgumentNullException(nameof(getStorage));
 
-			if (drive == null)
-				throw new ArgumentNullException(nameof(drive));
+			//if (drive == null)
+			//	throw new ArgumentNullException(nameof(drive));
 
-			_security = security;
-			_arg = arg;
-			_getSecurity = getSecurity;
-			_getStorage = getStorage;
+			Security = security;
+			Arg = arg;
+			//_getSecurity = getSecurity;
+			//_getStorage = getStorage;
 
-			Drive = drive;
+			//Drive = drive;
 		}
 
-		IEnumerable<DateTime> IMarketDataStorage.Dates
-		{
-			get { return _security.InnerSecurities.SelectMany(s => _getStorage(s, Drive.Drive).Dates).Distinct().OrderBy(); }
-		}
+		//IEnumerable<DateTime> IMarketDataStorage.Dates
+		//{
+		//	get { return _security.InnerSecurities.SelectMany(s => _getStorage(s, Drive.Drive).Dates).Distinct().OrderBy(); }
+		//}
 
-		Type IMarketDataStorage.DataType => typeof(T);
+		/// <summary>
+		/// The type of market-data, operated by given storage.
+		/// </summary>
+		public override Type DataType => typeof(T);
 
-		Security IMarketDataStorage.Security => _security;
+		/// <summary>
+		/// The instrument, operated by the external storage.
+		/// </summary>
+		public override Security Security { get; }
 
-		private readonly object _arg;
+		/// <summary>
+		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.
+		/// </summary>
+		public override object Arg { get; }
 
-		object IMarketDataStorage.Arg => _arg;
+		//public IMarketDataStorageDrive Drive { get; }
 
-		public IMarketDataStorageDrive Drive { get; }
+		//private bool _appendOnlyNew = true;
 
-		private bool _appendOnlyNew = true;
+		//bool IMarketDataStorage.AppendOnlyNew
+		//{
+		//	get { return _appendOnlyNew; }
+		//	set
+		//	{
+		//		_appendOnlyNew = value;
+		//		_security.InnerSecurities.ForEach(s => _getStorage(s, Drive.Drive).AppendOnlyNew = value);
+		//	}
+		//}
 
-		bool IMarketDataStorage.AppendOnlyNew
-		{
-			get { return _appendOnlyNew; }
-			set
-			{
-				_appendOnlyNew = value;
-				_security.InnerSecurities.ForEach(s => _getStorage(s, Drive.Drive).AppendOnlyNew = value);
-			}
-		}
+		//IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
 
-		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
+		//IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
+		//{
+		//	get { throw new NotSupportedException(); }
+		//}
 
-		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
-		{
-			get { throw new NotSupportedException(); }
-		}
+		//public int Save(IEnumerable<T> data)
+		//{
+		//	var count = 0;
 
-		public int Save(IEnumerable<T> data)
-		{
-			var count = 0;
+		//	foreach (var group in data.GroupBy(_getSecurity))
+		//	{
+		//		count += _getStorage(GetParent(group.Key), Drive.Drive).Save(group);
+		//	}
 
-			foreach (var group in data.GroupBy(_getSecurity))
-			{
-				count += _getStorage(GetParent(group.Key), Drive.Drive).Save(group);
-			}
+		//	return count;
+		//}
 
-			return count;
-		}
+		//public void Delete(IEnumerable<T> data)
+		//{
+		//	foreach (var group in data.GroupBy(_getSecurity))
+		//	{
+		//		_getStorage(GetParent(group.Key), Drive.Drive).Delete(group);
+		//	}
+		//}
 
-		public void Delete(IEnumerable<T> data)
-		{
-			foreach (var group in data.GroupBy(_getSecurity))
-			{
-				_getStorage(GetParent(group.Key), Drive.Drive).Delete(group);
-			}
-		}
+		//void IMarketDataStorage.Delete(IEnumerable data)
+		//{
+		//	Delete((IEnumerable<T>)data);
+		//}
 
-		void IMarketDataStorage.Delete(IEnumerable data)
-		{
-			Delete((IEnumerable<T>)data);
-		}
+		//void IMarketDataStorage.Delete(DateTime date)
+		//{
+		//	_security.InnerSecurities.ForEach(s => _getStorage(s, Drive.Drive).Delete(date));
+		//}
 
-		void IMarketDataStorage.Delete(DateTime date)
-		{
-			_security.InnerSecurities.ForEach(s => _getStorage(s, Drive.Drive).Delete(date));
-		}
+		//int IMarketDataStorage.Save(IEnumerable data)
+		//{
+		//	return Save((IEnumerable<T>)data);
+		//}
 
-		int IMarketDataStorage.Save(IEnumerable data)
-		{
-			return Save((IEnumerable<T>)data);
-		}
+		//IEnumerable IMarketDataStorage.Load(DateTime date)
+		//{
+		//	return Load(date);
+		//}
 
-		IEnumerable IMarketDataStorage.Load(DateTime date)
-		{
-			return Load(date);
-		}
+		//IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
+		//{
+		//	throw new NotSupportedException();
+		//}
 
-		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
-		{
-			throw new NotSupportedException();
-		}
+		//public IEnumerable<T> Load(DateTime date)
+		//{
+		//	//return new IndexMarketDataEnumerator(_security.InnerSecurities.Select(s => _getStorage(s).Read(date).GetEnumerator()));
+		//	throw new NotImplementedException();
+		//}
 
-		public IEnumerable<T> Load(DateTime date)
-		{
-			//return new IndexMarketDataEnumerator(_security.InnerSecurities.Select(s => _getStorage(s).Read(date).GetEnumerator()));
-			throw new NotImplementedException();
-		}
+		//private Security GetParent(Security security)
+		//{
+		//	var parent = GetParent(_security, security);
 
-		private Security GetParent(Security security)
-		{
-			var parent = GetParent(_security, security);
+		//	return parent == _security ? security : parent;
+		//}
 
-			return parent == _security ? security : parent;
-		}
-
-		private static Security GetParent(BasketSecurity root, Security security)
-		{
-			if (!root.InnerSecurities.Contains(security))
-				return root.InnerSecurities.OfType<BasketSecurity>().FirstOrDefault(basket => GetParent(basket, security) != null);
-			else
-				return root;
-		}
+		//private static Security GetParent(BasketSecurity root, Security security)
+		//{
+		//	if (!root.InnerSecurities.Contains(security))
+		//		return root.InnerSecurities.OfType<BasketSecurity>().FirstOrDefault(basket => GetParent(basket, security) != null);
+		//	else
+		//		return root;
+		//}
 	}
 }
