@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Candles
 
 	using MoreLinq;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	class IndexSecurityCandleManagerSource : Disposable, ICandleManagerSource
@@ -144,12 +145,20 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
+		private readonly ISecurityProvider _securityProvider;
 		private readonly DateTimeOffset _from;
 		private readonly DateTimeOffset _to;
 		private readonly SynchronizedDictionary<CandleSeries, IndexSeriesInfo> _info = new SynchronizedDictionary<CandleSeries, IndexSeriesInfo>();
 
-		public IndexSecurityCandleManagerSource(ICandleManager candleManager, DateTimeOffset from, DateTimeOffset to)
+		public IndexSecurityCandleManagerSource(ICandleManager candleManager, ISecurityProvider securityProvider, DateTimeOffset from, DateTimeOffset to)
 		{
+			if (candleManager == null)
+				throw new ArgumentNullException(nameof(candleManager));
+
+			if (securityProvider == null)
+				throw new ArgumentNullException(nameof(securityProvider));
+
+			_securityProvider = securityProvider;
 			_from = from;
 			_to = to;
 			CandleManager = candleManager;
@@ -184,7 +193,7 @@ namespace StockSharp.Algo.Candles
 			var basketInfo = new IndexSeriesInfo(CandleManager,
 				series.CandleType,
 				indexSecurity
-					.InnerSecurities
+					.GetInnerSecurities(_securityProvider)
 					.Select(sec => new CandleSeries(series.CandleType, sec, IndexCandleBuilder.CloneArg(series.Arg, sec))
 					{
 						WorkingTime = series.WorkingTime.Clone(),

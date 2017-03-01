@@ -21,6 +21,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Configuration;
 
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -708,6 +709,8 @@ namespace StockSharp.Algo
 
 			protected Security Security { get; }
 			protected IConnector Connector { get; }
+
+			protected static ISecurityProvider SecurityProvider => ConfigManager.GetService<ISecurityProvider>();
 		}
 
 		private sealed class SecurityChangedRule : SecurityRule<Security>
@@ -737,7 +740,7 @@ namespace StockSharp.Algo
 
 				if (basket != null)
 				{
-					if (basket.Contains(security) && _condition(security))
+					if (basket.Contains(SecurityProvider, security) && _condition(security))
 						Activate(security);
 				}
 				else
@@ -769,7 +772,7 @@ namespace StockSharp.Algo
 
 				var basket = sec as BasketSecurity;
 
-				var has = basket?.Contains(trade.Security) ?? trade.Security == sec;
+				var has = basket?.Contains(SecurityProvider, trade.Security) ?? trade.Security == sec;
 
 				if (has)
 					Activate(trade);
@@ -797,7 +800,7 @@ namespace StockSharp.Algo
 
 				var basket = sec as BasketSecurity;
 
-				var has = basket?.Contains(item.Order.Security) ?? item.Order.Security == sec;
+				var has = basket?.Contains(SecurityProvider, item.Order.Security) ?? item.Order.Security == sec;
 
 				if (has)
 					Activate(item);
@@ -840,7 +843,7 @@ namespace StockSharp.Algo
 
 				if (basket != null)
 				{
-					return basket.Contains(security) && _condition(security);
+					return basket.Contains(SecurityProvider, security) && _condition(security);
 				}
 				else
 				{
@@ -859,7 +862,7 @@ namespace StockSharp.Algo
 				var basket = security as BasketSecurity;
 
 				return basket != null
-					? basket.Contains(trade.Security) && _condition(trade.Security)
+					? basket.Contains(SecurityProvider, trade.Security) && _condition(trade.Security)
 					: trade.Security == security && _condition(trade.Security);
 			}
 
@@ -915,7 +918,7 @@ namespace StockSharp.Algo
 			{
 				var basket = security as BasketSecurity;
 
-				return basket?.Contains(depth.Security) ?? depth.Security == security;
+				return basket?.Contains(SecurityProvider, depth.Security) ?? depth.Security == security;
 			}
 
 			protected override void DisposeManaged()

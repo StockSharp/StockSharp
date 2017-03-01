@@ -13,12 +13,14 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-namespace StockSharp.BusinessEntities
+namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Linq;
+
+	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Instruments basket.
@@ -38,24 +40,6 @@ namespace StockSharp.BusinessEntities
 		/// Instruments, from which this basket is created.
 		/// </summary>
 		[Browsable(false)]
-		public abstract IEnumerable<Security> InnerSecurities { get; }
-
-		/// <summary>
-		/// To check whether specified instrument is used now.
-		/// </summary>
-		/// <param name="security">The instrument that should be checked.</param>
-		/// <returns><see langword="true" />, if specified instrument is used now, otherwise <see langword="false" />.</returns>
-		public virtual bool Contains(Security security)
-		{
-			return InnerSecurities.Any(innerSecurity =>
-			{
-				var basket = innerSecurity as BasketSecurity;
-
-				if (basket == null)
-					return innerSecurity == security;
-
-				return basket.Contains(security);
-			});
-		}
+		public abstract IEnumerable<SecurityId> InnerSecurityIds { get; }
 	}
 }

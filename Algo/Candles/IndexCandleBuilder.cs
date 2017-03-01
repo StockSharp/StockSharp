@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Candles
 		private readonly Type _candleType;
 		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, CandleBuffer> _buffers = new CachedSynchronizedOrderedDictionary<DateTimeOffset, CandleBuffer>();
 		private CandleBuffer _lastProcessBuffer;
-		private readonly SynchronizedDictionary<Security, int> _securityIndecies = new SynchronizedDictionary<Security, int>();
+		private readonly SynchronizedDictionary<SecurityId, int> _securityIndecies = new SynchronizedDictionary<SecurityId, int>();
 		private readonly int _bufferSize;
 		private CandleBuffer _sparseBuffer1;
 		private CandleBuffer _sparseBuffer2;
@@ -162,7 +162,7 @@ namespace StockSharp.Algo.Candles
 		{
 			var index = 0;
 
-			foreach (var security in basketSecurity.InnerSecurities)
+			foreach (var security in basketSecurity.InnerSecurityIds)
 			{
 				_securityIndecies[security] = index;
 
@@ -276,7 +276,8 @@ namespace StockSharp.Algo.Candles
 			lock (_buffers.SyncRoot)
 			{
 				var buffer = _buffers.SafeAdd(candle.OpenTime, key => new CandleBuffer(_candleType, candle.OpenTime, candle.CloseTime, _bufferSize, false));
-				buffer.AddCandle(_securityIndecies[candle.Security], candle);
+				var secId = candle.Security.ToSecurityId();
+				buffer.AddCandle(_securityIndecies[secId], candle);
 
 				if (!buffer.IsFilled)
 				{
@@ -292,13 +293,13 @@ namespace StockSharp.Algo.Candles
 						_sparseBuffer1 = new CandleBuffer(_candleType, candle.OpenTime, candle.CloseTime, _bufferSize, true);
 
 					if (!_sparseBuffer1.IsFilled)
-						_sparseBuffer1.AddCandle(_securityIndecies[candle.Security], candle);
+						_sparseBuffer1.AddCandle(_securityIndecies[secId], candle);
 					else
 					{
 						if (_sparseBuffer2 == null)
 							_sparseBuffer2 = new CandleBuffer(_candleType, candle.OpenTime, candle.CloseTime, _bufferSize, true);
 
-						_sparseBuffer2.AddCandle(_securityIndecies[candle.Security], candle);
+						_sparseBuffer2.AddCandle(_securityIndecies[secId], candle);
 
 						// если первая свеча будет построена по размазанному буферу, то разница между временем эти буферов
 						// должна гарантировать, что между ними 
@@ -395,7 +396,7 @@ namespace StockSharp.Algo.Candles
 			}
 			catch (ArithmeticException excp)
 			{
-				throw new ArithmeticException("Build index candle {0} for {1} error.".Put(_security, _security.InnerSecurities.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
+				throw new ArithmeticException("Build index candle {0} for {1} error.".Put(_security, _security.InnerSecurityIds.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
 			}
 		}
 

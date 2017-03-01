@@ -78,7 +78,6 @@
     </Compile>
     <Compile Include="AggregatedQuote.cs" />
     <Compile Include="BasePosition.cs" />
-    <Compile Include="BasketSecurity.cs" />
     <Compile Include="CategoryAttributes.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="ExchangeBoard.cs" />

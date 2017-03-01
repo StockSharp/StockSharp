@@ -1460,6 +1460,51 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To check whether specified instrument is used now.
+		/// </summary>
+		/// <param name="basketSecurity">Instruments basket.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="security">The instrument that should be checked.</param>
+		/// <returns><see langword="true" />, if specified instrument is used now, otherwise <see langword="false" />.</returns>
+		public static bool Contains(this BasketSecurity basketSecurity, ISecurityProvider securityProvider, Security security)
+		{
+			return basketSecurity.GetInnerSecurities(securityProvider).Any(innerSecurity =>
+			{
+				var basket = innerSecurity as BasketSecurity;
+
+				if (basket == null)
+					return innerSecurity == security;
+
+				return basket.Contains(securityProvider, security);
+			});
+		}
+
+		/// <summary>
+		/// Find inner security instancies.
+		/// </summary>
+		/// <param name="security">Instruments basket.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <returns>Instruments, from which this basket is created.</returns>
+		public static IEnumerable<Security> GetInnerSecurities(this BasketSecurity security, ISecurityProvider securityProvider)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (securityProvider == null)
+				throw new ArgumentNullException(nameof(securityProvider));
+
+			return security.InnerSecurityIds.Select(id =>
+			{
+				var innerSec = securityProvider.LookupById(id);
+
+				if (innerSec == null)
+					throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id));
+
+				return innerSec;
+			}).ToArray();
+		}
+
+		/// <summary>
 		/// To filter orders for the given instrument.
 		/// </summary>
 		/// <param name="orders">All orders, in which the required shall be searched for.</param>
@@ -1474,7 +1519,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket?.InnerSecurities.SelectMany(s => Filter(orders, s)) ?? orders.Where(o => o.Security == security);
+			return basket?.InnerSecurityIds.SelectMany(id => orders.Where(o => o.Security.ToSecurityId() == id)) ?? orders.Where(o => o.Security == security);
 		}
 
 		/// <summary>
@@ -1537,7 +1582,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket?.InnerSecurities.SelectMany(s => Filter(trades, s)) ?? trades.Where(t => t.Security == security);
+			return basket?.InnerSecurityIds.SelectMany(id => trades.Where(o => o.Security.ToSecurityId() == id)) ?? trades.Where(t => t.Security == security);
 		}
 
 		/// <summary>
@@ -1570,7 +1615,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket?.InnerSecurities.SelectMany(s => Filter(positions, s)) ?? positions.Where(p => p.Security == security);
+			return basket?.InnerSecurityIds.SelectMany(id => positions.Where(o => o.Security.ToSecurityId() == id)) ?? positions.Where(p => p.Security == security);
 		}
 
 		/// <summary>
@@ -1605,7 +1650,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket == null ? myTrades.Where(t => t.Order.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(myTrades, s));
+			return basket?.InnerSecurityIds.SelectMany(id => myTrades.Where(t => t.Order.Security.ToSecurityId() == id)) ?? myTrades.Where(t => t.Order.Security == security);
 		}
 
 		/// <summary>
@@ -2025,10 +2070,12 @@ namespace StockSharp.Algo
 
 			foreach (var security in securities)
 			{
-				if (security.ExpiryDate == null)
+				var expDate = security.ExpiryDate;
+
+				if (expDate == null)
 					throw new InvalidOperationException(LocalizedStrings.Str698Params.Put(security.Id));
 
-				continuousSecurity.ExpirationJumps.Add(security, (DateTimeOffset)security.ExpiryDate);
+				continuousSecurity.ExpirationJumps.Add(security.ToSecurityId(), expDate.Value);
 			}
 		}
 
@@ -2925,6 +2972,17 @@ namespace StockSharp.Algo
 		/// <param name="provider">The provider of information about instruments.</param>
 		/// <param name="id">Security ID.</param>
 		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+		public static Security LookupById(this ISecurityProvider provider, SecurityId id)
+		{
+			return provider.LookupById(id.ToStringId());
+		}
+
+		/// <summary>
+		/// To get the instrument by the identifier.
+		/// </summary>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="id">Security ID.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
 		public static Security LookupById(this ISecurityProvider provider, string id)
 		{
 			if (provider == null)
@@ -2957,7 +3015,7 @@ namespace StockSharp.Algo
 
 			var secId = nativeIdStorage.TryGetByNativeId(storageName, nativeId);
 
-			return secId == null ? null : provider.LookupById(secId.Value.ToStringId());
+			return secId == null ? null : provider.LookupById(secId.Value);
 		}
 
 		/// <summary>

@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Storages
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (security.InnerSecurities.IsEmpty())
+			if (security.InnerSecurityIds.IsEmpty())
 				throw new ArgumentOutOfRangeException(nameof(security));
 
 			//if (getSecurity == null)
