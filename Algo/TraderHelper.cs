@@ -930,7 +930,7 @@ namespace StockSharp.Algo
 		public static QuoteChangeMessage GetDelta(this QuoteChangeMessage from, QuoteChangeMessage to)
 		{
 			if (from == null)
-				throw new ArgumentNullException(nameof(@from));
+				throw new ArgumentNullException(nameof(from));
 
 			if (to == null)
 				throw new ArgumentNullException(nameof(to));
@@ -993,7 +993,7 @@ namespace StockSharp.Algo
 		public static QuoteChangeMessage AddDelta(this QuoteChangeMessage from, QuoteChangeMessage delta)
 		{
 			if (from == null)
-				throw new ArgumentNullException(nameof(@from));
+				throw new ArgumentNullException(nameof(from));
 
 			if (delta == null)
 				throw new ArgumentNullException(nameof(delta));
@@ -1937,7 +1937,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<DateTimeOffset> GetExpiryDates(this DateTime from, DateTime to)
 		{
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(@from));
+				throw new ArgumentOutOfRangeException(nameof(from));
 
 			for (var year = from.Year; year <= to.Year; year++)
 			{
@@ -1985,7 +1985,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(baseCode));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(@from));
+				throw new ArgumentOutOfRangeException(nameof(from));
 
 			if (getSecurity == null)
 				throw new ArgumentNullException(nameof(getSecurity));

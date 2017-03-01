@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="to">The last time value.</param>
 		/// <param name="values">Ready data collection.</param>
 		public TradeRawConvertableCandleBuilderSource(Security security, DateTimeOffset from, DateTimeOffset to, IEnumerable<Trade> values)
-			: base(security, @from, to, values)
+			: base(security, from, to, values)
 		{
 		}
 
@@ -255,7 +255,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="values">Ready data collection.</param>
 		/// <param name="type">Type of candle depth based data.</param>
 		public DepthRawConvertableCandleBuilderSource(Security security, DateTimeOffset from, DateTimeOffset to, IEnumerable<MarketDepth> values, DepthCandleSourceTypes type)
-			: base(security, @from, to, values)
+			: base(security, from, to, values)
 		{
 			_type = type;
 		}

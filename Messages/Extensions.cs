@@ -228,7 +228,7 @@ namespace StockSharp.Messages
 		public static void CopyExtensionInfo(this IExtendableEntity from, IExtendableEntity to)
 		{
 			if (from == null)
-				throw new ArgumentNullException(nameof(@from));
+				throw new ArgumentNullException(nameof(from));
 
 			if (to == null)
 				throw new ArgumentNullException(nameof(to));
@@ -493,7 +493,7 @@ namespace StockSharp.Messages
 			});
 
 			if (from != CurrencyTypes.RUB && !info.ContainsKey(from))
-				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(from), nameof(@from));
+				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(from), nameof(from));
 
 			if (to != CurrencyTypes.RUB && !info.ContainsKey(to))
 				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(to), nameof(to));

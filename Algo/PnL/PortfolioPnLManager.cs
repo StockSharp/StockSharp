@@ -39,7 +39,7 @@ namespace StockSharp.Algo.PnL
 			PortfolioName = portfolioName;
 		}
 
-		public string PortfolioName { get; private set; }
+		public string PortfolioName { get; }
 
 		/// <summary>
 		/// Total profit-loss.
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.PnL
 		public virtual decimal RealizedPnL => _realizedPnL;
 
 		/// <summary>
-		/// To zero <see cref="PortfolioPnLManager.PnL"/>.
+		/// To zero <see cref="PnL"/>.
 		/// </summary>
 		public void Reset()
 		{

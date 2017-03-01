@@ -35,15 +35,15 @@ namespace XMLCommToHTM.DOM
 		{
 			MemberDom ret;
 			if (memberInfo is MethodInfo)
-				ret = new MethodDom(memberInfo as MethodInfo, doc);
+				ret = new MethodDom((MethodInfo)memberInfo, doc);
 			else if (memberInfo is ConstructorInfo)
-				ret = new ConstructorDom(memberInfo as ConstructorInfo, doc);
+				ret = new ConstructorDom((ConstructorInfo)memberInfo, doc);
 			else if (memberInfo is PropertyInfo)
-				ret = new PropertyDom(memberInfo as PropertyInfo, doc);
+				ret = new PropertyDom((PropertyInfo)memberInfo, doc);
 			else if (memberInfo is EventInfo)
-				ret = new EventDom(memberInfo as EventInfo, doc);
+				ret = new EventDom((EventInfo)memberInfo, doc);
 			else if (memberInfo is FieldInfo)
-				ret = new FieldDom(memberInfo as FieldInfo, doc);
+				ret = new FieldDom((FieldInfo)memberInfo, doc);
 			else
 				throw new Exception();
 			ret.Type = typeDom; //ToTo: передавать конструктор? Иначе в конструкторе _typeDom==null

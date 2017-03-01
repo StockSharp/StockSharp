@@ -25,7 +25,6 @@ namespace StockSharp.Algo.Risk
 	using Ecng.Collections;
 
 	using StockSharp.Messages;
-
 	using StockSharp.Localization;
 
 	/// <summary>

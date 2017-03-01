@@ -40,7 +40,7 @@ namespace StockSharp.Algo.PnL
 		decimal? UnrealizedPnL { get; }
 
 		/// <summary>
-		/// To zero <see cref="IPnLManager.PnL"/>.
+		/// To zero <see cref="PnL"/>.
 		/// </summary>
 		void Reset();
 

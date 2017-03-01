@@ -59,7 +59,7 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <summary>
-		/// To zero <see cref="PnLManager.PnL"/>.
+		/// To zero <see cref="PnL"/>.
 		/// </summary>
 		public void Reset()
 		{

@@ -18,7 +18,6 @@ namespace StockSharp.Algo.PnL
 	using System;
 
 	using StockSharp.Messages;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -48,7 +47,7 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Own trade.
 		/// </summary>
-		public ExecutionMessage Trade { get; private set; }
+		public ExecutionMessage Trade { get; }
 
 		/// <summary>
 		/// The volume of position, which was closed by own trade.
@@ -56,11 +55,11 @@ namespace StockSharp.Algo.PnL
 		/// <remarks>
 		/// For example, in strategy position was 2. The trade for -5 contracts. Closed position 2.
 		/// </remarks>
-		public decimal ClosedVolume { get; private set; }
+		public decimal ClosedVolume { get; }
 
 		/// <summary>
 		/// The profit, realized by this trade.
 		/// </summary>
-		public decimal PnL { get; private set; }
+		public decimal PnL { get; }
 	}
 }
