@@ -1793,7 +1793,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ContinuousSecurityWindow">
       <summary>
-            The window for creating or editing <see cref="P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity" />.
+            The window for creating or editing <see cref="T:StockSharp.Algo.ContinuousSecurity" />.
             </summary>
       <summary>
             ContinuousSecurityWindow
@@ -1804,17 +1804,17 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.ContinuousSecurityWindow" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityStorage">
+      <summary>
+            Securities meta info storage.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.ValidateId">
       <summary>
-            The handler checking the entered identifier availability for <see cref="T:StockSharp.BusinessEntities.Security" />.
+            The handler checking the entered identifier availability for <see cref="P:StockSharp.Xaml.ContinuousSecurityWindow.Security" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityProvider">
-      <summary>
-            The provider of information about instruments.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity">
+    <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.Security">
       <summary>
             Continuous security.
             </summary>
@@ -2200,6 +2200,13 @@
             Returns a string that represents the current object.
             </summary>
       <returns>A string that represents the current object.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToLevel1">
+      <summary>
+            Generate <see cref="T:StockSharp.Messages.Level1ChangeMessage" /> message.
+            </summary>
+      <returns>
+        <see cref="T:StockSharp.Messages.Level1ChangeMessage" /> message</returns>
     </member>
     <member name="M:StockSharp.Xaml.OptionDeskRow.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security)">
       <summary>
@@ -2797,6 +2804,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityCreateWindow" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.SecurityCreateWindow.SecurityStorage">
+      <summary>
+            Securities meta info storage.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.SecurityCreateWindow.Security">
       <summary>
             Security to edit.
@@ -2868,28 +2880,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityIdTextBox" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SecurityIdTextBox.Security">
-      <summary>
-            Security.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.SecurityIdTextBox.ValidateId">
       <summary>
             To check the correctness of the entered identifier.
             </summary>
       <returns>An error message text, or <see langword="null" /> if no error.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityIdTextBox.OnGotFocus(System.Windows.RoutedEventArgs)">
-      <summary>
-            Invoked whenever an unhandled <see cref="E:System.Windows.UIElement.GotFocus" /> event reaches this element in its route.
-            </summary>
-      <param name="e">The <see cref="T:System.Windows.RoutedEventArgs" /> that contains the event data.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityIdTextBox.OnLostFocus(System.Windows.RoutedEventArgs)">
-      <summary>
-            Raises the <see cref="E:System.Windows.UIElement.LostFocus" /> event (using the provided arguments).
-            </summary>
-      <param name="e">Provides data about the event.</param>
     </member>
     <member name="M:StockSharp.Xaml.SecurityIdTextBox.InitializeComponent">
       <summary>
