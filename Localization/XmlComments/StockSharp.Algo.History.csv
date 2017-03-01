@@ -266,11 +266,11 @@ F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Save/summary;DocStr164
 F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Load/summary;DocStr165
 F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Delete/summary;XamlStr781
 T:StockSharp.Algo.History.Hydra.RemoteStorage/summary;DocStr166
-M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.IEntityRegistry)/summary;DocStr93
-M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.IEntityRegistry)/param/storageRegistry;DocStr168
-M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.IEntityRegistry)/param/entityRegistry;DocStr169
+M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.ISecurityProvider)/summary;DocStr93
+M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.ISecurityProvider)/param/storageRegistry;DocStr168
+M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.ISecurityProvider)/param/securityProvider;DocStr972
 P:StockSharp.Algo.History.Hydra.RemoteStorage.StorageRegistry/summary;DocStr168
-P:StockSharp.Algo.History.Hydra.RemoteStorage.EntityRegistry/summary;DocStr169
+P:StockSharp.Algo.History.Hydra.RemoteStorage.SecurityProvider/summary;DocStr972
 P:StockSharp.Algo.History.Hydra.RemoteStorage.Authorization/summary;DocStr173
 F:StockSharp.Algo.History.Hydra.RemoteStorage.DefaultMaxSecurityCount/summary;DocStr167
 P:StockSharp.Algo.History.Hydra.RemoteStorage.MaxSecurityCount/summary;DocStr174
