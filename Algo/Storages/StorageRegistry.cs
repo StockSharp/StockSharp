@@ -1105,8 +1105,6 @@ namespace StockSharp.Algo.Storages
 
 				CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
-					var idGen = new SecurityIdGenerator();
-
 					foreach (var line in File.ReadAllLines(_file))
 					{
 						var security = new Security();
@@ -1118,7 +1116,7 @@ namespace StockSharp.Algo.Storages
 							proxySet[i].SetValue(security, cells[i].To(proxySet[i].ReturnType));
 						}
 
-						var id = idGen.Split(security.Id);
+						var id = security.Id.ToSecurityId();
 						security.Code = id.SecurityCode;
 						security.Board = _parent.ExchangeInfoProvider.GetOrCreateBoard(id.BoardCode);
 

@@ -156,7 +156,7 @@ namespace SamplePerformance
 			_lastPrice = 0m;
 
 			_candles.Clear();
-			var id = new SecurityIdGenerator().Split(_securityId);
+			var id = _securityId.ToSecurityId();
 
 			_security = new Security
 			{
