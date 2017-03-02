@@ -191,11 +191,9 @@ namespace StockSharp.Algo.Storages
 							_fieldTypes.Add(fields[i], types[i]);
 						}
 
-						var idGenerator = new SecurityIdGenerator();
-
 						while (reader.NextLine())
 						{
-							var secId = idGenerator.Split(reader.ReadString());
+							var secId = reader.ReadString().ToSecurityId();
 
 							var values = new Dictionary<object, object>();
 

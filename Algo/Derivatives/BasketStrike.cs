@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <summary>
 		/// Instruments, from which this basket is created.
 		/// </summary>
-		public override IEnumerable<Security> InnerSecurities
+		public override IEnumerable<SecurityId> InnerSecurityIds
 		{
 			get
 			{
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Derivatives
 				if (type != null)
 					derivatives = derivatives.Filter((OptionTypes)type);
 
-				return FilterStrikes(derivatives);
+				return FilterStrikes(derivatives).Select(s => s.ToSecurityId());
 			}
 		}
 

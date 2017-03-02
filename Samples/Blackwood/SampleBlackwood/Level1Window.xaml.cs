@@ -15,11 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleBlackwood
 {
-	using System.Linq;
-	using System.Windows;
-
-	using MoreLinq;
-
 	public partial class Level1Window
 	{
 		public Level1Window()

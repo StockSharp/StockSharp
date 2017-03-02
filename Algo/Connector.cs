@@ -743,13 +743,13 @@ namespace StockSharp.Algo
 
 				CheckOnNew(order, order.Type != OrderTypes.Conditional, initOrder);
 
-				var cs = order.Security as ContinuousSecurity;
+				//var cs = order.Security as ContinuousSecurity;
 
-				while (cs != null)
-				{
-					order.Security = cs.GetSecurity(CurrentTime);
-					cs = order.Security as ContinuousSecurity;
-				}
+				//while (cs != null)
+				//{
+				//	order.Security = cs.GetSecurity(CurrentTime);
+				//	cs = order.Security as ContinuousSecurity;
+				//}
 
 				if (initOrder)
 				{
@@ -1007,8 +1007,8 @@ namespace StockSharp.Algo
 
 			//order.Connector = this;
 
-			if (order.Security is ContinuousSecurity)
-				order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
+			//if (order.Security is ContinuousSecurity)
+			//	order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
 
 			order.LocalTime = CurrentTime;
 			order.State = order.State.CheckModification(OrderStates.Pending);

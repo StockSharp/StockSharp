@@ -15,13 +15,10 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Quik.Xaml
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Windows;
-	using System.Windows.Data;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Localization;
 

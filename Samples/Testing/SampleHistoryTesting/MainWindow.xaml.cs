@@ -192,8 +192,7 @@ namespace SampleHistoryTesting
 				return;
 			}
 
-			var secGen = new SecurityIdGenerator();
-			var id = secGen.Split(SecId.Text);
+			var id = SecId.Text.ToSecurityId();
 
 			//if (secIdParts.Length != 2)
 			//{

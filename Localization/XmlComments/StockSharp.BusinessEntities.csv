@@ -23,12 +23,6 @@ P:StockSharp.BusinessEntities.BasePosition.Description/summary;Str269
 P:StockSharp.BusinessEntities.BasePosition.Currency/summary;Str251
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/summary;DocStr2615
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/param/destination;DocStr2616
-T:StockSharp.BusinessEntities.BasketSecurity/summary;DocStr2619
-M:StockSharp.BusinessEntities.BasketSecurity.#ctor/summary;DocStr93
-P:StockSharp.BusinessEntities.BasketSecurity.InnerSecurities/summary;DocStr936
-M:StockSharp.BusinessEntities.BasketSecurity.Contains(StockSharp.BusinessEntities.Security)/summary;DocStr2631
-M:StockSharp.BusinessEntities.BasketSecurity.Contains(StockSharp.BusinessEntities.Security)/param/security;DocStr2632
-M:StockSharp.BusinessEntities.BasketSecurity.Contains(StockSharp.BusinessEntities.Security)/returns;DocStr2633
 T:StockSharp.BusinessEntities.Exchange/summary;ExchangeInfo
 M:StockSharp.BusinessEntities.Exchange.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Exchange.Name/summary;DocStr2639

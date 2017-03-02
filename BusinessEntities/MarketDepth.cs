@@ -544,16 +544,16 @@ namespace StockSharp.BusinessEntities
 				asks = asks.OrderBy(q => q.Price);
 			}
 
-			bids = bids.ToArray();
-			asks = asks.ToArray();
+			var bidsArr = bids.ToArray();
+			var asksArr = asks.ToArray();
 
 			if (AutoVerify)
 			{
-				if (!Verify(bids, asks))
+				if (!Verify(bidsArr, asksArr))
 					throw new ArgumentException(LocalizedStrings.Str485);
 			}
 
-			Truncate((Quote[])bids, (Quote[])asks, lastChangeTime);
+			Truncate(bidsArr, asksArr, lastChangeTime);
 			return this;
 		}
 
@@ -571,11 +571,8 @@ namespace StockSharp.BusinessEntities
 
 			if (evt != null)
 			{
-				if (outOfRangeBids != null)
-					outOfRangeBids.ForEach(evt);
-
-				if (outOfRangeAsks != null)
-					outOfRangeAsks.ForEach(evt);
+				outOfRangeBids?.ForEach(evt);
+				outOfRangeAsks?.ForEach(evt);
 			}
 		}
 
@@ -612,8 +609,7 @@ namespace StockSharp.BusinessEntities
 
 			UpdateDepthAndTime(lastChangeTime, false);
 
-			if (null != QuotesChanged)
-				QuotesChanged();
+			QuotesChanged?.Invoke();
 			//RaiseQuotesChanged();
 		}
 
@@ -1091,7 +1087,7 @@ namespace StockSharp.BusinessEntities
 				return Verify(_bids, _asks);
 		}
 
-		private bool Verify(IEnumerable<Quote> bids, IEnumerable<Quote> asks)
+		private bool Verify(Quote[] bids, Quote[] asks)
 		{
 			var bestBid = bids.FirstOrDefault();
 			var bestAsk = asks.FirstOrDefault();
@@ -1106,7 +1102,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private bool Verify(IEnumerable<Quote> quotes, bool isBids)
+		private bool Verify(Quote[] quotes, bool isBids)
 		{
 			if (quotes.IsEmpty())
 				return true;

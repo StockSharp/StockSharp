@@ -3,6 +3,20 @@ StockSharp API Change log
 ###current:
 * (bug) SampleOptionsQuoting fix.
 * (bug) Transaq. Demo address fix.
+* (bug) ContinuousSecurityWindow fixes.
+* (feature) Connector. Removed BasketSecurity support.
+* (feature) BasketSecuriry. Store internally SecurityId instead of Security instance.
+* (bug) TraderHelper.GetFortsJumps fix.
+* (bug) CsvEntityList. String key normalization.
+* (feature) CollectionSecurityProvider. Track notifiable collections.
+* (feature) IndexSecurity. Removed Board initialization.
+* (feature) IEntityRegistry. Removed Orders, MyTrades, Trades, OrderFails and News properties.
+* (bug) Alerts. Loc fixes.
+* (bug) ExpressionFormula. Parsing fixes.
+* (feature) SecurityCreateWindow, ContinuousSecurityWindow. Uses ISecurityStorage.
+* (feature) SecurityIdTextBox. Removed Security property.
+* (bug) Transaq. Set TPlusLimits for positions.
+* (bug) Transaq. Fix http://stocksharp.ru/forum/8098/ne-vidit-pozitsii-schet-edp-finam-transaq-connector/
 
 ###v4.3.21:
 * (feature) IConnector.OrderStatusFailed

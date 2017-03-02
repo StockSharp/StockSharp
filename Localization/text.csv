@@ -13758,3 +13758,13 @@ DocStr9528;{0}, if data type is candle, otherwise, {1};{0}, если тип да
 DocStr9529;Convert {0} message to {1} criteria;Преобразовать сообщение {0} в критерий поиска {1}
 DocStr9530;The published strategy identifier;Идентификатор опубликованной стратегии
 DocStr9531;Volume at low;Объем закрытия
+DocStr9532;Save data only for subscriptions;Сохранять данные только для подписок
+DocStr9533;Update filter with new subscription;Обновить фильтр новой подпиской
+DocStr9534;If subscription was just created, return {0}, otherwise {1};Если подписка была только что создана, вернуть {0}, иначе {1}
+DocStr9535;Update filter with remove a subscription;Обновить фильтр удалением подпиской
+DocStr9536;If subscription was just removed, return {0}, otherwise {1};Если подписка была только что удалена, вернуть {0}, иначе {1}
+DocStr9537;Remove all subscriptions;Удалить все подписки
+DocStr9538;The aggregator-storage, allowing to load data simultaneously market data for {0};Хранилище-агрегатор, позволяющее загружать данные одновременно для {0}
+DocStr9539;Find inner security instancies;Найти внутренние инструменты
+DocStr9540;Generate {0} message;Создать сообщение {0}
+DocStr9541;{0} message;Сообщение {0}

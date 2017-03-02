@@ -296,7 +296,7 @@ namespace StockSharp.Algo
 			return entity;
 		}
 
-		TEntity IStorage.GetBy<TEntity>(SerializationItemCollection @by)
+		TEntity IStorage.GetBy<TEntity>(SerializationItemCollection by)
 		{
 			throw new NotSupportedException();
 		}

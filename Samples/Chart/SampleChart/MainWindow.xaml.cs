@@ -157,7 +157,7 @@ namespace SampleChart
 			_lastPrice = 0m;
 			_allCandles.Clear();
 
-			var id = new SecurityIdGenerator().Split(SecurityId.Text);
+			var id = SecurityId.Text.ToSecurityId();
 
 			_security = new Security
 			{

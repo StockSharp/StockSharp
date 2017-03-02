@@ -712,6 +712,17 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Convert <see cref="Security.Id"/> to <see cref="SecurityId"/> value.
+		/// </summary>
+		/// <param name="id"><see cref="Security.Id"/> value.</param>
+		/// <param name="generator">The instrument identifiers generator <see cref="SecurityId"/>. Can be <see langword="null"/>.</param>
+		/// <returns><see cref="SecurityId"/> value.</returns>
+		public static SecurityId ToSecurityId(this string id, SecurityIdGenerator generator = null)
+		{
+			return (generator ?? _defaultGenerator).Split(id);
+		}
+
+		/// <summary>
 		/// To convert the portfolio into message.
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>

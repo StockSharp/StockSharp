@@ -344,7 +344,7 @@ namespace StockSharp.Algo.Testing
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
 			var securityId = message.SecurityId;
-			var security = SecurityProvider.LookupById(securityId.ToStringId());
+			var security = SecurityProvider.LookupById(securityId);
 
 			if (security == null)
 			{

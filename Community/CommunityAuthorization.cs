@@ -18,7 +18,6 @@ namespace StockSharp.Community
 	using System;
 	using System.Security;
 
-	using Ecng.Common;
 	using Ecng.Security;
 
 	using StockSharp.Localization;

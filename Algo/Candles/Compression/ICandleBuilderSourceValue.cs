@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// <summary>
 	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="Trade"/>.
 	/// </summary>
-	[DebuggerDisplay("{Trade}")]
+	[DebuggerDisplay("{" + nameof(Trade) + "}")]
 	public class TradeCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
 		/// <summary>
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// <summary>
 	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="Trade"/>.
 	/// </summary>
-	[DebuggerDisplay("{Tick}")]
+	[DebuggerDisplay("{" + nameof(Tick) + "}")]
 	public class TickCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
 		/// <summary>
@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// <summary>
 	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="MarketDepth"/>.
 	/// </summary>
-	[DebuggerDisplay("{Depth}")]
+	[DebuggerDisplay("{" + nameof(Depth) + "}")]
 	public class DepthCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
 		private readonly decimal _price;

@@ -22,7 +22,7 @@ T:StockSharp.Algo.Expressions.ExpressionIndexSecurity/summary;DocStr1111
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.#ctor/summary;DocStr1
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Formula/summary;DocStr8476
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression/summary;DocStr1117
-P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurities/summary;DocStr936
+P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurityIds/summary;DocStr936
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])/summary;DocStr1113
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])/param/prices;DocStr1114
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])/returns;DocStr1115
@@ -43,9 +43,3 @@ P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HighligthBackColor/summary;DocStr
 E:StockSharp.Algo.Expressions.Xaml.IndexEditor.SecurityClicked/summary;DocStr8210
 E:StockSharp.Algo.Expressions.Xaml.IndexEditor.TextChanged/summary;DocStr1489
 M:StockSharp.Algo.Expressions.Xaml.IndexEditor.InitializeComponent/summary;DocStr8
-T:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow/summary;DocStr8182
-M:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.#ctor/summary;DocStr1
-P:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.ValidateId/summary;DocStr8181
-P:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.Securities/summary;DocStr2513
-P:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.IndexSecurity/summary;Index
-M:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.InitializeComponent/summary;DocStr8

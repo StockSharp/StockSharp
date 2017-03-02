@@ -69,9 +69,7 @@ namespace StockSharp.Algo.Storages
 
 			_basket = new BasketMarketDataStorage<T>();
 
-			var idGenerator = new SecurityIdGenerator();
-
-			var id = idGenerator.Split(security.Id);
+			var id = security.Id.ToSecurityId();
 			var code = id.SecurityCode;
 
 			var securities = InteropHelper
@@ -79,7 +77,7 @@ namespace StockSharp.Algo.Storages
 				.Select(p => Path.GetFileName(p).FolderNameToSecurityId())
 				.Select(s =>
 				{
-					var idInfo = idGenerator.Split(s);
+					var idInfo = s.ToSecurityId();
 
 					var clone = security.Clone();
 					clone.Id = s;

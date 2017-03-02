@@ -20,7 +20,6 @@ namespace SampleCurrency
 	using Ecng.Common;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.Messages;
 
 	public partial class MainWindow

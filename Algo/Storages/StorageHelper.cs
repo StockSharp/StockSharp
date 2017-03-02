@@ -154,7 +154,7 @@ namespace StockSharp.Algo.Storages
 					throw new ArgumentNullException(nameof(getTime));
 
 				if (from > to)
-					throw new ArgumentOutOfRangeException(nameof(@from));
+					throw new ArgumentOutOfRangeException(nameof(from));
 
 				//_storage = storage;
 				//_from = from;
@@ -500,8 +500,6 @@ namespace StockSharp.Algo.Storages
 
 			var logSource = ConfigManager.GetService<LogManager>().Application;
 
-			var securityIdGenerator = new SecurityIdGenerator();
-
 			var securities = securityStorage.LookupAll().ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
 
 			foreach (var securityPath in securityPaths)
@@ -526,7 +524,7 @@ namespace StockSharp.Algo.Storages
 
 					if (firstDataFile != null)
 					{
-						var id = securityIdGenerator.Split(securityId);
+						var id = securityId.ToSecurityId();
 
 						decimal priceStep;
 

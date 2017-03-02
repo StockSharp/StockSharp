@@ -375,9 +375,9 @@ M:StockSharp.Xaml.SecurityJumpsEditor.Validate/returns;DocStr325
 M:StockSharp.Xaml.SecurityJumpsEditor.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ContinuousSecurityWindow/summary;DocStr8179
 M:StockSharp.Xaml.ContinuousSecurityWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityStorage/summary;DocStr110
 P:StockSharp.Xaml.ContinuousSecurityWindow.ValidateId/summary;DocStr8181
-P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityProvider/summary;DocStr972
-P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity/summary;ContinuousSecurity
+P:StockSharp.Xaml.ContinuousSecurityWindow.Security/summary;ContinuousSecurity
 M:StockSharp.Xaml.ContinuousSecurityWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.CredentialsWindow/summary;DocStr8182
 M:StockSharp.Xaml.CredentialsWindow.#ctor/summary;DocStr1
@@ -454,6 +454,8 @@ P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ImpliedVolatilityLastTrade/sum
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.HistoricalVolatility/summary;Str1532
 M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString/summary;DocStr49
 M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString/returns;DocStr50
+M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToLevel1/summary;DocStr9540
+M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToLevel1/returns;DocStr9541
 M:StockSharp.Xaml.OptionDeskRow.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security)/summary;DocStr1
 M:StockSharp.Xaml.OptionDeskRow.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security)/param/underlyingAsset;UnderlyingAsset
 M:StockSharp.Xaml.OptionDeskRow.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Security)/param/call;DocStr9471
@@ -579,6 +581,7 @@ P:StockSharp.Xaml.RiskWindow.Rules/summary;DocStr8125
 M:StockSharp.Xaml.RiskWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityCreateWindow/summary;DocStr8290
 M:StockSharp.Xaml.SecurityCreateWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.SecurityCreateWindow.SecurityStorage/summary;DocStr110
 P:StockSharp.Xaml.SecurityCreateWindow.Security/summary;DocStr9524
 P:StockSharp.Xaml.SecurityCreateWindow.Securities/summary;DocStr9525
 M:StockSharp.Xaml.SecurityCreateWindow.InitializeComponent/summary;DocStr8
@@ -592,13 +595,8 @@ P:StockSharp.Xaml.SecurityGrid.MarketDataProvider/summary;DocStr973
 M:StockSharp.Xaml.SecurityGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityIdTextBox/summary;DocStr8295
 M:StockSharp.Xaml.SecurityIdTextBox.#ctor/summary;DocStr1
-P:StockSharp.Xaml.SecurityIdTextBox.Security/summary;DocStr2831
 M:StockSharp.Xaml.SecurityIdTextBox.ValidateId/summary;DocStr8296
 M:StockSharp.Xaml.SecurityIdTextBox.ValidateId/returns;DocStr8297
-M:StockSharp.Xaml.SecurityIdTextBox.OnGotFocus(System.Windows.RoutedEventArgs)/summary;DocStr8298
-M:StockSharp.Xaml.SecurityIdTextBox.OnGotFocus(System.Windows.RoutedEventArgs)/param/e;DocStr8299
-M:StockSharp.Xaml.SecurityIdTextBox.OnLostFocus(System.Windows.RoutedEventArgs)/summary;DocStr8300
-M:StockSharp.Xaml.SecurityIdTextBox.OnLostFocus(System.Windows.RoutedEventArgs)/param/e;DocStr8301
 M:StockSharp.Xaml.SecurityIdTextBox.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityLookupPanel/summary;DocStr8302
 F:StockSharp.Xaml.SecurityLookupPanel.SearchSecurityCommand/summary;DocStr29
