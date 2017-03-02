@@ -258,7 +258,7 @@
 					}
 
 					securityId.Native = native;
-					ReplaceSecurityId(message, securityId);
+					message.ReplaceSecurityId(securityId);
 
 					break;
 				}
@@ -328,7 +328,7 @@
 					return;
 				}
 
-				ReplaceSecurityId(message, fullSecurityId.Value);
+				message.ReplaceSecurityId(fullSecurityId.Value);
 			}
 			else
 			{
@@ -365,7 +365,7 @@
 						}
 					}
 
-					ReplaceSecurityId(message, foundId.Value);
+					message.ReplaceSecurityId(foundId.Value);
 
 					//// если указан код и тип инструмента, то пытаемся найти инструмент по ним
 					//if (securityId.SecurityType != null)
@@ -431,7 +431,7 @@
 
 			foreach (var msg in msgs)
 			{
-				ReplaceSecurityId(msg, securityId);
+				msg.ReplaceSecurityId(securityId);
 				base.OnInnerAdapterNewOutMessage(msg);
 			}
 		}
@@ -446,97 +446,6 @@
 				retVal.AddRange(tuple.Second.Values);
 
 			return retVal;
-		}
-
-		private static void ReplaceSecurityId(Message message, SecurityId securityId)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.Position:
-				{
-					var positionMsg = (PositionMessage)message;
-					positionMsg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.PositionChange:
-				{
-					var positionMsg = (PositionChangeMessage)message;
-					positionMsg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.Execution:
-				{
-					var execMsg = (ExecutionMessage)message;
-					execMsg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.Level1Change:
-				{
-					var level1Msg = (Level1ChangeMessage)message;
-					level1Msg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.QuoteChange:
-				{
-					var quoteChangeMsg = (QuoteChangeMessage)message;
-					quoteChangeMsg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.News:
-				{
-					var newsMsg = (NewsMessage)message;
-					newsMsg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.OrderRegister:
-				{
-					var msg = (OrderRegisterMessage)message;
-					msg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.OrderReplace:
-				{
-					var msg = (OrderReplaceMessage)message;
-					msg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.OrderCancel:
-				{
-					var msg = (OrderCancelMessage)message;
-					msg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.MarketData:
-				{
-					var msg = (MarketDataMessage)message;
-					msg.SecurityId = securityId;
-					break;
-				}
-
-				case MessageTypes.CandleTimeFrame:
-				case MessageTypes.CandleRange:
-				case MessageTypes.CandlePnF:
-				case MessageTypes.CandleRenko:
-				case MessageTypes.CandleTick:
-				case MessageTypes.CandleVolume:
-				{
-					var msg = (CandleMessage)message;
-					msg.SecurityId = securityId;
-					break;
-				}
-
-				default:
-					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
-			}
 		}
 	}
 }

@@ -354,7 +354,7 @@ namespace StockSharp.Algo.Storages
 
 		IEnumerable<T> IMarketDataStorage<T>.Load(DateTime date)
 		{
-			return Load(date);
+			return OnLoad(date);
 		}
 
 		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
@@ -374,7 +374,7 @@ namespace StockSharp.Algo.Storages
 
 		IEnumerable IMarketDataStorage.Load(DateTime date)
 		{
-			return Load(date);
+			return OnLoad(date);
 		}
 
 		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
@@ -395,6 +395,16 @@ namespace StockSharp.Algo.Storages
 		public IBasketMarketDataStorageEnumerable<T> Load(DateTime date)
 		{
 			return new BasketEnumerable(this, date);
+		}
+
+		/// <summary>
+		/// To load messages from embedded storages for specified date.
+		/// </summary>
+		/// <param name="date">Date.</param>
+		/// <returns>The messages.</returns>
+		protected virtual IEnumerable<T> OnLoad(DateTime date)
+		{
+			return Load(date);
 		}
 
 		DateTimeOffset IMarketDataStorageInfo<T>.GetTime(T data)

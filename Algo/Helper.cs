@@ -130,5 +130,96 @@ namespace StockSharp.Algo
 
 			throw new ArgumentOutOfRangeException(nameof(message));
 		}
+
+		public static void ReplaceSecurityId(this Message message, SecurityId securityId)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.Position:
+				{
+					var positionMsg = (PositionMessage)message;
+					positionMsg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.PositionChange:
+				{
+					var positionMsg = (PositionChangeMessage)message;
+					positionMsg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.Execution:
+				{
+					var execMsg = (ExecutionMessage)message;
+					execMsg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.Level1Change:
+				{
+					var level1Msg = (Level1ChangeMessage)message;
+					level1Msg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.QuoteChange:
+				{
+					var quoteChangeMsg = (QuoteChangeMessage)message;
+					quoteChangeMsg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.News:
+				{
+					var newsMsg = (NewsMessage)message;
+					newsMsg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.OrderRegister:
+				{
+					var msg = (OrderRegisterMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.OrderReplace:
+				{
+					var msg = (OrderReplaceMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.OrderCancel:
+				{
+					var msg = (OrderCancelMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.MarketData:
+				{
+					var msg = (MarketDataMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.CandleTimeFrame:
+				case MessageTypes.CandleRange:
+				case MessageTypes.CandlePnF:
+				case MessageTypes.CandleRenko:
+				case MessageTypes.CandleTick:
+				case MessageTypes.CandleVolume:
+				{
+					var msg = (CandleMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
+			}
+		}
 	}
 }
