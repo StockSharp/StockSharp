@@ -45,7 +45,7 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Security ID.
 		/// </summary>
-		public SecurityId SecurityId { get; private set; }
+		public SecurityId SecurityId { get; }
 
 		private decimal _priceStep = 1;
 
@@ -65,12 +65,12 @@ namespace StockSharp.Algo.PnL
 			}
 		}
 
-		private decimal _stepPrice = 1;
+		private decimal? _stepPrice;
 
 		/// <summary>
 		/// Step price.
 		/// </summary>
-		public decimal StepPrice
+		public decimal? StepPrice
 		{
 			get { return _stepPrice; }
 			private set
@@ -313,7 +313,9 @@ namespace StockSharp.Algo.PnL
 
 		private void UpdateMultiplier()
 		{
-			_multiplier = (StepPrice / PriceStep) * Leverage * LotMultiplier;
+			var stepPrice = StepPrice;
+
+			_multiplier = (stepPrice == null ? 1 : stepPrice.Value / PriceStep) * Leverage * LotMultiplier;
 		}
 
 		private static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)
