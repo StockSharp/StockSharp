@@ -294,7 +294,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AuthorizationModes.cs" />
-    <Compile Include="Storages\AllSecurityMarketDataStorage.cs" />
     <Compile Include="Storages\Binary\BinaryMarketDataSerializer.cs" />
     <Compile Include="Storages\BufferMessageAdapter.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />

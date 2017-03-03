@@ -261,9 +261,12 @@ namespace StockSharp.Algo.Storages
 		private abstract class ConvertableStorage<TMessage, TEntity, TId> : MarketDataStorage<TMessage, TId>, IMarketDataStorage<TEntity>, IMarketDataStorageInfo<TEntity>
 			where TMessage : Message
 		{
-			protected ConvertableStorage(Security security, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurity, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive)
+			private readonly SecurityMarketDataDrive _parent;
+
+			protected ConvertableStorage(SecurityMarketDataDrive parent, Security security, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurity, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive)
 				: base(security, arg, getTime, getSecurity, getId, serializer, drive)
 			{
+				_parent = parent;
 			}
 
 			IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer
@@ -283,7 +286,7 @@ namespace StockSharp.Algo.Storages
 
 			IEnumerable<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
 			{
-				return Load(date).ToEntities<TMessage, TEntity>(Security);
+				return Load(date).ToEntities<TMessage, TEntity>(Security, _parent.ExchangeInfoProvider);
 			}
 
 			public abstract DateTimeOffset GetTime(TEntity data);
@@ -293,8 +296,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class TradeStorage : ConvertableStorage<ExecutionMessage, Trade, long>
 		{
-			public TradeStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.TradeId ?? 0, serializer, drive)
+			public TradeStorage(SecurityMarketDataDrive parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+				: base(parent, security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.TradeId ?? 0, serializer, drive)
 			{
 			}
 
@@ -327,8 +330,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class MarketDepthStorage : ConvertableStorage<QuoteChangeMessage, MarketDepth, DateTimeOffset>
 		{
-			public MarketDepthStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<QuoteChangeMessage> serializer)
-				: base(security, null, depth => depth.ServerTime, depth => depth.SecurityId, depth => depth.ServerTime.Truncate(), serializer, drive)
+			public MarketDepthStorage(SecurityMarketDataDrive parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<QuoteChangeMessage> serializer)
+				: base(parent, security, null, depth => depth.ServerTime, depth => depth.SecurityId, depth => depth.ServerTime.Truncate(), serializer, drive)
 			{
 			}
 
@@ -345,8 +348,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class OrderLogStorage : ConvertableStorage<ExecutionMessage, OrderLogItem, long>
 		{
-			public OrderLogStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(security, ExecutionTypes.OrderLog, item => item.ServerTime, item => item.SecurityId, item => item.TransactionId, serializer, drive)
+			public OrderLogStorage(SecurityMarketDataDrive parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+				: base(parent, security, ExecutionTypes.OrderLog, item => item.ServerTime, item => item.SecurityId, item => item.TransactionId, serializer, drive)
 			{
 			}
 
@@ -622,6 +625,23 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public SecurityId SecurityId { get; }
 
+		private IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
+		/// <summary>
+		/// Exchanges and trading boards provider.
+		/// </summary>
+		public IExchangeInfoProvider ExchangeInfoProvider
+		{
+			get { return _exchangeInfoProvider; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				_exchangeInfoProvider = value;
+			}
+		}
+
 		/// <summary>
 		/// To get the storage of tick trades for the specified instrument.
 		/// </summary>
@@ -629,7 +649,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The storage of tick trades.</returns>
 		public IMarketDataStorage<ExecutionMessage> GetTickStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
-			return new TradeStorage(Security, GetStorageDrive(serializer, ExecutionTypes.Tick), serializer);
+			return new TradeStorage(this, Security, GetStorageDrive(serializer, ExecutionTypes.Tick), serializer);
 		}
 
 		/// <summary>
@@ -639,7 +659,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The order books storage.</returns>
 		public IMarketDataStorage<QuoteChangeMessage> GetQuoteStorage(IMarketDataSerializer<QuoteChangeMessage> serializer)
 		{
-			return new MarketDepthStorage(Security, GetStorageDrive(serializer), serializer);
+			return new MarketDepthStorage(this, Security, GetStorageDrive(serializer), serializer);
 		}
 
 		/// <summary>
@@ -649,7 +669,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The storage of orders log.</returns>
 		public IMarketDataStorage<ExecutionMessage> GetOrderLogStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
-			return new OrderLogStorage(Security, GetStorageDrive(serializer, ExecutionTypes.OrderLog), serializer);
+			return new OrderLogStorage(this, Security, GetStorageDrive(serializer, ExecutionTypes.OrderLog), serializer);
 		}
 
 		/// <summary>

@@ -193,9 +193,12 @@ namespace StockSharp.Algo.Storages
 		private abstract class ConvertableStorage<TMessage, TEntity, TId> : MarketDataStorage<TMessage, TId>, IMarketDataStorage<TEntity>, IMarketDataStorageInfo<TEntity>
 			where TMessage : Message
 		{
-			protected ConvertableStorage(Security security, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurity, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive)
+			private readonly StorageRegistry _parent;
+
+			protected ConvertableStorage(StorageRegistry parent, Security security, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurity, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive)
 				: base(security, arg, getTime, getSecurity, getId, serializer, drive)
 			{
+				_parent = parent;
 			}
 
 			IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer
@@ -215,7 +218,7 @@ namespace StockSharp.Algo.Storages
 
 			IEnumerable<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
 			{
-				return Load(date).ToEntities<TMessage, TEntity>(Security);
+				return Load(date).ToEntities<TMessage, TEntity>(Security, _parent.ExchangeInfoProvider);
 			}
 
 			public abstract DateTimeOffset GetTime(TEntity data);
@@ -225,8 +228,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class TradeStorage : ConvertableStorage<ExecutionMessage, Trade, DateTimeOffset>
 		{
-			public TradeStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.ServerTime.Truncate(), serializer, drive)
+			public TradeStorage(StorageRegistry parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+				: base(parent, security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.ServerTime.Truncate(), serializer, drive)
 			{
 			}
 
@@ -269,8 +272,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class MarketDepthStorage : ConvertableStorage<QuoteChangeMessage, MarketDepth, DateTimeOffset>
 		{
-			public MarketDepthStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<QuoteChangeMessage> serializer)
-				: base(security, null, depth => depth.ServerTime, depth => depth.SecurityId, depth => depth.ServerTime.Truncate(), serializer, drive)
+			public MarketDepthStorage(StorageRegistry parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<QuoteChangeMessage> serializer)
+				: base(parent, security, null, depth => depth.ServerTime, depth => depth.SecurityId, depth => depth.ServerTime.Truncate(), serializer, drive)
 			{
 			}
 
@@ -287,8 +290,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class OrderLogStorage : ConvertableStorage<ExecutionMessage, OrderLogItem, long>
 		{
-			public OrderLogStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(security, ExecutionTypes.OrderLog, item => item.ServerTime, item => item.SecurityId, item => item.TransactionId, serializer, drive)
+			public OrderLogStorage(StorageRegistry parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+				: base(parent, security, ExecutionTypes.OrderLog, item => item.ServerTime, item => item.SecurityId, item => item.TransactionId, serializer, drive)
 			{
 			}
 
@@ -519,8 +522,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class NewsStorage : ConvertableStorage<NewsMessage, News, VoidType>
 		{
-			public NewsStorage(Security security, IMarketDataSerializer<NewsMessage> serializer, IMarketDataStorageDrive drive)
-				: base(security, null, m => m.ServerTime, m => default(SecurityId), m => null, serializer, drive)
+			public NewsStorage(StorageRegistry parent, Security security, IMarketDataSerializer<NewsMessage> serializer, IMarketDataStorageDrive drive)
+				: base(parent, security, null, m => m.ServerTime, m => default(SecurityId), m => null, serializer, drive)
 			{
 			}
 
@@ -794,7 +797,7 @@ namespace StockSharp.Algo.Storages
 						throw new ArgumentOutOfRangeException(nameof(format));
 				}
 
-				return new MarketDepthStorage(security, key.Item2, serializer);
+				return new MarketDepthStorage(this, security, key.Item2, serializer);
 			});
 		}
 
@@ -838,8 +841,8 @@ namespace StockSharp.Algo.Storages
 
 			return _level1Storages.SafeAdd(Tuple.Create(securityId, (drive ?? DefaultDrive).GetStorageDrive(securityId, typeof(Level1ChangeMessage), null, format)), key =>
 			{
-				if (security.Board == ExchangeBoard.Associated)
-					return new AllSecurityMarketDataStorage<Level1ChangeMessage>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), (s, d) => GetLevel1MessageStorage(s, d, format), key.Item2, ExchangeInfoProvider);
+				//if (security.Board == ExchangeBoard.Associated)
+				//	return new AllSecurityMarketDataStorage<Level1ChangeMessage>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), (s, d) => GetLevel1MessageStorage(s, d, format), key.Item2, ExchangeInfoProvider);
 
 				IMarketDataSerializer<Level1ChangeMessage> serializer;
 
@@ -942,7 +945,7 @@ namespace StockSharp.Algo.Storages
 								throw new ArgumentOutOfRangeException(nameof(format));
 						}
 
-						return new TradeStorage(security, mdDrive, serializer);
+						return new TradeStorage(this, security, mdDrive, serializer);
 					}
 					case ExecutionTypes.Transaction:
 					{
@@ -978,7 +981,7 @@ namespace StockSharp.Algo.Storages
 								throw new ArgumentOutOfRangeException(nameof(format));
 						}
 
-						return new OrderLogStorage(security, mdDrive, serializer);
+						return new OrderLogStorage(this, security, mdDrive, serializer);
 					}
 					default:
 						throw new ArgumentOutOfRangeException(nameof(type));
@@ -1069,7 +1072,7 @@ namespace StockSharp.Algo.Storages
 						throw new ArgumentOutOfRangeException(nameof(format));
 				}
 
-				return new NewsStorage(_newsSecurity, serializer, key);
+				return new NewsStorage(this, _newsSecurity, serializer, key);
 			});
 		}
 
