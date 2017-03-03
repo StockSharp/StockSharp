@@ -396,7 +396,7 @@ namespace StockSharp.Algo.Candles
 			}
 			catch (ArithmeticException excp)
 			{
-				throw new ArithmeticException("Build index candle {0} for {1} error.".Put(_security, _security.InnerSecurityIds.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
+				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(_security, _security.InnerSecurityIds.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
 			}
 		}
 

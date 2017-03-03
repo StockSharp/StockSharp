@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Storages
 	public class IndexSecurityMarketDataStorage<T> : BasketMarketDataStorage<T>
 		where T : Message
 	{
-		private readonly IndexSecurity _security;
+		//private readonly IndexSecurity _security;
 		private readonly IndexBuilder<T> _builder;
 		private readonly MessageTypes _messageType;
 
@@ -53,18 +53,18 @@ namespace StockSharp.Algo.Storages
 
 			if (typeof(T) == typeof(ExecutionMessage))
 			{
-				_builder = new TradeIndexBuilder(security) as IndexBuilder<T>;
+				_builder = new TradeIndexBuilder(security).To<IndexBuilder<T>>();
 				_messageType = MessageTypes.Execution;
 			}
 			else if (typeof(T) == typeof(CandleMessage))
 			{
-				_builder = new TimeFrameCandleIndexBuilder(security) as IndexBuilder<T>;
+				_builder = new TimeFrameCandleIndexBuilder(security).To<IndexBuilder<T>>();
 				_messageType = MessageTypes.CandleTimeFrame;
 			}
 			else
 				throw new ArgumentException();
 
-			Security = _security = security;
+			Security = security;
 			Arg = arg;
 		}
 
@@ -159,6 +159,7 @@ namespace StockSharp.Algo.Storages
 		private MessageBuffer<T> _lastProcessBuffer;
 
 		public IndexSecurity Security { get; }
+		public SecurityId SecurityId { get; }
 
 		protected IndexBuilder(IndexSecurity security)
 		{
@@ -166,7 +167,10 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(security));
 
 			Security = security;
+			SecurityId = security.ToSecurityId();
+
 			FillSecurityIndecies(Security);
+
 			_bufferSize = _securityIndecies.Values.Distinct().Count();
 		}
 
@@ -310,7 +314,7 @@ namespace StockSharp.Algo.Storages
 			}
 			catch (ArithmeticException excp)
 			{
-				throw new ArithmeticException("Build index candle {0} for {1} error.".Put(Security, Security.InnerSecurityIds.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
+				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, Security.InnerSecurityIds.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
 			}
 		}
 	}
@@ -331,7 +335,7 @@ namespace StockSharp.Algo.Storages
 		{
 			var res = new ExecutionMessage
 			{
-				SecurityId = Security.ToSecurityId(),
+				SecurityId = SecurityId,
 				ServerTime = buffer.Time,
 				LocalTime = buffer.Time,
 				ExecutionType = ExecutionTypes.Tick,
@@ -357,18 +361,20 @@ namespace StockSharp.Algo.Storages
 
 		protected override CandleMessage Process(MessageBuffer<CandleMessage> buffer)
 		{
-			var res = new TimeFrameCandleMessage();
+			var res = new TimeFrameCandleMessage
+			{
+				SecurityId = SecurityId,
+				OpenTime = buffer.Time,
+				LocalTime = buffer.Time,
+				TotalVolume = Calculate(buffer, c => c.TotalVolume),
+				OpenPrice = Calculate(buffer, m => m.OpenPrice),
+				HighPrice = Calculate(buffer, m => m.HighPrice),
+				LowPrice = Calculate(buffer, m => m.LowPrice),
+				ClosePrice = Calculate(buffer, m => m.ClosePrice),
+				State = CandleStates.Finished
+			};
 
-			res.SecurityId = Security.ToSecurityId();
 			//res.Arg = IndexCandleBuilder.CloneArg(candle.Arg, Security);
-			res.OpenTime = buffer.Time;
-			res.LocalTime = buffer.Time;
-
-			res.TotalVolume = Calculate(buffer, c => c.TotalVolume);
-			res.OpenPrice = Calculate(buffer, m => m.OpenPrice);
-			res.HighPrice = Calculate(buffer, m => m.HighPrice);
-			res.LowPrice = Calculate(buffer, m => m.LowPrice);
-			res.ClosePrice = Calculate(buffer, m => m.ClosePrice);
 
 			if (Security.CalculateExtended)
 			{
@@ -378,8 +384,6 @@ namespace StockSharp.Algo.Storages
 				res.HighVolume = Calculate(buffer, c => c.HighVolume ?? 0);
 				res.LowVolume = Calculate(buffer, c => c.LowVolume ?? 0);
 			}
-
-			res.State = CandleStates.Finished;
 
 			return res;
 		}

@@ -43946,5 +43946,15 @@ namespace StockSharp.Localization
 		/// Maximum depth of book
 		/// </summary>
 		public static string MaxDepthOfBook => GetString(MaxDepthOfBookKey);
+
+		/// <summary>
+		/// Build index {0} for {1} error.
+		/// </summary>
+		public const string BuildIndexErrorKey = nameof(BuildIndexError);
+
+		/// <summary>
+		/// Build index {0} for {1} error.
+		/// </summary>
+		public static string BuildIndexError => GetString(BuildIndexErrorKey);
 	}
 }
