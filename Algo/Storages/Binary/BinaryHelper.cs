@@ -65,12 +65,17 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public static void WritePrice(this BitArrayWriter writer, decimal price, decimal prevPrice, MetaInfo info, SecurityId securityId, bool useLong = false)
 		{
-			if ((price % info.PriceStep) != 0)
-				throw new ArgumentException(LocalizedStrings.Str1007Params.Put(info.PriceStep, securityId, price), nameof(info));
+			var priceStep = info.PriceStep;
+
+			if (priceStep == 0)
+				throw new InvalidOperationException(LocalizedStrings.Str2925);
+
+			if ((price % priceStep) != 0)
+				throw new ArgumentException(LocalizedStrings.Str1007Params.Put(priceStep, securityId, price), nameof(info));
 
 			try
 			{
-				var stepCount = (long)((price - prevPrice) / info.PriceStep);
+				var stepCount = (long)((price - prevPrice) / priceStep);
 
 				// ОЛ может содержать заявки с произвольно большими ценами
 				if (useLong)
@@ -80,7 +85,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			catch (OverflowException ex)
 			{
-				throw new ArgumentException(LocalizedStrings.Str1008Params.Put(price, prevPrice, info.PriceStep, useLong), ex);
+				throw new ArgumentException(LocalizedStrings.Str1008Params.Put(price, prevPrice, priceStep, useLong), ex);
 			}
 		}
 
