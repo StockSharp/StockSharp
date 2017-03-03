@@ -207,8 +207,11 @@ namespace StockSharp.Algo.Storages
 			{
 				var time = GetTruncatedTime(data[0]);
 
-				metaInfo.PriceStep = Security.PriceStep ?? 0.01m;
-				metaInfo.VolumeStep = Security.VolumeStep ?? 1m;
+				var priceStep = Security.PriceStep;
+				var volumeStep = Security.VolumeStep;
+
+				metaInfo.PriceStep = priceStep == null || priceStep == 0 ? 0.01m : priceStep.Value;
+				metaInfo.VolumeStep = volumeStep == null || volumeStep == 0 ? 1m : volumeStep.Value;
 				metaInfo.LastTime = time;
 				metaInfo.FirstTime = time;
 			}
