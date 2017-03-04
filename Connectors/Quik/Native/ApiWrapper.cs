@@ -82,6 +82,12 @@ namespace StockSharp.Quik.Native
 
 		public void Connect(string path)
 		{
+			if (IsConnected)
+			{
+				ConnectionChanged.SafeInvoke(Codes.QuikConnected, null, null);
+				return;
+			}
+
 			if (IsDllConnected() == Codes.DllConnected)
 				return;
 
