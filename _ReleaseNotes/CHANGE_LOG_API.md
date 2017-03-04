@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.22:
 * (bug) SampleOptionsQuoting fix.
 * (bug) Transaq. Demo address fix.
 * (bug) ContinuousSecurityWindow fixes.
@@ -17,6 +17,14 @@ StockSharp API Change log
 * (feature) SecurityIdTextBox. Removed Security property.
 * (bug) Transaq. Set TPlusLimits for positions.
 * (bug) Transaq. Fix http://stocksharp.ru/forum/8098/ne-vidit-pozitsii-schet-edp-finam-transaq-connector/
+* (bug) Micex TEAP. Equity pos fix.
+* (bug) Transaq. Fix https://github.com/StockSharp/StockSharp/issues/288
+* (bug) SecurityJumpsEditor fixes.
+* (bug) SmartCOM. PriceStep fixes.
+* (feature) ISecurityDownloader. Removed INativeIdStorage and IExchangeBoardProvider.
+* (feature) Candle storage. Non aligned price support.
+* (feature) ContinuousSecurityMarketDataStorage and IndexSecurityMarketDataStorage.
+* (bug) CandleMessage. Clone fix.
 
 ###v4.3.21:
 * (feature) IConnector.OrderStatusFailed
