@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Storages
 				_messageType = MessageTypes.QuoteChange;
 			}
 			else
-				throw new ArgumentException(LocalizedStrings.Str721);
+				throw new InvalidOperationException(LocalizedStrings.Str2142Params.Put(typeof(T)));
 
 			Security = security;
 			Arg = arg;
