@@ -61,8 +61,13 @@ namespace StockSharp.Algo.Storages
 				_builder = new TimeFrameCandleIndexBuilder(security).To<IndexBuilder<T>>();
 				_messageType = MessageTypes.CandleTimeFrame;
 			}
+			else if (typeof(T) == typeof(QuoteChangeMessage))
+			{
+				_builder = new QuoteChangeIndexBuilder(security).To<IndexBuilder<T>>();
+				_messageType = MessageTypes.QuoteChange;
+			}
 			else
-				throw new ArgumentException();
+				throw new ArgumentException(LocalizedStrings.Str721);
 
 			Security = security;
 			Arg = arg;
@@ -253,11 +258,10 @@ namespace StockSharp.Algo.Storages
 					{
 						curr.Fill(_lastProcessBuffer);
 
-						if (!curr.IsFilled)
-							throw new InvalidOperationException(LocalizedStrings.Str655);
-
 						_lastProcessBuffer = curr;
-						buffers.Add(curr);
+
+						if (curr.IsFilled)
+							buffers.Add(curr);
 					}
 
 					deleteKeys.Add(time);
@@ -266,13 +270,13 @@ namespace StockSharp.Algo.Storages
 				if (!buffer.IsFilled)
 					lastBuffer.Fill(_lastProcessBuffer);
 
-				if (!lastBuffer.IsFilled)
-					throw new InvalidOperationException(LocalizedStrings.Str656);
+				if (lastBuffer.IsFilled)
+				{
+					deleteKeys.Add(lastBuffer.Time);
 
-				deleteKeys.Add(lastBuffer.Time);
-
-				_lastProcessBuffer = lastBuffer;
-				buffers.Add(lastBuffer);
+					_lastProcessBuffer = lastBuffer;
+					buffers.Add(lastBuffer);
+				}
 
 				deleteKeys.ForEach(k => _buffers.Remove(k));
 			}
@@ -306,7 +310,12 @@ namespace StockSharp.Algo.Storages
 
 		protected decimal Calculate(MessageBuffer<T> buffer, Func<T, decimal> getPart)
 		{
-			var values = buffer.Messages.Select(getPart).ToArray();
+			return Calculate(buffer.Messages, getPart);
+		}
+
+		protected decimal Calculate<TItem>(IEnumerable<TItem> items, Func<TItem, decimal> getPart)
+		{
+			var values = items.Select(getPart).ToArray();
 
 			try
 			{
@@ -316,6 +325,11 @@ namespace StockSharp.Algo.Storages
 			{
 				throw new ArithmeticException(LocalizedStrings.BuildIndexError.Put(SecurityId, Security.InnerSecurityIds.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
 			}
+		}
+
+		protected int GetIndex(SecurityId securityId)
+		{
+			return _securityIndecies.TryGetValue(securityId);
 		}
 	}
 
@@ -386,6 +400,72 @@ namespace StockSharp.Algo.Storages
 			}
 
 			return res;
+		}
+	}
+
+	sealed class QuoteChangeIndexBuilder : IndexBuilder<QuoteChangeMessage>
+	{
+		public QuoteChangeIndexBuilder(IndexSecurity security)
+			: base(security)
+		{
+		}
+
+		public override IEnumerable<QuoteChangeMessage> Process(QuoteChangeMessage msg)
+		{
+			return OnProcess(msg, msg.ServerTime, msg.SecurityId);
+		}
+
+		protected override QuoteChangeMessage Process(MessageBuffer<QuoteChangeMessage> buffer)
+		{
+			var res = new QuoteChangeMessage
+			{
+				SecurityId = SecurityId,
+				ServerTime = buffer.Time,
+				LocalTime = buffer.Time,
+			};
+
+			var bids = new List<QuoteChange[]>();
+			var asks = new List<QuoteChange[]>();
+
+			foreach (var msg in buffer.Messages)
+			{
+				var index = GetIndex(msg.SecurityId);
+
+				AddChanges(msg.Bids, bids, index, buffer.Messages.Length);
+				AddChanges(msg.Asks, asks, index, buffer.Messages.Length);
+			}
+
+			res.Bids = CreateQuoteChanges(bids, Sides.Buy);
+			res.Asks = CreateQuoteChanges(asks, Sides.Sell);
+
+			return res;
+		}
+
+		private IEnumerable<QuoteChange> CreateQuoteChanges(IEnumerable<QuoteChange[]> pairs, Sides side)
+		{
+			return pairs
+				.Where(p => p.All(q => q != null))
+				.Select(p => new QuoteChange
+				{
+					Side = side,
+					Price = Calculate(p, item => item.Price),
+					Volume = Calculate(p, item => item.Volume)
+				})
+				.ToArray();
+		}
+
+		private static void AddChanges(IEnumerable<QuoteChange> changes, IList<QuoteChange[]> bids, int index, int count)
+		{
+			var i = 0;
+
+			foreach (var change in changes)
+			{
+				if (bids.Count <= i)
+					bids.Add(new QuoteChange[count]);
+
+				bids[i][index] = change;
+				i++;
+			}
 		}
 	}
 }
