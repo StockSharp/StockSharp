@@ -29,35 +29,6 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class CandlePriceLevel : Cloneable<CandlePriceLevel>
 	{
-		///// <summary>
-		///// Initializes a new instance of the <see cref="CandlePriceLevel"/>.
-		///// </summary>
-		///// <param name="price">Price.</param>
-		//public CandlePriceLevel(decimal price)
-		//	: this(price, new List<decimal>(), new List<decimal>())
-		//{
-		//}
-
-		///// <summary>
-		///// Initializes a new instance of the <see cref="CandlePriceLevel"/>.
-		///// </summary>
-		///// <param name="price">Price.</param>
-		///// <param name="buyVolumes">The volumes collection to buy.</param>
-		///// <param name="sellVolumes">The volumes collection for sale.</param>
-		//public CandlePriceLevel(decimal price, List<decimal> buyVolumes, List<decimal> sellVolumes)
-		//{
-		//	Price = price;
-
-		//	BuyVolume = buyVolumes.Sum();
-		//	SellVolume = sellVolumes.Sum();
-
-		//	BuyCount = buyVolumes.Count;
-		//	SellCount = sellVolumes.Count;
-
-		//	BuyVolumes = buyVolumes;
-		//	SellVolumes = sellVolumes;
-		//}
-
 		/// <summary>
 		/// Price.
 		/// </summary>

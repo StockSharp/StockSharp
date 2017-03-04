@@ -270,17 +270,19 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(copy));
 
 			copy.LocalTime = LocalTime;
+			copy.OpenPrice = OpenPrice;
+			copy.OpenTime = OpenTime;
+			copy.OpenVolume = OpenVolume;
 			copy.ClosePrice = ClosePrice;
 			copy.CloseTime = CloseTime;
 			copy.CloseVolume = CloseVolume;
 			copy.HighPrice = HighPrice;
 			copy.HighVolume = HighVolume;
+			copy.HighTime = HighTime;
 			copy.LowPrice = LowPrice;
 			copy.LowVolume = LowVolume;
+			copy.LowTime = LowTime;
 			copy.OpenInterest = OpenInterest;
-			copy.OpenPrice = OpenPrice;
-			copy.OpenTime = OpenTime;
-			copy.OpenVolume = OpenVolume;
 			copy.SecurityId = SecurityId;
 			copy.TotalVolume = TotalVolume;
 			copy.RelativeVolume = RelativeVolume;
@@ -290,6 +292,7 @@ namespace StockSharp.Messages
 			copy.TotalTicks = TotalTicks;
 			copy.IsFinished = IsFinished;
 			copy.PriceLevels = PriceLevels?.Select(l => l.Clone()).ToArray();
+			copy.State = State;
 
 			return copy;
 		}
