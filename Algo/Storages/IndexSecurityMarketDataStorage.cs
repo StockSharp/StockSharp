@@ -111,12 +111,8 @@ namespace StockSharp.Algo.Storages
 		protected sealed class MessageBuffer<TBuffer>
 			where TBuffer : Message
 		{
-			private int _counter;
-
 			public MessageBuffer(DateTimeOffset time, int maxMessageCount)
 			{
-				_counter = maxMessageCount;
-
 				Time = time;
 				Messages = new TBuffer[maxMessageCount];
 			}
@@ -125,7 +121,7 @@ namespace StockSharp.Algo.Storages
 
 			public TBuffer[] Messages { get; }
 
-			public bool IsFilled => _counter <= 0;
+			public bool IsFilled => Messages.All(m => m != null);
 
 			public void AddMessage(int securityIndex, TBuffer msg)
 			{
@@ -136,8 +132,6 @@ namespace StockSharp.Algo.Storages
 				//	throw new ArgumentException(LocalizedStrings.Str654Params.Put(msg.LocalTime), nameof(msg));
 
 				Messages[securityIndex] = msg;
-
-				_counter--;
 			}
 
 			public void Fill(MessageBuffer<TBuffer> prevBuffer)
@@ -151,7 +145,6 @@ namespace StockSharp.Algo.Storages
 						continue;
 
 					Messages[i] = (TBuffer)prevBuffer.Messages[i].Clone();
-					_counter--;
 				}
 			}
 		}
