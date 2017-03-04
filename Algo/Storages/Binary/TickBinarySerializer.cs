@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Storages.Binary
 			stream.Write(FirstPrice);
 			stream.Write(LastPrice);
 
-			WriteNonSystemPrice(stream);
+			WriteFractionalPrice(stream);
 			WriteFractionalVolume(stream);
 
 			WriteLocalTime(stream, MarketDataVersions.Version47);
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Storages.Binary
 			FirstPrice = stream.Read<decimal>();
 			LastPrice = stream.Read<decimal>();
 
-			ReadNonSystemPrice(stream);
+			ReadFractionalPrice(stream);
 			ReadFractionalVolume(stream);
 
 			ReadLocalTime(stream, MarketDataVersions.Version47);

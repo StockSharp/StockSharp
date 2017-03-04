@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Storages.Binary
 			foreach (var portfolio in Portfolios)
 				stream.Write(portfolio);
 
-			WriteNonSystemPrice(stream);
+			WriteFractionalPrice(stream);
 			WriteFractionalVolume(stream);
 
 			if (Version < MarketDataVersions.Version45)
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Storages.Binary
 			for (var i = 0; i < count; i++)
 				Portfolios.Add(stream.Read<string>());
 
-			ReadNonSystemPrice(stream);
+			ReadFractionalPrice(stream);
 			ReadFractionalVolume(stream);
 
 			if (Version < MarketDataVersions.Version45)

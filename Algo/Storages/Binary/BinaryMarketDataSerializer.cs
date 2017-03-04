@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Storages.Binary
 			stream.Position += extInfoSize;
 		}
 
-		protected void WriteNonSystemPrice(Stream stream)
+		protected void WriteFractionalPrice(Stream stream)
 		{
 			if (Version < MarketDataVersions.Version43)
 				return;
@@ -164,7 +164,7 @@ namespace StockSharp.Algo.Storages.Binary
 			stream.Write(LastFractionalPrice);
 		}
 
-		protected void ReadNonSystemPrice(Stream stream)
+		protected void ReadFractionalPrice(Stream stream)
 		{
 			if (Version < MarketDataVersions.Version43)
 				return;

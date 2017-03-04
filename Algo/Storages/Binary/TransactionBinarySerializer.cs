@@ -117,7 +117,7 @@ namespace StockSharp.Algo.Storages.Binary
 			WriteList(stream, SystemComments);
 			WriteList(stream, Errors);
 
-			WriteNonSystemPrice(stream);
+			WriteFractionalPrice(stream);
 			WriteFractionalVolume(stream);
 
 			WriteLocalTime(stream, MarketDataVersions.Version47);
@@ -178,7 +178,7 @@ namespace StockSharp.Algo.Storages.Binary
 			ReadList(stream, SystemComments);
 			ReadList(stream, Errors);
 
-			ReadNonSystemPrice(stream);
+			ReadFractionalPrice(stream);
 			ReadFractionalVolume(stream);
 
 			ReadLocalTime(stream, MarketDataVersions.Version47);
