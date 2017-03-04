@@ -2796,11 +2796,14 @@ P:StockSharp.Algo.IInnerAdapterList.Item(StockSharp.Messages.IMessageAdapter)/pa
 P:StockSharp.Algo.IInnerAdapterList.Item(StockSharp.Messages.IMessageAdapter)/returns;DocStr439
 T:StockSharp.Algo.BasketMessageAdapter/summary;DocStr440
 P:StockSharp.Algo.BasketMessageAdapter.InnerAdapters/summary;DocStr447
-P:StockSharp.Algo.BasketMessageAdapter.Portfolios/summary;DocStr448
 P:StockSharp.Algo.BasketMessageAdapter.NativeIdStorage/summary;DocStr9329
 P:StockSharp.Algo.BasketMessageAdapter.ExtendedInfoStorage/summary;DocStr9374
 M:StockSharp.Algo.BasketMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Algo.BasketMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Algo.BasketMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.Messages.IMessageAdapterProvider)/summary;DocStr1
+M:StockSharp.Algo.BasketMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.Messages.IMessageAdapterProvider)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Algo.BasketMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.Messages.IMessageAdapterProvider)/param/adapterProvider;DocStr9328
+P:StockSharp.Algo.BasketMessageAdapter.AdapterProvider/summary;DocStr9328
 P:StockSharp.Algo.BasketMessageAdapter.SupportedMessages/summary;DocStr449
 P:StockSharp.Algo.BasketMessageAdapter.PortfolioLookupRequired/summary;DocStr450
 P:StockSharp.Algo.BasketMessageAdapter.OrderStatusRequired/summary;DocStr451

@@ -13592,7 +13592,7 @@ DocStr9349;Restore subscription on reconnect;Восстановить подпи
 DocStr9350;Successful unsubscription market-data;Успешная отписка на маркет-данные
 DocStr9351;Error unsubscription market-data;Ошибка отписки от маркет-данных
 DocStr9352;Native id storage name;Название хранилища системных идентификаторов
-DocStr9353;In memory security native identifier storage;Хранилища системных идентификаторов
+DocStr9353;In memory security native identifier storage;Хранилище системных идентификаторов
 DocStr9354;To get the instrument by the system identifier;Получить инструмент по системному идентификатору
 DocStr9355;Convert {0} to readable string;Перевести {0} в читаемую строку
 DocStr9356;Readable string;Читаемая строка
@@ -13769,3 +13769,6 @@ DocStr9538;The aggregator-storage, allowing to load data simultaneously market d
 DocStr9539;Find inner security instancies;Найти внутренние инструменты
 DocStr9540;Generate {0} message;Создать сообщение {0}
 DocStr9541;{0} message;Сообщение {0}
+DocStr9542;Remove association between portfolio name and adapter;Удалить ассоциацию между портфелем и адаптером
+DocStr9543;{0} if the association is successfully removed, otherwise, {1};{0} если ассоциация была удалена успешно, иначе, {1}
+DocStr9544;In memory message adapter's provider;Провайдер адаптеров сообщений, хранящий данные в памяти

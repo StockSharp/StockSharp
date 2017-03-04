@@ -52,7 +52,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Adapter-aggregator that allows simultaneously to operate multiple adapters connected to different trading systems.
 	/// </summary>
-	public class BasketMessageAdapter : MessageAdapter, IMessageAdapterProvider
+	public class BasketMessageAdapter : MessageAdapter
 	{
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 		{
@@ -135,11 +135,6 @@ namespace StockSharp.Algo
 		public IInnerAdapterList InnerAdapters => _innerAdapters;
 
 		/// <summary>
-		/// Portfolios which are used to send transactions.
-		/// </summary>
-		public IDictionary<string, IMessageAdapter> Portfolios { get; }
-
-		/// <summary>
 		/// Security native identifier storage.
 		/// </summary>
 		public INativeIdStorage NativeIdStorage { get; set; }
@@ -154,11 +149,29 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator)
+			: this(transactionIdGenerator, new InMemoryMessageAdapterProvider())
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
+		/// </summary>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		/// <param name="adapterProvider">The message adapter's provider.</param>
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IMessageAdapterProvider adapterProvider)
 			: base(transactionIdGenerator)
 		{
+			if (adapterProvider == null)
+				throw new ArgumentNullException(nameof(adapterProvider));
+
 			_innerAdapters = new InnerAdapterList();
-			Portfolios = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
+			AdapterProvider = adapterProvider;
 		}
+
+		/// <summary>
+		/// The message adapter's provider.
+		/// </summary>
+		public IMessageAdapterProvider AdapterProvider { get; }
 
 		/// <summary>
 		/// Supported by adapter message types.
@@ -474,7 +487,7 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(string portfolioName, Message message)
 		{
-			var adapter = portfolioName.IsEmpty() ? null : Portfolios.TryGetValue(portfolioName);
+			var adapter = portfolioName.IsEmpty() ? null : AdapterProvider.GetAdapter(portfolioName);
 
 			if (adapter == null)
 			{
@@ -516,6 +529,26 @@ namespace StockSharp.Algo
 					case MessageTypes.MarketData:
 						ProcessMarketDataMessage(innerAdapter, (MarketDataMessage)message);
 						return;
+
+					case MessageTypes.Portfolio:
+						var pfMsg = (PortfolioMessage)message;
+						AdapterProvider.SetAdapter(pfMsg.PortfolioName, innerAdapter);
+						break;
+
+					case MessageTypes.PortfolioChange:
+						var pfChangeMsg = (PortfolioChangeMessage)message;
+						AdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, innerAdapter);
+						break;
+
+					case MessageTypes.Position:
+						var posMsg = (PositionMessage)message;
+						AdapterProvider.SetAdapter(posMsg.PortfolioName, innerAdapter);
+						break;
+
+					case MessageTypes.PositionChange:
+						var posChangeMsg = (PositionChangeMessage)message;
+						AdapterProvider.SetAdapter(posChangeMsg.PortfolioName, innerAdapter);
+						break;
 				}
 			}
 
@@ -726,18 +759,6 @@ namespace StockSharp.Algo
 			_hearbeatAdapters.Values.ForEach(a => ((IMessageAdapter)a).Parent = null);
 
 			base.DisposeManaged();
-		}
-
-		IEnumerable<IMessageAdapter> IMessageAdapterProvider.Adapters => InnerAdapters;
-
-		IMessageAdapter IMessageAdapterProvider.GetAdapter(string portfolioName)
-		{
-			return Portfolios.TryGetValue(portfolioName);
-		}
-
-		void IMessageAdapterProvider.SetAdapter(string portfolioName, IMessageAdapter adapter)
-		{
-			Portfolios[portfolioName] = adapter;
 		}
 	}
 }
