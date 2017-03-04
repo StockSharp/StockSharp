@@ -76,8 +76,8 @@ namespace StockSharp.Algo.Storages.Binary
 		// сериализация и десериализация их полей сделана в дочерних классах
 		public decimal FirstPrice { get; set; }
 		public decimal LastPrice { get; set; }
-		public decimal FirstNonSystemPrice { get; set; }
-		public decimal LastNonSystemPrice { get; set; }
+		public decimal FirstFractionalPrice { get; set; }
+		public decimal LastFractionalPrice { get; set; }
 
 		public decimal FirstFractionalVolume { get; set; }
 		public decimal LastFractionalVolume { get; set; }
@@ -160,8 +160,8 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version43)
 				return;
 
-			stream.Write(FirstNonSystemPrice);
-			stream.Write(LastNonSystemPrice);
+			stream.Write(FirstFractionalPrice);
+			stream.Write(LastFractionalPrice);
 		}
 
 		protected void ReadNonSystemPrice(Stream stream)
@@ -169,8 +169,8 @@ namespace StockSharp.Algo.Storages.Binary
 			if (Version < MarketDataVersions.Version43)
 				return;
 
-			FirstNonSystemPrice = stream.Read<decimal>();
-			LastNonSystemPrice = stream.Read<decimal>();
+			FirstFractionalPrice = stream.Read<decimal>();
+			LastFractionalPrice = stream.Read<decimal>();
 		}
 
 		protected void WriteFractionalVolume(Stream stream)
@@ -282,8 +282,8 @@ namespace StockSharp.Algo.Storages.Binary
 			LastTime = src.LastTime;
 			LocalOffset = src.LocalOffset;
 			ServerOffset = src.ServerOffset;
-			FirstNonSystemPrice = src.FirstNonSystemPrice;
-			LastNonSystemPrice = src.LastNonSystemPrice;
+			FirstFractionalPrice = src.FirstFractionalPrice;
+			LastFractionalPrice = src.LastFractionalPrice;
 			VolumeStep = src.VolumeStep;
 			FirstFractionalVolume = src.FirstFractionalVolume;
 			LastFractionalVolume = src.LastFractionalVolume;

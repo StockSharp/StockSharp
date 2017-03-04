@@ -112,10 +112,10 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 				else
 				{
-					if (info.FirstNonSystemPrice == 0)
-						info.FirstNonSystemPrice = info.LastNonSystemPrice = price;
+					if (info.FirstFractionalPrice == 0)
+						info.FirstFractionalPrice = info.LastFractionalPrice = price;
 
-					info.LastNonSystemPrice = writer.WriteDecimal(price, info.LastNonSystemPrice);
+					info.LastFractionalPrice = writer.WriteDecimal(price, info.LastFractionalPrice);
 				}
 			}
 		}
@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 				else
 				{
-					return info.FirstNonSystemPrice = reader.ReadDecimal(info.FirstNonSystemPrice);
+					return info.FirstFractionalPrice = reader.ReadDecimal(info.FirstFractionalPrice);
 				}
 			}
 		}
