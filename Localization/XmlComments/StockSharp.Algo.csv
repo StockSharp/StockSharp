@@ -578,13 +578,6 @@ M:StockSharp.Algo.Storages.CsvNativeIdStorage.TryGetBySecurityId(System.String,S
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.TryGetBySecurityId(System.String,StockSharp.Messages.SecurityId)/param/securityId;DocStr9333
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.TryGetBySecurityId(System.String,StockSharp.Messages.SecurityId)/returns;DocStr802
 T:StockSharp.Algo.Storages.InMemoryNativeIdStorage/summary;DocStr9353
-M:StockSharp.Algo.Storages.AllSecurityMarketDataStorage`1.Save(System.Collections.Generic.IEnumerable{`0})/summary;DocStr1264
-M:StockSharp.Algo.Storages.AllSecurityMarketDataStorage`1.Save(System.Collections.Generic.IEnumerable{`0})/param/data;MarketData
-M:StockSharp.Algo.Storages.AllSecurityMarketDataStorage`1.Delete(System.Collections.Generic.IEnumerable{`0})/summary;DocStr1265
-M:StockSharp.Algo.Storages.AllSecurityMarketDataStorage`1.Delete(System.Collections.Generic.IEnumerable{`0})/param/data;DocStr1266
-M:StockSharp.Algo.Storages.AllSecurityMarketDataStorage`1.Load(System.DateTime)/summary;DocStr1268
-M:StockSharp.Algo.Storages.AllSecurityMarketDataStorage`1.Load(System.DateTime)/param/date;DocStr1269
-M:StockSharp.Algo.Storages.AllSecurityMarketDataStorage`1.Load(System.DateTime)/returns;DocStr1270
 T:StockSharp.Algo.Storages.BufferMessageAdapter/summary;DocStr8565
 T:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2/summary;DocStr1589
 T:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2/typeparam/TKey;DocStr1590
@@ -724,6 +717,7 @@ M:StockSharp.Algo.Storages.SecurityMarketDataDrive.#ctor(StockSharp.Algo.Storage
 P:StockSharp.Algo.Storages.SecurityMarketDataDrive.Drive/summary;DocStr1278
 P:StockSharp.Algo.Storages.SecurityMarketDataDrive.Security/summary;DocStr2831
 P:StockSharp.Algo.Storages.SecurityMarketDataDrive.SecurityId/summary;DocStr8485
+P:StockSharp.Algo.Storages.SecurityMarketDataDrive.ExchangeInfoProvider/summary;DocStr9509
 M:StockSharp.Algo.Storages.SecurityMarketDataDrive.GetTickStorage(StockSharp.Algo.Storages.IMarketDataSerializer{StockSharp.Messages.ExecutionMessage})/summary;DocStr1420
 M:StockSharp.Algo.Storages.SecurityMarketDataDrive.GetTickStorage(StockSharp.Algo.Storages.IMarketDataSerializer{StockSharp.Messages.ExecutionMessage})/param/serializer;DocStr1280
 M:StockSharp.Algo.Storages.SecurityMarketDataDrive.GetTickStorage(StockSharp.Algo.Storages.IMarketDataSerializer{StockSharp.Messages.ExecutionMessage})/returns;DocStr694
@@ -788,6 +782,9 @@ M:StockSharp.Algo.Storages.ContinuousSecurityMarketDataStorage`1.#ctor(StockShar
 P:StockSharp.Algo.Storages.ContinuousSecurityMarketDataStorage`1.DataType/summary;DocStr1275
 P:StockSharp.Algo.Storages.ContinuousSecurityMarketDataStorage`1.Security/summary;DocStr1276
 P:StockSharp.Algo.Storages.ContinuousSecurityMarketDataStorage`1.Arg/summary;DocStr1277
+M:StockSharp.Algo.Storages.ContinuousSecurityMarketDataStorage`1.OnLoad(System.DateTime)/summary;DocStr2094
+M:StockSharp.Algo.Storages.ContinuousSecurityMarketDataStorage`1.OnLoad(System.DateTime)/param/date;Date
+M:StockSharp.Algo.Storages.ContinuousSecurityMarketDataStorage`1.OnLoad(System.DateTime)/returns;DocStr8776
 T:StockSharp.Algo.Storages.EntityRegistry/summary;DocStr1309
 M:StockSharp.Algo.Storages.EntityRegistry.#ctor/summary;DocStr1
 M:StockSharp.Algo.Storages.EntityRegistry.#ctor(Ecng.Serialization.IStorage)/summary;DocStr1
@@ -932,6 +929,9 @@ M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.#ctor(StockSharp.Alg
 P:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.DataType/summary;DocStr1275
 P:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.Security/summary;DocStr1276
 P:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.Arg/summary;DocStr1277
+M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.OnLoad(System.DateTime)/summary;DocStr2094
+M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.OnLoad(System.DateTime)/param/date;Date
+M:StockSharp.Algo.Storages.IndexSecurityMarketDataStorage`1.OnLoad(System.DateTime)/returns;DocStr8776
 T:StockSharp.Algo.Storages.LocalMarketDataDrive/summary;DocStr1580
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.#ctor/summary;DocStr1
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.#ctor(System.String)/summary;DocStr1
@@ -1324,6 +1324,9 @@ P:StockSharp.Algo.Storages.BasketMarketDataStorage`1.Arg/summary;DocStr1277
 M:StockSharp.Algo.Storages.BasketMarketDataStorage`1.Load(System.DateTime)/summary;DocStr2094
 M:StockSharp.Algo.Storages.BasketMarketDataStorage`1.Load(System.DateTime)/param/date;Date
 M:StockSharp.Algo.Storages.BasketMarketDataStorage`1.Load(System.DateTime)/returns;DocStr2095
+M:StockSharp.Algo.Storages.BasketMarketDataStorage`1.OnLoad(System.DateTime)/summary;DocStr2094
+M:StockSharp.Algo.Storages.BasketMarketDataStorage`1.OnLoad(System.DateTime)/param/date;Date
+M:StockSharp.Algo.Storages.BasketMarketDataStorage`1.OnLoad(System.DateTime)/returns;DocStr8776
 T:StockSharp.Algo.Storages.MyTradeList/summary;DocStr2214
 M:StockSharp.Algo.Storages.MyTradeList.#ctor(Ecng.Serialization.IStorage)/summary;DocStr1
 M:StockSharp.Algo.Storages.MyTradeList.#ctor(Ecng.Serialization.IStorage)/param/storage;DocStr1336
