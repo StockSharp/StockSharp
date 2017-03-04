@@ -63,6 +63,12 @@ namespace SampleSmartConsole
 							waitHandle.Set();
 						};
 
+						// подписываемся на событие ошибки подключения
+						trader.ConnectionError += error =>
+						{
+							Console.WriteLine(LocalizedStrings.Str2959 + " " + error.ToString());
+						};
+
 						Console.WriteLine(LocalizedStrings.Str2170);
 
 						trader.Connect();
