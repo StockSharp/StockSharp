@@ -52,6 +52,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WriteOffsets(stream);
+
+			if (Version < MarketDataVersions.Version56)
+				return;
+
+			WriteFractionalPrice(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -72,6 +77,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadOffsets(stream);
+
+			if (Version < MarketDataVersions.Version56)
+				return;
+
+			ReadFractionalPrice(stream);
 		}
 
 		public override void CopyFrom(CandleMetaInfo src)
@@ -330,7 +340,10 @@ namespace StockSharp.Algo.Storages.Binary
 
 				foreach (var level in priceLevels)
 				{
-					writer.WritePrice(level.Price, metaInfo.LastPrice, metaInfo, SecurityId);
+					if (metaInfo.Version < MarketDataVersions.Version56)
+						writer.WritePrice(level.Price, metaInfo.LastPrice, metaInfo, SecurityId);
+					else
+						writer.WritePriceEx(level.Price, metaInfo, SecurityId);
 
 					writer.WriteInt(level.BuyCount);
 					writer.WriteInt(level.SellCount);
@@ -505,7 +518,9 @@ namespace StockSharp.Algo.Storages.Binary
 				{
 					var priceLevel = new CandlePriceLevel
 					{
-						Price = reader.ReadPrice(metaInfo.FirstPrice, metaInfo),
+						Price = metaInfo.Version < MarketDataVersions.Version56
+								? reader.ReadPrice(metaInfo.FirstPrice, metaInfo)
+								: reader.ReadPriceEx(metaInfo),
 						BuyCount = reader.ReadInt(),
 						SellCount = reader.ReadInt(),
 						BuyVolume = reader.ReadVolume(metaInfo),
