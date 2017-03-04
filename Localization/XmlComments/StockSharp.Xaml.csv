@@ -367,6 +367,8 @@ T:StockSharp.Xaml.SecurityJumpsEditor/summary;DocStr8174
 P:StockSharp.Xaml.SecurityJumpsEditor.Jumps/summary;DocStr8176
 P:StockSharp.Xaml.SecurityJumpsEditor.SelectedJump/summary;DocStr8177
 P:StockSharp.Xaml.SecurityJumpsEditor.SelectedJumps/summary;DocStr8178
+F:StockSharp.Xaml.SecurityJumpsEditor.SecurityProviderProperty/summary;DocStr29
+P:StockSharp.Xaml.SecurityJumpsEditor.SecurityProvider/summary;DocStr972
 E:StockSharp.Xaml.SecurityJumpsEditor.Changed/summary;DocStr8173
 E:StockSharp.Xaml.SecurityJumpsEditor.JumpSelected/summary;DocStr8173
 M:StockSharp.Xaml.SecurityJumpsEditor.#ctor/summary;DocStr1

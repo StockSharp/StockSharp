@@ -1765,6 +1765,16 @@
             Selected rollovers.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.SecurityJumpsEditor.SecurityProviderProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityJumpsEditor.SecurityProvider" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityJumpsEditor.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.SecurityJumpsEditor.Changed">
       <summary>
             The rollover change event.
