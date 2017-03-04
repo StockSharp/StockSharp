@@ -116,7 +116,10 @@ namespace SampleHistoryTesting
 		private SimpleMovingAverage _longMa;
 		private ChartArea _area;
 
-		private readonly FinamHistorySource _finamHistorySource = new FinamHistorySource();
+		private readonly InMemoryNativeIdStorage _nativeIdStorage = new InMemoryNativeIdStorage();
+		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
+		private readonly FinamHistorySource _finamHistorySource;
 
 		public MainWindow()
 		{
@@ -168,6 +171,8 @@ namespace SampleHistoryTesting
 				FinamCandlesCheckBox,
 				YahooCandlesCheckBox,
 			});
+
+			_finamHistorySource = new FinamHistorySource(_nativeIdStorage, _exchangeInfoProvider);
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
@@ -202,11 +207,8 @@ namespace SampleHistoryTesting
 
 			var timeFrame = TimeSpan.FromMinutes(TimeFrame.SelectedIndex == 0 ? 1 : 5);
 
-			var nativeIdStorage = new InMemoryNativeIdStorage();
-			var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-
 			var secCode = id.SecurityCode;
-			var board = exchangeInfoProvider.GetOrCreateBoard(id.BoardCode);
+			var board = _exchangeInfoProvider.GetOrCreateBoard(id.BoardCode);
 
 			// create test security
 			var security = new Security
@@ -218,7 +220,7 @@ namespace SampleHistoryTesting
 
 			if (FinamCandlesCheckBox.IsChecked == true)
 			{
-				_finamHistorySource.Refresh(new FinamSecurityStorage(security), nativeIdStorage, exchangeInfoProvider, security, s => {}, () => false);
+				_finamHistorySource.Refresh(new FinamSecurityStorage(security), security, s => {}, () => false);
 			}
 
 			// create backtesting modes
@@ -299,7 +301,7 @@ namespace SampleHistoryTesting
 					FinamCandlesProgress,
 					FinamCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, nativeIdStorage, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
 					FinamCandlesChart,
 					FinamCandlesEquity,
 					FinamCandlesPosition),
@@ -309,7 +311,7 @@ namespace SampleHistoryTesting
 					YahooCandlesProgress,
 					YahooCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource().GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource(_exchangeInfoProvider).GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
 					YahooCandlesChart,
 					YahooCandlesEquity,
 					YahooCandlesPosition),

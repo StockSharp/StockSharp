@@ -26,34 +26,38 @@
       <param name="security">Security.</param>
       <returns>Security code.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.BaseHistorySource.GetSecurityBoard(StockSharp.BusinessEntities.Security)">
-      <summary>
-            To get the instrument board by its identifier.
-            </summary>
-      <param name="security">Security.</param>
-      <returns>Security board.</returns>
-    </member>
     <member name="T:StockSharp.Algo.History.BaseDumpableHistorySource">
       <summary>
             The base source of market data, which saves the downloaded data to a temporary directory.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.#ctor">
+    <member name="P:StockSharp.Algo.History.BaseDumpableHistorySource.NativeIdStorage">
+      <summary>
+            Security native identifier storage.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.BaseDumpableHistorySource.ExchangeInfoProvider">
+      <summary>
+            Exchanges and trading boards provider.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initialize <see cref="T:StockSharp.Algo.History.BaseDumpableHistorySource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.BaseDumpableHistorySource.CanDump">
       <summary>
             Is it possible to save files.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.Process(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object,System.Func{System.String})">
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.Process(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object,System.Func{System.String})">
       <summary>
             Upload or download text file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
@@ -69,26 +73,38 @@
             If the value is an empty string, the data will not stored locally.
             </remarks>
     </member>
-    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.GetSecurityBoard(StockSharp.BusinessEntities.Security)">
+      <summary>
+            To get the instrument board by its identifier.
+            </summary>
+      <param name="security">Security.</param>
+      <returns>Security board.</returns>
+    </member>
     <member name="T:StockSharp.Algo.History.FinVizHistorySource">
       <summary>
             The source for downloading historical data from FinViz.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.FinVizHistorySource.#ctor">
+    <member name="M:StockSharp.Algo.History.FinVizHistorySource.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.FinVizHistorySource" />.
+            </summary>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+    </member>
+    <member name="P:StockSharp.Algo.History.FinVizHistorySource.ExchangeInfoProvider">
+      <summary>
+            Exchanges and trading boards provider.
             </summary>
     </member>
     <member name="M:StockSharp.Algo.History.FinVizHistorySource.LoadChanges(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})">
@@ -98,13 +114,11 @@
       <param name="securities">Securities.</param>
       <returns>Changes of market data.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.FinVizHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.FinVizHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -119,18 +133,18 @@
             Available timeframes of historical data.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.#ctor">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.DukasCopySource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -161,12 +175,11 @@
       <param name="side">Quote type (bid or ask).</param>
       <returns>Historical time-frames.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
@@ -178,28 +191,27 @@
             The source for downloading historical data from Gain Capital.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.#ctor">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.GainCapitalSource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
@@ -227,10 +239,12 @@
             The source for downloading historical data from MBTrading.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.#ctor">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.MBTradingSource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.Login">
       <summary>
@@ -252,23 +266,20 @@
             The maximum number of attempts to login to the site. The default is 10.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
@@ -298,10 +309,12 @@
             The source for downloading historical data from TrueFX.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.#ctor">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.TrueFXSource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Forex.TrueFXSource.Login">
       <summary>
@@ -313,23 +326,20 @@
             Password.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
@@ -371,13 +381,11 @@
       <param name="to">End date.</param>
       <returns>Historical rate.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -643,17 +651,24 @@
             The client for access to the history server <see cref="T:StockSharp.Algo.History.Hydra.IRemoteStorage" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
             </summary>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor(System.Uri,System.Boolean)">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider,System.Uri,System.Boolean)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
             </summary>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="address">Server address.</param>
       <param name="streaming">Data transfer via WCF Streaming.</param>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.ExchangeInfoProvider">
+      <summary>
+            Exchanges and trading boards provider.
+            </summary>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.Credentials">
       <summary>
@@ -681,13 +696,11 @@
             </summary>
       <returns>WCF channel.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -728,13 +741,11 @@
             The interface of the loader of information about instruments.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.ISecurityDownloader.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.ISecurityDownloader.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -749,10 +760,12 @@
             Timeframes which can be passed to <see cref="M:StockSharp.Algo.History.QuandlHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.QuandlHistorySource.#ctor">
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.QuandlHistorySource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.QuandlHistorySource.DatabaseCode">
       <summary>
@@ -764,12 +777,11 @@
             The registered user identifier.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.QuandlHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
@@ -786,13 +798,11 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -807,10 +817,12 @@
             History server address.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.#ctor(System.String)">
+    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,System.String)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Russian.AlorHistorySource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="address">The history server address. The default is http://history.alor.ru.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.AlorHistorySource.TimeFrames">
@@ -818,12 +830,11 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
@@ -851,10 +862,12 @@
             Native id storage name.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.#ctor">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Russian.Finam.FinamHistorySource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.TimeFrames">
       <summary>
@@ -867,46 +880,41 @@
             </summary>
       <returns>Information about securities.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
       <summary>
             Load historical ticks.
             </summary>
       <param name="security">The instrument for which you need to get all trades.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Begin period.</param>
       <param name="to">End period.</param>
       <returns>Historical ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.TimeSpan,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
       <summary>
             To download candles.
             </summary>
       <param name="security">The instrument for which you need to get candles.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="timeFrame">Time-frame. Possible values <see cref="P:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.TimeFrames" />.</param>
       <param name="from">Begin period.</param>
       <param name="to">End period.</param>
       <returns>Downloaded candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -951,55 +959,52 @@
             Native id storage name.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.#ctor">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Russian.MfdHistorySource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.MfdHistorySource.TimeFrames">
       <summary>
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetTicks(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
       <summary>
             To download tick trades.
             </summary>
       <param name="security">The instrument for which you need to get trades.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Begin period.</param>
       <param name="to">End period.</param>
       <returns>Loaded ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.TimeSpan,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
       <summary>
             To download candles.
             </summary>
       <param name="security">The instrument for which you need to get candles.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="timeFrame">Time-frame. Possible values <see cref="P:StockSharp.Algo.History.Russian.MfdHistorySource.TimeFrames" />.</param>
       <param name="from">Begin period.</param>
       <param name="to">End period.</param>
@@ -1116,10 +1121,12 @@
             The source for download of historical trades from RTS.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor">
+    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Russian.Rts.RtsHistorySource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.TimeZone">
       <summary>
@@ -1172,12 +1179,11 @@
             If the value is an empty string, the data in CSV and Excel formats are not processed.
             </remarks>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
@@ -1217,35 +1223,34 @@
             The source for download of historical data from the site of the Ukrainian stock exchange.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.#ctor">
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Russian.UxHistorySource" />.
             </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.UxHistorySource.TimeFrames">
       <summary>
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
       <param name="security">Security.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="from">Start date.</param>
       <param name="to">End date.</param>
       <param name="dataType">Data type.</param>
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -1274,9 +1279,15 @@
             The market data source from Xignite.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.XigniteHistorySource.#ctor">
+    <member name="M:StockSharp.Algo.History.XigniteHistorySource.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.XigniteHistorySource" />.
+            </summary>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+    </member>
+    <member name="P:StockSharp.Algo.History.XigniteHistorySource.ExchangeInfoProvider">
+      <summary>
+            Exchanges and trading boards provider.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.XigniteHistorySource.AuthToken">
@@ -1294,13 +1305,11 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.XigniteHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.XigniteHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -1310,9 +1319,15 @@
             The market data source from Yahoo Finance.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.YahooHistorySource.#ctor">
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.YahooHistorySource" />.
+            </summary>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+    </member>
+    <member name="P:StockSharp.Algo.History.YahooHistorySource.ExchangeInfoProvider">
+      <summary>
+            Exchanges and trading boards provider.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.YahooHistorySource.Fields">
@@ -1343,13 +1358,11 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.YahooHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
       <param name="securityStorage">Securities meta info storage.</param>
-      <param name="nativeIdStorage">Security native identifier storage.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
@@ -1359,10 +1372,11 @@
             Remote storage of market data working via <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.#ctor">
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.Storages.RemoteMarketDataDrive" />.
             </summary>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
     <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.#ctor(StockSharp.Algo.History.Hydra.RemoteStorageClient)">
       <summary>
