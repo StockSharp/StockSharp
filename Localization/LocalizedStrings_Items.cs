@@ -43956,5 +43956,25 @@ namespace StockSharp.Localization
 		/// Build index {0} for {1} error.
 		/// </summary>
 		public static string BuildIndexError => GetString(BuildIndexErrorKey);
+
+		/// <summary>
+		/// OS version
+		/// </summary>
+		public const string OSVersionKey = nameof(OSVersion);
+
+		/// <summary>
+		/// OS version
+		/// </summary>
+		public static string OSVersion => GetString(OSVersionKey);
+
+		/// <summary>
+		/// Bit mode
+		/// </summary>
+		public const string BitModeKey = nameof(BitMode);
+
+		/// <summary>
+		/// Bit mode
+		/// </summary>
+		public static string BitMode => GetString(BitModeKey);
 	}
 }

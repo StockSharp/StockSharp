@@ -4429,6 +4429,8 @@ TotalPrice;Total price size;Общий ценовой размер
 TotalQuotesCount;Total quotes count;Общее количество котировок
 MaxDepthOfBook;Maximum depth of book;Максимальная глубина стакана
 BuildIndexError;Build index {0} for {1} error.;Ошибка построения индекса {0} для {1}.
+OSVersion;OS version;Версия ОС
+BitMode;Bit mode;Битность
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
