@@ -13774,3 +13774,4 @@ DocStr9541;{0} message;Сообщение {0}
 DocStr9542;Remove association between portfolio name and adapter;Удалить ассоциацию между портфелем и адаптером
 DocStr9543;{0} if the association is successfully removed, otherwise, {1};{0} если ассоциация была удалена успешно, иначе, {1}
 DocStr9544;In memory message adapter's provider;Провайдер адаптеров сообщений, хранящий данные в памяти
+DocStr9545;App version;Версия программы

@@ -65,5 +65,10 @@ namespace StockSharp.Localization
 		{
 			return Manager.GetString(resourceId, language);
 		}
+
+		/// <summary>
+		/// Web site domain.
+		/// </summary>
+		public static string Domain => ActiveLanguage == Languages.Russian ? "ru" : "com";
 	}
 }

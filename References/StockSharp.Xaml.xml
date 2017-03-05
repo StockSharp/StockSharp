@@ -817,6 +817,16 @@
             Link to file.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.SuggestionsWindow.Product">
+      <summary>
+            Product type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SuggestionsWindow.Version">
+      <summary>
+            App version.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.SuggestionsWindow.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SuggestionsWindow" />.
