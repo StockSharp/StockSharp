@@ -17,8 +17,10 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -60,54 +62,6 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class WeightedIndexSecurity : IndexSecurity
 	{
-		//private sealed class WeightsDictionary : CachedSynchronizedDictionary<SecurityId, decimal>
-		//{
-		//	private readonly WeightedIndexSecurity _parent;
-
-		//	public WeightsDictionary(WeightedIndexSecurity parent)
-		//	{
-		//		if (parent == null)
-		//			throw new ArgumentNullException(nameof(parent));
-
-		//		_parent = parent;
-		//	}
-
-		//	public override void Add(SecurityId key, decimal value)
-		//	{
-		//		base.Add(key, value);
-		//		RefreshName();
-		//	}
-
-		//	public override bool Remove(SecurityId key)
-		//	{
-		//		if (base.Remove(key))
-		//		{
-		//			RefreshName();
-		//			return true;
-		//		}
-
-		//		return false;
-		//	}
-
-		//	public override void Clear()
-		//	{
-		//		base.Clear();
-		//		RefreshName();
-		//	}
-
-		//	private void RefreshName()
-		//	{
-		//		_parent.Id = GetName(s => s.Id);
-		//		_parent.Code = GetName(s => s.Code);
-		//		_parent.Name = GetName(s => s.Name);
-		//	}
-
-		//	private string GetName(Func<SecurityId, string> getSecurityName)
-		//	{
-		//		return this.Select(p => "{0} * {1}".Put(p.Value, getSecurityName(p.Key))).Join(", ");
-		//	}
-		//}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WeightedIndexSecurity"/>.
 		/// </summary>
@@ -141,12 +95,15 @@ namespace StockSharp.Algo
 			if (prices.Length != _weights.Count)// || !InnerSecurities.All(prices.ContainsKey))
 				throw new ArgumentOutOfRangeException(nameof(prices));
 
-			decimal retVal = 0;
+			var value = 0M;
 
 			for (var i = 0; i < prices.Length; i++)
-				retVal += _weights.CachedValues[i] * prices[i];
+				value += _weights.CachedValues[i] * prices[i];
 
-			return retVal;
+			if (Decimals != null)
+				value = MathHelper.Round(value, Decimals.Value);
+
+			return value;
 		}
 
 		/// <summary>
@@ -159,6 +116,15 @@ namespace StockSharp.Algo
 			clone.Weights.AddRange(_weights.CachedPairs);
 			CopyTo(clone);
 			return clone;
+		}
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>A string that represents the current object.</returns>
+		public override string ToString()
+		{
+			return _weights.CachedPairs.Select(p => "{0} * {1}".Put(p.Value, p.Key.ToStringId())).Join(", ");
 		}
 	}
 }
