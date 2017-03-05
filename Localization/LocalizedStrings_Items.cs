@@ -43976,5 +43976,35 @@ namespace StockSharp.Localization
 		/// Bit mode
 		/// </summary>
 		public static string BitMode => GetString(BitModeKey);
+
+		/// <summary>
+		/// Save build
+		/// </summary>
+		public const string SaveBuildKey = nameof(SaveBuild);
+
+		/// <summary>
+		/// Save build
+		/// </summary>
+		public static string SaveBuild => GetString(SaveBuildKey);
+
+		/// <summary>
+		/// Select destination
+		/// </summary>
+		public const string SelectDestinationKey = nameof(SelectDestination);
+
+		/// <summary>
+		/// Select destination
+		/// </summary>
+		public static string SelectDestination => GetString(SelectDestinationKey);
+
+		/// <summary>
+		/// Expression not set.
+		/// </summary>
+		public const string ExpressionNotSetKey = nameof(ExpressionNotSet);
+
+		/// <summary>
+		/// Expression not set.
+		/// </summary>
+		public static string ExpressionNotSet => GetString(ExpressionNotSetKey);
 	}
 }

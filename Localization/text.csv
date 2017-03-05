@@ -4431,6 +4431,9 @@ MaxDepthOfBook;Maximum depth of book;Максимальная глубина с�
 BuildIndexError;Build index {0} for {1} error.;Ошибка построения индекса {0} для {1}.
 OSVersion;OS version;Версия ОС
 BitMode;Bit mode;Битность
+SaveBuild;Save build;Сохранить скомпилированное
+SelectDestination;Select destination;Выбрать путь
+ExpressionNotSet;Expression not set.;Выражение не инициализировано.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5530,7 +5533,7 @@ DocStr1110;Mathematical formula;Математическая формула
 DocStr1111;The index, built of combination of several instruments through mathematic formula {0};Индекс, построенный из комбинации нескольких инструментов через математическую формулу {0}
 DocStr1112;The index, built of instruments. For example, to specify spread at arbitrage or pair trading;Индекс, построенный из инструментов. Например, для задание спреда при арбитраже или парном трейдинге
 DocStr1113;To calculate the basket value;Вычислить значение корзины
-DocStr1114;Prices of basket composite instruments {0};Цены составных инструментов корзины {0}
+DocStr1114;Values of basket composite instruments {0};Значения составных инструментов корзины {0}
 DocStr1115;The basket value;Значение корзины
 DocStr1116;Copy;Копия объекта
 DocStr1117;The mathematic formula of index;Математическая формула индекса
@@ -13775,3 +13778,5 @@ DocStr9542;Remove association between portfolio name and adapter;Удалить 
 DocStr9543;{0} if the association is successfully removed, otherwise, {1};{0} если ассоциация была удалена успешно, иначе, {1}
 DocStr9544;In memory message adapter's provider;Провайдер адаптеров сообщений, хранящий данные в памяти
 DocStr9545;App version;Версия программы
+DocStr9546;Is price based value calculation;Вычисление значения, основанное на цене
+DocStr9547;Attachments;Вложения

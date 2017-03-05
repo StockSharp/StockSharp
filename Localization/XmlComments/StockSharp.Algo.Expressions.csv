@@ -1,6 +1,6 @@
 T:StockSharp.Algo.Expressions.ExpressionFormula/summary;DocStr8476
 M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])/summary;DocStr1113
-M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])/param/prices;DocStr1114
+M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])/param/values;DocStr1114
 M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])/returns;DocStr1115
 P:StockSharp.Algo.Expressions.ExpressionFormula.Expression/summary;DocStr8477
 P:StockSharp.Algo.Expressions.ExpressionFormula.Error/summary;DocStr8478
@@ -23,9 +23,9 @@ M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.#ctor/summary;DocStr1
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Formula/summary;DocStr8476
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression/summary;DocStr1117
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurityIds/summary;DocStr936
-M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])/summary;DocStr1113
-M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])/param/prices;DocStr1114
-M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])/returns;DocStr1115
+M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.OnCalculate(System.Decimal[])/summary;DocStr1113
+M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.OnCalculate(System.Decimal[])/param/values;DocStr1114
+M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.OnCalculate(System.Decimal[])/returns;DocStr1115
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Clone/summary;DocStr643
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Clone/returns;DocStr1116
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToString/summary;DocStr49
