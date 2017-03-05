@@ -52,9 +52,33 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To calculate the basket value.
 		/// </summary>
-		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
+		/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
+		/// <param name="isPrice">Is price based value calculation.</param>
 		/// <returns>The basket value.</returns>
-		public abstract decimal Calculate(decimal[] prices);
+		public decimal Calculate(decimal[] values, bool isPrice)
+		{
+			var value = OnCalculate(values);
+
+			if (isPrice)
+			{
+				if (PriceStep != null)
+					value = this.ShrinkPrice(value);
+			}
+			else
+			{
+				if (VolumeStep != null)
+					value = MathHelper.Round(value, VolumeStep.Value, VolumeStep.Value.GetCachedDecimals());
+			}
+
+			return value;
+		}
+
+		/// <summary>
+		/// To calculate the basket value.
+		/// </summary>
+		/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
+		/// <returns>The basket value.</returns>
+		protected abstract decimal OnCalculate(decimal[] values);
 	}
 
 	/// <summary>
@@ -85,23 +109,20 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To calculate the basket value.
 		/// </summary>
-		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
+		/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
 		/// <returns>The basket value.</returns>
-		public override decimal Calculate(decimal[] prices)
+		protected override decimal OnCalculate(decimal[] values)
 		{
-			if (prices == null)
-				throw new ArgumentNullException(nameof(prices));
+			if (values == null)
+				throw new ArgumentNullException(nameof(values));
 
-			if (prices.Length != _weights.Count)// || !InnerSecurities.All(prices.ContainsKey))
-				throw new ArgumentOutOfRangeException(nameof(prices));
+			if (values.Length != _weights.Count)// || !InnerSecurities.All(prices.ContainsKey))
+				throw new ArgumentOutOfRangeException(nameof(values));
 
 			var value = 0M;
 
-			for (var i = 0; i < prices.Length; i++)
-				value += _weights.CachedValues[i] * prices[i];
-
-			if (Decimals != null)
-				value = MathHelper.Round(value, Decimals.Value);
+			for (var i = 0; i < values.Length; i++)
+				value += _weights.CachedValues[i] * values[i];
 
 			return value;
 		}

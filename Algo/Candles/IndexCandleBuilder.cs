@@ -190,19 +190,19 @@ namespace StockSharp.Algo.Candles
 
 					try
 					{
-						indexCandle.TotalVolume = Calculate(buffer, c => c.TotalVolume);
-						indexCandle.OpenPrice = Calculate(buffer, c => c.OpenPrice);
-						indexCandle.ClosePrice = Calculate(buffer, c => c.ClosePrice);
-						indexCandle.HighPrice = Calculate(buffer, c => c.HighPrice);
-						indexCandle.LowPrice = Calculate(buffer, c => c.LowPrice);
+						indexCandle.TotalVolume = Calculate(buffer, false, c => c.TotalVolume);
+						indexCandle.OpenPrice = Calculate(buffer, true, c => c.OpenPrice);
+						indexCandle.ClosePrice = Calculate(buffer, true, c => c.ClosePrice);
+						indexCandle.HighPrice = Calculate(buffer, true, c => c.HighPrice);
+						indexCandle.LowPrice = Calculate(buffer, true, c => c.LowPrice);
 
 						if (_security.CalculateExtended)
 						{
-							indexCandle.TotalPrice = Calculate(buffer, c => c.TotalPrice);
-							indexCandle.OpenVolume = Calculate(buffer, c => c.OpenVolume ?? 0);
-							indexCandle.CloseVolume = Calculate(buffer, c => c.CloseVolume ?? 0);
-							indexCandle.HighVolume = Calculate(buffer, c => c.HighVolume ?? 0);
-							indexCandle.LowVolume = Calculate(buffer, c => c.LowVolume ?? 0);
+							indexCandle.TotalPrice = Calculate(buffer, true, c => c.TotalPrice);
+							indexCandle.OpenVolume = Calculate(buffer, false, c => c.OpenVolume ?? 0);
+							indexCandle.CloseVolume = Calculate(buffer, false, c => c.CloseVolume ?? 0);
+							indexCandle.HighVolume = Calculate(buffer, false, c => c.HighVolume ?? 0);
+							indexCandle.LowVolume = Calculate(buffer, false, c => c.LowVolume ?? 0);
 						}
 					}
 					catch (ArithmeticException ex)
@@ -386,13 +386,13 @@ namespace StockSharp.Algo.Candles
 			return buffers;
 		}
 
-		private decimal Calculate(CandleBuffer buffer, Func<Candle, decimal> getPart)
+		private decimal Calculate(CandleBuffer buffer, bool isPrice, Func<Candle, decimal> getPart)
 		{
 			var values = buffer.Candles.Select(getPart).ToArray();
 
 			try
 			{
-				return _security.Calculate(values);
+				return _security.Calculate(values, isPrice);
 			}
 			catch (ArithmeticException excp)
 			{

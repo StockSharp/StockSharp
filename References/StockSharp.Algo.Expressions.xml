@@ -13,7 +13,7 @@
             <summary>
             To calculate the basket value.
             </summary>
-            <param name="prices">Prices of basket composite instruments <see cref="P:StockSharp.Algo.BasketSecurity.InnerSecurityIds"/>.</param>
+            <param name="values">Values of basket composite instruments <see cref="P:StockSharp.Algo.BasketSecurity.InnerSecurityIds"/>.</param>
             <returns>The basket value.</returns>
         </member>
         <member name="P:StockSharp.Algo.Expressions.ExpressionFormula.Expression">
@@ -89,11 +89,11 @@
             Instruments, from which this basket is created.
             </summary>
         </member>
-        <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])">
+        <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.OnCalculate(System.Decimal[])">
             <summary>
             To calculate the basket value.
             </summary>
-            <param name="prices">Prices of basket composite instruments <see cref="P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurityIds"/>.</param>
+            <param name="values">Values of basket composite instruments <see cref="P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurityIds"/>.</param>
             <returns>The basket value.</returns>
         </member>
         <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Clone">

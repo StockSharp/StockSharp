@@ -167,9 +167,16 @@ namespace StockSharp.Algo.Storages
 			Security = security;
 			SecurityId = security.ToSecurityId();
 
-			FillSecurityIndecies(Security);
+			var index = 0;
 
-			_bufferSize = _securityIndecies.Values.Distinct().Count();
+			foreach (var innerSec in security.InnerSecurityIds)
+			{
+				_securityIndecies[innerSec] = index;
+
+				index++;
+			}
+
+			_bufferSize = index;
 		}
 
 		public abstract IEnumerable<T> Process(T msg);
@@ -180,18 +187,6 @@ namespace StockSharp.Algo.Storages
 		{
 			_lastProcessBuffer = null;
 			_buffers.Clear();
-		}
-
-		private void FillSecurityIndecies(BasketSecurity basketSecurity)
-		{
-			var index = 0;
-
-			foreach (var security in basketSecurity.InnerSecurityIds)
-			{
-				_securityIndecies[security] = index;
-
-				index++;
-			}
 		}
 
 		private IEnumerable<MessageBuffer<T>> GetFormedBuffers(T msg, DateTimeOffset openTime, SecurityId secId)
@@ -301,18 +296,18 @@ namespace StockSharp.Algo.Storages
 				.Where(c => c != null);
 		}
 
-		protected decimal Calculate(MessageBuffer<T> buffer, Func<T, decimal> getPart)
+		protected decimal Calculate(MessageBuffer<T> buffer, bool isPrice, Func<T, decimal> getPart)
 		{
-			return Calculate(buffer.Messages, getPart);
+			return Calculate(buffer.Messages, isPrice, getPart);
 		}
 
-		protected decimal Calculate<TItem>(IEnumerable<TItem> items, Func<TItem, decimal> getPart)
+		protected decimal Calculate<TItem>(IEnumerable<TItem> items, bool isPrice, Func<TItem, decimal> getPart)
 		{
 			var values = items.Select(getPart).ToArray();
 
 			try
 			{
-				return Security.Calculate(values);
+				return Security.Calculate(values, isPrice);
 			}
 			catch (ArithmeticException excp)
 			{
@@ -346,8 +341,8 @@ namespace StockSharp.Algo.Storages
 				ServerTime = buffer.Time,
 				LocalTime = buffer.Time,
 				ExecutionType = ExecutionTypes.Tick,
-				TradePrice = Calculate(buffer, m => m.TradePrice ?? 0),
-				TradeVolume = Calculate(buffer, m => m.TradeVolume ?? 0)
+				TradePrice = Calculate(buffer, true, m => m.TradePrice ?? 0),
+				TradeVolume = Calculate(buffer, false, m => m.TradeVolume ?? 0)
 			};
 
 			return res;
@@ -373,11 +368,11 @@ namespace StockSharp.Algo.Storages
 				SecurityId = SecurityId,
 				OpenTime = buffer.Time,
 				LocalTime = buffer.Time,
-				TotalVolume = Calculate(buffer, c => c.TotalVolume),
-				OpenPrice = Calculate(buffer, m => m.OpenPrice),
-				HighPrice = Calculate(buffer, m => m.HighPrice),
-				LowPrice = Calculate(buffer, m => m.LowPrice),
-				ClosePrice = Calculate(buffer, m => m.ClosePrice),
+				TotalVolume = Calculate(buffer, false, c => c.TotalVolume),
+				OpenPrice = Calculate(buffer, true, m => m.OpenPrice),
+				HighPrice = Calculate(buffer, true, m => m.HighPrice),
+				LowPrice = Calculate(buffer, true, m => m.LowPrice),
+				ClosePrice = Calculate(buffer, true, m => m.ClosePrice),
 				State = CandleStates.Finished
 			};
 
@@ -386,10 +381,10 @@ namespace StockSharp.Algo.Storages
 			if (Security.CalculateExtended)
 			{
 				//res.TotalPrice = Calculate(buffer, c => c.TotalPrice);
-				res.OpenVolume = Calculate(buffer, c => c.OpenVolume ?? 0);
-				res.CloseVolume = Calculate(buffer, c => c.CloseVolume ?? 0);
-				res.HighVolume = Calculate(buffer, c => c.HighVolume ?? 0);
-				res.LowVolume = Calculate(buffer, c => c.LowVolume ?? 0);
+				res.OpenVolume = Calculate(buffer, false, c => c.OpenVolume ?? 0);
+				res.CloseVolume = Calculate(buffer, false, c => c.CloseVolume ?? 0);
+				res.HighVolume = Calculate(buffer, false, c => c.HighVolume ?? 0);
+				res.LowVolume = Calculate(buffer, false, c => c.LowVolume ?? 0);
 			}
 
 			return res;
@@ -441,8 +436,8 @@ namespace StockSharp.Algo.Storages
 				.Select(p => new QuoteChange
 				{
 					Side = side,
-					Price = Calculate(p, item => item.Price),
-					Volume = Calculate(p, item => item.Volume)
+					Price = Calculate(p, true, item => item.Price),
+					Volume = Calculate(p, false, item => item.Volume)
 				})
 				.ToArray();
 		}
