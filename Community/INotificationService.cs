@@ -65,10 +65,11 @@ namespace StockSharp.Community
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="title">The message title.</param>
 		/// <param name="body">Message body.</param>
+		/// <param name="attachments">Attachments.</param>
 		/// <param name="isEnglish">Message in English.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
-		byte SendMessage(Guid sessionId, string title, string body, bool isEnglish);
+		byte SendMessage(Guid sessionId, string title, string body, long[] attachments, bool isEnglish);
 
 		/// <summary>
 		/// To get the latest news.

@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.Linq;
 	using System.Threading;
 
 	using Ecng.Common;
@@ -111,9 +112,13 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <param name="title">The message title.</param>
 		/// <param name="body">Message body.</param>
-		public void SendMessage(string title, string body)
+		/// <param name="attachments">Attachments.</param>
+		public void SendMessage(string title, string body, FileData[] attachments)
 		{
-			ValidateError(Invoke(f => f.SendMessage(SessionId, title, body, IsEnglish)));
+			if (attachments == null)
+				throw new ArgumentNullException(nameof(attachments));
+
+			ValidateError(Invoke(f => f.SendMessage(SessionId, title, body, attachments.Select(a => a.Id).ToArray(), IsEnglish)));
 		}
 
 		/// <summary>
