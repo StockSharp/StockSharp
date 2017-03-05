@@ -25,6 +25,10 @@ StockSharp API Change log
 * (feature) Candle storage. Non aligned price support.
 * (feature) ContinuousSecurityMarketDataStorage and IndexSecurityMarketDataStorage.
 * (bug) CandleMessage. Clone fix.
+* (feature) IndexSecurity. Values rounding.
+* (feature) INotificationService.SendMessage. Attachments.
+* (feature) CandleSettingsEditor. Removed fixes width.
+* (feature) ISecurityStorage. Removed GetSecurityIds
 
 ###v4.3.21:
 * (feature) IConnector.OrderStatusFailed

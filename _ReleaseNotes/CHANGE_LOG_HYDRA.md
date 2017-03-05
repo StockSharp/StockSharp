@@ -1,5 +1,18 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.22:
+* (feature) FIX server mode. Live and historical streaming.
+* (feature) Analytics restored.
+* (feature) IndexSecurity and ContinuousSecurity. Create, save, load, build data.
+* (feature) OptionDesk export.
+* (feature) Suggestions. Logs as attachments, app name + version.
+* (feature) Save built data.
+* (bug) ConvertTask. Settings fix.
+* (bug) Filter data fix.
+* (feature) Erase data. Data type.
+* (feature) ExportTxtPreview. Do not show again. Templates removed from app.config
+* (feature) Candles. Build from bid, ask, mid or last options.
+
 ###v4.3.20.1:
 * (bug) Hydra freezed while start up. http://stocksharp.ru/posts/m/39082/
 * (bug) Splash screen fix http://stocksharp.ru/posts/m/39083/
