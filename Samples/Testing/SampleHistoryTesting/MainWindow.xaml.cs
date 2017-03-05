@@ -84,10 +84,10 @@ namespace SampleHistoryTesting
 				throw new NotSupportedException();
 			}
 
-			IEnumerable<string> ISecurityStorage.GetSecurityIds()
-			{
-				return Enumerable.Empty<string>();
-			}
+			//IEnumerable<string> ISecurityStorage.GetSecurityIds()
+			//{
+			//	return Enumerable.Empty<string>();
+			//}
 		}
 
 		// emulation settings

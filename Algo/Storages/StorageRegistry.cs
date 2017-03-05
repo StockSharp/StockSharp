@@ -1195,10 +1195,10 @@ namespace StockSharp.Algo.Storages
 				});
 			}
 
-			IEnumerable<string> ISecurityStorage.GetSecurityIds()
-			{
-				return _securities.Cache.Select(s => s.Id);
-			}
+			//IEnumerable<string> ISecurityStorage.GetSecurityIds()
+			//{
+			//	return _securities.Cache.Select(s => s.Id);
+			//}
 		}
 
 		/// <summary>
