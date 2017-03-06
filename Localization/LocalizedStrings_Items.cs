@@ -11630,12 +11630,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Analytics
 		/// </summary>
-		public const string Str1221Key = nameof(Str1221);
+		public const string AnalyticsKey = nameof(Analytics);
 
 		/// <summary>
 		/// Analytics
 		/// </summary>
-		public static string Str1221 => GetString(Str1221Key);
+		public static string Analytics => GetString(AnalyticsKey);
 
 		/// <summary>
 		/// Start date.
@@ -33388,16 +33388,6 @@ namespace StockSharp.Localization
 		public static string Str3601 => GetString(Str3601Key);
 
 		/// <summary>
-		/// Analytics
-		/// </summary>
-		public const string Str3604Key = nameof(Str3604);
-
-		/// <summary>
-		/// Analytics
-		/// </summary>
-		public static string Str3604 => GetString(Str3604Key);
-
-		/// <summary>
 		/// Terminal
 		/// </summary>
 		public const string Str3605Key = nameof(Str3605);
@@ -44006,5 +43996,15 @@ namespace StockSharp.Localization
 		/// Expression not set.
 		/// </summary>
 		public static string ExpressionNotSet => GetString(ExpressionNotSetKey);
+
+		/// <summary>
+		/// Analytics '{0}'. Result
+		/// </summary>
+		public const string AnalyticsResultKey = nameof(AnalyticsResult);
+
+		/// <summary>
+		/// Analytics '{0}'. Result
+		/// </summary>
+		public static string AnalyticsResult => GetString(AnalyticsResultKey);
 	}
 }

@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str1242Key,
 			Description = LocalizedStrings.Str1243Key,
-			GroupName = LocalizedStrings.Str1221Key,
+			GroupName = LocalizedStrings.AnalyticsKey,
 			Order = 0)]
 		public TimeSpan TimeFrame
 		{

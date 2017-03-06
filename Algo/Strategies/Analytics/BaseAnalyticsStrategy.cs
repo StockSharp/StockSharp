@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str343Key,
 			Description = LocalizedStrings.Str1222Key,
-			GroupName = LocalizedStrings.Str1221Key,
+			GroupName = LocalizedStrings.AnalyticsKey,
 			Order = 0)]
 		public DateTime From
 		{
@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str345Key,
 			Description = LocalizedStrings.Str345Key + LocalizedStrings.Dot,
-			GroupName = LocalizedStrings.Str1221Key,
+			GroupName = LocalizedStrings.AnalyticsKey,
 			Order = 1)]
 		public DateTime To
 		{
