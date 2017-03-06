@@ -12,6 +12,7 @@ StockSharp Data (Hydra) Change log
 * (feature) Erase data. Data type.
 * (feature) ExportTxtPreview. Do not show again. Templates removed from app.config
 * (feature) Candles. Build from bid, ask, mid or last options.
+* (feature) Candles. Bin format. Non aligned price support.
 
 ###v4.3.20.1:
 * (bug) Hydra freezed while start up. http://stocksharp.ru/posts/m/39082/

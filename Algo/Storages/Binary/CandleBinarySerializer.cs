@@ -113,8 +113,13 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				var firstCandle = candles.First();
 
-				metaInfo.FirstPrice = firstCandle.LowPrice;
-				metaInfo.LastPrice = firstCandle.LowPrice;
+				var low = firstCandle.LowPrice;
+
+				if ((low % metaInfo.PriceStep) == 0)
+					metaInfo.FirstPrice = metaInfo.LastPrice = low;
+				else
+					metaInfo.FirstFractionalPrice = metaInfo.LastFractionalPrice = low;
+
 				metaInfo.ServerOffset = firstCandle.OpenTime.Offset;
 			}
 
