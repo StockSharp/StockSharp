@@ -29,6 +29,7 @@ StockSharp API Change log
 * (feature) INotificationService.SendMessage. Attachments.
 * (feature) CandleSettingsEditor. Removed fixes width.
 * (feature) ISecurityStorage. Removed GetSecurityIds
+* (feature) ExpressionFormula.Functions
 
 ###v4.3.21:
 * (feature) IConnector.OrderStatusFailed

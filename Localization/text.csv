@@ -4434,6 +4434,8 @@ SaveBuild;Save build;Сохранить скомпилированное
 SelectDestination;Select destination;Выбрать путь
 ExpressionNotSet;Expression not set.;Выражение не инициализировано.
 AnalyticsResult;Analytics '{0}'. Result;Аналитика '{0}'. Результат
+IndexSample;Sample: LOG(AAPL@NASDAQ) / LOG(MSFT@NADAQ);Пример: LOG(SBER@TQBR) / LOG(LKOH@TQBR)
+AvailableFunctions;Available functions;Доступные функции
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -5,6 +5,7 @@ M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])/retu
 P:StockSharp.Algo.Expressions.ExpressionFormula.Expression/summary;DocStr8477
 P:StockSharp.Algo.Expressions.ExpressionFormula.Error/summary;DocStr8478
 P:StockSharp.Algo.Expressions.ExpressionFormula.SecurityIds/summary;DocStr142
+P:StockSharp.Algo.Expressions.ExpressionFormula.Functions/summary;AvailableFunctions
 M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String)/summary;DocStr8479
 M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String)/param/expression;DocStr8480
 M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String)/returns;DocStr8476

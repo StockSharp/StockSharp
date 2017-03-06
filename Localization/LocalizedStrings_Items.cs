@@ -44006,5 +44006,25 @@ namespace StockSharp.Localization
 		/// Analytics '{0}'. Result
 		/// </summary>
 		public static string AnalyticsResult => GetString(AnalyticsResultKey);
+
+		/// <summary>
+		/// Sample: LOG(AAPL@NASDAQ) / LOG(MSFT@NADAQ)
+		/// </summary>
+		public const string IndexSampleKey = nameof(IndexSample);
+
+		/// <summary>
+		/// Sample: LOG(AAPL@NASDAQ) / LOG(MSFT@NADAQ)
+		/// </summary>
+		public static string IndexSample => GetString(IndexSampleKey);
+
+		/// <summary>
+		/// Available functions
+		/// </summary>
+		public const string AvailableFunctionsKey = nameof(AvailableFunctions);
+
+		/// <summary>
+		/// Available functions
+		/// </summary>
+		public static string AvailableFunctions => GetString(AvailableFunctionsKey);
 	}
 }
