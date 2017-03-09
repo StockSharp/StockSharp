@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="992fd698-345f-4bc0-8420-b8a57c0619b4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink><caption placement="after">͏</caption><image xlink:href="044_Designer_RU_Working_time"/></mediaLink>
+<para>Кубик используется для определения рабочего времени, 
+например, когда идут торги по определенному инструменту.</para>
+<para>На вход кубика передается инструмент, для которого необходимо определить
+ активна ли торговая сессия и сигнал, с помощью которого определяется момент, 
+ когда необходимо выполнять проверку. На выходе кубика передается флаг, 
+ который определяет активна ли торговая сессия.</para>
+ <para>Кубик может использоваться для определения момента, когда торги 
+ ведутся по нескольким инструментам с различных торговых площадок.</para>
+ <mediaLink><caption placement="after">͏</caption><image xlink:href="045_Designer_RU_Working_time"/></mediaLink>
+ <para><legacyItalic>Составной элемент для определения возможности открытия позиции по двум различным инструментам.</legacyItalic></para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="08ebe03d-a446-4738-98fb-44cff38ddfda" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

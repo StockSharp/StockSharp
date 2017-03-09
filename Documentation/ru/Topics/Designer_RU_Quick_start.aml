@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+		  				<para>При первом запуске S#.Designer будет показано следующее окно:</para>
+		  				<mediaLink><caption>͏</caption><image xlink:href="004_Designer_RU_Quick_start"/></mediaLink>
+		  				<para>Необходимо выбрать режим запуска и нажать кнопку <legacyBold>ОК</legacyBold>.</para>
+	  				<para>При первом запуске S#.Designer предложит открыть окно для <token>Скачивание данных</token>,
+		  				также исторические данные можно скачать программой <token>hydra</token> (кодовое название Hydra) 
+		  				предназначенной для автоматической загрузки маркет-данных (инструменты, свечи, тиковые сделки и стаканы и др.) 
+		  				из различных источников и хранения их в локальном хранилище. О скачивании и хранении исторических данных подробно описано 
+		  				в пункте <token>Хранилище исторических данных</token>.</para>
+		  				<para>При нажатии на кнопку <legacyBold>Скачать инструмент</legacyBold> появится окно <legacyBold>Скачать инструмент</legacyBold>(<link xlink:href="d0a1bb26-7a29-4607-992c-4f539632c2eb" />).
+		  				Для скачивания инструмента необходимо ввести код инструмента, тип инструмента, выбрать источник данных и нажать кнопку <legacyBold>ОК</legacyBold>. 
+		  				S#.Designer запросит у источника данных имеющиеся у него инструменты. Все найденные инструменты появятся в панели <legacyBold>Все инструменты</legacyBold>.
+		  				Для Российского рынка наиболее популярный бесплатный источник исторических данных брокер Финам, по умолчанию в S#.Designer он указан
+		  				как источник данных. Также как источник данных можно использовать торговые терминалы, как настроить подключение к терминалам описано
+		  				в пункте <token>Настройки подключения</token>.</para>
+		  				<mediaLink><caption>͏</caption><image xlink:href="005_Designer_RU_Quick_start"/></mediaLink>
+		  				<para>Для получения исторических данных по инструменту необходимо из списка <legacyBold>Все инструменты</legacyBold> выбрать необходимый инструмент, 
+		  				установить период исторических данных, выбрать тип и Time Frame <token>свечей</token> и нажать кнопку <legacyBold>Старт</legacyBold>. 
+		  				Все данные сохранятся в <token>Хранилище исторических данных</token>.</para>
+		  				<mediaLink><caption>͏</caption><image xlink:href="006_Designer_RU_Quick_start"/></mediaLink>
+		  				<para>После получения исторических данных выберем одну из демонстрационных стратегий. 
+		  				На панели <token>Схемы</token> в папке <legacyBold>Стратегии</legacyBold> двойным нажатием 
+		  				выбираем пример-стратегию <legacyBold>SMA</legacyBold>, после чего в рабочей область появится вкладка <legacyBold>Sma</legacyBold>. 
+		  				Перейдя на которую в ленте автоматически откроется вкладка <legacyBold>Эмуляция</legacyBold>, на которой расположены основные элементы по 
+		  				созданию стратегии, отладке, тестированию стратегий.( <token>Создание стратегии</token>, <token>Тестирование на истории</token>)</para>
+				  <mediaLink><caption>͏</caption><image xlink:href="007_Designer_RU_Quick_start"/></mediaLink>
+<para>На вкладке <legacyBold>Эмуляция</legacyBold> необходимо установить период тестирования а также выбрать <token>Хранилище исторических данных</token> в поле <legacyBold>Маркет-данные</legacyBold>.</para>
+<para>Нажав на значок <mediaLinkInline><image xlink:href="008_Designer_RU_Quick_start"/></mediaLinkInline> в поле <legacyBold>Инструмент</legacyBold> откроется окно <legacyBold>Выбор инструмента</legacyBold>, в этом окне необходимо выбрать требуемый инструмент.</para>
+<mediaLink><caption>͏</caption><image xlink:href="009_Designer_RU_Quick_start"/></mediaLink>
+<para>Выбрав любой блок на панели <legacyBold>Дизайнер</legacyBold>, в панели <legacyBold>Свойства</legacyBold> появятся свойства этого блока. 
+В панели <legacyBold>Свойства</legacyBold> блока <legacyBold>Candles</legacyBold> можно настроить тип и Time Frame <token>свечей</token>.</para>
+<para>После нажатия кнопку <legacyBold>Старт</legacyBold> начнется эмуляция торгов.</para>
+<mediaLink><caption>͏</caption><image xlink:href="010_Designer_RU_Quick_start"/></mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="c74991fa-bad6-4196-98c0-8952e2a57b3e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

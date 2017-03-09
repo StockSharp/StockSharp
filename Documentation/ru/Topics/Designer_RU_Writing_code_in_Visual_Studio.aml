@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="bcdeb091-c497-4a7d-85d6-a4d51675d514" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <mediaLink>
+        <image placement="left" xlink:href="hydra_settings_alfa" />
+      </mediaLink>
+       <para><legacyBold>AlfaDirect</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+          <legacyBold>Логин</legacyBold> - логин.
+		</listItem>
+        <listItem>
+          <legacyBold>Пароль</legacyBold> - пароль.
+		</listItem>
+		</list>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

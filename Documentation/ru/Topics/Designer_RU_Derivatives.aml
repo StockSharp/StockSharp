@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7f308694-a0c5-4c1a-8aa7-4f7b2b129f0c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink><caption placement="after">͏</caption>
+<image xlink:href="084_Designer_RU_Derivatives"/>
+</mediaLink>
+<para>Кубик используется для получения списка опционов по заданному фильтру, 
+на вход принимает <legacyBold>Инструмент</legacyBold> (базовый актив) и содержит следующие свойства:</para>
+
+<list class="bullet">
+  <listItem><para><legacyBold>Тип опционов</legacyBold> – тип опционов может быть Колл (опцион на покупку) или Пут (опцион на продажу).</para></listItem>
+  <listItem><para><legacyBold>Дата экспирации</legacyBold> – дата экспирации опциона</para></listItem>
+  <listItem><para><legacyBold>Страйк (меньше)</legacyBold> – Сдвиг влево (меньше) от центрального страйка. 
+Если цена не установлена, то все страйки с меньшим значением центрального 
+будут использованы. Сдвиг считается в шагах страйка, например, если шаг страйка 
+500 у.е., то сдвиг равный 3 будет равняться 1500 у.е.</para></listItem>
+  <listItem><para><legacyBold>Страйк (больше)</legacyBold> – Сдвиг вправо (больше) от центрального страйка. 
+Если цена не установлена, то все страйки с большим значением центрального 
+будут использованы. Сдвиг считается в шагах страйка, например, если шаг страйка 
+500 у.е., то сдвиг равный 3 будет равняться 1500 у.е.</para></listItem>
+</list>
+<para>На выход передает список опционов по базовому активу.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

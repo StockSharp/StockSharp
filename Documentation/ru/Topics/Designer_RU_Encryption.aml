@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="66413582-a15e-414a-a413-8d77fe00f0e0" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>В окне <legacyBold>Экспортировать схему</legacyBold>, есть возможность установить шифрование.</para>
+ <mediaLink><caption placement="after">͏</caption>
+<image xlink:href="134_Designer_RU_Encryption"/>
+</mediaLink>
+<para>Если после шифрования открыть xml файл, то увидим, что описание схемы не читаемо</para>
+ <mediaLink><caption placement="after">͏</caption>
+<image xlink:href="135_Designer_RU_Encryption"/>
+</mediaLink>
+<para>При импорте зашифрованного файла, необходимо ввести пароль, который был введен при шифровке файла</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="47c764fa-a28c-48f7-81b3-714c059e0e57" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

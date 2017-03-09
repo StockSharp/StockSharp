@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="71792b34-7013-4e7d-a486-400ec92e2410" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para><legacyBold>Рабочая область</legacyBold> S#.Designer является оконным интерфейсом с закреплением панелей, 
+на подобие той, что используется в Microsoft Visual Studio. 
+Нажав, не отпуская на заголовок панели левую кнопку мыши, можно закрепить панель в удобном месте.
+ А захватив край панели можно отрегулировать высоту или ширину панели. </para>
+ 
+ <content>
+<mediaLink><caption placement="after">͏</caption>
+<image plasement = "left" xlink:href="020_Designer_RU_Workspace"/>
+</mediaLink>
+</content>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="085174e5-3be9-4dc3-bdeb-dcc3706b483d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для получения исторических данных по инструменту необходимо из 
+списка <legacyBold>Все инструменты</legacyBold> выбрать необходимый инструмент, 
+перенести его в список инструментов <legacyBold>Активные</legacyBold>. 
+Установить период исторических данных, выбрать тип и Time Frame <token>свечей</token> и 
+нажать кнопку <legacyBold>Старт</legacyBold>. Все данные сохранятся в 
+<token>Хранилище исторических данных</token>.</para>
+ <mediaLink><caption placement="after">͏</caption>
+<image xlink:href="006_Designer_RU_Quick_start"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="4456e138-a1be-4bc2-8aab-a1f0f226759d" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>
