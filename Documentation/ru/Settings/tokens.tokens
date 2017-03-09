@@ -70,7 +70,17 @@
 		  <ddue:linkText>Excel</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/Excel</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="fast_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>FAST</ddue:linkText>
+    <ddue:linkUri>https://en.wikipedia.org/wiki/FAST_protocol</ddue:linkUri>
+    <ddue:linkAlternateText>Fix Adapted for STreaming protocol</ddue:linkAlternateText>
+  </ddue:externalLink></item>
   <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
+  <item id="fix_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>FIX</ddue:linkText>
+    <ddue:linkUri>https://ru.wikipedia.org/wiki/Financial_Information_eXchange</ddue:linkUri>
+    <ddue:linkAlternateText>Financial Information eXchange protocol</ddue:linkAlternateText>
+  </ddue:externalLink></item>
   <item id="forts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>ФОРТС</ddue:linkText>
 		  <ddue:linkUri>http://moex.com/ru/derivatives/</ddue:linkUri>
@@ -217,6 +227,10 @@
 		  <ddue:linkText>StockSharp Education</ddue:linkText>
 		  <ddue:linkUri>http://stocksharp.ru/edu/#pricing/</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="stocksharpfacebook"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>StockSharp Facebook</ddue:linkText>
+    <ddue:linkUri>https://facebook.com/stocksharp</ddue:linkUri>
+  </ddue:externalLink></item>
   <item id="stocksharpforum"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>StockSharp Forum</ddue:linkText>
 		  <ddue:linkUri>http://stocksharp.ru/forum/</ddue:linkUri>
@@ -232,6 +246,10 @@
   <item id="stocksharpnotify"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
    <ddue:linkText>S#.Notify</ddue:linkText>
    <ddue:linkUri>http://stocksharp.ru/products/notify/</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="stocksharppricing"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>StockSharp Pricing</ddue:linkText>
+    <ddue:linkUri>http://stocksharp.ru/products/pricing/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpprofile"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>http://stocksharp.ru/profile/</ddue:linkText>
@@ -301,22 +319,17 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="stocksharpfacebook"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>StockSharp Facebook</ddue:linkText>
-    <ddue:linkUri>https://facebook.com/stocksharp</ddue:linkUri>
-  </ddue:externalLink></item>
-  <item id="stocksharppricing"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>StockSharp Pricing</ddue:linkText>
-    <ddue:linkUri>http://stocksharp.ru/products/pricing/</ddue:linkUri>
-  </ddue:externalLink></item>
-  <item id="fix_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>FIX</ddue:linkText>
-    <ddue:linkUri>https://ru.wikipedia.org/wiki/Financial_Information_eXchange</ddue:linkUri>
-    <ddue:linkAlternateText>Financial Information eXchange protocol</ddue:linkAlternateText>
-  </ddue:externalLink></item>
-  <item id="fast_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>FAST</ddue:linkText>
-    <ddue:linkUri>https://en.wikipedia.org/wiki/FAST_protocol</ddue:linkUri>
-    <ddue:linkAlternateText>Fix Adapted for STreaming protocol</ddue:linkAlternateText>
-  </ddue:externalLink></item>
+  <item id="Хранилище исторических данных"><ddue:link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
+  <item id="Настройки"><ddue:link xlink:href="fa053dc0-6bb9-45c5-bd49-520208624d2d" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Настройки</ddue:link></item>
+  <item id="Создание стратегии"><ddue:link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Создание стратегии</ddue:link></item>
+  <item id="Live торговля"><ddue:link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Live торговля</ddue:link></item>
+  <item id="Создание стратегии из кубиков"><ddue:link xlink:href="6974891d-4c8d-46e1-bdeb-fc7391bc0625" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Создание стратегии из кубиков</ddue:link></item>
+  <item id="Создание стратегии из кода"><ddue:link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Создание стратегии из кода</ddue:link></item>
+  <item id="Скачивание данных"><ddue:link xlink:href="085174e5-3be9-4dc3-bdeb-dcc3706b483d" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Скачивание данных</ddue:link></item>
+  <item id="Скачивание инструментов">Add token content here</item>
+  <item id="Настройки подключения"><ddue:link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Настройки подключения</ddue:link></item>
+  <item id="свечей"><ddue:link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">свечей</ddue:link></item>
+  <item id="Схемы"><ddue:link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Схемы</ddue:link></item>
+  <item id="Тестирование на истории"><ddue:link xlink:href="a69371d5-ba05-42ca-9228-48025e43ac91" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Тестирование на истории</ddue:link></item>
+  <item id="График"><ddue:link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">График</ddue:link></item>
 </content>

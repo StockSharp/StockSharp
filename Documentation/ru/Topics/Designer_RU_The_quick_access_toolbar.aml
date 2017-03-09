@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="45ae6713-c28b-457d-be6b-19016f54507e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para><legacyBold>Панель быстрого доступа</legacyBold> по умолчанию расположена в верхней части окна S#.Designer и предназначена 
+для быстрого доступа к наиболее часто используемым функциям.</para>
+<list class="ordered">
+  <listItem><para>При нажатии на кнопки <mediaLinkInline><image xlink:href="011_Designer_RU_The_quick_access_toolbar"/></mediaLinkInline>  
+  S#.Designer подключится к торговым терминалам и источникам данных,
+о работе с источниками данных подробно описано в разделах <token>Настройки подключения</token> и <token>Хранилище исторических данных</token>.</para></listItem>
+  <listItem><para>При нажатии на кнопки <mediaLinkInline><image xlink:href="012_Designer_RU_The_quick_access_toolbar"/></mediaLinkInline> 
+  открывается <link xlink:href="d416a6d9-0a42-40c0-8f9f-0c1df29f5cda" />.</para></listItem>
+  <listItem><para>При нажатии на кнопки <mediaLinkInline><image xlink:href="013_Designer_RU_The_quick_access_toolbar"/></mediaLinkInline> 
+  появится возможность сменить <token>Настройки</token> программы,
+  режим запуска, язык интерфейса, или полностью сбросить настройки S#.Designer. </para></listItem></list>
+  <mediaLinkInline><image xlink:href="014_Designer_RU_The_quick_access_toolbar"/></mediaLinkInline>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="2f00e9bc-8ea7-4679-9688-b02c3424f03a" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

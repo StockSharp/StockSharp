@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="49d3744f-77c5-40ee-a4c2-4d7b08125712" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink><caption placement="after">͏</caption>
+<image xlink:href="057_Designer_RU_Protect_positions"/>
+</mediaLink>
+<para>Кубик используется для автоматической защиты открываемых сделок с помощью 
+стоп-лосса и тейк-профита и содержит следующие основные свойства, которые указываются 
+отдельно для стоп-лосса и тейк-профита:
+</para>
+
+<list class="bullet">
+  <listItem><para><legacyBold>Тейк-профит</legacyBold> - значение тейк-профита.</para></listItem>
+  <listItem><para><legacyBold>Стоп-лосс</legacyBold> – значение стоп-лосса.</para></listItem>
+</list>
+<para>На вход кубика принимает сделку, которую необходимо защищать стоп-лоссом 
+и тейк-профитом, на выходе кубика передаются заявки, которые были выставлены одной 
+из защитных стратегий.
+</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

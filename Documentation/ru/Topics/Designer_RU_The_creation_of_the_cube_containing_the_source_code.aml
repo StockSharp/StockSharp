@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="22a4dc42-dc36-41cc-a849-32aa2a8194fe" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>В S#.Designer создать свой кубик можно нажав в панели <legacyBold>Схемы</legacyBold> правую 
+кнопку мыши на папке <legacyBold>Исходный код</legacyBold>. В появившемся меню 
+выбрать <legacyBold>Добавить</legacyBold> в случае создания новой стратегии 
+или <legacyBold>Импорт</legacyBold> в случае импорта уже готовой стратегии.</para>
+ <mediaLink><caption placement="after">͏</caption>
+<image xlink:href="109_Designer_RU_The_creation_of_the_cube_containing_the_source_code"/>
+</mediaLink>
+<para>Также в S#.Designer создать свой кубик можно на вкладке Общие нажав кнопку 
+добавить, и в появившемся меню выбрать Исходный код.</para>
+ <mediaLink><caption placement="after">͏</caption>
+<image xlink:href="110_Designer_RU_The_creation_of_the_cube_containing_the_source_code"/>
+</mediaLink>
+<para>После создания кубика в папке <legacyBold>Исходный код</legacyBold> панели <legacyBold>Схемы</legacyBold> появится новый кубик, 
+нажав на который двойным нажатием в рабочей области появится вкладка с именем 
+кубика, а в ленте автоматически откроется вкладка <legacyBold>Исходный код</legacyBold>.
+На вкладке <legacyBold>Исходный код</legacyBold> можно изменить название кубика, 
+дать описание кубику, отменить последнее действие, вернуть отменённое действие, 
+а также добавить Dll библиотеку нажав кнопку <legacyBold>Ссылки</legacyBold>.</para>
+ <mediaLink><caption placement="after">͏</caption>
+<image xlink:href="111_Designer_RU_The_creation_of_the_cube_containing_the_source_code"/>
+</mediaLink>
+<para>Вкладка нового кубика в рабочей области состоит из панелей, 
+<legacyBold>Исходный код</legacyBold> и <legacyBold>Список ошибок</legacyBold>. 
+Панель <legacyBold>Исходный код</legacyBold> содержит исходный код кубика. 
+Каждая строчка исходного кода пронумерована, справа от нумерации цветом отмечены 
+строки в которых были изменения. Панель <legacyBold>Список ошибок</legacyBold> 
+представляет собой таблицу со списком ошибок в коде, при двойном нажатии на строчку 
+ошибки курсор в панели <legacyBold>Исходный код</legacyBold> автоматически перейдет 
+на место ошибки. При появлении новой ошибки в коде в правом нижнем углу 
+панели <legacyBold>Список ошибок</legacyBold> появится значок <mediaLinkInline><image xlink:href="112_Designer_RU_The_creation_of_the_cube_containing_the_source_code"/></mediaLinkInline>. 
+При создании нового кубика <legacyBold>Исходный код</legacyBold> в 
+панели <legacyBold>Исходный код</legacyBold> будет C# код стратегии 
+SMA аналогичный стандартной стратегии SMA собранной из кубиков в 
+пункте <link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" />.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4b3ab78a-1a3d-4cd0-9e25-c52948de52ee" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для получения необходимой строки покупок из стакана может использоваться следующая схема:</para>
+<mediaLink><caption placement="after">͏</caption>
+<image xlink:href="090_Designer_RU_Event_model"/>
+</mediaLink>
+<para>Для кубика <legacyBold>Переменная</legacyBold> выбран тип данных <legacyBold>Инструмент</legacyBold>, если инструмент не указан, 
+но установлен флаг <legacyBold>Параметры</legacyBold> группы свойств <legacyBold>Общее</legacyBold>, то он будет взят из стратегии. 
+Для кубика <legacyBold>Конвертер</legacyBold> выбран тип данных и соответствующее поле коллекции кубиков 
+на покупку Bids. Кубик индексатор получает необходимый элемент из коллекции лучших 
+цен на покупку. Для получения конкретного значения цены или объема на уровне 
+может использоваться кубик <legacyBold>Конвертер</legacyBold>.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="22a4dc42-dc36-41cc-a849-32aa2a8194fe" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

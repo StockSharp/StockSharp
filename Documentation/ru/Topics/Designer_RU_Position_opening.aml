@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="33d15f2c-5d73-4c95-8e67-2612d34f14a2" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink><caption placement="after">͏</caption>
+<image xlink:href="051_Designer_RU_Position_opening"/>
+</mediaLink>
+<para>Кубик используется для открытия позиции по инструменту и содержит следующие свойства:</para>
+<list class="bullet">
+    <listItem><para><legacyBold>Направление</legacyBold> – направление заявки, покупка или продажа.</para></listItem>
+  <listItem><para><legacyBold>Рыночная</legacyBold> – признак рыночной заявки</para></listItem>
+   <listItem><para><legacyBold>Код клиента</legacyBold> – код клиента присвоенный дрокером,
+  если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
+    <listItem><para><legacyBold>Брокер</legacyBold> – код брокерской фирмы,
+  если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
+</list>
+<para>На входе кубика принимает инструмент, для которого надо выставить заявку, 
+значение цены, если выставляется не рыночная заявка, объем выставляемой заявки 
+и флаг, который должен быть передан в момент, когда надо выставить заявку с 
+установленными параметрами. На выходе элемента передается выставленная заявка, 
+которая может использоваться для получения сделок по ней с помощью элемента 
+<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью кубика 
+<legacyBold>Панель графика</legacyBold>.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="538b6ea4-bf0f-4833-9fb6-a3b1f0a59039" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

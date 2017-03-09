@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="250003df-48b4-4211-9c8e-25ac3f6a45be" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink><caption placement="after">͏</caption>
+<image xlink:href="060_Designer_RU_The_transaction_strategy"/>
+</mediaLink>
+<para>Кубик используется для получения всех сделок стратегии, на вход кубика 
+передается инструмент, для которого необходимо получать сделки, если инструмент
+ не передан, то на выход передаются сделки по всем инструментам стратегии.
+</para>
+<para>Сделки могут использоваться как для отображения на графике с помощью 
+кубика <legacyBold>Панель графика</legacyBold>, так и для защиты позиции с 
+помощью кубика <legacyBold>Защита позиции</legacyBold>.
+</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="67a08284-5d80-42f1-b311-f6c78789c48d" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

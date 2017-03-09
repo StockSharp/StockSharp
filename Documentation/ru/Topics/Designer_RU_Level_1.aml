@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="bc7fbe5c-9e8a-4c39-af1a-35c6c3c2a43c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink><caption placement="after">͏</caption>
+<image xlink:href="063_Designer_RU_Level_1"/>
+</mediaLink>
+<para>Кубик используется для получения <legacyBold>Level1</legacyBold> данных по инструменту 
+и содержит единственное свойство: <legacyBold>Значение</legacyBold> – Level1 параметр 
+который необходимо отслеживать.</para>
+<para>На входе кубик принимает инструмент, для которого необходимо 
+получать <legacyBold>Level1</legacyBold> данные, на выходе передаются значения 
+отслеживаемого параметра, в зависимости от настроек.
+</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="9aa0288d-e086-4da8-bd76-98cf52cb17a7" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>
