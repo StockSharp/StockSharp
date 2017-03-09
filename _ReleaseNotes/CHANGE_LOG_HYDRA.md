@@ -1,5 +1,8 @@
 StockSharp Data (Hydra) Change log
 ========================
+###current:
+* (bug) Remove security fix.
+
 ###v4.3.22:
 * (feature) FIX server mode. Live and historical streaming.
 * (feature) Analytics restored.
