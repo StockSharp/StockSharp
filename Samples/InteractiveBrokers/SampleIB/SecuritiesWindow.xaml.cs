@@ -131,10 +131,12 @@ namespace SampleIB
 
 		private void DepthClick(object sender, RoutedEventArgs e)
 		{
-			if (Depth.IsChecked == false)
+			var wnd = _quotesWindows.TryGetValue(SelectedSecurity);
+
+			if (wnd == null)
 			{
 				// create order book window
-				var wnd = new QuotesWindow { Title = SelectedSecurity.Id + " " + LocalizedStrings.MarketDepth };
+				wnd = new QuotesWindow { Title = SelectedSecurity.Id + " " + LocalizedStrings.MarketDepth };
 				_quotesWindows.Add(SelectedSecurity, wnd);
 
 				// subscribe on order book flow
@@ -146,7 +148,6 @@ namespace SampleIB
 			{
 				Trader.UnRegisterMarketDepth(SelectedSecurity);
 
-				var wnd = _quotesWindows[SelectedSecurity];
 				_quotesWindows.Remove(SelectedSecurity);
 
 				wnd.Close();
