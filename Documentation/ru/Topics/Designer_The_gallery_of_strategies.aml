@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="3c44a545-4674-4272-9269-e50265efcd82" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Панель <legacyBold>Галерея стратегий</legacyBold> предназначена для приобретения 
+уже готовых стратегий, или предложения собственных стратегий другим трейдерам. 
+Открыть <legacyBold>Галерею стратегий</legacyBold> можно нажав на кнопку <legacyBold>Галерея стратегий</legacyBold>
+ вкладки Общая. Или двойным нажатием левой кнопки мыши на папку <legacyBold>Галерея стратегий</legacyBold> 
+ панели <token>SchemeDis</token>. При открытии панели <legacyBold>Галереи стратегий</legacyBold> 
+ автоматически откроется вкладка <legacyBold>Галерея стратегий</legacyBold>.</para>
+ <mediaLink>
+<image xlink:href="Designer_The_gallery_of_strategies_00"/>
+</mediaLink>
+
+<para>1.	На вкладке <legacyBold>Галерея стратегий</legacyBold> отображается текущей баланс, 
+на который можно приобретать стратегии. Нажав на кнопку <legacyBold>Пополнить баланс</legacyBold>, 
+S#.Designer перенаправит на страницу где можно <externalLink>
+<linkText>пополнить баланс</linkText>
+<linkUri>http://stocksharp.ru/services/PayClick.aspx</linkUri>
+<linkTarget>_blank</linkTarget>
+</externalLink>. </para>
+<para>2.	Для быстрого поиска стратегий на вкладке <legacyBold>Галерея стратегий</legacyBold>
+ есть фильтры <legacyBold>Все стратегии</legacyBold>, <legacyBold>Купленные стратегии</legacyBold>, 
+ <legacyBold>Бесплатные стратегии</legacyBold>, <legacyBold>Свои стратегии</legacyBold> 
+ после нажатия на кнопку фильтра в панели <legacyBold>Галерея стратегий</legacyBold>
+ останутся стратегии, соответствующие названию фильтра. </para>
+<para>3.	Для того чтоб в папке <legacyBold>Галерея стратегий</legacyBold> панели <token>SchemeDis</token>
+ появилась выбранная стратегия необходимо выделить стратегию нажав на неё в панели <legacyBold>Галерея стратегий</legacyBold>, 
+ и нажать на кнопку <legacyBold>Подписаться</legacyBold> на вкладке <legacyBold>Галерея стратегий</legacyBold>. 
+ Если нажать на кнопку <legacyBold>Отписаться</legacyBold> выбранная стратегия исчезнет из
+ папки <legacyBold>Галерея стратегий</legacyBold> панели <token>SchemeDis</token>.</para>
+<para>4.	Опубликовать свою стратегию можно нажав на стратегию левой кнопкой мыши панели <token>SchemeDis</token>,
+ и выбрать <legacyBold>Опубликовать</legacyBold> или перейдя на панель стратегии нажать на кнопку 
+ <legacyBold>Опубликовать</legacyBold> на вкладке <legacyBold>Эмуляция</legacyBold>.</para>
+ <mediaLink>
+<image xlink:href="Designer_The_gallery_of_strategies_01"/>
+</mediaLink>
+<para>5. После нажатия на кнопку <legacyBold>Опубликовать</legacyBold>, появится 
+окно <legacyBold>Опубликовать</legacyBold> с параметрами публикации. </para>
+<mediaLink>
+<image xlink:href="Designer_The_gallery_of_strategies_02"/>
+</mediaLink>
+<para>6. В окне <legacyBold>Опубликовать</legacyBold> необходимо дать название стратегии, 
+краткое описание, логотип, цену. Также в окне <legacyBold>Опубликовать</legacyBold> можно установить 
+флажок <legacyBold>Зашифровать</legacyBold>, скачав стратегию, опубликованную 
+с установленным флажком <legacyBold>Зашифровать</legacyBold> структура, код, 
+используемые кубики просмотреть будет невозможно. На панели <legacyBold>Дизайнер</legacyBold> 
+будет надпись: <legacyBold>«Стратегия зашифрована и не может быть просмотрена»</legacyBold>. 
+Также о шифровании стратегий можно посмотреть в пункте <link xlink:href="66413582-a15e-414a-a413-8d77fe00f0e0" />.</para>
+<mediaLink>
+<image xlink:href="Designer_The_gallery_of_strategies_03"/>
+</mediaLink>
+<para>После нажатия на кнопку <legacyBold>ОК</legacyBold>, стратегия появится в 
+панели <legacyBold>Галерея стратегий</legacyBold>, ее можно будет быстро найти при установке
+ фильтра <legacyBold>Свои стратегии</legacyBold>.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

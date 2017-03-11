@@ -534,125 +534,125 @@
     <None Include="Topics\StrategyOrdersLoad.aml" />
     <None Include="Topics\UIMarshalling.aml" />
     <None Include="Topics\Unit.aml" />
-    <None Include="Topics\Designer_RU_A_logic_function_with_one_argument.aml" />
-    <None Include="Topics\Designer_RU_Add_strategy_Live_trade.aml" />
-    <None Include="Topics\Designer_RU_Algorithm_creation_of_cubes.aml" />
-    <None Include="Topics\Designer_RU_An_example_of_backtesting.aml" />
-    <None Include="Topics\Designer_RU_Applications.aml" />
-    <None Include="Topics\Designer_RU_Association.aml" />
-    <None Include="Topics\Designer_RU_Backtesting.aml" />
-    <None Include="Topics\Designer_RU_Bar_Palette.aml" />
-    <None Include="Topics\Designer_RU_Black_Sols.aml" />
-    <None Include="Topics\Designer_RU_Cancellations.aml" />
-    <None Include="Topics\Designer_RU_Candles.aml" />
-    <None Include="Topics\Designer_RU_Chart_Position.aml" />
-    <None Include="Topics\Designer_RU_Combine_cubes_of_Source_code_and_standard_cubes.aml" />
-    <None Include="Topics\Designer_RU_Comparison.aml" />
-    <None Include="Topics\Designer_RU_Converter.aml" />
-    <None Include="Topics\Designer_RU_Converters.aml" />
-    <None Include="Topics\Designer_RU_Creating_a_composite_elements.aml" />
-    <None Include="Topics\Designer_RU_Creating_a_DLL_cube_in_Visual_Studio.aml" />
-    <None Include="Topics\Designer_RU_Creating_a_repository_of_historical_data.aml" />
-    <None Include="Topics\Designer_RU_Creating_a_strategy_from_the_source_code.aml" />
-    <None Include="Topics\Designer_RU_Creating_a_strategy_out_of_blocks.aml" />
-    <None Include="Topics\Designer_RU_Creating_strategy_from_code.aml" />
-    <None Include="Topics\Designer_RU_Creation_tool.aml" />
-    <None Include="Topics\Designer_RU_Crossing.aml" />
-    <None Include="Topics\Designer_RU_Data_sources.aml" />
-    <None Include="Topics\Designer_RU_Deals_on_request.aml" />
-    <None Include="Topics\Designer_RU_Debug.aml" />
-    <None Include="Topics\Designer_RU_Debugging_DLL_cube_using_Visual_Studio.aml" />
-    <None Include="Topics\Designer_RU_Derivatives.aml" />
-    <None Include="Topics\Designer_RU_Description_of_cubes.aml" />
-    <None Include="Topics\Designer_RU_Designer_schemes_strategies_and_component_elements.aml" />
-    <None Include="Topics\Designer_RU_Determination_of_the_volume_position.aml" />
-    <None Include="Topics\Designer_RU_Directory_and_edit_the_data_manually.aml" />
-    <None Include="Topics\Designer_RU_DLL_Strategy.aml" />
-    <None Include="Topics\Designer_RU_Download_the_tools.aml" />
-    <None Include="Topics\Designer_RU_Downloading_data.aml" />
-    <None Include="Topics\Designer_RU_Edit_tool.aml" />
-    <None Include="Topics\Designer_RU_Empty_glass.aml" />
-    <None Include="Topics\Designer_RU_Encryption.aml" />
-    <None Include="Topics\Designer_RU_Event_model.aml" />
-    <None Include="Topics\Designer_RU_Example_of_Live_trading.aml" />
-    <None Include="Topics\Designer_RU_Examples_of_the_use_of_cubes.aml" />
-    <None Include="Topics\Designer_RU_Export_strategies.aml" />
-    <None Include="Topics\Designer_RU_Formula_with_one_argument.aml" />
-    <None Include="Topics\Designer_RU_Formula_with_two_arguments.aml" />
-    <None Include="Topics\Designer_RU_Get_the_best_rates_for_the_tool.aml" />
-    <None Include="Topics\Designer_RU_Glass.aml" />
-    <None Include="Topics\Designer_RU_Glass_implied_volatility.aml" />
-    <None Include="Topics\Designer_RU_Glasses.aml" />
-    <None Include="Topics\Designer_RU_Graph_options_positions.aml" />
-    <None Include="Topics\Designer_RU_Grouped_glass.aml" />
-    <None Include="Topics\Designer_RU_Hedging.aml" />
-    <None Include="Topics\Designer_RU_Import_strategies.aml" />
-    <None Include="Topics\Designer_RU_Index.aml" />
-    <None Include="Topics\Designer_RU_Indexer.aml" />
-    <None Include="Topics\Designer_RU_Indicator.aml" />
-    <None Include="Topics\Designer_RU_Informing.aml" />
-    <None Include="Topics\Designer_RU_Installation.aml" />
-    <None Include="Topics\Designer_RU_Interface.aml" />
-    <None Include="Topics\Designer_RU_Introduction.aml" />
-    <None Include="Topics\Designer_RU_Level_1.aml" />
-    <None Include="Topics\Designer_RU_Line.aml" />
-    <None Include="Topics\Designer_RU_Live_trade.aml" />
-    <None Include="Topics\Designer_RU_Math.aml" />
-    <None Include="Topics\Designer_RU_Moving_applications.aml" />
-    <None Include="Topics\Designer_RU_Notice.aml" />
-    <None Include="Topics\Designer_RU_Obtaining_a_specified_level_in_the_glass.aml" />
-    <None Include="Topics\Designer_RU_Optimization.aml" />
-    <None Include="Topics\Designer_RU_Options.aml" />
-    <None Include="Topics\Designer_RU_Options_Board.aml" />
-    <None Include="Topics\Designer_RU_Panel_A_Portfolios.aml" />
-    <None Include="Topics\Designer_RU_Panel_Circuits.aml" />
-    <None Include="Topics\Designer_RU_Panel_Designer.aml" />
-    <None Include="Topics\Designer_RU_Panel_graphics.aml" />
-    <None Include="Topics\Designer_RU_Panel_Logs.aml" />
-    <None Include="Topics\Designer_RU_Panel_strategies.aml" />
-    <None Include="Topics\Designer_RU_Position.aml" />
-    <None Include="Topics\Designer_RU_Position_opening.aml" />
-    <None Include="Topics\Designer_RU_Properties_emulation.aml" />
-    <None Include="Topics\Designer_RU_Protect_positions.aml" />
-    <None Include="Topics\Designer_RU_Quick_start.aml" />
-    <None Include="Topics\Designer_RU_Quoting.aml" />
-    <None Include="Topics\Designer_RU_Repository_of_historical_data.aml" />
-    <None Include="Topics\Designer_RU_Reset_language_settings.aml" />
-    <None Include="Topics\Designer_RU_Schedule.aml" />
-    <None Include="Topics\Designer_RU_Schedule_PU.aml" />
-    <None Include="Topics\Designer_RU_Setting_SAPI_from_GitHub.aml" />
-    <None Include="Topics\Designer_RU_Setting_SAPI_using_Nuget.aml" />
-    <None Include="Topics\Designer_RU_Settings.aml" />
-    <None Include="Topics\Designer_RU_Source_code.aml" />
-    <None Include="Topics\Designer_RU_Start_mode.aml" />
-    <None Include="Topics\Designer_RU_Statistics.aml" />
-    <None Include="Topics\Designer_RU_Step.aml" />
-    <None Include="Topics\Designer_RU_Stopping_point.aml" />
-    <None Include="Topics\Designer_RU_Tape.aml" />
-    <None Include="Topics\Designer_RU_The_conclusion_of_the_candles_on_the_chart.aml" />
-    <None Include="Topics\Designer_RU_The_conditional_operator.aml" />
-    <None Include="Topics\Designer_RU_The_connection_settings.aml" />
-    <None Include="Topics\Designer_RU_The_creation_of_a_strategy.aml" />
-    <None Include="Topics\Designer_RU_The_creation_of_the_cube_containing_the_source_code.aml" />
-    <None Include="Topics\Designer_RU_The_elements.aml" />
-    <None Include="Topics\Designer_RU_The_gallery_of_strategies.aml" />
-    <None Include="Topics\Designer_RU_The_integration_of_dice_Source_code_in_the_General_scheme.aml" />
-    <None Include="Topics\Designer_RU_The_logical_condition.aml" />
-    <None Include="Topics\Designer_RU_The_previous_value.aml" />
-    <None Include="Topics\Designer_RU_The_programs_interface.aml" />
-    <None Include="Topics\Designer_RU_The_Properties_Panel.aml" />
-    <None Include="Topics\Designer_RU_The_quick_access_toolbar.aml" />
-    <None Include="Topics\Designer_RU_The_transaction.aml" />
-    <None Include="Topics\Designer_RU_The_transaction_strategy.aml" />
-    <None Include="Topics\Designer_RU_Total.aml" />
-    <None Include="Topics\Designer_RU_Update_to_new_version.aml" />
-    <None Include="Topics\Designer_RU_Variable.aml" />
-    <None Include="Topics\Designer_RU_Viewing_the_downloaded_data.aml" />
-    <None Include="Topics\Designer_RU_Working_time.aml" />
-    <None Include="Topics\Designer_RU_Workspace.aml" />
-    <None Include="Topics\Designer_RU_Writing_code_in_Visual_Studio.aml" />
-    <None Include="Topics\Designer_RU_Backtesting_Interface.aml" />
-    <None Include="Topics\Designer_RU_Live_trade_interface.aml" />
+    <None Include="Topics\Designer_A_logic_function_with_one_argument.aml" />
+    <None Include="Topics\Designer_Add_strategy_Live_trade.aml" />
+    <None Include="Topics\Designer_Algorithm_creation_of_cubes.aml" />
+    <None Include="Topics\Designer_An_example_of_backtesting.aml" />
+    <None Include="Topics\Designer_Applications.aml" />
+    <None Include="Topics\Designer_Association.aml" />
+    <None Include="Topics\Designer_Backtesting.aml" />
+    <None Include="Topics\Designer_Bar_Palette.aml" />
+    <None Include="Topics\Designer_Black_Sols.aml" />
+    <None Include="Topics\Designer_Cancellations.aml" />
+    <None Include="Topics\Designer_Candles.aml" />
+    <None Include="Topics\Designer_Chart_Position.aml" />
+    <None Include="Topics\Designer_Combine_cubes_of_Source_code_and_standard_cubes.aml" />
+    <None Include="Topics\Designer_Comparison.aml" />
+    <None Include="Topics\Designer_Converter.aml" />
+    <None Include="Topics\Designer_Converters.aml" />
+    <None Include="Topics\Designer_Creating_a_composite_elements.aml" />
+    <None Include="Topics\Designer_Creating_a_DLL_cube_in_Visual_Studio.aml" />
+    <None Include="Topics\Designer_Creating_a_repository_of_historical_data.aml" />
+    <None Include="Topics\Designer_Creating_a_strategy_from_the_source_code.aml" />
+    <None Include="Topics\Designer_Creating_a_strategy_out_of_blocks.aml" />
+    <None Include="Topics\Designer_Creating_strategy_from_code.aml" />
+    <None Include="Topics\Designer_Creation_tool.aml" />
+    <None Include="Topics\Designer_Crossing.aml" />
+    <None Include="Topics\Designer_Data_sources.aml" />
+    <None Include="Topics\Designer_Deals_on_request.aml" />
+    <None Include="Topics\Designer_Debug.aml" />
+    <None Include="Topics\Designer_Debugging_DLL_cube_using_Visual_Studio.aml" />
+    <None Include="Topics\Designer_Derivatives.aml" />
+    <None Include="Topics\Designer_Description_of_cubes.aml" />
+    <None Include="Topics\Designer_Designer_schemes_strategies_and_component_elements.aml" />
+    <None Include="Topics\Designer_Determination_of_the_volume_position.aml" />
+    <None Include="Topics\Designer_Directory_and_edit_the_data_manually.aml" />
+    <None Include="Topics\Designer_DLL_Strategy.aml" />
+    <None Include="Topics\Designer_Download_the_tools.aml" />
+    <None Include="Topics\Designer_Downloading_data.aml" />
+    <None Include="Topics\Designer_Edit_tool.aml" />
+    <None Include="Topics\Designer_Empty_glass.aml" />
+    <None Include="Topics\Designer_Encryption.aml" />
+    <None Include="Topics\Designer_Event_model.aml" />
+    <None Include="Topics\Designer_Example_of_Live_trading.aml" />
+    <None Include="Topics\Designer_Examples_of_the_use_of_cubes.aml" />
+    <None Include="Topics\Designer_Export_strategies.aml" />
+    <None Include="Topics\Designer_Formula_with_one_argument.aml" />
+    <None Include="Topics\Designer_Formula_with_two_arguments.aml" />
+    <None Include="Topics\Designer_Get_the_best_rates_for_the_tool.aml" />
+    <None Include="Topics\Designer_Glass.aml" />
+    <None Include="Topics\Designer_Glass_implied_volatility.aml" />
+    <None Include="Topics\Designer_Glasses.aml" />
+    <None Include="Topics\Designer_Graph_options_positions.aml" />
+    <None Include="Topics\Designer_Grouped_glass.aml" />
+    <None Include="Topics\Designer_Hedging.aml" />
+    <None Include="Topics\Designer_Import_strategies.aml" />
+    <None Include="Topics\Designer_Index.aml" />
+    <None Include="Topics\Designer_Indexer.aml" />
+    <None Include="Topics\Designer_Indicator.aml" />
+    <None Include="Topics\Designer_Informing.aml" />
+    <None Include="Topics\Designer_Installation.aml" />
+    <None Include="Topics\Designer_Interface.aml" />
+    <None Include="Topics\Designer_Introduction.aml" />
+    <None Include="Topics\Designer_Level_1.aml" />
+    <None Include="Topics\Designer_Line.aml" />
+    <None Include="Topics\Designer_Live_trade.aml" />
+    <None Include="Topics\Designer_Math.aml" />
+    <None Include="Topics\Designer_Moving_applications.aml" />
+    <None Include="Topics\Designer_Notice.aml" />
+    <None Include="Topics\Designer_Obtaining_a_specified_level_in_the_glass.aml" />
+    <None Include="Topics\Designer_Optimization.aml" />
+    <None Include="Topics\Designer_Options.aml" />
+    <None Include="Topics\Designer_Options_Board.aml" />
+    <None Include="Topics\Designer_Panel_A_Portfolios.aml" />
+    <None Include="Topics\Designer_Panel_Circuits.aml" />
+    <None Include="Topics\Designer_Panel_Designer.aml" />
+    <None Include="Topics\Designer_Panel_graphics.aml" />
+    <None Include="Topics\Designer_Panel_Logs.aml" />
+    <None Include="Topics\Designer_Panel_strategies.aml" />
+    <None Include="Topics\Designer_Position.aml" />
+    <None Include="Topics\Designer_Position_opening.aml" />
+    <None Include="Topics\Designer_Properties_emulation.aml" />
+    <None Include="Topics\Designer_Protect_positions.aml" />
+    <None Include="Topics\Designer_Quick_start.aml" />
+    <None Include="Topics\Designer_Quoting.aml" />
+    <None Include="Topics\Designer_Repository_of_historical_data.aml" />
+    <None Include="Topics\Designer_Reset_language_settings.aml" />
+    <None Include="Topics\Designer_Schedule.aml" />
+    <None Include="Topics\Designer_Schedule_PU.aml" />
+    <None Include="Topics\Designer_Setting_SAPI_from_GitHub.aml" />
+    <None Include="Topics\Designer_Setting_SAPI_using_Nuget.aml" />
+    <None Include="Topics\Designer_Settings.aml" />
+    <None Include="Topics\Designer_Source_code.aml" />
+    <None Include="Topics\Designer_Start_mode.aml" />
+    <None Include="Topics\Designer_Statistics.aml" />
+    <None Include="Topics\Designer_Step.aml" />
+    <None Include="Topics\Designer_Stopping_point.aml" />
+    <None Include="Topics\Designer_Tape.aml" />
+    <None Include="Topics\Designer_The_conclusion_of_the_candles_on_the_chart.aml" />
+    <None Include="Topics\Designer_The_conditional_operator.aml" />
+    <None Include="Topics\Designer_The_connection_settings.aml" />
+    <None Include="Topics\Designer_The_creation_of_a_strategy.aml" />
+    <None Include="Topics\Designer_The_creation_of_the_cube_containing_the_source_code.aml" />
+    <None Include="Topics\Designer_The_elements.aml" />
+    <None Include="Topics\Designer_The_gallery_of_strategies.aml" />
+    <None Include="Topics\Designer_The_integration_of_dice_Source_code_in_the_General_scheme.aml" />
+    <None Include="Topics\Designer_The_logical_condition.aml" />
+    <None Include="Topics\Designer_The_previous_value.aml" />
+    <None Include="Topics\Designer_The_programs_interface.aml" />
+    <None Include="Topics\Designer_The_Properties_Panel.aml" />
+    <None Include="Topics\Designer_The_quick_access_toolbar.aml" />
+    <None Include="Topics\Designer_The_transaction.aml" />
+    <None Include="Topics\Designer_The_transaction_strategy.aml" />
+    <None Include="Topics\Designer_Total.aml" />
+    <None Include="Topics\Designer_Update_to_new_version.aml" />
+    <None Include="Topics\Designer_Variable.aml" />
+    <None Include="Topics\Designer_Viewing_the_downloaded_data.aml" />
+    <None Include="Topics\Designer_Working_time.aml" />
+    <None Include="Topics\Designer_Workspace.aml" />
+    <None Include="Topics\Designer_Writing_code_in_Visual_Studio.aml" />
+    <None Include="Topics\Designer_Backtesting_Interface.aml" />
+    <None Include="Topics\Designer_Live_trade_interface.aml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\hydra.png">
@@ -1815,884 +1815,884 @@
       <ImageId>FixServer</ImageId>
       <AlternateText>Fix Server</AlternateText>
     </Image>
-    <Image Include="Art\001_Designer_RU_Installation.png">
-      <ImageId>001_Designer_RU_Installation</ImageId>
-      <AlternateText>001 Designer RU Installation</AlternateText>
-    </Image>
-    <Image Include="Art\002_Designer_RU_Installation.png">
-      <ImageId>002_Designer_RU_Installation</ImageId>
-      <AlternateText>002 Designer RU Installation</AlternateText>
-    </Image>
-    <Image Include="Art\003_Designer_RU_Installation.png">
-      <ImageId>003_Designer_RU_Installation</ImageId>
-      <AlternateText>003 Designer RU Installation</AlternateText>
-    </Image>
-    <Image Include="Art\004_Designer_RU_Quick_start.png">
-      <ImageId>004_Designer_RU_Quick_start</ImageId>
-      <AlternateText>004 Designer RU Quick start</AlternateText>
-    </Image>
-    <Image Include="Art\005_Designer_RU_Quick_start.png">
-      <ImageId>005_Designer_RU_Quick_start</ImageId>
-      <AlternateText>005 Designer RU Quick start</AlternateText>
-    </Image>
-    <Image Include="Art\006_Designer_RU_Quick_start.png">
-      <ImageId>006_Designer_RU_Quick_start</ImageId>
-      <AlternateText>006 Designer RU Quick start</AlternateText>
-    </Image>
-    <Image Include="Art\007_Designer_RU_Quick_start.png">
-      <ImageId>007_Designer_RU_Quick_start</ImageId>
-      <AlternateText>007 Designer RU Quick start</AlternateText>
-    </Image>
-    <Image Include="Art\008_Designer_RU_Quick_start.png">
-      <ImageId>008_Designer_RU_Quick_start</ImageId>
-      <AlternateText>008 Designer RU Quick start</AlternateText>
-    </Image>
-    <Image Include="Art\009_Designer_RU_Quick_start.png">
-      <ImageId>009_Designer_RU_Quick_start</ImageId>
-      <AlternateText>009 Designer RU Quick start</AlternateText>
-    </Image>
-    <Image Include="Art\010_Designer_RU_Quick_start.png">
-      <ImageId>010_Designer_RU_Quick_start</ImageId>
-      <AlternateText>010 Designer RU Quick start</AlternateText>
-    </Image>
-    <Image Include="Art\011_Designer_RU_The_quick_access_toolbar.png">
-      <ImageId>011_Designer_RU_The_quick_access_toolbar</ImageId>
-      <AlternateText>011 Designer RU The quick access toolbar</AlternateText>
-    </Image>
-    <Image Include="Art\012_Designer_RU_The_quick_access_toolbar.png">
-      <ImageId>012_Designer_RU_The_quick_access_toolbar</ImageId>
-      <AlternateText>012 Designer RU The quick access toolbar</AlternateText>
-    </Image>
-    <Image Include="Art\013_Designer_RU_The_quick_access_toolbar.png">
-      <ImageId>013_Designer_RU_The_quick_access_toolbar</ImageId>
-      <AlternateText>013 Designer RU The quick access toolbar</AlternateText>
-    </Image>
-    <Image Include="Art\014_Designer_RU_The_quick_access_toolbar.png">
-      <ImageId>014_Designer_RU_The_quick_access_toolbar</ImageId>
-      <AlternateText>014 Designer RU The quick access toolbar</AlternateText>
-    </Image>
-    <Image Include="Art\015_Designer_RU_Tape.png">
-      <ImageId>015_Designer_RU_Tape</ImageId>
-      <AlternateText>015 Designer RU Tape</AlternateText>
-    </Image>
-    <Image Include="Art\016_Designer_RU_Tape.png">
-      <ImageId>016_Designer_RU_Tape</ImageId>
-      <AlternateText>016 Designer RU Tape</AlternateText>
-    </Image>
-    <Image Include="Art\017_Designer_RU_Tape.png">
-      <ImageId>017_Designer_RU_Tape</ImageId>
-      <AlternateText>017 Designer RU Tape</AlternateText>
-    </Image>
-    <Image Include="Art\018_Designer_RU_Tape.png">
-      <ImageId>018_Designer_RU_Tape</ImageId>
-      <AlternateText>018 Designer RU Tape</AlternateText>
-    </Image>
-    <Image Include="Art\019_Designer_RU_Tape.png">
-      <ImageId>019_Designer_RU_Tape</ImageId>
-      <AlternateText>019 Designer RU Tape</AlternateText>
-    </Image>
-    <Image Include="Art\020_Designer_RU_Workspace.png">
-      <ImageId>020_Designer_RU_Workspace</ImageId>
-      <AlternateText>020 Designer RU Workspace</AlternateText>
-    </Image>
-    <Image Include="Art\021_Designer_RU_Panel_Circuits.png">
-      <ImageId>021_Designer_RU_Panel_Circuits</ImageId>
-      <AlternateText>021 Designer RU Panel Circuits</AlternateText>
-    </Image>
-    <Image Include="Art\022_Designer_RU_Panel_Circuits.png">
-      <ImageId>022_Designer_RU_Panel_Circuits</ImageId>
-      <AlternateText>022 Designer RU Panel Circuits</AlternateText>
-    </Image>
-    <Image Include="Art\023_Designer_RU_Panel_Circuits.png">
-      <ImageId>023_Designer_RU_Panel_Circuits</ImageId>
-      <AlternateText>023 Designer RU Panel Circuits</AlternateText>
-    </Image>
-    <Image Include="Art\024_Designer_RU_Panel_Circuits.png">
-      <ImageId>024_Designer_RU_Panel_Circuits</ImageId>
-      <AlternateText>024 Designer RU Panel Circuits</AlternateText>
-    </Image>
-    <Image Include="Art\025_Designer_RU_Panel_Logs.png">
-      <ImageId>025_Designer_RU_Panel_Logs</ImageId>
-      <AlternateText>025 Designer RU Panel Logs</AlternateText>
-    </Image>
-    <Image Include="Art\026_Designer_RU_Panel_Logs.png">
-      <ImageId>026_Designer_RU_Panel_Logs</ImageId>
-      <AlternateText>026 Designer RU Panel Logs</AlternateText>
-    </Image>
-    <Image Include="Art\027_Designer_RU_Panel_A_Portfolios.png">
-      <ImageId>027_Designer_RU_Panel_A_Portfolios</ImageId>
-      <AlternateText>027 Designer RU Panel A Portfolios</AlternateText>
-    </Image>
-    <Image Include="Art\028_Designer_RU_Panel_A_Portfolios.png">
-      <ImageId>028_Designer_RU_Panel_A_Portfolios</ImageId>
-      <AlternateText>028 Designer RU Panel A Portfolios</AlternateText>
-    </Image>
-    <Image Include="Art\029_Designer_RU_The_gallery_of_strategies.png">
-      <ImageId>029_Designer_RU_The_gallery_of_strategies</ImageId>
-      <AlternateText>029 Designer RU The gallery of strategies</AlternateText>
-    </Image>
-    <Image Include="Art\030_Designer_RU_The_gallery_of_strategies.png">
-      <ImageId>030_Designer_RU_The_gallery_of_strategies</ImageId>
-      <AlternateText>030 Designer RU The gallery of strategies</AlternateText>
-    </Image>
-    <Image Include="Art\031_Designer_RU_The_gallery_of_strategies.png">
-      <ImageId>031_Designer_RU_The_gallery_of_strategies</ImageId>
-      <AlternateText>031 Designer RU The gallery of strategies</AlternateText>
-    </Image>
-    <Image Include="Art\032_Designer_RU_The_gallery_of_strategies.png">
-      <ImageId>032_Designer_RU_The_gallery_of_strategies</ImageId>
-      <AlternateText>032 Designer RU The gallery of strategies</AlternateText>
-    </Image>
-    <Image Include="Art\033_Designer_RU_The_creation_of_a_strategy.png">
-      <ImageId>033_Designer_RU_The_creation_of_a_strategy</ImageId>
-      <AlternateText>033 Designer RU The creation of a strategy</AlternateText>
-    </Image>
-    <Image Include="Art\034_Designer_RU_The_creation_of_a_strategy.png">
-      <ImageId>034_Designer_RU_The_creation_of_a_strategy</ImageId>
-      <AlternateText>034 Designer RU The creation of a strategy</AlternateText>
-    </Image>
-    <Image Include="Art\035_Designer_RU_Designer_schemes_strategies_and_component_elements.png">
-      <ImageId>035_Designer_RU_Designer_schemes_strategies_and_component_elements</ImageId>
-      <AlternateText>035 Designer RU Designer schemes strategies and component elements</AlternateText>
-    </Image>
-    <Image Include="Art\036_Designer_RU_The_Properties_Panel.png">
-      <ImageId>036_Designer_RU_The_Properties_Panel</ImageId>
-      <AlternateText>036 Designer RU The Properties Panel</AlternateText>
-    </Image>
-    <Image Include="Art\037_Designer_RU_Description_of_cubes.png">
-      <ImageId>037_Designer_RU_Description_of_cubes</ImageId>
-      <AlternateText>037 Designer RU Description of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\038_Designer_RU_Description_of_cubes.png">
-      <ImageId>038_Designer_RU_Description_of_cubes</ImageId>
-      <AlternateText>038 Designer RU Description of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\039_Designer_RU_Panel_graphics.png">
-      <ImageId>039_Designer_RU_Panel_graphics</ImageId>
-      <AlternateText>039 Designer RU Panel graphics</AlternateText>
-    </Image>
-    <Image Include="Art\040_Designer_RU_Panel_graphics.png">
-      <ImageId>040_Designer_RU_Panel_graphics</ImageId>
-      <AlternateText>040 Designer RU Panel graphics</AlternateText>
-    </Image>
-    <Image Include="Art\041_Designer_RU_Panel_graphics.png">
-      <ImageId>041_Designer_RU_Panel_graphics</ImageId>
-      <AlternateText>041 Designer RU Panel graphics</AlternateText>
-    </Image>
-    <Image Include="Art\042_Designer_RU_Panel_graphics.png">
-      <ImageId>042_Designer_RU_Panel_graphics</ImageId>
-      <AlternateText>042 Designer RU Panel graphics</AlternateText>
-    </Image>
-    <Image Include="Art\043_Designer_RU_Panel_graphics.png">
-      <ImageId>043_Designer_RU_Panel_graphics</ImageId>
-      <AlternateText>043 Designer RU Panel graphics</AlternateText>
-    </Image>
-    <Image Include="Art\044_Designer_RU_Working_time.png">
-      <ImageId>044_Designer_RU_Working_time</ImageId>
-      <AlternateText>044 Designer RU Working time</AlternateText>
-    </Image>
-    <Image Include="Art\045_Designer_RU_Working_time.png">
-      <ImageId>045_Designer_RU_Working_time</ImageId>
-      <AlternateText>045 Designer RU Working time</AlternateText>
-    </Image>
-    <Image Include="Art\046_Designer_RU_Comparison.png">
-      <ImageId>046_Designer_RU_Comparison</ImageId>
-      <AlternateText>046 Designer RU Comparison</AlternateText>
-    </Image>
-    <Image Include="Art\047_Designer_RU_Indicator.png">
-      <ImageId>047_Designer_RU_Indicator</ImageId>
-      <AlternateText>047 Designer RU Indicator</AlternateText>
-    </Image>
-    <Image Include="Art\048_Designer_RU_Indicator.png">
-      <ImageId>048_Designer_RU_Indicator</ImageId>
-      <AlternateText>048 Designer RU Indicator</AlternateText>
-    </Image>
-    <Image Include="Art\049_Designer_RU_The_logical_condition.png">
-      <ImageId>049_Designer_RU_The_logical_condition</ImageId>
-      <AlternateText>049 Designer RU The logical condition</AlternateText>
-    </Image>
-    <Image Include="Art\050_Designer_RU_Cancellations.png">
-      <ImageId>050_Designer_RU_Cancellations</ImageId>
-      <AlternateText>050 Designer RU Cancellations</AlternateText>
-    </Image>
-    <Image Include="Art\051_Designer_RU_Position_opening.png">
-      <ImageId>051_Designer_RU_Position_opening</ImageId>
-      <AlternateText>051 Designer RU Position opening</AlternateText>
-    </Image>
-    <Image Include="Art\052_Designer_RU_Moving_applications.png">
-      <ImageId>052_Designer_RU_Moving_applications</ImageId>
-      <AlternateText>052 Designer RU Moving applications</AlternateText>
-    </Image>
-    <Image Include="Art\053_Designer_RU_Deals_on_request.png">
-      <ImageId>053_Designer_RU_Deals_on_request</ImageId>
-      <AlternateText>053 Designer RU Deals on request</AlternateText>
-    </Image>
-    <Image Include="Art\054_Designer_RU_Association.png">
-      <ImageId>054_Designer_RU_Association</ImageId>
-      <AlternateText>054 Designer RU Association</AlternateText>
-    </Image>
-    <Image Include="Art\055_Designer_RU_Position.png">
-      <ImageId>055_Designer_RU_Position</ImageId>
-      <AlternateText>055 Designer RU Position</AlternateText>
-    </Image>
-    <Image Include="Art\056_Designer_RU_The_previous_value.png">
-      <ImageId>056_Designer_RU_The_previous_value</ImageId>
-      <AlternateText>056 Designer RU The previous value</AlternateText>
-    </Image>
-    <Image Include="Art\057_Designer_RU_Protect_positions.png">
-      <ImageId>057_Designer_RU_Protect_positions</ImageId>
-      <AlternateText>057 Designer RU Protect positions</AlternateText>
-    </Image>
-    <Image Include="Art\058_Designer_RU_Source_code.png">
-      <ImageId>058_Designer_RU_Source_code</ImageId>
-      <AlternateText>058 Designer RU Source code</AlternateText>
-    </Image>
-    <Image Include="Art\059_Designer_RU_DLL_Strategy.png">
-      <ImageId>059_Designer_RU_DLL_Strategy</ImageId>
-      <AlternateText>059 Designer RU DLL Strategy</AlternateText>
-    </Image>
-    <Image Include="Art\060_Designer_RU_The_transaction_strategy.png">
-      <ImageId>060_Designer_RU_The_transaction_strategy</ImageId>
-      <AlternateText>060 Designer RU The transaction strategy</AlternateText>
-    </Image>
-    <Image Include="Art\061_Designer_RU_Notice.png">
-      <ImageId>061_Designer_RU_Notice</ImageId>
-      <AlternateText>061 Designer RU Notice</AlternateText>
-    </Image>
-    <Image Include="Art\062_Designer_RU_Candles.png">
-      <ImageId>062_Designer_RU_Candles</ImageId>
-      <AlternateText>062 Designer RU Candles</AlternateText>
-    </Image>
-    <Image Include="Art\063_Designer_RU_Level_1.png">
-      <ImageId>063_Designer_RU_Level_1</ImageId>
-      <AlternateText>063 Designer RU Level 1</AlternateText>
-    </Image>
-    <Image Include="Art\064_Designer_RU_Index.png">
-      <ImageId>064_Designer_RU_Index</ImageId>
-      <AlternateText>064 Designer RU Index</AlternateText>
-    </Image>
-    <Image Include="Art\065_Designer_RU_Variable.png">
-      <ImageId>065_Designer_RU_Variable</ImageId>
-      <AlternateText>065 Designer RU Variable</AlternateText>
-    </Image>
-    <Image Include="Art\066_Designer_RU_Indexer.png">
-      <ImageId>066_Designer_RU_Indexer</ImageId>
-      <AlternateText>066 Designer RU Indexer</AlternateText>
-    </Image>
-    <Image Include="Art\067_Designer_RU_Converter.png">
-      <ImageId>067_Designer_RU_Converter</ImageId>
-      <AlternateText>067 Designer RU Converter</AlternateText>
-    </Image>
-    <Image Include="Art\068_Designer_RU_A_logic_function_with_one_argument.png">
-      <ImageId>068_Designer_RU_A_logic_function_with_one_argument</ImageId>
-      <AlternateText>068 Designer RU A logic function with one argument</AlternateText>
-    </Image>
-    <Image Include="Art\069_Designer_RU_Formula_with_one_argument.png">
-      <ImageId>069_Designer_RU_Formula_with_one_argument</ImageId>
-      <AlternateText>069 Designer RU Formula with one argument</AlternateText>
-    </Image>
-    <Image Include="Art\070_Designer_RU_Formula_with_two_arguments.png">
-      <ImageId>070_Designer_RU_Formula_with_two_arguments</ImageId>
-      <AlternateText>070 Designer RU Formula with two arguments</AlternateText>
-    </Image>
-    <Image Include="Art\071_Designer_RU_Glass.png">
-      <ImageId>071_Designer_RU_Glass</ImageId>
-      <AlternateText>071 Designer RU Glass</AlternateText>
-    </Image>
-    <Image Include="Art\072_Designer_RU_Grouped_glass.png">
-      <ImageId>072_Designer_RU_Grouped_glass</ImageId>
-      <AlternateText>072 Designer RU Grouped glass</AlternateText>
-    </Image>
-    <Image Include="Art\073_Designer_RU_Empty_glass.png">
-      <ImageId>073_Designer_RU_Empty_glass</ImageId>
-      <AlternateText>073 Designer RU Empty glass</AlternateText>
-    </Image>
-    <Image Include="Art\074_Designer_RU_Glass_implied_volatility.png">
-      <ImageId>074_Designer_RU_Glass_implied_volatility</ImageId>
-      <AlternateText>074 Designer RU Glass implied volatility</AlternateText>
-    </Image>
-    <Image Include="Art\075_Designer_RU_Options_Board.png">
-      <ImageId>075_Designer_RU_Options_Board</ImageId>
-      <AlternateText>075 Designer RU Options Board</AlternateText>
-    </Image>
-    <Image Include="Art\076_Designer_RU_Options_Board.png">
-      <ImageId>076_Designer_RU_Options_Board</ImageId>
-      <AlternateText>076 Designer RU Options Board</AlternateText>
-    </Image>
-    <Image Include="Art\077_Designer_RU_Options_Board.png">
-      <ImageId>077_Designer_RU_Options_Board</ImageId>
-      <AlternateText>077 Designer RU Options Board</AlternateText>
-    </Image>
-    <Image Include="Art\078_Designer_RU_Graph_options_positions.png">
-      <ImageId>078_Designer_RU_Graph_options_positions</ImageId>
-      <AlternateText>078 Designer RU Graph options positions</AlternateText>
-    </Image>
-    <Image Include="Art\079_Designer_RU_Graph_options_positions.png">
-      <ImageId>079_Designer_RU_Graph_options_positions</ImageId>
-      <AlternateText>079 Designer RU Graph options positions</AlternateText>
-    </Image>
-    <Image Include="Art\080_Designer_RU_Graph_options_positions.png">
-      <ImageId>080_Designer_RU_Graph_options_positions</ImageId>
-      <AlternateText>080 Designer RU Graph options positions</AlternateText>
-    </Image>
-    <Image Include="Art\081_Designer_RU_Black_Sols.png">
-      <ImageId>081_Designer_RU_Black_Sols</ImageId>
-      <AlternateText>081 Designer RU Black Sols</AlternateText>
-    </Image>
-    <Image Include="Art\082_Designer_RU_Hedging.png">
-      <ImageId>082_Designer_RU_Hedging</ImageId>
-      <AlternateText>082 Designer RU Hedging</AlternateText>
-    </Image>
-    <Image Include="Art\083_Designer_RU_Quoting.png">
-      <ImageId>083_Designer_RU_Quoting</ImageId>
-      <AlternateText>083 Designer RU Quoting</AlternateText>
-    </Image>
-    <Image Include="Art\084_Designer_RU_Derivatives.png">
-      <ImageId>084_Designer_RU_Derivatives</ImageId>
-      <AlternateText>084 Designer RU Derivatives</AlternateText>
-    </Image>
-    <Image Include="Art\085_Designer_RU_Crossing.png">
-      <ImageId>085_Designer_RU_Crossing</ImageId>
-      <AlternateText>085 Designer RU Crossing</AlternateText>
-    </Image>
-    <Image Include="Art\086_Designer_RU_Crossing.png">
-      <ImageId>086_Designer_RU_Crossing</ImageId>
-      <AlternateText>086 Designer RU Crossing</AlternateText>
-    </Image>
-    <Image Include="Art\087_Designer_RU_The_conditional_operator.png">
-      <ImageId>087_Designer_RU_The_conditional_operator</ImageId>
-      <AlternateText>087 Designer RU The conditional operator</AlternateText>
-    </Image>
-    <Image Include="Art\088_Designer_RU_The_conditional_operator.png">
-      <ImageId>088_Designer_RU_The_conditional_operator</ImageId>
-      <AlternateText>088 Designer RU The conditional operator</AlternateText>
-    </Image>
-    <Image Include="Art\089_Designer_RU_Line.png">
-      <ImageId>089_Designer_RU_Line</ImageId>
-      <AlternateText>089 Designer RU Line</AlternateText>
-    </Image>
-    <Image Include="Art\090_Designer_RU_Event_model.png">
-      <ImageId>090_Designer_RU_Event_model</ImageId>
-      <AlternateText>090 Designer RU Event model</AlternateText>
-    </Image>
-    <Image Include="Art\091_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>091_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>091 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\092_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>092_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>092 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\093_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>093_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>093 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\094_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>094_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>094 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\095_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>095_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>095 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\096_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>096_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>096 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\097_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>097_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>097 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\098_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>098_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>098 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\099_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>099_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>099 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\100_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>100_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>100 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\101_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>101_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>101 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\102_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>102_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>102 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\103_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>103_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>103 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\104_Designer_RU_Algorithm_creation_of_cubes.png">
-      <ImageId>104_Designer_RU_Algorithm_creation_of_cubes</ImageId>
-      <AlternateText>104 Designer RU Algorithm creation of cubes</AlternateText>
-    </Image>
-    <Image Include="Art\105_Designer_RU_Creating_a_composite_elements.png">
-      <ImageId>105_Designer_RU_Creating_a_composite_elements</ImageId>
-      <AlternateText>105 Designer RU Creating a composite elements</AlternateText>
-    </Image>
-    <Image Include="Art\106_Designer_RU_The_conclusion_of_the_candles_on_the_chart.png">
-      <ImageId>106_Designer_RU_The_conclusion_of_the_candles_on_the_chart</ImageId>
-      <AlternateText>106 Designer RU The conclusion of the candles on the chart</AlternateText>
-    </Image>
-    <Image Include="Art\107_Designer_RU_Get_the_best_rates_for_the_tool.png">
-      <ImageId>107_Designer_RU_Get_the_best_rates_for_the_tool</ImageId>
-      <AlternateText>107 Designer RU Get the best rates for the tool</AlternateText>
-    </Image>
-    <Image Include="Art\108_Designer_RU_Determination_of_the_volume_position.png">
-      <ImageId>108_Designer_RU_Determination_of_the_volume_position</ImageId>
-      <AlternateText>108 Designer RU Determination of the volume position</AlternateText>
-    </Image>
-    <Image Include="Art\109_Designer_RU_The_creation_of_the_cube_containing_the_source_code.png">
-      <ImageId>109_Designer_RU_The_creation_of_the_cube_containing_the_source_code</ImageId>
-      <AlternateText>109 Designer RU The creation of the cube containing the source code</AlternateText>
-    </Image>
-    <Image Include="Art\110_Designer_RU_The_creation_of_the_cube_containing_the_source_code.png">
-      <ImageId>110_Designer_RU_The_creation_of_the_cube_containing_the_source_code</ImageId>
-      <AlternateText>110 Designer RU The creation of the cube containing the source code</AlternateText>
-    </Image>
-    <Image Include="Art\111_Designer_RU_The_creation_of_the_cube_containing_the_source_code.png">
-      <ImageId>111_Designer_RU_The_creation_of_the_cube_containing_the_source_code</ImageId>
-      <AlternateText>111 Designer RU The creation of the cube containing the source code</AlternateText>
-    </Image>
-    <Image Include="Art\112_Designer_RU_The_creation_of_the_cube_containing_the_source_code.png">
-      <ImageId>112_Designer_RU_The_creation_of_the_cube_containing_the_source_code</ImageId>
-      <AlternateText>112 Designer RU The creation of the cube containing the source code</AlternateText>
-    </Image>
-    <Image Include="Art\113_Designer_RU_Creating_a_strategy_from_the_source_code.png">
-      <ImageId>113_Designer_RU_Creating_a_strategy_from_the_source_code</ImageId>
-      <AlternateText>113 Designer RU Creating a strategy from the source code</AlternateText>
-    </Image>
-    <Image Include="Art\114_Designer_RU_The_integration_of_dice_Source_code_in_the_General_scheme.png">
-      <ImageId>114_Designer_RU_The_integration_of_dice_Source_code_in_the_General_scheme</ImageId>
-      <AlternateText>114 Designer RU The integration of dice Source code in the General scheme</AlternateText>
-    </Image>
-    <Image Include="Art\115_Designer_RU_Combine_cubes_of_Source_code_and_standard_cubes.png">
-      <ImageId>115_Designer_RU_Combine_cubes_of_Source_code_and_standard_cubes</ImageId>
-      <AlternateText>115 Designer RU Combine cubes of Source code and standard cubes</AlternateText>
-    </Image>
-    <Image Include="Art\116_Designer_RU_Creating_a_DLL_cube_in_Visual_Studio.png">
-      <ImageId>116_Designer_RU_Creating_a_DLL_cube_in_Visual_Studio</ImageId>
-      <AlternateText>116 Designer RU Creating a DLL cube in Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\117_Designer_RU_Creating_a_DLL_cube_in_Visual_Studio.png">
-      <ImageId>117_Designer_RU_Creating_a_DLL_cube_in_Visual_Studio</ImageId>
-      <AlternateText>117 Designer RU Creating a DLL cube in Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\118_Designer_RU_Creating_a_DLL_cube_in_Visual_Studio.png">
-      <ImageId>118_Designer_RU_Creating_a_DLL_cube_in_Visual_Studio</ImageId>
-      <AlternateText>118 Designer RU Creating a DLL cube in Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\119_Designer_RU_Creating_a_DLL_cube_in_Visual_Studio.png">
-      <ImageId>119_Designer_RU_Creating_a_DLL_cube_in_Visual_Studio</ImageId>
-      <AlternateText>119 Designer RU Creating a DLL cube in Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\120_Designer_RU_Setting_SAPI_from_GitHub.png">
-      <ImageId>120_Designer_RU_Setting_SAPI_from_GitHub</ImageId>
+    <Image Include="Art\Designer_Installation_00.png">
+      <ImageId>Designer_Installation_00</ImageId>
+      <AlternateText>Designer Installation 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Installation_01.png">
+      <ImageId>Designer_Installation_01</ImageId>
+      <AlternateText>Designer Installation 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Installation_02.png">
+      <ImageId>Designer_Installation_02</ImageId>
+      <AlternateText>Designer Installation 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quick_start_00.png">
+      <ImageId>Designer_Quick_start_00</ImageId>
+      <AlternateText>Designer Quick start 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quick_start_01.png">
+      <ImageId>Designer_Quick_start_01</ImageId>
+      <AlternateText>Designer Quick start 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quick_start_02.png">
+      <ImageId>Designer_Quick_start_02</ImageId>
+      <AlternateText>Designer Quick start 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quick_start_03.png">
+      <ImageId>Designer_Quick_start_03</ImageId>
+      <AlternateText>Designer Quick start 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quick_start_04.png">
+      <ImageId>Designer_Quick_start_04</ImageId>
+      <AlternateText>Designer Quick start 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quick_start_05.png">
+      <ImageId>Designer_Quick_start_05</ImageId>
+      <AlternateText>Designer Quick start 05</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quick_start_06.png">
+      <ImageId>Designer_Quick_start_06</ImageId>
+      <AlternateText>Designer Quick start 06</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_quick_access_toolbar_00.png">
+      <ImageId>Designer_The_quick_access_toolbar_00</ImageId>
+      <AlternateText>Designer The quick access toolbar 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_quick_access_toolbar_01.png">
+      <ImageId>Designer_The_quick_access_toolbar_01</ImageId>
+      <AlternateText>Designer The quick access toolbar 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_quick_access_toolbar_02.png">
+      <ImageId>Designer_The_quick_access_toolbar_02</ImageId>
+      <AlternateText>Designer The quick access toolbar 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_quick_access_toolbar_03.png">
+      <ImageId>Designer_The_quick_access_toolbar_03</ImageId>
+      <AlternateText>Designer The quick access toolbar 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Tape_00.png">
+      <ImageId>Designer_Tape_00</ImageId>
+      <AlternateText>Designer Tape 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Tape_01.png">
+      <ImageId>Designer_Tape_01</ImageId>
+      <AlternateText>Designer Tape 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Tape_02.png">
+      <ImageId>Designer_Tape_02</ImageId>
+      <AlternateText>Designer Tape 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Tape_03.png">
+      <ImageId>Designer_Tape_03</ImageId>
+      <AlternateText>Designer Tape 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Tape_04.png">
+      <ImageId>Designer_Tape_04</ImageId>
+      <AlternateText>Designer Tape 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Workspace_00.png">
+      <ImageId>Designer_Workspace_00</ImageId>
+      <AlternateText>Designer Workspace 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_Circuits_00.png">
+      <ImageId>Designer_Panel_Circuits_00</ImageId>
+      <AlternateText>Designer Panel Circuits 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_Circuits_01.png">
+      <ImageId>Designer_Panel_Circuits_01</ImageId>
+      <AlternateText>Designer Panel Circuits 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_Circuits_02.png">
+      <ImageId>Designer_Panel_Circuits_02</ImageId>
+      <AlternateText>Designer Panel Circuits 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_Circuits_03.png">
+      <ImageId>Designer_Panel_Circuits_03</ImageId>
+      <AlternateText>Designer Panel Circuits 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_Logs_00.png">
+      <ImageId>Designer_Panel_Logs_00</ImageId>
+      <AlternateText>Designer Panel Logs 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_Logs_01.png">
+      <ImageId>Designer_Panel_Logs_01</ImageId>
+      <AlternateText>Designer Panel Logs 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_A_Portfolios_00.png">
+      <ImageId>Designer_Panel_A_Portfolios_00</ImageId>
+      <AlternateText>Designer Panel A Portfolios 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_A_Portfolios_01.png">
+      <ImageId>Designer_Panel_A_Portfolios_01</ImageId>
+      <AlternateText>Designer Panel A Portfolios 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_gallery_of_strategies_00.png">
+      <ImageId>Designer_The_gallery_of_strategies_00</ImageId>
+      <AlternateText>Designer The gallery of strategies 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_gallery_of_strategies_01.png">
+      <ImageId>Designer_The_gallery_of_strategies_01</ImageId>
+      <AlternateText>Designer The gallery of strategies 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_gallery_of_strategies_02.png">
+      <ImageId>Designer_The_gallery_of_strategies_02</ImageId>
+      <AlternateText>Designer The gallery of strategies 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_gallery_of_strategies_03.png">
+      <ImageId>Designer_The_gallery_of_strategies_03</ImageId>
+      <AlternateText>Designer The gallery of strategies 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_creation_of_a_strategy_00.png">
+      <ImageId>Designer_The_creation_of_a_strategy_00</ImageId>
+      <AlternateText>Designer The creation of a strategy 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_creation_of_a_strategy_01.png">
+      <ImageId>Designer_The_creation_of_a_strategy_01</ImageId>
+      <AlternateText>Designer The creation of a strategy 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Designer_schemes_strategies_and_component_elements_00.png">
+      <ImageId>Designer_Designer_schemes_strategies_and_component_elements_00</ImageId>
+      <AlternateText>Designer Designer schemes strategies and component elements 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_Properties_Panel_00.png">
+      <ImageId>Designer_The_Properties_Panel_00</ImageId>
+      <AlternateText>Designer The Properties Panel 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Description_of_cubes_00.png">
+      <ImageId>Designer_Description_of_cubes_00</ImageId>
+      <AlternateText>Designer Description of cubes 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Description_of_cubes_01.png">
+      <ImageId>Designer_Description_of_cubes_01</ImageId>
+      <AlternateText>Designer Description of cubes 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_graphics_00.png">
+      <ImageId>Designer_Panel_graphics_00</ImageId>
+      <AlternateText>Designer Panel graphics 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_graphics_01.png">
+      <ImageId>Designer_Panel_graphics_01</ImageId>
+      <AlternateText>Designer Panel graphics 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_graphics_02.png">
+      <ImageId>Designer_Panel_graphics_02</ImageId>
+      <AlternateText>Designer Panel graphics 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_graphics_03.png">
+      <ImageId>Designer_Panel_graphics_03</ImageId>
+      <AlternateText>Designer Panel graphics 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_graphics_04.png">
+      <ImageId>Designer_Panel_graphics_04</ImageId>
+      <AlternateText>Designer Panel graphics 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Working_time_00.png">
+      <ImageId>Designer_Working_time_00</ImageId>
+      <AlternateText>Designer Working time 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Working_time_01.png">
+      <ImageId>Designer_Working_time_01</ImageId>
+      <AlternateText>Designer Working time 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Comparison_00.png">
+      <ImageId>Designer_Comparison_00</ImageId>
+      <AlternateText>Designer Comparison 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Indicator_00.png">
+      <ImageId>Designer_Indicator_00</ImageId>
+      <AlternateText>Designer Indicator 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Indicator_01.png">
+      <ImageId>Designer_Indicator_01</ImageId>
+      <AlternateText>Designer Indicator 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_logical_condition_00.png">
+      <ImageId>Designer_The_logical_condition_00</ImageId>
+      <AlternateText>Designer The logical condition 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Cancellations_00.png">
+      <ImageId>Designer_Cancellations_00</ImageId>
+      <AlternateText>Designer Cancellations 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Position_opening_00.png">
+      <ImageId>Designer_Position_opening_00</ImageId>
+      <AlternateText>Designer Position opening 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Moving_applications_00.png">
+      <ImageId>Designer_Moving_applications_00</ImageId>
+      <AlternateText>Designer Moving applications 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Deals_on_request_00.png">
+      <ImageId>Designer_Deals_on_request_00</ImageId>
+      <AlternateText>Designer Deals on request 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Association_00.png">
+      <ImageId>Designer_Association_00</ImageId>
+      <AlternateText>Designer Association 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Position_00.png">
+      <ImageId>Designer_Position_00</ImageId>
+      <AlternateText>Designer Position 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_previous_value_00.png">
+      <ImageId>Designer_The_previous_value_00</ImageId>
+      <AlternateText>Designer The previous value 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Protect_positions_00.png">
+      <ImageId>Designer_Protect_positions_00</ImageId>
+      <AlternateText>Designer Protect positions 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Source_code_00.png">
+      <ImageId>Designer_Source_code_00</ImageId>
+      <AlternateText>Designer Source code 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_DLL_Strategy_00.png">
+      <ImageId>Designer_DLL_Strategy_00</ImageId>
+      <AlternateText>Designer DLL Strategy 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_transaction_strategy_00.png">
+      <ImageId>Designer_The_transaction_strategy_00</ImageId>
+      <AlternateText>Designer The transaction strategy 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Notice_00.png">
+      <ImageId>Designer_Notice_00</ImageId>
+      <AlternateText>Designer Notice 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Candles_00.png">
+      <ImageId>Designer_Candles_00</ImageId>
+      <AlternateText>Designer Candles 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Level_1_00.png">
+      <ImageId>Designer_Level_1_00</ImageId>
+      <AlternateText>Designer Level 1 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Index_00.png">
+      <ImageId>Designer_Index_00</ImageId>
+      <AlternateText>Designer Index 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Variable_00.png">
+      <ImageId>Designer_Variable_00</ImageId>
+      <AlternateText>Designer Variable 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Indexer_00.png">
+      <ImageId>Designer_Indexer_00</ImageId>
+      <AlternateText>Designer Indexer 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Converter_00.png">
+      <ImageId>Designer_Converter_00</ImageId>
+      <AlternateText>Designer Converter 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_A_logic_function_with_one_argument_00.png">
+      <ImageId>Designer_A_logic_function_with_one_argument_00</ImageId>
+      <AlternateText>Designer A logic function with one argument 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Formula_with_one_argument_00.png">
+      <ImageId>Designer_Formula_with_one_argument_00</ImageId>
+      <AlternateText>Designer Formula with one argument 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Formula_with_two_arguments_00.png">
+      <ImageId>Designer_Formula_with_two_arguments_00</ImageId>
+      <AlternateText>Designer Formula with two arguments 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Glass_00.png">
+      <ImageId>Designer_Glass_00</ImageId>
+      <AlternateText>Designer Glass 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Grouped_glass_00.png">
+      <ImageId>Designer_Grouped_glass_00</ImageId>
+      <AlternateText>Designer Grouped glass 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Empty_glass_00.png">
+      <ImageId>Designer_Empty_glass_00</ImageId>
+      <AlternateText>Designer Empty glass 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Glass_implied_volatility_00.png">
+      <ImageId>Designer_Glass_implied_volatility_00</ImageId>
+      <AlternateText>Designer Glass implied volatility 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Options_Board_00.png">
+      <ImageId>Designer_Options_Board_00</ImageId>
+      <AlternateText>Designer Options Board 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Options_Board_01.png">
+      <ImageId>Designer_Options_Board_01</ImageId>
+      <AlternateText>Designer Options Board 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Options_Board_02.png">
+      <ImageId>Designer_Options_Board_02</ImageId>
+      <AlternateText>Designer Options Board 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Graph_options_positions_00.png">
+      <ImageId>Designer_Graph_options_positions_00</ImageId>
+      <AlternateText>Designer Graph options positions 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Graph_options_positions_01.png">
+      <ImageId>Designer_Graph_options_positions_01</ImageId>
+      <AlternateText>Designer Graph options positions 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Graph_options_positions_02.png">
+      <ImageId>Designer_Graph_options_positions_02</ImageId>
+      <AlternateText>Designer Graph options positions 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Black_Sols_00.png">
+      <ImageId>Designer_Black_Sols_00</ImageId>
+      <AlternateText>Designer Black Sols 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Hedging_00.png">
+      <ImageId>Designer_Hedging_00</ImageId>
+      <AlternateText>Designer Hedging 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quoting_00.png">
+      <ImageId>Designer_Quoting_00</ImageId>
+      <AlternateText>Designer Quoting 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Derivatives_00.png">
+      <ImageId>Designer_Derivatives_00</ImageId>
+      <AlternateText>Designer Derivatives 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Crossing_00.png">
+      <ImageId>Designer_Crossing_00</ImageId>
+      <AlternateText>Designer Crossing 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Crossing_01.png">
+      <ImageId>Designer_Crossing_01</ImageId>
+      <AlternateText>Designer Crossing 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_conditional_operator_00.png">
+      <ImageId>Designer_The_conditional_operator_00</ImageId>
+      <AlternateText>Designer The conditional operator 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_conditional_operator_01.png">
+      <ImageId>Designer_The_conditional_operator_01</ImageId>
+      <AlternateText>Designer The conditional operator 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Line_00.png">
+      <ImageId>Designer_Line_00</ImageId>
+      <AlternateText>Designer Line 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Event_model_00.png">
+      <ImageId>Designer_Event_model_00</ImageId>
+      <AlternateText>Designer Event model 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_13.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_13</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 13</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_00.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_00</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_01.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_01</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_02.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_02</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_03.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_03</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_04.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_04</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_05.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_05</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 05</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_06.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_06</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 06</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_07.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_07</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 07</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_08.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_08</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 08</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_09.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_09</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 09</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_10.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_10</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 10</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_11.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_11</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 11</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Algorithm_creation_of_cubes_12.png">
+      <ImageId>Designer_Algorithm_creation_of_cubes_12</ImageId>
+      <AlternateText>Designer Algorithm creation of cubes 12</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_composite_elements_00.png">
+      <ImageId>Designer_Creating_a_composite_elements_00</ImageId>
+      <AlternateText>Designer Creating a composite elements 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_conclusion_of_the_candles_on_the_chart_00.png">
+      <ImageId>Designer_The_conclusion_of_the_candles_on_the_chart_00</ImageId>
+      <AlternateText>Designer The conclusion of the candles on the chart 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Get_the_best_rates_for_the_tool_00.png">
+      <ImageId>Designer_Get_the_best_rates_for_the_tool_00</ImageId>
+      <AlternateText>Designer Get the best rates for the tool 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Determination_of_the_volume_position_00.png">
+      <ImageId>Designer_Determination_of_the_volume_position_00</ImageId>
+      <AlternateText>Designer Determination of the volume position 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_creation_of_the_cube_containing_the_source_code_00.png">
+      <ImageId>Designer_The_creation_of_the_cube_containing_the_source_code_00</ImageId>
+      <AlternateText>Designer The creation of the cube containing the source code 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_creation_of_the_cube_containing_the_source_code_01.png">
+      <ImageId>Designer_The_creation_of_the_cube_containing_the_source_code_01</ImageId>
+      <AlternateText>Designer The creation of the cube containing the source code 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_creation_of_the_cube_containing_the_source_code_02.png">
+      <ImageId>Designer_The_creation_of_the_cube_containing_the_source_code_02</ImageId>
+      <AlternateText>Designer The creation of the cube containing the source code 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_creation_of_the_cube_containing_the_source_code_03.png">
+      <ImageId>Designer_The_creation_of_the_cube_containing_the_source_code_03</ImageId>
+      <AlternateText>Designer The creation of the cube containing the source code 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_strategy_from_the_source_code_00.png">
+      <ImageId>Designer_Creating_a_strategy_from_the_source_code_00</ImageId>
+      <AlternateText>Designer Creating a strategy from the source code 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_integration_of_dice_Source_code_in_the_General_scheme_00.png">
+      <ImageId>Designer_The_integration_of_dice_Source_code_in_the_General_scheme_00</ImageId>
+      <AlternateText>Designer The integration of dice Source code in the General scheme 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Combine_cubes_of_Source_code_and_standard_cubes_00.png">
+      <ImageId>Designer_Combine_cubes_of_Source_code_and_standard_cubes_00</ImageId>
+      <AlternateText>Designer Combine cubes of Source code and standard cubes 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_DLL_cube_in_Visual_Studio_00.png">
+      <ImageId>Designer_Creating_a_DLL_cube_in_Visual_Studio_00</ImageId>
+      <AlternateText>Designer Creating a DLL cube in Visual Studio 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_DLL_cube_in_Visual_Studio_01.png">
+      <ImageId>Designer_Creating_a_DLL_cube_in_Visual_Studio_01</ImageId>
+      <AlternateText>Designer Creating a DLL cube in Visual Studio 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_DLL_cube_in_Visual_Studio_02.png">
+      <ImageId>Designer_Creating_a_DLL_cube_in_Visual_Studio_02</ImageId>
+      <AlternateText>Designer Creating a DLL cube in Visual Studio 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_DLL_cube_in_Visual_Studio_03.png">
+      <ImageId>Designer_Creating_a_DLL_cube_in_Visual_Studio_03</ImageId>
+      <AlternateText>Designer Creating a DLL cube in Visual Studio 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Setting_SAPI_from_GitHub_00.png">
+      <ImageId>Designer_Setting_SAPI_from_GitHub_00</ImageId>
       <AlternateText>120 Designer RU Setting SAPI from Git Hub</AlternateText>
     </Image>
-    <Image Include="Art\121_Designer_RU_Setting_SAPI_from_GitHub.png">
-      <ImageId>121_Designer_RU_Setting_SAPI_from_GitHub</ImageId>
+    <Image Include="Art\Designer_Setting_SAPI_from_GitHub_01.png">
+      <ImageId>Designer_Setting_SAPI_from_GitHub_01</ImageId>
       <AlternateText>121 Designer RU Setting SAPI from Git Hub</AlternateText>
     </Image>
-    <Image Include="Art\122_Designer_RU_Setting_SAPI_from_GitHub.png">
-      <ImageId>122_Designer_RU_Setting_SAPI_from_GitHub</ImageId>
+    <Image Include="Art\Designer_Setting_SAPI_from_GitHub_02.png">
+      <ImageId>Designer_Setting_SAPI_from_GitHub_02</ImageId>
       <AlternateText>122 Designer RU Setting SAPI from Git Hub</AlternateText>
     </Image>
-    <Image Include="Art\123_Designer_RU_Setting_SAPI_using_Nuget.png">
-      <ImageId>123_Designer_RU_Setting_SAPI_using_Nuget</ImageId>
-      <AlternateText>123 Designer RU Setting SAPI using Nuget</AlternateText>
-    </Image>
-    <Image Include="Art\124_Designer_RU_Setting_SAPI_using_Nuget.png">
-      <ImageId>124_Designer_RU_Setting_SAPI_using_Nuget</ImageId>
-      <AlternateText>124 Designer RU Setting SAPI using Nuget</AlternateText>
-    </Image>
-    <Image Include="Art\125_Designer_RU_Setting_SAPI_using_Nuget.png">
-      <ImageId>125_Designer_RU_Setting_SAPI_using_Nuget</ImageId>
-      <AlternateText>125 Designer RU Setting SAPI using Nuget</AlternateText>
-    </Image>
-    <Image Include="Art\126_Designer_RU_Debugging_DLL_cube_using_Visual_Studio.png">
-      <ImageId>126_Designer_RU_Debugging_DLL_cube_using_Visual_Studio</ImageId>
-      <AlternateText>126 Designer RU Debugging DLL cube using Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\127_Designer_RU_Debugging_DLL_cube_using_Visual_Studio.png">
-      <ImageId>127_Designer_RU_Debugging_DLL_cube_using_Visual_Studio</ImageId>
-      <AlternateText>127 Designer RU Debugging DLL cube using Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\128_Designer_RU_Debugging_DLL_cube_using_Visual_Studio.png">
-      <ImageId>128_Designer_RU_Debugging_DLL_cube_using_Visual_Studio</ImageId>
-      <AlternateText>128 Designer RU Debugging DLL cube using Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\129_Designer_RU_Debugging_DLL_cube_using_Visual_Studio.png">
-      <ImageId>129_Designer_RU_Debugging_DLL_cube_using_Visual_Studio</ImageId>
-      <AlternateText>129 Designer RU Debugging DLL cube using Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\130_Designer_RU_Debugging_DLL_cube_using_Visual_Studio.png">
-      <ImageId>130_Designer_RU_Debugging_DLL_cube_using_Visual_Studio</ImageId>
-      <AlternateText>130 Designer RU Debugging DLL cube using Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\131_Designer_RU_Debugging_DLL_cube_using_Visual_Studio.png">
-      <ImageId>131_Designer_RU_Debugging_DLL_cube_using_Visual_Studio</ImageId>
-      <AlternateText>131 Designer RU Debugging DLL cube using Visual Studio</AlternateText>
-    </Image>
-    <Image Include="Art\132_Designer_RU_Export_strategies.png">
-      <ImageId>132_Designer_RU_Export_strategies</ImageId>
-      <AlternateText>132 Designer RU Export strategies</AlternateText>
-    </Image>
-    <Image Include="Art\133_Designer_RU_Export_strategies.png">
-      <ImageId>133_Designer_RU_Export_strategies</ImageId>
-      <AlternateText>133 Designer RU Export strategies</AlternateText>
-    </Image>
-    <Image Include="Art\134_Designer_RU_Encryption.png">
-      <ImageId>134_Designer_RU_Encryption</ImageId>
-      <AlternateText>134 Designer RU Encryption</AlternateText>
-    </Image>
-    <Image Include="Art\135_Designer_RU_Encryption.png">
-      <ImageId>135_Designer_RU_Encryption</ImageId>
-      <AlternateText>135 Designer RU Encryption</AlternateText>
-    </Image>
-    <Image Include="Art\136_Designer_RU_Import_strategies.png">
-      <ImageId>136_Designer_RU_Import_strategies</ImageId>
-      <AlternateText>136 Designer RU Import strategies</AlternateText>
-    </Image>
-    <Image Include="Art\137_Designer_RU_Import_strategies.png">
-      <ImageId>137_Designer_RU_Import_strategies</ImageId>
-      <AlternateText>137 Designer RU Import strategies</AlternateText>
-    </Image>
-    <Image Include="Art\138_Designer_RU_Import_strategies.png">
-      <ImageId>138_Designer_RU_Import_strategies</ImageId>
-      <AlternateText>138 Designer RU Import strategies</AlternateText>
-    </Image>
-    <Image Include="Art\139_Designer_RU_Interface_Backtesting.png">
-      <ImageId>139_Designer_RU_Interface_Backtesting</ImageId>
-      <AlternateText>139 Designer RU Interface Backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\140_Designer_RU_Interface_Backtesting.png">
-      <ImageId>140_Designer_RU_Interface_Backtesting</ImageId>
-      <AlternateText>140 Designer RU Interface Backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\141_Designer_RU_Interface_Backtesting.png">
-      <ImageId>141_Designer_RU_Interface_Backtesting</ImageId>
-      <AlternateText>141 Designer RU Interface Backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\142_Designer_RU_Interface_Backtesting.png">
-      <ImageId>142_Designer_RU_Interface_Backtesting</ImageId>
-      <AlternateText>142 Designer RU Interface Backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\143_Designer_RU_Interface_Backtesting.png">
-      <ImageId>143_Designer_RU_Interface_Backtesting</ImageId>
-      <AlternateText>143 Designer RU Interface Backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\144_Designer_RU_Interface_Backtesting.png">
-      <ImageId>144_Designer_RU_Interface_Backtesting</ImageId>
-      <AlternateText>144 Designer RU Interface Backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\145_Designer_RU_Interface_Backtesting.png">
-      <ImageId>145_Designer_RU_Interface_Backtesting</ImageId>
-      <AlternateText>145 Designer RU Interface Backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\146_Designer_RU_Properties_emulation.png">
-      <ImageId>146_Designer_RU_Properties_emulation</ImageId>
-      <AlternateText>146 Designer RU Properties emulation</AlternateText>
-    </Image>
-    <Image Include="Art\147_Designer_RU_Schedule.png">
-      <ImageId>147_Designer_RU_Schedule</ImageId>
-      <AlternateText>147 Designer RU Schedule</AlternateText>
-    </Image>
-    <Image Include="Art\148_Designer_RU_Schedule.png">
-      <ImageId>148_Designer_RU_Schedule</ImageId>
-      <AlternateText>148 Designer RU Schedule</AlternateText>
-    </Image>
-    <Image Include="Art\149_Designer_RU_Schedule.png">
-      <ImageId>149_Designer_RU_Schedule</ImageId>
-      <AlternateText>149 Designer RU Schedule</AlternateText>
-    </Image>
-    <Image Include="Art\150_Designer_RU_Schedule.png">
-      <ImageId>150_Designer_RU_Schedule</ImageId>
-      <AlternateText>150 Designer RU Schedule</AlternateText>
-    </Image>
-    <Image Include="Art\151_Designer_RU_Applications.png">
-      <ImageId>151_Designer_RU_Applications</ImageId>
-      <AlternateText>151 Designer RU Applications</AlternateText>
-    </Image>
-    <Image Include="Art\152_Designer_RU_The_transaction.png">
-      <ImageId>152_Designer_RU_The_transaction</ImageId>
-      <AlternateText>152 Designer RU The transaction</AlternateText>
-    </Image>
-    <Image Include="Art\153_Designer_RU_Schedule_PU.png">
-      <ImageId>153_Designer_RU_Schedule_PU</ImageId>
-      <AlternateText>153 Designer RU Schedule PU</AlternateText>
-    </Image>
-    <Image Include="Art\154_Designer_RU_Chart_Position.png">
-      <ImageId>154_Designer_RU_Chart_Position</ImageId>
-      <AlternateText>154 Designer RU Chart Position</AlternateText>
-    </Image>
-    <Image Include="Art\155_Designer_RU_Statistics.png">
-      <ImageId>155_Designer_RU_Statistics</ImageId>
-      <AlternateText>155 Designer RU Statistics</AlternateText>
-    </Image>
-    <Image Include="Art\156_Designer_RU_Debug.png">
-      <ImageId>156_Designer_RU_Debug</ImageId>
-      <AlternateText>156 Designer RU Debug</AlternateText>
-    </Image>
-    <Image Include="Art\157_Designer_RU_Debug.png">
-      <ImageId>157_Designer_RU_Debug</ImageId>
-      <AlternateText>157 Designer RU Debug</AlternateText>
-    </Image>
-    <Image Include="Art\158_Designer_RU_Debug.png">
-      <ImageId>158_Designer_RU_Debug</ImageId>
-      <AlternateText>158 Designer RU Debug</AlternateText>
-    </Image>
-    <Image Include="Art\159_Designer_RU_Debug.png">
-      <ImageId>159_Designer_RU_Debug</ImageId>
-      <AlternateText>159 Designer RU Debug</AlternateText>
-    </Image>
-    <Image Include="Art\160_Designer_RU_Debug.png">
-      <ImageId>160_Designer_RU_Debug</ImageId>
-      <AlternateText>160 Designer RU Debug</AlternateText>
-    </Image>
-    <Image Include="Art\161_Designer_RU_Debug.png">
-      <ImageId>161_Designer_RU_Debug</ImageId>
-      <AlternateText>161 Designer RU Debug</AlternateText>
-    </Image>
-    <Image Include="Art\162_Designer_RU_Debug.png">
-      <ImageId>162_Designer_RU_Debug</ImageId>
-      <AlternateText>162 Designer RU Debug</AlternateText>
-    </Image>
-    <Image Include="Art\163_Designer_RU_Stopping_point.png">
-      <ImageId>163_Designer_RU_Stopping_point</ImageId>
-      <AlternateText>163 Designer RU Stopping point</AlternateText>
-    </Image>
-    <Image Include="Art\164_Designer_RU_Stopping_point.png">
-      <ImageId>164_Designer_RU_Stopping_point</ImageId>
-      <AlternateText>164 Designer RU Stopping point</AlternateText>
-    </Image>
-    <Image Include="Art\165_Designer_RU_Optimization.png">
-      <ImageId>165_Designer_RU_Optimization</ImageId>
-      <AlternateText>165 Designer RU Optimization</AlternateText>
-    </Image>
-    <Image Include="Art\166_Designer_RU_Optimization.png">
-      <ImageId>166_Designer_RU_Optimization</ImageId>
-      <AlternateText>166 Designer RU Optimization</AlternateText>
-    </Image>
-    <Image Include="Art\167_Designer_RU_Optimization.png">
-      <ImageId>167_Designer_RU_Optimization</ImageId>
-      <AlternateText>167 Designer RU Optimization</AlternateText>
-    </Image>
-    <Image Include="Art\168_Designer_RU_An_example_of_backtesting.png">
-      <ImageId>168_Designer_RU_An_example_of_backtesting</ImageId>
-      <AlternateText>168 Designer RU An example of backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\169_Designer_RU_An_example_of_backtesting.png">
-      <ImageId>169_Designer_RU_An_example_of_backtesting</ImageId>
-      <AlternateText>169 Designer RU An example of backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\170_Designer_RU_An_example_of_backtesting.png">
-      <ImageId>170_Designer_RU_An_example_of_backtesting</ImageId>
-      <AlternateText>170 Designer RU An example of backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\171_Designer_RU_An_example_of_backtesting.png">
-      <ImageId>171_Designer_RU_An_example_of_backtesting</ImageId>
-      <AlternateText>171 Designer RU An example of backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\172_Designer_RU_An_example_of_backtesting.png">
-      <ImageId>172_Designer_RU_An_example_of_backtesting</ImageId>
-      <AlternateText>172 Designer RU An example of backtesting</AlternateText>
-    </Image>
-    <Image Include="Art\173_Designer_RU_Live_trade.png">
-      <ImageId>173_Designer_RU_Live_trade</ImageId>
-      <AlternateText>173 Designer RU Live trade</AlternateText>
-    </Image>
-    <Image Include="Art\174_Designer_RU_Live_trade.png">
-      <ImageId>174_Designer_RU_Live_trade</ImageId>
-      <AlternateText>174 Designer RU Live trade</AlternateText>
-    </Image>
-    <Image Include="Art\175_Designer_RU_Live_trade.png">
-      <ImageId>175_Designer_RU_Live_trade</ImageId>
-      <AlternateText>175 Designer RU Live trade</AlternateText>
-    </Image>
-    <Image Include="Art\176_Designer_RU_Interface_Live_trade.png">
-      <ImageId>176_Designer_RU_Interface_Live_trade</ImageId>
-      <AlternateText>176 Designer RU Interface Live trade</AlternateText>
-    </Image>
-    <Image Include="Art\177_Designer_RU_Interface_Live_trade.png">
-      <ImageId>177_Designer_RU_Interface_Live_trade</ImageId>
-      <AlternateText>177 Designer RU Interface Live trade</AlternateText>
-    </Image>
-    <Image Include="Art\178_Designer_RU_The_connection_settings.png">
-      <ImageId>178_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>178 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\179_Designer_RU_The_connection_settings.png">
-      <ImageId>179_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>179 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\180_Designer_RU_The_connection_settings.png">
-      <ImageId>180_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>180 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\181_Designer_RU_The_connection_settings.png">
-      <ImageId>181_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>181 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\182_Designer_RU_The_connection_settings.png">
-      <ImageId>182_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>182 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\183_Designer_RU_The_connection_settings.png">
-      <ImageId>183_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>183 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\184_Designer_RU_The_connection_settings.png">
-      <ImageId>184_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>184 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\185_Designer_RU_The_connection_settings.png">
-      <ImageId>185_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>185 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\186_Designer_RU_The_connection_settings.png">
-      <ImageId>186_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>186 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\187_Designer_RU_The_connection_settings.png">
-      <ImageId>187_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>187 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\188_Designer_RU_The_connection_settings.png">
-      <ImageId>188_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>188 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\189_Designer_RU_The_connection_settings.png">
-      <ImageId>189_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>189 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\190_Designer_RU_The_connection_settings.png">
-      <ImageId>190_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>190 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\191_Designer_RU_The_connection_settings.png">
-      <ImageId>191_Designer_RU_The_connection_settings</ImageId>
-      <AlternateText>191 Designer RU The connection settings</AlternateText>
-    </Image>
-    <Image Include="Art\192_Designer_RU_Panel_strategies.png">
-      <ImageId>192_Designer_RU_Panel_strategies</ImageId>
-      <AlternateText>192 Designer RU Panel strategies</AlternateText>
-    </Image>
-    <Image Include="Art\193_Designer_RU_Panel_strategies.png">
-      <ImageId>193_Designer_RU_Panel_strategies</ImageId>
-      <AlternateText>193 Designer RU Panel strategies</AlternateText>
-    </Image>
-    <Image Include="Art\194_Designer_RU_Panel_strategies.png">
-      <ImageId>194_Designer_RU_Panel_strategies</ImageId>
-      <AlternateText>194 Designer RU Panel strategies</AlternateText>
-    </Image>
-    <Image Include="Art\195_Designer_RU_Example_of_Live_trading.png">
-      <ImageId>195_Designer_RU_Example_of_Live_trading</ImageId>
-      <AlternateText>195 Designer RU Example of Live trading</AlternateText>
-    </Image>
-    <Image Include="Art\196_Designer_RU_Example_of_Live_trading.png">
-      <ImageId>196_Designer_RU_Example_of_Live_trading</ImageId>
-      <AlternateText>196 Designer RU Example of Live trading</AlternateText>
-    </Image>
-    <Image Include="Art\197_Designer_RU_Example_of_Live_trading.png">
-      <ImageId>197_Designer_RU_Example_of_Live_trading</ImageId>
-      <AlternateText>197 Designer RU Example of Live trading</AlternateText>
-    </Image>
-    <Image Include="Art\198_Designer_RU_Example_of_Live_trading.png">
-      <ImageId>198_Designer_RU_Example_of_Live_trading</ImageId>
-      <AlternateText>198 Designer RU Example of Live trading</AlternateText>
-    </Image>
-    <Image Include="Art\199_Designer_RU_Example_of_Live_trading.png">
-      <ImageId>199_Designer_RU_Example_of_Live_trading</ImageId>
-      <AlternateText>199 Designer RU Example of Live trading</AlternateText>
-    </Image>
-    <Image Include="Art\200_Designer_RU_Repository_of_historical_data.png">
-      <ImageId>200_Designer_RU_Repository_of_historical_data</ImageId>
-      <AlternateText>200 Designer RU Repository of historical data</AlternateText>
-    </Image>
-    <Image Include="Art\201_Designer_RU_Creating_a_repository_of_historical_data.png">
-      <ImageId>201_Designer_RU_Creating_a_repository_of_historical_data</ImageId>
-      <AlternateText>201 Designer RU Creating a repository of historical data</AlternateText>
-    </Image>
-    <Image Include="Art\202_Designer_RU_Creating_a_repository_of_historical_data.png">
-      <ImageId>202_Designer_RU_Creating_a_repository_of_historical_data</ImageId>
-      <AlternateText>202 Designer RU Creating a repository of historical data</AlternateText>
-    </Image>
-    <Image Include="Art\203_Designer_RU_Creating_a_repository_of_historical_data.png">
-      <ImageId>203_Designer_RU_Creating_a_repository_of_historical_data</ImageId>
-      <AlternateText>203 Designer RU Creating a repository of historical data</AlternateText>
-    </Image>
-    <Image Include="Art\204_Designer_RU_Creating_a_repository_of_historical_data.png">
-      <ImageId>204_Designer_RU_Creating_a_repository_of_historical_data</ImageId>
-      <AlternateText>204 Designer RU Creating a repository of historical data</AlternateText>
-    </Image>
-    <Image Include="Art\205_Designer_RU_Creating_a_repository_of_historical_data.png">
-      <ImageId>205_Designer_RU_Creating_a_repository_of_historical_data</ImageId>
-      <AlternateText>205 Designer RU Creating a repository of historical data</AlternateText>
-    </Image>
-    <Image Include="Art\206_Designer_RU_Creating_a_repository_of_historical_data.png">
-      <ImageId>206_Designer_RU_Creating_a_repository_of_historical_data</ImageId>
-      <AlternateText>206 Designer RU Creating a repository of historical data</AlternateText>
-    </Image>
-    <Image Include="Art\207_Designer_RU_Creating_a_repository_of_historical_data.png">
-      <ImageId>207_Designer_RU_Creating_a_repository_of_historical_data</ImageId>
-      <AlternateText>207 Designer RU Creating a repository of historical data</AlternateText>
-    </Image>
-    <Image Include="Art\208_Designer_RU_Download_the_tools.png">
-      <ImageId>208_Designer_RU_Download_the_tools</ImageId>
-      <AlternateText>208 Designer RU Download the tools</AlternateText>
-    </Image>
-    <Image Include="Art\209_Designer_RU_Creation_tool.png">
-      <ImageId>209_Designer_RU_Creation_tool</ImageId>
-      <AlternateText>209 Designer RU Creation tool</AlternateText>
-    </Image>
-    <Image Include="Art\210_Designer_RU_Creation_tool.png">
-      <ImageId>210_Designer_RU_Creation_tool</ImageId>
-      <AlternateText>210 Designer RU Creation tool</AlternateText>
-    </Image>
-    <Image Include="Art\211_Designer_RU_Edit_tool.png">
-      <ImageId>211_Designer_RU_Edit_tool</ImageId>
-      <AlternateText>211 Designer RU Edit tool</AlternateText>
-    </Image>
-    <Image Include="Art\212_Designer_RU_Edit_tool.png">
-      <ImageId>212_Designer_RU_Edit_tool</ImageId>
-      <AlternateText>212 Designer RU Edit tool</AlternateText>
-    </Image>
-    <Image Include="Art\213_Designer_RU_Viewing_the_downloaded_data.png">
-      <ImageId>213_Designer_RU_Viewing_the_downloaded_data</ImageId>
-      <AlternateText>213 Designer RU Viewing the downloaded data</AlternateText>
-    </Image>
-    <Image Include="Art\214_Designer_RU_Start_mode.png">
-      <ImageId>214_Designer_RU_Start_mode</ImageId>
-      <AlternateText>214 Designer RU Start mode</AlternateText>
-    </Image>
-    <Image Include="Art\215_Designer_RU_Start_mode.png">
-      <ImageId>215_Designer_RU_Start_mode</ImageId>
-      <AlternateText>215 Designer RU Start mode</AlternateText>
-    </Image>
-    <Image Include="Art\216_Designer_RU_Start_mode.png">
-      <ImageId>216_Designer_RU_Start_mode</ImageId>
-      <AlternateText>216 Designer RU Start mode</AlternateText>
-    </Image>
-    <Image Include="Art\217_Designer_RU_Reset_language_settings.png">
-      <ImageId>217_Designer_RU_Reset_language_settings</ImageId>
-      <AlternateText>217 Designer RU Reset language settings</AlternateText>
-    </Image>
-    <Image Include="Art\218_Designer_RU_Directory_and_edit_the_data_manually.png">
-      <ImageId>218_Designer_RU_Directory_and_edit_the_data_manually</ImageId>
-      <AlternateText>218 Designer RU Directory and edit the data manually</AlternateText>
-    </Image>
-    <Image Include="Art\219_Designer_RU_Directory_and_edit_the_data_manually.png">
-      <ImageId>219_Designer_RU_Directory_and_edit_the_data_manually</ImageId>
-      <AlternateText>219 Designer RU Directory and edit the data manually</AlternateText>
-    </Image>
-    <Image Include="Art\091_Designer_RU_Event_model0.png">
-      <ImageId>091_Designer_RU_Event_model0</ImageId>
+    <Image Include="Art\Designer_Setting_SAPI_using_Nuget_00.png">
+      <ImageId>Designer_Setting_SAPI_using_Nuget_00</ImageId>
+      <AlternateText>Designer Setting SAPI using Nuget 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Setting_SAPI_using_Nuget_01.png">
+      <ImageId>Designer_Setting_SAPI_using_Nuget_01</ImageId>
+      <AlternateText>Designer Setting SAPI using Nuget 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Setting_SAPI_using_Nuget_02.png">
+      <ImageId>Designer_Setting_SAPI_using_Nuget_02</ImageId>
+      <AlternateText>Designer Setting SAPI using Nuget 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_00.png">
+      <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_00</ImageId>
+      <AlternateText>Designer Debugging DLL cube using Visual Studio 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_01.png">
+      <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_01</ImageId>
+      <AlternateText>Designer Debugging DLL cube using Visual Studio 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_02.png">
+      <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_02</ImageId>
+      <AlternateText>Designer Debugging DLL cube using Visual Studio 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_03.png">
+      <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_03</ImageId>
+      <AlternateText>Designer Debugging DLL cube using Visual Studio 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_04.png">
+      <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_04</ImageId>
+      <AlternateText>Designer Debugging DLL cube using Visual Studio 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_05.png">
+      <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_05</ImageId>
+      <AlternateText>Designer Debugging DLL cube using Visual Studio 05</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Export_strategies_00.png">
+      <ImageId>Designer_Export_strategies_00</ImageId>
+      <AlternateText>Designer Export strategies 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Export_strategies_01.png">
+      <ImageId>Designer_Export_strategies_01</ImageId>
+      <AlternateText>Designer Export strategies 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Encryption_00.png">
+      <ImageId>Designer_Encryption_00</ImageId>
+      <AlternateText>Designer Encryption 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Encryption_01.png">
+      <ImageId>Designer_Encryption_01</ImageId>
+      <AlternateText>Designer Encryption 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Import_strategies_00.png">
+      <ImageId>Designer_Import_strategies_00</ImageId>
+      <AlternateText>Designer Import strategies 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Import_strategies_01.png">
+      <ImageId>Designer_Import_strategies_01</ImageId>
+      <AlternateText>Designer Import strategies 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Import_strategies_02.png">
+      <ImageId>Designer_Import_strategies_02</ImageId>
+      <AlternateText>Designer Import strategies 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Backtesting_00.png">
+      <ImageId>Designer_Interface_Backtesting_00</ImageId>
+      <AlternateText>Designer Interface Backtesting 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Backtesting_01.png">
+      <ImageId>Designer_Interface_Backtesting_01</ImageId>
+      <AlternateText>Designer Interface Backtesting 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Backtesting_02.png">
+      <ImageId>Designer_Interface_Backtesting_02</ImageId>
+      <AlternateText>Designer Interface Backtesting 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Backtesting_03.png">
+      <ImageId>Designer_Interface_Backtesting_03</ImageId>
+      <AlternateText>Designer Interface Backtesting 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Backtesting_04.png">
+      <ImageId>Designer_Interface_Backtesting_04</ImageId>
+      <AlternateText>Designer Interface Backtesting 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Backtesting_05.png">
+      <ImageId>Designer_Interface_Backtesting_05</ImageId>
+      <AlternateText>Designer Interface Backtesting 05</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Backtesting_06.png">
+      <ImageId>Designer_Interface_Backtesting_06</ImageId>
+      <AlternateText>Designer Interface Backtesting 06</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Properties_emulation_00.png">
+      <ImageId>Designer_Properties_emulation_00</ImageId>
+      <AlternateText>Designer Properties emulation 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Schedule_00.png">
+      <ImageId>Designer_Schedule_00</ImageId>
+      <AlternateText>Designer Schedule 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Schedule_01.png">
+      <ImageId>Designer_Schedule_01</ImageId>
+      <AlternateText>Designer Schedule 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Schedule_02.png">
+      <ImageId>Designer_Schedule_02</ImageId>
+      <AlternateText>Designer Schedule 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Schedule_03.png">
+      <ImageId>Designer_Schedule_03</ImageId>
+      <AlternateText>Designer Schedule 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Applications_00.png">
+      <ImageId>Designer_Applications_00</ImageId>
+      <AlternateText>Designer Applications 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_transaction_00.png">
+      <ImageId>Designer_The_transaction_00</ImageId>
+      <AlternateText>Designer The transaction 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Schedule_PU_00.png">
+      <ImageId>Designer_Schedule_PU_00</ImageId>
+      <AlternateText>Designer Schedule PU 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Chart_Position_00.png">
+      <ImageId>Designer_Chart_Position_00</ImageId>
+      <AlternateText>Designer Chart Position 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Statistics_00.png">
+      <ImageId>Designer_Statistics_00</ImageId>
+      <AlternateText>Designer Statistics 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debug_00.png">
+      <ImageId>Designer_Debug_00</ImageId>
+      <AlternateText>Designer Debug 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debug_01.png">
+      <ImageId>Designer_Debug_01</ImageId>
+      <AlternateText>Designer Debug 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debug_02.png">
+      <ImageId>Designer_Debug_02</ImageId>
+      <AlternateText>Designer Debug 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debug_03.png">
+      <ImageId>Designer_Debug_03</ImageId>
+      <AlternateText>Designer Debug 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debug_04.png">
+      <ImageId>Designer_Debug_04</ImageId>
+      <AlternateText>Designer Debug 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debug_05.png">
+      <ImageId>Designer_Debug_05</ImageId>
+      <AlternateText>Designer Debug 05</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Debug_06.png">
+      <ImageId>Designer_Debug_06</ImageId>
+      <AlternateText>Designer Debug 06</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Stopping_point_00.png">
+      <ImageId>Designer_Stopping_point_00</ImageId>
+      <AlternateText>Designer Stopping point 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Stopping_point_01.png">
+      <ImageId>Designer_Stopping_point_01</ImageId>
+      <AlternateText>Designer Stopping point 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Optimization_00.png">
+      <ImageId>Designer_Optimization_00</ImageId>
+      <AlternateText>Designer Optimization 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Optimization_01.png">
+      <ImageId>Designer_Optimization_01</ImageId>
+      <AlternateText>Designer Optimization 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Optimization_02.png">
+      <ImageId>Designer_Optimization_02</ImageId>
+      <AlternateText>Designer Optimization 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_An_example_of_backtesting_00.png">
+      <ImageId>Designer_An_example_of_backtesting_00</ImageId>
+      <AlternateText>Designer An example of backtesting 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_An_example_of_backtesting_01.png">
+      <ImageId>Designer_An_example_of_backtesting_01</ImageId>
+      <AlternateText>Designer An example of backtesting 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_An_example_of_backtesting_02.png">
+      <ImageId>Designer_An_example_of_backtesting_02</ImageId>
+      <AlternateText>Designer An example of backtesting 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_An_example_of_backtesting_03.png">
+      <ImageId>Designer_An_example_of_backtesting_03</ImageId>
+      <AlternateText>Designer An example of backtesting 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_An_example_of_backtesting_04.png">
+      <ImageId>Designer_An_example_of_backtesting_04</ImageId>
+      <AlternateText>Designer An example of backtesting 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Live_trade_00.png">
+      <ImageId>Designer_Live_trade_00</ImageId>
+      <AlternateText>Designer Live trade 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Live_trade_01.png">
+      <ImageId>Designer_Live_trade_01</ImageId>
+      <AlternateText>Designer Live trade 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Live_trade_02.png">
+      <ImageId>Designer_Live_trade_02</ImageId>
+      <AlternateText>Designer Live trade 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Live_trade_00.png">
+      <ImageId>Designer_Interface_Live_trade_00</ImageId>
+      <AlternateText>Designer Interface Live trade 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Interface_Live_trade_01.png">
+      <ImageId>Designer_Interface_Live_trade_01</ImageId>
+      <AlternateText>Designer Interface Live trade 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_00.png">
+      <ImageId>Designer_The_connection_settings_00</ImageId>
+      <AlternateText>Designer The connection settings 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_01.png">
+      <ImageId>Designer_The_connection_settings_01</ImageId>
+      <AlternateText>Designer The connection settings 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_02.png">
+      <ImageId>Designer_The_connection_settings_02</ImageId>
+      <AlternateText>Designer The connection settings 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_03.png">
+      <ImageId>Designer_The_connection_settings_03</ImageId>
+      <AlternateText>Designer The connection settings 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_04.png">
+      <ImageId>Designer_The_connection_settings_04</ImageId>
+      <AlternateText>Designer The connection settings 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_05.png">
+      <ImageId>Designer_The_connection_settings_05</ImageId>
+      <AlternateText>Designer The connection settings 05</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_06.png">
+      <ImageId>Designer_The_connection_settings_06</ImageId>
+      <AlternateText>Designer The connection settings 06</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_07.png">
+      <ImageId>Designer_The_connection_settings_07</ImageId>
+      <AlternateText>Designer The connection settings 07</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_08.png">
+      <ImageId>Designer_The_connection_settings_08</ImageId>
+      <AlternateText>Designer The connection settings 08</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_09.png">
+      <ImageId>Designer_The_connection_settings_09</ImageId>
+      <AlternateText>Designer The connection settings 09</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_10.png">
+      <ImageId>Designer_The_connection_settings_10</ImageId>
+      <AlternateText>Designer The connection settings 10</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_11.png">
+      <ImageId>Designer_The_connection_settings_11</ImageId>
+      <AlternateText>Designer The connection settings 11</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_12.png">
+      <ImageId>Designer_The_connection_settings_12</ImageId>
+      <AlternateText>Designer The connection settings 12</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_The_connection_settings_13.png">
+      <ImageId>Designer_The_connection_settings_13</ImageId>
+      <AlternateText>Designer The connection settings 13</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_strategies_00.png">
+      <ImageId>Designer_Panel_strategies_00</ImageId>
+      <AlternateText>Designer Panel strategies 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_strategies_01.png">
+      <ImageId>Designer_Panel_strategies_01</ImageId>
+      <AlternateText>Designer Panel strategies 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_strategies_02.png">
+      <ImageId>Designer_Panel_strategies_02</ImageId>
+      <AlternateText>Designer Panel strategies 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Example_of_Live_trading_00.png">
+      <ImageId>Designer_Example_of_Live_trading_00</ImageId>
+      <AlternateText>Designer Example of Live trading 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Example_of_Live_trading_01.png">
+      <ImageId>Designer_Example_of_Live_trading_01</ImageId>
+      <AlternateText>Designer Example of Live trading 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Example_of_Live_trading_02.png">
+      <ImageId>Designer_Example_of_Live_trading_02</ImageId>
+      <AlternateText>Designer Example of Live trading 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Example_of_Live_trading_03.png">
+      <ImageId>Designer_Example_of_Live_trading_03</ImageId>
+      <AlternateText>Designer Example of Live trading 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Example_of_Live_trading_04.png">
+      <ImageId>Designer_Example_of_Live_trading_04</ImageId>
+      <AlternateText>Designer Example of Live trading 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Repository_of_historical_data_00.png">
+      <ImageId>Designer_Repository_of_historical_data_00</ImageId>
+      <AlternateText>Designer Repository of historical data 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_00.png">
+      <ImageId>Designer_Creating_a_repository_of_historical_data_00</ImageId>
+      <AlternateText>Designer Creating a repository of historical data 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_01.png">
+      <ImageId>Designer_Creating_a_repository_of_historical_data_01</ImageId>
+      <AlternateText>Designer Creating a repository of historical data 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_02.png">
+      <ImageId>Designer_Creating_a_repository_of_historical_data_02</ImageId>
+      <AlternateText>Designer Creating a repository of historical data 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_03.png">
+      <ImageId>Designer_Creating_a_repository_of_historical_data_03</ImageId>
+      <AlternateText>Designer Creating a repository of historical data 03</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_04.png">
+      <ImageId>Designer_Creating_a_repository_of_historical_data_04</ImageId>
+      <AlternateText>Designer Creating a repository of historical data 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_05.png">
+      <ImageId>Designer_Creating_a_repository_of_historical_data_05</ImageId>
+      <AlternateText>Designer Creating a repository of historical data 05</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_06.png">
+      <ImageId>Designer_Creating_a_repository_of_historical_data_06</ImageId>
+      <AlternateText>Designer Creating a repository of historical data 06</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Download_the_tools_00.png">
+      <ImageId>Designer_Download_the_tools_00</ImageId>
+      <AlternateText>Designer Download the tools 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creation_tool_00.png">
+      <ImageId>Designer_Creation_tool_00</ImageId>
+      <AlternateText>Designer Creation tool 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Creation_tool_01.png">
+      <ImageId>Designer_Creation_tool_01</ImageId>
+      <AlternateText>Designer Creation tool 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Edit_tool_00.png">
+      <ImageId>Designer_Edit_tool_00</ImageId>
+      <AlternateText>Designer Edit tool 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Edit_tool_01.png">
+      <ImageId>Designer_Edit_tool_01</ImageId>
+      <AlternateText>Designer Edit tool 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Viewing_the_downloaded_data_00.png">
+      <ImageId>Designer_Viewing_the_downloaded_data_00</ImageId>
+      <AlternateText>Designer Viewing the downloaded data 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Start_mode_00.png">
+      <ImageId>Designer_Start_mode_00</ImageId>
+      <AlternateText>Designer Start mode 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Start_mode_01.png">
+      <ImageId>Designer_Start_mode_01</ImageId>
+      <AlternateText>Designer Start mode 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Start_mode_02.png">
+      <ImageId>Designer_Start_mode_02</ImageId>
+      <AlternateText>Designer Start mode 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Reset_language_settings_00.png">
+      <ImageId>Designer_Reset_language_settings_00</ImageId>
+      <AlternateText>Designer Reset language settings 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Directory_and_edit_the_data_manually_00.png">
+      <ImageId>Designer_Directory_and_edit_the_data_manually_00</ImageId>
+      <AlternateText>Designer Directory and edit the data manually 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Directory_and_edit_the_data_manually_01.png">
+      <ImageId>Designer_Directory_and_edit_the_data_manually_01</ImageId>
+      <AlternateText>Designer Directory and edit the data manually 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Event_model0_00.png">
+      <ImageId>Designer_Event_model0_00</ImageId>
       <AlternateText>091 Designer RU Event model 0</AlternateText>
       <CopyToMedia>False</CopyToMedia>
     </Image>

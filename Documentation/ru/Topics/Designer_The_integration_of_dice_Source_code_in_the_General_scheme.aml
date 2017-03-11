@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="77322bb8-139a-40e8-b871-8a13ddc96b13" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для добавления стратегии SMA описанной в пункте <link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" />, 
+необходимо в <legacyBold>Палитре</legacyBold> выбрать кубик <legacyBold>Исходный код</legacyBold>, 
+перенести его в панель <legacyBold>Дизайнер</legacyBold>. В свойствах кубика исходный 
+код необходимо выбрать имя стратегии. </para>
+ <mediaLink>
+<image xlink:href="Designer_The_integration_of_dice_Source_code_in_the_General_scheme_00"/>
+</mediaLink>
+<para> Так как метод ProcessCandle(Candle candle) (пункт <link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" />) принимает свечи, то необходимо добавить 
+ кубик свечи и кубик <legacyBold>Переменная</legacyBold> с типом <legacyBold>Инструмент</legacyBold>. 
+ Соединить все кубики линиями. Так как S#.Designer ни как не ограничивает количество 
+ любых кубиков в стратегии, то в одной стратегии можно использовать несколько 
+ кубиков <legacyBold>Исходный код</legacyBold>. Наиболее рациональным 
+ подходом является комбинирование кубиков, те действия которые проще описать в 
+ коде, стоит описывать в коде и интегрировать с помочью кубиков <legacyBold>Исходный код</legacyBold> или 
+ <legacyBold>Dll стратегия</legacyBold>, те действия, что проще сделать с помощью стандартных кубиков 
+ стоит делать стандартными кубиками, пример с данным подходом описан в 
+ пункте <link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" />.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>
