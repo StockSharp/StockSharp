@@ -208,6 +208,7 @@
 		  <ddue:linkText>РТС Стандарт</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru/ru/standard/</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="SchemeDis"><ddue:link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Схемы</ddue:link></item>
   <item id="smartcom"><ddue:link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">SmartCOM</ddue:link></item>
   <item id="smartcom_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>SmartCOM</ddue:linkText>
@@ -320,5 +321,8 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="SchemeDis"><ddue:link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Схемы</ddue:link></item>
+  <item id="MSDN"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>MSDN</ddue:linkText>
+    <ddue:linkUri>https://msdn.microsoft.com/ru-ru/library/3s68z0b3.aspx</ddue:linkUri>
+   </ddue:externalLink></item>
 </content>
