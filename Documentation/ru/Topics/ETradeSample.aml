@@ -19,7 +19,6 @@ Trader = new ETradeTrader(IsSandbox, IsSandbox ? GetSandboxSecurities() : null)
 	ConsumerKey = ConsumerKey,
 	ConsumerSecret = secret,
 	LogLevel = LogLevels.Debug,
-	DumpRestData = true
 };
 							]]>
 							</code>
@@ -45,27 +44,30 @@ Trader.Disconnected += () =>this.GuiAsync(() => OnConnectionChanged(false));
 
 Trader.Error += error =>this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибкаобработкиданных"));
 
-Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
-Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
-Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
-Trader.NewPortfolios += portfolios => this.GuiAsync(() =>
-{
-	// регистрирует портфели на обновление данных
-	portfolios.ForEach(Trader.RegisterPortfolio);
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
 
-	_portfoliosWindow.Portfolios.AddRange(portfolios);
-});
-Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
+Trader.NewPortfolio += portfolio =>
+{
+	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+
+	// регистрирует портфели на обновление данных
+	Trader.RegisterPortfolio(portfolio);
+};
+
+Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 // подписываемся на событие о неудачной регистрации заявок
-Trader.OrdersRegisterFailed += OrdersFailed;
+Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 // подписываемся на событие о неудачном снятии заявок
-Trader.OrdersCancelFailed += OrdersFailed;
+Trader.OrderCancelFailed += OrderFailed;
 
 // подписываемся на событие о неудачной регистрации стоп-заявок
-Trader.StopOrdersRegisterFailed += OrdersFailed;
+Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 // подписываемся на событие о неудачном снятии стоп-заявок
-Trader.StopOrdersCancelFailed += OrdersFailed;
+Trader.StopOrderCancelFailed += OrderFailed;
 							]]>
 							</code>						
 						</content>
@@ -120,17 +122,16 @@ Trader.Connect();
             				
             				<code language="C#">
             				<![CDATA[
-void SearchTextPreviewKeyUp(object sender, KeyEventArgs e)
+private void FindClick(object sender, RoutedEventArgs e)
 {
-	if (e.Key != Key.Enter)
+	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+
+	if (!wnd.ShowModal(this))
 		return;
 
-	var text = SearchText.Text.Trim();
-
-	if (text.IsEmpty())
-		return;
-	MainWindow.Instance.Trader.LookupSecurities(new Security { Name = text });
+	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
 }
+
 							]]>
 							</code>
 						</content>
@@ -142,12 +143,12 @@ void SearchTextPreviewKeyUp(object sender, KeyEventArgs e)
 							<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-Trader.NewPortfolios += portfolios =>
+Trader.NewPortfolio += portfolio =>
 {
-	// регистрирует портфели на обновление данных
-	portfolios.ForEach(Trader.RegisterPortfolio);
+	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 
-	_portfoliosWindow.Portfolios.AddRange(portfolios);
+	// регистрирует портфели на обновление данных
+	Trader.RegisterPortfolio(portfolio);
 };
 							]]>
 							</code>						
