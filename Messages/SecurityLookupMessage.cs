@@ -17,7 +17,6 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -27,7 +26,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class SecurityLookupMessage : SecurityMessage, IEquatable<SecurityLookupMessage>
+	public class SecurityLookupMessage : SecurityMessage//, IEquatable<SecurityLookupMessage>
 	{
 		/// <summary>
 		/// Transaction ID.
@@ -78,30 +77,31 @@ namespace StockSharp.Messages
 			return clone;
 		}
 
-		/// <summary>
-		/// Determines whether the specified criterias are considered equal.
-		/// </summary>
-		/// <param name="other">Another search criteria with which to compare.</param>
-		/// <returns><see langword="true" />, if criterias are equal, otherwise, <see langword="false" />.</returns>
-		public bool Equals(SecurityLookupMessage other)
-		{
-			if (SecurityId.Equals(other.SecurityId))
-				return true;
+		///// <summary>
+		///// Determines whether the specified criterias are considered equal.
+		///// </summary>
+		///// <param name="other">Another search criteria with which to compare.</param>
+		///// <returns><see langword="true" />, if criterias are equal, otherwise, <see langword="false" />.</returns>
+		//public bool Equals(SecurityLookupMessage other)
+		//{
+		//	if (!SecurityId.IsDefault() && SecurityId.Equals(other.SecurityId))
+		//		return true;
 
-			if (Name == other.Name && 
-				ShortName == other.ShortName && 
-				Currency == other.Currency && 
-				ExpiryDate == other.ExpiryDate && 
-				OptionType == other.OptionType &&
-				((SecurityTypes == null && other.SecurityTypes == null) ||
-				(SecurityTypes != null && other.SecurityTypes != null && SecurityTypes.SequenceEqual(other.SecurityTypes))) && 
-				SettlementDate == other.SettlementDate &&
-				Strike == other.Strike &&
-				UnderlyingSecurityCode == other.UnderlyingSecurityCode && CFICode == other.CFICode)
-				return true;
+		//	if (Name == other.Name && 
+		//		ShortName == other.ShortName && 
+		//		Currency == other.Currency && 
+		//		ExpiryDate == other.ExpiryDate && 
+		//		OptionType == other.OptionType &&
+		//		((SecurityTypes == null && other.SecurityTypes == null) ||
+		//		(SecurityTypes != null && other.SecurityTypes != null && SecurityTypes.SequenceEqual(other.SecurityTypes))) && 
+		//		SettlementDate == other.SettlementDate &&
+		//		BinaryOptionType == other.BinaryOptionType &&
+		//		Strike == other.Strike &&
+		//		UnderlyingSecurityCode == other.UnderlyingSecurityCode && CFICode == other.CFICode)
+		//		return true;
 
-			return false;
-		}
+		//	return false;
+		//}
 
 		/// <summary>
 		/// Returns a string that represents the current object.
