@@ -17,7 +17,7 @@ namespace StockSharp.Algo
 	{
 		private readonly SyncObject _sync = new SyncObject();
 
-		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, DateTimeOffset?, DateTimeOffset?, long?, int?>, RefPair<MarketDataMessage, int>> _subscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, DateTimeOffset?, DateTimeOffset?, long?, int?>, RefPair<MarketDataMessage, int>>();
+		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?>, RefPair<MarketDataMessage, int>> _subscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?>, RefPair<MarketDataMessage, int>>();
 		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object>, RefPair<MarketDataMessage, int>> _candleSubscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object>, RefPair<MarketDataMessage, int>>();
 		private readonly Dictionary<string, RefPair<MarketDataMessage, int>> _newsSubscribers = new Dictionary<string, RefPair<MarketDataMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<string, RefPair<PortfolioMessage, int>> _pfSubscribers = new Dictionary<string, RefPair<PortfolioMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
@@ -346,7 +346,7 @@ namespace StockSharp.Algo
 					}
 					default:
 					{
-						var key = Tuple.Create(message.DataType, message.SecurityId, message.From, message.To, message.Count, message.MaxDepth);
+						var key = message.CreateKey();
 
 						var pair = _subscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
 						var subscribersCount = pair.Second;

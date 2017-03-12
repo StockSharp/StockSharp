@@ -777,6 +777,7 @@ P:StockSharp.Messages.NewsMessage.Headline/summary;Str215
 P:StockSharp.Messages.NewsMessage.Story/summary;Str218
 P:StockSharp.Messages.NewsMessage.ServerTime/summary;Str220
 P:StockSharp.Messages.NewsMessage.Url/summary;Str222
+P:StockSharp.Messages.NewsMessage.OriginalTransactionId/summary;DocStr4056
 M:StockSharp.Messages.NewsMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.NewsMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.NewsMessage.ToString/returns;DocStr50
@@ -1204,9 +1205,6 @@ P:StockSharp.Messages.SecurityLookupMessage.CFICode/summary;DocStr9083
 M:StockSharp.Messages.SecurityLookupMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.SecurityLookupMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.SecurityLookupMessage.Clone/returns;DocStr1116
-M:StockSharp.Messages.SecurityLookupMessage.Equals(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr4505
-M:StockSharp.Messages.SecurityLookupMessage.Equals(StockSharp.Messages.SecurityLookupMessage)/param/other;DocStr4506
-M:StockSharp.Messages.SecurityLookupMessage.Equals(StockSharp.Messages.SecurityLookupMessage)/returns;DocStr4507
 M:StockSharp.Messages.SecurityLookupMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.SecurityLookupMessage.ToString/returns;DocStr50
 T:StockSharp.Messages.SecurityLookupResultMessage/summary;DocStr4508

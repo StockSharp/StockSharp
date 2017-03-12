@@ -29,7 +29,7 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using SubscriptionInfo = System.Tuple<Messages.SecurityId, Messages.MarketDataTypes, object, System.DateTimeOffset?, System.DateTimeOffset?, long?, int?>;
+	using SubscriptionInfo = System.Tuple<Messages.MarketDataTypes, Messages.SecurityId, object, System.DateTimeOffset?, System.DateTimeOffset?, long?, int?>;
 
 	/// <summary>
 	/// The interface describing the list of adapters to trading systems with which the aggregator operates.
@@ -134,10 +134,22 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IInnerAdapterList InnerAdapters => _innerAdapters;
 
+		private INativeIdStorage _nativeIdStorage = new InMemoryNativeIdStorage();
+
 		/// <summary>
 		/// Security native identifier storage.
 		/// </summary>
-		public INativeIdStorage NativeIdStorage { get; set; }
+		public INativeIdStorage NativeIdStorage
+		{
+			get { return _nativeIdStorage; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				_nativeIdStorage = value;
+			}
+		}
 
 		/// <summary>
 		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
@@ -259,9 +271,7 @@ namespace StockSharp.Algo
 		{
 			if (adapter.IsNativeIdentifiers)
 			{
-				adapter = NativeIdStorage != null
-					? new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage)
-					: new SecurityNativeIdMessageAdapter(adapter);
+				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage);
 			}
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
@@ -375,7 +385,7 @@ namespace StockSharp.Algo
 
 						default:
 						{
-							var key = CreateKey(mdMsg);
+							var key = mdMsg.CreateKey();
 
 							var state = _subscriptionStates.TryGetValue2(key);
 
@@ -605,7 +615,7 @@ namespace StockSharp.Algo
 				var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId);
 
 				if (key == null)
-					key = CreateKey(message);
+					key = message.CreateKey();
 				else
 					_subscriptionKeys.Remove(originalTransactionId);
 
@@ -614,14 +624,9 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private static SubscriptionInfo CreateKey(MarketDataMessage message)
-		{
-			return Tuple.Create(message.SecurityId, message.DataType, message.Arg, message.From, message.To, message.Count, message.MaxDepth);
-		}
-
 		private void ProcessMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)
 		{
-			var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId) ?? CreateKey(message);
+			var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId) ?? message.CreateKey();
 			
 			var enumerator = _subscriptionQueue.TryGetValue(key);
 			var state = _subscriptionStates.TryGetValue2(key);

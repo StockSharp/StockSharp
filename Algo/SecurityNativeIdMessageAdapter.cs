@@ -26,14 +26,14 @@
 		/// </summary>
 		public INativeIdStorage Storage { get; }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SecurityNativeIdMessageAdapter"/>.
-		/// </summary>
-		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter)
-			: this(innerAdapter, new InMemoryNativeIdStorage())
-		{
-		}
+		///// <summary>
+		///// Initializes a new instance of the <see cref="SecurityNativeIdMessageAdapter"/>.
+		///// </summary>
+		///// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+		//public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter)
+		//	: this(innerAdapter, new InMemoryNativeIdStorage())
+		//{
+		//}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityNativeIdMessageAdapter"/>.
@@ -280,9 +280,7 @@
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return Storage == null
-				       ? new SecurityNativeIdMessageAdapter(InnerAdapter)
-				       : new SecurityNativeIdMessageAdapter(InnerAdapter, Storage);
+			return new SecurityNativeIdMessageAdapter(InnerAdapter, Storage);
 		}
 
 		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, Func<TMessage, TMessage, TMessage> processSuspend)

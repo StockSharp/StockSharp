@@ -54,7 +54,7 @@ namespace StockSharp.Quik
 			if (table == null)
 				throw new ArgumentNullException(nameof(table));
 
-			Table = table;
+			Arg = Table = table;
 		}
 
 		public CustomExportMessage(IEnumerable<DdeTable> tables)
@@ -63,7 +63,7 @@ namespace StockSharp.Quik
 			if (tables == null)
 				throw new ArgumentNullException(nameof(tables));
 
-			Tables = tables;
+			Arg = Tables = tables;
 		}
 
 		public CustomExportMessage(string caption)
@@ -72,7 +72,7 @@ namespace StockSharp.Quik
 			if (caption.IsEmpty())
 				throw new ArgumentNullException(nameof(caption));
 
-			Caption = caption;
+			Arg = Caption = caption;
 		}
 	}
 }
