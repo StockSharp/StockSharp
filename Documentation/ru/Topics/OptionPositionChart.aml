@@ -93,8 +93,11 @@ PosChart.SecurityProvider = Connector;
 						<para>При получении инструментов добавляем базовые активы в список.</para>
             			<code title="C#" language="C#">
                   <![CDATA[
-Connector.NewSecurities += securities =>
-		_assets.AddRange(securities.Where(s => s.Type == SecurityTypes.Future));
+Connector.NewSecurity += security =>
+			{
+				if (security.Type == SecurityTypes.Future)
+					_assets.Add(security);
+			};
 ]]>
                   		</code>
 					</content>

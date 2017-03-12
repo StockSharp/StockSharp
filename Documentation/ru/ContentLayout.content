@@ -8,9 +8,9 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
-    <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
+    <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" title="Коннекторы (Россия)">
       <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
-        <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" isSelected="true" title="Настройка Quik Lua" />
+        <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
         <Topic id="d79f3357-6bdf-4a6f-92d6-c9b45e820f1a" visible="True" title="Пример использования Quik Lua" />
         <Topic id="a82865dd-98ed-4579-8f48-dd8f806c39e7" visible="True" title="Стоп-заявки" />
         <Topic id="52cb16e3-0ff0-4e82-8ad5-73a2e6e918a1" visible="True" title="Включение и выключение Quik" />
@@ -155,7 +155,8 @@
       <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
       <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" title="RSS" />
     </Topic>
-    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Управление заявками">
+    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" isExpanded="true" title="Управление заявками">
+      <Topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" visible="True" isSelected="true" title="Создать новую заявку" />
       <Topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" visible="True" title="Получение информации по заявкам" />
       <Topic id="41a3b3e7-a7cd-43ba-842f-13f6a7199d26" visible="True" title="Состояния заявок" />
       <Topic id="6267fec7-64e5-4488-ba08-c72cf61fcc9e" visible="True" title="Снятие заявок" />

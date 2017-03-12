@@ -191,22 +191,20 @@ private void DepthClick(object sender, RoutedEventArgs e)
 							<para>Для регистрации заявок предусмотрена кнопка «Новая заявка». Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
             				<code language="C#">
             				<![CDATA[
-private void Send_Click(object sender, RoutedEventArgs e)
+private void NewOrderClick(object sender, RoutedEventArgs e)
 {
-    var order = new Order
-    {
-        Type = IsMarket.IsChecked == true ? OrderTypes.Market : OrderTypes.Limit,
-        Portfolio = Portfolio.SelectedPortfolio,
-        Volume = Volume.Text.To<decimal>(),
-        Price = Price.Text.To<decimal>(),
-        Security = Security,
-        Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-    };
+	var newOrder = new OrderWindow
+	{
+		Order = new Order { Security = SecurityPicker.SelectedSecurity },
+		SecurityProvider = Trader,
+		MarketDataProvider = Trader,
+		Portfolios = new PortfolioDataSource(Trader),
+	};
 
-    MainWindow.Instance.Trader.RegisterOrder(order);
-
-    DialogResult = true;
+	if (newOrder.ShowModal(this))
+		Trader.RegisterOrder(newOrder.Order);
 }
+
 							]]>
 							</code>						
 						</content>

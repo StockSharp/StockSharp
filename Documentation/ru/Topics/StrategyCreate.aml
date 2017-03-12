@@ -222,12 +222,14 @@ _trader.Connected += () =>
 		TryCreateStrategy();
 	};
 
-	_trader.NewSecurities += securities => this.GuiAsync(() =>
+	_trader.NewSecurity += security => this.GuiAsync(() =>
 	{
 		// находим нужную бумагу
-		_lkoh = securities.FirstOrDefault(s => s.Code == "LKOH");
-
-		TryCreateStrategy();
+		if(security.Code == "LKOH")
+		{
+			lkoh = security;
+			TryCreateStrategy();
+		}
 	});
 
 	_trader.NewMyTrades += trades => this.GuiAsync(() =>

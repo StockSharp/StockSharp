@@ -63,7 +63,7 @@ private void ConnectClick(object sender, RoutedEventArgs e)
             .......................................			
 			
 			// Добавляем инструменты в компонент SecurityPicker
-			Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 			
 			// Добавляем свои сделки в таблицу MyTradeGrid
 			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);

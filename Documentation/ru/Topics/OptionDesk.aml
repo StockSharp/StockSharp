@@ -106,24 +106,21 @@ Desk.CurrentTime = null;
 					</list>
             		<code title="C#" language="C#">
                   <![CDATA[
-_connector.NewSecurities += securities =>
+_connector.NewSecurity += security =>
 	this.GuiAsync(() =>
 	{
 		// добавляем в выпадающий список (подлежащие инструменты) только фьючерсы
-		_assets.AddRange(securities.Where(s => s.Type == SecurityTypes.Future));
+		if(security.Type == SecurityTypes.Future)
+		_assets.Add(security);
 
 		if (SelectedAsset == null && _assets.Count > 0)
 			SelectedAsset = _assets.First();
 
 		if (SelectedAsset != null)
 		{
-			var newStrikes = securities
-				.Where(s => s.Type == SecurityTypes.Option && s.UnderlyingSecurityId.CompareIgnoreCase(SelectedAsset.Id))
-				.ToArray();
-
-			if (newStrikes.Length > 0)
+			if (security.Type == SecurityTypes.Option && security.UnderlyingSecurityId.CompareIgnoreCase(SelectedAsset.Id))
 			{
-				_options.AddRange(newStrikes);
+				_options.Add(security);
 				Desk.Options = _options;
 				Desk.RefreshOptions();
 			}

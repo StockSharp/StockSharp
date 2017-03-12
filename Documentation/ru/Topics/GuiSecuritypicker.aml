@@ -157,7 +157,7 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
 			// добавляем инструменты в коллекцию инструментов SecurityPicker
-			Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 			
 			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
 			Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);

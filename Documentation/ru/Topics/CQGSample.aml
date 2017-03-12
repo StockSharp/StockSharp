@@ -99,7 +99,7 @@ Trader.Connect();
 					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
 				</content>
 			</step>
-			<step>
+			<!--step>
 				<content>
 					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
          			<code language="C#">
@@ -180,7 +180,7 @@ private void DepthClick(object sender, RoutedEventArgs e)
 					</code>
 					<para>Стаканы появляются в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference>.</para>
 				</content>
-			</step>
+			</step-->
 			<step>
 				<content>
 					<para>Для регистрации заявок предусмотрена кнопка <legacyBold>Новая заявка...</legacyBold> . Метод 

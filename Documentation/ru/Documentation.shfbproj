@@ -181,6 +181,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\CreateNewOrder.aml" />
     <None Include="Topics\QuikLuaFirstStrategy.aml" />
     <None Include="Topics\QuikLuaStrategy.aml.aml" />
     <None Include="Topics\RSS.aml" />

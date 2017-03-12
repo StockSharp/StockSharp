@@ -77,13 +77,10 @@ IMarketDataStorage<ExecutionMessage> tranStorage = null;
 
 // В обработчике событии получения инстументов
 // получаем хранилище транзакций для заданного инструмента
-connector.NewSecurities += securities =>
+connector.NewSecurity += security =>
 {
-	securities.ForEach(s =>
-	{
-		if (s.Id == securityId)
-			tranStorage = _storage.GetTransactionStorage(s);
-	});
+		if (security.Id == securityId)
+			tranStorage = _storage.GetTransactionStorage(security);
 };
 
  ]]>
