@@ -104,6 +104,12 @@ namespace StockSharp.Messages
 		public Uri Url { get; set; }
 
 		/// <summary>
+		/// ID of the original message <see cref="MarketDataMessage.TransactionId"/> for which this message is a response.
+		/// </summary>
+		[DataMember]
+		public long OriginalTransactionId { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="NewsMessage"/>.
 		/// </summary>
 		public NewsMessage()
