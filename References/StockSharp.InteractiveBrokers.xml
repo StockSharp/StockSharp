@@ -64,6 +64,36 @@
             The query identifier <see cref="T:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage" />.
             </summary>
     </member>
+    <member name="T:StockSharp.InteractiveBrokers.HistogramMarketDataMessage">
+      <summary>
+            Request histogram data message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.HistogramMarketDataMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.OptionParametersMarketDataMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.HistogramMessage">
+      <summary>
+            Histogram data message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.HistogramMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.HistogramMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.HistogramMessage.OriginalTransactionId">
+      <summary>
+            ID of the original message <see cref="P:StockSharp.Messages.MarketDataMessage.TransactionId" /> for which this message is a response.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.HistogramMessage.Data">
+      <summary>
+            Data.
+            </summary>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter">
       <summary>
             The messages adapter for InteractiveBrokers.
@@ -433,25 +463,6 @@
     <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes.PercentChange">
       <summary>
             Percent change.
-            </summary>
-    </member>
-    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SoftDollarTier">
-      <summary>
-      </summary>
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SoftDollarTier.Name">
-      <summary>
-            Name.
-            </summary>
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SoftDollarTier.Value">
-      <summary>
-            Value.
-            </summary>
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SoftDollarTier.DisplayName">
-      <summary>
-            Display name.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.BaseCondition">
@@ -1760,6 +1771,16 @@
             The new financial advice occurring event. Parameters are passed in the xml format.
             </summary>
     </member>
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewOptionParameters">
+      <summary>
+            The new option parameters event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewHistogramData">
+      <summary>
+            The new histogram data event.
+            </summary>
+    </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
       <summary>
             Cancel orders by filter.
@@ -1772,6 +1793,11 @@
       <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
       <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
       <param name="securityType">Instrument type. If the value is equal to <see langword="null" />, then the type does not match the orders cancel filter.</param>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestOptionParameters(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Request option parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewOptionParameters" /> event.
+            </summary>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestScannerParameters">
       <summary>
@@ -1804,6 +1830,21 @@
             To unsubscribe from receive market reports.
             </summary>
       <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports)" />.</param>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeHistogram(StockSharp.BusinessEntities.Security,System.DateTimeOffset,System.DateTimeOffset)">
+      <summary>
+            To subscribe to receive histogram data for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewHistogramData" /> event.
+            </summary>
+      <param name="security">Security.</param>
+      <param name="from">The initial date from which you need to get data.</param>
+      <param name="to">The final date by which you need to get data.</param>
+      <returns>Subscription id.</returns>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeHistogram(System.Int64)">
+      <summary>
+            To unsubscribe from receive histogram data.
+            </summary>
+      <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeHistogram(StockSharp.BusinessEntities.Security,System.DateTimeOffset,System.DateTimeOffset)" />.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)">
       <summary>
@@ -1871,6 +1912,36 @@
     <member name="P:StockSharp.InteractiveBrokers.OptionCalcMarketDataMessage.AssetPrice">
       <summary>
             Underlying asset price.
+            </summary>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.OptionParametersMarketDataMessage">
+      <summary>
+            Request option parameters message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.OptionParametersMarketDataMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.OptionParametersMarketDataMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.OptionParametersMessage">
+      <summary>
+            The result message for the <see cref="T:StockSharp.InteractiveBrokers.OptionParametersMarketDataMessage" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.OptionParametersMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.OptionParametersMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.OptionParametersMessage.Strikes">
+      <summary>
+            Strikes.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.OptionParametersMessage.Expirations">
+      <summary>
+            Expirations.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerMarketDataMessage">
@@ -2384,6 +2455,40 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Year">
       <summary>
             Annual time frame.
+            </summary>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.SoftDollarTier">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.SoftDollarTier.Name">
+      <summary>
+            Name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.SoftDollarTier.Value">
+      <summary>
+            Value.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.SoftDollarTier.DisplayName">
+      <summary>
+            Display name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.SoftDollarTierMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.SoftDollarTierMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.OriginalTransactionId">
+      <summary>
+            ID of the original message <see cref="!:SoftDollarTierMarketDataMessage.TransactionId" /> for which this message is a response.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Tiers">
+      <summary>
+            Tiers.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.Web.Market">
