@@ -113,6 +113,7 @@
 		  <ddue:linkText>IV</ddue:linkText>
 		  <ddue:linkUri>http://en.wikipedia.org/wiki/Implied_volatility</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="Live торговля"><ddue:link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Live торговля</ddue:link></item>
   <item id="lmax"><ddue:link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">LMAX</ddue:link></item>
   <item id="lmax_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>LMAX</ddue:linkText>
@@ -207,6 +208,7 @@
 		  <ddue:linkText>РТС Стандарт</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru/ru/standard/</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="SchemeDis"><ddue:link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Схемы</ddue:link></item>
   <item id="smartcom"><ddue:link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">SmartCOM</ddue:link></item>
   <item id="smartcom_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>SmartCOM</ddue:linkText>
@@ -319,17 +321,8 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="Хранилище исторических данных"><ddue:link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" /></item>
-  <item id="Настройки"><ddue:link xlink:href="fa053dc0-6bb9-45c5-bd49-520208624d2d" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Настройки</ddue:link></item>
-  <item id="Создание стратегии"><ddue:link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Создание стратегии</ddue:link></item>
-  <item id="Live торговля"><ddue:link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Live торговля</ddue:link></item>
-  <item id="Создание стратегии из кубиков"><ddue:link xlink:href="6974891d-4c8d-46e1-bdeb-fc7391bc0625" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Создание стратегии из кубиков</ddue:link></item>
-  <item id="Создание стратегии из кода"><ddue:link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Создание стратегии из кода</ddue:link></item>
-  <item id="Скачивание данных"><ddue:link xlink:href="085174e5-3be9-4dc3-bdeb-dcc3706b483d" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Скачивание данных</ddue:link></item>
-  <item id="Скачивание инструментов">Add token content here</item>
-  <item id="Настройки подключения"><ddue:link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Настройки подключения</ddue:link></item>
-  <item id="свечей"><ddue:link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">свечей</ddue:link></item>
-  <item id="Схемы"><ddue:link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Схемы</ddue:link></item>
-  <item id="Тестирование на истории"><ddue:link xlink:href="a69371d5-ba05-42ca-9228-48025e43ac91" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Тестирование на истории</ddue:link></item>
-  <item id="График"><ddue:link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">График</ddue:link></item>
+  <item id="MSDN"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>MSDN</ddue:linkText>
+    <ddue:linkUri>https://msdn.microsoft.com/ru-ru/library/3s68z0b3.aspx</ddue:linkUri>
+   </ddue:externalLink></item>
 </content>
