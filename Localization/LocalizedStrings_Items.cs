@@ -44026,5 +44026,55 @@ namespace StockSharp.Localization
 		/// Available functions
 		/// </summary>
 		public static string AvailableFunctions => GetString(AvailableFunctionsKey);
+
+		/// <summary>
+		/// Rank
+		/// </summary>
+		public const string RankKey = nameof(Rank);
+
+		/// <summary>
+		/// Rank
+		/// </summary>
+		public static string Rank => GetString(RankKey);
+
+		/// <summary>
+		/// Legs
+		/// </summary>
+		public const string LegsKey = nameof(Legs);
+
+		/// <summary>
+		/// Legs
+		/// </summary>
+		public static string Legs => GetString(LegsKey);
+
+		/// <summary>
+		/// Distance
+		/// </summary>
+		public const string DistanceKey = nameof(Distance);
+
+		/// <summary>
+		/// Distance
+		/// </summary>
+		public static string Distance => GetString(DistanceKey);
+
+		/// <summary>
+		/// Benchmark
+		/// </summary>
+		public const string BenchmarkKey = nameof(Benchmark);
+
+		/// <summary>
+		/// Benchmark
+		/// </summary>
+		public static string Benchmark => GetString(BenchmarkKey);
+
+		/// <summary>
+		/// Projection
+		/// </summary>
+		public const string ProjectionKey = nameof(Projection);
+
+		/// <summary>
+		/// Projection
+		/// </summary>
+		public static string Projection => GetString(ProjectionKey);
 	}
 }

@@ -42,6 +42,7 @@ namespace SampleIB
 		private readonly ConditionOrdersWindow _conditionOrdersWindow = new ConditionOrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
+		private readonly ScannerWindow _scannerWindow;
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -60,6 +61,9 @@ namespace SampleIB
 			_portfoliosWindow.MakeHideable();
 			_newsWindow.MakeHideable();
 
+			_scannerWindow = new ScannerWindow();
+			_scannerWindow.MakeHideable();
+
 			Trader.LogLevel = LogLevels.Debug;
 			_logManager.Sources.Add(Trader);
 			_logManager.Listeners.Add(new FileLogListener("logs.txt"));
@@ -76,7 +80,8 @@ namespace SampleIB
 			_securitiesWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			_newsWindow.DeleteHideable();
-			
+			_scannerWindow.DeleteHideable();
+
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
@@ -191,8 +196,8 @@ namespace SampleIB
 			ConnectionStatus.Content = isConnected ? LocalizedStrings.Connected : LocalizedStrings.Disconnected;
 
 			ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowNews.IsEnabled =
-            ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-            ShowPortfolios.IsEnabled = isConnected;
+            ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowConditionOrders.IsEnabled =
+            ShowPortfolios.IsEnabled = ShowScanner.IsEnabled = isConnected;
 		}
 
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)
@@ -228,6 +233,11 @@ namespace SampleIB
 		private void ShowNewsClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_newsWindow);
+		}
+
+		private void ShowScannerClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_scannerWindow);
 		}
 
 		private static void ShowOrHide(Window window)

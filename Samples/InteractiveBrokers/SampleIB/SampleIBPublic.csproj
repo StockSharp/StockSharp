@@ -122,6 +122,9 @@
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScannerWindow.xaml.cs">
+      <DependentUpon>ScannerWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindow.xaml.cs">
@@ -204,6 +207,10 @@
     <Page Include="TradesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ScannerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

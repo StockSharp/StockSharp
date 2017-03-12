@@ -41,7 +41,6 @@ namespace SampleIB
 		private readonly Dictionary<Security, long[]> _reportSecurities = new Dictionary<Security, long[]>();
 		private readonly Dictionary<Security, long> _optionSecurities = new Dictionary<Security, long>();
 		private bool _initialized;
-		private long? _scannerId;
 
 		public SecuritiesWindow()
 		{
@@ -63,12 +62,6 @@ namespace SampleIB
 			{
 				if (_initialized)
 					Trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
-
-				if (_scannerId != null)
-				{
-					Trader.UnSubscribeScanner(_scannerId.Value);
-					_scannerId = null;
-				}
 
 				_reportSecurities.SelectMany(p => p.Value).ForEach(Trader.UnSubscribeFundamentalReport);
 				_optionSecurities.ForEach(p => Trader.UnSubscribeOptionCalc(p.Value));
@@ -271,36 +264,6 @@ namespace SampleIB
 				_optionSecurities.Remove(security);
 				Options.IsChecked = false;
 			}
-		}
-
-		private void ScannerClick(object sender, RoutedEventArgs e)
-		{
-			if (_scannerId == null)
-			{
-				Trader.NewScannerResults += TraderOnNewScannerResults;
-
-				_scannerId = Trader.SubscribeScanner(new ScannerFilter
-				{
-					ScanCode = "LOW_WS_13W_HL",
-					BoardCode = "STK.US",
-					SecurityType = "ALL",
-					RowCount = 15,
-				});
-				Scanner.IsChecked = true;
-			}
-			else
-			{
-				Trader.NewScannerResults -= TraderOnNewScannerResults;
-
-				Trader.UnSubscribeScanner(_scannerId.Value);
-				Scanner.IsChecked = false;
-				_scannerId = null;
-			}
-		}
-
-		private void TraderOnNewScannerResults(ScannerFilter filter, IEnumerable<ScannerResult> results)
-		{
-			
 		}
 	}
 }

@@ -4436,6 +4436,11 @@ ExpressionNotSet;Expression not set.;Выражение не инициализ�
 AnalyticsResult;Analytics '{0}'. Result;Аналитика '{0}'. Результат
 IndexSample;Sample: LOG(AAPL@NASDAQ) / LOG(MSFT@NADAQ);Пример: LOG(SBER@TQBR) / LOG(LKOH@TQBR)
 AvailableFunctions;Available functions;Доступные функции
+Rank;Rank;Ранк
+Legs;Legs;Ноги
+Distance;Distance;Дистанция
+Benchmark;Benchmark;Оценка
+Projection;Projection;Проекция
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -8041,7 +8046,6 @@ DocStr3638;The new report occurring event obtained by subscription {0};Собы�
 DocStr3639;The event of occurring of new scanner parameters which are applied via {0}. Parameters are passed in the xml format;Событие о появлении новых параметров сканера, которые применяются через {0}. Параметры передаются в виде xml
 DocStr3640;The new financial advice occurring event. Parameters are passed in the xml format;Событие о появлении новых финансовых консультаций. Параметры передаются в виде xml
 DocStr3641;The filter result of scanner starting via {0};Результат фильтра сканера, запускаемого через {0}
-DocStr3642;Rank;Ранк
 DocStr3643;The query value;Значение запроса
 DocStr3644;The combined instrument description;Описание комбинированного инструмента
 DocStr3645;Server-side logging levels;Уровни логирования серверной стороны
