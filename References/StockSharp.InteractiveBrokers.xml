@@ -14,6 +14,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.FinancialAdviseMessage" />.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.FinancialAdviseMessage.IsReplace">
+      <summary>
+            Replaces Financial Advisor's settings.
+            </summary>
+    </member>
     <member name="P:StockSharp.InteractiveBrokers.FinancialAdviseMessage.AdviseType">
       <summary>
             Type.
@@ -375,33 +380,60 @@
         <see cref="N:StockSharp.InteractiveBrokers" /> order condition.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionType">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtraOrderCondition">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionType.Price">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtraOrderCondition.Type">
+      <summary>
+            Type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtraOrderCondition.IsConjunctionConnection">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionType.Time">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtraOrderCondition.Create(StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes)">
+      <summary>
+            Create extra condition.
+            </summary>
+      <param name="type">Type.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionType.Margin">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes.Price">
       <summary>
-      </summary>
+            Price.
+            </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionType.Execution">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes.Time">
       <summary>
-      </summary>
+            Time.
+            </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionType.Volume">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes.Margin">
       <summary>
-      </summary>
+            Margin.
+            </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionType.PercentCange">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes.Execution">
       <summary>
-      </summary>
+            Execution.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes.Volume">
+      <summary>
+            Used with conditional orders to submit or cancel an order based on a specified volume change in a security.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PeggedOrderConditionTypes.PercentChange">
+      <summary>
+            Percent change.
+            </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SoftDollarTier">
       <summary>
@@ -1418,7 +1450,8 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Tier">
       <summary>
-      </summary>
+            Define the Soft Dollar Tier used for the order. Only provided for registered professional advisors and hedge and mutual funds.
+            </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ReferenceContractId">
       <summary>
@@ -1486,6 +1519,16 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ConditionsCancelOrder">
       <summary>
             Conditions can determine if an order should become active or canceled.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.CashQty">
+      <summary>
+            The native cash quantity.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtraConditions">
+      <summary>
+            Extra conditions.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ExchangeNewsTypes">
@@ -1730,6 +1773,11 @@
       <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
       <param name="securityType">Instrument type. If the value is equal to <see langword="null" />, then the type does not match the orders cancel filter.</param>
     </member>
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestScannerParameters">
+      <summary>
+            Request scanner parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerParameters" /> event.
+            </summary>
+    </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)">
       <summary>
             To start the instruments scanner based on specified parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults" /> event.
@@ -1830,6 +1878,11 @@
             The message about start of the instruments scanner based on specified parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults" /> event.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.ScannerMarketDataMessage.IsParametersRequest">
+      <summary>
+            Is parameters request.
+            </summary>
+    </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerMarketDataMessage.Filter">
       <summary>
             Filter.
@@ -1872,17 +1925,17 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerResult.Distance">
       <summary>
-            The query value.
+            Distance.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerResult.Benchmark">
       <summary>
-            The query value.
+            Benchmark.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerResult.Projection">
       <summary>
-            The query value.
+            Projection.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerResult.Legs">
@@ -1960,6 +2013,163 @@
             Only the Exchange-traded fund.
             </summary>
     </member>
+    <member name="T:StockSharp.InteractiveBrokers.ScannerFilterTypes">
+      <summary>
+            Scanner filter types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowOptVolPutCallRatio">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighOptImpVolatOverHist">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowOptImpVolatOverHist">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighOptImpVolat">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopOptImpVolatGain">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopOptImpVolatLose">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighOptVolumePutCallRatio">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowOptVolumePutCallRatio">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.OptVolumeMostActive">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HotByOptVolume">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighOptOpenInterestPutCallRatio">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowOptOpenInterestPutCallRatio">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopPercGain">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.MostActive">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopPercLose">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HotByVolume">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HotByPrice">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopTradeCount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopTradeRate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopPriceRange">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HotByPriceRange">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopVolumeRate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowOptImpVolat">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.OptOpenInterestMostActive">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.NotOpen">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.Halted">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopOpenPercGain">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.TopOpenPercLose">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighOpenGap">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowOpenGap">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighVs13WHl">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowVs13WHl">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighVs26WHl">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowVs26WHl">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighVs52WHl">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowVs52WHl">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.HighSynthBidRevNatYield">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.ScannerFilterTypes.LowSynthBidRevNatYield">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerFilter">
       <summary>
             Filter settings of the scanner starting via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.
@@ -1987,7 +2197,8 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerFilter.ScanCode">
       <summary>
-      </summary>
+            Scan code.
+            </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerFilter.AbovePrice">
       <summary>

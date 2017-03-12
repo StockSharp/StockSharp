@@ -284,10 +284,10 @@ namespace StockSharp.Algo.Storages.Csv
 				this.Filter(criteria).ForEach(s => Remove(s));
 			}
 
-			public IEnumerable<string> GetSecurityIds()
-			{
-				return this.Select(s => s.Id);
-			}
+			//public IEnumerable<string> GetSecurityIds()
+			//{
+			//	return this.Select(s => s.Id);
+			//}
 
 			#endregion
 
