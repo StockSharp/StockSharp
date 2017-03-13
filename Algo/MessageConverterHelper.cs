@@ -584,7 +584,7 @@ namespace StockSharp.Algo
 				OptionType = security.OptionType,
 				Strike = security.Strike,
 				BinaryOptionType = security.BinaryOptionType,
-				UnderlyingSecurityCode = security.UnderlyingSecurityId.IsEmpty() ? null : security.UnderlyingSecurityId.Split('@')[0],
+				UnderlyingSecurityCode = security.UnderlyingSecurityId.IsEmpty() ? null : security.UnderlyingSecurityId.ToSecurityId().SecurityCode,
 				SettlementDate = security.SettlementDate,
 				ExpiryDate = security.ExpiryDate,
 			};

@@ -152,7 +152,7 @@
             Unique ID. Used when several clients are connected to one terminal or gateway.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.IsRealTimeMarketData">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.MarketDataType">
       <summary>
             Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
             </summary>
@@ -870,7 +870,7 @@
             Stop-price.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.ConId">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.ContractId">
       <summary>
       </summary>
     </member>
@@ -1448,11 +1448,6 @@
             Condition for GTC orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ModelCode">
-      <summary>
-            Model code.
-            </summary>
-    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtOperator">
       <summary>
             Regulartory attribute that applies to all US Commodity (Futures) Exchanges, 
@@ -1575,6 +1570,31 @@
     <member name="F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.PopupHtml">
       <summary>
       </summary>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes">
+      <summary>
+            Market data types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.RealTime">
+      <summary>
+            Real-time.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.Frozen">
+      <summary>
+            Frozen market data.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.Delayed">
+      <summary>
+            Enables delayed and disables delayed-frozen market data.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.DelayedFrozen">
+      <summary>
+            Enables delayed and delayed-frozen market data.
+            </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.CandleDataTypes">
       <summary>
@@ -1736,7 +1756,7 @@
             The server messages logging level. The default is <see cref="F:StockSharp.InteractiveBrokers.ServerLogLevels.Information" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.IsRealTimeMarketData">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.MarketDataType">
       <summary>
             Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
             </summary>

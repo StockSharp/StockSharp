@@ -13811,3 +13811,7 @@ DocStr9569;The result message for the {0};Результирующее сооб�
 DocStr9570;Strikes;Страйки
 DocStr9571;Expirations;Экспирации
 DocStr9572;Tiers;Уровни
+DocStr9573;Market data types;Типы рыночных данных
+DocStr9575;Frozen market data;Замороженные рыночные данные
+DocStr9576;Enables delayed and disables delayed-frozen market data;Включает отложенные и выключает отложенно-замороженные рыночные данные
+DocStr9577;Enables delayed and delayed-frozen market data;Включает отложенные и отложенно-замороженные рыночные данные

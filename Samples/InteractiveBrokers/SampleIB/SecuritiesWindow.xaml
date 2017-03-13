@@ -31,6 +31,7 @@
 			<Button x:Name="Find" Grid.Column="0" Click="FindClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
 			</Button>
+			<Button x:Name="Histogram" Grid.Column="1" IsEnabled="False" Click="HistogramClick" Content="{x:Static loc:LocalizedStrings.Str1976}" />
 			<ToggleButton x:Name="Level1" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Level1}" IsEnabled="False" Click="Level1Click" />
 			<ToggleButton x:Name="Reports" Grid.Column="3" Content="{x:Static loc:LocalizedStrings.Reports}" IsEnabled="False" Click="ReportsClick" />
 			<ToggleButton x:Name="Options" Grid.Column="4" IsEnabled="False" Click="OptionsClick">
