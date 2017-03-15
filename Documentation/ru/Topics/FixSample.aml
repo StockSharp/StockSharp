@@ -192,8 +192,8 @@ private void QuotesClick(object sender, RoutedEventArgs e)
 }
 							]]>
 					</code>
-					<para>Сделки будут приходить в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>, 
-					а изменения в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference>.</para>
+					<para>Сделки будут приходить в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>, 
+					а изменения в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecurityChanged </codeEntityReference>.</para>
 				</content>
 			</step>
 					<step>

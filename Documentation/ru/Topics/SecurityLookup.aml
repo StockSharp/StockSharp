@@ -38,7 +38,7 @@
 			</listItem-->
 		</list>
 		<para>
-			Найденные инструменты будут возвращены через событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>.
+			Найденные инструменты будут возвращены через событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>.
 		</para>
     </introduction>
     <relatedTopics>

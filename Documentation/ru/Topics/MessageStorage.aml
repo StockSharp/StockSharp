@@ -89,9 +89,7 @@ connector.NewSecurity += security =>
 			</step>
 			<step>
 		<content>
-		
-		   <!--System.Action<System.Collections.Generic.IEnumerable<StockSharp.BusinessEntities.MyTrade>> NewMyTrades-->
-		
+
 			<para>Сохранение собственных сделок будет выполняться в обработчике события
 			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrades</codeEntityReference> при помощи метода
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Save(System.Collections.IEnumerable)</codeEntityReference>. 

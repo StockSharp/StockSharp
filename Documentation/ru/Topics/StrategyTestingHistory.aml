@@ -389,8 +389,8 @@ trader.Connect();
 					</code>
 					  <para>
 						  Для переданных в конструктор <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> инструментов
-						  и портфелей вызываются <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
-						  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolios</codeEntityReference>.
+						  и портфелей вызываются <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>
+						  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference>.
 					  </para>
 				  </content>
 			  </step>

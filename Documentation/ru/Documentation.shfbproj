@@ -2704,6 +2704,14 @@
       <AlternateText>Quik Lua First Strategy</AlternateText>
       <CopyToMedia>False</CopyToMedia>
     </Image>
+    <Image Include="Art\StockSharpTitle_0.png">
+      <ImageId>StockSharpTitle_0</ImageId>
+      <AlternateText>Stock Sharp Title 0</AlternateText>
+    </Image>
+    <Image Include="Art\StockSharpTitle_1.png">
+      <ImageId>StockSharpTitle_1</ImageId>
+      <AlternateText>Stock Sharp Title 1</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

@@ -69,12 +69,14 @@ Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
 Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
 
 // подписываемся на событие получение нового портфеля
-Trader.NewPortfolios += portfolios =>
+Trader.NewPortfolio += portfolio =>
 {
 	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-	// подписываемся на обновление данных портфеля
+
+	// subscribe on portfolio updates
 	Trader.RegisterPortfolio(portfolio);
 };
+
 
 // подписываемся на событие новой позиции
 Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
@@ -112,7 +114,7 @@ Trader.Connect();
 			<step>
 				<content>
 					<para>При успешном подключении можно ожидать срабатывания события 
-					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolios</codeEntityReference>. В обработчике этого события подписываемся
+					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference>. В обработчике этого события подписываемся
 					на изменения портфелей <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfolioChanged</codeEntityReference> при помощи метода 
 					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
 				</content>
