@@ -40,7 +40,9 @@ namespace SampleIB
 		private readonly SynchronizedDictionary<CandleSeries, CandlesWindow> _realTimeCandles = new SynchronizedDictionary<CandleSeries, CandlesWindow>();
 		private readonly Dictionary<Security, long[]> _reportSecurities = new Dictionary<Security, long[]>();
 		private readonly Dictionary<Security, long> _optionSecurities = new Dictionary<Security, long>();
-		private bool _initialized;
+		private bool _mdInitialized;
+		private bool _optionsInitialized;
+		private bool _histogramInitialized;
 
 		public SecuritiesWindow()
 		{
@@ -60,8 +62,14 @@ namespace SampleIB
 
 			if (Trader != null)
 			{
-				if (_initialized)
+				if (_mdInitialized)
 					Trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
+
+				if (_optionsInitialized)
+					Trader.NewOptionParameters -= TraderOnNewOptionParameters;
+
+				if (_histogramInitialized)
+					Trader.NewHistogramData -= TraderOnNewHistogramData;
 
 				_reportSecurities.SelectMany(p => p.Value).ForEach(Trader.UnSubscribeFundamentalReport);
 				_optionSecurities.ForEach(p => Trader.UnSubscribeOptionCalc(p.Value));
@@ -93,10 +101,13 @@ namespace SampleIB
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Level1.IsEnabled = Reports.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = HistoryCandles.IsEnabled = RealTimeCandles.IsEnabled = security != null;
+			Histogram.IsEnabled = Options.IsEnabled = Level1.IsEnabled = Reports.IsEnabled = NewOrder.IsEnabled
+				= Depth.IsEnabled = HistoryCandles.IsEnabled = RealTimeCandles.IsEnabled = security != null;
 
 			if (security == null)
 				return;
+
+			Options.IsEnabled = security.Type == SecurityTypes.Future || security.Type == SecurityTypes.Option;
 
 			Level1.IsChecked = Trader.RegisteredSecurities.Contains(SelectedSecurity);
 			Reports.IsChecked = _reportSecurities.ContainsKey(SelectedSecurity);
@@ -146,11 +157,11 @@ namespace SampleIB
 				wnd.Close();
 			}
 
-			if (!_initialized)
+			if (!_mdInitialized)
 			{
 				TraderOnMarketDepthChanged(Trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
 				Trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				_mdInitialized = true;
 			}
 		}
 
@@ -199,7 +210,7 @@ namespace SampleIB
 		{
 			var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, InteractiveBrokersTimeFrames.Second5);
 
-			if (RealTimeCandles.IsChecked == true)
+			if (_realTimeCandles.Keys.Any(s => s.Security == SelectedSecurity))
 			{
 				Trader.UnSubscribeCandles(series);
 				_realTimeCandles.GetAndRemove(series).Close();
@@ -246,24 +257,67 @@ namespace SampleIB
 		{
 			var security = SelectedSecurity;
 
-			var id = _optionSecurities.TryGetValue2(security);
-
-			if (id == null)
+			if (security.Type == SecurityTypes.Option)
 			{
-				var wnd = new OptionWindow();
+				var id = _optionSecurities.TryGetValue2(security);
 
-				if (!wnd.ShowModal(this))
-					return;
+				if (id == null)
+				{
+					var wnd = new OptionWindow();
 
-				Trader.SubscribeOptionCalc(security, wnd.Volatility, wnd.OptionPrice, wnd.AssetPrice);
-				Options.IsChecked = true;
+					if (!wnd.ShowModal(this))
+						return;
+
+					id = Trader.SubscribeOptionCalc(security, wnd.Volatility, wnd.OptionPrice, wnd.AssetPrice);
+					_optionSecurities.Add(security, id.Value);
+					Options.IsChecked = true;
+				}
+				else
+				{
+					Trader.UnSubscribeOptionCalc(id.Value);
+					_optionSecurities.Remove(security);
+					Options.IsChecked = false;
+				}
 			}
 			else
 			{
-				Trader.UnSubscribeOptionCalc(id.Value);
-				_optionSecurities.Remove(security);
-				Options.IsChecked = false;
+				if (!_optionsInitialized)
+				{
+					Trader.NewOptionParameters += TraderOnNewOptionParameters;
+					_optionsInitialized = true;
+				}
+
+				Trader.RequestOptionParameters(security);
 			}
+		}
+
+		private void TraderOnNewOptionParameters(string tradingClass, decimal? multiplier, IEnumerable<DateTimeOffset> expirations, IEnumerable<decimal> strikes)
+		{
+			this.GuiAsync(() =>
+			{
+				new MessageBoxBuilder()
+					.Caption($"Options = {tradingClass}")
+					.Text($@"Expirations: {expirations.Select(e => e.Date.ToString()).Join(", ")}
+Strikes: {strikes.Select(s => s.ToString()).Join(", ")}")
+					.Owner(this)
+					.Show();
+			});
+		}
+
+		private void HistogramClick(object sender, RoutedEventArgs e)
+		{
+			if (!_histogramInitialized)
+			{
+				Trader.NewHistogramData += TraderOnNewHistogramData;
+				_histogramInitialized = true;
+			}
+
+			Trader.SubscribeHistogram(SelectedSecurity, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+		}
+
+		private void TraderOnNewHistogramData(long requestId, IEnumerable<Tuple<decimal, long>> data)
+		{
+
 		}
 	}
 }

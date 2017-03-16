@@ -2719,8 +2719,6 @@ M:StockSharp.Algo.Risk.RiskTradeFreqRule.Load(Ecng.Serialization.SettingsStorage
 M:StockSharp.Algo.Risk.RiskTradeFreqRule.Load(Ecng.Serialization.SettingsStorage)/param/storage;Str1405
 T:StockSharp.Algo.SecurityNativeIdMessageAdapter/summary;DocStr9341
 P:StockSharp.Algo.SecurityNativeIdMessageAdapter.Storage/summary;DocStr9329
-M:StockSharp.Algo.SecurityNativeIdMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
-M:StockSharp.Algo.SecurityNativeIdMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr1241
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.INativeIdStorage)/summary;DocStr1
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.INativeIdStorage)/param/innerAdapter;DocStr1241
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.INativeIdStorage)/param/storage;DocStr9329

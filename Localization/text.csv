@@ -13803,3 +13803,19 @@ DocStr9557;Request scanner parameters. The results will come through the {0} eve
 DocStr9558;Is parameters request;Запрос параметров
 DocStr9559;Scanner filter types;Типы фильтра сканнера
 DocStr9560;Scan code;Тип фильтра
+DocStr9561;Request histogram data message;Сообщение запроса гистограммы
+DocStr9562;Histogram data message;Сообщение с данными гистограммы
+DocStr9563;The new option parameters event;The new option parameters event
+DocStr9564;The new histogram data event;Событие новых данных гистограммы
+DocStr9565;Request option parameters. The results will come through the {0} event;Запросить параметры опционов. Результаты будут приходить через событие {0}
+DocStr9566;To subscribe to receive histogram data for the specified instrument. The results will come through the {0} event;Подписаться на данные гистограммы для указанного инструмента. Результаты будут приходить через событие {0}
+DocStr9567;To unsubscribe from receive histogram data;Отписаться от получения гистограммы
+DocStr9568;Request option parameters message;Сообщение запроса параметров опционов
+DocStr9569;The result message for the {0};Результирующее сообщение для {0}
+DocStr9570;Strikes;Страйки
+DocStr9571;Expirations;Экспирации
+DocStr9572;Tiers;Уровни
+DocStr9573;Market data types;Типы рыночных данных
+DocStr9575;Frozen market data;Замороженные рыночные данные
+DocStr9576;Enables delayed and disables delayed-frozen market data;Включает отложенные и выключает отложенно-замороженные рыночные данные
+DocStr9577;Enables delayed and delayed-frozen market data;Включает отложенные и отложенно-замороженные рыночные данные
