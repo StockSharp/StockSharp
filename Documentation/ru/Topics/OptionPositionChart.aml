@@ -82,8 +82,6 @@ PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
 
 PosChart.MarketDataProvider = Connector;
 PosChart.SecurityProvider = Connector;
-
-
 ]]>
                   		</code>
 					</content>
@@ -93,8 +91,11 @@ PosChart.SecurityProvider = Connector;
 						<para>При получении инструментов добавляем базовые активы в список.</para>
             			<code title="C#" language="C#">
                   <![CDATA[
-Connector.NewSecurities += securities =>
-		_assets.AddRange(securities.Where(s => s.Type == SecurityTypes.Future));
+Connector.NewSecurity += security =>
+{
+	if (security.Type == SecurityTypes.Future)
+		_assets.Add(security);
+};
 ]]>
                   		</code>
 					</content>
@@ -106,19 +107,19 @@ Connector.NewSecurities += securities =>
 							Таким образом мы контролируем частоту перерисовки.</para>
             			<code title="C#" language="C#">
                   <![CDATA[
-Connector.SecuritiesChanged += securities =>
+Connector.SecurityChanged += security =>
 {
-	if ((PosChart.AssetPosition != null && securities.Contains(PosChart.AssetPosition.Security)) || PosChart.Positions.Cache.Select(p => p.Security).Intersect(securities).Any())
+	if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
 		_isDirty = true;
 };
 
 // подписываемся на событие новых сделок чтобы обновить текущую цену фьючерса
-Connector.NewTrades += trades =>
+Connector.NewTrade += trade =>
 {
-	var assetPos = PosChart.AssetPosition;
-	if (assetPos != null && trades.Any(t => t.Security == assetPos.Security))
+	if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
 		_isDirty = true;
-			};
+};
+
 ]]>
                   		</code>
 					</content>
@@ -131,34 +132,33 @@ Connector.NewTrades += trades =>
 							В этом случае, а также при изменении позициии, вызываем перерисовку графика.</para>
             			<code title="C#" language="C#">
                   <![CDATA[
-Connector.NewPositions += positions => this.GuiAsync(() =>
+Connector.NewPosition += position => this.GuiAsync(() =>
 {
 	var asset = SelectedAsset;
 
 	if (asset == null)
 		return;
 
-	var assetPos = positions.FirstOrDefault(p => p.Security == asset);
-	var newPos = positions.Where(p => p.Security.UnderlyingSecurityId == asset.Id).ToArray();
+	var assetPos = position.Security == asset;
+	var newPos = position.Security.UnderlyingSecurityId == asset.Id;
 
-	if (assetPos == null && newPos.Length == 0)
+	if (!assetPos && !newPos)
 		return;
 
-	if (assetPos != null)
-		PosChart.AssetPosition = assetPos;
+	if (assetPos)
+		PosChart.AssetPosition = position;
 
-	if (newPos.Length > 0)
-		PosChart.Positions.AddRange(newPos);
+	if (newPos)
+		PosChart.Positions.Add(position);
 
 	RefreshChart();
 });
 
-Connector.PositionsChanged += positions => this.GuiAsync(() =>
+Connector.PositionChanged += position => this.GuiAsync(() =>
 {
-	if ((PosChart.AssetPosition != null && positions.Contains(PosChart.AssetPosition)) || positions.Intersect(PosChart.Positions.Cache).Any())
+	if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
 		RefreshChart();
 });
-
 ]]>
                  			</code>
 						</content>
@@ -174,9 +174,8 @@ private void RefreshChart()
 	var trade = asset.LastTrade;
 
 	if (trade != null)
-		PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.Now, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
+		PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.NowWithOffset, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
 }
-
 ]]>
                		</code>
 				</content>

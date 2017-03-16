@@ -66,8 +66,8 @@ public class MyStrategy : Strategy
 		
 		// регистрируем правило, отслеживающее появление новых сделок по заявке
 		longPos
-			.WhenNewTrades()
-			.Do(OnNewOrderTrades)
+			.WhenNewTrade()
+			.Do(OnNewOrderTrade)
 			.Apply(this);
 		
 		// отправляем заявку на регистрацию
@@ -86,22 +86,21 @@ public class MyStrategy : Strategy
 				Данная стратегия автоматически изменяет объем одной из стратегий при частичной активации (например, при касании стоп-лосс уровня закрылась
 				лишь часть позиции, а затем рынок снова вернулся в безубыточную зону):
           	</para>
-			<code language="C#"><![CDATA[private void OnNewOrderTrades(IEnumerable<MyTrade> trades)
+			<code language="C#"><![CDATA[
+private void OnNewOrderTrade(MyTrade trade)
 {
-	// для каждой сделки добавляем защитную пару стратегии
-	var protectiveStrategies = trades.Select(t =>
-	{
-		// выставляет тейк-профит в 40 пунктов
-		var takeProfit = new TakeProfitStrategy(t, 40);
+    // для сделки добавляем защитную пару стратегии
+    // выставляет тейк-профит в 40 пунктов
+    var takeProfit = new TakeProfitStrategy(trade, 40);
 
-		// выставляет стоп-лосс в 20 пунктов
-		var stopLoss = new StopLossStrategy(t, 20);
+    // выставляет стоп-лосс в 20 пунктов
+    var stopLoss = new StopLossStrategy(trade, 20);
 
-		return new TakeProfitStopLossStrategy(takeProfit, stopLoss);
-	});
+    var protectiveStrategies = new TakeProfitStopLossStrategy(takeProfit, stopLoss);
+    ChildStrategies.AddRange(protectiveStrategies);
+}
 
-	ChildStrategies.AddRange(protectiveStrategies);
-}]]></code>
+]]></code>
           </content>
         </step>
       </steps>
@@ -116,7 +115,7 @@ public class MyStrategy : Strategy
         	<codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference> не отслеживают частичное закрытие позиции или ее переворот
         	(например, позиция была закрыта руками в терминале и была открыта в противоположную сторону). Для того, чтобы автоматически отслеживать в роботе
         	подобные ситуации, необходимо использовать <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy</codeEntityReference>.
-        	Данная стратегия через поступающие в нее сделки (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})</codeEntityReference>)
+        	Данная стратегия через поступающие в нее сделки (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade(StockSharp.BusinessEntities.MyTrade)</codeEntityReference>)
         	решает, что нужно сделать: защитить их (если идет открытие позиции или ее увеличение) или остановить защитные стратегии (если идет закрытие позиции или ее уменьшение).
         	Также стратегия автоматически переворачивает защитные стратегии в случае переворота позиции (из длинной в короткую или из короткой в длинную).
         </para>
@@ -129,62 +128,6 @@ public class MyStrategy : Strategy
 		  <link xlink:href="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5">Отчеты</link>
 		</para>
       </content>
-    </nextSteps>
-    
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
-    
+    </nextSteps>    
   </developerWalkthroughDocument>
 </topic>

@@ -56,7 +56,7 @@ class FirstStrategy : Strategy
 			.Apply(this);
 
 		Security
-			.WhenNewTrades()
+			.WhenNewTrade()
 			.Do(NewTrade)
 			.Apply(this);
 
@@ -185,7 +185,7 @@ bool flag = false;
 ...
 				
 Security
-	.WhenNewTrades()
+	.WhenNewTrade()
 	.Do(() =>
 			{
 				if(условие) flag = true;

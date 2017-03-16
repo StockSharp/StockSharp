@@ -145,6 +145,10 @@
     <ddue:linkText>MOEX</ddue:linkText>
     <ddue:linkUri>http://moex.com</ddue:linkUri>
   </ddue:externalLink></item>
+  <item id="MSDN"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>MSDN</ddue:linkText>
+    <ddue:linkUri>https://msdn.microsoft.com/ru-ru/library/3s68z0b3.aspx</ddue:linkUri>
+   </ddue:externalLink></item>
   <item id="net"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>NetInvestor</ddue:linkText>
 		  <ddue:linkUri>http://netinvestor.ru</ddue:linkUri>
@@ -321,8 +325,9 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="MSDN"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>MSDN</ddue:linkText>
-    <ddue:linkUri>https://msdn.microsoft.com/ru-ru/library/3s68z0b3.aspx</ddue:linkUri>
-   </ddue:externalLink></item>
+  <item id="download"><ddue:externalLink 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>Скачать</ddue:linkText>
+    <ddue:linkUri>http://stocksharp.ru/products/download/</ddue:linkUri>
+  </ddue:externalLink></item>
 </content>

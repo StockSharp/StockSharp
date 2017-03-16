@@ -51,7 +51,7 @@
 			<step>
 				<content>
 					<para>В самом начале необходимо создать менеджер свечей <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>,
+					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>,
 					будет формировать свечи:</para>
 			
 					<code language="C#">

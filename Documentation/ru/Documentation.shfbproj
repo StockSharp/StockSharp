@@ -181,6 +181,9 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\CreateNewOrder.aml" />
+    <None Include="Topics\QuikLuaFirstStrategy.aml" />
+    <None Include="Topics\QuikLuaStrategy.aml.aml" />
     <None Include="Topics\RSS.aml" />
     <None Include="Topics\HydraSettingsBarChart.aml" />
     <None Include="Topics\OECNews.aml" />
@@ -2695,6 +2698,19 @@
       <ImageId>Designer_Event_model0_00</ImageId>
       <AlternateText>091 Designer RU Event model 0</AlternateText>
       <CopyToMedia>False</CopyToMedia>
+    </Image>
+    <Image Include="Art\QuikLuaFirstStrategy.png">
+      <ImageId>QuikLuaFirstStrategy</ImageId>
+      <AlternateText>Quik Lua First Strategy</AlternateText>
+      <CopyToMedia>False</CopyToMedia>
+    </Image>
+    <Image Include="Art\StockSharpTitle_0.png">
+      <ImageId>StockSharpTitle_0</ImageId>
+      <AlternateText>Stock Sharp Title 0</AlternateText>
+    </Image>
+    <Image Include="Art\StockSharpTitle_1.png">
+      <ImageId>StockSharpTitle_1</ImageId>
+      <AlternateText>Stock Sharp Title 1</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

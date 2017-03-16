@@ -27,41 +27,46 @@
 			  <step>
 				  <content>
 					  <para>
-						  Сама стратегия <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> не запускается,
-						  а вместо этого она упаковывается в <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference>, у
-						  которой и вызывается метод запуска стратегии:
+Сама стратегия <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> не запускается,
+а вместо этого она передается в качестве дочерней, для стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>
 					  </para>
-					  <code language="C#">var basket = new BasketStrategy(BasketStrategyFinishModes.All);
-basket.ChildStrategies.Add(quoting);
+					  	
+<code title="C#" language="C#"><![CDATA[
 
-// запускаем котирование
-basket.Start();</code>
-					  <para>
-						  <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> принимает родительскую стратегию, 
-						  которая содержит в качестве <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">дочерних стратегий</link> стратегии,
-						  работающие отдельно по своему страйку. Таким образом <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>
-						  контролирует суммарную позицию по всем опционным стратегиям. Так как пример работает только с одним страйком и, следовательно, с одной
-						  опционной стратегией, то эта стратегия была упакована в специальная "корзину" стратегий - <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference>.
-						  <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference> не содержит торговой логики и сделана для создания
-						  иерархии стратегий, которая нужна <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>.
-					  </para>
-				  </content>
-			  </step>
-			  <step>
-				  <content>
-					  <para>
-						  После создания корзины для котирования необходимо создать и запустить дельта хеджирование:
-					  </para>
-					  <code>// создаем дельта-хеджирование, передав в него опционные стратегии для отслеживания их позиции
-var hedge = new DeltaHedgeStrategy(basket)
+
+// Создаем Дельта-хедж стратегию
+var hedge = new DeltaHedgeStrategy
 {
-	Security = option.GetUnderlyingAsset(),
-	Portfolio = this.Portfolio.SelectedPortfolio,
-	Trader = _trader,
+	Security = option.GetUnderlyingAsset(Connector),
+	Portfolio = Portfolio.SelectedPortfolio,
+	Connector = Connector,
 };
 
-// запускаем дельта-хеджирование
-hedge.Start();</code>
+// создаем котирование на покупку 20-ти контрактов
+var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
+		new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
+{
+	// указываем, что котирование работает с объемом в 1 контракт
+	Volume = 1,
+	Security = option,
+	Portfolio = Portfolio.SelectedPortfolio,
+	Connector = Connector,
+};
+
+// Передаем котирование в Дельта-хедж стратегию
+hedge.ChildStrategies.Add(quoting);
+
+// Запускаем Дельта-хедж стратегию
+hedge.Start();
+
+
+]]></code>
+					  <para>
+						  <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> принимает 
+						  в качестве <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">дочерних стратегий</link> стратегии,
+						  работающие отдельно по своему страйку. Таким образом <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>
+						  контролирует суммарную позицию по всем дочерним опционным стратегиям. 
+					  </para>
 				  </content>
 			  </step>
 			  <step>
@@ -70,7 +75,7 @@ hedge.Start();</code>
 						  Завершение работы дельта хеджирования:
 					  </para>
 					  <code>hedge.Stop();
-basket.Stop();</code>
+</code>
 				  </content>
 			  </step>
 		  </steps>
