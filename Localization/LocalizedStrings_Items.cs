@@ -44076,5 +44076,45 @@ namespace StockSharp.Localization
 		/// Projection
 		/// </summary>
 		public static string Projection => GetString(ProjectionKey);
+
+		/// <summary>
+		/// All period
+		/// </summary>
+		public const string AllPeriodKey = nameof(AllPeriod);
+
+		/// <summary>
+		/// All period
+		/// </summary>
+		public static string AllPeriod => GetString(AllPeriodKey);
+
+		/// <summary>
+		/// Preparation of logs
+		/// </summary>
+		public const string PreparationLogsKey = nameof(PreparationLogs);
+
+		/// <summary>
+		/// Preparation of logs
+		/// </summary>
+		public static string PreparationLogs => GetString(PreparationLogsKey);
+
+		/// <summary>
+		/// Select the duration of logs for export
+		/// </summary>
+		public const string SelectLogsDurationToExportKey = nameof(SelectLogsDurationToExport);
+
+		/// <summary>
+		/// Select the duration of logs for export
+		/// </summary>
+		public static string SelectLogsDurationToExport => GetString(SelectLogsDurationToExportKey);
+
+		/// <summary>
+		/// {0} day(s)
+		/// </summary>
+		public const string DaysParamKey = nameof(DaysParam);
+
+		/// <summary>
+		/// {0} day(s)
+		/// </summary>
+		public static string DaysParam => GetString(DaysParamKey);
 	}
 }

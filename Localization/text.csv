@@ -4441,6 +4441,10 @@ Legs;Legs;Ноги
 Distance;Distance;Дистанция
 Benchmark;Benchmark;Оценка
 Projection;Projection;Проекция
+AllPeriod;All period;Весь период
+PreparationLogs;Preparation of logs;Подготовка логов
+SelectLogsDurationToExport;Select the duration of logs for export;Выберите продолжительность логов для экспорта
+DaysParam;{0} day(s);{0} день(-я, -й)
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
