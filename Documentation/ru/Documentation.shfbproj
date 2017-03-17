@@ -2712,6 +2712,10 @@
       <ImageId>StockSharpTitle_1</ImageId>
       <AlternateText>Stock Sharp Title 1</AlternateText>
     </Image>
+    <Image Include="Art\GUI_IndexSecurityWindow.png">
+      <ImageId>GUI_IndexSecurityWindow</ImageId>
+      <AlternateText>GUI Index Security Window</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
