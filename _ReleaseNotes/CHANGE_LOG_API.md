@@ -3,6 +3,7 @@ StockSharp API Change log
 ###current:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
 * (bug) BasketMessageAdapter and SubscriptionMessageAdapter. Fix derived MarketDataMessage types handling.
+* (bug) Strategy.MyTrades fill fix.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.
