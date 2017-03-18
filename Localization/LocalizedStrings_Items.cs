@@ -44116,5 +44116,45 @@ namespace StockSharp.Localization
 		/// {0} day(s)
 		/// </summary>
 		public static string DaysParam => GetString(DaysParamKey);
+
+		/// <summary>
+		/// MICEX TEAP
+		/// </summary>
+		public const string MicexTeapKey = nameof(MicexTeap);
+
+		/// <summary>
+		/// MICEX TEAP
+		/// </summary>
+		public static string MicexTeap => GetString(MicexTeapKey);
+
+		/// <summary>
+		/// Xignite
+		/// </summary>
+		public const string XigniteKey = nameof(Xignite);
+
+		/// <summary>
+		/// Xignite
+		/// </summary>
+		public static string Xignite => GetString(XigniteKey);
+
+		/// <summary>
+		/// Sterling
+		/// </summary>
+		public const string SterlingKey = nameof(Sterling);
+
+		/// <summary>
+		/// Sterling
+		/// </summary>
+		public static string Sterling => GetString(SterlingKey);
+
+		/// <summary>
+		/// FinViz
+		/// </summary>
+		public const string FinVizKey = nameof(FinViz);
+
+		/// <summary>
+		/// FinViz
+		/// </summary>
+		public static string FinViz => GetString(FinVizKey);
 	}
 }

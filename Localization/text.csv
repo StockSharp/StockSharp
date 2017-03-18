@@ -4445,6 +4445,10 @@ AllPeriod;All period;Весь период
 PreparationLogs;Preparation of logs;Подготовка логов
 SelectLogsDurationToExport;Select the duration of logs for export;Выберите продолжительность логов для экспорта
 DaysParam;{0} day(s);{0} день(-я, -й)
+MicexTeap;MICEX TEAP;ММВБ TEAP
+Xignite;Xignite;Xignite
+Sterling;Sterling;Sterling
+FinViz;FinViz;FinViz
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

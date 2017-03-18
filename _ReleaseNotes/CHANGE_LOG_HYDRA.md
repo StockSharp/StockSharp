@@ -2,6 +2,7 @@ StockSharp Data (Hydra) Change log
 ========================
 ###current:
 * (bug) Remove security fix.
+* (bug) Fix http://stocksharp.ru/forum/8158/gidra-padaet-pri-nastroike-micex-teap-i-drugie-bagi/
 
 ###v4.3.22:
 * (feature) FIX server mode. Live and historical streaming.
