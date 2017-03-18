@@ -3018,7 +3018,7 @@ Str3235;Panel for editing information about exchange boards.;Панель для
 Str3236;Panel for viewing Level2 data.;Панель для просмотра данных по Level2.
 Str3237;Logs;Логи
 Str3238;Panel for viewing news data.;Панель для просмотра данных по новостям.
-Str3239;Options positions chart;График позиций опционов
+Str3239;Positions (options);Позиции (опционы)
 Str3240;Panel for viewing options positions and greeks chart in respect to the underlying asset.;Панель для просмотра графика позиции и греков опционов относительно базового актива.
 Str3242;Conditional orders;Условные заявки
 Str3243;Panel for viewing and managing conditional orders.;Панель для просмотра и управления условными заявками.
@@ -4295,7 +4295,7 @@ FileNotStarted;File uploading has not started.;Загрузка файла не 
 FileTooMuch;This file exceeds the maximum upload size.;Файл превысил максимальный размер.
 StrategyEncrypted;Strategy has been encrypted and can not be viewed.;Стратегия зашифрована и не может быть просмотрена.
 Email;Email;Почта
-Pause;Pause;Приостановить
+Pause;Pause;Пауза
 CompositionAlreadyExistParams;{0} {1} already exist.;{0} {1} уже существует.
 WithEcnryption;With ecnryption;С шифрованием
 WithoutEcnryption;Without ecnryption;Без шифрования
