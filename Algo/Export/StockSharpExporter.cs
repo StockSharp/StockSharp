@@ -19,8 +19,6 @@ namespace StockSharp.Algo.Export
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Ecng.Configuration;
-
 	using MoreLinq;
 
 	using StockSharp.Algo.Storages;
@@ -84,7 +82,7 @@ namespace StockSharp.Algo.Export
 			foreach (var batch in messages.Batch(BatchSize).Select(b => b.ToArray()))
 			{
 				if (storage == null)
-					storage = (IMarketDataStorage<TMessage>)_storageRegistry.GetStorage(Security, typeof(TMessage), Arg, _drive);
+					storage = (IMarketDataStorage<TMessage>)_storageRegistry.GetStorage(Security, typeof(TMessage), Arg, _drive, _format);
 
 				if (CanProcess(batch.Length))
 					storage.Save(batch);
@@ -126,9 +124,7 @@ namespace StockSharp.Algo.Export
 		{
 			foreach (var group in messages.GroupBy(m => m.GetType()))
 			{
-				var storage = ConfigManager
-					.GetService<IStorageRegistry>()
-					.GetCandleMessageStorage(group.Key, Security, Arg, _drive, _format);
+				var storage = _storageRegistry.GetCandleMessageStorage(group.Key, Security, Arg, _drive, _format);
 
 				foreach (var candleMessages in group.Batch(BatchSize).Select(b => b.ToArray()))
 				{
