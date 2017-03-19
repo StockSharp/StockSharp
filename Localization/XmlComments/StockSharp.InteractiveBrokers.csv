@@ -398,6 +398,7 @@ E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerParameters/su
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFinancialAdvise/summary;DocStr3640
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewOptionParameters/summary;DocStr9563
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewHistogramData/summary;DocStr9564
+E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewSoftDollarTiers/summary;DocStr9578
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/summary;DocStr839
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/transactionId;DocStr838
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/isStopOrder;DocStr840
@@ -408,6 +409,7 @@ M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.I
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/securityType;DocStr9140
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestOptionParameters(StockSharp.BusinessEntities.Security)/summary;DocStr9565
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestScannerParameters/summary;DocStr9557
+M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestSoftDollarTier/summary;DocStr9579
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)/summary;DocStr9419
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)/param/filter;Filter
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)/returns;DocStr9420
@@ -569,10 +571,13 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Day/summary;DocStr7
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Week/summary;DocStr76
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month/summary;DocStr77
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Year/summary;DocStr78
-T:StockSharp.InteractiveBrokers.SoftDollarTier/summary;DocStr8459
+T:StockSharp.InteractiveBrokers.SoftDollarTier/summary;DocStr9580
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Name/summary;DocStr3082
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Value/summary;Str3099
 P:StockSharp.InteractiveBrokers.SoftDollarTier.DisplayName/summary;DocStr9078
+T:StockSharp.InteractiveBrokers.SoftDollarTierMarketDataMessage/summary;DocStr9581
+M:StockSharp.InteractiveBrokers.SoftDollarTierMarketDataMessage.#ctor/summary;DocStr1
+T:StockSharp.InteractiveBrokers.SoftDollarTierMessage/summary;DocStr9582
 M:StockSharp.InteractiveBrokers.SoftDollarTierMessage.#ctor/summary;DocStr1
 P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Tiers/summary;DocStr9572

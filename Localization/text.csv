@@ -13823,3 +13823,9 @@ DocStr9573;Market data types;Типы рыночных данных
 DocStr9575;Frozen market data;Замороженные рыночные данные
 DocStr9576;Enables delayed and disables delayed-frozen market data;Включает отложенные и выключает отложенно-замороженные рыночные данные
 DocStr9577;Enables delayed and delayed-frozen market data;Включает отложенные и отложенно-замороженные рыночные данные
+DocStr9578;The new Soft Dollar Tier event;Событие появления новой информации о Soft Dollar Tier
+DocStr9579;Request Soft Dollar Tier information. The results will come through the {0} event;Запросить информация о Soft Dollar Tier. Результаты будут приходить через событие {0}
+DocStr9580;Soft Dollar Tier information;Информация о Soft Dollar Tier
+DocStr9581;Request Soft Dollar Tier information message;Сообщение запроса информации о Soft Dollar Tier
+DocStr9582;Soft Dollar Tier message;Сообщение с Soft Dollar Tier
+DocStr9583;The search box for grid control column chooser;Поле поиска для выбора колонок у таблицы

@@ -1801,6 +1801,11 @@
             The new histogram data event.
             </summary>
     </member>
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewSoftDollarTiers">
+      <summary>
+            The new Soft Dollar Tier event.
+            </summary>
+    </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
       <summary>
             Cancel orders by filter.
@@ -1822,6 +1827,11 @@
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestScannerParameters">
       <summary>
             Request scanner parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerParameters" /> event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestSoftDollarTier">
+      <summary>
+            Request Soft Dollar Tier information. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewSoftDollarTiers" /> event.
             </summary>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)">
@@ -2479,7 +2489,8 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.SoftDollarTier">
       <summary>
-      </summary>
+            Soft Dollar Tier information.
+            </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.SoftDollarTier.Name">
       <summary>
@@ -2496,6 +2507,21 @@
             Display name.
             </summary>
     </member>
+    <member name="T:StockSharp.InteractiveBrokers.SoftDollarTierMarketDataMessage">
+      <summary>
+            Request Soft Dollar Tier information message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.SoftDollarTierMarketDataMessage.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.SoftDollarTierMarketDataMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.SoftDollarTierMessage">
+      <summary>
+            Soft Dollar Tier message.
+            </summary>
+    </member>
     <member name="M:StockSharp.InteractiveBrokers.SoftDollarTierMessage.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.SoftDollarTierMessage" />.
@@ -2503,7 +2529,7 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.OriginalTransactionId">
       <summary>
-            ID of the original message <see cref="!:SoftDollarTierMarketDataMessage.TransactionId" /> for which this message is a response.
+            ID of the original message <see cref="P:StockSharp.Messages.MarketDataMessage.TransactionId" /> for which this message is a response.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Tiers">
