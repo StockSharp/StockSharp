@@ -76,8 +76,6 @@ namespace SampleFix
 
 			Instance = this;
 
-			Trader.LogLevel = LogLevels.Debug;
-
 			_logManager.Sources.Add(Trader);
 			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_Fix" });
 		}

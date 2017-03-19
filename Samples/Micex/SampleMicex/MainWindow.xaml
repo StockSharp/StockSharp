@@ -2,9 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-    xmlns:micex="clr-namespace:StockSharp.Micex.Xaml;assembly=StockSharp.Micex"
-    xmlns:micex2="clr-namespace:StockSharp.Micex;assembly=StockSharp.Micex"
-    xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+    xmlns:propertyGrid="http://schemas.stocksharp.com/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     Title="{x:Static loc:LocalizedStrings.XamlStr540}"
 	Height="124" Width="750" WindowStartupLocation="CenterScreen">
     <Grid>
@@ -38,7 +37,18 @@
 
 			<Button x:Name="ConnectBtn" Grid.Column="0" Background="LightPink" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" TabIndex="3" />
 
-			<TextBox x:Name="Address" Grid.Column="2">localhost:15005</TextBox>
+			<dx:DropDownButton Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Settings}">
+				<Grid Width="400">
+					<Grid.RowDefinitions>
+						<RowDefinition />
+						<RowDefinition Height="100" />
+					</Grid.RowDefinitions>
+
+					<propertyGrid:PropertyGridEx x:Name="Settings" />
+					<propertyGrid:ConnectorSupportedMessagesPanel x:Name="TransactionSupportedMessages" Grid.Row="1" />
+				</Grid>
+			</dx:DropDownButton>
+			<!--<TextBox x:Name="Address" Grid.Column="2">localhost:15005</TextBox>
 			<TextBox x:Name="Server" Grid.Column="3">EQ_TEST</TextBox>
 			<micex:MicexInterfaceComboBox x:Name="Interface" Grid.Column="4" SelectedValue="IFCBroker_24" Width="100" />
 			<TextBlock Grid.Column="5"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
@@ -47,7 +57,7 @@
 			<PasswordBox x:Name="Password" Grid.Column="8" Width="80" />
 			<ex:EnumComboBox x:Name="Compression" Grid.Column="9" Width="60" EnumType="{x:Type micex2:CompressionLevels}" SelectedIndex="0" />
 			<TextBlock Grid.Column="10"><Run Text="{x:Static loc:LocalizedStrings.Str1660}" />:</TextBlock>
-			<TextBox x:Name="Depth" Grid.Column="11" Text="10" Width="20"/>
+			<TextBox x:Name="Depth" Grid.Column="11" Text="10" Width="30"/>-->
 		</Grid>
 
 		<Button x:Name="ShowSecurities" Grid.Column="0" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
@@ -63,3 +73,6 @@
         </StatusBar>
 	</Grid>
 </Window>
+
+
+
