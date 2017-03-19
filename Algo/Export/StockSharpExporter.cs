@@ -77,15 +77,22 @@ namespace StockSharp.Algo.Export
 		private void Export<TMessage>(IEnumerable<TMessage> messages)
 			where TMessage : Message
 		{
-			IMarketDataStorage<TMessage> storage = null;
+			Export(typeof(TMessage), messages);
+		}
+
+		private void Export(Type messageType, IEnumerable<Message> messages)
+		{
+			IMarketDataStorage storage = null;
 
 			foreach (var batch in messages.Batch(BatchSize).Select(b => b.ToArray()))
 			{
 				if (storage == null)
-					storage = (IMarketDataStorage<TMessage>)_storageRegistry.GetStorage(Security, typeof(TMessage), Arg, _drive, _format);
+					storage = _storageRegistry.GetStorage(Security, messageType, Arg, _drive, _format);
 
-				if (CanProcess(batch.Length))
-					storage.Save(batch);
+				if (!CanProcess(batch.Length))
+					break;
+
+				storage.Save(batch);
 			}
 		}
 
@@ -124,13 +131,7 @@ namespace StockSharp.Algo.Export
 		{
 			foreach (var group in messages.GroupBy(m => m.GetType()))
 			{
-				var storage = _storageRegistry.GetCandleMessageStorage(group.Key, Security, Arg, _drive, _format);
-
-				foreach (var candleMessages in group.Batch(BatchSize).Select(b => b.ToArray()))
-				{
-					if (CanProcess(candleMessages.Length))
-						storage.Save(candleMessages);	
-				}
+				Export(group.Key, group);
 
 				if (!CanProcess())
 					break;
