@@ -44156,5 +44156,15 @@ namespace StockSharp.Localization
 		/// FinViz
 		/// </summary>
 		public static string FinViz => GetString(FinVizKey);
+
+		/// <summary>
+		/// Synchronize
+		/// </summary>
+		public const string SynchronizeKey = nameof(Synchronize);
+
+		/// <summary>
+		/// Synchronize
+		/// </summary>
+		public static string Synchronize => GetString(SynchronizeKey);
 	}
 }
