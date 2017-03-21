@@ -44166,5 +44166,15 @@ namespace StockSharp.Localization
 		/// Synchronize
 		/// </summary>
 		public static string Synchronize => GetString(SynchronizeKey);
+
+		/// <summary>
+		/// Tables that need to be monitored for revision changes
+		/// </summary>
+		public const string RevisionTablesDescKey = nameof(RevisionTablesDesc);
+
+		/// <summary>
+		/// Tables that need to be monitored for revision changes
+		/// </summary>
+		public static string RevisionTablesDesc => GetString(RevisionTablesDescKey);
 	}
 }
