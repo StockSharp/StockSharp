@@ -187,8 +187,7 @@ namespace StockSharp.Algo
 			{
 				_isSuspended = value;
 
-				if (_container != null)
-					_container.AddRuleLog(LogLevels.Info, this, value ? LocalizedStrings.Str1089 : LocalizedStrings.Str1090);
+				_container?.AddRuleLog(LogLevels.Info, this, value ? LocalizedStrings.Str1089 : LocalizedStrings.Str1090);
 			}
 		}
 
@@ -388,9 +387,7 @@ namespace StockSharp.Algo
 		{
 			var result = _action(_arg);
 
-			var ah = _activatedHandler;
-			if (ah != null)
-				ah(result);
+			_activatedHandler?.Invoke(result);
 
 			return _canFinish();
 		}

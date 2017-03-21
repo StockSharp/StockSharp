@@ -2135,6 +2135,9 @@ namespace StockSharp.Algo
 		/// <param name="process">The handler.</param>
 		public static void ActiveRule(this IMarketRuleContainer container, IMarketRule rule, Func<bool> process)
 		{
+			if (process == null)
+				throw new ArgumentNullException(nameof(process));
+
 			container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Str1082);
 
 			List<IMarketRule> removedRules = null;
