@@ -29,11 +29,11 @@ P:StockSharp.Messages.CandleMessage.OpenPrice/summary;Str79
 P:StockSharp.Messages.CandleMessage.HighPrice/summary;XamlStr830
 P:StockSharp.Messages.CandleMessage.LowPrice/summary;XamlStr831
 P:StockSharp.Messages.CandleMessage.ClosePrice/summary;ClosingPrice
-P:StockSharp.Messages.CandleMessage.OpenVolume/summary;DocStr636
-P:StockSharp.Messages.CandleMessage.CloseVolume/summary;DocStr637
-P:StockSharp.Messages.CandleMessage.HighVolume/summary;DocStr638
-P:StockSharp.Messages.CandleMessage.LowVolume/summary;DocStr9531
-P:StockSharp.Messages.CandleMessage.RelativeVolume/summary;DocStr640
+P:StockSharp.Messages.CandleMessage.OpenVolume/summary;OpenVolume
+P:StockSharp.Messages.CandleMessage.CloseVolume/summary;CloseVolume
+P:StockSharp.Messages.CandleMessage.HighVolume/summary;HighVolume
+P:StockSharp.Messages.CandleMessage.LowVolume/summary;LowVolume
+P:StockSharp.Messages.CandleMessage.RelativeVolume/summary;RelativeVolume
 P:StockSharp.Messages.CandleMessage.TotalVolume/summary;DocStr2547
 P:StockSharp.Messages.CandleMessage.OpenInterest/summary;Str150
 P:StockSharp.Messages.CandleMessage.TotalTicks/summary;TickCount

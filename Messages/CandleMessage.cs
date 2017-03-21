@@ -168,7 +168,7 @@ namespace StockSharp.Messages
 		public decimal? LowVolume { get; set; }
 
 		/// <summary>
-		/// Relative colume.
+		/// Relative volume.
 		/// </summary>
 		[DataMember]
 		public decimal? RelativeVolume { get; set; }

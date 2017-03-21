@@ -3554,12 +3554,12 @@ P:StockSharp.Algo.Candles.Candle.ClosePrice/summary;ClosingPrice
 P:StockSharp.Algo.Candles.Candle.HighPrice/summary;XamlStr830
 P:StockSharp.Algo.Candles.Candle.LowPrice/summary;XamlStr831
 P:StockSharp.Algo.Candles.Candle.TotalPrice/summary;DocStr635
-P:StockSharp.Algo.Candles.Candle.OpenVolume/summary;DocStr636
-P:StockSharp.Algo.Candles.Candle.CloseVolume/summary;DocStr637
-P:StockSharp.Algo.Candles.Candle.HighVolume/summary;DocStr638
-P:StockSharp.Algo.Candles.Candle.LowVolume/summary;DocStr9531
+P:StockSharp.Algo.Candles.Candle.OpenVolume/summary;OpenVolume
+P:StockSharp.Algo.Candles.Candle.CloseVolume/summary;CloseVolume
+P:StockSharp.Algo.Candles.Candle.HighVolume/summary;HighVolume
+P:StockSharp.Algo.Candles.Candle.LowVolume/summary;LowVolume
 P:StockSharp.Algo.Candles.Candle.TotalVolume/summary;DocStr2547
-P:StockSharp.Algo.Candles.Candle.RelativeVolume/summary;DocStr640
+P:StockSharp.Algo.Candles.Candle.RelativeVolume/summary;RelativeVolume
 P:StockSharp.Algo.Candles.Candle.Arg/summary;DocStr548
 P:StockSharp.Algo.Candles.Candle.TotalTicks/summary;TickCount
 P:StockSharp.Algo.Candles.Candle.UpTicks/summary;TickUpCount
