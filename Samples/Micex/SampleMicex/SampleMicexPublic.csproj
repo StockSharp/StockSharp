@@ -55,6 +55,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -93,6 +94,9 @@
     </Reference>
     <Reference Include="DevExpress.Xpf.LayoutControl.v15.2">
       <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v15.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v15.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v15.2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

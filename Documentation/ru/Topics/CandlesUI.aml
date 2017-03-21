@@ -8,38 +8,38 @@
       
 		<mediaLink><image placement="center" xlink:href="sample_candleschart" /></mediaLink>
 	  
-		<para>Для отображения, поступающие свечи от <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> передаются в метод
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)</codeEntityReference>.</para>
+		<para>Для отображения, поступающие свечи от <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> 
+		передаются в метод
+		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Xaml.Charting.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>.</para>
 		
-		<para>При передаче свечи из события <codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
+		<para>При передаче свечи из события 
+		<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
 		для отрисовки на графике, будут отбражаться изменения текущей свечи.</para>
 		
-		<para>Если же нужно отображать <legacyBold>только</legacyBold> "целые" свечи, то необходимо проверить свойство 
+		<para>Если же нужно отображать только <legacyBold>"целые"</legacyBold> свечи, то необходимо проверить свойство 
 		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Candle.State</codeEntityReference> пришедшей свечи:</para>
 		
 		<code language="C#">
 		<![CDATA[
 private ChartArea _area;
 private ChartCandleElement _candlesElem;
-
-// _chart - StockSharp.Xaml.Chart
+...
+// CandlesChart - StockSharp.Xaml.Chart
 // Создание области графика
-_area = new ChartArea();
-_chart.Areas.Add(_area);
+	_area = new ChartArea();
+	CandlesChart.AddArea(_area);
 
-// Создание элемента графика представляющего свечи
-_candlesElem = new ChartCandleElement();
-_area.Elements.Add(_candlesElem);
-
+	_candlesElem = new ChartCandleElement { ShowAxisMarker = false };
+	CandlesChart.AddElement(_area, _candlesElem);
 ...
 		
-_candleManager.Processing += DrawCandle;
+candleManager.Processing += CandleManagerOnProcessing;
 
 ...
 
-private void DrawCandle(CandleSeries series, Candle candle)
+private void CandleManagerOnProcessing(CandleSeries candleSeries, Candle candle)
 {
-	if (candle.State == CandleStates.Finished) this.GuiAsync(() => _chart.Draw(_candlesElem, candle) );
+    if (candle.State == CandleStates.Finished) CandlesChart.Draw(_candlesElem, candle);
 }
 		]]>
 		</code>	

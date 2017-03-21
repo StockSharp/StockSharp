@@ -19,7 +19,6 @@ namespace SampleMicex
 	using System.Windows;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using MoreLinq;
@@ -109,7 +108,7 @@ namespace SampleMicex
 					Title = security.Id + " " + LocalizedStrings.MarketDepth,
 					DepthCtrl =
 					{
-						MaxDepth = MainWindow.Instance.Depth.Text.To<int>()
+						MaxDepth = MainWindow.Instance.Trader.OrderBookDepth ?? 100
 					}
 				};
 				wnd.MakeHideable();

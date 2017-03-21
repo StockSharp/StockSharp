@@ -16,7 +16,7 @@
 	          	<para>Выбрать данные для анализа:</para>
 				<list class="bullet">
   					<listItem>
-  						<para>Открыть окно <legacyBold>Параметры</legacyBold> при помощи одноименной кнопки на панели инструментов.</para>
+  						<para>В окне <legacyBold>Параметры</legacyBold> расположенной в правой части программы.</para>
   						<mediaLink>
     	    				<image placement="left" xlink:href="hydra_analitics_parameters" />
       					</mediaLink>
@@ -26,11 +26,6 @@
   					</listItem>
 				</list>
     	      </content>
-        	</step>
-        	<step>
-          		<content>
-          			<para>Выбрать шаблон при помощи списка <legacyBold>Шаблон</legacyBold> на панели инструментов.</para>
-          		</content>
         	</step>
         	<step>
           		<content>

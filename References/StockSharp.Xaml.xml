@@ -295,6 +295,132 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.GridControl.SearchBox">
+      <summary>
+            The search box for grid control column chooser.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.GridControl.SearchBox.ItemsPanelProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.SearchBox.ItemsPanel" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.SearchBox.ItemsPanel">
+      <summary>
+      </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.SearchBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.SearchBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.SearchBox.OnTextChanged(System.String,System.String)">
+      <summary>
+      </summary>
+      <param name="oldText">
+      </param>
+      <param name="text">
+      </param>
+    </member>
+    <member name="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs">
+      <summary>
+            Contains event data for <see cref="E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Column">
+      <summary>
+            Column.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row">
+      <summary>
+            Value.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.GridControl.BaseGridControl">
+      <summary>
+            The grid control.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder">
+      <summary>
+            Holds columns visibility.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Count">
+      <summary>
+            Get columns count.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Item(System.Int32)">
+      <summary>
+            Get or set column visibility by index.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.#ctor(DevExpress.Xpf.Grid.GridColumnCollection)">
+      <summary>
+            Initializes a new instance of the <see cref="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility" />.
+            </summary>
+      <param name="columns">
+      </param>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility">
+      <summary>
+            Get or set column visibility by index.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler">
+      <summary>
+            DDE export error handler.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged">
+      <summary>
+            Layout changed event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick">
+      <summary>
+            Event of double-clicking the mouse on the selected item.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.BaseGridControl" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)">
+      <summary>
+            Called when the ItemsSource property changes.
+            </summary>
+      <param name="oldValue">Old value of the ItemsSource property.</param>
+      <param name="newValue">New value of the ItemsSource property.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.OnLoaded(System.Object,System.Windows.RoutedEventArgs)">
+      <summary>
+      </summary>
+      <param name="sender">
+      </param>
+      <param name="e">
+      </param>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.OptionDeskModel">
       <summary>
             Option desk model.
@@ -892,105 +1018,6 @@
       <summary>
             InitializeComponent
             </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs">
-      <summary>
-            Contains event data for <see cref="E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Column">
-      <summary>
-            Column.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row">
-      <summary>
-            Value.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.GridControl.BaseGridControl">
-      <summary>
-            The grid control.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder">
-      <summary>
-            Holds columns visibility.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Count">
-      <summary>
-            Get columns count.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Item(System.Int32)">
-      <summary>
-            Get or set column visibility by index.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.#ctor(DevExpress.Xpf.Grid.GridColumnCollection)">
-      <summary>
-            Initializes a new instance of the <see cref="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility" />.
-            </summary>
-      <param name="columns">
-      </param>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility">
-      <summary>
-            Get or set column visibility by index.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler">
-      <summary>
-            DDE export error handler.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged">
-      <summary>
-            Layout changed event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick">
-      <summary>
-            Event of double-clicking the mouse on the selected item.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.BaseGridControl" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)">
-      <summary>
-            Called when the ItemsSource property changes.
-            </summary>
-      <param name="oldValue">Old value of the ItemsSource property.</param>
-      <param name="newValue">New value of the ItemsSource property.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.OnLoaded(System.Object,System.Windows.RoutedEventArgs)">
-      <summary>
-      </summary>
-      <param name="sender">
-      </param>
-      <param name="e">
-      </param>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.BasketPortfolioWindow">
       <summary>

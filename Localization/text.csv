@@ -811,9 +811,9 @@ Str852;Lower histogram.;Нижняя гистограмма.
 Str853;Market Facilitation Index.;Индекс Облегчения Рынка.
 Str854;Williams Percent Range.;Процентный диапазон Уильямса.
 Str855Params;Activation of risk-rule {0}-{1} with action {2}.;Активация риск-правила {0}-{1} с действием {2}.
-Str856;Close positions.;Закрыть позиции.
-Str857;Stop trading.;Остановить торговлю.
-Str858;Cancel orders.;Отменить заявки.
+Str856;Close positions;Закрыть позиции
+Str857;Stop trading;Остановить торговлю
+Str858;Cancel orders;Отменить заявки
 Str859;Action that needs to be taken in case of rule activation.;Действие, которое необходимо совершить в случае активации правило.
 Str860;Risk-rule, tracking profit-loss.;Риск-правило, отслеживающее прибыль-убыток.
 Str861;Profit-loss.;Прибыль-убыток.
@@ -3018,7 +3018,7 @@ Str3235;Panel for editing information about exchange boards.;Панель для
 Str3236;Panel for viewing Level2 data.;Панель для просмотра данных по Level2.
 Str3237;Logs;Логи
 Str3238;Panel for viewing news data.;Панель для просмотра данных по новостям.
-Str3239;Options positions chart;График позиций опционов
+Str3239;Positions (options);Позиции (опционы)
 Str3240;Panel for viewing options positions and greeks chart in respect to the underlying asset.;Панель для просмотра графика позиции и греков опционов относительно базового актива.
 Str3242;Conditional orders;Условные заявки
 Str3243;Panel for viewing and managing conditional orders.;Панель для просмотра и управления условными заявками.
@@ -4295,7 +4295,7 @@ FileNotStarted;File uploading has not started.;Загрузка файла не 
 FileTooMuch;This file exceeds the maximum upload size.;Файл превысил максимальный размер.
 StrategyEncrypted;Strategy has been encrypted and can not be viewed.;Стратегия зашифрована и не может быть просмотрена.
 Email;Email;Почта
-Pause;Pause;Приостановить
+Pause;Pause;Пауза
 CompositionAlreadyExistParams;{0} {1} already exist.;{0} {1} уже существует.
 WithEcnryption;With ecnryption;С шифрованием
 WithoutEcnryption;Without ecnryption;Без шифрования
@@ -4362,8 +4362,8 @@ DownloadSecurities;Download securities;Скачать инструменты
 NotSupportSecurityDownload;The source does not support automatical instruments downloading. Manually create an instrument?;Источник не предоставляет возможность автоматической загрузки инструментов. Создать инструмент напрямую?
 IgnoreErrors;Ignore errors;Игнорировать ошибки
 CalculateExtended;Calculate extended information;Вычислять расширенную информацию
-VolatilitySmile;Volatility smile;Улыбка волательности
-VolatilitySmileChart;Options volatility smile chart.;График улыбки волательности опционов
+VolatilitySmile;Volatility smile;Улыбка волатильности
+VolatilitySmileChart;Options volatility smile chart.;График улыбки волатильности опционов
 StrategyNotInitialized;Strategy not initialized.;Стратегия не инициализирована.
 ExternalSocketMoreEvents;Type {0} must contain only one event with {1}.;Тип {0} должен содержать только одно событие с атрибутом {1}.
 ExternalSocketOneParam;Event {0} must contains only one parameter.;Событие {0} должно содержать только 1 параметр.
@@ -4445,6 +4445,11 @@ AllPeriod;All period;Весь период
 PreparationLogs;Preparation of logs;Подготовка логов
 SelectLogsDurationToExport;Select the duration of logs for export;Выберите продолжительность логов для экспорта
 DaysParam;{0} day(s);{0} день(-я, -й)
+MicexTeap;MICEX TEAP;ММВБ TEAP
+Xignite;Xignite;Xignite
+Sterling;Sterling;Sterling
+FinViz;FinViz;FinViz
+Synchronize;Synchronize;Синхронизировать
 OpenVolume;Volume at open;Объем на открытии
 CloseVolume;Volume at close;Объем на закрытии
 HighVolume;Volume at high;Объем на максимуме
@@ -13825,3 +13830,9 @@ DocStr9573;Market data types;Типы рыночных данных
 DocStr9575;Frozen market data;Замороженные рыночные данные
 DocStr9576;Enables delayed and disables delayed-frozen market data;Включает отложенные и выключает отложенно-замороженные рыночные данные
 DocStr9577;Enables delayed and delayed-frozen market data;Включает отложенные и отложенно-замороженные рыночные данные
+DocStr9578;The new Soft Dollar Tier event;Событие появления новой информации о Soft Dollar Tier
+DocStr9579;Request Soft Dollar Tier information. The results will come through the {0} event;Запросить информация о Soft Dollar Tier. Результаты будут приходить через событие {0}
+DocStr9580;Soft Dollar Tier information;Информация о Soft Dollar Tier
+DocStr9581;Request Soft Dollar Tier information message;Сообщение запроса информации о Soft Dollar Tier
+DocStr9582;Soft Dollar Tier message;Сообщение с Soft Dollar Tier
+DocStr9583;The search box for grid control column chooser;Поле поиска для выбора колонок у таблицы

@@ -17,35 +17,65 @@ namespace StockSharp.Community
 {
 	using System.Security;
 
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	/// <summary>
 	/// The class that contains a login and password to access the services http://stocksharp.com .
 	/// </summary>
-	public sealed class ServerCredentials : IPersistable
+	public sealed class ServerCredentials : NotifiableObject, IPersistable
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ServerCredentials"/>.
 		/// </summary>
 		public ServerCredentials()
 		{
-			AutoLogon = true;
 		}
+
+		private string _email;
 
 		/// <summary>
 		/// Email.
 		/// </summary>
-		public string Email { get; set; }
+		public string Email
+		{
+			get { return _email; }
+			set
+			{
+				_email = value;
+				NotifyChanged(nameof(Email));
+			}
+		}
+
+		private SecureString _password;
 
 		/// <summary>
 		/// Password.
 		/// </summary>
-		public SecureString Password { get; set; }
+		public SecureString Password
+		{
+			get { return _password; }
+			set
+			{
+				_password = value;
+				NotifyChanged(nameof(Password));
+			}
+		}
+
+		private bool _autoLogon = true;
 
 		/// <summary>
 		/// Auto login.
 		/// </summary>
-		public bool AutoLogon { get; set; }
+		public bool AutoLogon
+		{
+			get { return _autoLogon; }
+			set
+			{
+				_autoLogon = value;
+				NotifyChanged(nameof(AutoLogon));
+			}
+		}
 
 		/// <summary>
 		/// Load settings.

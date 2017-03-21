@@ -2,7 +2,7 @@
 <topic id="45cc9b3a-117c-4567-94af-fea13087ebe9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>Пункт главного меню приложения <legacyBold>Дополнительно => Удалить данные...</legacyBold>.</para>
+    	<para>Вкладка <legacyBold>Общее</legacyBold> кнопка <legacyBold>Удалить данные...</legacyBold>.</para>
 		<mediaLink>
 			<image placement="left" xlink:href="hydra_data_delete" />
 		</mediaLink>

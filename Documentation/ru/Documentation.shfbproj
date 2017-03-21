@@ -181,6 +181,8 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\hydra_index.aml" />
+    <None Include="Topics\hydra_options.aml" />
     <None Include="Topics\CreateNewOrder.aml" />
     <None Include="Topics\QuikLuaFirstStrategy.aml" />
     <None Include="Topics\QuikLuaStrategy.aml.aml" />
@@ -2711,6 +2713,38 @@
     <Image Include="Art\StockSharpTitle_1.png">
       <ImageId>StockSharpTitle_1</ImageId>
       <AlternateText>Stock Sharp Title 1</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_IndexSecurityWindow.png">
+      <ImageId>GUI_IndexSecurityWindow</ImageId>
+      <AlternateText>GUI Index Security Window</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Barchart.png">
+      <ImageId>hydra_settings_Barchart</ImageId>
+      <AlternateText>hydra settings Barchart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_analitic.png">
+      <ImageId>hydra_tasks_analitic</ImageId>
+      <AlternateText>hydra tasks analitic</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_view_export.png">
+      <ImageId>hydra_view_export</ImageId>
+      <AlternateText>hydra view export</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_option_desk.png">
+      <ImageId>hydra_option_desk</ImageId>
+      <AlternateText>hydra option desk</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_option_smile_of_volatility.png">
+      <ImageId>hydra_option_smile_of_volatility</ImageId>
+      <AlternateText>hydra option smile of volatility</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_index_sec.png">
+      <ImageId>hydra_index_sec</ImageId>
+      <AlternateText>hydra index sec</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_index_candle.png">
+      <ImageId>hydra_index_candle</ImageId>
+      <AlternateText>hydra index candle</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

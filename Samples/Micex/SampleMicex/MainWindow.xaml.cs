@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -17,10 +17,11 @@ namespace SampleMicex
 {
 	using System;
 	using System.ComponentModel;
-	using System.Net;
+	using System.IO;
 	using System.Windows;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -41,6 +42,8 @@ namespace SampleMicex
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
 
+		private const string _settingsFile = "settings.xml";
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -54,6 +57,13 @@ namespace SampleMicex
 			_securitiesWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_newsWindow.MakeHideable();
+
+			if (File.Exists(_settingsFile))
+			{
+				Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+			}
+
+			Settings.SelectedObject = Trader.MarketDataAdapter;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -86,17 +96,6 @@ namespace SampleMicex
 			{
 				if (!_isConnected)
 				{
-					// создаем подключение
-					Trader.Addresses = new[] { Address.Text.To<EndPoint>() };
-					Trader.Server = Server.Text;
-					Trader.Login = Login.Text;
-					Trader.CompressionLevel = (CompressionLevels)Compression.SelectedValue;
-					Trader.Interface = Interface.Text;
-					Trader.OrderBookDepth = Depth.Text.To<int>();
-
-					if (!Password.Password.IsEmpty())
-						Trader.Password = Password.Password;
-	
 					if (!_initialized)
 					{
 						_initialized = true;
@@ -169,6 +168,8 @@ namespace SampleMicex
 						// set news provider
 						_newsWindow.NewsPanel.NewsProvider = Trader;
 					}
+
+					new XmlSerializer<SettingsStorage>().Serialize(Trader.Save(), _settingsFile);
 
 					Trader.Connect();
 				}

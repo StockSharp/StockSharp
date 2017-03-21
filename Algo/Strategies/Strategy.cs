@@ -2178,7 +2178,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void AddMyTrade(MyTrade trade)
 		{
-			if (_myTrades.Contains(trade))
+			if (!_myTrades.TryAdd(trade))
 				return;
 
 			if (WaitAllTrades)
@@ -2195,7 +2195,6 @@ namespace StockSharp.Algo.Strategies
 
 			var isComChanged = false;
 			var isPnLChanged = false;
-			decimal? pos = null;
 			var isSlipChanged = false;
 
 			this.AddInfoLog(LocalizedStrings.Str1398Params,
@@ -2215,7 +2214,7 @@ namespace StockSharp.Algo.Strategies
 			if (tradeInfo.PnL != 0)
 				isPnLChanged = true;
 
-			pos = PositionManager.ProcessMessage(trade.ToMessage());
+			var pos = PositionManager.ProcessMessage(trade.ToMessage());
 
 			if (trade.Slippage != null)
 			{
@@ -2313,6 +2312,16 @@ namespace StockSharp.Algo.Strategies
 
 				param?.Load(s);
 			}
+
+			var pnlStorage = storage.GetValue<SettingsStorage>(nameof(PnLManager));
+
+			if (pnlStorage != null)
+				PnLManager.Load(pnlStorage);
+
+			var riskStorage = storage.GetValue<SettingsStorage>(nameof(RiskManager));
+
+			if (riskStorage != null)
+				RiskManager.Load(riskStorage);
 		}
 
 		/// <summary>
@@ -2322,6 +2331,11 @@ namespace StockSharp.Algo.Strategies
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Parameters), Parameters.SyncGet(c => c.Select(p => p.Save()).ToArray()));
+
+			storage.SetValue(nameof(PnLManager), PnLManager.Save());
+			storage.SetValue(nameof(RiskManager), RiskManager.Save());
+			//storage.SetValue(nameof(StatisticManager), StatisticManager.Save());
+			//storage.SetValue(nameof(PositionManager), PositionManager.Save());
 		}
 
 		/// <summary>
