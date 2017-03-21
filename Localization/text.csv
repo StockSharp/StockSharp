@@ -4451,6 +4451,12 @@ Sterling;Sterling;Sterling
 FinViz;FinViz;FinViz
 Synchronize;Synchronize;Синхронизировать
 RevisionTablesDesc;Tables that need to be monitored for revision changes;Таблицы, которые необходимо отслеживать на изменение
+OpenVolume;Volume at open;Объем на открытии
+CloseVolume;Volume at close;Объем на закрытии
+HighVolume;Volume at high;Объем на максимуме
+LowVolume;Volume at low;Объем на минимуме
+RelativeVolume;Relative volume;Относительный объем
+PriceLevels;Price levels;Ценовые уровни
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -145,8 +145,12 @@ namespace StockSharp.Algo.Storages
 
 			lock (_boards.SyncRoot)
 			{
-				if (!_boards.TryAdd(board.Code, board))
+				var oldBoard = _boards.TryGetValue(board.Code);
+
+				if (ReferenceEquals(oldBoard, board))
 					return;
+
+				_boards[board.Code] = board;
 			}
 
 			BoardAdded?.Invoke(board);
@@ -163,8 +167,12 @@ namespace StockSharp.Algo.Storages
 
 			lock (_exchanges.SyncRoot)
 			{
-				if (!_exchanges.TryAdd(exchange.Name, exchange))
+				var oldExchange = _exchanges.TryGetValue(exchange.Name);
+
+				if (ReferenceEquals(oldExchange, exchange))
 					return;
+
+				_exchanges[exchange.Name] = exchange;
 			}
 
 			ExchangeAdded?.Invoke(exchange);
