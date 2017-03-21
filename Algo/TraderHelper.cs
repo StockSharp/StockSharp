@@ -1333,7 +1333,7 @@ namespace StockSharp.Algo
 				};
 
 				var depthMsg = depth.ToMessage();
-				var regMsg = order.CreateRegisterMessage(order.Security.ToSecurityId());
+				var regMsg = order.CreateRegisterMessage();
 				var pfMsg = testPf.ToChangeMessage();
 
 				pfMsg.ServerTime = depthMsg.ServerTime = order.LastChangeTime;

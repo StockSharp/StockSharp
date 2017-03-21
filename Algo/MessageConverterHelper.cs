@@ -421,7 +421,7 @@ namespace StockSharp.Algo
 		/// <param name="order">Order.</param>
 		/// <param name="securityId">Security ID.</param>
 		/// <returns>Message.</returns>
-		public static OrderRegisterMessage CreateRegisterMessage(this Order order, SecurityId securityId)
+		public static OrderRegisterMessage CreateRegisterMessage(this Order order, SecurityId? securityId = null)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
