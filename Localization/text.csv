@@ -811,9 +811,9 @@ Str852;Lower histogram.;Нижняя гистограмма.
 Str853;Market Facilitation Index.;Индекс Облегчения Рынка.
 Str854;Williams Percent Range.;Процентный диапазон Уильямса.
 Str855Params;Activation of risk-rule {0}-{1} with action {2}.;Активация риск-правила {0}-{1} с действием {2}.
-Str856;Close positions.;Закрыть позиции.
-Str857;Stop trading.;Остановить торговлю.
-Str858;Cancel orders.;Отменить заявки.
+Str856;Close positions;Закрыть позиции
+Str857;Stop trading;Остановить торговлю
+Str858;Cancel orders;Отменить заявки
 Str859;Action that needs to be taken in case of rule activation.;Действие, которое необходимо совершить в случае активации правило.
 Str860;Risk-rule, tracking profit-loss.;Риск-правило, отслеживающее прибыль-убыток.
 Str861;Profit-loss.;Прибыль-убыток.
@@ -4362,8 +4362,8 @@ DownloadSecurities;Download securities;Скачать инструменты
 NotSupportSecurityDownload;The source does not support automatical instruments downloading. Manually create an instrument?;Источник не предоставляет возможность автоматической загрузки инструментов. Создать инструмент напрямую?
 IgnoreErrors;Ignore errors;Игнорировать ошибки
 CalculateExtended;Calculate extended information;Вычислять расширенную информацию
-VolatilitySmile;Volatility smile;Улыбка волательности
-VolatilitySmileChart;Options volatility smile chart.;График улыбки волательности опционов
+VolatilitySmile;Volatility smile;Улыбка волатильности
+VolatilitySmileChart;Options volatility smile chart.;График улыбки волатильности опционов
 StrategyNotInitialized;Strategy not initialized.;Стратегия не инициализирована.
 ExternalSocketMoreEvents;Type {0} must contain only one event with {1}.;Тип {0} должен содержать только одно событие с атрибутом {1}.
 ExternalSocketOneParam;Event {0} must contains only one parameter.;Событие {0} должно содержать только 1 параметр.
