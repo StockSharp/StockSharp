@@ -6261,10 +6261,10 @@ M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.T
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderLogItem)/summary;DocStr2140
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderLogItem)/param/item;DocStr1442
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderLogItem)/returns;Str3166
-M:StockSharp.Algo.MessageConverterHelper.CreateRegisterMessage(StockSharp.BusinessEntities.Order,StockSharp.Messages.SecurityId)/summary;DocStr2141
-M:StockSharp.Algo.MessageConverterHelper.CreateRegisterMessage(StockSharp.BusinessEntities.Order,StockSharp.Messages.SecurityId)/param/order;Str504
-M:StockSharp.Algo.MessageConverterHelper.CreateRegisterMessage(StockSharp.BusinessEntities.Order,StockSharp.Messages.SecurityId)/param/securityId;SecurityId
-M:StockSharp.Algo.MessageConverterHelper.CreateRegisterMessage(StockSharp.BusinessEntities.Order,StockSharp.Messages.SecurityId)/returns;Str3166
+M:StockSharp.Algo.MessageConverterHelper.CreateRegisterMessage(StockSharp.BusinessEntities.Order,System.Nullable{StockSharp.Messages.SecurityId})/summary;DocStr2141
+M:StockSharp.Algo.MessageConverterHelper.CreateRegisterMessage(StockSharp.BusinessEntities.Order,System.Nullable{StockSharp.Messages.SecurityId})/param/order;Str504
+M:StockSharp.Algo.MessageConverterHelper.CreateRegisterMessage(StockSharp.BusinessEntities.Order,System.Nullable{StockSharp.Messages.SecurityId})/param/securityId;SecurityId
+M:StockSharp.Algo.MessageConverterHelper.CreateRegisterMessage(StockSharp.BusinessEntities.Order,System.Nullable{StockSharp.Messages.SecurityId})/returns;Str3166
 M:StockSharp.Algo.MessageConverterHelper.CreateCancelMessage(StockSharp.BusinessEntities.Order,StockSharp.Messages.SecurityId,System.Int64,System.Nullable{System.Decimal})/summary;DocStr2142
 M:StockSharp.Algo.MessageConverterHelper.CreateCancelMessage(StockSharp.BusinessEntities.Order,StockSharp.Messages.SecurityId,System.Int64,System.Nullable{System.Decimal})/param/order;Str504
 M:StockSharp.Algo.MessageConverterHelper.CreateCancelMessage(StockSharp.BusinessEntities.Order,StockSharp.Messages.SecurityId,System.Int64,System.Nullable{System.Decimal})/param/securityId;SecurityId
