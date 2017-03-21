@@ -715,7 +715,8 @@ namespace StockSharp.Algo.Testing
 
 			private void MatchOrder(DateTimeOffset time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
 			{
-				string matchError = null;
+				//string matchError = null;
+				var isCrossTrade = false;
 
 				var executions = result == null ? null : new Dictionary<decimal, decimal>();
 
@@ -748,8 +749,10 @@ namespace StockSharp.Algo.Testing
 						// если это пользовательская заявка и матчинг идет о заявку с таким же портфелем
 						if (executions != null && quote.PortfolioName == order.PortfolioName)
 						{
-							matchError = LocalizedStrings.Str1161Params.Put(quote.TransactionId, order.TransactionId);
+							var matchError = LocalizedStrings.Str1161Params.Put(quote.TransactionId, order.TransactionId);
 							this.AddErrorLog(matchError);
+
+							isCrossTrade = true;
 							break;
 						}
 
@@ -789,7 +792,7 @@ namespace StockSharp.Algo.Testing
 							break;
 					}
 
-					if (leftBalance == 0 || matchError != null)
+					if (leftBalance == 0 || isCrossTrade)
 						break;
 				}
 
@@ -865,13 +868,16 @@ namespace StockSharp.Algo.Testing
 					}
 				}
 
-				if (matchError != null)
+				if (isCrossTrade)
 				{
 					var reply = CreateReply(order, time);
 
-					reply.OrderState = OrderStates.Failed;
-					reply.OrderStatus = (long?)OrderStatus.RejectedBySystem;
-					reply.Error = new InvalidOperationException(matchError);
+					//reply.OrderState = OrderStates.Failed;
+					//reply.OrderStatus = (long?)OrderStatus.RejectedBySystem;
+					//reply.Error = new InvalidOperationException(matchError);
+
+					reply.OrderState = OrderStates.Done;
+					reply.OrderStatus = (long?)OrderStatus.CanceledByManager;
 
 					result.Add(reply);
 				}
