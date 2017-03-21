@@ -44116,5 +44116,65 @@ namespace StockSharp.Localization
 		/// {0} day(s)
 		/// </summary>
 		public static string DaysParam => GetString(DaysParamKey);
+
+		/// <summary>
+		/// Volume at open
+		/// </summary>
+		public const string OpenVolumeKey = nameof(OpenVolume);
+
+		/// <summary>
+		/// Volume at open
+		/// </summary>
+		public static string OpenVolume => GetString(OpenVolumeKey);
+
+		/// <summary>
+		/// Volume at close
+		/// </summary>
+		public const string CloseVolumeKey = nameof(CloseVolume);
+
+		/// <summary>
+		/// Volume at close
+		/// </summary>
+		public static string CloseVolume => GetString(CloseVolumeKey);
+
+		/// <summary>
+		/// Volume at high
+		/// </summary>
+		public const string HighVolumeKey = nameof(HighVolume);
+
+		/// <summary>
+		/// Volume at high
+		/// </summary>
+		public static string HighVolume => GetString(HighVolumeKey);
+
+		/// <summary>
+		/// Volume at low
+		/// </summary>
+		public const string LowVolumeKey = nameof(LowVolume);
+
+		/// <summary>
+		/// Volume at low
+		/// </summary>
+		public static string LowVolume => GetString(LowVolumeKey);
+
+		/// <summary>
+		/// Relative volume
+		/// </summary>
+		public const string RelativeVolumeKey = nameof(RelativeVolume);
+
+		/// <summary>
+		/// Relative volume
+		/// </summary>
+		public static string RelativeVolume => GetString(RelativeVolumeKey);
+
+		/// <summary>
+		/// Price levels
+		/// </summary>
+		public const string PriceLevelsKey = nameof(PriceLevels);
+
+		/// <summary>
+		/// Price levels
+		/// </summary>
+		public static string PriceLevels => GetString(PriceLevelsKey);
 	}
 }

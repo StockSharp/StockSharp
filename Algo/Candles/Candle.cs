@@ -199,6 +199,7 @@ namespace StockSharp.Algo.Candles
 		/// Total trades volume.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
 		public decimal TotalPrice
 		{
 			get { return _totalPrice; }
@@ -215,6 +216,7 @@ namespace StockSharp.Algo.Candles
 		/// Volume at open.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.OpenVolumeKey)]
 		public decimal? OpenVolume
 		{
 			get { return _openVolume; }
@@ -231,6 +233,7 @@ namespace StockSharp.Algo.Candles
 		/// Volume at close.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CloseVolumeKey)]
 		public decimal? CloseVolume
 		{
 			get { return _closeVolume; }
@@ -247,6 +250,7 @@ namespace StockSharp.Algo.Candles
 		/// Volume at high.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.HighVolumeKey)]
 		public decimal? HighVolume
 		{
 			get { return _highVolume; }
@@ -263,6 +267,7 @@ namespace StockSharp.Algo.Candles
 		/// Volume at low.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.LowVolumeKey)]
 		public decimal? LowVolume
 		{
 			get { return _lowVolume; }
@@ -297,6 +302,7 @@ namespace StockSharp.Algo.Candles
 		/// Relative colume.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.RelativeVolumeKey)]
 		public decimal? RelativeVolume
 		{
 			get { return _relativeVolume; }
@@ -412,6 +418,7 @@ namespace StockSharp.Algo.Candles
 		/// Price levels.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.PriceLevelsKey)]
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
 		/// <summary>
