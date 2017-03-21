@@ -657,6 +657,11 @@ namespace StockSharp.Algo.Risk
 		private DateTimeOffset? _endTime;
 		private int _current;
 
+		private void UpdateTitle()
+		{
+			Title = Count + " -> " + Interval;
+		}
+
 		private int _count;
 
 		/// <summary>
@@ -671,7 +676,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_count = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
 
@@ -690,7 +695,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_interval = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
 
@@ -915,6 +920,11 @@ namespace StockSharp.Algo.Risk
 		private DateTimeOffset? _endTime;
 		private int _current;
 
+		private void UpdateTitle()
+		{
+			Title = Count + " -> " + Interval;
+		}
+
 		private int _count;
 
 		/// <summary>
@@ -929,7 +939,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_count = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
 
@@ -947,7 +957,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				_interval = value;
-				Title = value.To<string>();
+				UpdateTitle();
 			}
 		}
 
