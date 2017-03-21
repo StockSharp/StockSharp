@@ -1463,9 +1463,6 @@ namespace StockSharp.Algo
 		{
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
 
-			if (tuple.Item2)
-				RaiseNewTrade(tuple.Item1);
-
 			var values = GetSecurityValues(security);
 
 			var changes = new List<KeyValuePair<Level1Fields, object>>(4)
@@ -1496,6 +1493,9 @@ namespace StockSharp.Algo
 					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.TradeVolume.Value));
 				}
 			}
+
+			if (tuple.Item2)
+				RaiseNewTrade(tuple.Item1);
 
 			RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
 
