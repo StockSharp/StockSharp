@@ -33,7 +33,7 @@ namespace StockSharp.Messages
 	public abstract class Message : Cloneable<Message>, IExtendableEntity
 	{
 		/// <summary>
-		/// Local time label when a message was received/created.
+		/// Local timestamp when a message was received/created.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str203Key)]
 		[DescriptionLoc(LocalizedStrings.Str204Key)]

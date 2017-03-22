@@ -233,7 +233,7 @@ Str200;Market depth at Level1;Стакан по Level1
 Str201;Refresh market depth for security using Level1 data.;Обновлять стакан для инструмента по Level1 данным.
 Messages;Messages;Сообщения
 Str203;Local time;Локальное время
-Str204;Local time label when a message was received/created.;Метка локального времени, когда сообщение было получено/создано.
+Str204;Local timestamp when a message was received/created.;Метка локального времени, когда сообщение было получено/создано.
 ExtendedInfo;Extended information;Расширенная информация
 Id;ID;Идентификатор
 NewsId;News ID.;Идентификатор новости.
@@ -6583,7 +6583,7 @@ DocStr2149;To convert the instrument into message;Преобразовать и�
 DocStr2150;To convert the message into instrument;Преобразовать сообщение в инструмент
 DocStr2151;To convert the portfolio into message;Преобразовать портфель в сообщение
 DocStr2152;To convert the position into message;Преобразовать позицию в сообщение
-DocStr2153;The local time label;Метка локального времени
+DocStr2153;The local timestamp;Метка локального времени
 DocStr2154;To convert the board into message;Преобразовать площадку в сообщение
 DocStr2155;To convert trading objects into messages;Преобразовать торговые объекты в сообщения
 DocStr2156;The type of trading object;Тип торгового объекта

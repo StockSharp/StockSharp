@@ -2310,7 +2310,7 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		/// <param name="changes">Changes.</param>
 		/// <param name="serverTime">Change server time.</param>
-		/// <param name="localTime">Local time label when a message was received/created.</param>
+		/// <param name="localTime">Local timestamp when a message was received/created.</param>
 		public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			if (security == null)

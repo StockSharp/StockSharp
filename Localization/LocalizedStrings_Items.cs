@@ -2368,12 +2368,12 @@ namespace StockSharp.Localization
 		public static string Str203 => GetString(Str203Key);
 
 		/// <summary>
-		/// Local time label when a message was received/created.
+		/// Local timestamp when a message was received/created.
 		/// </summary>
 		public const string Str204Key = nameof(Str204);
 
 		/// <summary>
-		/// Local time label when a message was received/created.
+		/// Local timestamp when a message was received/created.
 		/// </summary>
 		public static string Str204 => GetString(Str204Key);
 
