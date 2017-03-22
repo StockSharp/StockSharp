@@ -421,6 +421,29 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="T:StockSharp.Xaml.MarketRuleGrid">
+      <summary>
+            The panel for the list editing <see cref="T:StockSharp.Algo.IMarketRule" />.
+            </summary>
+      <summary>
+            MarketRuleGrid
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.MarketRuleGrid.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.MarketRuleGrid" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketRuleGrid.Rules">
+      <summary>
+            The list of market rules added to the table.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.MarketRuleGrid.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.OptionDeskModel">
       <summary>
             Option desk model.

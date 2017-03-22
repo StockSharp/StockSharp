@@ -88,6 +88,10 @@ M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsSt
 M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+T:StockSharp.Xaml.MarketRuleGrid/summary;DocStr8122
+M:StockSharp.Xaml.MarketRuleGrid.#ctor/summary;DocStr1
+P:StockSharp.Xaml.MarketRuleGrid.Rules/summary;DocStr9584
+M:StockSharp.Xaml.MarketRuleGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.OptionDeskModel/summary;DocStr9484
 P:StockSharp.Xaml.OptionDeskModel.EvaluateFildes/summary;DocStr9476
 P:StockSharp.Xaml.OptionDeskModel.Options/summary;DocStr8223

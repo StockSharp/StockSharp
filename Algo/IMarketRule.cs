@@ -17,11 +17,11 @@ namespace StockSharp.Algo
 {
 	using System;
     
-	using StockSharp.Logging;
-
 	using Ecng.Collections;
 	using Ecng.Common;
+
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// The interface of the rule, activating action at occurrence of market condition.

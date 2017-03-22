@@ -13831,3 +13831,4 @@ DocStr9580;Soft Dollar Tier information;Информация о Soft Dollar Tier
 DocStr9581;Request Soft Dollar Tier information message;Сообщение запроса информации о Soft Dollar Tier
 DocStr9582;Soft Dollar Tier message;Сообщение с Soft Dollar Tier
 DocStr9583;The search box for grid control column chooser;Поле поиска для выбора колонок у таблицы
+DocStr9584;The list of market rules added to the table;Список правил для добавления в таблицу

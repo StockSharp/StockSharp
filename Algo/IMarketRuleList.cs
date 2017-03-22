@@ -23,13 +23,12 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 
 	using StockSharp.Logging;
-
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// The interface, describing the rules list.
 	/// </summary>
-	public interface IMarketRuleList : ISynchronizedCollection<IMarketRule>
+	public interface IMarketRuleList : ISynchronizedCollection<IMarketRule>, INotifyList<IMarketRule>
 	{
 		/// <summary>
 		/// To get all active tokens of rules.

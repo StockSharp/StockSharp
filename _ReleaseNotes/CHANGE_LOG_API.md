@@ -6,6 +6,15 @@ StockSharp API Change log
 * (bug) Strategy.MyTrades fill fix.
 * (feature) InteractiveBrokers. Soft Dollar support.
 * (feature) Grid controls. Search columns by name.
+* (feature) MarketRuleGrid.
+* (feature) Strategy. Process child order for risk management.
+* (feature) MessageConverterHelper.CreateRegisterMessage. SecurityId as optional.
+* (bug) RiskRule. Title update fix.
+* (feature) Connector.NewTrade. Raise when all data initialized.
+* (feature) MarketEmulator. Cross trades. Failed -> Canceled.
+* (bug) RiskManager.Load fix.
+* (bug) InMemoryExchangeInfoProvider. Save data fixes.
+* (feature) Strategy. Save/load pnl and risk settings.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.
