@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Strategies
 				if (item.Security == null)
 					item.Security = _parent.Security;
 
-				item.OrderRegistering += _parent.OnOrderRegistering;
+				item.OrderRegistering += _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered += _parent.ProcessOrder;
 				//item.ReRegistering += _parent.ReRegisterSlippage;
 				item.OrderChanged += _parent.OnChildOrderChanged;
@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				//item.Parent = null;
 
-				item.OrderRegistering -= _parent.OnOrderRegistering;
+				item.OrderRegistering -= _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered -= _parent.ProcessOrder;
 				//item.ReRegistering -= _parent.ReRegisterSlippage;
 				item.OrderChanged -= _parent.OnChildOrderChanged;
@@ -1291,14 +1291,26 @@ namespace StockSharp.Algo.Strategies
 			});
 		}
 
+		private void ProcessRisk(Order order)
+		{
+			ProcessRisk(order.CreateRegisterMessage());
+		}
+
+		private void ProcessChildOrderRegistering(Order order)
+		{
+			OnOrderRegistering(order);
+
+			ProcessRisk(order);
+		}
+
 		private void AddOrder(Order order)
 		{
+			ProcessRisk(order);
+
 			_ordersInfo.Add(order, new OrderInfo { IsOwn = true });
 
 			if (order.State != OrderStates.Failed && order.State != OrderStates.Done)
 				ApplyMonitorRules(order);
-
-			ProcessRisk(order.CreateRegisterMessage(order.Security.ToSecurityId()));
 		}
 
 		private void ProcessRegisterOrderAction(Order oOrder, Order nOrder, Action<Order, Order> action)
@@ -2522,6 +2534,9 @@ namespace StockSharp.Algo.Strategies
 		{
 			foreach (var rule in RiskManager.ProcessRules(message))
 			{
+				this.AddWarningLog(LocalizedStrings.Str855Params,
+					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
+
 				switch (rule.Action)
 				{
 					case RiskActions.ClosePositions:

@@ -299,7 +299,7 @@ namespace StockSharp.Algo.Candles
 		private decimal? _relativeVolume;
 
 		/// <summary>
-		/// Relative colume.
+		/// Relative volume.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.RelativeVolumeKey)]

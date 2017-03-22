@@ -4450,6 +4450,7 @@ Xignite;Xignite;Xignite
 Sterling;Sterling;Sterling
 FinViz;FinViz;FinViz
 Synchronize;Synchronize;Синхронизировать
+RevisionTablesDesc;Tables that need to be monitored for revision changes;Таблицы, которые необходимо отслеживать на изменение
 OpenVolume;Volume at open;Объем на открытии
 CloseVolume;Volume at close;Объем на закрытии
 HighVolume;Volume at high;Объем на максимуме
@@ -5078,11 +5079,6 @@ DocStr632;Close time;Время окончания свечи
 DocStr633;High time;Время с максимальной ценой в свече
 DocStr634;Low time;Время с минимальной ценой в свече
 DocStr635;Total trades volume;Суммарный оборот по сделкам
-DocStr636;Volume at open;Объем открытия
-DocStr637;Volume at close;Объем закрытия
-DocStr638;Volume at high;Максимальный объем
-DocStr639;Total volume;Суммарный объем
-DocStr640;Relative colume;Относительный объем
 DocStr641;Candle's source;Источник, из которого была получена свеча
 DocStr642;Time-frame candle;Свеча, группируемая по тайм-фрейму
 DocStr643;Create a copy of {0};Создать копию {0}
@@ -10625,7 +10621,6 @@ DocStr6268;По-умолчанию путь равен локальной дир
 DocStr6269;Базовый адаптер сообщений для Plaza 2;Базовый адаптер сообщений для Plaza 2
 DocStr6270;Менеджер управления ревизиями потоков {0};Менеджер управления ревизиями потоков {0}
 DocStr6271;Сохранить ревизии в файл;Сохранить ревизии в файл
-DocStr6272;Таблицы, которые необходимо отслеживать на изменение ревизий;Таблицы, которые необходимо отслеживать на изменение ревизий
 DocStr6273;Интервал сохранения измененных ревизий. По-умолчанию равно 10 секундам;Интервал сохранения измененных ревизий. По-умолчанию равно 10 секундам
 DocStr6274;Если значение установлено в {0}, то таймер сохранения ревизий в файл выключен, и необходимо самостоятельно вызывать метод {1};Если значение установлено в {0}, то таймер сохранения ревизий в файл выключен, и необходимо самостоятельно вызывать метод {1}
 DocStr6275;Маркет-дата адаптер сообщений для Плаза;Маркет-дата адаптер сообщений для Плаза
@@ -13785,7 +13780,6 @@ DocStr9527;The data type;Тип данных
 DocStr9528;{0}, if data type is candle, otherwise, {1};{0}, если тип данных является свечой, иначе, {1}
 DocStr9529;Convert {0} message to {1} criteria;Преобразовать сообщение {0} в критерий поиска {1}
 DocStr9530;The published strategy identifier;Идентификатор опубликованной стратегии
-DocStr9531;Volume at low;Объем закрытия
 DocStr9532;Save data only for subscriptions;Сохранять данные только для подписок
 DocStr9533;Update filter with new subscription;Обновить фильтр новой подпиской
 DocStr9534;If subscription was just created, return {0}, otherwise {1};Если подписка была только что создана, вернуть {0}, иначе {1}

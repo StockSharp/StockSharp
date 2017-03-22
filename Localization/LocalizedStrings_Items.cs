@@ -44228,6 +44228,16 @@ namespace StockSharp.Localization
 		public static string PriceLevels => GetString(PriceLevelsKey);
 
 		/// <summary>
+		/// Tables that need to be monitored for revision changes
+		/// </summary>
+		public const string RevisionTablesDescKey = nameof(RevisionTablesDesc);
+
+		/// <summary>
+		/// Tables that need to be monitored for revision changes
+		/// </summary>
+		public static string RevisionTablesDesc => GetString(RevisionTablesDescKey);
+
+		/// <summary>
 		/// Used connection
 		/// </summary>
 		public const string UsedConnectionKey = nameof(UsedConnection);

@@ -6307,6 +6307,11 @@
             Таблицы, которые будут запущены при подключении.
             </summary>
     </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.RevisionTables">
+      <summary>
+            Таблицы, которые необходимо отслеживать на изменение ревизий.
+            </summary>
+    </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
       <summary>
             Создать построитель стакана.

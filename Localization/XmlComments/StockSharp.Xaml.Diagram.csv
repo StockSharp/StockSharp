@@ -674,6 +674,12 @@ M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute/summary;DocStr9316
+T:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement/summary;Str3137
+P:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.TypeId/summary;DocStr7902
+P:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.IconName/summary;DocStr9214
+M:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.#ctor/summary;DocStr1
+M:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.OnStart/summary;DocStr7892
+M:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement/summary;Str3156
 M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.TypeId/summary;DocStr7902

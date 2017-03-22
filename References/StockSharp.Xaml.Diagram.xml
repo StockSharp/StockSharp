@@ -2637,6 +2637,36 @@
             Attribute, applied to methods or parameters, to create input socket.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement">
+      <summary>
+            Position element (for security and money) for the specified portfolio.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement">
       <summary>
             Strategy trades element.
