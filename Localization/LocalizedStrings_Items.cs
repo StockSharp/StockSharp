@@ -44226,5 +44226,15 @@ namespace StockSharp.Localization
 		/// Price levels
 		/// </summary>
 		public static string PriceLevels => GetString(PriceLevelsKey);
+
+		/// <summary>
+		/// Used connection
+		/// </summary>
+		public const string UsedConnectionKey = nameof(UsedConnection);
+
+		/// <summary>
+		/// Used connection
+		/// </summary>
+		public static string UsedConnection => GetString(UsedConnectionKey);
 	}
 }
