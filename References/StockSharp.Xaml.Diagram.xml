@@ -117,19 +117,21 @@
             The method is called at deinitialization of the diagram element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnSocketConnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnSocketConnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean)">
       <summary>
             The method is called at subscription to the processing of diagram element output values.
             </summary>
       <param name="socket">The diagram element socket.</param>
       <param name="source">The source diagram element socket.</param>
+      <param name="isOutput">Is the output socket connected.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean)">
       <summary>
             The method is called at unsubscription from the processing of diagram element output values.
             </summary>
       <param name="socket">The diagram element socket.</param>
       <param name="source">The source diagram element socket.</param>
+      <param name="isOutput">Is the output socket connected.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStart">
       <summary>
@@ -759,19 +761,21 @@
       <param name="socket">Connection.</param>
       <returns>Sender elements.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketConnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketConnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean)">
       <summary>
             The method is called at subscription to the processing of diagram element output values.
             </summary>
       <param name="socket">The diagram element socket.</param>
       <param name="source">The source diagram element socket.</param>
+      <param name="isOutput">Is the output socket connected.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean)">
       <summary>
             The method is called at unsubscription from the processing of diagram element output values.
             </summary>
       <param name="socket">The diagram element socket.</param>
       <param name="source">The source diagram element socket.</param>
+      <param name="isOutput">Is the output socket connected.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseSocketChanged(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
@@ -2774,6 +2778,11 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStart">
       <summary>
             The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
