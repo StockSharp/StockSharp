@@ -24,18 +24,23 @@ namespace StockSharp.Algo.Risk
 
 	using MoreLinq;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// The risks control manager.
 	/// </summary>
-	public class RiskManager : IRiskManager
+	public class RiskManager : BaseLogReceiver, IRiskManager
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RiskManager"/>.
 		/// </summary>
 		public RiskManager()
 		{
+			_rules.Added += r => r.Parent = this;
+			_rules.Removed += r => r.Parent = null;
+			_rules.Inserted += (i, r) => r.Parent = this;
+			_rules.Clearing += () => _rules.Cache.ForEach(r => r.Parent = null);
 		}
 
 		private readonly CachedSynchronizedSet<IRiskRule> _rules = new CachedSynchronizedSet<IRiskRule>();
@@ -73,19 +78,23 @@ namespace StockSharp.Algo.Risk
 		/// Load settings.
 		/// </summary>
 		/// <param name="storage">Storage.</param>
-		public void Load(SettingsStorage storage)
+		public override void Load(SettingsStorage storage)
 		{
 			Rules.Clear();
 			Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<IRiskRule>()));
+
+			base.Load(storage);
 		}
 
 		/// <summary>
 		/// Save settings.
 		/// </summary>
 		/// <param name="storage">Storage.</param>
-		public void Save(SettingsStorage storage)
+		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
+
+			base.Save(storage);
 		}
 
 		RiskActions IRiskRule.Action

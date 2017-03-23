@@ -257,6 +257,8 @@ namespace StockSharp.Algo.Strategies
 			InitMaxOrdersKeepTime();
 
 			_strategyStat.Add(this);
+
+			_riskManager = new RiskManager { Parent = this };
 		}
 
 		private readonly StrategyParam<Guid> _id;
@@ -608,7 +610,7 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		private IRiskManager _riskManager = new RiskManager();
+		private IRiskManager _riskManager;
 
 		/// <summary>
 		/// The risks control manager.

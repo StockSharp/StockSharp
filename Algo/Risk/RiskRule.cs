@@ -20,17 +20,17 @@ namespace StockSharp.Algo.Risk
 	using System.ComponentModel;
 
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 	using Ecng.Collections;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Base risk-rule.
 	/// </summary>
-	public abstract class RiskRule : NotifiableObject, IRiskRule
+	public abstract class RiskRule : BaseLogReceiver, IRiskRule, INotifyPropertyChanged
 	{
 		/// <summary>
 		/// Initialize <see cref="RiskRule"/>.
@@ -81,18 +81,35 @@ namespace StockSharp.Algo.Risk
 		/// Load settings.
 		/// </summary>
 		/// <param name="storage">Storage.</param>
-		public virtual void Load(SettingsStorage storage)
+		public override void Load(SettingsStorage storage)
 		{
 			Action = storage.GetValue<RiskActions>(nameof(Action));
+
+			base.Load(storage);
 		}
 
 		/// <summary>
 		/// Save settings.
 		/// </summary>
 		/// <param name="storage">Storage.</param>
-		public virtual void Save(SettingsStorage storage)
+		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Action), Action.To<string>());
+
+			base.Save(storage);
+		}
+
+		private PropertyChangedEventHandler _propertyChanged;
+
+		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+		{
+			add { _propertyChanged += value; }
+			remove { _propertyChanged -= value; }
+		}
+
+		private void NotifyChanged(string propertyName)
+		{
+			_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 
@@ -257,6 +274,9 @@ namespace StockSharp.Algo.Risk
 			get { return _time; }
 			set
 			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value));
+				
 				_time = value;
 				Title = value.To<string>();
 			}
@@ -593,6 +613,9 @@ namespace StockSharp.Algo.Risk
 			get { return _volume; }
 			set
 			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_volume = value;
 				Title = value.To<string>();
 			}
@@ -675,6 +698,9 @@ namespace StockSharp.Algo.Risk
 			get { return _count; }
 			set
 			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_count = value;
 				UpdateTitle();
 			}
@@ -694,6 +720,9 @@ namespace StockSharp.Algo.Risk
 			get { return _interval; }
 			set
 			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_interval = value;
 				UpdateTitle();
 			}
@@ -723,29 +752,45 @@ namespace StockSharp.Algo.Risk
 				case MessageTypes.OrderReplace:
 				case MessageTypes.OrderPairReplace:
 				{
-					if (_endTime == null)
+					var time = message.LocalTime;
+
+					if (time.IsDefault())
 					{
-						_endTime = message.LocalTime + Interval;
-						_current = 1;
+						this.AddWarningLog("Time is null. Msg={0}", message);
 						return false;
 					}
 
-					if (message.LocalTime < _endTime)
+					if (_endTime == null)
+					{
+						_endTime = time + Interval;
+						_current = 1;
+
+						this.AddDebugLog("EndTime={0}", _endTime);
+						return false;
+					}
+
+					if (time < _endTime)
 					{
 						_current++;
 
+						this.AddDebugLog("Count={0} Msg={1}", _current, message);
+
 						if (_current >= Count)
 						{
-							_endTime = message.LocalTime + Interval;
-							_current = 0;
+							this.AddInfoLog("Count={0} EndTime={1}", _current, _endTime);
+
+							_endTime = null;
 							return true;
 						}
-
-						return false;
 					}
+					else
+					{
+						_endTime = time + Interval;
+						_current = 1;
 
-					_endTime = message.LocalTime + Interval;
-					_current = 0;
+						this.AddDebugLog("EndTime={0}", _endTime);
+					}
+					
 					return false;
 				}
 			}
@@ -864,6 +909,9 @@ namespace StockSharp.Algo.Risk
 			get { return _volume; }
 			set
 			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_volume = value;
 				Title = value.To<string>();
 			}
@@ -938,6 +986,9 @@ namespace StockSharp.Algo.Risk
 			get { return _count; }
 			set
 			{
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_count = value;
 				UpdateTitle();
 			}
@@ -956,6 +1007,9 @@ namespace StockSharp.Algo.Risk
 			get { return _interval; }
 			set
 			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_interval = value;
 				UpdateTitle();
 			}
@@ -987,29 +1041,45 @@ namespace StockSharp.Algo.Risk
 			if (!execMsg.HasTradeInfo())
 				return false;
 
-			if (_endTime == null)
+			var time = message.LocalTime;
+
+			if (time.IsDefault())
 			{
-				_endTime = message.LocalTime + Interval;
-				_current = 1;
+				this.AddWarningLog("Time is null. Msg={0}", message);
 				return false;
 			}
 
-			if (message.LocalTime < _endTime)
+			if (_endTime == null)
+			{
+				_endTime = time + Interval;
+				_current = 1;
+
+				this.AddDebugLog("EndTime={0}", _endTime);
+				return false;
+			}
+
+			if (time < _endTime)
 			{
 				_current++;
 
+				this.AddDebugLog("Count={0} Msg={1}", _current, message);
+
 				if (_current >= Count)
 				{
-					_endTime = message.LocalTime + Interval;
-					_current = 0;
+					this.AddInfoLog("Count={0} EndTime={1}", _current, _endTime);
+
+					_endTime = null;
 					return true;
 				}
-
-				return false;
 			}
+			else
+			{
+				_endTime = time + Interval;
+				_current = 1;
 
-			_endTime = message.LocalTime + Interval;
-			_current = 0;
+				this.AddDebugLog("EndTime={0}", _endTime);
+			}
+			
 			return false;
 		}
 
