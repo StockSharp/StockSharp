@@ -436,6 +436,13 @@
       <param name="securityIds">IDs securities.</param>
       <returns>Securities.</returns>
     </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.UploadSecurities(System.Guid,System.Tuple{StockSharp.BusinessEntities.Security,System.String,System.String}[])">
+      <summary>
+            Upload securities.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="securities">Securities.</param>
+    </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
             To get all the dates for which market data are recorded.
@@ -602,21 +609,21 @@
             The external market data storage access to which is organized through the WCF network connection (for more details see <see cref="N:System.ServiceModel" />).
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.ISecurityProvider)">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage)">
       <summary>
             Initialize <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />.
             </summary>
       <param name="storageRegistry">Market-data storage.</param>
-      <param name="securityProvider">The provider of information about instruments.</param>
+      <param name="securityStorage">Securities meta info storage.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.StorageRegistry">
       <summary>
             Market-data storage.
             </summary>
     </member>
-    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.SecurityProvider">
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.SecurityStorage">
       <summary>
-            The provider of information about instruments.
+            Securities meta info storage.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.Authorization">
@@ -704,6 +711,12 @@
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.UploadSecurities(StockSharp.BusinessEntities.Security[])">
+      <summary>
+            Upload securities.
+            </summary>
+      <param name="securities">Securities.</param>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)">
       <summary>

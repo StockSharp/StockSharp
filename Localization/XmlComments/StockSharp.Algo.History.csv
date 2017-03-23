@@ -184,6 +184,9 @@ M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])/param/sessionId;DocStr138
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])/param/securityIds;DocStr142
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])/returns;Securities
+M:StockSharp.Algo.History.Hydra.IRemoteStorage.UploadSecurities(System.Guid,System.Tuple{StockSharp.BusinessEntities.Security,System.String,System.String}[])/summary;DocStr9589
+M:StockSharp.Algo.History.Hydra.IRemoteStorage.UploadSecurities(System.Guid,System.Tuple{StockSharp.BusinessEntities.Security,System.String,System.String}[])/param/sessionId;DocStr138
+M:StockSharp.Algo.History.Hydra.IRemoteStorage.UploadSecurities(System.Guid,System.Tuple{StockSharp.BusinessEntities.Security,System.String,System.String}[])/param/securities;Securities
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr143
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)/param/sessionId;DocStr138
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)/param/securityId;SecurityId
@@ -262,11 +265,11 @@ F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Save/summary;DocStr164
 F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Load/summary;DocStr165
 F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Delete/summary;XamlStr781
 T:StockSharp.Algo.History.Hydra.RemoteStorage/summary;DocStr166
-M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.ISecurityProvider)/summary;DocStr93
-M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.ISecurityProvider)/param/storageRegistry;DocStr168
-M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.ISecurityProvider)/param/securityProvider;DocStr972
+M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage)/summary;DocStr93
+M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage)/param/storageRegistry;DocStr168
+M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage)/param/securityStorage;DocStr110
 P:StockSharp.Algo.History.Hydra.RemoteStorage.StorageRegistry/summary;DocStr168
-P:StockSharp.Algo.History.Hydra.RemoteStorage.SecurityProvider/summary;DocStr972
+P:StockSharp.Algo.History.Hydra.RemoteStorage.SecurityStorage/summary;DocStr110
 P:StockSharp.Algo.History.Hydra.RemoteStorage.Authorization/summary;DocStr173
 F:StockSharp.Algo.History.Hydra.RemoteStorage.DefaultMaxSecurityCount/summary;DocStr167
 P:StockSharp.Algo.History.Hydra.RemoteStorage.MaxSecurityCount/summary;DocStr174
@@ -293,6 +296,8 @@ M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Stor
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/criteria;DocStr111
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/newSecurity;DocStr112
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/isCancelled;DocStr113
+M:StockSharp.Algo.History.Hydra.RemoteStorageClient.UploadSecurities(StockSharp.BusinessEntities.Security[])/summary;DocStr9589
+M:StockSharp.Algo.History.Hydra.RemoteStorageClient.UploadSecurities(StockSharp.BusinessEntities.Security[])/param/securities;Securities
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr179
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/securityId;SecurityId
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)/param/dataType;DocStr774
