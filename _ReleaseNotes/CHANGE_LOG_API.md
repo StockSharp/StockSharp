@@ -18,6 +18,7 @@ StockSharp API Change log
 * (feature) IRemoteStorage. UploadSecurities, BasketSecurity instances support.
 * (feature) BasketSecurity. From/To serialized string.
 * (feature) Risk rule. Logging support.
+* (feature) Market rule WhenChanged for Portfolio.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.

@@ -538,6 +538,23 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To create a rule for the event of change portfolio .
+		/// </summary>
+		/// <param name="portfolio">The portfolio to be traced for the event of change.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Portfolio, Portfolio> WhenChanged(this Portfolio portfolio, IConnector connector)
+		{
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return new PortfolioRule(portfolio, connector, pf => true)
+			{
+				Name = "Pf {0} change".Put(portfolio)
+			};
+		}
+
+		/// <summary>
 		/// To create a rule for the event of money decrease in portfolio below the specific level.
 		/// </summary>
 		/// <param name="portfolio">The portfolio to be traced for the event of money decrease below the specific level.</param>
