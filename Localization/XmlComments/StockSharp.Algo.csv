@@ -8,6 +8,10 @@ M:StockSharp.Algo.AssociatedSecurityAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.BasketSecurity/summary;DocStr2619
 M:StockSharp.Algo.BasketSecurity.#ctor/summary;DocStr93
 P:StockSharp.Algo.BasketSecurity.InnerSecurityIds/summary;DocStr936
+M:StockSharp.Algo.BasketSecurity.ToSerializedString/summary;DocStr9585
+M:StockSharp.Algo.BasketSecurity.ToSerializedString/returns;DocStr9586
+M:StockSharp.Algo.BasketSecurity.FromSerializedString(System.String)/summary;DocStr9587
+M:StockSharp.Algo.BasketSecurity.FromSerializedString(System.String)/param/text;DocStr9588
 T:StockSharp.Algo.CollectionSecurityProvider/summary;DocStr2253
 M:StockSharp.Algo.CollectionSecurityProvider.#ctor/summary;DocStr1
 M:StockSharp.Algo.CollectionSecurityProvider.#ctor(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/summary;DocStr1
@@ -4086,6 +4090,10 @@ P:StockSharp.Algo.ContinuousSecurity.InnerSecurityIds/summary;DocStr936
 M:StockSharp.Algo.ContinuousSecurity.GetSecurity(System.DateTimeOffset)/summary;DocStr930
 M:StockSharp.Algo.ContinuousSecurity.GetSecurity(System.DateTimeOffset)/param/marketTime;DocStr931
 M:StockSharp.Algo.ContinuousSecurity.GetSecurity(System.DateTimeOffset)/returns;DocStr932
+M:StockSharp.Algo.ContinuousSecurity.ToSerializedString/summary;DocStr9585
+M:StockSharp.Algo.ContinuousSecurity.ToSerializedString/returns;DocStr9586
+M:StockSharp.Algo.ContinuousSecurity.FromSerializedString(System.String)/summary;DocStr9587
+M:StockSharp.Algo.ContinuousSecurity.FromSerializedString(System.String)/param/text;DocStr9588
 T:StockSharp.Algo.Derivatives.BasketBlackScholes/summary;DocStr951
 T:StockSharp.Algo.Derivatives.BasketBlackScholes.InnerModel/summary;DocStr993
 M:StockSharp.Algo.Derivatives.BasketBlackScholes.InnerModel.#ctor(StockSharp.Algo.Derivatives.BlackScholes,StockSharp.Algo.Positions.IPositionManager)/summary;DocStr1
@@ -4166,6 +4174,10 @@ M:StockSharp.Algo.Derivatives.OffsetBasketStrike.#ctor(StockSharp.BusinessEntiti
 M:StockSharp.Algo.Derivatives.OffsetBasketStrike.FilterStrikes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/summary;DocStr999
 M:StockSharp.Algo.Derivatives.OffsetBasketStrike.FilterStrikes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/allStrikes;DocStr1000
 M:StockSharp.Algo.Derivatives.OffsetBasketStrike.FilterStrikes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/returns;DocStr1001
+M:StockSharp.Algo.Derivatives.OffsetBasketStrike.ToSerializedString/summary;DocStr9585
+M:StockSharp.Algo.Derivatives.OffsetBasketStrike.ToSerializedString/returns;DocStr9586
+M:StockSharp.Algo.Derivatives.OffsetBasketStrike.FromSerializedString(System.String)/summary;DocStr9587
+M:StockSharp.Algo.Derivatives.OffsetBasketStrike.FromSerializedString(System.String)/param/text;DocStr9588
 T:StockSharp.Algo.Derivatives.VolatilityBasketStrike/summary;DocStr1004
 M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,Ecng.ComponentModel.Range{System.Decimal})/summary;DocStr1
 M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,Ecng.ComponentModel.Range{System.Decimal})/param/underlyingAsset;UnderlyingAsset
@@ -4175,6 +4187,10 @@ M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.#ctor(StockSharp.BusinessEn
 M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.FilterStrikes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/summary;DocStr999
 M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.FilterStrikes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/allStrikes;DocStr1000
 M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.FilterStrikes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/returns;DocStr1001
+M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.ToSerializedString/summary;DocStr9585
+M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.ToSerializedString/returns;DocStr9586
+M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.FromSerializedString(System.String)/summary;DocStr9587
+M:StockSharp.Algo.Derivatives.VolatilityBasketStrike.FromSerializedString(System.String)/param/text;DocStr9588
 T:StockSharp.Algo.Derivatives.Black/summary;DocStr1005
 M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/summary;DocStr1
 M:StockSharp.Algo.Derivatives.Black.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider)/param/option;OptionsContract
@@ -4665,6 +4681,10 @@ M:StockSharp.Algo.WeightedIndexSecurity.OnCalculate(System.Decimal[])/param/valu
 M:StockSharp.Algo.WeightedIndexSecurity.OnCalculate(System.Decimal[])/returns;DocStr1115
 M:StockSharp.Algo.WeightedIndexSecurity.Clone/summary;DocStr643
 M:StockSharp.Algo.WeightedIndexSecurity.Clone/returns;DocStr1116
+M:StockSharp.Algo.WeightedIndexSecurity.FromSerializedString(System.String)/summary;DocStr9587
+M:StockSharp.Algo.WeightedIndexSecurity.FromSerializedString(System.String)/param/text;DocStr9588
+M:StockSharp.Algo.WeightedIndexSecurity.ToSerializedString/summary;DocStr9585
+M:StockSharp.Algo.WeightedIndexSecurity.ToSerializedString/returns;DocStr9586
 M:StockSharp.Algo.WeightedIndexSecurity.ToString/summary;DocStr49
 M:StockSharp.Algo.WeightedIndexSecurity.ToString/returns;DocStr50
 T:StockSharp.Algo.OrderLogCancelReasons/summary;DocStr1436

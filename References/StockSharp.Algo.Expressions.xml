@@ -113,6 +113,18 @@
             </summary>
             <returns>A string that represents the current object.</returns>
         </member>
+        <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToSerializedString">
+            <summary>
+            Save security state to string.
+            </summary>
+            <returns>String.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.FromSerializedString(System.String)">
+            <summary>
+            Load security state from <paramref name="text"/>.
+            </summary>
+            <param name="text">Value, received from <see cref="M:StockSharp.Algo.BasketSecurity.ToSerializedString"/>.</param>
+        </member>
         <member name="T:StockSharp.Algo.Expressions.Xaml.IndexEditor">
             <summary>
             The graphic control for editing <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity"/>.

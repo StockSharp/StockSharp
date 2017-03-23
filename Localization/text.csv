@@ -1983,15 +1983,15 @@ Str2081Params;Session does not have the rights for {0} for {1} {2} ({3}) {4}.;С
 Str2082Params;Type of data {0} is not supported.;Тип данных {0} не поддерживается.
 Str2083;HydraServer is not available.;HydraServer недоступен.
 Str2084Params;Session {0}. Created for user {1}.;Сессия {0}. Создание для юзера {1}.
-Str2085Params;Sessions {0}. End.;Сессии {0}. Окончание.
-Str2086Params;Sessions {0}. Securities search.;Сессии {0}. Поиск инструментов.
-Str2087Params;Sessions {0}. Filtered securities search.;Сессии {0}. Поиск инструментов по фильтру.
-Str2088Params;Sessions {0}. Receiving securities.;Сессии {0}. Получение инструментов.
-Str2089Params;Sessions {0}. Receiving dates for {1} {2} {3}.;Сессии {0}. Получение дат для {1} {2} {3}.
-Str2090Params;Sessions {0}. Receiving data types for {1}.;Сессии {0}. Получение типов данных для {1}.
-Str2091Params;Sessions {0}. Saving for {1} {2} {3} for {4}.;Сессии {0}. Сохранение для {1} {2} {3} за {4}.
-Str2092Params;Sessions {0}. Deleting for {1} {2} {3} for {4}.;Сессии {0}. Удаление для {1} {2} {3} за {4}.
-Str2093Params;Sessions {0}. Loading stream or {1} {2} {3} for {4}.;Сессии {0}. Загрузка потока для {1} {2} {3} за {4}.
+Str2085Params;Session {0}. End.;Сессия {0}. Окончание.
+Str2086Params;Session {0}. Securities search.;Сессия {0}. Поиск инструментов.
+Str2087Params;Session {0}. Filtered securities search.;Сессия {0}. Поиск инструментов по фильтру.
+Str2088Params;Session {0}. Receiving securities.;Сессия {0}. Получение инструментов.
+Str2089Params;Session {0}. Receiving dates for {1} {2} {3}.;Сессия {0}. Получение дат для {1} {2} {3}.
+Str2090Params;Session {0}. Receiving data types for {1}.;Сессия {0}. Получение типов данных для {1}.
+Str2091Params;Session {0}. Saving for {1} {2} {3} for {4}.;Сессия {0}. Сохранение для {1} {2} {3} за {4}.
+Str2092Params;Session {0}. Deleting for {1} {2} {3} for {4}.;Сессия {0}. Удаление для {1} {2} {3} за {4}.
+Str2093Params;Session {0}. Loading stream or {1} {2} {3} for {4}.;Сессия {0}. Загрузка потока для {1} {2} {3} за {4}.
 Str2094Params;Wrong security code {0}.;Неправильный код инструмента {0}.
 Str2095;Wrong type of security. Must be either futures or options contract.;Неправильный тип инструмента. Должен быть или фьючерс или опцион.
 Str2096;Wrong type of security. Must be an index, stock, futures or options contract.;Неправильный тип инструмента. Должен быть индекс, акция, фьючерс или опцион.
@@ -4458,6 +4458,7 @@ LowVolume;Volume at low;Объем на минимуме
 RelativeVolume;Relative volume;Относительный объем
 PriceLevels;Price levels;Ценовые уровни
 UsedConnection;Used connection;Используемое подключение
+SessionUploadingSecurities;Sessions {0}. Uploading securities.;Сессия {0}. Загрузка инструментов.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13832,3 +13833,9 @@ DocStr9581;Request Soft Dollar Tier information message;Сообщение за�
 DocStr9582;Soft Dollar Tier message;Сообщение с Soft Dollar Tier
 DocStr9583;The search box for grid control column chooser;Поле поиска для выбора колонок у таблицы
 DocStr9584;The list of market rules added to the table;Список правил для добавления в таблицу
+DocStr9585;Save security state to string;Сохранить состояние инструмента в строку
+DocStr9586;String;Строка
+DocStr9587;Load security state from {0};Загрузить состояние инструмента из {0}
+DocStr9588;Value, received from {0};Значение, полученное из {0}
+DocStr9589;Upload securities;Загрузить инструменты
+DocStr9590;Is the output socket connected;Соединен ли исходящий сокет

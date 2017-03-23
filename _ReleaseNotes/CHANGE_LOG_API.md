@@ -15,6 +15,8 @@ StockSharp API Change log
 * (bug) RiskManager.Load fix.
 * (bug) InMemoryExchangeInfoProvider. Save data fixes.
 * (feature) Strategy. Save/load pnl and risk settings.
+* (feature) IRemoteStorage. UploadSecurities, BasketSecurity instances support.
+* (feature) BasketSecurity. From/To serialized string.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.

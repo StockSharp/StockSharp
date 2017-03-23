@@ -140,6 +140,32 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Load security state from <paramref name="text"/>.
+		/// </summary>
+		/// <param name="text">Value, received from <see cref="ToSerializedString"/>.</param>
+		public override void FromSerializedString(string text)
+		{
+			lock (_weights.SyncRoot)
+			{
+				_weights.Clear();
+				_weights.AddRange(text.Split(",").Select(p =>
+				{
+					var parts = p.Split("=");
+					return new KeyValuePair<SecurityId, decimal>(parts[0].ToSecurityId(), parts[1].To<decimal>());
+				}));
+			}
+		}
+
+		/// <summary>
+		/// Save security state to string.
+		/// </summary>
+		/// <returns>String.</returns>
+		public override string ToSerializedString()
+		{
+			return _weights.CachedPairs.Select(p => $"{p.Key.ToStringId()}={p.Value}").Join(",");
+		}
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>

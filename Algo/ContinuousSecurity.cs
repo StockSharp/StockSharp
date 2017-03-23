@@ -191,8 +191,7 @@ namespace StockSharp.Algo
 
 			private void DisposeEnumerator()
 			{
-				if (_enumerator != null)
-					_enumerator.Dispose();
+				_enumerator?.Dispose();
 			}
 
 			SecurityId IExpirationJumpList.FirstSecurity => GetSecurity(DateTimeOffset.MinValue);
@@ -260,31 +259,6 @@ namespace StockSharp.Algo
 		[Browsable(false)]
 		public override IEnumerable<SecurityId> InnerSecurityIds => _expirationJumps.InnerSecurities;
 
-		///// <summary>
-		///// Проверить, используется ли указанный инструмент в настоящее время.
-		///// </summary>
-		///// <param name="security">Инструмент, который необходимо проверить.</param>
-		///// <returns><see langword="true"/>, если указанный инструмент используется в настоящее время, иначе, <see langword="false"/>.</returns>
-		//public override bool Contains(Security security)
-		//{
-		//	var innerSecurity = GetSecurity();
-		//	var basket = innerSecurity as BasketSecurity;
-
-		//	if (basket == null)
-		//		return innerSecurity == security;
-
-		//	return basket.Contains(security);
-		//}
-
-		///// <summary>
-		///// Получить инструмент, который торгуется в текущий момент (текущее время вычисляется через метод <see cref="TraderHelper.GetMarketTime"/>).
-		///// </summary>
-		///// <returns>Инструмент. Если не существует инструмента для указанного времени, то будет возвращено <see langword="null"/>.</returns>
-		//public Security GetSecurity()
-		//{
-		//	return GetSecurity(this.GetMarketTime());
-		//}
-
 		/// <summary>
 		/// To get the instrument that trades for the specified exchange time.
 		/// </summary>
@@ -293,6 +267,35 @@ namespace StockSharp.Algo
 		public SecurityId GetSecurity(DateTimeOffset marketTime)
 		{
 			return _expirationJumps.GetSecurity(marketTime);
+		}
+
+		private const string _dateFormat = "yyyyMMddHHmmss";
+
+		/// <summary>
+		/// Save security state to string.
+		/// </summary>
+		/// <returns>String.</returns>
+		public override string ToSerializedString()
+		{
+			lock (_expirationJumps.SyncRoot)
+				return _expirationJumps.Select(j => $"{j.Key.ToStringId()}={j.Value.UtcDateTime.ToString(_dateFormat)}").Join(",");
+		}
+
+		/// <summary>
+		/// Load security state from <paramref name="text"/>.
+		/// </summary>
+		/// <param name="text">Value, received from <see cref="BasketSecurity.ToSerializedString"/>.</param>
+		public override void FromSerializedString(string text)
+		{
+			lock (_expirationJumps.SyncRoot)
+			{
+				_expirationJumps.Clear();
+				_expirationJumps.AddRange(text.Split(",").Select(p =>
+				{
+					var parts = p.Split("=");
+					return new KeyValuePair<SecurityId, DateTimeOffset>(parts[0].ToSecurityId(), parts[1].ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc));
+				}));
+			}
 		}
 
 		///// <summary>

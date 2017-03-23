@@ -41,5 +41,17 @@ namespace StockSharp.Algo
 		/// </summary>
 		[Browsable(false)]
 		public abstract IEnumerable<SecurityId> InnerSecurityIds { get; }
+
+		/// <summary>
+		/// Save security state to string.
+		/// </summary>
+		/// <returns>String.</returns>
+		public abstract string ToSerializedString();
+
+		/// <summary>
+		/// Load security state from <paramref name="text"/>.
+		/// </summary>
+		/// <param name="text">Value, received from <see cref="ToSerializedString"/>.</param>
+		public abstract void FromSerializedString(string text);
 	}
 }

@@ -19828,92 +19828,92 @@ namespace StockSharp.Localization
 		public static string Str2084Params => GetString(Str2084ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. End.
+		/// Session {0}. End.
 		/// </summary>
 		public const string Str2085ParamsKey = nameof(Str2085Params);
 
 		/// <summary>
-		/// Sessions {0}. End.
+		/// Session {0}. End.
 		/// </summary>
 		public static string Str2085Params => GetString(Str2085ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. Securities search.
+		/// Session {0}. Securities search.
 		/// </summary>
 		public const string Str2086ParamsKey = nameof(Str2086Params);
 
 		/// <summary>
-		/// Sessions {0}. Securities search.
+		/// Session {0}. Securities search.
 		/// </summary>
 		public static string Str2086Params => GetString(Str2086ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. Filtered securities search.
+		/// Session {0}. Filtered securities search.
 		/// </summary>
 		public const string Str2087ParamsKey = nameof(Str2087Params);
 
 		/// <summary>
-		/// Sessions {0}. Filtered securities search.
+		/// Session {0}. Filtered securities search.
 		/// </summary>
 		public static string Str2087Params => GetString(Str2087ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. Receiving securities.
+		/// Session {0}. Receiving securities.
 		/// </summary>
 		public const string Str2088ParamsKey = nameof(Str2088Params);
 
 		/// <summary>
-		/// Sessions {0}. Receiving securities.
+		/// Session {0}. Receiving securities.
 		/// </summary>
 		public static string Str2088Params => GetString(Str2088ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. Receiving dates for {1} {2} {3}.
+		/// Session {0}. Receiving dates for {1} {2} {3}.
 		/// </summary>
 		public const string Str2089ParamsKey = nameof(Str2089Params);
 
 		/// <summary>
-		/// Sessions {0}. Receiving dates for {1} {2} {3}.
+		/// Session {0}. Receiving dates for {1} {2} {3}.
 		/// </summary>
 		public static string Str2089Params => GetString(Str2089ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. Receiving data types for {1}.
+		/// Session {0}. Receiving data types for {1}.
 		/// </summary>
 		public const string Str2090ParamsKey = nameof(Str2090Params);
 
 		/// <summary>
-		/// Sessions {0}. Receiving data types for {1}.
+		/// Session {0}. Receiving data types for {1}.
 		/// </summary>
 		public static string Str2090Params => GetString(Str2090ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. Saving for {1} {2} {3} for {4}.
+		/// Session {0}. Saving for {1} {2} {3} for {4}.
 		/// </summary>
 		public const string Str2091ParamsKey = nameof(Str2091Params);
 
 		/// <summary>
-		/// Sessions {0}. Saving for {1} {2} {3} for {4}.
+		/// Session {0}. Saving for {1} {2} {3} for {4}.
 		/// </summary>
 		public static string Str2091Params => GetString(Str2091ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. Deleting for {1} {2} {3} for {4}.
+		/// Session {0}. Deleting for {1} {2} {3} for {4}.
 		/// </summary>
 		public const string Str2092ParamsKey = nameof(Str2092Params);
 
 		/// <summary>
-		/// Sessions {0}. Deleting for {1} {2} {3} for {4}.
+		/// Session {0}. Deleting for {1} {2} {3} for {4}.
 		/// </summary>
 		public static string Str2092Params => GetString(Str2092ParamsKey);
 
 		/// <summary>
-		/// Sessions {0}. Loading stream or {1} {2} {3} for {4}.
+		/// Session {0}. Loading stream or {1} {2} {3} for {4}.
 		/// </summary>
 		public const string Str2093ParamsKey = nameof(Str2093Params);
 
 		/// <summary>
-		/// Sessions {0}. Loading stream or {1} {2} {3} for {4}.
+		/// Session {0}. Loading stream or {1} {2} {3} for {4}.
 		/// </summary>
 		public static string Str2093Params => GetString(Str2093ParamsKey);
 
@@ -44246,5 +44246,15 @@ namespace StockSharp.Localization
 		/// Used connection
 		/// </summary>
 		public static string UsedConnection => GetString(UsedConnectionKey);
+
+		/// <summary>
+		/// Session {0}. Uploading securities.
+		/// </summary>
+		public const string SessionUploadingSecuritiesKey = nameof(SessionUploadingSecurities);
+
+		/// <summary>
+		/// Session {0}. Uploading securities.
+		/// </summary>
+		public static string SessionUploadingSecurities => GetString(SessionUploadingSecuritiesKey);
 	}
 }
