@@ -428,6 +428,22 @@
       <param name="criteria">The instrument which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available instruments.</param>
       <returns>Found IDs securities.</returns>
     </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.LookupExchanges(System.Guid,StockSharp.BusinessEntities.Exchange)">
+      <summary>
+            To find exchange codes that match the filter <paramref name="criteria" />.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="criteria">The exchange which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available exchanges.</param>
+      <returns>Found codes.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.LookupExchangeBoards(System.Guid,StockSharp.BusinessEntities.ExchangeBoard)">
+      <summary>
+            To find exchange board codes that match the filter <paramref name="criteria" />.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="criteria">The exchange board which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available exchange boards.</param>
+      <returns>Found codes.</returns>
+    </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])">
       <summary>
             Get securities.
@@ -436,12 +452,63 @@
       <param name="securityIds">IDs securities.</param>
       <returns>Securities.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.UploadSecurities(System.Guid,System.Tuple{StockSharp.BusinessEntities.Security,System.String,System.String}[])">
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetExchanges(System.Guid,System.String[])">
       <summary>
-            Upload securities.
+            Get exchanges.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="codes">Exchange codes.</param>
+      <returns>Exchanges.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetExchangeBoards(System.Guid,System.String[])">
+      <summary>
+            Get exchange boards.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="codes">Board codes.</param>
+      <returns>Exchange boards.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.SaveSecurities(System.Guid,System.Tuple{StockSharp.BusinessEntities.Security,System.String,System.String}[])">
+      <summary>
+            Save securities.
             </summary>
       <param name="sessionId">Session ID.</param>
       <param name="securities">Securities.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.SaveExchanges(System.Guid,StockSharp.BusinessEntities.Exchange[])">
+      <summary>
+            Save exchanges.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="exchanges">Exchanges.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.SaveExchangeBoards(System.Guid,StockSharp.BusinessEntities.ExchangeBoard[])">
+      <summary>
+            Save exchange boards.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="boards">Exchange boards.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteSecurities(System.Guid,System.String[])">
+      <summary>
+            Delete securities.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="securityIds">IDs securities.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteExchanges(System.Guid,System.String[])">
+      <summary>
+            Delete exchanges.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="codes">Exchange codes.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteExchangeBoards(System.Guid,System.String[])">
+      <summary>
+            Delete exchange boards.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="codes">Exchange board codes.</param>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
@@ -510,11 +577,12 @@
             The interface describing the connection to <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" /> access check module.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorageAuthorization.GetPermissions(System.Guid,System.String,System.String,System.Object,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorageAuthorization.HasPermissions(System.Guid,StockSharp.Algo.History.Hydra.RemoteStoragePermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})">
       <summary>
             Get permission for request.
             </summary>
       <param name="sessionId">Session ID.</param>
+      <param name="requiredPermissions">Required permissions.</param>
       <param name="securityId">Security ID.</param>
       <param name="dataType">Market data type.</param>
       <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="P:StockSharp.Messages.CandleMessage.Arg" />.</param>
@@ -531,53 +599,12 @@
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization.GetPermissions(System.Guid,System.String,System.String,System.Object,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization.HasPermissions(System.Guid,StockSharp.Algo.History.Hydra.RemoteStoragePermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})">
       <summary>
             Get permission for request.
             </summary>
       <param name="sessionId">Session ID.</param>
-      <param name="securityId">Security ID.</param>
-      <param name="dataType">Market data type.</param>
-      <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="P:StockSharp.Messages.CandleMessage.Arg" />.</param>
-      <param name="date">Date.</param>
-      <returns>Possible permissions.</returns>
-    </member>
-    <member name="T:StockSharp.Algo.History.Hydra.WindowsRemoteStorageAuthorization">
-      <summary>
-            The connection to <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" /> access check module based on Windows authentication.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Algo.History.Hydra.WindowsRemoteStorageAuthorization.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Hydra.WindowsRemoteStorageAuthorization" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Algo.History.Hydra.WindowsRemoteStorageAuthorization.GetPermissions(System.Guid,System.String,System.String,System.Object,System.DateTime)">
-      <summary>
-            Get permission for request.
-            </summary>
-      <param name="sessionId">Session ID.</param>
-      <param name="securityId">Security ID.</param>
-      <param name="dataType">Market data type.</param>
-      <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="P:StockSharp.Messages.CandleMessage.Arg" />.</param>
-      <param name="date">Date.</param>
-      <returns>Possible permissions.</returns>
-    </member>
-    <member name="T:StockSharp.Algo.History.Hydra.CommunityRemoteStorageAuthorization">
-      <summary>
-            The connection to <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" /> access check module based on the <see cref="T:StockSharp.Community.IAuthenticationService" /> authentication.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Algo.History.Hydra.CommunityRemoteStorageAuthorization.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Hydra.CommunityRemoteStorageAuthorization" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Algo.History.Hydra.CommunityRemoteStorageAuthorization.GetPermissions(System.Guid,System.String,System.String,System.Object,System.DateTime)">
-      <summary>
-            Get permission for request.
-            </summary>
-      <param name="sessionId">Session ID.</param>
+      <param name="requiredPermissions">Required permissions.</param>
       <param name="securityId">Security ID.</param>
       <param name="dataType">Market data type.</param>
       <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="P:StockSharp.Messages.CandleMessage.Arg" />.</param>
@@ -604,17 +631,63 @@
             Data deletion.
             </summary>
     </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.SecurityLookup">
+      <summary>
+            Security lookup.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.ExchangeLookup">
+      <summary>
+            Exchange lookup.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.ExchangeBoardLookup">
+      <summary>
+            Exchange board lookup.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.EditSecurities">
+      <summary>
+            Edit securities.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.EditExchanges">
+      <summary>
+            Edit exchanges.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.EditBoards">
+      <summary>
+            Edit boards.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.DeleteSecurities">
+      <summary>
+            Delete securities.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.DeleteExchanges">
+      <summary>
+            Delete exchanges.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.DeleteBoards">
+      <summary>
+            Delete boards.
+            </summary>
+    </member>
     <member name="T:StockSharp.Algo.History.Hydra.RemoteStorage">
       <summary>
             The external market data storage access to which is organized through the WCF network connection (for more details see <see cref="N:System.ServiceModel" />).
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage)">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initialize <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />.
             </summary>
       <param name="storageRegistry">Market-data storage.</param>
       <param name="securityStorage">Securities meta info storage.</param>
+      <param name="exchangeInfoProvider">The exchange boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.StorageRegistry">
       <summary>
@@ -624,6 +697,11 @@
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.SecurityStorage">
       <summary>
             Securities meta info storage.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.ExchangeInfoProvider">
+      <summary>
+            The exchange boards provider.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.Authorization">
@@ -712,11 +790,55 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.UploadSecurities(StockSharp.BusinessEntities.Security[])">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.LoadExchanges(StockSharp.BusinessEntities.Exchange)">
       <summary>
-            Upload securities.
+            To find exchanges that match the filter <paramref name="criteria" />.
+            </summary>
+      <param name="criteria">The exchange which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available exchanges.</param>
+      <returns>Exchanges.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.LoadExchangeBoards(StockSharp.BusinessEntities.ExchangeBoard)">
+      <summary>
+            To find exchange boards that match the filter <paramref name="criteria" />.
+            </summary>
+      <param name="criteria">The exchange board which fields will be used as a filter. If the value is <see langword="null" /> then there is a search of all available exchange boards.</param>
+      <returns>Exchange boards.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.SaveSecurities(StockSharp.BusinessEntities.Security[])">
+      <summary>
+            Save securities.
             </summary>
       <param name="securities">Securities.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.DeleteSecurities(StockSharp.BusinessEntities.Security[])">
+      <summary>
+            Delete securities.
+            </summary>
+      <param name="securities">Securities.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.SaveExchanges(StockSharp.BusinessEntities.Exchange[])">
+      <summary>
+            Save exchanges.
+            </summary>
+      <param name="exchanges">Exchanges.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.DeleteExchanges(StockSharp.BusinessEntities.Exchange[])">
+      <summary>
+            Delete exchanges.
+            </summary>
+      <param name="exchanges">Exchanges.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.SaveExchangeBoards(StockSharp.BusinessEntities.ExchangeBoard[])">
+      <summary>
+            Save exchange boards.
+            </summary>
+      <param name="boards">Boards.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.DeleteExchangeBoards(StockSharp.BusinessEntities.ExchangeBoard[])">
+      <summary>
+            Delete exchange boards.
+            </summary>
+      <param name="boards">Boards.</param>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)">
       <summary>

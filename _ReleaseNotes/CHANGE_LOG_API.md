@@ -21,6 +21,7 @@ StockSharp API Change log
 * (feature) Market rule WhenChanged for Portfolio.
 * (feature) IExchangeInfoProvider. Delete board and exchanges.
 * (feature) ISecurityStorage. DeleteById extension method.
+* (feature) IRemoteStorage. Exchanges and boards support. Delete securities, exchanges and boards support.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.
