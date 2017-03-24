@@ -26,15 +26,6 @@
 		/// </summary>
 		public INativeIdStorage Storage { get; }
 
-		///// <summary>
-		///// Initializes a new instance of the <see cref="SecurityNativeIdMessageAdapter"/>.
-		///// </summary>
-		///// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		//public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter)
-		//	: this(innerAdapter, new InMemoryNativeIdStorage())
-		//{
-		//}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityNativeIdMessageAdapter"/>.
 		/// </summary>
