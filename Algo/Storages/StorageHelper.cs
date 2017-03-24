@@ -636,7 +636,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Delete instruments by identifier.
+		/// Delete instrument by identifier.
 		/// </summary>
 		/// <param name="securityStorage">Securities meta info storage.</param>
 		/// <param name="securityId">Identifier.</param>

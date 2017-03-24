@@ -44256,5 +44256,135 @@ namespace StockSharp.Localization
 		/// Session {0}. Uploading securities.
 		/// </summary>
 		public static string SessionUploadingSecurities => GetString(SessionUploadingSecuritiesKey);
+
+		/// <summary>
+		/// User {0} not found or password is incorrect.
+		/// </summary>
+		public const string UserNotFoundKey = nameof(UserNotFound);
+
+		/// <summary>
+		/// User {0} not found or password is incorrect.
+		/// </summary>
+		public static string UserNotFound => GetString(UserNotFoundKey);
+
+		/// <summary>
+		/// Load securities
+		/// </summary>
+		public const string LoadSecuritiesKey = nameof(LoadSecurities);
+
+		/// <summary>
+		/// Load securities
+		/// </summary>
+		public static string LoadSecurities => GetString(LoadSecuritiesKey);
+
+		/// <summary>
+		/// Edit securities
+		/// </summary>
+		public const string EditSecuritiesKey = nameof(EditSecurities);
+
+		/// <summary>
+		/// Edit securities
+		/// </summary>
+		public static string EditSecurities => GetString(EditSecuritiesKey);
+
+		/// <summary>
+		/// Delete securities
+		/// </summary>
+		public const string DeleteSecuritiesKey = nameof(DeleteSecurities);
+
+		/// <summary>
+		/// Delete securities
+		/// </summary>
+		public static string DeleteSecurities => GetString(DeleteSecuritiesKey);
+
+		/// <summary>
+		/// Load exchanges
+		/// </summary>
+		public const string LoadExchangesKey = nameof(LoadExchanges);
+
+		/// <summary>
+		/// Load exchanges
+		/// </summary>
+		public static string LoadExchanges => GetString(LoadExchangesKey);
+
+		/// <summary>
+		/// Edit exchanges
+		/// </summary>
+		public const string EditExchangesKey = nameof(EditExchanges);
+
+		/// <summary>
+		/// Edit exchanges
+		/// </summary>
+		public static string EditExchanges => GetString(EditExchangesKey);
+
+		/// <summary>
+		/// Delete exchanges
+		/// </summary>
+		public const string DeleteExchangesKey = nameof(DeleteExchanges);
+
+		/// <summary>
+		/// Delete exchanges
+		/// </summary>
+		public static string DeleteExchanges => GetString(DeleteExchangesKey);
+
+		/// <summary>
+		/// Load boards
+		/// </summary>
+		public const string LoadBoardsKey = nameof(LoadBoards);
+
+		/// <summary>
+		/// Load boards
+		/// </summary>
+		public static string LoadBoards => GetString(LoadBoardsKey);
+
+		/// <summary>
+		/// Edit boards
+		/// </summary>
+		public const string EditBoardsKey = nameof(EditBoards);
+
+		/// <summary>
+		/// Edit boards
+		/// </summary>
+		public static string EditBoards => GetString(EditBoardsKey);
+
+		/// <summary>
+		/// Delete boards
+		/// </summary>
+		public const string DeleteBoardsKey = nameof(DeleteBoards);
+
+		/// <summary>
+		/// Delete boards
+		/// </summary>
+		public static string DeleteBoards => GetString(DeleteBoardsKey);
+
+		/// <summary>
+		/// Load data
+		/// </summary>
+		public const string LoadMarketDataKey = nameof(LoadMarketData);
+
+		/// <summary>
+		/// Load data
+		/// </summary>
+		public static string LoadMarketData => GetString(LoadMarketDataKey);
+
+		/// <summary>
+		/// Edit data
+		/// </summary>
+		public const string EditMarketDataKey = nameof(EditMarketData);
+
+		/// <summary>
+		/// Edit data
+		/// </summary>
+		public static string EditMarketData => GetString(EditMarketDataKey);
+
+		/// <summary>
+		/// Delete data
+		/// </summary>
+		public const string DeleteMarketDataKey = nameof(DeleteMarketData);
+
+		/// <summary>
+		/// Delete data
+		/// </summary>
+		public static string DeleteMarketData => GetString(DeleteMarketDataKey);
 	}
 }

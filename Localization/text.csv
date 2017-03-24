@@ -4459,6 +4459,19 @@ RelativeVolume;Relative volume;Относительный объем
 PriceLevels;Price levels;Ценовые уровни
 UsedConnection;Used connection;Используемое подключение
 SessionUploadingSecurities;Sessions {0}. Uploading securities.;Сессия {0}. Загрузка инструментов.
+UserNotFound;User {0} not found or password is incorrect.;Пользователь {0} не найден или был передан неправильный пароль.
+LoadMarketData;Load data;Загрузка данных
+EditMarketData;Edit data;Редактирование данных
+DeleteMarketData;Delete data;Удаление данных
+LoadSecurities;Load securities;Загрузка инструментов
+EditSecurities;Edit data;Редактирование инструментов
+DeleteSecurities;Delete data;Удаление инструментов
+LoadExchanges;Load exchanges;Загрузка бирж
+EditExchanges;Edit exchanges;Редактирование бирж
+DeleteExchanges;Delete exchanges;Удаление бирж
+LoadBoards;Load boards;Загрузка площадок
+EditBoards;Edit boards;Редактирование площадок
+DeleteBoards;Delete boards;Удаление площадок
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13839,3 +13852,31 @@ DocStr9587;Load security state from {0};Загрузить состояние и
 DocStr9588;Value, received from {0};Значение, полученное из {0}
 DocStr9589;Upload securities;Загрузить инструменты
 DocStr9590;Is the output socket connected;Соединен ли исходящий сокет
+DocStr9591;To find exchange codes that match the filter {0};Найти биржевые коды, совпадающие фильтру {0}
+DocStr9592;The exchange which fields will be used as a filter. If the value is {0} then there is a search of all available exchanges;Биржа, чьи поля будут использоваться как фильтр. Если значение равно {0}, тогда будет запрашиваться все биржи
+DocStr9593;Found codes;Найденные коды
+DocStr9594;To find exchange board codes that match the filter {0};Найти коды площадок, совпадающие фильтру {0}
+DocStr9595;The exchange board which fields will be used as a filter. If the value is {0} then there is a search of all available exchange boards;Биржевая площадка, чьи поля будут использоваться как фильтр. Если значение равно {0}, тогда будет запрашиваться все биржевые площадки
+DocStr9596;Get exchanges;Получить биржи
+DocStr9597;Exchange codes;Коды бирж
+DocStr9598;Get exchange boards;Получить биржевые площадки
+DocStr9599;Board codes;Коды площадок
+DocStr9600;Exchange boards;Биржевые площадки
+DocStr9601;Save securities;Сохранить инструменты
+DocStr9602;Save exchanges;Сохранить биржи
+DocStr9603;Save exchange boards;Сохранить биржевые площадки
+DocStr9604;Delete exchange boards;Удалить биржевые площадки
+DocStr9605;Exchange board codes;Коды биржевых площадок
+DocStr9606;Required permissions;Запрашиваемые разрешения
+DocStr9607;Security lookup;Поиск инструментов
+DocStr9608;Exchange lookup;Поиск бирж
+DocStr9609;Exchange board lookup;Поиск биржевых площадок
+DocStr9616;To find exchanges that match the filter {0};Найти биржи, совпадающие фильтру {0}
+DocStr9617;To find exchange boards that match the filter {0};Найти биржевые площадки, совпадающие фильтру {0}
+DocStr9618;Notification about removing the existing board;Уведомление об удаление существующей биржевой площадки
+DocStr9619;Notification about removing the existing exchange;Уведомление об удаление существующей биржи
+DocStr9620;Delete exchange;Удалить биржи
+DocStr9621;Delete exchange board;Удалить биржевые площадки
+DocStr9622;Delete instrument by identifier;Удалить инструмент по идентификатору
+DocStr9623;To create a rule for the event of change portfolio;Создать правило отслеживающе событие изменения портфеля
+DocStr9624;The portfolio to be traced for the event of change;Портфель, которые необходимо отслеживать на событие изменения
