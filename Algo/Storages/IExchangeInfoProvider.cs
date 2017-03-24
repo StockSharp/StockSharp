@@ -76,6 +76,28 @@ namespace StockSharp.Algo.Storages
 		/// Notification about adding a new exchange.
 		/// </summary>
 		event Action<Exchange> ExchangeAdded;
+
+		/// <summary>
+		/// Notification about removing the existing board.
+		/// </summary>
+		event Action<ExchangeBoard> BoardRemoved;
+
+		/// <summary>
+		/// Notification about removing the existing exchange.
+		/// </summary>
+		event Action<Exchange> ExchangeRemoved;
+
+		/// <summary>
+		/// Delete exchange.
+		/// </summary>
+		/// <param name="exchange">Exchange.</param>
+		void Delete(Exchange exchange);
+
+		/// <summary>
+		/// Delete exchange board.
+		/// </summary>
+		/// <param name="board">Exchange board.</param>
+		void Delete(ExchangeBoard board);
 	}
 
 	/// <summary>
@@ -187,6 +209,42 @@ namespace StockSharp.Algo.Storages
 		/// Notification about adding a new exchange.
 		/// </summary>
 		public event Action<Exchange> ExchangeAdded;
+
+		/// <summary>
+		/// Notification about removing the existing board.
+		/// </summary>
+		public event Action<ExchangeBoard> BoardRemoved;
+
+		/// <summary>
+		/// Notification about removing the existing exchange.
+		/// </summary>
+		public event Action<Exchange> ExchangeRemoved;
+
+		/// <summary>
+		/// Delete exchange.
+		/// </summary>
+		/// <param name="exchange">Exchange.</param>
+		public virtual void Delete(Exchange exchange)
+		{
+			if (exchange == null)
+				throw new ArgumentNullException(nameof(exchange));
+
+			_exchanges.Remove(exchange.Name);
+			ExchangeRemoved?.Invoke(exchange);
+		}
+
+		/// <summary>
+		/// Delete exchange board.
+		/// </summary>
+		/// <param name="board">Exchange board.</param>
+		public virtual void Delete(ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			_boards.Remove(board.Code);
+			BoardRemoved?.Invoke(board);
+		}
 	}
 
 	/// <summary>
