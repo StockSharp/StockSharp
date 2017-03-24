@@ -23,7 +23,7 @@ namespace StockSharp.Community
 	/// <summary>
 	/// The class that contains a login and password to access the services http://stocksharp.com .
 	/// </summary>
-	public sealed class ServerCredentials : NotifiableObject, IPersistable
+	public class ServerCredentials : NotifiableObject, IPersistable
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ServerCredentials"/>.
@@ -81,7 +81,7 @@ namespace StockSharp.Community
 		/// Load settings.
 		/// </summary>
 		/// <param name="storage">Settings storage.</param>
-		public void Load(SettingsStorage storage)
+		public virtual void Load(SettingsStorage storage)
 		{
 			Email = storage.GetValue<string>(nameof(Email));
 			Password = storage.GetValue<SecureString>(nameof(Password));
@@ -92,7 +92,7 @@ namespace StockSharp.Community
 		/// Save settings.
 		/// </summary>
 		/// <param name="storage">Settings storage.</param>
-		public void Save(SettingsStorage storage)
+		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Email), Email);
 			storage.SetValue(nameof(Password), Password);
