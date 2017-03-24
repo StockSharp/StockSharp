@@ -19,6 +19,8 @@ StockSharp API Change log
 * (feature) BasketSecurity. From/To serialized string.
 * (feature) Risk rule. Logging support.
 * (feature) Market rule WhenChanged for Portfolio.
+* (feature) IExchangeInfoProvider. Delete board and exchanges.
+* (feature) ISecurityStorage. DeleteById extension method.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.

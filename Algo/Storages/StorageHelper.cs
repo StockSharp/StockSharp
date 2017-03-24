@@ -634,5 +634,21 @@ namespace StockSharp.Algo.Storages
 					break;
 			}
 		}
+
+		/// <summary>
+		/// Delete instruments by identifier.
+		/// </summary>
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="securityId">Identifier.</param>
+		public static void DeleteById(this ISecurityStorage securityStorage, string securityId)
+		{
+			if (securityStorage == null)
+				throw new ArgumentNullException(nameof(securityStorage));
+
+			if (securityId.IsEmpty())
+				throw new ArgumentNullException(nameof(securityId));
+
+			securityStorage.DeleteBy(new Security { Id = securityId });
+		}
 	}
 }
