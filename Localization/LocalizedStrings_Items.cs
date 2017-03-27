@@ -41718,12 +41718,12 @@ namespace StockSharp.Localization
 		public static string BestPair => GetString(BestPairKey);
 
 		/// <summary>
-		/// Timeout (get)
+		/// Timeout (read)
 		/// </summary>
 		public const string ReadTimeOutKey = nameof(ReadTimeOut);
 
 		/// <summary>
-		/// Timeout (get)
+		/// Timeout (read)
 		/// </summary>
 		public static string ReadTimeOut => GetString(ReadTimeOutKey);
 
@@ -41738,22 +41738,22 @@ namespace StockSharp.Localization
 		public static string WriteTimeOut => GetString(WriteTimeOutKey);
 
 		/// <summary>
-		/// The timeout of getting data from the server.
+		/// The timeout of reading data.
 		/// </summary>
 		public const string ReadTimeOutDescKey = nameof(ReadTimeOutDesc);
 
 		/// <summary>
-		/// The timeout of getting data from the server.
+		/// The timeout of reading data.
 		/// </summary>
 		public static string ReadTimeOutDesc => GetString(ReadTimeOutDescKey);
 
 		/// <summary>
-		/// The timeout of sending data to the server.
+		/// The timeout of sending data.
 		/// </summary>
 		public const string WriteTimeOutDescKey = nameof(WriteTimeOutDesc);
 
 		/// <summary>
-		/// The timeout of sending data to the server.
+		/// The timeout of sending data.
 		/// </summary>
 		public static string WriteTimeOutDesc => GetString(WriteTimeOutDescKey);
 
@@ -43738,6 +43738,16 @@ namespace StockSharp.Localization
 		public static string FixServer => GetString(FixServerKey);
 
 		/// <summary>
+		/// WCF server
+		/// </summary>
+		public const string WcfServerKey = nameof(WcfServer);
+
+		/// <summary>
+		/// WCF server
+		/// </summary>
+		public static string WcfServer => GetString(WcfServerKey);
+
+		/// <summary>
 		/// FIX server, spread live and historical market data.
 		/// </summary>
 		public const string HydraFixServerKey = nameof(HydraFixServer);
@@ -43746,6 +43756,16 @@ namespace StockSharp.Localization
 		/// FIX server, spread live and historical market data.
 		/// </summary>
 		public static string HydraFixServer => GetString(HydraFixServerKey);
+
+		/// <summary>
+		/// WCF server, spread historical market data in S# format files.
+		/// </summary>
+		public const string HydraWcfServerKey = nameof(HydraWcfServer);
+
+		/// <summary>
+		/// WCF server, spread historical market data in S# format files.
+		/// </summary>
+		public static string HydraWcfServer => GetString(HydraWcfServerKey);
 
 		/// <summary>
 		/// Candle max days
@@ -44386,5 +44406,85 @@ namespace StockSharp.Localization
 		/// Delete data
 		/// </summary>
 		public static string DeleteMarketData => GetString(DeleteMarketDataKey);
+
+		/// <summary>
+		/// IP restrictions
+		/// </summary>
+		public const string IpRestrictionsKey = nameof(IpRestrictions);
+
+		/// <summary>
+		/// IP restrictions
+		/// </summary>
+		public static string IpRestrictions => GetString(IpRestrictionsKey);
+
+		/// <summary>
+		/// IP address '{0}' is not valid.
+		/// </summary>
+		public const string IpAddrNotValidKey = nameof(IpAddrNotValid);
+
+		/// <summary>
+		/// IP address '{0}' is not valid.
+		/// </summary>
+		public static string IpAddrNotValid => GetString(IpAddrNotValidKey);
+
+		/// <summary>
+		/// Max bytes (read)
+		/// </summary>
+		public const string MaxReadBytesKey = nameof(MaxReadBytes);
+
+		/// <summary>
+		/// Max bytes (read)
+		/// </summary>
+		public static string MaxReadBytes => GetString(MaxReadBytesKey);
+
+		/// <summary>
+		/// Max bytes (write)
+		/// </summary>
+		public const string MaxWriteBytesKey = nameof(MaxWriteBytes);
+
+		/// <summary>
+		/// Max bytes (write)
+		/// </summary>
+		public static string MaxWriteBytes => GetString(MaxWriteBytesKey);
+
+		/// <summary>
+		/// Gets and sets the maximum allowed bytes per read.
+		/// </summary>
+		public const string MaxReadBytesDescKey = nameof(MaxReadBytesDesc);
+
+		/// <summary>
+		/// Gets and sets the maximum allowed bytes per read.
+		/// </summary>
+		public static string MaxReadBytesDesc => GetString(MaxReadBytesDescKey);
+
+		/// <summary>
+		/// Gets and sets the maximum allowed bytes per write.
+		/// </summary>
+		public const string MaxWriteBytesDescKey = nameof(MaxWriteBytesDesc);
+
+		/// <summary>
+		/// Gets and sets the maximum allowed bytes per write.
+		/// </summary>
+		public static string MaxWriteBytesDesc => GetString(MaxWriteBytesDescKey);
+
+		/// <summary>
+		/// Current count of bytes '{0}' exceeded the allowed size '{1}'.
+		/// </summary>
+		public const string MaxBytesExceededKey = nameof(MaxBytesExceeded);
+
+		/// <summary>
+		/// Current count of bytes '{0}' exceeded the allowed size '{1}'.
+		/// </summary>
+		public static string MaxBytesExceeded => GetString(MaxBytesExceededKey);
+
+		/// <summary>
+		/// Session '{0}' not found.
+		/// </summary>
+		public const string SessionNotFoundKey = nameof(SessionNotFound);
+
+		/// <summary>
+		/// Session '{0}' not found.
+		/// </summary>
+		public static string SessionNotFound => GetString(SessionNotFoundKey);
 	}
 }

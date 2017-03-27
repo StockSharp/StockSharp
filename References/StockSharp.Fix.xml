@@ -484,7 +484,7 @@
       <param name="reader">Data reader.</param>
       <returns>Whether the data was successfully processed.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.Security.SecureString,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})">
+    <member name="M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.Security.SecureString,System.Net.IPAddress,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixServer" />.
             </summary>
@@ -681,12 +681,22 @@
     </member>
     <member name="P:StockSharp.Fix.FixSession.ReadTimeout">
       <summary>
-            The timeout of getting data from the server. The default value is <see cref="F:System.TimeSpan.Zero" />.
+            The timeout of reading data. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixSession.WriteTimeout">
       <summary>
-            The timeout of sending data to the server. The default value is <see cref="F:System.TimeSpan.Zero" />.
+            The timeout of sending data. The default value is <see cref="F:System.TimeSpan.Zero" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.MaxReadBytes">
+      <summary>
+            Gets and sets the maximum allowed bytes per read.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.MaxWriteBytes">
+      <summary>
+            Gets and sets the maximum allowed bytes per write.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixSession.Load(Ecng.Serialization.SettingsStorage)">
@@ -769,6 +779,11 @@
             </summary>
       <returns>Byte.</returns>
     </member>
+    <member name="M:StockSharp.Fix.Native.BaseFixReader.ClearState">
+      <summary>
+            Clear state.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.BaseFixWriter">
       <summary>
             The base class of the recorder.
@@ -800,6 +815,11 @@
       <param name="buffer">Bytes array.</param>
       <param name="offset">The zero-based byte offset in <paramref name="buffer" /> at which to begin copying bytes to the current stream.</param>
       <param name="count">The number of bytes to be written to the current stream.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BaseFixWriter.ClearState">
+      <summary>
+            Clear state.
+            </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.BinaryFixReader">
       <summary>
@@ -4909,11 +4929,21 @@
             Whether the tag value was read.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.FixBase.MaxBytes">
+      <summary>
+            Gets and sets the maximum allowed bytes per read/write operation.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Native.FixBase.Dump(System.Byte)">
       <summary>
             Add to the data log a new byte.
             </summary>
       <param name="value">New byte.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FixBase.ClearState">
+      <summary>
+            Clear state.
+            </summary>
     </member>
     <member name="M:StockSharp.Fix.Native.FixBase.FlushDump">
       <summary>
@@ -5028,6 +5058,11 @@
       <param name="buffer">Bytes array.</param>
       <param name="offset">The zero-based byte offset in <paramref name="buffer" /> at which to begin copying bytes to the current stream.</param>
       <param name="count">The number of bytes to be written to the current stream.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.ClearState">
+      <summary>
+            Clear state.
+            </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.MDEntry">
       <summary>
@@ -5401,6 +5436,11 @@
             Skip value.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ClearState">
+      <summary>
+            Clear state.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixFormats">
       <summary>
             FIX protocol formats.
@@ -5533,12 +5573,12 @@
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.ReadTimeout">
       <summary>
-            The timeout of getting data from the server. The default value is <see cref="F:System.TimeSpan.Zero" />.
+            The timeout of reading data. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.WriteTimeout">
       <summary>
-            The timeout of sending data to the server. The default value is <see cref="F:System.TimeSpan.Zero" />.
+            The timeout of sending data. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsValid">
