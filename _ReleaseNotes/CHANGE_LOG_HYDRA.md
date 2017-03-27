@@ -1,5 +1,15 @@
 StockSharp Data (Hydra) Change log
 ========================
+###current:
+* (bug) Fix http://stocksharp.ru/forum/8164/gidra-servernyi-rezhim-i-samplefix-nablyudeniya/
+* (bug) Fix http://stocksharp.ru/posts/m/39529/
+* (feature) Hydra. Server mode. IP address restrictions.
+* (feature) Hydra. Option desk in Market data ribbon section.
+* (feature) Hydra. Extended FIX server settings.
+* (feature) Hydra. Server mode credentials. Custom permissions.
+* (feature) Hydra. Server mode. Exchanges and boards support. Delete securities, exchanges and boards support.
+* (feature) Hydra. Server mode. UploadSecurities. BasketSecurity instances support.
+
 ###v4.3.22.1:
 * (bug) Remove security fix.
 * (bug) Fix http://stocksharp.ru/forum/8158/gidra-padaet-pri-nastroike-micex-teap-i-drugie-bagi/
