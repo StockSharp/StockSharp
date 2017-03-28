@@ -22,6 +22,7 @@ StockSharp API Change log
 * (feature) IExchangeInfoProvider. Delete board and exchanges.
 * (feature) ISecurityStorage. DeleteById extension method.
 * (feature) IRemoteStorage. Exchanges and boards support. Delete securities, exchanges and boards support.
+* (bug) FIX server. http://stocksharp.ru/posts/m/39529/ Fix ObjectDisposedException error handling.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.

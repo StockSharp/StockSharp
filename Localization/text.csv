@@ -4199,10 +4199,10 @@ RefreshScheme;Refresh scheme;Обновить схему
 LabelsFormatIntraday;Labels format (intraday);Формат надписей (внутри дня)
 LabelsFormatIntradayDesc;The format of X-axis labels within the day;Формат надписей для оси X внутри дня
 BestPair;Best pair quotes;Лучшая пара котировок
-ReadTimeOut;Timeout (get);Время ожидания (получение)
+ReadTimeOut;Timeout (read);Время ожидания (получение)
 WriteTimeOut;Timeout (send);Время ожидания (отправка)
-ReadTimeOutDesc;The timeout of getting data from the server.;Время ожидания получения данных от сервера.
-WriteTimeOutDesc;The timeout of sending data to the server.;Время ожидания отправки данных на сервер.
+ReadTimeOutDesc;The timeout of reading data.;Время ожидания получения данных.
+WriteTimeOutDesc;The timeout of sending data.;Время ожидания отправки данных.
 Themes;Themes;Темы
 Equal;Equal;Равно
 NotEqual;Not equal;Не равно
@@ -4406,8 +4406,10 @@ CanNotCreateLogsFile;Can not create logs file.;Неудалось создать
 CSV;CSV;CSV
 TrailingDelta;Trailing delta;Дельта скольжения
 TrailingReferencePrice;Trailing reference price;Цена активации скольжения
-FixServer;FIX server;Сервер, работающий через FIX протокол
+FixServer;FIX server;FIX сервер
+WcfServer;WCF server;WCF сервер
 HydraFixServer;FIX server, spread live and historical market data.;Сервер, распространяющий live и исторические данные через FIX протокол.
+HydraWcfServer;WCF server, spread historical market data in S# format files.;Сервер, распространяющий исторические данные в формате S# через WCF протокол.
 CandleMaxDays;Candle max days;Количество дней для свечей
 CandleMaxDaysDescription;The maximum number of days available to download historical candles.;Максимальное количество дней, доступных для загрузки истории свечей.
 TickMaxDays;Tick max days;Количество дней для тиков
@@ -4472,6 +4474,14 @@ DeleteExchanges;Delete exchanges;Удаление бирж
 LoadBoards;Load boards;Загрузка площадок
 EditBoards;Edit boards;Редактирование площадок
 DeleteBoards;Delete boards;Удаление площадок
+IpRestrictions;IP restrictions;IP ограничения
+IpAddrNotValid;IP address '{0}' is not valid.;IP адрес '{0}' недопустим.
+MaxReadBytes;Max bytes (read);Максимально байт (чтение)
+MaxWriteBytes;Max bytes (write);Максимально байт (запись)
+MaxReadBytesDesc;Gets and sets the maximum allowed bytes per read.;Получить и задать максимально допустимое число байтов для каждой операции чтения.
+MaxWriteBytesDesc;Gets and sets the maximum allowed bytes per write.;Получить и задать максимально допустимое число байтов для каждой операции записи.
+MaxBytesExceeded;Current count of bytes '{0}' exceeded the allowed size '{1}'.;Текущее количество байтов '{0}' превысило допустимый размер '{1}'.
+SessionNotFound;Session '{0}' not found.;Сессия '{0}' не найдена.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7615,8 +7625,8 @@ DocStr3179;The interval of the connection availability check. The default is 1 m
 DocStr3180;The encoding used for data transmission. The default value is {0};Кодировка, используемая при передаче данных. По-умолчанию значение равно {0}
 DocStr3181;To send changes by the order book. If disabled, the order book is sent entirely. The default is enabled;Отправлять изменения по стакану. Если выключено, отправляется стакан целиком. По умолчанию, включено
 DocStr3182;Date format;Формат даты
-DocStr3183;The timeout of getting data from the server. The default value is {0};Время ожидания получения данных от сервера. По-умолчанию равно {0}
-DocStr3184;The timeout of sending data to the server. The default value is {0};Время ожидания отправки данных на сервер. По-умолчанию равно {0}
+DocStr3183;The timeout of reading data. The default value is {0};Время ожидания получения данных. По-умолчанию равно {0}
+DocStr3184;The timeout of sending data. The default value is {0};Время ожидания отправки данных. По-умолчанию равно {0}
 DocStr3185;Data reader base class;Базовый класс читателя
 DocStr3186;Data reader/writer base class;Базовый класс для писателя и читателя
 DocStr3187;Text encoding;Кодировка строковых данных
@@ -13880,3 +13890,6 @@ DocStr9621;Delete exchange board;Удалить биржевые площадк�
 DocStr9622;Delete instrument by identifier;Удалить инструмент по идентификатору
 DocStr9623;To create a rule for the event of change portfolio;Создать правило отслеживающе событие изменения портфеля
 DocStr9624;The portfolio to be traced for the event of change;Портфель, которые необходимо отслеживать на событие изменения
+DocStr9625;Remote network address;Удаленный сетевой адрес
+DocStr9626;Clear state;Очистить состояние
+DocStr9627;Gets and sets the maximum allowed bytes per read/write operation;Получить и задать максимально допустимое число байтов для операция чтения или записи

@@ -46,7 +46,7 @@ namespace StockSharp.Quik.Lua
 		{
 			//private readonly SynchronizedSet<long> _transactionIds = new SynchronizedSet<long>(); 
 
-			public FixServerEx(Func<string, SecureString, Tuple<TimeSpan, FixClientRoles>> authorize)
+			public FixServerEx(Func<string, SecureString, IPAddress, Tuple<TimeSpan, FixClientRoles>> authorize)
 				: base(authorize)
 			{
 			}
@@ -136,7 +136,7 @@ namespace StockSharp.Quik.Lua
 			_requests.Close();
 			_securityClassInfo.FillDefault();
 
-			_fixServer = new FixServerEx((l, p) =>
+			_fixServer = new FixServerEx((l, p, addr) =>
 			{
 				if (Login.IsEmpty() || (l.CompareIgnoreCase(Login) && p == _password))
 				{

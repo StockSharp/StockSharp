@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.Net;
 	using System.Security;
 
 	using Ecng.Security;
@@ -39,8 +40,9 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <param name="login">Login.</param>
 		/// <param name="password">Password.</param>
+		/// <param name="clientAddress">Remote network address.</param>
 		/// <returns>Session ID.</returns>
-		public virtual Guid ValidateCredentials(string login, SecureString password)
+		public virtual Guid ValidateCredentials(string login, SecureString password, IPAddress clientAddress)
 		{
 			try
 			{

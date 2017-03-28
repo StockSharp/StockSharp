@@ -55,10 +55,11 @@ P:StockSharp.Community.CommunityNews.RussianTitle/summary;DocStr2977
 P:StockSharp.Community.CommunityNews.RussianBody/summary;DocStr2978
 T:StockSharp.Community.CommunityAuthorization/summary;DocStr2991
 M:StockSharp.Community.CommunityAuthorization.#ctor/summary;DocStr1
-M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString)/summary;DocStr2992
-M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString)/param/login;Login
-M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString)/param/password;Password
-M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString)/returns;DocStr138
+M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString,System.Net.IPAddress)/summary;DocStr2992
+M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString,System.Net.IPAddress)/param/login;Login
+M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString,System.Net.IPAddress)/param/password;Password
+M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString,System.Net.IPAddress)/param/clientAddress;DocStr9625
+M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.Security.SecureString,System.Net.IPAddress)/returns;DocStr138
 T:StockSharp.Community.FileClient/summary;DocStr2993
 M:StockSharp.Community.FileClient.#ctor/summary;DocStr1
 M:StockSharp.Community.FileClient.#ctor(System.Uri)/summary;DocStr1
