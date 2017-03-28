@@ -14,6 +14,12 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
+		/// Contains history market data.
+		/// </summary>
+		[DataMember]
+		public bool IsHistory { get; set; }
+
+		/// <summary>
 		/// Initialize <see cref="Message"/>.
 		/// </summary>
 		public MarketDataFinishedMessage()

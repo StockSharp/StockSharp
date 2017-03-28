@@ -47,21 +47,21 @@ namespace SampleHistoryTesting
 
 	public partial class MainWindow
 	{
-		private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
-		{
-			public TradeCandleBuilderSourceEx(IConnector connector)
-				: base(connector)
-			{
-			}
+		//private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
+		//{
+		//	public TradeCandleBuilderSourceEx(IConnector connector)
+		//		: base(connector)
+		//	{
+		//	}
 
-			protected override void RegisterSecurity(Security security)
-			{
-			}
+		//	protected override void RegisterSecurity(Security security)
+		//	{
+		//	}
 
-			protected override void UnRegisterSecurity(Security security)
-			{
-			}
-		}
+		//	protected override void UnRegisterSecurity(Security security)
+		//	{
+		//	}
+		//}
 
 		private class FinamSecurityStorage : CollectionSecurityProvider, ISecurityStorage
 		{
@@ -404,7 +404,7 @@ namespace SampleHistoryTesting
 						}
 					},
 
-					UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
+					//UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
 
 					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
 					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
@@ -436,11 +436,12 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(connector);
 
-				var candleManager = emulationInfo.UseCandleTimeFrame == null
-					? new CandleManager(new TradeCandleBuilderSourceEx(connector))
-					: new CandleManager(connector);
+				var candleManager = new CandleManager((Connector)connector);
 
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
+				{
+					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? BuildCandlesModes.Build : BuildCandlesModes.Load
+				};
 
 				_shortMa = new SimpleMovingAverage { Length = 10 };
 				_shortElem = new ChartIndicatorElement

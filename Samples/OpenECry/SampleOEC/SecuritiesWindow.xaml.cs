@@ -171,7 +171,7 @@ namespace SampleOEC
 			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
 			var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
 
-			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
+			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.MaxValue).Show();
 		}
 
 		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)

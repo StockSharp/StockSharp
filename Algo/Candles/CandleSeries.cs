@@ -134,6 +134,11 @@ namespace StockSharp.Algo.Candles
 		public DateTimeOffset To { get; set; } = DateTimeOffset.MaxValue;
 
 		/// <summary>
+		/// Build candles mode.
+		/// </summary>
+		public BuildCandlesModes BuildCandlesMode { get; set; }
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>

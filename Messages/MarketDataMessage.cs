@@ -95,6 +95,32 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
+	/// Build candles modes.
+	/// </summary>
+	[DataContract]
+	[Serializable]
+	public enum BuildCandlesModes
+	{
+		/// <summary>
+		/// Request formed candles and build and build the missing candles by trades, depths and etc.
+		/// </summary>
+		[EnumMember]
+		LoadAndBuild,
+
+		/// <summary>
+		/// Only request formed candles.
+		/// </summary>
+		[EnumMember]
+		Load,
+
+		/// <summary>
+		/// Only build by trades, depths and etc.
+		/// </summary>
+		[EnumMember]
+		Build
+	}
+
+	/// <summary>
 	/// Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
 	/// </summary>
 	[DataContract]
@@ -178,6 +204,24 @@ namespace StockSharp.Messages
 		public string NewsId { get; set; }
 
 		/// <summary>
+		/// To perform the calculation <see cref="CandleMessage.PriceLevels"/>. By default, it is disabled.
+		/// </summary>
+		[DataMember]
+		public bool IsCalcVolumeProfile { get; set; }
+
+		/// <summary>
+		/// Build candles mode.
+		/// </summary>
+		[DataMember]
+		public BuildCandlesModes BuildCandlesMode { get; set; }
+
+		/// <summary>
+		/// Contains history market data.
+		/// </summary>
+		[DataMember]
+		public bool IsHistory { get; set; }
+
+		/// <summary>
 		/// The default depth of order book.
 		/// </summary>
 		public const int DefaultMaxDepth = 50;
@@ -218,7 +262,9 @@ namespace StockSharp.Messages
 				MaxDepth = MaxDepth,
 				NewsId = NewsId,
 				LocalTime = LocalTime,
-				IsNotSupported = IsNotSupported
+				IsNotSupported = IsNotSupported,
+				BuildCandlesMode = BuildCandlesMode,
+				IsCalcVolumeProfile = IsCalcVolumeProfile,
 			};
 
 			CopyTo(clone);

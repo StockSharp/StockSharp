@@ -1126,6 +1126,24 @@ namespace StockSharp.Algo
 			var candle = type.CreateInstance<Candle>();
 
 			candle.Security = security;
+
+			return candle.Update(message);
+		}
+
+		/// <summary>
+		/// Update candle from <see cref="CandleMessage"/>.
+		/// </summary>
+		/// <param name="candle">Candle.</param>
+		/// <param name="message">Message.</param>
+		/// <returns>Candle.</returns>
+		public static Candle Update(this Candle candle, CandleMessage message)
+		{
+			if (candle == null)
+				throw new ArgumentNullException(nameof(candle));
+
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
 			candle.Arg = message.Arg;
 
 			candle.OpenPrice = message.OpenPrice;
@@ -1534,7 +1552,7 @@ namespace StockSharp.Algo
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>The message for market data subscription.</returns>
-		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Connector connector, Security security)
+		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, IConnector connector, Security security)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));

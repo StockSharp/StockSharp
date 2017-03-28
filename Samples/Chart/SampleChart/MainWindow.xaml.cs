@@ -304,7 +304,7 @@ namespace SampleChart
 
 			_candle.TotalVolume += tick.TradeVolume.Value;
 
-			_volumeProfile.Update(new TickCandleBuilderSourceValue(security, tick));
+			_volumeProfile.Update(new TickCandleBuilderSourceValue(tick));
 
 			lock(_updatedCandles.SyncRoot)
 				_updatedCandles[_candle.OpenTime] = _candle;
