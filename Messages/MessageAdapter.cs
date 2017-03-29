@@ -537,6 +537,7 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
+			Id = storage.GetValue(nameof(Id), Id);
 			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
 			SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
 			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
@@ -550,6 +551,7 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
+			storage.SetValue(nameof(Id), Id);
 			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
 			storage.SetValue(nameof(SupportedMessages), SupportedMessages.Select(t => t.To<string>()).ToArray());
 			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
