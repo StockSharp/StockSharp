@@ -100,9 +100,11 @@ M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchangeBoards/returns;Str2
 M:StockSharp.BusinessEntities.ExchangeBoard.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.ExchangeBoard.Code/summary;BoardCode
 P:StockSharp.BusinessEntities.ExchangeBoard.ExpiryTime/summary;Str64
+P:StockSharp.BusinessEntities.ExchangeBoard.ExpiryTimeStr/summary;DocStr8225
 P:StockSharp.BusinessEntities.ExchangeBoard.Exchange/summary;Str479
 P:StockSharp.BusinessEntities.ExchangeBoard.WorkingTime/summary;WorkingHours
 P:StockSharp.BusinessEntities.ExchangeBoard.TimeZone/summary;Str68
+P:StockSharp.BusinessEntities.ExchangeBoard.TimeZoneStr/summary;DocStr8225
 P:StockSharp.BusinessEntities.ExchangeBoard.ExtensionInfo/summary;DocStr2690
 P:StockSharp.BusinessEntities.ExchangeBoard.ExtensionInfo/remarks;DocStr2691
 M:StockSharp.BusinessEntities.ExchangeBoard.ToString/summary;DocStr49
