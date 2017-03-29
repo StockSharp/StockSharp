@@ -21,6 +21,7 @@ namespace StockSharp.BusinessEntities
 	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+	using System.Xml;
 	using System.Xml.Serialization;
 
 	using Ecng.Common;
@@ -103,6 +104,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str64Key)]
 		[MainCategory]
+		[XmlIgnore]
 		public TimeSpan ExpiryTime
 		{
 			get { return _expiryTime; }
@@ -113,6 +115,26 @@ namespace StockSharp.BusinessEntities
 
 				_expiryTime = value;
 				Notify(nameof(ExpiryTime));
+			}
+		}
+
+		/// <summary>
+		/// Reserved.
+		/// </summary>
+		[Browsable(false)]
+		[XmlElement(DataType = "duration", ElementName = nameof(ExpiryTime))]
+		[Ignore]
+		public string ExpiryTimeStr
+		{
+			// XmlSerializer does not support TimeSpan, so use this property for 
+			// serialization instead.
+			get
+			{
+				return XmlConvert.ToString(ExpiryTime);
+			}
+			set
+			{
+				ExpiryTime = value.IsEmpty() ? TimeSpan.Zero : XmlConvert.ToTimeSpan(value);
 			}
 		}
 
@@ -213,6 +235,18 @@ namespace StockSharp.BusinessEntities
 				_timeZone = value;
 				Notify(nameof(TimeZone));
 			}
+		}
+
+		/// <summary>
+		/// Reserved.
+		/// </summary>
+		[Browsable(false)]
+		[DataMember]
+		[Ignore]
+		public string TimeZoneStr
+		{
+			get { return TimeZone.To<string>(); }
+			set { TimeZone = value.To<TimeZoneInfo>(); }
 		}
 
 		[field: NonSerialized]
