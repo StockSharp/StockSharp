@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Storages
 		IExtendedInfoStorageItem Get(string storageName);
 
 		/// <summary>
-		/// To create storage for the specified name.
+		/// To create storage.
 		/// </summary>
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="fields">Extended fields (names and types).</param>

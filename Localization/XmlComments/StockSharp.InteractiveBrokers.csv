@@ -37,6 +37,7 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTime/s
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTimeZone/summary;DocStr9635
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ExtraAuth/summary;DocStr8460
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.OptionalCapabilities/summary;DocStr8461
+P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.UseV100Plus/summary;DocStr9646
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -391,6 +392,7 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.Address/summary;Address
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.ClientId/summary;Str2518
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.ServerLogLevel/summary;DocStr3514
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.MarketDataType/summary;DocStr3513
+P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UseV100Plus/summary;DocStr9646
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults/summary;DocStr3637
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandles/summary;DocStr90
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.Stopped/summary;DocStr91
