@@ -415,6 +415,45 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
+    <member name="T:StockSharp.Algo.History.Hydra.IRemoteExtendedStorage">
+      <summary>
+            Remote extended info storage.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.IRemoteExtendedStorage.StorageName">
+      <summary>
+            Storage name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.IRemoteExtendedStorage.Securities">
+      <summary>
+            Get all security identifiers.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.IRemoteExtendedStorage.Fields">
+      <summary>
+            Get security extended fields (names and types).
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteExtendedStorage.GetSecurityStorage(StockSharp.Messages.SecurityId)">
+      <summary>
+            Get remote security extended info storage.
+            </summary>
+      <param name="securityId">Security identifier.</param>
+      <returns>Remote security extended info storage.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteExtendedStorage.GetAllExtendedInfo">
+      <summary>
+            Get security extended info.
+            </summary>
+      <returns>Extended information.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteExtendedStorage.CreateSecurityExtendedFields(System.Tuple{System.String,System.Type}[])">
+      <summary>
+            Create extended info storage.
+            </summary>
+      <param name="fields">Extended fields (names and types).</param>
+    </member>
     <member name="T:StockSharp.Algo.History.Hydra.IRemoteStorage">
       <summary>
             The interface describing the external market data storage access to which is organized through the WCF network connection (for more details see <see cref="N:System.ServiceModel" />).
@@ -509,6 +548,71 @@
             </summary>
       <param name="sessionId">Session ID.</param>
       <param name="codes">Exchange board codes.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurityExtendedStorages(System.Guid)">
+      <summary>
+            Get security extended storage names.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <returns>Storage names.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurityExtendedFields(System.Guid,System.String)">
+      <summary>
+            Get security extended fields (names and types).
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="storageName">Storage name.</param>
+      <returns>Extended fields (names and types).</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetExtendedInfoSecurities(System.Guid,System.String)">
+      <summary>
+            Get security extended fields (names and types).
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="storageName">Storage name.</param>
+      <returns>IDs securities.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurityExtendedInfo(System.Guid,System.String,System.String)">
+      <summary>
+            Get security extended info.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="storageName">Storage name.</param>
+      <param name="securityId">Security identifier.</param>
+      <returns>Extended information.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAllExtendedInfo(System.Guid,System.String)">
+      <summary>
+            Get security extended info.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="storageName">Storage name.</param>
+      <returns>Extended information.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.CreateSecurityExtendedFields(System.Guid,System.String,System.Tuple{System.String,System.String}[])">
+      <summary>
+            Create extended info storage.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="storageName">Storage name.</param>
+      <param name="fields">Extended fields (names and types).</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.AddSecurityExtendedInfo(System.Guid,System.String,System.String,System.String[])">
+      <summary>
+            Add extended info.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="storageName">Storage name.</param>
+      <param name="securityId">Security identifier.</param>
+      <param name="fieldValues">Extended information.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteSecurityExtendedInfo(System.Guid,System.String,System.String)">
+      <summary>
+            Delete extended info.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="storageName">Storage name.</param>
+      <param name="securityId">Security identifier.</param>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
@@ -611,6 +715,27 @@
       <param name="date">Date.</param>
       <returns>Possible permissions.</returns>
     </member>
+    <member name="T:StockSharp.Algo.History.Hydra.ISecurityRemoteExtendedStorage">
+      <summary>
+            Remote security extended info storage.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.ISecurityRemoteExtendedStorage.SecurityId">
+      <summary>
+            Security identifier.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.ISecurityRemoteExtendedStorage.AddSecurityExtendedInfo(System.Object[])">
+      <summary>
+            Add extended info.
+            </summary>
+      <param name="fieldValues">Extended information.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.ISecurityRemoteExtendedStorage.DeleteSecurityExtendedInfo">
+      <summary>
+            Delete extended info.
+            </summary>
+    </member>
     <member name="T:StockSharp.Algo.History.Hydra.RemoteStoragePermissions">
       <summary>
             Available permissions which customer receives for work with data.
@@ -681,12 +806,13 @@
             The external market data storage access to which is organized through the WCF network connection (for more details see <see cref="N:System.ServiceModel" />).
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.IExtendedInfoStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
             Initialize <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />.
             </summary>
       <param name="storageRegistry">Market-data storage.</param>
       <param name="securityStorage">Securities meta info storage.</param>
+      <param name="extendedInfoStorage">Extended info <see cref="P:StockSharp.Messages.Message.ExtensionInfo" /> storage.</param>
       <param name="exchangeInfoProvider">The exchange boards provider.</param>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.StorageRegistry">
@@ -697,6 +823,11 @@
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.SecurityStorage">
       <summary>
             Securities meta info storage.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.ExtendedInfoStorage">
+      <summary>
+            Extended info <see cref="P:StockSharp.Messages.Message.ExtensionInfo" /> storage.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.ExchangeInfoProvider">
@@ -839,6 +970,19 @@
             Delete exchange boards.
             </summary>
       <param name="boards">Boards.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetSecurityExtendedStorages">
+      <summary>
+            Get security extended storage names.
+            </summary>
+      <returns>Storage names.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetExtendedStorage(System.String)">
+      <summary>
+            Get extended info storage.
+            </summary>
+      <param name="storageName">Storage name.</param>
+      <returns>Extended info storage.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)">
       <summary>

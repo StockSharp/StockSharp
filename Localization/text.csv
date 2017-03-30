@@ -13893,3 +13893,21 @@ DocStr9624;The portfolio to be traced for the event of change;Портфель, 
 DocStr9625;Remote network address;Удаленный сетевой адрес
 DocStr9626;Clear state;Очистить состояние
 DocStr9627;Gets and sets the maximum allowed bytes per read/write operation;Получить и задать максимально допустимое число байтов для операция чтения или записи
+DocStr9628;Remote security extended info storage;Удаленное хранилище расширенной информации инструмента
+DocStr9629;Get security extended fields (names and types);Получить расширенные поля инструмента (имена и типы)
+DocStr9630;Extended fields (names and types);Расширенные поля (имена и типы)
+DocStr9631;Create extended info storage;Создать хранилище расширенной информации
+DocStr9632;Delete extended info;Удалить расширенную информацию
+DocStr9633;Get extended info storage;Получить хранилище расширенной информации
+DocStr9634;Extended info storage;Хранилище расширенной информации
+DocStr9635;The time zone for {0};Временная зона для {0}
+DocStr9636;Remote extended info storage;Удаленное хранилище расширенной информации
+DocStr9637;Get all security identifiers;Получить все идентификаторы инструментов
+DocStr9638;Get remote security extended info storage;Получить удаленное хранилище расширенной информации
+DocStr9639;Get security extended info;Получить расширенную информацию инструмента
+DocStr9640;Get security extended storage names;Получить все имена хранилищ расширенной информации инструментов
+DocStr9641;Storage names;Имена хранилищ
+DocStr9643;Get all extended storage names;Получить все имена хранилищ расширенной информации
+DocStr9644;To get storage for the specified name;Получить хранилище для заданного имени
+DocStr9645;To create storage;Создать хранилище
+DocStr9646;Use V100 plus version at the connect time;Использовать V100+ версию для подключения

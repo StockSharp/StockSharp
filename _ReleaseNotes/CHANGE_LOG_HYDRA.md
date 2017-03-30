@@ -10,6 +10,7 @@ StockSharp Data (Hydra) Change log
 * (feature) Server mode. Exchanges and boards support. Delete securities, exchanges and boards support.
 * (feature) Server mode. UploadSecurities. BasketSecurity instances support.
 * (bug) UI localization fixes.
+* (feature) RemoteStorage. Extended security info.
 
 ###v4.3.22.1:
 * (bug) Remove security fix.
