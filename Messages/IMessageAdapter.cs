@@ -117,7 +117,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Names of extended security fields in <see cref="SecurityMessage"/>.
 		/// </summary>
-		string[] SecurityExtendedFields { get; }
+		Tuple<string, Type>[] SecurityExtendedFields { get; }
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.

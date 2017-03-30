@@ -18,6 +18,7 @@ namespace StockSharp.Messages
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -148,9 +149,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Server check interval for track the connection alive. The value is <see cref="TimeSpan.Zero"/> turned off tracking.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str186Key)]
-		[DisplayNameLoc(LocalizedStrings.Str192Key)]
-		[DescriptionLoc(LocalizedStrings.Str193Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str192Key,
+			Description = LocalizedStrings.Str193Key,
+			GroupName = LocalizedStrings.Str186Key)]
 		public TimeSpan HeartbeatInterval
 		{
 			get { return _heartbeatInterval; }
@@ -225,7 +228,7 @@ namespace StockSharp.Messages
 		/// Names of extended security fields in <see cref="SecurityMessage"/>.
 		/// </summary>
 		[Browsable(false)]
-		public virtual string[] SecurityExtendedFields { get; } = ArrayHelper.Empty<string>();
+		public virtual Tuple<string, Type>[] SecurityExtendedFields { get; } = ArrayHelper.Empty<Tuple<string, Type>>();
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.

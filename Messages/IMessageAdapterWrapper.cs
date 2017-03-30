@@ -202,7 +202,7 @@ namespace StockSharp.Messages
 
 		string IMessageAdapter.AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
 
-		string[] IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
+		Tuple<string, Type>[] IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
