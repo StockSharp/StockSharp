@@ -2273,7 +2273,7 @@ namespace StockSharp.Algo
 						position.AveragePrice = (decimal)change.Value;
 						break;
 					case PositionChangeTypes.ExtensionInfo:
-						var pair = change.Value.To<KeyValuePair<object, object>>();
+						var pair = change.Value.To<KeyValuePair<string, object>>();
 						position.ExtensionInfo[pair.Key] = pair.Value;
 						break;
 					case PositionChangeTypes.RealizedPnL:
@@ -2289,7 +2289,7 @@ namespace StockSharp.Algo
 						position.VariationMargin = (decimal)change.Value;
 						break;
 					case PositionChangeTypes.DepoName:
-						position.ExtensionInfo[change.Key] = change.Value;
+						position.ExtensionInfo[nameof(PositionChangeTypes.DepoName)] = change.Value;
 						break;
 					case PositionChangeTypes.Currency:
 						position.Currency = (CurrencyTypes)change.Value;

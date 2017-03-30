@@ -67,7 +67,7 @@ namespace StockSharp.BusinessEntities
 		/// Extended information on the order with an error.
 		/// </summary>
 		[XmlIgnore]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
 			get { return Order.ExtensionInfo; }
 			set { Order.ExtensionInfo = value; }

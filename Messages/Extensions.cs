@@ -237,7 +237,7 @@ namespace StockSharp.Messages
 				return;
 
 			if (to.ExtensionInfo == null)
-				to.ExtensionInfo = new Dictionary<object, object>();
+				to.ExtensionInfo = new Dictionary<string, object>();
 
 			foreach (var pair in from.ExtensionInfo)
 			{

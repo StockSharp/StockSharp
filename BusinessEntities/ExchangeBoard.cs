@@ -65,7 +65,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public ExchangeBoard()
 		{
-			ExtensionInfo = new Dictionary<object, object>();
+			ExtensionInfo = new Dictionary<string, object>();
 		}
 
 		private string _code = string.Empty;
@@ -250,7 +250,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		[field: NonSerialized]
-		private IDictionary<object, object> _extensionInfo;
+		private IDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended exchange info.
@@ -261,7 +261,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		[DataMember]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
 			get { return _extensionInfo; }
 			set
@@ -278,7 +278,7 @@ namespace StockSharp.BusinessEntities
 		private void AfterDeserialization(StreamingContext ctx)
 		{
 			if (ExtensionInfo == null)
-				ExtensionInfo = new Dictionary<object, object>();
+				ExtensionInfo = new Dictionary<string, object>();
 		}
 
 		[field: NonSerialized]

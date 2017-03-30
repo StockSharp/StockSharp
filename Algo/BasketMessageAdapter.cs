@@ -276,7 +276,7 @@ namespace StockSharp.Algo
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
 			{
-				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage.Get(adapter.StorageName, adapter.SecurityExtendedFields));
+				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage.Create(adapter.StorageName, adapter.SecurityExtendedFields));
 			}
 
 			return new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestorSubscriptioneOnReconnect };
@@ -509,7 +509,14 @@ namespace StockSharp.Algo
 				adapter = adapters.First();
 			}
 			else
-				adapter = _hearbeatAdapters[adapter];
+			{
+				var a = _hearbeatAdapters.TryGetValue(adapter);
+
+				if (a == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1838Params.Put(adapter.GetType()));
+
+				adapter = a;
+			}
 
 			adapter.SendInMessage(message);
 		}

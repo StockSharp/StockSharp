@@ -31,7 +31,7 @@ namespace StockSharp.Messages
 		/// <remarks>
 		/// Required when extra information is stored in the program.
 		/// </remarks>
-		IDictionary<object, object> ExtensionInfo { get; set; }
+		IDictionary<string, object> ExtensionInfo { get; set; }
 	}
 
 	/// <summary>
@@ -45,7 +45,7 @@ namespace StockSharp.Messages
 		/// <param name="entity">Entity.</param>
 		/// <param name="key">Key.</param>
 		/// <param name="value">Value.</param>
-		public static void AddValue(this IExtendableEntity entity, object key, object value)
+		public static void AddValue(this IExtendableEntity entity, string key, object value)
 		{
 			entity.GetExtInfo(true)[key] = value;
 		}
@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 		/// <param name="entity">Entity.</param>
 		/// <param name="key">Key.</param>
 		/// <returns>Value.</returns>
-		public static T GetValue<T>(this IExtendableEntity entity, object key)
+		public static T GetValue<T>(this IExtendableEntity entity, string key)
 		{
 			var info = entity.GetExtInfo(false);
 
@@ -67,7 +67,7 @@ namespace StockSharp.Messages
 			return (T)(info.TryGetValue(key) ?? default(T));
 		}
 
-		private static IDictionary<object, object> GetExtInfo(this IExtendableEntity entity, bool createIfNotExist)
+		private static IDictionary<string, object> GetExtInfo(this IExtendableEntity entity, bool createIfNotExist)
 		{
 			if (entity == null)
 				throw new ArgumentNullException(nameof(entity));
@@ -76,7 +76,7 @@ namespace StockSharp.Messages
 
 			if (info == null && createIfNotExist)
 			{
-				info = new SynchronizedDictionary<object, object>();
+				info = new SynchronizedDictionary<string, object>();
 				entity.ExtensionInfo = info;
 			}
 

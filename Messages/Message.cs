@@ -50,7 +50,7 @@ namespace StockSharp.Messages
 		public MessageTypes Type => _type;
 
 		[field: NonSerialized]
-		private IDictionary<object, object> _extensionInfo;
+		private IDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended information.
@@ -63,7 +63,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
 			get { return _extensionInfo; }
 			set { _extensionInfo = value; }

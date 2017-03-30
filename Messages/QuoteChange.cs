@@ -91,7 +91,7 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		[field: NonSerialized]
-		private IDictionary<object, object> _extensionInfo;
+		private IDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended quote info.
@@ -104,7 +104,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
 			get { return _extensionInfo; }
 			set { _extensionInfo = value; }

@@ -1776,7 +1776,7 @@ namespace StockSharp.Quik
 			if (table.Columns.ExtendedColumns.Count > 0)
 			{
 				if (entity.ExtensionInfo == null)
-					entity.ExtensionInfo = new Dictionary<object, object>();
+					entity.ExtensionInfo = new Dictionary<string, object>();
 
 				table.Columns.ExtendedColumns.ForEach(c =>
 				{

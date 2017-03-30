@@ -83,6 +83,8 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public string Headline { get; set; }
 
+		private string _story;
+
 		/// <summary>
 		/// News text.
 		/// </summary>
@@ -129,9 +131,7 @@ namespace StockSharp.BusinessEntities
 		public Uri Url { get; set; }
 
 		[field: NonSerialized]
-		private IDictionary<object, object> _extensionInfo;
-
-		private string _story;
+		private IDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended information.
@@ -144,7 +144,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
 			get { return _extensionInfo; }
 			set { _extensionInfo = value; }

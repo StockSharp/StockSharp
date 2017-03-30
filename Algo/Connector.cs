@@ -1000,7 +1000,7 @@ namespace StockSharp.Algo
 			order.Balance = order.Volume;
 
 			if (order.ExtensionInfo == null)
-				order.ExtensionInfo = new Dictionary<object, object>();
+				order.ExtensionInfo = new Dictionary<string, object>();
 
 			if (order.TransactionId == 0)
 				order.TransactionId = TransactionIdGenerator.GetNextId();
@@ -1026,9 +1026,9 @@ namespace StockSharp.Algo
 		{
 			var regMsg = order.CreateRegisterMessage(GetSecurityId(order.Security));
 
-			var depoName = order.Portfolio.GetValue<string>(PositionChangeTypes.DepoName);
+			var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
 			if (depoName != null)
-				regMsg.AddValue(PositionChangeTypes.DepoName, depoName);
+				regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
 
 			SendInMessage(regMsg);
 		}

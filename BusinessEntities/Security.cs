@@ -441,7 +441,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		[field: NonSerialized]
-		private SynchronizedDictionary<object, object> _extensionInfo;
+		private SynchronizedDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended security info.
@@ -458,7 +458,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 20)]
 		[Ignore]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
 			get { return _extensionInfo; }
 			set

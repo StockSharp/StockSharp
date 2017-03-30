@@ -88,7 +88,7 @@ namespace StockSharp.Quik
 			if (column == null)
 				throw new ArgumentException(LocalizedStrings.Str1709Params.Put(parameter, entity.GetType()), nameof(parameter));
 
-			return entity.ExtensionInfo.TryGetValue(column);
+			return entity.ExtensionInfo.TryGetValue(column.Name);
 		}
 
 		private static Type GetKey(IExtendableEntity entity)

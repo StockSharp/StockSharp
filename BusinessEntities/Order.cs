@@ -507,7 +507,7 @@ namespace StockSharp.BusinessEntities
 		public RpsOrderInfo RpsInfo { get; set; }
 
 		[field: NonSerialized]
-		private SynchronizedDictionary<object, object> _extensionInfo;
+		private SynchronizedDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended information on order.
@@ -520,7 +520,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
 			get { return _extensionInfo; }
 			set
