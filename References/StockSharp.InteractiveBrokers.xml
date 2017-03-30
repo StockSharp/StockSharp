@@ -187,6 +187,11 @@
             Optional capabilities.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.UseV100Plus">
+      <summary>
+            Use V100 plus version at the connect time.
+            </summary>
+    </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
@@ -1764,6 +1769,11 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.MarketDataType">
       <summary>
             Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UseV100Plus">
+      <summary>
+            Use V100 plus version at the connect time.
             </summary>
     </member>
     <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults">
