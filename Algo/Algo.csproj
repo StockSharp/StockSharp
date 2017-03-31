@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="AssociatedSecurityAdapter.cs" />
     <Compile Include="BasketSecurity.cs" />
+    <Compile Include="Candles\Compression\BuilderCandleSource.cs" />
     <Compile Include="Candles\Compression\CandleBuilderMessageAdapter.cs" />
     <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="BasketPosition.cs" />
     <Compile Include="Candles\BaseCandleSource.cs" />
     <Compile Include="Candles\CandleSourceEnumerator.cs" />
+    <Compile Include="Candles\Compression\BaseCandleBuilderSource.cs" />
     <Compile Include="Candles\Compression\CandleBuilder.cs" />
     <Compile Include="Candles\CandleManagerContainer.cs" />
     <Compile Include="Candles\CandleHelper.cs" />
@@ -150,6 +152,10 @@
     <Compile Include="Candles\ICandleManager.cs" />
     <Compile Include="Candles\ICandleManagerSource.cs" />
     <Compile Include="Candles\ICandleManagerSourceList.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilderSource.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilderSourceList.cs" />
+    <Compile Include="Candles\Compression\StorageCandleBuilderSource.cs" />
+    <Compile Include="Candles\Compression\RawConvertableCandleBuilderSource.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />

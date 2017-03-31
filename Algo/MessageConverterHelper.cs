@@ -1552,6 +1552,25 @@ namespace StockSharp.Algo
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>The message for market data subscription.</returns>
+		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Security security)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			security.ToMessage(security.ToSecurityId()).CopyTo(message);
+			return message;
+		}
+
+		/// <summary>
+		/// To fill the message with information about instrument.
+		/// </summary>
+		/// <param name="message">The message for market data subscription.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>The message for market data subscription.</returns>
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, IConnector connector, Security security)
 		{
 			if (message == null)
@@ -1678,6 +1697,39 @@ namespace StockSharp.Algo
 				return typeof(SecurityMessage);
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
+		}
+
+		/// <summary>
+		/// Cast <see cref="CandleSeries"/> to <see cref="MarketDataMessage"/>.
+		/// </summary>
+		/// <param name="series">Candle series.</param>
+		/// <param name="isSubscribe"></param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Market data message.</returns>
+		public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		{
+			if (series == null)
+				throw new ArgumentNullException(nameof(series));
+
+			var dataType = series
+				.CandleType
+				.ToCandleMessageType()
+				.ToCandleMarketDataType();
+
+			var mdMsg = new MarketDataMessage
+			{
+				DataType = dataType,
+				Arg = series.Arg,
+				IsSubscribe = isSubscribe,
+				From = from,
+				To = to,
+				BuildCandlesMode = series.BuildCandlesMode,
+			};
+
+			mdMsg.FillSecurityInfo(series.Security);
+
+			return mdMsg;
 		}
 	}
 }

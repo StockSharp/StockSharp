@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Candles
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -265,21 +266,8 @@ namespace StockSharp.Algo.Candles
 			{
 				var transactionId = _connector.TransactionIdGenerator.GetNextId();
 
-				var dataType = series
-					.CandleType
-					.ToCandleMessageType()
-					.ToCandleMarketDataType();
-
-				var mdMsg = new MarketDataMessage
-				{
-					TransactionId = transactionId,
-					DataType = dataType,
-					Arg = series.Arg,
-					IsSubscribe = true,
-					From = from,
-					To = to,
-					BuildCandlesMode = series.BuildCandlesMode,
-				};
+				var mdMsg = series.ToMarketDataMessage(true, from, to);
+				mdMsg.TransactionId = transactionId;
 
 				mdMsg.FillSecurityInfo(_connector, series.Security);
 
@@ -295,22 +283,10 @@ namespace StockSharp.Algo.Candles
 					return;
 
 				var transactionId = pair.Key;
-				var info = pair.Value;
 
-				var dataType = series
-					.CandleType
-					.ToCandleMessageType()
-					.ToCandleMarketDataType();
-
-				var mdMsg = new MarketDataMessage
-				{
-					TransactionId = _connector.TransactionIdGenerator.GetNextId(),
-					OriginalTransactionId = transactionId,
-					DataType = dataType,
-					Arg = series.Arg,
-					IsSubscribe = false,
-					BuildCandlesMode = series.BuildCandlesMode,
-				};
+				var mdMsg = series.ToMarketDataMessage(false);
+				mdMsg.TransactionId = _connector.TransactionIdGenerator.GetNextId();
+                mdMsg.OriginalTransactionId = transactionId;
 
 				mdMsg.FillSecurityInfo(_connector, series.Security);
 
@@ -391,21 +367,28 @@ namespace StockSharp.Algo.Candles
 			Sources = new CandleManagerSourceList(this)
 			{
 				new StorageCandleSource(),
+
+				new BuilderCandleSource<TimeFrameCandleBuilder>(),
+				new BuilderCandleSource<TickCandleBuilder>(),
+				new BuilderCandleSource<VolumeCandleBuilder>(),
+				new BuilderCandleSource<RangeCandleBuilder>(),
+				new BuilderCandleSource<RenkoCandleBuilder>(),
+				new BuilderCandleSource<PnFCandleBuilder>(),
 			};
 		}
 
-		///// <summary>
-		///// Initializes a new instance of the <see cref="CandleManager"/>.
-		///// </summary>
-		///// <param name="builderSource">The data source for <see cref="ICandleBuilder"/>.</param>
-		//public CandleManager(ICandleBuilderSource builderSource)
-		//	: this()
-		//{
-		//	if (builderSource == null)
-		//		throw new ArgumentNullException(nameof(builderSource));
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CandleManager"/>.
+		/// </summary>
+		/// <param name="source">The data source for <see cref="IBuilderCandleSource"/>.</param>
+		public CandleManager(ICandleBuilderSource source)
+			: this()
+		{
+			if (source == null)
+				throw new ArgumentNullException(nameof(source));
 
-		//	Sources.OfType<ICandleBuilder>().ForEach(b => b.Sources.Add(builderSource));
-		//}
+			Sources.OfType<IBuilderCandleSource>().ForEach(b => b.Sources.Add(source));
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleManager"/>.
