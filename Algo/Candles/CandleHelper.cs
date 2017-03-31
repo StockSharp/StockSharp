@@ -276,51 +276,51 @@ namespace StockSharp.Algo.Candles
 		{
 			private sealed class CandleEnumerator<TValue> : SimpleEnumerator<Candle>
 			{
-				//private sealed class EnumeratorCandleBuilderSource : BaseCandleBuilderSource
-				//{
-				//	private readonly Security _security;
+				private sealed class EnumeratorCandleBuilderSource : BaseCandleBuilderSource
+				{
+					private readonly Security _security;
 
-				//	public EnumeratorCandleBuilderSource(Security security)
-				//	{
-				//		if (security == null)
-				//			throw new ArgumentNullException(nameof(security));
+					public EnumeratorCandleBuilderSource(Security security)
+					{
+						if (security == null)
+							throw new ArgumentNullException(nameof(security));
 
-				//		_security = security;
-				//	}
+						_security = security;
+					}
 
-				//	public override int SpeedPriority => 0;
+					public override int SpeedPriority => 0;
 
-				//	public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
-				//	{
-				//		if (series == null)
-				//			throw new ArgumentNullException(nameof(series));
+					public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
+					{
+						if (series == null)
+							throw new ArgumentNullException(nameof(series));
 
-				//		if (series.Security != _security)
-				//			yield break;
+						if (series.Security != _security)
+							yield break;
 
-				//		yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
-				//	}
+						yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
+					}
 
-				//	public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
-				//	{
-				//	}
+					public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+					{
+					}
 
-				//	public override void Stop(CandleSeries series)
-				//	{
-				//		RaiseStopped(series);
-				//	}
+					public override void Stop(CandleSeries series)
+					{
+						RaiseStopped(series);
+					}
 
-				//	public void PushNewValue(CandleSeries series, ICandleBuilderSourceValue value)
-				//	{
-				//		RaiseProcessing(series, new[] { value });
-				//	}
-				//}
+					public void PushNewValue(CandleSeries series, ICandleBuilderSourceValue value)
+					{
+						RaiseProcessing(series, new[] { value });
+					}
+				}
 
 				private readonly CandleSeries _series;
 				private readonly Func<TValue, ICandleBuilderSourceValue> _converter;
 				private bool _isNewCandle;
 				private readonly IEnumerator<TValue> _valuesEnumerator;
-				//private readonly EnumeratorCandleBuilderSource _builderSource;
+				private readonly EnumeratorCandleBuilderSource _builderSource;
 				private Candle _lastCandle;
 				private readonly CandleManager _candleManager;
 
@@ -334,8 +334,8 @@ namespace StockSharp.Algo.Candles
 					_candleManager = new CandleManager();
 					_candleManager.Processing += OnProcessCandle;
 
-					//_builderSource = new EnumeratorCandleBuilderSource(series.Security);
-					//_candleManager.Sources.OfType<ICandleBuilder>().ForEach(b => b.Sources.Add(_builderSource));
+					_builderSource = new EnumeratorCandleBuilderSource(series.Security);
+					_candleManager.Sources.OfType<IBuilderCandleSource>().ForEach(b => b.Sources.Add(_builderSource));
 
 					_candleManager.Start(series);
 				}
@@ -361,7 +361,7 @@ namespace StockSharp.Algo.Candles
 						if (!_valuesEnumerator.MoveNext())
 							break;
 
-						//_builderSource.PushNewValue(_series, _converter(_valuesEnumerator.Current));
+						_builderSource.PushNewValue(_series, _converter(_valuesEnumerator.Current));
 					}
 
 					if (_isNewCandle)

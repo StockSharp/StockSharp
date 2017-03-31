@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Candles.Compression
 			candle.CloseVolume = value.Volume;
 			candle.LowVolume = value.Volume;
 			candle.HighVolume = value.Volume;
-			//candle.TotalVolume = value.Volume;
+			candle.TotalVolume = value.Volume ?? 0;
 
 			return candle;
 		}
@@ -413,6 +413,14 @@ namespace StockSharp.Algo.Candles.Compression
 
 				_timeout = value;
 			}
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
+		/// </summary>
+		public TimeFrameCandleBuilder()
+			: this(new InMemoryExchangeInfoProvider())
+		{
 		}
 
 		/// <summary>
