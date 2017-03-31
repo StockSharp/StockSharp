@@ -243,104 +243,159 @@ namespace StockSharp.Algo.Storages
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
-			if (message.Type == MessageTypes.MarketData)
-				ProcessMarketDataMessage((MarketDataMessage)message);
+			switch (message.Type)
+			{
+				case MessageTypes.MarketData:
+					ProcessMarketDataMessage((MarketDataMessage)message);
+					break;
 
-			base.SendInMessage(message);
+				default:
+					base.SendInMessage(message);
+					break;
+			}
 		}
 
 		private void ProcessMarketDataMessage(MarketDataMessage msg)
 		{
-			if (msg.IsBack || !msg.IsSubscribe || DaysLoad == TimeSpan.Zero)
+			if (msg.IsBack || DaysLoad == TimeSpan.Zero)
+			{
+				base.SendInMessage(msg);
 				return;
+			}
 
-			var today = DateTime.UtcNow.Date;
+			if (msg.IsSubscribe)
+			{
+				Subscribe(msg.SecurityId, CreateDataType(msg));
 
-			var from = (DateTimeOffset)(today - DaysLoad);
-			var to = DateTimeOffset.Now;
+				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
+				var to = msg.To ?? DateTimeOffset.Now;
+				var transactionId = msg.TransactionId;
+
+				RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId, IsHistory = true });
+
+				var lastTime = LoadMessages(msg, from, to, transactionId);
+
+				RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
+
+				var clone = (MarketDataMessage)msg.Clone();
+				clone.From = lastTime;
+
+				base.SendInMessage(clone);
+			}
+			else
+			{
+				UnSubscribe(msg.SecurityId, CreateDataType(msg));
+				base.SendInMessage(msg);
+			}
+		}
+
+		private DateTimeOffset LoadMessages(MarketDataMessage msg, DateTimeOffset from, DateTimeOffset to, long transactionId)
+		{
+			DateTimeOffset lastTime;
 
 			switch (msg.DataType)
 			{
 				case MarketDataTypes.Level1:
-					LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to);
+					lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, null);
 					break;
 
 				case MarketDataTypes.MarketDepth:
-					LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to);
+					lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, null);
 					break;
 
 				case MarketDataTypes.Trades:
-					if (!UseCandlesInsteadTrades)
-						LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to);
-					else
-						LoadMessages(msg.SecurityId, ExecutionTypes.Tick, from, to);
+					lastTime = !UseCandlesInsteadTrades 
+						? LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, m => SetTransactionId(m, transactionId)) 
+						: LoadMessages(msg.SecurityId, ExecutionTypes.Tick, from, to, transactionId);
 					break;
 
 				case MarketDataTypes.OrderLog:
-					LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.OrderLog), from, to);
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.OrderLog), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.News:
-					LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to);
+					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
-					LoadMessages(GetStorage<TimeFrameCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					lastTime = LoadMessages(GetStorage<TimeFrameCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandlePnF:
-					LoadMessages(GetStorage<PnFCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					lastTime = LoadMessages(GetStorage<PnFCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleRange:
-					LoadMessages(GetStorage<RangeCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					lastTime = LoadMessages(GetStorage<RangeCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleRenko:
-					LoadMessages(GetStorage<RenkoCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					lastTime = LoadMessages(GetStorage<RenkoCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleTick:
-					LoadMessages(GetStorage<TickCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					lastTime = LoadMessages(GetStorage<TickCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleVolume:
-					LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
 			}
+
+			return lastTime;
 		}
 
-		private void LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset from, DateTimeOffset to)
+		private DateTimeOffset LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset from, DateTimeOffset to, Func<TMessage, DateTimeOffset> func) 
 			where TMessage : Message
 		{
-			storage
-				.Load(from, to)
-				.ForEach(RaiseStorageMessage);
+			var messages = storage.Load(from, to);
+			var lastTime = from;
+
+			foreach (var message in messages)
+			{
+				if (func != null)
+					lastTime = func.Invoke(message);
+
+				RaiseStorageMessage(message);
+			}
+
+			return lastTime;
 		}
 
-		private void LoadMessages(SecurityId securityId, object arg, DateTimeOffset from, DateTimeOffset to)
+		private DateTimeOffset LoadMessages(SecurityId securityId, object arg, DateTimeOffset from, DateTimeOffset to, long transactionId)
 		{
 			var tickStorage = GetStorage<ExecutionMessage>(securityId, arg);
 			var tickDates = tickStorage.GetDates(from.DateTime, to.DateTime).ToArray();
 
 			var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
 
-			for (var date = from.Date; date <= to.Date; date = date.AddDays(1))
+			var ticksLastDate = tickStorage.GetToDate() ?? from.Date;
+			var candlesLastDate = candleStorage.GetToDate() ?? from.Date;
+
+			var toDate = ticksLastDate.Max(candlesLastDate).Min(to.Date);
+			var lastTime = from;
+
+			for (var date = from.Date; date <= toDate; date = date.AddDays(1))
 			{
-				if (tickDates.Contains(date))
+				var messages = tickDates.Contains(date)
+					? tickStorage.Load(date) 
+					: candleStorage.Load(date).ToTrades(0.001m);
+
+				foreach (var msg in messages)
 				{
-					tickStorage.Load(date).ForEach(RaiseStorageMessage);
-				}
-				else
-				{
-					candleStorage.Load(date).ToTrades(0.001m).ForEach(RaiseStorageMessage);
+					lastTime = msg.ServerTime;
+
+					msg.OriginalTransactionId = transactionId;
+					RaiseStorageMessage(msg);
 				}
 			}
 
 			RaiseStorageMessage(new HistoryInitializedMessage(securityId));
+
+			return lastTime;
 		}
 
 		/// <summary>
@@ -373,8 +428,15 @@ namespace StockSharp.Algo.Storages
 					{
 						board = _storageRegistry.ExchangeInfoProvider.GetOrCreateBoard(boardMsg.Code, code =>
 						{
-							var exchange = boardMsg.ToExchange(new Exchange { Name = boardMsg.ExchangeCode });
-							return boardMsg.ToBoard(new ExchangeBoard { Code = code, Exchange = exchange });
+							var exchange = boardMsg.ToExchange(new Exchange
+							{
+								Name = boardMsg.ExchangeCode
+							});
+							return boardMsg.ToBoard(new ExchangeBoard
+							{
+								Code = code,
+								Exchange = exchange
+							});
 						});
 					}
 					else
@@ -390,8 +452,10 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.Portfolio:
 				{
 					var portfolioMsg = (PortfolioMessage)message;
-					var portfolio = _entityRegistry.Portfolios.ReadById(portfolioMsg.PortfolioName)
-							?? new Portfolio { Name = portfolioMsg.PortfolioName };
+					var portfolio = _entityRegistry.Portfolios.ReadById(portfolioMsg.PortfolioName) ?? new Portfolio
+					{
+						Name = portfolioMsg.PortfolioName
+					};
 
 					portfolioMsg.ToPortfolio(portfolio, _storageRegistry.ExchangeInfoProvider);
 					_entityRegistry.Portfolios.Save(portfolio);
@@ -402,8 +466,10 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.PortfolioChange:
 				{
 					var portfolioMsg = (PortfolioChangeMessage)message;
-					var portfolio = _entityRegistry.Portfolios.ReadById(portfolioMsg.PortfolioName)
-							?? new Portfolio { Name = portfolioMsg.PortfolioName };
+					var portfolio = _entityRegistry.Portfolios.ReadById(portfolioMsg.PortfolioName) ?? new Portfolio
+					{
+						Name = portfolioMsg.PortfolioName
+					};
 
 					portfolio.ApplyChanges(portfolioMsg, _storageRegistry.ExchangeInfoProvider);
 					_entityRegistry.Portfolios.Save(portfolio);
@@ -453,9 +519,11 @@ namespace StockSharp.Algo.Storages
 
 		private Position GetPosition(SecurityId securityId, string portfolioName)
 		{
-			var security = !securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty()
-				? _entityRegistry.Securities.ReadBySecurityId(securityId)
-				: _entityRegistry.Securities.Lookup(new Security { Code = securityId.SecurityCode, Type = securityId.SecurityType }).FirstOrDefault();
+			var security = !securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _entityRegistry.Securities.ReadBySecurityId(securityId) : _entityRegistry.Securities.Lookup(new Security
+			{
+				Code = securityId.SecurityCode,
+				Type = securityId.SecurityType
+			}).FirstOrDefault();
 
 			if (security == null)
 				security = TryCreateSecurity(securityId);
@@ -475,8 +543,11 @@ namespace StockSharp.Algo.Storages
 				_entityRegistry.Portfolios.Add(portfolio);
 			}
 
-			return _entityRegistry.Positions.ReadBySecurityAndPortfolio(security, portfolio)
-				?? new Position { Security = security, Portfolio = portfolio };
+			return _entityRegistry.Positions.ReadBySecurityAndPortfolio(security, portfolio) ?? new Position
+			{
+				Security = security,
+				Portfolio = portfolio
+			};
 		}
 
 		private Security TryCreateSecurity(SecurityId securityId)
@@ -503,6 +574,66 @@ namespace StockSharp.Algo.Storages
 				message.LocalTime = InnerAdapter.CurrentTime;
 
 			RaiseNewOutMessage(message);
+		}
+
+		private static DataType CreateDataType(MarketDataMessage msg)
+		{
+			switch (msg.DataType)
+			{
+				case MarketDataTypes.Level1:
+					return DataType.Create(typeof(Level1ChangeMessage), null);
+
+				case MarketDataTypes.MarketDepth:
+					return DataType.Create(typeof(QuoteChangeMessage), null);
+
+				case MarketDataTypes.Trades:
+					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick);
+
+				case MarketDataTypes.OrderLog:
+					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+
+				case MarketDataTypes.News:
+					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+
+				case MarketDataTypes.CandleTimeFrame:
+					return DataType.Create(typeof(TimeFrameCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandleTick:
+					return DataType.Create(typeof(TickCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandleVolume:
+					return DataType.Create(typeof(VolumeCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandleRange:
+					return DataType.Create(typeof(RangeCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandlePnF:
+					return DataType.Create(typeof(PnFCandleMessage), msg.Arg);
+
+				case MarketDataTypes.CandleRenko:
+					return DataType.Create(typeof(RenkoCandleMessage), msg.Arg);
+
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		private static DateTimeOffset SetTransactionId(CandleMessage msg, long transactionId)
+		{
+			msg.OriginalTransactionId = transactionId;
+			return msg.OpenTime;
+		}
+
+		private static DateTimeOffset SetTransactionId(NewsMessage msg, long transactionId)
+		{
+			msg.OriginalTransactionId = transactionId;
+			return msg.ServerTime;
+		}
+
+		private static DateTimeOffset SetTransactionId(ExecutionMessage msg, long transactionId)
+		{
+			msg.OriginalTransactionId = transactionId;
+			return msg.ServerTime;
 		}
 
 		/// <summary>

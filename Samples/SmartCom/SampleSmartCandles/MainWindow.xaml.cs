@@ -86,7 +86,7 @@ namespace SampleSmartCandles
 
 			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
-			_candleManager = new CandleManager(_trader);
+			_candleManager = new CandleManager((IExternalCandleSource)_trader);
 
             _trader.Connect();
 			ConnectBtn.IsEnabled = false;

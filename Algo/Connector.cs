@@ -138,6 +138,7 @@ namespace StockSharp.Algo
 
 			CreateDepthFromLevel1 = true;
 			SupportFilteredMarketDepth = true;
+			SupportCandleBuilder = true;
 
 			if (initManagers)
 			{

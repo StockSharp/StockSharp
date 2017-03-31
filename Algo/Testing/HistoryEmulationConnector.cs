@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Testing
 	/// <summary>
 	/// The emulational connection. It uses historical data and/or occasionally generated.
 	/// </summary>
-	public class HistoryEmulationConnector : BaseEmulationConnector, IExternalCandleSource
+	public class HistoryEmulationConnector : BaseEmulationConnector//, IExternalCandleSource
 	{
 		private class EmulationEntityFactory : EntityFactory
 		{
@@ -155,9 +155,9 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
+		//private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _historySourceSubscriptions = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CachedSynchronizedSet<CandleSeries>> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CachedSynchronizedSet<CandleSeries>>();
+		//private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CachedSynchronizedSet<CandleSeries>> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CachedSynchronizedSet<CandleSeries>>();
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
@@ -323,10 +323,10 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public bool IsFinished { get; private set; }
 
-		/// <summary>
-		/// To enable the possibility to give out candles directly into <see cref="ICandleManager"/>. It accelerates operation, but candle change events will not be available. By default it is disabled.
-		/// </summary>
-		public bool UseExternalCandleSource { get; set; }
+		///// <summary>
+		///// To enable the possibility to give out candles directly into <see cref="ICandleManager"/>. It accelerates operation, but candle change events will not be available. By default it is disabled.
+		///// </summary>
+		//public bool UseExternalCandleSource { get; set; }
 
 		/// <summary>
 		/// Clear cache.
@@ -335,9 +335,9 @@ namespace StockSharp.Algo.Testing
 		{
 			base.ClearCache();
 
-			_series.Clear();
+			//_series.Clear();
 			_historySourceSubscriptions.Clear();
-			_subscribedCandles.Clear();
+			//_subscribedCandles.Clear();
 
 			IsFinished = false;
 		}
@@ -456,21 +456,21 @@ namespace StockSharp.Algo.Testing
 
 							if (candleMsg != null)
 							{
-								if (!UseExternalCandleSource)
-									break;
+								//if (!UseExternalCandleSource)
+								//	break;
 
-								var seriesList = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
+								//var seriesList = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
 
-								if (seriesList == null)
-									break;
+								//if (seriesList == null)
+								//	break;
 
-								foreach (var series in seriesList.Cache)
-								{
-									_newCandles?.Invoke(series, new[] {candleMsg.ToCandle(series)});
+								//foreach (var series in seriesList.Cache)
+								//{
+								//	_newCandles?.Invoke(series, new[] {candleMsg.ToCandle(series)});
 
-									if (candleMsg.IsFinished)
-										_stopped?.Invoke(series);
-								}
+								//	if (candleMsg.IsFinished)
+								//		_stopped?.Invoke(series);
+								//}
 
 								break;
 							}
@@ -653,97 +653,101 @@ namespace StockSharp.Algo.Testing
 			});
 		}
 
-		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
-		{
-			if (!UseExternalCandleSource)
-				yield break;
+		#region IExternalCandleSource
 
-			var securityId = series.Security.ToSecurityId();
-			var messageType = series.CandleType.ToCandleMessageType();
-			var dataType = messageType.ToCandleMarketDataType();
+		//IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
+		//{
+		//	if (!UseExternalCandleSource)
+		//		yield break;
 
-			if (_historySourceSubscriptions.ContainsKey(Tuple.Create(securityId, dataType, series.Arg)))
-			{
-				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
-				yield break;
-			}
+		//	var securityId = series.Security.ToSecurityId();
+		//	var messageType = series.CandleType.ToCandleMessageType();
+		//	var dataType = messageType.ToCandleMarketDataType();
 
-			var types = HistoryMessageAdapter.Drive.GetAvailableDataTypes(securityId, HistoryMessageAdapter.StorageFormat);
+		//	if (_historySourceSubscriptions.ContainsKey(Tuple.Create(securityId, dataType, series.Arg)))
+		//	{
+		//		yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
+		//		yield break;
+		//	}
 
-			foreach (var tuple in types)
-			{
-				if (tuple.MessageType != messageType || !tuple.Arg.Equals(series.Arg))
-					continue;
+		//	var types = HistoryMessageAdapter.Drive.GetAvailableDataTypes(securityId, HistoryMessageAdapter.StorageFormat);
 
-				var dates = HistoryMessageAdapter.StorageRegistry.GetCandleMessageStorage(tuple.MessageType, series.Security, series.Arg, HistoryMessageAdapter.Drive, HistoryMessageAdapter.StorageFormat).Dates.ToArray();
+		//	foreach (var tuple in types)
+		//	{
+		//		if (tuple.MessageType != messageType || !tuple.Arg.Equals(series.Arg))
+		//			continue;
 
-				if (dates.Any())
-					yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));
+		//		var dates = HistoryMessageAdapter.StorageRegistry.GetCandleMessageStorage(tuple.MessageType, series.Security, series.Arg, HistoryMessageAdapter.Drive, HistoryMessageAdapter.StorageFormat).Dates.ToArray();
 
-				break;
-			}
-		}
+		//		if (dates.Any())
+		//			yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));
 
-		private Action<CandleSeries, IEnumerable<Candle>> _newCandles;
+		//		break;
+		//	}
+		//}
 
-		event Action<CandleSeries, IEnumerable<Candle>> IExternalCandleSource.NewCandles
-		{
-			add { _newCandles += value; }
-			remove { _newCandles -= value; }
-		}
+		//private Action<CandleSeries, IEnumerable<Candle>> _newCandles;
 
-		private Action<CandleSeries> _stopped;
+		//event Action<CandleSeries, IEnumerable<Candle>> IExternalCandleSource.NewCandles
+		//{
+		//	add { _newCandles += value; }
+		//	remove { _newCandles -= value; }
+		//}
 
-		event Action<CandleSeries> IExternalCandleSource.Stopped
-		{
-			add { _stopped += value; }
-			remove { _stopped -= value; }
-		}
+		//private Action<CandleSeries> _stopped;
 
-		void IExternalCandleSource.SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
-		{
-			var securityId = GetSecurityId(series.Security);
-			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
-			var key = Tuple.Create(securityId, dataType, series.Arg);
+		//event Action<CandleSeries> IExternalCandleSource.Stopped
+		//{
+		//	add { _stopped += value; }
+		//	remove { _stopped -= value; }
+		//}
 
-			_series.SafeAdd(key).Add(series);
+		//void IExternalCandleSource.SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		//{
+		//	var securityId = GetSecurityId(series.Security);
+		//	var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+		//	var key = Tuple.Create(securityId, dataType, series.Arg);
 
-			if (!_historySourceSubscriptions.ContainsKey(key))
-			{
-				if (_subscribedCandles.ChangeSubscribers(key, true) != 1)
-					return;
+		//	_series.SafeAdd(key).Add(series);
 
-				MarketDataAdapter.SendInMessage(new MarketDataMessage
-				{
-					//SecurityId = securityId,
-					DataType = dataType,
-					Arg = series.Arg,
-					IsSubscribe = true,
-				}.FillSecurityInfo(this, series.Security));
-			}
-		}
+		//	if (!_historySourceSubscriptions.ContainsKey(key))
+		//	{
+		//		if (_subscribedCandles.ChangeSubscribers(key, true) != 1)
+		//			return;
 
-		void IExternalCandleSource.UnSubscribeCandles(CandleSeries series)
-		{
-			var securityId = GetSecurityId(series.Security);
-			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
-			var key = Tuple.Create(securityId, dataType, series.Arg);
+		//		MarketDataAdapter.SendInMessage(new MarketDataMessage
+		//		{
+		//			//SecurityId = securityId,
+		//			DataType = dataType,
+		//			Arg = series.Arg,
+		//			IsSubscribe = true,
+		//		}.FillSecurityInfo(this, series.Security));
+		//	}
+		//}
 
-			_series.SafeAdd(key).Remove(series);
+		//void IExternalCandleSource.UnSubscribeCandles(CandleSeries series)
+		//{
+		//	var securityId = GetSecurityId(series.Security);
+		//	var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+		//	var key = Tuple.Create(securityId, dataType, series.Arg);
 
-			if (!_historySourceSubscriptions.ContainsKey(key))
-			{
-				if (_subscribedCandles.ChangeSubscribers(key, false) != 0)
-					return;
+		//	_series.SafeAdd(key).Remove(series);
 
-				MarketDataAdapter.SendInMessage(new MarketDataMessage
-				{
-					//SecurityId = securityId,
-					DataType = MarketDataTypes.CandleTimeFrame,
-					Arg = series.Arg,
-					IsSubscribe = false,
-				}.FillSecurityInfo(this, series.Security));
-			}
-		}
+		//	if (!_historySourceSubscriptions.ContainsKey(key))
+		//	{
+		//		if (_subscribedCandles.ChangeSubscribers(key, false) != 0)
+		//			return;
+
+		//		MarketDataAdapter.SendInMessage(new MarketDataMessage
+		//		{
+		//			//SecurityId = securityId,
+		//			DataType = MarketDataTypes.CandleTimeFrame,
+		//			Arg = series.Arg,
+		//			IsSubscribe = false,
+		//		}.FillSecurityInfo(this, series.Security));
+		//	}
+		//}
+
+		#endregion
 	}
 }

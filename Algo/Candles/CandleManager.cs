@@ -27,7 +27,6 @@ namespace StockSharp.Algo.Candles
 	using MoreLinq;
 
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -211,6 +210,177 @@ namespace StockSharp.Algo.Candles
 			ICandleManager ICandleManagerSource.CandleManager { get; set; }
 		}
 
+		private sealed class ConnectorCandleSource : Disposable, ICandleManagerSource
+		{
+			private sealed class SeriesInfo
+			{
+				public CandleSeries Series { get; }
+
+				public MarketDataMessage Message { get; }
+
+				public Candle CurrentCandle { get; set; }
+
+				public SeriesInfo(CandleSeries series, MarketDataMessage message)
+				{
+					if (series == null)
+						throw new ArgumentNullException(nameof(series));
+
+					if (message == null)
+						throw new ArgumentNullException(nameof(message));
+
+					Series = series;
+					Message = message;
+				}
+			}
+
+			private readonly SynchronizedDictionary<long, SeriesInfo> _seriesInfos = new SynchronizedDictionary<long, SeriesInfo>();
+
+			private readonly IConnector _connector;
+
+			public ICandleManager CandleManager { get; set; }
+
+			public int SpeedPriority => 1;
+
+			public event Action<CandleSeries, Candle> Processing;
+
+			public event Action<CandleSeries> Stopped;
+
+			public event Action<Exception> Error;
+
+			public ConnectorCandleSource(IConnector connector)
+			{
+				if (connector == null)
+					throw new ArgumentNullException(nameof(connector));
+
+				_connector = connector;
+				_connector.NewMessage += OnConnectorNewMessage;
+			}
+
+			IEnumerable<Range<DateTimeOffset>> ICandleSource<Candle>.GetSupportedRanges(CandleSeries series)
+			{
+				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
+			}
+
+			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+			{
+				var transactionId = _connector.TransactionIdGenerator.GetNextId();
+
+				var dataType = series
+					.CandleType
+					.ToCandleMessageType()
+					.ToCandleMarketDataType();
+
+				var mdMsg = new MarketDataMessage
+				{
+					TransactionId = transactionId,
+					DataType = dataType,
+					Arg = series.Arg,
+					IsSubscribe = true,
+					From = from,
+					To = to,
+					BuildCandlesMode = series.BuildCandlesMode,
+				};
+
+				mdMsg.FillSecurityInfo(_connector, series.Security);
+
+				_seriesInfos.Add(transactionId, new SeriesInfo(series, mdMsg));
+				((Connector)_connector).SendInMessage(mdMsg); // TODO remove cast
+			}
+
+			void ICandleSource<Candle>.Stop(CandleSeries series)
+			{
+				var pair = _seriesInfos.FirstOrDefault(p => p.Value.Series == series);
+
+				if (pair.Value == null)
+					return;
+
+				var transactionId = pair.Key;
+				var info = pair.Value;
+
+				var dataType = series
+					.CandleType
+					.ToCandleMessageType()
+					.ToCandleMarketDataType();
+
+				var mdMsg = new MarketDataMessage
+				{
+					TransactionId = _connector.TransactionIdGenerator.GetNextId(),
+					OriginalTransactionId = transactionId,
+					DataType = dataType,
+					Arg = series.Arg,
+					IsSubscribe = false,
+					BuildCandlesMode = series.BuildCandlesMode,
+				};
+
+				mdMsg.FillSecurityInfo(_connector, series.Security);
+
+				_seriesInfos.Remove(transactionId);
+				_connector.MarketDataAdapter.SendInMessage(mdMsg);
+			}
+
+			/// <summary>
+			/// Release resources.
+			/// </summary>
+			protected override void DisposeManaged()
+			{
+				_connector.NewMessage -= OnConnectorNewMessage;
+
+				base.DisposeManaged();
+			}
+
+			private void OnConnectorNewMessage(Message message)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.CandleTimeFrame:
+					case MessageTypes.CandlePnF:
+					case MessageTypes.CandleRange:
+					case MessageTypes.CandleRenko:
+					case MessageTypes.CandleTick:
+					case MessageTypes.CandleVolume:
+					{
+						var candleMsg = (CandleMessage)message;
+						var info = _seriesInfos.TryGetValue(candleMsg.OriginalTransactionId);
+
+						if (info != null)
+							ProcessCandle(info, candleMsg);
+
+						break;
+					}
+
+					case MessageTypes.MarketDataFinished:
+					{
+						var msg = (MarketDataFinishedMessage)message;
+						var info = _seriesInfos.TryGetValue(msg.OriginalTransactionId);
+
+						if (info == null)
+							break;
+
+						Stopped?.Invoke(info.Series);
+						break;
+					}
+				}
+			}
+
+			private void ProcessCandle(SeriesInfo info, CandleMessage candleMsg)
+			{
+				if (info.CurrentCandle != null && info.CurrentCandle.OpenTime == candleMsg.OpenTime)
+				{
+					if (info.CurrentCandle.State == CandleStates.Finished)
+						return;
+
+					info.CurrentCandle.Update(candleMsg);
+				}
+				else
+					info.CurrentCandle = candleMsg.ToCandle(info.Series);
+
+				Processing?.Invoke(info.Series, info.CurrentCandle);
+
+				if (candleMsg.IsFinished)
+					Stopped?.Invoke(info.Series);
+			}
+		}
+
 		private readonly SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleManagerSource, Candle>> _series = new SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleManagerSource, Candle>>();
 
 		/// <summary>
@@ -218,45 +388,43 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public CandleManager()
 		{
-			var builderContainer = new CandleBuilderContainer();
-
 			Sources = new CandleManagerSourceList(this)
 			{
 				new StorageCandleSource(),
-
-				new TimeFrameCandleBuilder(builderContainer),
-				new TickCandleBuilder(builderContainer),
-				new VolumeCandleBuilder(builderContainer),
-				new RangeCandleBuilder(builderContainer),
-				new RenkoCandleBuilder(builderContainer),
-				new PnFCandleBuilder(builderContainer),
 			};
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CandleManager"/>.
-		/// </summary>
-		/// <param name="builderSource">The data source for <see cref="ICandleBuilder"/>.</param>
-		public CandleManager(ICandleBuilderSource builderSource)
-			: this()
-		{
-			if (builderSource == null)
-				throw new ArgumentNullException(nameof(builderSource));
+		///// <summary>
+		///// Initializes a new instance of the <see cref="CandleManager"/>.
+		///// </summary>
+		///// <param name="builderSource">The data source for <see cref="ICandleBuilder"/>.</param>
+		//public CandleManager(ICandleBuilderSource builderSource)
+		//	: this()
+		//{
+		//	if (builderSource == null)
+		//		throw new ArgumentNullException(nameof(builderSource));
 
-			Sources.OfType<ICandleBuilder>().ForEach(b => b.Sources.Add(builderSource));
-		}
+		//	Sources.OfType<ICandleBuilder>().ForEach(b => b.Sources.Add(builderSource));
+		//}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleManager"/>.
 		/// </summary>
 		/// <param name="connector">The connection to trading system to create the source for tick trades by default.</param>
 		public CandleManager(IConnector connector)
-			: this(new TradeCandleBuilderSource(connector))
+			: this()
 		{
-			var externalSource = connector as IExternalCandleSource;
-			
-			if (externalSource != null)
-				Sources.Add(new ExternalCandleSource(externalSource));
+			Sources.Add(new ConnectorCandleSource(connector));
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CandleManager"/>.
+		/// </summary>
+		/// <param name="candleSource">The external candles source.</param>
+		public CandleManager(IExternalCandleSource candleSource)
+			: this()
+		{
+			Sources.Add(new ExternalCandleSource(candleSource));
 		}
 
 		private ICandleManagerContainer _container = new CandleManagerContainer();

@@ -27,6 +27,7 @@ namespace SampleOEC
 	partial class ChartWindow
 	{
 		private readonly OpenECryTrader _trader;
+		private readonly CandleManager _manager;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 
@@ -56,24 +57,22 @@ namespace SampleOEC
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandles += ProcessNewCandles;
-			_trader.SubscribeCandles(_candleSeries, from, to);
+			_manager = new CandleManager(_trader);
+			_manager.Processing += ProcessNewCandles;
+			_manager.Start(_candleSeries, from, to);
 		}
 
-		private void ProcessNewCandles(CandleSeries series, IEnumerable<Candle> candles)
+		private void ProcessNewCandles(CandleSeries series, Candle candle)
 		{
 			if (series != _candleSeries)
 				return;
 
-			foreach (var timeFrameCandle in candles)
-			{
-				Chart.Draw(_candleElem, timeFrameCandle);
-			}
+			Chart.Draw(_candleElem, candle);
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewCandles -= ProcessNewCandles;
+			_manager.Processing -= ProcessNewCandles;
 			base.OnClosing(e);
 		}
 	}
