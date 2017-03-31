@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Configuration;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
@@ -48,7 +49,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public abstract MarketDataTypes CandleType { get; }
 
 		/// <summary>
-		/// Initialize <see cref="CandleBuilder{T}"/>.
+		/// Initialize <see cref="CandleBuilder{TCandleMessage}"/>.
 		/// </summary>
 		protected CandleBuilder()
 		{
@@ -419,7 +420,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
 		/// </summary>
 		public TimeFrameCandleBuilder()
-			: this(new InMemoryExchangeInfoProvider())
+			: this(ConfigManager.TryGetService<IExchangeInfoProvider>() ?? new InMemoryExchangeInfoProvider())
 		{
 		}
 

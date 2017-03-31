@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
-	class IndexSecurityCandleManagerSource : Disposable, ICandleManagerSource
+	class IndexSecurityCandleManagerSource : Disposable, ICandleSource<Candle>
 	{
 		private sealed class IndexSeriesInfo : Disposable
 		{
@@ -149,6 +149,7 @@ namespace StockSharp.Algo.Candles
 		private readonly DateTimeOffset _from;
 		private readonly DateTimeOffset _to;
 		private readonly SynchronizedDictionary<CandleSeries, IndexSeriesInfo> _info = new SynchronizedDictionary<CandleSeries, IndexSeriesInfo>();
+		private readonly ICandleManager _candleManager;
 
 		public IndexSecurityCandleManagerSource(ICandleManager candleManager, ISecurityProvider securityProvider, DateTimeOffset from, DateTimeOffset to)
 		{
@@ -161,10 +162,8 @@ namespace StockSharp.Algo.Candles
 			_securityProvider = securityProvider;
 			_from = from;
 			_to = to;
-			CandleManager = candleManager;
+			_candleManager = candleManager;
 		}
-
-		public ICandleManager CandleManager { get; set; }
 
 		public int SpeedPriority => 2;
 
@@ -190,7 +189,7 @@ namespace StockSharp.Algo.Candles
 
 			var indexSecurity = (IndexSecurity)series.Security;
 
-			var basketInfo = new IndexSeriesInfo(CandleManager,
+			var basketInfo = new IndexSeriesInfo(_candleManager,
 				series.CandleType,
 				indexSecurity
 					.GetInnerSecurities(_securityProvider)
@@ -208,7 +207,7 @@ namespace StockSharp.Algo.Candles
 					//	c.Source = this;
 					//}
 
-					CandleManager.Container.AddCandle(series, c);
+					_candleManager.Container.AddCandle(series, c);
 					Processing?.Invoke(series, c);
 				},
 				() => Stopped?.Invoke(series));

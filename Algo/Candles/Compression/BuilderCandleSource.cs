@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// <summary>
 	/// Interface of candles source for <see cref="ICandleManager"/> that builds candles with <see cref="ICandleBuilder"/>.
 	/// </summary>
-	public interface IBuilderCandleSource : ICandleManagerSource
+	public interface IBuilderCandleSource : ICandleSource<Candle>
 	{
 		/// <summary>
 		/// Data sources.
@@ -122,11 +122,6 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Data sources.
 		/// </summary>
 		public ICandleBuilderSourceList Sources { get; }
-
-		/// <summary>
-		/// The candles manager which owns this source.
-		/// </summary>
-		ICandleManager ICandleManagerSource.CandleManager { get; set; }
 
 		/// <summary>
 		/// A new value for processing occurrence event.

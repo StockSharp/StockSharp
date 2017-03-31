@@ -1548,7 +1548,6 @@ namespace StockSharp.Algo
 		/// To fill the message with information about instrument.
 		/// </summary>
 		/// <param name="message">The message for market data subscription.</param>
-		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>The message for market data subscription.</returns>
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Security security)
@@ -1721,9 +1720,10 @@ namespace StockSharp.Algo
 				DataType = dataType,
 				Arg = series.Arg,
 				IsSubscribe = isSubscribe,
-				From = from,
-				To = to,
+				From = from ?? series.From,
+				To = to ?? series.To,
 				BuildCandlesMode = series.BuildCandlesMode,
+				IsCalcVolumeProfile = series.IsCalcVolumeProfile
 			};
 
 			mdMsg.FillSecurityInfo(series.Security);

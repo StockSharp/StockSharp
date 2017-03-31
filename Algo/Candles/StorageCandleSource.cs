@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Candles
 	/// <summary>
 	/// The candles source for <see cref="ICandleManager"/> that downloads candles from an external storage.
 	/// </summary>
-	public class StorageCandleSource : BaseCandleSource<Candle>, ICandleManagerSource, IStorageCandleSource
+	public class StorageCandleSource : BaseCandleSource<Candle>, IStorageCandleSource
 	{
 		[DebuggerDisplay("{Series} {Reader}")]
 		private sealed class SeriesInfo
@@ -83,11 +83,6 @@ namespace StockSharp.Algo.Candles
 		/// The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.
 		/// </summary>
 		public IMarketDataDrive Drive { get; set; }
-
-		/// <summary>
-		/// The candles manager which owns this source.
-		/// </summary>
-		ICandleManager ICandleManagerSource.CandleManager { get; set; }
 
 		/// <summary>
 		/// To get time ranges for which this source of passed candles series has data.

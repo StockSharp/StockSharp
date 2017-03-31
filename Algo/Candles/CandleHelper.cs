@@ -25,8 +25,6 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -272,143 +270,106 @@ namespace StockSharp.Algo.Candles
 			return manager;
 		}
 
-		private sealed class CandleEnumerable : SimpleEnumerable<Candle>//, IEnumerableEx<Candle>
+		private sealed class CandleMessageEnumerable : SimpleEnumerable<CandleMessage>
 		{
-			private sealed class CandleEnumerator<TValue> : SimpleEnumerator<Candle>
+			private sealed class CandleMessageEnumerator : SimpleEnumerator<CandleMessage>
 			{
-				private sealed class EnumeratorCandleBuilderSource : BaseCandleBuilderSource
+				private IEnumerator<ICandleBuilderSourceValue> _valuesEnumerator;
+				private readonly List<CandleMessage> _finishedCandles = new List<CandleMessage>();
+				private readonly ICandleBuilder _candleBuilder;
+				private readonly MarketDataMessage _mdMsg;
+				private readonly IEnumerable<ICandleBuilderSourceValue> _values;
+
+				public CandleMessageEnumerator(MarketDataMessage mdMsg, IEnumerable<ICandleBuilderSourceValue> values)
 				{
-					private readonly Security _security;
+					_mdMsg = mdMsg;
+					_values = values;
 
-					public EnumeratorCandleBuilderSource(Security security)
+					_valuesEnumerator = _values.GetEnumerator();
+
+					switch (mdMsg.DataType)
 					{
-						if (security == null)
-							throw new ArgumentNullException(nameof(security));
-
-						_security = security;
-					}
-
-					public override int SpeedPriority => 0;
-
-					public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
-					{
-						if (series == null)
-							throw new ArgumentNullException(nameof(series));
-
-						if (series.Security != _security)
-							yield break;
-
-						yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
-					}
-
-					public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
-					{
-					}
-
-					public override void Stop(CandleSeries series)
-					{
-						RaiseStopped(series);
-					}
-
-					public void PushNewValue(CandleSeries series, ICandleBuilderSourceValue value)
-					{
-						RaiseProcessing(series, new[] { value });
+						case MarketDataTypes.CandleTimeFrame:
+							_candleBuilder = new TimeFrameCandleBuilder();
+							break;
+						case MarketDataTypes.CandleTick:
+							_candleBuilder = new TickCandleBuilder();
+							break;
+						case MarketDataTypes.CandleVolume:
+							_candleBuilder = new VolumeCandleBuilder();
+							break;
+						case MarketDataTypes.CandleRange:
+							_candleBuilder = new RangeCandleBuilder();
+							break;
+						case MarketDataTypes.CandlePnF:
+							_candleBuilder = new PnFCandleBuilder();
+							break;
+						case MarketDataTypes.CandleRenko:
+							_candleBuilder = new RenkoCandleBuilder();
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
 					}
 				}
 
-				private readonly CandleSeries _series;
-				private readonly Func<TValue, ICandleBuilderSourceValue> _converter;
-				private bool _isNewCandle;
-				private readonly IEnumerator<TValue> _valuesEnumerator;
-				private readonly EnumeratorCandleBuilderSource _builderSource;
-				private Candle _lastCandle;
-				private readonly CandleManager _candleManager;
-
-				public CandleEnumerator(CandleSeries series, IEnumerable<TValue> values, Func<TValue, ICandleBuilderSourceValue> converter)
+				public override void Reset()
 				{
-					_series = series;
-					_converter = converter;
+					base.Reset();
 
-					_valuesEnumerator = values.GetEnumerator();
-
-					_candleManager = new CandleManager();
-					_candleManager.Processing += OnProcessCandle;
-
-					_builderSource = new EnumeratorCandleBuilderSource(series.Security);
-					_candleManager.Sources.OfType<IBuilderCandleSource>().ForEach(b => b.Sources.Add(_builderSource));
-
-					_candleManager.Start(series);
-				}
-
-				private void OnProcessCandle(CandleSeries series, Candle candle)
-				{
-					if (series != _series)
-						return;
-
-					_lastCandle = candle;
-
-					if (candle.State != CandleStates.Finished)
-						return;
-
-					Current = candle;
-					_isNewCandle = true;
+					_finishedCandles.Clear();
+					_valuesEnumerator = _values.GetEnumerator();
 				}
 
 				public override bool MoveNext()
 				{
-					while (!_isNewCandle)
+					while (_finishedCandles.Count == 0)
 					{
 						if (!_valuesEnumerator.MoveNext())
 							break;
 
-						_builderSource.PushNewValue(_series, _converter(_valuesEnumerator.Current));
+						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _valuesEnumerator.Current))
+						{
+							if (candleMessage.State == CandleStates.Finished)
+								_finishedCandles.Add(candleMessage);
+						}
 					}
 
-					if (_isNewCandle)
+					if (_finishedCandles.Count > 0)
 					{
-						_isNewCandle = false;
+						Current = _finishedCandles[0];
+						_finishedCandles.RemoveAt(0);
+
 						return true;
 					}
 
-					if (_lastCandle != null)
-					{
-						Current = _lastCandle;
-						_lastCandle = null;
-						return true;
-					}
-					else
-					{
-						Current = null;
-						return false;
-					}
+					return false;
 				}
 
 				protected override void DisposeManaged()
 				{
 					Reset();
-					_candleManager.Processing -= OnProcessCandle;
-					_candleManager.Stop(_series);
-                    _candleManager.Dispose();
+
+					_candleBuilder.Dispose();
 
 					base.DisposeManaged();
 				}
 			}
 
-			public CandleEnumerable(CandleSeries series, IEnumerable<Trade> values)
-				: base(() => new CandleEnumerator<Trade>(series, values, t => new TradeCandleBuilderSourceValue(t)))
+			public CandleMessageEnumerable(MarketDataMessage mdMsg, IEnumerable<ExecutionMessage> ticks)
+				: base(() => new CandleMessageEnumerator(mdMsg, ticks.Select(t => new TickCandleBuilderSourceValue(t))))
 			{
-				if (series == null)
-					throw new ArgumentNullException(nameof(series));
+				if (mdMsg == null)
+					throw new ArgumentNullException(nameof(mdMsg));
 
-				if (values == null)
-					throw new ArgumentNullException(nameof(values));
+				if (ticks == null)
+					throw new ArgumentNullException(nameof(ticks));
 			}
 
-			public CandleEnumerable(CandleSeries series, IEnumerable<MarketDepth> depths, DepthCandleSourceTypes type)
-				: base(() => new CandleEnumerator<MarketDepth>(series, depths, d => new DepthCandleBuilderSourceValue(d, type)))
+			public CandleMessageEnumerable(MarketDataMessage mdMsg, IEnumerable<QuoteChangeMessage> depths, DepthCandleSourceTypes type)
+				: base(() => new CandleMessageEnumerator(mdMsg, depths.Select(d => new QuoteCandleBuilderSourceValue(d, type))))
 			{
-				if (series == null)
-					throw new ArgumentNullException(nameof(series));
+				if (mdMsg == null)
+					throw new ArgumentNullException(nameof(mdMsg));
 
 				if (depths == null)
 					throw new ArgumentNullException(nameof(depths));
@@ -441,7 +402,10 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<Trade> trades, CandleSeries series)
 		{
-			return new CandleEnumerable(series, trades);
+			return trades
+				.ToMessages<Trade, ExecutionMessage>()
+				.ToCandles(series)
+				.ToCandles<Candle>(series.Security, series.CandleType);
 		}
 
 		/// <summary>
@@ -452,10 +416,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> trades, CandleSeries series)
 		{
-			return trades
-				.ToEntities<ExecutionMessage, Trade>(series.Security)
-				.ToCandles(series)
-				.ToMessages<Candle, CandleMessage>();
+			return new CandleMessageEnumerable(series.ToMarketDataMessage(true), trades);
 		}
 
 		/// <summary>
@@ -467,7 +428,10 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series, DepthCandleSourceTypes type)
 		{
-			return new CandleEnumerable(series, depths, type);
+			return depths
+				.ToMessages<MarketDepth, QuoteChangeMessage>()
+				.ToCandles(series, type)
+				.ToCandles<Candle>(series.Security, series.CandleType);
 		}
 
 		/// <summary>
@@ -479,10 +443,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, DepthCandleSourceTypes type)
 		{
-			return depths
-				.ToEntities<QuoteChangeMessage, MarketDepth>(series.Security)
-				.ToCandles(series, type)
-				.ToMessages<Candle, CandleMessage>();
+			return new CandleMessageEnumerable(series.ToMarketDataMessage(true), depths, type);
 		}
 
 		/// <summary>

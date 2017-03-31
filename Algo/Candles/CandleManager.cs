@@ -38,14 +38,14 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	public class CandleManager : BaseLogReceiver, ICandleManager
 	{
-		private sealed class CandleManagerSourceList : SynchronizedList<ICandleManagerSource>, ICandleManagerSourceList
+		private sealed class CandleManagerSourceList : SynchronizedList<ICandleSource<Candle>>, ICandleSourceList
 		{
 			private sealed class SourceInfo : Disposable
 			{
-				private readonly ICandleManagerSource _source;
+				private readonly ICandleSource<Candle> _source;
 				private readonly CandleManager _manager;
 
-				public SourceInfo(ICandleManagerSource source, CandleManager manager)
+				public SourceInfo(ICandleSource<Candle> source, CandleManager manager)
 				{
 					if (source == null)
 						throw new ArgumentNullException(nameof(source));
@@ -55,7 +55,6 @@ namespace StockSharp.Algo.Candles
 
 					_source.Processing += OnProcessing;
 					_source.Error += _manager.RaiseError;
-					_source.CandleManager = _manager;
 				}
 
 				private void OnProcessing(CandleSeries series, Candle candle)
@@ -79,7 +78,7 @@ namespace StockSharp.Algo.Candles
 				}
 			}
 
-			private readonly SynchronizedDictionary<ICandleManagerSource, SourceInfo> _info = new SynchronizedDictionary<ICandleManagerSource,SourceInfo>();
+			private readonly SynchronizedDictionary<ICandleSource<Candle>, SourceInfo> _info = new SynchronizedDictionary<ICandleSource<Candle>, SourceInfo>();
 			private readonly CandleManager _manager;
 
 			public CandleManagerSourceList(CandleManager manager)
@@ -90,19 +89,19 @@ namespace StockSharp.Algo.Candles
 				_manager = manager;
 			}
 
-			protected override void OnAdded(ICandleManagerSource item)
+			protected override void OnAdded(ICandleSource<Candle> item)
 			{
 				Subscribe(item);
 				base.OnAdded(item);
 			}
 
-			protected override bool OnRemoving(ICandleManagerSource item)
+			protected override bool OnRemoving(ICandleSource<Candle> item)
 			{
 				UnSubscribe(item);
 				return base.OnRemoving(item);
 			}
 
-			protected override void OnInserted(int index, ICandleManagerSource item)
+			protected override void OnInserted(int index, ICandleSource<Candle> item)
 			{
 				Subscribe(item);
 				base.OnInserted(index, item);
@@ -116,12 +115,12 @@ namespace StockSharp.Algo.Candles
 				return base.OnClearing();
 			}
 
-			private void Subscribe(ICandleManagerSource source)
+			private void Subscribe(ICandleSource<Candle> source)
 			{
 				_info.Add(source, new SourceInfo(source, _manager));
 			}
 
-			private void UnSubscribe(ICandleManagerSource source)
+			private void UnSubscribe(ICandleSource<Candle> source)
 			{
 				lock (_info.SyncRoot)
 				{
@@ -132,7 +131,7 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private sealed class ExternalCandleSource : Disposable, ICandleManagerSource
+		private sealed class ExternalCandleSource : Disposable, ICandleSource<Candle>
 		{
 			private readonly HashSet<CandleSeries> _series = new HashSet<CandleSeries>();
 			private readonly IExternalCandleSource _source;
@@ -207,11 +206,9 @@ namespace StockSharp.Algo.Candles
 
 				base.DisposeManaged();
 			}
-
-			ICandleManager ICandleManagerSource.CandleManager { get; set; }
 		}
 
-		private sealed class ConnectorCandleSource : Disposable, ICandleManagerSource
+		private sealed class ConnectorCandleSource : Disposable, ICandleSource<Candle>
 		{
 			private sealed class SeriesInfo
 			{
@@ -237,8 +234,6 @@ namespace StockSharp.Algo.Candles
 			private readonly SynchronizedDictionary<long, SeriesInfo> _seriesInfos = new SynchronizedDictionary<long, SeriesInfo>();
 
 			private readonly IConnector _connector;
-
-			public ICandleManager CandleManager { get; set; }
 
 			public int SpeedPriority => 1;
 
@@ -357,7 +352,7 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private readonly SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleManagerSource, Candle>> _series = new SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleManagerSource, Candle>>();
+		private readonly SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleSource<Candle>, Candle>> _series = new SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleSource<Candle>, Candle>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleManager"/>.
@@ -457,7 +452,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Candles sources.
 		/// </summary>
-		public ICandleManagerSourceList Sources { get; }
+		public ICandleSourceList Sources { get; }
 
 		/// <summary>
 		/// The source priority by speed (0 - the best).
@@ -506,15 +501,15 @@ namespace StockSharp.Algo.Candles
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
-			CandleSourceEnumerator<ICandleManagerSource, Candle> enumerator;
+			CandleSourceEnumerator<ICandleSource<Candle>, Candle> enumerator;
 
 			lock (_series.SyncRoot)
 			{
 				if (_series.ContainsKey(series))
 					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), nameof(series));
 
-				enumerator = new CandleSourceEnumerator<ICandleManagerSource, Candle>(series, from, to,
-					series.Security is IndexSecurity ? (IEnumerable<ICandleManagerSource>)new[] { new IndexSecurityCandleManagerSource(this, ConfigManager.GetService<ISecurityProvider>(), from, to) } : Sources,
+				enumerator = new CandleSourceEnumerator<ICandleSource<Candle>, Candle>(series, from, to,
+					series.Security is IndexSecurity ? (IEnumerable<ICandleSource<Candle>>)new[] { new IndexSecurityCandleManagerSource(this, ConfigManager.GetService<ISecurityProvider>(), from, to) } : Sources,
 					c =>
 					{
 						Processing?.Invoke(series, c);

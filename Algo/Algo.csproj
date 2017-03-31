@@ -150,8 +150,7 @@
     <Compile Include="Candles\Compression\ICandleBuilderSourceValue.cs" />
     <Compile Include="Candles\ICandleManagerContainer.cs" />
     <Compile Include="Candles\ICandleManager.cs" />
-    <Compile Include="Candles\ICandleManagerSource.cs" />
-    <Compile Include="Candles\ICandleManagerSourceList.cs" />
+    <Compile Include="Candles\ICandleSourceList.cs" />
     <Compile Include="Candles\Compression\ICandleBuilderSource.cs" />
     <Compile Include="Candles\Compression\ICandleBuilderSourceList.cs" />
     <Compile Include="Candles\Compression\StorageCandleBuilderSource.cs" />

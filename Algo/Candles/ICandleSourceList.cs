@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Candles
 	/// <summary>
 	/// The candles sources collection.
 	/// </summary>
-	public interface ICandleManagerSourceList : IList<ICandleManagerSource>, ISynchronizedCollection
+	public interface ICandleSourceList : IList<ICandleSource<Candle>>, ISynchronizedCollection
 	{
 	}
 }

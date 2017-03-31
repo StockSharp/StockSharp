@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Candles.Compression
 {
+	using System;
 	using System.Collections.Generic;
 
 	using StockSharp.Messages;
@@ -22,7 +23,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// <summary>
 	/// The candles builder interface.
 	/// </summary>
-	public interface ICandleBuilder
+	public interface ICandleBuilder : IDisposable
 	{
 		/// <summary>
 		/// The candle type.

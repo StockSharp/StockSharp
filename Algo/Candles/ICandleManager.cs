@@ -35,6 +35,6 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Candles sources.
 		/// </summary>
-		ICandleManagerSourceList Sources { get; }
+		ICandleSourceList Sources { get; }
 	}
 }
