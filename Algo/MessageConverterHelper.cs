@@ -1126,6 +1126,7 @@ namespace StockSharp.Algo
 			var candle = type.CreateInstance<Candle>();
 
 			candle.Security = security;
+			candle.Arg = message.Arg;
 
 			return candle.Update(message);
 		}
@@ -1143,8 +1144,6 @@ namespace StockSharp.Algo
 
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
-
-			candle.Arg = message.Arg;
 
 			candle.OpenPrice = message.OpenPrice;
 			candle.OpenVolume = message.OpenVolume;

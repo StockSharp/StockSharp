@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Candles.Compression
 {
-	using System;
 	using System.Collections.Generic;
 
 	using StockSharp.Messages;
@@ -23,7 +22,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// <summary>
 	/// The candles builder interface.
 	/// </summary>
-	public interface ICandleBuilder //: ICandleManagerSource
+	public interface ICandleBuilder
 	{
 		/// <summary>
 		/// The candle type.
@@ -33,7 +32,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To process the new data.
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
 		/// <returns>A new candles changes.</returns>
 		IEnumerable<CandleMessage> Process(MarketDataMessage message, ICandleBuilderSourceValue value);

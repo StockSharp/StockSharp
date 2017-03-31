@@ -1951,8 +1951,9 @@ namespace StockSharp.Algo
 
 			if (type == typeof(TickCandle))
 			{
+				var tickCandle = (TickCandle)candle;
 				var count = realPercent * (int)candle.Arg;
-				return ((TickCandle)candle).CurrentTradeCount >= count;
+				return tickCandle.TotalTicks != null && tickCandle.TotalTicks.Value >= count;
 			}
 			else if (type == typeof(RangeCandle))
 			{

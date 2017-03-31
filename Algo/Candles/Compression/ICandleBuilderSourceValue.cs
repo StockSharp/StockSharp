@@ -26,10 +26,10 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public interface ICandleBuilderSourceValue
 	{
-		/// <summary>
-		/// The instrument identifier by which data has been created.
-		/// </summary>
-		SecurityId SecurityId { get; }
+		///// <summary>
+		///// The instrument identifier by which data has been created.
+		///// </summary>
+		//SecurityId SecurityId { get; }
 
 		/// <summary>
 		/// The time of new data occurrence.
@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public Trade Trade { get; }
 
-		SecurityId ICandleBuilderSourceValue.SecurityId => Trade.Security.ToSecurityId();
+		//SecurityId ICandleBuilderSourceValue.SecurityId => Trade.Security.ToSecurityId();
 
 		DateTimeOffset ICandleBuilderSourceValue.Time => Trade.Time;
 
@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="Trade"/>.
+	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="ExecutionMessage"/>.
 	/// </summary>
 	[DebuggerDisplay("{" + nameof(Tick) + "}")]
 	public class TickCandleBuilderSourceValue : ICandleBuilderSourceValue
@@ -106,7 +106,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public ExecutionMessage Tick { get; }
 
-		SecurityId ICandleBuilderSourceValue.SecurityId => Tick.SecurityId;
+		//SecurityId ICandleBuilderSourceValue.SecurityId => Tick.SecurityId;
 
 		DateTimeOffset ICandleBuilderSourceValue.Time => Tick.ServerTime;
 
@@ -203,7 +203,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public DepthCandleSourceTypes Type { get; }
 
-		SecurityId ICandleBuilderSourceValue.SecurityId => Depth.Security.ToSecurityId();
+		//SecurityId ICandleBuilderSourceValue.SecurityId => Depth.Security.ToSecurityId();
 
 		DateTimeOffset ICandleBuilderSourceValue.Time => Depth.LastChangeTime;
 
@@ -215,7 +215,7 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="MarketDepth"/>.
+	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="QuoteChangeMessage"/>.
 	/// </summary>
 	[DebuggerDisplay("{" + nameof(QuoteChange) + "}")]
 	public class QuoteCandleBuilderSourceValue : ICandleBuilderSourceValue
@@ -291,7 +291,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public DepthCandleSourceTypes Type { get; }
 
-		SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
+		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
 
 		DateTimeOffset ICandleBuilderSourceValue.Time => QuoteChange.ServerTime;
 

@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To process the new data.
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
 		/// <returns>A new candles changes.</returns>
 		public IEnumerable<CandleMessage> Process(MarketDataMessage message, ICandleBuilderSourceValue value)
@@ -161,7 +161,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (value == null)
 				throw new ArgumentNullException(nameof(value));
 
-			candle.SecurityId = value.SecurityId;
+			candle.SecurityId = message.SecurityId;
 
 			candle.OpenPrice = value.Price;
 			candle.ClosePrice = value.Price;
@@ -517,7 +517,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
 		protected override bool IsCandleFinishedBeforeChange(MarketDataMessage message, TickCandleMessage candle, ICandleBuilderSourceValue value)
 		{
-			return candle.CurrentTradeCount >= candle.MaxTradeCount;
+			return candle.TotalTicks != null && candle.TotalTicks.Value >= candle.MaxTradeCount;
 		}
 
 		/// <summary>
@@ -529,7 +529,8 @@ namespace StockSharp.Algo.Candles.Compression
 		protected override void UpdateCandle(MarketDataMessage message, TickCandleMessage candle, ICandleBuilderSourceValue value)
 		{
 			base.UpdateCandle(message, candle, value);
-			candle.CurrentTradeCount++;
+
+			candle.TotalTicks = (candle.TotalTicks ?? 0) + 1;
 		}
 	}
 

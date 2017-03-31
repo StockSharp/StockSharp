@@ -196,7 +196,7 @@ namespace StockSharp.Algo.Candles
 		private decimal _totalPrice;
 
 		/// <summary>
-		/// Total trades volume.
+		/// Total price size.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
@@ -571,12 +571,6 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		[DataMember]
 		public int MaxTradeCount { get; set; }
-
-		/// <summary>
-		/// Current tick count.
-		/// </summary>
-		[DataMember]
-		public int CurrentTradeCount { get; set; }
 
 		/// <summary>
 		/// Candle arg.
