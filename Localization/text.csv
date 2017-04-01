@@ -13913,3 +13913,18 @@ DocStr9643;Get all extended storage names;Получить все имена х�
 DocStr9644;To get storage for the specified name;Получить хранилище для заданного имени
 DocStr9645;To create storage;Создать хранилище
 DocStr9646;Use V100 plus version at the connect time;Использовать V100+ версию для подключения
+DocStr9647;Interface of candles source for {0} that builds candles with {1};Интерфейс источника свечек для {0}, который строит свечи с помощью {1}
+DocStr9648;The candles source for {0} that builds candles with {1};Источник свечек для {0}, который строит свечи с помощью {1}
+DocStr9649;Candle builder adapter;Адаптер построения свечей
+DocStr9650;Build candles from;Строить свечи из
+DocStr9651;Candles builders;Построители свечей
+DocStr9654;A new candles changes;Новые изменения свечей
+DocStr9659;Build candles mode;Режим построения свечей
+DocStr9660;Time precision;Временная точность
+DocStr9661;Update candle from {0};Обновить свечу из {0}
+DocStr9664;Contains history market data;Содержит историю рыночных данных
+DocStr9665;Build candles modes;Режима построения свечей
+DocStr9666;Request built candles and build the missing candles from trades, depths etc;Запросить готовые свечи, или построить их из сделок, стаканов и т.д.
+DocStr9667;Request only built candles;Запросить готовые свечи
+DocStr9668;Build from trades, depths etc;Построить из сделок, стаканов и т.д.
+DocStr9669;Candles builder;Candles builder

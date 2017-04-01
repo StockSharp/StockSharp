@@ -333,6 +333,7 @@ E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionFailed/summary;Do
 E:StockSharp.BusinessEntities.IConnector.MarketDataUnSubscriptionSucceeded/summary;DocStr9350
 E:StockSharp.BusinessEntities.IConnector.MarketDataUnSubscriptionFailed/summary;DocStr9351
 E:StockSharp.BusinessEntities.IConnector.SessionStateChanged/summary;DocStr897
+P:StockSharp.BusinessEntities.IConnector.TransactionIdGenerator/summary;DocStr3311
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr803
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/param/board;DocStr804
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/returns;DocStr805
@@ -360,6 +361,9 @@ M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEnt
 M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)/param/criteria;DocStr111
 M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr808
 M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)/param/criteria;DocStr809
+M:StockSharp.BusinessEntities.IConnector.GetSecurityId(StockSharp.BusinessEntities.Security)/summary;DocStr848
+M:StockSharp.BusinessEntities.IConnector.GetSecurityId(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
+M:StockSharp.BusinessEntities.IConnector.GetSecurityId(StockSharp.BusinessEntities.Security)/returns;SecurityId
 M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/summary;DocStr810
 M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/param/criteria;DocStr811
 M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/summary;DocStr812

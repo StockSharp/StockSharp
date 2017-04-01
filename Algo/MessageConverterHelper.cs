@@ -1700,11 +1700,11 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Cast <see cref="CandleSeries"/> to <see cref="MarketDataMessage"/>.
 		/// </summary>
-		/// <param name="series">Candle series.</param>
+		/// <param name="series">Candles series.</param>
 		/// <param name="isSubscribe"></param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		/// <returns>Market data message.</returns>
+		/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
 		public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			if (series == null)

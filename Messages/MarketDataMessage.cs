@@ -102,19 +102,19 @@ namespace StockSharp.Messages
 	public enum BuildCandlesModes
 	{
 		/// <summary>
-		/// Request formed candles and build and build the missing candles by trades, depths and etc.
+		/// Request built candles and build the missing candles from trades, depths etc.
 		/// </summary>
 		[EnumMember]
 		LoadAndBuild,
 
 		/// <summary>
-		/// Only request formed candles.
+		/// Request only built candles.
 		/// </summary>
 		[EnumMember]
 		Load,
 
 		/// <summary>
-		/// Only build by trades, depths and etc.
+		/// Build from trades, depths etc.
 		/// </summary>
 		[EnumMember]
 		Build

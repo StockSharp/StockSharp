@@ -34,6 +34,7 @@ P:StockSharp.Messages.CandleMessage.CloseVolume/summary;CloseVolume
 P:StockSharp.Messages.CandleMessage.HighVolume/summary;HighVolume
 P:StockSharp.Messages.CandleMessage.LowVolume/summary;LowVolume
 P:StockSharp.Messages.CandleMessage.RelativeVolume/summary;RelativeVolume
+P:StockSharp.Messages.CandleMessage.TotalPrice/summary;TotalPrice
 P:StockSharp.Messages.CandleMessage.TotalVolume/summary;DocStr2547
 P:StockSharp.Messages.CandleMessage.OpenInterest/summary;Str150
 P:StockSharp.Messages.CandleMessage.TotalTicks/summary;TickCount
@@ -497,6 +498,7 @@ M:StockSharp.Messages.IDailyInfoSoap.GetCursOnDate(System.DateTime)/param/date;D
 M:StockSharp.Messages.IDailyInfoSoap.GetCursOnDate(System.DateTime)/returns;DocStr2076
 T:StockSharp.Messages.MarketDataFinishedMessage/summary;DocStr9385
 P:StockSharp.Messages.MarketDataFinishedMessage.OriginalTransactionId/summary;DocStr4056
+P:StockSharp.Messages.MarketDataFinishedMessage.IsHistory/summary;DocStr9664
 M:StockSharp.Messages.MarketDataFinishedMessage.#ctor/summary;DocStr93
 T:StockSharp.Messages.IExtendableEntity/summary;DocStr4041
 P:StockSharp.Messages.IExtendableEntity.ExtensionInfo/summary;ExtendedInfo
@@ -1119,6 +1121,10 @@ F:StockSharp.Messages.MarketDataTypes.CandleVolume/summary;DocStr4370
 F:StockSharp.Messages.MarketDataTypes.CandleRange/summary;DocStr4371
 F:StockSharp.Messages.MarketDataTypes.CandlePnF/summary;DocStr4372
 F:StockSharp.Messages.MarketDataTypes.CandleRenko/summary;DocStr4373
+T:StockSharp.Messages.BuildCandlesModes/summary;DocStr9665
+F:StockSharp.Messages.BuildCandlesModes.LoadAndBuild/summary;DocStr9666
+F:StockSharp.Messages.BuildCandlesModes.Load/summary;DocStr9667
+F:StockSharp.Messages.BuildCandlesModes.Build/summary;DocStr9668
 T:StockSharp.Messages.MarketDataMessage/summary;DocStr4473
 P:StockSharp.Messages.MarketDataMessage.From/summary;Str344
 P:StockSharp.Messages.MarketDataMessage.To/summary;Str346
@@ -1131,6 +1137,9 @@ P:StockSharp.Messages.MarketDataMessage.Error/summary;DocStr4477
 P:StockSharp.Messages.MarketDataMessage.Count/summary;DocStr4478
 P:StockSharp.Messages.MarketDataMessage.MaxDepth/summary;DocStr4479
 P:StockSharp.Messages.MarketDataMessage.NewsId/summary;DocStr4480
+P:StockSharp.Messages.MarketDataMessage.IsCalcVolumeProfile/summary;DocStr2053
+P:StockSharp.Messages.MarketDataMessage.BuildCandlesMode/summary;DocStr9659
+P:StockSharp.Messages.MarketDataMessage.IsHistory/summary;DocStr9664
 F:StockSharp.Messages.MarketDataMessage.DefaultMaxDepth/summary;DocStr4474
 M:StockSharp.Messages.MarketDataMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.MarketDataMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93

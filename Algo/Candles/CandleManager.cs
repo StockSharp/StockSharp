@@ -398,7 +398,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleManager"/>.
 		/// </summary>
-		/// <param name="candleSource">The external candles source.</param>
+		/// <param name="candleSource">The external candles source (for example, connection <see cref="IConnector"/> which provides the possibility of ready candles getting).</param>
 		public CandleManager(IExternalCandleSource candleSource)
 			: this()
 		{

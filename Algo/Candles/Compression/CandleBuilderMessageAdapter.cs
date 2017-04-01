@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The candles manager adapter.
+	/// Candle builder adapter.
 	/// </summary>
 	public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 	{
@@ -77,14 +77,14 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private readonly CandleBuildersList _candleBuilders;
 
-		private MarketDataTypes _buildCandlesFromDataType;
+		private MarketDataTypes _buildCandlesFrom;
 
 		/// <summary>
-		/// Build candles from market-data type.
+		/// Build candles from.
 		/// </summary>
-		public MarketDataTypes BuildCandlesFromDataType
+		public MarketDataTypes BuildCandlesFrom
 		{
-			get { return _buildCandlesFromDataType; }
+			get { return _buildCandlesFrom; }
 			set
 			{
 				switch (value)
@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Candles.Compression
 					//case MarketDataTypes.Level1:
 					case MarketDataTypes.MarketDepth:
 					case MarketDataTypes.Trades:
-						_buildCandlesFromDataType = value;
+						_buildCandlesFrom = value;
 						break;
 
 					default:
@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Initializes a new instance of the <see cref="CandleBuilderMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Inner message adapter.</param>
-		/// <param name="exchangeInfoProvider">Exchanges and trading boards information provider.</param>
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 		public CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, IExchangeInfoProvider exchangeInfoProvider)
 			: base(innerAdapter)
 		{
@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			_exchangeInfoProvider = exchangeInfoProvider;
 
-			BuildCandlesFromDataType = MarketDataTypes.Trades;
+			BuildCandlesFrom = MarketDataTypes.Trades;
 			DepthCandleSourceType = DepthCandleSourceTypes.Middle;
 
 			_candleBuilders = new CandleBuildersList
@@ -418,7 +418,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private bool CheckCanBuildCandlesFrom(MarketDataTypes marketDataType)
 		{
-			return BuildCandlesFromDataType == marketDataType;
+			return BuildCandlesFrom == marketDataType;
 		}
 
 		private void Subscribe(SeriesInfo info)
@@ -456,13 +456,13 @@ namespace StockSharp.Algo.Candles.Compression
 			switch (info.MarketDataMessage.BuildCandlesMode)
 			{
 				case BuildCandlesModes.LoadAndBuild:
-					return info.DataType == null ? info.MarketDataMessage.DataType : BuildCandlesFromDataType;
+					return info.DataType == null ? info.MarketDataMessage.DataType : BuildCandlesFrom;
 
 				case BuildCandlesModes.Load:
 					return info.MarketDataMessage.DataType;
 
 				case BuildCandlesModes.Build:
-					return BuildCandlesFromDataType;
+					return BuildCandlesFrom;
 
 				default:
 					throw new ArgumentOutOfRangeException();

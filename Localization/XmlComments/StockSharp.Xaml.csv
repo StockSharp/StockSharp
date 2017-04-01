@@ -724,6 +724,7 @@ E:StockSharp.Xaml.GuiConnector`1.StopOrderChanged/summary;DocStr9263
 E:StockSharp.Xaml.GuiConnector`1.NewMarketDepth/summary;DocStr8557
 E:StockSharp.Xaml.GuiConnector`1.MarketDepthChanged/summary;DocStr8558
 E:StockSharp.Xaml.GuiConnector`1.NewOrderLogItem/summary;DocStr885
+P:StockSharp.Xaml.GuiConnector`1.TransactionIdGenerator/summary;DocStr3311
 M:StockSharp.Xaml.GuiConnector`1.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr803
 M:StockSharp.Xaml.GuiConnector`1.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/param/board;DocStr804
 M:StockSharp.Xaml.GuiConnector`1.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/returns;DocStr805
@@ -752,6 +753,9 @@ M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.BusinessEntities.Se
 M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.BusinessEntities.Security)/param/criteria;DocStr111
 M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr808
 M:StockSharp.Xaml.GuiConnector`1.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)/param/criteria;DocStr809
+M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Security)/summary;DocStr848
+M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
+M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Security)/returns;SecurityId
 M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/summary;DocStr810
 M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/param/criteria;DocStr811
 M:StockSharp.Xaml.GuiConnector`1.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/summary;DocStr812

@@ -226,7 +226,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DepthCandleBuilderSourceValue"/>.
 		/// </summary>
-		/// <param name="message">Quote change message.</param>
+		/// <param name="message">Messages containing quotes.</param>
 		/// <param name="type">Type of candle depth based data.</param>
 		public QuoteCandleBuilderSourceValue(QuoteChangeMessage message, DepthCandleSourceTypes type)
 		{
@@ -282,7 +282,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Quote change.
+		/// Messages containing quotes.
 		/// </summary>
 		public QuoteChangeMessage QuoteChange { get; }
 

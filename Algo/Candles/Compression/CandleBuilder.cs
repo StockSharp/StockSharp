@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The candles builder.
+	/// Candles builder.
 	/// </summary>
 	/// <typeparam name="TCandleMessage">The type of candle which the builder will create.</typeparam>
 	public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBuilder
@@ -126,7 +126,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To create a new candle.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">Data with which a new candle should be created.</param>
 		/// <returns>Created candle.</returns>
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
 		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To fill in the initial candle settings.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data.</param>
 		/// <returns>Candle.</returns>
@@ -182,7 +182,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To update the candle data.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data.</param>
 		protected virtual void UpdateCandle(MarketDataMessage message, TCandleMessage candle, ICandleBuilderSourceValue value)
@@ -237,7 +237,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To process the new data.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
 		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> can not be applied to candles), then <see langword="null" /> is returned.</returns>
@@ -261,7 +261,7 @@ namespace StockSharp.Algo.Candles.Compression
 		///// <summary>
 		///// To finish the candle forcibly.
 		///// </summary>
-		///// <param name="message">Market-data message.</param>
+		///// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		///// <param name="candleMessage">Candle.</param>
 		//protected void ForceFinishCandle(MarketDataMessage message, CandleMessage candleMessage)
 		//{
@@ -440,7 +440,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To create a new candle.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">Data with which a new candle should be created.</param>
 		/// <returns>Created candle.</returns>
@@ -471,7 +471,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
 		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
@@ -501,7 +501,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To create a new candle.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">Data with which a new candle should be created.</param>
 		/// <returns>Created candle.</returns>
@@ -520,7 +520,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
 		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
@@ -532,7 +532,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To update the candle data.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data.</param>
 		protected override void UpdateCandle(MarketDataMessage message, TickCandleMessage candle, ICandleBuilderSourceValue value)
@@ -563,7 +563,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To create a new candle.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">Data with which a new candle should be created.</param>
 		/// <returns>Created candle.</returns>
@@ -582,7 +582,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
 		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
@@ -612,7 +612,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To create a new candle.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">Data with which a new candle should be created.</param>
 		/// <returns>Created candle.</returns>
@@ -631,7 +631,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
 		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
@@ -661,7 +661,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To create a new candle.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">Data with which a new candle should be created.</param>
 		/// <returns>Created candle.</returns>
@@ -731,7 +731,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
 		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
@@ -747,7 +747,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To update the candle data.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="candle">Candle.</param>
 		/// <param name="value">Data.</param>
 		protected override void UpdateCandle(MarketDataMessage message, PnFCandleMessage candle, ICandleBuilderSourceValue value)
@@ -795,7 +795,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To process the new data.
 		/// </summary>
-		/// <param name="message">Market-data message.</param>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
 		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> can not be applied to candles), then <see langword="null" /> is returned.</returns>
