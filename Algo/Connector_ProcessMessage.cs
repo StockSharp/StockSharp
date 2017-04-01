@@ -23,7 +23,6 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Latency;
@@ -779,8 +778,8 @@ namespace StockSharp.Algo
 						break;
 
 					case MessageTypes.Error:
-						var mdErrorMsg = (ErrorMessage)message;
-						RaiseError(mdErrorMsg.Error);
+						var errorMsg = (ErrorMessage)message;
+						RaiseError(errorMsg.Error);
 						break;
 
 					case MessageTypes.Connect:

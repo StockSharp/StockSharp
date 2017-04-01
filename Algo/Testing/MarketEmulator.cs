@@ -1326,7 +1326,7 @@ namespace StockSharp.Algo.Testing
 
 				_currentMoney = _beginMoney = (decimal)beginValue;
 
-				result.Add(CreateChangeMessage(pfChangeMsg.ServerTime));
+				AddPortfolioChangeMessage(pfChangeMsg.ServerTime, result);
 			}
 
 			private MoneyInfo GetMoney(SecurityId securityId, DateTimeOffset time, ICollection<Message> result)
@@ -1374,7 +1374,7 @@ namespace StockSharp.Algo.Testing
 
 				var commission = _parent._commissionManager.Process(orderMsg);
 
-				result.Add(CreateChangeMessage(orderMsg.ServerTime));
+				AddPortfolioChangeMessage(orderMsg.ServerTime, result);
 
 				return commission;
 			}
@@ -1429,7 +1429,7 @@ namespace StockSharp.Algo.Testing
 					.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
 				);
 
-				result.Add(CreateChangeMessage(time));
+				AddPortfolioChangeMessage(time, result);
 			}
 
 			public void ProcessMarginChange(DateTimeOffset time, SecurityId securityId, ICollection<Message> result)
@@ -1454,16 +1454,23 @@ namespace StockSharp.Algo.Testing
 				);
 			}
 
-			public PortfolioChangeMessage CreateChangeMessage(DateTimeOffset time)
+			public void AddPortfolioChangeMessage(DateTimeOffset time, ICollection<Message> result)
 			{
 				var realizedPnL = PnLManager.RealizedPnL;
 				var unrealizedPnL = PnLManager.UnrealizedPnL;
 				var commission = _parent._commissionManager.Commission;
 				var totalPnL = PnLManager.PnL - commission;
 
-				_currentMoney = _beginMoney + totalPnL;
+				try
+				{
+					_currentMoney = _beginMoney + totalPnL;
+				}
+				catch (OverflowException ex)
+				{
+					result.Add(new ErrorMessage { Error = ex });
+				}
 
-				return new PortfolioChangeMessage
+				result.Add(new PortfolioChangeMessage
 				{
 					ServerTime = time,
 					LocalTime = time,
@@ -1474,7 +1481,7 @@ namespace StockSharp.Algo.Testing
 				.Add(PositionChangeTypes.VariationMargin, totalPnL)
 				.Add(PositionChangeTypes.CurrentValue, _currentMoney)
 				.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
-				.Add(PositionChangeTypes.Commission, commission);
+				.Add(PositionChangeTypes.Commission, commission));
 			}
 
 			public string CheckRegistration(ExecutionMessage execMsg, ICollection<Message> result)
@@ -1867,7 +1874,7 @@ namespace StockSharp.Algo.Testing
 			}
 
 			foreach (var emulator in _portfolios.Values)
-				messages.Add(emulator.CreateChangeMessage(time));
+				emulator.AddPortfolioChangeMessage(time, messages);
 
 			_portfoliosPrevRecalc = time;
 		}
