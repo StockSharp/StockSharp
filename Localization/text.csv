@@ -3772,6 +3772,8 @@ XamlStr387;End time;Окончание работы
 OrderLogOf;OL;ОЛ
 OnlineDoc;Online documentation;Онлайн документация
 IsSupportAtomicReRegister;Atomic reregister;Атомарная перерегистрация
+MoreThanCloseTime;Time {0} more than close time {1}.;Время {0} больше чем время закрытия {1}.
+BigRangeError;The difference between {0} and {1} cannot be more than 1 day.;Разница между {0} и {1} не может быть больше 1 дня.
 XamlStr391;Description of the source and its data;Описание источника и получаемых данных
 XamlStr392;Task description:;Описание источника:
 XamlStr394;Optimize;Оптимизировать

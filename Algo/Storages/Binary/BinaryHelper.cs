@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return id;
 		}
 
-		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset)
+		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset, bool bigRange = false)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(nameof(writer));
@@ -205,6 +205,17 @@ namespace StockSharp.Algo.Storages.Binary
 					{
 						writer.Write(false);
 						writer.WriteInt(timeDiff.Hours);
+
+						if (timeDiff.Days > 0)
+						{
+							if (!bigRange)
+								throw new ArgumentOutOfRangeException(LocalizedStrings.BigRangeError.Put(prevTime, dto));
+
+							writer.Write(true);
+							writer.WriteInt(timeDiff.Days);
+						}
+						else
+							writer.Write(false);
 					}
 
 					writer.WriteBits(timeDiff.Minutes, 6);
@@ -245,7 +256,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return time;
 		}
 
-		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset)
+		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset, bool bigRange = false)
 		{
 			if (allowDiffOffsets)
 			{
@@ -267,7 +278,16 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (reader.Read())
 				{
-					time += (reader.Read() ? reader.Read(5) : reader.ReadInt()) * TimeSpan.TicksPerHour;
+					if (reader.Read())
+						time += reader.Read(5) * TimeSpan.TicksPerHour;
+					else
+					{
+						time += reader.ReadInt() * TimeSpan.TicksPerHour;
+
+						if (reader.Read())
+							time += reader.ReadInt() * TimeSpan.TicksPerDay;
+					}
+
 					time += reader.Read(6) * TimeSpan.TicksPerMinute;
 					time += reader.Read(6) * TimeSpan.TicksPerSecond;
 				}

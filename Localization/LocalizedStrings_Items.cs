@@ -44486,5 +44486,25 @@ namespace StockSharp.Localization
 		/// Session '{0}' not found.
 		/// </summary>
 		public static string SessionNotFound => GetString(SessionNotFoundKey);
+
+		/// <summary>
+		/// Time {0} more than close time {1}.
+		/// </summary>
+		public const string MoreThanCloseTimeKey = nameof(MoreThanCloseTime);
+
+		/// <summary>
+		/// Time {0} more than close time {1}.
+		/// </summary>
+		public static string MoreThanCloseTime => GetString(MoreThanCloseTimeKey);
+
+		/// <summary>
+		/// The difference between {0} and {1} cannot be more than 1 day.
+		/// </summary>
+		public const string BigRangeErrorKey = nameof(BigRangeError);
+
+		/// <summary>
+		/// The difference between {0} and {1} cannot be more than 1 day.
+		/// </summary>
+		public static string BigRangeError => GetString(BigRangeErrorKey);
 	}
 }

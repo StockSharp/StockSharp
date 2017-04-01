@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Storages.Binary
 		private readonly object _arg;
 
 		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 74, MarketDataVersions.Version56, exchangeInfoProvider)
+			: base(securityId, 74, MarketDataVersions.Version57, exchangeInfoProvider)
 		{
 			if (arg == null)
 				throw new ArgumentNullException(nameof(arg));
@@ -174,9 +174,14 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WritePriceEx(candle.HighPrice, metaInfo, SecurityId);
 				}
 
+				if (!candle.CloseTime.IsDefault() && candle.OpenTime > candle.CloseTime)
+					throw new ArgumentException(LocalizedStrings.MoreThanCloseTime.Put(candle.OpenTime, candle.CloseTime));
+
 				var lastOffset = metaInfo.LastServerOffset;
 				metaInfo.LastTime = writer.WriteTime(candle.OpenTime, metaInfo.LastTime, LocalizedStrings.Str998, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
+
+				var bigRange = metaInfo.Version >= MarketDataVersions.Version57;
 
 				if (metaInfo.Version >= MarketDataVersions.Version46)
 				{
@@ -217,7 +222,10 @@ namespace StockSharp.Algo.Storages.Binary
 						if (first.Offset != lastOffset)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(first, lastOffset));
 
-						metaInfo.LastTime = writer.WriteTime(first, metaInfo.LastTime, LocalizedStrings.Str999, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+						if (!candle.CloseTime.IsDefault() && first > candle.CloseTime)
+							throw new ArgumentException(LocalizedStrings.MoreThanCloseTime.Put(first, candle.CloseTime));
+
+						metaInfo.LastTime = writer.WriteTime(first, metaInfo.LastTime, LocalizedStrings.Str999, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset, bigRange);
 					}
 
 					if (!second.IsDefault())
@@ -225,7 +233,10 @@ namespace StockSharp.Algo.Storages.Binary
 						if (second.Offset != lastOffset)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(second, lastOffset));
 
-						metaInfo.LastTime = writer.WriteTime(second, metaInfo.LastTime, LocalizedStrings.Str1000, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+						if (!candle.CloseTime.IsDefault() && second > candle.CloseTime)
+							throw new ArgumentException(LocalizedStrings.MoreThanCloseTime.Put(second, candle.CloseTime));
+
+						metaInfo.LastTime = writer.WriteTime(second, metaInfo.LastTime, LocalizedStrings.Str1000, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset, bigRange);
 					}
 				}
 
@@ -238,7 +249,7 @@ namespace StockSharp.Algo.Storages.Binary
 						if (candle.CloseTime.Offset != lastOffset)
 							throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(candle.CloseTime, lastOffset));
 
-						metaInfo.LastTime = writer.WriteTime(candle.CloseTime, metaInfo.LastTime, LocalizedStrings.Str1001, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+						metaInfo.LastTime = writer.WriteTime(candle.CloseTime, metaInfo.LastTime, LocalizedStrings.Str1001, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset, bigRange);
 					}
 				}
 				else
@@ -450,14 +461,16 @@ namespace StockSharp.Algo.Storages.Binary
 			candle.OpenTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset);
 			metaInfo.FirstServerOffset = lastOffset;
 
+			var bigRange = metaInfo.Version >= MarketDataVersions.Version57;
+
 			if (metaInfo.Version >= MarketDataVersions.Version46)
 			{
 				if (reader.Read())
 				{
 					var isOrdered = reader.Read();
 
-					var first = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset);
-					var second = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset);
+					var first = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset, bigRange);
+					var second = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset, bigRange);
 
 					candle.HighTime = isOrdered ? first : second;
 					candle.LowTime = isOrdered ? second : first;
@@ -465,17 +478,17 @@ namespace StockSharp.Algo.Storages.Binary
 				else
 				{
 					if (reader.Read())
-						candle.HighTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset);
+						candle.HighTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset, bigRange);
 
 					if (reader.Read())
-						candle.LowTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset);
+						candle.LowTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset, bigRange);
 				}
 			}
 
 			if (metaInfo.Version >= MarketDataVersions.Version47)
 			{
 				if (reader.Read())
-					candle.CloseTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset);
+					candle.CloseTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, ref lastOffset, bigRange);
 			}
 			else
 				candle.CloseTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset);
