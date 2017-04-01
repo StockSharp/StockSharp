@@ -346,6 +346,8 @@ namespace StockSharp.Algo.Storages
 
 		public IEnumerable<TData> Load(DateTime date)
 		{
+			date = date.Date;
+
 			lock (GetSync(date))
 			{
 				var stream = LoadStream(date);
@@ -371,6 +373,8 @@ namespace StockSharp.Algo.Storages
 
 		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
 		{
+			date = date.Date;
+
 			lock (GetSync(date))
 			{
 				using (var stream = LoadStream(date))
@@ -405,6 +409,8 @@ namespace StockSharp.Algo.Storages
 
 		void IMarketDataStorage.Delete(DateTime date)
 		{
+			date = date.Date;
+
 			lock (GetSync(date))
 				Drive.Delete(date);
 		}
