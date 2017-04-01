@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
 		public OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 200, MarketDataVersions.Version52, exchangeInfoProvider)
+			: base(securityId, 200, MarketDataVersions.Version53, exchangeInfoProvider)
 		{
 		}
 
@@ -193,6 +193,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version47;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
 
 			foreach (var message in messages)
 			{
@@ -263,7 +264,7 @@ namespace StockSharp.Algo.Storages.Binary
 				writer.Write(message.Side == Sides.Buy);
 
 				var lastOffset = metaInfo.LastServerOffset;
-				metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, LocalizedStrings.Str1013, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+				metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, LocalizedStrings.Str1013, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
 				if (hasTrade)
@@ -373,10 +374,11 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version47;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset);
+			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 

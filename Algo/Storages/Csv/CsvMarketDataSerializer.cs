@@ -155,6 +155,11 @@ namespace StockSharp.Algo.Storages.Csv
 		public StorageFormats Format => StorageFormats.Csv;
 
 		/// <summary>
+		/// Time precision.
+		/// </summary>
+		public TimeSpan TimePrecision { get; } = TimeSpan.FromMilliseconds(1);
+
+		/// <summary>
 		/// To create empty meta-information.
 		/// </summary>
 		/// <param name="date">Date.</param>

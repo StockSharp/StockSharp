@@ -410,7 +410,7 @@ namespace StockSharp.Algo.Storages.Binary
 		};
 
 		public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 50, MarketDataVersions.Version54, exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version55, exchangeInfoProvider)
 		{
 		}
 
@@ -458,13 +458,14 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version53;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 
 			foreach (var message in messages)
 			{
 				if (metaInfo.Version >= MarketDataVersions.Version49)
 				{
 					var lastOffset = metaInfo.LastServerOffset;
-					metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+					metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 					metaInfo.LastServerOffset = lastOffset;
 
 					var hasLocalTime = !message.LocalTime.IsDefault() && message.LocalTime != message.ServerTime;
@@ -474,7 +475,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (hasLocalTime)
 					{
 						lastOffset = metaInfo.LastLocalOffset;
-						metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str919, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset);
+						metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str919, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 						metaInfo.LastLocalOffset = lastOffset;
 					}
 
@@ -491,7 +492,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (metaInfo.Version < MarketDataVersions.Version49)
 					{
 						var offset = TimeSpan.Zero;
-						metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset, false, ref offset);
+						metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset, false, false, ref offset);
 					}
 
 					writer.WriteInt(MapTo(metaInfo, change.Key));
@@ -671,12 +672,14 @@ namespace StockSharp.Algo.Storages.Binary
 
 							if (metaInfo.FirstFieldTime.IsDefault())
 							{
-								timeValue = timeValue.Truncate();
+								if (!isTickPrecision)
+									timeValue = timeValue.StorageBinaryOldTruncate();
+
 								metaInfo.FirstFieldTime = metaInfo.LastFieldTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
 							}
 
 							var lastOffset = metaInfo.LastServerOffset;
-							metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+							metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 							metaInfo.LastServerOffset = lastOffset;
 							break;
 						}
@@ -859,6 +862,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version53;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 
 			var l1Msg = new Level1ChangeMessage { SecurityId = SecurityId };
 
@@ -868,7 +872,7 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				var prevTime = metaInfo.FirstTime;
 				var lastOffset = metaInfo.FirstServerOffset;
-				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset);
+				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.FirstTime = prevTime;
 				metaInfo.FirstServerOffset = lastOffset;
 
@@ -876,7 +880,7 @@ namespace StockSharp.Algo.Storages.Binary
 				{
 					prevTime = metaInfo.FirstLocalTime;
 					lastOffset = metaInfo.FirstLocalOffset;
-					l1Msg.LocalTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset);
+					l1Msg.LocalTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 					metaInfo.FirstLocalTime = prevTime;
 					metaInfo.FirstLocalOffset = lastOffset;
 				}
@@ -889,7 +893,7 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				var prevTime = metaInfo.FirstTime;
 				var offset = TimeSpan.Zero;
-				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, false, ref offset);
+				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, false, false, ref offset);
 				l1Msg.LocalTime = metaInfo.FirstTime = prevTime;
 			}
 
@@ -1086,7 +1090,7 @@ namespace StockSharp.Algo.Storages.Binary
 					{
 						var prevTime = metaInfo.FirstFieldTime;
 						var lastOffset = metaInfo.FirstServerOffset;
-						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset));
+						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset));
 						metaInfo.FirstFieldTime = prevTime;
 						metaInfo.FirstServerOffset = lastOffset;
 						break;

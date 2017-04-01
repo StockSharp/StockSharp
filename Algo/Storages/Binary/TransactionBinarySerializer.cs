@@ -243,7 +243,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 200, MarketDataVersions.Version59, exchangeInfoProvider)
+			: base(securityId, 200, MarketDataVersions.Version60, exchangeInfoProvider)
 		{
 		}
 
@@ -271,6 +271,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version51;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version56;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version60;
 
 			foreach (var msg in messages)
 			{
@@ -377,7 +378,7 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WriteVolume(msg.Balance.Value, metaInfo, SecurityId);
 
 				var lastOffset = metaInfo.LastServerOffset;
-				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
 				writer.WriteNullableInt(msg.OrderType);
@@ -435,7 +436,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.Version < MarketDataVersions.Version59)
 					continue;
 
-				WriteItemLocalTime(writer, metaInfo, msg);
+				WriteItemLocalTime(writer, metaInfo, msg, isTickPrecision);
 			}
 		}
 
@@ -492,9 +493,11 @@ namespace StockSharp.Algo.Storages.Binary
 			var visibleVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
 			var balance = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
 
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version60;
+
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			var serverTime = reader.ReadTime(ref prevTime, true, true, metaInfo.GetTimeZone(true, SecurityId, ExchangeInfoProvider), true, ref lastOffset);
+			var serverTime = reader.ReadTime(ref prevTime, true, true, metaInfo.GetTimeZone(true, SecurityId, ExchangeInfoProvider), true, isTickPrecision, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 
@@ -588,7 +591,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (metaInfo.Version >= MarketDataVersions.Version59)
 			{
-				msg.LocalTime = ReadItemLocalTime(reader, metaInfo);
+				msg.LocalTime = ReadItemLocalTime(reader, metaInfo, isTickPrecision);
 			}
 
 			return msg;

@@ -329,7 +329,7 @@ namespace StockSharp.Algo.Storages
 			var first = dates.First().ApplyTimeZone(TimeZoneInfo.Utc);
 			var last = dates.Last().EndOfDay().ApplyTimeZone(TimeZoneInfo.Utc);
 
-			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).Truncate(), (to ?? last).Truncate()));
+			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).StorageTruncate(storage.Serializer.TimePrecision), (to ?? last).StorageTruncate(storage.Serializer.TimePrecision)));
 		}
 
 		/// <summary>
@@ -427,9 +427,16 @@ namespace StockSharp.Algo.Storages
 			return securities.ReadById(securityId.ToStringId());
 		}
 
-		internal static DateTimeOffset Truncate(this DateTimeOffset time)
+		internal static DateTimeOffset StorageTruncate(this DateTimeOffset time, TimeSpan precision)
 		{
-			return time.Truncate(TimeSpan.TicksPerMillisecond);
+			var ticks = precision.Ticks;
+
+			return ticks == 1 ? time : time.Truncate(ticks);
+		}
+
+		internal static DateTimeOffset StorageBinaryOldTruncate(this DateTimeOffset time)
+		{
+			return time.StorageTruncate(TimeSpan.FromMilliseconds(1));
 		}
 
 		/// <summary>

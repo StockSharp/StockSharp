@@ -28,6 +28,7 @@ StockSharp API Change log
 * (feature) CandleHelper. ToCandles. Only formed option.
 * (feature) ExchangeBoard. Serialization fixes (WCF and Xml).
 * (feature) Storage. CandleBinarySerializer. Support big time frames.
+* (feature) Storage. Binary format. Tick time precision.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.

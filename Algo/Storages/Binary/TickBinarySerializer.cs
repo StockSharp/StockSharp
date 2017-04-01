@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
 		public TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 50, MarketDataVersions.Version54, exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version55, exchangeInfoProvider)
 		{
 		}
 
@@ -123,6 +123,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 
 			foreach (var msg in messages)
 			{
@@ -174,7 +175,7 @@ namespace StockSharp.Algo.Storages.Binary
 				writer.WriteSide(msg.OriginSide);
 
 				var lastOffset = metaInfo.LastServerOffset;
-				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str985, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str985, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
 				if (metaInfo.Version < MarketDataVersions.Version40)
@@ -195,7 +196,7 @@ namespace StockSharp.Algo.Storages.Binary
 					if (hasLocalTime)
 					{
 						lastOffset = metaInfo.LastLocalOffset;
-						metaInfo.LastLocalTime = writer.WriteTime(msg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str1024, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset);
+						metaInfo.LastLocalTime = writer.WriteTime(msg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str1024, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 						metaInfo.LastLocalOffset = lastOffset;
 					}
 				}
@@ -269,10 +270,11 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, ref lastOffset);
+			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 
@@ -306,7 +308,7 @@ namespace StockSharp.Algo.Storages.Binary
 				{
 					var prevLocalTime = metaInfo.FirstLocalTime;
 					lastOffset = metaInfo.FirstLocalOffset;
-					var localTime = reader.ReadTime(ref prevLocalTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset);
+					var localTime = reader.ReadTime(ref prevLocalTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 					metaInfo.FirstLocalTime = prevLocalTime;
 					metaInfo.FirstLocalOffset = lastOffset;
 					msg.LocalTime = localTime;

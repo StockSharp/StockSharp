@@ -54,6 +54,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public static readonly Version Version57 = new Version(5, 7);
 		public static readonly Version Version58 = new Version(5, 8);
 		public static readonly Version Version59 = new Version(5, 9);
+		public static readonly Version Version60 = new Version(6, 0);
 	}
 
 	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo
@@ -404,6 +405,8 @@ namespace StockSharp.Algo.Storages.Binary
 		protected Version Version { get; set; }
 		protected IExchangeInfoProvider ExchangeInfoProvider { get; }
 
+		public TimeSpan TimePrecision { get; } = TimeSpan.FromTicks(1);
+
 		public StorageFormats Format => StorageFormats.Binary;
 
 		IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
@@ -445,18 +448,18 @@ namespace StockSharp.Algo.Storages.Binary
 		protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);
 		public abstract TData MoveNext(MarketDataEnumerator enumerator);
 
-		protected void WriteItemLocalTime(BitArrayWriter writer, TMetaInfo metaInfo, Message message)
+		protected void WriteItemLocalTime(BitArrayWriter writer, TMetaInfo metaInfo, Message message, bool isTickPrecision)
 		{
 			var lastLocalOffset = metaInfo.LastItemLocalOffset;
-			metaInfo.LastItemLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastItemLocalTime, "local time", true, true, metaInfo.LocalOffset, true, ref lastLocalOffset);
+			metaInfo.LastItemLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastItemLocalTime, "local time", true, true, metaInfo.LocalOffset, true, isTickPrecision, ref lastLocalOffset);
 			metaInfo.LastItemLocalOffset = lastLocalOffset;
 		}
 
-		protected DateTimeOffset ReadItemLocalTime(BitArrayReader reader, TMetaInfo metaInfo)
+		protected DateTimeOffset ReadItemLocalTime(BitArrayReader reader, TMetaInfo metaInfo, bool isTickPrecision)
 		{
 			var prevTsTime = metaInfo.FirstItemLocalTime;
 			var lastOffset = metaInfo.FirstItemLocalOffset;
-			var retVal = reader.ReadTime(ref prevTsTime, true, true, lastOffset, true, ref lastOffset);
+			var retVal = reader.ReadTime(ref prevTsTime, true, true, lastOffset, true, isTickPrecision, ref lastOffset);
 			metaInfo.FirstItemLocalTime = prevTsTime;
 			metaInfo.FirstItemLocalOffset = lastOffset;
 			return retVal;

@@ -31,6 +31,11 @@ namespace StockSharp.Algo.Storages
 		StorageFormats Format { get; }
 
 		/// <summary>
+		/// Time precision.
+		/// </summary>
+		TimeSpan TimePrecision { get; }
+
+		/// <summary>
 		/// To create empty meta-information.
 		/// </summary>
 		/// <param name="date">Date.</param>

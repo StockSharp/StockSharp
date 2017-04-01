@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Storages
 
 		protected DateTime GetTruncatedTime(TData data)
 		{
-			return _getTime(data).Truncate().UtcDateTime;
+			return _getTime(data).StorageTruncate(Serializer.TimePrecision).UtcDateTime;
 		}
 
 		private SyncObject GetSync(DateTime time)

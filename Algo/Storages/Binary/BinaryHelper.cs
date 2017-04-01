@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return id;
 		}
 
-		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset, bool bigRange = false)
+		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset, bool bigRange = false)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(nameof(writer));
@@ -176,7 +176,8 @@ namespace StockSharp.Algo.Storages.Binary
 			else if (isUtc && dto.Offset != offset)
 				throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(dto, offset));
 
-			dto = dto.Truncate();
+			if (!isTickPrecision)
+				dto = dto.StorageBinaryOldTruncate();
 
 			var time = isUtc ? dto.UtcDateTime : dto.LocalDateTime;
 
@@ -253,10 +254,15 @@ namespace StockSharp.Algo.Storages.Binary
 			
 			writer.WriteInt(timeDiff.Milliseconds);
 
+			if (isTickPrecision)
+			{
+				writer.WriteInt((int)(timeDiff.Ticks % 10000));
+			}
+
 			return time;
 		}
 
-		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset, bool bigRange = false)
+		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset, bool bigRange = false)
 		{
 			if (allowDiffOffsets)
 			{
@@ -297,6 +303,9 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 
 				time += reader.ReadInt() * TimeSpan.TicksPerMillisecond;
+
+				if (isTickPrecision)
+					time += reader.ReadInt();
 
 				time = prevTime.Ticks + sign * time;
 			}
