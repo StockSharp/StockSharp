@@ -3504,6 +3504,11 @@
             Order log received.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.GuiConnector`1.TransactionIdGenerator">
+      <summary>
+            Transaction id generator.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)">
       <summary>
             Get session state for required board.
@@ -3627,6 +3632,13 @@
             To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult" />.
             </summary>
       <param name="criteria">The criterion which fields will be used as a filter.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Get <see cref="T:StockSharp.Messages.SecurityId" />.
+            </summary>
+      <param name="security">Security.</param>
+      <returns>Security ID.</returns>
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)">
       <summary>
