@@ -24,6 +24,9 @@ StockSharp API Change log
 * (feature) IRemoteStorage. Exchanges and boards support. Delete securities, exchanges and boards support.
 * (bug) FIX server. http://stocksharp.ru/posts/m/39529/ Fix ObjectDisposedException error handling.
 * (feature) RemoteStorage. Extended security info.
+* (feature) CandleBuilder. Uses messages.
+* (feature) CandleHelper. ToCandles. Only formed option.
+* (feature) ExchangeBoard. Serialization fixes (WCF and Xml).
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.
