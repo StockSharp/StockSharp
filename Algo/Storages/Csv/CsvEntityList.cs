@@ -91,11 +91,21 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (item == null)
 				Add(entity);
-			else
+			else if (IsChanged(entity))
 				Write();
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Is <paramref name="entity"/> changed.
+		/// </summary>
+		/// <param name="entity">Trade object.</param>
+		/// <returns>Is changed.</returns>
+		protected virtual bool IsChanged(T entity)
+		{
+			return true;
+		}
 
 		/// <summary>
 		/// Get key from trade object.
@@ -177,6 +187,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 		internal void ReadItems(List<Exception> errors)
 		{
+			if (errors == null)
+				throw new ArgumentNullException(nameof(errors));
+
 			if (!File.Exists(_fileName))
 				return;
 
@@ -234,25 +247,33 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (isFullChanged)
 			{
-				Write(_items.CachedValues, false, true);
+				ClearCache();
+				Write(_items.CachedValues, false);
 			}
 			else if (addedItems.Length > 0)
 			{
-				Write(addedItems, true, false);
+				Write(addedItems, true);
 			}
 
 			return true;
 		}
 
-		private void Write(IEnumerable<T> items, bool append, bool clear)
+		/// <summary>
+		/// Clear cache.
+		/// </summary>
+		protected virtual void ClearCache()
+		{
+			
+		}
+
+		private void Write(IEnumerable<T> items, bool append)
 		{
 			using (var stream = new FileStream(_fileName, FileMode.OpenOrCreate))
 			{
-				if (clear)
-					stream.SetLength(0);
-
 				if (append)
 					stream.Position = stream.Length;
+				else
+					stream.SetLength(0);
 
 				using (var writer = new CsvFileWriter(stream, Registry.Encoding))
 				{

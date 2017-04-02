@@ -31,7 +31,7 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.IdentifiersKey)]
 	[DescriptionLoc(LocalizedStrings.Str603Key)]
-	public struct SecurityExternalId : ICloneable<SecurityExternalId>
+	public struct SecurityExternalId : ICloneable<SecurityExternalId>, IEquatable<SecurityExternalId>
 	{
 		///// <summary>
 		///// Initializes a new instance of the <see cref="SecurityExternalId"/>.
@@ -119,8 +119,20 @@ namespace StockSharp.BusinessEntities
 				Isin = Isin,
 				Ric = Ric,
 				Sedol = Sedol,
-				InteractiveBrokers = InteractiveBrokers
+				InteractiveBrokers = InteractiveBrokers,
+				Plaza = Plaza,
 			};
+		}
+
+		/// <summary>
+		/// Creates a new object that is a copy of the current instance.
+		/// </summary>
+		/// <returns>
+		/// A new object that is a copy of this instance.
+		/// </returns>
+		object ICloneable.Clone()
+		{
+			return Clone();
 		}
 
 		/// <summary>
@@ -158,15 +170,75 @@ namespace StockSharp.BusinessEntities
 			return str;
 		}
 
-		/// <summary>
-		/// Creates a new object that is a copy of the current instance.
-		/// </summary>
-		/// <returns>
-		/// A new object that is a copy of this instance.
-		/// </returns>
-		object ICloneable.Clone()
+		/// <inheritdoc />
+		public override int GetHashCode()
 		{
-			throw new NotImplementedException();
+			return base.GetHashCode();
+		}
+
+		/// <summary>
+		/// Compare <see cref="SecurityExternalId"/> on the equivalence.
+		/// </summary>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
+		public override bool Equals(object other)
+		{
+			if (other == null)
+				return false;
+
+			return Equals((SecurityExternalId)other);
+		}
+
+		/// <inheritdoc />
+		public bool Equals(SecurityExternalId other)
+		{
+			if (Bloomberg != other.Bloomberg)
+				return false;
+
+			if (Cusip != other.Cusip)
+				return false;
+
+			if (IQFeed != other.IQFeed)
+				return false;
+
+			if (Isin != other.Isin)
+				return false;
+
+			if (Ric != other.Ric)
+				return false;
+
+			if (Sedol != other.Sedol)
+				return false;
+
+			if (InteractiveBrokers != other.InteractiveBrokers)
+				return false;
+
+			if (Plaza != other.Plaza)
+				return false;
+
+			return true;
+		}
+
+		/// <summary>
+		/// Compare the inequality of two identifiers.
+		/// </summary>
+		/// <param name="left">Left operand.</param>
+		/// <param name="right">Right operand.</param>
+		/// <returns><see langword="true" />, if identifiers are equal, otherwise, <see langword="false" />.</returns>
+		public static bool operator !=(SecurityExternalId left, SecurityExternalId right)
+		{
+			return !(left == right);
+		}
+
+		/// <summary>
+		/// Compare two identifiers for equality.
+		/// </summary>
+		/// <param name="left">Left operand.</param>
+		/// <param name="right">Right operand.</param>
+		/// <returns><see langword="true" />, if the specified identifiers are equal, otherwise, <see langword="false" />.</returns>
+		public static bool operator ==(SecurityExternalId left, SecurityExternalId right)
+		{
+			return left.Equals(right);
 		}
 	}
 }

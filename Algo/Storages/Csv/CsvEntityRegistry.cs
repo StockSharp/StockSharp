@@ -308,16 +308,153 @@ namespace StockSharp.Algo.Storages.Csv
 				return board;
 			}
 
+			private class LiteSecurity
+			{
+				public string Name { get; set; }
+				public string Code { get; set; }
+				public string Class { get; set; }
+				public string ShortName { get; set; }
+				public string Board { get; set; }
+				public string UnderlyingSecurityId { get; set; }
+				public decimal? PriceStep { get; set; }
+				public decimal? VolumeStep { get; set; }
+				public decimal? Multiplier { get; set; }
+				public int? Decimals { get; set; }
+				public SecurityTypes? Type { get; set; }
+				public DateTimeOffset? ExpiryDate { get; set; }
+				public DateTimeOffset? SettlementDate { get; set; }
+				public decimal? Strike { get; set; }
+				public OptionTypes? OptionType { get; set; }
+				public CurrencyTypes? Currency { get; set; }
+				public SecurityExternalId ExternalId { get; set; }
+
+				public Security ToSecurity(SecurityCsvList list, string id)
+				{
+					return new Security
+					{
+						Id = id,
+						Name = Name,
+						Code = Code,
+						Class = Class,
+						ShortName = ShortName,
+						Board = list.GetBoard(Board),
+						UnderlyingSecurityId = UnderlyingSecurityId,
+						PriceStep = PriceStep,
+						VolumeStep = VolumeStep,
+						Multiplier = Multiplier,
+						Decimals = Decimals,
+						Type = Type,
+						ExpiryDate = ExpiryDate,
+						SettlementDate = SettlementDate,
+						Strike = Strike,
+						OptionType = OptionType,
+						Currency = Currency,
+						ExternalId = ExternalId.Clone(),
+					};
+				}
+
+				public void Update(Security security)
+				{
+					Name = security.Name;
+					Code = security.Code;
+					Class = security.Class;
+					ShortName = security.ShortName;
+					Board = security.Board.Code;
+					UnderlyingSecurityId = security.UnderlyingSecurityId;
+					PriceStep = security.PriceStep;
+					VolumeStep = security.VolumeStep;
+					Multiplier = security.Multiplier;
+					Decimals = security.Decimals;
+					Type = security.Type;
+					ExpiryDate = security.ExpiryDate;
+					SettlementDate = security.SettlementDate;
+					Strike = security.Strike;
+					OptionType = security.OptionType;
+					Currency = security.Currency;
+					ExternalId = security.ExternalId.Clone();
+				}
+
+				public bool IsChanged(Security security)
+				{
+					if (Name != security.Name)
+						return true;
+
+					if (Code != security.Code)
+						return true;
+
+					if (Class != security.Class)
+						return true;
+
+					if (ShortName != security.ShortName)
+						return true;
+
+					if (Board != security.Board.Code)
+						return true;
+
+					if (UnderlyingSecurityId != security.UnderlyingSecurityId)
+						return true;
+
+					if (PriceStep != security.PriceStep)
+						return true;
+
+					if (VolumeStep != security.VolumeStep)
+						return true;
+
+					if (Multiplier != security.Multiplier)
+						return true;
+
+					if (Decimals != security.Decimals)
+						return true;
+
+					if (Type != security.Type)
+						return true;
+
+					if (ExpiryDate != security.ExpiryDate)
+						return true;
+
+					if (SettlementDate != security.SettlementDate)
+						return true;
+
+					if (Strike != security.Strike)
+						return true;
+
+					if (OptionType != security.OptionType)
+						return true;
+
+					if (Currency != security.Currency)
+						return true;
+
+					if (ExternalId != security.ExternalId)
+						return true;
+
+					return false;
+				}
+			}
+
+			private readonly Dictionary<string, LiteSecurity> _cache = new Dictionary<string, LiteSecurity>(StringComparer.InvariantCultureIgnoreCase);
+
+			protected override bool IsChanged(Security entity)
+			{
+				return _cache[entity.Id].IsChanged(entity);
+			}
+
+			protected override void ClearCache()
+			{
+				_cache.Clear();
+				base.ClearCache();
+			}
+
 			protected override Security Read(FastCsvReader reader)
 			{
-				var security = new Security
+				var id = reader.ReadString();
+
+				var security = new LiteSecurity
 				{
-					Id = reader.ReadString(),
 					Name = reader.ReadString(),
 					Code = reader.ReadString(),
 					Class = reader.ReadString(),
 					ShortName = reader.ReadString(),
-					Board = GetBoard(reader.ReadString()),
+					Board = reader.ReadString(),
 					UnderlyingSecurityId = reader.ReadString(),
 					PriceStep = reader.ReadNullableDecimal(),
 					VolumeStep = reader.ReadNullableDecimal(),
@@ -343,11 +480,15 @@ namespace StockSharp.Algo.Storages.Csv
 					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
 
-				return security;
+				_cache.Add(id, security);
+
+				return security.ToSecurity(this, id);
 			}
 
 			protected override void Write(CsvFileWriter writer, Security data)
 			{
+				_cache[data.Id].Update(data);
+
 				writer.WriteRow(new[]
 				{
 					data.Id,
@@ -561,7 +702,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private readonly List<IList> _csvLists = new List<IList>();
 
-		private DelayAction _delayAction;
 		private Timer _flushTimer;
 		private bool _isFlushing;
 
@@ -591,6 +731,8 @@ namespace StockSharp.Algo.Storages.Csv
 				_encoding = value;
 			}
 		}
+
+		private DelayAction _delayAction;
 
 		/// <summary>
 		/// The time delayed action.

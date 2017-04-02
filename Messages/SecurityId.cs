@@ -190,7 +190,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Compare <see cref="Currency"/> on the equivalence.
+		/// Compare <see cref="SecurityId"/> on the equivalence.
 		/// </summary>
 		/// <param name="other">Another value with which to compare.</param>
 		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
