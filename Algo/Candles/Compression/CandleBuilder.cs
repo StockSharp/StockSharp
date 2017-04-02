@@ -258,6 +258,14 @@ namespace StockSharp.Algo.Candles.Compression
 			return currentCandle;
 		}
 
+		/// <summary>
+		/// Reset state.
+		/// </summary>
+		public virtual void Reset()
+		{
+			_info.Clear();
+		}
+
 		///// <summary>
 		///// To finish the candle forcibly.
 		///// </summary>
@@ -436,6 +444,16 @@ namespace StockSharp.Algo.Candles.Compression
 
 			GenerateEmptyCandles = true;
 		}
+
+		///// <summary>
+		///// Reset state.
+		///// </summary>
+		//public override void Reset()
+		//{
+		//	base.Reset();
+
+		//	_timeoutInfos.Clear();
+		//}
 
 		/// <summary>
 		/// To create a new candle.

@@ -322,6 +322,7 @@ namespace StockSharp.Algo.Candles
 					_finishedCandles.Clear();
 					_valuesEnumerator = _values.GetEnumerator();
 					_lastActiveCandle = null;
+					_candleBuilder.Reset();
 				}
 
 				public override bool MoveNext()
@@ -362,6 +363,7 @@ namespace StockSharp.Algo.Candles
 						return true;
 					}
 
+					Current = null;
 					return false;
 				}
 
