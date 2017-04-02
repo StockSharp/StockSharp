@@ -514,6 +514,7 @@ namespace StockSharp.Algo.Candles.Compression
 				CloseTime = value.Time,
 				HighTime = value.Time,
 				LowTime = value.Time,
+				TotalTicks = 1,
 			}, value);
 		}
 
@@ -539,7 +540,12 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			base.UpdateCandle(message, candle, value);
 
-			candle.TotalTicks = (candle.TotalTicks ?? 0) + 1;
+			var ticks = candle.TotalTicks;
+
+			if (ticks == null)
+				throw new InvalidOperationException();
+
+			candle.TotalTicks = ticks.Value + 1;
 		}
 	}
 
