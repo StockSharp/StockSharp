@@ -265,6 +265,7 @@ namespace StockSharp.Messages
 				IsNotSupported = IsNotSupported,
 				BuildCandlesMode = BuildCandlesMode,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
+				IsHistory = IsHistory,
 			};
 
 			CopyTo(clone);

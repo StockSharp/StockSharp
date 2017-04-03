@@ -23,6 +23,8 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using MoreLinq;
+
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Latency;
@@ -311,6 +313,8 @@ namespace StockSharp.Algo
 					_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
 					_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
+
+					_adapter.InnerAdapters.ForEach(InnerAdaptersOnAdded);
 				}
 
 				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;

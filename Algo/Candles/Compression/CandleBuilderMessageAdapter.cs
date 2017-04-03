@@ -383,7 +383,15 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 
 			if (message.IsHistory)
+			{
+				if (!info.MarketDataMessage.IsHistory)
+					return;
+
+				UnSubscribe(info);
+				RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = info.MarketDataMessage.TransactionId, IsHistory = true });
+
 				return;
+			}
 
 			_seriesInfosByTransactions.Remove(message.OriginalTransactionId);
 

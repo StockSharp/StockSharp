@@ -11,7 +11,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -88,6 +87,7 @@ namespace StockSharp.Algo.Storages
 	{
 		private class CsvExtendedInfoStorageItem : IExtendedInfoStorageItem
 		{
+			private readonly CsvExtendedInfoStorage _storage;
 			private readonly string _fileName;
 			private Tuple<string, Type>[] _fields;
 			private readonly SyncObject _lock = new SyncObject();
@@ -95,16 +95,20 @@ namespace StockSharp.Algo.Storages
 			private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = new Dictionary<SecurityId, Dictionary<string, object>>();
 			private bool _isDirty;
 
-			public CsvExtendedInfoStorageItem(string fileName)
+			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
 			{
+				if (storage == null)
+					throw new ArgumentNullException(nameof(storage));
+
 				if (fileName.IsEmpty())
 					throw new ArgumentNullException(nameof(fileName));
 
+				_storage = storage;
 				_fileName = fileName;
 			}
 
-			public CsvExtendedInfoStorageItem(string fileName, Tuple<string, Type>[] fields)
-				: this(fileName)
+			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, Tuple<string, Type>[] fields)
+				: this(storage, fileName)
 			{
 				if (fields == null)
 					throw new ArgumentNullException(nameof(fields));
@@ -173,20 +177,11 @@ namespace StockSharp.Algo.Storages
 					if (_fields == null)
 						throw new InvalidOperationException();
 				}
+			}
 
-				ThreadingHelper
-					.Timer(() =>
-					{
-						try
-						{
-							OnFlush();
-						}
-						catch (Exception ex)
-						{
-							ex.LogError();
-						}
-					})
-					.Interval(TimeSpan.FromSeconds(5));
+			private void Flush()
+			{
+				_storage.DelayAction.Add(OnFlush);
 			}
 
 			private void OnFlush()
@@ -198,20 +193,17 @@ namespace StockSharp.Algo.Storages
 
 					_isDirty = false;
 
-					CultureInfo.InvariantCulture.DoInCulture(() =>
+					using (var stream = new FileStream(_fileName, FileMode.Create, FileAccess.Write))
+					using (var writer = new CsvFileWriter(stream))
 					{
-						using (var stream = new FileStream(_fileName, FileMode.Create, FileAccess.Write))
-						using (var writer = new CsvFileWriter(stream))
-						{
-							writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
-							writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
+						writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
+						writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
 
-							foreach (var pair in _cache)
-							{
-								writer.WriteRow(new[] { pair.Key.ToStringId() }.Concat(_fields.Select(f => pair.Value.TryGetValue(f.Item1)?.To<string>())));
-							}
+						foreach (var pair in _cache)
+						{
+							writer.WriteRow(new[] { pair.Key.ToStringId() }.Concat(_fields.Select(f => pair.Value.TryGetValue(f.Item1)?.To<string>())));
 						}
-					});
+					}
 				}
 			}
 
@@ -237,6 +229,8 @@ namespace StockSharp.Algo.Storages
 						_isDirty = true;
 					}
 				}
+
+				Flush();
 			}
 
 			IEnumerable<Tuple<SecurityId, IDictionary<string, object>>> IExtendedInfoStorageItem.Load()
@@ -265,7 +259,12 @@ namespace StockSharp.Algo.Storages
 			void IExtendedInfoStorageItem.Delete(SecurityId securityId)
 			{
 				lock (_lock)
+				{
 					_cache.Remove(securityId);
+					_isDirty = true;
+				}
+
+				Flush();
 			}
 
 			IEnumerable<SecurityId> IExtendedInfoStorageItem.Securities
@@ -308,7 +307,7 @@ namespace StockSharp.Algo.Storages
 
 			return _items.SafeAdd(storageName, key =>
 			{
-				var item = new CsvExtendedInfoStorageItem(fileName, fields);
+				var item = new CsvExtendedInfoStorageItem(this, fileName, fields);
 				item.Init();
 				return item;
 			});
@@ -331,7 +330,7 @@ namespace StockSharp.Algo.Storages
 		{
 			foreach (var fileName in Directory.GetFiles(_path, "*.csv"))
 			{
-				var item = new CsvExtendedInfoStorageItem(fileName);
+				var item = new CsvExtendedInfoStorageItem(this, fileName);
 				_items.Add(Path.GetFileNameWithoutExtension(fileName), item);
 
 				item.Init();
