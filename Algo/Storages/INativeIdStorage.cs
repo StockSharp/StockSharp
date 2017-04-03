@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Reflection;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
@@ -78,6 +79,11 @@ namespace StockSharp.Algo.Storages
 
 			_path = path.ToFullPath();
 		}
+
+		/// <summary>
+		/// The time delayed action.
+		/// </summary>
+		public DelayAction DelayAction { get; set; }
 
 		/// <summary>
 		/// Initialize the storage.

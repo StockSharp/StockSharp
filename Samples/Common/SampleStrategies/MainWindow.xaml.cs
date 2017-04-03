@@ -75,8 +75,6 @@ namespace SampleStrategies
 
 			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
 
-			SerializationContext.DelayAction = entityRegistry.DelayAction = new DelayAction(entityRegistry.Storage, ex => ex.LogError());
-
 			Connector = new Connector(entityRegistry, storageRegistry);
 			LogManager.Sources.Add(Connector);
 

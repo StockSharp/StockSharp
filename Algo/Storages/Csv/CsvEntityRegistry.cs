@@ -794,6 +794,8 @@ namespace StockSharp.Algo.Storages.Csv
 			Add(_securities = new SecurityCsvList(this));
 			Add(_portfolios = new PortfolioCsvList(this));
 			Add(_positions = new PositionCsvList(this));
+
+			DelayAction = new DelayAction(Storage, ex => ex.LogError());
 		}
 
 		/// <summary>
