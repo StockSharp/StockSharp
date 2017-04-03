@@ -181,15 +181,14 @@ namespace StockSharp.Algo.Storages
 
 			private void Flush()
 			{
-				_storage.DelayAction.Add(OnFlush);
+				_storage.DelayAction.DefaultGroup.Add(OnFlush, canBatch: false);
 			}
 
 			private void OnFlush()
 			{
 				var copy = ((IExtendedInfoStorageItem)this).Load();
 
-				using (var stream = new FileStream(_fileName, FileMode.Create, FileAccess.Write))
-				using (var writer = new CsvFileWriter(stream))
+				using (var writer = new CsvFileWriter(new FileStream(_fileName, FileMode.Create, FileAccess.Write)))
 				{
 					writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
 					writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));

@@ -156,11 +156,7 @@ namespace StockSharp.Algo.Storages
 			((ICollectionEx<Security>)this).RemovedRange += s => _removed?.Invoke(s);
 		}
 
-		DelayAction IStorageEntityList<Security>.DelayAction
-		{
-			get { return DelayAction; }
-			set { DelayAction = (StorageDelayAction)value; }
-		}
+		DelayAction IStorageEntityList<Security>.DelayAction => DelayAction;
 
 		private Action<IEnumerable<Security>> _added;
 

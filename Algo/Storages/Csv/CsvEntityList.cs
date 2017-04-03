@@ -20,11 +20,6 @@ namespace StockSharp.Algo.Storages.Csv
 		private readonly string _fileName;
 
 		private readonly CachedSynchronizedDictionary<object, T> _items = new CachedSynchronizedDictionary<object, T>();
-		private readonly List<T> _addedItems = new List<T>();
-		private readonly SyncObject _syncRoot = new SyncObject();
-
-		private bool _isChanged;
-		private bool _isFullChanged;
 
 		/// <summary>
 		/// The CSV storage of trading objects.
@@ -51,10 +46,34 @@ namespace StockSharp.Algo.Storages.Csv
 
 		#region IStorageEntityList<T>
 
+		private DelayAction.Group _delayActionGroup;
+		private DelayAction _delayAction;
+
 		/// <summary>
 		/// The time delayed action.
 		/// </summary>
-		public DelayAction DelayAction { get; set; }
+		public DelayAction DelayAction
+		{
+			get { return _delayAction; }
+			set
+			{
+				if (_delayAction == value)
+					return;
+
+				if (_delayAction != null)
+				{
+					_delayAction.DeleteGroup(_delayActionGroup);
+					_delayActionGroup = null;
+				}
+
+				_delayAction = value;
+
+				if (_delayAction != null)
+				{
+					_delayActionGroup = _delayAction.CreateGroup(() => new CsvFileWriter(new FileStream(_fileName, FileMode.Append), Registry.Encoding));
+				}
+			}
+		}
 
 		T IStorageEntityList<T>.ReadById(object id)
 		{
@@ -165,24 +184,24 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private void Write()
 		{
-			lock (_syncRoot)
+			_delayActionGroup.Add(() =>
 			{
-				_isChanged = true;
-				_isFullChanged = true;
-			}
+				ClearCache();
 
-			Flush();
+				using (var writer = new CsvFileWriter(new FileStream(_fileName, FileMode.Create), Registry.Encoding))
+				{
+					foreach (var item in _items.CachedValues)
+						Write(writer, item);
+				}
+			}, canBatch: false);
 		}
 
 		private void Write(T entity)
 		{
-			lock (_syncRoot)
+			_delayActionGroup.Add(s =>
 			{
-				_isChanged = true;
-				_addedItems.Add(entity);
-			}
-
-			Flush();
+				Write((CsvFileWriter)s, entity);
+			});
 		}
 
 		internal void ReadItems(List<Exception> errors)
@@ -221,77 +240,11 @@ namespace StockSharp.Algo.Storages.Csv
 			});
 		}
 
-		private void Flush()
-		{
-			DelayAction.Add(() =>
-			{
-				if (OnFlush())
-					return;
-
-				Flush();
-			});
-		}
-
-		private bool OnFlush()
-		{
-			bool isChanged;
-			bool isFullChanged;
-
-			var addedItems = ArrayHelper.Empty<T>();
-
-			lock (_syncRoot)
-			{
-				isChanged = _isChanged;
-				isFullChanged = _isFullChanged;
-
-				_isChanged = false;
-
-				if (!isChanged)
-				{
-					_isFullChanged = false;
-					addedItems = _addedItems.CopyAndClear();
-				}
-			}
-
-			if (isChanged)
-				return false;
-
-			if (isFullChanged)
-			{
-				ClearCache();
-				Write(_items.CachedValues, false);
-			}
-			else if (addedItems.Length > 0)
-			{
-				Write(addedItems, true);
-			}
-
-			return true;
-		}
-
 		/// <summary>
 		/// Clear cache.
 		/// </summary>
 		protected virtual void ClearCache()
 		{
-			
-		}
-
-		private void Write(IEnumerable<T> items, bool append)
-		{
-			using (var stream = new FileStream(_fileName, FileMode.OpenOrCreate))
-			{
-				if (append)
-					stream.Position = stream.Length;
-				else
-					stream.SetLength(0);
-
-				using (var writer = new CsvFileWriter(stream, Registry.Encoding))
-				{
-					foreach (var item in items)
-						Write(writer, item);
-				}
-			}
 		}
 	}
 }

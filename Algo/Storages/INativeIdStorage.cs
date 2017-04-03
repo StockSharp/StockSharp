@@ -223,14 +223,13 @@ namespace StockSharp.Algo.Storages
 
 		private void Save(string name, SecurityId securityId, object nativeId)
 		{
-			DelayAction.Add(() =>
+			DelayAction.DefaultGroup.Add(() =>
 			{
 				var fileName = Path.Combine(_path, name + ".csv");
 
 				var appendHeader = !File.Exists(fileName);
 
-				using (var stream = new FileStream(fileName, FileMode.Append, FileAccess.Write))
-				using (var writer = new CsvFileWriter(stream))
+				using (var writer = new CsvFileWriter(new FileStream(fileName, FileMode.Append, FileAccess.Write)))
 				{
 					var nativeIdType = nativeId.GetType();
 					var typleType = nativeIdType.GetGenericType(typeof(Tuple<,>));
@@ -282,7 +281,7 @@ namespace StockSharp.Algo.Storages
 						});
 					}
 				}
-			});
+			}, canBatch: false);
 		}
 
 		private static string GetTypeName(Type nativeIdType)

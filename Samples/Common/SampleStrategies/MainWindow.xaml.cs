@@ -173,7 +173,7 @@ namespace SampleStrategies
 
 			Connector.Dispose();
 
-			ConfigManager.GetService<IEntityRegistry>().DelayAction.WaitFlush(true);
+			ConfigManager.GetService<IEntityRegistry>().DelayAction.DefaultGroup.WaitFlush(true);
 
 			base.OnClosing(e);
 		}

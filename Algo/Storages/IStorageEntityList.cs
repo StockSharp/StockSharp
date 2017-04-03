@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The time delayed action.
 		/// </summary>
-		DelayAction DelayAction { get; set; }
+		DelayAction DelayAction { get; }
 
 		/// <summary>
 		/// To load last created data.

@@ -68,27 +68,27 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// List of exchanges.
 		/// </summary>
-		public virtual IStorageEntityList<Exchange> Exchanges { get; }
+		public IStorageEntityList<Exchange> Exchanges { get; }
 
 		/// <summary>
 		/// The list of stock boards.
 		/// </summary>
-		public virtual IStorageEntityList<ExchangeBoard> ExchangeBoards { get; }
+		public IStorageEntityList<ExchangeBoard> ExchangeBoards { get; }
 
 		/// <summary>
 		/// The list of instruments.
 		/// </summary>
-		public virtual IStorageSecurityList Securities { get; }
+		public IStorageSecurityList Securities { get; }
 
 		/// <summary>
 		/// The list of portfolios.
 		/// </summary>
-		public virtual IStorageEntityList<Portfolio> Portfolios { get; }
+		public IStorageEntityList<Portfolio> Portfolios { get; }
 
 		/// <summary>
 		/// The list of positions.
 		/// </summary>
-		public virtual IStoragePositionList Positions { get; }
+		public IStoragePositionList Positions { get; }
 
 		///// <summary>
 		///// The list of own trades.
@@ -133,15 +133,15 @@ namespace StockSharp.Algo.Storages
 			{
 				_delayAction = value;
 
-				Exchanges.DelayAction = _delayAction;
-				ExchangeBoards.DelayAction = _delayAction;
-				Securities.DelayAction = _delayAction;
+				((ExchangeList)Exchanges).DelayAction = _delayAction;
+				((ExchangeBoardList)ExchangeBoards).DelayAction = _delayAction;
+				((SecurityList)Securities).DelayAction = _delayAction;
 				//Trades.DelayAction = _delayAction;
 				//MyTrades.DelayAction = _delayAction;
 				//Orders.DelayAction = _delayAction;
 				//OrderFails.DelayAction = _delayAction;
-				Portfolios.DelayAction = _delayAction;
-				Positions.DelayAction = _delayAction;
+				((PortfolioList)Portfolios).DelayAction = _delayAction;
+				((PositionList)Positions).DelayAction = _delayAction;
 				//News.DelayAction = _delayAction;
 			}
 		}
