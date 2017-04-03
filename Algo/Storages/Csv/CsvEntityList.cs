@@ -171,7 +171,7 @@ namespace StockSharp.Algo.Storages.Csv
 				_isFullChanged = true;
 			}
 
-			Registry.TryCreateTimer();
+			Flush();
 		}
 
 		private void Write(T entity)
@@ -182,7 +182,7 @@ namespace StockSharp.Algo.Storages.Csv
 				_addedItems.Add(entity);
 			}
 
-			Registry.TryCreateTimer();
+			Flush();
 		}
 
 		internal void ReadItems(List<Exception> errors)
@@ -221,7 +221,18 @@ namespace StockSharp.Algo.Storages.Csv
 			});
 		}
 
-		internal bool Flush()
+		private void Flush()
+		{
+			DelayAction.Add(() =>
+			{
+				if (OnFlush())
+					return;
+
+				Flush();
+			});
+		}
+
+		private bool OnFlush()
 		{
 			bool isChanged;
 			bool isFullChanged;

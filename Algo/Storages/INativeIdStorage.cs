@@ -209,7 +209,7 @@ namespace StockSharp.Algo.Storages
 
 		private void Save(string name, SecurityId securityId, object nativeId)
 		{
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			DelayAction.Add(() =>
 			{
 				var fileName = Path.Combine(_path, name + ".csv");
 

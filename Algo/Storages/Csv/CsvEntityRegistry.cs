@@ -4,11 +4,9 @@ namespace StockSharp.Algo.Storages.Csv
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 	using System.Text;
-	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -487,7 +485,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override void Write(CsvFileWriter writer, Security data)
 			{
-				_cache[data.Id].Update(data);
+				_cache
+					.SafeAdd(data.Id)
+					.Update(data);
 
 				writer.WriteRow(new[]
 				{
@@ -691,9 +691,6 @@ namespace StockSharp.Algo.Storages.Csv
 			return _dateTimeParser.Parse(str).ChangeKind(DateTimeKind.Utc);
 		}
 
-		private readonly TimeSpan _flushInterval = TimeSpan.FromSeconds(1);
-		private readonly SyncObject _syncRoot = new SyncObject();
-
 		private readonly ExchangeCsvList _exchanges;
 		private readonly ExchangeBoardCsvList _exchangeBoards;
 		private readonly SecurityCsvList _securities;
@@ -701,9 +698,6 @@ namespace StockSharp.Algo.Storages.Csv
 		private readonly PositionCsvList _positions;
 
 		private readonly List<IList> _csvLists = new List<IList>();
-
-		private Timer _flushTimer;
-		private bool _isFlushing;
 
 		/// <summary>
 		/// The path to data directory.
@@ -835,64 +829,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (errors.Count > 0)
 				throw new AggregateException(errors);
-		}
-
-		internal void TryCreateTimer()
-		{
-			lock (_syncRoot)
-			{
-				if (_isFlushing || _flushTimer != null)
-					return;
-
-				_flushTimer = ThreadingHelper
-					.Timer(() =>
-					{
-						try
-						{
-							CultureInfo.InvariantCulture.DoInCulture(OnFlush);
-						}
-						catch (Exception ex)
-						{
-							ex.LogError("Flush CSV entity registry error: {0}");
-						}
-					})
-					.Interval(_flushInterval);
-			}
-		}
-
-		private void OnFlush()
-		{
-			lock (_syncRoot)
-			{
-				if (_isFlushing)
-					return;
-
-				_isFlushing = true;
-			}
-
-			var canStop = true;
-
-			try
-			{
-				foreach (dynamic list in _csvLists)
-					canStop &= list.Flush();
-			}
-			finally
-			{
-				lock (_syncRoot)
-				{
-					_isFlushing = false;
-
-					if (canStop)
-					{
-						if (_flushTimer != null)
-						{
-							_flushTimer.Dispose();
-							_flushTimer = null;
-						}
-					}
-				}
-			}
 		}
 	}
 }
