@@ -265,8 +265,6 @@ namespace StockSharp.Algo.Storages
 
 			if (msg.IsSubscribe)
 			{
-				Subscribe(msg.SecurityId, CreateDataType(msg));
-
 				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
 				var to = msg.To ?? DateTimeOffset.Now;
 				var transactionId = msg.TransactionId;
@@ -277,6 +275,11 @@ namespace StockSharp.Algo.Storages
 
 				RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
+				if (msg.IsHistory)
+					return;
+
+				Subscribe(msg.SecurityId, CreateDataType(msg));
+
 				var clone = (MarketDataMessage)msg.Clone();
 				clone.From = lastTime;
 
@@ -284,6 +287,9 @@ namespace StockSharp.Algo.Storages
 			}
 			else
 			{
+				if (msg.IsHistory)
+					return;
+
 				UnSubscribe(msg.SecurityId, CreateDataType(msg));
 				base.SendInMessage(msg);
 			}
