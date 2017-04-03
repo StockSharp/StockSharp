@@ -54,6 +54,12 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
+		DelayAction IStorageEntityList<T>.DelayAction
+		{
+			get { return DelayAction; }
+			set { DelayAction = (StorageDelayAction)value; }
+		}
+
 		/// <summary>
 		/// To add the trading object to the collection.
 		/// </summary>

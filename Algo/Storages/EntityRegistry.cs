@@ -27,8 +27,6 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class EntityRegistry : IEntityRegistry
 	{
-		private DelayAction _delayAction;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EntityRegistry"/>.
 		/// </summary>
@@ -117,10 +115,18 @@ namespace StockSharp.Algo.Storages
 		///// </summary>
 		//public virtual IStorageEntityList<News> News { get; }
 
+		DelayAction IEntityRegistry.DelayAction
+		{
+			get { return DelayAction; }
+			set { DelayAction = (StorageDelayAction)value; }
+		}
+
+		private StorageDelayAction _delayAction;
+
 		/// <summary>
 		/// The time delayed action.
 		/// </summary>
-		public DelayAction DelayAction
+		public StorageDelayAction DelayAction
 		{
 			get { return _delayAction; }
 			set

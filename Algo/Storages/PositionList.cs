@@ -35,6 +35,12 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
+		DelayAction IStorageEntityList<Position>.DelayAction
+		{
+			get { return DelayAction; }
+			set { DelayAction = (StorageDelayAction)value; }
+		}
+
 		/// <summary>
 		/// To get data from essence for creation.
 		/// </summary>

@@ -334,7 +334,7 @@ namespace StockSharp.Algo
 			throw new NotSupportedException();
 		}
 
-		BatchContext IStorage.BeginBatch()
+		IBatchContext IStorage.BeginBatch()
 		{
 			throw new NotSupportedException();
 		}

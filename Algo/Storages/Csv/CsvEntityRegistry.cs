@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 			}
 
-			public BatchContext BeginBatch()
+			public IBatchContext BeginBatch()
 			{
 				return new BatchContext(this);
 			}
@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Storages.Csv
 			public event Action<object> Removed;
 		}
 
-		sealed class ExchangeCsvList : CsvEntityList<Exchange>
+		private class ExchangeCsvList : CsvEntityList<Exchange>
 		{
 			public ExchangeCsvList(CsvEntityRegistry registry)
 				: base(registry, "exchange.csv")
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		sealed class ExchangeBoardCsvList : CsvEntityList<ExchangeBoard>
+		private class ExchangeBoardCsvList : CsvEntityList<ExchangeBoard>
 		{
 			public ExchangeBoardCsvList(CsvEntityRegistry registry)
 				: base(registry, "exchangeboard.csv")
@@ -229,7 +229,7 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		sealed class SecurityCsvList : CsvEntityList<Security>, IStorageSecurityList
+		private class SecurityCsvList : CsvEntityList<Security>, IStorageSecurityList
 		{
 			public SecurityCsvList(CsvEntityRegistry registry)
 				: base(registry, "security.csv")
@@ -523,7 +523,7 @@ namespace StockSharp.Algo.Storages.Csv
 			#endregion
 		}
 
-		sealed class PortfolioCsvList : CsvEntityList<Portfolio>
+		private class PortfolioCsvList : CsvEntityList<Portfolio>
 		{
 			public PortfolioCsvList(CsvEntityRegistry registry)
 				: base(registry, "portfolio.csv")
@@ -591,7 +591,7 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		sealed class PositionCsvList : CsvEntityList<Position>, IStoragePositionList
+		private class PositionCsvList : CsvEntityList<Position>, IStoragePositionList
 		{
 			public PositionCsvList(CsvEntityRegistry registry)
 				: base(registry, "position.csv")
@@ -736,6 +736,9 @@ namespace StockSharp.Algo.Storages.Csv
 			get { return _delayAction; }
 			set
 			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
 				_delayAction = value;
 
 				_exchanges.DelayAction = _delayAction;
@@ -789,7 +792,7 @@ namespace StockSharp.Algo.Storages.Csv
 			Add(_portfolios = new PortfolioCsvList(this));
 			Add(_positions = new PositionCsvList(this));
 
-			DelayAction = new DelayAction(Storage, ex => ex.LogError());
+			DelayAction = new DelayAction(ex => ex.LogError());
 		}
 
 		/// <summary>

@@ -11,6 +11,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -279,12 +280,26 @@ namespace StockSharp.Algo.Storages
 
 			_path = path.ToFullPath();
 			Directory.CreateDirectory(path);
+
+			_delayAction = new DelayAction(ex => ex.LogError());
 		}
+
+		private DelayAction _delayAction;
 
 		/// <summary>
 		/// The time delayed action.
 		/// </summary>
-		public DelayAction DelayAction { get; set; }
+		public DelayAction DelayAction
+		{
+			get { return _delayAction; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				_delayAction = value;
+			}
+		}
 
 		IExtendedInfoStorageItem IExtendedInfoStorage.Create(string storageName, Tuple<string, Type>[] fields)
 		{

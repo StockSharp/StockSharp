@@ -156,6 +156,12 @@ namespace StockSharp.Algo.Storages
 			((ICollectionEx<Security>)this).RemovedRange += s => _removed?.Invoke(s);
 		}
 
+		DelayAction IStorageEntityList<Security>.DelayAction
+		{
+			get { return DelayAction; }
+			set { DelayAction = (StorageDelayAction)value; }
+		}
+
 		private Action<IEnumerable<Security>> _added;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added

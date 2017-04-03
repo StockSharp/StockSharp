@@ -12,6 +12,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Reflection;
 	using Ecng.Serialization;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -78,12 +79,25 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(path));
 
 			_path = path.ToFullPath();
+			_delayAction = new DelayAction(ex => ex.LogError());
 		}
+
+		private DelayAction _delayAction;
 
 		/// <summary>
 		/// The time delayed action.
 		/// </summary>
-		public DelayAction DelayAction { get; set; }
+		public DelayAction DelayAction
+		{
+			get { return _delayAction; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				_delayAction = value;
+			}
+		}
 
 		/// <summary>
 		/// Initialize the storage.
