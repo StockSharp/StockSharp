@@ -44506,5 +44506,15 @@ namespace StockSharp.Localization
 		/// The difference between {0} and {1} cannot be more than 1 day.
 		/// </summary>
 		public static string BigRangeError => GetString(BigRangeErrorKey);
+
+		/// <summary>
+		/// Native id lookup for '{0}'.
+		/// </summary>
+		public const string NativeIdLookupKey = nameof(NativeIdLookup);
+
+		/// <summary>
+		/// Native id lookup for '{0}'.
+		/// </summary>
+		public static string NativeIdLookup => GetString(NativeIdLookupKey);
 	}
 }

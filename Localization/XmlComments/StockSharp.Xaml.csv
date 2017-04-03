@@ -38,7 +38,10 @@ P:StockSharp.Xaml.BaseApplication.ExtendedFeatures/summary;DocStr8077
 F:StockSharp.Xaml.BaseApplication.AppDataPath/summary;DocStr8071
 F:StockSharp.Xaml.BaseApplication.PlatformConfigurationFile/summary;DocStr8072
 F:StockSharp.Xaml.BaseApplication.ProxyConfigurationFile/summary;DocStr8073
+F:StockSharp.Xaml.BaseApplication.SecurityNativeIdDir/summary;DocStr9672
 P:StockSharp.Xaml.BaseApplication.ProxySettings/summary;Str1435
+M:StockSharp.Xaml.BaseApplication.StartIsRunning/summary;DocStr9673
+M:StockSharp.Xaml.BaseApplication.StopIsRunning/summary;DocStr9674
 P:StockSharp.Xaml.BaseApplication.AppIcon/summary;DocStr8078
 P:StockSharp.Xaml.BaseApplication.CheckTargetPlatform/summary;DocStr8079
 M:StockSharp.Xaml.BaseApplication.OnStartup(System.Windows.StartupEventArgs)/summary;DocStr8074
@@ -891,6 +894,7 @@ M:StockSharp.Xaml.LogControl.Load(Ecng.Serialization.SettingsStorage)/summary;Do
 M:StockSharp.Xaml.LogControl.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.LogControl.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.LogControl.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+P:StockSharp.Xaml.LogControl.Like/summary;DocStr9675
 M:StockSharp.Xaml.LogControl.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.LogWindow/summary;DocStr8355
 M:StockSharp.Xaml.LogWindow.#ctor/summary;DocStr8356

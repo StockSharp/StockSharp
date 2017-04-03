@@ -81,6 +81,7 @@ M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Me
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/param/currentCandle;DocStr496
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/param/value;DocStr497
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/returns;DocStr498
+M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.Reset/summary;Str3282
 T:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder/summary;DocStr505
 P:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.CandleType/summary;DocStr475
 P:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.GenerateEmptyCandles/summary;DocStr507
@@ -171,6 +172,7 @@ M:StockSharp.Algo.Candles.Compression.ICandleBuilder.Process(StockSharp.Messages
 M:StockSharp.Algo.Candles.Compression.ICandleBuilder.Process(StockSharp.Messages.MarketDataMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/param/message;DocStr4473
 M:StockSharp.Algo.Candles.Compression.ICandleBuilder.Process(StockSharp.Messages.MarketDataMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/param/value;DocStr497
 M:StockSharp.Algo.Candles.Compression.ICandleBuilder.Process(StockSharp.Messages.MarketDataMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/returns;DocStr9654
+M:StockSharp.Algo.Candles.Compression.ICandleBuilder.Reset/summary;Str3282
 T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue/summary;DocStr657
 P:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue.Time/summary;DocStr659
 P:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue.Price/summary;Price
@@ -1166,6 +1168,9 @@ M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.#ctor(StockSharp.Algo.Storages.Cs
 P:StockSharp.Algo.Storages.Csv.CsvEntityList`1.DelayAction/summary;DocStr1335
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Save(`0)/summary;DocStr9398
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Save(`0)/param/entity;DocStr9399
+M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.IsChanged(`0)/summary;DocStr9670
+M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.IsChanged(`0)/param/entity;DocStr9399
+M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.IsChanged(`0)/returns;DocStr9671
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.GetKey(`0)/summary;DocStr9400
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.GetKey(`0)/param/item;DocStr9399
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.GetKey(`0)/returns;DocStr9401
@@ -1180,6 +1185,7 @@ M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.OnAdded(`0)/param/item;DocStr9399
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.OnRemoved(`0)/summary;DocStr8459
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.OnRemoved(`0)/param/item;DocStr9399
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.OnCleared/summary;DocStr8459
+M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.ClearCache/summary;DocStr858
 T:StockSharp.Algo.Storages.Csv.CsvEntityRegistry/summary;DocStr9193
 P:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Path/summary;DocStr9194
 P:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Storage/summary;DocStr1336
@@ -1357,6 +1363,7 @@ M:StockSharp.Algo.Storages.IExtendedInfoStorage.Create(System.String,System.Tupl
 T:StockSharp.Algo.Storages.CsvExtendedInfoStorage/summary;DocStr9379
 M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.#ctor(System.String)/param/path;DocStr9340
+P:StockSharp.Algo.Storages.CsvExtendedInfoStorage.DelayAction/summary;DocStr1335
 M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.Init/summary;DocStr9249
 T:StockSharp.Algo.Storages.INativeIdStorage/summary;DocStr9329
 M:StockSharp.Algo.Storages.INativeIdStorage.Init/summary;DocStr9249
@@ -1380,6 +1387,7 @@ M:StockSharp.Algo.Storages.INativeIdStorage.TryGetBySecurityId(System.String,Sto
 T:StockSharp.Algo.Storages.CsvNativeIdStorage/summary;DocStr9338
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.#ctor(System.String)/param/path;DocStr9340
+P:StockSharp.Algo.Storages.CsvNativeIdStorage.DelayAction/summary;DocStr1335
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.Get(System.String)/summary;DocStr9330
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.Get(System.String)/param/name;DocStr429

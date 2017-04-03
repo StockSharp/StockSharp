@@ -4484,6 +4484,7 @@ MaxReadBytesDesc;Gets and sets the maximum allowed bytes per read.;Получи�
 MaxWriteBytesDesc;Gets and sets the maximum allowed bytes per write.;Получить и задать максимально допустимое число байтов для каждой операции записи.
 MaxBytesExceeded;Current count of bytes '{0}' exceeded the allowed size '{1}'.;Текущее количество байтов '{0}' превысило допустимый размер '{1}'.
 SessionNotFound;Session '{0}' not found.;Сессия '{0}' не найдена.
+NativeIdLookup;Native id lookup for '{0}'.;Поиск системного идентификатора для '{0}'.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13927,4 +13928,10 @@ DocStr9665;Build candles modes;Режима построения свечей
 DocStr9666;Request built candles and build the missing candles from trades, depths etc;Запросить готовые свечи, или построить их из сделок, стаканов и т.д.
 DocStr9667;Request only built candles;Запросить готовые свечи
 DocStr9668;Build from trades, depths etc;Построить из сделок, стаканов и т.д.
-DocStr9669;Candles builder;Candles builder
+DocStr9669;Candles builder;Построитель свечей
+DocStr9670;Is {0} changed;Изменилось ли {0}
+DocStr9671;Is changed;Изменилось ли
+DocStr9672;The path to the directory with native security identifiers;Путь к директории с системными идентификаторами инструментов
+DocStr9673;Check if an instance of the application already started;Проверить, если экземпляр приложения уже запущен
+DocStr9674;Release all resources allocated by {0};Освободить все ресурсы, выделенные через {0}
+DocStr9675;Text filter for the log messages;Текстовый фильтр для лог сообщений
