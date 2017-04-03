@@ -93,7 +93,6 @@ namespace StockSharp.Algo.Storages
 			private readonly SyncObject _lock = new SyncObject();
 			//private readonly Dictionary<string, Type> _fieldTypes = new Dictionary<string, Type>(StringComparer.InvariantCultureIgnoreCase);
 			private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = new Dictionary<SecurityId, Dictionary<string, object>>();
-			private bool _isDirty;
 
 			public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName)
 			{
@@ -186,23 +185,17 @@ namespace StockSharp.Algo.Storages
 
 			private void OnFlush()
 			{
-				lock (_lock)
+				var copy = ((IExtendedInfoStorageItem)this).Load();
+
+				using (var stream = new FileStream(_fileName, FileMode.Create, FileAccess.Write))
+				using (var writer = new CsvFileWriter(stream))
 				{
-					if (!_isDirty)
-						return;
+					writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
+					writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
 
-					_isDirty = false;
-
-					using (var stream = new FileStream(_fileName, FileMode.Create, FileAccess.Write))
-					using (var writer = new CsvFileWriter(stream))
+					foreach (var pair in copy)
 					{
-						writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
-						writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
-
-						foreach (var pair in _cache)
-						{
-							writer.WriteRow(new[] { pair.Key.ToStringId() }.Concat(_fields.Select(f => pair.Value.TryGetValue(f.Item1)?.To<string>())));
-						}
+						writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
 					}
 				}
 			}
@@ -225,8 +218,6 @@ namespace StockSharp.Algo.Storages
 						dict[field.Item1] = value;
 
 						//_fieldTypes.TryAdd(field, value.GetType());
-
-						_isDirty = true;
 					}
 				}
 
@@ -259,10 +250,7 @@ namespace StockSharp.Algo.Storages
 			void IExtendedInfoStorageItem.Delete(SecurityId securityId)
 			{
 				lock (_lock)
-				{
 					_cache.Remove(securityId);
-					_isDirty = true;
-				}
 
 				Flush();
 			}
