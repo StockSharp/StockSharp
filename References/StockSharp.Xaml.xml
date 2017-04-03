@@ -210,9 +210,24 @@
             The path to the configuration file of proxy settings.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.BaseApplication.SecurityNativeIdDir">
+      <summary>
+            The path to the directory with native security identifiers.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.BaseApplication.ProxySettings">
       <summary>
             Proxy-server settings.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.BaseApplication.StartIsRunning">
+      <summary>
+            Check if an instance of the application already started.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.BaseApplication.StopIsRunning">
+      <summary>
+            Release all resources allocated by <see cref="M:StockSharp.Xaml.BaseApplication.StartIsRunning" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.BaseApplication.AppIcon">
@@ -4054,6 +4069,11 @@
             Save settings.
             </summary>
       <param name="storage">Settings storage.</param>
+    </member>
+    <member name="P:StockSharp.Xaml.LogControl.Like">
+      <summary>
+            Text filter for the log messages.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.LogControl.InitializeComponent">
       <summary>

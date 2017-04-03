@@ -29,6 +29,7 @@ StockSharp API Change log
 * (feature) ExchangeBoard. Serialization fixes (WCF and Xml).
 * (feature) Storage. CandleBinarySerializer. Support big time frames.
 * (feature) Storage. Binary format. Tick time precision.
+* (feature) LogControl. Like filter.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.

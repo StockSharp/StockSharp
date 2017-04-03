@@ -11,6 +11,7 @@ StockSharp Data (Hydra) Change log
 * (feature) Server mode. UploadSecurities. BasketSecurity instances support.
 * (bug) UI localization fixes.
 * (feature) RemoteStorage. Extended security info.
+* (feature) LogControl. Like filter.
 
 ###v4.3.22.1:
 * (bug) Remove security fix.
