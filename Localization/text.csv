@@ -4485,6 +4485,7 @@ MaxWriteBytesDesc;Gets and sets the maximum allowed bytes per write.;Получ�
 MaxBytesExceeded;Current count of bytes '{0}' exceeded the allowed size '{1}'.;Текущее количество байтов '{0}' превысило допустимый размер '{1}'.
 SessionNotFound;Session '{0}' not found.;Сессия '{0}' не найдена.
 NativeIdLookup;Native id lookup for '{0}'.;Поиск системного идентификатора для '{0}'.
+IsTradeAllowed;Is trade allowed;Резрешена ли торговля
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

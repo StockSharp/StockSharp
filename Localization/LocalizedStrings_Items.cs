@@ -44516,5 +44516,15 @@ namespace StockSharp.Localization
 		/// Native id lookup for '{0}'.
 		/// </summary>
 		public static string NativeIdLookup => GetString(NativeIdLookupKey);
+
+		/// <summary>
+		/// Is trade allowed
+		/// </summary>
+		public const string IsTradeAllowedKey = nameof(IsTradeAllowed);
+
+		/// <summary>
+		/// Is trade allowed
+		/// </summary>
+		public static string IsTradeAllowed => GetString(IsTradeAllowedKey);
 	}
 }
