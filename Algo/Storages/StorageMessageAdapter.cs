@@ -399,8 +399,6 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			RaiseStorageMessage(new HistoryInitializedMessage(securityId));
-
 			return lastTime;
 		}
 
@@ -649,31 +647,6 @@ namespace StockSharp.Algo.Storages
 		public override IMessageChannel Clone()
 		{
 			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry);
-		}
-	}
-
-	/// <summary>
-	/// Indicate history initialized message.
-	/// </summary>
-	public class HistoryInitializedMessage : Message
-	{
-		/// <summary>
-		/// Security identifier.
-		/// </summary>
-		public SecurityId SecurityId { get; }
-
-		/// <summary>
-		/// Message type.
-		/// </summary>
-		public static MessageTypes MessageType => ExtendedMessageTypes.HistoryInitialized;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="HistoryInitializedMessage"/>.
-		/// </summary>
-		public HistoryInitializedMessage(SecurityId securityId)
-			: base(MessageType)
-		{
-			SecurityId = securityId;
 		}
 	}
 }
