@@ -282,7 +282,7 @@ namespace StockSharp.Algo.Candles.Compression
 					.SafeAdd(Tuple.Create(msg.SecurityId, msg.DataType, msg.Arg))
 					.Add(info);
 
-				Subscribe(info);
+				Subscribe(info, false);
 			}
 			else
 			{
@@ -294,7 +294,7 @@ namespace StockSharp.Algo.Candles.Compression
 				var removed = subscriptions.RemoveWhere(s => s.MarketDataMessage.TransactionId == msg.OriginalTransactionId);
 
 				foreach (var info in removed)
-					UnSubscribe(info);
+					UnSubscribe(info, false);
 			}
 		}
 
@@ -312,7 +312,7 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					_seriesInfosByDates.Dequeue();
 
-					UnSubscribe(pair.Value);
+					UnSubscribe(pair.Value, true);
 					SendMarketDataFinished(pair.Value);
 
 					if (_seriesInfosByDates.Count == 0)
@@ -365,7 +365,7 @@ namespace StockSharp.Algo.Candles.Compression
 						SendNotSupported(info);
 					}
 					else
-						Subscribe(info);
+						Subscribe(info, true);
 
 					break;
 				}
@@ -387,7 +387,7 @@ namespace StockSharp.Algo.Candles.Compression
 				if (!info.MarketDataMessage.IsHistory)
 					return;
 
-				UnSubscribe(info);
+				RemoveSeriesInfo(info);
 				RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = info.MarketDataMessage.TransactionId, IsHistory = true });
 
 				return;
@@ -417,7 +417,7 @@ namespace StockSharp.Algo.Candles.Compression
 						SendMarketDataFinished(info);
 					}
 					else
-						Subscribe(info);
+						Subscribe(info, true);
 
 					break;
 				}
@@ -429,7 +429,7 @@ namespace StockSharp.Algo.Candles.Compression
 			return BuildCandlesFrom == marketDataType;
 		}
 
-		private void Subscribe(SeriesInfo info)
+		private void Subscribe(SeriesInfo info, bool isBack)
 		{
 			info.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
 			info.DataType = GetCurrentDataType(info);
@@ -441,10 +441,16 @@ namespace StockSharp.Algo.Candles.Compression
 
 			_seriesInfosByTransactions.Add(info.TransactionId, info);
 
-			base.SendInMessage(msg);
+			if (isBack)
+			{
+				msg.IsBack = true;
+				RaiseNewOutMessage(msg);
+			}
+			else
+				base.SendInMessage(msg);
 		}
 
-		private void UnSubscribe(SeriesInfo info)
+		private void UnSubscribe(SeriesInfo info, bool isBack)
 		{
 			RemoveSeriesInfo(info);
 
@@ -456,7 +462,13 @@ namespace StockSharp.Algo.Candles.Compression
 			mdMsg.DataType = info.DataType.Value;
 			mdMsg.IsSubscribe = false;
 
-			base.SendInMessage(mdMsg);
+			if (isBack)
+			{
+				mdMsg.IsBack = true;
+				RaiseNewOutMessage(mdMsg);
+			}
+			else
+				base.SendInMessage(mdMsg);
 		}
 
 		private MarketDataTypes GetCurrentDataType(SeriesInfo info)
@@ -496,7 +508,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var msg = new MarketDataFinishedMessage
 			{
-				OriginalTransactionId = info.MarketDataMessage.TransactionId,
+				OriginalTransactionId = info.MarketDataMessage.TransactionId
 			};
 
 			RaiseNewOutMessage(msg);
