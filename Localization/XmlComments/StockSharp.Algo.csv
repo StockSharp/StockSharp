@@ -1813,10 +1813,6 @@ M:StockSharp.Algo.Storages.StorageMessageAdapter.OnInnerAdapterNewOutMessage(Sto
 M:StockSharp.Algo.Storages.StorageMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
 M:StockSharp.Algo.Storages.StorageMessageAdapter.Clone/summary;DocStr643
 M:StockSharp.Algo.Storages.StorageMessageAdapter.Clone/returns;DocStr1116
-T:StockSharp.Algo.Storages.HistoryInitializedMessage/summary;DocStr9306
-P:StockSharp.Algo.Storages.HistoryInitializedMessage.SecurityId/summary;DocStr9333
-P:StockSharp.Algo.Storages.HistoryInitializedMessage.MessageType/summary;DocStr9
-M:StockSharp.Algo.Storages.HistoryInitializedMessage.#ctor(StockSharp.Messages.SecurityId)/summary;DocStr1
 T:StockSharp.Algo.Storages.StorageFormats/summary;DocStr1598
 F:StockSharp.Algo.Storages.StorageFormats.Binary/summary;DocStr1599
 F:StockSharp.Algo.Storages.StorageFormats.Csv/summary;DocStr1600
@@ -5293,10 +5289,6 @@ M:StockSharp.Algo.Strategies.StrategyHelper.GetIsInitialization(StockSharp.Algo.
 M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,System.Boolean)/summary;DocStr1782
 M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/isInitialization;DocStr1781
-M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.SecurityId,System.Boolean)/summary;DocStr1782
-M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.SecurityId,System.Boolean)/param/strategy;Strategy
-M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.SecurityId,System.Boolean)/param/securityId;DocStr9333
-M:StockSharp.Algo.Strategies.StrategyHelper.SetIsInitialization(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.SecurityId,System.Boolean)/param/isInitialization;DocStr1781
 M:StockSharp.Algo.Strategies.StrategyHelper.LoadState(StockSharp.Algo.Strategies.Strategy,Ecng.Serialization.SettingsStorage)/summary;DocStr1783
 M:StockSharp.Algo.Strategies.StrategyHelper.LoadState(StockSharp.Algo.Strategies.Strategy,Ecng.Serialization.SettingsStorage)/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.StrategyHelper.LoadState(StockSharp.Algo.Strategies.Strategy,Ecng.Serialization.SettingsStorage)/param/storage;MarketDataStorage

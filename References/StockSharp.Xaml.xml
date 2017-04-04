@@ -934,6 +934,11 @@
             Tag.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.StrategiesDashboardItem.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.StrategiesDashboardItem" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.StrategiesDashboardItem.#ctor(System.String,StockSharp.Algo.Strategies.Strategy,System.Object)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.StrategiesDashboardItem" />.
@@ -951,6 +956,10 @@
       </summary>
     </member>
     <member name="P:StockSharp.Xaml.StrategiesDashboardItem.PnLChange">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.ProcessState">
       <summary>
       </summary>
     </member>

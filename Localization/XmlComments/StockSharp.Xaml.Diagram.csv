@@ -689,6 +689,10 @@ M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.#ctor/summary;Do
 P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.IconName/summary;DocStr9214
 M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnStart/summary;DocStr7892
+T:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement/summary;DocStr9676
+P:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.TypeId/summary;DocStr7902
+P:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.IconName/summary;DocStr9214
+M:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.#ctor/summary;DocStr1
 T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1/summary;DocStr8052
 T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1/typeparam/T;DocStr8906
 P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Type/summary;Str2133

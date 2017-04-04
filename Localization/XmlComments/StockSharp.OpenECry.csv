@@ -61,16 +61,6 @@ P:StockSharp.OpenECry.OpenECryTrader.EnableOECLogging/summary;DocStr5952
 M:StockSharp.OpenECry.OpenECryTrader.SendMessage(System.String,System.String)/summary;DocStr5950
 M:StockSharp.OpenECry.OpenECryTrader.SendMessage(System.String,System.String)/param/userName;DocStr5951
 M:StockSharp.OpenECry.OpenECryTrader.SendMessage(System.String,System.String)/param/text;Str3167
-E:StockSharp.OpenECry.OpenECryTrader.NewCandles/summary;DocStr90
-E:StockSharp.OpenECry.OpenECryTrader.Stopped/summary;DocStr91
-M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
-M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
-M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84
-M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/to;DocStr85
-M:StockSharp.OpenECry.OpenECryTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr86
-M:StockSharp.OpenECry.OpenECryTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
-M:StockSharp.OpenECry.OpenECryTrader.OnProcessMessage(StockSharp.Messages.Message)/summary;DocStr80
-M:StockSharp.OpenECry.OpenECryTrader.OnProcessMessage(StockSharp.Messages.Message)/param/message;Str3166
 T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox/summary;DocStr5933
 M:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox.#ctor/summary;DocStr1
 T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor/summary;DocStr29

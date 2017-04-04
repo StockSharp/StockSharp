@@ -2696,6 +2696,26 @@
             The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement">
+      <summary>
+            Is trade allowed verification element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1">
       <summary>
             The diagram element with the changeable data type.

@@ -291,36 +291,6 @@
       <param name="userName">The recipient name.</param>
       <param name="text">Message text.</param>
     </member>
-    <member name="E:StockSharp.OpenECry.OpenECryTrader.NewCandles">
-      <summary>
-            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.OpenECry.OpenECryTrader.Stopped">
-      <summary>
-            The series processing end event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
-      <summary>
-            Subscribe to receive new candles.
-            </summary>
-      <param name="series">Candles series.</param>
-      <param name="from">The initial date from which you need to get data.</param>
-      <param name="to">The final date by which you need to get data.</param>
-    </member>
-    <member name="M:StockSharp.OpenECry.OpenECryTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-      <param name="series">Candles series.</param>
-    </member>
-    <member name="M:StockSharp.OpenECry.OpenECryTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <summary>
-            Process message.
-            </summary>
-      <param name="message">Message.</param>
-    </member>
     <member name="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox">
       <summary>
             The drop-down list to select the OpenECry server address.

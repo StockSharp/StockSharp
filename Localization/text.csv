@@ -13936,3 +13936,4 @@ DocStr9672;The path to the directory with native security identifiers;Путь �
 DocStr9673;Check if an instance of the application already started;Проверить, если экземпляр приложения уже запущен
 DocStr9674;Release all resources allocated by {0};Освободить все ресурсы, выделенные через {0}
 DocStr9675;Text filter for the log messages;Текстовый фильтр для лог сообщений
+DocStr9676;Is trade allowed verification element;Элемент диаграммы, определяющий возможность торговли
