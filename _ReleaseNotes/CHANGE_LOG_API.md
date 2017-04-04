@@ -30,6 +30,7 @@ StockSharp API Change log
 * (feature) Storage. CandleBinarySerializer. Support big time frames.
 * (feature) Storage. Binary format. Tick time precision.
 * (feature) LogControl. Like filter.
+* (bug) FinamHistorySource fix. http://stocksharp.ru/forum/8190/ne-zagruzhayutsya-dannye-s-finama/
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.
