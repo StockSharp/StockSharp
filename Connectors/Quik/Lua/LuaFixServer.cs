@@ -46,8 +46,8 @@ namespace StockSharp.Quik.Lua
 		{
 			//private readonly SynchronizedSet<long> _transactionIds = new SynchronizedSet<long>(); 
 
-			public FixServerEx(Func<string, SecureString, IPAddress, Tuple<TimeSpan, FixClientRoles>> authorize)
-				: base(authorize)
+			public FixServerEx(IRemoteAuthorization authorization)
+				: base(authorization)
 			{
 			}
 
@@ -128,6 +128,29 @@ namespace StockSharp.Quik.Lua
 		/// </summary>
 		public IExchangeInfoProvider ExchangeInfoProvider { get; } = new InMemoryExchangeInfoProvider();
 
+		private class LuaAuthorization : AnonymousRemoteAuthorization
+		{
+			private readonly LuaFixServer _server;
+
+			public LuaAuthorization(LuaFixServer server)
+			{
+				if (server == null)
+					throw new ArgumentNullException(nameof(server));
+
+				_server = server;
+			}
+
+			public override Guid ValidateCredentials(string login, SecureString password, IPAddress clientAddress)
+			{
+				if (_server.Login.IsEmpty())
+					return base.ValidateCredentials(login, password, clientAddress);
+				else if (login.CompareIgnoreCase(_server.Login) && password == _server._password)
+					return Guid.NewGuid();
+
+				throw new UnauthorizedAccessException();
+			}
+		}
+
 		/// <summary>
 		/// Создать <see cref="LuaFixServer"/>.
 		/// </summary>
@@ -136,16 +159,7 @@ namespace StockSharp.Quik.Lua
 			_requests.Close();
 			_securityClassInfo.FillDefault();
 
-			_fixServer = new FixServerEx((l, p, addr) =>
-			{
-				if (Login.IsEmpty() || (l.CompareIgnoreCase(Login) && p == _password))
-				{
-					_prevLevel1.Clear();
-					return Tuple.Create(TimeSpan.FromMilliseconds(100), FixClientRoles.Admin);
-				}
-
-				return null;
-			});
+			_fixServer = new FixServerEx(new LuaAuthorization(this));
 
 			_fixServer.NewOutMessage += message =>
 			{

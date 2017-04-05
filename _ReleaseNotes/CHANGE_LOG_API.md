@@ -31,6 +31,7 @@ StockSharp API Change log
 * (feature) Storage. Binary format. Tick time precision.
 * (feature) LogControl. Like filter.
 * (bug) FinamHistorySource fix. http://stocksharp.ru/forum/8190/ne-zagruzhayutsya-dannye-s-finama/
+* (feature) IRemoteAuthorization. Moved from Algo.History -> Algo.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.

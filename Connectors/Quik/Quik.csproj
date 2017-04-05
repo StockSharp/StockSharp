@@ -62,6 +62,9 @@
     <Reference Include="Ecng.Reflection">
       <HintPath>..\..\References\Ecng.Reflection.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Security">
+      <HintPath>..\..\References\Ecng.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
