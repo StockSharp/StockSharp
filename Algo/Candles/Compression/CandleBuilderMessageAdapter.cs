@@ -168,7 +168,7 @@ namespace StockSharp.Algo.Candles.Compression
 							base.SendInMessage(message);
 							break;
 					}
-					
+
 					break;
 				}
 
@@ -264,6 +264,15 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			if (msg.IsSubscribe)
 			{
+				if (msg.IsBack)
+				{
+					if (_seriesInfosByTransactions.ContainsKey(msg.TransactionId))
+					{
+						base.SendInMessage(msg);
+						return;
+					}
+				}
+
 				var info = new SeriesInfo
 				{
 					MarketDataMessage = (MarketDataMessage)msg.Clone(),
