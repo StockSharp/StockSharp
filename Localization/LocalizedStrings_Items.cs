@@ -44526,5 +44526,165 @@ namespace StockSharp.Localization
 		/// Is trade allowed
 		/// </summary>
 		public static string IsTradeAllowed => GetString(IsTradeAllowedKey);
+
+		/// <summary>
+		/// Session {0}. Exchanges search.
+		/// </summary>
+		public const string RemoteStorageLookupExchangesKey = nameof(RemoteStorageLookupExchanges);
+
+		/// <summary>
+		/// Session {0}. Exchanges search.
+		/// </summary>
+		public static string RemoteStorageLookupExchanges => GetString(RemoteStorageLookupExchangesKey);
+
+		/// <summary>
+		/// Session {0}. Exchange boards search.
+		/// </summary>
+		public const string RemoteStorageLookupExchangeBoardsKey = nameof(RemoteStorageLookupExchangeBoards);
+
+		/// <summary>
+		/// Session {0}. Exchange boards search.
+		/// </summary>
+		public static string RemoteStorageLookupExchangeBoards => GetString(RemoteStorageLookupExchangeBoardsKey);
+
+		/// <summary>
+		/// Session {0}. Gettings info about '{1}' exchanges.
+		/// </summary>
+		public const string RemoteStorageGetExchangesKey = nameof(RemoteStorageGetExchanges);
+
+		/// <summary>
+		/// Session {0}. Gettings info about '{1}' exchanges.
+		/// </summary>
+		public static string RemoteStorageGetExchanges => GetString(RemoteStorageGetExchangesKey);
+
+		/// <summary>
+		/// Session {0}. Gettings info about '{1}' boards.
+		/// </summary>
+		public const string RemoteStorageGetExchangeBoardsKey = nameof(RemoteStorageGetExchangeBoards);
+
+		/// <summary>
+		/// Session {0}. Gettings info about '{1}' boards.
+		/// </summary>
+		public static string RemoteStorageGetExchangeBoards => GetString(RemoteStorageGetExchangeBoardsKey);
+
+		/// <summary>
+		/// Session {0}. Save exchanges.
+		/// </summary>
+		public const string RemoteStorageSaveExchangesKey = nameof(RemoteStorageSaveExchanges);
+
+		/// <summary>
+		/// Session {0}. Save exchanges.
+		/// </summary>
+		public static string RemoteStorageSaveExchanges => GetString(RemoteStorageSaveExchangesKey);
+
+		/// <summary>
+		/// Session {0}. Save exchange boards.
+		/// </summary>
+		public const string RemoteStorageSaveExchangeBoardsKey = nameof(RemoteStorageSaveExchangeBoards);
+
+		/// <summary>
+		/// Session {0}. Save exchange boards.
+		/// </summary>
+		public static string RemoteStorageSaveExchangeBoards => GetString(RemoteStorageSaveExchangeBoardsKey);
+
+		/// <summary>
+		/// Session {0}. Deleting '{1}' exchanges.
+		/// </summary>
+		public const string RemoteStorageDeleteExchangesKey = nameof(RemoteStorageDeleteExchanges);
+
+		/// <summary>
+		/// Session {0}. Deleting '{1}' exchanges.
+		/// </summary>
+		public static string RemoteStorageDeleteExchanges => GetString(RemoteStorageDeleteExchangesKey);
+
+		/// <summary>
+		/// Session {0}. Deleting '{1}' boards.
+		/// </summary>
+		public const string RemoteStorageDeleteExchangeBoardsKey = nameof(RemoteStorageDeleteExchangeBoards);
+
+		/// <summary>
+		/// Session {0}. Deleting '{1}' boards.
+		/// </summary>
+		public static string RemoteStorageDeleteExchangeBoards => GetString(RemoteStorageDeleteExchangeBoardsKey);
+
+		/// <summary>
+		/// Session {0}. Get extended fields from '{1}' storage.
+		/// </summary>
+		public const string RemoteStorageGetSecurityExtendedFieldsKey = nameof(RemoteStorageGetSecurityExtendedFields);
+
+		/// <summary>
+		/// Session {0}. Get extended fields from '{1}' storage.
+		/// </summary>
+		public static string RemoteStorageGetSecurityExtendedFields => GetString(RemoteStorageGetSecurityExtendedFieldsKey);
+
+		/// <summary>
+		/// Session {0}. Create extended '{1}' storage with '{2}' fields.
+		/// </summary>
+		public const string RemoteStorageCreateSecurityExtendedFieldsKey = nameof(RemoteStorageCreateSecurityExtendedFields);
+
+		/// <summary>
+		/// Session {0}. Create extended '{1}' storage with '{2}' fields.
+		/// </summary>
+		public static string RemoteStorageCreateSecurityExtendedFields => GetString(RemoteStorageCreateSecurityExtendedFieldsKey);
+
+		/// <summary>
+		/// Session {0}. Add extended info to '{1}' storage for '{2}' security.
+		/// </summary>
+		public const string RemoteStorageAddSecurityExtendedInfoKey = nameof(RemoteStorageAddSecurityExtendedInfo);
+
+		/// <summary>
+		/// Session {0}. Add extended info to '{1}' storage for '{2}' security.
+		/// </summary>
+		public static string RemoteStorageAddSecurityExtendedInfo => GetString(RemoteStorageAddSecurityExtendedInfoKey);
+
+		/// <summary>
+		/// Session {0}. Delete extended info from '{1}' storage for '{2}' security.
+		/// </summary>
+		public const string RemoteStorageDeleteSecurityExtendedInfoKey = nameof(RemoteStorageDeleteSecurityExtendedInfo);
+
+		/// <summary>
+		/// Session {0}. Delete extended info from '{1}' storage for '{2}' security.
+		/// </summary>
+		public static string RemoteStorageDeleteSecurityExtendedInfo => GetString(RemoteStorageDeleteSecurityExtendedInfoKey);
+
+		/// <summary>
+		/// Session {0}. Get extended info storages.
+		/// </summary>
+		public const string RemoteStorageGetSecurityExtendedStoragesKey = nameof(RemoteStorageGetSecurityExtendedStorages);
+
+		/// <summary>
+		/// Session {0}. Get extended info storages.
+		/// </summary>
+		public static string RemoteStorageGetSecurityExtendedStorages => GetString(RemoteStorageGetSecurityExtendedStoragesKey);
+
+		/// <summary>
+		/// Session {0}. Get securities with extended info from '{1}' storage.
+		/// </summary>
+		public const string RemoteStorageGetExtendedInfoSecuritiesKey = nameof(RemoteStorageGetExtendedInfoSecurities);
+
+		/// <summary>
+		/// Session {0}. Get securities with extended info from '{1}' storage.
+		/// </summary>
+		public static string RemoteStorageGetExtendedInfoSecurities => GetString(RemoteStorageGetExtendedInfoSecuritiesKey);
+
+		/// <summary>
+		/// Session {0}. Get extended info from '{1}' storage for '{2}' security.
+		/// </summary>
+		public const string RemoteStorageGetSecurityExtendedInfoKey = nameof(RemoteStorageGetSecurityExtendedInfo);
+
+		/// <summary>
+		/// Session {0}. Get extended info from '{1}' storage for '{2}' security.
+		/// </summary>
+		public static string RemoteStorageGetSecurityExtendedInfo => GetString(RemoteStorageGetSecurityExtendedInfoKey);
+
+		/// <summary>
+		/// Session {0}. Get all extended info from '{1}' storage.
+		/// </summary>
+		public const string RemoteStorageGetAllExtendedInfoKey = nameof(RemoteStorageGetAllExtendedInfo);
+
+		/// <summary>
+		/// Session {0}. Get all extended info from '{1}' storage.
+		/// </summary>
+		public static string RemoteStorageGetAllExtendedInfo => GetString(RemoteStorageGetAllExtendedInfoKey);
 	}
 }

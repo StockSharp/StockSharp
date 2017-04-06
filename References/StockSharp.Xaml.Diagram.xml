@@ -1636,6 +1636,11 @@
             Use strategy parameters values for composition properties.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramStrategy.RiskRules">
+      <summary>
+            The risk rules.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramStrategy.CompositionChanged">
       <summary>
             The strategy diagram change event.

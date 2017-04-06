@@ -4486,6 +4486,22 @@ MaxBytesExceeded;Current count of bytes '{0}' exceeded the allowed size '{1}'.;�
 SessionNotFound;Session '{0}' not found.;Сессия '{0}' не найдена.
 NativeIdLookup;Native id lookup for '{0}'.;Поиск системного идентификатора для '{0}'.
 IsTradeAllowed;Is trade allowed;Резрешена ли торговля
+RemoteStorageLookupExchanges;Session {0}. Exchanges search.;Сессия {0}. Поиск бирж.
+RemoteStorageLookupExchangeBoards;Session {0}. Exchange boards search.;Сессия {0}. Поиск биржевых площадок.
+RemoteStorageGetExchanges;Session {0}. Gettings info about '{1}' exchanges.;Сессия {0}. Получение информации о '{1}' биржах.
+RemoteStorageGetExchangeBoards;Session {0}. Gettings info about '{1}' boards.;Сессия {0}. Получение информации о '{1}' площадках.
+RemoteStorageSaveExchanges;Session {0}. Save exchanges.;Сессия {0}. Сохранение бирж.
+RemoteStorageSaveExchangeBoards;Session {0}. Save exchange boards.;Сессия {0}. Сохранение биржевых площадок.
+RemoteStorageDeleteExchanges;Session {0}. Deleting '{1}' exchanges.;Сессия {0}. Удаление '{1}' бирж.
+RemoteStorageDeleteExchangeBoards;Session {0}. Deleting '{1}' boards.;Сессия {0}. Удаление '{1}' площадкок.
+RemoteStorageGetSecurityExtendedFields;Session {0}. Get extended fields for '{1}' storage.;Сессия {0}. Получение расширенных полей для хранилища '{1}'.
+RemoteStorageCreateSecurityExtendedFields;Session {0}. Create extended '{1}' storage with '{2}' fields.;Сессия {0}. Создание хранилища расширенной информации '{1}' с полями '{2}'.
+RemoteStorageAddSecurityExtendedInfo;Session {0}. Add extended info to '{1}' storage for '{2}' security.;Сессия {0}. Добавление расширенной информации в хранилище '{1}' для инструмента '{2}'.
+RemoteStorageDeleteSecurityExtendedInfo;Session {0}. Delete extended info from '{1}' storage for '{2}' security.;Сессия {0}. Удаление расширенной информации из хранилища '{1}' для инструмента '{2}'.
+RemoteStorageGetSecurityExtendedStorages;Session {0}. Get extended info storages.;Сессия {0}. Получение хранилищ расширенной информации.
+RemoteStorageGetExtendedInfoSecurities;Session {0}. Get securities with extended info from '{1}' storage.;Сессия {0}. Получение инструментов с расширенной информацией из хранилища '{1}'.
+RemoteStorageGetSecurityExtendedInfo;Session {0}. Get extended info from '{1}' storage for '{2}' security.;Сессия {0}. Получение расширенной информации из хранилища '{1}' для инструмента '{2}'.
+RemoteStorageGetAllExtendedInfo;Session {0}. Get all extended info from '{1}' storage.;Сессия {0}. Получение всей расширенной информации из хранилища '{1}'.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -4634,12 +4650,12 @@ DocStr153;The date on which you need to remove market data;Дата, для ко
 DocStr154;To download market data in the StockSharp storage format;Загрузить маркет-данные в формате хранилища StockSharp
 DocStr155;The date on which you need to download market data;Дата, для которой необходимо загрузить маркет-данные
 DocStr156;Market data in the StockSharp storage format. If the data does not exist then {0} will be returned;Маркет-данные в формате хранилища StockSharp. Если данных не существует, то будет возвращено {0}
-DocStr157;The interface describing the connection to {0} access check module;Интерфейс, описывающий модуль проверки доступа соединения с {0}
+DocStr157;The interface describing the connection access check module;Интерфейс, описывающий модуль проверки доступа соединения
 DocStr158;Get permission for request;Получить набор разрешений для запроса
 DocStr159;Possible permissions;Допустимые разрешения
-DocStr160;The connection to {0} access check module which provides access to all connections;Модуль проверки доступа соединения с {0}, предоставляющий доступ всем соединениям
-DocStr161;The connection to {0} access check module based on Windows authentication;Модуль проверки доступа соединения с {0}, основанный на Windows авторизации
-DocStr162;The connection to {0} access check module based on the {1} authentication;Модуль проверки доступа соединения с {0}, основанный на {1} авторизации
+DocStr160;The connection access check module which provides access to all connections;Модуль проверки доступа соединения, предоставляющий доступ всем соединениям
+DocStr161;The connection access check module based on Windows authentication;Модуль проверки доступа соединения, основанный на Windows авторизации
+DocStr162;The connection access check module based on the {0} authentication;Модуль проверки доступа соединения, основанный на {0} авторизации
 DocStr163;Available permissions which customer receives for work with data;Доступные разрешения работы с данными, которые получает клиент
 DocStr164;Market-data downloading;Сохранение данных
 DocStr165;Market-data uploading;Загрузка данных
@@ -13937,3 +13953,4 @@ DocStr9673;Check if an instance of the application already started;Провер�
 DocStr9674;Release all resources allocated by {0};Освободить все ресурсы, выделенные через {0}
 DocStr9675;Text filter for the log messages;Текстовый фильтр для лог сообщений
 DocStr9676;Is trade allowed verification element;Элемент диаграммы, определяющий возможность торговли
+DocStr9677;The risk rules;Риск правила

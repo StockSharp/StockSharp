@@ -153,8 +153,8 @@ M:StockSharp.Fix.FixServer.OnProcess(StockSharp.Fix.FixSession,System.String,Sto
 M:StockSharp.Fix.FixServer.OnProcess(StockSharp.Fix.FixSession,System.String,StockSharp.Fix.Native.IFixReader)/param/msgType;DocStr9
 M:StockSharp.Fix.FixServer.OnProcess(StockSharp.Fix.FixSession,System.String,StockSharp.Fix.Native.IFixReader)/param/reader;DocStr3154
 M:StockSharp.Fix.FixServer.OnProcess(StockSharp.Fix.FixSession,System.String,StockSharp.Fix.Native.IFixReader)/returns;DocStr3157
-M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.Security.SecureString,System.Net.IPAddress,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})/summary;DocStr1
-M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.Security.SecureString,System.Net.IPAddress,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})/param/authorize;DocStr3162
+M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.IRemoteAuthorization)/summary;DocStr1
+M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.IRemoteAuthorization)/param/authorization;DocStr3162
 P:StockSharp.Fix.FixServer.InitialTransactionId/summary;DocStr3172
 P:StockSharp.Fix.FixServer.ConvertToLatin/summary;DocStr9080
 P:StockSharp.Fix.FixServer.TransactionSession/summary;TransactionalSession
@@ -1443,9 +1443,6 @@ M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summ
 M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Fix.FixMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Fix.FixMessageAdapter.ToString/returns;DocStr50
-T:StockSharp.Fix.FixClientRoles/summary;DocStr3332
-F:StockSharp.Fix.FixClientRoles.Regular/summary;DocStr3333
-F:StockSharp.Fix.FixClientRoles.Admin/summary;DocStr3334
 T:StockSharp.Fix.FixDialects/summary;DocStr8807
 F:StockSharp.Fix.FixDialects.Default/summary;DocStr8808
 F:StockSharp.Fix.FixDialects.CFH/summary;DocStr8809

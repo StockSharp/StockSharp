@@ -466,6 +466,7 @@ M:StockSharp.Xaml.Diagram.DiagramSocketValue.ToString/returns;DocStr50
 T:StockSharp.Xaml.Diagram.DiagramStrategy/summary;DocStr8037
 P:StockSharp.Xaml.Diagram.DiagramStrategy.Composition/summary;DocStr8041
 P:StockSharp.Xaml.Diagram.DiagramStrategy.UseStrategyParameterValues/summary;DocStr9149
+P:StockSharp.Xaml.Diagram.DiagramStrategy.RiskRules/summary;DocStr9677
 E:StockSharp.Xaml.Diagram.DiagramStrategy.CompositionChanged/summary;DocStr8042
 M:StockSharp.Xaml.Diagram.DiagramStrategy.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.DiagramStrategy.OnStarted/summary;DocStr282

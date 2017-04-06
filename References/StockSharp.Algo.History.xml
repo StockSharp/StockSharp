@@ -676,45 +676,6 @@
       <param name="format">Format type.</param>
       <returns>Market data in the StockSharp storage format. If the data does not exist then <see cref="F:System.IO.Stream.Null" /> will be returned.</returns>
     </member>
-    <member name="T:StockSharp.Algo.History.Hydra.IRemoteStorageAuthorization">
-      <summary>
-            The interface describing the connection to <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" /> access check module.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorageAuthorization.HasPermissions(System.Guid,StockSharp.Algo.History.Hydra.RemoteStoragePermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})">
-      <summary>
-            Get permission for request.
-            </summary>
-      <param name="sessionId">Session ID.</param>
-      <param name="requiredPermissions">Required permissions.</param>
-      <param name="securityId">Security ID.</param>
-      <param name="dataType">Market data type.</param>
-      <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="P:StockSharp.Messages.CandleMessage.Arg" />.</param>
-      <param name="date">Date.</param>
-      <returns>Possible permissions.</returns>
-    </member>
-    <member name="T:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization">
-      <summary>
-            The connection to <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" /> access check module which provides access to all connections.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization.HasPermissions(System.Guid,StockSharp.Algo.History.Hydra.RemoteStoragePermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})">
-      <summary>
-            Get permission for request.
-            </summary>
-      <param name="sessionId">Session ID.</param>
-      <param name="requiredPermissions">Required permissions.</param>
-      <param name="securityId">Security ID.</param>
-      <param name="dataType">Market data type.</param>
-      <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="P:StockSharp.Messages.CandleMessage.Arg" />.</param>
-      <param name="date">Date.</param>
-      <returns>Possible permissions.</returns>
-    </member>
     <member name="T:StockSharp.Algo.History.Hydra.ISecurityRemoteExtendedStorage">
       <summary>
             Remote security extended info storage.
@@ -734,71 +695,6 @@
     <member name="M:StockSharp.Algo.History.Hydra.ISecurityRemoteExtendedStorage.DeleteSecurityExtendedInfo">
       <summary>
             Delete extended info.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Algo.History.Hydra.RemoteStoragePermissions">
-      <summary>
-            Available permissions which customer receives for work with data.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Save">
-      <summary>
-            Market-data downloading.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Load">
-      <summary>
-            Market-data uploading.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Delete">
-      <summary>
-            Data deletion.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.SecurityLookup">
-      <summary>
-            Security lookup.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.ExchangeLookup">
-      <summary>
-            Exchange lookup.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.ExchangeBoardLookup">
-      <summary>
-            Exchange board lookup.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.EditSecurities">
-      <summary>
-            Edit securities.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.EditExchanges">
-      <summary>
-            Edit exchanges.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.EditBoards">
-      <summary>
-            Edit boards.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.DeleteSecurities">
-      <summary>
-            Delete securities.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.DeleteExchanges">
-      <summary>
-            Delete exchanges.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.DeleteBoards">
-      <summary>
-            Delete boards.
             </summary>
     </member>
     <member name="T:StockSharp.Algo.History.Hydra.RemoteStorage">

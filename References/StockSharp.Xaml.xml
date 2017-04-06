@@ -533,6 +533,16 @@
             Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.RiskRulesEditor">
+      <summary>
+            Editor for <see cref="T:StockSharp.Algo.Risk.IRiskRule" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.RiskRulesEditor.#ctor">
+      <summary>
+            Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor">
       <summary>
             Editor for <see cref="T:StockSharp.BusinessEntities.ExchangeBoard" />.
@@ -1705,45 +1715,12 @@
             </summary>
       <returns>A string that represents the current object.</returns>
     </member>
-    <member name="T:StockSharp.Xaml.ProxySettingsEditor">
-      <summary>
-            The panel for editing <see cref="P:StockSharp.Xaml.ProxySettingsEditor.ProxySettings" />.
-            </summary>
-      <summary>
-            ProxySettingsEditor
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.ProxySettingsEditor.ProxySettingsProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.ProxySettingsEditor.ProxySettings" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.ProxySettingsEditor.ProxySettings">
-      <summary>
-            Proxy-server settings.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.ProxySettingsEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ProxySettingsEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.ProxySettingsEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.ProxyEditorWindow">
       <summary>
             The dialog box for editing <see cref="P:StockSharp.Xaml.ProxyEditorWindow.ProxySettings" />.
             </summary>
       <summary>
             ProxyEditorWindow
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.ProxyEditorWindow.ProxySettingsProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.ProxyEditorWindow.ProxySettings" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.ProxyEditorWindow.ProxySettings">

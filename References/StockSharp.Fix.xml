@@ -484,11 +484,11 @@
       <param name="reader">Data reader.</param>
       <returns>Whether the data was successfully processed.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.Security.SecureString,System.Net.IPAddress,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})">
+    <member name="M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.IRemoteAuthorization)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixServer" />.
             </summary>
-      <param name="authorize">The customer authentication.</param>
+      <param name="authorization">The customer authentication.</param>
     </member>
     <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
       <summary>
@@ -5603,21 +5603,6 @@
             Returns a string that represents the current object.
             </summary>
       <returns>A string that represents the current object.</returns>
-    </member>
-    <member name="T:StockSharp.Fix.FixClientRoles">
-      <summary>
-            Roles.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Fix.FixClientRoles.Regular">
-      <summary>
-            Regular connection.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Fix.FixClientRoles.Admin">
-      <summary>
-            Administrative connection.
-            </summary>
     </member>
     <member name="T:StockSharp.Fix.FixDialects">
       <summary>

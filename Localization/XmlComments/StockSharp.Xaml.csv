@@ -113,6 +113,8 @@ M:StockSharp.Xaml.OptionDeskModel.Refresh(System.Nullable{System.DateTimeOffset}
 M:StockSharp.Xaml.OptionDeskModel.Refresh(System.Nullable{System.DateTimeOffset},System.Nullable{System.Decimal})/param/assetPrice;DocStr8221
 T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor/summary;DocStr8144
 M:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor.#ctor/summary;DocStr9444
+T:StockSharp.Xaml.PropertyGrid.RiskRulesEditor/summary;DocStr8144
+M:StockSharp.Xaml.PropertyGrid.RiskRulesEditor.#ctor/summary;DocStr9444
 T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor/summary;DocStr8144
 F:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProviderProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProvider/summary;DocStr8914
@@ -357,13 +359,7 @@ M:StockSharp.Xaml.ProxySettings.Load(Ecng.Serialization.SettingsStorage)/summary
 M:StockSharp.Xaml.ProxySettings.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.ProxySettings.ToString/summary;DocStr49
 M:StockSharp.Xaml.ProxySettings.ToString/returns;DocStr50
-T:StockSharp.Xaml.ProxySettingsEditor/summary;DocStr8169
-F:StockSharp.Xaml.ProxySettingsEditor.ProxySettingsProperty/summary;DocStr29
-P:StockSharp.Xaml.ProxySettingsEditor.ProxySettings/summary;Str1435
-M:StockSharp.Xaml.ProxySettingsEditor.#ctor/summary;DocStr1
-M:StockSharp.Xaml.ProxySettingsEditor.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ProxyEditorWindow/summary;DocStr8170
-F:StockSharp.Xaml.ProxyEditorWindow.ProxySettingsProperty/summary;DocStr29
 P:StockSharp.Xaml.ProxyEditorWindow.ProxySettings/summary;Str1435
 M:StockSharp.Xaml.ProxyEditorWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.ProxyEditorWindow.InitializeComponent/summary;DocStr8

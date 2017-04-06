@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
 * (bug) BasketMessageAdapter and SubscriptionMessageAdapter. Fix derived MarketDataMessage types handling.
 * (bug) Strategy.MyTrades fill fix.
@@ -32,6 +32,7 @@ StockSharp API Change log
 * (feature) LogControl. Like filter.
 * (bug) FinamHistorySource fix. http://stocksharp.ru/forum/8190/ne-zagruzhayutsya-dannye-s-finama/
 * (feature) IRemoteAuthorization. Moved from Algo.History -> Algo.
+* (bug) RiskPanel and CommissionPanel. Refresh Title fix.
 
 ###v4.3.22:
 * (bug) SampleOptionsQuoting fix.
