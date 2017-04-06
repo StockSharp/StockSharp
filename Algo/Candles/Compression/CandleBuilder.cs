@@ -831,20 +831,20 @@ namespace StockSharp.Algo.Candles.Compression
 			if (currentCandle == null)
 				return NewCandle(message, value.Price, value.Price, value);
 
-			var delta = currentCandle.BoxSize.Value;
+			var delta = currentCandle.BoxSize;
 
 			if (currentCandle.OpenPrice < currentCandle.ClosePrice)
 			{
 				if ((value.Price - currentCandle.ClosePrice) > delta)
 				{
 					// New bullish candle
-					return NewCandle(message, currentCandle.ClosePrice, currentCandle.ClosePrice + delta, value);
+					return NewCandle(message, currentCandle.ClosePrice, (decimal)(currentCandle.ClosePrice + delta), value);
 				}
 
 				if ((currentCandle.OpenPrice - value.Price) > delta)
 				{
 					// New bearish candle
-					return NewCandle(message, currentCandle.OpenPrice, currentCandle.OpenPrice - delta, value);
+					return NewCandle(message, currentCandle.OpenPrice, (decimal)(currentCandle.OpenPrice - delta), value);
 				}
 			}
 			else
@@ -852,13 +852,13 @@ namespace StockSharp.Algo.Candles.Compression
 				if ((value.Price - currentCandle.OpenPrice) > delta)
 				{
 					// New bullish candle
-					return NewCandle(message, currentCandle.OpenPrice, currentCandle.OpenPrice + delta, value);
+					return NewCandle(message, currentCandle.OpenPrice, (decimal)(currentCandle.OpenPrice + delta), value);
 				}
 
 				if ((currentCandle.ClosePrice - value.Price) > delta)
 				{
 					// New bearish candle
-					return NewCandle(message, currentCandle.ClosePrice, currentCandle.ClosePrice - delta, value);
+					return NewCandle(message, currentCandle.ClosePrice, (decimal)(currentCandle.ClosePrice - delta), value);
 				}
 			}
 
