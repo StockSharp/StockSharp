@@ -55,13 +55,23 @@ namespace StockSharp.Algo.Risk
 			}
 		}
 
+		private RiskActions _action;
+
 		/// <summary>
 		/// Action that needs to be taken in case of rule activation.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str722Key)]
 		[DescriptionLoc(LocalizedStrings.Str859Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public RiskActions Action { get; set; }
+		public RiskActions Action
+		{
+			get { return _action; }
+			set
+			{
+				_action = value;
+				NotifyChanged(nameof(Action));
+			}
+		}
 
 		/// <summary>
 		/// To reset the state.
@@ -100,7 +110,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		private PropertyChangedEventHandler _propertyChanged;
-
+		
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
 			add { _propertyChanged += value; }
