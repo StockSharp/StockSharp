@@ -29,5 +29,6 @@ namespace StockSharp.Algo
 		public const MessageTypes CommissionRule = (MessageTypes)(-7);
 		public const MessageTypes HistorySource = (MessageTypes)(-8);
 		public const MessageTypes RemoveSecurity = (MessageTypes)(-9);
+		public const MessageTypes ProcessSuspendedSecurityMessages = (MessageTypes)(-10);
 	}
 }

@@ -16,6 +16,19 @@
 	/// </summary>
 	public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	{
+		private sealed class ProcessSuspendedSecurityMessage : Message
+		{
+			public SecurityId SecurityId { get; }
+
+			public ProcessSuspendedSecurityMessage(IMessageAdapter adapter, SecurityId securityId)
+				: base(ExtendedMessageTypes.ProcessSuspendedSecurityMessages)
+			{
+				Adapter = adapter;
+				SecurityId = securityId;
+				IsBack = true;
+			}
+		}
+
 		private readonly PairSet<object, SecurityId> _securityIds = new PairSet<object, SecurityId>();
 		private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = new Dictionary<SecurityId, List<Message>>();
 		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
@@ -38,6 +51,7 @@
 				throw new ArgumentNullException(nameof(storage));
 
 			Storage = storage;
+			Storage.Added += OnStorageNewIdentifierAdded;
 		}
 
 		/// <summary>
@@ -260,6 +274,10 @@
 					// TODO
 					break;
 				}
+
+				case ExtendedMessageTypes.ProcessSuspendedSecurityMessages:
+					ProcessSuspendedSecurityMessages(((ProcessSuspendedSecurityMessage)message).SecurityId);
+					break;
 			}
 
 			base.SendInMessage(message);
@@ -423,6 +441,20 @@
 				msg.ReplaceSecurityId(securityId);
 				base.OnInnerAdapterNewOutMessage(msg);
 			}
+		}
+
+		private void OnStorageNewIdentifierAdded(string storageName, SecurityId securityId, object nativeId)
+		{
+			if (!InnerAdapter.StorageName.CompareIgnoreCase(storageName))
+				return;
+
+			bool added;
+
+			lock (_syncRoot)
+				added = _securityIds.TryAdd(nativeId, securityId);
+
+			if (added)
+				RaiseNewOutMessage(new ProcessSuspendedSecurityMessage(this, securityId));
 		}
 
 		private static List<Message> GetMessages(RefPair<List<Message>, Dictionary<MessageTypes, Message>> tuple)
