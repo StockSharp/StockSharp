@@ -21,6 +21,11 @@ namespace StockSharp.Algo.Storages
 	public interface INativeIdStorage
 	{
 		/// <summary>
+		/// The new native security identifier added to storage.
+		/// </summary>
+		event Action<string, SecurityId, object> Added;
+
+		/// <summary>
 		/// Initialize the storage.
 		/// </summary>
 		void Init();
@@ -100,6 +105,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
+		/// The new native security identifier added to storage.
+		/// </summary>
+		public event Action<string, SecurityId, object> Added;
+
+		/// <summary>
 		/// Initialize the storage.
 		/// </summary>
 		public void Init()
@@ -175,6 +185,8 @@ namespace StockSharp.Algo.Storages
 
 			if (isPersistable)
 				Save(name, securityId, nativeId);
+
+			Added?.Invoke(name, securityId, nativeId);
 
 			return true;
 		}
@@ -352,6 +364,14 @@ namespace StockSharp.Algo.Storages
 	{
 		private readonly SynchronizedDictionary<string, PairSet<SecurityId, object>> _nativeIds = new SynchronizedDictionary<string, PairSet<SecurityId, object>>(StringComparer.InvariantCultureIgnoreCase);
 
+		private Action<string, SecurityId, object> _added;
+
+		event Action<string, SecurityId, object> INativeIdStorage.Added
+		{
+			add { _added += value; }
+			remove { _added -= value; }
+		}
+
 		void INativeIdStorage.Init()
 		{
 		}
@@ -365,7 +385,16 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(nativeId));
 
 			lock (_nativeIds.SyncRoot)
-				return _nativeIds.SafeAdd(name).TryAdd(securityId, nativeId);
+			{
+				var added = _nativeIds.SafeAdd(name).TryAdd(securityId, nativeId);
+
+				if (!added)
+					return false;
+			}
+
+			_added?.Invoke(name, securityId, nativeId);
+
+			return true;
 		}
 
 		object INativeIdStorage.TryGetBySecurityId(string name, SecurityId securityId)
