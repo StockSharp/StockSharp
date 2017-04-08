@@ -12851,7 +12851,7 @@ DocStr8482;The unscreened text;Дэ-экранировать выражение
 DocStr8483;Data types;Типы данных
 DocStr8484;Get all available data types;Получить все доступные типы данных
 DocStr8485;Instrument identifier;Идентификатор инструмента
-DocStr8486;The helper class that filling fields in {0} and {1} based on information from the site http://www.micex.ru;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://www.micex.ru
+DocStr8486;The helper class that filling fields in {0} and {1} based on information from the site http://moex.com;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://moex.com
 DocStr8487;The message adapter, automatically calculating commission;Адаптер сообщений, автоматически считающий комиссию.
 DocStr8488;Process {0} output message;Обработать {0} исходящее сообщение
 DocStr8489;The message;Сообщение

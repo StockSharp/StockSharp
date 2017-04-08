@@ -104,7 +104,7 @@ namespace StockSharp.BusinessEntities
 				// http://www.rts.ru/s355
 				new DateTime(2011, 3, 5),
 				
-				// http://rts.micex.ru/a254
+				// http://moex.com/a254
 				new DateTime(2012, 3, 11),
 				new DateTime(2012, 4, 28),
 				new DateTime(2012, 5, 5),
@@ -112,9 +112,8 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2012, 6, 9),
 				new DateTime(2012, 12, 29),
 
-				//http://moex.com/a3367
-				new DateTime(2016,02,20)
-
+				// http://moex.com/a3367
+				new DateTime(2016, 02, 20)
 			};
 
 			var russianSpecialHolidays = new[]
@@ -293,7 +292,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2011, 6, 13),
 				new DateTime(2011, 11, 4),
 
-				// http://rts.micex.ru/a254
+				// http://moex.com/a254
 				new DateTime(2012, 1, 2),
 				new DateTime(2012, 2, 23),
 				new DateTime(2012, 3, 8),
@@ -319,7 +318,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2013, 11, 4),
 				new DateTime(2013, 12, 31),
 
-				//http://moex.com/a2973
+				// http://moex.com/a2973
 				new DateTime(2014, 1, 1),
 				new DateTime(2014, 1, 2),
 				new DateTime(2014, 1, 3),
@@ -331,7 +330,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2014, 11, 4),
 				new DateTime(2014, 12, 31),
 				
-				//http://moex.com/a2793
+				// http://moex.com/a2793
 				new DateTime(2015, 1, 1),
 				new DateTime(2015, 1, 2),
 				new DateTime(2015, 1, 7),
@@ -344,7 +343,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2015, 11, 4),
 				new DateTime(2015, 12, 31),
 
-				//http://moex.com/a3367
+				// http://moex.com/a3367
 				new DateTime(2016, 1, 1),
 				new DateTime(2016, 1, 7),
 				new DateTime(2016, 1, 8),

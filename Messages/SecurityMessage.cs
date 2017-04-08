@@ -196,7 +196,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Initialize <see cref="SecurityMessage"/>.
+		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		protected SecurityMessage(MessageTypes type)
