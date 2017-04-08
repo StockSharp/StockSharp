@@ -23,13 +23,22 @@ namespace StockSharp.Messages
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public sealed class TimeMessage : Message
+	public class TimeMessage : Message
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeMessage"/>.
 		/// </summary>
 		public TimeMessage()
 			: base(MessageTypes.Time)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TimeMessage"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		protected TimeMessage(MessageTypes type)
+			: base(type)
 		{
 		}
 
