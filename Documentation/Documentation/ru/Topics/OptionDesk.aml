@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0bcd3950-6fc9-463a-b473-6b0c6587f7f1" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <introduction>
+      <para>
+      	Графический компонент <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference> - таблица для отображения доски опционов. Показывает "греки", вмененную волатильность,
+                  	 теоретическую цену, лучший оффер и бид для Put и Call опционов.
+      </para>
+      <para>
+      	Ниже показан пример OptionCalculator, в котором используется этот компонент. Исходные коды примера можно найти в папке <legacyItalic>Samples/Options/OptionCalculator</legacyItalic>.
+      </para>
+      <mediaLink><image placement="left" xlink:href="option_desk" /></mediaLink>
+    </introduction>
+    
+   <procedure>
+   	<title>Пример OptionCalculator</title>
+    	<steps class="ordered">
+			<step>
+				<content>
+					<para>В коде XAML добавляем элемент <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>
+							и присваиваем ему имя <legacyBold>Desk</legacyBold>.</para>
+            		<code title="XAML" language="XAML">
+	  				<![CDATA[
+<Window x:Class="OptionCalculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="{x:Static loc:LocalizedStrings.XamlStr396}" Height="400" Width="1030">
+    <Grid Margin="5,5,5,5">
+    
+	    .........................................................
+	    
+	    <xaml:OptionDesk x:Name="Desk" Grid.Row="6" Grid.ColumnSpan="3" Grid.Column="0" />
+    
+	</Grid>
+</Window>
+	  				]]>
+                  	</code>
+				</content>
+			</step>
+			<step>
+				<content>
+				<para>В коде C# создаем подключение. В зависимости от выбранного типа коннектора инициализируем экземпляр 
+					<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference> или <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference>.
+					</para>
+            	<code title="C#" language="C#">
+                  <![CDATA[
+if (_connector == null)
+{
+	if (IsQuik.IsChecked == true)
+	{
+		// создаем подключение
+		var trader = new QuikTrader()
+		{
+		};
+
+		_connector = trader;
+	}
+	else
+	{
+		var trader = new PlazaTrader
+		{
+			Address = Address.Text.To<EndPoint>(),
+			IsCGate = IsCGate.IsChecked == true
+		};
+
+		trader.Tables.Add(trader.TableRegistry.Volatility);
+			
+		if (IsAutorization.IsChecked == true)
+		{
+			trader.Login = Login.Text;
+			trader.Password = Password.Password;
+		}
+
+		_connector = trader;
+	}
+}
+]]>
+                  	</code>
+				</content>
+				</step>
+				<step>
+					<content>
+					<para>Задаем провайдера сообщений для рыночных данных и инструментов.</para>
+            		<code title="C#" language="C#">
+                  <![CDATA[
+Desk.MarketDataProvider = _connector;
+Desk.SecurityProvider = _connector;
+Desk.CurrentTime = null;
+]]>
+                   </code>
+				</content>
+				</step>
+				<step>
+				<content>
+					<para>При получении инструментов:</para>
+					<list class="ordered">
+  							<listItem>Заполняем коллекцию фьючерсов для выпадающего списка;</listItem>
+  							<listItem>Инициализируем выбранный инструмент первым элементом этой коллекции;</listItem>
+  							<listItem>Заполняем массив цепочкой опционов, где подлежащим активом выступает выбранный инструмент;</listItem>
+  							<listItem>Присваиваем свойству <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> этот массив;</listItem>
+  							<listItem>Обновляем значения доски опционов при помощи метода 
+  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.</listItem>
+					</list>
+            		<code title="C#" language="C#">
+                  <![CDATA[
+_connector.NewSecurity += security =>
+	this.GuiAsync(() =>
+	{
+		// добавляем в выпадающий список (подлежащие инструменты) только фьючерсы
+		if(security.Type == SecurityTypes.Future)
+		_assets.Add(security);
+
+		if (SelectedAsset == null && _assets.Count > 0)
+			SelectedAsset = _assets.First();
+
+		if (SelectedAsset != null)
+		{
+			if (security.Type == SecurityTypes.Option && security.UnderlyingSecurityId.CompareIgnoreCase(SelectedAsset.Id))
+			{
+				_options.Add(security);
+				Desk.Options = _options;
+				Desk.RefreshOptions();
+			}
+		}
+	});
+]]>
+                  	</code>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>При изменении параметров опционов:</para>
+						<list class="ordered">
+  							<listItem>Заполняем массив опционами, которые не были добавлены ранее в коллекцию опционов контрола;</listItem>
+  							<listItem>Если добавлены новые опционы, то обновляем значение свойства 
+  							<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference>;</listItem>
+  							<listItem>
+  									 Если были добавлены новые опционы или изменились параметры ранее добавленных опционов, то обновляем доску опционов 
+  									<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.</listItem>
+						</list>
+            			<code title="C#" language="C#">
+                  <![CDATA[
+_connector.SecuritiesChanged += securities =>
+{
+	this.GuiAsync(() =>
+	{
+		if (SelectedAsset == null)
+			return;
+			
+		var newStrikes = securities
+				.Where(s => s.Type == SecurityTypes.Option && s.UnderlyingSecurityId.CompareIgnoreCase(SelectedAsset.Id))
+				.Where(s => !_options.Contains(s))
+				.ToArray();
+
+		if (newStrikes.Length > 0)
+		{
+			_options.AddRange(newStrikes);
+			Desk.Options = _options;
+			Desk.RefreshOptions();
+		}
+
+		if (Desk.Options.Intersect(securities).Any())
+			Desk.RefreshOptions();
+	});
+};
+
+]]>
+                  		</code>
+					</content>
+				</step>
+			</steps>
+ 	</procedure>
+
+    <relatedTopics>
+		<link xlink:href="063708c5-b6a8-45f6-9ff9-608f89796a88">Греки</link>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

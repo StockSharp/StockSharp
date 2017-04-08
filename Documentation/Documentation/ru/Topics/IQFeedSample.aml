@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="66003162-d1b0-4f5f-8126-508055d15470" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+      	Пример работы с <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> демонстрирует приложение SampleIQFeed, показанное на рисунке ниже.
+      	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/IQFeed</legacyItalic>.
+      </para>
+      <mediaLink><image placement="center" xlink:href="IQFeedSample"/></mediaLink>
+ 	  <list class="ordered">
+ 	  	<listItem>
+ 	  		<para>В самом начале необходимо создать экземпляр класса шлюза <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference>:</para>
+ 	  		<code language="C#">
+// создаем шлюз
+Trader = new IQFeedTrader();
+
+//устанавливаем настройки для подключения
+((ITraderSettingsPanel)IqFeedSettings).Save(Trader);
+			</code>
+		</listItem>
+		<listItem>
+ 	  		<para>Далее следует установить требуемые обработчики событий <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference>:</para>
+ 	  		<code language="C#">
+// подписываемся на событие успешного соединения
+Trader.Connected += () =>
+{
+	// возводим флаг, что соединение установлено
+	_isConnected = true;
+	Trader.RegisterNews();
+
+	// разблокируем кнопки
+	this.GuiAsync(() => ChangeConnectStatus(true));
+};
+
+Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
+// подписываемся на событие разрыва соединения
+Trader.ConnectionError += error => this.GuiAsync(() =>
+{
+	// заблокируем кнопки так как соединение было потеряно)
+	ChangeConnectStatus(false);
+
+	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
+});
+
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Trader.NewNews += news => _newsWindow.NewsGrid.News.Add(news);
+
+			</code>
+		</listItem>
+		<listItem>
+ 	  		<para>Далее необходимо выполнить подключение:</para>
+ 	  		<code language="C#">
+Trader.Connect();
+			</code>
+		</listItem>
+		<listItem>
+ 	  		<para>При успешном подключении в обработчике события будет произведена подписка на новости:</para>
+ 	  		<code language="C#">
+Trader.RegisterNews();
+			</code>
+ 	  		<para>После этого можно ожидать срабатывания событий:</para>
+ 	  		<list class="ordered">
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.SecurityChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.).</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.MarketDepthChanged</codeEntityReference> – 
+ 	  			изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
+ 	  			новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> – поступление новости.</listItem>
+ 	  		</list>
+ 	  	</listItem>
+		<listItem>
+ 	  		<para>Поиск инструментов:</para>
+ 	  		<mediaLink><image placement="center" xlink:href="IQFeedFindSecurity"/></mediaLink>
+ 	  		<code language="C#">
+private void FindClick(object sender, RoutedEventArgs e)
+{
+	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+
+	if (!wnd.ShowModal(this))
+		return;
+
+	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
+}
+
+			</code>
+		</listItem>
+		<listItem>
+ 	  		<para>
+ 	  			Для получения обновлений по выбранному инструменту и тиков необходимо воспользоваться методами
+ 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> и
+ 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:
+ 	  		</para>
+ 	  		<code language="C#">
+private void Level1Click(object sender, RoutedEventArgs e)
+{
+	TryInitialize();
+
+	var window = _level1Windows.SafeAdd(SelectedSecurity, security =>
+	{
+		// create level1 window
+		var wnd = new Level1Window { Title = security.Code + " level1" };
+
+		// subscribe on level1
+		MainWindow.Instance.Trader.RegisterSecurity(security);
+
+		wnd.MakeHideable();
+		return wnd;
+	});
+
+	if (window.Visibility == Visibility.Visible)
+		window.Hide();
+	else
+		window.Show();
+}
+
+			</code>
+		</listItem>
+		<listItem>
+ 	  		<para>Для запроса обновлений по стаканам необходимо воспользоваться методом <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+ 	  		<code language="C#">
+private void DepthClick(object sender, RoutedEventArgs e)
+{
+	var trader = MainWindow.Instance.Trader;
+
+	var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
+	{
+		// subscribe on order book flow
+		trader.RegisterMarketDepth(security);
+
+		// create order book window
+		var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
+		wnd.MakeHideable();
+		return wnd;
+	});
+
+	if (window.Visibility == Visibility.Visible)
+		window.Hide();
+	else
+		window.Show();
+
+	TryInitialize();
+}
+
+			</code>
+		</listItem>
+		
+		<!-- <listItem>
+ 	  		<para>Для получения полной информации по выбранной новости необходимо воспользоваться методом <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetNewsStory(System.Int64)</codeEntityReference>:</para>
+ 	  		<mediaLink><image placement="center" xlink:href="IQFeedNews"/></mediaLink>
+  	  		<code language="C#">
+private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+{
+	var news = List.SelectedItem as News;
+	if (news == null)
+		return;
+
+	if (news.Story.IsEmpty())
+		news.Story = MainWindow.Instance.Trader.GetNewsStory(news.Id);
+
+	MessageBox.Show(this, news.Story, news.Headline);
+}
+			</code>
+		</listItem> -->
+		
+		<listItem>
+ 	  		<para>Для получения истории сделок за указанную дату необходимо воспользоваться методом 
+ 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)</codeEntityReference>:</para>
+ 	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryTrades"/></mediaLink>
+  	  		<code language="C#">
+var ticks = MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out isSuccess);
+
+this.GuiAsync(() =>
+{
+	BusyIndicator.IsBusy = false;
+
+	L1Grid.Messages.Clear();
+	L1Grid.Messages.AddRange(ticks);
+});
+			</code>
+		</listItem>
+		<listItem>
+ 	  		<para>Для получения истории свечей по инструменту за указанный период необходимо воспользоваться методом 
+ 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>:</para>
+ 	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryCandles"/></mediaLink>
+  	  		<code language="C#">
+var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandle), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
+Chart.Reset(new[] { _candlesElem });
+foreach (var message in messages)
+	Chart.Draw(_candlesElem, message.ToCandle(_security));
+
+			</code>
+		</listItem>
+      </list>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

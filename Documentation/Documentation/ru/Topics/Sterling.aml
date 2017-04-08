@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+       <para>
+			Для написания торговых роботов для <token>sterling</token> необходимо использовать 
+			<codeEntityReference>T:StockSharp.Sterling.SterlingTrader</codeEntityReference>.
+			Авторизация пользователя выполняется при запуске терминала <legacyBold>Sterling Trader Pro</legacyBold>.
+		</para>
+		<mediaLink><image placement="center" xlink:href="Sterling_loging"/></mediaLink>
+		<alert class="note">
+  			<para>Для корректной работы Sterling API нужно запускать Visual Studio от имени администратора.</para>
+		</alert>
+		
+    </introduction>
+    <relatedTopics>
+    	<link xlink:href="7e828fb2-0b95-41fd-8540-17f6bdc747cf">Пример работы со SterlingTrader</link>
+  		<link xlink:href="35cde593-3105-4903-974e-10d85482ec8f">Стоп-заявки</link>
+  		<link xlink:href="6191a437-1a8c-451c-9a43-17daee119bb7">Новости</link>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

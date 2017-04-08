@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="621927b7-839f-4492-8dbb-162e63d57769" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para><token>hydra</token> allows to generate the candles on the basis of the downloaded trades. Later these candles can be exported to the following formats:
+      <token>excel</token>, xml, sql, bin or txt (see below).</para>
+      <para>Then this allows to use the data in any technical analysis programs (WealthLab, AmiBroker etc.).</para>
+    </introduction>
+    
+    <procedure>
+      <title>Candles generation</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>In the main window click the <legacyBold>Candles</legacyBold> button, the following window will open:</para>
+            <mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_main" />
+	  		</mediaLink>
+          </content>
+        </step>
+        
+         <step>
+          <content>
+            <para>
+            	Next, select from the drop-down list the needed candle type (all <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">standard candles</link> are supported),
+            	parameter, select in <legacyBold>Build from:</legacyBold> from what the candles will be generated, select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> button.
+            	After that the candles generation will be performed on the basis of found data. For example, for the candles of the 
+            	<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> type the following will be generated:
+            </para>
+            	
+            <mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_tf" />
+	  		</mediaLink>
+	  		
+	  		<para>
+	  			And for the candles of the <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> type will be generated:
+	  		</para>
+
+	  		<mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_volume" />
+	  		</mediaLink>
+	  		
+
+          </content>
+        </step>
+        
+        <step>
+          <content>
+            <para>If it is necessary to view the generated candles graphically, then click the <mediaLinkInline><image xlink:href="hydra_candles"/></mediaLinkInline>
+            button and after that the chart will open:</para>
+            <mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_tf_chart" />
+	  		</mediaLink>
+	  		<mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_volume_chart" />
+	  		</mediaLink>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>The indicators can be added to the chart. To do this, open the context menu by right-clicking on the chart panel, and select the <legacyBold>Indicator</legacyBold> item.
+            Furthermore, the indicator can be displayed on a separate panel. To do this, it is necessary to add a new panel using the <mediaLinkInline> <image xlink:href="hydra_candles_newarea"/> </mediaLinkInline>
+            button, and also select the required indicator from the context menu.</para>
+            <mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_ind_chart" />
+	  		</mediaLink>
+          </content>
+        </step>
+        
+        
+        
+        
+        <step>
+          <content>
+    		<para>The generated candles can be exported to the Excel, xml or txt formats. The export is performed using the drop-down list:</para>
+    		<mediaLink>
+    			<image placement="left" xlink:href="hydra_export" />
+    		</mediaLink>
+          </content>
+        </step>        
+      </steps>
+    </procedure>
+  </developerHowToDocument>
+</topic>

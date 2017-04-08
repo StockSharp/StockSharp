@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6fe5b321-a23d-415d-b3e3-af9de9212a20" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+		<para>
+			For the option quoting the special <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference>
+			strategy is realized, which provides the volume quoting by the specified range of volatility.
+		</para>
+    </introduction>
+
+	  <procedure>
+		  <title>Quoting by volatility</title>
+
+		  <steps class="ordered">
+			  <step>
+				  <content>
+					  <para>
+						  The <token>stocksharp</token> installation package includes the example SampleOptionQuoting, which quotes selected strike by the specified
+						  range of volatility.
+					  </para>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  Creating a connection to the <token>OpenECry</token> and export starting:
+					  </para>
+					  <code language="C#">
+_trader = new OpenECryTrader(this.Path.Text);
+
+this.Portfolio.Trader = _trader;
+
+// adding all options into drop down list
+_trader.NewSecurities += securities =>
+	this.GuiAsync(() => _options.AddRange(securities.Where(s => s.Type == SecurityTypes.Option)));
+
+// tracking the last asset price
+_trader.NewTrades += trades => this.GuiAsync(() =>
+{
+	var option = this.SelectedOption;
+	if (option != null)
+	{
+		var future = option.GetUnderlyingAsset();
+		if (future.LastTrade != null)
+			this.BaseActivePrice.Text = future.LastTrade.Price.ToString();
+	}
+});
+
+_trader.Connected += () => _trader.StartExport();
+
+_trader.Connect();</code>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  Set up the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> strategy
+						  (filling the range of volatility, as well as the creation of the order, wherethrough the required volume and quoting direction are specified):
+					  </para>
+					  <code><![CDATA[// quoting 20 long option contacts
+var quoting = new VolatilityQuotingStrategy(
+		new Range<decimal>(this.VolatilityMin.Text.To<decimal>(), this.VolatilityMax.Text.To<decimal>()),
+		OrderDirections.Buy, 20)
+{
+	// order size on order book will be always 1 contact (to hide a real size)
+	Volume = 1,
+	Security = option,
+	Portfolio = this.Portfolio.SelectedPortfolio,
+	Trader = _trader,
+};]]></code>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  The quoting start:
+					  </para>
+					  <code language="C#">quoting.Start();</code>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  For a visual presentation of the volatility the example shows how you can convert the standard order book with quotations to the order book
+						  of volatility through the use of the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,System.DateTimeOffset,System.Decimal,System.Decimal)</codeEntityReference>
+						  method:
+					  </para>
+					  <code language="C#"><![CDATA[var ivDepth = _depth.ImpliedVolatility();
+
+this.GuiAsync(() =>
+{
+	this.Quotes.Clear();
+	this.Quotes.AddRange(ivDepth.Select(q => new IVQuote(q)));
+});]]></code>
+					  <mediaLink>
+						  <image placement="center" xlink:href="sample_quote_iv" />
+					  </mediaLink>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  The quoting ending and the strategy stop:
+					  </para>
+					  <code>quoting.Stop();</code>
+				  </content>
+			  </step>
+		  </steps>
+	  </procedure>
+
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+        
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

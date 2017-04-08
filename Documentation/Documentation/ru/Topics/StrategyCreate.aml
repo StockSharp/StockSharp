@@ -1,0 +1,482 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a8159c99-256b-46e4-80fe-7cf92944b4c9" revisionNumber="0">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+		Наравне с событийным подходом при <link xlink:href="a8159c99-256b-46e4-80fe-7cf92944b4c9">создании стратегии</link>, в <token>stocksharp</token> 
+		можно создавать код стратегии, основанной на итерационной модели. 
+		Такой подход следует использовать, если требуется простая реализация стратегии, не критичная к скорости исполнения.
+      </para>
+
+      <para>
+	  	Для создания стратегии на основе итерационной модели используется класс
+	  	<codeEntityReference>T:StockSharp.Algo.Strategies.TimeFrameStrategy</codeEntityReference>. При использовании данного класса
+	  	основной код торгового алгоритма должен быть сосредоточен в методе <codeEntityReference>M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess</codeEntityReference>.
+	  	Частота вызова данного метода зависит от значения <codeEntityReference>P:StockSharp.Algo.Strategies.TimeFrameStrategy.Interval</codeEntityReference>.
+	  	Подход в использовании <codeEntityReference>T:StockSharp.Algo.Strategies.TimeFrameStrategy</codeEntityReference>
+		состоит в итерационной обработке: начало метода -> проверка состояния рынка -> регистрация (или отмена) заявок -> конец метода.
+		При таком подходе необходимо хранить состояния, для того, чтобы следующий вызов метода мог получить данные, созданные в предыдущем вызове.
+      </para>
+
+      <para>
+		Работу итерационной модели, демонстрирует пример робота торгующего по алгоритму <token>ma</token> (его простой реализации). В нем реализован
+		класс-наследник <codeEntityReference>T:StockSharp.Algo.Strategies.TimeFrameStrategy</codeEntityReference>, хранящий между вызовами метода
+		<codeEntityReference>M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess</codeEntityReference> состояние пересечений скользящих (длинная выше или
+		ниже короткой).	 
+	 </para>
+	  <para>
+		<mediaLink>
+		  <image placement="center" xlink:href="samplesma" />
+		</mediaLink>
+	  </para>
+    </introduction>
+
+	<procedure>
+	  <title>Алгоритм Скользящей Cредней:</title>
+
+	  <steps class="ordered">
+		<step>
+		  <content>
+		  	<para>
+			  Для данного алгоритма необходимы исторические данные, поэтому для примера с сайта Финам были скачаны 5-минутки по бумаге
+			  Лукойл и сохранены в файл LKOH_history.txt.
+			</para>
+			<alert class="note">
+			  <para>
+				Перед запуском программы рекомендуется обновить данные, скачав их с сайта. Правильный формат данных можно посмотреть в тестовом файле.
+			  </para>
+			</alert>
+		  </content>
+		</step>
+		<step>
+		  <content>
+		    <para>
+		  		Формула простой скользящей средней:
+		  	</para>
+			<math>
+			  SMA = (P<subscript>m</subscript> + P<subscript>m-1</subscript> + ... + P<subscript>m-n</subscript>) / n
+			</math>
+			<para>
+				Индикаторы реализованы в пространстве имен <codeEntityReference>N:StockSharp.Algo.Indicators</codeEntityReference>. Подробнее, в разделе
+				<link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">Индикаторы</link>.
+			</para>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  Код реализации торговой стратегии для скользящей:
+			</para>
+			<code language="C#">
+				<![CDATA[
+class SmaStrategy : Strategy
+{
+	private readonly ICandleManager _candleManager;
+	private readonly CandleSeries _series;
+	private bool _isShortLessThenLong;
+
+	public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
+	{
+		_candleManager = candleManager;
+		_series = series;
+
+		LongSma = longSma;
+		ShortSma = shortSma;
+	}
+
+	public SimpleMovingAverage LongSma { get; }
+	public SimpleMovingAverage ShortSma { get; }
+
+	protected override void OnStarted()
+	{
+		_candleManager
+			.WhenCandlesFinished(_series)
+			.Do(ProcessCandle)
+			.Apply(this);
+
+		// запоминаем текущее положение относительно друг друга
+		_isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
+
+		base.OnStarted();
+	}
+
+	private void ProcessCandle(Candle candle)
+	{
+		// если наша стратегия в процессе остановки
+		if (ProcessState == ProcessStates.Stopping)
+		{
+			// отменяем активные заявки
+			CancelActiveOrders();
+			return;
+		}
+
+		// добавляем новую свечу
+		LongSma.Process(candle);
+		ShortSma.Process(candle);
+
+		// вычисляем новое положение относительно друг друга
+		var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
+
+		// если произошло пересечение
+		if (_isShortLessThenLong != isShortLessThenLong)
+		{
+			// если короткая меньше чем длинная, то продажа, иначе, покупка.
+			var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+
+			// вычисляем размер для открытия или переворота позы
+			var volume = Position == 0 ? Volume : Position.Abs() * 2;
+
+			// регистрируем заявку (обычным способом - лимитированной заявкой)
+			//RegisterOrder(this.CreateOrder(direction, (decimal)Security.GetCurrentPrice(direction), volume));
+
+			// переворачиваем позицию через котирование
+			var strategy = new MarketQuotingStrategy(direction, volume);
+			ChildStrategies.Add(strategy);
+
+			// запоминаем текущее положение относительно друг друга
+			_isShortLessThenLong = isShortLessThenLong;
+		}
+	}
+}
+]]></code>
+			<para>
+			  В начале метода через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ProcessState</codeEntityReference>
+			  проверяется, не находится ли стратегия в процессе остановки (например, был вызван метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference>
+			  или произошла ошибка). Если стратегия в процессе остановки, то отменяются все активные заявки через метод
+			  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.CancelActiveOrders</codeEntityReference>,
+			  чтобы предотвратить их активацию по невыгодным ценам. Если необходимо не только отменить заявки, но также и закрыть позицию,
+			  то можно воспользоваться методом <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.StrategyHelper.ClosePosition(StockSharp.Algo.Strategies.Strategy,System.Decimal)</codeEntityReference>.
+			 </para>
+			<para> 
+			  Если остановить стратегию невозможно в текущий момент по каким-либо причинам и требуется некоторое время, то необходимо вернуть значение
+			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Continue</codeEntityReference>, и
+			  попытаться завершить работу стратегии в следующей итерации вызова <codeEntityReference>M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess</codeEntityReference>.
+			  Именно поэтому после вызова метода <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference> стратегия не сразу
+			  меняет свое состояние на <codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Stopped</codeEntityReference>.
+				В случае SmaStrategy такой ситуации быть не может, так как никаких особых ситуаций в реализации скользящей средней нет. Поэтому при остановке
+				стратегии сразу возвращается <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Stop</codeEntityReference>.
+			</para>
+			<para>
+			  После проверки идет сам код работы со скользящими. <legacyBold>Важно!</legacyBold> У класса <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
+			  есть метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
+			  который необходимо вызывать вместо регистрации напрямую через шлюз (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>).
+			  Все сделки, которые произошли по такой заявке, будут перехватываться <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>,
+			  и на основе них будет производиться расчет позиции, проскальзывания, P&amp;L и т.д.. Также, такие заявки и сделки будут добавлятся в коллекции
+			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Orders</codeEntityReference> и
+			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.MyTrades</codeEntityReference>, что позволяет просматривать все заявки
+			  и сделки, совершенные в рамках работы стратегии.
+			</para>
+			<alert class-="note">
+			  <para>
+				Если необходимо изменить зарегистрированную заявку, то также нужно вызывать метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>,
+				а не обращаться напрямую к шлюзу через метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
+			  </para>
+			</alert>
+			<para>
+			  В самом конце метода возвращается значение <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Continue</codeEntityReference>,
+			  которое означает, что стратегия не закончила свою работу и необходимо вызвать ее еще раз. Если реализуется какой-либо другой алгоритм,
+			  у которого есть критерий завершения (например, набор позиции до определенного значения), то в случае окончания работы такого алгоритма
+			  необходимо возвращать значение <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Stop</codeEntityReference>.
+			</para>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  Инициализация самой стратегии и заполнение его историческими данными:
+			</para>
+			<code language="C#">
+	<![CDATA[// создаем шлюз
+_trader = new QuikTrader(this.Path.Text);
+
+_trader.Connected += () =>
+{
+	_candleManager = new CandleManager(_trader);
+
+	_trader.NewSecurity += security =>
+	{
+		if (!security.Code.CompareIgnoreCase("LKOH"))
+			return;
+
+		// находим нужную бумагу
+		var lkoh = security;
+
+		_lkoh = lkoh;
+
+		this.GuiAsync(() =>
+		{
+			Start.IsEnabled = true;
+		});
+	};
+
+	_trader.NewMyTrade += trade =>
+	{
+		if (_strategy != null)
+		{
+			// найти те сделки, которые совершила стратегия скользящей средней
+			if (_strategy.Orders.Contains(trade.Order))
+				Trades.Trades.Add(trade);
+		}
+	};
+
+	_candleManager.Processing += (series, candle) =>
+	{
+		// если скользящие за сегодняшний день отрисованы, то рисуем в реальном времени текущие скользящие
+		if (_isTodaySmaDrawn && candle.State == CandleStates.Finished)
+			ProcessCandle(candle);
+	};
+	//_trader.Error += ex => this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
+	_trader.ConnectionError += ex =>
+	{
+		if (ex != null)
+			this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
+	};
+
+	this.GuiAsync(() =>
+	{
+		ConnectBtn.IsEnabled = false;
+		Report.IsEnabled = true;
+	});
+};
+
+...
+
+private void StartClick(object sender, RoutedEventArgs e)
+{
+	if (_strategy == null)
+	{
+		if (Portfolios.SelectedPortfolio == null)
+		{
+			MessageBox.Show(this, LocalizedStrings.Str3009);
+			return;
+		}
+
+		// регистрируем наш тайм-фрейм
+		var series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
+
+		// создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
+		_strategy = new SmaStrategy(_candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+		{
+			Volume = 1,
+			Security = _lkoh,
+			Portfolio = Portfolios.SelectedPortfolio,
+			Connector = _trader,
+		};
+		_strategy.Log += OnLog;
+		_strategy.PropertyChanged += OnStrategyPropertyChanged;
+
+		_candlesElem = new ChartCandleElement();
+		_area.Elements.Add(_candlesElem);
+
+		_longMaElem = new ChartIndicatorElement
+		{
+			Title = LocalizedStrings.Long,
+			Color = Colors.OrangeRed
+		};
+		_area.Elements.Add(_longMaElem);
+
+		_shortMaElem = new ChartIndicatorElement
+		{
+			Title = LocalizedStrings.Short,
+			Color = Colors.RoyalBlue
+		};
+		_area.Elements.Add(_shortMaElem);
+
+		IEnumerable<Candle> candles = CultureInfo.InvariantCulture.DoInCulture(() => File.ReadAllLines("LKOH_history.txt").Select(line =>
+		{
+			var parts = line.Split(',');
+			var time = (parts[0] + parts[1]).ToDateTime("yyyyMMddHHmmss").ApplyTimeZone(TimeHelper.Moscow);
+			return (Candle)new TimeFrameCandle
+			{
+				OpenPrice = parts[2].To<decimal>(),
+				HighPrice = parts[3].To<decimal>(),
+				LowPrice = parts[4].To<decimal>(),
+				ClosePrice = parts[5].To<decimal>(),
+				TimeFrame = _timeFrame,
+				OpenTime = time,
+				CloseTime = time + _timeFrame,
+				TotalVolume = parts[6].To<decimal>(),
+				Security = _lkoh,
+				State = CandleStates.Finished,
+			};
+		}).ToArray());
+
+		var lastCandleTime = default(DateTimeOffset);
+
+		// начинаем вычислять скользящие средние
+		foreach (var candle in candles)
+		{
+			ProcessCandle(candle);
+			lastCandleTime = candle.OpenTime;
+		}
+
+		_candleManager.Start(series);
+...
+]]></code>
+			<alert class="caution">
+				<para>
+					Номер счета, который в примере записан в переменную <legacyBold>account</legacyBold>, это <legacyBold>не логин</legacyBold> в
+					<token>quik</token>, а код клиента. Об особенности портфелей в Quik читайте в соответствующем <link xlink:href="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e">разделе</link>.
+				</para>
+			</alert>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  Запуск и остановка торговой стратегии происходит следующим образом:
+			</para>
+			<code language="C#"><![CDATA[
+...
+	if (_strategy.ProcessState == ProcessStates.Stopped)
+	{
+		// запускаем процесс получения стакана, необходимый для работы алгоритма котирования
+		_trader.RegisterMarketDepth(_strategy.Security);
+		_strategy.Start();
+		Start.Content = LocalizedStrings.Str242;
+	}
+	else
+	{
+		_trader.UnRegisterMarketDepth(_strategy.Security);
+		_strategy.Stop();
+		Start.Content = LocalizedStrings.Str2421;
+	}
+...	
+
+	]]></code>
+			<para>
+			  В процессе работы торговой стратегии может возникнуть ошибка. В этом случае <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
+			  перехватывает ошибку через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)</codeEntityReference>,
+			  меняется значение <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ErrorState</codeEntityReference>
+			  на <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>, выводится текст ошибки через событие
+			  <codeEntityReference qualifyHint="true">E:StockSharp.Logging.ILogSource.Log</codeEntityReference> 
+			  и самостоятельно начинается остановка
+			  стратегии.
+			</para>
+			<note class="note">
+			  Значение <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Warning</codeEntityReference> предназначено для
+			  оповещения о чем-то необычном. Например, вывести пользователю информацию о том, что начался клиринг, или на счету недостаточно, и есть
+			  вероятность того, что следующая заявка не сможет быть зарегистрирована.
+			</note>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  Отрисовка на графике новых данных линий скользящий и свечей, показывающих тренд:
+			</para>
+			<code language="C#">
+			<![CDATA[
+// начинаем вычислять скользящие средние
+foreach (var candle in candles)
+{
+	ProcessCandle(candle);
+	lastCandleTime = candle.OpenTime;
+}
+
+_candleManager.Start(series);
+
+// вычисляем временные отрезки текущей свечи
+var bounds = _timeFrame.GetCandleBounds(_trader.CurrentTime);
+
+candles = _candleManager.Container.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
+
+foreach (var candle in candles)
+{
+	ProcessCandle(candle);
+}
+...
+private void ProcessCandle(Candle candle)
+{
+	var longValue = candle.State == CandleStates.Finished ? _strategy.LongSma.Process(candle) : null;
+	var shortValue = candle.State == CandleStates.Finished ? _strategy.ShortSma.Process(candle) : null;
+
+	var chartData = new ChartDrawData();
+
+	chartData
+		.Group(candle.OpenTime)
+			.Add(_candlesElem, candle)
+			.Add(_longMaElem, longValue)
+			.Add(_shortMaElem, shortValue);
+
+	Chart.Draw(chartData);
+}
+
+
+]]></code>
+		  </content>
+		</step>
+	  </steps>
+	</procedure>
+    
+    <!--<section>
+      <title>Optional section</title>
+
+      <content>
+        <para>Some topic content</para>
+      </content>
+    </section>-->
+
+    <nextSteps>
+      <content>
+        <para><link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Дочерние стратегии</link></para>
+      </content>
+    </nextSteps>
+    
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+                
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+    
+  </developerWalkthroughDocument>
+</topic>

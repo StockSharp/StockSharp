@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="abf5321b-0c86-4557-8240-a5e7a6133059" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>The following describes the creation and configuration of AWS account.</para>
+    </introduction>
+   	<procedure>
+		<steps class="ordered">
+			<step>
+				<content>
+					<para>To create an AWS account, please go to the <externalLink>
+			<linkText>Create AWS account</linkText>
+			<linkAlternateText>Optional alternate text</linkAlternateText>
+			<linkUri>https://aws.amazon.com/</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink> page and click the <legacyBold>Create account</legacyBold> button.</para>
+			<mediaLink>
+        		<image placement="left" xlink:href="Aws3_CreateAccount" />
+			</mediaLink>
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>Next, fill in the form proposed by the web service.</para>
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>At one stage of the registration it will be prompted to enter a phone number and initiate a call to your phone using the
+					<legacyBold>Call Me Now</legacyBold> button.</para>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_CallMeNow" />
+					</mediaLink>
+					<para>You should pick up the phone and dial the code, which will be shown on the computer screen.</para> 
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>Further it will be asked to choose a support plan. At the end of the account creation it is necessary to go to the management console.</para>
+					<mediaLink>
+        				<image placement="center" xlink:href="Aws3_console" />
+					</mediaLink>
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>The first step when setting up the account is to create a Bucket. <mediaLinkInline><image xlink:href="Aws3_CreateBucket" /></mediaLinkInline></para>
+					<para>Bucket is a container for objects stored in the "cloud." It is necessary to specify a unique name for Bucket, and choose a regional data
+					center (Region) where the data is physically stored. Note that in the future when configuring a backup task: 1) you will need to enter the bucket
+					name in the <legacyBold>Bucket</legacyBold> field, 2) in the <legacyBold>Address</legacyBold> field you should use not a name, but the address of the
+					regional data center, which can be found <externalLink>
+					<linkText>here</linkText>
+						<linkAlternateText>Optional alternate text</linkAlternateText>
+							<linkUri>//http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>.</para>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_CreateBucketDialog"/>
+					</mediaLink>
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>Next, you need to specify the keys for programmatic access to the AWS services. To do this, click on the link 
+					<legacyBold>Security Credentials</legacyBold> in the AWS console.</para>
+					<mediaLink>
+        				<image placement="left" xlink:href="Aws3_SecurityCredentials"/>
+					</mediaLink>
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>Opening the <legacyBold>Access Keys (Access Key ID and Secret Access Key)</legacyBold> title and creating the access keys by clicking the
+					<mediaLinkInline><image xlink:href="Aws3_CreateNewAccessKey" /></mediaLinkInline> button.</para>
+					<mediaLink>
+        				<image placement="center" xlink:href="Aws3_SecurityCredentialsCreate" />
+					</mediaLink>
+					<para>Created keys can be saved to a file using the <legacyBold>Download Key File</legacyBold> button.</para>
+					<para>Note that when you set up the backup task <legacyBold>Access Key ID</legacyBold> should be used as a login and 
+					<legacyBold>Secret Access Key</legacyBold> as a password.</para>
+				</content>
+			</step>
+			
+		</steps>
+	</procedure>
+	 <relatedTopics>
+		<link xlink:href="8f0fbcfe-c687-4af4-9bed-fe976b18f545">S#.Data settings</link>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

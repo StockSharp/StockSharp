@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para>To create <codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference> and <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
+		candles the same procedure used as for creating the <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference> candles.</para>
+		<para>For example, create a 1 min candle for APM5 - ESM5 spread:</para>
+        <code language="C#">
+        <![CDATA[
+private QuikTrader _trader;
+
+private Security _instr1;
+private Security _instr2;
+private WeightedIndexSecurity _indexInstr;
+
+private const string _secCode1 = "APM5";
+private const string _secCode2 = "ESM5";
+
+private CandleManager _candleManager;
+private CandleSeries _indexSeries;
+
+readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(1);
+
+private ChartArea _area;
+private ChartCandleElement _candlesElem;
+
+...
+
+_area = new ChartArea();
+_chart.Areas.Add(_area);
+
+_candlesElem = new ChartCandleElement();
+_area.Candles.Add(_candlesElem);
+
+...
+
+_candleManager = new CandleManager(_trader);
+_candleManager.Processing += DrawCandles;
+
+...
+
+_indexInstr = new WeightedIndexSecurity() { Exchange = Exchange.Associated, Id = "IndexInstr" };
+_indexInstr.Weights.Add(_instr1, 1);
+_indexInstr.Weights.Add(_instr2, -1);
+_indexSeries = new CandleSeries(typeof(TimeFrameCandle), _indexInstr, _timeFrame);
+
+...
+
+_candleManager.Start(_indexSeries);
+		]]>
+		</code>
+		
+		<para>After that, candles will come to the event handler Processing - DrawCandles. These candles can be displayed on the chart:</para>
+
+        <code language="C#">
+        <![CDATA[
+private void DrawCandles(CandleSeries series, Candle candle)
+{
+    if (series == _indexSeries) this.GuiAsync(() => _chart.ProcessCandle(_candlesElem, candle) );
+}
+		]]>
+		</code>
+		
+	</introduction>
+
+    <relatedTopics>
+      <link xlink:href="0f7cceee-bb7c-4f24-a266-ed900cb8e557">Continuous futures</link>
+      <link xlink:href="ee8f7be8-80ad-4ab9-a5aa-14754fe024f1">Index</link>
+    </relatedTopics>
+
+	</developerWalkthroughDocument>
+</topic>

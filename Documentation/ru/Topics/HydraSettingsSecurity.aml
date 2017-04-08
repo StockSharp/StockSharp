@@ -2,7 +2,8 @@
 <topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Нажав на кнопку <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>в окне с источником данных, откроется окно для поиска и добавления инструментов.</para>
+      <para>Нажав на кнопку <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>, 
+      выбрав в выпавшем меню <legacyBold>Инструмент</legacyBold>. Откроется окно для поиска и добавления инструментов.</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_securities" />
       </mediaLink>

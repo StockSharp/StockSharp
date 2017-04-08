@@ -167,6 +167,12 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\hydra_index.aml" />
+    <None Include="Topics\HydraExtensionInfo.aml" />
+    <None Include="Topics\hydraAPIConnectWCF.aml" />
+    <None Include="Topics\hydraAPIConnect.aml" />
+    <None Include="Topics\hydra_server.aml" />
+    <None Include="Topics\hydra_options.aml" />
     <None Include="Topics\RSS.aml" />
     <None Include="Topics\HydraSettingsBarChart.aml" />
     <None Include="Topics\Conceptual.aml" />
@@ -1682,6 +1688,54 @@
     <Image Include="Art\FixServer.png">
       <ImageId>FixServer</ImageId>
       <AlternateText>Fix Server</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_BarChart.png">
+      <ImageId>hydra_settings_BarChart</ImageId>
+      <AlternateText>hydra settings Bar Chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_view_export.png">
+      <ImageId>hydra_view_export</ImageId>
+      <AlternateText>hydra view export</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_00.png">
+      <ImageId>hydra_Quick_start_00</ImageId>
+      <AlternateText>hydra Quick start 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_option_desk.png">
+      <ImageId>hydra_option_desk</ImageId>
+      <AlternateText>hydra option desk</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_option_smile_of_volatility.png">
+      <ImageId>hydra_option_smile_of_volatility</ImageId>
+      <AlternateText>hydra option smile of volatility</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_csv_excel.png">
+      <ImageId>hydra_ExtensionInfo_csv_excel</ImageId>
+      <AlternateText>hydra Extension Info csv excel</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_csv_notepad.png">
+      <ImageId>hydra_ExtensionInfo_csv_notepad</ImageId>
+      <AlternateText>hydra Extension Info csv notepad</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_securities.png">
+      <ImageId>hydra_ExtensionInfo_securities</ImageId>
+      <AlternateText>hydra Extension Info securities</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_window.png">
+      <ImageId>hydra_ExtensionInfo_window</ImageId>
+      <AlternateText>hydra Extension Info window</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_server.png">
+      <ImageId>hydra_server</ImageId>
+      <AlternateText>hydra server</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_index_sec.png">
+      <ImageId>hydra_index_sec</ImageId>
+      <AlternateText>hydra index sec</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_index_candle.png">
+      <ImageId>hydra_index_candle</ImageId>
+      <AlternateText>hydra index candle</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

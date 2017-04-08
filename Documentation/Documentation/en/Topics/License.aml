@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para> <token>stocksharp</token> has a few licence types.</para>
+		<para><legacyBold>Private Trader</legacyBold></para>
+		<para>
+	    	 Free and for everyone. You do not need to generate and download license files! Just <externalLink>
+			<linkText>complete the registration!</linkText>
+			<linkAlternateText>Registration</linkAlternateText>
+			<linkUri>http://stocksharp.com/register/</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink>
+			 It's include <token>designer</token>, <token>hydra</token>, <token>stocksharpapi</token> 
+			 (<token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
+			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>, 
+			 <token>matlab</token>, <token>btce</token>, <token>bitstamp</token>, <token>barchart</token> и RSS).
+		</para>
+		<para>See also <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">StockSharp installation</link>.</para>
+		<para><legacyBold>Extended License</legacyBold></para>
+		<list class="ordered">
+  			<listItem>
+  				<para>Ready-to-use trading strategies (option hedging, market-making, quoting, trailing stop and take-profit, etc.).</para>
+  			</listItem>
+  			<listItem>
+  				<para>Order Log.</para>
+  			</listItem>
+  			<listItem>
+  				<para>S#.Data server.</para>
+  			</listItem>
+  			<listItem>
+  				<para>S#.Shell source code.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Extended samples.</para>
+  			</listItem>
+  			<listItem>
+  				<para>40+ hours video training.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Premium support.</para>
+  			</listItem>
+		</list>
+
+		<para><legacyBold>Maximum</legacyBold></para>
+		<para>
+  			The license is paid and includes all the basic and extended licenses functionality, as well as:
+  		</para>
+  		<list class="ordered">
+			<listItem>
+				<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - direct access to exchanges, to a range of brokers (see all list on <token>stocksharppricing</token>).</para>
+			</listItem>
+			<listItem>
+				<para><link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link> - market data connector to LSE or NASDAQ.</para>
+			</listItem>
+		</list>
+		<para>
+  			HFT connectors has perpetual license with one year upgrade subscription option.
+  		</para>
+
+		<para><legacyBold>Source codes</legacyBold></para>
+		<para>Includes any of our ready-to-use applications 
+		(<token>hydra</token>, <token>designer</token>, <externalLink>
+				<linkText>S#.Shell</linkText>
+				<linkAlternateText>Shell</linkAlternateText>
+				<linkUri>http://stocksharp.com/products/shell/</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>),
+		and the whole S#.API.</para>
+
+		<para>
+  			For more details please visit the <token>stocksharppricing</token>.
+  		</para>
+
+	</introduction>
+	
+	 <!--relatedTopics>
+     	<externalLink>
+			<linkText>Новые подходы к лицензированию</linkText>
+			<linkAlternateText>Лицензирование</linkAlternateText>
+			<linkUri>http://stocksharp.com/news/10456-novye-podhody-k-litsenzirovaniyu</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+		<externalLink>
+			<linkText>Стоимость лицензий StockSharp</linkText>
+			<linkAlternateText>Стоимость лицензий</linkAlternateText>
+			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+     </relatedTopics-->
+	</developerWalkthroughDocument>
+</topic>
+

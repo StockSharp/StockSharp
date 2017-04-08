@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Position_00"/>
+</mediaLink>
+<para>Элемент используется для получения информации по изменению позиции для 
+указанного инструмента и портфеля и содержит единственное свойство:
+ <legacyBold>Деньги</legacyBold> – при установленном флаге на выход элемента 
+ передается денежная позиция для выбранного портфеля</para>
+ <para>Если для элемента не установлен флаг <legacyBold>Деньги</legacyBold>, 
+ то на входе элемент принимает инструмент, для которого необходимо 
+ возвращать значение позиции. На выходе элемента передается значение позиции 
+ по инструменту или текущее количество доступных средств по счету при их 
+ изменении и после запуска стратегии.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

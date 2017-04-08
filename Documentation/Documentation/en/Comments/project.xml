@@ -1,0 +1,380 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+	<members>
+		<member name="N:StockSharp.Alerts">
+			<summary>
+				<p>Alerts.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo">
+			<summary>
+				<p>Trading algorithms.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Candles">
+			<summary>
+				<p>Candle algos (pattern recognition).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Candles.Compression">
+			<summary>
+				<p>Candle builders (time-frame, renko, volume, tick).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Candles.VolumePriceStatistics">
+			<summary>
+				<p>Market profile (price, volume).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Equity">
+			<summary>
+				<p>Equity calculation.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.History">
+			<summary>
+				<p>Historical market-data sources.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.History.Forex">
+			<summary>
+				<p>Historical Forex market-data sources.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.History.Russian">
+			<summary>
+				<p>Historical Russian market-data sources.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.History.Russian.Finam">
+			<summary>
+				<p>Historical Finam market-data source.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.History.Russian.Rts">
+			<summary>
+				<p>Historical Moex market-data source.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Latency">
+			<summary>
+				<p>Order latency calculation (registration and cancellation).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.PnL">
+			<summary>
+				<p>Profit-loss calculation.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Positions">
+			<summary>
+				<p>Position calculation.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Reporting">
+			<summary>
+				<p>Report generator.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Slippage">
+			<summary>
+				<p>Slippage generator.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Strategies">
+			<summary>
+				<p>Trading strategies base classes.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Strategies.Analytics">
+			<summary>
+				<p>Analytics strategies.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Strategies.Derivatives">
+			<summary>
+				<p>Options trading strategies (delta-hedging, quoting, volatility).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Strategies.Protective">
+			<summary>
+				<p>Position protestions (take-profit, stop-loss, trailing stops).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Strategies.Quoting">
+			<summary>
+				<p>Market making strategies.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Testing">
+			<summary>
+				<p>Backtesting and paper-trading (simulator).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Commissions">
+			<summary>
+				<p>Commisson calculation.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Derivatives">
+			<summary>
+				<p>Option algorithms.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Export">
+			<summary>
+				<p>Exporting components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.History.Hydra">
+			<summary>
+				<p>Hydra server components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Indicators">
+			<summary>
+				<p>Trading technical analysis indicators.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Statistics">
+			<summary>
+				<p>Statistics calculation.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Risk">
+			<summary>
+				<p>Risk management calculation.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Storages">
+			<summary>
+				<p>Market-data storages.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Expressions">
+			<summary>
+				<p>Math expressions.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Expressions.Xaml">
+			<summary>
+				<p>Math expressions WPF compontents.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Storages.Csv">
+			<summary>
+				<p>CSV storage compontents.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Strategies.Reporting">
+			<summary>
+				<p>Strategies report components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Strategies.Testing">
+			<summary>
+				<p>Strategies backtesting components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.BitStamp">
+			<summary>
+				<p>BitStamp connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Btce">
+			<summary>
+				<p>BTCE connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.BusinessEntities">
+			<summary>
+				<p>Main trading entities (security, order, connector etc.).</p>
+			</summary>
+		</member>	
+		<member name="N:StockSharp.Community">
+			<summary>
+				<p>StockSharp website components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Configuration">
+			<summary>
+				<p>StockSharp configuration.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.CQG">
+			<summary>
+				<p>CQG connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Logging">
+			<summary>
+				<p>Log component.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Sterling">
+			<summary>
+				<p>Sterling connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml">
+			<summary>
+				<p>WPF components (candle chart, tables etc.).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Charting">
+			<summary>
+				<p>WPF candle chart and equity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Charting.IndicatorPainters">
+			<summary>
+				<p><see cref="N:StockSharp.Algo.Indicators"/> custom renderers.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Hydra.Core">
+			<summary>
+				<p>Common S#.Data components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Licensing">
+			<summary>
+				<p>Licenses.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Licensing.Xaml">
+			<summary>
+				<p>License WPF components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.InteractiveBrokers">
+			<summary>
+				<p>InteractiveBrokers connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.InteractiveBrokers.Web">
+			<summary>
+				<p>InteractiveBrokers site-grabber components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Oanda">
+			<summary>
+				<p>Oanda connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.OpenECry">
+			<summary>
+				<p>OpenECry (Gain futures) connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.OpenECry.Xaml">
+			<summary>
+				<p><see cref="N:StockSharp.OpenECry"/> WPF components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.MatLab">
+			<summary>
+				<p>MatLab integration components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.ETrade">
+			<summary>
+				<p>ETrade connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.ETrade.Client">
+			<summary>
+				<p>ETrade protocol classes.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.ETrade.Xaml">
+			<summary>
+				<p><see cref="N:StockSharp.ETrade"/> WPF components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.ETrade.Native">
+			<summary>
+				<p>API ETrade implementation.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.LMAX">
+			<summary>
+				<p>LMAX Exchange connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Blackwood">
+			<summary>
+				<p>Blackwood (Fusion) DMA connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.IQFeed">
+			<summary>
+				<p>DTN IQFeed connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.ITCH">
+			<summary>
+				<p>ITCH protocol connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Fix">
+			<summary>
+				<p>FIX protocol connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Fix.Dialects">
+			<summary>
+				<p>FIX protocol dialects.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Fix.Native">
+			<summary>
+				<p>FIX protocol native components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Rithmic">
+			<summary>
+				<p>Rithmic connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Rithmic.Xaml">
+			<summary>
+				<p><see cref="N:StockSharp.Rithmic"/> WPF components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Rss">
+			<summary>
+				<p>RSS feed components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Rss.Xaml">
+			<summary>
+				<p><see cref="N:StockSharp.Rss"/> WPF components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Messages">
+			<summary>
+				<p>Trading messages.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Diagram">
+			<summary>
+				<p>Visual strategies designer.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Diagram.Elements">
+			<summary>
+				<p><see cref="N:StockSharp.Xaml.Diagram"/> elements.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.GridControl">
+			<summary>
+				<p>Table components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.PropertyGrid">
+			<summary>
+				<p>PropertyGridEx compontent.</p>
+			</summary>
+		</member>
+	</members>
+</doc>

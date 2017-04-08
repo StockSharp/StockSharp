@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+		<para>
+			The <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> should be used for trading algorithms using <token>iqfeed_external</token> .
+			The scheme of interaction is shown in this figure:
+		</para>
+		
+		<mediaLink><image placement="center" xlink:href="IQFeed"/></mediaLink>
+		
+		<alert class="caution">
+			<para>
+				<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> only supports the receiving of market data and does not support the sending of transactions.
+			</para>
+		</alert>
+	</introduction>
+	<relatedTopics>
+		<link xlink:href="21aa8b6b-137d-4c28-87d9-dfbc5e446d95">Connection</link>
+		<link xlink:href="66003162-d1b0-4f5f-8126-508055d15470">Getting started</link>
+		<link xlink:href="443734c7-7c88-47e0-a96a-4eec6fdfcfc7">Instruments getting</link>
+		<link xlink:href="310155fd-ef3a-40f4-9920-179dcaf2b6bf">Historical data</link>
+		<link xlink:href="d315bbb3-5d00-4685-8e75-9e8e3646320a">News</link>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

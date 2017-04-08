@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" revisionNumber="0">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+      <para>
+		  The <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> class (from which the
+		  <codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>
+		  and <codeEntityReference>T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> connectors are inherited) realizes in its code the connections monitoring.
+		  Such a tracking is configured through the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference>
+		  property and allows to track the following error scenarios:
+		  
+		  <!--<token>stocksharp</token> предоставляет возможность отслеживать состояние подключения к торговой системе через свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.ITrader.IsConnected</codeEntityReference>.
+		В случае разрыва связи вызывается событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.ConnectionError</codeEntityReference>, информирую роботов о необходимости начать процесс переподключения.
+		Чтобы переподключиться необходимо использовать методы <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.Connect</codeEntityReference> и <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.Disconnect</codeEntityReference>,
+		или вызывать напрямую метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.Reconnect</codeEntityReference>.-->
+		</para>
+		<list class="ordered">
+			<listItem>
+				It is impossible to establish a connection (no connection, incorrect login-password, etc.). The number of attempts to establish a connection is set
+				through the <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.AttemptCount</codeEntityReference> property. The default
+				is 0, meaning that the mode is disabled. -1 specifies an infinite number of attempts.
+			</listItem>
+			<listItem>
+				The connection was broken during the working process. The number of attempts to reestablish a connection is set through the 
+				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ReAttemptCount</codeEntityReference> property. The default is 100.
+				-1 specifies an infinite number of attempts. 0 – the mode is disabled.
+			</listItem>
+			<!-- <listItem>
+				Экспорт данных не приходит долгое время. Через свойство
+				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.TimeOutInterval</codeEntityReference> задается время,
+				максимально допустимое для отсутствия новых данных. По умолчанию оно равно TimeSpan.Zero, что означает, что режим отключен.
+				Время ожидания успешного подключения/отключения. Если значение равно TimeSpan.Zero, то мониторинг не производится.  По-умолчанию значение равно 30 секундам. 
+			</listItem> -->
+			<listItem>
+				The corresponding  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference> or
+				 <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Disconnected</codeEntityReference> events may not come for a long time
+				 during the connection or disconnection process. For such situations, the <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.TimeOutInterval</codeEntityReference>
+				 property can be used to specify the maximum allowable time to wait a successful event. If the desired event is not occurred on the expiration of this
+				 time, then the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ConnectionError</codeEntityReference> event is called with an expiration error.
+			</listItem>
+		</list>
+	  <!--<para>
+		 скрывает реализацию отслеживания потери соединения, автоматически
+		  восстанавливая соединение в случае его разрыва до тех пор, пока <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.ITrader.IsConnected</codeEntityReference>
+		  не вернет true.
+	  </para>-->
+    </introduction>
+
+    <!-- Specify at least one procedure or section/procedure and codeExample -->
+
+   <procedure>
+      <title>Use of the connection tracking</title>
+
+      <steps class="ordered">
+        <step>
+          <content>
+			  <para>
+				  For the demonstration the SampleOEC example working with <token>openecry</token> is taken.
+			  </para>
+			  <para>
+				  When creating a gateway, it is necessary to initialize the reconnections mechanism settings through the
+				  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference> property:
+			  </para>
+			<code language="C#"><![CDATA[
+// tradking interval is 10 seconds
+Trader.ReConnectionSettings.Interval = TimeSpan.FromSeconds(10);
+
+Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() => MessageBox.Show(this, "Connection was restored."));
+
+// connection was dropped
+Trader.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.ToString()));]]></code>
+
+          </content>
+        </step>
+		<step>
+		  <content>
+			<para>In order to check how the mechanism works, it is possible, for example, turn off your Internet connection:
+			</para>
+			<para>
+			  <mediaLink>
+				<image placement="center" xlink:href="transactions" />
+			  </mediaLink>
+			</para>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  The program will signal about loss of connection:
+			</para>
+			<para>
+			  <mediaLink>
+				<image placement="center" xlink:href="sampleconnectionerror" />
+			  </mediaLink>
+			</para>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  Once the external transactions turned on, the program will display a message about the successful reconnection:
+			</para>
+			<para>
+			  <mediaLink>
+				<image placement="center" xlink:href="sampleconnectionrestore" />
+			  </mediaLink>
+			</para>
+		  </content>
+		</step>
+		  <!-- <step>
+			  <content>
+				  <para>
+					  <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> может автоматически при восстановлении соединения
+					  перезапускать экспорт через метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReStartExport</codeEntityReference>.
+					  Это необходимо в тех случаях, когда экспорт данных был остановлен вместе с потерей соединения. Например, программы <token>quik</token>
+					  или <token>smartcom</token> были полностью перезапущены. При этом, перезапускаются только те потоки данных, которые работали на момент
+					  потери соединения. Данная функциональность по умолчанию отключена. Если требуется включить ее, то необходимо использовать свойство
+					  <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.IsReStartExport</codeEntityReference>:
+				  </para>
+				  <code language="C#"><![CDATA[Trader.ReConnectionSettings.IsReStartExport = true;]]></code>
+			  </content>
+		  </step> -->
+      </steps>
+    </procedure>
+
+	
+    
+  </developerHowToDocument>
+</topic>

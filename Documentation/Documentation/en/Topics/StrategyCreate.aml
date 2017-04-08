@@ -1,0 +1,495 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a8159c99-256b-46e4-80fe-7cf92944b4c9" revisionNumber="0">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+		Along with the event-driven approach for <link xlink:href="a8159c99-256b-46e4-80fe-7cf92944b4c9">strategies creating</link>, in the <token>stocksharp</token> 
+		you can create code for a strategy based on an iteration model. This approach should be used when you want a simple strategy implementation, is not critical
+		to the execution speed.
+      </para>
+
+      <para>
+	  	To create a strategy based on an iteration model the <codeEntityReference>T:StockSharp.Algo.Strategies.TimeFrameStrategy</codeEntityReference> class is used.
+	  	When you use this class, the main trading algorithm code should be focused in the <codeEntityReference>M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess</codeEntityReference> method.
+	  	This method call frequency depends on the <codeEntityReference>P:StockSharp.Algo.Strategies.TimeFrameStrategy.Interval</codeEntityReference> value.
+	  	The approach in the <codeEntityReference>T:StockSharp.Algo.Strategies.TimeFrameStrategy</codeEntityReference>
+		using is iteration processing: the beginning of the method -> check the state of the market -> orders registration (or cancel) -> method end. With this approach,
+		you need to store the states for the next method call could get the data created in the previous call.
+      </para>
+
+      <para>
+		The example of the <token>ma</token> trading algorithm (its simple implementation) shows the iteration model work. In example the inheriting class
+		<codeEntityReference>T:StockSharp.Algo.Strategies.TimeFrameStrategy</codeEntityReference> implemented, which stores the state of moving crosses (the long
+		is above or below the short one) between the <codeEntityReference>M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess</codeEntityReference> method calls.	 
+	 </para>
+	  <para>
+		<mediaLink>
+		  <image placement="center" xlink:href="samplesma" />
+		</mediaLink>
+	  </para>
+    </introduction>
+
+	<procedure>
+	  <title>The moving average algorithm:</title>
+
+	  <steps class="ordered">
+		<step>
+		  <content>
+		  	<para>
+			  Historical data are necessary for this algorithm, so, for example, the 5-minutes were downloaded from the <token>IQFeed</token> site on the AAPL paper
+			  and saved to the AAPL_history.txt file.
+			</para>
+			<alert class="note">
+			  <para>
+				Before starting the program it is recommended to update the data by downloading them from the website. The correct data format can be viewed in the test file.
+			  </para>
+			</alert>
+		  </content>
+		</step>
+		<step>
+		  <content>
+		    <para>
+		  		The simple moving average formula:
+		  	</para>
+			<math>
+			  SMA = (P<subscript>m</subscript> + P<subscript>m-1</subscript> + ... + P<subscript>m-n</subscript>) / n
+			</math>
+			<para>
+				Indicators implemented in the <codeEntityReference>N:StockSharp.Algo.Indicators</codeEntityReference> namespace. For more details see
+				<link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">Indicators</link>.
+			</para>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  The implementation code of the trading strategy for moving average:
+			</para>
+			<code language="C#">
+<![CDATA[class SmaStrategy : TimeFrameStrategy
+{
+	private readonly CandleManager _candleManager;
+	private bool _isShortLessThenLong;
+
+	private DateTime _nextTime;
+
+	public SmaStrategy(CandleManager candleManager, SimpleMovingAverage longSma, SimpleMovingAverage shortSma, TimeSpan timeFrame)
+		: base(timeFrame)
+	{
+		_candleManager = candleManager;
+	
+		this.LongSma = longSma;
+		this.ShortSma = shortSma;
+	}
+
+	public SimpleMovingAverage LongSma { get; private set; }
+	public SimpleMovingAverage ShortSma { get; private set; }
+
+	protected override void OnStarting()
+	{
+		_isShortLessThenLong = this.ShortSma.LastValue < this.LongSma.LastValue;
+		
+		_nextTime = base.Interval.GetCandleBounds(base.Trader).Max;
+
+		base.OnStarting();
+	}
+
+	protected override ProcessResults OnProcess()
+	{
+		// strategy are stopping
+		if (ProcessState == ProcessStates.Stopping)
+		{
+			CancelActiveOrders();
+			return ProcessResults.Stop;
+		}
+
+		this.AddInfoLog(LocalizedStrings.Str3634Params.Put(candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security));
+
+		// process new candle
+		var longValue = LongSma.Process(candle);
+		var shortValue = ShortSma.Process(candle);
+
+		// calc new values for short and long
+		var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
+
+		// crossing happened
+		if (_isShortLessThenLong != isShortLessThenLong)
+		{
+			// if short less than long, the sale, otherwise buy
+			var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+
+			// calc size for open position or revert
+			var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+
+			if (!SafeGetConnector().RegisteredMarketDepths.Contains(Security))
+			{
+				var price = Security.GetMarketPrice(Connector, direction);
+
+				// register "market" order (limit order with guaranteed execution price)
+				if (price != null)
+					RegisterOrder(this.CreateOrder(direction, price.Value, volume));
+			}
+			else
+			{
+				// register order (limit order)
+				RegisterOrder(this.CreateOrder(direction, (decimal)(Security.GetCurrentPrice(this, direction) ?? 0), volume));
+
+				// or revert position via market quoting
+				//var strategy = new MarketQuotingStrategy(direction, volume)
+				//{
+				//	WaitAllTrades = true,
+				//};
+				//ChildStrategies.Add(strategy);
+			}
+
+			// store current values for short and long
+			_isShortLessThenLong = isShortLessThenLong;
+		}
+
+		return ProcessResults.Continue;
+	}
+}]]></code>
+			<para>
+			  At the beginning of the method through the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ProcessState</codeEntityReference>
+			  property it is checked to see if the strategy is in the process of stopping (for example, the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference>
+			  method has been called or an error occurred). If the strategy is in the process of stopping, then all active orders are cancelled through the
+			  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.CancelActiveOrders</codeEntityReference>,
+			  method, to prevent their activation at unfavorable prices. If you want not only to cancel orders, but also to close the position, you can use the
+			  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.StrategyHelper.ClosePosition(StockSharp.Algo.Strategies.Strategy,System.Decimal)</codeEntityReference> method.
+			 </para>
+			<para> 
+			  If it is impossible to stop the strategy at the moment for some reason, and it takes some time, it is necessary to return the
+			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Continue</codeEntityReference> value, and to try to finalize the
+			  strategy work in the next iteration of the <codeEntityReference>M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess</codeEntityReference> call.
+			  That is why after calling the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference> method the strategy
+			  is not immediately changing its state to the <codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Stopped</codeEntityReference>.
+			  In case of the SmaStrategy such a situation can not occured, as there are no special circumstances in the implementation of the moving average. Therefore,
+			  the <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Stop</codeEntityReference> is returned immediately when strategy stops.
+			</para>
+			<para>
+			  The code of work with moving average goes after checking. <legacyBold>Important!</legacyBold> The <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
+			  class has the <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+			  method, which must be called instead of direct registration through the (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>)
+			  connector. All trades that have taken place on such order will be captured by the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>.
+			  And on the basis of these trades the calculation of position, slippage, P&amp;L etc. will be done. In addition, such orders and trades will be added to the
+			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Orders</codeEntityReference> and
+			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.MyTrades</codeEntityReference> collections, so you can view all the orders
+			  and trades created within the framework of the strategy.
+			</para>
+			<alert class-="note">
+			  <para>
+				If you want to change the registered order, you also have to call <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
+				method, and not to apply directly to the connector through the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
+				method.
+			  </para>
+			</alert>
+			<para>
+			  At the end of the method the <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Continue</codeEntityReference>,
+			  value returned, which means that the strategy has not finished its work and you need to call it again. If any other algorithm that has a termination
+			  criterion (for example, the position change until a certain value) implements, then in case of operation termination of such algorithm it is necessary
+			  to return the <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Stop</codeEntityReference> value.
+			</para>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  Initialization of the strategy itself and filling in its by the historical data:
+			</para>
+			<code language="C#">
+	<![CDATA[
+_trader = new RithmicTrader(this.Path.Text);
+
+_trader.Connected += () =>
+{
+	_candleManager = new CandleManager(_trader);
+	
+	foreach (var builder in _candleManager.Sources.OfType<CandleBuilder>())
+	{
+		builder.IsSyncRegister = true;
+	}
+
+	_trader.NewPortfolios += portfolios =>
+	{
+		_micex = portfolios.First(p => p.Name == account);
+
+		TryCreateStrategy();
+	};
+
+	_trader.NewSecurities += securities => this.GuiAsync(() =>
+	{
+		_aapl = securities.FirstOrDefault(s => s.Code == "AAPL");
+
+		TryCreateStrategy();
+	});
+
+	_trader.NewMyTrades += trades => this.GuiAsync(() =>
+	{
+		if (_strategy != null)
+		{
+			trades = trades.Where(t => _strategy.Orders.Any(o => o == t.Order));
+
+			_trades.Trades.AddRange(trades);
+		}
+	});
+
+	_candleManager.CandlesStarted += (token, candles) =>
+	{
+		DrawCandles(candles.Keys);
+
+		if (_isTodaySmaDrawn)
+			DrawSma();
+	};
+	
+	_candleManager.CandlesChanged += (token, candles) => DrawCandles(candles.Keys);
+
+	_trader.ConnectionError += ex =>
+	{
+		if (ex != null)
+			this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
+	};
+};
+
+_trader.Connect();
+
+...
+
+private void TryCreateStrategy()
+{
+	if (_aapl != null)
+	{
+		var candles = File.ReadAllLines("AAPL_history.txt").Select(line =>
+		{
+			var parts = line.Split(',');
+			var time = DateTime.ParseExact(parts[0] + parts[1], "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+			return new TimeFrameCandle
+			{
+				OpenPrice = parts[2].To<decimal>(),
+				HighPrice = parts[3].To<decimal>(),
+				LowPrice = parts[4].To<decimal>(),
+				ClosePrice = parts[5].To<decimal>(),
+				TimeFrame = _timeFrame,
+				Time = time,
+				TotalVolume = parts[6].To<int>(),
+				Security = _aapl,
+			};
+		});
+
+		DrawCandles(candles.Cast<Candle>());
+
+		_strategy = new SmaStrategy(_candleManager, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 }, _timeFrame)
+		{
+			Volume = 1,
+			Security = _aapl,
+			Portfolio = this.Portfolios.SelectedPortfolio,
+			Trader = _trader,
+		};
+		_strategy.Log += OnLog;
+		_strategy.NewOrder += OnNewOrder;
+		_strategy.PropertyChanged += OnStrategyPropertyChanged;
+
+		var index = 0;
+
+		foreach (var candle in candles)
+		{
+			_strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+			_strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+
+			if (index >= _strategy.LongSma.Length)
+				DrawSmaLines(candle.Time);
+
+			index++;
+
+			_lastCandleTime = candle.Time;
+		}
+
+		_candleManager.RegisterTimeFrameCandles(_lkoh, _timeFrame);
+
+		this.Start.IsEnabled = true;
+	}
+}]]></code>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  Start and stop of the trading strategy is as follows:
+			</para>
+			<code language="C#"><![CDATA[
+if (!_isTodaySmaDrawn)
+{
+	var bounds = _timeFrame.GetCandleBounds(_trader);
+
+	var candles = _candleManager.GetTimeFrameCandles(_strategy.Security, _timeFrame, new Range<DateTime>(_lastCandleTime + _timeFrame, bounds.Min));
+
+	foreach (var candle in candles)
+	{
+		_strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+		_strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+
+		DrawSmaLines(candle.Time);
+
+		_lastCandleTime = candle.Time;
+	}
+
+	_isTodaySmaDrawn = true;
+}
+
+if (_strategy.ProcessState == ProcessStates.Stopped)
+	_strategy.Start();
+else
+	_strategy.Stop();]]></code>
+			<para>
+			  An error can occur in the process of trading strategy work. In this case, the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
+			  captures the error through the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)</codeEntityReference> method,
+			  the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ErrorState</codeEntityReference> value changes on
+			  <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>, the error text is displayed through the
+			  <codeEntityReference qualifyHint="true">E:StockSharp.Logging.ILogSource.Log</codeEntityReference> 
+			  event and strategy termination begins by itself.
+			</para>
+			<note class="note">
+			  The <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Warning</codeEntityReference> value is aimed to alert about anything unusual.
+			  For example, to display information to the user that clearing started, or the account has not sufficient funds and there is a probability that the next
+			  order can not be registered.
+			</note>
+		  </content>
+		</step>
+		<step>
+		  <content>
+			<para>
+			  Drawing on the chart of new data lines of moving average and candles showing the trend:
+			</para>
+			<code language="C#">
+			<![CDATA[_trader.CandlesStarted += (token, candles) =>
+{
+	DrawCandles(candles.Keys);
+
+	if (_isTodaySmaDrawn)
+		DrawSma();
+};
+_trader.CandlesChanged += (token, candles) => DrawCandles(candles);
+
+private void DrawCandles(IEnumerable<Candle> candles)
+{
+	this.Sync(() => _chart.Candles.DrawCandles(candles));
+}
+
+private void DrawSma()
+{
+	var bounds = _timeFrame.GetCandleBounds(_trader);
+
+	if (_lastCandleTime < bounds.Min)
+	{
+		var endOffset = TimeSpan.FromSeconds(1);
+
+		bounds = new Range<DateTime>(_lastCandleTime + _timeFrame, bounds.Min - endOffset);
+
+		var candles = _trader.GetTimeFrameCandles(_strategy.Security, _timeFrame, bounds);
+
+		if (candles.Count() > 0)
+		{
+			foreach (var candle in candles)
+			{
+			  	 _strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+				 _strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+			}
+		
+			_lastCandleTime = candles.Max(c => c.Time);
+
+			DrawSmaLines(bounds.Min);
+		}
+	}
+}
+
+private void DrawSmaLines(DateTime time)
+{
+	this.GuiSync(() =>
+	{
+		_longSmaGraph.Add(new CustomChartIndicator
+		{
+			Time = time,
+			Value = (double)_strategy.LongSma.LastValue
+		});
+		_shortSmaGraph.Add(new CustomChartIndicator
+		{
+			Time = time,
+			Value = (double)_strategy.ShortSma.LastValue
+		});
+	});
+}]]></code>
+		  </content>
+		</step>
+	  </steps>
+	</procedure>
+    
+    <!--<section>
+      <title>Optional section</title>
+
+      <content>
+        <para>Some topic content</para>
+      </content>
+    </section>-->
+
+    <nextSteps>
+      <content>
+        <para><link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Child strategies</link></para>
+      </content>
+    </nextSteps>
+    
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+                
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+    
+  </developerWalkthroughDocument>
+</topic>

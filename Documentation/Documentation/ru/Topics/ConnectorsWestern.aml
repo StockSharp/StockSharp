@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>На текущий момент <token>stocksharp</token> поддерживает следующие западные коннекторы:</para>
+		<list class="ordered">
+			<listItem><codeEntityReference>T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> для <token>OpenECry</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> для <token>IB</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> для <token>blackwood</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.ETrade.ETradeTrader</codeEntityReference> для <token>etrade</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> для <token>iqfeed</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.Sterling.SterlingTrader</codeEntityReference> для <token>sterling</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference> для <token>cqg</token></listItem>
+			<!--<listItem><codeEntityReference>T:StockSharp.Fix.FixTrader</codeEntityReference> для <token>fix</token></listItem>-->
+			<listItem><codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> для <token>rithmic</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference> для <token>itch</token></listItem>
+		</list>
+	</introduction>
+	</developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="b49f617f-7425-4c1d-bb45-c347f55d1d1e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Hedging_00"/>
+</mediaLink>
+<para>Кубик используется для защиты позиции по опционным стратегиям.
+ Кубик содержит единственное свойство Тип хеджирования, которое может принимать 
+ значения Дельта, Гамма, Вега, Тета, Ро</para>
+
+<para>На вход принимает Инструмент базовый актив, Дельта, Позицию по базовому активу, 
+Сигнал для выставления заявки. </para>
+
+<para>На выход передает заявку, зарегистрированную в рамках стратегии.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b85d4d51-2824-44e5-aad1-0bde76d409ae" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

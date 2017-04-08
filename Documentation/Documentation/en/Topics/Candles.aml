@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para>The <token>stocksharp</token> supports 6 candle types:</para>
+	  
+		<list class="bullet">
+			<listItem>
+				<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> - the candle on the basis of the time interval (timeframe).
+				You can specify both popular segments (minute, hour, day) and customized. For example, 21 seconds, 4.5 minutes, etc
+			</listItem>
+			
+			<listItem>
+				<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference> - the candle of the price range. A new candle is created when there
+				is an order with the price goes outside the permissible limits. The acceptable limit is generated every time based on the price of the first trade.
+			</listItem>
+		  
+			<listItem>
+				<codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> - the candle is produced as long as the total of orders not exceeded
+				the volume. If the new trade exceeds allowable volume, it gets in the new candle.
+			</listItem>
+		  
+			<listItem>
+				<codeEntityReference>T:StockSharp.Algo.Candles.TickCandle</codeEntityReference> - the same as the <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference>,
+				only limited to the number of trades instead of the volume.
+			</listItem>
+		  
+			<listItem>
+				<codeEntityReference>T:StockSharp.Algo.Candles.PnFCandle</codeEntityReference> - point and figure chart candle.
+			</listItem>
+		  
+			<listItem>
+				<codeEntityReference>T:StockSharp.Algo.Candles.RenkoCandle</codeEntityReference> - Renko candle.
+			</listItem>
+		</list>
+	  
+		<para>The <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> and 
+		<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference> charts are on the following figures:</para>
+		
+	  
+		<mediaLink><image placement="center" xlink:href="sample_timeframecandles" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="sample_rangecandles" /></mediaLink>
+	</introduction>
+
+    <procedure>
+		<title>The CandleManager creating and start of data receiving</title>
+
+		<steps class="ordered">
+			<step>
+				<content>
+					<para>First, you need to create the candles manager <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
+					which is by subscribing to the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>event,
+					will create candles:</para>
+			
+					<code language="C#">
+					<![CDATA[
+_trader = new RithmicTrader(this.Path.Text);
+_trader.Connect();
+
+...
+
+_candleManager = new CandleManager(_trader);
+					]]>
+					</code>
+					
+					<alert class="note">
+						<para>If for tick trades getting the source with another procedure used instead of the <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
+						connector, you must implement the <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.ICandleManagerSource</codeEntityReference>
+						interface and pass the implementation to <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>.</para>
+						
+						<para>The following implementations of this interface are in the <token>stocksharp</token>:</para>
+						
+						<list class="bullet">
+  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder</codeEntityReference></para></listItem>
+  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.RangeCandleBuilder</codeEntityReference></para></listItem>
+  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.VolumeCandleBuilder</codeEntityReference></para></listItem>
+  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference></para></listItem>
+  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.PnFCandleBuilder</codeEntityReference></para></listItem>
+  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.RenkoCandleBuilder</codeEntityReference></para></listItem>
+  							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.StorageCandleSource</codeEntityReference></para></listItem>
+						</list>
+						
+						<para>which are standard as the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>
+						when the <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> is creating.</para>
+
+					</alert>
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>Next, you must subscribe to the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
+					event, which informs about a new value for the handling:</para>
+			
+					<code language="C#">
+					<![CDATA[
+_candleManager.Processing += DrawCandle;
+
+private void DrawCandle(CandleSeries series, Candle candle)
+{
+	 ...
+	 
+	wnd.Chart.Draw((ChartCandleElement)wnd.Chart.Areas[0].Elements[0], candle);
+}
+					]]>
+					</code>
+					
+					<alert class="note">
+						To display candles the graphical component <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> is used.
+					</alert>
+				</content>
+			</step>
+		
+			<step>
+				<content>
+					<para>You must declare exactly which candles are required for the algorithm and start data receiving through 
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:</para>
+
+					<code language="C#">
+					<![CDATA[
+switch (type)
+{
+	case CandleTypes.TimeFrame:
+		series = new CandleSeries(typeof(TimeFrameCandle), security, TimeFrame.Value.Value.TimeOfDay);
+		break;
+	case CandleTypes.Tick:
+		series = new CandleSeries(typeof(TickCandle), security, VolumeCtrl.Text.To<int>());
+		break;
+	case CandleTypes.Volume:
+		series = new CandleSeries(typeof(VolumeCandle), security, VolumeCtrl.Text.To<decimal>());
+		break;
+	case CandleTypes.Range:
+		series = new CandleSeries(typeof(RangeCandle), security, PriceRange.Unit);
+		break;
+	default:
+		throw new ArgumentOutOfRangeException();
+}
+
+...
+
+_candleManager.Start(series);				
+					]]>
+					</code>
+			
+					<para>The <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
+					event will start be called after this phase.</para>
+				</content>
+			</step>
+		</steps>
+	</procedure>
+    
+    <procedure>
+    	<title>Working with candles</title>
+		<steps class="bullet">
+			<step>
+				<content>    		
+					<para>If you want to get the already created candles by the specified parameters, you need to call special methods, for example, for
+					<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>,
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,Ecng.ComponentModel.Range{System.DateTimeOffset})</codeEntityReference>,
+					or for <codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference>,
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset)</codeEntityReference>:</para>
+					<code language="C#">
+					<![CDATA[
+// to get 100 5min candles for APPL
+private Security _aapl;
+private readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
+private _series;
+
+...
+
+_series = new CandleSeries(typeof(TimeFrameCandle), _aapl, _timeFrame);
+
+...
+
+var candles = _series.GetCandles(100);
+					]]>
+					</code>
+				</content>    		
+			</step>
+			
+			<step>
+				<content>  			
+					<para>If you want to address to the elapsed candles by number (for example, to get the fifth from the end), you can use the
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandle``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.Int32)</codeEntityReference>:</para>
+					<code language="C#">
+					<![CDATA[
+// to get the 5th candle at the end (numbering start from 0, 0 - current candle)
+private Security _aapl;
+private readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
+private _series;
+
+...
+
+_series = new CandleSeries(typeof(TimeFrameCandle), _aapl, _timeFrame);
+
+...
+
+var prev5Candle = _series.GetCandle<TimeFrameCandle>(5);
+
+					]]>
+					</code>
+				</content>    		
+			</step>
+		</steps>
+    </procedure>
+    
+	<nextSteps>
+		<content>
+			<para><link xlink:href="287125e1-7c7e-4be3-a8ce-5018538e613f">Chart</link></para>
+			<para><link xlink:href="ccc96909-8623-4f56-b3ee-fdc5070b3fde">Patterns</link></para>
+			<para><link xlink:href="99da6499-9ac1-4e7e-bcaf-a0c832dce4de">Custom type of candle</link></para>
+		</content>
+	</nextSteps>
+	
+	 
+    
+	</developerWalkthroughDocument>
+</topic>

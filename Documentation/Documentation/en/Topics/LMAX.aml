@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+		<para>
+			The <codeEntityReference qualifyHint="false">T:StockSharp.LMAX.LmaxTrader</codeEntityReference> should be used for trading algorithms creating for <token>lmax_external</token>.
+			The scheme of interaction is shown in this figure:
+		</para>
+		<mediaLink><image placement="center" xlink:href="LMaxTrader"/></mediaLink>
+	</introduction>
+	<relatedTopics>
+    	<link xlink:href="9cd10cbc-8534-4d44-bf3b-60b0a3f03590">Getting started</link>
+    	<link xlink:href="c6236e85-fb9e-4c4d-9585-6b4b687e8b35">Stop orders</link>
+    	<link xlink:href="3220f956-8ab0-43bb-b063-c6861ccceaf1">Historical data</link>
+    </relatedTopics>
+  </developerWalkthroughDocument>
+</topic>

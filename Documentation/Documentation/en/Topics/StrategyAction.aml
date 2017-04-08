@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8c0327db-494a-4fe0-aba8-0d4b93dea60e" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+	  <para>
+		The basis of the creating strategies is the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class, which includes the main
+		trading options such as: portfolio, instrument, the current position, profit-loss, etc.
+	  </para>
+	  <para>
+	  	It is recommended that the strategy code has been implemented without binding to specified instrument or portfolio. This approach allows you to use strategy with
+	  	different instruments on different trading accounts simultaneously or in different time periods:
+	  </para>
+	  <para>
+		<mediaLink>
+		  <image placement="center" xlink:href="strategy" />
+		</mediaLink>
+	  </para>
+	  
+	  
+	  
+	  <para>
+	  	The <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class uses an approach <link xlink:href="97cf7a9c-8b3d-4791-9306-275d55d4cf36">based on events</link>. 
+	  	Such code is compact and quickly reacts to market events due instant recall. If you use the <link xlink:href="a8159c99-256b-46e4-80fe-7cf92944b4c9">iteration model</link>,
+		the code is called only after the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.TimeFrameStrategy.TimeFrame</codeEntityReference>
+		timeframe end, and there is a chance to miss the necessary signals in the market. Therefore, it is recommended to use in the <token>stocksharp</token>
+		only events to create the logic of the strategies (all standard <token>stocksharp</token> strategies implement this approach).
+	  </para>
+	  <para>
+	  	To use event-driven approach, you must use the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Rules</codeEntityReference>
+	  	property. The list of rules set through this property. Each of the rules stores an event trigger condition and the action itself, which handles this event.
+	  	Here is the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> strategy code, which uses the event model:
+	  </para>
+
+		<code language="C#">
+<![CDATA[
+/// <summary>
+/// The options delta hedging strategy.
+/// </summary>
+public class DeltaHedgeStrategy : HedgeStrategy
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="DeltaHedgeStrategy"/>.
+	/// </summary>
+	public DeltaHedgeStrategy()
+	{
+		_positionOffset = new StrategyParam<decimal>(this, "PositionOffset");
+	}
+
+	private readonly StrategyParam<decimal> _positionOffset;
+
+	/// <summary>
+	/// Shift in position for underlying asset, allowing not to hedge part of the options position.
+	/// </summary>
+	[CategoryLoc(LocalizedStrings.Str1244Key)]
+	[DisplayNameLoc(LocalizedStrings.Str1245Key)]
+	[DescriptionLoc(LocalizedStrings.Str1246Key)]
+	public decimal PositionOffset
+	{
+		get { return _positionOffset.Value; }
+		set { _positionOffset.Value = value; }
+	}
+
+	/// <summary>
+	/// To get a list of orders rehedging the option position.
+	/// </summary>
+	/// <returns>Rehedging orders.</returns>
+	protected override IEnumerable<Order> GetReHedgeOrders()
+	{
+		var futurePosition = BlackScholes.Delta(CurrentTime);
+
+		if (futurePosition == null)
+			return Enumerable.Empty<Order>();
+
+		var diff = futurePosition.Value.Round() + PositionOffset;
+
+		this.AddInfoLog(LocalizedStrings.Str1247Params,
+			futurePosition, BlackScholes.UnderlyingAssetPosition.Position, PositionOffset, diff);
+
+		if (diff == 0)
+			return Enumerable.Empty<Order>();
+
+		var dir = diff > 0 ? Sides.Sell : Sides.Buy;
+
+		var price = Security.GetCurrentPrice(this, dir);
+
+		if (price == null)
+			return Enumerable.Empty<Order>();
+
+		return new[]
+		{
+			new Order
+			{
+				Direction = dir,
+				Volume = diff.Abs(),
+				Security = BlackScholes.UnderlyingAsset,
+				Portfolio = Portfolio,
+				Price = price.ApplyOffset(dir, PriceOffset, Security)
+			}
+		};
+	}
+}]]>
+		</code>
+		<para>
+			This strategy at start adds the rule on new trades event (for rehedging):
+		</para>
+		<code language="C#">
+_tradingStrategy
+	.WhenNewMyTrades()
+	.Do(ReHedge).Apply(this);
+		</code>
+		<para>
+			and also the rule for event of the futures contract change (its price):
+		</para>
+		<code language="C#">
+Security
+	.WhenChanged()
+	.Do(ReHedge).Apply(this);
+		</code>
+				
+		<para>
+			In the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> rules are added by calling the
+			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.Apply(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRuleContainer)</codeEntityReference>
+			add-in method, that implicitly adds new <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Rules</codeEntityReference>
+			objects to the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.IMarketRule</codeEntityReference> list. This reduces the code and make it more
+			readable. As long as the rule is not added to the strategy - it is inactive.
+		</para>
+			
+		<para>
+			By default the rule is recurring, i.e. it is called as many times, as an event occurs. It will continue as long as the strategy is working, to which a rule
+			is added (<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ProcessState</codeEntityReference>
+			equals <codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Started</codeEntityReference>).
+			
+			If you want to create a rule that will be active from other condition (for example, a rule that closes the position when strategy stops <legacyBold>should not</legacyBold>
+			depend on the <codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Started</codeEntityReference>) value), then you need to call the
+			<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRule`2.Until(System.Func{System.Boolean})</codeEntityReference>
+			method. The criterion for the rule end is passed to this method
+		</para>
+
+
+		<alert class="caution">
+			If the strategy has been forcibly stopped through the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference>
+			method (for example, when the user clicks on the program window), the strategy is not immediately stopped and goes into the
+			<codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Stopping</codeEntityReference>
+			state and will remain active as long as the list with the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Rules</codeEntityReference>
+			rules is not empty (that means that some rules are still active). Therefore, you must be careful with the addition of a rule stopping criterion not to make
+			a strategy unstoppable.
+		</alert>
+		
+    </introduction>
+
+	<nextSteps>
+	  <content>
+		<para>
+		  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Child strategies</link>
+		</para>
+	  </content>
+	</nextSteps>
+
+    <relatedTopics>
+      <link xlink:href="97cf7a9c-8b3d-4791-9306-275d55d4cf36">Event model</link>
+    </relatedTopics>
+    
+   </developerConceptualDocument>
+</topic>
