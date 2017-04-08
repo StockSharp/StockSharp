@@ -614,6 +614,30 @@
       <param name="storageName">Storage name.</param>
       <param name="securityId">Security identifier.</param>
     </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetUsers(System.Guid)">
+      <summary>
+            Get users.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <returns>Users.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.SaveUser(System.Guid,System.String,System.String,System.String[],StockSharp.Algo.UserPermissions)">
+      <summary>
+            Save user info.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="login">Login.</param>
+      <param name="password">Password.</param>
+      <param name="ipAddresses">IP address list.</param>
+      <param name="permissions">Permissions.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteUser(System.Guid,System.String)">
+      <summary>
+            Delete existing user.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="login">Login.</param>
+    </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
             To get all the dates for which market data are recorded.
@@ -879,6 +903,26 @@
             </summary>
       <param name="storageName">Storage name.</param>
       <returns>Extended info storage.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetUsers">
+      <summary>
+            Get users.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.SaveUser(System.String,System.Security.SecureString,System.Net.IPAddress[],StockSharp.Algo.UserPermissions)">
+      <summary>
+            Save user info.
+            </summary>
+      <param name="login">Login.</param>
+      <param name="password">Password.</param>
+      <param name="ipAddresses">IP address list.</param>
+      <param name="permissions">Permissions.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.DeleteUser(System.String)">
+      <summary>
+            Delete existing user.
+            </summary>
+      <param name="login">Login.</param>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
@@ -1187,7 +1231,7 @@
     </member>
     <member name="T:StockSharp.Algo.History.Russian.MoexDownloader">
       <summary>
-            The helper class that filling fields in <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> and <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" /> based on information from the site http://www.micex.ru.
+            The helper class that filling fields in <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> and <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" /> based on information from the site http://moex.com.
             </summary>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,StockSharp.Algo.Storages.IExchangeInfoProvider,System.Boolean)">

@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) Remote storage. Edit users.
+
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
 * (bug) BasketMessageAdapter and SubscriptionMessageAdapter. Fix derived MarketDataMessage types handling.

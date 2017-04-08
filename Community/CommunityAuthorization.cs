@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Net;
 	using System.Security;
 
@@ -53,6 +54,35 @@ namespace StockSharp.Community
 			{
 				throw new UnauthorizedAccessException(LocalizedStrings.WrongLoginOrPassword, ex);
 			}
+		}
+
+		/// <summary>
+		/// Save user.
+		/// </summary>
+		/// <param name="login">Login.</param>
+		/// <param name="password">Password.</param>
+		/// <param name="possibleAddresses">Possible addresses.</param>
+		public void SaveUser(string login, SecureString password, IEnumerable<IPAddress> possibleAddresses)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Delete user by login.
+		/// </summary>
+		/// <param name="login">Login.</param>
+		/// <returns>Returns <see langword="true"/>, if user was deleted, otherwise return <see langword="false"/>.</returns>
+		public bool DeleteUser(string login)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Get all available users.
+		/// </summary>
+		public IEnumerable<Tuple<string, IEnumerable<IPAddress>>> AllUsers
+		{
+			get { throw new NotSupportedException(); }
 		}
 	}
 }

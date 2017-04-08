@@ -1110,6 +1110,15 @@ M:StockSharp.Algo.FilteredMarketDepthAdapter.OnInnerAdapterNewOutMessage(StockSh
 M:StockSharp.Algo.FilteredMarketDepthAdapter.Clone/summary;DocStr643
 M:StockSharp.Algo.FilteredMarketDepthAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.IRemoteAuthorization/summary;DocStr157
+P:StockSharp.Algo.IRemoteAuthorization.AllRemoteUsers/summary;DocStr9682
+M:StockSharp.Algo.IRemoteAuthorization.SaveRemoteUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress},StockSharp.Algo.UserPermissions)/summary;DocStr9683
+M:StockSharp.Algo.IRemoteAuthorization.SaveRemoteUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress},StockSharp.Algo.UserPermissions)/param/login;Login
+M:StockSharp.Algo.IRemoteAuthorization.SaveRemoteUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress},StockSharp.Algo.UserPermissions)/param/password;Password
+M:StockSharp.Algo.IRemoteAuthorization.SaveRemoteUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress},StockSharp.Algo.UserPermissions)/param/possibleAddresses;DocStr9684
+M:StockSharp.Algo.IRemoteAuthorization.SaveRemoteUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress},StockSharp.Algo.UserPermissions)/param/permissions;DocStr9680
+M:StockSharp.Algo.IRemoteAuthorization.DeleteRemoteUser(System.String)/summary;DocStr9685
+M:StockSharp.Algo.IRemoteAuthorization.DeleteRemoteUser(System.String)/param/login;Login
+M:StockSharp.Algo.IRemoteAuthorization.DeleteRemoteUser(System.String)/returns;DocStr9686
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/summary;DocStr158
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/sessionId;DocStr138
 M:StockSharp.Algo.IRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/requiredPermissions;DocStr9606
@@ -1128,6 +1137,9 @@ M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockS
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/arg;DocStr144
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/param/date;Date
 M:StockSharp.Algo.AnonymousRemoteAuthorization.HasPermissions(System.Guid,StockSharp.Algo.UserPermissions,System.String,System.String,System.Object,System.Nullable{System.DateTime})/returns;DocStr159
+P:StockSharp.Algo.AnonymousRemoteAuthorization.AllRemoteUsers/inheritdoc;DocStr8459
+M:StockSharp.Algo.AnonymousRemoteAuthorization.SaveRemoteUser(System.String,System.Security.SecureString,System.Collections.Generic.IEnumerable{System.Net.IPAddress},StockSharp.Algo.UserPermissions)/inheritdoc;DocStr8459
+M:StockSharp.Algo.AnonymousRemoteAuthorization.DeleteRemoteUser(System.String)/inheritdoc;DocStr8459
 T:StockSharp.Algo.Storages.IExchangeInfoProvider/summary;DocStr2816
 P:StockSharp.Algo.Storages.IExchangeInfoProvider.Boards/summary;DocStr1320
 P:StockSharp.Algo.Storages.IExchangeInfoProvider.Exchanges/summary;DocStr1321
@@ -1385,6 +1397,7 @@ M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.#ctor(System.String)/param/pat
 P:StockSharp.Algo.Storages.CsvExtendedInfoStorage.DelayAction/summary;DocStr1335
 M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.Init/summary;DocStr9249
 T:StockSharp.Algo.Storages.INativeIdStorage/summary;DocStr9329
+E:StockSharp.Algo.Storages.INativeIdStorage.Added/summary;DocStr9687
 M:StockSharp.Algo.Storages.INativeIdStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.INativeIdStorage.Get(System.String)/summary;DocStr9330
 M:StockSharp.Algo.Storages.INativeIdStorage.Get(System.String)/param/name;DocStr429
@@ -1407,6 +1420,7 @@ T:StockSharp.Algo.Storages.CsvNativeIdStorage/summary;DocStr9338
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.#ctor(System.String)/param/path;DocStr9340
 P:StockSharp.Algo.Storages.CsvNativeIdStorage.DelayAction/summary;DocStr1335
+E:StockSharp.Algo.Storages.CsvNativeIdStorage.Added/summary;DocStr9687
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.Get(System.String)/summary;DocStr9330
 M:StockSharp.Algo.Storages.CsvNativeIdStorage.Get(System.String)/param/name;DocStr429
@@ -7009,3 +7023,6 @@ F:StockSharp.Algo.UserPermissions.EditBoards/summary;EditBoards
 F:StockSharp.Algo.UserPermissions.DeleteSecurities/summary;XamlStr789
 F:StockSharp.Algo.UserPermissions.DeleteExchanges/summary;DeleteExchanges
 F:StockSharp.Algo.UserPermissions.DeleteBoards/summary;DeleteBoards
+F:StockSharp.Algo.UserPermissions.GetUsers/summary;GetUsers
+F:StockSharp.Algo.UserPermissions.EditUsers/summary;EditUsers
+F:StockSharp.Algo.UserPermissions.DeleteUsers/summary;DeleteUsers

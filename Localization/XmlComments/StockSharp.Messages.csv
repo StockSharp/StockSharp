@@ -1243,7 +1243,7 @@ P:StockSharp.Messages.SecurityMessage.Currency/summary;Str382
 P:StockSharp.Messages.SecurityMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.SecurityMessage.Class/summary;SecurityClass
 M:StockSharp.Messages.SecurityMessage.#ctor/summary;DocStr1
-M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
+M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
 M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
 M:StockSharp.Messages.SecurityMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.SecurityMessage.Clone/returns;DocStr1116
@@ -1294,6 +1294,8 @@ F:StockSharp.Messages.TimeInForce.MatchOrCancel/summary;FOK
 F:StockSharp.Messages.TimeInForce.CancelBalance/summary;IOC
 T:StockSharp.Messages.TimeMessage/summary;DocStr4527
 M:StockSharp.Messages.TimeMessage.#ctor/summary;DocStr1
+M:StockSharp.Messages.TimeMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
+M:StockSharp.Messages.TimeMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
 P:StockSharp.Messages.TimeMessage.TransactionId/summary;DocStr3166
 P:StockSharp.Messages.TimeMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.TimeMessage.ServerTime/summary;ServerTime

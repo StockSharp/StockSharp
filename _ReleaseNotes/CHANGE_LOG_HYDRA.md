@@ -1,5 +1,8 @@
 StockSharp Data (Hydra) Change log
 ========================
+###current:
+* (feature) Server mode. Edit users.
+
 ###v4.3.23:
 * (bug) Fix http://stocksharp.ru/forum/8164/gidra-servernyi-rezhim-i-samplefix-nablyudeniya/
 * (bug) Fix http://stocksharp.ru/posts/m/39529/

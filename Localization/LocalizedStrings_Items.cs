@@ -19788,12 +19788,12 @@ namespace StockSharp.Localization
 		public static string Str2080Params => GetString(Str2080ParamsKey);
 
 		/// <summary>
-		/// Session does not have the rights for {0} for {1} {2} ({3}) {4}.
+		/// Session {0} does not have the rights for {1} for {2} {3} ({4}) {5}.
 		/// </summary>
 		public const string Str2081ParamsKey = nameof(Str2081Params);
 
 		/// <summary>
-		/// Session does not have the rights for {0} for {1} {2} ({3}) {4}.
+		/// Session {0} does not have the rights for {1} for {2} {3} ({4}) {5}.
 		/// </summary>
 		public static string Str2081Params => GetString(Str2081ParamsKey);
 
@@ -44686,5 +44686,65 @@ namespace StockSharp.Localization
 		/// Session {0}. Get all extended info from '{1}' storage.
 		/// </summary>
 		public static string RemoteStorageGetAllExtendedInfo => GetString(RemoteStorageGetAllExtendedInfoKey);
+
+		/// <summary>
+		/// Session {0}. Getting users.
+		/// </summary>
+		public const string RemoteStorageGetUsersKey = nameof(RemoteStorageGetUsers);
+
+		/// <summary>
+		/// Session {0}. Getting users.
+		/// </summary>
+		public static string RemoteStorageGetUsers => GetString(RemoteStorageGetUsersKey);
+
+		/// <summary>
+		/// Session {0}. Saving user: login='{1}', IP={2}, permissions={3}.
+		/// </summary>
+		public const string RemoteStorageSaveUserKey = nameof(RemoteStorageSaveUser);
+
+		/// <summary>
+		/// Session {0}. Saving user: login='{1}', IP={2}, permissions={3}.
+		/// </summary>
+		public static string RemoteStorageSaveUser => GetString(RemoteStorageSaveUserKey);
+
+		/// <summary>
+		/// Session {0}. Deleting user '{1}'.
+		/// </summary>
+		public const string RemoteStorageDeleteUserKey = nameof(RemoteStorageDeleteUser);
+
+		/// <summary>
+		/// Session {0}. Deleting user '{1}'.
+		/// </summary>
+		public static string RemoteStorageDeleteUser => GetString(RemoteStorageDeleteUserKey);
+
+		/// <summary>
+		/// Get users
+		/// </summary>
+		public const string GetUsersKey = nameof(GetUsers);
+
+		/// <summary>
+		/// Get users
+		/// </summary>
+		public static string GetUsers => GetString(GetUsersKey);
+
+		/// <summary>
+		/// Edit users
+		/// </summary>
+		public const string EditUsersKey = nameof(EditUsers);
+
+		/// <summary>
+		/// Edit users
+		/// </summary>
+		public static string EditUsers => GetString(EditUsersKey);
+
+		/// <summary>
+		/// Delete users
+		/// </summary>
+		public const string DeleteUsersKey = nameof(DeleteUsers);
+
+		/// <summary>
+		/// Delete users
+		/// </summary>
+		public static string DeleteUsers => GetString(DeleteUsersKey);
 	}
 }

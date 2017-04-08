@@ -1979,7 +1979,7 @@ Str2077;Unknown time-frame.;Неизвестный тайм-фрейм.
 Str2078Params;Server returned error {0} for date {1}.;Сервер вернул ошибку {0} для даты {1}.
 Str2079;Time-frame is out of range.;Тайм-фрейм вне диапазона.
 Str2080Params;Session with ID {0} not found.;Сессия с идентификатором {0} не найдена.
-Str2081Params;Session does not have the rights for {0} for {1} {2} ({3}) {4}.;Сессия не имеет прав на {0} для {1} {2} ({3}) {4}.
+Str2081Params;Session {0} does not have the rights for {1} for {2} {3} ({4}) {5}.;Сессия {0} не имеет прав на {1} для {2} {3} ({4}) {5}.
 Str2082Params;Type of data {0} is not supported.;Тип данных {0} не поддерживается.
 Str2083;HydraServer is not available.;HydraServer недоступен.
 Str2084Params;Session {0}. Created for user {1}.;Сессия {0}. Создание для юзера {1}.
@@ -4502,6 +4502,12 @@ RemoteStorageGetSecurityExtendedStorages;Session {0}. Get extended info storages
 RemoteStorageGetExtendedInfoSecurities;Session {0}. Get securities with extended info from '{1}' storage.;Сессия {0}. Получение инструментов с расширенной информацией из хранилища '{1}'.
 RemoteStorageGetSecurityExtendedInfo;Session {0}. Get extended info from '{1}' storage for '{2}' security.;Сессия {0}. Получение расширенной информации из хранилища '{1}' для инструмента '{2}'.
 RemoteStorageGetAllExtendedInfo;Session {0}. Get all extended info from '{1}' storage.;Сессия {0}. Получение всей расширенной информации из хранилища '{1}'.
+RemoteStorageGetUsers;Session {0}. Getting users.;Сессия {0}. Получение пользователей.
+RemoteStorageSaveUser;Session {0}. Saving user: login='{1}', IP={2}, permissions={3}.;Сессия {0}. Сохранение пользователя: логин='{1}', IP={2}, разрешения={3}.
+RemoteStorageDeleteUser;Session {0}. Deleting user '{1}'.;Сессия {0}. Удаление пользователя '{1}'.
+GetUsers;Get users;Получение пользователей
+EditUsers;Edit users;Редактирование пользователей
+DeleteUsers;Delete users;Удаление пользователей
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13954,3 +13960,14 @@ DocStr9674;Release all resources allocated by {0};Освободить все р
 DocStr9675;Text filter for the log messages;Текстовый фильтр для лог сообщений
 DocStr9676;Is trade allowed verification element;Элемент диаграммы, определяющий возможность торговли
 DocStr9677;The risk rules;Риск правила
+DocStr9678;Save user info;Сохранить информацию о пользователе
+DocStr9679;IP address list;Список IP адресов
+DocStr9680;Permissions;Разрешения
+DocStr9681;Delete existing user;Удалить существующего пользователя
+DocStr9682;All available users;Все доступные пользователи
+DocStr9683;Save user;Сохранить пользователя
+DocStr9684;Possible addresses;Допустимые адреса
+DocStr9685;Delete user by login;Удалить пользователя по логину
+DocStr9686;Returns {0}, if user was deleted, otherwise return {1};Вернуть {0}, если пользователь был удален, иначе вернуть {1}
+DocStr9687;The new native security identifier added to storage;Новые системный идентификатор был добавлен в хранилище
+DocStr9688;Get all available users;Получить всех доступных пользователей

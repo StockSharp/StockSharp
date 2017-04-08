@@ -1,6 +1,10 @@
 namespace StockSharp.Algo
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using System.Security;
 
 	using Ecng.Security;
 
@@ -11,6 +15,27 @@ namespace StockSharp.Algo
 	/// </summary>
 	public interface IRemoteAuthorization : IAuthorization
 	{
+		/// <summary>
+		/// All available users.
+		/// </summary>
+		IEnumerable<Tuple<string, IEnumerable<IPAddress>, UserPermissions>> AllRemoteUsers { get; }
+
+		/// <summary>
+		/// Save user.
+		/// </summary>
+		/// <param name="login">Login.</param>
+		/// <param name="password">Password.</param>
+		/// <param name="possibleAddresses">Possible addresses.</param>
+		/// <param name="permissions">Permissions.</param>
+		void SaveRemoteUser(string login, SecureString password, IEnumerable<IPAddress> possibleAddresses, UserPermissions permissions);
+
+		/// <summary>
+		/// Delete user by login.
+		/// </summary>
+		/// <param name="login">Login.</param>
+		/// <returns>Returns <see langword="true"/>, if user was deleted, otherwise return <see langword="false"/>.</returns>
+		bool DeleteRemoteUser(string login);
+
 		/// <summary>
 		/// Get permission for request.
 		/// </summary>
@@ -67,6 +92,21 @@ namespace StockSharp.Algo
 				default:
 					throw new ArgumentOutOfRangeException(nameof(requiredPermissions), requiredPermissions, null);
 			}
+		}
+
+		/// <inheritdoc />
+		public virtual IEnumerable<Tuple<string, IEnumerable<IPAddress>, UserPermissions>> AllRemoteUsers => Enumerable.Empty<Tuple<string, IEnumerable<IPAddress>, UserPermissions>>();
+
+		/// <inheritdoc />
+		public virtual void SaveRemoteUser(string login, SecureString password, IEnumerable<IPAddress> possibleAddresses, UserPermissions permissions)
+		{
+			SaveUser(login, password, possibleAddresses);
+		}
+
+		/// <inheritdoc />
+		public virtual bool DeleteRemoteUser(string login)
+		{
+			return DeleteUser(login);
 		}
 	}
 
