@@ -44718,6 +44718,36 @@ namespace StockSharp.Localization
 		public static string RemoteStorageDeleteUser => GetString(RemoteStorageDeleteUserKey);
 
 		/// <summary>
+		/// Session {0}. Restart.
+		/// </summary>
+		public const string RemoteStorageRestartKey = nameof(RemoteStorageRestart);
+
+		/// <summary>
+		/// Session {0}. Restart.
+		/// </summary>
+		public static string RemoteStorageRestart => GetString(RemoteStorageRestartKey);
+
+		/// <summary>
+		/// Session {0}. Start downloading.
+		/// </summary>
+		public const string RemoteStorageStartDownloadingKey = nameof(RemoteStorageStartDownloading);
+
+		/// <summary>
+		/// Session {0}. Start downloading.
+		/// </summary>
+		public static string RemoteStorageStartDownloading => GetString(RemoteStorageStartDownloadingKey);
+
+		/// <summary>
+		/// Session {0}. Stop downloading.
+		/// </summary>
+		public const string RemoteStorageStopDownloadingKey = nameof(RemoteStorageStopDownloading);
+
+		/// <summary>
+		/// Session {0}. Stop downloading.
+		/// </summary>
+		public static string RemoteStorageStopDownloading => GetString(RemoteStorageStopDownloadingKey);
+
+		/// <summary>
 		/// Get users
 		/// </summary>
 		public const string GetUsersKey = nameof(GetUsers);
@@ -44746,5 +44776,25 @@ namespace StockSharp.Localization
 		/// Delete users
 		/// </summary>
 		public static string DeleteUsers => GetString(DeleteUsersKey);
+
+		/// <summary>
+		/// Restart
+		/// </summary>
+		public const string RestartKey = nameof(Restart);
+
+		/// <summary>
+		/// Restart
+		/// </summary>
+		public static string Restart => GetString(RestartKey);
+
+		/// <summary>
+		/// Manage server
+		/// </summary>
+		public const string ManageServerKey = nameof(ManageServer);
+
+		/// <summary>
+		/// Manage server
+		/// </summary>
+		public static string ManageServer => GetString(ManageServerKey);
 	}
 }

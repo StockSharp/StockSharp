@@ -2,6 +2,7 @@ StockSharp API Change log
 ========================
 ###current:
 * (feature) Remote storage. Edit users.
+* (feature) Remote storage. Manage server.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.

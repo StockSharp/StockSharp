@@ -7026,3 +7026,4 @@ F:StockSharp.Algo.UserPermissions.DeleteBoards/summary;DeleteBoards
 F:StockSharp.Algo.UserPermissions.GetUsers/summary;GetUsers
 F:StockSharp.Algo.UserPermissions.EditUsers/summary;EditUsers
 F:StockSharp.Algo.UserPermissions.DeleteUsers/summary;DeleteUsers
+F:StockSharp.Algo.UserPermissions.ServerManage/summary;Restart

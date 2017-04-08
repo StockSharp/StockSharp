@@ -4505,9 +4505,14 @@ RemoteStorageGetAllExtendedInfo;Session {0}. Get all extended info from '{1}' st
 RemoteStorageGetUsers;Session {0}. Getting users.;Сессия {0}. Получение пользователей.
 RemoteStorageSaveUser;Session {0}. Saving user: login='{1}', IP={2}, permissions={3}.;Сессия {0}. Сохранение пользователя: логин='{1}', IP={2}, разрешения={3}.
 RemoteStorageDeleteUser;Session {0}. Deleting user '{1}'.;Сессия {0}. Удаление пользователя '{1}'.
+RemoteStorageRestart;Session {0}. Restart.;Сессия {0}. Перезапуск.
+RemoteStorageStartDownloading;Session {0}. Start downloading.;Сессия {0}. Запуск загрузки.
+RemoteStorageStopDownloading;Session {0}. Stop downloading.;Сессия {0}. Остановка загрузки.
 GetUsers;Get users;Получение пользователей
 EditUsers;Edit users;Редактирование пользователей
 DeleteUsers;Delete users;Удаление пользователей
+Restart;Restart;Перезапуск
+ManageServer;Manage server;Управление сервером
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13971,3 +13976,10 @@ DocStr9685;Delete user by login;Удалить пользователя по л�
 DocStr9686;Returns {0}, if user was deleted, otherwise return {1};Вернуть {0}, если пользователь был удален, иначе вернуть {1}
 DocStr9687;The new native security identifier added to storage;Новые системный идентификатор был добавлен в хранилище
 DocStr9688;Get all available users;Получить всех доступных пользователей
+DocStr9689;Restart server;Перезапустить сервер
+DocStr9690;Start downloading;Запустить загрузку
+DocStr9691;{0}, if downloading was start, otherwise, {1};{0}, если загрузка была запущена, иначе, {1}
+DocStr9692;Stop downloading;Остановить загрузку
+DocStr9693;Event of server restarting;Событие перезапуска сервера
+DocStr9694;Event of start downloading;Событие запуска загрузки
+DocStr9695;Event of stop downloading;Событие остановки загрузку

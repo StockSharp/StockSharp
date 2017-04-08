@@ -116,5 +116,12 @@ namespace StockSharp.Algo
 		[EnumDisplayNameLoc(LocalizedStrings.DeleteUsersKey)]
 		[EnumMember]
 		DeleteUsers = EditUsers << 1,
+
+		/// <summary>
+		/// Restart.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.ManageServerKey)]
+		[EnumMember]
+		ServerManage = DeleteUsers << 1,
 	}
 }

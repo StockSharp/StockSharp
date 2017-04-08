@@ -638,6 +638,26 @@
       <param name="sessionId">Session ID.</param>
       <param name="login">Login.</param>
     </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.Restart(System.Guid)">
+      <summary>
+            Restart server.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.StartDownloading(System.Guid)">
+      <summary>
+            Start downloading.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <returns>
+        <see langword="true" />, if downloading was start, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.StopDownloading(System.Guid)">
+      <summary>
+            Stop downloading.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+    </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
             To get all the dates for which market data are recorded.
@@ -768,6 +788,21 @@
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.MaxSecurityCount">
       <summary>
             The maximum number of instruments which can be requested from the server via the <see cref="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])" /> method. The default is <see cref="F:StockSharp.Algo.History.Hydra.RemoteStorage.DefaultMaxSecurityCount" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Algo.History.Hydra.RemoteStorage.Restarting">
+      <summary>
+            Event of server restarting.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Algo.History.Hydra.RemoteStorage.StartDownloading">
+      <summary>
+            Event of start downloading.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Algo.History.Hydra.RemoteStorage.StopDownloading">
+      <summary>
+            Event of stop downloading.
             </summary>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.AddDataType(System.Type)">
@@ -923,6 +958,23 @@
             Delete existing user.
             </summary>
       <param name="login">Login.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Restart">
+      <summary>
+            Restart server.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.StartDownloading">
+      <summary>
+            Start downloading.
+            </summary>
+      <returns>
+        <see langword="true" />, if downloading was start, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.StopDownloading">
+      <summary>
+            Stop downloading.
+            </summary>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
