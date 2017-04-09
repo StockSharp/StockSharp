@@ -181,6 +181,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\Hydra_users.aml" />
     <None Include="Topics\HydraSecurityExtensionInfo.aml" />
     <None Include="HydraSecurityExtensionInfo.aml" />
     <None Include="SecurityExtensionInfo.aml" />

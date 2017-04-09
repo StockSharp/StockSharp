@@ -293,7 +293,7 @@
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" isSelected="true" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка S#.Data" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="Первый запуск" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Настройка источников">
@@ -367,7 +367,7 @@
       <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="Новости" />
       <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Транзакции" />
     </Topic>
-    <Topic id="c9491706-3750-42e8-a63f-b50184a7da1d" visible="True" noFile="true" isExpanded="true" title="Работа с  S#.Data через S#.API">
+    <Topic id="c9491706-3750-42e8-a63f-b50184a7da1d" visible="True" noFile="true" title="Работа с  S#.Data через S#.API">
       <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="Подключение к S#.Data через FixTrader" />
       <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="Подключение к S#.Data через WCF" />
       <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Добавление в S#.Data новых данных" />
@@ -381,17 +381,17 @@
       <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Экспорт (авто)" />
       <Topic id="f2b919bd-cb33-4cf1-818f-315c8f79b5ce" visible="True" title="Бэкап данных" />
     </Topic>
-    <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" isExpanded="true" title="Аналитика">
+    <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" title="Аналитика">
       <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Работа со скриптами" />
       <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Отображение результатов анализа" />
     </Topic>
-    <Topic id="b6131db4-4a22-48ea-b89e-8e2a79d633c1" visible="True" noFile="true" title="Настройки">
+    <Topic id="b6131db4-4a22-48ea-b89e-8e2a79d633c1" visible="True" noFile="true" isExpanded="true" title="Настройки">
       <Topic id="e088a37c-22aa-4a85-a20e-3b64c1b039d3" visible="True" title="Сбросить настройки" />
       <Topic id="45cc9b3a-117c-4567-94af-fea13087ebe9" visible="True" title="Удалить данные " />
       <Topic id="938a2834-a3cc-4d92-8a41-e4c11cf84d78" visible="True" title="Настройка сети" />
       <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Площадки" />
       <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Настройки" />
-      <Topic id="77c8e6ee-1c1e-4304-b07c-09a2b68a2182" visible="True" title="Пользователи" />
+      <Topic id="77c8e6ee-1c1e-4304-b07c-09a2b68a2182" visible="True" isSelected="true" title="Пользователи" />
       <Topic id="38595e78-cff6-44ed-b525-2be13e6c17e4" visible="True" title="База данных" />
       <Topic id="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20" visible="True" title="Аварийное восстановление" />
       <Topic id="715c9caa-2fc1-4b7d-bc01-05cdf5897794" visible="True" title="Синхронизировать данные с директориями" />

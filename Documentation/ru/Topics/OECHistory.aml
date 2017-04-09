@@ -3,7 +3,8 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<token>openecry</token> предоставляет исторические свечи, которые можно использовать как для тестирования, так и для инициализации <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">индикаторов</link>.
+      	<token>openecry</token> предоставляет исторические свечи, которые можно использовать 
+      	как для тестирования, так и для инициализации <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">индикаторов</link>.
 	  </para>
     </introduction>
     
@@ -13,7 +14,8 @@
         <step>
           <content>
             <para>
-            	Для того, чтобы получить исторические свечи, необходимо вызвать метод <codeEntityReference qualifyHint="true">M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
+            	Для того, чтобы получить исторические свечи, необходимо вызвать 
+            	метод <codeEntityReference qualifyHint="true">M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
        		</para>
             <code language="C#">
             <![CDATA[

@@ -224,7 +224,7 @@ while (true)
 				  <para>Завершение работы алгоритма:</para>
 				  <code language="C#">
 						// останавливаем подключение
-						trader.Disconnect();;</code>
+						trader.Disconnect();</code>
 			  </content>
 		  </step>
       </steps>

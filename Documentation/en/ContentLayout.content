@@ -315,7 +315,8 @@
       <Topic id="715c9caa-2fc1-4b7d-bc01-05cdf5897794" visible="True" title="Synchronization" />
       <Topic id="938a2834-a3cc-4d92-8a41-e4c11cf84d78" visible="True" title="Network settings" />
       <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Boards" />
-      <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" isSelected="true" title="Common settings" />
+      <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Common settings" />
+      <Topic id="77c8e6ee-1c1e-4304-b07c-09a2b68a2182" visible="True" isSelected="true" title="Пользователи" />
       <Topic id="38595e78-cff6-44ed-b525-2be13e6c17e4" visible="True" title="Database" />
       <Topic id="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20" visible="True" title="Disaster recovery" />
       <Topic id="5a056352-64c7-41ea-87a8-2e112935e3b9" visible="True" isExpanded="true" title="Backup">

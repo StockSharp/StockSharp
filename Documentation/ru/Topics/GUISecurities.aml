@@ -24,7 +24,7 @@
   			
   			<listItem>
   				<para>Компоненты для создания непрерывных и индексных инструментов - <codeEntityReference>T:StockSharp.Xaml.ContinuousSecurityWindow</codeEntityReference> и 
-  				<codeEntityReference>T:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow</codeEntityReference>. </para>
+  				<codeEntityReference>T:StockSharp.Algo.Expressions.Xaml.IndexEditor</codeEntityReference>. </para>
   			</listItem>
   			
 		</list>

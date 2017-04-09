@@ -167,6 +167,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\Hydra_users.aml" />
     <None Include="Topics\hydra_index.aml" />
     <None Include="Topics\HydraExtensionInfo.aml" />
     <None Include="Topics\hydraAPIConnectWCF.aml" />
@@ -1736,6 +1737,10 @@
     <Image Include="Art\hydra_index_candle.png">
       <ImageId>hydra_index_candle</ImageId>
       <AlternateText>hydra index candle</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_users.png">
+      <ImageId>hydra_users</ImageId>
+      <AlternateText>hydra users</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

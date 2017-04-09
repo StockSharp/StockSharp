@@ -7,7 +7,7 @@
 		Например, для задание спреда при арбитраже или парном трейдинге. Имеет следующие реализации.</para>
 		<para>1.	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> - 
 		Индекс, построенный из комбинации нескольких инструментов через математическую 
-		формулу <codeEntityReference>T:StockSharp.Algo.Expressions</codeEntityReference>.</para>
+		формулу <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionFormula</codeEntityReference>.</para>
 		<para>2.	<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - 
 		индекс построенный из инструментов с применением весовых коэффициентов.</para>
 	</introduction>
