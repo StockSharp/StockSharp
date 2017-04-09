@@ -49,7 +49,14 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 		private static string CreateInsertSqlString(Table table, IDictionary<string, object> parameters)
 		{
+			if (table == null)
+				throw new ArgumentNullException(nameof(table));
+
+			if (parameters == null)
+				throw new ArgumentNullException(nameof(parameters));
+
 			var sb = new StringBuilder();
+
 			sb.Append("INSERT OR IGNORE INTO ");
 			sb.Append(table.Name);
 			sb.Append(" (");
@@ -69,6 +76,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			}
 			sb.Remove(sb.Length - 1, 1);
 			sb.AppendLine(")");
+
 			return sb.ToString();
 		}
 
@@ -84,22 +92,25 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 		protected override string CreateIsTableExistsString(Table table)
 		{
-			return "SELECT name FROM sqlite_master WHERE type='table' AND name='{0}'".Put(table.Name);
+			return $"SELECT name FROM sqlite_master WHERE type='table' AND name='{table.Name}'";
 		}
 
-		protected override string GetDbType(Type t, object restriction)
+		protected override string GetDbType(Type type, object restriction)
 		{
 			//anothar:SQLite не поддерживает datetime2, а только datetime то есть округляет до трех знаков в миллисекундах-нам не подходит.
-			if (t == typeof(DateTime))
+			if (type == typeof(DateTime))
 				return "TEXT";
-			if (t == typeof(DateTimeOffset))
+
+			if (type == typeof(DateTimeOffset))
 				return "TEXT";
-			if (t == typeof(TimeSpan))
+
+			if (type == typeof(TimeSpan))
 				return "TEXT";
-			if (t == typeof(bool))
+
+			if (type == typeof(bool))
 				return "boolean";
 
-			return base.GetDbType(t, restriction);
+			return base.GetDbType(type, restriction);
 		}
 	}
 }

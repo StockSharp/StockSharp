@@ -19,25 +19,24 @@ namespace StockSharp.Algo.Export.Database
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
+
 	abstract class Table
 	{
 		protected Table(string name, IEnumerable<ColumnDescription> columns)
 		{
-			Columns = columns.ToArray();
+			if (name.IsEmpty())
+				throw new ArgumentNullException(nameof(name));
+
+			if (columns == null)
+				throw new ArgumentNullException(nameof(columns));
+
 			Name = name;
+			Columns = columns.ToArray();
 		}
 
-		public string Name
-		{
-			get;
-			private set;
-		}
-
-		public IEnumerable<ColumnDescription> Columns
-		{
-			get;
-			private set;
-		}
+		public string Name { get; }
+		public IEnumerable<ColumnDescription> Columns { get; }
 	}
 
 	abstract class Table<T> : Table
@@ -60,58 +59,38 @@ namespace StockSharp.Algo.Export.Database
 
 	class ColumnDescription
 	{
-		public ColumnDescription() { }
+		public ColumnDescription()
+		{
+		}
 
-		public ColumnDescription(String name)
+		public ColumnDescription(string name)
 		{
 			Name = name;
 		}
 
-		public String Name
-		{
-			get;
-			set;
-		}
+		public string Name { get; set; }
 
-		public bool IsPrimaryKey
-		{
-			get;
-			set;
-		}
+		public bool IsPrimaryKey { get; set; }
 
-		public Type DbType
-		{
-			get;
-			set;
-		}
+		public Type DbType { get; set; }
 
-		public object ValueRestriction
-		{
-			get;
-			set;
-		}
+		public object ValueRestriction { get; set; }
 	}
 
 	class StringRestriction
 	{
-		public StringRestriction() { }
+		public StringRestriction()
+		{
+		}
 
 		public StringRestriction(int maxLength)
 		{
 			MaxLength = maxLength;
 		}
 
-		public int MaxLength
-		{
-			get;
-			set;
-		}
+		public int MaxLength { get; set; }
 
-		public bool IsFixedSize
-		{
-			get;
-			set;
-		}
+		public bool IsFixedSize { get; set; }
 	}
 
 	class DecimalRestriction
@@ -122,16 +101,8 @@ namespace StockSharp.Algo.Export.Database
 			Scale = 5;
 		}
 
-		public int Precision
-		{
-			get;
-			set;
-		}
+		public int Precision { get; set; }
 
-		public int Scale
-		{
-			get;
-			set;
-		}
+		public int Scale { get; set; }
 	}
 }

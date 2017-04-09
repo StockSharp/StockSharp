@@ -58,6 +58,12 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 		private static string CreateInsertSqlString(Table table, IDictionary<string, object> parameters)
 		{
+			if (table == null)
+				throw new ArgumentNullException(nameof(table));
+
+			if (parameters == null)
+				throw new ArgumentNullException(nameof(parameters));
+
 			var sb = new StringBuilder();
 			sb.AppendLine("IF NOT EXISTS (SELECT * FROM {0} WHERE {1})".Put(table.Name, table.Columns.Where(c => c.IsPrimaryKey).Select(c => "{0} = @{0}".Put(c.Name)).Join(" AND ")));
 			sb.AppendLine("BEGIN");

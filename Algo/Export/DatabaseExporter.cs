@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
-			Do(messages, () => new SecurityTable(Security));
+			Do(messages, () => new SecurityTable());
 		}
 
 		private void Do<TValue, TTable>(IEnumerable<TValue> values, Func<TTable> getTable)

@@ -30,6 +30,9 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 	{
 		public static BaseDbProvider Create(DatabaseConnectionPair connection)
 		{
+			if (connection == null)
+				throw new ArgumentNullException(nameof(connection));
+
 			if (connection.Provider is SqlServerDatabaseProvider)
 				return new MSSQLDbProvider(connection);
 			else
@@ -99,11 +102,17 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			{
 				foreach (var par in parameters)
 				{
-					var cparam = Database.Provider.Factory.CreateParameter();
-					cparam.Direction = ParameterDirection.Input;
-					cparam.ParameterName = par.Key;
-					cparam.Value = par.Value;
-					command.Parameters.Add(cparam);
+					var dbParam = Database.Provider.Factory.CreateParameter();
+
+					if (dbParam == null)
+						throw new InvalidOperationException();
+
+					dbParam.Direction = ParameterDirection.Input;
+					dbParam.ParameterName = par.Key;
+					dbParam.Value = par.Value ?? DBNull.Value;
+					dbParam.IsNullable = true;
+
+					command.Parameters.Add(dbParam);
 				}
 			}
 
@@ -112,11 +121,17 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 		protected virtual string CreateIsTableExistsString(Table table)
 		{
-			return "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}'".Put(table.Name);
+			if (table == null)
+				throw new ArgumentNullException(nameof(table));
+
+			return $"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{table.Name}'";
 		}
 
 		private string CreateCreateTableString(Table table)
 		{
+			if (table == null)
+				throw new ArgumentNullException(nameof(table));
+
 			var tableName = table.Name;
 
 			var sb = new StringBuilder();
@@ -158,9 +173,12 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 		protected abstract string CreatePrimaryKeyString(IEnumerable<ColumnDescription> columns);
 
-		protected virtual string GetDbType(Type t, object restriction)
+		protected virtual string GetDbType(Type type, object restriction)
 		{
-			if (t == typeof(string))
+			if (type == null)
+				throw new ArgumentNullException(nameof(type));
+
+			if (type == typeof(string))
 			{
 				var srest = restriction as StringRestriction;
 				if (srest != null)
@@ -174,25 +192,25 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 					return "ntext";
 			}
 
-			if (t == typeof(long))
+			if (type == typeof(long))
 				return "BIGINT";
-			if (t == typeof(int))
+			if (type == typeof(int))
 				return "INTEGER";
 
-			if (t == typeof(decimal))
+			if (type == typeof(decimal))
 			{
 				var drest = restriction as DecimalRestriction;
 				return drest != null ? "decimal({0},{1})".Put(drest.Precision, drest.Scale) : "double";
 			}
 
-			if (t == typeof(Enum))
+			if (type == typeof(Enum))
 				return "INTEGER";
-			if (t == typeof(double))
+			if (type == typeof(double))
 				return "FLOAT";
-			if (t == typeof(float))
+			if (type == typeof(float))
 				return "FLOAT";
 
-			throw new NotSupportedException(t.Name + " is not supported by BaseDbProvider");
+			throw new NotSupportedException($"{type.Name} is not supported by {nameof(BaseDbProvider)}.");
 		}
 	}
 }
