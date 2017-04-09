@@ -4,6 +4,7 @@ StockSharp API Change log
 * (feature) Remote storage. Edit users.
 * (feature) Remote storage. Manage server.
 * (feature) Xaml. All XXXWindows's derived from DXWindow.
+* (bug) Database export fix.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.

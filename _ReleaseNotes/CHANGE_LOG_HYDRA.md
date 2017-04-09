@@ -4,6 +4,7 @@ StockSharp Data (Hydra) Change log
 * (feature) Server mode. Edit users.
 * (feature) Remote storage. Manage server.
 * (bug) Hydra. Database connection creation fix.
+* (bug) Database export fix.
 
 ###v4.3.23:
 * (bug) Fix http://stocksharp.ru/forum/8164/gidra-servernyi-rezhim-i-samplefix-nablyudeniya/
