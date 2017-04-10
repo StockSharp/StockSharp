@@ -36,7 +36,7 @@ namespace SampleETrade
 	{
 		public static MainWindow Instance { get; private set; }
 
-		public static readonly DependencyProperty IsConnectedProperty = DependencyProperty.Register("IsConnected", typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
+		public static readonly DependencyProperty IsConnectedProperty = DependencyProperty.Register(nameof(IsConnected), typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
 
 		public bool IsConnected
 		{

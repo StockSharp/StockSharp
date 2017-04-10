@@ -36,7 +36,7 @@ namespace SampleRithmic
 		public static MainWindow Instance { get; private set; }
 
 		public static readonly DependencyProperty IsConnectedProperty = 
-				DependencyProperty.Register("IsConnected", typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
+				DependencyProperty.Register(nameof(IsConnected), typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
 
 		public bool IsConnected
 		{
