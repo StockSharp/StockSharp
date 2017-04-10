@@ -2,8 +2,7 @@
 <topic id="059d6abd-2ef6-459f-bc1a-69c72213689b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-     <para><codeEntityReference>T:StockSharp.Xaml.PortfolioPickerWindow</codeEntityReference> - окно для выбора портфеля. 
-     В окне отображается список портфелей
+     <para><codeEntityReference>T:StockSharp.Xaml.PortfolioPickerWindow</codeEntityReference> - окно для выбора портфеля. В окне отображается список портфелей
      и информация о денежных позициях портфелей.</para>
 
 	<para>

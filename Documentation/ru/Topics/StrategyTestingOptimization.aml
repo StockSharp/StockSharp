@@ -47,14 +47,12 @@
 						Создается несколько настроек длин скользящих средних (первое значение отвечает за длину длинной, второе за длину короткой, третье за
 						цвет <link xlink:href="973860e9-8f2d-4035-98de-bb88b33b6751">кривой эквити</link>):
 					</para>
-					<code language="C#"><![CDATA[
-var periods = new[]
+					<code language="C#"><![CDATA[var periods = new[]
 {
-	new Tuple<int, int, Color>(80, 10, Colors.DarkGreen),
-	new Tuple<int, int, Color>(70, 8, Colors.Red),
-	new Tuple<int, int, Color>(60, 6, Colors.DarkBlue)
-};
-]]></code>
+	new Triple<int, int, Color>(80, 10, Colors.DarkGreen),
+	new Triple<int, int, Color>(70, 8, Colors.Red),
+	new Triple<int, int, Color>(60, 6, Colors.DarkBlue),
+};]]></code>
 				</content>
 			</step>
 			
@@ -69,7 +67,7 @@ var periods = new[]
 var storageRegistry = new StorageRegistry
 {
 	// set historical path
-	DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
+		DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
 };
 
 var timeFrame = TimeSpan.FromMinutes(5);
@@ -118,17 +116,17 @@ var portfolio = new Portfolio
 					<code language="C#">
 // create backtesting connector
 var batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
-{
-	EmulationSettings =
 	{
-		MarketTimeChangedInterval = timeFrame,
-		StartTime = startTime,
-		StopTime = stopTime,
+		EmulationSettings =
+		{
+			MarketTimeChangedInterval = timeFrame,
+			StartTime = startTime,
+			StopTime = stopTime,
 
-		// count of parallel testing strategies
-		BatchSize = periods.Length,
-	}
-};
+			// count of parallel testing strategies
+			BatchSize = periods.Length,
+		}
+	};
 </code>
 				</content>
 			</step>
@@ -159,15 +157,14 @@ batchEmulation.StateChanged += (oldState, newState) =>
 	});
 };
 
-
 // get emulation connector
 var connector = batchEmulation.EmulationConnector;
 
 logManager.Sources.Add(connector);
 
-connector.NewSecurity += s =>
+connector.NewSecurities += securities =>
 {
-	if (s != security)
+	if (securities.All(s => s != security))
 		return;
 
 	// fill level1 values
@@ -185,11 +182,12 @@ TestingProcess.Value = 0;
 
 _startEmulationTime = DateTime.Now;
 
+
 var strategies = periods
 	.Select(period =>
 	{
 		var candleManager = new CandleManager(connector);
-        var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+                 var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 		// create strategy based SMA
 		var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
@@ -221,7 +219,8 @@ var strategies = periods
 		Stat.AddStrategies(new[] { strategy });
 
 		return strategy;
-	});
+	})
+	.ToEx(periods.Length);
 ]]></code>
 				</content>
 			</step>
@@ -232,7 +231,8 @@ var strategies = periods
 					</para>
 					<code language="C#"><![CDATA[
 // start emulation
-batchEmulation.Start(strategies, periods.Length);
+batchEmulation.Start(strategies);
+
 ]]></code>
 				</content>
 			</step>

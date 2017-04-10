@@ -68,77 +68,94 @@
 			  Код реализации торговой стратегии для скользящей:
 			</para>
 			<code language="C#">
-				<![CDATA[
-class SmaStrategy : Strategy
+				<![CDATA[class SmaStrategy : TimeFrameStrategy
 {
-	private readonly ICandleManager _candleManager;
-	private readonly CandleSeries _series;
+	private readonly CandleManager _candleManager;
 	private bool _isShortLessThenLong;
 
-	public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
+	private DateTime _nextTime;
+
+	public SmaStrategy(CandleManager candleManager, SimpleMovingAverage longSma, SimpleMovingAverage shortSma, TimeSpan timeFrame)
+		: base(timeFrame)
 	{
 		_candleManager = candleManager;
-		_series = series;
-
-		LongSma = longSma;
-		ShortSma = shortSma;
+	
+		this.LongSma = longSma;
+		this.ShortSma = shortSma;
 	}
 
-	public SimpleMovingAverage LongSma { get; }
-	public SimpleMovingAverage ShortSma { get; }
+	public SimpleMovingAverage LongSma { get; private set; }
+	public SimpleMovingAverage ShortSma { get; private set; }
 
-	protected override void OnStarted()
+	protected override void OnStarting()
 	{
-		_candleManager
-			.WhenCandlesFinished(_series)
-			.Do(ProcessCandle)
-			.Apply(this);
-
 		// запоминаем текущее положение относительно друг друга
-		_isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
+		_isShortLessThenLong = this.ShortSma.LastValue < this.LongSma.LastValue;
+		
+		// вычисляем время окончания текущей пятиминутки
+		_nextTime = base.Interval.GetCandleBounds(base.Trader).Max;
 
-		base.OnStarted();
+		base.OnStarting();
 	}
 
-	private void ProcessCandle(Candle candle)
+	protected override ProcessResults OnProcess()
 	{
 		// если наша стратегия в процессе остановки
-		if (ProcessState == ProcessStates.Stopping)
+		if (base.ProcessState == ProcessStates.Stopping)
 		{
 			// отменяем активные заявки
-			CancelActiveOrders();
-			return;
+			base.CancelActiveOrders();
+
+			// так как все активные заявки гарантированно были отменены, то возвращаем ProcessResults.Stop
+			return ProcessResults.Stop;
 		}
 
-		// добавляем новую свечу
-		LongSma.Process(candle);
-		ShortSma.Process(candle);
+		// событие обработки торговой стратегии вызвалось в первый раз, что раньше, чем окончания текущей 5-минутки.
+		if (base.Trader.MarketTime < _nextTime)
+		{
+			// возвращаем ProcessResults.Continue, так как наш алгоритм еще не закончил свою работу, а просто ожидает следующего вызова.
+			return ProcessResults.Continue;
+		}
+
+		// получаем сформированную свечу
+		var candle = _candleManager.GetTimeFrameCandle(base.Security, base.TimeFrame, _nextTime - base.TimeFrame);
+		
+		// если свечи не существует (не было ни одной сделке в тайм-фрейме), то ждем окончания следующей свечи.
+		if (candle == null)
+		{
+			// если прошло больше 10 секунд с момента окончания свечи, а она так и не появилась,
+			// значит сделок в прошедшей 5-минутке не было, и переходим на следующую свечу
+			if ((base.Trader.MarketTime - _nextTime) > TimeSpan.FromSeconds(10))
+				_nextTime = base.TimeFrame.GetCandleBounds(base.Trader.MarketTime).Max;
+
+			return ProcessResults.Continue;
+		}
+			
+		_nextTime += base.TimeFrame;
 
 		// вычисляем новое положение относительно друг друга
-		var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
+		var isShortLessThenLong = this.ShortSma.LastValue < this.LongSma.LastValue;
 
 		// если произошло пересечение
 		if (_isShortLessThenLong != isShortLessThenLong)
 		{
 			// если короткая меньше чем длинная, то продажа, иначе, покупка.
-			var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+			var direction = isShortLessThenLong ? OrderDirections.Sell : OrderDirections.Buy;
 
-			// вычисляем размер для открытия или переворота позы
-			var volume = Position == 0 ? Volume : Position.Abs() * 2;
+			// создаем заявку
+			var order = this.CreateOrder(direction,
+				base.Security.GetMarketPrice(direction), base.Volume);
 
-			// регистрируем заявку (обычным способом - лимитированной заявкой)
-			//RegisterOrder(this.CreateOrder(direction, (decimal)Security.GetCurrentPrice(direction), volume));
-
-			// переворачиваем позицию через котирование
-			var strategy = new MarketQuotingStrategy(direction, volume);
-			ChildStrategies.Add(strategy);
+			// регистрируем ее
+			base.RegisterOrder(order);
 
 			// запоминаем текущее положение относительно друг друга
 			_isShortLessThenLong = isShortLessThenLong;
 		}
+
+		return ProcessResults.Continue;
 	}
-}
-]]></code>
+}]]></code>
 			<para>
 			  В начале метода через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ProcessState</codeEntityReference>
 			  проверяется, не находится ли стратегия в процессе остановки (например, был вызван метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference>
@@ -192,127 +209,118 @@ _trader = new QuikTrader(this.Path.Text);
 _trader.Connected += () =>
 {
 	_candleManager = new CandleManager(_trader);
-
-	_trader.NewSecurity += security =>
+	foreach (var builder in _candleManager.Sources.OfType<CandleBuilder>())
 	{
-		if (!security.Code.CompareIgnoreCase("LKOH"))
-			return;
+		builder.IsSyncRegister = true;
+	}
 
-		// находим нужную бумагу
-		var lkoh = security;
+	_trader.NewPortfolios += portfolios =>
+	{
+		// выбираем портфель для ММВБ (так как работаем с LKOH)
+		_micex = portfolios.First(p => p.Name == account);
 
-		_lkoh = lkoh;
-
-		this.GuiAsync(() =>
-		{
-			Start.IsEnabled = true;
-		});
+		TryCreateStrategy();
 	};
 
-	_trader.NewMyTrade += trade =>
+	_trader.NewSecurities += securities => this.GuiAsync(() =>
+	{
+		// находим нужную бумагу
+		_lkoh = securities.FirstOrDefault(s => s.Code == "LKOH");
+
+		TryCreateStrategy();
+	});
+
+	_trader.NewMyTrades += trades => this.GuiAsync(() =>
 	{
 		if (_strategy != null)
 		{
 			// найти те сделки, которые совершила стратегия скользящей средней
-			if (_strategy.Orders.Contains(trade.Order))
-				Trades.Trades.Add(trade);
-		}
-	};
+			trades = trades.Where(t => _strategy.Orders.Any(o => o == t.Order));
 
-	_candleManager.Processing += (series, candle) =>
+			_trades.Trades.AddRange(trades);
+		}
+	});
+
+	_candleManager.CandlesStarted += (token, candles) =>
 	{
+		DrawCandles(candles.Keys);
+
 		// если скользящие за сегодняшний день отрисованы, то рисуем в реальном времени текущие скользящие
-		if (_isTodaySmaDrawn && candle.State == CandleStates.Finished)
-			ProcessCandle(candle);
+		if (_isTodaySmaDrawn)
+			DrawSma();
 	};
-	//_trader.Error += ex => this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
+	_candleManager.CandlesChanged += (token, candles) => DrawCandles(candles.Keys);
+	//_trader.Error += ex => this.Sync(() => MessageBox.Show(this, ex.ToString()));
 	_trader.ConnectionError += ex =>
 	{
 		if (ex != null)
 			this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
 	};
-
-	this.GuiAsync(() =>
-	{
-		ConnectBtn.IsEnabled = false;
-		Report.IsEnabled = true;
-	});
 };
+
+_trader.Connect();
 
 ...
 
-private void StartClick(object sender, RoutedEventArgs e)
+private void TryCreateStrategy()
 {
-	if (_strategy == null)
+	// если были получены и инструмент, и портфель
+	if (_lkoh != null && _micex != null)
 	{
-		if (Portfolios.SelectedPortfolio == null)
-		{
-			MessageBox.Show(this, LocalizedStrings.Str3009);
-			return;
-		}
-
-		// регистрируем наш тайм-фрейм
-		var series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
-
-		// создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
-		_strategy = new SmaStrategy(_candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
-		{
-			Volume = 1,
-			Security = _lkoh,
-			Portfolio = Portfolios.SelectedPortfolio,
-			Connector = _trader,
-		};
-		_strategy.Log += OnLog;
-		_strategy.PropertyChanged += OnStrategyPropertyChanged;
-
-		_candlesElem = new ChartCandleElement();
-		_area.Elements.Add(_candlesElem);
-
-		_longMaElem = new ChartIndicatorElement
-		{
-			Title = LocalizedStrings.Long,
-			Color = Colors.OrangeRed
-		};
-		_area.Elements.Add(_longMaElem);
-
-		_shortMaElem = new ChartIndicatorElement
-		{
-			Title = LocalizedStrings.Short,
-			Color = Colors.RoyalBlue
-		};
-		_area.Elements.Add(_shortMaElem);
-
-		IEnumerable<Candle> candles = CultureInfo.InvariantCulture.DoInCulture(() => File.ReadAllLines("LKOH_history.txt").Select(line =>
+		var candles = File.ReadAllLines("LKOH_history.txt").Select(line =>
 		{
 			var parts = line.Split(',');
-			var time = (parts[0] + parts[1]).ToDateTime("yyyyMMddHHmmss").ApplyTimeZone(TimeHelper.Moscow);
-			return (Candle)new TimeFrameCandle
+			var time = DateTime.ParseExact(parts[0] + parts[1], "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+			return new TimeFrameCandle
 			{
 				OpenPrice = parts[2].To<decimal>(),
 				HighPrice = parts[3].To<decimal>(),
 				LowPrice = parts[4].To<decimal>(),
 				ClosePrice = parts[5].To<decimal>(),
 				TimeFrame = _timeFrame,
-				OpenTime = time,
-				CloseTime = time + _timeFrame,
-				TotalVolume = parts[6].To<decimal>(),
+				Time = time,
+				TotalVolume = parts[6].To<int>(),
 				Security = _lkoh,
-				State = CandleStates.Finished,
 			};
-		}).ToArray());
+		});
 
-		var lastCandleTime = default(DateTimeOffset);
+		DrawCandles(candles.Cast<Candle>());
+
+		// создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
+		_strategy = new SmaStrategy(_candleManager, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 }, _timeFrame)
+		{
+			Volume = 1,
+			Security = _lkoh,
+			Portfolio = this.Portfolios.SelectedPortfolio,
+			Trader = _trader,
+		};
+		_strategy.Log += OnLog;
+		_strategy.NewOrder += OnNewOrder;
+		_strategy.PropertyChanged += OnStrategyPropertyChanged;
+
+		var index = 0;
 
 		// начинаем вычислять скользящие средние
 		foreach (var candle in candles)
 		{
-			ProcessCandle(candle);
-			lastCandleTime = candle.OpenTime;
+			_strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+			_strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+
+			// если все скользящие сформировались, то начинаем их отрисовывать
+			if (index >= _strategy.LongSma.Length)
+				DrawSmaLines(candle.Time);
+
+			index++;
+
+			_lastCandleTime = candle.Time;
 		}
 
-		_candleManager.Start(series);
-...
-]]></code>
+		// регистрируем наш тайм-фрейм
+		_candleManager.RegisterTimeFrameCandles(_lkoh, _timeFrame);
+
+		this.Start.IsEnabled = true;
+	}
+}]]></code>
 			<alert class="caution">
 				<para>
 					Номер счета, который в примере записан в переменную <legacyBold>account</legacyBold>, это <legacyBold>не логин</legacyBold> в
@@ -326,24 +334,31 @@ private void StartClick(object sender, RoutedEventArgs e)
 			<para>
 			  Запуск и остановка торговой стратегии происходит следующим образом:
 			</para>
-			<code language="C#"><![CDATA[
-...
-	if (_strategy.ProcessState == ProcessStates.Stopped)
-	{
-		// запускаем процесс получения стакана, необходимый для работы алгоритма котирования
-		_trader.RegisterMarketDepth(_strategy.Security);
-		_strategy.Start();
-		Start.Content = LocalizedStrings.Str242;
-	}
-	else
-	{
-		_trader.UnRegisterMarketDepth(_strategy.Security);
-		_strategy.Stop();
-		Start.Content = LocalizedStrings.Str2421;
-	}
-...	
+			<code language="C#"><![CDATA[// если скользящие не отрисованы за текущую сессию
+if (!_isTodaySmaDrawn)
+{
+	// вычисляем временные отрезки текущей свечи
+	var bounds = _timeFrame.GetCandleBounds(_trader);
 
-	]]></code>
+	var candles = _candleManager.GetTimeFrameCandles(_strategy.Security, _timeFrame, new Range<DateTime>(_lastCandleTime + _timeFrame, bounds.Min));
+
+	foreach (var candle in candles)
+	{
+		_strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+		_strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+
+		DrawSmaLines(candle.Time);
+
+		_lastCandleTime = candle.Time;
+	}
+
+	_isTodaySmaDrawn = true;
+}
+
+if (_strategy.ProcessState == ProcessStates.Stopped)
+	_strategy.Start();
+else
+	_strategy.Stop();]]></code>
 			<para>
 			  В процессе работы торговой стратегии может возникнуть ошибка. В этом случае <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
 			  перехватывает ошибку через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)</codeEntityReference>,
@@ -366,44 +381,73 @@ private void StartClick(object sender, RoutedEventArgs e)
 			  Отрисовка на графике новых данных линий скользящий и свечей, показывающих тренд:
 			</para>
 			<code language="C#">
-			<![CDATA[
-// начинаем вычислять скользящие средние
-foreach (var candle in candles)
+			<![CDATA[_trader.CandlesStarted += (token, candles) =>
 {
-	ProcessCandle(candle);
-	lastCandleTime = candle.OpenTime;
+	DrawCandles(candles.Keys);
+
+	// если скользящие за сегодняшний день отрисованы, то рисуем в реальном времени текущие скользящие
+	if (_isTodaySmaDrawn)
+		DrawSma();
+};
+_trader.CandlesChanged += (token, candles) => DrawCandles(candles);
+
+private void DrawCandles(IEnumerable<Candle> candles)
+{
+	this.Sync(() => _chart.Candles.DrawCandles(candles));
 }
 
-_candleManager.Start(series);
-
-// вычисляем временные отрезки текущей свечи
-var bounds = _timeFrame.GetCandleBounds(_trader.CurrentTime);
-
-candles = _candleManager.Container.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
-
-foreach (var candle in candles)
+private void DrawSma()
 {
-	ProcessCandle(candle);
+	// нас не интересует текущая свеча, так как она еще не сформировалась
+	// и из нее нельзя брать цену закрытия
+
+	// вычисляем временные отрезки текущей свечи
+	var bounds = _timeFrame.GetCandleBounds(_trader);
+
+	// если появились новые полностью сформированные свечи
+	if (_lastCandleTime < bounds.Min)
+	{
+		// отступ с конца интервала, чтобы не захватить текущую свечу.
+		var endOffset = TimeSpan.FromSeconds(1);
+
+		bounds = new Range<DateTime>(_lastCandleTime + _timeFrame, bounds.Min - endOffset);
+
+		// получаем эти свечи
+		var candles = _trader.GetTimeFrameCandles(_strategy.Security, _timeFrame, bounds);
+
+		if (candles.Count() > 0)
+		{
+			foreach (var candle in candles)
+			{
+			  	// добавляем новую свечу
+				 _strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+				 _strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
+			}
+		
+			// получаем время самой последней свечи и запоминаем его как новое начало
+			_lastCandleTime = candles.Max(c => c.Time);
+
+			DrawSmaLines(bounds.Min);
+		}
+	}
 }
-...
-private void ProcessCandle(Candle candle)
+
+private void DrawSmaLines(DateTime time)
 {
-	var longValue = candle.State == CandleStates.Finished ? _strategy.LongSma.Process(candle) : null;
-	var shortValue = candle.State == CandleStates.Finished ? _strategy.ShortSma.Process(candle) : null;
-
-	var chartData = new ChartDrawData();
-
-	chartData
-		.Group(candle.OpenTime)
-			.Add(_candlesElem, candle)
-			.Add(_longMaElem, longValue)
-			.Add(_shortMaElem, shortValue);
-
-	Chart.Draw(chartData);
-}
-
-
-]]></code>
+	this.GuiSync(() =>
+	{
+		_longSmaGraph.Add(new CustomChartIndicator
+		{
+			Time = time,
+			Value = (double)_strategy.LongSma.LastValue
+		});
+		_shortSmaGraph.Add(new CustomChartIndicator
+		{
+			Time = time,
+			Value = (double)_strategy.ShortSma.LastValue
+		});
+	});
+}]]></code>
 		  </content>
 		</step>
 	  </steps>

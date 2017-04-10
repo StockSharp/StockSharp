@@ -18,9 +18,6 @@
 		<listItem>
           <legacyBold>Выходные</legacyBold> - игнорировать выходные и праздничные дни (не загружать данные).
 		</listItem>
-		<listItem>
-<legacyBold>Интервал времени</legacyBold> - Интервал в днях, за который скачиваются данные.
-</listItem>
 		</list>
 		<para><legacyBold>Основные</legacyBold></para>
 	   <list class="bullet">

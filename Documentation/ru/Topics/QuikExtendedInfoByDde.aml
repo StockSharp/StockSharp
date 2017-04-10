@@ -184,13 +184,13 @@ this.Trader.SecuritiesTable.Columns.Insert(4, DdeSecurityColumns.Volatility);</c
 			  <step>
 				<content>
 				  <para>
-					После этого, через события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>
+					После этого, через события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
 					  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> будут приходить 
 					  объекты <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>, содержащие расширенную информацию. Чтобы
 					  ее получить в коде, необходимо воспользоваться свойством <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExtensionInfo</codeEntityReference>:
 					</para>
 					<code language="C#">
-Trader.NewSecurity += security => this.GuiAsync(() => _securitiesWindow.Securities.Add(security));
+Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.Securities.AddRange(securities));
 					</code>
 					<alert class="note">
 						<para>

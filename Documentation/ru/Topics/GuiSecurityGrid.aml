@@ -62,9 +62,9 @@ SecurityGrid.MarketDataProvider = _connector;
 ..........................
 
 // Добавляем в сетку инструменты
-_connector.NewSecurity += security =>
+_connector.NewSecurities += securities =>
 {
-	SecurityGrid.Securities.Add(security);
+	SecurityGrid.Securities.AddRange(securities);
 };
 
 ..........................

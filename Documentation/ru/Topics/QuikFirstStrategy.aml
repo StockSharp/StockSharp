@@ -81,73 +81,75 @@ waitHandle.WaitOne();</code>
 				  <para>Далее, необходимо подписаться на события появления информации по инструментам (так программа получит сведения по бумаге Лукойл),
 				  и портфелям (для выставления заявок). А также на событие появления Моих Сделок (сигнал пользователю о том, что произошла сделка по его
 				  заявке):</para>
-				  <code language="C#"><![CDATA[
-trader.NewPortfolio += portfolio =>
+				  <code language="C#"><![CDATA[trader.NewPortfolios += portfolios =>
 {
-	if (_portfolio == null && portfolio.Name == account)
+	if (_portfolio == null)
 	{
 		// находим нужный портфель и присваиваем его переменной _portfolio
-		_portfolio = portfolio;
+		_portfolio = portfolios.FirstOrDefault(p => p.Name == account);
 
-		Console.WriteLine(LocalizedStrings.Str2171Params, account);
-
-		// если инструмент и стакан уже появились,
-		// то извещаем об этом основной поток для выставления заявки
-		if (_lkoh != null && _depth != null)
-			waitHandle.Set();
-	}
-};
-
-
-// подписываемся на событие появление инструментов
-trader.NewSecurity += security =>
-{
-	if (_lkoh == null)
-	{
-		if (!security.Code.CompareIgnoreCase(secCode))
-			return;
-
-		// находим Лукойл и присваиваем ее переменной lkoh
-		_lkoh = security;
-
-		if (_lkoh != null)
+		if (_portfolio != null)
 		{
-			Console.WriteLine(LocalizedStrings.Str2987);
+			Console.WriteLine("Портфель {0} появился.", account);
 
-			// запускаем экспорт стакана
-			trader.RegisterMarketDepth(_lkoh);
-
-			if (_portfolio != null && _depth != null)
+			// если инструмент и стакан уже появились,
+			// то извещаем об этом основной поток для выставления заявки
+			if (_lkoh != null && _depth != null)
 				waitHandle.Set();
 		}
 	}
 };
 
+// подписываемся на событие появление инструментов
+trader.NewSecurities += securities =>
+{
+	if (_lkoh == null)
+	{
+		// находим Лукойл и присваиваем ее переменной lkoh
+		_lkoh = securities.FirstOrDefault(sec => sec.Code == secCode);
+
+		if (_lkoh != null)
+		{
+			Console.WriteLine("Инструмент Лукойл появился.");
+			
+			// запускаем экспорт стакана
+			trader.RegisterMarketDepth(_lkoh);
+
+			if (_portfolio != null)
+				waitHandle.Set();
+		}
+	}
+};
 
 // подписываемся на событие появления моих новых сделок
-trader.NewMyTrade += myTrade =>
+trader.NewMyTrades += myTrades =>
 {
-	var trade = myTrade.Trade;
-	Console.WriteLine(LocalizedStrings.Str2173Params, trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
+	foreach (var myTrade in myTrades)
+	{
+		var trade = myTrade.Trade;
+		Console.WriteLine("Сделка {0} по цене {1} по бумаге {2} по объему {3} в {4}.", trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
+	}
 };
 
 // подписываемся на событие обновления стакана
-trader.MarketDepthChanged += depth =>
+trader.MarketDepthsChanged += depths =>
 {
-	if (_depth == null && _lkoh != null && depth.Security == _lkoh)
+	if (_depth == null && _lkoh != null)
 	{
-		_depth = depth;
+		_depth = depths.FirstOrDefault(d => d.Security == _lkoh);
 
-		Console.WriteLine(LocalizedStrings.Str2988);
+		if (_depth != null)
+		{
+			Console.WriteLine("Стакан Лукойла появился.");
 
-		// если портфель и инструмент уже появился, то извещаем об этом основной поток для выставления заявки
-		if (_portfolio != null && _lkoh != null)
-			waitHandle.Set();
+			// если портфель уже появился, то извещаем об этом основной поток для выставления заявки
+			if (_portfolio != null)
+				waitHandle.Set();
+		}
 	}
-};
-]]></code>
+};]]></code>
 				<para>
-					В обработчике <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference> запускается
+					В обработчике <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference> запускается
 					экспорт стакана для того, чтобы начали обновляться такие поля как
 					<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestBid</codeEntityReference>,
 					<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestAsk</codeEntityReference> и
@@ -162,14 +164,14 @@ trader.MarketDepthChanged += depth =>
 				</alert>
 				 <para>
 					  Когда данные начнут приходить в <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>, то будут вызываться
-					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> и т.д. Для тех данных,
+					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
+					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
-					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>.
+					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>.
 				  </para>
 				  <para>
 					  Независимо от того, созданы ли данные программно, например, заявки, или же пользователь сам вручную зарегистрировал заявку, для новых
-					  данных в таблице Заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference>.
+					  данных в таблице Заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference>.
 					  Это очень удобно в случае, когда пользователь отменяет выставленную заявку, и программа продолжает работать с актуальными данными.
 				  </para>
 				
@@ -224,7 +226,7 @@ while (true)
 				  <para>Завершение работы алгоритма:</para>
 				  <code language="C#">
 						// останавливаем подключение
-						trader.Disconnect();</code>
+						trader.Disconnect();;</code>
 			  </content>
 		  </step>
       </steps>

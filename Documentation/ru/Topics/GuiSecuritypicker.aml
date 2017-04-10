@@ -122,16 +122,18 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		if (Trader == null)
 		{
 			// создаем подключение
-		    Trader = new QuikTrader
-		    {
-		        LuaFixServerAddress = Address.Text.To<EndPoint>(),
-		        LuaLogin = Login.Text,
-		        LuaPassword = Password.Password.To<SecureString>(),
-		        LogLevel = LogLevels.Debug
-		    };
+			Trader = isLua
+				? new QuikTrader
+				{
+					LuaFixServerAddress = Address.Text.To<EndPoint>(),
+					LuaLogin = Login.Text,
+					LuaPassword = Password.Password.To<SecureString>()
+				}
+				: new QuikTrader(Path.Text) { IsDde = true };
 
-
-		    _logManager.Sources.Add(Trader);
+			Trader.LogLevel = LogLevels.Debug;
+			
+			_logManager.Sources.Add(Trader);
 
 			// отключение автоматического запроса всех инструментов.
 			Trader.RequestAllSecurities = AllSecurities.IsChecked == true;
@@ -149,29 +151,26 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 			// подписываемся на событие разрыва соединения
 			Trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
 
-			// подписываемся на ошибку обработки данных (транзакций и маркет)
-			Trader.Error += error =>this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 			// подписываемся на ошибку подписки маркет-данных
-			Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+			Trader.MarketDataSubscriptionFailed += (security, type, error) =>
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены ордера"));
-			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп ордера"));
-			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+			// добавляем инструменты в коллекцию инструментов SecurityPicker
+			Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+			
+			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+			Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
+			Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
+			Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
+			Trader.OrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
+			Trader.OrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
+			Trader.StopOrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
+			Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
+			Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+			Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
-			Trader.MassOrderCancelFailed += (transId, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
-
-			// устанавливаем поставщик маркет-данных
+			// устанавливаем поставщик маркет-данных для SecurityPicker
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
 			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
@@ -198,6 +197,7 @@ private void SecurityPicker_OnSecuritySelected(Security security)
 	NewStopOrder.IsEnabled = NewOrder.IsEnabled =
 	Level1.IsEnabled = Depth.IsEnabled = security != null;
 }
+
 ]]>
               </code>
           </content>

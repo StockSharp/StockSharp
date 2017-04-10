@@ -38,31 +38,14 @@ public MainWindow()
 	Title = Title.Put("Multi connection");
 
 	_ordersWindow.MakeHideable();
-	_myTradesWindow.MakeHideable();
-	_tradesWindow.MakeHideable();
 	_securitiesWindow.MakeHideable();
-	_stopOrdersWindow.MakeHideable();
-	_portfoliosWindow.MakeHideable();
 
 	var logManager = new LogManager();
 	logManager.Listeners.Add(new FileLogListener("sample.log"));
-
-	var entityRegistry = new CsvEntityRegistry("Data");
-
-	ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
-	// ecng.serialization invoke in several places IStorage obj
-	ConfigManager.RegisterService(entityRegistry.Storage);
-
-	var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
-
-	SerializationContext.DelayAction = entityRegistry.DelayAction = new DelayAction(entityRegistry.Storage, ex => ex.LogError());
-
-	Connector = new Connector(entityRegistry, storageRegistry);
 	logManager.Sources.Add(Connector);
 
-	InitConnector(entityRegistry);
+	InitConnector();
 }
-
 		]]>
 				</code> 
 		 	</content>
@@ -75,7 +58,7 @@ public MainWindow()
 				</para>
 				<code language="C#">
 				<![CDATA[
-private void InitConnector(CsvEntityRegistry entityRegistry)
+private void InitConnector()
 {
 	// subscribe on connection successfully event
 	Connector.Connected += () =>
@@ -97,28 +80,16 @@ private void InitConnector(CsvEntityRegistry entityRegistry)
 		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 	// subscribe on error of market data subscription event
-	Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
-		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+	Connector.MarketDataSubscriptionFailed += (security, type, error) =>
+		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-	Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-	Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-
-	Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-	Connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-	Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-	
-	Connector.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-	Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+	Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+	Connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 
 	// subscribe on error of order registration event
-	Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+	Connector.OrdersRegisterFailed += OrdersFailed;
 	// subscribe on error of order cancelling event
-	Connector.OrderCancelFailed += OrderFailed;
-
-	// subscribe on error of stop-order registration event
-	Connector.OrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-	// subscribe on error of stop-order cancelling event
-	Connector.StopOrderCancelFailed += OrderFailed;
+	Connector.OrdersCancelFailed += OrdersFailed;
 
 	// set market data provider
 	_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
@@ -131,25 +102,7 @@ private void InitConnector(CsvEntityRegistry entityRegistry)
 	catch
 	{
 	}
-
-	if (Connector.StorageAdapter == null)
-		return;
-
-	try
-	{
-		entityRegistry.Init();
-	}
-	catch (Exception ex)
-	{
-		MessageBox.Show(this, ex.ToString());
-	}
-
-	Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
-	Connector.StorageAdapter.Load();
-
-	ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 }
-
 ]]>
 			</code> 
 		 </content>
@@ -165,8 +118,8 @@ private void InitConnector(CsvEntityRegistry entityRegistry)
 				<![CDATA[
 private void SettingsClick(object sender, RoutedEventArgs e)
 {
-	if (Connector.Configure(this))
-		new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+	Connector.Configure(this);
+	new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
 }
 		]]>
 				</code> 

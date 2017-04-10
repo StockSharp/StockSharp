@@ -9,7 +9,7 @@
         Также в журнале отображается запись о сделке с указанием номера сведенной в данную сделку заявки.</para>
         
         <para>Для того чтобы начать получать данные по ордер лог, надо подписаться на событие 
-        <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrderLogItem</codeEntityReference>:</para>
+        <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrderLogItems</codeEntityReference>:</para>
 
         <code language="C#">
         <![CDATA[
@@ -17,13 +17,16 @@ private PlazaTrader _trader;
 
 ...
 
-_trader.NewOrderLogItem += NewOrderLog;
+_trader.NewOrderLogItems += NewOrderLog;
 
 ...
 
-private void NewOrderLog(OrderLogItem orderLogItems)
+private void NewOrderLog(IEnumerable<OrderLogItem> orderLogItems)
 {
+	foreach (var orderLogItem in orderLogItems)
+	{
 		Console.WriteLine(orderLogItem);                
+	}
 }
 		]]>
 		</code>

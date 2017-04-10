@@ -27,7 +27,7 @@
 	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/ITCH/SampleITCH</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="GUI_orderlog" /></mediaLink>
+      <mediaLink><image placement="left" xlink:href="hydra_export_order_log" /></mediaLink>
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

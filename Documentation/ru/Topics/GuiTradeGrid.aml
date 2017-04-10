@@ -51,43 +51,43 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		if (Trader == null)
 		{
 			// создаем подключение
-	      Trader = new QuikTrader
-	      {
-	          LuaFixServerAddress = Address.Text.To<EndPoint>(),
-	          LuaLogin = Login.Text,
-	          LuaPassword = Password.Password.To<SecureString>(),
-	          LogLevel = LogLevels.Debug
-	      };
-
+			Trader = isLua
+				? new QuikTrader
+				{
+					LuaFixServerAddress = Address.Text.To<EndPoint>(),
+					LuaLogin = Login.Text,
+					LuaPassword = Password.Password.To<SecureString>()
+				}
+				: new QuikTrader(Path.Text) { IsDde = true };
 
             .......................................			
 			
 			// Добавляем инструменты в компонент SecurityPicker
-			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+			Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 			
 			// Добавляем свои сделки в таблицу MyTradeGrid
-			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
 			
 			// Добавляем сделки в таблицу TradeGrid
-			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+			Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
 			
 			// Добавляем заявки в таблицу OrderGrid
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+			Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 			
 			// Добавляем стоп-заявки в таблицу OrderGrid
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+			Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
 			
-			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены ордера"));
-			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп ордера"));
+			Trader.OrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
+			Trader.OrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
+			Trader.StopOrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
+			Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
 			
 			
 			// Добавляем портфели в таблицу PortfolioGrid
-			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+			Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
 			
 			// Добавляем позиции в таблицу PortfolioGrid
-			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+			Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
 			// устанавливаем поставщик маркет-данных для компонента SecurityPicker
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
@@ -109,7 +109,8 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		_isConnected = false;
 		ConnectBtn.Content = LocalizedStrings.Connect;
 	}
-}            		
+}
+              		
 	  				]]>
              </code>
     </introduction>

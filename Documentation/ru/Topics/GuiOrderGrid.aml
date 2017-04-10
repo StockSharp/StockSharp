@@ -72,20 +72,22 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		if (Trader == null)
 		{
 			// создаем подключение
-		    Trader = new QuikTrader
-		    {
-		        LuaFixServerAddress = Address.Text.To<EndPoint>(),
-		        LuaLogin = Login.Text,
-		        LuaPassword = Password.Password.To<SecureString>(),
-		        LogLevel = LogLevels.Debug
-		    };
+			Trader = isLua
+				? new QuikTrader
+				{
+					LuaFixServerAddress = Address.Text.To<EndPoint>(),
+					LuaLogin = Login.Text,
+					LuaPassword = Password.Password.To<SecureString>()
+				}
+				: new QuikTrader(Path.Text) { IsDde = true };
+
             .......................................			
 			
 			// Добавляем заявки в таблицу OrderGrid
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+			Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 			
 			// Добавляем стоп-заявки в таблицу OrderGrid
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+			Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
 			
 			.......................................			
 
@@ -111,7 +113,7 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 // Удаляет все выбранные заявки
 private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
 {
-	orders.ForEach(_connector.CancelOrder);
+	orders.ForEach(MainWindow.Instance.Trader.CancelOrder);
 }
 
 // Открывает окно редактирования заявки и выполняет замену выбранной заявки
@@ -120,17 +122,25 @@ private void OrderGrid_OnOrderReRegistering(Order order)
 	var window = new OrderWindow
 	{
 		Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-		SecurityProvider = _connector,
-		MarketDataProvider = _connector,
-		Portfolios = new PortfolioDataSource(_connector),
-		Order = order.ReRegisterClone(newVolume: order.Balance)
+		Connector = MainWindow.Instance.Trader,
+		Order = order.ReRegisterClone(newVolume: order.Balance),
 	};
 
 	if (window.ShowModal(this))
-		_connector.ReRegisterOrder(order, window.Order);
+	{
+		MainWindow.Instance.Trader.ReRegisterOrder(order, window.Order);
+	}
 }
+              		
+              		
+              		
 	  				]]>
              </code>
+
+      
+      
+      
+      
     </introduction>
   </developerConceptualDocument>
 </topic>

@@ -7,8 +7,7 @@
 
     <introduction>
 		<para>
-			Для котирования опционов реализована специальная стратегия 
-			<codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference>,
+			Для котирования опционов реализована специальная стратегия <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference>,
 			которая предусматривает котирование объема по заданным границам волатильности.
 		</para>
     </introduction>
@@ -20,8 +19,7 @@
 			  <step>
 				  <content>
 					  <para>
-						  В дистрибутиве <token>stocksharp</token> идет пример SampleOptionQuoting, 
-						  который котирует выбранный страйк по заданной границе
+						  В дистрибутиве <token>stocksharp</token> идет пример SampleOptionQuoting, который котирует выбранный страйк по заданной границе
 						  волатильности.
 					  </para>
 				  </content>
@@ -29,80 +27,32 @@
 			  <step>
 				  <content>
 					  <para>
-						  Создание подключения к <link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" /> и запуск экспорта:
+						  Создание подключения к <token>smartcom</token> и запуск экспорта:
 					  </para>
-					  <code title="C#" language="C#"><![CDATA[
-private void ConnectClick(object sender, RoutedEventArgs e)
+					  <code language="C#">// создаем шлюз
+_trader = new SmartTrader(this.Path.Text);
+
+this.Portfolio.Trader = _trader;
+
+// добавляем в выпадающий список только опционы
+_trader.NewSecurities += securities =>
+	this.GuiAsync(() => _options.AddRange(securities.Where(s => s.Type == SecurityTypes.Option)));
+
+// подписываемся на событие новых сделок чтобы обновить текущую цену фьючерса
+_trader.NewTrades += trades => this.GuiAsync(() =>
 {
-	if (!_isConnected)
+	var option = this.SelectedOption;
+	if (option != null)
 	{
-
-        .......................................
-
-		if (Trader == null)
-		{
-			// создаем подключение
-	      Trader = new QuikTrader
-	      {
-	          LuaFixServerAddress = Address.Text.To<EndPoint>(),
-	          LuaLogin = Login.Text,
-	          LuaPassword = Password.Password.To<SecureString>(),
-	          LogLevel = LogLevels.Debug
-	      };
-
-
-            .......................................			
-			
-			// Добавляем инструменты в компонент SecurityPicker
-			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-			
-			// Добавляем свои сделки в таблицу MyTradeGrid
-			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-			
-			// Добавляем сделки в таблицу TradeGrid
-			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-			
-			// Добавляем заявки в таблицу OrderGrid
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-			
-			// Добавляем стоп-заявки в таблицу OrderGrid
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-			
-			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены ордера"));
-			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп ордера"));
-			
-			
-			// Добавляем портфели в таблицу PortfolioGrid
-			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-			
-			// Добавляем позиции в таблицу PortfolioGrid
-			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
-
-			// устанавливаем поставщик маркет-данных для компонента SecurityPicker
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
-
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
-
-		Trader.Connect();
-
-		_isConnected = true;
-		ConnectBtn.Content = LocalizedStrings.Disconnect;
+		var future = option.GetUnderlyingAsset();
+		if (future.LastTrade != null)
+			this.BaseActivePrice.Text = future.LastTrade.Price.ToString();
 	}
-	else
-	{
-		Trader.Disconnect();
+});
 
-		_isConnected = false;
-		ConnectBtn.Content = LocalizedStrings.Connect;
-	}
-}            		
-	  				]]>
-             </code>
+_trader.Connected += () => _trader.StartExport();
+
+_trader.Connect();</code>
 				  </content>
 			  </step>
 			  <step>
@@ -111,18 +61,17 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 						  Настройка стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> (заполнение
 						  границ волатильности, а также создание заявки, через которую указываются требуемый объем и направление котирования):
 					  </para>
-					  <code><![CDATA[
-// создаем котирование на покупку 20-ти контрактов
-var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
-		new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
+					  <code><![CDATA[// создаем котирование на покупку 20-ти контрактов
+var quoting = new VolatilityQuotingStrategy(
+		new Range<decimal>(this.VolatilityMin.Text.To<decimal>(), this.VolatilityMax.Text.To<decimal>()),
+		OrderDirections.Buy, 20)
 {
 	// указываем, что котирование работает с объемом в 1 контракт
 	Volume = 1,
 	Security = option,
-	Portfolio = Portfolio.SelectedPortfolio,
-	Connector = Connector,
-};
-]]></code>
+	Portfolio = this.Portfolio.SelectedPortfolio,
+	Trader = _trader,
+};]]></code>
 				  </content>
 			  </step>
 			  <step>
@@ -136,18 +85,17 @@ var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
 			  <step>
 				  <content>
 					  <para>
-Для визуального представления волатильности пример показывает, как можно перевести стандартный стакан с котировками в стакан волатильности
-за счет использования метода
-<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider
-,System.DateTimeOffset,System.Decimal,System.Decimal)</codeEntityReference>:
+						  Для визуального представления волатильности пример показывает, как можно перевести стандартный стакан с котировками в стакан волатильности
+						  за счет использования метода 
+						  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,System.DateTimeOffset,System.Decimal,System.Decimal)</codeEntityReference>:
 					  </para>
-					  <code language="C#"><![CDATA[
-private void OnQuotesChanged()
-{
-	DepthCtrl.UpdateDepth(_depth.ImpliedVolatility(Connector, Connector, Connector.CurrentTime));
-}
+					  <code language="C#"><![CDATA[var ivDepth = _depth.ImpliedVolatility();
 
-]]></code>
+this.GuiAsync(() =>
+{
+	this.Quotes.Clear();
+	this.Quotes.AddRange(ivDepth.Select(q => new IVQuote(q)));
+});]]></code>
 					  <mediaLink>
 						  <image placement="center" xlink:href="sample_quote_iv" />
 					  </mediaLink>
@@ -165,7 +113,58 @@ private void OnQuotesChanged()
 	  </procedure>
 
     <relatedTopics>
-<link xlink:href="598efa7f-83fb-4dc8-8822-e6776362f652" />
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+        
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
     </relatedTopics>
 
   </developerConceptualDocument>

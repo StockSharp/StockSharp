@@ -66,7 +66,7 @@ public class DeltaHedgeStrategy : Strategy
     protected override void OnStarted()
     {
         _tradingStrategy
-            .WhenNewMyTrade()
+            .WhenNewMyTrades()
             .Do(ReHedge).Apply(this);
 
         Security
@@ -124,7 +124,7 @@ public class DeltaHedgeStrategy : Strategy
 		</para>
 		<code language="C#">
 _tradingStrategy
-	.WhenNewMyTrade()
+	.WhenNewMyTrades()
 	.Do(ReHedge).Apply(this);
 		</code>
 		<para>
