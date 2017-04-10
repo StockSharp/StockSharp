@@ -1,6 +1,6 @@
 StockSharp Data (Hydra) Change log
 ========================
-###current:
+###v4.3.23.1:
 * (feature) Server mode. Edit users.
 * (feature) Remote storage. Manage server.
 * (bug) Hydra. Database connection creation fix.
