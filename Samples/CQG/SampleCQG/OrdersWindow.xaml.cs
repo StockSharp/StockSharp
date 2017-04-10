@@ -35,9 +35,11 @@ namespace SampleCQG
 			InitializeComponent();
 		}
 
+		private static IConnector Connector => MainWindow.Instance.Connector;
+
 		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
 		{
-			orders.ForEach(MainWindow.Instance.Trader.CancelOrder);
+			orders.ForEach(Connector.CancelOrder);
 		}
 
 		private void OrderGrid_OnOrderReRegistering(Order order)
@@ -45,21 +47,21 @@ namespace SampleCQG
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+				SecurityProvider = Connector,
+				MarketDataProvider = Connector,
+				Portfolios = new PortfolioDataSource(Connector),
 				Order = order.ReRegisterClone(newVolume: order.Balance),
 			};
 
 			if (window.ShowModal(this))
 			{
-				MainWindow.Instance.Trader.ReRegisterOrder(order, window.Order);
+				Connector.ReRegisterOrder(order, window.Order);
 			}
 		}
 
 		private void CancelAll_OnClick(object sender, RoutedEventArgs e)
 		{
-			MainWindow.Instance.Trader.CancelOrders();
+			Connector.CancelOrders();
 		}
 	}
 }

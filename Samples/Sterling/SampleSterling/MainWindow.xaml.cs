@@ -72,7 +72,7 @@ namespace SampleSterling
 			var guiListener = new GuiLogListener(LogControl);
 			//guiListener.Filters.Add(msg => msg.Level > LogLevels.Debug);
 			_logManager.Listeners.Add(guiListener);
-			_logManager.Listeners.Add(new FileLogListener("sterling") { LogDirectory = "Logs" });
+			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "Logs" });
 
 			Application.Current.MainWindow = this;
 		}
