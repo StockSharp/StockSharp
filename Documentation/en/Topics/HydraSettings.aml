@@ -7,9 +7,7 @@
     		It allows to setup <token>hydra</token> to work in server mode. To open the window with <token>hydra</token> settings it is necessary to click
     		<legacyBold>Additional</legacyBold> in the main menu, and to select <legacyBold>Settings</legacyBold> in the drop-down menu.
     	</para>
-		<mediaLink>
-        	<image placement="center" xlink:href="hydra_settings" />
-		</mediaLink>
+<mediaLink><image xlink:href="hydra_settings"/></mediaLink>
       
        	<para> <legacyBold>S#.Data Server</legacyBold></para>
       

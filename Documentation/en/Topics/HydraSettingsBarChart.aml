@@ -8,6 +8,9 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       <para>To be added later.</para>
+      <mediaLink>
+<image xlink:href="hydra_settings_BarChart"/>
+</mediaLink>
     </introduction>
   </developerConceptualDocument>
 </topic>

@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" isDefault="true" title="About StockSharp" />
+  <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" title="About StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="StockSharp Licensing" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Reference materials" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" isSelected="true" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
@@ -235,7 +235,7 @@
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Sources setting up">
-      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" isExpanded="true" title="Stock, Futures and Options">
+      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Stock, Futures and Options">
         <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
         <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" title="FinFiz" />
         <Topic id="0166d686-9fb0-4e78-8578-f5b706ad6a07" visible="True" title="Google" />
@@ -270,7 +270,7 @@
       <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" title="Connection properties" />
     </Topic>
     <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Instruments list" />
-    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" isExpanded="true" title="View and export">
+    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="View and export">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Ticks" />
       <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Order books" />
       <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Candles" />
@@ -278,6 +278,7 @@
       <Topic id="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99" visible="True" title="Level 1 " />
       <Topic id="243486c1-b9d4-47af-889e-61aaaa670644" visible="True" title="News" />
       <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" title="Transactions" />
+      <Topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" visible="True" title="Option desk" />
     </Topic>
     <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Candle generation" />
     <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" isExpanded="true" title="Importing">
@@ -290,8 +291,15 @@
       <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="News" />
       <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Transactions" />
     </Topic>
+    <Topic id="75239e3a-afbe-497f-ba37-85886895a988" visible="True" noFile="true" isExpanded="true" title="Работа с  S#.Data через S#.API">
+      <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="Подключение к S#.Data через WCF" />
+      <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="Подключение к S#.Data через FixTrader" />
+      <Topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" visible="True" title="Добавление в S#.Data новых данных" />
+    </Topic>
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Create new souce" />
     <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Gluing data" />
+    <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" isSelected="true" title="Создание индекса" />
+    <Topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" visible="True" title="Расширеная информация инструмента" />
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" isExpanded="true" title="Tasks">
       <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Converter" />
       <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Export (auto)" />
@@ -308,6 +316,7 @@
       <Topic id="938a2834-a3cc-4d92-8a41-e4c11cf84d78" visible="True" title="Network settings" />
       <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Boards" />
       <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Common settings" />
+      <Topic id="77c8e6ee-1c1e-4304-b07c-09a2b68a2182" visible="True" title="Пользователи" />
       <Topic id="38595e78-cff6-44ed-b525-2be13e6c17e4" visible="True" title="Database" />
       <Topic id="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20" visible="True" title="Disaster recovery" />
       <Topic id="5a056352-64c7-41ea-87a8-2e112935e3b9" visible="True" isExpanded="true" title="Backup">
