@@ -22,9 +22,12 @@ namespace SampleCQG
 	using Ecng.Common;
 	using Ecng.Xaml;
 
+	using SampleCQG.Properties;
+
 	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Cqg.Com;
+	using StockSharp.Cqg.Continuum;
 	using StockSharp.Logging;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -42,17 +45,18 @@ namespace SampleCQG
 			set { SetValue(IsConnectedProperty, value); }
 		}
 
-		public CqgComTrader Trader { get; private set; }
+		public IConnector Connector { get; private set; }
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
+		private readonly TradesWindow _tradesWindow = new TradesWindow();
 
 		private readonly LogManager _logManager = new LogManager();
 
-		private static string Username => Properties.Settings.Default.Username;
+		private static string Username => Settings.Default.Username;
 
 		public MainWindow()
 		{
@@ -67,31 +71,35 @@ namespace SampleCQG
 			_securitiesWindow.MakeHideable();
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
-
+			_myTradesWindow.MakeHideable();
+			_tradesWindow.MakeHideable();
 
 			var guiListener = new GuiLogListener(LogControl);
-			//guiListener.Filters.Add(msg => msg.Level > LogLevels.Debug);
 			_logManager.Listeners.Add(guiListener);
-			_logManager.Listeners.Add(new FileLogListener("sterling") { LogDirectory = "Logs" });
+			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "Logs" });
 
 			Application.Current.MainWindow = this;
 		}
 
-		private void OnClosing(object sender, CancelEventArgs cancelEventArgs)
+		private void OnClosing(object sender, CancelEventArgs e)
 		{
-			Properties.Settings.Default.Save();
+			Settings.Default.Save();
+
 			_ordersWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
 			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
+			_myTradesWindow.DeleteHideable();
+			_tradesWindow.DeleteHideable();
 
 			_securitiesWindow.Close();
 			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
+			_myTradesWindow.Close();
+			_tradesWindow.Close();
 
-			if (Trader != null)
-				Trader.Dispose();
+			Connector?.Dispose();
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
@@ -111,71 +119,86 @@ namespace SampleCQG
 					return;
 				}
 
-				if (Trader == null)
+				if (Connector == null)
 				{
 					// create connector
-					Trader = new CqgComTrader { LogLevel = LogLevels.Debug };
 
-					_logManager.Sources.Add(Trader);
+					if (IsCqgContinuum.IsChecked == true)
+					{
+						Connector = new CqgContinuumTrader
+						{
+							UserName = Username,
+							Password = PwdBox.Password,
+							Server = Settings.Default.Address,
+						};
+					}
+					else
+					{
+						Connector = new CqgComTrader();
+					}
+
+					//Connector.LogLevel = LogLevels.Debug;
+					_logManager.Sources.Add(Connector);
 
 					// subscribe on connection successfully event
-					Trader.Connected += () =>
+					Connector.Connected += () =>
 					{
 						this.GuiAsync(() => OnConnectionChanged(true));
 					};
 
 					// subscribe on connection error event
-					Trader.ConnectionError += error => this.GuiAsync(() =>
+					Connector.ConnectionError += error => this.GuiAsync(() =>
 					{
-						OnConnectionChanged(Trader.ConnectionState == ConnectionStates.Connected);
+						OnConnectionChanged(Connector.ConnectionState == ConnectionStates.Connected);
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 					});
 
-					Trader.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
+					Connector.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
 
 					// subscribe on error event
-					Trader.Error += error =>
+					Connector.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// subscribe on error of market data subscription event
-					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+					Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-					Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-					Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-					Trader.NewPortfolio += portfolio =>
+					Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+					Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+					Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+					Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+					Connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+					Connector.NewPortfolio += portfolio =>
 					{
 						_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 
 						// subscribe on portfolio updates
-						Trader.RegisterPortfolio(portfolio);
+						Connector.RegisterPortfolio(portfolio);
 					};
-					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+					Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 					// subscribe on error of order registration event
-					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+					Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of order cancelling event
-					Trader.OrderCancelFailed += OrderFailed;
+					Connector.OrderCancelFailed += OrderFailed;
 
 					// subscribe on error of stop-order registration event
-					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+					Connector.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of stop-order cancelling event
-					Trader.StopOrderCancelFailed += OrderFailed;
+					Connector.StopOrderCancelFailed += OrderFailed;
 
-					Trader.MassOrderCancelFailed += (transId, error) =>
+					Connector.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 					// set market data provider
-					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+					_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
 				}
 
-				Trader.Connect();
+				Connector.Connect();
 			}
 			else
 			{
-				Trader.Disconnect();
+				Connector.Disconnect();
 			}
 		}
 
@@ -227,6 +250,11 @@ namespace SampleCQG
 		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_stopOrdersWindow);
+		}
+
+		private void ShowTradesClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_tradesWindow);
 		}
 	}
 }
