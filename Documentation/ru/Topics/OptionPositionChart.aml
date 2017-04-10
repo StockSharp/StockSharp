@@ -44,24 +44,96 @@
 			</step>
 			<step>
 				<content>
-					<para>В коде C# создаем подключение	<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>.</para>
+					<para>В коде C# создаем подключение, и подписываемся на необходимые события.</para>
             		<code title="C#" language="C#">
-                  <![CDATA[
-if (Connector != null && !(Connector is FakeConnector))
-		return;
-
-// создаем подключение
-Connector = new QuikTrader
+<![CDATA[
+...                 
+public readonly Connector Connector = new Connector();
+...                 
+// subscribe on connection successfully event
+Connector.Connected += () =>
 {
+	// update gui labels
+	this.GuiAsync(() => ChangeConnectStatus(true));
 };
 
+// subscribe on disconnection event
+Connector.Disconnected += () =>
+{
+	// update gui labels
+	this.GuiAsync(() => ChangeConnectStatus(false));
+};
+
+// subscribe on connection error event
+Connector.ConnectionError += error => this.GuiAsync(() =>
+{
+	// update gui labels
+	ChangeConnectStatus(false);
+
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+});
+
+// fill underlying asset's list
+Connector.NewSecurity += security =>
+{
+	if (security.Type == SecurityTypes.Future)
+		_assets.Add(security);
+};
+
+Connector.SecurityChanged += security =>
+{
+	if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
+		_isDirty = true;
+};
+
+// subscribing on tick prices and updating asset price
+Connector.NewTrade += trade =>
+{
+	if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
+		_isDirty = true;
+};
+
+Connector.NewPosition += position => this.GuiAsync(() =>
+{
+	var asset = SelectedAsset;
+
+	if (asset == null)
+		return;
+
+	var assetPos = position.Security == asset;
+	var newPos = position.Security.UnderlyingSecurityId == asset.Id;
+
+	if (!assetPos && !newPos)
+		return;
+
+	if (assetPos)
+		PosChart.AssetPosition = position;
+
+	if (newPos)
+		PosChart.Positions.Add(position);
+
+	RefreshChart();
+});
+
+Connector.PositionChanged += position => this.GuiAsync(() =>
+{
+	if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
+		RefreshChart();
+});
+
+try
+{
+	if (File.Exists(_settingsFile))
+		Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+}
+...
 ]]>
                   	</code>
 				</content>
 			</step>
 			<step>
 				<content>
-					<para>Задаем первоначальные установки контрола:</para>
+					<para>При подключении задаем первоначальные установки контрола:</para>
 						<list class="ordered">
   							<listItem>
   									Обнуляем коллекции позиций опционов
@@ -76,12 +148,28 @@ Connector = new QuikTrader
 						</list>
             			<code title="C#" language="C#">
                   <![CDATA[
-PosChart.Positions.Clear();
-PosChart.AssetPosition = null;
-PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
+private void ConnectClick(object sender, RoutedEventArgs e)
+{
+	if (!_isConnected)
+	{
+		ConnectBtn.IsEnabled = false;
+...
 
-PosChart.MarketDataProvider = Connector;
-PosChart.SecurityProvider = Connector;
+		PosChart.Positions.Clear();
+		PosChart.AssetPosition = null;
+		PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
+
+...
+
+		PosChart.MarketDataProvider = Connector;
+		PosChart.SecurityProvider = Connector;
+
+		Connector.Connect();
+	}
+	else
+		Connector.Disconnect();
+}
+
 ]]>
                   		</code>
 					</content>

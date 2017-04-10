@@ -50,10 +50,11 @@
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity</codeEntityReference> - непрерывный инструмент.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.Security</codeEntityReference> - непрерывный инструмент.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityProvider</codeEntityReference> - поставщик информации об инструментах.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityStorage</codeEntityReference> - хранилище информации об инструментах.
+</para>
   			</listItem>
 		</list>
 		

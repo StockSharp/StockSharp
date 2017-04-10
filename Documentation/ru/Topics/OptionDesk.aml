@@ -42,95 +42,171 @@
 			</step>
 			<step>
 				<content>
-				<para>В коде C# создаем подключение. В зависимости от выбранного типа коннектора инициализируем экземпляр 
-					<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference> или <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference>.
+				<para>В коде C# создаем подключение и подписываемся на необходимые события.
 					</para>
             	<code title="C#" language="C#">
-                  <![CDATA[
-if (_connector == null)
+<![CDATA[
+...                 
+public readonly Connector Connector = new Connector();
+...                 
+// subscribe on connection successfully event
+Connector.Connected += () =>
 {
-	if (IsQuik.IsChecked == true)
-	{
-		// создаем подключение
-		var trader = new QuikTrader()
-		{
-		};
+	// update gui labels
+	this.GuiAsync(() => ChangeConnectStatus(true));
+};
 
-		_connector = trader;
-	}
-	else
-	{
-		var trader = new PlazaTrader
-		{
-			Address = Address.Text.To<EndPoint>(),
-			IsCGate = IsCGate.IsChecked == true
-		};
+// subscribe on disconnection event
+Connector.Disconnected += () =>
+{
+	// update gui labels
+	this.GuiAsync(() => ChangeConnectStatus(false));
+};
 
-		trader.Tables.Add(trader.TableRegistry.Volatility);
-			
-		if (IsAutorization.IsChecked == true)
-		{
-			trader.Login = Login.Text;
-			trader.Password = Password.Password;
-		}
+// subscribe on connection error event
+Connector.ConnectionError += error => this.GuiAsync(() =>
+{
+	// update gui labels
+	ChangeConnectStatus(false);
 
-		_connector = trader;
-	}
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+});
+
+// fill underlying asset's list
+Connector.NewSecurity += security =>
+{
+	if (security.Type == SecurityTypes.Future)
+		_assets.Add(security);
+};
+
+Connector.SecurityChanged += security =>
+{
+	if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
+		_isDirty = true;
+};
+
+// subscribing on tick prices and updating asset price
+Connector.NewTrade += trade =>
+{
+	if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
+		_isDirty = true;
+};
+
+Connector.NewPosition += position => this.GuiAsync(() =>
+{
+	var asset = SelectedAsset;
+
+	if (asset == null)
+		return;
+
+	var assetPos = position.Security == asset;
+	var newPos = position.Security.UnderlyingSecurityId == asset.Id;
+
+	if (!assetPos && !newPos)
+		return;
+
+	if (assetPos)
+		PosChart.AssetPosition = position;
+
+	if (newPos)
+		PosChart.Positions.Add(position);
+
+	RefreshChart();
+});
+
+Connector.PositionChanged += position => this.GuiAsync(() =>
+{
+	if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
+		RefreshChart();
+});
+
+try
+{
+	if (File.Exists(_settingsFile))
+		Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 }
+...
 ]]>
                   	</code>
 				</content>
 				</step>
 				<step>
 					<content>
-					<para>Задаем провайдера сообщений для рыночных данных и инструментов.</para>
+					<para>При подключении задаем провайдера сообщений для рыночных данных.</para>
             		<code title="C#" language="C#">
                   <![CDATA[
-Desk.MarketDataProvider = _connector;
-Desk.SecurityProvider = _connector;
-Desk.CurrentTime = null;
+private void ConnectClick(object sender, RoutedEventArgs e)
+{
+	if (!_isConnected)
+	{
+		ConnectBtn.IsEnabled = false;
+
+		_model.Clear();
+		_model.MarketDataProvider = Connector;
+...
+		Connector.Connect();
+	}
+	else
+		Connector.Disconnect();
+}
 ]]>
                    </code>
 				</content>
 				</step>
 				<step>
 				<content>
-					<para>При получении инструментов:</para>
-					<list class="ordered">
-  							<listItem>Заполняем коллекцию фьючерсов для выпадающего списка;</listItem>
-  							<listItem>Инициализируем выбранный инструмент первым элементом этой коллекции;</listItem>
-  							<listItem>Заполняем массив цепочкой опционов, где подлежащим активом выступает выбранный инструмент;</listItem>
-  							<listItem>Присваиваем свойству <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> этот массив;</listItem>
-  							<listItem>Обновляем значения доски опционов при помощи метода 
-  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.</listItem>
-					</list>
+					<para>При получении инструментов добавляем базовые активы в список.</para>
             		<code title="C#" language="C#">
                   <![CDATA[
-_connector.NewSecurity += security =>
-	this.GuiAsync(() =>
-	{
-		// добавляем в выпадающий список (подлежащие инструменты) только фьючерсы
-		if(security.Type == SecurityTypes.Future)
+// fill underlying asset's list
+Connector.NewSecurity += security =>
+{
+	if (security.Type == SecurityTypes.Future)
 		_assets.Add(security);
-
-		if (SelectedAsset == null && _assets.Count > 0)
-			SelectedAsset = _assets.First();
-
-		if (SelectedAsset != null)
-		{
-			if (security.Type == SecurityTypes.Option && security.UnderlyingSecurityId.CompareIgnoreCase(SelectedAsset.Id))
-			{
-				_options.Add(security);
-				Desk.Options = _options;
-				Desk.RefreshOptions();
-			}
-		}
-	});
+};
 ]]>
                   	</code>
 					</content>
 				</step>
 				<step>
+				<content>
+					<para>При выборе инструмента:</para>
+					<list class="bullet">
+  							<listItem>Заполняем массив цепочкой опционов, где подлежащим активом выступает выбранный инструмент;</listItem>
+  							<listItem>Присваиваем свойству <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDeskModel.Options</codeEntityReference> этот массив;</listItem>
+  							<listItem>Очищаем значения доски опционов при помощи метода 
+  							<codeEntityReference qualifyHint="true">M:tockSharp.Xaml.OptionDeskModel.Clear</codeEntityReference>.</listItem>
+					</list>
+            		<code title="C#" language="C#">
+                  <![CDATA[
+private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+	var asset = SelectedAsset;
+
+	_model.UnderlyingAsset = asset;
+
+	_model.Clear();
+	_options.Clear();
+
+	var options = asset.GetDerivatives(Connector);
+
+	foreach (var security in options)
+	{
+		_model.Add(security);
+		_options.Add(security);
+	}
+
+	ProcessPositions();
+}
+
+]]>
+                  	</code>
+					</content>
+				</step>
+				
+				
+				
+				<!--step>
 					<content>
 						<para>При изменении параметров опционов:</para>
 						<list class="ordered">
@@ -170,7 +246,7 @@ _connector.SecuritiesChanged += securities =>
 ]]>
                   		</code>
 					</content>
-				</step>
+				</step-->
 			</steps>
  	</procedure>
 

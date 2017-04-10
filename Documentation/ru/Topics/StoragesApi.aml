@@ -9,7 +9,7 @@
 		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>,
 		который создан для описания всех возможных действий с хранилищем, и содержит такие свойства как
 		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Securities</codeEntityReference>,
-		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Orders</codeEntityReference>
+		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Positions</codeEntityReference>
 		и т.д. Через эти свойства можно получить все сохраненные ранее торговые объекты, например, инструменты. Вся работа идет как с обычной
 		коллекцией за счет использования интерфейса
 		<codeEntityReference>T:StockSharp.Algo.Storages.IStorageEntityList`1</codeEntityReference>.

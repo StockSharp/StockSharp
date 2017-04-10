@@ -181,6 +181,15 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\Hydra_users.aml" />
+    <None Include="Topics\HydraSecurityExtensionInfo.aml" />
+    <None Include="HydraSecurityExtensionInfo.aml" />
+    <None Include="SecurityExtensionInfo.aml" />
+    <None Include="Topics\hydraAPIConnectWCF.aml" />
+    <None Include="Topics\HydraExtensionInfo.aml" />
+    <None Include="Hydra_users.aml" />
+    <None Include="Topics\hydraAPIConnect.aml" />
+    <None Include="Topics\hydra_server.aml" />
     <None Include="Topics\hydra_index.aml" />
     <None Include="Topics\hydra_options.aml" />
     <None Include="Topics\CreateNewOrder.aml" />
@@ -2745,6 +2754,42 @@
     <Image Include="Art\hydra_index_candle.png">
       <ImageId>hydra_index_candle</ImageId>
       <AlternateText>hydra index candle</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_server.png">
+      <ImageId>hydra_server</ImageId>
+      <AlternateText>hydra server</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_securities_menu.png">
+      <ImageId>hydra_securities_menu</ImageId>
+      <AlternateText>hydra securities menu</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_users.png">
+      <ImageId>hydra_users</ImageId>
+      <AlternateText>hydra users</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_csv_notepad.png">
+      <ImageId>hydra_ExtensionInfo_csv_notepad</ImageId>
+      <AlternateText>hydra Extension Info csv notepad</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_csv_excel.png">
+      <ImageId>hydra_ExtensionInfo_csv_excel</ImageId>
+      <AlternateText>hydra Extension Info csv excel</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_securities.png">
+      <ImageId>hydra_ExtensionInfo_securities</ImageId>
+      <AlternateText>hydra Extension Info securities</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_ExtensionInfo_window.png">
+      <ImageId>hydra_ExtensionInfo_window</ImageId>
+      <AlternateText>hydra Extension Info window</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_Quick_start_00.png">
+      <ImageId>hydra_Quick_start_00</ImageId>
+      <AlternateText>hydra Quick start 00</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_orderlog.png">
+      <ImageId>GUI_orderlog</ImageId>
+      <AlternateText>GUI orderlog</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
