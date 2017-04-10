@@ -5,7 +5,7 @@
       <para>Опция <legacyBold>Аналитика</legacyBold> позволяет при помощи подключаемых 
       <link xlink:href="83e7f4bb-733d-4463-a2c9-923ccc486d36">скриптов</link> производить анализ скачанных данных, и 
       <link xlink:href="46348bb0-292f-4c53-b075-793ecf8b3d08">отображать результаты</link> анализа в графической или табличной форме. 
-      Чтобы загрузить данную опцию, нужно выбрать из главного меню приложения <legacyBold>Дополнительно => Аналитика</legacyBold> или кнопку <legacyBold>Аналитика</legacyBold> на панели инструментов. </para>
+      Чтобы загрузить данную опцию, нужно нажать на вкладке <legacyBold>Общая</legacyBold> кнопку <legacyBold>Аналитика</legacyBold>. </para>
     </introduction>
   </developerConceptualDocument>
 </topic>

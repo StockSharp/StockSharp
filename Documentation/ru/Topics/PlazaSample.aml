@@ -41,10 +41,9 @@
 					  В самом начале необходимо создать шлюз <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference>:
 				  </para>
 				  <code language="C#"><![CDATA[// создаем шлюз к Плазе
-var Trader = new PlazaTrader(this.Address.Text.To<IPEndPoint>());
-
-// Если роутер плазы (P2MQRouter.exe) установлен на локальном компьютере, можно использовать конструктор без параметров:
-var Trader = new PlazaTrader();]]></code>
+var Trader = new PlazaTrader();
+Trader.Address = Address.Text.To<EndPoint>();
+]]></code>
 				<alert class="note">
 					При соединении между клиентским приложением и роутером в платформе <token>plaza</token> возможно использование 
 					протокола TCP или LRPCQ. Последний является простым транспортом, основанным на использовании 
@@ -76,8 +75,8 @@ this.Trader.Password = this.Password.Password;</code>
 					  такой системой выступает P2MQRouter.exe.
 				  </para>
 				  <para>
-					  После подключения начнут вызываться события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> и т.д. Для тех данных,
+					  После подключения начнут вызываться события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
+					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
 					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>.
 				  </para>
@@ -97,43 +96,64 @@ this.Trader.Password = this.Password.Password;</code>
 				  <para>
 					  Для просмотра списка инструментов используется окно Инструменты (SecuritiesWindow.xaml).  Чтобы в нем отображались ценные бумаги,
 					  необходимо внутри метода Connect_Click класса MainWindow подписаться на событие 
-					  <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>.
+					  <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>.
 				  </para>
-				  <code language="C#">this.Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));</code>
+				  <code language="C#">
+				  Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+				  </code>
 			  </content>
 		  </step>
 		  <step>
 			  <content>
 			  	<para>Для просмотра стаканов нужно в окне Инструменты щелкнуть на кнопке Стакан:</para>
 				<code language="C#">
-// внутри метода Quotes_Click
-var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
-{
-	// начинаем получать котировки стакана
-	trader.RegisterMarketDepth(security);
+		private void DepthClick(object sender, RoutedEventArgs e)
+		{
+			var trader = MainWindow.Instance.Trader;
 
-	// создаем окно со стаканом
-	var wnd = new QuotesWindow { Title = security.Code + " котировки" };
-	wnd.MakeHideable();
-	return wnd;
-});</code>
+			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			{
+				// начинаем получать котировки стакана
+				trader.RegisterMarketDepth(security);
+
+				// создаем окно со стаканом
+				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
+				wnd.MakeHideable();
+				return wnd;
+			});
+
+			if (window.Visibility == Visibility.Visible)
+				window.Hide();
+			else
+				window.Show();
+
+			if (!_initialized)
+			{
+				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+				_initialized = true;
+			}
+		}
+</code>
 				</content>
 		  </step>
 		  <step>
 			  <content>
-			  	<para>Создание заявок (используется класс NewOrderWindow):</para>
+			  	<para>Создание заявок (используется класс OrdersWindow):</para>
 			  	<code language="C#"><![CDATA[
-// внутри метода Send_Click
-var order = new Order
-{
-	Portfolio = Portfolio.SelectedPortfolio,
-	Volume = Volume.Text.To<decimal>(),
-	Price = Price.Text.To<decimal>(),
-	Security = Security,
-	Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-};
+		private void NewOrderClick(object sender, RoutedEventArgs e)
+		{
+			var newOrder = new OrderWindow
+			{
+				Order = new Order { Security = SecurityPicker.SelectedSecurity },
+				SecurityProvider = MainWindow.Instance.Trader,
+				MarketDataProvider = MainWindow.Instance.Trader,
+				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+			};
 
-MainWindow.Instance.Trader.RegisterOrder(order);
+			if (newOrder.ShowModal(this))
+				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+		}
 ]]>
 				</code>
 			  </content>

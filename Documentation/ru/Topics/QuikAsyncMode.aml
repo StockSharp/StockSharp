@@ -53,7 +53,7 @@
 
 this.Trader = new QuikTrader(this.Path.Text) { IsAsyncMode = true };
 
-this.Trader.NewSecurities += securities => this.Sync(() => _securitiesWindow.Securities.AddRange(securities));
+this.Trader.NewSecurity += security => this.Sync(() => _securitiesWindow.Securities.Add(security));
 
 // подписываемся на событие о неудачной регистрации заявок
 this.Trader.OrdersRegisterFailed += OrdersFailed;

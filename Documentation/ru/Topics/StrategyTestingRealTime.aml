@@ -47,7 +47,8 @@
 						  в графические компоненты и устанавливаем соединение.
 					  </para>
 					  <code language="C#"><![CDATA[
-SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
+SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_connector);
+SecurityPicker.MarketDataProvider = _connector;
 
 _candleManager = new CandleManager(_connector);
 
@@ -55,15 +56,15 @@ _logManager.Sources.Add(_connector);
 					
 _connector.Connected += () =>
 {
-	// set flag (connection is established)
-	_isConnected = true;
-
 	// update gui labels
-	this.GuiAsync(() =>
-		{
-			ChangeConnectStatus(true);
-			ConnectBtn.IsEnabled = false;
-		});
+	this.GuiAsync(() => { ChangeConnectStatus(true); });
+};
+
+// subscribe on disconnection event
+_connector.Disconnected += () =>
+{
+	// update gui labels
+	this.GuiAsync(() => { ChangeConnectStatus(false); });
 };
 
 // subscribe on connection error event
@@ -75,34 +76,39 @@ _connector.ConnectionError += error => this.GuiAsync(() =>
 	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 });
 
-_connector.NewMarketDepths += OnDepths;
-_connector.MarketDepthsChanged += OnDepths;
+_connector.NewMarketDepth += OnDepth;
+_connector.MarketDepthChanged += OnDepth;
 
-_connector.NewPortfolios += PortfolioGrid.Portfolios.AddRange;
-_connector.NewPositions += PortfolioGrid.Positions.AddRange;
+_connector.NewPortfolio += PortfolioGrid.Portfolios.Add;
+_connector.NewPosition += PortfolioGrid.Positions.Add;
 
-_connector.NewOrders += Orders.Orders.AddRange;
-_connector.NewMyTrades += Trades.Trades.AddRange;
+_connector.NewOrder += OrderGrid.Orders.Add;
+_connector.NewMyTrade += TradeGrid.Trades.Add;
 
 // subscribe on error of order registration event
-_connector.OrdersRegisterFailed += OrdersFailed;
+_connector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
 
 _candleManager.Processing += (s, candle) =>
-	{
-		if (candle.State == CandleStates.Finished)
-			_buffer.Add(candle);
-	};
+{
+	if (candle.State == CandleStates.Finished)
+		_buffer.Add(candle);
+};
+
+_connector.MassOrderCancelFailed += (transId, error) =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 // subscribe on error event
 _connector.Error += error =>
 	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-	// subscribe on error of market data subscription event
-	_connector.MarketDataSubscriptionFailed += (security, type, error) =>
-		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-			}
+// subscribe on error of market data subscription event
+_connector.MarketDataSubscriptionFailed += (security, msg, error) =>
+{
+	if (error == null)
+		return;
 
-_connector.Connect();
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+};
 					  ]]></code>
 				  </content>
 			  </step>

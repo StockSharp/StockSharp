@@ -51,18 +51,18 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		if (Trader == null)
 		{
 			// создаем подключение
-			Trader = isLua
-				? new QuikTrader
-				{
-					LuaFixServerAddress = Address.Text.To<EndPoint>(),
-					LuaLogin = Login.Text,
-					LuaPassword = Password.Password.To<SecureString>()
-				}
-				: new QuikTrader(Path.Text) { IsDde = true };
+		    Trader = new QuikTrader
+		    {
+		        LuaFixServerAddress = Address.Text.To<EndPoint>(),
+		        LuaLogin = Login.Text,
+		        LuaPassword = Password.Password.To<SecureString>(),
+		        LogLevel = LogLevels.Debug
+		    };
+
 				
             ...............................................
 
-			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
 			
 			...............................................
 

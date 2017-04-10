@@ -3,7 +3,7 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para><token>stocksharp</token> поддерживает 6 видов свечей:</para>
+		<para><token>stocksharp</token> поддерживает сдедующие виды:</para>
 	  
 		<list class="bullet">
 			<listItem>
@@ -51,7 +51,7 @@
 			<step>
 				<content>
 					<para>В самом начале необходимо создать менеджер свечей <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>,
+					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>,
 					будет формировать свечи:</para>
 			
 					<code language="C#">
@@ -67,8 +67,8 @@ _candleManager = new CandleManager(_trader);
 					
 					<alert class="note">
 						<para>Если для получения тиковых сделок вместо шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> используется источник с другим механизмом, то необходимо реализовать интерфейс
-						<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.ICandleManagerSource</codeEntityReference>, и передать реализацию в 
-						<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>.</para>
+						<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.Compression.IBuilderCandleSource</codeEntityReference>, и передать реализацию в 
+						<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
 						
 						<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса</para>
 						

@@ -88,9 +88,10 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 			Trader.MarketDataSubscriptionFailed += (security, type, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-			Trader.NewSecurities += _securitiesWindow.SecurityPicker.Securities.AddRange;
-			Trader.NewTrades += _tradesWindow.TradeGrid.Trades.AddRange;
-			Trader.NewOrderLogItems += _orderLogWindow.OrderLogGrid.LogItems.AddRange;
+			Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+			Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+			Trader.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
+
 
 			var subscribed = false;
 			//if (AllDepths.IsChecked == true)
@@ -131,7 +132,8 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 			</step>
 			<step>
 				<content>
-					<para>Для вывода сделок и логов заявок нужно открыть окна при помощи кнопок <legacyBold>Тики</legacyBold> и <legacyBold>Лог заявок</legacyBold> соответственно. Для получения стакана нужно открыть окно инструментов, выбрать нужный инструмент
+					<para>Для вывода сделок и логов заявок нужно открыть окна при помощи кнопок <legacyBold>Тики</legacyBold> и <legacyBold>Лог заявок</legacyBold> соответственно. 
+					Для получения стакана нужно открыть окно инструментов, выбрать нужный инструмент
 					и открыть стакан при помощи кнопки <legacyBold>Стакан..</legacyBold> .</para>
 				</content>
 			</step>

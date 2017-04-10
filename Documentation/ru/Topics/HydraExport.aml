@@ -12,14 +12,14 @@
 	  </para>
 
       <para>
-		  Для этого в главном окне на панели инструметов необходимо нажать на одну из следующих кнопок -
+		  Для этого на вкладке <legacyBold>Общее</legacyBold> необходимо нажать на одну из следующих кнопок -
 	  </para>
 	  
 	  	
       <list class="bullet">
         <listItem>
           <para>
-          	<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Сделки</link> 
+          	<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Тики</link> 
           </para>
         </listItem>
         <listItem>
@@ -52,14 +52,18 @@
           	 <link xlink:href="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677">Транзакции</link> 
           </para>
         </listItem>
-       
+        <listItem>
+          <para>
+          	 <link xlink:href="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9">Доска опционов</link> 
+          </para>
+        </listItem>
       </list> 
       
-      <para>Или выбрать соответствующий пункт меню в главном меню "Экспорт".</para>
+      <para>Или нажать на инструменте правой кнопкой мыши, выбрать, в выпавшем меню, необходимый тип данных. Как показано на рисунке.</para>
 	  
 	  
 	  <mediaLink>
-		  <image placement="center" xlink:href="hydra_main_start" />
+		  <image placement="center" xlink:href="hydra_view_export" />
 	  </mediaLink>	  
 	  
 

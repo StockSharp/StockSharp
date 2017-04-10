@@ -2,7 +2,9 @@
 <topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
       <introduction>
-      <para><token>hydra</token> позволяет выполнять импорт собственных данных, сохраненных в формате .csv. Для импорта нужно выбрать в главном меню приложения пункт <legacyBold>Импорт</legacyBold>, а затем тип биржевых данных, который Вы собираетесь импортировать. Можно импортировать следующие типы: </para>
+      <para><token>hydra</token> позволяет выполнять импорт собственных данных, сохраненных в формате .csv. 
+      Для импорта нужно отрыть вкладку <legacyBold>Импорт</legacyBold>, 
+      и выбрать тип биржевых данных, который необходимо импортировать. Можно импортировать следующие типы: </para>
       
 	<list class="bullet">
   		<listItem>

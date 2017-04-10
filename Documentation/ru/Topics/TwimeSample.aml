@@ -35,11 +35,13 @@
             				<![CDATA[
 public MainWindow()
 {
-    ..................................................
-    
-	var mdAdapter = new PassThroughMessageAdapter(Trader.TransactionIdGenerator);
-	mdAdapter.AddMarketDataSupport();
-	Trader.Adapter.InnerAdapters.Add(mdAdapter);
+    ..................................................    
+	var mdAdapter = new PlazaMessageAdapter(Trader.TransactionIdGenerator)
+    {
+    	IsCGate = true,
+    };
+    mdAdapter.RemoveTransactionalSupport();
+    Trader.Adapter.InnerAdapters.Add(mdAdapter);
 }
 ]]>
 					</code>
@@ -97,39 +99,32 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		// подписываемся на событие ошибки подписки на рыночные данные
 		Trader.MarketDataSubscriptionFailed += (security, type, error) => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-		Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-		Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-		Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-		Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-
-		Trader.NewPortfolios += portfolios =>
-		{
-			// подписываемся на событие обновления портфеля
-			//portfolios.ForEach(Trader.RegisterPortfolio);
-
-			_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-		};
-		Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
-
+        Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+        Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+        Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+        Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+        Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+        Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
          .................................................
-
 		_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
-
 		.................................................
-
 	}
 
 	switch (Trader.ConnectionState)
 	{
 		case ConnectionStates.Failed:
 		case ConnectionStates.Disconnected:
-			 Trader.TransactionAddress = TransactionAddress.EndPoint;
-			 Trader.RecoveryAddress = RecoveryAddress.EndPoint;
-			 Trader.Login = Login.Text;
-			 Trader.Connect();
-			 break;
+			Trader.TransactionAddress = TransactionAddress.EndPoint;
+			Trader.RecoveryAddress = RecoveryAddress.EndPoint;
+			Trader.Login = Login.Text;
+			Trader.PortfolioName = PortfolioName.Text;
+
+			((PlazaMessageAdapter)Trader.MarketDataAdapter).IsDemo = IsDemo.IsChecked == true;
+
+			Trader.Connect();
+			break;
 		case ConnectionStates.Connected:
-			 Trader.Disconnect();
+			Trader.Disconnect();
 			break;
 	}
 }
