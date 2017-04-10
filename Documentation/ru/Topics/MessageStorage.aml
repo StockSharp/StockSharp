@@ -77,13 +77,10 @@ IMarketDataStorage<ExecutionMessage> tranStorage = null;
 
 // В обработчике событии получения инстументов
 // получаем хранилище транзакций для заданного инструмента
-connector.NewSecurities += securities =>
+connector.NewSecurity += security =>
 {
-	securities.ForEach(s =>
-	{
-		if (s.Id == securityId)
-			tranStorage = _storage.GetTransactionStorage(s);
-	});
+		if (security.Id == securityId)
+			tranStorage = _storage.GetTransactionStorage(security);
 };
 
  ]]>
@@ -92,9 +89,7 @@ connector.NewSecurities += securities =>
 			</step>
 			<step>
 		<content>
-		
-		   <!--System.Action<System.Collections.Generic.IEnumerable<StockSharp.BusinessEntities.MyTrade>> NewMyTrades-->
-		
+
 			<para>Сохранение собственных сделок будет выполняться в обработчике события
 			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrades</codeEntityReference> при помощи метода
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Save(System.Collections.IEnumerable)</codeEntityReference>. 

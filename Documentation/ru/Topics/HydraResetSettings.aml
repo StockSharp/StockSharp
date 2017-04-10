@@ -2,7 +2,7 @@
 <topic id="e088a37c-22aa-4a85-a20e-3b64c1b039d3" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>Пункт главного меню приложения <legacyBold>Дополнительно => Сбросить настройки</legacyBold>.</para>
+    	<para>Панель быстрого доступа приложения <legacyBold>Настройки => Сбросить настройки</legacyBold>.</para>
     	<para>Сбрасывает настройки <token>hydra</token> в начальное состояние.</para>
     </introduction>
   </developerConceptualDocument>

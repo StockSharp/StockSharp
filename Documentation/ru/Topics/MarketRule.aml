@@ -16,7 +16,7 @@
 				  - правило на событие изменения инструмента.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrades(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrade(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
 				  - правило на событие появления у инструмента новой сделки.
 			  </listItem>
 			  <listItem>
@@ -244,7 +244,7 @@
 		  </para>
 		  <list class="bullet">
 		  	  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenNewMyTrades(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenNewMyTrade(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
 				  - правило на событие появление новых сделок стратегии.
 			  </listItem>
 			  <listItem>
@@ -365,18 +365,18 @@ private sealed class PortfolioRule : MarketRule<Portfolio, Portfolio>
 
 		_portfolio = portfolio;
 		_connector = connector;
-		_connector.PortfoliosChanged += OnPortfoliosChanged;
+		_connector.PortfolioChanged += OnPortfolioChanged;
 	}
 
-	private void OnPortfoliosChanged(IEnumerable<Portfolio> portfolios)
+	private void OnPortfolioChanged(Portfolio portfolio)
 	{
-		if (portfolios.Contains(_portfolio) && _changed(_portfolio))
+		if ((portfolio==_portfolio) && _changed(_portfolio))
 			Activate(_portfolio);
 	}
 
 	protected override void DisposeManaged()
 	{
-		_connector.PortfoliosChanged -= OnPortfoliosChanged;
+		_connector.PortfolioChanged -= OnPortfolioChanged;
 		base.DisposeManaged();
 	}
 }
@@ -399,7 +399,7 @@ public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio port
 		]]></code>
 		<para>
 			Правило <legacyItalic>PortfolioRule</legacyItalic> подписывается на событие
-			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
+			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfolioChanged</codeEntityReference>
 			и, как только оно вызывается, то проверяется условие на превышение текущего уровня денежных средств в портфеле выше определенного лимита.
 			Если условие возвращает <legacyBold>true</legacyBold>, то активируется правило через метод 
 			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRule`2.Activate</codeEntityReference>.

@@ -12,7 +12,7 @@
       <steps class="ordered">
         <step>
           <content>
-            <para>В главном окне нажать кнопку <legacyBold>Свечи</legacyBold>, откроется следующее окно:</para>
+            <para>На вкладке <legacyBold>Общее</legacyBold> нажать кнопку <legacyBold>Свечи</legacyBold>, откроется следующее окно:</para>
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_main" />
 	  		</mediaLink>
@@ -22,11 +22,20 @@
          <step>
           <content>
             <para>
-            	Далее выбрать из выпадающего списка интересующий тип свечи (поддерживаются все <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">стандартные свечи</link>),
-            	параметр, выбрать в <legacyBold>Построить из:</legacyBold> из чего будут строится свечи, выбрать инструмент и нажать на кнопку <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline>.
-            	После этого произойдет генерация свечей на основе найденных данных. Например, для свечей типа
-            	<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> будет сформировано следующее:
+            	Далее необходимо:
             </para>
+            
+<list class="bullet">
+  <listItem><para>Выбрать из выпадающего списка интересующий тип 
+  свечи (поддерживаются все <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">стандартные свечи</link>)</para></listItem>
+  <listItem><para>Выбрать в поле <legacyBold>Построить из:</legacyBold> из чего будут строится свечи
+            	(позволяет строить свечи из лучшего бида, аска, спреду, сделкам или одноминутным свечам)</para></listItem>
+  <listItem><para>Выбрать инструмент и нажать на кнопку <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline></para></listItem>
+</list>
+
+            	<para>После этого произойдет генерация свечей на основе найденных данных. Например, для свечей типа
+            	<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> будет сформировано следующее:</para>
+
             	
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_tf" />
@@ -43,7 +52,7 @@
 	  		
 			<alert class="note">
   				<para>Если в <legacyBold>Построить из:</legacyBold> выбрать <legacyBold>не строить</legacyBold>, то будет произведен поиск готовых свечей, 
-  				которые были скачаны через источник <link xlink:href="bad33f32-1a13-4ba7-a335-326e6249d1be">Finam</link>.</para>
+  				которые были скачаны через источник (например, <link xlink:href="bad33f32-1a13-4ba7-a335-326e6249d1be">Finam</link>).</para>
 			</alert>
 
           </content>
@@ -63,7 +72,9 @@
         </step>
         <step>
           <content>
-            <para>К графику можно добавить индикаторы. Для этого нужно открыть контекстное меню, щелкнув правой кнопкой по панели графика, и выбрать пункт <legacyBold>Индикатор</legacyBold>. Кроме того, индикатор можно вывести на отдельной панели. Для этого необходимо добавить новую панель при помощи кнопки <mediaLinkInline> <image xlink:href="hydra_candles_newarea"/> </mediaLinkInline> и также выбрать необходимый индикатор из контекстного меню.</para>
+            <para>К графику можно добавить индикаторы. Для этого нужно открыть контекстное меню, щелкнув правой кнопкой по панели графика, и выбрать пункт <legacyBold>Индикатор</legacyBold>. 
+            Кроме того, индикатор можно вывести на отдельной панели. 
+            Для этого необходимо добавить новую панель при помощи кнопки <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline> и также выбрать необходимый индикатор из контекстного меню.</para>
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_ind_chart" />
 	  		</mediaLink>

@@ -64,13 +64,13 @@ quikTrader2.ConnectionError += OnError;
 
 var portfoliosWait = new ManualResetEvent(false);
 
-Action<IEnumerable<Portfolio>> newPortfolios = portfolios =>
+Action<Portfolio> newPortfolio = portfolio =>
 {
-	if (_portfolio1 == null)
-		_portfolio1 = portfolios.FirstOrDefault(p => p.Name == account1);
+	if (_portfolio1 == null && portfolio.Name == account1)
+		_portfolio1 = portfolio;
 
-	if (_portfolio2 == null)
-		_portfolio2 = portfolios.FirstOrDefault(p => p.Name == account2);
+	if (_portfolio2 == null && portfolio.Name == account2)
+		_portfolio2 = portfolio;
 
 	// если оба инструмента появились
 	if (_portfolio1 != null && _portfolio2 != null)
@@ -78,29 +78,30 @@ Action<IEnumerable<Portfolio>> newPortfolios = portfolios =>
 };
 
 // подписываемся на события новых портфелей
-quikTrader1.NewPortfolios += newPortfolios;
-quikTrader2.NewPortfolios += newPortfolios;
-
+quikTrader1.NewPortfolio += newPortfolio;
+quikTrader2.NewPortfolio += newPortfolio;
 
 var securitiesWait = new ManualResetEvent(false);
 
-Action<IEnumerable<Security>> newSecurities = securities =>
+// подписываемся на события новых инструментов
+quikTrader1.NewSecurity += security =>
 {
-	if (_lkoh == null)
-		_lkoh = securities.FirstOrDefault(s => s.Code == "LKOH" && s.Trader == quikTrader1);
-
-	if (_riz0 == null)
-		_riz0 = securities.FirstOrDefault(s => s.Code == "RIZ0" && s.Trader == quikTrader2);
+	if (_lkoh == null && security.Code == "LKOH")
+		_lkoh = security;
 
 	// если оба инструмента появились
-	if (_lkoh != null && _riz0 != null)
+	if (_lkoh != null && _ri != null)
 		securitiesWait.Set();
 };
+quikTrader2.NewSecurity += security =>
+{
+	if (_ri == null && security.Code == "RIZ7")
+		_ri = security;
 
-// подписываемся на события новых инструментов
-quikTrader1.NewSecurities += newSecurities;
-quikTrader2.NewSecurities += newSecurities;
-
+	// если оба инструмента появились
+	if (_lkoh != null && _ri != null)
+		securitiesWait.Set();
+};
 
 // запускаем экспорты в Quik-ах, когда получим событие об успешном соединении
 //

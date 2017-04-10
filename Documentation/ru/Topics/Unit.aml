@@ -37,7 +37,7 @@
 					  или использовать более короткую запись с помощью <codeEntityReference>T:StockSharp.Messages.UnitHelper</codeEntityReference>:
 				  </para>
 				  <code language="C#">// тестовый инструмент с шагом цены в 1 копейку и стоимостью в 10 рублей
-// (в реальном приложении информацию необходимо получать через IConnector.NewSecurities)
+// (в реальном приложении информацию необходимо получать через IConnector.NewSecurity)
 var security = new Security
 {
 	Name = "Тестовый инструмент",
