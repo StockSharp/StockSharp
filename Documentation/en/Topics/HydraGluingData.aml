@@ -4,7 +4,8 @@
 	<introduction>
 		<para>With <token>hydra</token> it is possible to glue together different types of market data on different contracts into one continuous instrument.</para> 
 		<para>To do this, select the <legacyBold>Securities => Glue</legacyBold>. item in the main menu of the application. After the opening the following window will appear:</para>
-				
+		<mediaLink><image placement="center" xlink:href="HydraGluingWindow" /></mediaLink>
+		
 		<para>Before gluing the data, it is necessary to check which market data is available. To do this, the path is selected where the data is, and the instruments
 		that are supposed to glue together are reviewed in turn. If there are gaps, it is necessary to download the required market data (for example, BarChart).</para>
 		<mediaLink><image placement="center" xlink:href="HydraGluingCheckData" /></mediaLink>

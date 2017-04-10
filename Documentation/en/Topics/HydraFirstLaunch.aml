@@ -6,7 +6,7 @@
 			At first start you will see the following window:
 		</para>
 		<mediaLink>
-			<image xlink:href="hydra_Quick_start_00"/>
+			<image placement="left" xlink:href="hydra_main_first" />
 		</mediaLink>
 
 		<steps class="ordered">
