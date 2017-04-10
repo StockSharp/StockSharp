@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>The task performs the export of the exchange data to different formats: Excel, xml, sql, bin or txt.</para>
+	<table>
+	  <row>
+    	<entry>
+    	    <mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_export" />
+      		</mediaLink>
+    	</entry>
+    	<entry>
+    	   	<mediaLink>
+        		<image placement="left" xlink:href="hydra_tasks_connstring" />
+      		</mediaLink>
+    	</entry>
+  	 </row>
+	</table>
+
+
+      <para><legacyBold>Database</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Connection</legacyBold> - the connect to the database. Used in the case of export via SQL.
+			</listItem>
+			<listItem>
+ 		    <legacyBold>Batch</legacyBold> - the transmitted data batch size. By default is 50 items. Used in the case of export via SQL.
+			</listItem>
+			<listItem>
+ 		    <legacyBold>Uniqueness</legacyBold> - to check the data uniqueness in the database. It affects the performance. By default is enabled. Used in the case of export via SQL. 
+			</listItem>
+		 </list>
+		 
+		<alert class="note">
+  			<para>When using the export via SQL it is required to set the connection string settings.</para>
+		</alert>
+		
+		<para><legacyBold>New connection string</legacyBold></para>
+       <list class="bullet">
+        	<listItem>
+				<legacyBold>Provider</legacyBold> - the ISP settings.
+			</listItem>
+			<listItem>
+ 		    	<legacyBold>Server</legacyBold> - the server address or the path to the database.
+			</listItem>
+			<listItem>
+ 		    	<legacyBold>Database</legacyBold> - the database name. Not used for SQLite. 
+			</listItem>
+			<listItem>
+ 		    	<legacyBold>Login</legacyBold> - the login to access the database. Not used with anonymous access.
+			</listItem>
+			<listItem>
+ 		    	<legacyBold>Password</legacyBold> - the password to access the database. Not used with anonymous access.
+			</listItem>
+			<listItem>
+ 		    	<legacyBold>Windows</legacyBold> - to use the current Windows account to connect to the database. 
+			</listItem>
+			<listItem>
+ 		    	<legacyBold>Connection</legacyBold> - the ready connection string. 
+			</listItem>
+		 </list>
+		 
+		 <alert class="note">
+  			<para>To check the connection to database is possible using the <legacyBold>Test</legacyBold> button.</para>
+		</alert>
+
+		<para><legacyBold>Main</legacyBold></para>
+		<list class="bullet">
+        <listItem>
+          <legacyBold>Work from</legacyBold> - the operating start time.
+		</listItem>
+        <listItem>
+          <legacyBold>Work till</legacyBold> - the operating stop time.
+		</listItem>
+        <listItem>
+          <legacyBold>Interval</legacyBold> - the operating interval.
+		</listItem>
+        <listItem>
+          <legacyBold>Data directory</legacyBold> - the data directory where the final files will be saved in the <token>stocksharp</token> format.
+		</listItem>
+		<listItem>
+          <legacyBold>Format</legacyBold> - the data format: BIN/CSV.
+		</listItem>
+		<listItem>
+          <legacyBold>Max errors</legacyBold> - the maximum number of errors to achieve that the task will be stopped. By default is 0 – number of errors is ignored.
+		</listItem>
+		<listItem>
+          <legacyBold>Dependency</legacyBold> - the task that must be executed before the current is started.
+		</listItem>
+		<listItem>
+          <legacyBold>Logging level</legacyBold> - the logging level.
+		</listItem>
+      </list>
+     <para><legacyBold>Candles</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Parameters</legacyBold> - the candles parameters.
+		</listItem>
+ 	  </list>
+      <para><legacyBold>Export (auto)</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Type</legacyBold> - the type of export (format).
+		</listItem>
+		<listItem>
+		 	<legacyBold>Start date</legacyBold> - from which date to start exporting data.
+		</listItem>
+		<listItem>
+			<legacyBold>Offset</legacyBold> - the time offset in days.
+		</listItem>
+		<listItem>
+          <legacyBold>Export directory</legacyBold> - the directory where data will be exported to.
+		</listItem>
+ 	  </list>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

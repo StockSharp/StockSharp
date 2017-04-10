@@ -10,7 +10,7 @@
 	  
 		<para>Для отображения, поступающие свечи от <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> 
 		передаются в метод
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Xaml.Charting.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>.</para>
+		<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>.</para>
 		
 		<para>При передаче свечи из события 
 		<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
@@ -26,11 +26,14 @@ private ChartCandleElement _candlesElem;
 ...
 // CandlesChart - StockSharp.Xaml.Chart
 // Создание области графика
-	_area = new ChartArea();
-	CandlesChart.AddArea(_area);
+private ChartArea _areaComb;
+private ChartCandleElement _candleElement;
+...
+var series = new CandleSeries(typeof(TimeFrameCandle),_security,TimeSpan.FromMinutes(_timeframe));
 
-	_candlesElem = new ChartCandleElement { ShowAxisMarker = false };
-	CandlesChart.AddElement(_area, _candlesElem);
+_candleElement = new ChartCandleElement() { FullTitle = "Candles" };
+Chart.AddElement(_areaComb, _candleElement, series);
+
 ...
 		
 candleManager.Processing += CandleManagerOnProcessing;
@@ -39,7 +42,12 @@ candleManager.Processing += CandleManagerOnProcessing;
 
 private void CandleManagerOnProcessing(CandleSeries candleSeries, Candle candle)
 {
-    if (candle.State == CandleStates.Finished) CandlesChart.Draw(_candlesElem, candle);
+    if (candle.State == CandleStates.Finished) 
+    {
+       var chartData = new ChartDrawData();
+       chartData.Group(candle.OpenTime).Add(_candleElement, candle);
+       Chart.Draw(chartData);
+    }
 }
 		]]>
 		</code>	

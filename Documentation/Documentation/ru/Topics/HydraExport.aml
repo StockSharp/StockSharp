@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <para>
+		  Скачанные данные <token>hydra</token> позволяет просмотреть в специальных окнах. 
+	  </para>
+
+      <para>
+		  Для этого на вкладке <legacyBold>Общее</legacyBold> необходимо нажать на одну из следующих кнопок -
+	  </para>
+	  
+	  	
+      <list class="bullet">
+        <listItem>
+          <para>
+          	<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Тики</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	<link xlink:href="6126cb15-de8b-4bcc-8b81-7354e8894239">Стаканы</link>
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">Свечи</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="fe4f5992-a496-45bb-82e6-d353b42df894">Лог заявок</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99">Level 1</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="243486c1-b9d4-47af-889e-61aaaa670644">Новости</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677">Транзакции</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9">Доска опционов</link> 
+          </para>
+        </listItem>
+      </list> 
+      
+      <para>Или нажать на инструменте правой кнопкой мыши, выбрать, в выпавшем меню, необходимый тип данных. Как показано на рисунке.</para>
+	  
+	  
+	  <mediaLink>
+		  <image placement="center" xlink:href="hydra_view_export" />
+	  </mediaLink>	  
+	  
+
+
+    </introduction>
+    <!-- Optional procedures followed by optional code example but must have
+         at least one procedure or code example -->
+    
+    <!-- <codeExample>Optional code example</codeExample> -->
+    <!-- <buildInstructions>Optional instructions for building a
+         code example.</buildInstructions> -->
+    <!-- <robustProgramming>Optional discussion of error handling and other
+         issues related to writing solid code.</robustProgramming> -->
+    <!-- <security>Optional discussion of security issues.</security> -->
+    <relatedTopics>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID">Link text</link>
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on CodePlex</linkText>
+          <linkAlternateText>Go to CodePlex</linkAlternateText>
+          <linkUri>http://shfb.codeplex.com</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerHowToDocument>
+</topic>

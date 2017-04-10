@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+      <para>
+		  The <token>hydra</token> program created using plug-in extensions as data sources. All standard sources are the same extensions, and they can be removed from
+		  the program. To do this it is necessary to remove the required connection, which is represented in the form of a dll, in the <legacyItalic>Plugins</legacyItalic>
+		  subfolder in the directory where <token>hydra</token> is installed. Similarly, new ones are added. For example, when it is necessary to add the source of
+		  market data from other resources, which are not included as standard. Below is the creation process of the source for the Google Finance,
+		  which is included as standard.
+	  </para>
+    </introduction>
+	<procedure>
+		<title>The source creation stages</title>
+		<steps class="ordered">
+			<step>
+				<content>
+					<para>
+						Each source must implement the <codeEntityReference>T:StockSharp.Hydra.Core.IHydraTask</codeEntityReference>
+						interface (or be inherited from the <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.BaseHydraTask</codeEntityReference> or
+						<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.ConnectorHydraTask`1</codeEntityReference> classes):
+					</para>
+					<code language="C#">
+<![CDATA[
+[DisplayNameLoc(_sourceName)]
+[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+[Doc("0166d686-9fb0-4e78-8578-f5b706ad6a07.htm")]
+[Icon("google_logo.png")]
+[TaskCategory(TaskCategories.America | TaskCategories.History |
+	TaskCategories.Stock | TaskCategories.Free | TaskCategories.Candles)]
+class GoogleTask : BaseHydraTask
+{
+	private GoogleSettings _settings;
+
+	public GoogleTask()
+	{
+		SupportedDataTypes = GoogleHistorySource
+			.TimeFrames
+			.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+			.ToArray();
+	}
+
+	protected override void ApplySettings(HydraTaskSettings settings)
+	{
+		_settings = new GoogleSettings(settings);
+
+		if (!settings.IsDefault)
+			return;
+
+		_settings.DayOffset = 1;
+		_settings.StartFrom = new DateTime(2000, 1, 1);
+		_settings.Interval = TimeSpan.FromDays(1);
+		_settings.IgnoreWeekends = true;
+		_settings.CandleDayStep = 30;
+	}
+
+	public override HydraTaskSettings Settings => _settings;
+
+	public override IEnumerable<DataType> SupportedDataTypes { get; }
+}]]>
+					</code>
+				</content>
+			</step>
+			
+			<step>
+		  		<content>
+			  		<para>
+				  		The <codeEntityReference qualifyHint="true">P:StockSharp.Hydra.Core.IHydraTask.Settings</codeEntityReference>
+				  		property is used to store the source settings. The class that is returned from this property should be the descendant of 
+				  		<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.HydraTaskSettings</codeEntityReference>:
+			  		</para>
+			  		<code language="C#">
+<![CDATA[
+[TaskSettingsDisplayName(_sourceName)]
+private sealed class GoogleSettings : HydraTaskSettings
+{
+	public GoogleSettings(HydraTaskSettings settings)
+		: base(settings)
+	{
+		ExtensionInfo.TryAdd(nameof(CandleDayStep), 30);
+	}
+
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str2282Key,
+		Description = LocalizedStrings.Str2283Key,
+		GroupName = _sourceName,
+		Order = 0)]
+	public DateTime StartFrom
+	{
+		get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+		set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
+	}
+
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str2284Key,
+		Description = LocalizedStrings.Str2285Key,
+		GroupName = _sourceName,
+		Order = 1)]
+	public int DayOffset
+	{
+		get { return ExtensionInfo[nameof(DayOffset)].To<int>(); }
+		set { ExtensionInfo[nameof(DayOffset)] = value; }
+	}
+
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.Str2286Key,
+		Description = LocalizedStrings.Str2287Key,
+		GroupName = _sourceName,
+		Order = 2)]
+	public bool IgnoreWeekends
+	{
+		get { return (bool)ExtensionInfo[nameof(IgnoreWeekends)]; }
+		set { ExtensionInfo[nameof(IgnoreWeekends)] = value; }
+	}
+
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.TimeIntervalKey,
+		Description = LocalizedStrings.CandleTimeIntervalKey,
+		GroupName = _sourceName,
+		Order = 4)]
+	public int CandleDayStep
+	{
+		get { return ExtensionInfo[nameof(CandleDayStep)].To<int>(); }
+		set
+		{
+			if (value < 1)
+				throw new ArgumentOutOfRangeException();
+
+			ExtensionInfo[nameof(CandleDayStep)] = value;
+		}
+	}
+}]]>
+					</code>
+				</content>
+			</step>
+	    	<step>
+				<content>
+					<para>
+					  At the final stage it is necessary to implement the <codeEntityReference qualifyHint="true">M:StockSharp.Hydra.Core.BaseHydraTask.OnProcess</codeEntityReference>,
+					  method, in which the logic of the market data downloading is implemented. In the case of GoogleTask, all the logic is in the <token>stocksharp</token>
+					  и используется класс <codeEntityReference>T:StockSharp.Algo.History.GoogleHistorySource</codeEntityReference>:
+					</para>
+					<code language="C#">
+<![CDATA[
+protected override TimeSpan OnProcess()
+{
+	var allSecurity = this.GetAllSecurity();
+
+	var source = new GoogleHistorySource();
+
+	var startDate = _settings.StartFrom;
+	var endDate = DateTime.Today - TimeSpan.FromDays(_settings.DayOffset);
+
+	var allDates = startDate.Range(endDate, TimeSpan.FromDays(1)).ToArray();
+
+	var hasSecurities = false;
+
+	foreach (var security in GetWorkingSecurities())
+	{
+		hasSecurities = true;
+
+		if (!CanProcess())
+			break;
+
+		foreach (var pair in (allSecurity ?? security).GetCandleSeries())
+		{
+			if (!CanProcess())
+				break;
+
+			if (pair.MessageType != typeof(TimeFrameCandleMessage))
+			{
+				this.AddWarningLog(LocalizedStrings.Str2296Params, pair);
+				continue;
+			}
+
+			var tf = (TimeSpan)pair.Arg;
+
+			var storage = StorageRegistry.GetCandleMessageStorage(pair.MessageType, security.Security, tf, _settings.Drive, _settings.StorageFormat);
+			var emptyDates = allDates.Except(storage.Dates).ToArray();
+
+			if (emptyDates.IsEmpty())
+			{
+				this.AddInfoLog(LocalizedStrings.Str2297Params, tf, security.Security.Id);
+				continue;
+			}
+
+			var currDate = emptyDates.First();
+			var lastDate = emptyDates.Last();
+
+			while (currDate <= lastDate)
+			{
+				if (!CanProcess())
+					break;
+
+				if (_settings.IgnoreWeekends && !security.IsTradeDate(currDate))
+				{
+					this.AddDebugLog(LocalizedStrings.WeekEndDate, currDate);
+					currDate = currDate.AddDays(1);
+					continue;
+				}
+
+				try
+				{
+					var till = currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max(tf);
+					this.AddInfoLog(LocalizedStrings.Str2298Params, tf, currDate, till, security.Security.Id);
+							
+					var candles = source.GetCandles(security.Security, tf, currDate, till);
+							
+					if (candles.Any())
+						SaveCandles(security, candles);
+					else
+						this.AddDebugLog(LocalizedStrings.NoData);
+				}
+				catch (Exception ex)
+				{
+					HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
+						.Put(tf, currDate, security.Security.Id), ex));
+				}
+
+				currDate = currDate.AddDays(_settings.CandleDayStep);
+			}
+		}
+	}
+
+	if (!hasSecurities)
+	{
+		this.AddWarningLog(LocalizedStrings.Str2292);
+		return TimeSpan.MaxValue;
+	}
+
+	if (CanProcess())
+		this.AddInfoLog(LocalizedStrings.Str2300);
+
+	return base.OnProcess();
+}]]>
+					</code>
+				</content>
+			</step>
+	  </steps>
+	</procedure>
+
+  </developerConceptualDocument>
+</topic>

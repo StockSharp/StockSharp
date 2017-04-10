@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="598efa7f-83fb-4dc8-8822-e6776362f652" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+		<para>
+			Если требуется защитить позиции по опционным стратегиям (например, как <link xlink:href="6fe5b321-a23d-415d-b3e3-af9de9212a20">Котирование по волатильности</link>)
+			можно воспользоваться стратегией хеджирования по дельте <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>.
+		</para>
+    </introduction>
+
+	  <procedure>
+		  <title>Дельта хеджирование</title>
+
+		  <steps class="ordered">
+			  <step>
+				  <content>
+					  <para>
+						  В качестве демонстрации работы <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> изменен пример
+						  SampleOptionQuoting (подробнее, <link xlink:href="6fe5b321-a23d-415d-b3e3-af9de9212a20">Котирование по волатильности</link>).
+					  </para>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+Сама стратегия <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> не запускается,
+а вместо этого она передается в качестве дочерней, для стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>
+					  </para>
+					  	
+<code title="C#" language="C#"><![CDATA[
+
+
+// Создаем Дельта-хедж стратегию
+var hedge = new DeltaHedgeStrategy
+{
+	Security = option.GetUnderlyingAsset(Connector),
+	Portfolio = Portfolio.SelectedPortfolio,
+	Connector = Connector,
+};
+
+// создаем котирование на покупку 20-ти контрактов
+var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
+		new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
+{
+	// указываем, что котирование работает с объемом в 1 контракт
+	Volume = 1,
+	Security = option,
+	Portfolio = Portfolio.SelectedPortfolio,
+	Connector = Connector,
+};
+
+// Передаем котирование в Дельта-хедж стратегию
+hedge.ChildStrategies.Add(quoting);
+
+// Запускаем Дельта-хедж стратегию
+hedge.Start();
+
+
+]]></code>
+					  <para>
+						  <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> принимает 
+						  в качестве <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">дочерних стратегий</link> стратегии,
+						  работающие отдельно по своему страйку. Таким образом <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>
+						  контролирует суммарную позицию по всем дочерним опционным стратегиям. 
+					  </para>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  Завершение работы дельта хеджирования:
+					  </para>
+					  <code>hedge.Stop();
+</code>
+				  </content>
+			  </step>
+		  </steps>
+	  </procedure>
+
+    <!--<section>
+      <title>A topic section</title>
+
+      <content>
+        <para>Some topic content</para>
+      </content>
+    </section>-->
+
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+        
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

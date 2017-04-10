@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ab42038e-836b-4c00-9332-0b2db2cbd948" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+	  <introduction>
+		  <para>
+			  Testing on random data is a special kind of testing. It is not intended to search for the optimal parameters. Instead, such testing can detect errors
+			  in the code by means of exposure trading algorithm to various exchange scenarios.
+		  </para>
+		  <para>
+			  As a rule, only a certain set of scenarios is used in the algorithm development. Therefore, when there is a special situation, the algorithm may not react
+			  right or throw exceptions. For example, the following situations may occur:
+		  </para>
+		  <list class="bullet">
+			  <listItem>
+				  The strategy works with the <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> candles and expects at each iteration,
+				  that there will always be a candle for the requested period of time. A period began when there was not a single trade, and a candle was not created.
+				  As a result, in the absence of proper handling, the <codeEntityReference>T:System.NullReferenceException</codeEntityReference> will be thrown and the strategy will stop.
+			  </listItem>
+			  <listItem>
+				  The strategy works with non-liquid instrument and uses <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>.
+				  The strategy expects that the order book is always filled. At some time, the order book is half filled (for example, there are bids, but no offers).
+				  If the strategy does not expect this situation, then either it will wrong register an order, or it will throw an exception and the strategy will stop.
+			  </listItem>
+			  <listItem>
+				  The strategy calculates the price levels. The code is written in such a way that the strategy awaits when levels set in advance will be broken through.
+				  If the levels are calculated and are set not correctly, then they will never be broken through, or always only one of them will be broken through.
+				  As a result, either the strategy will not perform any trades, or these trades will lose money.
+			  </listItem>
+		  </list>
+		  <para>
+			  For these and for many other scenarios of the exchange work, which is impossible to predict in advance, the <token>stocksharp</token> provides testing on
+			  random data, which will be able to generate the maximum number of conditions at the short range due to its uniform uniqueness.
+		  </para>
+	  </introduction>
+
+<!--_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
+				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });-->
+
+	  <procedure>
+		  <title>Testing on random data of moving averages strategy</title>
+		  <steps class="ordered">
+			  <step>
+				  <content>
+					  <para>
+						  The SampleRandomEmulation example  (<legacyItalic>..Samples/Testing/SampleRandomEmulation</legacyItalic>) is almost identical to the 
+						  SampleHistoryTesting example (its description can be found in the <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">testing on historical data</link>
+						  section) due the use of the unified <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> class. But, unlike the
+						  <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">testing on historical data</link>, testing on random data the market data are
+						  not loaded and are generated "on the fly". Therefore, two random data generators are added to the example: for the order book and for the
+						  tick trades. In SampleHistoryTesting only one generator is used - for the order book, as there is no history stored.
+					  </para>
+					  <code language="C#"><![CDATA[
+_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
+_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
+]]></code>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  The result of the example work is as follows:
+					  </para>
+					  <mediaLink>
+						  <image placement="center" xlink:href="sampleemulationtest" />
+					  </mediaLink>
+				  </content>
+			  </step>
+		  </steps>
+	  </procedure>
+
+    <!--<section>
+      <title>A topic section</title>
+
+      <content>
+        <para>Some topic content</para>
+      </content>
+    </section>-->
+
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+        
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

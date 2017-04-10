@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <para>Задача выполняет конвертацию биржевых данных. Например, из ОрдерЛог в тики или тиков в свечи и т.п.</para>
+      <mediaLink>
+        <image placement="left" xlink:href="hydra_tasks_converter" />
+      </mediaLink>
+      <para><legacyBold>Конвертер</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Конвертер</legacyBold> - конвертер.
+			</listItem>
+			<listItem>
+ 		    <legacyBold>Начальная дата</legacyBold> - с какой даты начать конвертацию данных.
+			</listItem>
+			<listItem>
+ 		    <legacyBold>Формат</legacyBold> - формат данных.
+			</listItem>
+			<listItem>
+			<legacyBold>Временной отступ</legacyBold> - временной отступ в днях от даты запуска задачи.
+			</listItem>
+			<listItem>
+          <legacyBold>Куда</legacyBold> - директория с данными, куда будут сохраняться сконвертированные данные.
+		</listItem>
+		 </list>
+		<para><legacyBold>Основные</legacyBold></para>
+		<list class="bullet">
+        <listItem>
+          <legacyBold>Работать с</legacyBold> - время начала работы.
+		</listItem>
+        <listItem>
+          <legacyBold>Работать до</legacyBold> - время окончания работы.
+		</listItem>
+        <listItem>
+          <legacyBold>Интервал работы</legacyBold> - интервал работы.
+		</listItem>
+        <listItem>
+          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
+		</listItem>
+		<listItem>
+          <legacyBold>Формат</legacyBold> - формат данных: BIN/CSV.
+		</listItem>
+		<listItem>
+          <legacyBold>Макс. ошибок</legacyBold> - максимальное количество ошибок по достижению которого задача будет остановлена. По умолчанию 0 - количество ошибок игнорируются.
+		</listItem>
+		<listItem>
+          <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
+		</listItem>
+		<listItem>
+          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+		</listItem>
+      </list>
+     <para><legacyBold>Свечи</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Параметры</legacyBold> - параметры свечей.
+		</listItem>
+ 	  </list>
+      <para><legacyBold>Стаканы</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Интервал</legacyBold> - интервал генерации стаканов.
+		</listItem>
+		<listItem>
+			<legacyBold>Глубина</legacyBold> - максимальная глубина генерации стаканов.
+		</listItem>
+ 	  </list>
+    
+    
+    
+    </introduction>
+
+    
+  </developerConceptualDocument>
+</topic>

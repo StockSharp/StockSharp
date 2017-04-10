@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7e828fb2-0b95-41fd-8540-17f6bdc747cf" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+     <para>
+      	The application SampleSterling shows an example of working with <codeEntityReference>T:StockSharp.Sterling.SterlingTrader</codeEntityReference>, as shown in the figure below.
+      	The example source code is in the <legacyItalic>Samples/Sterling</legacyItalic> folder of the installation package.
+      </para>
+      <mediaLink><image placement="center" xlink:href="SterlingSample"/></mediaLink>
+      
+	<alert class="note">
+  		<para>To work with an example of connecting to the Sterling Trader Pro the Visual Studio must be <legacyBold>run from an administrator account</legacyBold>!</para>
+	</alert>
+
+    </introduction>
+    <procedure>
+		<steps class="ordered">
+			<step>
+				<content>
+					<para>First, you need to create an instance of the
+					<codeEntityReference qualifyHint="false">T:StockSharp.Sterling.SterlingTrader</codeEntityReference>:</para>
+            		<code language="C#">
+            				<![CDATA[
+Trader = new SterlingTrader { LogLevel = LogLevels.Debug };
+							]]>
+					</code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>Next, you should subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
+					<code language="C#">
+            				<![CDATA[
+// subscribe on successfully connect event
+Trader.Connected += () =>
+{
+	// set flag (connection is established)
+	_isConnected = true;
+
+	// update gui labes
+	this.GuiAsync(() => ChangeConnectStatus(true));
+};
+
+// subscribe on connection error event
+Trader.ConnectionError += error => this.GuiAsync(() =>
+{
+	// update gui labes
+	ChangeConnectStatus(false);
+
+	MessageBox.Show(this, error.ToString(), "Connection was dropped.");	
+});
+
+// subscribe on successfully disconnect event
+Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
+
+// subscribe on error event
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Data processing error"));
+
+// new securities received
+Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
+
+// new own trades received
+Trader.NewMyTrades += trades => this.GuiAsync(() => _myTradesWindow.Trades.AddRange(trades));
+
+// new anonymous trades received
+Trader.NewTrades += trades => this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
+
+// new orders received
+Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
+
+// new stop-orders received
+Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
+
+// new portofolios (=accounts) received
+Trader.NewPortfolios += portfolios =>
+{
+	// subscribe on portfolio updates
+    portfolios.ForEach(Trader.RegisterPortfolio);
+    
+    _portfoliosWindow.Portfolios.AddRange(portfolios);
+};
+
+// new positions received
+Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
+
+// subscribe on error of order registration event
+Trader.OrdersRegisterFailed += OrdersFailed;
+
+// subscribe on error of order cancelling event
+Trader.OrdersCancelFailed += OrdersFailed;
+
+// subscribe on error of stop-order registration event
+Trader.StopOrdersRegisterFailed += OrdersFailed;
+
+// subscribe on error of stop-order cancelling event
+Trader.StopOrdersCancelFailed += OrdersFailed;
+
+// subscribing on news
+Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
+
+							]]>
+					</code>						
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>Then you need to connect to the <token>sterling</token> server:</para>
+            		<code language="C#">
+            				<![CDATA[
+Trader.Connect();
+							]]>
+					</code>						
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>When the connection is successful, you can expect to trigger the 
+					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolios</codeEntityReference> event. In this event handler
+					you should subscribe to changes in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
+					portfolios using the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
+					<mediaLink><image placement="center" xlink:href="Sterling_securities"/></mediaLink>
+         			<code language="C#">
+            				<![CDATA[
+private void Ok_Click(object sender, RoutedEventArgs e)
+{
+    var criteria = new Security
+    {
+     Code = SecCode.Text,
+     Type = SecType.SelectedType
+	};
+
+    MainWindow.Instance.Trader.LookupSecurities(criteria);
+	DialogResult = true;
+}
+
+							]]>
+					</code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>To get trades by the selected instrument you should call the
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> method:</para>
+            		<code language="C#">
+            				<![CDATA[
+private void TradesClick(object sender, RoutedEventArgs e)
+{
+   TryInitialize();
+
+   var window = _tradesWindows.SafeAdd(SelectedSecurity, security =>
+   {
+     // create tick trades window
+     var wnd = new TradesWindow { Title = security.Code + " ticks" };
+
+     // subscribe on tick trades flow
+     MainWindow.Instance.Trader.RegisterTrades(security);
+
+     wnd.MakeHideable();
+     return wnd;
+   });
+
+   if (window.Visibility == Visibility.Visible)
+       window.Hide();
+   else
+       window.Show();
+}
+							]]>
+					</code>
+					<para>Trades will come in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> event.</para>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>To request updates on the order books you need to use the 
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method:</para>
+            		<code language="C#">
+            				<![CDATA[
+private void DepthClick(object sender, RoutedEventArgs e)
+{
+	TryInitialize();
+
+	var trader = MainWindow.Instance.Trader;
+
+	var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
+	{
+		// subscribe on order book flow
+		trader.RegisterMarketDepth(security);
+
+		// create order book window
+		var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
+		wnd.MakeHideable();
+		return wnd;
+	});
+
+	if (window.Visibility == Visibility.Visible)
+		window.Hide();
+	else
+		window.Show();
+}
+							]]>
+					</code>
+					<para>The order books appears in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> event.</para>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>For orders registration the <legacyBold>New Order</legacyBold> button used. The 
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> method sends an order to the server:</para>
+            		<code language="C#">
+            				<![CDATA[
+private void NewOrderClick(object sender, RoutedEventArgs e)
+{
+	var newOrder = new OrderWindow
+	{
+		Order = new Order { Security = SecurityPicker.SelectedSecurity },
+		Connector = MainWindow.Instance.Trader,
+	};
+
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+}
+							]]>
+					</code>						
+				</content>
+			</step>
+		</steps>
+    </procedure>
+    
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

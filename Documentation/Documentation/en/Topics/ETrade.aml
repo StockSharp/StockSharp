@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="84d6a0fb-607f-4d87-be8a-e2b58006493e" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   <introduction>
+		<para>
+			The <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference> should be used for trading algorithms creating for <token>etrade_external</token>.
+			The scheme of interaction is shown in this figure:
+		</para>
+		
+		<mediaLink><image placement="center" xlink:href="ETrade"/></mediaLink>
+	</introduction>
+	<relatedTopics>
+		<link xlink:href="2b16e1d6-32bf-426d-8d20-08020f5f1f40">Gettings started</link>
+		<link xlink:href="df8227ff-5381-4912-b080-b58e6004480b">Authorisation</link>
+		<link xlink:href="028b3872-d610-4ca4-9127-5434764f05de">Stop-orders</link>
+    </relatedTopics>
+  </developerWalkthroughDocument>
+</topic>

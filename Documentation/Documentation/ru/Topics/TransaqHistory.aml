@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7434ae20-4166-46e8-95a8-3f02587848df" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>
+			<codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqTrader</codeEntityReference> может предоставлять исторические данные за предыдущие торговые сессии.
+			Такие данные поставляются только свечами вида <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>,
+			и со строго ограниченными тайм-фреймами. Список поддерживаемых ТФ доступен через 
+			<codeEntityReference qualifyHint="true">P:StockSharp.Transaq.TransaqTrader.CandleTimeFrames</codeEntityReference>.
+		</para>
+
+
+		<para>
+			Для получения исторических свечей необходимо подписаться на событие
+			<codeEntityReference qualifyHint="false">E:StockSharp.Transaq.TransaqTrader.NewCandles</codeEntityReference> и вызвать метод
+			<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
+		</para>
+		
+		<code language="C#">
+		<![CDATA[
+_trader.NewCandles += ProcessNewCandles;
+_trader.SubscribeCandles(_candleSeries, 100, true);
+		]]>
+		</code>
+		
+		<list class="bullet">
+			<listItem><para>_candleSeries - серия ТФ свечей, которой в качестве аргумента передано одно из значений в <codeEntityReference qualifyHint="true">P:StockSharp.Transaq.TransaqTrader.CandleTimeFrames</codeEntityReference>.</para></listItem>
+			<listItem><para>100 - глубина получаемых данных(например получить последние 100 свечей).</para></listItem>
+			<listItem><para>true - получить ли и текущие свечи в реальном времени.</para></listItem>
+		</list>
+
+	</introduction>
+	</developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   
+    <introduction>
+      <para>In the appearing window select the required time range, then select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline> button:</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_export_executions" />
+      </mediaLink>
+    <para>By means of the context menu you can set various settings of the transaction table: rows grouping, columns available, the display format, and others.</para>
+	 <mediaLink>
+       <image placement="center" xlink:href="hydra_export_context" />
+     </mediaLink>
+  
+    <para>Found transactions can be exported to formats <token>excel</token>, xml, sql, bin or txt. This can be done by using the drop-down list:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

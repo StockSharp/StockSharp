@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>You can download the ready script using the <mediaLinkInline><image xlink:href="hydra_analitics_folder"/></mediaLinkInline> button or create it in the
+      	<token>hydra</token> editor. The script must be a class inherited from the <legacyItalic>BaseAnalyticsStrategy</legacyItalic> class. The ready script must be
+      	compiled using the <mediaLinkInline><image xlink:href="hydra_analitics_compile"/></mediaLinkInline> button. The compilation result is displayed in the
+      	<legacyBold>Error list</legacyBold> window. To connect the necessary libraries using the <mediaLinkInline><image xlink:href="hydra_analitics_references"/></mediaLinkInline> button.</para>
+      <mediaLink>
+        <image placement="left" xlink:href="hydra_analitics_main" />
+      </mediaLink>
+      
+     <alert class="note">
+  		<para>The <token>hydra</token> standard installation kit includes two ready-made scripts: "the volume analysis broken down by the hours" and "volume analysis
+  		broken down by the price".</para>
+	 </alert>
+
+      
+    </introduction>
+   
+  </developerConceptualDocument>
+</topic>
+
+

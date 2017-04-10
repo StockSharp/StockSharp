@@ -4,7 +4,6 @@
 	<introduction>
 		<para>With <token>hydra</token> it is possible to glue together different types of market data on different contracts into one continuous instrument.</para> 
 		<para>To do this, select the <legacyBold>Securities => Glue</legacyBold>. item in the main menu of the application. After the opening the following window will appear:</para>
-		<mediaLink><image placement="center" xlink:href="HydraGluingWindow" /></mediaLink>
 		
 		<para>Before gluing the data, it is necessary to check which market data is available. To do this, the path is selected where the data is, and the instruments
 		that are supposed to glue together are reviewed in turn. If there are gaps, it is necessary to download the required market data (for example, BarChart).</para>
@@ -34,9 +33,6 @@
 		<alert class="note">
 			<para>Important: The candles must be pre-downloaded. Otherwise, nothing will glue together.</para>
 		</alert>
-		
-		<para>And click the <legacyBold>Склеить</legacyBold> button.</para>
-		<mediaLink><image placement="center" xlink:href="HydraGluingCandles" /></mediaLink>
 
 		<para>Затем Then it is necessary to select the type of tick market data and click the Glue button again.</para>
 		<mediaLink><image placement="center" xlink:href="HydraGluingTrades" /></mediaLink>
@@ -44,9 +40,11 @@
 		<para>After this it is possible to view that glued instrument.</para>
 		<mediaLink><image placement="center" xlink:href="HydraGluingCheckGluingData" /></mediaLink>
 		
-		<para>And, if necessary, to upload, for example to txt,
-		<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">ticks</link> or 
-		<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">candles</link>. </para>
+    		<para>The generated candles can be exported to the Excel, xml or txt formats. The export is performed using the drop-down list:</para>
+    		<mediaLink>
+    			<image placement="left" xlink:href="hydra_export" />
+    		</mediaLink>
+
 
 	</introduction>
 	</developerWalkthroughDocument>

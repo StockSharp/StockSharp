@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <para>The task performs conversion of the exchange data. For example, from Order Log into ticks or from ticks into candles, etc.</para>
+      <mediaLink>
+        <image placement="left" xlink:href="hydra_tasks_converter" />
+      </mediaLink>
+      <para><legacyBold>Converter</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Converter</legacyBold> - converter.
+			</listItem>
+			<listItem>
+ 		    <legacyBold>Start date</legacyBold> - the date from which to start data conversion.
+			</listItem>
+			<listItem>
+ 		    <legacyBold>Format</legacyBold> - the data format.
+			</listItem>
+			<listItem>
+			<legacyBold>Offset</legacyBold> - time offset in days from the task start date.
+			</listItem>
+			<listItem>
+          <legacyBold>Destination</legacyBold> - a directory with data, where the converted data will be stored to.
+		</listItem>
+		 </list>
+		<para><legacyBold>Main</legacyBold></para>
+		<list class="bullet">
+        <listItem>
+          <legacyBold>Work from</legacyBold> - the operating start time.
+		</listItem>
+        <listItem>
+          <legacyBold>Work till</legacyBold> - the operating stop time.
+		</listItem>
+        <listItem>
+          <legacyBold>Interval</legacyBold> - the operating interval.
+		</listItem>
+        <listItem>
+          <legacyBold>Data directory</legacyBold> - the data directory where the final files will be saved in the <token>stocksharp</token> format.
+		</listItem>
+		<listItem>
+          <legacyBold>Format</legacyBold> - the data format: BIN/CSV.
+		</listItem>
+		<listItem>
+          <legacyBold>Max errors</legacyBold> - the maximum number of errors to achieve that the task will be stopped. By default is 0 – number of errors is ignored.
+		</listItem>
+		<listItem>
+          <legacyBold>Dependency</legacyBold> - the task that must be executed before the current is started.
+		</listItem>
+		<listItem>
+          <legacyBold>Logging level</legacyBold> - the logging level.
+		</listItem>
+      </list>
+     <para><legacyBold>Candles</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Parameters</legacyBold> - the candles parameters.
+		</listItem>
+ 	  </list>
+      <para><legacyBold>Order books</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+			<legacyBold>Interval</legacyBold> - the order books generating interval.
+		</listItem>
+		<listItem>
+			<legacyBold>Depth</legacyBold> - the maximum depth of the order books generating.
+		</listItem>
+ 	  </list>
+    
+    
+    
+    </introduction>
+
+    
+  </developerConceptualDocument>
+</topic>

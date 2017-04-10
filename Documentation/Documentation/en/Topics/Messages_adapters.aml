@@ -1,0 +1,767 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="fb79e67d-945c-493d-bdac-85d0040af828" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+       <para>
+       The message mechanism allows creating own connections to any external trading system. To do that, it is necessary to create an own class of the
+       <legacyItalic>message adapter</legacyItalic>, inherited from the abstract class <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
+       </para>
+       <para>
+       	The following task shall be solved at development of own message adapter:
+       </para>
+       
+		<list class="ordered">
+  			<listItem>
+  				<para>Write the code, converting outgoing messages <token>stocksharp</token> into external system commands.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Write the code, converting information from the external system into incoming messages.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Perform conversion of encoded information from the external system (codes of instruments and boards, listings etc.) into types of <token>stocksharp</token>.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Perform additional adjustments, related with the external system features.</para>
+  			</listItem>
+		</list>
+		
+       <para>
+       	Prior to starting description of the own adapter development, let's consider the process of creation and processing of incoming and outgoing messages in the
+       	<token>stocksharp</token> by the example of the message <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
+       	Supposing, that the program called the <codeEntityReference>M:StockSharp.Algo.Connector.Connect</codeEntityReference> method, then the following will happen
+       	in the base class <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>:
+		</para>
+		<list class="ordered">
+  			<listItem>
+  				<para>The protected method 
+  				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnConnect</codeEntityReference>, 
+  				is called, in which the message is created and transmitted to the method
+  				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>.</para>
+  				<code language="C#">
+protected virtual void OnConnect()
+{
+	SendInMessage(new ConnectMessage());
+}
+  				</code>
+  			</listItem>
+  			<listItem>
+  			<para>In the method <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  			the message is sent to the adapter method with the same name.</para>
+  			<code language="C#">
+public void SendInMessage(Message message)
+{
+	_inAdapter.SendInMessage(message);
+}
+  			</code>
+  			</listItem>
+  			<listItem>
+  				<para>In the adapter method <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					additional checks are performed. If everything is OK, then the message is sent to the method 
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					(see below). If error was generated, a new incoming message of the similar type is created, the exception object is transferred into the message's
+  					<codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference> feature. This new message is sent to the
+  					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					method, in which event will be generated for occurrence of new incoming message <codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>,
+  					signaling on error.
+  				</para>
+  			</listItem>
+		</list>
+		
+		<para>
+			Incoming messages are created using the  
+			<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>
+			method, where the message object is sent to. In this method the event of new incoming message 
+			<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference> is generated. Next, this
+			event is processed in the base class of the connecter on the protected method 
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)</codeEntityReference>
+			where, depending on situation, the message is converted into the corresponding <token>stocksharp</token> type, and connector event is generated, also,
+			additional outgoing messages can be created.
+		</para>
+		
+		<para>
+		Below see description of own adapter creation process for <token>btce</token>.
+		</para>
+       
+       
+    </introduction>
+    
+    <procedure>
+			<title>Example of BTCE message adapter creation</title>
+			<steps class="ordered">
+			   <step>
+					<content>
+						<para>
+						<legacyBold>Создание класса адаптера.</legacyBold>
+						</para>
+						<para>
+						 Вначале создаем класс адаптера сообщений <legacyBold>SmartAdapter</legacyBold> унаследованный от
+						 абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
+						 В область пространств имен, наряду с другими ссылками, необходимо добавить SmartCOM3Lib.
+						 Также создадим переменную <legacyBold>_smartCom</legacyBold> для ссылки на объект библиотеки <token>smartcom</token>.
+						</para>
+						<code language="C#">
+public class SmartAdapter: MessageAdapter 
+{
+	private SmartCOM3Lib.StServer _smartCom;
+}						
+						
+</code>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>
+						<legacyBold>Конструктор адаптера.</legacyBold>
+						</para>
+						<list class="bullet">
+  							<listItem>
+  								<para>В конструктор адаптера передается генератор идентификаторов транзакций, который будет использоваться для создания идентификаторов сообщений.</para>
+  							</listItem>
+  							<listItem>
+  								<para>Далее заполняем словарь <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityClassInfo</codeEntityReference>. 
+  								Этот словарь сопоставляет коды классов инструментов в <token>smartcom</token> с типом инструмента 
+  								<codeEntityReference>P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> и кодом площадки в <token>stocksharp</token>.</para>
+  							</listItem>
+  							<listItem>
+  								<para>Заполняется словарь <legacyBold>PortfolioBoardCodes</legacyBold>, который сопоставляет
+  								коды площадок для портфелей.</para>
+  							</listItem>
+  							<listItem>
+  								<para>
+  								При помощи метода 
+  								<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)</codeEntityReference>
+    							добавляем в массив <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedMessages</codeEntityReference> типы сообщений, 
+    							которые будет поддерживать адаптер.
+  								</para>
+  							</listItem>
+						</list>
+	
+						<code language="C#">
+						<![CDATA[
+public SmartAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
+{
+
+	 SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+     SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
+     SecurityClassInfo.Add("TQBR", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexTqbr.Code));
+
+     PortfolioBoardCodes = new Dictionary<string, string>
+	{
+		{ "EQ", ExchangeBoard.MicexEqbr.Code },
+		{ "FOB", ExchangeBoard.MicexFbcb.Code },
+		{ "RTS_FUT", ExchangeBoard.Forts.Code },
+	};
+	
+	// Сообщения, связанные с маркет-данными
+    this.AddSupportedMessage(MessageTypes.MarketData);
+    this.AddSupportedMessage(MessageTypes.SecurityLookup);
+
+    // Сообщения, связанные с транзакциями
+    this.AddSupportedMessage(MessageTypes.OrderCancel);
+    this.AddSupportedMessage(MessageTypes.OrderGroupCancel);
+    this.AddSupportedMessage(MessageTypes.OrderPairReplace);
+    this.AddSupportedMessage(MessageTypes.OrderRegister);
+    this.AddSupportedMessage(MessageTypes.OrderReplace);
+    // this.AddSupportedMessage(MessageTypes.OrderStatus);
+    this.AddSupportedMessage(MessageTypes.Portfolio);
+    this.AddSupportedMessage(MessageTypes.PortfolioLookup);
+    this.AddSupportedMessage(MessageTypes.Position);
+}
+						
+]]>
+						
+						</code>
+					</content>
+				</step>
+				<step>
+					<content>
+					<para>
+					<legacyBold>Свойства адаптера.</legacyBold>
+					</para>
+						<para>
+						 	Переопределяем свойства <codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup</codeEntityReference> и
+						 	<codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup</codeEntityReference>.
+						 	Поскольку <token>smartcom</token> поддерживает поиск портфелей и инструментов делаем, чтобы свойства возвращали <legacyBold>true</legacyBold>.
+						 	Также добавляем свойства для логина, пароля, адреса и порта сервера <token>smartcom</token>.
+						</para>
+						<code language="C#">
+protected override bool IsSupportNativePortfolioLookup
+{
+	get { return true; }
+}
+
+protected override bool IsSupportNativeSecurityLookup
+{
+	get { return true; }
+}
+
+ public string Address {set; get;}
+ public ushort Port {set; get;}
+ public string Login {set; get;}
+ public string Password {set; get;}
+						</code>
+					</content>
+				</step>
+
+				<step>
+					<content>
+					<para>
+					 Метод <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>.
+					</para>
+						<para>
+					    Далее необходимо переопределить метод 
+					    <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>. 
+					    Как говорилось выше, в этот метод передаются все исходящие сообщения и для каждого типа сообщения нужно написать код, 
+					    преобразующий сообщения в команды <token>smartcom</token>.
+						</para>
+						<para>
+						При получении сообщения 
+						<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Reset</codeEntityReference> 
+						необходимо выполнить "обнуление" состояния и освободить ресурсы.
+						По завершении этих операций нужно отправить исходящие сообщение 
+						<codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference>.
+						</para>
+						<para>
+						 При поступлении сообщения 
+						 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference> 
+						 инициализируем переменную _smartCom, подписываемся на события <token>smartcom</token> и устанавливаем соединение при помощи метода 
+						 <legacyBold>Connect</legacyBold> нативного API. В случае удачного соединения должно наступить событие 
+						 <legacyBold>StServer.Connected</legacyBold>.
+						</para>
+
+						<code language="C#">
+						<![CDATA[
+protected override void OnSendInMessage(Message message)
+{
+    switch (message.Type)
+    {
+         case MessageTypes.Reset:
+         {
+              _lookupSecuritiesId = 0;
+              _lookupPortfoliosId = 0;
+
+              if (_smartCom != null)
+              {
+                  try
+                  {
+                      DisposeSmartCom();
+                  }
+                  catch (Exception ex)
+                  {
+                      SendOutError(ex);
+                  }
+
+                  try
+                  {
+                      _smartCom.disconnect();
+                  }
+                  catch (Exception ex)
+                  {
+                      SendOutError(ex);
+                  }
+
+                   _smartCom = null;
+              }
+
+              SendOutMessage(new ResetMessage());
+
+              break;
+        }
+
+        case MessageTypes.Connect:
+        {
+            if (_smartCom != null)
+                throw new InvalidOperationException("smartCom != null");
+
+            _smartCom = new StServer();
+
+            _smartCom.Connected += smartCom_Connected;
+            _smartCom.Disconnected += smartCom_Disconnected;
+            _smartCom.AddPortfolio += smartCom_AddPortfolio;
+            _smartCom.AddSymbol += smartCom_AddSymbol;
+            _smartCom.SetPortfolio += smartCom_SetPortfolio;
+            _smartCom.UpdatePosition += smartCom_UpdatePosition;
+            _smartCom.AddTick += smartCom_AddTick;
+            _smartCom.UpdateBidAsk += smartCom_UpdateBidAsk;
+            _smartCom.UpdateQuote +=  smartCom_UpdateQuote;
+            _smartCom.AddTrade += smartCom_AddTrade;
+            _smartCom.UpdateOrder += smartCom_UpdateOrder;
+            _smartCom.SetMyClosePos += smartCom_SetMyClosePos;
+            _smartCom.SetMyOrder += smartCom_SetMyOrder;
+            _smartCom.SetMyTrade += smartCom_SetMyTrade;
+            _smartCom.OrderSucceeded += smartCom_OrderSucceeded;
+            _smartCom.OrderFailed += smartCom_OrderFailed;
+            _smartCom.OrderCancelFailed += smartCom_OrderCancelFailed;
+            _smartCom.OrderCancelSucceeded += smartCom_OrderCancelSucceeded;
+            _smartCom.OrderMoveFailed += smartCom_OrderMoveFailed;
+            _smartCom.OrderMoveSucceeded += smartCom_OrderMoveSucceeded;
+
+            _smartCom.connect(Address, Port, Login, Password);
+
+            break;
+        }
+
+        case MessageTypes.Disconnect:
+        {
+            if (_smartCom == null)
+                throw new InvalidOperationException(LocalizedStrings.Str1856);
+                
+            _smartCom.disconnect();
+
+            break;
+        }
+
+        case MessageTypes.OrderRegister:
+            // TODO
+            break;
+
+        case MessageTypes.OrderCancel:
+            // TODO
+            break;
+
+        case MessageTypes.OrderGroupCancel:
+             // TODO
+             break;
+
+        case MessageTypes.OrderReplace:
+             // TODO
+             break;
+
+        case MessageTypes.Portfolio:
+             // TODO
+             break;
+
+        case MessageTypes.PortfolioLookup:
+             ProcessPortolioLookupMessage((PortfolioLookupMessage)message);
+             break;
+
+        case MessageTypes.MarketData:
+             ProcessMarketDataMessage((MarketDataMessage)message);
+             break;
+
+        case MessageTypes.SecurityLookup:
+             ProcessSecurityLookupMessage((SecurityLookupMessage)message);
+             break;
+    }
+}
+]]>			
+						</code>
+					</content>
+				</step>
+				<step>
+				<content>
+					<para>
+					 Событие <legacyBold>StServer.Connected</legacyBold>.
+					</para>
+					<para>
+					 В обработчике события соединения нативного API необходимо послать исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
+					 При обработке этого сообщения в коде базового класса  <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+					 будут проверены значения булевых свойств:
+					 </para>
+					<list class="bullet">
+  						<listItem>
+  								<para>
+  									<codeEntityReference>P:StockSharp.Messages.MessageAdapter.PortfolioLookupRequired</codeEntityReference> - необходимо ли сообщение
+  									<codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> для получения портфелей и позиций.
+  								</para>
+  						</listItem>
+  						<listItem>
+  							<para>
+  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityLookupRequired</codeEntityReference> - необходимо ли сообщение
+  									<codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> для получения инструментов.
+  							</para>
+  						</listItem>
+  						<listItem>
+  							<para>
+  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.OrderStatusRequired</codeEntityReference> - необходимо ли сообщение
+  									<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> для получения заявок и собственых сделок.
+  							</para>
+  						</listItem>
+					</list>
+					<para>
+					 Если значение <legacyBold>true</legacyBold>, то соответсвующее сообщение будет послано. По умолчанию значения этих свойств зависят от
+					 наличия соответсвующего типа сообщения в списке поддерживаемых сообщений. В нашем примере (см. Конструктор адаптера.) в этот список были
+					 добавлены типы 
+					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> и  
+					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference>, поэтому
+					 следует ожидать получения исходящих сообщений <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> и
+					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference>.
+					</para>
+					<code language="C#">
+						<![CDATA[
+private void smartCom_Connected()
+{
+    SendOutMessage(new ConnectMessage());
+}
+						]]>	
+					</code>
+				</content>
+				</step>
+				<step>
+				<content>
+				<para>
+				Исходящие сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> и <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference>.
+				</para>
+				<para>
+				При получении этих сообщений необходимо вызвать функции <token>smartcom</token>, запрашивающие портфели и инструменты соответственно.
+				Вызов этих функций приведет к возникновению событий 
+				<legacyBold>StServer.AddPortfolio</legacyBold> (портфели) и <legacyBold>StServer.AddSymbol</legacyBold> (инструменты).
+				</para>
+				<code language="C#">
+						<![CDATA[
+// Запрашиваем список портфелей
+private void ProcessPortolioLookupMessage(PortfolioLookupMessage pfMsg)
+{
+    if (_lookupPortfoliosId == 0)
+    {
+        _lookupPortfoliosId = pfMsg.TransactionId;
+        _smartCom.GetPrortfolioList(); 
+    }
+    else
+        SendOutError(LocalizedStrings.Str1868);
+}
+
+// Запрашиваем инструменты
+private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
+{
+    if (_lookupSecuritiesId == 0)
+    {
+        _lookupSecuritiesId = message.TransactionId;
+        _smartCom.GetSymbols();
+    }
+    else
+        SendOutError(LocalizedStrings.Str1854);
+}
+						
+						]]>	
+				</code>
+				
+				</content>
+				</step>
+				<step>
+				<content>
+				<para>
+					 Событие <legacyBold>StServer.AddPortfolio</legacyBold>.
+				</para>
+                <para>
+					 В обработчике события <legacyBold>StServer.AddPortfolio</legacyBold> полученную информацию о портфеле
+					 необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.
+					 А после получения всех портфелей необходимо послать входящее сообщение 
+					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.
+					 Обратите внимание, что в последнем случае свойству 
+					 <codeEntityReference>P:StockSharp.Messages.PortfolioLookupResultMessage.OriginalTransactionId</codeEntityReference> нужно
+					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
+				</para>
+				<code language="C#">
+				<![CDATA[
+private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, string portfolioExch, SmartCOM3Lib.StPortfolioStatus portfolioStatus)
+{
+	SendOutMessage(new PortfolioMessage
+    {
+		PortfolioName = portfolioName,
+		BoardCode = PortfolioBoardCodes.TryGetValue(portfolioExch),
+        ExtensionInfo = new Dictionary<object, object>
+					{
+						{ "PortfolioStatus", portfolioStatus }
+					}
+     });
+
+     if ((row + 1) < nrows)
+          return;
+
+     SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = _lookupPortfoliosId });
+     _lookupPortfoliosId = 0;
+}
+				]]>	
+				</code>
+				</content>
+				</step>
+				<step>
+				<content>
+				<para>
+					 Событие <legacyBold>StServer.AddSymbol</legacyBold>.
+				</para>
+				<para>
+					 В обработчике события <legacyBold>StServer.AddSymbol</legacyBold> полученную информацию об инструменте
+					 необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference>.
+					 А после получения всех инструментов необходимо послать входящее сообщение 
+					 <codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.
+					 Обратите внимание, что свойству <legacyBold>OriginalTransactionId</legacyBold> обоих входящих сообщений нужно 
+					 присвоить значение <legacyBold>TransactionId</legacyBold> соответсвующего исходящего сообщения.  
+				</para>
+				<code language="C#">
+				<![CDATA[
+private void smartCom_AddSymbol(int row, int rowCount, string smartId, string name, string secCode, string secClass, int decimals, int lotSize, double stepPrice, double priceStep,
+            string isin, string board, System.DateTime expiryDate, double daysBeforeExpiry, double strike)
+{
+	if (secCode.IsEmpty())
+    	secCode = smartId;
+
+    var securityId = new SecurityId
+    {
+        SecurityCode = secCode,
+        BoardCode = board,
+        Native = smartId,
+        Isin = isin
+    };
+
+    if (secClass.IsEmpty())
+        secClass = board;
+
+    DateTime? expDate = DateTime.FromOADate(0) == expiryDate ? (DateTime?)null : expiryDate;
+
+
+    var secMsg = new SecurityMessage
+    {
+        PriceStep = priceStep.ToDecimal(),
+        Decimals = decimals,
+        Multiplier = lotSize,
+        Name = name,
+        ShortName = name,
+        ExpiryDate = expDate == null ? (DateTimeOffset?)null : expDate.Value.ApplyTimeZone(TimeHelper.Moscow),
+        ExtensionInfo = new Dictionary<object, object>
+		{
+					{ "Class", secClass }
+		},
+        OriginalTransactionId = _lookupSecuritiesId
+     };
+
+     if (secClass.CompareIgnoreCase("IDX"))
+     {
+         secMsg.SecurityType = SecurityTypes.Index;
+
+         switch (secMsg.SecurityId.BoardCode)
+         {
+             case "RUSIDX":
+                  securityId.BoardCode = secCode.ContainsIgnoreCase("MICEX") || secCode.ContainsIgnoreCase("MCX") ? ExchangeBoard.Micex.Code : ExchangeBoard.Forts.Code;
+                  break;
+         }
+     }
+     else
+     {
+         var info = SecurityClassInfo.GetSecurityClassInfo(secClass);
+
+         secMsg.SecurityType = info.Item1;
+         securityId.BoardCode = info.Item2;
+
+         if (ExchangeBoard.GetOrCreateBoard(info.Item2).IsMicex
+             &&
+             /* проверяем, что не началась ли трансляция правильных дробных шагов */
+                    secMsg.PriceStep != null && secMsg.PriceStep == (int)secMsg.PriceStep)
+         {
+             secMsg.PriceStep = 1m / 10m.Pow(secMsg.PriceStep.Value);
+         }
+     }
+
+     secMsg.SecurityId = securityId;
+
+     if (secMsg.SecurityType == SecurityTypes.Option)
+     {
+         var optionInfo = secMsg.Name.GetOptionInfo(ExchangeBoard.Forts);
+
+         if (optionInfo != null)
+         {
+             if (!secCode.IsEmpty())
+             {
+                 var futureInfo = optionInfo.UnderlyingSecurityId.GetFutureInfo(secCode, ExchangeBoard.Forts);
+                 if (futureInfo != null)
+                        secMsg.UnderlyingSecurityCode = futureInfo.SecurityId.SecurityCode;
+             }
+
+             secMsg.ExpiryDate = optionInfo.ExpiryDate;
+             secMsg.OptionType = optionInfo.OptionType;
+             secMsg.Strike = optionInfo.Strike;
+        }
+     }
+
+     SendOutMessage(secMsg);
+
+     var stpPrice = stepPrice.ToDecimal();
+
+     if (stepPrice != null)
+     {
+         SendOutMessage(
+             new Level1ChangeMessage
+             {
+                        SecurityId = securityId,
+                        ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
+             }
+             .TryAdd(Level1Fields.StepPrice, stpPrice.Value));
+     }
+
+     if ((row + 1) < rowCount)
+          return;
+
+     SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = _lookupSecuritiesId });
+      _lookupSecuritiesId = 0;
+}
+				]]>	
+				</code>
+				</content>
+				</step>
+				
+				<step>
+				<content>
+				<para>
+				 <legacyBold>Регистрация/отмена регистрации сделок.</legacyBold>
+				</para>
+				<para>
+				 При вызове методов <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> или
+				 <codeEntityReference>M:StockSharp.Algo.Connector.UnRegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> будет получено исходящее
+				 сообщение <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference>.
+				 </para>
+				 <para>
+				 При обработке этого сообщения необходимо вызвать методы <token>smartcom</token> регистрирующий/отменяющий регистрацию получения сделок.
+				 </para>
+				 <para>
+				 Так как сообщение используется для работы со всем типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
+				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType</codeEntityReference>. Для сделок значение этого свойства равно
+				 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MarketDataTypes.Trades</codeEntityReference>.
+				</para>
+				<para>
+				  Посде вызова метода <legacyBold>StServer.ListenTicks</legacyBold> сделки будут поступать в событии <legacyBold>StServer.AddTick</legacyBold>.
+				 </para>
+				
+				<code language="C#">
+                <![CDATA[
+private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
+{
+    
+    // Получаем код инструмента, используемый в SmartCom
+    var smartId = (string)mdMsg.SecurityId.Native;
+
+    if (smartId.IsEmpty())
+        throw new InvalidOperationException(LocalizedStrings.Str1853Params.Put(mdMsg.SecurityId));
+
+    switch (mdMsg.DataType)
+    {
+        case MarketDataTypes.Level1:
+        {
+             //TODO
+             break;
+        }
+        case MarketDataTypes.MarketDepth:
+        {
+             //TODO
+             break;
+        }
+        case MarketDataTypes.Trades:
+        {
+            if (mdMsg.From == null)
+            {
+                if (mdMsg.IsSubscribe)
+                    _smartCom.ListenTicks(smartId);
+                else
+                    _smartCom.CancelTicks(smartId);
+           }
+           else
+           {
+                //TODO
+           }
+           
+           break;
+        }
+        case MarketDataTypes.CandleTimeFrame:
+        {
+             //TODO
+             break;
+        }
+        default:
+        {
+            SendOutMarketDataNotSupported(mdMsg.TransactionId);
+            return;
+     }
+}
+				]]>	
+				</code>
+			</content>
+			</step>
+			<step>
+				<content>
+				<para>
+					Событие <legacyBold>StServer.AddTick</legacyBold>.
+				</para>
+				<para>
+				В обработчике события <legacyBold>StServer.AddTick</legacyBold> полученную информацию о сделке 
+				необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>.
+				Обратите внимание, что сообщения <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> используются как для сделок, так и для заявок. 
+  				Поэтому в сообщении уточняется, что оно относится к сделке - 
+  				<codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference> = 
+  				<codeEntityReference qualifyHint="true">F:StockSharp.Messages.ExecutionTypes.Tick</codeEntityReference>.
+				</para>
+				<code language="C#">
+				<![CDATA[
+private void smartCom_AddTick(string smartId, System.DateTime time, double price, double volume, string tradeId, SmartCOM3Lib.StOrder_Action action)
+{
+    SendOutMessage(CreateTrade(smartId, time, price.ToDecimal(), volume.ToDecimal(), tradeId.To<long>(), action));
+}
+
+private static ExecutionMessage CreateTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartCOM3Lib.StOrder_Action action)
+{
+    return new ExecutionMessage
+    {
+         SecurityId = new SecurityId { Native = smartId },
+         TradeId = tradeId,
+         TradePrice = price,
+         Volume = volume,
+         OriginSide = action.ToSide(),
+         ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
+         ExecutionType = ExecutionTypes.Tick
+   };
+}
+
+
+			    ]]>	
+			   </code>
+			</content>
+				</step>
+			</steps>
+		</procedure>
+    
+  </developerConceptualDocument>
+</topic>
+
+
+<!--<list class="ordered">
+  						<listItem>
+  							<para>При помощи метода <legacyBold>CreateTrade</legacyBold> создается исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>. 
+  							Обратите внимание, что сообщения <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> используются как для сделок, так и для заявок. 
+  							Поэтому в сообщении уточняется, что оно относится к сделке - <legacyBold>ExecutionType = ExecutionTypes.Tick</legacyBold>.</para>
+  						</listItem>
+  						<listItem>
+  							<para>Созданное сообщение передается в метод <codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(Message)</codeEntityReference> (см. ниже).</para>
+  						</listItem>
+					</list> 
+				   
+				   <para>
+				     Рассмотрим этот процесс на примере события получения новой сделки <legacyBold>_wrapper.NewTrade</legacyBold>.
+				     </para>
+				   
+						<code language="C#">
+						<![CDATA[
+// Обработчик события новой сделки						
+private void OnNewTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartOrderAction action)
+{
+	SendOutMessage(CreateTrade(smartId, time, price, volume, tradeId, action));
+}
+
+// Создаем сообщение новой сделки
+private static ExecutionMessage CreateTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartOrderAction action)
+{
+	return new ExecutionMessage
+	{
+		SecurityId = new SecurityId { Native = smartId },
+		TradeId = tradeId,
+		TradePrice = price,
+		Volume = volume,
+		OriginSide = action.ToSide(),
+		ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
+		ExecutionType = ExecutionTypes.Tick,
+	};
+}
+
+						]]>	
+						</code> -->
+
+

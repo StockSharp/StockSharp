@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="b85d4d51-2824-44e5-aad1-0bde76d409ae" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Quoting_00"/>
+</mediaLink>
+<para>Кубик используется для котирования опционов согласно заданным параметрам. 
+На вход принимает список опционов (кубик <legacyBold>Деривативы</legacyBold>) и объём котирования, 
+кубик содержит следующие свойства:</para>
+
+<list class="bullet">
+  <listItem><para><legacyBold>Котирование</legacyBold> – по какому параметру будет проводиться котирование, может 
+принимать значения волатильность (котирование объема будет проходить по заданным 
+границам волатильности) и теоретическая цена (котирование объема будет проходить
+ по заданным границам теоретической цены).</para></listItem>
+  <listItem><para><legacyBold>Направление</legacyBold> – направление котирования может принимать значения Покупка и Продажа.</para></listItem>
+  <listItem><para><legacyBold>Минимальное</legacyBold> – минимальное значения волатильности или теоретической цены </para></listItem>
+  <listItem><para><legacyBold>Максимальное</legacyBold> – максимальное значения волатильности или теоретической цены</para></listItem>
+</list>
+<para>На выход передает заявку, зарегистрированную в рамках стратегии.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="7f308694-a0c5-4c1a-8aa7-4f7b2b129f0c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

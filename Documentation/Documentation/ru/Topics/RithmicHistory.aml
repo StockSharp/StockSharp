@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="beafeb9f-608e-4986-99ae-1bcca1500c4b" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   <introduction>
+      <para>
+      	<token>rithmic</token> позволяет получать исторические свечи.
+	  </para>
+    </introduction>
+    
+    <procedure>
+      <title>Работа с историческими свечами</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>
+            	Для того, чтобы получить исторические свечи, необходимо вызвать 
+            	метод <codeEntityReference qualifyHint="true">M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
+       		</para>
+            <code language="C#">
+            <![CDATA[
+var series = new CandleSeries
+{
+	CandleType = typeof(TimeFrameCandle),
+	Security = SecurityPicker.SelectedSecurity,
+	Arg = (TimeSpan)CandlesPeriods.SelectedItem;
+};
+_trader.SubscribeCandles(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now);
+			]]>
+			</code>
+          </content>
+        </step>
+        <step>
+        	<para>
+            	Исторически свечи передаются через событие 
+            	<codeEntityReference qualifyHint="true">E:StockSharp.Rithmic.RithmicTrader.NewCandles</codeEntityReference>:
+       		</para>
+          <code language="C#">
+            <![CDATA[
+_trader.NewCandles += ProcessNewCandles;
+			]]>
+			</code>
+        </step>
+        <step>
+          <content>
+            <para>Появившиеся свечи можно отрисовывать через <link xlink:href="287125e1-7c7e-4be3-a8ce-5018538e613f">графический контрол</link>.</para>
+          </content>
+        </step>
+      </steps>
+    </procedure>
+  </developerConceptualDocument>
+</topic>

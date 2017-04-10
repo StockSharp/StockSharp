@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c2162c96-d12f-4107-ac96-0238b793f466" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Oanda.OandaTrader</codeEntityReference> should be used for trading algorithms creating for <token>oanda</token>.
+		</para>
+     </introduction>
+      
+     <relatedTopics>
+    	<link xlink:href="bf4d89d7-32a7-4755-beab-3bfd0581db6c">Getting started</link>
+    	<link xlink:href="5389994b-68d4-456d-8ea0-52d07dbc185d">Stop orders</link>
+    	<link xlink:href="ad7e6528-705a-4e3f-8df6-e9b129279c08">Historical data</link>
+    </relatedTopics>
+      
+  </developerConceptualDocument>
+</topic>
+
+

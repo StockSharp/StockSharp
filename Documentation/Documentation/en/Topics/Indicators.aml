@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+      	The <token>stocksharp</token> normally provides for more than 70 indicators of technical analysis, which allows not to create a necessary indicator from scratch,
+      	but to use a ready-made (or to create your own one based on existing, as shown in the <link xlink:href="ec4c3abe-3779-4a5f-899c-697b049254d4">Custom indicator</link> section).
+      	All base classes for working with indicators, as well as indicators themselves are in the
+      	<codeEntityReference qualifyHint="true">N:StockSharp.Algo.Indicators</codeEntityReference> namespace. 
+      </para>
+    </introduction>
+    <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
+    <!-- One or more procedure or section with procedure -->
+    <procedure>
+      <title>Indicator connection to algorithm</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>First, you need to create an indicator. The indicator is created as a usual .NET object:</para>
+			<code language="C#"><![CDATA[var longSma = new SimpleMovingAverage { Length = 80 };]]></code>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Next, you need to fill it with data. For example, it may be the candle closing price:</para>
+            <code language="C#"><![CDATA[foreach (var candle in candles)
+	longSma.Process((DecimalIndicatorValue)candle.ClosePrice);]]></code>
+			<para>
+				The indicator takes the <codeEntityReference>T:StockSharp.Algo.Indicators.IIndicatorValue</codeEntityReference>. Some of the indicators
+				operate a primitive value, such as the <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference>.
+				Others require a full candle, for example, <codeEntityReference>T:StockSharp.Algo.Indicators.MedianPrice</codeEntityReference>.
+				Therefore, the incoming values should be casted to either <codeEntityReference>T:StockSharp.Algo.Indicators.DecimalIndicatorValue</codeEntityReference>
+				or <codeEntityReference>T:StockSharp.Algo.Indicators.CandleIndicatorValue</codeEntityReference>. The indicator resulting value works under the same rules as the input value.
+			</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>In order to get the current indicator value the <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Indicators.IIndicatorValue.GetValue``1</codeEntityReference> method is used:</para>
+			<code language="C#"><![CDATA[// new relative position between long and short sma indicators
+var isShortLessThenLong = ShortSma.GetValue<decimal>(0) < LongSma.GetValue<decimal>(0);
+
+// we got crossing
+if (_isShortLessThenLong != isShortLessThenLong)
+{
+	// short is less than long - sell, otherwise, buy.
+	var direction = isShortLessThenLong ? OrderDirections.Sell : OrderDirections.Buy;
+
+	// creating a new order
+	var order = this.CreateOrder(direction, Security.GetMarketPrice(direction), Volume);
+
+	// sending to registration
+	RegisterOrder(order);
+
+	// save the last relative position
+	_isShortLessThenLong = isShortLessThenLong;
+}]]></code>
+          </content>
+        </step>
+      </steps>
+      <!-- <conclusion>Optional conclusion</conclusion> -->
+    </procedure>
+    <!-- Optional additional procedure or section with procedure -->
+    <!--section address="Section1">
+      <title>Optional section title</title>
+      <content>
+        <procedure>
+          <title>Procedure #2</title>
+          <steps class="ordered">
+            <step>
+              <content>
+                <para>First step</para>
+              </content>
+            </step>
+            <step>
+              <content>
+                <para>Second step</para>
+              </content>
+            </step>
+          </steps>
+        </procedure>
+      </content>
+    </section-->
+    <!-- Optional next steps info
+    <nextSteps>
+      <content><para>Next steps info goes here</para></content>
+    </nextSteps>
+    -->
+    <relatedTopics>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID">Link text</link>
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on CodePlex</linkText>
+          <linkAlternateText>Go to CodePlex</linkAlternateText>
+          <linkUri>http://shfb.codeplex.com</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <introduction>
+     <para>Ниже описана последовательность действий для проведения анализа данных.</para>
+    <procedure>
+     	<title>
+      		<para>Запуск скрипта и отображение результатов анализа</para>
+      	</title>
+	    <mediaLink>
+    	    <image placement="left" xlink:href="hydra_analitics_toolbar" />
+      	</mediaLink>
+	    <steps class="ordered">
+    	    <step>
+        	  <content>
+	          	<para>Выбрать данные для анализа:</para>
+				<list class="bullet">
+  					<listItem>
+  						<para>В окне <legacyBold>Параметры</legacyBold> расположенной в правой части программы.</para>
+  						<mediaLink>
+    	    				<image placement="left" xlink:href="hydra_analitics_parameters" />
+      					</mediaLink>
+  					</listItem>
+  					<listItem>
+  						<para>Выбрать инструмент, начальную и конечную дату, путь к данным и их формат.</para>
+  					</listItem>
+				</list>
+    	      </content>
+        	</step>
+        	<step>
+          		<content>
+          			<para>Запустить скрипт при помощи кнопки <mediaLinkInline><image xlink:href="hydra_analitics_run"/></mediaLinkInline>.</para>
+          		</content>
+        	</step>
+        	<step>
+          		<content>
+          			<para>Просмотреть результаты:</para>
+					<list class="bullet">
+  					<listItem>
+  						<para>Для просмотра графика выбрать закладку <legacyBold>График</legacyBold>.</para>
+  						<mediaLink>
+    	    				<image placement="left" xlink:href="hydra_analitics_chart" />
+      					</mediaLink>
+  					</listItem>
+  					<listItem>
+  						<para>Для просмотра таблицы выбрать закладку <legacyBold>Таблица</legacyBold>.</para>
+  						<mediaLink>
+    	    				<image placement="left" xlink:href="hydra_analitics_table" />
+      					</mediaLink>
+  					</listItem>
+					</list>
+          		</content>
+        	</step>
+      	</steps>
+    </procedure>	
+  </introduction>
+  </developerConceptualDocument>
+</topic>
+

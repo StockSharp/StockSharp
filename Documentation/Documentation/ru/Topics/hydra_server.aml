@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="cf6f05ef-efb4-418a-9e50-1ca435513a54" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <introduction>
+<para>При нажатии на вкладке <legacyBold>Общее</legacyBold> кнопки <legacyBold>Настройки</legacyBold> откроется 
+окно настройки серверного режима.</para>
+    </introduction>
+   <mediaLink><image xlink:href="hydra_server"/></mediaLink>
+    <relatedTopics>
+    
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

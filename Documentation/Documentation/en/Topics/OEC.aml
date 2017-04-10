@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f8cae46b-57e1-4954-a4cf-832854840981" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para><codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> (FuturesOnline)
+		(not to be confused with the name of the “OEC Trader” terminal) should be used for <token>OpenECry_external</token> trading algorithms creating.
+		The scheme of interaction is shown in this figure:</para>
+		
+		<mediaLink><image placement="center" xlink:href="OECTrader"/></mediaLink>
+		
+		<para>As can be seen from the figure, <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>
+		communicates with the OEC server through the <token>OECApi</token>. The <token>OECApi</token> using does not require a working OEC Trader terminal.</para>
+	</introduction>
+	<relatedTopics>
+		<link xlink:href="1dbc72c4-cc59-4094-824a-a2b77f9623d6">Example of working with OpenECryTrader</link>
+		<link xlink:href="6f3be323-80bb-4823-9d27-8060c238af32">Stop orders</link>
+		<link xlink:href="c56a139b-fb64-4f4f-992f-96a1480233cf">Several algorithms connection</link>
+		<link xlink:href="49a7bfef-38e4-41e7-afe5-21bb8ac64258">The simultaneous connection of terminal and algorithm</link>
+    </relatedTopics>
+	</developerWalkthroughDocument>
+</topic>
