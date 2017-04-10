@@ -50,9 +50,6 @@
   				</listItem>
   				<listItem>
   					<para><legacyBold>Mapping</legacyBold> - to set matching the column value in the file to the stocksharp type (if necessary). For example, the following figure shows how to set the matching between the "instrument type" column values and the corresponding enumeration in stocksharp.</para>
-  					 <mediaLink>
-		  				<image placement="left" xlink:href="hydra_import_association" />
-	   				</mediaLink>
   				</listItem>
   				<listItem>
   					<para><legacyBold>By default</legacyBold> - the default field value. For example, it can be used for duplicate field values (<legacyBold>Security</legacyBold> or <legacyBold>Board</legacyBold>
