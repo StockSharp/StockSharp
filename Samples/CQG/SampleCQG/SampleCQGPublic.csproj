@@ -175,9 +175,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\CQG\CQG.csproj">
-      <Project>{34984B57-9200-47B9-AC78-0D93FDFA437A}</Project>
-      <Name>CQG</Name>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Cqg.Com\Cqg.Com.csproj">
+      <Project>{34984b57-9200-47b9-ac78-0d93fdfa437a}</Project>
+      <Name>Cqg.Com</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>

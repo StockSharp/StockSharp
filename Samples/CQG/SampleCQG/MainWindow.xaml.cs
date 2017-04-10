@@ -24,7 +24,7 @@ namespace SampleCQG
 
 	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.CQG;
+	using StockSharp.Cqg.Com;
 	using StockSharp.Logging;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -34,7 +34,7 @@ namespace SampleCQG
 		public static MainWindow Instance { get; private set; }
 
 		public static readonly DependencyProperty IsConnectedProperty = 
-				DependencyProperty.Register("IsConnected", typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
+				DependencyProperty.Register(nameof(IsConnected), typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
 
 		public bool IsConnected
 		{
@@ -42,7 +42,7 @@ namespace SampleCQG
 			set { SetValue(IsConnectedProperty, value); }
 		}
 
-		public CQGTrader Trader { get; private set; }
+		public CqgComTrader Trader { get; private set; }
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
@@ -114,7 +114,7 @@ namespace SampleCQG
 				if (Trader == null)
 				{
 					// create connector
-					Trader = new CQGTrader { LogLevel = LogLevels.Debug };
+					Trader = new CqgComTrader { LogLevel = LogLevels.Debug };
 
 					_logManager.Sources.Add(Trader);
 

@@ -41,7 +41,8 @@ namespace StockSharp.Configuration
 	using StockSharp.BitStamp;
 	using StockSharp.Blackwood;
 	using StockSharp.Btce;
-	using StockSharp.CQG;
+	using StockSharp.Cqg.Continuum;
+	using StockSharp.Cqg.Com;
 	using StockSharp.ETrade;
 	using StockSharp.Fix;
 	using StockSharp.InteractiveBrokers;
@@ -157,32 +158,33 @@ namespace StockSharp.Configuration
 
 			wnd.ConnectorsInfo.AddRange(_customConnections);
 
-			AddConnectorInfo(wnd, typeof(AlfaDirectMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BarChartMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BitStampMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BlackwoodMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BtceMessageAdapter));
-			AddConnectorInfo(wnd, typeof(CQGMessageAdapter));
-			AddConnectorInfo(wnd, typeof(ETradeMessageAdapter));
-			AddConnectorInfo(wnd, typeof(FixMessageAdapter));
-			AddConnectorInfo(wnd, typeof(InteractiveBrokersMessageAdapter));
-			AddConnectorInfo(wnd, typeof(IQFeedMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(ItchMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LmaxMessageAdapter));
-			AddConnectorInfo(wnd, typeof(MicexMessageAdapter));
-			AddConnectorInfo(wnd, typeof(OandaMessageAdapter));
-			AddConnectorInfo(wnd, typeof(OpenECryMessageAdapter));
-			AddConnectorInfo(wnd, typeof(PlazaMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LuaFixTransactionMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LuaFixMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(QuikTrans2QuikAdapter));
-			AddConnectorInfo(wnd, typeof(QuikDdeAdapter));
-			AddConnectorInfo(wnd, typeof(RithmicMessageAdapter));
-			AddConnectorInfo(wnd, typeof(RssMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(SmartComMessageAdapter));
-			AddConnectorInfo(wnd, typeof(SterlingMessageAdapter));
-			AddConnectorInfo(wnd, typeof(TransaqMessageAdapter));
-			AddConnectorInfo(wnd, typeof(TwimeMessageAdapter));
+			AddConnectorInfo<AlfaDirectMessageAdapter>(wnd);
+			AddConnectorInfo<BarChartMessageAdapter>(wnd);
+			AddConnectorInfo<BitStampMessageAdapter>(wnd);
+			AddConnectorInfo<BlackwoodMessageAdapter>(wnd);
+			AddConnectorInfo<BtceMessageAdapter>(wnd);
+			AddConnectorInfo<CqgComMessageAdapter>(wnd);
+			AddConnectorInfo<CqgContinuumMessageAdapter>(wnd);
+			AddConnectorInfo<ETradeMessageAdapter>(wnd);
+			AddConnectorInfo<FixMessageAdapter>(wnd);
+			AddConnectorInfo<InteractiveBrokersMessageAdapter>(wnd);
+			AddConnectorInfo<IQFeedMarketDataMessageAdapter>(wnd);
+			AddConnectorInfo<ItchMessageAdapter>(wnd);
+			AddConnectorInfo<LmaxMessageAdapter>(wnd);
+			AddConnectorInfo<MicexMessageAdapter>(wnd);
+			AddConnectorInfo<OandaMessageAdapter>(wnd);
+			AddConnectorInfo<OpenECryMessageAdapter>(wnd);
+			AddConnectorInfo<PlazaMessageAdapter>(wnd);
+			AddConnectorInfo<LuaFixTransactionMessageAdapter>(wnd);
+			AddConnectorInfo<LuaFixMarketDataMessageAdapter>(wnd);
+			AddConnectorInfo<QuikTrans2QuikAdapter>(wnd);
+			AddConnectorInfo<QuikDdeAdapter>(wnd);
+			AddConnectorInfo<RithmicMessageAdapter>(wnd);
+			AddConnectorInfo<RssMarketDataMessageAdapter>(wnd);
+			AddConnectorInfo<SmartComMessageAdapter>(wnd);
+			AddConnectorInfo<SterlingMessageAdapter>(wnd);
+			AddConnectorInfo<TransaqMessageAdapter>(wnd);
+			AddConnectorInfo<TwimeMessageAdapter>(wnd);
 
 			wnd.Adapter = (BasketMessageAdapter)adapter.Clone();
 			wnd.AutoConnect = autoConnect;
@@ -196,12 +198,12 @@ namespace StockSharp.Configuration
 			return true;
 		}
 
-		private static void AddConnectorInfo(ConnectorWindow wnd, Type adapterType)
+		private static void AddConnectorInfo<TAdapter>(ConnectorWindow wnd)
 		{
 			if (wnd == null)
 				throw new ArgumentNullException(nameof(wnd));
 
-			wnd.ConnectorsInfo.Add(new ConnectorInfo(adapterType));
+			wnd.ConnectorsInfo.Add(new ConnectorInfo(typeof(TAdapter)));
 		}
 
 		private static IndicatorType[] _indicatorTypes;

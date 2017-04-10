@@ -42238,6 +42238,26 @@ namespace StockSharp.Localization
 		public static string Lua => GetString(LuaKey);
 
 		/// <summary>
+		/// CQG COM
+		/// </summary>
+		public const string CqgComKey = nameof(CqgCom);
+
+		/// <summary>
+		/// CQG COM
+		/// </summary>
+		public static string CqgCom => GetString(CqgComKey);
+
+		/// <summary>
+		/// CQG Continuum
+		/// </summary>
+		public const string CqgContinuumKey = nameof(CqgContinuum);
+
+		/// <summary>
+		/// CQG Continuum
+		/// </summary>
+		public static string CqgContinuum => GetString(CqgContinuumKey);
+
+		/// <summary>
 		/// Initializing.
 		/// </summary>
 		public const string InitializingKey = nameof(Initializing);

@@ -1,5 +1,8 @@
 StockSharp Data (Hydra) Change log
 ========================
+###current:
+* (feature) CQG continuum.
+
 ###v4.3.23.1:
 * (feature) Server mode. Edit users.
 * (feature) Remote storage. Manage server.

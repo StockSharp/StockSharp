@@ -125,9 +125,13 @@
       <Project>{AF225452-1CF1-48A2-B381-C02BEBE643D7}</Project>
       <Name>Btce</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharpApps\Connectors\CQG\CQG.csproj">
-      <Project>{34984B57-9200-47B9-AC78-0D93FDFA437A}</Project>
-      <Name>CQG</Name>
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Cqg.Com\Cqg.Com.csproj">
+      <Project>{34984b57-9200-47b9-ac78-0d93fdfa437a}</Project>
+      <Name>Cqg.Com</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Cqg.Continuum\Cqg.Continuum.csproj">
+      <Project>{3edd3bf7-3f1e-4192-87aa-54dfaa17340c}</Project>
+      <Name>Cqg.Continuum</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Connectors\ETrade\ETrade.csproj">
       <Project>{480539A8-CA30-4B87-B038-6AD854DA0C6A}</Project>

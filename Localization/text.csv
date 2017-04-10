@@ -4260,6 +4260,8 @@ IQFeed;IQFeed;IQFeed
 Quik;Quik;Quik
 Dde;DDE;DDE
 Lua;LUA;LUA
+CqgCom;CQG COM;CQG COM
+CqgContinuum;CQG Continuum;CQG Continuum
 Initializing;Initializing...;Инициализация...
 InitializingDatabase;Initializing database...;Инициализация базы данных...
 InitializingCommands;Initializing command handlers...;Инициализация обработчиков команд...
@@ -13982,4 +13984,6 @@ DocStr9691;{0}, if downloading was start, otherwise, {1};{0}, если загр�
 DocStr9692;Stop downloading;Остановить загрузку
 DocStr9693;Event of server restarting;Событие перезапуска сервера
 DocStr9694;Event of start downloading;Событие запуска загрузки
-DocStr9695;Event of stop downloading;Событие остановки загрузку
+DocStr9695;Event of stop downloading;Событие остановки загрузки
+DocStr9696;CQG Continuum message adapter;Адаптер сообщений для CQG Continuum
+DocStr9698;The interface {0} implementation which provides a connection to the CQG Continuum;Реализация интерфейса {0} для взаимодействия с системой CQG Continuum
