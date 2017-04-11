@@ -113,6 +113,7 @@ namespace SampleCQG
 					MessageBox.Show(this, LocalizedStrings.Str3751);
 					return;
 				}
+
 				if (pwd.IsEmpty())
 				{
 					MessageBox.Show(this, LocalizedStrings.Str2975);
@@ -129,7 +130,7 @@ namespace SampleCQG
 						{
 							UserName = Username,
 							Password = PwdBox.Password,
-							Server = Settings.Default.Address,
+							Address = Settings.Default.Address,
 						};
 					}
 					else

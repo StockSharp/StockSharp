@@ -16,21 +16,54 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleCQG
 {
 	using System;
+	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
 
+	using MoreLinq;
+
+	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Cqg.Com;
+	using StockSharp.Cqg.Continuum;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
 	public partial class SecuritiesWindow
 	{
+		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
+		private bool _initialized;
+
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
+
+		}
+
+		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			CandlesPeriods.ItemsSource = Connector is CqgContinuumTrader ? CqgContinuumMessageAdapter.TimeFrames : CqgComMessageAdapter.TimeFrames;
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			if (Connector != null)
+			{
+				if (_initialized)
+					Connector.MarketDepthChanged -= OnMarketDepthChanged;
+			}
+
+			base.OnClosed(e);
 		}
 
 		private static IConnector Connector => MainWindow.Instance.Connector;
@@ -70,7 +103,75 @@ namespace SampleCQG
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			NewStopOrder.IsEnabled = NewOrder.IsEnabled = security != null;
+			Quotes.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = NewStopOrder.IsEnabled = security != null;
+		}
+
+		private void FindClick(object sender, RoutedEventArgs e)
+		{
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "ES" } };
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			Connector.LookupSecurities(wnd.Criteria);
+		}
+
+		private void DepthClick(object sender, RoutedEventArgs e)
+		{
+			var security = SecurityPicker.SelectedSecurity;
+
+			var window = _quotesWindows.SafeAdd(security, key =>
+			{
+				// create order book window
+				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
+				wnd.MakeHideable();
+				return wnd;
+			});
+
+			if (window.Visibility == Visibility.Visible)
+			{
+				// unsubscribe from order book flow
+				Connector.UnRegisterMarketDepth(security);
+
+				window.Hide();
+			}
+			else
+			{
+				// subscribe on order book flow
+				Connector.RegisterMarketDepth(security);
+
+				window.Show();
+			}
+
+			if (!_initialized)
+			{
+				OnMarketDepthChanged(Connector.GetMarketDepth(security));
+				Connector.MarketDepthChanged += OnMarketDepthChanged;
+				_initialized = true;
+			}
+		}
+
+		private void OnMarketDepthChanged(MarketDepth depth)
+		{
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
+
+			wnd?.DepthCtrl.UpdateDepth(depth);
+		}
+
+		private void QuotesClick(object sender, RoutedEventArgs e)
+		{
+			var security = SecurityPicker.SelectedSecurity;
+
+			if (Connector.RegisteredSecurities.Contains(security))
+			{
+				Connector.UnRegisterSecurity(security);
+				Connector.UnRegisterTrades(security);
+			}
+			else
+			{
+				Connector.RegisterSecurity(security);
+				Connector.RegisterTrades(security);
+			}
 		}
 
 		private void CandlesClick(object sender, RoutedEventArgs e)

@@ -40,7 +40,7 @@
             Password.
             </summary>
     </member>
-    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Server">
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Address">
       <summary>
             Server address.
             </summary>
@@ -78,7 +78,7 @@
             Initializes a new instance of the <see cref="T:StockSharp.Cqg.Continuum.CqgContinuumTrader" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumTrader.Server">
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumTrader.Address">
       <summary>
             Server address.
             </summary>

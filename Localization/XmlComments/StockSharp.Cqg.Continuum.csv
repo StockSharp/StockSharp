@@ -8,7 +8,7 @@ M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.OnSendInMessage(StockSharp
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.UserName/summary;Login
 P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Password/summary;Password
-P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Server/summary;ServerAddress
+P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Address/summary;ServerAddress
 F:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.TimeFrames/summary;DocStr2531
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
@@ -18,6 +18,6 @@ M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.ToString/returns;DocStr50
 T:StockSharp.Cqg.Continuum.CqgContinuumTrader/summary;DocStr9698
 M:StockSharp.Cqg.Continuum.CqgContinuumTrader.#ctor/summary;DocStr1
-P:StockSharp.Cqg.Continuum.CqgContinuumTrader.Server/summary;ServerAddress
+P:StockSharp.Cqg.Continuum.CqgContinuumTrader.Address/summary;ServerAddress
 P:StockSharp.Cqg.Continuum.CqgContinuumTrader.UserName/summary;DocStr3319
 P:StockSharp.Cqg.Continuum.CqgContinuumTrader.Password/summary;DocStr3146

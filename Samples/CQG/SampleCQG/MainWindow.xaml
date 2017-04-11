@@ -18,30 +18,28 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+			
             <StackPanel Grid.Column="0" Margin="3" Orientation="Vertical" VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" IsEnabled="{Binding IsConnected, Converter={StaticResource InvBool}}">
 					<TextBlock VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.CqgContinuum}" />:</TextBlock>
 					<CheckBox x:Name="IsCqgContinuum" IsChecked="True" Margin="0,0,10,0"/>
 
 					<TextBlock VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Address}" />:</TextBlock>
-					<TextBox Text="{Binding Source={x:Static properties:Settings.Default}, Path=Address, Mode=TwoWay}" VerticalAlignment="Center" Width="200"
-							 IsEnabled="{Binding IsConnected, Converter={StaticResource InvBool}}"/>
+					<TextBox Text="{Binding Source={x:Static properties:Settings.Default}, Path=Address, Mode=TwoWay}" VerticalAlignment="Center" Width="200" />
 				</StackPanel>
 
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{Binding IsConnected, Converter={StaticResource InvBool}}">
 					<TextBlock VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
-					<TextBox Text="{Binding Source={x:Static properties:Settings.Default}, Path=Username, Mode=TwoWay}" Margin="0,0,10,0" Width="100"
-                             IsEnabled="{Binding IsConnected, Converter={StaticResource InvBool}}"/>
+					<TextBox Text="{Binding Source={x:Static properties:Settings.Default}, Path=Username, Mode=TwoWay}" Margin="0,0,10,0" Width="100" />
 					<TextBlock VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Password}" />:</TextBlock>
-					<PasswordBox x:Name="PwdBox" Width="130" IsEnabled="{Binding IsConnected, Converter={StaticResource InvBool}}"/>
+					<PasswordBox x:Name="PwdBox" Width="130" />
 				</StackPanel>
 
-				<Button x:Name="ConnectBtn" Background="LightPink"
-                        Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Margin="40,10"/>
+				<Button x:Name="ConnectBtn" Background="LightPink" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Margin="40,10"/>
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
-                <Grid IsEnabled="{Binding IsConnected}">
+			<StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center" IsEnabled="{Binding IsConnected}">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -57,12 +55,12 @@
                         </Style>
                     </Grid.Resources>
 
-					<Button Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" IsEnabled="False"/>
-					<Button Grid.Column="1" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" IsEnabled="False"/>
-					<Button Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" IsEnabled="False"/>
-					<Button Grid.Column="1" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Str226}" Click="ShowStopOrdersClick" IsEnabled="False"/>
-					<Button Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" IsEnabled="False"/>
-					<Button Grid.Column="1" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" IsEnabled="False" />
+					<Button Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
+					<Button Grid.Column="1" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />
+					<Button Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
+					<Button Grid.Column="1" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Str226}" Click="ShowStopOrdersClick" />
+					<Button Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
+					<Button Grid.Column="1" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" />
 				</Grid>
             </StackPanel>
         </Grid>
