@@ -178,7 +178,7 @@
       <Project>{17EAE926-C9A9-40C7-8D54-3545077B4AB7}</Project>
       <Name>OpenECry</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Connectors\Quik\Quik.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Quik\Quik.csproj">
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>Quik</Name>
     </ProjectReference>

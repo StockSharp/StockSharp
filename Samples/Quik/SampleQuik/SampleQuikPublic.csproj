@@ -255,7 +255,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\Quik\QuikPublic.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Quik\QuikPublic.csproj">
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>QuikPublic</Name>
     </ProjectReference>
