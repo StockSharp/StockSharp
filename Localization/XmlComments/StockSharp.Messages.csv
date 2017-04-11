@@ -416,6 +416,7 @@ P:StockSharp.Messages.ExecutionMessage.UserOrderId/summary;DocStr4289
 P:StockSharp.Messages.ExecutionMessage.Currency/summary;Str382
 P:StockSharp.Messages.ExecutionMessage.PnL/summary;DocStr8684
 P:StockSharp.Messages.ExecutionMessage.Position/summary;DocStr8832
+P:StockSharp.Messages.ExecutionMessage.IsMarketMaker/summary;MarketMakerOrder
 M:StockSharp.Messages.ExecutionMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.ExecutionMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.ExecutionMessage.ToString/returns;DocStr50
@@ -843,6 +844,7 @@ P:StockSharp.Messages.OrderRegisterMessage.TillDate/remarks;DocStr4284
 P:StockSharp.Messages.OrderRegisterMessage.TimeInForce/summary;Str232
 P:StockSharp.Messages.OrderRegisterMessage.RepoInfo/summary;Str234
 P:StockSharp.Messages.OrderRegisterMessage.RpsInfo/summary;Str236
+P:StockSharp.Messages.OrderRegisterMessage.IsMarketMaker/summary;MarketMakerOrder
 M:StockSharp.Messages.OrderRegisterMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9

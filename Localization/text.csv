@@ -13989,3 +13989,5 @@ DocStr9694;Event of start downloading;Событие запуска загруз
 DocStr9695;Event of stop downloading;Событие остановки загрузки
 DocStr9696;CQG Continuum message adapter;Адаптер сообщений для CQG Continuum
 DocStr9698;The interface {0} implementation which provides a connection to the CQG Continuum;Реализация интерфейса {0} для взаимодействия с системой CQG Continuum
+DocStr9699;Designates the capacity of the firm placing the order;Определяет емкость фирмы, размещающая заявку
+DocStr9700;Restrictions associated with an order. If more than one restriction is applicable to an order, this field can contain multiple instructions separated by space;Ограничения, связанные с заявкой. Если к заявке применяется более одного ограничения, это поле может содержать несколько инструкций, разделенных пробелом
