@@ -68,7 +68,7 @@ _candleManager = new CandleManager(_trader);
 					<alert class="note">
 						<para>Если для получения тиковых сделок вместо шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> используется источник с другим механизмом, то необходимо реализовать интерфейс
 						<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.Compression.IBuilderCandleSource</codeEntityReference>, и передать реализацию в 
-						<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
+						<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
 						
 						<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса</para>
 						

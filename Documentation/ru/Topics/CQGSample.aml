@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
      <para>
-      	Пример работы с <codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference> демонстрирует приложение SampleCQG, показанное на рисунке ниже.
+      	Пример работы с <codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> демонстрирует приложение SampleCQG, показанное на рисунке ниже.
       	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/CQG</legacyItalic>.
       </para>
       <mediaLink><image placement="center" xlink:href="CQGTraderSample"/></mediaLink>
@@ -15,7 +15,7 @@
 			<step>
 				<content>
 					<para>В самом начале создаем экземпляр класса шлюза 
-					<codeEntityReference qualifyHint="false">T:StockSharp.CQG.CQGTrader</codeEntityReference>:</para>
+					<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference>:</para>
             		<code language="C#">
             				<![CDATA[
 // создаем коннектор
