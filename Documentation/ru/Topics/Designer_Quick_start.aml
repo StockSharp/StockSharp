@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -25,8 +25,7 @@ S#.Designer запросит у источника данных имеющиес
 На панели <token>SchemeDis</token> в папке <legacyBold>Стратегии</legacyBold> двойным нажатием 
 выбираем пример-стратегию <legacyBold>SMA</legacyBold>, после чего в рабочей область появится вкладка <legacyBold>Sma</legacyBold>. 
 Перейдя на которую в ленте автоматически откроется вкладка <legacyBold>Эмуляция</legacyBold>, на которой расположены основные элементы по 
-созданию стратегии, отладке, тестированию стратегий.( <link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, 
-<link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />)</para>
+созданию стратегии, отладке, тестированию стратегий.( <link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, <link xlink:href="a26317f6-5e11-4d6d-913f-73a4f497cec8" />)</para>
 <mediaLink><image xlink:href="Designer_Quick_start_03"/></mediaLink>
 <para>На вкладке <legacyBold>Эмуляция</legacyBold> необходимо установить период тестирования а также выбрать <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> в поле <legacyBold>Маркет-данные</legacyBold>.</para>
 <para>Нажав на значок <mediaLinkInline><image xlink:href="Designer_Quick_start_04"/></mediaLinkInline> в поле <legacyBold>Инструмент</legacyBold> откроется окно <legacyBold>Выбор инструмента</legacyBold>, в этом окне необходимо выбрать требуемый инструмент.</para>

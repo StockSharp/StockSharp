@@ -7,7 +7,7 @@
 S#.Data работающей в серверном режиме можно подключиться из <legacyBold>S#.Designer</legacyBold>
  (как это сделать описано в пункте <link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" /> документации 
  по <legacyBold>S#.Designer</legacyBold>). Также к <legacyBold>S#.Data</legacyBold> можно подключиться через <legacyBold>S#.API</legacyBold> (как 
- это сделать описано в пунктах <link xlink:href="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" />, <link xlink:href="f143c9e7-d5a6-4464-9b01-18117183cc7a" />, <link xlink:href="040cdc40-39b4-47be-b3f0-441710515562" />).</para>
+ это сделать описано в пункте <link xlink:href="c9491706-3750-42e8-a63f-b50184a7da1d" />).</para>
 <para>Для включения серверного режима <legacyBold>S#.Data</legacyBold> необходимо на вкладке <legacyBold>Общее</legacyBold> нажать 
 кнопку <legacyBold>Настройки</legacyBold> откроется 
 окно настройки серверного режима.</para>

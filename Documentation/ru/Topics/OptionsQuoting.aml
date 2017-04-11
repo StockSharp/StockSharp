@@ -138,7 +138,8 @@ var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
 					  <para>
 Для визуального представления волатильности пример показывает, как можно перевести стандартный стакан с котировками в стакан волатильности
 за счет использования метода
-<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,System.DateTimeOffset,System.Decimal,System.Decimal)</codeEntityReference>:
+<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider
+,System.DateTimeOffset,System.Decimal,System.Decimal)</codeEntityReference>:
 					  </para>
 					  <code language="C#"><![CDATA[
 private void OnQuotesChanged()
