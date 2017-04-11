@@ -10,7 +10,7 @@
 	  
 		<para>Для отображения, поступающие свечи от <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> 
 		передаются в метод
-		<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>.</para>
+		<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>.</para>
 		
 		<para>При передаче свечи из события 
 		<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>

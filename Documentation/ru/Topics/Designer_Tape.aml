@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="2f00e9bc-8ea7-4679-9688-b02c3424f03a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -19,7 +19,8 @@
 </mediaLink>
 <para>2.	Вкладка <legacyBold>Эмуляция</legacyBold>, автоматически открывается при выборе стратегии на панели <token>SchemeDis</token>.
  На вкладке <legacyBold>Эмуляция</legacyBold> расположены основные элементы по созданию 
- стратегии, отладке, тестированию стратегий.(<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, <link xlink:href="a26317f6-5e11-4d6d-913f-73a4f497cec8" />)</para>
+ стратегии, отладке, тестированию стратегий.(<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, 
+ <link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />)</para>
  <mediaLink>
 <image plasement = "left" xlink:href="Designer_Tape_01"/>
 </mediaLink>
