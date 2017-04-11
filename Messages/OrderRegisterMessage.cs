@@ -114,6 +114,15 @@ namespace StockSharp.Messages
 		public RpsOrderInfo RpsInfo { get; set; }
 
 		/// <summary>
+		/// Is the order of market-maker.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MarketMakerKey)]
+		[DescriptionLoc(LocalizedStrings.MarketMakerOrderKey, true)]
+		[MainCategory]
+		public bool? IsMarketMaker { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
@@ -157,6 +166,7 @@ namespace StockSharp.Messages
 				UserOrderId = UserOrderId,
 				ClientCode = ClientCode,
 				BrokerCode = BrokerCode,
+				IsMarketMaker = IsMarketMaker
 			};
 
 			CopyTo(clone);

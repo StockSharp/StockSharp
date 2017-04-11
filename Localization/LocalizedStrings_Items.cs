@@ -25088,22 +25088,22 @@ namespace StockSharp.Localization
 		public static string Str2684 => GetString(Str2684Key);
 
 		/// <summary>
-		/// Market-maker obligations in futures
+		/// Market maker obligations in futures
 		/// </summary>
 		public const string Str2685Key = nameof(Str2685);
 
 		/// <summary>
-		/// Market-maker obligations in futures
+		/// Market maker obligations in futures
 		/// </summary>
 		public static string Str2685 => GetString(Str2685Key);
 
 		/// <summary>
-		/// Market-maker obligations in options
+		/// Market maker obligations in options
 		/// </summary>
 		public const string Str2686Key = nameof(Str2686);
 
 		/// <summary>
-		/// Market-maker obligations in options
+		/// Market maker obligations in options
 		/// </summary>
 		public static string Str2686 => GetString(Str2686Key);
 
@@ -27698,12 +27698,12 @@ namespace StockSharp.Localization
 		public static string Str2974 => GetString(Str2974Key);
 
 		/// <summary>
-		/// Login is not specified.
+		/// Password is not specified.
 		/// </summary>
 		public const string Str2975Key = nameof(Str2975);
 
 		/// <summary>
-		/// Login is not specified.
+		/// Password is not specified.
 		/// </summary>
 		public static string Str2975 => GetString(Str2975Key);
 
@@ -40758,12 +40758,12 @@ namespace StockSharp.Localization
 		public static string CentralStrikeSecurities => GetString(CentralStrikeSecuritiesKey);
 
 		/// <summary>
-		/// Market-maker agreements
+		/// Market maker agreements
 		/// </summary>
 		public const string MarketMakerAgreementsKey = nameof(MarketMakerAgreements);
 
 		/// <summary>
-		/// Market-maker agreements
+		/// Market maker agreements
 		/// </summary>
 		public static string MarketMakerAgreements => GetString(MarketMakerAgreementsKey);
 
@@ -44816,5 +44816,25 @@ namespace StockSharp.Localization
 		/// Manage server
 		/// </summary>
 		public static string ManageServer => GetString(ManageServerKey);
+
+		/// <summary>
+		/// Market maker
+		/// </summary>
+		public const string MarketMakerKey = nameof(MarketMaker);
+
+		/// <summary>
+		/// Market maker
+		/// </summary>
+		public static string MarketMaker => GetString(MarketMakerKey);
+
+		/// <summary>
+		/// Is the order of market-maker
+		/// </summary>
+		public const string MarketMakerOrderKey = nameof(MarketMakerOrder);
+
+		/// <summary>
+		/// Is the order of market-maker
+		/// </summary>
+		public static string MarketMakerOrder => GetString(MarketMakerOrderKey);
 	}
 }

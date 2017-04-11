@@ -507,6 +507,14 @@ namespace StockSharp.Messages
 		public decimal? Position { get; set; }
 
 		/// <summary>
+		/// Is the order of market-maker.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MarketMakerKey)]
+		[DescriptionLoc(LocalizedStrings.MarketMakerOrderKey, true)]
+		public bool? IsMarketMaker { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -583,7 +591,9 @@ namespace StockSharp.Messages
 				Position = Position,
 
 				HasTradeInfo = HasTradeInfo,
-				HasOrderInfo = HasOrderInfo
+				HasOrderInfo = HasOrderInfo,
+
+				IsMarketMaker = IsMarketMaker
 			};
 
 			this.CopyExtensionInfo(clone);

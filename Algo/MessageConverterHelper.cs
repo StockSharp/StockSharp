@@ -1263,6 +1263,7 @@ namespace StockSharp.Algo
 			order.Comment = message.Comment;
 			order.Commission = message.Commission;
 			order.Currency = message.Currency;
+			order.IsMarketMaker = message.IsMarketMaker;
 
 			if (message.OrderState != null)
 				order.State = order.State.CheckModification((OrderStates)message.OrderState);

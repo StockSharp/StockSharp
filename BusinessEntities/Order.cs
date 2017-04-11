@@ -602,6 +602,14 @@ namespace StockSharp.BusinessEntities
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
+		/// Is the order of market-maker.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MarketMakerKey)]
+		[DescriptionLoc(LocalizedStrings.MarketMakerOrderKey, true)]
+		public bool? IsMarketMaker { get; set; }
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>

@@ -7,6 +7,7 @@ StockSharp API Change log
 * (bug) Database export fix.
 * (bug) FinamHistorySource. Small fix.
 * (feature) CQG continuum.
+* (feature) Order. IsMarketMaker property.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
