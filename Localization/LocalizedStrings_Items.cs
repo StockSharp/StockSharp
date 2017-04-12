@@ -44836,5 +44836,15 @@ namespace StockSharp.Localization
 		/// Is the order of market-maker
 		/// </summary>
 		public static string MarketMakerOrder => GetString(MarketMakerOrderKey);
+
+		/// <summary>
+		/// Connection state: {0}
+		/// </summary>
+		public const string ConnectionStateParamsKey = nameof(ConnectionStateParams);
+
+		/// <summary>
+		/// Connection state: {0}
+		/// </summary>
+		public static string ConnectionStateParams => GetString(ConnectionStateParamsKey);
 	}
 }

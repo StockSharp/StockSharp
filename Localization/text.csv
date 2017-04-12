@@ -4488,6 +4488,7 @@ MaxBytesExceeded;Current count of bytes '{0}' exceeded the allowed size '{1}'.;�
 SessionNotFound;Session '{0}' not found.;Сессия '{0}' не найдена.
 NativeIdLookup;Native id lookup for '{0}'.;Поиск системного идентификатора для '{0}'.
 IsTradeAllowed;Is trade allowed;Резрешена ли торговля
+ConnectionStateParams;Connection state: {0};Состояние подключения: {0}
 RemoteStorageLookupExchanges;Session {0}. Exchanges search.;Сессия {0}. Поиск бирж.
 RemoteStorageLookupExchangeBoards;Session {0}. Exchange boards search.;Сессия {0}. Поиск биржевых площадок.
 RemoteStorageGetExchanges;Session {0}. Gettings info about '{1}' exchanges.;Сессия {0}. Получение информации о '{1}' биржах.
