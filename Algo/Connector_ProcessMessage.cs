@@ -1043,8 +1043,16 @@ namespace StockSharp.Algo
 			if (adapter.SecurityLookupRequired)
 				SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
-			if (message is RestoredConnectMessage)
-				RaiseRestored();
+			if (!(message is RestoredConnectMessage))
+				return;
+
+			var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
+
+			if (!isAllConnected)
+				return;
+
+			ConnectionState = ConnectionStates.Connected;
+			RaiseRestored();
 		}
 
 		private void RaiseConnectedWhenAllConnected()

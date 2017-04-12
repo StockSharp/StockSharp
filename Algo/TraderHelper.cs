@@ -455,17 +455,29 @@ namespace StockSharp.Algo
 			var exchangeTime = time.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
-			var isWorkingDay = board.IsTradeDate(time);
+			return workingTime.IsTradeTime(exchangeTime, out period);
+		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="workingTime">Working info info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="period">Current working time period.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this WorkingTime workingTime, DateTime time, out WorkingTimePeriod period)
+		{
+			var isWorkingDay = workingTime.IsTradeDate(time);
 
 			if (!isWorkingDay)
 			{
 				period = null;
-                return false;
+				return false;
 			}
 
-			period = workingTime.GetPeriod(exchangeTime);
+			period = workingTime.GetPeriod(time);
 
-			var tod = exchangeTime.TimeOfDay;
+			var tod = time.TimeOfDay;
 			return period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
 		}
 
@@ -496,17 +508,29 @@ namespace StockSharp.Algo
 			var exchangeTime = date.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
-			var period = workingTime.GetPeriod(exchangeTime);
+			return workingTime.IsTradeDate(exchangeTime, checkHolidays);
+		}
+
+		/// <summary>
+		/// To check, whether date is traded.
+		/// </summary>
+		/// <param name="workingTime">Working time info.</param>
+		/// <param name="date">The passed date to be checked.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
+		public static bool IsTradeDate(this WorkingTime workingTime, DateTime date, bool checkHolidays = false)
+		{
+			var period = workingTime.GetPeriod(date);
 
 			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Count == 0 && workingTime.SpecialHolidays.Count == 0)
 				return true;
 
 			bool isWorkingDay;
 
-			if (checkHolidays && (exchangeTime.DayOfWeek == DayOfWeek.Saturday || exchangeTime.DayOfWeek == DayOfWeek.Sunday))
-				isWorkingDay = workingTime.SpecialWorkingDays.Contains(exchangeTime.Date);
+			if (checkHolidays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday))
+				isWorkingDay = workingTime.SpecialWorkingDays.Contains(date.Date);
 			else
-				isWorkingDay = !workingTime.SpecialHolidays.Contains(exchangeTime.Date);
+				isWorkingDay = !workingTime.SpecialHolidays.Contains(date.Date);
 
 			return isWorkingDay;
 		}

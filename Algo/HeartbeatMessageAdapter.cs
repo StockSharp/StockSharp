@@ -48,8 +48,7 @@ namespace StockSharp.Algo
 
 		private int _connectingAttemptCount;
 		private TimeSpan _connectionTimeOut;
-		private Timer _heartBeatTimer;
-		private Timer _reconnectionTimer;
+		private Timer _timer;
 		private bool _canSendTime;
 		private bool _isFirstTimeConnect = true;
 		
@@ -82,9 +81,6 @@ namespace StockSharp.Algo
 
 						lock (_timeSync)
 							_prevState = _currState = ConnectionStates.Connected;
-
-						StopReconnectionTimer();
-						StartHeartbeatTimer();
 					}
 					else
 					{
@@ -93,8 +89,6 @@ namespace StockSharp.Algo
 
 						_connectionTimeOut = _reConnectionSettings.Interval;
 						_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
-
-						StartReconnectionTimer();
 					}
 
 					if (isReconnecting)
@@ -108,15 +102,6 @@ namespace StockSharp.Algo
 				}
 				case MessageTypes.Disconnect:
 				{
-					lock (_timeSync)
-					{
-						if (_heartBeatTimer != null)
-						{
-							_heartBeatTimer.Dispose();
-							_heartBeatTimer = null;
-						}
-					}
-
 					if (((DisconnectMessage)message).Error == null)
 					{
 						lock (_timeSync)
@@ -129,8 +114,6 @@ namespace StockSharp.Algo
 
 						_connectionTimeOut = _reConnectionSettings.Interval;
 						_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
-
-						StartReconnectionTimer();
 					}
 
 					base.OnInnerAdapterNewOutMessage(message);
@@ -169,6 +152,8 @@ namespace StockSharp.Algo
 					else
 						_connectionTimeOut = _reConnectionSettings.Interval;
 
+					StartTimer();
+
 					break;
 				}
 				case MessageTypes.Disconnect:
@@ -178,18 +163,10 @@ namespace StockSharp.Algo
 
 					_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
 
-					StopReconnectionTimer();
+					StopTimer();
 
 					lock (_timeSync)
-					{
 						_canSendTime = false;
-
-						if (_heartBeatTimer != null)
-						{
-							_heartBeatTimer.Dispose();
-							_heartBeatTimer = null;
-						}
-					}
 
 					break;
 				}
@@ -204,98 +181,76 @@ namespace StockSharp.Algo
 				_canSendTime = true;
 		}
 
-		private void StartHeartbeatTimer()
-		{
-			// heart beat is disabled
-			if (InnerAdapter.HeartbeatInterval == TimeSpan.Zero)
-				return;
-
-			lock (_timeSync)
-			{
-				_canSendTime = true;
-				_heartBeatTimer = ThreadingHelper.Timer(() =>
-				{
-					try
-					{
-						OnHeartbeatTimer();
-					}
-					catch (Exception ex)
-					{
-						ex.LogError();
-					}
-				}).Interval(InnerAdapter.HeartbeatInterval);
-			}
-		}
-
-		private void OnHeartbeatTimer()
+		private void StartTimer()
 		{
 			lock (_timeSync)
 			{
-				if (_currState != ConnectionStates.Connected)
+				if (_timer != null)
 					return;
 
-				if (!_canSendTime)
-					return;
+				var period = InnerAdapter.ReConnectionSettings.Interval;
+				var needHeartbeat = InnerAdapter.HeartbeatInterval != TimeSpan.Zero;
+				var time = TimeHelper.Now;
+				var lastHeartBeatTime = TimeHelper.Now;
+				var sync = new SyncObject();
+				var isProcessing = false;
 
-				_canSendTime = false;
-			}
-
-			_timeMessage.IsBack = true;
-			_timeMessage.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
-
-			RaiseNewOutMessage(_timeMessage);
-			//InnerAdapter.SendInMessage(_timeMessage);
-		}
-
-		private void StartReconnectionTimer()
-		{
-			if (_reconnectionTimer != null)
-				return;
-
-			var time = DateTimeOffset.Now;
-			var sync = new SyncObject();
-			var isProcessing = false;
-
-			_reconnectionTimer = ThreadingHelper
-				.Timer(() =>
+				if (needHeartbeat)
 				{
-					lock (sync)
-					{
-						if (isProcessing)
-							return;
+					_canSendTime = true;
+					period = period.Min(InnerAdapter.HeartbeatInterval);
+				}
 
-						isProcessing = true;
-					}
-
-					try
-					{
-						var now = DateTimeOffset.Now;
-						var diff = now - time;
-
-						ProcessReconnection(diff);
-
-						time = now;
-					}
-					catch (Exception ex)
-					{
-						ex.LogError();
-					}
-					finally
+				_timer = ThreadingHelper
+					.Timer(() =>
 					{
 						lock (sync)
-							isProcessing = false;
-					}
-				})
-				.Interval(TimeSpan.FromSeconds(10));
+						{
+							if (isProcessing)
+								return;
+
+							isProcessing = true;
+						}
+
+						try
+						{
+							var now = TimeHelper.Now;
+							var diff = now - time;
+
+							if (needHeartbeat && now - lastHeartBeatTime >= InnerAdapter.HeartbeatInterval)
+							{
+								ProcessHeartbeat();
+								lastHeartBeatTime = now;
+							}
+
+							ProcessReconnection(diff);
+
+							time = now;
+						}
+						catch (Exception ex)
+						{
+							ex.LogError();
+						}
+						finally
+						{
+							lock (sync)
+								isProcessing = false;
+						}
+					})
+					.Interval(period);
+			}
 		}
 
-		private void StopReconnectionTimer()
+		private void StopTimer()
 		{
-			if (_reconnectionTimer == null)
-				return;
+			lock (_timeSync)
+			{
+				if (_timer == null)
+					return;
 
-			_reconnectionTimer.Dispose();
-			_reconnectionTimer = null;
+				_timer.Dispose();
+				_timer = null;
+			}
 		}
 
 		private void ProcessReconnection(TimeSpan diff)
@@ -390,11 +345,30 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private void ProcessHeartbeat()
+		{
+			lock (_timeSync)
+			{
+				if (_currState != ConnectionStates.Connected)
+					return;
+
+				if (!_canSendTime)
+					return;
+
+				_canSendTime = false;
+			}
+
+			_timeMessage.IsBack = true;
+			_timeMessage.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+
+			RaiseNewOutMessage(_timeMessage);
+			//InnerAdapter.SendInMessage(_timeMessage);
+		}
+
 		private bool IsTradeTime()
 		{
-			// TODO
-			return true;
-			//return _reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now);
+			WorkingTimePeriod period;
+			return _reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out period);
 		}
 
 		/// <summary>
