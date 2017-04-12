@@ -175,7 +175,7 @@ Connector.NewSecurity += security =>
   							<listItem>Заполняем массив цепочкой опционов, где подлежащим активом выступает выбранный инструмент;</listItem>
   							<listItem>Присваиваем свойству <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDeskModel.Options</codeEntityReference> этот массив;</listItem>
   							<listItem>Очищаем значения доски опционов при помощи метода 
-  							<codeEntityReference qualifyHint="true">M:tockSharp.Xaml.OptionDeskModel.Clear</codeEntityReference>.</listItem>
+  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDeskModel.Clear</codeEntityReference>.</listItem>
 					</list>
             		<code title="C#" language="C#">
                   <![CDATA[

@@ -53,27 +53,29 @@ public class TickCandle : Candle
 				<content>
 <para>Далее требуется создать построителя свечей, для нового типа свечей. Для этого необходимо создать реализацию 
 <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference>.
-В метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage, TCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference> 
+В метод 
+<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,TCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference> 
 будут поступать данные типа 
 <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>.
 В зависимости от источников 
-<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceList.Sources</codeEntityReference>,
+<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Sources</codeEntityReference>,
 <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference> 
 может содержать данные как о тиковой сделке
 <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Trade</codeEntityReference>,
 так и о стакане <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>.</para>
 
 <para>Метод 
-<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage, TCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
-должен возвратить или новую свечу (если новые данные привели к формированию свечи), или обновить переданную(если данных пока недостаточно для создания новой свечи). Если метод
-<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage, TCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,TCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+должен возвратить или новую свечу (если новые данные привели к формированию свечи), 
+или обновить переданную(если данных пока недостаточно для создания новой свечи). Если метод
+<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,TCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
 возвращает новую свечу, то 
 <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference> 
 вызывает его еще раз, передав в метод
 то же самое значение 
 <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Sources</codeEntityReference>. 
 Метод будет вызываться до тех пор, пока
-<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage, TCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,TCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
 не вернет переданную свечу. Это сделано для тех случаев, когда по одному входящему значению 
 <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>
 может быть сформированно несколько свечей:

@@ -234,8 +234,8 @@
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Sources setting up">
-      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Stock, Futures and Options">
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Sources setting up">
+      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" isExpanded="true" title="Stock, Futures and Options">
         <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
         <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" title="FinFiz" />
         <Topic id="0166d686-9fb0-4e78-8578-f5b706ad6a07" visible="True" title="Google" />
@@ -248,8 +248,10 @@
         <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
         <Topic id="1e3811a4-60e6-4f6c-bb55-0d3b3c2e246f" visible="True" title="ITCH" />
         <Topic id="48a0cef2-f3f7-4bf1-aa3b-043a130777c7" visible="True" title="BarChart" />
+        <Topic id="19e07661-3563-4eb2-b781-d0f0106fd769" visible="True" isSelected="true" title="CQG Com" />
+        <Topic id="f3eda329-0077-4517-99f2-aabdea2a930d" visible="True" title="CQG Continuum" />
       </Topic>
-      <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" isExpanded="true" title="Forex">
+      <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" title="Forex">
         <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
         <Topic id="c1863414-25cb-4994-818f-3e4fa511f21b" visible="True" title="GainCapital" />
         <Topic id="0b962432-d81d-4646-a818-9fa7093cbe4f" visible="True" title="LMAX" />
@@ -291,14 +293,14 @@
       <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="News" />
       <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Transactions" />
     </Topic>
-    <Topic id="75239e3a-afbe-497f-ba37-85886895a988" visible="True" noFile="true" isExpanded="true" title="Работа с  S#.Data через S#.API">
+    <Topic id="75239e3a-afbe-497f-ba37-85886895a988" visible="True" noFile="true" title="Работа с  S#.Data через S#.API">
       <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="Подключение к S#.Data через WCF" />
       <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="Подключение к S#.Data через FixTrader" />
       <Topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" visible="True" title="Добавление в S#.Data новых данных" />
     </Topic>
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Create new souce" />
     <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Gluing data" />
-    <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" isSelected="true" title="Создание индекса" />
+    <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" title="Создание индекса" />
     <Topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" visible="True" title="Расширеная информация инструмента" />
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" isExpanded="true" title="Tasks">
       <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Converter" />

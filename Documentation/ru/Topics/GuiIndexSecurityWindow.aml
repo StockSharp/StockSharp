@@ -44,10 +44,10 @@
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.InnerSecurityIds</codeEntityReference> - список подлежащих инструментов.</para>
+  				<para><codeEntityReference>P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Securities</codeEntityReference> - все доступные инструменты.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.Expression</codeEntityReference> - Математическая формула индекса.</para>
+  				<para><codeEntityReference>P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Formula</codeEntityReference> - математическая формула индекса.</para>
   			</listItem>
 		</list>
 		

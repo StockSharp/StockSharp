@@ -183,13 +183,12 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\hydra_CQG_Continuum.aml" />
+    <None Include="Topics\hydra_CQG_Com.aml" />
     <None Include="Topics\Hydra_users.aml" />
     <None Include="Topics\HydraSecurityExtensionInfo.aml" />
-    <None Include="HydraSecurityExtensionInfo.aml" />
-    <None Include="SecurityExtensionInfo.aml" />
     <None Include="Topics\hydraAPIConnectWCF.aml" />
     <None Include="Topics\HydraExtensionInfo.aml" />
-    <None Include="Hydra_users.aml" />
     <None Include="Topics\hydraAPIConnect.aml" />
     <None Include="Topics\hydra_server.aml" />
     <None Include="Topics\hydra_index.aml" />
@@ -2792,6 +2791,14 @@
     <Image Include="Art\GUI_orderlog.png">
       <ImageId>GUI_orderlog</ImageId>
       <AlternateText>GUI orderlog</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_CQG_COM.png">
+      <ImageId>hydra_CQG_COM</ImageId>
+      <AlternateText>hydra CQG COM</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_CQG_Continuum.png">
+      <ImageId>hydra_CQG_Continuum</ImageId>
+      <AlternateText>hydra CQG Continuum</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
