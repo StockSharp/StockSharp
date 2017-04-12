@@ -96,7 +96,7 @@ base.RegisterOrder(order);</code>
 		<para>
 		  на:
 		</para>
-		<code language="C#">var strategy = new MarketQuotingStrategy(order, new Unit());
+		<code language="C#">var strategy = new MarketQuotingStrategy(order, 1m);
 base.ChildStrategies.Add(strategy);</code>
 		<!--para>
 		  После этого <codeEntityReference>T:StockSharp.Algo.Strategies.RealTimeStrategyManager</codeEntityReference> выполнит до конца метод SmaStrategy.OnProcess

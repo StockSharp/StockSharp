@@ -55,12 +55,15 @@ private void Draw(CandleSeries series, Candle candle)
        return;
 
 	var longValue = _sma.Process(candle);
+	var data = new ChartDrawData();
 
-	this.GuiAsync(() => _chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
-	{
-		{ _candlesElem, candle },
-		{ _longMaElem, longValue}
-	}));
+	data
+		.Group(candle.OpenTime)
+			.Add(_candlesElem, candle)
+			.Add(_longElem, longValue);
+
+	_chart.Draw(data);
+
 }
 		]]>
 		</code>	  
