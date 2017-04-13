@@ -165,8 +165,14 @@ namespace StockSharp.Algo.Candles.Compression
 							break;
 
 						default:
+						{
+							if (message.IsBack && message.Adapter == this)
+								message.IsBack = false;
+
 							base.SendInMessage(message);
 							break;
+						}
+
 					}
 
 					break;
@@ -453,6 +459,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (isBack)
 			{
 				msg.IsBack = true;
+				msg.Adapter = this;
 				RaiseNewOutMessage(msg);
 			}
 			else
