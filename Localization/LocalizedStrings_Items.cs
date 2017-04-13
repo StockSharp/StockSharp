@@ -44846,5 +44846,15 @@ namespace StockSharp.Localization
 		/// Connection state: {0}
 		/// </summary>
 		public static string ConnectionStateParams => GetString(ConnectionStateParamsKey);
+
+		/// <summary>
+		/// Create scheme
+		/// </summary>
+		public const string CreateSchemeKey = nameof(CreateScheme);
+
+		/// <summary>
+		/// Create scheme
+		/// </summary>
+		public static string CreateScheme => GetString(CreateSchemeKey);
 	}
 }
