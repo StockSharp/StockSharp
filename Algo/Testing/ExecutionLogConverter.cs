@@ -99,11 +99,17 @@ namespace StockSharp.Algo.Testing
 
 				if (quote != null)
 				{
-					_securityDefinition.PriceStep = quote.Price.GetDecimalInfo().EffectiveScale.GetPriceStep();
-					_securityDefinition.VolumeStep = quote.Volume.GetDecimalInfo().EffectiveScale.GetPriceStep();
-					
-					_priceStepUpdated = true;
-					_volumeStepUpdated = true;
+					if (!_priceStepUpdated)
+					{
+						_securityDefinition.PriceStep = quote.Price.GetDecimalInfo().EffectiveScale.GetPriceStep();
+						_priceStepUpdated = true;
+					}
+
+					if (!_volumeStepUpdated)
+					{
+						_securityDefinition.VolumeStep = quote.Volume.GetDecimalInfo().EffectiveScale.GetPriceStep();
+						_volumeStepUpdated = true;
+					}
 				}
 			}
 
@@ -539,7 +545,8 @@ namespace StockSharp.Algo.Testing
 			if (HasDepth(localTime))
 				return;
 
-			var oppositePrice = tradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
+			var priceStep = GetPriceStep();
+            var oppositePrice = (tradePrice + _settings.SpreadSize * priceStep * (originSide == Sides.Buy ? 1 : -1)).Max(priceStep);
 
 			var bestQuote = quotes.FirstOrDefault();
 

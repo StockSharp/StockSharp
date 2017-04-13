@@ -4490,6 +4490,7 @@ NativeIdLookup;Native id lookup for '{0}'.;Поиск системного ид�
 IsTradeAllowed;Is trade allowed;Резрешена ли торговля
 ConnectionStateParams;Connection state: {0};Состояние подключения: {0}
 CreateScheme;Create scheme;Создать схему
+OrderPriceNotMultipleOfPriceStep;Price {0} of order {1} is not a multiple of security price step {2}.;Цена {0} заявки {1} не кратна шагу цены инструмента {2}.
 RemoteStorageLookupExchanges;Session {0}. Exchanges search.;Сессия {0}. Поиск бирж.
 RemoteStorageLookupExchangeBoards;Session {0}. Exchange boards search.;Сессия {0}. Поиск биржевых площадок.
 RemoteStorageGetExchanges;Session {0}. Gettings info about '{1}' exchanges.;Сессия {0}. Получение информации о '{1}' биржах.

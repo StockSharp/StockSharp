@@ -44856,5 +44856,15 @@ namespace StockSharp.Localization
 		/// Create scheme
 		/// </summary>
 		public static string CreateScheme => GetString(CreateSchemeKey);
+
+		/// <summary>
+		/// Order price is not a multiple of security price step. Price step is '{0}', order price is '{1}'.
+		/// </summary>
+		public const string OrderPriceNotMultipleOfPriceStepKey = nameof(OrderPriceNotMultipleOfPriceStep);
+
+		/// <summary>
+		/// Order price is not a multiple of security price step. Price step is '{0}', order price is '{1}'.
+		/// </summary>
+		public static string OrderPriceNotMultipleOfPriceStep => GetString(OrderPriceNotMultipleOfPriceStepKey);
 	}
 }

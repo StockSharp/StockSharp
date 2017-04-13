@@ -574,7 +574,7 @@ namespace StockSharp.Algo.Testing
 				}
 				else
 				{
-					var message = _parent.CheckRegistration(execution, result);
+					var message = _parent.CheckRegistration(execution, _securityDefinition, result);
 
 					var replyMsg = CreateReply(execution, time);
 
@@ -1793,6 +1793,10 @@ namespace StockSharp.Algo.Testing
 			{
 				switch (change.Key)
 				{
+					case Level1Fields.PriceStep:
+						state[change.Key] = change.Value;
+						break;
+
 					case Level1Fields.MinPrice:
 					case Level1Fields.MaxPrice:
 						state[change.Key] = change.Value;
@@ -1824,7 +1828,7 @@ namespace StockSharp.Algo.Testing
 				info.ProcessMarginChange(level1Msg.LocalTime, level1Msg.SecurityId, retVal);
 		}
 
-		private string CheckRegistration(ExecutionMessage execMsg, ICollection<Message> result)
+		private string CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition, ICollection<Message> result)
 		{
 			var board = _boardDefinitions.TryGetValue(execMsg.SecurityId.BoardCode);
 
@@ -1839,11 +1843,15 @@ namespace StockSharp.Algo.Testing
 			}
 
 			var state = _secStates.TryGetValue(execMsg.SecurityId);
+			var priceStep = securityDefinition?.PriceStep;
 
 			if (state != null && execMsg.OrderType != OrderTypes.Market)
 			{
 				var minPrice = (decimal?)state.TryGetValue(Level1Fields.MinPrice);
 				var maxPrice = (decimal?)state.TryGetValue(Level1Fields.MaxPrice);
+
+				if (priceStep == null)
+					priceStep = (decimal?)state.TryGetValue(Level1Fields.PriceStep);
 
 				if (minPrice != null && minPrice > 0 && execMsg.OrderPrice < minPrice)
 					return LocalizedStrings.Str1172Params.Put(execMsg.OrderPrice, execMsg.TransactionId, minPrice);
@@ -1851,6 +1859,9 @@ namespace StockSharp.Algo.Testing
 				if (maxPrice != null && maxPrice > 0 && execMsg.OrderPrice > maxPrice)
 					return LocalizedStrings.Str1173Params.Put(execMsg.OrderPrice, execMsg.TransactionId, maxPrice);
 			}
+
+			if (priceStep != null && priceStep > 0 && execMsg.OrderPrice % priceStep != 0)
+				return LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(execMsg.OrderPrice, execMsg.TransactionId, priceStep);
 
 			var info = GetPortfolioInfo(execMsg.PortfolioName);
 
