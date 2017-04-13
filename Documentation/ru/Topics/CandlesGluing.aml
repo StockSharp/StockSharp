@@ -39,8 +39,10 @@ _area.Candles.Add(_candlesElem);
 _candleManager = new CandleManager(_trader);
 
 // Добавление в источник свечей TimeFrameCandleBuilder источник данных в виде файлов гидры
-var storageRegistry = new StorageRegistry();
-((LocalMarketDataDrive)storageRegistry.DefaultDrive).Path = _historyPath;
+var storageRegistry = new StorageRegistry
+{
+    DefaultDrive = new LocalMarketDataDrive(_historyPath.ToString())
+};
 var cbs = new TradeStorageCandleBuilderSource { StorageRegistry = storageRegistry };
 _candleManager.Sources.OfType<TimeFrameCandleBuilder>().Single().Sources.Add(cbs);
 
@@ -60,9 +62,15 @@ _candleManager.Start(_series, _startTime, _endTime);
 
         <code language="C#">
         <![CDATA[
-private void DrawCandles(CandleSeries series, Candle candle)
+        
+private void CandleManagerOnProcessing(CandleSeries candleSeries, Candle candle)
 {
-    if (series == _series) this.GuiAsync(() => _chart.ProcessCandle(_candlesElem, candle) );
+    if (series == _series)
+       {
+          var chartData = new ChartDrawData();
+          chartData.Group(candle.OpenTime).Add(_candleElement, candle);
+          _chart.Draw(chartData);
+       }
 }
 		]]>
 		</code>

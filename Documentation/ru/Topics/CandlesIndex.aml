@@ -57,7 +57,12 @@ _candleManager.Start(_indexSeries);
         <![CDATA[
 private void DrawCandles(CandleSeries series, Candle candle)
 {
-    if (series == _indexSeries) this.GuiAsync(() => _chart.ProcessCandle(_candlesElem, candle) );
+    if (series == _indexSeries) 
+       {
+          var chartData = new ChartDrawData();
+          chartData.Group(candle.OpenTime).Add(_candleElement, candle);
+          _chart.Draw(chartData);
+       }
 }
 		]]>
 		</code>
