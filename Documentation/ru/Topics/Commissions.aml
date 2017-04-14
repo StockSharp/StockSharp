@@ -32,7 +32,7 @@ private CommissionManager _commissionManager = new CommissionManager();
 						
 						<code language="C#">
 						<![CDATA[
- CommissionRule commissionRule = new CommissionRule {Type = CommissionTypes.PerTradeVolume, Value = new Unit(1m)};
+ CommissionRule commissionRule =  new CommissionPerTradeRule {  Value = new Unit(1m) };
 						]]>
 						</code>
 					</content>

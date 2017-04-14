@@ -19,7 +19,7 @@ var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri
 ]]></code>
 
       <para>2. Сохранение в <legacyBold>S#.Data</legacyBold> информации о бирже 
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntitiesExchange.Exchange</codeEntityReference></para>
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Exchange</codeEntityReference></para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Console.WriteLine("Enter Exchange name (example: NYSE or TESTE)");
@@ -39,7 +39,7 @@ client.SaveExchanges(exchange);
 ]]></code>
 
       <para>3. Сохранение в <legacyBold>S#.Data</legacyBold> информации о биржевой площадке
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntitiesExchange.ExchangeBoard</codeEntityReference></para>
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ExchangeBoard</codeEntityReference></para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Console.WriteLine("Enter ExchangeBoard name (example: NYMEX or TESTB)");
@@ -59,7 +59,7 @@ client.SaveExchangeBoards(exchangeBoard);
 ...
 ]]></code>
       <para>4. Сохранение в <legacyBold>S#.Data</legacyBold> инструмента (акция, фьючерс, опцион и т.д.)
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntitiesExchange.Security</codeEntityReference></para>
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Security</codeEntityReference></para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Security[] security = new Security[]

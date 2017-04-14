@@ -62,7 +62,7 @@
 	var newOrder = registeredOrder.Clone();
 
 	// изменяем цену на лучшую
-	newOrder.Price = (registeredOrder.Direction == OrderDirections.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
+	newOrder.Price = (registeredOrder.Direction == Sides.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
 
 	// заменяем заявку на бирже
 	trader.ReRegisterOrder(registeredOrder, newOrder);

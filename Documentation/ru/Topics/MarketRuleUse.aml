@@ -9,23 +9,24 @@
 				<![CDATA[
 private void btnBuy_Click(object sender, RoutedEventArgs e)
 {
-	var order = new Order
-	{
-		Portfolio = Portfolio.SelectedPortfolio,
-		Price = _instr1.BestAsk.Price,
-		Security = _instr1,
-		Volume = 1,
-		Direction = OrderDirections.Buy,
-	};
-    
-	order
-		.WhenRegistered()
-		.Do(() => trader.AddInfoLog("Заявка успешно зарегистрирована"))
-		.Once()
-		.Apply(this);
+   var order = new Order
+   { 
+       Portfolio = Portfolio.SelectedPortfolio,
+       Price = _instr1.BestAsk.Price,
+       Security = _instr1,
+       Volume = 1,
+       Direction = Sides.Buy,
+   };
+
+   order
+       .WhenRegistered(Connector)
+       .Do(() => Connector.AddInfoLog("Заявка успешно зарегистрирована"))
+       .Once()
+       .Apply(this);
+
     
 	// регистрация заявки
-	trader.RegisterOrder(order);
+   Connector.RegisterOrder(order);
 }
 	  	  		]]>
 				</code>
@@ -56,7 +57,7 @@ class FirstStrategy : Strategy
 			.Apply(this);
 
 		Security
-			.WhenNewTrade()
+			.WhenNewTrade(trader)
 			.Do(NewTrade)
 			.Apply(this);
 
@@ -82,39 +83,40 @@ class FirstStrategy : Strategy
 				<![CDATA[
 var order = this.CreateOrder(direction, (decimal) Security.GetCurrentPrice(direction), Volume);
 
-var ruleCanceled = order.WhenCanceled();
+var ruleCanceled = order.WhenCanceled(Connector);
 
 ruleCanceled
-	.Do(() => 
-			{
-				this.AddInfoLog("Заявка успешно отменена");
-				
-				// удаление всех правил связанных с order
-				Rules.RemoveRulesByToken(ruleCanceled, ruleCanceled.Token);
-			})
-	.Once()
-	.Apply(this);
+    .Do(() =>
+    {
+        this.AddInfoLog("Заявка успешно отменена");
+
+        // удаление всех правил связанных с order
+        Rules.RemoveRulesByToken(ruleCanceled, (IMarketRule) ruleCanceled.Token);
+    })
+    .Once()
+    .Apply(this);
 
 order
-	.WhenRegistered()
+    .WhenRegistered(Connector)
     .Do(() => this.AddInfoLog("Заявка успешно зарегистрирована"))
     .Once()
-    .Apply(this)
+    .Apply(this);
 
 order
-	.WhenRegisterFailed()
+    .WhenRegisterFailed(Connector)
     .Do(() => this.AddInfoLog("Заявка не принята биржей"))
     .Once()
-    .Apply(this)
-	
+    .Apply(this);
+
 order
-	.WhenMatched()
-	.Do(() => this.AddInfoLog("Заявка полностью исполнена"))
-	.Once()
-	.Apply(this);	
-        
+    .WhenMatched(Connector)
+    .Do(() => this.AddInfoLog("Заявка полностью исполнена"))
+    .Once()
+    .Apply(this);
+
 // регистрирация заявки
 RegisterOrder(order);
+
 	  	  		]]>
 				</code>	  				
   			</listItem>  
@@ -136,7 +138,7 @@ TimeSpan _holdTimeToOpen = TimeSpan.FromMilliseconds(5000);
 
 Trader
 	.WhenIntervalElapsed(_holdTimeToOpen)
-	.Or(_series.WhenCandlesStarted())
+	.Or(__candleManager.WhenCandlesStarted(_series))
 	.Do(() => this.AddInfoLog("Свеча закрыта или вышло время"))
 	.Once()
 	.Apply(this);
@@ -148,7 +150,7 @@ Trader
   				<code language="C#">
 				<![CDATA[
 MarketRuleHelper
-	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), _series.WhenCandlesStarted()})
+	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), _candleManager.WhenCandlesStarted(_series)})
 	.Do(() => this.AddInfoLog("Свеча закрыта или вышло время"))
 	.Once()
 	.Apply(this);
@@ -162,7 +164,7 @@ var priceMore = new Unit(135000m, UnitTypes.Limit);
 var priceLess = new Unit(140000m, UnitTypes.Limit);
 				
 MarketRuleHelper
-	.And(new IMarketRule[] {Security.WhenLastTradePriceMore(priceMore), Security.WhenLastTradePriceLess(priceLess)})
+	.And(new IMarketRule[] {Security.WhenLastTradePriceMore(Connector, Connector, priceMore), Security.WhenLastTradePriceLess(Connector, Connector, priceLess)})
 	.Do(() => this.AddInfoLog(string.Format("Цена последней сделки находится в диапазоне от {0} до {1}", priceMore, priceLess)))
 	.Apply(this);
 	  	  		]]>
@@ -185,7 +187,7 @@ bool flag = false;
 ...
 				
 Security
-	.WhenNewTrade()
+	.WhenNewTrade(Connector)
 	.Do(() =>
 			{
 				if(условие) flag = true;

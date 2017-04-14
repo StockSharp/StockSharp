@@ -248,8 +248,9 @@
         <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
         <Topic id="1e3811a4-60e6-4f6c-bb55-0d3b3c2e246f" visible="True" title="ITCH" />
         <Topic id="48a0cef2-f3f7-4bf1-aa3b-043a130777c7" visible="True" title="BarChart" />
-        <Topic id="19e07661-3563-4eb2-b781-d0f0106fd769" visible="True" isSelected="true" title="CQG Com" />
+        <Topic id="19e07661-3563-4eb2-b781-d0f0106fd769" visible="True" title="CQG Com" />
         <Topic id="f3eda329-0077-4517-99f2-aabdea2a930d" visible="True" title="CQG Continuum" />
+        <Topic id="3adf98fb-fa41-46ad-93cb-583fb67c1d6b" visible="True" isSelected="true" title="Xignite" />
       </Topic>
       <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" title="Forex">
         <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
