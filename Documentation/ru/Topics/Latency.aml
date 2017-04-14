@@ -35,14 +35,15 @@
 						<para>Далее, необходимо расширить метод-обработчик события изменения параметров стратегии:</para>
 						<code language="C#">
 						<![CDATA[
-this.Sync(() =>
+this.GuiAsync(() =>
 {
 	Status.Content = _strategy.ProcessState;
-	PnL.Content = _strategy.PnLManager.AbsoluteValue;
-	Slippage.Content = _strategy.SlippageManager.Slippage;
-	Position.Content = _strategy.PositionManager.Position;
-	Latency.Content = _strategy.LatencyManager.Latency;
+	PnL.Content = _strategy.PnL;
+	Slippage.Content = _strategy.Slippage;
+	Position.Content = _strategy.Position;
+	Latency.Content = _strategy.Latency;
 });
+
 						]]>
 						</code>
 					</content>

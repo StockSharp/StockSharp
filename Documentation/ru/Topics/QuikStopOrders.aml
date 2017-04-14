@@ -45,41 +45,40 @@ if (marketOrder != null)
     <!-- One or more procedure or section elements -->
 
     <procedure>
-		<title>Примеры создания стоп-заявок:</title>
+		<!--title>Примеры создания стоп-заявок:</title-->
 
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>Выбор нужного типа стоп-заявки:</para>
+					<!--para>Выбор нужного типа стоп-заявки:</para-->
 					<alert class="note">
 						<para>Исходные коды примера лежат в дистрибутиве в папке под названием Sample.</para>
 					</alert>
 					<code language="C#">
-<![CDATA[switch (this.StopOrderType.SelectedIndex)
+<![CDATA[
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
-	case 0:
-		stopOrder = CreateLinkedOrder();
-		break;
-	case 1:
-		stopOrder = CreateStopLimit();
-		break;
-	case 2:
-		stopOrder = CreateOtherSecurity();
-		break;
-	case 3:
-		stopOrder = CreateTakeProfit();
-		break;
-	case 4:
-		stopOrder = CreateTakeProfitAndStopLimit();
-		break;
-	default:
-		throw new InvalidOperationException("Выбран неизвестный тип стоп-заявки.");
-}
+	var newOrder = new OrderConditionalWindow
+	{
+		Order = new Order
+		{
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+			ExpiryDate = DateTime.Today
+		},
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
+	};
 
-MainWindow.Instance.NewOrder(stopOrder);]]></code>
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+}
+]]></code>
 				</content>
 			</step>
-			<step>
+			<!--step>
 				<content>
 					<para>Со связанной заявкой:</para>
 					<code language="C#">
@@ -306,7 +305,7 @@ MainWindow.Instance.NewOrder(stopOrder);]]></code>
 						<image placement="center" xlink:href="samplestoporder" />
 					</mediaLink>
 				</content>
-			</step>
+			</step-->
 		</steps>
     </procedure>
     

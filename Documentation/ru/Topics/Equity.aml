@@ -41,13 +41,14 @@
       <code language="C#">
 _strategy.PnLChanged += () =>
 {
-	var data = new EquityData
+	var pnl = new EquityData
 	{
-		Time = _strategy.Trader.MarketTime,
-		Value = _strategy.PnL,
+		Time = strategy.CurrentTime,
+		Value = strategy.PnL - strategy.Commission ?? 0
 	};
 
-	this.GuiAsync(() => _curveItems.Add(data));
+
+	pnlCurve.Add(pnl);
 };      
       </code>
       <para>

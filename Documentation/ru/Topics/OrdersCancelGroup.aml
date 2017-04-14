@@ -36,7 +36,7 @@
 		  <para>
 			  Снять все стоп-заявки на покупку:
 		  </para>
-		  <code language="C#">trader.CancelOrders(true, null, OrderDirections.Buy, null, null);</code>
+		  <code language="C#">trader.CancelOrders(true, null, Sides.Buy, null, null);</code>
       </content>
     </section>
     

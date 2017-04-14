@@ -60,11 +60,12 @@
 						<![CDATA[
 private void OnStrategyPropertyChanged(object sender, PropertyChangedEventArgs e)
 {
-	this.Sync(() =>
-	{
-		Status.Content = _strategy.ProcessState;
-		Slippage.Content = _strategy.Slippage;
-	});
+   this.GuiAsync(() =>
+   {
+      	Status.Content = _strategy.ProcessState;
+    	Slippage.Content = _strategy.Slippage;
+   });
+
 }
 						]]>
 						</code>

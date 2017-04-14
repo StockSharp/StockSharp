@@ -21,7 +21,10 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 			Security = SecurityPicker.SelectedSecurity,
 			Type = OrderTypes.Conditional,
 		},
-		Connector = MainWindow.Instance.Trader,
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
 	};
 
 	if (newOrder.ShowModal(this))
