@@ -178,44 +178,47 @@ trader.MarketDepthChanged += depth =>
 		  <step>
 			  <content>
 				  <para>Торговый алгоритм робота:</para>
-				  <code language="C#"><![CDATA[// 0.1% от изменения цены
+				  <code language="C#"><![CDATA[
+// 0.1% от изменения цены
 const decimal delta = 0.001m;
 
 // запоминаем первоначальное значение середины спреда
-var firstMid = lkoh.BestPair.SpreadPrice / 2;
-if (_lkoh.BestBid == null)
-	throw new Exception("Нет лучшего бида для котировки.");
+var firstMid = _lkoh.BestPair.SpreadPrice / 2;
+if (_lkoh.BestBid == null || firstMid == null)
+	throw new Exception(LocalizedStrings.Str2990);
 
-Console.WriteLine("Первоначальное значение середины спреда {0:0.##}", _lkoh.BestBid.Price + firstMid);
+Console.WriteLine(LocalizedStrings.Str2991Params, _lkoh.BestBid.Price + firstMid);
 
 while (true)
 {
 	var mid = _lkoh.BestPair.SpreadPrice / 2;
 
 	// если спред вышел за пределы нашего диапазона
-	if	(
-			((firstMid + firstMid * delta) <= mid) ||
-			((firstMid - firstMid * delta) >= mid)
+	if (mid != null &&
+			((firstMid + firstMid * delta) <= mid ||
+			(firstMid - firstMid * delta) >= mid)
 		)
 	{
 		var order = new Order
 		{
 			Portfolio = _portfolio,
-			Price = _lkoh.ShrinkPrice(lkoh.BestBid + mid),
+			Price = _lkoh.ShrinkPrice(_lkoh.BestBid.Price + mid.Value),
 			Security = _lkoh,
 			Volume = 1,
-			Direction = OrderDirections.Buy,
+			Direction = Sides.Buy,
 		};
 		trader.RegisterOrder(order);
-		Console.WriteLine("Заявка {0} зарегистрирована", order.Id);
+		Console.WriteLine(LocalizedStrings.Str1157Params, order.Id);
 		break;
 	}
 	else
-		Console.WriteLine("Текущее значение середины спреда {0:0.##}", _lkoh.BestBid.Price + mid);
+		Console.WriteLine(LocalizedStrings.Str2176Params, _lkoh.BestBid.Price + mid);
 
 	// ждем 1 секунду
 	Thread.Sleep(1000);
-}]]></code>
+}
+
+]]></code>
 			  </content>
 		  </step>
 		  

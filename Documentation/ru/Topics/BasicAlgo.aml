@@ -46,7 +46,7 @@ var someOrders = new List<Order>();
 // заполняем коллекцию собственными заявками
 
 // вычисляем истинно-лучшую цену на покупку
-Console.WriteLine(trader.GetMarketDepth(someSecurity).GetFilteredQuotes(OrderDirections.Buy, someOrders, null).Max(q => q.Price));]]></code>
+Console.WriteLine(trader.GetMarketDepth(someSecurity).GetFilteredQuotes(Sides.Buy, someOrders, null).Max(q => q.Price));]]></code>
 			  </content>
 		  </step>
 		  <!--<step>
@@ -81,10 +81,9 @@ Console.WriteLine(someSecurity.ShrinkPrice(13453.65342));</code>
 		  <step>
 			  <content>
 				  <para>
-					  Получить позицию по совершенным сделкам через метод <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetPosition</codeEntityReference>.
-					  В примере идет расчет по торговой стратегии - объекту класса <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>:</para>
-				  <code language="C#">Strategy someStrategy = ...;
-Console.WriteLine(someStrategy.Trades.GetPosition());</code>
+					  Получить позицию по совершенным сделкам через метод <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetPosition</codeEntityReference>:</para>
+				  <code language="C#">
+Console.WriteLine(_trader.GetPosition(Portfolio,Security, clientCode, depoName);</code>
 			  </content>
 		  </step>
 		  <!--step>
@@ -117,7 +116,7 @@ Console.WriteLine(someTrade.GetSlippage(someTrade.Order.Price));</code>
 				  <code language="C#">// любой инструмент
 var someSecurity = trader.Securities.First();
 
-Console.WriteLine(someSecurity.Exchange.IsTradeTime(currentTime));</code>
+Console.WriteLine(someSecurity.Board.IsTradeTime(currentTime));</code>
 			  </content>
 		  </step>
 		  <step>

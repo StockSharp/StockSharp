@@ -24,7 +24,7 @@
           <content>
             <para>Далее, необходимо заполнять его данными. Например, это может быть цена закрытия свечи:</para>
             <code language="C#"><![CDATA[foreach (var candle in candles)
-	longSma.Process((DecimalIndicatorValue)candle.ClosePrice);]]></code>
+	longSma.Process(candle);]]></code>
 			<para>
 				Индикатор принимает на вход <codeEntityReference>T:StockSharp.Algo.Indicators.IIndicatorValue</codeEntityReference>. Некоторые из индикаторов
 				оперируют простым числом, как, например, <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference>.
@@ -39,19 +39,18 @@
           <content>
             <para>Для того, чтобы получить текущее значение индикатора, используется метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Indicators.IIndicatorValue.GetValue``1</codeEntityReference>:</para>
 			<code language="C#"><![CDATA[// вычисляем новое положение относительно друг друга
-var isShortLessThenLong = ShortSma.GetValue<decimal>(0) < LongSma.GetValue<decimal>(0);
+var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
 
 // если произошло пересечение
 if (_isShortLessThenLong != isShortLessThenLong)
 {
 	// если короткая меньше чем длинная, то продажа, иначе, покупка.
-	var direction = isShortLessThenLong ? OrderDirections.Sell : OrderDirections.Buy;
-
-	// создаем заявку
-	var order = this.CreateOrder(direction, Security.GetMarketPrice(direction), Volume);
+	var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
 
 	// регистрируем заявку
-	RegisterOrder(order);
+	var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+	var price = candle.ClosePrice + ((direction == Sides.Buy ? Security.PriceStep : -Security.PriceStep) ?? 1);
+    RegisterOrder(this.CreateOrder(direction, price, volume));
 
 	// запоминаем текущее положение относительно друг друга
 	_isShortLessThenLong = isShortLessThenLong;

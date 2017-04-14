@@ -22,7 +22,7 @@
 var depth = trader.GetMarketDepth(option);
 
 // получить теоритические сделки на покупку 100 контрактов
-var trades = depth.GetTheoreticalTrades(OrderDirections.Buy, 100);
+var trades = depth.GetTheoreticalTrades(Sides.Buy, 100);
 
 // расчитать реализованный объем
 var matchedVolume = trades.Sum(t => t.Trade.Volume);

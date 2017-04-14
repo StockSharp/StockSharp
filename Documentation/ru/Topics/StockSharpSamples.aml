@@ -167,7 +167,7 @@
 			  	  <entry>CQG</entry>
 				  <entry>SampleCQG</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.CQG.CQGTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference>, <codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 			  <row>
