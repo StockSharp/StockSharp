@@ -71,8 +71,6 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		// TODO сделать хранение описания инструментов и сделать эмуляцию на Level1
-
 		private sealed class SecurityMarketEmulator : BaseLogReceiver//, IMarketEmulator
 		{
 			private readonly MarketEmulator _parent;
@@ -1794,9 +1792,7 @@ namespace StockSharp.Algo.Testing
 				switch (change.Key)
 				{
 					case Level1Fields.PriceStep:
-						state[change.Key] = change.Value;
-						break;
-
+					case Level1Fields.VolumeStep:
 					case Level1Fields.MinPrice:
 					case Level1Fields.MaxPrice:
 						state[change.Key] = change.Value;
@@ -1835,15 +1831,17 @@ namespace StockSharp.Algo.Testing
 			if (board != null)
 			{
 				//if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
-				if (!Settings.IsSupportAtomicReRegister)
-					return LocalizedStrings.Str1170Params.Put(board.Code);
+				//if (!Settings.IsSupportAtomicReRegister)
+				//	return LocalizedStrings.Str1170Params.Put(board.Code);
 
 				if (!board.IsTradeTime(execMsg.ServerTime))
 					return LocalizedStrings.Str1171;
 			}
 
 			var state = _secStates.TryGetValue(execMsg.SecurityId);
+
 			var priceStep = securityDefinition?.PriceStep;
+			var volumeStep = securityDefinition?.VolumeStep;
 
 			if (state != null && execMsg.OrderType != OrderTypes.Market)
 			{
@@ -1862,6 +1860,12 @@ namespace StockSharp.Algo.Testing
 
 			if (priceStep != null && priceStep > 0 && execMsg.OrderPrice % priceStep != 0)
 				return LocalizedStrings.OrderPriceNotMultipleOfPriceStep.Put(execMsg.OrderPrice, execMsg.TransactionId, priceStep);
+
+			if (volumeStep == null)
+				volumeStep = (decimal?)state?.TryGetValue(Level1Fields.VolumeStep);
+
+			if (volumeStep != null && volumeStep > 0 && execMsg.OrderVolume % volumeStep != 0)
+				return LocalizedStrings.OrderVolumeNotMultipleOfVolumeStep.Put(execMsg.OrderVolume, execMsg.TransactionId, volumeStep);
 
 			var info = GetPortfolioInfo(execMsg.PortfolioName);
 

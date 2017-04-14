@@ -44866,5 +44866,15 @@ namespace StockSharp.Localization
 		/// Order price is not a multiple of security price step. Price step is '{0}', order price is '{1}'.
 		/// </summary>
 		public static string OrderPriceNotMultipleOfPriceStep => GetString(OrderPriceNotMultipleOfPriceStepKey);
+
+		/// <summary>
+		/// Volume {0} of order {1} is not a multiple of security volume step {2}.
+		/// </summary>
+		public const string OrderVolumeNotMultipleOfVolumeStepKey = nameof(OrderVolumeNotMultipleOfVolumeStep);
+
+		/// <summary>
+		/// Volume {0} of order {1} is not a multiple of security volume step {2}.
+		/// </summary>
+		public static string OrderVolumeNotMultipleOfVolumeStep => GetString(OrderVolumeNotMultipleOfVolumeStepKey);
 	}
 }
