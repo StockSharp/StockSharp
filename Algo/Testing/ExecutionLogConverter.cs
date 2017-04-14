@@ -452,7 +452,7 @@ namespace StockSharp.Algo.Testing
 			if (message.IsContainsTick())
 				yield return message.ToTick();
 
-			if (message.IsContainsQuotes())
+			if (message.IsContainsQuotes() && !HasDepth(message.LocalTime))
 			{
 				var prevBidPrice = _prevBidPrice;
 				var prevBidVolume = _prevBidVolume;
