@@ -15,7 +15,7 @@
 			<step>
 				<content>
 <para>В самом начале создаем экземпляр класса шлюза 
-<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgContinuumTrader</codeEntityReference> или  
+<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> или  
 <codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> в зависимости от используемого подключения:</para>
             		<code language="C#">
             				<![CDATA[
