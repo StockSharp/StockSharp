@@ -447,12 +447,12 @@ namespace StockSharp.Algo.Storages
 		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
-		/// <param name="addLog">The handler through which a new log message be passed.</param>
+		/// <param name="logsReceiver">Logs receiver.</param>
 		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
 		public static void SynchronizeSecurities(this IEnumerable<IMarketDataDrive> drives,
 			ISecurityStorage securityStorage, IExchangeInfoProvider exchangeInfoProvider,
-			Action<Security> newSecurity,
-			Action<int, int> updateProgress, Action<LogMessage> addLog, Func<bool> isCancelled)
+			Action<Security> newSecurity, Action<int, int> updateProgress,
+			Func<bool> isCancelled, ILogReceiver logsReceiver)
 		{
 			if (drives == null)
 				throw new ArgumentNullException(nameof(drives));
@@ -469,11 +469,11 @@ namespace StockSharp.Algo.Storages
 			if (updateProgress == null)
 				throw new ArgumentNullException(nameof(updateProgress));
 
-			if (addLog == null)
-				throw new ArgumentNullException(nameof(addLog));
-
 			if (isCancelled == null)
 				throw new ArgumentNullException(nameof(isCancelled));
+
+			if (logsReceiver == null)
+				throw new ArgumentNullException(nameof(logsReceiver));
 
 			var securityPaths = new List<string>();
 			var progress = 0;
@@ -504,8 +504,6 @@ namespace StockSharp.Algo.Storages
 			var iterCount = securityPaths.Count;
 
 			updateProgress(0, iterCount);
-
-			var logSource = ConfigManager.GetService<LogManager>().Application;
 
 			var securities = securityStorage.LookupAll().ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
 
@@ -570,7 +568,7 @@ namespace StockSharp.Algo.Storages
 				updateProgress(progress++, iterCount);
 
 				if (isNew)
-					addLog(new LogMessage(logSource, TimeHelper.NowWithOffset, LogLevels.Info, LocalizedStrings.Str2930Params.Put(security)));
+					logsReceiver.AddInfoLog(LocalizedStrings.Str2930Params, security);
 			}
 		}
 
@@ -579,18 +577,22 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="drives">Storage drives.</param>
 		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
-		/// <param name="addLog">The handler through which a new log message be passed.</param>
 		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
-		public static void ClearDatesCache(this IEnumerable<IMarketDataDrive> drives, Action<int, int> updateProgress, Action<LogMessage> addLog, Func<bool> isCancelled)
+		/// <param name="logsReceiver">Logs receiver.</param>
+		public static void ClearDatesCache(this IEnumerable<IMarketDataDrive> drives, Action<int, int> updateProgress,
+			Func<bool> isCancelled, ILogReceiver logsReceiver)
 		{
 			if (drives == null)
 				throw new ArgumentNullException(nameof(drives));
 
-			if (addLog == null)
-				throw new ArgumentNullException(nameof(addLog));
+			if (updateProgress == null)
+				throw new ArgumentNullException(nameof(updateProgress));
 
 			if (isCancelled == null)
 				throw new ArgumentNullException(nameof(isCancelled));
+
+			if (logsReceiver == null)
+				throw new ArgumentNullException(nameof(logsReceiver));
 
 			//var dataTypes = new[]
 			//{
@@ -603,7 +605,6 @@ namespace StockSharp.Algo.Storages
 			//	Tuple.Create(typeof(NewsMessage), (object)null)
 			//};
 
-			var logSource = ConfigManager.GetService<LogManager>().Application;
 			var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 			var progress = 0;
 
@@ -634,7 +635,7 @@ namespace StockSharp.Algo.Storages
 
 					updateProgress(progress++, iterCount);
 
-					addLog(new LogMessage(logSource, TimeHelper.NowWithOffset, LogLevels.Info, LocalizedStrings.Str2931Params.Put(secId, drive.Path)));
+					logsReceiver.AddInfoLog(LocalizedStrings.Str2931Params, secId, drive.Path);
 				}
 
 				if (isCancelled())
