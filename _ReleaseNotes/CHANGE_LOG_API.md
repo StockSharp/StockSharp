@@ -9,6 +9,9 @@ StockSharp API Change log
 * (feature) CQG continuum.
 * (feature) Order. IsMarketMaker property.
 * (bug) HeartbeatMessageAdapter. Auto reconnect fix.
+* (feature) Micex TEAP, Micex FIX. Market maker orders support.
+* (bug) Quik lua. Fix Level1 translation after reconnect.
+* (bug) Quik lua. Fix transaction status check.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.

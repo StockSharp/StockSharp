@@ -520,16 +520,6 @@
         <see cref="P:StockSharp.Fix.FixServer.State" /> change event.
             </summary>
     </member>
-    <member name="E:StockSharp.Fix.FixServer.SessionCreated">
-      <summary>
-            Session change event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.UserLoggedOut">
-      <summary>
-            User disconnect event.
-            </summary>
-    </member>
     <member name="E:StockSharp.Fix.FixServer.UserPasswordChanging">
       <summary>
             Password change event.
@@ -3924,6 +3914,16 @@
             Required if responding to and if provided on the <see cref="F:StockSharp.Fix.Native.FixMessages.OrderMassStatusRequest" /> message.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.OrderCapacity">
+      <summary>
+            Designates the capacity of the firm placing the order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.OrderRestrictions">
+      <summary>
+            Restrictions associated with an order. If more than one restriction is applicable to an order, this field can contain multiple instructions separated by space.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Price">
       <summary>
             Price per unit of quantity (e.g. per share).
@@ -4704,6 +4704,14 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.NestedPartyID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.OrderCapacity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.OrderRestrictions">
       <summary>
       </summary>
     </member>
