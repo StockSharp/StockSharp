@@ -161,8 +161,6 @@ P:StockSharp.Fix.FixServer.TransactionSession/summary;TransactionalSession
 P:StockSharp.Fix.FixServer.MarketDataSession/summary;TransactionalSession
 P:StockSharp.Fix.FixServer.State/summary;DocStr3173
 E:StockSharp.Fix.FixServer.StateChanged/summary;DocStr3900
-E:StockSharp.Fix.FixServer.SessionCreated/summary;DocStr3174
-E:StockSharp.Fix.FixServer.UserLoggedOut/summary;DocStr3175
 E:StockSharp.Fix.FixServer.UserPasswordChanging/summary;DocStr3176
 E:StockSharp.Fix.FixServer.UserFinding/summary;DocStr3177
 M:StockSharp.Fix.FixServer.Start/summary;DocStr3163
@@ -1025,6 +1023,8 @@ P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestamp/summary;DocStr8790
 P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestampType/summary;DocStr8791
 P:StockSharp.Fix.Native.ExecutionReport.MaxFloor/summary;DocStr9139
 P:StockSharp.Fix.Native.ExecutionReport.MassStatusReqId/summary;DocStr9461
+P:StockSharp.Fix.Native.ExecutionReport.OrderCapacity/summary;DocStr9699
+P:StockSharp.Fix.Native.ExecutionReport.OrderRestrictions/summary;DocStr9700
 F:StockSharp.Fix.Native.ExecutionReport.Price/summary;DocStr8792
 F:StockSharp.Fix.Native.ExecutionReport.Symbol/summary;DocStr8793
 F:StockSharp.Fix.Native.ExecutionReport.SecurityExchange/summary;DocStr8794
@@ -1209,6 +1209,8 @@ F:StockSharp.Fix.Native.FixTags.PartyRole/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoPartyIDs/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.CFICode/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NestedPartyID/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.OrderCapacity/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.OrderRestrictions/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MassCancelRequestType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MassCancelResponse/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MassCancelRejectReason/summary;DocStr8459

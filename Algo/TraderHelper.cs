@@ -356,9 +356,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the position on My trade.
+		/// To get the position on own trade.
 		/// </summary>
-		/// <param name="trade">My trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
+		/// <param name="trade">Own trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
 		public static decimal? GetPosition(this MyTrade trade)
 		{
@@ -369,9 +369,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the position on My trade.
+		/// To get the position on own trade.
 		/// </summary>
-		/// <param name="message">My trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
+		/// <param name="message">Own trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <param name="byOrder">To check implemented volume by order balance (<see cref="ExecutionMessage.Balance"/>) or by received trades. The default is checked by the order.</param>
 		/// <returns>Position.</returns>
 		public static decimal? GetPosition(this ExecutionMessage message, bool byOrder)
@@ -461,7 +461,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
 		/// </summary>
-		/// <param name="workingTime">Working info info.</param>
+		/// <param name="workingTime">Board working hours.</param>
 		/// <param name="time">The passed time to be checked.</param>
 		/// <param name="period">Current working time period.</param>
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
@@ -514,7 +514,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To check, whether date is traded.
 		/// </summary>
-		/// <param name="workingTime">Working time info.</param>
+		/// <param name="workingTime">Board working hours.</param>
 		/// <param name="date">The passed date to be checked.</param>
 		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
 		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>

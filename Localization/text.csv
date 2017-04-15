@@ -3728,7 +3728,7 @@ BlackModel;Black model;Модель Блэка
 XamlStr308;Current date modifier;Модификатор текущей даты
 XamlStr309;Price modifier of the underlying asset;Модификатор цены базового актива
 XamlStr310;Modified current date;Модифицированная текущая дата
-MyTrades;My trades;Мои сделки
+MyTrades;Own trades;Мои сделки
 XamlStr313;Work monitoring;Мониторинг работы
 XamlStr314;Press the button to save new exchange;Нажмите кнопку, чтобы сохранить новую биржу
 XamlStr315;Press the button to save new exchange board;Нажмите кнопку, чтобы сохранить новую площадку
@@ -5258,7 +5258,7 @@ DocStr753;The commission calculating rule;Правило вычисления к
 DocStr754;The class to create connections to trading systems;Класс для создания подключений к торговым системам
 DocStr755;Send outgoing message;Отправить исходящее сообщение
 DocStr756;Send error message;Отправить ошибку
-DocStr757;My trades to be passed to the event;Мои сделки, которые нужно передать в событие
+DocStr757;Own trades to be passed to the event;Собственные сделки, которые нужно передать в событие
 DocStr758;Trades that should be passed to the event;Сделки, которые нужно передать в событие
 DocStr759;Orders that should be passed to the event;Заявки, которые нужно передать в событие
 DocStr760;Stop orders that should be passed to the event;Стоп-заявки, которые нужно передать в событие
@@ -6777,15 +6777,15 @@ DocStr2281;To cut the price, to make it multiple of minimal step, also to limit 
 DocStr2282;The instrument from which the {0} and {1} values are taken;Инструмент, из которого берется значения {0} и {1}
 DocStr2283;The price to be made multiple;Цена, которую нужно сделать кратной
 DocStr2284;The multiple price;Кратная цена
-DocStr2285;To get the position on My trade;Получить позицию по Моей сделке
-DocStr2286;My trade, used for position calculation. At buy the trade volume {0} is taken with positive sign, at sell - with negative;Моя сделка, по которой рассчитывается позиция. При покупке объем сделки {0} берется с положительным знаком, при продаже - с отрицательным
+DocStr2285;To get the position on own trade;Получить позицию по собственной сделке
+DocStr2286;Own trade, used for position calculation. At buy the trade volume {0} is taken with positive sign, at sell - with negative;Собственная сделка, по которой рассчитывается позиция. При покупке объем сделки {0} берется с положительным знаком, при продаже - с отрицательным
 DocStr2287;To get the position by the order;Получить позицию по заявке
 DocStr2288;The order, used for the position calculation. At buy the position is taken with positive sign, at sell - with negative;Заявка, по которой рассчитывается позиция. При покупке позиция берется с положительным знаком, при продаже - с отрицательным
 DocStr2289;To get the position by the portfolio;Получить позицию по портфелю
 DocStr2290;The portfolio, for which the position needs to be got;Портфель, для которого необходимо получить позицию
 DocStr2291;The position by the portfolio;Позиция по портфелю
-DocStr2292;To get the position by My trades;Получить позицию по Моим сделкам
-DocStr2293;My trades, used for the position calculation using the {0} method;Мои сделки, по которым рассчитывается позиция через метод {0}
+DocStr2292;To get the position by own trades;Получить позицию по собственным сделкам
+DocStr2293;Own trades, used for the position calculation using the {0} method;Собственные сделки, по которым рассчитывается позиция через метод {0}
 DocStr2294;To get the trade volume, collatable with the position size;Получить объем заявки, сопоставимый с размером позиции
 DocStr2295;The position by the instrument;Позиция по инструменту
 DocStr2296;To group orders by instrument and portfolio;Сгруппировать заявки по инструменту и портфелю
@@ -13995,3 +13995,27 @@ DocStr9696;CQG Continuum message adapter;Адаптер сообщений дл�
 DocStr9698;The interface {0} implementation which provides a connection to the CQG Continuum;Реализация интерфейса {0} для взаимодействия с системой CQG Continuum
 DocStr9699;Designates the capacity of the firm placing the order;Определяет емкость фирмы, размещающая заявку
 DocStr9700;Restrictions associated with an order. If more than one restriction is applicable to an order, this field can contain multiple instructions separated by space;Ограничения, связанные с заявкой. Если к заявке применяется более одного ограничения, это поле может содержать несколько инструкций, разделенных пробелом
+DocStr9703;Add element;Добавить элемент
+DocStr9704;Element position;Позиция элемента
+DocStr9705;Remove element;Удалить элемент
+DocStr9706;Add link;Добавить связь
+DocStr9707;The source diagram element;Исходящий элемент
+DocStr9708;The source socket unique key;Уникальный ключ исходящего сокета
+DocStr9709;The destination diagram element;Конечный элемент
+DocStr9710;The destination socket unique key;Уникальный ключ конечного сокета
+DocStr9711;The source socket;Исходящий сокет
+DocStr9712;The destination socket;Конечный сокет
+DocStr9713;Remove link;Удалить связь
+DocStr9714;Get diagram socket by unique socket key;Получить сокет по ключу
+DocStr9716;Diagram socket;Сокет
+DocStr9718;The unique diagram socket keys;Уникальные ключи сокетов
+DocStr9720;First operand;Первый операнд
+DocStr9721;Second operand;Второй операнд
+DocStr9723;Second input;Второй вход
+DocStr9726;Hedge type;Тип хэджирования
+DocStr9727;Quoting type;Тип котирования
+DocStr9729;Left offset;Сдвиг влево
+DocStr9730;Right offset;Сдвиг вправо
+DocStr9731;Level1 field;Поле Level1
+DocStr9742;The variable value;Значение переменной
+DocStr9743;Indicators;Индикаторы

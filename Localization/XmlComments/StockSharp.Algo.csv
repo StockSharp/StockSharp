@@ -6522,6 +6522,11 @@ M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.BoardMessage,Syst
 M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.BoardMessage,System.DateTimeOffset,StockSharp.Messages.WorkingTimePeriod@)/param/time;DocStr2310
 M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.BoardMessage,System.DateTimeOffset,StockSharp.Messages.WorkingTimePeriod@)/param/period;DocStr8652
 M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.BoardMessage,System.DateTimeOffset,StockSharp.Messages.WorkingTimePeriod@)/returns;DocStr2311
+M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.WorkingTime,System.DateTime,StockSharp.Messages.WorkingTimePeriod@)/summary;DocStr2309
+M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.WorkingTime,System.DateTime,StockSharp.Messages.WorkingTimePeriod@)/param/workingTime;WorkingHours
+M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.WorkingTime,System.DateTime,StockSharp.Messages.WorkingTimePeriod@)/param/time;DocStr2310
+M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.WorkingTime,System.DateTime,StockSharp.Messages.WorkingTimePeriod@)/param/period;DocStr8652
+M:StockSharp.Algo.TraderHelper.IsTradeTime(StockSharp.Messages.WorkingTime,System.DateTime,StockSharp.Messages.WorkingTimePeriod@)/returns;DocStr2311
 M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.BusinessEntities.ExchangeBoard,System.DateTimeOffset,System.Boolean)/summary;DocStr2313
 M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.BusinessEntities.ExchangeBoard,System.DateTimeOffset,System.Boolean)/param/board;BoardInfo
 M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.BusinessEntities.ExchangeBoard,System.DateTimeOffset,System.Boolean)/param/date;DocStr2314
@@ -6532,6 +6537,11 @@ M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.BoardMessage,Syst
 M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.BoardMessage,System.DateTimeOffset,System.Boolean)/param/date;DocStr2314
 M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.BoardMessage,System.DateTimeOffset,System.Boolean)/param/checkHolidays;DocStr2315
 M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.BoardMessage,System.DateTimeOffset,System.Boolean)/returns;DocStr2316
+M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.WorkingTime,System.DateTime,System.Boolean)/summary;DocStr2313
+M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.WorkingTime,System.DateTime,System.Boolean)/param/workingTime;WorkingHours
+M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.WorkingTime,System.DateTime,System.Boolean)/param/date;DocStr2314
+M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.WorkingTime,System.DateTime,System.Boolean)/param/checkHolidays;DocStr2315
+M:StockSharp.Algo.TraderHelper.IsTradeDate(StockSharp.Messages.WorkingTime,System.DateTime,System.Boolean)/returns;DocStr2316
 M:StockSharp.Algo.TraderHelper.LastTradeDay(StockSharp.Messages.BoardMessage,System.DateTimeOffset,System.Boolean)/summary;DocStr9163
 M:StockSharp.Algo.TraderHelper.LastTradeDay(StockSharp.Messages.BoardMessage,System.DateTimeOffset,System.Boolean)/param/board;BoardInfo
 M:StockSharp.Algo.TraderHelper.LastTradeDay(StockSharp.Messages.BoardMessage,System.DateTimeOffset,System.Boolean)/param/date;DocStr9164

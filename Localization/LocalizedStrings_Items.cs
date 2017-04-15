@@ -37218,12 +37218,12 @@ namespace StockSharp.Localization
 		public static string XamlStr310 => GetString(XamlStr310Key);
 
 		/// <summary>
-		/// My trades
+		/// Own trades
 		/// </summary>
 		public const string MyTradesKey = nameof(MyTrades);
 
 		/// <summary>
-		/// My trades
+		/// Own trades
 		/// </summary>
 		public static string MyTrades => GetString(MyTradesKey);
 
