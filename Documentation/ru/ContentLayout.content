@@ -311,7 +311,7 @@
         <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
         <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
       </Topic>
-      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" isExpanded="true" title="Америка">
+      <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Америка">
         <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
         <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" title="FinViz" />
         <Topic id="0166d686-9fb0-4e78-8578-f5b706ad6a07" visible="True" title="Google" />
@@ -326,7 +326,7 @@
         <Topic id="48a0cef2-f3f7-4bf1-aa3b-043a130777c7" visible="True" title="BarChart" />
         <Topic id="19e07661-3563-4eb2-b781-d0f0106fd769" visible="True" title="CQG COM" />
         <Topic id="f3eda329-0077-4517-99f2-aabdea2a930d" visible="True" title="CQG Continuum" />
-        <Topic id="3adf98fb-fa41-46ad-93cb-583fb67c1d6b" visible="True" isSelected="true" title="Xignite" />
+        <Topic id="3adf98fb-fa41-46ad-93cb-583fb67c1d6b" visible="True" title="Xignite" />
       </Topic>
       <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" title="Форекс" tocTitle="Форекс">
         <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
@@ -370,7 +370,7 @@
       <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="Новости" />
       <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Транзакции" />
     </Topic>
-    <Topic id="c9491706-3750-42e8-a63f-b50184a7da1d" visible="True" noFile="true" title="Работа с  S#.Data через S#.API">
+    <Topic id="c9491706-3750-42e8-a63f-b50184a7da1d" visible="True" noFile="true" title="Работа с S#.Data через S#.API">
       <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="Подключение к S#.Data через FixTrader" />
       <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="Подключение к S#.Data через WCF" />
       <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Добавление в S#.Data новых данных" />
@@ -388,7 +388,7 @@
       <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Работа со скриптами" />
       <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Отображение результатов анализа" />
     </Topic>
-    <Topic id="b6131db4-4a22-48ea-b89e-8e2a79d633c1" visible="True" noFile="true" title="Настройки">
+    <Topic id="b6131db4-4a22-48ea-b89e-8e2a79d633c1" visible="True" noFile="true" isExpanded="true" title="Настройки">
       <Topic id="e088a37c-22aa-4a85-a20e-3b64c1b039d3" visible="True" title="Сбросить настройки" />
       <Topic id="45cc9b3a-117c-4567-94af-fea13087ebe9" visible="True" title="Удалить данные " />
       <Topic id="938a2834-a3cc-4d92-8a41-e4c11cf84d78" visible="True" title="Настройка сети" />
@@ -405,7 +405,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
     <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" isExpanded="true" title="Интерфейс программы">
