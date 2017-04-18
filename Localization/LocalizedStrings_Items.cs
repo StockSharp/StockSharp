@@ -44876,5 +44876,15 @@ namespace StockSharp.Localization
 		/// Volume {0} of order {1} is not a multiple of security volume step {2}.
 		/// </summary>
 		public static string OrderVolumeNotMultipleOfVolumeStep => GetString(OrderVolumeNotMultipleOfVolumeStepKey);
+
+		/// <summary>
+		/// Delete all break points
+		/// </summary>
+		public const string DeleteAllBreakPointsKey = nameof(DeleteAllBreakPoints);
+
+		/// <summary>
+		/// Delete all break points
+		/// </summary>
+		public static string DeleteAllBreakPoints => GetString(DeleteAllBreakPointsKey);
 	}
 }
