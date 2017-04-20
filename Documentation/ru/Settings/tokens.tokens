@@ -61,10 +61,6 @@
 		  <ddue:linkText>.NET</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/.NET_Framework</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="download"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>Скачать</ddue:linkText>
-    <ddue:linkUri>http://stocksharp.ru/products/download/</ddue:linkUri>
-  </ddue:externalLink></item>
   <item id="etrade"><ddue:link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">E*TRADE</ddue:link></item>
   <item id="etrade_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>E*TRADE</ddue:linkText>
@@ -117,6 +113,7 @@
 		  <ddue:linkText>IV</ddue:linkText>
 		  <ddue:linkUri>http://en.wikipedia.org/wiki/Implied_volatility</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="Live торговля"><ddue:link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Live торговля</ddue:link></item>
   <item id="lmax"><ddue:link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">LMAX</ddue:link></item>
   <item id="lmax_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>LMAX</ddue:linkText>
@@ -148,7 +145,7 @@
     <ddue:linkText>MOEX</ddue:linkText>
     <ddue:linkUri>http://moex.com</ddue:linkUri>
   </ddue:externalLink></item>
-  <item id="MSDN_VS_Attach_process"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+  <item id="MSDN"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>MSDN</ddue:linkText>
     <ddue:linkUri>https://msdn.microsoft.com/ru-ru/library/3s68z0b3.aspx</ddue:linkUri>
    </ddue:externalLink></item>
@@ -328,4 +325,9 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="download"><ddue:externalLink 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>Скачать</ddue:linkText>
+    <ddue:linkUri>http://stocksharp.ru/products/download/</ddue:linkUri>
+  </ddue:externalLink></item>
 </content>
