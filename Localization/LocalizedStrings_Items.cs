@@ -36218,12 +36218,12 @@ namespace StockSharp.Localization
 		public static string XamlStr145 => GetString(XamlStr145Key);
 
 		/// <summary>
-		/// Add break point
+		/// Add breakpoint
 		/// </summary>
 		public const string XamlStr146Key = nameof(XamlStr146);
 
 		/// <summary>
-		/// Add break point
+		/// Add breakpoint
 		/// </summary>
 		public static string XamlStr146 => GetString(XamlStr146Key);
 
@@ -40368,12 +40368,12 @@ namespace StockSharp.Localization
 		public static string XamlStr799 => GetString(XamlStr799Key);
 
 		/// <summary>
-		/// Delete break point
+		/// Delete breakpoint
 		/// </summary>
 		public const string XamlStr800Key = nameof(XamlStr800);
 
 		/// <summary>
-		/// Delete break point
+		/// Delete breakpoint
 		/// </summary>
 		public static string XamlStr800 => GetString(XamlStr800Key);
 
@@ -44878,12 +44878,12 @@ namespace StockSharp.Localization
 		public static string OrderVolumeNotMultipleOfVolumeStep => GetString(OrderVolumeNotMultipleOfVolumeStepKey);
 
 		/// <summary>
-		/// Delete all break points
+		/// Delete all breakpoints
 		/// </summary>
 		public const string DeleteAllBreakPointsKey = nameof(DeleteAllBreakPoints);
 
 		/// <summary>
-		/// Delete all break points
+		/// Delete all breakpoints
 		/// </summary>
 		public static string DeleteAllBreakPoints => GetString(DeleteAllBreakPointsKey);
 	}

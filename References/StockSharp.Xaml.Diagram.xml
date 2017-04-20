@@ -437,11 +437,23 @@
             </summary>
       <param name="socket">Socket.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveAllBreaks">
+      <summary>
+            Remove all breakpoints from the scheme.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
             Whether the socket is the breakpoint.
             </summary>
       <param name="socket">Socket.</param>
+      <returns>
+        <see langword="true" />, if the socket is the breakpoint, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.HasBreaks">
+      <summary>
+            Whether the scheme contains the breakpoints.
+            </summary>
       <returns>
         <see langword="true" />, if the socket is the breakpoint, otherwise, <see langword="false" />.</returns>
     </member>

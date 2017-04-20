@@ -127,9 +127,12 @@ M:StockSharp.Xaml.Diagram.DiagramDebugger.AddBreak(StockSharp.Xaml.Diagram.Diagr
 M:StockSharp.Xaml.Diagram.DiagramDebugger.AddBreak(StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;DocStr8883
 M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveBreak(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr8889
 M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveBreak(StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;DocStr8883
+M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveAllBreaks/summary;DocStr9744
 M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr8890
 M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;DocStr8883
 M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramSocket)/returns;DocStr8891
+M:StockSharp.Xaml.Diagram.DiagramDebugger.HasBreaks/summary;DocStr9745
+M:StockSharp.Xaml.Diagram.DiagramDebugger.HasBreaks/returns;DocStr8891
 M:StockSharp.Xaml.Diagram.DiagramDebugger.StepNext/summary;DocStr7950
 M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto(StockSharp.Xaml.Diagram.CompositionDiagramElement)/summary;DocStr7952
 M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto(StockSharp.Xaml.Diagram.CompositionDiagramElement)/param/composition;XamlStr688
