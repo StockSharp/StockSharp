@@ -22,6 +22,12 @@
       <param name="dialect">The FIX dialect.</param>
       <returns>The dialect.</returns>
     </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Send message.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixServer">
       <summary>
             FIX сервер, запускающийся LUA.
