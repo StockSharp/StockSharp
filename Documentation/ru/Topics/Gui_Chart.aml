@@ -225,7 +225,7 @@ private void DrawCandle(CandleSeries series, Candle candle)
 		var smaValue = _sma.Process(candle);
 		var macdValue = _macd.Process(candle);
 
-		var data = new ChartingDrawData();
+		var data = new ChartDrawData();
 		data
 		  .Group(candle.OpenTime)
 		    .Add(_candlesElem, candle)

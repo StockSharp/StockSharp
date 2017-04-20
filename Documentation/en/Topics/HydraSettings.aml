@@ -45,6 +45,14 @@
           <legacyBold>Errors (email)</legacyBold> - the e-mail address, to which a message about exceeding the maximum number of errors will be sent.
 		</listItem>	
       </list>		
+      
+      <para>Если установить <legacyBold>Авторизацию</legacyBold> отличную от <legacyBold>Анонимно</legacyBold>, 
+    на вкладке <legacyBold>Общее</legacyBold> появится кнопка <legacyBold>Пользователи</legacyBold>, 
+    после нажатия на которую появляется окно <legacyBold>Пользователи</legacyBold></para>
+<mediaLink>
+<image xlink:href="hydra_users"/>
+</mediaLink>
+      <para>В левой части окна можно добавить нового пользователя, а в правой установить для него права доступа.</para>
 	</introduction>
 	</developerWalkthroughDocument>
 </topic>

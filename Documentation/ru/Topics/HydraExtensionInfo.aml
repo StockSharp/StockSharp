@@ -2,10 +2,16 @@
 <topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Расширенная информаци по инструментам храниться в <legacyBold>CSV</legacyBold> файлах в папке 
-"c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", и автоматически загружается при загрузке <legacyBold>S#.Data</legacyBold>.</para>
-<para>Для выбора необходимой расширеной информации, нежно в вкладке инструменты нажать на кнопку <legacyBold>Расширенная информация</legacyBold>.</para>
-    <mediaLink>
+<para>Источниками расширенной информации по инструментам являются <legacyBold>CSV</legacyBold> файлы, расположенные в папке 
+"c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", которые автоматически загружаются при загрузке <legacyBold>S#.Data</legacyBold>.</para>
+
+<para>Расширенной информацией может являться любая необходимая информация по инструменту (например, страна, город, сайт и др.). </para>
+<para>Каждый источник расширенной информации (<legacyBold>CSV</legacyBold> файл) содержит список инструментов и свойств расширеной информации 
+имеющихся в источнике для каждого из инструментов. Для каждого источника расширенной информации, расширенная информация будет уникальной.</para>
+<para>Если в источнике нет расширенной информации по инструменту, то в колонках соответствующих расширенной информации, 
+списка всех инструментов, будут отображаться пустые ячейки.</para>
+<para>Для выбора необходимой расширеной информации, нужно во вкладке инструменты нажать на кнопку <legacyBold>Расширенная информация</legacyBold>.</para>
+<mediaLink>
 <image xlink:href="hydra_ExtensionInfo_securities"/>
 </mediaLink>
 <para>После чего появиться окно выбора расширенной информации</para>
