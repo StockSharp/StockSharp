@@ -33,6 +33,8 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class HistoryMessageAdapter : MessageAdapter
 	{
+		private readonly HashSet<Tuple<SecurityId, MarketDataTypes>> _generators = new HashSet<Tuple<SecurityId, MarketDataTypes>>();
+
 		private bool _isSuspended;
 		private bool _isStarted;
 
@@ -163,6 +165,7 @@ namespace StockSharp.Algo.Testing
 			this.AddMarketDataSupport();
 			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
 			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>
@@ -232,7 +235,8 @@ namespace StockSharp.Algo.Testing
 				{
 					_isSuspended = false;
 					_currentTime = default(DateTimeOffset);
-					BasketStorage.Reset();
+					_generators.Clear();
+                    BasketStorage.Reset();
 					
 					LoadedMessageCount = 0;
 
@@ -336,6 +340,19 @@ namespace StockSharp.Algo.Testing
 						SendOutMessage(new EmulationStateMessage { State = EmulationStates.Suspended });
 
 					return;
+
+				case ExtendedMessageTypes.Generator:
+				{
+					var generatorMsg = (GeneratorMessage)message;
+					var item = Tuple.Create(generatorMsg.SecurityId, generatorMsg.DataType);
+
+					if (generatorMsg.IsSubscribe)
+						_generators.Add(item);
+					else
+						_generators.Remove(item);
+
+					break;
+				}
 			}
 
 			//SendOutMessage(message);
@@ -366,6 +383,9 @@ namespace StockSharp.Algo.Testing
 			{
 				case MarketDataTypes.Level1:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+						break;
+
 					if (message.IsSubscribe)
 					{
 						if (history == null)
@@ -398,6 +418,9 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.MarketDepth:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+						break;
+
 					if (message.IsSubscribe)
 					{
 						BasketStorage.AddStorage(history == null
@@ -412,6 +435,9 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.Trades:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+						break;
+
 					if (message.IsSubscribe)
 					{
 						BasketStorage.AddStorage(history == null
@@ -426,6 +452,9 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.OrderLog:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+						break;
+
 					if (message.IsSubscribe)
 					{
 						BasketStorage.AddStorage(history == null
@@ -445,6 +474,14 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.CandlePnF:
 				case MarketDataTypes.CandleRenko:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, MarketDataTypes.Trades)))
+					{
+						if (message.IsSubscribe)
+							SendOutMarketDataNotSupported(message.TransactionId);
+
+						return;
+					}
+
 					var msgType = message.DataType.ToCandleMessageType();
 
 					if (message.IsSubscribe)
