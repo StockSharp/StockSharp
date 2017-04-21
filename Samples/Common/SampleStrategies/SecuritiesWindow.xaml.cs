@@ -85,43 +85,47 @@ namespace SampleStrategies
 		{
 			var connector = MainWindow.Instance.Connector;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				connector.RegisterMarketDepth(security);
-
-				// create order book window
-				var wnd = new QuotesWindow
+				var window = _quotesWindows.SafeAdd(security, s =>
 				{
-					Title = security.Id + " " + LocalizedStrings.MarketDepth
-				};
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// subscribe on order book flow
+					connector.RegisterMarketDepth(security);
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthChanged(connector.GetMarketDepth(SecurityPicker.SelectedSecurity));
-				connector.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
+
+				if (!_initialized)
+				{
+					TraderOnMarketDepthChanged(connector.GetMarketDepth(security));
+					connector.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
-
 			var connector = MainWindow.Instance.Connector;
 
-			if (connector.RegisteredSecurities.Contains(security))
-				connector.UnRegisterSecurity(security);
-			else
-				connector.RegisterSecurity(security);
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				if (connector.RegisteredSecurities.Contains(security))
+					connector.UnRegisterSecurity(security);
+				else
+					connector.RegisterSecurity(security);
+			}
 		}
 
 		private void TraderOnMarketDepthChanged(MarketDepth depth)

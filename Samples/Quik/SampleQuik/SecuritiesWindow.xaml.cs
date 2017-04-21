@@ -101,40 +101,46 @@ namespace SampleQuik
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				//// начинаем получать котировки стакана
-				trader.RegisterMarketDepth(security);
+				var window = _quotesWindows.SafeAdd(security, key =>
+				{
+					//// начинаем получать котировки стакана
+					trader.RegisterMarketDepth(security);
 
-				// создаем окно со стаканом
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// создаем окно со стаканом
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
-				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
 
-				// запросить котировки по всем стаканам сразу
-				//trader.SendInMessage(new MarketDataMessage
-				//{
-				//	SecurityId = new SecurityId
-				//	{
-				//		SecurityCode = "ALL",
-				//		BoardCode = "ALL"
-				//	},
-				//	IsSubscribe = true,
-				//	DataType = MarketDataTypes.MarketDepth,
-				//	TransactionId = trader.TransactionIdGenerator.GetNextId()
-				//});
+					// запросить котировки по всем стаканам сразу
+					//trader.SendInMessage(new MarketDataMessage
+					//{
+					//	SecurityId = new SecurityId
+					//	{
+					//		SecurityCode = "ALL",
+					//		BoardCode = "ALL"
+					//	},
+					//	IsSubscribe = true,
+					//	DataType = MarketDataTypes.MarketDepth,
+					//	TransactionId = trader.TransactionIdGenerator.GetNextId()
+					//});
+				}
 			}
 		}
 
@@ -148,18 +154,20 @@ namespace SampleQuik
 
 		private void Level1Click(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
 			var trader = MainWindow.Instance.Trader;
 
-			if (trader.RegisteredSecurities.Contains(security))
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				trader.UnRegisterSecurity(security);
-				trader.UnRegisterTrades(security);
-			}
-			else
-			{
-				trader.RegisterSecurity(security);
-				trader.RegisterTrades(security);
+				if (trader.RegisteredSecurities.Contains(security))
+				{
+					trader.UnRegisterSecurity(security);
+					trader.UnRegisterTrades(security);
+				}
+				else
+				{
+					trader.RegisterSecurity(security);
+					trader.RegisterTrades(security);
+				}
 			}
 		}
 

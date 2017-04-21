@@ -79,16 +79,18 @@ namespace SampleOanda
 
 		private void Level1Click(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
 			var trader = MainWindow.Instance.Trader;
 
-			if (trader.RegisteredSecurities.Contains(security))
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				trader.UnRegisterSecurity(security);
-			}
-			else
-			{
-				trader.RegisterSecurity(security);
+				if (trader.RegisteredSecurities.Contains(security))
+				{
+					trader.UnRegisterSecurity(security);
+				}
+				else
+				{
+					trader.RegisterSecurity(security);
+				}
 			}
 		}
 
@@ -104,10 +106,13 @@ namespace SampleOanda
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
 		{
-			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
-			var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
 
-			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
+			}
 		}
 
 		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)

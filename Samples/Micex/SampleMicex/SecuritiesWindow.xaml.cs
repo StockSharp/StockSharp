@@ -97,34 +97,37 @@ namespace SampleMicex
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// начинаем получать котировки стакана
-				trader.RegisterMarketDepth(security);
-
-				// создаем окно со стаканом
-				var wnd = new QuotesWindow
+				var window = _quotesWindows.SafeAdd(security, s =>
 				{
-					Title = security.Id + " " + LocalizedStrings.MarketDepth,
-					DepthCtrl =
+					// начинаем получать котировки стакана
+					trader.RegisterMarketDepth(security);
+
+					// создаем окно со стаканом
+					var wnd = new QuotesWindow
 					{
-						MaxDepth = MainWindow.Instance.Trader.OrderBookDepth ?? 100
-					}
-				};
-				wnd.MakeHideable();
-				return wnd;
-			});
+						Title = security.Id + " " + LocalizedStrings.MarketDepth,
+						DepthCtrl =
+						{
+							MaxDepth = MainWindow.Instance.Trader.OrderBookDepth ?? 100
+						}
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
-				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 

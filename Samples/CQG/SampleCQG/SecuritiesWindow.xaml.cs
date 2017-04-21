@@ -118,36 +118,40 @@ namespace SampleCQG
 
 		private void DepthClick(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
-
-			var window = _quotesWindows.SafeAdd(security, key =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+				var window = _quotesWindows.SafeAdd(security, key =>
+				{
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-			{
-				// unsubscribe from order book flow
-				Connector.UnRegisterMarketDepth(security);
+				if (window.Visibility == Visibility.Visible)
+				{
+					// unsubscribe from order book flow
+					Connector.UnRegisterMarketDepth(security);
 
-				window.Hide();
-			}
-			else
-			{
-				// subscribe on order book flow
-				Connector.RegisterMarketDepth(security);
+					window.Hide();
+				}
+				else
+				{
+					// subscribe on order book flow
+					Connector.RegisterMarketDepth(security);
 
-				window.Show();
-			}
+					window.Show();
+				}
 
-			if (!_initialized)
-			{
-				OnMarketDepthChanged(Connector.GetMarketDepth(security));
-				Connector.MarketDepthChanged += OnMarketDepthChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					OnMarketDepthChanged(Connector.GetMarketDepth(security));
+					Connector.MarketDepthChanged += OnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 
@@ -160,26 +164,30 @@ namespace SampleCQG
 
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
-
-			if (Connector.RegisteredSecurities.Contains(security))
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				Connector.UnRegisterSecurity(security);
-				Connector.UnRegisterTrades(security);
-			}
-			else
-			{
-				Connector.RegisterSecurity(security);
-				Connector.RegisterTrades(security);
+				if (Connector.RegisteredSecurities.Contains(security))
+				{
+					Connector.UnRegisterSecurity(security);
+					Connector.UnRegisterTrades(security);
+				}
+				else
+				{
+					Connector.RegisterSecurity(security);
+					Connector.RegisterTrades(security);
+				}
 			}
 		}
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
 		{
-			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
-			var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
 
-			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.MaxValue).Show();
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.MaxValue).Show();
+			}
 		}
 
 		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
