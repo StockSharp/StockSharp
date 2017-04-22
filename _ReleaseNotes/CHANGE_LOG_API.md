@@ -15,7 +15,8 @@ StockSharp API Change log
 * (feature) FIX connector. Dump performance boost.
 * (bug) Quik lua. Duration and BuyBackDate fixes.
 * (feature) CollectionHelper. TryGetAndRemove and TryPeek.
-* (feature) TraderHelper.Filter. Overload for SecurityMessage
+* (feature) TraderHelper.Filter. Overload for SecurityMessage.
+* (bug) PortfolioGrid. Multiselect rows fixes.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
