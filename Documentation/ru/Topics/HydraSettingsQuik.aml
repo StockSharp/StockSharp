@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="54a1e95e-ea39-4322-9613-e74859a3a596" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -94,7 +94,7 @@
 	<section address="Section2">
 	  	<title>Настройки для экспорта дополнительных колонок из таблицы Инструменты (изменения).</title>
 		<content>
-	  		<para>Экспорт данных из таблицы Инструменты (изменения) позволяет сохранять данные не только с момента запуска скачивания данныx, но и за весь текущий торговый день.</para>
+	  		<para>Экспорт данных из таблицы Инструменты (изменения) позволяет сохранять данные не только с момента запуска скачивания данных, но и за весь текущий торговый день.</para>
 	  		<para>В таблице Инструменты(изменения) добавить нужные дополнительные колонки.</para>
 			<mediaLink>
         		<image placement="left" xlink:href="hydra_settings_quik_securities_changes" />

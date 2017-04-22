@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
@@ -14,7 +14,7 @@
 		
 		<para>При передаче свечи из события 
 		<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
-		для отрисовки на графике, будут отбражаться изменения текущей свечи.</para>
+		для отрисовки на графике, будут отображаться изменения текущей свечи.</para>
 		
 		<para>Если же нужно отображать только <legacyBold>"целые"</legacyBold> свечи, то необходимо проверить свойство 
 		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Candle.State</codeEntityReference> пришедшей свечи:</para>

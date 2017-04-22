@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="47ebc084-6b07-4b69-8f96-ea190110111f" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -45,7 +45,7 @@
 			</step>
 		  	<step>
 				<content>
-					  <para>Чтобы источник после нажатия кнопки <legacyBold>Старт</legacyBold> стал скачивать данные, его нужно влючить. Для этого следует выбрать значок
+					  <para>Чтобы источник после нажатия кнопки <legacyBold>Старт</legacyBold> стал скачивать данные, его нужно включить. Для этого следует выбрать значок
 					  источника на левой панели и использовать кнопку <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> для включения или выключения.
 					  Эту операцию можно выполнить до, или после добавления инструментов для скачивания, что описано ниже.</para>
 				</content>

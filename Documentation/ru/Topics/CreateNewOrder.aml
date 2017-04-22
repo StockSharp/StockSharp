@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" revisionNumber="1">
   <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--<summary>
@@ -23,7 +23,7 @@
         Type = OrderTypes.Limit,
         // устанавливается портфель для исполнения заявки
         Portfolio = Portfolio.SelectedPortfolio,
-        // устанавливается обьем заявки
+        // устанавливается объём заявки
         Volume = Volume.Text.To<decimal>(),
         // устанавливается цена заявки
         Price = Price.Text.To<decimal>(),

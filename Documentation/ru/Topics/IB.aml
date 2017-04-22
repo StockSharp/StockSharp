@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -13,7 +13,7 @@
 	<relatedTopics>
 		<link xlink:href="eab815a2-65f7-46e8-9989-4ae52d234703">Настройка TWS</link>
 		<link xlink:href="7c23b480-d472-43df-aabf-f743ad09fded">Пример работы с InteractiveBrokersTrader</link>
-		<link xlink:href="3e0f02b3-3e2f-405d-a8a2-6d44a50db166">Aлго-заявки</link>
+		<link xlink:href="3e0f02b3-3e2f-405d-a8a2-6d44a50db166">Алго-заявки</link>
 		<link xlink:href="f7074321-9e5c-4bc0-a8a3-b2025c5b7268">Исторические данные</link>
 		<link xlink:href="9817c52a-fc3e-4fc8-a5f0-d7caf654b440">Сканер</link>
     </relatedTopics>

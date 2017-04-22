@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <summary>
@@ -9,7 +9,7 @@
     <introduction>
       <para>В <token>dotnet</token> существует специальная технология для построения графического интерфейса – <token>wpf</token> (до этого была
 	  технология <token>winforms</token>, которая значительно уступает по графическим возможностям). В этой технологии для создания графических элементов 
-	  используется специальный декларативынй язык <externalLink>
+	  используется специальный декларативный язык <externalLink>
 		<linkText>XAML</linkText>
 		<linkAlternateText>eXtensible Application Markup Language</linkAlternateText>
 		<linkUri>https://msdn.microsoft.com/ru-ru/library/hh700354.aspx</linkUri>
@@ -59,7 +59,7 @@ _trader.NewSecurity += security => this.GuiSync(() => this.Security.ItemsSource 
 
 
 <para>
-	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соотвествующих пространств имен и использовать эти
+	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соответствующих пространств имен и использовать эти
 	 псевдонимы в коде XAML. Как это сделать показано в следующем примере:
 </para>
 	  <code language="XAML">
