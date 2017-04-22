@@ -8,18 +8,12 @@
       <summary>
             CQG Continuum message adapter.
             </summary>
-      <summary>
-            CQG message adapter.
-            </summary>
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter" />.
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
-    </member>
-    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.IsNativeIdentifiers">
-      <inheritdoc />
     </member>
     <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.SecurityLookupRequired">
       <inheritdoc />
