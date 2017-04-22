@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Generate <see cref="TimeMessage"/>.
+		/// Generate <see cref="TimeMessage"/> message.
 		/// </summary>
 		public bool GenerateTimeLine { get; set; } = true;
 
