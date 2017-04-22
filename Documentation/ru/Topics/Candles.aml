@@ -1,13 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para><token>stocksharp</token> поддерживает сдедующие виды:</para>
+		<para><token>stocksharp</token> поддерживает следующие виды:</para>
 	  
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> - свеча на основе временного отрезка, таймфрема.
+				<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> - свеча на основе временного отрезка, таймфрейма.
 				Можно задавать как популярные отрезки (минутки, часовики, дневные), так и кастомизированные. Например, 21 секунда, 4.5 минуты и т.д.
 			</listItem>
 			
@@ -27,7 +27,7 @@
 			</listItem>
 		  
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.PnFCandle</codeEntityReference> - cвеча пункто-цифрового графика (график крестики-нолики).
+				<codeEntityReference>T:StockSharp.Algo.Candles.PnFCandle</codeEntityReference> - свеча пункто-цифрового графика (график крестики-нолики).
 			</listItem>
 		  
 			<listItem>

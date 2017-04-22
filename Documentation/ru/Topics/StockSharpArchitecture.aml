@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	  <introduction>
@@ -113,7 +113,7 @@
 				поиска инструментов, портфелей, отображения стакана, доски опционов, мониторинга работы стратегий, логирования (и другие), в том числе:
 				<list class="bullet">
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Xaml.Charting</codeEntityReference> - средства для построения различных графиков: cвечки, индикаторы, доходность и др.</para>
+  							<para><codeEntityReference>N:StockSharp.Xaml.Charting</codeEntityReference> - средства для построения различных графиков: свечки, индикаторы, доходность и др.</para>
   						</listItem>
   						<listItem>
   							<para><codeEntityReference>N:StockSharp.Xaml.Diagram</codeEntityReference> - графические элементы для визуального создания стратегий.</para>
@@ -123,7 +123,7 @@
 			
 			<listItem>
 				<codeEntityReference qualifyHint="false">N:StockSharp.Logging</codeEntityReference> - специальный инструментарий для работы с отладочной информацией. Предлагаются различные способы
-				вывода отладочных сообщений: в окно отладки, в файл, в окно графического компонета, а также в системы оповещения (email, звуковой сигнал) в случае возникновения проблем у робота.
+				вывода отладочных сообщений: в окно отладки, в файл, в окно графического компонента, а также в системы оповещения (email, звуковой сигнал) в случае возникновения проблем у робота.
 			</listItem>
 		
 			<listItem>

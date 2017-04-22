@@ -3,7 +3,7 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
 	<introduction>
-		<para>Через класс <codeEntityReference>T:StockSharp.Algo.Candles.CandleHelper</codeEntityReference> можно произвести распознавание паттернов свечей по следующия методам:</para>
+		<para>Через класс <codeEntityReference>T:StockSharp.Algo.Candles.CandleHelper</codeEntityReference> можно произвести распознавание паттернов свечей по следующим методам:</para>
 		  
 		<list class="bullet">
 			<listItem>

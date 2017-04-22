@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Для настройки источников маркет-данных необxодимо нажать на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> у соответствующего источника.</para>
+      <para>Для настройки источников маркет-данных необходимо нажать на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> у соответствующего источника.</para>
       <para>На данный момент <token>hydra</token> поддерживает следующие источники:</para>
       
       
@@ -41,7 +41,7 @@
           			<para><link xlink:href="1cca5a33-e5ab-434e-bfed-287389fea2eb">SmartCom</link> - подключение через SmartCom API.</para>
         		</listItem>
         		<listItem>
-          			<para><link xlink:href="065a9dec-12d0-49d0-be8c-9f9b48f6a899">Transaq</link> - подключение черезе Transaq API.</para>
+          			<para><link xlink:href="065a9dec-12d0-49d0-be8c-9f9b48f6a899">Transaq</link> - подключение через Transaq API.</para>
         		</listItem>        
         		<listItem>
           			<para><link xlink:href="184da0f9-29db-4397-8497-1ed4c8f7ea0d">UX</link> - с украинской биржи.</para>

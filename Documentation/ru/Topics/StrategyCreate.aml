@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="a8159c99-256b-46e4-80fe-7cf92944b4c9" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -32,7 +32,7 @@
     </introduction>
 
 	<procedure>
-	  <title>Алгоритм Скользящей Cредней:</title>
+	  <title>Алгоритм Скользящей Средней:</title>
 
 	  <steps class="ordered">
 		<step>
@@ -161,7 +161,7 @@ class SmaStrategy : Strategy
 			  есть метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 			  который необходимо вызывать вместо регистрации напрямую через шлюз (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>).
 			  Все сделки, которые произошли по такой заявке, будут перехватываться <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>,
-			  и на основе них будет производиться расчет позиции, проскальзывания, P&amp;L и т.д.. Также, такие заявки и сделки будут добавлятся в коллекции
+			  и на основе них будет производиться расчет позиции, проскальзывания, P&amp;L и т.д.. Также, такие заявки и сделки будут добавляется в коллекции
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Orders</codeEntityReference> и
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.MyTrades</codeEntityReference>, что позволяет просматривать все заявки
 			  и сделки, совершенные в рамках работы стратегии.
@@ -221,7 +221,7 @@ _trader.Connected += () =>
 
 	_candleManager.Processing += (series, candle) =>
 	{
-		// если скользящие за сегодняшний день отрисованы, то рисуем в реальном времени текущие скользящие
+		// если скользящие за сегодняшний день отрисованны, то рисуем в реальном времени текущие скользящие
 		if (_isTodaySmaDrawn && candle.State == CandleStates.Finished)
 			ProcessCandle(candle);
 	};

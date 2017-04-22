@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="a711d06d-9d1d-40b8-89bf-ee62d817a878" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--
@@ -14,7 +14,7 @@
       <!-- <autoOutline /> -->
       	<para>
       		Если необходимо создать свою реализацию <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference> (например, когда
-      		требуется сохранять сообщения в базе данных), то можно или отнаследоваться от класса <codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference>
+      		требуется сохранять сообщения в базе данных), то можно или унаследоваться от класса <codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference>
       		или напрямую реализовать интерфейс <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference>. Через метод
 			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Logging.ILogListener.WriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})</codeEntityReference>
 			передается объект класса <codeEntityReference>T:StockSharp.Logging.LogMessage</codeEntityReference>. Данный класс содержит информацию об

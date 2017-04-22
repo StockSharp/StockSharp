@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="6f3be323-80bb-4823-9d27-8060c238af32" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -43,7 +43,7 @@ private void Send_Click(object sender, RoutedEventArgs e)
 				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopLimit</codeEntityReference> – после достижения стоп-цены автоматически выставляется лимитная заявка.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference> – cтоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, 
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference> – стоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, 
 				оставаясь на заранее заявленном интервале от рыночной цены. В случае, если рынок достигает стоп-цены, автоматически выставляется рыночная заявка.</para>
 			</listItem>
 			<listItem>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="f9e75266-8f0e-4983-8319-7a41d53e0f39" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--
@@ -9,7 +9,7 @@
     <introduction>
     <para>
 		В предыдущих топиках источниками логов выступали объекты встроенных в <token>stocksharp</token> классов. В <token>stocksharp</token> предусмотрены возможности для
-		случаев, когда источником логов должен служить Ваш собственый класс или же источник не должен быть связан с определенным классом, а обслуживать всё приложение.
+		случаев, когда источником логов должен служить Ваш собственный класс или же источник не должен быть связан с определенным классом, а обслуживать всё приложение.
 		Для первого случая необходимо реализовать в Вашем классе интерфейс <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference> или наследовать его
 		от <codeEntityReference>T:StockSharp.Logging.BaseLogReceiver</codeEntityReference>. Во второй ситуации можно использовать источник 
 		<codeEntityReference>T:StockSharp.Logging.TraceSource</codeEntityReference>, использующий систему трассировки .NET.

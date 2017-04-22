@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="0b0bd6e0-7ddf-407d-9e03-a218796163af" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--<summary>
@@ -35,7 +35,7 @@
         <step>
           <content>
 			  <para>
-				  Данный код написан в примере SampleConsole и закомментирован. Если необходима работа с <token>rtsstandard</token>, то его необходимо расскомментировать:
+				  Данный код написан в примере SampleConsole и закомментирован. Если необходима работа с <token>rtsstandard</token>, то его необходимо раскомментировать:
 			  </para>
 			  <code language="C#">trader.FormatTransaction += transaction => transaction.RemoveInstruction(Transaction.ExecutionCondition);</code>
           </content>

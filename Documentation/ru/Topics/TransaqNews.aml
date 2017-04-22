@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="afb77039-0acb-4964-a4b7-b8102812961d" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
-		<para><codeEntityReference>T:StockSharp.Transaq.TransaqTrader</codeEntityReference> позоволяет получать новости. Список полученных новостей можно получить через
+		<para><codeEntityReference>T:StockSharp.Transaq.TransaqTrader</codeEntityReference> позволяет получать новости. Список полученных новостей можно получить через
 		<codeEntityReference qualifyHint="false">P:StockSharp.BusinessEntities.IConnector.News</codeEntityReference>.</para>
 		
 		<para>Для того, чтобы начать получить новости, необходимо подписаться на событие <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference>

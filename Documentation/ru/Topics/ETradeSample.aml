@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -37,12 +37,12 @@ Trader.Connected += () => this.GuiAsync(() =>OnConnectionChanged(true));
 Trader.ConnectionError += error => this.GuiAsync(() =>
 {
 	OnConnectionChanged(Trader.IsConnected);
-	MessageBox.Show(this, error.ToString(), "Ошибкасоединения");
+	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
 });
 
 Trader.Disconnected += () =>this.GuiAsync(() => OnConnectionChanged(false));
 
-Trader.Error += error =>this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибкаобработкиданных"));
+Trader.Error += error =>this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);

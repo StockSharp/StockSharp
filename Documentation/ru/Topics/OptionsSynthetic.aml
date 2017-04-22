@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="efad2861-7392-4ed6-957d-f7fde651a48f" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--<summary>
@@ -21,10 +21,10 @@
 		<code language="C#"><![CDATA[// получить стакан опциона
 var depth = trader.GetMarketDepth(option);
 
-// получить теоритические сделки на покупку 100 контрактов
+// получить теоретические сделки на покупку 100 контрактов
 var trades = depth.GetTheoreticalTrades(Sides.Buy, 100);
 
-// расчитать реализованный объем
+// рассчитать реализованный объем
 var matchedVolume = trades.Sum(t => t.Trade.Volume);
 
 // регистрируем заявку по основному опциону

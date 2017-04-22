@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="82437493-cd53-41eb-b756-d913af0f4f8e" revisionNumber="0">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -20,7 +20,7 @@
 			<list class="ordered">
 				<listItem>
 					<codeEntityReference>T:StockSharp.Logging.FileLogListener</codeEntityReference> - записывает сообщения в текстовый файл.
-					Рекомендуется использовать для уже сделаного робота, и использовать логи в форс-мажорных ситуациях.
+					Рекомендуется использовать для уже сделанного робота, и использовать логи в форс-мажорных ситуациях.
 				</listItem>
 				<listItem>
 					<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference> - проигрывает звуковое сообщение когда приходит

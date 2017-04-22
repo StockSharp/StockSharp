@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
       <token>itch</token> - протокол прямого доступа к данным (direct data-feed protocol), 
-      который позволяет подключаться к серверам данных при помощи TCP и UDP протоколов. Особеностью <token>itch</token> является то, 
+      который позволяет подключаться к серверам данных при помощи TCP и UDP протоколов. Особенностью <token>itch</token> является то, 
       что он позволяет отслеживать изменение статуса заявки, т.е. получать лог заявок. 
       Этот протокол используется биржами NASDAQ (см. <externalLink>
 <linkText>TotalView-ITCH</linkText>

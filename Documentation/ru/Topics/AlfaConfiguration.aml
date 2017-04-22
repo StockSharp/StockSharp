@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
 		<para>
-			Для корректной работый с <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrader</codeEntityReference> необходимо предварительно 
+			Для корректной работой с <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrader</codeEntityReference> необходимо предварительно 
 			настроить торговый терминал <token>alfa</token>.
 		</para>
     </introduction>
@@ -14,7 +14,7 @@
       <steps class="ordered">
         <step>
           <content>
-            <para>Для удобства, cоздайте новую вкладку (Правый клик мыши на вкладках снизу терминала -> 
+            <para>Для удобства, создайте новую вкладку (Правый клик мыши на вкладках снизу терминала -> 
             Добавить). Добавьте окна "Сделки" и "Очередь заявок" для интересующего вас инструмента - меню 
             "Информация -> Сделки" и "Информация -> Очередь заявок" соответственно.</para>
           </content>

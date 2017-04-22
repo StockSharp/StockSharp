@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="fb79e67d-945c-493d-bdac-85d0040af828" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -379,13 +379,13 @@ protected override void OnSendInMessage(Message message)
   						<listItem>
   							<para>
   								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.OrderStatusRequired</codeEntityReference> - необходимо ли сообщение
-  									<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> для получения заявок и собственых сделок.
+  									<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> для получения заявок и собственных сделок.
   							</para>
   						</listItem>
 					</list>
 					<para>
-					 Если значение <legacyBold>true</legacyBold>, то соответсвующее сообщение будет послано. По умолчанию значения этих свойств зависят от
-					 наличия соответсвующего типа сообщения в списке поддерживаемых сообщений. В нашем примере (см. Конструктор адаптера.) в этот список были
+					 Если значение <legacyBold>true</legacyBold>, то соответствующее сообщение будет послано. По умолчанию значения этих свойств зависят от
+					 наличия соответствующего типа сообщения в списке поддерживаемых сообщений. В нашем примере (см. Конструктор адаптера.) в этот список были
 					 добавлены типы 
 					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> и  
 					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference>, поэтому
@@ -492,7 +492,7 @@ private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, str
 					 А после получения всех инструментов необходимо послать входящее сообщение 
 					 <codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.
 					 Обратите внимание, что свойству <legacyBold>OriginalTransactionId</legacyBold> обоих входящих сообщений нужно 
-					 присвоить значение <legacyBold>TransactionId</legacyBold> соответсвующего исходящего сообщения.  
+					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -624,7 +624,7 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 				 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MarketDataTypes.Trades</codeEntityReference>.
 				</para>
 				<para>
-				  Посде вызова метода <legacyBold>StServer.ListenTicks</legacyBold> сделки будут поступать в событии <legacyBold>StServer.AddTick</legacyBold>.
+				  После вызова метода <legacyBold>StServer.ListenTicks</legacyBold> сделки будут поступать в событии <legacyBold>StServer.AddTick</legacyBold>.
 				 </para>
 				
 				<code language="C#">
