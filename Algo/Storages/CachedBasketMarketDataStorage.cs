@@ -115,11 +115,6 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Generate <see cref="TimeMessage"/> message.
-		/// </summary>
-		public bool GenerateTimeLine { get; set; } = true;
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="CachedBasketMarketDataStorage{T}"/>.
 		/// </summary>
 		public CachedBasketMarketDataStorage()
@@ -197,7 +192,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns><see langword="true" /> if the enumerator was successfully advanced to the next element; <see langword="false" /> if the enumerator has passed the end of the collection.</returns>
 		public bool MoveNext()
 		{
-			if (GenerateTimeLine && !_isTimeLineAdded)
+			if (MarketTimeChangedInterval != TimeSpan.Zero && !_isTimeLineAdded)
 			{
 				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine));
 
