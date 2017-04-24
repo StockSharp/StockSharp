@@ -4522,6 +4522,10 @@ ManageServer;Manage server;Управление сервером
 MarketMaker;Market maker;Маркет-мейкер
 MarketMakerOrder;Is the order of market-maker;Является ли заявка маркет-мейкерской
 DeleteAllBreakPoints;Delete all breakpoints;Удалить все точки остановки
+OrderPriceNotSpecified;Order price is not specified;Цена заявки не указана
+OrderVolumeNotSpecified;Order volume is not specified;Объем заявки не указан
+OrderSideNotSpecified;Order side is not specified;Наравление заявки не указано
+RaiseOnStart;Raise on start;Обрабатывать при запуске
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

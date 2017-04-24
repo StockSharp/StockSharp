@@ -44886,5 +44886,45 @@ namespace StockSharp.Localization
 		/// Delete all breakpoints
 		/// </summary>
 		public static string DeleteAllBreakPoints => GetString(DeleteAllBreakPointsKey);
+
+		/// <summary>
+		/// Order price is not specified
+		/// </summary>
+		public const string OrderPriceNotSpecifiedKey = nameof(OrderPriceNotSpecified);
+
+		/// <summary>
+		/// Order price is not specified
+		/// </summary>
+		public static string OrderPriceNotSpecified => GetString(OrderPriceNotSpecifiedKey);
+
+		/// <summary>
+		/// Order volume is not specified
+		/// </summary>
+		public const string OrderVolumeNotSpecifiedKey = nameof(OrderVolumeNotSpecified);
+
+		/// <summary>
+		/// Order volume is not specified
+		/// </summary>
+		public static string OrderVolumeNotSpecified => GetString(OrderVolumeNotSpecifiedKey);
+
+		/// <summary>
+		/// Order side is not specified
+		/// </summary>
+		public const string OrderSideNotSpecifiedKey = nameof(OrderSideNotSpecified);
+
+		/// <summary>
+		/// Order side is not specified
+		/// </summary>
+		public static string OrderSideNotSpecified => GetString(OrderSideNotSpecifiedKey);
+
+		/// <summary>
+		/// Raise on start
+		/// </summary>
+		public const string RaiseOnStartKey = nameof(RaiseOnStart);
+
+		/// <summary>
+		/// Raise on start
+		/// </summary>
+		public static string RaiseOnStart => GetString(RaiseOnStartKey);
 	}
 }
