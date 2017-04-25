@@ -1,3 +1,7 @@
+T:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition/summary;DocStr60
+M:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition.TrailingStopLossOffset/summary;Str3447
 T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter/summary;DocStr9696
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311

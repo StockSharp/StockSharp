@@ -4,6 +4,26 @@
     <name>StockSharp.Cqg.Continuum</name>
   </assembly>
   <members>
+    <member name="T:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition">
+      <summary>
+        <see cref="N:StockSharp.Cqg.Continuum" /> order condition.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition.StopPrice">
+      <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumOrderCondition.TrailingStopLossOffset">
+      <summary>
+            Offset of a trailing stop-loss.
+            </summary>
+    </member>
     <member name="T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter">
       <summary>
             CQG Continuum message adapter.
