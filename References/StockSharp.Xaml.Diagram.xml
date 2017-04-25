@@ -313,10 +313,11 @@
             The current error.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
             </summary>
+      <param name="rootElement">The root diagram element.</param>
       <param name="isBreak">The handler that returns a stop flag for the socket.</param>
       <param name="breakAction">The action with the element at stop.</param>
       <param name="errorAction">The action with the element at error.</param>
@@ -1481,6 +1482,11 @@
             Commission.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Side">
+      <summary>
+            Side.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocket">
       <summary>
             Connection.
@@ -1752,6 +1758,11 @@
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Options">
       <summary>
             Options.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Side">
+      <summary>
+            Side.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)">
@@ -2659,11 +2670,6 @@
             Icon resource name.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Direction">
-      <summary>
-            Direction.
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMarket">
       <summary>
             Market order type.
@@ -3176,6 +3182,11 @@
     <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.IconName">
       <summary>
             Icon resource name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.RaiseValueOnStart">
+      <summary>
+            Raise value on start.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.Value">
