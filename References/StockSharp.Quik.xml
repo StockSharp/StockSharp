@@ -80,6 +80,11 @@
             https://forum.quik.ru/forum10/topic1218/
             </summary>
     </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixServer.IgnoreTransactionDuplicates">
+      <summary>
+            Игнорировать дубликаты по транзакциям.
+            </summary>
+    </member>
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.LogFile">
       <summary>
             Название текстового файла, в который будут писаться логи.
@@ -135,6 +140,14 @@
             Получить номер транзакции для ручной заявки. Начинается с 1.
             </summary>
       <returns>Номер транзакции.</returns>
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryProcess(System.Int64)">
+      <summary>
+            Проверить, можно ли обработать транзакции.
+            </summary>
+      <param name="transactionId">Номер транзакции.</param>
+      <returns>
+        <see langword="true" />, если транзакция не была ранее обработана и ее можно обработать, иначе <see langword="false" />.</returns>
     </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter">
       <summary>
