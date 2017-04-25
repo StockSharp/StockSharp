@@ -14026,3 +14026,10 @@ DocStr9742;The variable value;Значение переменной
 DocStr9743;Indicators;Индикаторы
 DocStr9744;Remove all breakpoints from the scheme;Удалить все точки остановки из схемы
 DocStr9745;Whether the scheme contains the breakpoints;Содержит ли схема точки остановки
+DocStr9746;The root diagram element;Корневой элемент диаграммы
+DocStr9747;Side;Направление
+DocStr9748;Raise value on start;Вызвать значение при старте
+DocStr9749;Show days in editor;Показывать дни
+DocStr9750;To delete items;Удалить элементы
+DocStr9751;Count of items;Количество элементов
+DocStr9752;Count of removed items;Количество удаленных элементов

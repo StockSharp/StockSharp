@@ -96,10 +96,11 @@ T:StockSharp.Xaml.Diagram.DebuggerSyncObject/summary;DocStr7933
 P:StockSharp.Xaml.Diagram.DebuggerSyncObject.CurrentElement/summary;DocStr7942
 P:StockSharp.Xaml.Diagram.DebuggerSyncObject.CurrentSocket/summary;DocStr8885
 P:StockSharp.Xaml.Diagram.DebuggerSyncObject.CurrentError/summary;DocStr9228
-M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/summary;DocStr1
-M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/param/isBreak;DocStr8886
-M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/param/breakAction;DocStr7935
-M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/param/errorAction;DocStr9229
+M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/summary;DocStr1
+M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/param/rootElement;DocStr9746
+M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/param/isBreak;DocStr8886
+M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/param/breakAction;DocStr7935
+M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})/param/errorAction;DocStr9229
 P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnInput/summary;DocStr7943
 P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnOutput/summary;DocStr7944
 M:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsBreakpointAt(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr7936
@@ -431,6 +432,7 @@ P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.UnderlyingAsset/summary;Underl
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.PnLUnreal/summary;Str258
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.PnLRealized/summary;Str259
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Commission/summary;XamlStr249
+P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Side/summary;DocStr9747
 T:StockSharp.Xaml.Diagram.DiagramSocket/summary;Str3143
 P:StockSharp.Xaml.Diagram.DiagramSocket.Id/summary;DocStr7873
 P:StockSharp.Xaml.Diagram.DiagramSocket.UniqueKey/summary;DocStr5982
@@ -499,6 +501,7 @@ F:StockSharp.Xaml.Diagram.DiagramSocketType.Unit/summary;NumericValue
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Comparable/summary;DocStr8033
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Portfolio/summary;Portfolio
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Options/summary;Options
+F:StockSharp.Xaml.Diagram.DiagramSocketType.Side/summary;DocStr9747
 M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/summary;DocStr9344
 M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/param/parameterType;Str1963
 M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/returns;DocStr9345
@@ -695,7 +698,6 @@ M:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement/summary;Str3124
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IconName/summary;DocStr9214
-P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Direction/summary;Str128
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IsMarket/summary;XamlStr623
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.BrokerCode/summary;Str2619
@@ -806,6 +808,7 @@ M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Load(Ecng.Serialization
 T:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement/summary;Str3160
 P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.IconName/summary;DocStr9214
+P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.RaiseValueOnStart/summary;DocStr9748
 P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.Value/summary;DocStr9742
 M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeChanged/summary;DocStr8054

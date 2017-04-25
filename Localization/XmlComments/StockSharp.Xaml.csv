@@ -154,6 +154,8 @@ F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HoursProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Hours/summary;DocStr9244
 F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.DaysProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Days/summary;DocStr9245
+P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDays/summary;DocStr9749
+F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDaysProperty/summary;DocStr29
 E:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ValueChanged/summary;DocStr9237
 M:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.InitializeComponent/summary;DocStr8
@@ -438,6 +440,10 @@ M:StockSharp.Xaml.LogMessageCollection.Add(StockSharp.Logging.LogMessage)/param/
 M:StockSharp.Xaml.LogMessageCollection.AddRange(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})/summary;DocStr1352
 M:StockSharp.Xaml.LogMessageCollection.AddRange(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})/param/items;DocStr1353
 M:StockSharp.Xaml.LogMessageCollection.Clear/summary;DocStr8217
+M:StockSharp.Xaml.LogMessageCollection.RemoveRange(System.Int32,System.Int32)/summary;DocStr9750
+M:StockSharp.Xaml.LogMessageCollection.RemoveRange(System.Int32,System.Int32)/param/index;DocStr8521
+M:StockSharp.Xaml.LogMessageCollection.RemoveRange(System.Int32,System.Int32)/param/count;DocStr9751
+M:StockSharp.Xaml.LogMessageCollection.RemoveRange(System.Int32,System.Int32)/returns;DocStr9752
 T:StockSharp.Xaml.NewsPanel/summary;DocStr8148
 M:StockSharp.Xaml.NewsPanel.#ctor/summary;DocStr1
 P:StockSharp.Xaml.NewsPanel.NewsProvider/summary;DocStr8921

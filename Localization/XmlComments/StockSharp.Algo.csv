@@ -1496,7 +1496,6 @@ P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.StopDate/summary;DocS
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.PostTradeMarketTimeChangedCount/summary;DocStr2107
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.PostTradeMarketTimeChangedCount/remarks;DocStr2108
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.MarketTimeChangedInterval/summary;DocStr2111
-P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.GenerateTimeLine/summary;DocStr9540
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor/summary;DocStr1
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.BasketMarketDataStorage{`0})/summary;DocStr1
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.AddStorage(StockSharp.Algo.Storages.IMarketDataStorage)/summary;DocStr8577

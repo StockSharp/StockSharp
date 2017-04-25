@@ -752,7 +752,7 @@
     </member>
     <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDays">
       <summary>
-            Show days editor.
+            Show days in editor.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDaysProperty">
