@@ -16,12 +16,14 @@
 				<steps class="ordered">
 					<step>
 						<content>
-							<para>Объявить составные инструменты, которые будут входить в <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> и сам <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>:</para>
+<para>Объявить составные инструменты, которые будут входить в <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
+и сам <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
 private Security _instr1;
 private Security _instr2;
-private WeightedIndexSecurity _indexInstr;
+
+private ExpressionIndexSecurity _indexInstr;
 
 private const string _secCode1 = "GZM5";
 private const string _secCode2 = "LKM5";
@@ -32,27 +34,19 @@ private const string _secCode2 = "LKM5";
 
 					<step>
 						<content>
-							<para>Создать <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>:</para>
+<para>Создать <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-_indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Forts, Id = "IndexInstr" };
+_indexInstr = new ExpressionIndexSecurity
+{
+    Id = "IndexInstr@FORTS",
+    Expression = "GZM5@FORTS/LKM5@FORTS",
+    Board = ExchangeBoard.Forts,
+};
 							]]>
 							</code>						
 						</content>
 					</step>
-					
-					<step>
-						<content>
-							<para>Добавить в него составные инструменты:</para>
-            				<code language="C#">
-            				<![CDATA[
-_indexInstr.Weights.Add(_instr1, 1);
-_indexInstr.Weights.Add(_instr2, -1);
-							]]>
-							</code>						
-						</content>
-					</step>
-
 				</steps>
 		</procedure>
 		<procedure>
@@ -65,6 +59,7 @@ _indexInstr.Weights.Add(_instr2, -1);
             				<![CDATA[
 private Security _instr1;
 private Security _instr2;
+
 private WeightedIndexSecurity _indexInstr;
 
 private const string _secCode1 = "GZM5";
