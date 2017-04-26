@@ -371,69 +371,66 @@ namespace StockSharp.Algo.Storages.Csv
 					Currency = security.Currency;
 					ExternalId = security.ExternalId.Clone();
 				}
-
-				public bool IsChanged(Security security)
-				{
-					if (Name != security.Name)
-						return true;
-
-					if (Code != security.Code)
-						return true;
-
-					if (Class != security.Class)
-						return true;
-
-					if (ShortName != security.ShortName)
-						return true;
-
-					if (Board != security.Board.Code)
-						return true;
-
-					if (UnderlyingSecurityId != security.UnderlyingSecurityId)
-						return true;
-
-					if (PriceStep != security.PriceStep)
-						return true;
-
-					if (VolumeStep != security.VolumeStep)
-						return true;
-
-					if (Multiplier != security.Multiplier)
-						return true;
-
-					if (Decimals != security.Decimals)
-						return true;
-
-					if (Type != security.Type)
-						return true;
-
-					if (ExpiryDate != security.ExpiryDate)
-						return true;
-
-					if (SettlementDate != security.SettlementDate)
-						return true;
-
-					if (Strike != security.Strike)
-						return true;
-
-					if (OptionType != security.OptionType)
-						return true;
-
-					if (Currency != security.Currency)
-						return true;
-
-					if (ExternalId != security.ExternalId)
-						return true;
-
-					return false;
-				}
 			}
 
 			private readonly Dictionary<string, LiteSecurity> _cache = new Dictionary<string, LiteSecurity>(StringComparer.InvariantCultureIgnoreCase);
 
-			protected override bool IsChanged(Security entity)
+			protected override bool IsChanged(Security security)
 			{
-				return _cache[entity.Id].IsChanged(entity);
+				var liteSec = _cache[security.Id];
+
+				if (!security.Name.IsEmpty() && liteSec.Name != security.Name)
+					return true;
+
+				if (!security.Code.IsEmpty() && liteSec.Code != security.Code)
+					return true;
+
+				if (!security.Class.IsEmpty() && liteSec.Class != security.Class)
+					return true;
+
+				if (!security.ShortName.IsEmpty() && liteSec.ShortName != security.ShortName)
+					return true;
+
+				if (security.Board != null && liteSec.Board != security.Board.Code)
+					return true;
+
+				if (!security.UnderlyingSecurityId.IsEmpty() && liteSec.UnderlyingSecurityId != security.UnderlyingSecurityId)
+					return true;
+
+				if (security.PriceStep != null && liteSec.PriceStep != security.PriceStep)
+					return true;
+
+				if (security.VolumeStep != null && liteSec.VolumeStep != security.VolumeStep)
+					return true;
+
+				if (security.Multiplier != null && liteSec.Multiplier != security.Multiplier)
+					return true;
+
+				if (security.Decimals != null && liteSec.Decimals != security.Decimals)
+					return true;
+
+				if (security.Type != null && liteSec.Type != security.Type)
+					return true;
+
+				if (security.ExpiryDate != null && liteSec.ExpiryDate != security.ExpiryDate)
+					return true;
+
+				if (security.SettlementDate != null && liteSec.SettlementDate != security.SettlementDate)
+					return true;
+
+				if (security.Strike != null && liteSec.Strike != security.Strike)
+					return true;
+
+				if (security.OptionType != null && liteSec.OptionType != security.OptionType)
+					return true;
+
+				if (security.Currency != null && liteSec.Currency != security.Currency)
+					return true;
+
+				if (!security.ExternalId.IsDefault() && liteSec.ExternalId != security.ExternalId)
+					return true;
+
+				return false;
 			}
 
 			protected override void ClearCache()

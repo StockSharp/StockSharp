@@ -34,6 +34,7 @@ namespace StockSharp.Algo.Storages
 
 		private bool _isInitialized;
 		private bool _isChanged;
+		private bool _isTimeLineAdded;
 
 		private DateTimeOffset _currentTime;
 
@@ -130,8 +131,6 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(basketStorage));
 
 			_basketStorage = basketStorage;
-			_basketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine));
-
 			_cancellationToken = new CancellationTokenSource();
 
 			ThreadingHelper
@@ -193,6 +192,14 @@ namespace StockSharp.Algo.Storages
 		/// <returns><see langword="true" /> if the enumerator was successfully advanced to the next element; <see langword="false" /> if the enumerator has passed the end of the collection.</returns>
 		public bool MoveNext()
 		{
+			if (MarketTimeChangedInterval != TimeSpan.Zero && !_isTimeLineAdded)
+			{
+				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine));
+
+				_isTimeLineAdded = true;
+				_moveNextSyncRoot.WaitSignal();
+			}
+
 			if (_messageQueue.Count == 0 && !_isInitialized)
 				return false;
 
@@ -228,7 +235,8 @@ namespace StockSharp.Algo.Storages
 		{
 			_currentMessage = null;
 			_currentTime = DateTimeOffset.MinValue;
-			_basketStorage.InnerStorages.Clear();
+			_isTimeLineAdded = false;
+            _basketStorage.InnerStorages.Clear();
 		}
 
 		/// <summary>

@@ -22,6 +22,12 @@
       <param name="dialect">The FIX dialect.</param>
       <returns>The dialect.</returns>
     </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Send message.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixServer">
       <summary>
             FIX сервер, запускающийся LUA.
@@ -72,6 +78,11 @@
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.SingleSlash">
       <summary>
             https://forum.quik.ru/forum10/topic1218/
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixServer.IgnoreTransactionDuplicates">
+      <summary>
+            Игнорировать дубликаты по транзакциям.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.LogFile">
@@ -129,6 +140,14 @@
             Получить номер транзакции для ручной заявки. Начинается с 1.
             </summary>
       <returns>Номер транзакции.</returns>
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.TryProcess(System.Int64)">
+      <summary>
+            Проверить, можно ли обработать транзакции.
+            </summary>
+      <param name="transactionId">Номер транзакции.</param>
+      <returns>
+        <see langword="true" />, если транзакция не была ранее обработана и ее можно обработать, иначе <see langword="false" />.</returns>
     </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter">
       <summary>

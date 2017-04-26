@@ -750,6 +750,16 @@
             The days value.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDays">
+      <summary>
+            Show days in editor.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDaysProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDays" />.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ValueChanged">
       <summary>
             The <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Value" /> changed event.
@@ -2109,6 +2119,14 @@
       <summary>
             To delete all items.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.LogMessageCollection.RemoveRange(System.Int32,System.Int32)">
+      <summary>
+            To delete items.
+            </summary>
+      <param name="index">Start index.</param>
+      <param name="count">Count of items.</param>
+      <returns>Count of removed items.</returns>
     </member>
     <member name="T:StockSharp.Xaml.NewsPanel">
       <summary>

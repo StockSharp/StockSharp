@@ -13,6 +13,10 @@ StockSharp API Change log
 * (bug) Quik lua. Fix Level1 translation after reconnect.
 * (bug) Quik lua. Fix transaction status check.
 * (feature) FIX connector. Dump performance boost.
+* (bug) Quik lua. Duration and BuyBackDate fixes.
+* (feature) CollectionHelper. TryGetAndRemove and TryPeek.
+* (feature) TraderHelper.Filter. Overload for SecurityMessage.
+* (bug) PortfolioGrid. Multiselect rows fixes.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.

@@ -110,16 +110,15 @@ namespace StockSharp.Algo.Testing
 							try
 							{
 								var sended = _historyMessageAdapter.SendOutMessage();
+								var block = !sended;
 
 								Message message;
 
-								if (!_messageQueue.TryDequeue(out message, true, !sended))
+								while (_messageQueue.TryDequeue(out message, true, block))
 								{
-									if (!sended)
-										break;
-								}
-								else
 									NewOutMessage?.Invoke(message);
+									block = false;
+								}
 							}
 							catch (Exception ex)
 							{

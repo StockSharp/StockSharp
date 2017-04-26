@@ -3628,7 +3628,7 @@ XamlStr142;Add asix;Добавить ось
 XamlStr143;Add panel;Добавить панель
 XamlStr144;Add connection;Добавить подключение
 XamlStr145;Add rule;Добавить правило
-XamlStr146;Add break point;Добавить точку остановки
+XamlStr146;Add breakpoint;Добавить точку остановки
 XamlStr147;Add:;Добавить:
 XamlStr148;Documentation;Документация
 XamlStr151;Extra references;Дополнительные библиотеки
@@ -4047,7 +4047,7 @@ XamlStr796;Delete rule;Удалить правило
 XamlStr797;Delete stript;Удалить скрипт
 XamlStr798;Delete composite element;Удалить составной элемент
 XamlStr799;Delete strategy;Удалить стратегию
-XamlStr800;Delete break point;Удалить точку остановки
+XamlStr800;Delete breakpoint;Удалить точку остановки
 File;File;Файл
 FileAssembly;File (assembly);Файл (сборка)
 XamlStr807;Volume filter (do not show ticks with volume less than specified);Фильтр объема (не показывать тики меньше заданного)
@@ -4521,7 +4521,11 @@ Restart;Restart;Перезапуск
 ManageServer;Manage server;Управление сервером
 MarketMaker;Market maker;Маркет-мейкер
 MarketMakerOrder;Is the order of market-maker;Является ли заявка маркет-мейкерской
-DeleteAllBreakPoints;Delete all break points;Удалить все точки остановки
+DeleteAllBreakPoints;Delete all breakpoints;Удалить все точки остановки
+OrderPriceNotSpecified;Order price is not specified;Цена заявки не указана
+OrderVolumeNotSpecified;Order volume is not specified;Объем заявки не указан
+OrderSideNotSpecified;Order side is not specified;Наравление заявки не указано
+RaiseOnStart;Raise on start;Обрабатывать при запуске
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14020,3 +14024,12 @@ DocStr9730;Right offset;Сдвиг вправо
 DocStr9731;Level1 field;Поле Level1
 DocStr9742;The variable value;Значение переменной
 DocStr9743;Indicators;Индикаторы
+DocStr9744;Remove all breakpoints from the scheme;Удалить все точки остановки из схемы
+DocStr9745;Whether the scheme contains the breakpoints;Содержит ли схема точки остановки
+DocStr9746;The root diagram element;Корневой элемент диаграммы
+DocStr9747;Side;Направление
+DocStr9748;Raise value on start;Вызвать значение при старте
+DocStr9749;Show days in editor;Показывать дни
+DocStr9750;To delete items;Удалить элементы
+DocStr9751;Count of items;Количество элементов
+DocStr9752;Count of removed items;Количество удаленных элементов

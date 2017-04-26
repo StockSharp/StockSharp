@@ -112,12 +112,15 @@ namespace SampleBlackwood
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 		}
 
-		private void ShowLevel1()
+		private void ShowLevel1(Security security)
 		{
-			var window = _level1Windows.SafeAdd(SecurityPicker.SelectedSecurity.Code, security =>
+			var window = _level1Windows.SafeAdd(security.Code, s =>
 			{
 				// create level1 window
-				var wnd = new Level1Window { Title = security + LocalizedStrings.Str3693 };
+				var wnd = new Level1Window
+				{
+					Title = security + LocalizedStrings.Str3693
+				};
 				wnd.MakeHideable();
 				return wnd;
 			});
@@ -146,39 +149,44 @@ namespace SampleBlackwood
 
 		private void Level2Click(object sender, RoutedEventArgs e)
 		{
-			ShowLevel1();
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				ShowLevel1(security);
 
-			// subscribe on order book flow
-			MainWindow.Instance.Trader.RegisterMarketDepth(SecurityPicker.SelectedSecurity);
+				// subscribe on order book flow
+				MainWindow.Instance.Trader.RegisterMarketDepth(security);
+			}
 		}
 
 		private void Level1Click(object sender, RoutedEventArgs e)
 		{
-			ShowLevel1();
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				ShowLevel1(security);
 
-			var security = SecurityPicker.SelectedSecurity;
-			var trader = MainWindow.Instance.Trader;
+				var trader = MainWindow.Instance.Trader;
 
-			// subscribe on level1 and tick data flow
-			trader.RegisterSecurity(security);
-			trader.RegisterTrades(security);
+				// subscribe on level1 and tick data flow
+				trader.RegisterSecurity(security);
+				trader.RegisterTrades(security);
 
-			//if (_bidAskSecurities.Contains(security))
-			//{
-			//	// unsubscribe from level1 and tick data flow
-			//	trader.UnRegisterSecurity(security);
-			//	trader.UnRegisterTrades(security);
+				//if (_bidAskSecurities.Contains(security))
+				//{
+				//	// unsubscribe from level1 and tick data flow
+				//	trader.UnRegisterSecurity(security);
+				//	trader.UnRegisterTrades(security);
 
-			//	_bidAskSecurities.Remove(security);
-			//}
-			//else
-			//{
-			//	// subscribe on level1 and tick data flow
-			//	trader.RegisterSecurity(security);
-			//	trader.RegisterTrades(security);
+				//	_bidAskSecurities.Remove(security);
+				//}
+				//else
+				//{
+				//	// subscribe on level1 and tick data flow
+				//	trader.RegisterSecurity(security);
+				//	trader.RegisterTrades(security);
 
-			//	_bidAskSecurities.Add(security);
-			//}
+				//	_bidAskSecurities.Add(security);
+				//}
+			}
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)
@@ -193,10 +201,13 @@ namespace SampleBlackwood
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
 		{
-			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
-			var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
 
-			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
+			}
 		}
 
 		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -213,24 +224,30 @@ namespace SampleBlackwood
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+				var window = _quotesWindows.SafeAdd(security, s =>
+				{
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
-				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 

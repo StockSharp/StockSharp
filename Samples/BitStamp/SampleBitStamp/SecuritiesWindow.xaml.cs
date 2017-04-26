@@ -79,53 +79,59 @@ namespace SampleBitStamp
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var security = SecurityPicker.SelectedSecurity;
-
-			var window = _quotesWindows.SafeAdd(security, key =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+				var window = _quotesWindows.SafeAdd(security, key =>
+				{
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-			{
-				// unsubscribe from order book flow
-				trader.UnRegisterMarketDepth(security);
+				if (window.Visibility == Visibility.Visible)
+				{
+					// unsubscribe from order book flow
+					trader.UnRegisterMarketDepth(security);
 
-				window.Hide();
-			}
-			else
-			{
-				// subscribe on order book flow
-				trader.RegisterMarketDepth(security);
+					window.Hide();
+				}
+				else
+				{
+					// subscribe on order book flow
+					trader.RegisterMarketDepth(security);
 
-				window.Show();
-			}
+					window.Show();
+				}
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
-				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
 			var trader = MainWindow.Instance.Trader;
 
-			if (trader.RegisteredSecurities.Contains(security))
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				trader.UnRegisterSecurity(security);
-				trader.UnRegisterTrades(security);
-			}
-			else
-			{
-				trader.RegisterSecurity(security);
-				trader.RegisterTrades(security);
+				if (trader.RegisteredSecurities.Contains(security))
+				{
+					trader.UnRegisterSecurity(security);
+					trader.UnRegisterTrades(security);
+				}
+				else
+				{
+					trader.RegisterSecurity(security);
+					trader.RegisterTrades(security);
+				}
 			}
 		}
 
