@@ -44970,11 +44970,11 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Microseconds
 		/// </summary>
-		public const string MicrosecondsPartKey = nameof(MicrosecondsPart);
+		public const string MicrosecondsKey = nameof(Microseconds);
 
 		/// <summary>
 		/// Microseconds
 		/// </summary>
-		public static string MicrosecondsPart => GetString(MicrosecondsPartKey);
+		public static string Microseconds => GetString(MicrosecondsKey);
 	}
 }

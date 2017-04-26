@@ -4530,7 +4530,7 @@ DeleteAll;Delete all;Удалить все
 Next;Next;Далее
 StepIn;Step in;Войти
 StepOut;Step out;Выйти
-MicrosecondsPart;Microseconds;Микросекунды
+Microseconds;Microseconds;Микросекунды
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
