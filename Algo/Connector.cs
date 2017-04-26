@@ -820,7 +820,7 @@ namespace StockSharp.Algo
 						oldOrder.Comment = newOrder.Comment;
 
 					InitNewOrder(newOrder);
-					_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);
+					_entityCache.AddOrderByCancelationId(oldOrder, oldOrder.TransactionId);
 
 					OnReRegisterOrder(oldOrder, newOrder);
 				}
