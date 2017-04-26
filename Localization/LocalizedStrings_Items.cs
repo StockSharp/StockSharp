@@ -44966,5 +44966,15 @@ namespace StockSharp.Localization
 		/// Step out
 		/// </summary>
 		public static string StepOut => GetString(StepOutKey);
+
+		/// <summary>
+		/// Microseconds
+		/// </summary>
+		public const string MicrosecondsPartKey = nameof(MicrosecondsPart);
+
+		/// <summary>
+		/// Microseconds
+		/// </summary>
+		public static string MicrosecondsPart => GetString(MicrosecondsPartKey);
 	}
 }
