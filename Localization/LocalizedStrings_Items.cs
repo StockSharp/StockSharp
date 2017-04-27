@@ -44926,5 +44926,55 @@ namespace StockSharp.Localization
 		/// Raise on start
 		/// </summary>
 		public static string RaiseOnStart => GetString(RaiseOnStartKey);
+
+		/// <summary>
+		/// Delete all
+		/// </summary>
+		public const string DeleteAllKey = nameof(DeleteAll);
+
+		/// <summary>
+		/// Delete all
+		/// </summary>
+		public static string DeleteAll => GetString(DeleteAllKey);
+
+		/// <summary>
+		/// Next
+		/// </summary>
+		public const string NextKey = nameof(Next);
+
+		/// <summary>
+		/// Next
+		/// </summary>
+		public static string Next => GetString(NextKey);
+
+		/// <summary>
+		/// Step in
+		/// </summary>
+		public const string StepInKey = nameof(StepIn);
+
+		/// <summary>
+		/// Step in
+		/// </summary>
+		public static string StepIn => GetString(StepInKey);
+
+		/// <summary>
+		/// Step out
+		/// </summary>
+		public const string StepOutKey = nameof(StepOut);
+
+		/// <summary>
+		/// Step out
+		/// </summary>
+		public static string StepOut => GetString(StepOutKey);
+
+		/// <summary>
+		/// Microseconds
+		/// </summary>
+		public const string MicrosecondsKey = nameof(Microseconds);
+
+		/// <summary>
+		/// Microseconds
+		/// </summary>
+		public static string Microseconds => GetString(MicrosecondsKey);
 	}
 }
