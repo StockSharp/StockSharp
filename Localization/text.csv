@@ -13611,8 +13611,8 @@ DocStr9267;This predicate is true when one can call {0};This predicate is true w
 DocStr9268;Restore the state of some models to before the current state;Восстановить состояние до текущего момента
 DocStr9269;Restore the state of some models to after the current state;Восстановить состояние после текущего момента
 DocStr9270;Is composition contains element;Пустой ли сложный элемент
-DocStr9271;"Black-Scholes ""greeks""";Греки модели Black-Scholes
-DocStr9272;"The Black-Scholes ""Greeks"" evaluation element";"Элемент вычисления ""греков"" по формуле Black-Scholes"
+DocStr9271;Black-Scholes "greeks";"Греки" модели Black-Scholes
+DocStr9272;The Black-Scholes "Greeks" evaluation element;Элемент вычисления "греков" по формуле Black-Scholes
 DocStr9273;The Level1 element;Элемент Level1
 DocStr9274;Sparsed market depth element;Элемент, делающий стакан разреженным (пустые строчки цен)
 DocStr9275;Grouped market depth element;Элемент, группирующий стакан
