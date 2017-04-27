@@ -44976,5 +44976,15 @@ namespace StockSharp.Localization
 		/// Microseconds
 		/// </summary>
 		public static string Microseconds => GetString(MicrosecondsKey);
+
+		/// <summary>
+		/// Milliseconds
+		/// </summary>
+		public const string MillisecondsKey = nameof(Milliseconds);
+
+		/// <summary>
+		/// Milliseconds
+		/// </summary>
+		public static string Milliseconds => GetString(MillisecondsKey);
 	}
 }
