@@ -187,7 +187,7 @@
     </member>
     <member name="F:StockSharp.Transaq.TransaqOrderConditionTypes.TakeProfit">
       <summary>
-            TP предназначен для закрытия позиции с фиксацие прибыли.
+            TP предназначен для закрытия позиции с фиксацией прибыли.
             </summary>
     </member>
     <member name="F:StockSharp.Transaq.TransaqOrderConditionTypes.TakeProfitStopLoss">
@@ -302,12 +302,12 @@
     </member>
     <member name="P:StockSharp.Transaq.TransaqOrderCondition.StopLossActivationPrice">
       <summary>
-            Цена активации, при достижении которой будет выставлена заявка по цене указанной в <see cref="P:StockSharp.Transaq.TransaqOrderCondition.StopLossOrderPrice" />.
+            Цена активации, при достижении которой будет выставлена заявка по цене, указанной в <see cref="P:StockSharp.Transaq.TransaqOrderCondition.StopLossOrderPrice" />.
             </summary>
     </member>
     <member name="P:StockSharp.Transaq.TransaqOrderCondition.StopLossOrderPrice">
       <summary>
-            Цена выставляемой заявки, которая будет отправлена на биржу при активации по цене указанной в <see cref="P:StockSharp.Transaq.TransaqOrderCondition.StopLossActivationPrice" />. 
+            Цена выставляемой заявки, которая будет отправлена на биржу при активации по цене, указанной в <see cref="P:StockSharp.Transaq.TransaqOrderCondition.StopLossActivationPrice" />. 
             Абсолютное значение, или в процентах.
             </summary>
     </member>

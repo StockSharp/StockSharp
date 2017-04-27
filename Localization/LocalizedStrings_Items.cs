@@ -27788,12 +27788,12 @@ namespace StockSharp.Localization
 		public static string Str2984 => GetString(Str2984Key);
 
 		/// <summary>
-		/// Running Quik found at
+		/// Running Quik found at '{0}'.
 		/// </summary>
 		public const string Str2985Key = nameof(Str2985);
 
 		/// <summary>
-		/// Running Quik found at
+		/// Running Quik found at '{0}'.
 		/// </summary>
 		public static string Str2985 => GetString(Str2985Key);
 
