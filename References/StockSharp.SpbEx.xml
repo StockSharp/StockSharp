@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.SpbEx</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.SpbEx.SpbExMessageAdapter">
+      <summary>
+            Spb exchange (binary protocol) message adapter.
+            </summary>
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.SpbEx.SpbExMessageAdapter" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsNativeIdentifiers">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="T:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig">
+      <summary>
+            NetworkConfig class
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.Test">
+      <summary>
+            Test NetworkConfig
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.Game">
+      <summary>
+            Game NetworkConfig
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.Real">
+      <summary>
+            Real NetworkConfig
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.List">
+      <summary>
+            List of NetworkConfig
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.TradesIncUdpIp1">
+      <summary>
+            //Trades — канал сделок, заключенных на всех торговых площадках
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.TradesIncUdpIp2">
+      <summary>
+            //Trades — канал сделок, заключенных на всех торговых площадках
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.TradesIncUdpPort">
+      <summary>
+            //Trades — канал сделок, заключенных на всех торговых площадках
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.BestPricesIncUdpIp1">
+      <summary>
+            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.BestPricesIncUdpIp2">
+      <summary>
+            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.BestPricesIncUdpPort">
+      <summary>
+            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookIncUdpIp1">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookIncUdpIp2">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookIncUdpPort">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookSnapUdpIp1">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookSnapUdpIp2">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookSnapUdpPort">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.EntranceServer">
+      <summary>
+            EntranceServer
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.EntranceServerPort">
+      <summary>
+            EntranceServer port
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.InstrumentCatalogUrl">
+      <summary>
+            InstrumentCatalogUrl
+            </summary>
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.ToString">
+      <summary>
+      </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.Config">
+      <summary>
+            Server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.SpbEx.SpbExTrader">
+      <summary>
+            The implementation of the interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> for interaction with Spb Exchange via binary protocol.
+            </summary>
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExTrader.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.SpbEx.SpbExTrader" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExTrader.Config">
+      <summary>
+            Server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExTrader.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExTrader.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
+  </members>
+</doc>

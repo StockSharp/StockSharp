@@ -17,6 +17,7 @@ StockSharp API Change log
 * (feature) CollectionHelper. TryGetAndRemove and TryPeek.
 * (feature) TraderHelper.Filter. Overload for SecurityMessage.
 * (bug) PortfolioGrid. Multiselect rows fixes.
+* (feature) SPB Exchange connector.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
