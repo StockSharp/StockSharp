@@ -44986,5 +44986,15 @@ namespace StockSharp.Localization
 		/// Milliseconds
 		/// </summary>
 		public static string Milliseconds => GetString(MillisecondsKey);
+
+		/// <summary>
+		/// SPB Exchange
+		/// </summary>
+		public const string SpbExKey = nameof(SpbEx);
+
+		/// <summary>
+		/// SPB Exchange
+		/// </summary>
+		public static string SpbEx => GetString(SpbExKey);
 	}
 }
