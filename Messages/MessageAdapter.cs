@@ -482,7 +482,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="description">Error detais.</param>
+		/// <param name="description">Error details.</param>
 		protected void SendOutError(string description)
 		{
 			SendOutError(new InvalidOperationException(description));
@@ -491,7 +491,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="error">Error detais.</param>
+		/// <param name="error">Error details.</param>
 		protected void SendOutError(Exception error)
 		{
 			SendOutMessage(error.ToErrorMessage());

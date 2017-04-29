@@ -27,7 +27,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Mearure units.
+	/// Measure units.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 		Step,
 
 		/// <summary>
-		/// The limited value. This unit allows to set a specific change number, which can not be used in arithmetic operations <see cref="Unit"/>.
+		/// The limited value. This unit allows to set a specific change number, which cannot be used in arithmetic operations <see cref="Unit"/>.
 		/// </summary>
 		[EnumMember]
 		Limit,
@@ -100,7 +100,7 @@ namespace StockSharp.Messages
 		/// Create a value of types <see cref="UnitTypes.Absolute"/> and <see cref="UnitTypes.Percent"/>.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		/// <param name="type">Mearure unit.</param>
+		/// <param name="type">Measure unit.</param>
 		public Unit(decimal value, UnitTypes type)
 			: this(value, type, null)
 		{
@@ -110,7 +110,7 @@ namespace StockSharp.Messages
 		/// Create a value of types <see cref="UnitTypes.Point"/> and <see cref="UnitTypes.Step"/>.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		/// <param name="type">Mearure unit.</param>
+		/// <param name="type">Measure unit.</param>
 		/// <param name="getTypeValue">The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).</param>
 		public Unit(decimal value, UnitTypes type, Func<UnitTypes, decimal?> getTypeValue)
 		{
@@ -128,7 +128,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Mearure unit.
+		/// Measure unit.
 		/// </summary>
 		[DataMember]
 		public UnitTypes Type { get; set; }
@@ -437,7 +437,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Compare two values in the inequality (if the value of different types, the convertion will be used).
+		/// Compare two values in the inequality (if the value of different types, the conversion will be used).
 		/// </summary>
 		/// <param name="u1">First unit.</param>
 		/// <param name="u2">Second unit.</param>
@@ -448,7 +448,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Compare two values for equality (if the value of different types, the convertion will be used).
+		/// Compare two values for equality (if the value of different types, the conversion will be used).
 		/// </summary>
 		/// <param name="u1">First unit.</param>
 		/// <param name="u2">Second unit.</param>

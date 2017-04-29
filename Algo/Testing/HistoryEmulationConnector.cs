@@ -22,19 +22,17 @@ namespace StockSharp.Algo.Testing
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The emulational connection. It uses historical data and/or occasionally generated.
+	/// The emulation connection. It uses historical data and/or occasionally generated.
 	/// </summary>
 	public class HistoryEmulationConnector : BaseEmulationConnector//, IExternalCandleSource
 	{

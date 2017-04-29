@@ -375,7 +375,7 @@ P:StockSharp.Messages.ExecutionMessage.BrokerCode/summary;Str2619
 P:StockSharp.Messages.ExecutionMessage.DepoName/summary;DocStr2933
 P:StockSharp.Messages.ExecutionMessage.ServerTime/summary;ServerTime
 P:StockSharp.Messages.ExecutionMessage.TransactionId/summary;TransactionId
-P:StockSharp.Messages.ExecutionMessage.OriginalTransactionId/summary;OriginalTrasactionId
+P:StockSharp.Messages.ExecutionMessage.OriginalTransactionId/summary;OriginalTransactionId
 P:StockSharp.Messages.ExecutionMessage.ExecutionType/summary;DocStr1627
 P:StockSharp.Messages.ExecutionMessage.IsCancelled/summary;IsActionOrderCancellation
 P:StockSharp.Messages.ExecutionMessage.OrderId/summary;Str1190

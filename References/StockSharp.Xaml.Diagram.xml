@@ -3227,7 +3227,7 @@
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement">
       <summary>
-            Notification element (sound, window etc.) for speceific market events.
+            Notification element (sound, window etc.) for specific market events.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.TypeId">

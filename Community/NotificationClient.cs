@@ -108,7 +108,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// To send an message.
+		/// To send a message.
 		/// </summary>
 		/// <param name="title">The message title.</param>
 		/// <param name="body">Message body.</param>

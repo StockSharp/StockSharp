@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Testing
 	using EntityFactory = StockSharp.Algo.EntityFactory;
 
 	/// <summary>
-	/// The simulational connection, intended for strategy testing with real connection to trading system through <see cref="RealTimeEmulationTrader{T}.UnderlyngMarketDataAdapter"/>, but without real resitering orders on stock. Execution of orders and their trades are emulated by connection, using information by order books, coming from real connection.
+	/// The simulation connection, intended for strategy testing with real connection to trading system through <see cref="RealTimeEmulationTrader{T}.UnderlyngMarketDataAdapter"/>, but without real registering orders on stock. Execution of orders and their trades are emulated by connection, using information by order books, coming from real connection.
 	/// </summary>
 	/// <typeparam name="TUnderlyingMarketDataAdapter">The type <see cref="IMessageAdapter"/>, through which market data will be received.</typeparam>
 	public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulationConnector

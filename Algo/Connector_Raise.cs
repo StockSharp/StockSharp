@@ -283,7 +283,7 @@ namespace StockSharp.Algo
 		public event Action<IMessageAdapter, Exception> ConnectionErrorEx;
 
 		/// <summary>
-		/// Dats process error.
+		/// Data process error.
 		/// </summary>
 		public event Action<Exception> Error;
 

@@ -792,7 +792,7 @@ P:StockSharp.BusinessEntities.Trade.StringId/summary;Str146
 P:StockSharp.BusinessEntities.Trade.Security/summary;DocStr2935
 P:StockSharp.BusinessEntities.Trade.Time/summary;Str605
 P:StockSharp.BusinessEntities.Trade.LocalTime/summary;Str606
-P:StockSharp.BusinessEntities.Trade.Volume/summary;TradeVolume
+P:StockSharp.BusinessEntities.Trade.Volume/summary;DocStr8830
 P:StockSharp.BusinessEntities.Trade.Price/summary;TradePrice
 P:StockSharp.BusinessEntities.Trade.OrderDirection/summary;Str608
 P:StockSharp.BusinessEntities.Trade.IsSystem/summary;IsSystemTrade

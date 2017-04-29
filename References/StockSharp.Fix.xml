@@ -833,7 +833,7 @@
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
@@ -841,7 +841,7 @@
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
@@ -1028,7 +1028,7 @@
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
@@ -1036,7 +1036,7 @@
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.Write(System.String)">
       <summary>
@@ -5035,7 +5035,7 @@
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
@@ -5043,7 +5043,7 @@
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.String)">
       <summary>
@@ -5194,7 +5194,7 @@
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
@@ -5202,7 +5202,7 @@
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
@@ -5305,7 +5305,7 @@
             </summary>
       <param name="value">
         <see cref="T:System.DateTime" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.TimeSpan,Ecng.Common.FastTimeSpanParser)">
       <summary>
@@ -5313,7 +5313,7 @@
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.String)">
       <summary>
@@ -5385,7 +5385,7 @@
       <summary>
             Read <see cref="T:System.DateTime" /> value.
             </summary>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
       <returns>
         <see cref="T:System.DateTime" /> value.</returns>
     </member>
@@ -5393,7 +5393,7 @@
       <summary>
             Read <see cref="T:System.TimeSpan" /> value.
             </summary>
-      <param name="parser">Time parser. Required if data will be transfed as string.</param>
+      <param name="parser">Time parser. Required if data will be transferred as string.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>

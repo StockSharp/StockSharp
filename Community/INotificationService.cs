@@ -60,7 +60,7 @@ namespace StockSharp.Community
 		byte SendEmail(Guid sessionId, string title, string body);
 
 		/// <summary>
-		/// To send an message.
+		/// To send a message.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="title">The message title.</param>
@@ -84,7 +84,7 @@ namespace StockSharp.Community
 		/// To get the latest news.
 		/// </summary>
 		/// <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
-		/// <param name="isEnglish">Request news on english.</param>
+		/// <param name="isEnglish">Request news on English.</param>
 		/// <param name="fromId">The identifier from which you need to receive the news.</param>
 		/// <returns>Last news.</returns>
 		[OperationContract]

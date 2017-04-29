@@ -49,7 +49,7 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.CertFile">
             <summary>
-            Path to certificate file, necessary yo connect to Rithmic system.
+            Path to certificate file, necessary to connect to Rithmic system.
             </summary>
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TransactionalUserName">
@@ -64,7 +64,7 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.LogFileName">
             <summary>
-            Path to lg file.
+            Path to log file.
             </summary>
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.Server">
@@ -207,7 +207,7 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicTrader.CertFile">
             <summary>
-            Path to certificate file, necessary yo connect to Rithmic system.
+            Path to certificate file, necessary to connect to Rithmic system.
             </summary>
         </member>
         <member name="P:StockSharp.Rithmic.RithmicTrader.Server">
@@ -217,7 +217,7 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicTrader.LogFileName">
             <summary>
-            Path to lg file.
+            Path to log file.
             </summary>
         </member>
         <member name="M:StockSharp.Rithmic.RithmicTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">

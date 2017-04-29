@@ -102,7 +102,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Chech the possibility order's state change.
+		/// Check the possibility order's state change.
 		/// </summary>
 		/// <param name="prev">Previous order's state.</param>
 		/// <param name="curr">Current order's state.</param>
@@ -1504,7 +1504,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Find inner security instancies.
+		/// Find inner security instances.
 		/// </summary>
 		/// <param name="security">Instruments basket.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
@@ -1564,7 +1564,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To ilter orders for the given condition.
+		/// To filter orders for the given condition.
 		/// </summary>
 		/// <param name="orders">All orders, in which the required shall be searched for.</param>
 		/// <param name="state">Order state.</param>
@@ -2103,14 +2103,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get real expirating instruments for base part of the code.
+		/// To get real expiration instruments for base part of the code.
 		/// </summary>
 		/// <param name="baseCode">The base part of the instrument code.</param>
 		/// <param name="from">The start of the expiration range.</param>
 		/// <param name="to">The end of the expiration range.</param>
 		/// <param name="getSecurity">The function to get instrument by the code.</param>
 		/// <param name="throwIfNotExists">To generate exception, if some of instruments are not available.</param>
-		/// <returns>Expirating instruments.</returns>
+		/// <returns>Expiration instruments.</returns>
 		public static IEnumerable<Security> GetFortsJumps(this string baseCode, DateTime from, DateTime to, Func<string, Security> getSecurity, bool throwIfNotExists = true)
 		{
 			if (baseCode.IsEmpty())
@@ -2168,7 +2168,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get real expirating instruments for the continuous instrument.
+		/// To get real expiration instruments for the continuous instrument.
 		/// </summary>
 		/// <param name="continuousSecurity">Continuous security.</param>
 		/// <param name="provider">The provider of information about instruments.</param>
@@ -2176,7 +2176,7 @@ namespace StockSharp.Algo
 		/// <param name="from">The start of the expiration range.</param>
 		/// <param name="to">The end of the expiration range.</param>
 		/// <param name="throwIfNotExists">To generate exception, if some of instruments for passed <paramref name="continuousSecurity" /> are not available.</param>
-		/// <returns>Expirating instruments.</returns>
+		/// <returns>Expiration instruments.</returns>
 		public static IEnumerable<Security> GetFortsJumps(this ContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists = true)
 		{
 			if (continuousSecurity == null)
@@ -2980,7 +2980,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="securityClassInfo">Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.</param>
 		/// <param name="secClass">Security class.</param>
-		/// <returns>The instrument description. If the class is not found, than <see langword="null" /> value is returned as instrument type.</returns>
+		/// <returns>The instrument description. If the class is not found, then <see langword="null" /> value is returned as instrument type.</returns>
 		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
 		{
 			var pair = securityClassInfo.TryGetValue(secClass);

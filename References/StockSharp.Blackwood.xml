@@ -443,7 +443,7 @@
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeHighLow(System.Boolean)">
       <summary>
-            Subscribe to the event getting the maximum and minimum values of a instruments. The data will transfer through event <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" />.
+            Subscribe to the event getting the maximum and minimum values of an instruments. The data will transfer through event <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" />.
             </summary>
       <param name="isSubscribe">
         <see langword="true" />, if you want to subscribe to data, otherwise, <see langword="false" />.</param>

@@ -59,7 +59,7 @@ namespace StockSharp.Messages
 		Failed,
 
 		/// <summary>
-		/// Pending acception.
+		/// Pending registration.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str238Key)]

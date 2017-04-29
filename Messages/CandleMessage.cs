@@ -208,7 +208,7 @@ namespace StockSharp.Messages
 		public int? TotalTicks { get; set; }
 
 		/// <summary>
-		/// Number of uptrending ticks.
+		/// Number of up trending ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickUpKey)]
@@ -217,7 +217,7 @@ namespace StockSharp.Messages
 		public int? UpTicks { get; set; }
 
 		/// <summary>
-		/// Number of downtrending ticks.
+		/// Number of down trending ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickDownKey)]
@@ -507,7 +507,7 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Point in fugure (X0) candle arg.
+	/// Point in figure (X0) candle arg.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]

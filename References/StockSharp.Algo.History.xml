@@ -70,7 +70,7 @@
             The path to the directory where the downloaded files will be saved.
             </summary>
       <remarks>
-            If the value is an empty string, the data will not stored locally.
+            If the value is an empty string, the data will not store locally.
             </remarks>
     </member>
     <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
@@ -777,7 +777,7 @@
     </member>
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.Authorization">
       <summary>
-            Authorizaton module.
+            Authorization module.
             </summary>
     </member>
     <member name="F:StockSharp.Algo.History.Hydra.RemoteStorage.DefaultMaxSecurityCount">

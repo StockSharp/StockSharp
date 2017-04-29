@@ -240,7 +240,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
-		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> can not be applied to candles), then <see langword="null" /> is returned.</returns>
+		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> cannot be applied to candles), then <see langword="null" /> is returned.</returns>
 		protected virtual TCandleMessage ProcessValue(MarketDataMessage message, TCandleMessage currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (currentCandle == null || IsCandleFinishedBeforeChange(message, currentCandle, value))
@@ -822,7 +822,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
-		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> can not be applied to candles), then <see langword="null" /> is returned.</returns>
+		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> cannot be applied to candles), then <see langword="null" /> is returned.</returns>
 		protected override RenkoCandleMessage ProcessValue(MarketDataMessage message, RenkoCandleMessage currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (value == null)

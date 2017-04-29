@@ -275,7 +275,7 @@ namespace StockSharp.BusinessEntities
 		event Action<IMessageAdapter, Exception> ConnectionErrorEx;
 
 		/// <summary>
-		/// Dats process error.
+		/// Data process error.
 		/// </summary>
 		event Action<Exception> Error;
 
