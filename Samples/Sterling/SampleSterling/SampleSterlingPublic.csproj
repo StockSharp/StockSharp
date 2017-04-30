@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A6B6041F-B174-43C9-89B2-53545C1303F5}</ProjectGuid>
+    <ProjectGuid>{2BC83A0F-F6BF-43EC-944D-A740A32041A2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SampleSterling</RootNamespace>
