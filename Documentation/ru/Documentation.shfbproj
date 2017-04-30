@@ -185,7 +185,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
-    <None Include="HydraSettingsSpbEx.aml" />
+    <None Include="Topics\HydraSettingsSpbEx.aml" />
     <None Include="Topics\SpbEx.aml" />
     <None Include="Topics\hydra_settings_Xignite.aml" />
     <None Include="Topics\hydra_CQG_Continuum.aml" />
