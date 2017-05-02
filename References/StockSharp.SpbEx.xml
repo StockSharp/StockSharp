@@ -4,6 +4,118 @@
     <name>StockSharp.SpbEx</name>
   </assembly>
   <members>
+    <member name="T:StockSharp.SpbEx.NetworkConfig">
+      <summary>
+            NetworkConfig class
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.Test">
+      <summary>
+            Test NetworkConfig
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.Game">
+      <summary>
+            Game NetworkConfig
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.Real">
+      <summary>
+            Real NetworkConfig
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.List">
+      <summary>
+            List of NetworkConfig
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.TradesIncUdpIp1">
+      <summary>
+            //Trades — канал сделок, заключенных на всех торговых площадках
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.TradesIncUdpIp2">
+      <summary>
+            //Trades — канал сделок, заключенных на всех торговых площадках
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.TradesIncUdpPort">
+      <summary>
+            //Trades — канал сделок, заключенных на всех торговых площадках
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.BestPricesIncUdpIp1">
+      <summary>
+            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.BestPricesIncUdpIp2">
+      <summary>
+            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.BestPricesIncUdpPort">
+      <summary>
+            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookIncUdpIp1">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookIncUdpIp2">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookIncUdpPort">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookSnapUdpIp1">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookSnapUdpIp2">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookSnapUdpPort">
+      <summary>
+            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.EntranceServer">
+      <summary>
+            EntranceServer
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.EntranceServerPort">
+      <summary>
+            EntranceServer port
+            </summary>
+    </member>
+    <member name="F:StockSharp.SpbEx.NetworkConfig.InstrumentCatalogUrl">
+      <summary>
+            InstrumentCatalogUrl
+            </summary>
+    </member>
+    <member name="M:StockSharp.SpbEx.NetworkConfig.#ctor(System.String)">
+      <summary>
+      </summary>
+      <param name="configName">
+      </param>
+    </member>
+    <member name="M:StockSharp.SpbEx.NetworkConfig.ToString">
+      <summary>
+      </summary>
+      <returns>
+      </returns>
+    </member>
     <member name="T:StockSharp.SpbEx.SpbExMessageAdapter">
       <summary>
             Spb exchange (binary protocol) message adapter.
@@ -18,114 +130,14 @@
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsNativeIdentifiers">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsNativeIdentifiersPersistable">
       <inheritdoc />
     </member>
-    <member name="T:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig">
-      <summary>
-            NetworkConfig class
-            </summary>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.StorageName">
+      <inheritdoc />
     </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.Test">
-      <summary>
-            Test NetworkConfig
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.Game">
-      <summary>
-            Game NetworkConfig
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.Real">
-      <summary>
-            Real NetworkConfig
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.List">
-      <summary>
-            List of NetworkConfig
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.TradesIncUdpIp1">
-      <summary>
-            //Trades — канал сделок, заключенных на всех торговых площадках
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.TradesIncUdpIp2">
-      <summary>
-            //Trades — канал сделок, заключенных на всех торговых площадках
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.TradesIncUdpPort">
-      <summary>
-            //Trades — канал сделок, заключенных на всех торговых площадках
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.BestPricesIncUdpIp1">
-      <summary>
-            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.BestPricesIncUdpIp2">
-      <summary>
-            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.BestPricesIncUdpPort">
-      <summary>
-            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookIncUdpIp1">
-      <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookIncUdpIp2">
-      <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookIncUdpPort">
-      <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookSnapUdpIp1">
-      <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookSnapUdpIp2">
-      <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.OrderBookSnapUdpPort">
-      <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.EntranceServer">
-      <summary>
-            EntranceServer
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.EntranceServerPort">
-      <summary>
-            EntranceServer port
-            </summary>
-    </member>
-    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.InstrumentCatalogUrl">
-      <summary>
-            InstrumentCatalogUrl
-            </summary>
-    </member>
-    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.NetworkConfig.ToString">
-      <summary>
-      </summary>
-      <returns>
-      </returns>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.Config">
       <summary>

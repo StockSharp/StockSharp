@@ -26,7 +26,6 @@ namespace SampleSpbEx
 	using StockSharp.SpbEx;
 	using StockSharp.Localization;
 
-
 	public partial class MainWindow
 	{
 		private bool _isConnected;
@@ -55,7 +54,7 @@ namespace SampleSpbEx
 
 			Instance = this;
 
-			NetworkCfg.ItemsSource = SpbExMessageAdapter.NetworkConfig.List;
+			NetworkCfg.ItemsSource = NetworkConfig.List;
 			NetworkCfg.SelectedIndex = 0;
 		}
 
@@ -176,8 +175,7 @@ namespace SampleSpbEx
 
 				Trader.Login = Login.Text;
 				Trader.Password = Password.SecurePassword;
-				Trader.Config = NetworkCfg.SelectedItem as SpbExMessageAdapter.NetworkConfig;
-				//Trader.ServerAddress = new IPEndPoint(IPAddress.Parse(Address.Text), int.Parse(Port.Text));
+				Trader.Config = (NetworkConfig)NetworkCfg.SelectedItem;
 
 				// clear password box for security reason
 				//Password.Clear();
