@@ -2983,5 +2983,22 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Mfd { get; }
 
+		/// <summary>
+		/// Information about board Arca.
+		/// </summary>
+		public static ExchangeBoard Arca { get; } = new ExchangeBoard
+		{
+			Code = "ARCA",
+			Exchange = Exchange.Nyse,
+		};
+
+		/// <summary>
+		/// Information about board BATS.
+		/// </summary>
+		public static ExchangeBoard Bats { get; } = new ExchangeBoard
+		{
+			Code = "BATS",
+			Exchange = Exchange.Cbot,
+		};
 	}
 }

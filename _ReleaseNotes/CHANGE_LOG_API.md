@@ -18,6 +18,7 @@ StockSharp API Change log
 * (feature) TraderHelper.Filter. Overload for SecurityMessage.
 * (bug) PortfolioGrid. Multiselect rows fixes.
 * (feature) SPB Exchange connector.
+* (feature) ExchangeBoard. Arca and BATS.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.

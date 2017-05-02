@@ -13736,7 +13736,7 @@ DocStr9402;Write data into CSV;Записать данные в CSV
 DocStr9403;Read data from CSV;Считать данные из CSV
 DocStr9404;Add list of trade objects;Добавить список торговых объектов
 DocStr9405;List of trade objects;Список торговых объектов
-DocStr9406;Regulatory attribute that applies to all US Commodity (Futures) Exchanges, provided to allow client to comply with CFTC Tag 50 Rules;Regulartory attribute that applies to all US Commodity (Futures) Exchanges, provided to allow client to comply with CFTC Tag 50 Rules
+DocStr9406;Regulatory attribute that applies to all US Commodity (Futures) Exchanges, provided to allow client to comply with CFTC Tag 50 Rules;Regulatory attribute that applies to all US Commodity (Futures) Exchanges, provided to allow client to comply with CFTC Tag 50 Rules
 DocStr9407;Pegged-to-benchmark orders: this attribute will contain the conId of the contract against which the order will be pegged;Pegged-to-benchmark orders: this attribute will contain the conId of the contract against which the order will be pegged
 DocStr9408;Pegged-to-benchmark orders: indicates whether the order's pegged price should increase or decreases;Pegged-to-benchmark orders: indicates whether the order's pegged price should increase or decreases
 DocStr9409;Pegged-to-benchmark orders: amount by which the order's pegged price should move;Pegged-to-benchmark orders: amount by which the order's pegged price should move
@@ -14041,3 +14041,5 @@ DocStr9754;{0} editor attribute;{0} атрибут редактора
 DocStr9755;Show editor parts mask;Показать маску редактора
 DocStr9756;Default editor parts mask;Маска по умолчанию
 DocStr9759;Show parts mask;Показать маску
+DocStr9760;Information about board Arca;Информация о площадке Arca
+DocStr9761;Information about board BATS;Информация о площадке BATS
