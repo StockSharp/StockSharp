@@ -363,7 +363,7 @@ namespace StockSharp.Algo.Candles
 		private int? _upTicks;
 
 		/// <summary>
-		/// Number of uptrending ticks.
+		/// Number of up trending ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickUpKey)]
@@ -381,7 +381,7 @@ namespace StockSharp.Algo.Candles
 		private int? _downTicks;
 
 		/// <summary>
-		/// Number of downtrending ticks.
+		/// Number of down trending ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickDownKey)]

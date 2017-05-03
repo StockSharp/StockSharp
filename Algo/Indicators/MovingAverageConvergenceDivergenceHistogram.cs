@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceHistogram"/>.
 		/// </summary>
 		/// <param name="macd">Convergence/divergence of moving averages.</param>
-		/// <param name="signalMa">Signalling Voving Average.</param>
+		/// <param name="signalMa">Signaling Moving Average.</param>
 		public MovingAverageConvergenceDivergenceHistogram(MovingAverageConvergenceDivergence macd, ExponentialMovingAverage signalMa)
 			: base(macd, signalMa)
 		{

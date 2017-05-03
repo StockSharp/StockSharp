@@ -268,7 +268,7 @@ M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.C
 M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/tradeId;Str1192
 M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/side;Str129
 M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/price;TradePrice
-M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/volume;TradeVolume
+M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/volume;DocStr8830
 M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/returns;DocStr8766
 M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartActiveOrdersElement,StockSharp.Xaml.Charting.ChartActiveOrderInfo)/summary;DocStr8977
 M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartActiveOrdersElement,StockSharp.Xaml.Charting.ChartActiveOrderInfo)/param/element;DocStr8955

@@ -131,8 +131,8 @@ namespace StockSharp.Messages
 		/// ID of original transaction, for which this message is the answer.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.OriginalTrasactionKey)]
-		[DescriptionLoc(LocalizedStrings.OriginalTrasactionIdKey)]
+		[DisplayNameLoc(LocalizedStrings.OriginalTransactionKey)]
+		[DescriptionLoc(LocalizedStrings.OriginalTransactionIdKey)]
 		[MainCategory]
 		public long OriginalTransactionId { get; set; }
 
@@ -232,7 +232,7 @@ namespace StockSharp.Messages
 		public decimal? OrderVolume { get; set; }
 
 		/// <summary>
-		/// Number of contracts in an trade.
+		/// Number of contracts in the trade.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeTradeKey)]

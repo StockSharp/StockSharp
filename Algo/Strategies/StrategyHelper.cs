@@ -663,7 +663,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for the event of occurrence new strategy trade.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which trade occurrence will be traced.</param>
+		/// <param name="strategy">The strategy, based on which trade occurrence will be traced.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, MyTrade> WhenNewMyTrade(this Strategy strategy)
 		{
@@ -673,7 +673,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of occurrence of new strategy order.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which order occurrence will be traced.</param>
+		/// <param name="strategy">The strategy, based on which order occurrence will be traced.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Order> WhenOrderRegistered(this Strategy strategy)
 		{
@@ -683,7 +683,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of change of any strategy order.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which orders change will be traced.</param>
+		/// <param name="strategy">The strategy, based on which orders change will be traced.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Order> WhenOrderChanged(this Strategy strategy)
 		{
@@ -693,7 +693,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for the event of strategy position change.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which position change will be traced.</param>
+		/// <param name="strategy">The strategy, based on which position change will be traced.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPositionChanged(this Strategy strategy)
 		{
@@ -703,7 +703,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of position event reduction below the specified level.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which position change will be traced.</param>
+		/// <param name="strategy">The strategy, based on which position change will be traced.</param>
 		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPositionLess(this Strategy strategy, Unit value)
@@ -725,7 +725,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of position event increase above the specified level.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which position change will be traced.</param>
+		/// <param name="strategy">The strategy, based on which position change will be traced.</param>
 		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPositionMore(this Strategy strategy, Unit value)
@@ -747,7 +747,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of profit reduction below the specified level.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which the profit change will be traced.</param>
+		/// <param name="strategy">The strategy, based on which the profit change will be traced.</param>
 		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPnLLess(this Strategy strategy, Unit value)
@@ -769,7 +769,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of profit increase above the specified level.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which the profit change will be traced.</param>
+		/// <param name="strategy">The strategy, based on which the profit change will be traced.</param>
 		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPnLMore(this Strategy strategy, Unit value)
@@ -791,7 +791,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of profit change.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which the profit change will be traced.</param>
+		/// <param name="strategy">The strategy, based on which the profit change will be traced.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPnLChanged(this Strategy strategy)
 		{
@@ -801,7 +801,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of start of strategy operation.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which the start of strategy operation will be expected.</param>
+		/// <param name="strategy">The strategy, based on which the start of strategy operation will be expected.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Strategy> WhenStarted(this Strategy strategy)
 		{
@@ -814,7 +814,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of beginning of the strategy operation stop.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which the beginning of stop will be determined.</param>
+		/// <param name="strategy">The strategy, based on which the beginning of stop will be determined.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Strategy> WhenStopping(this Strategy strategy)
 		{
@@ -827,7 +827,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event full stop of strategy operation.
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which the full stop will be expected.</param>
+		/// <param name="strategy">The strategy, based on which the full stop will be expected.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Strategy> WhenStopped(this Strategy strategy)
 		{
@@ -840,7 +840,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of strategy error (transition of state <see cref="Strategy.ErrorState"/> into <see cref="LogLevels.Error"/>).
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which error will be expected.</param>
+		/// <param name="strategy">The strategy, based on which error will be expected.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Exception> WhenError(this Strategy strategy)
 		{
@@ -850,7 +850,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// To create a rule for event of strategy warning (transition of state <see cref="Strategy.ErrorState"/> into <see cref="LogLevels.Warning"/>).
 		/// </summary>
-		/// <param name="strategy">The startegy, based on which the warning will be expected.</param>
+		/// <param name="strategy">The strategy, based on which the warning will be expected.</param>
 		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Strategy> WhenWarning(this Strategy strategy)
 		{

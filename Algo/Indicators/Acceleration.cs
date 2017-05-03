@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Acceleration / Decelration Indicator.
+	/// Acceleration / Deceleration Indicator.
 	/// </summary>
 	/// <remarks>
 	/// http://ta.mql4.com/indicators/bills/acceleration_deceleration.

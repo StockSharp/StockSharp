@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To call the event <see cref="Error"/>.
 		/// </summary>
-		/// <param name="error">Error detais.</param>
+		/// <param name="error">Error details.</param>
 		protected void RaiseError(Exception error)
 		{
 			Error?.Invoke(error);

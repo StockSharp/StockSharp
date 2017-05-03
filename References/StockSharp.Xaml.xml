@@ -543,6 +543,51 @@
             Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.TimeSpanEditorMask">
+      <summary>
+            Show <see cref="T:System.TimeSpan" /> editor parts mask.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditorMask.Days">
+      <summary>
+            Days.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditorMask.Hours">
+      <summary>
+            Hours.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditorMask.Minutes">
+      <summary>
+            Minutes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditorMask.Seconds">
+      <summary>
+            Seconds.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditorMask.Milliseconds">
+      <summary>
+            Milliseconds.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditorMask.Microseconds">
+      <summary>
+            Microseconds.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.TimeSpanEditorAttribute">
+      <summary>
+        <see cref="T:System.TimeSpan" /> editor attribute.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditorAttribute.Mask">
+      <summary>
+            Show editor parts mask.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor">
       <summary>
             Editor for <see cref="T:StockSharp.BusinessEntities.ExchangeBoard" />.
@@ -680,6 +725,11 @@
             TimeSpanEditor
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.DefaultMask">
+      <summary>
+            Default editor parts mask.
+            </summary>
+    </member>
     <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ValueProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Value" />.
@@ -710,6 +760,26 @@
             Has value.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.MicrosecondsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Microseconds" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Microseconds">
+      <summary>
+            Microseconds.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.MillisecondsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Milliseconds" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Milliseconds">
+      <summary>
+            Milliseconds.
+            </summary>
+    </member>
     <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.SecondsProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Seconds" />.
@@ -717,7 +787,7 @@
     </member>
     <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Seconds">
       <summary>
-            The seconds value.
+            Seconds.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.MinutesProperty">
@@ -727,7 +797,7 @@
     </member>
     <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Minutes">
       <summary>
-            The minutes value.
+            Minutes.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HoursProperty">
@@ -737,7 +807,7 @@
     </member>
     <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Hours">
       <summary>
-            The hours value.
+            Hours.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.DaysProperty">
@@ -750,14 +820,14 @@
             The days value.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDays">
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.MaskProperty">
       <summary>
-            Show days in editor.
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Mask" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDaysProperty">
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Mask">
       <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ShowDays" />.
+            Show parts mask.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ValueChanged">
@@ -1290,7 +1360,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ConnectorSupportedMessagesPanel">
       <summary>
-            The panel for modifing <see cref="P:StockSharp.Messages.IMessageAdapter.SupportedMessages" />.
+            The panel for modifying <see cref="P:StockSharp.Messages.IMessageAdapter.SupportedMessages" />.
             </summary>
       <summary>
             ConnectorSupportedMessagesPanel
@@ -1865,7 +1935,7 @@
       <summary>
             To check for proper input.
             </summary>
-      <returns>Error detais.</returns>
+      <returns>Error details.</returns>
     </member>
     <member name="M:StockSharp.Xaml.SecurityJumpsEditor.InitializeComponent">
       <summary>
@@ -3385,7 +3455,7 @@
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.Error">
       <summary>
-            Dats process error.
+            Data process error.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketTimeChanged">

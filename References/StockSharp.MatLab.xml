@@ -144,7 +144,7 @@
         </member>
         <member name="E:StockSharp.MatLab.MatLabConnector.Error">
             <summary>
-            Dats process error.
+            Data process error.
             </summary>
         </member>
         <member name="E:StockSharp.MatLab.MatLabConnector.MarketTimeChanged">

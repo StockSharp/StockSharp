@@ -577,7 +577,7 @@ namespace StockSharp.Algo
 					var nextWrapper = adapter as IMessageAdapterWrapper;
 
 					if (prevWrapper == null)
-						throw new InvalidOperationException("Adapter wrapper can not be added to the beginning of the chain.");
+						throw new InvalidOperationException("Adapter wrapper cannot be added to the beginning of the chain.");
 
 					if (nextWrapper == null)
 						throw new InvalidOperationException(LocalizedStrings.TypeNotImplemented.Put(adapter.GetType(), nameof(IMessageAdapterWrapper)));
@@ -696,7 +696,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Send error message.
 		/// </summary>
-		/// <param name="error">Error detais.</param>
+		/// <param name="error">Error details.</param>
 		public void SendOutError(Exception error)
 		{
 			SendOutMessage(error.ToErrorMessage());

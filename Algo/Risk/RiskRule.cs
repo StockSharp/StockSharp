@@ -469,7 +469,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _slippage;
 
 		/// <summary>
-		/// Sllippage size.
+		/// Slippage size.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str163Key)]
 		[DescriptionLoc(LocalizedStrings.Str871Key)]

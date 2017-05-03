@@ -101,7 +101,7 @@
     </member>
     <member name="P:StockSharp.Micex.MicexMessageAdapter.Server">
       <summary>
-            Идентификатор сервера доступа, например “EQ_TEST”.
+            Идентификатор сервера доступа, например, “EQ_TEST”.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.MicexMessageAdapter.Interface">
@@ -228,7 +228,7 @@
     </member>
     <member name="T:StockSharp.Micex.CompressionLevels">
       <summary>
-            Уровени сжатия данных.
+            Уровни сжатия данных.
             </summary>
     </member>
     <member name="F:StockSharp.Micex.CompressionLevels.None">
@@ -2262,7 +2262,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Currentallowedsellprice">
       <summary>
-            Максимальная допустимая цена активной  лимитной заявки на продажу.
+            Максимальная допустимая цена активной лимитной заявки на продажу.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Keepspreadvariant">
@@ -3118,7 +3118,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.RmsPricerange.Prevcentralrate">
       <summary>
-            Центральный курс на окончание предыдущего торговго дня.
+            Центральный курс на окончание предыдущего торгового дня.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.SecSettlecodeStats">
@@ -3199,7 +3199,7 @@
             Группы событий.
             </summary>
       <remarks>
-            Группы событий используемых в расписании.
+            Группы событий, используемых в расписании.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Tables.Trdtimegroups.#ctor">
@@ -3411,7 +3411,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.AllTrades.Buysell">
       <summary>
-            Направленность заявки инициирующей заключение сделки - "купля/продажа".
+            Направленность заявки, инициирующей заключение сделки - "купля/продажа".
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.AllTrades.Reporate">
@@ -3524,17 +3524,17 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Auctstats.Dpvalindicatorbuy">
       <summary>
-            Индикатор наличия заявок на покупку  на аукционе КП.
+            Индикатор наличия заявок на покупку на аукционе КП.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Auctstats.Dpvalindicatorsell">
       <summary>
-            Индикатор наличия заявок на продажу  на аукционе КП.
+            Индикатор наличия заявок на продажу на аукционе КП.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Auctstats.Dporderindicator">
       <summary>
-            Индикатор наличия заявок на покупку или продажу на аукционе крупными лотами до данному финасовому инструменту.
+            Индикатор наличия заявок на покупку или продажу на аукционе крупными лотами до данному финансовому инструменту.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Bankacc">
@@ -4231,12 +4231,12 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Dpauctions.Lcurrentprice">
       <summary>
-            Официальная текущая цена, рассчитываемая как средневзвешенная цена сделок заключенных за последние 10 минут, зафиксированная на момент начала ценового окна.
+            Официальная текущая цена, рассчитываемая как средневзвешенная цена сделок, заключенных за последние 10 минут, зафиксированная на момент начала ценового окна.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Dpauctions.Priceboundup">
       <summary>
-            Максимальная допустимая цена аукциона  при выборе цены как одной из средних цен ценового окна.
+            Максимальная допустимая цена аукциона при выборе цены как одной из средних цен ценового окна.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Dpauctions.Pricebounddown">
@@ -4514,7 +4514,7 @@
             Индексы.
             </summary>
       <remarks>
-            Каждая строка таблицы представляет один из индексов ММВБ, расчитываемых для этого рынка.
+            Каждая строка таблицы представляет один из индексов ММВБ, рассчитываемых для этого рынка.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Tables.Indexes.#ctor">
@@ -5907,7 +5907,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Orders.Intorderno">
       <summary>
-            Внутренний идентификационный номер заявки в Торговой Системе, присваиваемый заявке в момент постановки в  очередь. Используется для идентификации собственной заявки в анонимном потоке FAST Market Data.
+            Внутренний идентификационный номер заявки в Торговой Системе, присваиваемый заявке в момент постановки в очередь. Используется для идентификации собственной заявки в анонимном потоке FAST Market Data.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Orders.Upduserid">
@@ -5993,7 +5993,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Positions.Ordersell">
       <summary>
-            Объем активных заявок на продажу - суммарный неудовлетворенный объем всех активных заявок на продажу,в денежном выражении.
+            Объем активных заявок на продажу - суммарный неудовлетворенный объем всех активных заявок на продажу, в денежном выражении.
             Объем заявки в денежном выражении рассчитывается с учетом комиссионного сбора Биржи и накопленного купонного дохода.
             </summary>
     </member>
@@ -6306,7 +6306,7 @@
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.RepoQuotebook">
       <summary>
-            Котировки безадресных заявкок РЕПО.
+            Котировки безадресных заявок РЕПО.
             </summary>
       <remarks>
             Таблица содержит информацию о заявках с лучшими ставками РЕПО (отдельно на покупку и на продажу) по данному финансовому инструменту. Запрос осуществляется в двух вариантах, либо с указанием BoardID, либо с указанием SecBoard+SecCode.
@@ -6739,7 +6739,7 @@
             Финансовые инструменты.
             </summary>
       <remarks>
-            Таблица содержит текущую биржевую информацию о финансовых инструментах, относящихся к различным режимам торгов.Каждая строка таблицы соответствует уникальной паре режим торгов - финансовый инструмент.
+            Таблица содержит текущую биржевую информацию о финансовых инструментах, относящихся к различным режимам торгов. Каждая строка таблицы соответствует уникальной паре режим торгов - финансовый инструмент.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Tables.Securities.#ctor">
@@ -6784,7 +6784,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Marketcode">
       <summary>
-            Идентификатор рынка на котором торгуется финансовый инструмент.
+            Идентификатор рынка, на котором торгуется финансовый инструмент.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Instrid">
@@ -6895,7 +6895,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Buybackdate">
       <summary>
-            Дата досрочного выкупа облигации, заполняется если бумага предусматривает досрочный выкуп (до погашения). Если указана, то расчет доходности производится с успользованием этой даты, в качестве даты погашения.
+            Дата досрочного выкупа облигации, заполняется если бумага предусматривает досрочный выкуп (до погашения). Если указана, то расчет доходности производится с использованием этой даты, в качестве даты погашения.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Agentid">
@@ -6955,7 +6955,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Origintradingstatus">
       <summary>
-            Индикатор состояния торговой сессии по инструменту. Во время перерыва показывает действительное состояние торговой сесии (никогда не принимает значение "Перерыв").
+            Индикатор состояния торговой сессии по инструменту. Во время перерыва показывает действительное состояние торговой сессии (никогда не принимает значение "Перерыв").
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Issuesizeplaced">
@@ -7135,7 +7135,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Lcurrentprice">
       <summary>
-            Официальная текущая цена, рассчитываемая как средневзвешенная цена сделок заключенных за последние 10 минут.
+            Официальная текущая цена, рассчитываемая как средневзвешенная цена сделок, заключенных за последние 10 минут.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Lcloseprice">
@@ -7160,12 +7160,12 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Counterprice">
       <summary>
-            Цена контрагента за одну ценную бумагу. Если для бумаги указана цена контрагента, то заявки с признаком "по цене конрагента" удовлетворяются по этой цене.
+            Цена контрагента за одну ценную бумагу. Если для бумаги указана цена контрагента, то заявки с признаком "по цене контрагента" удовлетворяются по этой цене.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.MinCurrLast">
       <summary>
-            Минимальная из двух цен : Официальной текущей цены и цены последней сделки, вошедшей в расчёт официальной текущей цены.
+            Минимальная из двух цен: Официальной текущей цены и цены последней сделки, вошедшей в расчёт официальной текущей цены.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.MinCurrLastTime">
@@ -8820,7 +8820,7 @@
     <member name="P:StockSharp.Micex.Native.Transactions.CcpRepoOrder.Mmorder">
       <summary>
             Тип заявки "Заявка маркет-мейкера" используется при вводе лимитированной заявки.
-            Заявка с этип типом может быть выставлена только если участник торгов является маркет-мейкером по указанному в заявке финансовому инструменту.
+            Заявка с этим типом может быть выставлена только если участник торгов является маркет-мейкером по указанному в заявке финансовому инструменту.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.CcpRepoOrder.Secboard">
@@ -9053,7 +9053,7 @@
             Ввод заявки на перевод без подтверждения.
             </summary>
       <remarks>
-            Данная транзакция предназначена для осуществления переводов денежных средств/бумаг (без подтверждения) между основым счетом и счетом обеспечения. В результате выполнения транзакции в торговой системе регистрируются две заявки на перевод (табл. SECTRANSFERS) и пара соответствующих им сделок (табл. TRADES).
+            Данная транзакция предназначена для осуществления переводов денежных средств/бумаг (без подтверждения) между основным счетом и счетом обеспечения. В результате выполнения транзакции в торговой системе регистрируются две заявки на перевод (табл. SECTRANSFERS) и пара соответствующих им сделок (табл. TRADES).
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Transactions.ComplexTransfer.#ctor">
@@ -9671,7 +9671,7 @@
     <member name="P:StockSharp.Micex.Native.Transactions.Negdeal.Refundrate">
       <summary>
             Ставка фиксированного возмещения, выплачиваемого в случае неисполнения второй части РЕПО, в процентах.
-            Примечание: Для заключения сделки, во встречных адресных заявках ставки фиксированного возмещения должны совпадать.Фиксированное возмещение может указываться только в заявках с кодами расчетов типа 'B' или 'R', в других случаях поле RefundRate должно содержать пробелы.
+            Примечание: Для заключения сделки, во встречных адресных заявках ставки фиксированного возмещения должны совпадать. Фиксированное возмещение может указываться только в заявках с кодами расчетов типа 'B' или 'R', в других случаях поле RefundRate должно содержать пробелы.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.Negdeal.Acceptedquoteno">
@@ -9747,7 +9747,7 @@
     <member name="P:StockSharp.Micex.Native.Transactions.Order.Mmorder">
       <summary>
             Тип заявки "Заявка маркет-мейкера" используется при вводе лимитированной заявки.
-            Заявка с этип типом может быть выставлена только если участник торгов является маркет-мейкером по указанному в заявке финансовому инструменту.
+            Заявка с этим типом может быть выставлена только если участник торгов является маркет-мейкером по указанному в заявке финансовому инструменту.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.Order.Activationtype">
@@ -10288,7 +10288,7 @@
             Отмена внебиржевой сделки.
             </summary>
       <remarks>
-            Применяется для снятия ранее введенных сделок. Логическая операция "и" является соединяющим условием для значений указанных в полях транзакции.
+            Применяется для снятия ранее введенных сделок. Логическая операция "и" является соединяющим условием для значений, указанных в полях транзакции.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Transactions.WdExtTrade.#ctor">
@@ -10342,7 +10342,7 @@
             Снятие адресных заявок.
             </summary>
       <remarks>
-            Применяется для отмены одной или нескольких активных адресных заявок. Логическая операция "и" является соединяющим условием для значений указанных в полях транзакции.
+            Применяется для отмены одной или нескольких активных адресных заявок. Логическая операция "и" является соединяющим условием для значений, указанных в полях транзакции.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Transactions.WdNegdeal.#ctor">
@@ -10395,7 +10395,7 @@
             Снятие заявок.
             </summary>
       <remarks>
-            Применяется для снятия ранее введенных и не удовлетворенных полностью заявок. Логическая операция "и" является соединяющим условием для значений указанных в полях транзакции.
+            Применяется для снятия ранее введенных и не удовлетворенных полностью заявок. Логическая операция "и" является соединяющим условием для значений, указанных в полях транзакции.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Transactions.WdOrders.#ctor">
@@ -10453,7 +10453,7 @@
             Снятие безадресных заявок.
             </summary>
       <remarks>
-            Применяется для снятия ранее введенных и не удовлетворенных полностью заявок. Логическая операция "и" является соединяющим условием для значений указанных в полях транзакции.
+            Применяется для снятия ранее введенных и не удовлетворенных полностью заявок. Логическая операция "и" является соединяющим условием для значений, указанных в полях транзакции.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Transactions.WdQuote.#ctor">
@@ -10506,7 +10506,7 @@
             Снятие расчетной заявки-отчета.
             </summary>
       <remarks>
-            Применяется для снятия ранее введенных и не исполненных отчетов. Логическая операция "и" является соединяющим условием для значений указанных в полях транзакции.
+            Применяется для снятия ранее введенных и не исполненных отчетов. Логическая операция "и" является соединяющим условием для значений, указанных в полях транзакции.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Transactions.WdReport.#ctor">
@@ -10571,7 +10571,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.ServerInfo.Version">
       <summary>
-            Yомер версии сервера шлюза.
+            Номер версии сервера шлюза.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.ServerInfo.BetaVersion">
@@ -10622,7 +10622,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.ServerInfo.UserId">
       <summary>
-            Идентификатор пользователя используемый интерфейсным сервером для данного соединения.
+            Идентификатор пользователя, используемый интерфейсным сервером для данного соединения.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.ServerInfo.SystemId">
@@ -10714,7 +10714,7 @@
       <param name="connectionType">Тип подключения.</param>
       <param name="addresses">писок адресов и портов серверов доступа.</param>
       <param name="preferredAddress">Адрес предпочитаемого сервера доступа.</param>
-      <param name="server">Идентификатор сервера доступа, например “EQ_TEST”.</param>
+      <param name="server">Идентификатор сервера доступа, например, “EQ_TEST”.</param>
       <param name="login">Идентификатор пользователя в торговой системе ММВБ.</param>
       <param name="password">Пароль пользователя в торговой системе ММВБ.</param>
       <param name="srvInterface">Идентификатор интерфейса торговой системы ММВБ.</param>
@@ -10755,7 +10755,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.MicexClient.Server">
       <summary>
-            Идентификатор сервера доступа, например “EQ_TEST”.
+            Идентификатор сервера доступа, например, “EQ_TEST”.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.MicexClient.Boards">
@@ -11581,7 +11581,7 @@
     </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.OpenRepoQuotebookTable(System.String,System.String,System.String,System.Int32,System.Int32,System.Decimal,System.Decimal)">
       <summary>
-            Открыть таблицу 'Котировки безадресных заявкок РЕПО'.
+            Открыть таблицу 'Котировки безадресных заявок РЕПО'.
             </summary>
       <param name="boardid">Идентификатор режима торгов.</param>
       <param name="secboard">Идентификатор режима торгов.</param>
@@ -11590,18 +11590,18 @@
       <param name="maxrepoterm">Максимальный срок РЕПО в календарных днях или пусто.</param>
       <param name="minreporate">Минимальная ставка РЕПО, в процентах, или пусто.</param>
       <param name="maxreporate">Максимальная ставка РЕПО, в процентах, или пусто.</param>
-      <returns>Указатель на таблицу 'Котировки безадресных заявкок РЕПО'.</returns>
+      <returns>Указатель на таблицу 'Котировки безадресных заявок РЕПО'.</returns>
     </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.ReadRepoQuotebookTable(StockSharp.Micex.Native.MicexPtrReader)">
       <summary>
-            Котировки безадресных заявкок РЕПО.
+            Котировки безадресных заявок РЕПО.
             </summary>
       <param name="tablePtr">Указатель на таблицу.</param>
-      <returns>Список объектов 'Котировки безадресных заявкок РЕПО'.</returns>
+      <returns>Список объектов 'Котировки безадресных заявок РЕПО'.</returns>
     </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.AddRepoQuotebookTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.RepoQuotebook}})">
       <summary>
-            Добавить таблицу 'Котировки безадресных заявкок РЕПО' в пакетную обработку.
+            Добавить таблицу 'Котировки безадресных заявок РЕПО' в пакетную обработку.
             </summary>
       <param name="tableHandle">Идентификатор таблицы.</param>
       <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
@@ -12453,7 +12453,7 @@
     </member>
     <member name="P:StockSharp.Micex.Schema.FieldDesc.Enum">
       <summary>
-            Перечислимй тип.
+            Перечислимый тип.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Schema.FieldDesc.Size">
@@ -12559,7 +12559,7 @@
     </member>
     <member name="F:StockSharp.Micex.Schema.TableDescAttributes.ClearOrUpdate">
       <summary>
-            Очищаемая или обновляемая тоблица.
+            Очищаемая или обновляемая таблица.
             </summary>
     </member>
     <member name="F:StockSharp.Micex.Schema.TableDescAttributes.OrderBook">
@@ -12775,7 +12775,7 @@
     </member>
     <member name="P:StockSharp.Micex.MicexTrader.Server">
       <summary>
-            Идентификатор сервера доступа, например “EQ_TEST”.
+            Идентификатор сервера доступа, например, “EQ_TEST”.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.MicexTrader.Login">

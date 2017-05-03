@@ -136,7 +136,7 @@ namespace StockSharp.BusinessEntities
 			{
 				Name = "TSE",
 				RusName = "Токийская фондовая биржа",
-				EngName = "Tokio Stock Exchange",
+				EngName = "Tokyo Stock Exchange",
 				CountryCode = CountryCodes.JP,
 			};
 
@@ -471,7 +471,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Lse { get; }
 
 		/// <summary>
-		/// Information about TSE (Tokio Stock Exchange).
+		/// Information about TSE (Tokyo Stock Exchange).
 		/// </summary>
 		public static Exchange Tse { get; }
 

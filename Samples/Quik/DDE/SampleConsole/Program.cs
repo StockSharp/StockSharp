@@ -47,7 +47,7 @@ namespace SampleConsole
 					return;
 				}
 
-				Console.WriteLine(LocalizedStrings.Str2985 + quikPath);
+				Console.WriteLine(LocalizedStrings.Str2985.Put(quikPath));
 
 				Console.Write(LocalizedStrings.Str2986);
 				var account = Console.ReadLine();

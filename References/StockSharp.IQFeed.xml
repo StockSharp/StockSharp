@@ -259,7 +259,7 @@
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ShortSaleRestrictedCode">
       <summary>
-            The flag which means the short sales allowability.
+            The flag which means the short sales allow ability.
             </summary>
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.NetAssetValueMutualFonds">
@@ -309,7 +309,7 @@
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.CloseRange1">
       <summary>
-            Сlosing range.
+            Closing range.
             </summary>
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.OpenRange2">
@@ -319,7 +319,7 @@
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.CloseRange2">
       <summary>
-            Сlosing range.
+            Closing range.
             </summary>
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.TradeCount">

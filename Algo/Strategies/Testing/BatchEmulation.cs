@@ -185,12 +185,12 @@ namespace StockSharp.Algo.Strategies.Testing
 		public EmulationSettings EmulationSettings { get; }
 
 		/// <summary>
-		/// The emulational connection.
+		/// The emulation connection.
 		/// </summary>
 		public HistoryEmulationConnector EmulationConnector { get; }
 
 		/// <summary>
-		/// The startegy for testing.
+		/// The strategies for testing.
 		/// </summary>
 		public IEnumerable<Strategy> Strategies { get; set; }
 

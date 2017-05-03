@@ -524,7 +524,7 @@
     </member>
     <member name="P:StockSharp.Quik.DdeDerivativePortfolioColumns.PlannedPositionsPrice">
       <summary>
-            Планируемые чистые позиции по всем инструментам в денежном выражении Соответствует параметру «Свободные средства» рынка FORTS.
+            Планируемые чистые позиции по всем инструментам в денежном выражении. Соответствует параметру «Свободные средства» рынка FORTS.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.DdeDerivativePortfolioColumns.Margin">
@@ -936,7 +936,7 @@
     </member>
     <member name="P:StockSharp.Quik.DdeMyTradeColumns.Currency">
       <summary>
-            Валюта цены, например «SUR» - российский рубль.
+            Валюта цены, например, «SUR» - российский рубль.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.DdeMyTradeColumns.Trader">
@@ -1132,7 +1132,7 @@
     </member>
     <member name="P:StockSharp.Quik.DdeOrderColumns.Currency">
       <summary>
-            Валюта цены, например «SUR» - российский рубль.
+            Валюта цены, например, «SUR» - российский рубль.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.DdeOrderColumns.Yield">
@@ -1472,7 +1472,7 @@
     </member>
     <member name="P:StockSharp.Quik.DdeSecurityColumns.NominalCurrency">
       <summary>
-            Символьный код валюты номинала инструмента, например «SUR» - рубли.
+            Символьный код валюты номинала инструмента, например, «SUR» - рубли.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.DdeSecurityColumns.Type">
@@ -2050,9 +2050,9 @@
     </member>
     <member name="M:StockSharp.Quik.DdeTable.GetHashCode">
       <summary>
-            Рассчитать хеш-код объекта <see cref="T:StockSharp.Quik.DdeTable" />.
+            Рассчитать хэш-код объекта <see cref="T:StockSharp.Quik.DdeTable" />.
             </summary>
-      <returns>Хеш-код.</returns>
+      <returns>Хэш-код.</returns>
     </member>
     <member name="M:StockSharp.Quik.DdeTable.ToString">
       <summary>
@@ -2103,9 +2103,9 @@
     </member>
     <member name="M:StockSharp.Quik.DdeTableColumn.GetHashCode">
       <summary>
-            Рассчитать хеш-код объекта <see cref="T:StockSharp.Quik.DdeTableColumn" />.
+            Рассчитать хэш-код объекта <see cref="T:StockSharp.Quik.DdeTableColumn" />.
             </summary>
-      <returns>Хеш-код.</returns>
+      <returns>Хэш-код.</returns>
     </member>
     <member name="M:StockSharp.Quik.DdeTableColumn.ToString">
       <summary>
@@ -2205,7 +2205,7 @@
     </member>
     <member name="P:StockSharp.Quik.DdeTradeColumns.OrderDirection">
       <summary>
-            Направление операции, преведшей к сделке.
+            Направление операции, приведшей к сделке.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.DdeTradeColumns.Date">
@@ -2266,7 +2266,7 @@
     </member>
     <member name="T:StockSharp.Quik.ExtensionInfoConverter">
       <summary>
-            WPF-конвертер для <see cref="T:StockSharp.Messages.IExtendableEntity" />, который преобразует запись из <see cref="P:StockSharp.Messages.IExtendableEntity.ExtensionInfo" /> в сторку для визуального отображения на форме.
+            WPF-конвертер для <see cref="T:StockSharp.Messages.IExtendableEntity" />, который преобразует запись из <see cref="P:StockSharp.Messages.IExtendableEntity.ExtensionInfo" /> в строку для визуального отображения на форме.
             </summary>
     </member>
     <member name="T:StockSharp.Quik.QuikMessageAdapter">
@@ -2994,7 +2994,7 @@
             Запустить Quik терминал, установленный по указанному пути <see cref="P:StockSharp.Quik.QuikTerminal.FileName" />.
             </summary>
       <remarks>
-            Метод заканчивает работу при появлении окна с логином. Если окно не появилось в течении 6 минут, то будет выброшего исключение.
+            Метод заканчивает работу при появлении окна с логином. Если окно не появилось в течении 6 минут, то будет выброшено исключение.
             </remarks>
     </member>
     <member name="M:StockSharp.Quik.QuikTerminal.LoginWithCertificate(System.String,System.String,System.Net.IPEndPoint)">
@@ -3061,12 +3061,12 @@
     </member>
     <member name="P:StockSharp.Quik.QuikTerminal.EditWindowCaption">
       <summary>
-            Заголовок окна редактирования таблицы в Quik-е. В русской версии окно имеет заголовок "Редактирование таблицы", что является значение по-умолчанию.
+            Заголовок окна редактирования таблицы в Quik-е. В русской версии окно имеет заголовок "Редактирование таблицы", что является значением по умолчанию.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.QuikTerminal.AccountWindowCaption">
       <summary>
-            Заголовок окна редактирования таблицы в Quik-е. В русской версии окно имеет заголовок "Выбор активных счетов и задание их очередности", что является значение по-умолчанию.
+            Заголовок окна редактирования таблицы в Quik-е. В русской версии окно имеет заголовок "Выбор активных счетов и задание их очередности", что является значением по умолчанию.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.QuikTerminal.EnableFiltering">
@@ -3082,7 +3082,7 @@
     </member>
     <member name="M:StockSharp.Quik.QuikTerminal.IsDdeStarted(StockSharp.Quik.DdeTable)">
       <summary>
-            Запущен ли экспорт DDE для переданой таблицы.
+            Запущен ли экспорт DDE для переданной таблицы.
             </summary>
       <param name="table">Таблица, для которой необходимо узнать, запущен ли экспорт.</param>
       <returns>
@@ -3150,7 +3150,7 @@
       <summary>
             Проверить, открыто ли окно стакана для переданного инструмента.
             </summary>
-      <param name="security">Идентификатор нструмента, для которого необходимо проверить наличие окна стакана.</param>
+      <param name="security">Идентификатор инструмента, для которого необходимо проверить наличие окна стакана.</param>
       <returns>
         <see langword="true" />, если окно открыто, иначе, <see langword="false" />.</returns>
     </member>
@@ -3166,7 +3166,7 @@
       <summary>
             Открыть окно стакана для переданного инструмента.
             </summary>
-      <param name="securityId">Идентификатор нструмента, для которого необходимо открыть окно стакана.</param>
+      <param name="securityId">Идентификатор инструмента, для которого необходимо открыть окно стакана.</param>
     </member>
     <member name="M:StockSharp.Quik.QuikTerminal.OpenTable(StockSharp.Quik.DdeTable)">
       <summary>
@@ -3405,12 +3405,12 @@
     </member>
     <member name="F:StockSharp.Quik.TransactionActions.KillNegDeal">
       <summary>
-             Cнять заявку на внебиржевую сделку или заявку на сделку РЕПО.
+             Снять заявку на внебиржевую сделку или заявку на сделку РЕПО.
             </summary>
     </member>
     <member name="F:StockSharp.Quik.TransactionActions.KillAllNegDeal">
       <summary>
-             Cнять все заявки на внебиржевые сделки и заявки на сделки РЕПО.
+             Снять все заявки на внебиржевые сделки и заявки на сделки РЕПО.
             </summary>
     </member>
     <member name="F:StockSharp.Quik.TransactionActions.Iceberg">
@@ -3792,7 +3792,7 @@
     </member>
     <member name="F:StockSharp.Quik.Transaction.CurrencyCode">
       <summary>
-            Код валюты расчетов по внебиржевой сделки, например «SUR» – рубли РФ, «USD» – доллары США. Параметр внебиржевой сделки.
+            Код валюты расчетов по внебиржевой сделки, например, «SUR» – рубли РФ, «USD» – доллары США. Параметр внебиржевой сделки.
             </summary>
     </member>
     <member name="F:StockSharp.Quik.Transaction.ForAccount">

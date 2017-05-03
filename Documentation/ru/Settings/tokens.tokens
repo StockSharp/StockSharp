@@ -328,4 +328,8 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="spbex"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>SPB Exchange</ddue:linkText>
+    <ddue:linkUri>http://spbexchange.ru</ddue:linkUri>
+  </ddue:externalLink></item>
 </content>

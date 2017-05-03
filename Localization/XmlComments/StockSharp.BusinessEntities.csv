@@ -274,6 +274,8 @@ P:StockSharp.BusinessEntities.ExchangeBoard.BtcChina/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Icbit/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Finam/summary;DocStr2810
 P:StockSharp.BusinessEntities.ExchangeBoard.Mfd/summary;DocStr2811
+P:StockSharp.BusinessEntities.ExchangeBoard.Arca/summary;DocStr9760
+P:StockSharp.BusinessEntities.ExchangeBoard.Bats/summary;DocStr9761
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
@@ -792,7 +794,7 @@ P:StockSharp.BusinessEntities.Trade.StringId/summary;Str146
 P:StockSharp.BusinessEntities.Trade.Security/summary;DocStr2935
 P:StockSharp.BusinessEntities.Trade.Time/summary;Str605
 P:StockSharp.BusinessEntities.Trade.LocalTime/summary;Str606
-P:StockSharp.BusinessEntities.Trade.Volume/summary;TradeVolume
+P:StockSharp.BusinessEntities.Trade.Volume/summary;DocStr8830
 P:StockSharp.BusinessEntities.Trade.Price/summary;TradePrice
 P:StockSharp.BusinessEntities.Trade.OrderDirection/summary;Str608
 P:StockSharp.BusinessEntities.Trade.IsSystem/summary;IsSystemTrade

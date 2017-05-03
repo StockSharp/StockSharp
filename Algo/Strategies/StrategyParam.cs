@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// The startegy parameter.
+	/// The strategy parameter.
 	/// </summary>
 	public interface IStrategyParam : IPersistable
 	{
@@ -199,7 +199,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="name">Parameter name.</param>
 		/// <param name="initialValue">The initial value.</param>
-		/// <returns>The startegy parameter.</returns>
+		/// <returns>The strategy parameter.</returns>
 		public static StrategyParam<T> Param<T>(this Strategy strategy, string name, T initialValue = default(T))
 		{
 			return new StrategyParam<T>(strategy, name, initialValue);
@@ -209,11 +209,11 @@ namespace StockSharp.Algo.Strategies
 		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
 		/// <typeparam name="T">The type of the parameter value.</typeparam>
-		/// <param name="param">The startegy parameter.</param>
+		/// <param name="param">The strategy parameter.</param>
 		/// <param name="optimizeFrom">The From value at optimization.</param>
 		/// <param name="optimizeTo">The To value at optimization.</param>
 		/// <param name="optimizeStep">The Increment value at optimization.</param>
-		/// <returns>The startegy parameter.</returns>
+		/// <returns>The strategy parameter.</returns>
 		public static StrategyParam<T> Optimize<T>(this StrategyParam<T> param, T optimizeFrom = default(T), T optimizeTo = default(T), T optimizeStep = default(T))
 		{
 			if (param == null)
