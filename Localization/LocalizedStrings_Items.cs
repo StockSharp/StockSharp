@@ -44996,5 +44996,15 @@ namespace StockSharp.Localization
 		/// SPB Exchange
 		/// </summary>
 		public static string SpbEx => GetString(SpbExKey);
+
+		/// <summary>
+		/// Items count: {0}
+		/// </summary>
+		public const string ItemsCountParamKey = nameof(ItemsCountParam);
+
+		/// <summary>
+		/// Items count: {0}
+		/// </summary>
+		public static string ItemsCountParam => GetString(ItemsCountParamKey);
 	}
 }
