@@ -2,6 +2,8 @@ StockSharp Data (Hydra) Change log
 ========================
 ###current:
 * (feature) CQG continuum.
+* (feature) Securities. Custom sorting for extended info added.
+* (feature) SpbEx connector (binary).
 
 ###v4.3.23.1:
 * (feature) Server mode. Edit users.
