@@ -21,6 +21,10 @@ StockSharp API Change log
 * (feature) ExchangeBoard. Arca and BATS.
 * (bug) WhenRegistered rule. Track matched order.
 * (feature) WhenActivated rule. Removed.
+* (feature) BaseGridControl. Items count added to group summary.
+* (feature) SecurityGrid. Custom sorting for extended info added.
+* (feature) Validation attributes added to Security.
+* (feature) TimeSpanEditorAttribute added.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
