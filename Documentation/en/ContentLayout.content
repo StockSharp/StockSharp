@@ -293,18 +293,18 @@
       <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="News" />
       <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Transactions" />
     </Topic>
-    <Topic id="75239e3a-afbe-497f-ba37-85886895a988" visible="True" noFile="true" isExpanded="true" title="Серверный режим">
-      <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Common settings" />
-      <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="Подключение к S#.Data через FixTrader" />
-      <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="Подключение к S#.Data через WCF" />
-      <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Добавление в S#.Data новых данных" />
+    <Topic id="75239e3a-afbe-497f-ba37-85886895a988" visible="True" noFile="true" isExpanded="true" title="Server mode">
+      <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Settings" />
+      <Topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" visible="True" title="FIX/FAST connectivity" />
+      <Topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" visible="True" title="WCF connectivity" />
+      <Topic id="040cdc40-39b4-47be-b3f0-441710515562" visible="True" title="Remote administration" />
     </Topic>
-    <Topic id="d774a3ab-f2d2-4591-9b50-b844807d8b18" visible="True" noFile="true" isExpanded="true" title="Настройка инструментов и площадок">
+    <Topic id="d774a3ab-f2d2-4591-9b50-b844807d8b18" visible="True" noFile="true" isExpanded="true" title="Instruments and boards">
       <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Boards" />
       <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Instruments list" />
-      <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" isSelected="true" title="Непрерывный фьючерс" />
+      <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Continuous futures" />
+      <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" title="Index" />
       <Topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" visible="True" title="Extended instrument info" />
-      <Topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" visible="True" title="Создание индекса" />
     </Topic>
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Create new souce" />
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" isExpanded="true" title="Tasks">
@@ -330,7 +330,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" isSelected="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
     <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" isExpanded="true" title="Интерфейс программы">

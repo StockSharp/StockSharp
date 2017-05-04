@@ -1,6 +1,6 @@
 T:StockSharp.Licensing.Broker/summary;DocStr3835
 P:StockSharp.Licensing.Broker.Id/summary;Str361
-P:StockSharp.Licensing.Broker.Name/summary;DocStr3082
+P:StockSharp.Licensing.Broker.Name/summary;Name2
 P:StockSharp.Licensing.Broker.Criteria/summary;DocStr3836
 P:StockSharp.Licensing.Broker.OpenAccountLink/summary;DocStr3837
 P:StockSharp.Licensing.Broker.OpenDemoAccountLink/summary;DocStr9141
@@ -99,7 +99,7 @@ M:StockSharp.Licensing.LicenseClient.CreateLicense(System.String,System.String,S
 M:StockSharp.Licensing.LicenseClient.CreateLicense(System.String,System.String,System.String,System.String,System.DateTime)/returns;License
 T:StockSharp.Licensing.LicenseErrorLogSource/summary;DocStr3884
 M:StockSharp.Licensing.LicenseErrorLogSource.#ctor/summary;DocStr1
-P:StockSharp.Licensing.LicenseErrorLogSource.Name/summary;DocStr3082
+P:StockSharp.Licensing.LicenseErrorLogSource.Name/summary;Name2
 M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged/summary;DocStr7
 T:StockSharp.Licensing.LicenseExpireActions/summary;DocStr8818
 F:StockSharp.Licensing.LicenseExpireActions.PreventWork/summary;DocStr8819

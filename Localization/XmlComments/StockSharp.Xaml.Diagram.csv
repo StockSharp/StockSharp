@@ -185,7 +185,7 @@ P:StockSharp.Xaml.Diagram.DiagramElement.SelectedOutputSocket/summary;DocStr8894
 P:StockSharp.Xaml.Diagram.DiagramElement.SelectedSocket/summary;DocStr8895
 P:StockSharp.Xaml.Diagram.DiagramElement.Parameters/summary;DocStr7905
 P:StockSharp.Xaml.Diagram.DiagramElement.Category/summary;DocStr7906
-P:StockSharp.Xaml.Diagram.DiagramElement.Name/summary;DocStr3082
+P:StockSharp.Xaml.Diagram.DiagramElement.Name/summary;Name2
 P:StockSharp.Xaml.Diagram.DiagramElement.Description/summary;DocStr7907
 P:StockSharp.Xaml.Diagram.DiagramElement.LogLevel/summary;DocStr1679
 P:StockSharp.Xaml.Diagram.DiagramElement.ShowParameters/summary;Str3054
@@ -200,7 +200,7 @@ E:StockSharp.Xaml.Diagram.DiagramElement.SocketChanged/summary;DocStr9296
 M:StockSharp.Xaml.Diagram.DiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/summary;DocStr7868
 M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/typeparam/T;ParameterType
-M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/param/name;DocStr3082
+M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/param/name;Name2
 M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/param/value;Str3099
 M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/returns;Parameter
 M:StockSharp.Xaml.Diagram.DiagramElement.AddParam(StockSharp.Xaml.Diagram.IDiagramElementParam)/summary;DocStr7868

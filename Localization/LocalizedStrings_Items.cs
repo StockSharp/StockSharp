@@ -488,6 +488,16 @@ namespace StockSharp.Localization
 		public static string Name => GetString(NameKey);
 
 		/// <summary>
+		/// Name
+		/// </summary>
+		public const string Name2Key = nameof(Name2);
+
+		/// <summary>
+		/// Name
+		/// </summary>
+		public static string Name2 => GetString(Name2Key);
+
+		/// <summary>
 		/// Source name (to distinguish in log files).
 		/// </summary>
 		public const string Str7Key = nameof(Str7);

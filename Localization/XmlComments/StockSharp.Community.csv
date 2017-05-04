@@ -372,7 +372,7 @@ F:StockSharp.Community.StrategyPriceTypes.Annual/summary;DocStr9062
 T:StockSharp.Community.StrategyData/summary;DocStr3052
 P:StockSharp.Community.StrategyData.Id/summary;Str361
 P:StockSharp.Community.StrategyData.CreationDate/summary;DocStr3076
-P:StockSharp.Community.StrategyData.Name/summary;DocStr3082
+P:StockSharp.Community.StrategyData.Name/summary;Name2
 P:StockSharp.Community.StrategyData.Description/summary;Str3185
 P:StockSharp.Community.StrategyData.DescriptionId/summary;DocStr3077
 P:StockSharp.Community.StrategyData.PriceType/summary;DocStr9067

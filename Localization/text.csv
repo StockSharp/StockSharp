@@ -45,6 +45,7 @@ NameFileNotContainFileName;Name of file {0} does not contain a file name.;Наз
 RollerFileIndexMustGreatZero;Roller file index must be greater than zero.;Индекс роллируемого файла должен быть больше нуля.
 Logging;Logging;Логирование
 Name;Name;Название
+Name2;Name;Имя
 Str7;Source name (to distinguish in log files).;Название источника (для различия в лог файлах).
 Str8Params;Parent at source {0} is already set in {1}.;Родитель у источника {0} уже установлен в {1}.
 Str9;Logging level;Уровень логирования
@@ -7574,7 +7575,6 @@ DocStr3078;The purchase price;Цена приобретения
 DocStr3079;Source code (if the strategy is distributed in source code);Исходные коды (если стратегия распространяется в исходниках)
 DocStr3080;The compiled build (if the strategy is distributed as a finished build);Скомпилированная сборка (если стратегия распространяется как готовая сборка)
 DocStr3081;The author identifier;Идентификатор автора
-DocStr3082;Name;Имя
 DocStr3083;Description;Детальное описание
 DocStr3084;Registration date;Дата регистрации
 DocStr3085;CQG message adapter;Адаптер сообщений для CQG
