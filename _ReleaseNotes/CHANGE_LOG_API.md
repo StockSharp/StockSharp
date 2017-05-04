@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.24:
 * (feature) Remote storage. Edit users.
 * (feature) Remote storage. Manage server.
 * (feature) Xaml. All XXXWindows's derived from DXWindow.
