@@ -287,7 +287,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 9)]
 		[Nullable]
-		[GratherThanZero]
+		[GreaterThanZero]
 		public decimal? PriceStep
 		{
 			get { return _priceStep; }
@@ -317,7 +317,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
 		[Nullable]
-		[GratherThanZero]
+		[GreaterThanZero]
 		public decimal? VolumeStep
 		{
 			get { return _volumeStep; }
