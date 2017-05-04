@@ -19,6 +19,8 @@ StockSharp API Change log
 * (bug) PortfolioGrid. Multiselect rows fixes.
 * (feature) SPB Exchange connector.
 * (feature) ExchangeBoard. Arca and BATS.
+* (bug) WhenRegistered rule. Track matched order.
+* (feature) WhenActivated rule. Removed.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
