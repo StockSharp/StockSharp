@@ -36908,12 +36908,12 @@ namespace StockSharp.Localization
 		public static string XamlStr254 => GetString(XamlStr254Key);
 
 		/// <summary>
-		/// Configuration
+		/// Configurations
 		/// </summary>
 		public const string XamlStr255Key = nameof(XamlStr255);
 
 		/// <summary>
-		/// Configuration
+		/// Configurations
 		/// </summary>
 		public static string XamlStr255 => GetString(XamlStr255Key);
 
