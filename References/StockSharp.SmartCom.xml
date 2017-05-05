@@ -198,12 +198,12 @@
     </member>
     <member name="F:StockSharp.SmartCom.Native.SmartBarInterval.Hour2">
       <summary>
-            Двух часовой тайм-фрейм.
+            Двухчасовой тайм-фрейм.
             </summary>
     </member>
     <member name="F:StockSharp.SmartCom.Native.SmartBarInterval.Hour4">
       <summary>
-            Четырех часовой тайм-фрейм.
+            Четырехчасовой тайм-фрейм.
             </summary>
     </member>
     <member name="F:StockSharp.SmartCom.Native.SmartBarInterval.Day">
@@ -303,7 +303,7 @@
     </member>
     <member name="F:StockSharp.SmartCom.Native.SmartOrderState.Expired">
       <summary>
-            Ислекло время действия.
+            Истекло время действия.
             </summary>
     </member>
     <member name="F:StockSharp.SmartCom.Native.SmartOrderState.Cancel">
@@ -1592,12 +1592,12 @@
     </member>
     <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Hour2">
       <summary>
-            Двух часовой тайм-фрейм.
+            Двухчасовой тайм-фрейм.
             </summary>
     </member>
     <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Hour4">
       <summary>
-            Четырех часовой тайм-фрейм.
+            Четырехчасовой тайм-фрейм.
             </summary>
     </member>
     <member name="P:StockSharp.SmartCom.SmartComTimeFrames.Day">
