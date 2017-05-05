@@ -24,7 +24,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IsAutoScroll">
       <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.Chart.Areas" /> areas automatically when new data occured. The default is off.
+            To scroll <see cref="P:StockSharp.Xaml.Charting.Chart.Areas" /> areas automatically when new data occurred. The default is off.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IsAutoRange">
@@ -177,7 +177,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.TimeZone">
       <summary>
-            Local time zone for all <see cref="T:System.DateTimeOffset" /> values convertion.
+            Local time zone for all <see cref="T:System.DateTimeOffset" /> values conversion.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IndicatorTypes">
@@ -809,7 +809,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.AntiAliasing">
       <summary>
-            Candles rendering smothing (enabled by default).
+            Candles rendering smoothing (enabled by default).
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor">
@@ -1327,7 +1327,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartIndicatorElement.AdditionalColor">
       <summary>
-            Additional line color (bars etc), which will be drawn on the chart indicator.
+            Additional line color (bars, etc.), which will be drawn on the chart indicator.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartIndicatorElement.StrokeThickness">
@@ -1641,7 +1641,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsAutoScroll">
       <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occured. The default is enabled.
+            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occurred. The default is enabled.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})">
@@ -2055,7 +2055,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IChart.IsAutoScroll">
       <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occured. The default is enabled.
+            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occurred. The default is enabled.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IChart.IsAutoRange">
@@ -2793,12 +2793,12 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineElement.Color">
       <summary>
-            Line color (bar and etc.), with which it will be drawn on chart.
+            Line color (bars, etc.), with which it will be drawn on chart.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineElement.AdditionalColor">
       <summary>
-            Additional line color (bars etc), with which it will be drawn on the chart.
+            Additional line color (bars, etc.), with which it will be drawn on the chart.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineElement.StrokeThickness">

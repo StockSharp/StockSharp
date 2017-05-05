@@ -5806,10 +5806,6 @@ M:StockSharp.Algo.MarketRuleHelper.WhenRegistered(StockSharp.BusinessEntities.Or
 M:StockSharp.Algo.MarketRuleHelper.WhenRegistered(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/order;DocStr1922
 M:StockSharp.Algo.MarketRuleHelper.WhenRegistered(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
 M:StockSharp.Algo.MarketRuleHelper.WhenRegistered(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/returns;DocStr14
-M:StockSharp.Algo.MarketRuleHelper.WhenActivated(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/summary;DocStr1923
-M:StockSharp.Algo.MarketRuleHelper.WhenActivated(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/stopOrder;DocStr1924
-M:StockSharp.Algo.MarketRuleHelper.WhenActivated(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
-M:StockSharp.Algo.MarketRuleHelper.WhenActivated(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/returns;DocStr14
 M:StockSharp.Algo.MarketRuleHelper.WhenPartiallyMatched(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/summary;DocStr1925
 M:StockSharp.Algo.MarketRuleHelper.WhenPartiallyMatched(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/order;DocStr1926
 M:StockSharp.Algo.MarketRuleHelper.WhenPartiallyMatched(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
@@ -6229,7 +6225,7 @@ M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.O
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Order)/returns;Str3166
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/summary;DocStr2138
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/param/fail;DocStr325
-M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/param/originalTransactionId;OriginalTrasactionId
+M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/param/originalTransactionId;OriginalTransactionId
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.OrderFail,System.Int64)/returns;Str3166
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Trade)/summary;DocStr2139
 M:StockSharp.Algo.MessageConverterHelper.ToMessage(StockSharp.BusinessEntities.Trade)/param/trade;TickTrade

@@ -67,7 +67,7 @@ namespace StockSharp.Messages
 		public string ForAccount { get; set; }
 
 		/// <summary>
-		/// Currency code in ISO 4217 standard (OTC trade). Параметр внебиржевой сделки.
+		/// Currency code in ISO 4217 standard (OTC trade). Non-system trade parameter
 		/// </summary>
 		[DataMember]
 		public CurrencyTypes CurrencyType { get; set; }

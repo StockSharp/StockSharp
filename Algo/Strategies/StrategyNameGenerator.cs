@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Strategies
 		public bool AutoGenerateStrategyName { get; set; }
 
 		/// <summary>
-		/// The startegy brief name.
+		/// The strategy brief name.
 		/// </summary>
 		public string ShortName { get; }
 

@@ -191,6 +191,7 @@ namespace StockSharp.Algo
 		private sealed class ChangedOrNewOrderRule : OrderRule<Order>
 		{
 			private readonly Func<Order, bool> _condition;
+			private bool _activated;
 
 			public ChangedOrNewOrderRule(Order order, IConnector connector)
 				: this(order, connector, o => true)
@@ -240,8 +241,11 @@ namespace StockSharp.Algo
 
 			private void OnOrderChanged(Order order)
 			{
-				if (order == Order && _condition(order))
+				if (!_activated && order == Order && _condition(order))
+				{
+					_activated = true;
 					Activate(order);
+				}
 			}
 		}
 
@@ -369,22 +373,22 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			return new ChangedOrNewOrderRule(order, connector, o => o.State == OrderStates.Active) { Name = LocalizedStrings.Str1034 }.Once();
+			return new ChangedOrNewOrderRule(order, connector, o => o.State == OrderStates.Active || o.State == OrderStates.Done) { Name = LocalizedStrings.Str1034 }.Once();
 		}
 
-		/// <summary>
-		/// To create a rule for the stop order activation.
-		/// </summary>
-		/// <param name="stopOrder">The stop order to be traced for the activation event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenActivated(this Order stopOrder, IConnector connector)
-		{
-			if (stopOrder == null)
-				throw new ArgumentNullException(nameof(stopOrder));
+		///// <summary>
+		///// To create a rule for the stop order activation.
+		///// </summary>
+		///// <param name="stopOrder">The stop order to be traced for the activation event.</param>
+		///// <param name="connector">The connection of interaction with trade systems.</param>
+		///// <returns>Rule.</returns>
+		//public static MarketRule<Order, Order> WhenActivated(this Order stopOrder, IConnector connector)
+		//{
+		//	if (stopOrder == null)
+		//		throw new ArgumentNullException(nameof(stopOrder));
 
-			return new ChangedOrNewOrderRule(stopOrder, connector, o => o.DerivedOrder != null) { Name = LocalizedStrings.Str1035 }.Once();
-		}
+		//	return new ChangedOrNewOrderRule(stopOrder, connector, o => o.DerivedOrder != null) { Name = LocalizedStrings.Str1035 }.Once();
+		//}
 
 		/// <summary>
 		/// To create a rule for the event of order partial matching.
@@ -2284,7 +2288,7 @@ namespace StockSharp.Algo
 		/// <param name="container">The rules container.</param>
 		/// <param name="rule">Rule.</param>
 		/// <param name="checkCanFinish">To check the possibility of rule suspension.</param>
-		/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" />, if a rule can not be currently deleted.</returns>
+		/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" />, if a rule cannot be currently deleted.</returns>
 		public static bool TryRemoveRule(this IMarketRuleContainer container, IMarketRule rule, bool checkCanFinish = true)
 		{
 			if (container == null)

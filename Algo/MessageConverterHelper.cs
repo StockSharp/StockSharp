@@ -279,7 +279,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To convert thee order into message.
+		/// To convert the order into message.
 		/// </summary>
 		/// <param name="order">Order.</param>
 		/// <returns>Message.</returns>
@@ -323,7 +323,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To convert the error description into message.
 		/// </summary>
-		/// <param name="fail">Error detais.</param>
+		/// <param name="fail">Error details.</param>
 		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
 		public static ExecutionMessage ToMessage(this OrderFail fail, long originalTransactionId)

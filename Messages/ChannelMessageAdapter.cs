@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 		/// Initializes a new instance of the <see cref="ChannelMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		/// <param name="inputChannel">Incomming messages channgel.</param>
+		/// <param name="inputChannel">Incoming messages channel.</param>
 		/// <param name="outputChannel">Outgoing message channel.</param>
 		public ChannelMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inputChannel, IMessageChannel outputChannel)
 			: base(innerAdapter)

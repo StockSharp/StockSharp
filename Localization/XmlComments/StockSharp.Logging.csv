@@ -235,7 +235,7 @@ M:StockSharp.Logging.MemoryStatistics.ToString/returns;DocStr50
 P:StockSharp.Logging.MemoryStatistics.IsEnabled/summary;DocStr4000
 M:StockSharp.Logging.MemoryStatistics.AddOrRemove/summary;DocStr3996
 T:StockSharp.Logging.IMemoryStatisticsValue/summary;DocStr4001
-P:StockSharp.Logging.IMemoryStatisticsValue.Name/summary;DocStr3082
+P:StockSharp.Logging.IMemoryStatisticsValue.Name/summary;Name2
 P:StockSharp.Logging.IMemoryStatisticsValue.ObjectCount/summary;DocStr4003
 M:StockSharp.Logging.IMemoryStatisticsValue.Clear(System.Boolean)/summary;DocStr4002
 M:StockSharp.Logging.IMemoryStatisticsValue.Clear(System.Boolean)/param/resetCounter;DocStr3995
@@ -243,7 +243,7 @@ T:StockSharp.Logging.MemoryStatisticsValue`1/summary;DocStr4004
 T:StockSharp.Logging.MemoryStatisticsValue`1/typeparam/T;DocStr4005
 M:StockSharp.Logging.MemoryStatisticsValue`1.#ctor(System.String)/summary;DocStr1
 P:StockSharp.Logging.MemoryStatisticsValue`1.Objects/summary;DocStr4009
-P:StockSharp.Logging.MemoryStatisticsValue`1.Name/summary;DocStr3082
+P:StockSharp.Logging.MemoryStatisticsValue`1.Name/summary;Name2
 P:StockSharp.Logging.MemoryStatisticsValue`1.ObjectCount/summary;DocStr4003
 P:StockSharp.Logging.MemoryStatisticsValue`1.ThrowOnRemoveDeleted/summary;DocStr4016
 P:StockSharp.Logging.MemoryStatisticsValue`1.IsTraceObjects/summary;DocStr4017
@@ -284,9 +284,9 @@ M:StockSharp.Logging.SpeechLogListener.Save(Ecng.Serialization.SettingsStorage)/
 M:StockSharp.Logging.SpeechLogListener.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Logging.TraceSource/summary;DocStr4023
 M:StockSharp.Logging.TraceSource.#ctor/summary;DocStr1
-P:StockSharp.Logging.TraceSource.Name/summary;DocStr3082
+P:StockSharp.Logging.TraceSource.Name/summary;Name2
 M:StockSharp.Logging.TraceSource.DisposeManaged/summary;DocStr7
 T:StockSharp.Logging.UnhandledExceptionSource/summary;DocStr4024
 M:StockSharp.Logging.UnhandledExceptionSource.#ctor/summary;DocStr1
-P:StockSharp.Logging.UnhandledExceptionSource.Name/summary;DocStr3082
+P:StockSharp.Logging.UnhandledExceptionSource.Name/summary;Name2
 M:StockSharp.Logging.UnhandledExceptionSource.DisposeManaged/summary;DocStr7

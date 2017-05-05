@@ -1,6 +1,6 @@
 StockSharp Designer Change log
 ========================
-###current:
+###v4.3.24:
 * (bug) Fix splash screen http://stocksharp.ru/posts/m/39084/
 * (feature) Option basic strategy.
 * (bug) Fix grouped market depth. http://stocksharp.ru/posts/m/38969/
@@ -10,6 +10,28 @@ StockSharp Designer Change log
 * (feature) Storage format and data type added into ribbon http://stocksharp.ru/posts/m/39177/
 * (bug) Gallery identifiers fix http://stocksharp.ru/posts/m/39180/
 * (bug) Crash fix http://stocksharp.ru/posts/m/39181/
+* (bug) Live trading many fixes.
+* (bug) Auto connect fix.
+* (bug) Reconnection fixes.
+* (bug) InteractiveBrokers fix.
+* (bug) Commission rules fixes.
+* (feature) Variable. Auto set output type, auto set name http://stocksharp.ru/posts/m/38967/
+* (feature) Auto generate schema for code.
+* (feature) Security mandatory fields http://stocksharp.ru/posts/m/38903/
+* (feature) Live market data simulator.
+* (feature) Show connection for selected portfolio http://stocksharp.ru/posts/m/39193/ 
+* (feature) Boards panel.
+* (feature) Documentation embedded links.
+* (feature) Micex TEAP, Micex FIX. Market maker orders support.
+* (bug) Quik lua. Duration and BuyBackDate fixes.
+* (feature) Arca and BATS.
+* (bug) Portfolios. Multiselect rows fixes.
+* (bug) FinamHistorySource fix. http://stocksharp.ru/forum/8190/ne-zagruzhayutsya-dannye-s-finama/
+* (bug) Transaq. Set TPlusLimits for positions.
+* (bug) Transaq. Fix http://stocksharp.ru/forum/8098/ne-vidit-pozitsii-schet-edp-finam-transaq-connector/
+* (bug) Micex TEAP. Equity pos fix.
+* (bug) Transaq. Fix https://github.com/StockSharp/StockSharp/issues/288
+* (bug) SmartCOM. PriceStep fixes.
 
 ###v4.3.19.4:
 * (bug) FIX connection establish fix http://stocksharp.ru/posts/m/37571/

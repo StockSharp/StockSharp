@@ -575,7 +575,7 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Week/summary;DocStr
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month/summary;DocStr77
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Year/summary;DocStr78
 T:StockSharp.InteractiveBrokers.SoftDollarTier/summary;DocStr9580
-P:StockSharp.InteractiveBrokers.SoftDollarTier.Name/summary;DocStr3082
+P:StockSharp.InteractiveBrokers.SoftDollarTier.Name/summary;Name2
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Value/summary;Str3099
 P:StockSharp.InteractiveBrokers.SoftDollarTier.DisplayName/summary;DocStr9078
 T:StockSharp.InteractiveBrokers.SoftDollarTierMarketDataMessage/summary;DocStr9581
@@ -586,16 +586,16 @@ P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.OriginalTransactionId/summ
 P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Tiers/summary;DocStr9572
 T:StockSharp.InteractiveBrokers.Web.Market/summary;ExchangeInfo
 F:StockSharp.InteractiveBrokers.Web.Market.Id/summary;Str1917
-F:StockSharp.InteractiveBrokers.Web.Market.Name/summary;DocStr3082
+F:StockSharp.InteractiveBrokers.Web.Market.Name/summary;Name2
 F:StockSharp.InteractiveBrokers.Web.Market.Country/summary;Country
 F:StockSharp.InteractiveBrokers.Web.Market.Hours/summary;DocStr3679
 T:StockSharp.InteractiveBrokers.Web.Product/summary;DocStr3268
 F:StockSharp.InteractiveBrokers.Web.Product.ContractId/summary;DocStr3680
-F:StockSharp.InteractiveBrokers.Web.Product.Name/summary;DocStr3082
+F:StockSharp.InteractiveBrokers.Web.Product.Name/summary;Name2
 T:StockSharp.InteractiveBrokers.Web.ProductBoard/summary;DocStr3681
 F:StockSharp.InteractiveBrokers.Web.ProductBoard.Markets/summary;DocStr1562
 F:StockSharp.InteractiveBrokers.Web.ProductBoard.Id/summary;Str1917
-F:StockSharp.InteractiveBrokers.Web.ProductBoard.Name/summary;DocStr3082
+F:StockSharp.InteractiveBrokers.Web.ProductBoard.Name/summary;Name2
 F:StockSharp.InteractiveBrokers.Web.ProductBoard.Class/summary;Class
 F:StockSharp.InteractiveBrokers.Web.ProductBoard.SettlementMethod/summary;DocStr3682
 F:StockSharp.InteractiveBrokers.Web.ProductBoard.ExchangeWebsite/summary;DocStr3683
@@ -607,7 +607,7 @@ F:StockSharp.InteractiveBrokers.Web.ProductBoard.VolumeRange1/summary;DocStr3686
 F:StockSharp.InteractiveBrokers.Web.ProductBoard.VolumeRange2/summary;DocStr3686
 F:StockSharp.InteractiveBrokers.Web.ProductBoard.VolumeRange3/summary;DocStr3686
 T:StockSharp.InteractiveBrokers.Web.ProductDescripton/summary;DocStr3687
-F:StockSharp.InteractiveBrokers.Web.ProductDescripton.Name/summary;DocStr3082
+F:StockSharp.InteractiveBrokers.Web.ProductDescripton.Name/summary;Name2
 F:StockSharp.InteractiveBrokers.Web.ProductDescripton.Symbol/summary;Code
 F:StockSharp.InteractiveBrokers.Web.ProductDescripton.Type/summary;Str1963
 F:StockSharp.InteractiveBrokers.Web.ProductDescripton.Country/summary;Country

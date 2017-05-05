@@ -939,7 +939,7 @@ namespace StockSharp.Algo
 
 		private static void CheckOnNew(Order order, bool checkVolume = true, bool checkTransactionId = true)
 		{
-			ChechOrderState(order);
+			CheckOrderState(order);
 
 			if (checkVolume)
 			{
@@ -965,13 +965,13 @@ namespace StockSharp.Algo
 
 		private static void CheckOnOld(Order order)
 		{
-			ChechOrderState(order);
+			CheckOrderState(order);
 
 			if (order.TransactionId == 0 && order.Id == null && order.StringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str899, nameof(order));
 		}
 
-		private static void ChechOrderState(Order order)
+		private static void CheckOrderState(Order order)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));

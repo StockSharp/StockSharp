@@ -674,17 +674,6 @@ namespace StockSharp.Algo.Candles
 			return manager.GetSeries<TCandle>(security, arg) != null;
 		}
 
-		///// <summary>
-		///// Получить время формирования свечи.
-		///// </summary>
-		///// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить время формирования свечи.</param>
-		///// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
-		///// <returns>Время формирования свечи.</returns>
-		//public static DateTimeOffset GetCandleTime(this TimeSpan timeFrame, DateTimeOffset currentTime)
-		//{
-		//	return timeFrame.GetCandleBounds(currentTime).Min;
-		//}
-
 		/// <summary>
 		/// To get the candle time range.
 		/// </summary>

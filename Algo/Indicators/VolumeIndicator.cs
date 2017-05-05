@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Cadle volume.
+	/// Candle volume.
 	/// </summary>
 	[DisplayName("Volume")]
 	[DescriptionLoc(LocalizedStrings.Str756Key)]

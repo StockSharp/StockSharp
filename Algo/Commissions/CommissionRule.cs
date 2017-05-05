@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		public decimal? Process(Message message)
 		{
 			var commission = OnProcessExecution((ExecutionMessage)message);
@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected abstract decimal? OnProcessExecution(ExecutionMessage message);
 
 		/// <summary>
@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasOrderInfo())
@@ -168,7 +168,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
@@ -189,7 +189,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasOrderInfo())
@@ -210,7 +210,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
@@ -259,7 +259,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (!message.HasOrderInfo())
@@ -334,7 +334,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (!message.HasTradeInfo())
@@ -381,7 +381,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo())
@@ -422,7 +422,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && message.SecurityId == _securityId)
@@ -492,7 +492,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && message.SecurityId.SecurityType == SecurityType)
@@ -553,7 +553,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.CompareIgnoreCase(Board.Code))
@@ -628,7 +628,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (!message.HasTradeInfo())

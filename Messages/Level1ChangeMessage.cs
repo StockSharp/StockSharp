@@ -516,7 +516,7 @@ namespace StockSharp.Messages
 		QuickRatio,
 
 		/// <summary>
-		/// Capital (longterm debt).
+		/// Capital (long-term debt).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str334Key)]

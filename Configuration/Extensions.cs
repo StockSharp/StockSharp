@@ -59,6 +59,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Rithmic;
 	using StockSharp.Rss;
 	using StockSharp.SmartCom;
+	using StockSharp.SpbEx;
 	using StockSharp.Sterling;
 	using StockSharp.Transaq;
 	using StockSharp.Twime;
@@ -185,6 +186,7 @@ namespace StockSharp.Configuration
 			AddConnectorInfo<SterlingMessageAdapter>(wnd);
 			AddConnectorInfo<TransaqMessageAdapter>(wnd);
 			AddConnectorInfo<TwimeMessageAdapter>(wnd);
+			AddConnectorInfo<SpbExMessageAdapter>(wnd);
 
 			wnd.Adapter = (BasketMessageAdapter)adapter.Clone();
 			wnd.AutoConnect = autoConnect;

@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CE39BA92-4734-43D9-AAF8-306991E7533C}</ProjectGuid>
+    <ProjectGuid>{6D7319DB-7A1D-46D9-AD6F-62F5AA4A1ACC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SampleTwime</RootNamespace>

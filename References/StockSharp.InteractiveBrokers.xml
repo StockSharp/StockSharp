@@ -6,7 +6,7 @@
   <members>
     <member name="T:StockSharp.InteractiveBrokers.FinancialAdviseMessage">
       <summary>
-            The messgae with financial advice.
+            Message with financial advice.
             </summary>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.FinancialAdviseMessage.#ctor">
@@ -1315,7 +1315,7 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TrailStopVolumePercentage">
       <summary>
-            Trailing stop volume вas percentage.
+            Trailing stop volume as percentage.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisor">
@@ -1460,7 +1460,7 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtOperator">
       <summary>
-            Regulartory attribute that applies to all US Commodity (Futures) Exchanges, 
+            Regulatory attribute that applies to all US Commodity (Futures) Exchanges, 
             provided to allow client to comply with CFTC Tag 50 Rules.
             </summary>
     </member>

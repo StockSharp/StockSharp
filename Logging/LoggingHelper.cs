@@ -108,7 +108,7 @@ namespace StockSharp.Logging
 		/// To record an error to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
-		/// <param name="exception">Error detais.</param>
+		/// <param name="exception">Error details.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, Exception exception)
 		{
 			receiver.AddErrorLog(exception, null);
@@ -118,7 +118,7 @@ namespace StockSharp.Logging
 		/// To record an error to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
-		/// <param name="exception">Error detais.</param>
+		/// <param name="exception">Error details.</param>
 		/// <param name="format">A format string.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, Exception exception, string format)
 		{

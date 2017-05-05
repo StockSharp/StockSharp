@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Testing
 		private TimeSpan _depthExpirationTime = TimeSpan.FromDays(1);
 
 		/// <summary>
-		/// The maximal time, during which the order book is in the emulator, If no renewal during this time, the order book is deleted, This feature may be used to remove old order books if the are holes in data. By default is equal to 1 day.
+		/// The maximal time, during which the order book is in the emulator, if no renewal during this time, the order book is deleted, This feature may be used to remove old order books if the are holes in data. By default is equal to 1 day.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
@@ -160,7 +160,7 @@ namespace StockSharp.Algo.Testing
 		private TimeSpan _bufferTime;
 
 		/// <summary>
-		/// Responses shall be sent in intervals by whole package. The network delay and bufferized operation of exchange are emulated. The default is 0 ms.
+		/// Responses shall be sent in intervals by whole package. The network delay and buffered operation of exchange are emulated. The default is 0 ms.
 		/// </summary>
 		[Display(
 			ResourceType = typeof(LocalizedStrings),

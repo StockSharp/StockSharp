@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.24:
 * (feature) Remote storage. Edit users.
 * (feature) Remote storage. Manage server.
 * (feature) Xaml. All XXXWindows's derived from DXWindow.
@@ -17,6 +17,14 @@ StockSharp API Change log
 * (feature) CollectionHelper. TryGetAndRemove and TryPeek.
 * (feature) TraderHelper.Filter. Overload for SecurityMessage.
 * (bug) PortfolioGrid. Multiselect rows fixes.
+* (feature) SPB Exchange connector.
+* (feature) ExchangeBoard. Arca and BATS.
+* (bug) WhenRegistered rule. Track matched order.
+* (feature) WhenActivated rule. Removed.
+* (feature) BaseGridControl. Items count added to group summary.
+* (feature) SecurityGrid. Custom sorting for extended info added.
+* (feature) Validation attributes added to Security.
+* (feature) TimeSpanEditorAttribute added.
 
 ###v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.

@@ -38,22 +38,22 @@ namespace StockSharp.Algo.Strategies
 	/// </summary>
 	public abstract class TimeFrameStrategy : Strategy
 	{
-	    /// <summary>
-	    /// Initialize <see cref="TimeFrameStrategy"/>.
-	    /// </summary>
-	    /// <param name="timeFrame">The startegy timeframe.</param>
-	    protected TimeFrameStrategy(TimeSpan timeFrame)
+		/// <summary>
+		/// Initialize <see cref="TimeFrameStrategy"/>.
+		/// </summary>
+		/// <param name="timeFrame">The strategy timeframe.</param>
+		protected TimeFrameStrategy(TimeSpan timeFrame)
 		{
-			_interval = this.Param("Interval", timeFrame);
-			_timeFrame = this.Param("TimeFrame", timeFrame);
+			_interval = this.Param(nameof(Interval), timeFrame);
+			_timeFrame = this.Param(nameof(TimeFrame), timeFrame);
 		}
 
 		private readonly StrategyParam<TimeSpan> _timeFrame;
 
-        /// <summary>
-        /// The startegy timeframe.
-        /// </summary>
-        public TimeSpan TimeFrame
+		/// <summary>
+		/// The strategy timeframe.
+		/// </summary>
+		public TimeSpan TimeFrame
         {
 			get { return _timeFrame.Value; }
             set { _timeFrame.Value = value; }
@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<TimeSpan> _interval;
 
 		/// <summary>
-		/// The startegy start-up interval. By default, it equals to <see cref="TimeFrameStrategy.TimeFrame"/>.
+		/// The strategy start-up interval. By default, it equals to <see cref="TimeFrame"/>.
 		/// </summary>
 		public TimeSpan Interval
 		{

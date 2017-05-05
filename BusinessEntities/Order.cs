@@ -531,7 +531,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Comission (broker, exchange etc.).
+		/// Commission (broker, exchange etc.).
 		/// </summary>
 		[DataMember]
 		[Nullable]

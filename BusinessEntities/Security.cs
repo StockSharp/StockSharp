@@ -24,6 +24,7 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -84,6 +85,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str349Key + LocalizedStrings.Dot,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 1)]
+		[Required(AllowEmptyStrings = false)]
 		public string Code
 		{
 			get { return _code; }
@@ -110,6 +112,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str549Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 2)]
+		[Required]
 		public ExchangeBoard Board
 		{
 			get { return _board; }
@@ -284,6 +287,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 9)]
 		[Nullable]
+		[GreaterThanZero]
 		public decimal? PriceStep
 		{
 			get { return _priceStep; }
@@ -313,6 +317,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 10)]
 		[Nullable]
+		[GreaterThanZero]
 		public decimal? VolumeStep
 		{
 			get { return _volumeStep; }

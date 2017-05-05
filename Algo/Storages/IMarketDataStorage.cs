@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Storages
 		IEnumerable Load(DateTime date);
 
 		/// <summary>
-		/// To ger meta-information on data.
+		/// To get meta-information on data.
 		/// </summary>
 		/// <param name="date">Date, for which meta-information on data shall be received.</param>
 		/// <returns>Meta-information on data. If there is no such date in history, <see langword="null" /> will be returned.</returns>

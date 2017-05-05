@@ -1360,7 +1360,7 @@
     </member>
     <member name="T:StockSharp.Xaml.ConnectorSupportedMessagesPanel">
       <summary>
-            The panel for modifing <see cref="P:StockSharp.Messages.IMessageAdapter.SupportedMessages" />.
+            The panel for modifying <see cref="P:StockSharp.Messages.IMessageAdapter.SupportedMessages" />.
             </summary>
       <summary>
             ConnectorSupportedMessagesPanel
@@ -1935,7 +1935,7 @@
       <summary>
             To check for proper input.
             </summary>
-      <returns>Error detais.</returns>
+      <returns>Error details.</returns>
     </member>
     <member name="M:StockSharp.Xaml.SecurityJumpsEditor.InitializeComponent">
       <summary>
@@ -3455,7 +3455,7 @@
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.Error">
       <summary>
-            Dats process error.
+            Data process error.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketTimeChanged">

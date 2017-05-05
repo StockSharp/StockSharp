@@ -75,7 +75,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str425Key)]
 		[StatisticsCategory]
 		[Nullable]
-		[Browsable(false)]
+		//[Browsable(false)]
 		public decimal? CurrentValue
 		{
 			get { return _currentValue; }

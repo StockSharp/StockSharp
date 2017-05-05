@@ -488,6 +488,16 @@ namespace StockSharp.Localization
 		public static string Name => GetString(NameKey);
 
 		/// <summary>
+		/// Name
+		/// </summary>
+		public const string Name2Key = nameof(Name2);
+
+		/// <summary>
+		/// Name
+		/// </summary>
+		public static string Name2 => GetString(Name2Key);
+
+		/// <summary>
 		/// Source name (to distinguish in log files).
 		/// </summary>
 		public const string Str7Key = nameof(Str7);
@@ -718,12 +728,12 @@ namespace StockSharp.Localization
 		public static string MessageNoText => GetString(MessageNoTextKey);
 
 		/// <summary>
-		/// Message text esceeded maximum allowed length.
+		/// Message text exceeded maximum allowed length.
 		/// </summary>
 		public const string MessageTextMaxKey = nameof(MessageTextMax);
 
 		/// <summary>
-		/// Message text esceeded maximum allowed length.
+		/// Message text exceeded maximum allowed length.
 		/// </summary>
 		public static string MessageTextMax => GetString(MessageTextMaxKey);
 
@@ -1288,12 +1298,12 @@ namespace StockSharp.Localization
 		public static string TickUp => GetString(TickUpKey);
 
 		/// <summary>
-		/// Number of uptrending ticks.
+		/// Number of up trending ticks.
 		/// </summary>
 		public const string TickUpCountKey = nameof(TickUpCount);
 
 		/// <summary>
-		/// Number of uptrending ticks.
+		/// Number of up trending ticks.
 		/// </summary>
 		public static string TickUpCount => GetString(TickUpCountKey);
 
@@ -1308,12 +1318,12 @@ namespace StockSharp.Localization
 		public static string TickDown => GetString(TickDownKey);
 
 		/// <summary>
-		/// Number of downtrending ticks.
+		/// Number of down trending ticks.
 		/// </summary>
 		public const string TickDownCountKey = nameof(TickDownCount);
 
 		/// <summary>
-		/// Number of downtrending ticks.
+		/// Number of down trending ticks.
 		/// </summary>
 		public static string TickDownCount => GetString(TickDownCountKey);
 
@@ -1410,22 +1420,22 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Original transaction
 		/// </summary>
-		public const string OriginalTrasactionKey = nameof(OriginalTrasaction);
+		public const string OriginalTransactionKey = nameof(OriginalTransaction);
 
 		/// <summary>
 		/// Original transaction
 		/// </summary>
-		public static string OriginalTrasaction => GetString(OriginalTrasactionKey);
+		public static string OriginalTransaction => GetString(OriginalTransactionKey);
 
 		/// <summary>
 		/// ID of original transaction, for which this message is the answer.
 		/// </summary>
-		public const string OriginalTrasactionIdKey = nameof(OriginalTrasactionId);
+		public const string OriginalTransactionIdKey = nameof(OriginalTransactionId);
 
 		/// <summary>
 		/// ID of original transaction, for which this message is the answer.
 		/// </summary>
-		public static string OriginalTrasactionId => GetString(OriginalTrasactionIdKey);
+		public static string OriginalTransactionId => GetString(OriginalTransactionIdKey);
 
 		/// <summary>
 		/// Data type
@@ -1928,12 +1938,12 @@ namespace StockSharp.Localization
 		public static string Str159 => GetString(Str159Key);
 
 		/// <summary>
-		/// Comission (broker, stock exchange etc.).
+		/// Commission (broker, stock exchange etc.).
 		/// </summary>
 		public const string Str160Key = nameof(Str160);
 
 		/// <summary>
-		/// Comission (broker, stock exchange etc.).
+		/// Commission (broker, stock exchange etc.).
 		/// </summary>
 		public static string Str160 => GetString(Str160Key);
 
@@ -1948,12 +1958,12 @@ namespace StockSharp.Localization
 		public static string Str161 => GetString(Str161Key);
 
 		/// <summary>
-		/// Netework latency.
+		/// Network latency.
 		/// </summary>
 		public const string Str162Key = nameof(Str162);
 
 		/// <summary>
-		/// Netework latency.
+		/// Network latency.
 		/// </summary>
 		public static string Str162 => GetString(Str162Key);
 
@@ -2288,12 +2298,12 @@ namespace StockSharp.Localization
 		public static string Str195 => GetString(Str195Key);
 
 		/// <summary>
-		/// MarketTimeChanged event invocation interval can not be less or equal to zero.
+		/// MarketTimeChanged event invocation interval cannot be less or equal to zero.
 		/// </summary>
 		public const string Str196Key = nameof(Str196);
 
 		/// <summary>
-		/// MarketTimeChanged event invocation interval can not be less or equal to zero.
+		/// MarketTimeChanged event invocation interval cannot be less or equal to zero.
 		/// </summary>
 		public static string Str196 => GetString(Str196Key);
 
@@ -3588,12 +3598,12 @@ namespace StockSharp.Localization
 		public static string Str333 => GetString(Str333Key);
 
 		/// <summary>
-		/// Capital (longterm debt)
+		/// Capital (long-term debt)
 		/// </summary>
 		public const string Str334Key = nameof(Str334);
 
 		/// <summary>
-		/// Capital (longterm debt)
+		/// Capital (long-term debt)
 		/// </summary>
 		public static string Str334 => GetString(Str334Key);
 
@@ -4638,42 +4648,42 @@ namespace StockSharp.Localization
 		public static string Str480 => GetString(Str480Key);
 
 		/// <summary>
-		/// New depth can not be less than zero.
+		/// New depth cannot be less than zero.
 		/// </summary>
 		public const string Str481Key = nameof(Str481);
 
 		/// <summary>
-		/// New depth can not be less than zero.
+		/// New depth cannot be less than zero.
 		/// </summary>
 		public static string Str481 => GetString(Str481Key);
 
 		/// <summary>
-		/// New depth can not be greater than the current {0}.
+		/// New depth cannot be greater than the current {0}.
 		/// </summary>
 		public const string Str482ParamsKey = nameof(Str482Params);
 
 		/// <summary>
-		/// New depth can not be greater than the current {0}.
+		/// New depth cannot be greater than the current {0}.
 		/// </summary>
 		public static string Str482Params => GetString(Str482ParamsKey);
 
 		/// <summary>
-		/// Depth index can not be less than zero.
+		/// Depth index cannot be less than zero.
 		/// </summary>
 		public const string Str483Key = nameof(Str483);
 
 		/// <summary>
-		/// Depth index can not be less than zero.
+		/// Depth index cannot be less than zero.
 		/// </summary>
 		public static string Str483 => GetString(Str483Key);
 
 		/// <summary>
-		/// Depth can not be less than zero.
+		/// Depth cannot be less than zero.
 		/// </summary>
 		public const string Str484Key = nameof(Str484);
 
 		/// <summary>
-		/// Depth can not be less than zero.
+		/// Depth cannot be less than zero.
 		/// </summary>
 		public static string Str484 => GetString(Str484Key);
 
@@ -5368,12 +5378,12 @@ namespace StockSharp.Localization
 		public static string Str555 => GetString(Str555Key);
 
 		/// <summary>
-		/// Step price can not be less than zero.
+		/// Step price cannot be less than zero.
 		/// </summary>
 		public const string Str556Key = nameof(Str556);
 
 		/// <summary>
-		/// Step price can not be less than zero.
+		/// Step price cannot be less than zero.
 		/// </summary>
 		public static string Str556 => GetString(Str556Key);
 
@@ -5898,12 +5908,12 @@ namespace StockSharp.Localization
 		public static string Str627Params => GetString(Str627ParamsKey);
 
 		/// <summary>
-		/// Errors occured during shutdown.
+		/// Errors occurred during shutdown.
 		/// </summary>
 		public const string Str628Key = nameof(Str628);
 
 		/// <summary>
-		/// Errors occured during shutdown.
+		/// Errors occurred during shutdown.
 		/// </summary>
 		public static string Str628 => GetString(Str628Key);
 
@@ -5988,12 +5998,12 @@ namespace StockSharp.Localization
 		public static string Str636Params => GetString(Str636ParamsKey);
 
 		/// <summary>
-		/// Method should be overriden for the factory.
+		/// Method should be overridden for the factory.
 		/// </summary>
 		public const string Str637Key = nameof(Str637);
 
 		/// <summary>
-		/// Method should be overriden for the factory.
+		/// Method should be overridden for the factory.
 		/// </summary>
 		public static string Str637 => GetString(Str637Key);
 
@@ -6138,12 +6148,12 @@ namespace StockSharp.Localization
 		public static string Str652 => GetString(Str652Key);
 
 		/// <summary>
-		/// Type '{0}' can not be used as source data for candles.
+		/// Type '{0}' cannot be used as source data for candles.
 		/// </summary>
 		public const string Str653ParamsKey = nameof(Str653Params);
 
 		/// <summary>
-		/// Type '{0}' can not be used as source data for candles.
+		/// Type '{0}' cannot be used as source data for candles.
 		/// </summary>
 		public static string Str653Params => GetString(Str653ParamsKey);
 
@@ -6588,12 +6598,12 @@ namespace StockSharp.Localization
 		public static string Str700 => GetString(Str700Key);
 
 		/// <summary>
-		/// Asset {0} dividents not paid.
+		/// Asset {0} dividends not paid.
 		/// </summary>
 		public const string Str701ParamsKey = nameof(Str701Params);
 
 		/// <summary>
-		/// Asset {0} dividents not paid.
+		/// Asset {0} dividends not paid.
 		/// </summary>
 		public static string Str701Params => GetString(Str701ParamsKey);
 
@@ -7118,12 +7128,12 @@ namespace StockSharp.Localization
 		public static string Str755 => GetString(Str755Key);
 
 		/// <summary>
-		/// Cadle volume.
+		/// Candle volume.
 		/// </summary>
 		public const string Str756Key = nameof(Str756);
 
 		/// <summary>
-		/// Cadle volume.
+		/// Candle volume.
 		/// </summary>
 		public static string Str756 => GetString(Str756Key);
 
@@ -7298,12 +7308,12 @@ namespace StockSharp.Localization
 		public static string Str772 => GetString(Str772Key);
 
 		/// <summary>
-		/// Signalling part of indicator.
+		/// Signaling part of indicator.
 		/// </summary>
 		public const string Str773Key = nameof(Str773);
 
 		/// <summary>
-		/// Signalling part of indicator.
+		/// Signaling part of indicator.
 		/// </summary>
 		public static string Str773 => GetString(Str773Key);
 
@@ -7448,12 +7458,12 @@ namespace StockSharp.Localization
 		public static string Str787 => GetString(Str787Key);
 
 		/// <summary>
-		/// Peiod of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.
+		/// Period of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.
 		/// </summary>
 		public const string Str788Key = nameof(Str788);
 
 		/// <summary>
-		/// Peiod of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.
+		/// Period of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.
 		/// </summary>
 		public static string Str788 => GetString(Str788Key);
 
@@ -7608,22 +7618,22 @@ namespace StockSharp.Localization
 		public static string Str803 => GetString(Str803Key);
 
 		/// <summary>
-		/// Signalling MA
+		/// Signaling MA
 		/// </summary>
 		public const string Str804Key = nameof(Str804);
 
 		/// <summary>
-		/// Signalling MA
+		/// Signaling MA
 		/// </summary>
 		public static string Str804 => GetString(Str804Key);
 
 		/// <summary>
-		/// Signalling Voving Average.
+		/// Signaling Moving Average.
 		/// </summary>
 		public const string Str805Key = nameof(Str805);
 
 		/// <summary>
-		/// Signalling Voving Average.
+		/// Signaling Moving Average.
 		/// </summary>
 		public static string Str805 => GetString(Str805Key);
 
@@ -7908,12 +7918,12 @@ namespace StockSharp.Localization
 		public static string Str834 => GetString(Str834Key);
 
 		/// <summary>
-		/// Acceleration / Decelration Indicator.
+		/// Acceleration / Deceleration Indicator.
 		/// </summary>
 		public const string Str835Key = nameof(Str835);
 
 		/// <summary>
-		/// Acceleration / Decelration Indicator.
+		/// Acceleration / Deceleration Indicator.
 		/// </summary>
 		public static string Str835 => GetString(Str835Key);
 
@@ -8248,12 +8258,12 @@ namespace StockSharp.Localization
 		public static string Str870 => GetString(Str870Key);
 
 		/// <summary>
-		/// Sllippage size.
+		/// Slippage size.
 		/// </summary>
 		public const string Str871Key = nameof(Str871);
 
 		/// <summary>
-		/// Sllippage size.
+		/// Slippage size.
 		/// </summary>
 		public static string Str871 => GetString(Str871Key);
 
@@ -8468,32 +8478,32 @@ namespace StockSharp.Localization
 		public static string Str892 => GetString(Str892Key);
 
 		/// <summary>
-		/// Limit order price can not be equal 0.
+		/// Limit order price cannot be equal 0.
 		/// </summary>
 		public const string Str893Key = nameof(Str893);
 
 		/// <summary>
-		/// Limit order price can not be equal 0.
+		/// Limit order price cannot be equal 0.
 		/// </summary>
 		public static string Str893 => GetString(Str893Key);
 
 		/// <summary>
-		/// Order volume can not be zero.
+		/// Order volume cannot be zero.
 		/// </summary>
 		public const string Str894Key = nameof(Str894);
 
 		/// <summary>
-		/// Order volume can not be zero.
+		/// Order volume cannot be zero.
 		/// </summary>
 		public static string Str894 => GetString(Str894Key);
 
 		/// <summary>
-		/// Order volume can not be less than zero.
+		/// Order volume cannot be less than zero.
 		/// </summary>
 		public const string Str895Key = nameof(Str895);
 
 		/// <summary>
-		/// Order volume can not be less than zero.
+		/// Order volume cannot be less than zero.
 		/// </summary>
 		public static string Str895 => GetString(Str895Key);
 
@@ -8528,12 +8538,12 @@ namespace StockSharp.Localization
 		public static string Str898Params => GetString(Str898ParamsKey);
 
 		/// <summary>
-		/// Order has neither identifier nor trasaction ID. Possibly, it was not registered.
+		/// Order has neither identifier nor transaction ID. Possibly, it was not registered.
 		/// </summary>
 		public const string Str899Key = nameof(Str899);
 
 		/// <summary>
-		/// Order has neither identifier nor trasaction ID. Possibly, it was not registered.
+		/// Order has neither identifier nor transaction ID. Possibly, it was not registered.
 		/// </summary>
 		public static string Str899 => GetString(Str899Key);
 
@@ -8668,12 +8678,12 @@ namespace StockSharp.Localization
 		public static string Str912 => GetString(Str912Key);
 
 		/// <summary>
-		/// Iindex is greater than the allowed range.
+		/// Index is greater than the allowed range.
 		/// </summary>
 		public const string Str913Key = nameof(Str913);
 
 		/// <summary>
-		/// Iindex is greater than the allowed range.
+		/// Index is greater than the allowed range.
 		/// </summary>
 		public static string Str913 => GetString(Str913Key);
 
@@ -8918,22 +8928,22 @@ namespace StockSharp.Localization
 		public static string Str939 => GetString(Str939Key);
 
 		/// <summary>
-		/// Interval can not be less than zero.
+		/// Interval cannot be less than zero.
 		/// </summary>
 		public const string Str940Key = nameof(Str940);
 
 		/// <summary>
-		/// Interval can not be less than zero.
+		/// Interval cannot be less than zero.
 		/// </summary>
 		public static string Str940 => GetString(Str940Key);
 
 		/// <summary>
-		/// Market depth can not be less than zero.
+		/// Market depth cannot be less than zero.
 		/// </summary>
 		public const string Str941Key = nameof(Str941);
 
 		/// <summary>
-		/// Market depth can not be less than zero.
+		/// Market depth cannot be less than zero.
 		/// </summary>
 		public static string Str941 => GetString(Str941Key);
 
@@ -9638,12 +9648,12 @@ namespace StockSharp.Localization
 		public static string Str1013 => GetString(Str1013Key);
 
 		/// <summary>
-		/// To value can not be less than From value.
+		/// To value cannot be less than {0} value.
 		/// </summary>
 		public const string Str1014Key = nameof(Str1014);
 
 		/// <summary>
-		/// To value can not be less than From value.
+		/// To value cannot be less than {0} value.
 		/// </summary>
 		public static string Str1014 => GetString(Str1014Key);
 
@@ -9968,22 +9978,22 @@ namespace StockSharp.Localization
 		public static string Str1050 => GetString(Str1050Key);
 
 		/// <summary>
-		/// Price value can not be zero.
+		/// Price value cannot be zero.
 		/// </summary>
 		public const string Str1051Key = nameof(Str1051);
 
 		/// <summary>
-		/// Price value can not be zero.
+		/// Price value cannot be zero.
 		/// </summary>
 		public static string Str1051 => GetString(Str1051Key);
 
 		/// <summary>
-		/// Price value can not be less than zero.
+		/// Price value cannot be less than zero.
 		/// </summary>
 		public const string Str1052Key = nameof(Str1052);
 
 		/// <summary>
-		/// Price value can not be less than zero.
+		/// Price value cannot be less than zero.
 		/// </summary>
 		public static string Str1052 => GetString(Str1052Key);
 
@@ -10128,12 +10138,12 @@ namespace StockSharp.Localization
 		public static string Str1066 => GetString(Str1066Key);
 
 		/// <summary>
-		/// Icreasing close price of candle {0} above {1}
+		/// Increasing close price of candle {0} above {1}
 		/// </summary>
 		public const string Str1067ParamsKey = nameof(Str1067Params);
 
 		/// <summary>
-		/// Icreasing close price of candle {0} above {1}
+		/// Increasing close price of candle {0} above {1}
 		/// </summary>
 		public static string Str1067Params => GetString(Str1067ParamsKey);
 
@@ -10618,12 +10628,12 @@ namespace StockSharp.Localization
 		public static string Str1119Params => GetString(Str1119ParamsKey);
 
 		/// <summary>
-		/// Testing can not be started, because the connection is in state {0}.
+		/// Testing cannot be started, because the connection is in state {0}.
 		/// </summary>
 		public const string Str1120ParamsKey = nameof(Str1120Params);
 
 		/// <summary>
-		/// Testing can not be started, because the connection is in state {0}.
+		/// Testing cannot be started, because the connection is in state {0}.
 		/// </summary>
 		public static string Str1120Params => GetString(Str1120ParamsKey);
 
@@ -10748,22 +10758,22 @@ namespace StockSharp.Localization
 		public static string Str1132 => GetString(Str1132Key);
 
 		/// <summary>
-		/// Maximum volume can not be less than 1.
+		/// Maximum volume cannot be less than 1.
 		/// </summary>
 		public const string Str1133Key = nameof(Str1133);
 
 		/// <summary>
-		/// Maximum volume can not be less than 1.
+		/// Maximum volume cannot be less than 1.
 		/// </summary>
 		public static string Str1133 => GetString(Str1133Key);
 
 		/// <summary>
-		/// Minimum volume can not be less than 1.
+		/// Minimum volume cannot be less than 1.
 		/// </summary>
 		public const string Str1134Key = nameof(Str1134);
 
 		/// <summary>
-		/// Minimum volume can not be less than 1.
+		/// Minimum volume cannot be less than 1.
 		/// </summary>
 		public static string Str1134 => GetString(Str1134Key);
 
@@ -10788,52 +10798,52 @@ namespace StockSharp.Localization
 		public static string Str1136 => GetString(Str1136Key);
 
 		/// <summary>
-		/// Minimum spread size can not be less than one.
+		/// Minimum spread size cannot be less than one.
 		/// </summary>
 		public const string Str1137Key = nameof(Str1137);
 
 		/// <summary>
-		/// Minimum spread size can not be less than one.
+		/// Minimum spread size cannot be less than one.
 		/// </summary>
 		public static string Str1137 => GetString(Str1137Key);
 
 		/// <summary>
-		/// Maximum spread size can not be less than one.
+		/// Maximum spread size cannot be less than one.
 		/// </summary>
 		public const string Str1138Key = nameof(Str1138);
 
 		/// <summary>
-		/// Maximum spread size can not be less than one.
+		/// Maximum spread size cannot be less than one.
 		/// </summary>
 		public static string Str1138 => GetString(Str1138Key);
 
 		/// <summary>
-		/// Maximum bids depth can not be less than zero.
+		/// Maximum bids depth cannot be less than zero.
 		/// </summary>
 		public const string Str1139Key = nameof(Str1139);
 
 		/// <summary>
-		/// Maximum bids depth can not be less than zero.
+		/// Maximum bids depth cannot be less than zero.
 		/// </summary>
 		public static string Str1139 => GetString(Str1139Key);
 
 		/// <summary>
-		/// Maximum asks depth can not be less than zero.
+		/// Maximum asks depth cannot be less than zero.
 		/// </summary>
 		public const string Str1140Key = nameof(Str1140);
 
 		/// <summary>
-		/// Maximum asks depth can not be less than zero.
+		/// Maximum asks depth cannot be less than zero.
 		/// </summary>
 		public static string Str1140 => GetString(Str1140Key);
 
 		/// <summary>
-		/// Maximum number of generations can not be less than one.
+		/// Maximum number of generations cannot be less than one.
 		/// </summary>
 		public const string Str1141Key = nameof(Str1141);
 
 		/// <summary>
-		/// Maximum number of generations can not be less than one.
+		/// Maximum number of generations cannot be less than one.
 		/// </summary>
 		public static string Str1141 => GetString(Str1141Key);
 
@@ -11008,12 +11018,12 @@ namespace StockSharp.Localization
 		public static string Str1158Params => GetString(Str1158ParamsKey);
 
 		/// <summary>
-		/// Type of action with order can not be a statement.
+		/// Type of action with order cannot be a statement.
 		/// </summary>
 		public const string Str1159Key = nameof(Str1159);
 
 		/// <summary>
-		/// Type of action with order can not be a statement.
+		/// Type of action with order cannot be a statement.
 		/// </summary>
 		public static string Str1159 => GetString(Str1159Key);
 
@@ -11238,22 +11248,22 @@ namespace StockSharp.Localization
 		public static string Str1181 => GetString(Str1181Key);
 
 		/// <summary>
-		/// Percentage value can not be less than zero.
+		/// Percentage value cannot be less than zero.
 		/// </summary>
 		public const string Str1182Key = nameof(Str1182);
 
 		/// <summary>
-		/// Percentage value can not be less than zero.
+		/// Percentage value cannot be less than zero.
 		/// </summary>
 		public static string Str1182 => GetString(Str1182Key);
 
 		/// <summary>
-		/// Percentage value can not be greater than 100.
+		/// Percentage value cannot be greater than 100.
 		/// </summary>
 		public const string Str1183Key = nameof(Str1183);
 
 		/// <summary>
-		/// Percentage value can not be greater than 100.
+		/// Percentage value cannot be greater than 100.
 		/// </summary>
 		public static string Str1183 => GetString(Str1183Key);
 
@@ -11268,12 +11278,12 @@ namespace StockSharp.Localization
 		public static string Str1184 => GetString(Str1184Key);
 
 		/// <summary>
-		/// Latency can not be less than zero.
+		/// Latency cannot be less than zero.
 		/// </summary>
 		public const string Str1185Key = nameof(Str1185);
 
 		/// <summary>
-		/// Latency can not be less than zero.
+		/// Latency cannot be less than zero.
 		/// </summary>
 		public static string Str1185 => GetString(Str1185Key);
 
@@ -11288,12 +11298,12 @@ namespace StockSharp.Localization
 		public static string Str1186 => GetString(Str1186Key);
 
 		/// <summary>
-		/// Send replies in whole packages via an interval. Network latency and buffered work of stock exchange core are emuated.
+		/// Send replies in whole packages via an interval. Network latency and buffered work of stock exchange core are emulated.
 		/// </summary>
 		public const string Str1187Key = nameof(Str1187);
 
 		/// <summary>
-		/// Send replies in whole packages via an interval. Network latency and buffered work of stock exchange core are emuated.
+		/// Send replies in whole packages via an interval. Network latency and buffered work of stock exchange core are emulated.
 		/// </summary>
 		public static string Str1187 => GetString(Str1187Key);
 
@@ -11308,12 +11318,12 @@ namespace StockSharp.Localization
 		public static string Str1188 => GetString(Str1188Key);
 
 		/// <summary>
-		/// Time-frame can not be less than zero or zero.
+		/// Time-frame cannot be less than zero or zero.
 		/// </summary>
 		public const string Str1189Key = nameof(Str1189);
 
 		/// <summary>
-		/// Time-frame can not be less than zero or zero.
+		/// Time-frame cannot be less than zero or zero.
 		/// </summary>
 		public static string Str1189 => GetString(Str1189Key);
 
@@ -11658,42 +11668,42 @@ namespace StockSharp.Localization
 		public static string Str1224 => GetString(Str1224Key);
 
 		/// <summary>
-		/// Trailing mechanism can not be used at a limited stop level.
+		/// Trailing mechanism cannot be used at a limited stop level.
 		/// </summary>
 		public const string Str1225Key = nameof(Str1225);
 
 		/// <summary>
-		/// Trailing mechanism can not be used at a limited stop level.
+		/// Trailing mechanism cannot be used at a limited stop level.
 		/// </summary>
 		public static string Str1225 => GetString(Str1225Key);
 
 		/// <summary>
-		/// Trailing mechanism can not be used at a limited take level.
+		/// Trailing mechanism cannot be used at a limited take level.
 		/// </summary>
 		public const string Str1226Key = nameof(Str1226);
 
 		/// <summary>
-		/// Trailing mechanism can not be used at a limited take level.
+		/// Trailing mechanism cannot be used at a limited take level.
 		/// </summary>
 		public static string Str1226 => GetString(Str1226Key);
 
 		/// <summary>
-		/// Limitation in time can not be less than zero.
+		/// Limitation in time cannot be less than zero.
 		/// </summary>
 		public const string Str1227Key = nameof(Str1227);
 
 		/// <summary>
-		/// Limitation in time can not be less than zero.
+		/// Limitation in time cannot be less than zero.
 		/// </summary>
 		public static string Str1227 => GetString(Str1227Key);
 
 		/// <summary>
-		/// Maximum volume can not be less than or equal to zero.
+		/// Maximum volume cannot be less than or equal to zero.
 		/// </summary>
 		public const string Str1228Key = nameof(Str1228);
 
 		/// <summary>
-		/// Maximum volume can not be less than or equal to zero.
+		/// Maximum volume cannot be less than or equal to zero.
 		/// </summary>
 		public static string Str1228 => GetString(Str1228Key);
 
@@ -12158,12 +12168,12 @@ namespace StockSharp.Localization
 		public static string Str1276Params => GetString(Str1276ParamsKey);
 
 		/// <summary>
-		/// Rehdging with order {0} {1} volume {2} with price {3}.
+		/// Rehedging with order {0} {1} volume {2} with price {3}.
 		/// </summary>
 		public const string Str1277ParamsKey = nameof(Str1277Params);
 
 		/// <summary>
-		/// Rehdging with order {0} {1} volume {2} with price {3}.
+		/// Rehedging with order {0} {1} volume {2} with price {3}.
 		/// </summary>
 		public static string Str1277Params => GetString(Str1277ParamsKey);
 
@@ -12208,12 +12218,12 @@ namespace StockSharp.Localization
 		public static string Str1281Params => GetString(Str1281ParamsKey);
 
 		/// <summary>
-		/// Trailing mechanism can not be used at a limited level.
+		/// Trailing mechanism cannot be used at a limited level.
 		/// </summary>
 		public const string Str1282Key = nameof(Str1282);
 
 		/// <summary>
-		/// Trailing mechanism can not be used at a limited level.
+		/// Trailing mechanism cannot be used at a limited level.
 		/// </summary>
 		public static string Str1282 => GetString(Str1282Key);
 
@@ -12268,12 +12278,12 @@ namespace StockSharp.Localization
 		public static string Str1287 => GetString(Str1287Key);
 
 		/// <summary>
-		/// Quoting direction can not be changed when the position is zero.
+		/// Quoting direction cannot be changed when the position is zero.
 		/// </summary>
 		public const string Str1288Key = nameof(Str1288);
 
 		/// <summary>
-		/// Quoting direction can not be changed when the position is zero.
+		/// Quoting direction cannot be changed when the position is zero.
 		/// </summary>
 		public static string Str1288 => GetString(Str1288Key);
 
@@ -12438,12 +12448,12 @@ namespace StockSharp.Localization
 		public static string Str1304Params => GetString(Str1304ParamsKey);
 
 		/// <summary>
-		/// Order {0} in cacellation process.
+		/// Order {0} in cancellation process.
 		/// </summary>
 		public const string Str1305ParamsKey = nameof(Str1305Params);
 
 		/// <summary>
-		/// Order {0} in cacellation process.
+		/// Order {0} in cancellation process.
 		/// </summary>
 		public static string Str1305Params => GetString(Str1305ParamsKey);
 
@@ -12568,12 +12578,12 @@ namespace StockSharp.Localization
 		public static string Str1317Params => GetString(Str1317ParamsKey);
 
 		/// <summary>
-		/// Order can not be reregistered, since the interval has not yet expired.
+		/// Order cannot be reregistered, since the interval has not yet expired.
 		/// </summary>
 		public const string Str1318Key = nameof(Str1318);
 
 		/// <summary>
-		/// Order can not be reregistered, since the interval has not yet expired.
+		/// Order cannot be reregistered, since the interval has not yet expired.
 		/// </summary>
 		public static string Str1318 => GetString(Str1318Key);
 
@@ -12968,12 +12978,12 @@ namespace StockSharp.Localization
 		public static string Str1366 => GetString(Str1366Key);
 
 		/// <summary>
-		/// Maximum number of errors can not be less than one.
+		/// Maximum number of errors cannot be less than one.
 		/// </summary>
 		public const string Str1367Key = nameof(Str1367);
 
 		/// <summary>
-		/// Maximum number of errors can not be less than one.
+		/// Maximum number of errors cannot be less than one.
 		/// </summary>
 		public static string Str1367 => GetString(Str1367Key);
 
@@ -12988,12 +12998,12 @@ namespace StockSharp.Localization
 		public static string Str1368Params => GetString(Str1368ParamsKey);
 
 		/// <summary>
-		/// Strategy {0} is already stopped, and can not be transferred to state {1}.
+		/// Strategy {0} is already stopped, and cannot be transferred to state {1}.
 		/// </summary>
 		public const string Str1369ParamsKey = nameof(Str1369Params);
 
 		/// <summary>
-		/// Strategy {0} is already stopped, and can not be transferred to state {1}.
+		/// Strategy {0} is already stopped, and cannot be transferred to state {1}.
 		/// </summary>
 		public static string Str1369Params => GetString(Str1369ParamsKey);
 
@@ -13068,12 +13078,12 @@ namespace StockSharp.Localization
 		public static string Str1376 => GetString(Str1376Key);
 
 		/// <summary>
-		/// Strategy volume can not be less than zero.
+		/// Strategy volume cannot be less than zero.
 		/// </summary>
 		public const string Str1377Key = nameof(Str1377);
 
 		/// <summary>
-		/// Strategy volume can not be less than zero.
+		/// Strategy volume cannot be less than zero.
 		/// </summary>
 		public static string Str1377 => GetString(Str1377Key);
 
@@ -13258,22 +13268,22 @@ namespace StockSharp.Localization
 		public static string Str1395Params => GetString(Str1395ParamsKey);
 
 		/// <summary>
-		/// Atempting to stop. Remaining {0} rules. Rules {1}.
+		/// Attempting to stop. Remaining {0} rules. Rules {1}.
 		/// </summary>
 		public const string Str1396ParamsKey = nameof(Str1396Params);
 
 		/// <summary>
-		/// Atempting to stop. Remaining {0} rules. Rules {1}.
+		/// Attempting to stop. Remaining {0} rules. Rules {1}.
 		/// </summary>
 		public static string Str1396Params => GetString(Str1396ParamsKey);
 
 		/// <summary>
-		/// Can not be processed, because rules have been suspended.
+		/// cannot be processed, because rules have been suspended.
 		/// </summary>
 		public const string Str1397Key = nameof(Str1397);
 
 		/// <summary>
-		/// Can not be processed, because rules have been suspended.
+		/// cannot be processed, because rules have been suspended.
 		/// </summary>
 		public static string Str1397 => GetString(Str1397Key);
 
@@ -13818,12 +13828,12 @@ namespace StockSharp.Localization
 		public static string Str1455 => GetString(Str1455Key);
 
 		/// <summary>
-		/// Insufficient data to automaitcally form a continuous futures contract.
+		/// Insufficient data to automatically form a continuous futures contract.
 		/// </summary>
 		public const string Str1456Key = nameof(Str1456);
 
 		/// <summary>
-		/// Insufficient data to automaitcally form a continuous futures contract.
+		/// Insufficient data to automatically form a continuous futures contract.
 		/// </summary>
 		public static string Str1456 => GetString(Str1456Key);
 
@@ -14028,12 +14038,12 @@ namespace StockSharp.Localization
 		public static string Str1476 => GetString(Str1476Key);
 
 		/// <summary>
-		/// Error downloading uodates
+		/// Error downloading updates
 		/// </summary>
 		public const string Str1477Key = nameof(Str1477);
 
 		/// <summary>
-		/// Error downloading uodates
+		/// Error downloading updates
 		/// </summary>
 		public static string Str1477 => GetString(Str1477Key);
 
@@ -14398,12 +14408,12 @@ namespace StockSharp.Localization
 		public static string Str1513 => GetString(Str1513Key);
 
 		/// <summary>
-		/// Show fewer butons
+		/// Show fewer buttons
 		/// </summary>
 		public const string Str1514Key = nameof(Str1514);
 
 		/// <summary>
-		/// Show fewer butons
+		/// Show fewer buttons
 		/// </summary>
 		public static string Str1514 => GetString(Str1514Key);
 
@@ -14768,32 +14778,32 @@ namespace StockSharp.Localization
 		public static string Str1553Params => GetString(Str1553ParamsKey);
 
 		/// <summary>
-		/// Working connection can not be deleted.
+		/// Working connection cannot be deleted.
 		/// </summary>
 		public const string Str1554Key = nameof(Str1554);
 
 		/// <summary>
-		/// Working connection can not be deleted.
+		/// Working connection cannot be deleted.
 		/// </summary>
 		public static string Str1554 => GetString(Str1554Key);
 
 		/// <summary>
-		/// Working connection can not be edited.
+		/// Working connection cannot be edited.
 		/// </summary>
 		public const string Str1555Key = nameof(Str1555);
 
 		/// <summary>
-		/// Working connection can not be edited.
+		/// Working connection cannot be edited.
 		/// </summary>
 		public static string Str1555 => GetString(Str1555Key);
 
 		/// <summary>
-		/// Connection status can not be changed in the connected state. You must disconnect first.
+		/// Connection status cannot be changed in the connected state. You must disconnect first.
 		/// </summary>
 		public const string Str1556Key = nameof(Str1556);
 
 		/// <summary>
-		/// Connection status can not be changed in the connected state. You must disconnect first.
+		/// Connection status cannot be changed in the connected state. You must disconnect first.
 		/// </summary>
 		public static string Str1556 => GetString(Str1556Key);
 
@@ -16148,22 +16158,22 @@ namespace StockSharp.Localization
 		public static string Str1697Params => GetString(Str1697ParamsKey);
 
 		/// <summary>
-		/// Receiveing positions for {0} was rejected. Error code {1}, error text {2}.
+		/// Receiving positions for {0} was rejected. Error code {1}, error text {2}.
 		/// </summary>
 		public const string Str1698ParamsKey = nameof(Str1698Params);
 
 		/// <summary>
-		/// Receiveing positions for {0} was rejected. Error code {1}, error text {2}.
+		/// Receiving positions for {0} was rejected. Error code {1}, error text {2}.
 		/// </summary>
 		public static string Str1698Params => GetString(Str1698ParamsKey);
 
 		/// <summary>
-		/// Receiveing positions for {0} was rejected. Error code {1}.
+		/// Receiving positions for {0} was rejected. Error code {1}.
 		/// </summary>
 		public const string Str1699ParamsKey = nameof(Str1699Params);
 
 		/// <summary>
-		/// Receiveing positions for {0} was rejected. Error code {1}.
+		/// Receiving positions for {0} was rejected. Error code {1}.
 		/// </summary>
 		public static string Str1699Params => GetString(Str1699ParamsKey);
 
@@ -16208,12 +16218,12 @@ namespace StockSharp.Localization
 		public static string Str1703Params => GetString(Str1703ParamsKey);
 
 		/// <summary>
-		/// Column {0} can not be added to this table since it is being added to another.
+		/// Column {0} cannot be added to this table since it is being added to another.
 		/// </summary>
 		public const string Str1704ParamsKey = nameof(Str1704Params);
 
 		/// <summary>
-		/// Column {0} can not be added to this table since it is being added to another.
+		/// Column {0} cannot be added to this table since it is being added to another.
 		/// </summary>
 		public static string Str1704Params => GetString(Str1704ParamsKey);
 
@@ -16228,22 +16238,22 @@ namespace StockSharp.Localization
 		public static string Str1705Params => GetString(Str1705ParamsKey);
 
 		/// <summary>
-		/// You can not delete required column {0}.
+		/// You cannot delete required column {0}.
 		/// </summary>
 		public const string Str1706ParamsKey = nameof(Str1706Params);
 
 		/// <summary>
-		/// You can not delete required column {0}.
+		/// You cannot delete required column {0}.
 		/// </summary>
 		public static string Str1706Params => GetString(Str1706ParamsKey);
 
 		/// <summary>
-		/// You can not delete all columns.
+		/// You cannot delete all columns.
 		/// </summary>
 		public const string Str1707Key = nameof(Str1707);
 
 		/// <summary>
-		/// You can not delete all columns.
+		/// You cannot delete all columns.
 		/// </summary>
 		public static string Str1707 => GetString(Str1707Key);
 
@@ -16338,12 +16348,12 @@ namespace StockSharp.Localization
 		public static string Str1716Params => GetString(Str1716ParamsKey);
 
 		/// <summary>
-		/// Unsuported type of stop-order.
+		/// Unsupported type of stop-order.
 		/// </summary>
 		public const string Str1717Key = nameof(Str1717);
 
 		/// <summary>
-		/// Unsuported type of stop-order.
+		/// Unsupported type of stop-order.
 		/// </summary>
 		public static string Str1717 => GetString(Str1717Key);
 
@@ -16938,22 +16948,22 @@ namespace StockSharp.Localization
 		public static string Str1780 => GetString(Str1780Key);
 
 		/// <summary>
-		/// Asynchrous mode
+		/// Asynchronous mode
 		/// </summary>
 		public const string Str1781Key = nameof(Str1781);
 
 		/// <summary>
-		/// Asynchrous mode
+		/// Asynchronous mode
 		/// </summary>
 		public static string Str1781 => GetString(Str1781Key);
 
 		/// <summary>
-		/// Use asynchrous mode to send transaction (register, reregister and cancel orders).
+		/// Use asynchronous mode to send transaction (register, reregister and cancel orders).
 		/// </summary>
 		public const string Str1782Key = nameof(Str1782);
 
 		/// <summary>
-		/// Use asynchrous mode to send transaction (register, reregister and cancel orders).
+		/// Use asynchronous mode to send transaction (register, reregister and cancel orders).
 		/// </summary>
 		public static string Str1782 => GetString(Str1782Key);
 
@@ -17138,12 +17148,12 @@ namespace StockSharp.Localization
 		public static string Str1800 => GetString(Str1800Key);
 
 		/// <summary>
-		/// Positions in securites
+		/// Positions in securities
 		/// </summary>
 		public const string Str1801Key = nameof(Str1801);
 
 		/// <summary>
-		/// Positions in securites
+		/// Positions in securities
 		/// </summary>
 		public static string Str1801 => GetString(Str1801Key);
 
@@ -17318,12 +17328,12 @@ namespace StockSharp.Localization
 		public static string Str1818 => GetString(Str1818Key);
 
 		/// <summary>
-		/// Table export, describing the market depth, can not be started.
+		/// Table export, describing the market depth, cannot be started.
 		/// </summary>
 		public const string Str1819Key = nameof(Str1819);
 
 		/// <summary>
-		/// Table export, describing the market depth, can not be started.
+		/// Table export, describing the market depth, cannot be started.
 		/// </summary>
 		public static string Str1819 => GetString(Str1819Key);
 
@@ -18648,12 +18658,12 @@ namespace StockSharp.Localization
 		public static string Str1959 => GetString(Str1959Key);
 
 		/// <summary>
-		/// Candles rendering smothing (enabled by default).
+		/// Candles rendering smoothing (enabled by default).
 		/// </summary>
 		public const string Str1960Key = nameof(Str1960);
 
 		/// <summary>
-		/// Candles rendering smothing (enabled by default).
+		/// Candles rendering smoothing (enabled by default).
 		/// </summary>
 		public static string Str1960 => GetString(Str1960Key);
 
@@ -18878,12 +18888,12 @@ namespace StockSharp.Localization
 		public static string Str1984 => GetString(Str1984Key);
 
 		/// <summary>
-		/// Line color (bar and etc.), with which the indicator will be drawn on chart.
+		/// Line color (bars, etc.), with which the indicator will be drawn on chart.
 		/// </summary>
 		public const string Str1985Key = nameof(Str1985);
 
 		/// <summary>
-		/// Line color (bar and etc.), with which the indicator will be drawn on chart.
+		/// Line color (bars, etc.), with which the indicator will be drawn on chart.
 		/// </summary>
 		public static string Str1985 => GetString(Str1985Key);
 
@@ -18898,22 +18908,22 @@ namespace StockSharp.Localization
 		public static string Str1986 => GetString(Str1986Key);
 
 		/// <summary>
-		/// Additional line color (bars etc), which will be drawn on the chart indicator.
+		/// Additional line color (bars, etc.), which will be drawn on the chart indicator.
 		/// </summary>
 		public const string Str1987Key = nameof(Str1987);
 
 		/// <summary>
-		/// Additional line color (bars etc), which will be drawn on the chart indicator.
+		/// Additional line color (bars, etc.), which will be drawn on the chart indicator.
 		/// </summary>
 		public static string Str1987 => GetString(Str1987Key);
 
 		/// <summary>
-		/// Line width (bar and etc.), with which indicator will be drawn on chart.
+		/// Line width (bars, etc.), with which indicator will be drawn on chart.
 		/// </summary>
 		public const string Str1988Key = nameof(Str1988);
 
 		/// <summary>
-		/// Line width (bar and etc.), with which indicator will be drawn on chart.
+		/// Line width (bars, etc.), with which indicator will be drawn on chart.
 		/// </summary>
 		public static string Str1988 => GetString(Str1988Key);
 
@@ -19578,32 +19588,32 @@ namespace StockSharp.Localization
 		public static string Str2055 => GetString(Str2055Key);
 
 		/// <summary>
-		/// Line color (bar and etc.), with which it will be drawn on chart.
+		/// Line color (bars, etc.), with which it will be drawn on chart.
 		/// </summary>
 		public const string Str2056Key = nameof(Str2056);
 
 		/// <summary>
-		/// Line color (bar and etc.), with which it will be drawn on chart.
+		/// Line color (bars, etc.), with which it will be drawn on chart.
 		/// </summary>
 		public static string Str2056 => GetString(Str2056Key);
 
 		/// <summary>
-		/// Additional line color (bars etc), with which it will be drawn on the chart.
+		/// Additional line color (bars, etc.), with which it will be drawn on the chart.
 		/// </summary>
 		public const string Str2057Key = nameof(Str2057);
 
 		/// <summary>
-		/// Additional line color (bars etc), with which it will be drawn on the chart.
+		/// Additional line color (bars, etc.), with which it will be drawn on the chart.
 		/// </summary>
 		public static string Str2057 => GetString(Str2057Key);
 
 		/// <summary>
-		/// Line width (bar and etc.), with which it will be drawn on chart.
+		/// Line width (bars, etc.), with which it will be drawn on chart.
 		/// </summary>
 		public const string Str2058Key = nameof(Str2058);
 
 		/// <summary>
-		/// Line width (bar and etc.), with which it will be drawn on chart.
+		/// Line width (bars, etc.), with which it will be drawn on chart.
 		/// </summary>
 		public static string Str2058 => GetString(Str2058Key);
 
@@ -20518,12 +20528,12 @@ namespace StockSharp.Localization
 		public static string Str2156Params => GetString(Str2156ParamsKey);
 
 		/// <summary>
-		/// Error sending cammand: {0}
+		/// Error sending command: {0}
 		/// </summary>
 		public const string Str2157ParamsKey = nameof(Str2157Params);
 
 		/// <summary>
-		/// Error sending cammand: {0}
+		/// Error sending command: {0}
 		/// </summary>
 		public static string Str2157Params => GetString(Str2157ParamsKey);
 
@@ -20618,12 +20628,12 @@ namespace StockSharp.Localization
 		public static string Str2188Params => GetString(Str2188ParamsKey);
 
 		/// <summary>
-		/// Task state can not be changed from {0} to {1}.
+		/// Task state cannot be changed from {0} to {1}.
 		/// </summary>
 		public const string Str2189ParamsKey = nameof(Str2189Params);
 
 		/// <summary>
-		/// Task state can not be changed from {0} to {1}.
+		/// Task state cannot be changed from {0} to {1}.
 		/// </summary>
 		public static string Str2189Params => GetString(Str2189ParamsKey);
 
@@ -20638,12 +20648,12 @@ namespace StockSharp.Localization
 		public static string Str2190Params => GetString(Str2190ParamsKey);
 
 		/// <summary>
-		/// When source was launched a maximum timeout occured. Source will be stopped.
+		/// When source was launched a maximum timeout occurred. Source will be stopped.
 		/// </summary>
 		public const string Str2191Key = nameof(Str2191);
 
 		/// <summary>
-		/// When source was launched a maximum timeout occured. Source will be stopped.
+		/// When source was launched a maximum timeout occurred. Source will be stopped.
 		/// </summary>
 		public static string Str2191 => GetString(Str2191Key);
 
@@ -20658,12 +20668,12 @@ namespace StockSharp.Localization
 		public static string Str2192 => GetString(Str2192Key);
 
 		/// <summary>
-		/// During source work a maximum number of errors occured. Source will be stopped.
+		/// During source work a maximum number of errors occurred. Source will be stopped.
 		/// </summary>
 		public const string Str2193Key = nameof(Str2193);
 
 		/// <summary>
-		/// During source work a maximum number of errors occured. Source will be stopped.
+		/// During source work a maximum number of errors occurred. Source will be stopped.
 		/// </summary>
 		public static string Str2193 => GetString(Str2193Key);
 
@@ -21678,12 +21688,12 @@ namespace StockSharp.Localization
 		public static string Str2303 => GetString(Str2303Key);
 
 		/// <summary>
-		/// Receiveing new securities.
+		/// Receiving new securities.
 		/// </summary>
 		public const string Str2305Key = nameof(Str2305);
 
 		/// <summary>
-		/// Receiveing new securities.
+		/// Receiving new securities.
 		/// </summary>
 		public static string Str2305 => GetString(Str2305Key);
 
@@ -22568,12 +22578,12 @@ namespace StockSharp.Localization
 		public static string Str2416 => GetString(Str2416Key);
 
 		/// <summary>
-		/// Exersise
+		/// Exercise
 		/// </summary>
 		public const string Str2417Key = nameof(Str2417);
 
 		/// <summary>
-		/// Exersise
+		/// Exercise
 		/// </summary>
 		public static string Str2417 => GetString(Str2417Key);
 
@@ -22968,12 +22978,12 @@ namespace StockSharp.Localization
 		public static string Str2457 => GetString(Str2457Key);
 
 		/// <summary>
-		/// Trailing stop volume вas percentage.
+		/// Trailing stop volume as percentage.
 		/// </summary>
 		public const string Str2458Key = nameof(Str2458);
 
 		/// <summary>
-		/// Trailing stop volume вas percentage.
+		/// Trailing stop volume as percentage.
 		/// </summary>
 		public static string Str2458 => GetString(Str2458Key);
 
@@ -24358,12 +24368,12 @@ namespace StockSharp.Localization
 		public static string Str2611 => GetString(Str2611Key);
 
 		/// <summary>
-		/// Number of transactional threads can not be less than 1.
+		/// Number of transactional threads cannot be less than 1.
 		/// </summary>
 		public const string Str2612Key = nameof(Str2612);
 
 		/// <summary>
-		/// Number of transactional threads can not be less than 1.
+		/// Number of transactional threads cannot be less than 1.
 		/// </summary>
 		public static string Str2612 => GetString(Str2612Key);
 
@@ -24478,12 +24488,12 @@ namespace StockSharp.Localization
 		public static string Str2623 => GetString(Str2623Key);
 
 		/// <summary>
-		/// Path to directory,  куда будут сохраняться файлы Plaza SDK.
+		/// Path to directory, where Plaza SDK will be saved
 		/// </summary>
 		public const string Str2624Key = nameof(Str2624);
 
 		/// <summary>
-		/// Path to directory,  куда будут сохраняться файлы Plaza SDK.
+		/// Path to directory, where Plaza SDK will be saved
 		/// </summary>
 		public static string Str2624 => GetString(Str2624Key);
 
@@ -24518,12 +24528,12 @@ namespace StockSharp.Localization
 		public static string Str2627 => GetString(Str2627Key);
 
 		/// <summary>
-		/// Streams of market depths with varying depth can not be simultaneously exported.
+		/// Streams of market depths with varying depth cannot be simultaneously exported.
 		/// </summary>
 		public const string Str2628Key = nameof(Str2628);
 
 		/// <summary>
-		/// Streams of market depths with varying depth can not be simultaneously exported.
+		/// Streams of market depths with varying depth cannot be simultaneously exported.
 		/// </summary>
 		public static string Str2628 => GetString(Str2628Key);
 
@@ -25608,12 +25618,12 @@ namespace StockSharp.Localization
 		public static string Str2736 => GetString(Str2736Key);
 
 		/// <summary>
-		/// Comment can not be longer than 20 symbols.
+		/// Comment cannot be longer than 20 symbols.
 		/// </summary>
 		public const string Str2737Key = nameof(Str2737);
 
 		/// <summary>
-		/// Comment can not be longer than 20 symbols.
+		/// Comment cannot be longer than 20 symbols.
 		/// </summary>
 		public static string Str2737 => GetString(Str2737Key);
 
@@ -25678,12 +25688,12 @@ namespace StockSharp.Localization
 		public static string Str2743Params => GetString(Str2743ParamsKey);
 
 		/// <summary>
-		/// Error occured.
+		/// Error occurred.
 		/// </summary>
 		public const string Str2744Key = nameof(Str2744);
 
 		/// <summary>
-		/// Error occured.
+		/// Error occurred.
 		/// </summary>
 		public static string Str2744 => GetString(Str2744Key);
 
@@ -25908,12 +25918,12 @@ namespace StockSharp.Localization
 		public static string Str2766 => GetString(Str2766Key);
 
 		/// <summary>
-		/// Wrong convertion to decimal.
+		/// Wrong conversion to decimal.
 		/// </summary>
 		public const string Str2767Key = nameof(Str2767);
 
 		/// <summary>
-		/// Wrong convertion to decimal.
+		/// Wrong conversion to decimal.
 		/// </summary>
 		public static string Str2767 => GetString(Str2767Key);
 
@@ -26198,12 +26208,12 @@ namespace StockSharp.Localization
 		public static string Str2795Params => GetString(Str2795ParamsKey);
 
 		/// <summary>
-		/// Parameter value can not be less than zero.
+		/// Parameter value cannot be less than zero.
 		/// </summary>
 		public const string Str2796Key = nameof(Str2796);
 
 		/// <summary>
-		/// Parameter value can not be less than zero.
+		/// Parameter value cannot be less than zero.
 		/// </summary>
 		public static string Str2796 => GetString(Str2796Key);
 
@@ -26678,12 +26688,12 @@ namespace StockSharp.Localization
 		public static string Str2848 => GetString(Str2848Key);
 
 		/// <summary>
-		/// Imported candels parameters.
+		/// Imported candles parameters.
 		/// </summary>
 		public const string Str2849Key = nameof(Str2849);
 
 		/// <summary>
-		/// Imported candels parameters.
+		/// Imported candles parameters.
 		/// </summary>
 		public static string Str2849 => GetString(Str2849Key);
 
@@ -26988,12 +26998,12 @@ namespace StockSharp.Localization
 		public static string Str2887 => GetString(Str2887Key);
 
 		/// <summary>
-		/// Continuous furures contract must be created.
+		/// Continuous futures contract must be created.
 		/// </summary>
 		public const string Str2888Key = nameof(Str2888);
 
 		/// <summary>
-		/// Continuous furures contract must be created.
+		/// Continuous futures contract must be created.
 		/// </summary>
 		public static string Str2888 => GetString(Str2888Key);
 
@@ -27398,12 +27408,12 @@ namespace StockSharp.Localization
 		public static string Str2938 => GetString(Str2938Key);
 
 		/// <summary>
-		/// Errors count esceeded {0}.
+		/// Errors count exceeded {0}.
 		/// </summary>
 		public const string Str2940ParamsKey = nameof(Str2940Params);
 
 		/// <summary>
-		/// Errors count esceeded {0}.
+		/// Errors count exceeded {0}.
 		/// </summary>
 		public static string Str2940Params => GetString(Str2940ParamsKey);
 
@@ -29068,12 +29078,12 @@ namespace StockSharp.Localization
 		public static string Str3127 => GetString(Str3127Key);
 
 		/// <summary>
-		/// Security for position openining is not specified.
+		/// Security for position opening is not specified.
 		/// </summary>
 		public const string Str3128Key = nameof(Str3128);
 
 		/// <summary>
-		/// Security for position openining is not specified.
+		/// Security for position opening is not specified.
 		/// </summary>
 		public static string Str3128 => GetString(Str3128Key);
 
@@ -29128,12 +29138,12 @@ namespace StockSharp.Localization
 		public static string Str3133 => GetString(Str3133Key);
 
 		/// <summary>
-		/// Obejct property, from which a value must be obtained.
+		/// Object property, from which a value must be obtained.
 		/// </summary>
 		public const string Str3134Key = nameof(Str3134);
 
 		/// <summary>
-		/// Obejct property, from which a value must be obtained.
+		/// Object property, from which a value must be obtained.
 		/// </summary>
 		public static string Str3134 => GetString(Str3134Key);
 
@@ -29418,12 +29428,12 @@ namespace StockSharp.Localization
 		public static string Str3162 => GetString(Str3162Key);
 
 		/// <summary>
-		/// Notification element (sound, window etc.) for speceific market events.
+		/// Notification element (sound, window etc.) for specific market events.
 		/// </summary>
 		public const string Str3163Key = nameof(Str3163);
 
 		/// <summary>
-		/// Notification element (sound, window etc.) for speceific market events.
+		/// Notification element (sound, window etc.) for specific market events.
 		/// </summary>
 		public static string Str3163 => GetString(Str3163Key);
 
@@ -30028,12 +30038,12 @@ namespace StockSharp.Localization
 		public static string Str3227 => GetString(Str3227Key);
 
 		/// <summary>
-		/// Security {0} code does not contrain expiration date information.
+		/// Security {0} code does not contain expiration date information.
 		/// </summary>
 		public const string Str3228ParamsKey = nameof(Str3228Params);
 
 		/// <summary>
-		/// Security {0} code does not contrain expiration date information.
+		/// Security {0} code does not contain expiration date information.
 		/// </summary>
 		public static string Str3228Params => GetString(Str3228ParamsKey);
 
@@ -30398,22 +30408,22 @@ namespace StockSharp.Localization
 		public static string Str3268 => GetString(Str3268Key);
 
 		/// <summary>
-		/// Trading portfolios (checking account balance, open positions and etc.).
+		/// Trading portfolios (checking account balance, open positions, etc.).
 		/// </summary>
 		public const string Str3269Key = nameof(Str3269);
 
 		/// <summary>
-		/// Trading portfolios (checking account balance, open positions and etc.).
+		/// Trading portfolios (checking account balance, open positions, etc.).
 		/// </summary>
 		public static string Str3269 => GetString(Str3269Key);
 
 		/// <summary>
-		/// Panel for viewing parameters (securities, portfolios, trades etc.).
+		/// Panel for viewing parameters (securities, portfolios, trades, etc.).
 		/// </summary>
 		public const string Str3270Key = nameof(Str3270);
 
 		/// <summary>
-		/// Panel for viewing parameters (securities, portfolios, trades etc.).
+		/// Panel for viewing parameters (securities, portfolios, trades, etc.).
 		/// </summary>
 		public static string Str3270 => GetString(Str3270Key);
 
@@ -30608,12 +30618,12 @@ namespace StockSharp.Localization
 		public static string Str3291 => GetString(Str3291Key);
 
 		/// <summary>
-		/// Strategy based on maving averages crossing.
+		/// Strategy based on moving averages crossing.
 		/// </summary>
 		public const string Str3292Key = nameof(Str3292);
 
 		/// <summary>
-		/// Strategy based on maving averages crossing.
+		/// Strategy based on moving averages crossing.
 		/// </summary>
 		public static string Str3292 => GetString(Str3292Key);
 
@@ -30658,12 +30668,12 @@ namespace StockSharp.Localization
 		public static string Str3296 => GetString(Str3296Key);
 
 		/// <summary>
-		/// New signal for a long на лонг.
+		/// New signal for a long.
 		/// </summary>
 		public const string Str3297Key = nameof(Str3297);
 
 		/// <summary>
-		/// New signal for a long на лонг.
+		/// New signal for a long.
 		/// </summary>
 		public static string Str3297 => GetString(Str3297Key);
 
@@ -31218,12 +31228,12 @@ namespace StockSharp.Localization
 		public static string Str3358 => GetString(Str3358Key);
 
 		/// <summary>
-		/// Work of mudule '{0}' ended in error.
+		/// Work of module '{0}' ended in error.
 		/// </summary>
 		public const string Str3362ParamsKey = nameof(Str3362Params);
 
 		/// <summary>
-		/// Work of mudule '{0}' ended in error.
+		/// Work of module '{0}' ended in error.
 		/// </summary>
 		public static string Str3362Params => GetString(Str3362ParamsKey);
 
@@ -31708,12 +31718,12 @@ namespace StockSharp.Localization
 		public static string Str3419 => GetString(Str3419Key);
 
 		/// <summary>
-		/// Loggin level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,0".
+		/// Logging level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,0".
 		/// </summary>
 		public const string Str3422Key = nameof(Str3422);
 
 		/// <summary>
-		/// Loggin level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,0".
+		/// Logging level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,0".
 		/// </summary>
 		public static string Str3422 => GetString(Str3422Key);
 
@@ -32088,12 +32098,12 @@ namespace StockSharp.Localization
 		public static string Str3465 => GetString(Str3465Key);
 
 		/// <summary>
-		/// Path to certificate file, necessary yo connect to Rithmic system.
+		/// Path to certificate file, necessary to connect to Rithmic system.
 		/// </summary>
 		public const string Str3466Key = nameof(Str3466);
 
 		/// <summary>
-		/// Path to certificate file, necessary yo connect to Rithmic system.
+		/// Path to certificate file, necessary to connect to Rithmic system.
 		/// </summary>
 		public static string Str3466 => GetString(Str3466Key);
 
@@ -32148,12 +32158,12 @@ namespace StockSharp.Localization
 		public static string Str3471 => GetString(Str3471Key);
 
 		/// <summary>
-		/// Path to lg file.
+		/// Path to log file.
 		/// </summary>
 		public const string Str3472Key = nameof(Str3472);
 
 		/// <summary>
-		/// Path to lg file.
+		/// Path to log file.
 		/// </summary>
 		public static string Str3472 => GetString(Str3472Key);
 
@@ -32538,22 +32548,22 @@ namespace StockSharp.Localization
 		public static string Str3510 => GetString(Str3510Key);
 
 		/// <summary>
-		/// Number of headers {0} can not be less than zero.
+		/// Number of headers {0} cannot be less than zero.
 		/// </summary>
 		public const string Str3511ParamsKey = nameof(Str3511Params);
 
 		/// <summary>
-		/// Number of headers {0} can not be less than zero.
+		/// Number of headers {0} cannot be less than zero.
 		/// </summary>
 		public static string Str3511Params => GetString(Str3511ParamsKey);
 
 		/// <summary>
-		/// Number of headers {0} can not be greater than {1}.
+		/// Number of headers {0} cannot be greater than {1}.
 		/// </summary>
 		public const string Str3512ParamsKey = nameof(Str3512Params);
 
 		/// <summary>
-		/// Number of headers {0} can not be greater than {1}.
+		/// Number of headers {0} cannot be greater than {1}.
 		/// </summary>
 		public static string Str3512Params => GetString(Str3512ParamsKey);
 
@@ -32748,12 +32758,12 @@ namespace StockSharp.Localization
 		public static string Str3534 => GetString(Str3534Key);
 
 		/// <summary>
-		/// If set, then after order activation at an activation price and further price lowering (TP to sell) or furter rising price (TP to buy) an order will be sent at a price that includes a protection spread. Absolute value or percentage.
+		/// If set, then after order activation at an activation price and further price lowering (TP to sell) or further rising price (TP to buy) an order will be sent at a price that includes a protection spread. Absolute value or percentage.
 		/// </summary>
 		public const string Str3535Key = nameof(Str3535);
 
 		/// <summary>
-		/// If set, then after order activation at an activation price and further price lowering (TP to sell) or furter rising price (TP to buy) an order will be sent at a price that includes a protection spread. Absolute value or percentage.
+		/// If set, then after order activation at an activation price and further price lowering (TP to sell) or further rising price (TP to buy) an order will be sent at a price that includes a protection spread. Absolute value or percentage.
 		/// </summary>
 		public static string Str3535 => GetString(Str3535Key);
 
@@ -33118,22 +33128,22 @@ namespace StockSharp.Localization
 		public static string Str3572Params => GetString(Str3572ParamsKey);
 
 		/// <summary>
-		/// When paramter ({0}) change Step is positive the valie From ({1}) must be less than value To ({2}).
+		/// When parameter ({0}) change Step is positive the value From ({1}) must be less than value To ({2}).
 		/// </summary>
 		public const string Str3573ParamsKey = nameof(Str3573Params);
 
 		/// <summary>
-		/// When paramter ({0}) change Step is positive the valie From ({1}) must be less than value To ({2}).
+		/// When parameter ({0}) change Step is positive the value From ({1}) must be less than value To ({2}).
 		/// </summary>
 		public static string Str3573Params => GetString(Str3573ParamsKey);
 
 		/// <summary>
-		/// When paramter ({0}) change Step is negative the valie From ({1}) must be greater than value To ({2}).
+		/// When parameter ({0}) change Step is negative the value From ({1}) must be greater than value To ({2}).
 		/// </summary>
 		public const string Str3574ParamsKey = nameof(Str3574Params);
 
 		/// <summary>
-		/// When paramter ({0}) change Step is negative the valie From ({1}) must be greater than value To ({2}).
+		/// When parameter ({0}) change Step is negative the value From ({1}) must be greater than value To ({2}).
 		/// </summary>
 		public static string Str3574Params => GetString(Str3574ParamsKey);
 
@@ -33428,12 +33438,12 @@ namespace StockSharp.Localization
 		public static string Str3608 => GetString(Str3608Key);
 
 		/// <summary>
-		/// Moving avereages crossing strategy, created in visual diagram designer.
+		/// Moving averages crossing strategy, created in visual diagram designer.
 		/// </summary>
 		public const string Str3609Key = nameof(Str3609);
 
 		/// <summary>
-		/// Moving avereages crossing strategy, created in visual diagram designer.
+		/// Moving averages crossing strategy, created in visual diagram designer.
 		/// </summary>
 		public static string Str3609 => GetString(Str3609Key);
 
@@ -34088,12 +34098,12 @@ namespace StockSharp.Localization
 		public static string Str3682 => GetString(Str3682Key);
 
 		/// <summary>
-		/// Is proxy used to connecto to the internet.
+		/// Is proxy used to connect to the internet.
 		/// </summary>
 		public const string Str3683Key = nameof(Str3683);
 
 		/// <summary>
-		/// Is proxy used to connecto to the internet.
+		/// Is proxy used to connect to the internet.
 		/// </summary>
 		public static string Str3683 => GetString(Str3683Key);
 
@@ -34408,12 +34418,12 @@ namespace StockSharp.Localization
 		public static string Str3715Params => GetString(Str3715ParamsKey);
 
 		/// <summary>
-		/// Portfolio {0} for orders restoreation not found.
+		/// Portfolio {0} for orders restoration not found.
 		/// </summary>
 		public const string Str3716ParamsKey = nameof(Str3716Params);
 
 		/// <summary>
-		/// Portfolio {0} for orders restoreation not found.
+		/// Portfolio {0} for orders restoration not found.
 		/// </summary>
 		public static string Str3716Params => GetString(Str3716ParamsKey);
 
@@ -34858,12 +34868,12 @@ namespace StockSharp.Localization
 		public static string Str3766 => GetString(Str3766Key);
 
 		/// <summary>
-		/// Task designed for automatic schedule data export to external files (txt, excel and etc.).
+		/// Task designed for automatic schedule data export to external files (txt, excel, etc.).
 		/// </summary>
 		public const string Str3767Key = nameof(Str3767);
 
 		/// <summary>
-		/// Task designed for automatic schedule data export to external files (txt, excel and etc.).
+		/// Task designed for automatic schedule data export to external files (txt, excel, etc.).
 		/// </summary>
 		public static string Str3767 => GetString(Str3767Key);
 
@@ -34978,12 +34988,12 @@ namespace StockSharp.Localization
 		public static string Str3778 => GetString(Str3778Key);
 
 		/// <summary>
-		/// From what date to start data convertion.
+		/// From what date to start data conversion.
 		/// </summary>
 		public const string Str3779Key = nameof(Str3779);
 
 		/// <summary>
-		/// From what date to start data convertion.
+		/// From what date to start data conversion.
 		/// </summary>
 		public static string Str3779 => GetString(Str3779Key);
 
@@ -35038,12 +35048,12 @@ namespace StockSharp.Localization
 		public static string Str3785 => GetString(Str3785Key);
 
 		/// <summary>
-		/// Processing security {0}. Convertion {1} in {2}.
+		/// Processing security {0}. Conversion {1} in {2}.
 		/// </summary>
 		public const string Str3786ParamsKey = nameof(Str3786Params);
 
 		/// <summary>
-		/// Processing security {0}. Convertion {1} in {2}.
+		/// Processing security {0}. Conversion {1} in {2}.
 		/// </summary>
 		public static string Str3786Params => GetString(Str3786ParamsKey);
 
@@ -36178,12 +36188,12 @@ namespace StockSharp.Localization
 		public static string XamlStr141 => GetString(XamlStr141Key);
 
 		/// <summary>
-		/// Add asix
+		/// Add axis
 		/// </summary>
 		public const string XamlStr142Key = nameof(XamlStr142);
 
 		/// <summary>
-		/// Add asix
+		/// Add axis
 		/// </summary>
 		public static string XamlStr142 => GetString(XamlStr142Key);
 
@@ -36628,12 +36638,12 @@ namespace StockSharp.Localization
 		public static string XamlStr216 => GetString(XamlStr216Key);
 
 		/// <summary>
-		/// Use localy:
+		/// Use locally:
 		/// </summary>
 		public const string XamlStr217Key = nameof(XamlStr217);
 
 		/// <summary>
-		/// Use localy:
+		/// Use locally:
 		/// </summary>
 		public static string XamlStr217 => GetString(XamlStr217Key);
 
@@ -36898,12 +36908,12 @@ namespace StockSharp.Localization
 		public static string XamlStr254 => GetString(XamlStr254Key);
 
 		/// <summary>
-		/// Configuration
+		/// Configurations
 		/// </summary>
 		public const string XamlStr255Key = nameof(XamlStr255);
 
 		/// <summary>
-		/// Configuration
+		/// Configurations
 		/// </summary>
 		public static string XamlStr255 => GetString(XamlStr255Key);
 
@@ -37558,14 +37568,14 @@ namespace StockSharp.Localization
 		public static string OverviewArea => GetString(OverviewAreaKey);
 
 		/// <summary>
-		/// Obfucate:
+		/// Obfuscate:
 		/// </summary>
-		public const string ObfucateKey = nameof(Obfucate);
+		public const string ObfuscateKey = nameof(Obfuscate);
 
 		/// <summary>
-		/// Obfucate:
+		/// Obfuscate:
 		/// </summary>
-		public static string Obfucate => GetString(ObfucateKey);
+		public static string Obfuscate => GetString(ObfuscateKey);
 
 		/// <summary>
 		/// Join
@@ -38738,12 +38748,12 @@ namespace StockSharp.Localization
 		public static string XamlStr537 => GetString(XamlStr537Key);
 
 		/// <summary>
-		/// Currency convertion sample application
+		/// Currency conversion sample application
 		/// </summary>
 		public const string XamlStr538Key = nameof(XamlStr538);
 
 		/// <summary>
-		/// Currency convertion sample application
+		/// Currency conversion sample application
 		/// </summary>
 		public static string XamlStr538 => GetString(XamlStr538Key);
 
@@ -38958,12 +38968,12 @@ namespace StockSharp.Localization
 		public static string XamlStr581 => GetString(XamlStr581Key);
 
 		/// <summary>
-		/// Sell ny market
+		/// Sell by market
 		/// </summary>
 		public const string XamlStr582Key = nameof(XamlStr582);
 
 		/// <summary>
-		/// Sell ny market
+		/// Sell by market
 		/// </summary>
 		public static string XamlStr582 => GetString(XamlStr582Key);
 
@@ -40018,12 +40028,12 @@ namespace StockSharp.Localization
 		public static string XamlStr743 => GetString(XamlStr743Key);
 
 		/// <summary>
-		/// Test (speach)
+		/// Test (speech)
 		/// </summary>
 		public const string XamlStr745Key = nameof(XamlStr745);
 
 		/// <summary>
-		/// Test (speach)
+		/// Test (speech)
 		/// </summary>
 		public static string XamlStr745 => GetString(XamlStr745Key);
 
@@ -40338,12 +40348,12 @@ namespace StockSharp.Localization
 		public static string XamlStr796 => GetString(XamlStr796Key);
 
 		/// <summary>
-		/// Delete stript
+		/// Delete script
 		/// </summary>
 		public const string XamlStr797Key = nameof(XamlStr797);
 
 		/// <summary>
-		/// Delete stript
+		/// Delete script
 		/// </summary>
 		public static string XamlStr797 => GetString(XamlStr797Key);
 
@@ -40908,12 +40918,12 @@ namespace StockSharp.Localization
 		public static string UnknownUnitMeasurement => GetString(UnknownUnitMeasurementKey);
 
 		/// <summary>
-		/// Percentages '{0}' can not be compared to non percentages '{1}'.
+		/// Percentages '{0}' cannot be compared to non-percentages '{1}'.
 		/// </summary>
 		public const string PercentagesCannotCompareKey = nameof(PercentagesCannotCompare);
 
 		/// <summary>
-		/// Percentages '{0}' can not be compared to non percentages '{1}'.
+		/// Percentages '{0}' cannot be compared to non-percentages '{1}'.
 		/// </summary>
 		public static string PercentagesCannotCompare => GetString(PercentagesCannotCompareKey);
 
@@ -40928,12 +40938,12 @@ namespace StockSharp.Localization
 		public static string PercentagesConvert => GetString(PercentagesConvertKey);
 
 		/// <summary>
-		/// Limited value can not participate in mathematical operations.
+		/// Limited value cannot participate in mathematical operations.
 		/// </summary>
 		public const string LimitedValueNotMathKey = nameof(LimitedValueNotMath);
 
 		/// <summary>
-		/// Limited value can not participate in mathematical operations.
+		/// Limited value cannot participate in mathematical operations.
 		/// </summary>
 		public static string LimitedValueNotMath => GetString(LimitedValueNotMathKey);
 
@@ -41568,22 +41578,22 @@ namespace StockSharp.Localization
 		public static string Apart => GetString(ApartKey);
 
 		/// <summary>
-		/// Finam (сandles)
+		/// Finam (candles)
 		/// </summary>
 		public const string FinamCandlesKey = nameof(FinamCandles);
 
 		/// <summary>
-		/// Finam (сandles)
+		/// Finam (candles)
 		/// </summary>
 		public static string FinamCandles => GetString(FinamCandlesKey);
 
 		/// <summary>
-		/// Yahoo (сandles)
+		/// Yahoo (candles)
 		/// </summary>
 		public const string YahooCandlesKey = nameof(YahooCandles);
 
 		/// <summary>
-		/// Yahoo (сandles)
+		/// Yahoo (candles)
 		/// </summary>
 		public static string YahooCandles => GetString(YahooCandlesKey);
 
@@ -42608,12 +42618,12 @@ namespace StockSharp.Localization
 		public static string FileTooMuch => GetString(FileTooMuchKey);
 
 		/// <summary>
-		/// Strategy has been encrypted and can not be viewed.
+		/// Strategy has been encrypted and cannot be viewed.
 		/// </summary>
 		public const string StrategyEncryptedKey = nameof(StrategyEncrypted);
 
 		/// <summary>
-		/// Strategy has been encrypted and can not be viewed.
+		/// Strategy has been encrypted and cannot be viewed.
 		/// </summary>
 		public static string StrategyEncrypted => GetString(StrategyEncryptedKey);
 
@@ -42648,24 +42658,24 @@ namespace StockSharp.Localization
 		public static string CompositionAlreadyExistParams => GetString(CompositionAlreadyExistParamsKey);
 
 		/// <summary>
-		/// With ecnryption
+		/// With encryption
 		/// </summary>
-		public const string WithEcnryptionKey = nameof(WithEcnryption);
+		public const string WithEncryptionKey = nameof(WithEncryption);
 
 		/// <summary>
-		/// With ecnryption
+		/// With encryption
 		/// </summary>
-		public static string WithEcnryption => GetString(WithEcnryptionKey);
+		public static string WithEncryption => GetString(WithEncryptionKey);
 
 		/// <summary>
-		/// Without ecnryption
+		/// Without encryption
 		/// </summary>
-		public const string WithoutEcnryptionKey = nameof(WithoutEcnryption);
+		public const string WithoutEncryptionKey = nameof(WithoutEncryption);
 
 		/// <summary>
-		/// Without ecnryption
+		/// Without encryption
 		/// </summary>
-		public static string WithoutEcnryption => GetString(WithoutEcnryptionKey);
+		public static string WithoutEncryption => GetString(WithoutEncryptionKey);
 
 		/// <summary>
 		/// IV
@@ -42708,12 +42718,12 @@ namespace StockSharp.Localization
 		public static string FinamPanel => GetString(FinamPanelKey);
 
 		/// <summary>
-		/// Can not subscribe to own strategy.
+		/// cannot subscribe to own strategy.
 		/// </summary>
 		public const string OwnStrategySubscriptionKey = nameof(OwnStrategySubscription);
 
 		/// <summary>
-		/// Can not subscribe to own strategy.
+		/// cannot subscribe to own strategy.
 		/// </summary>
 		public static string OwnStrategySubscription => GetString(OwnStrategySubscriptionKey);
 
@@ -42748,12 +42758,12 @@ namespace StockSharp.Localization
 		public static string LoadCompositionWrongPasswordError => GetString(LoadCompositionWrongPasswordErrorKey);
 
 		/// <summary>
-		/// Error while loading scheme. Possibly file is corrupted, has an incorrect format or can not be read.
+		/// Error while loading scheme. Possibly file is corrupted, has an incorrect format or cannot be read.
 		/// </summary>
 		public const string LoadCompositionErrorKey = nameof(LoadCompositionError);
 
 		/// <summary>
-		/// Error while loading scheme. Possibly file is corrupted, has an incorrect format or can not be read.
+		/// Error while loading scheme. Possibly file is corrupted, has an incorrect format or cannot be read.
 		/// </summary>
 		public static string LoadCompositionError => GetString(LoadCompositionErrorKey);
 
@@ -43078,22 +43088,22 @@ namespace StockSharp.Localization
 		public static string ImpliedVolatilityMarketDepth => GetString(ImpliedVolatilityMarketDepthKey);
 
 		/// <summary>
-		/// Offet to the left (less) from central strike. If not set, all less then central strikes will be collected.
+		/// Offset to the left (less) from central strike. If not set, all less then central strikes will be collected.
 		/// </summary>
 		public const string StrikeLeftOffsetKey = nameof(StrikeLeftOffset);
 
 		/// <summary>
-		/// Offet to the left (less) from central strike. If not set, all less then central strikes will be collected.
+		/// Offset to the left (less) from central strike. If not set, all less then central strikes will be collected.
 		/// </summary>
 		public static string StrikeLeftOffset => GetString(StrikeLeftOffsetKey);
 
 		/// <summary>
-		/// Offet to the right (more) from central strike. If not set, all more then central strikes will be collected.
+		/// Offset to the right (more) from central strike. If not set, all more then central strikes will be collected.
 		/// </summary>
 		public const string StrikeRightOffsetKey = nameof(StrikeRightOffset);
 
 		/// <summary>
-		/// Offet to the right (more) from central strike. If not set, all more then central strikes will be collected.
+		/// Offset to the right (more) from central strike. If not set, all more then central strikes will be collected.
 		/// </summary>
 		public static string StrikeRightOffset => GetString(StrikeRightOffsetKey);
 
@@ -43268,12 +43278,12 @@ namespace StockSharp.Localization
 		public static string DownloadSecurities => GetString(DownloadSecuritiesKey);
 
 		/// <summary>
-		/// The source does not support automatical instruments downloading. Manually create an instrument?
+		/// The source does not support automatically instruments downloading. Manually create an instrument?
 		/// </summary>
 		public const string NotSupportSecurityDownloadKey = nameof(NotSupportSecurityDownload);
 
 		/// <summary>
-		/// The source does not support automatical instruments downloading. Manually create an instrument?
+		/// The source does not support automatically instruments downloading. Manually create an instrument?
 		/// </summary>
 		public static string NotSupportSecurityDownload => GetString(NotSupportSecurityDownloadKey);
 
@@ -43708,12 +43718,12 @@ namespace StockSharp.Localization
 		public static string SendLogs => GetString(SendLogsKey);
 
 		/// <summary>
-		/// Can not create logs file.
+		/// cannot create logs file.
 		/// </summary>
 		public const string CanNotCreateLogsFileKey = nameof(CanNotCreateLogsFile);
 
 		/// <summary>
-		/// Can not create logs file.
+		/// cannot create logs file.
 		/// </summary>
 		public static string CanNotCreateLogsFile => GetString(CanNotCreateLogsFileKey);
 
@@ -44986,5 +44996,25 @@ namespace StockSharp.Localization
 		/// Milliseconds
 		/// </summary>
 		public static string Milliseconds => GetString(MillisecondsKey);
+
+		/// <summary>
+		/// SPB Exchange
+		/// </summary>
+		public const string SpbExKey = nameof(SpbEx);
+
+		/// <summary>
+		/// SPB Exchange
+		/// </summary>
+		public static string SpbEx => GetString(SpbExKey);
+
+		/// <summary>
+		/// Items count: {0}
+		/// </summary>
+		public const string ItemsCountParamKey = nameof(ItemsCountParam);
+
+		/// <summary>
+		/// Items count: {0}
+		/// </summary>
+		public static string ItemsCountParam => GetString(ItemsCountParamKey);
 	}
 }

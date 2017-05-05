@@ -102,7 +102,7 @@ namespace StockSharp.Messages
 		public bool IsSorted { get; set; }
 
 		/// <summary>
-		/// The quote change was build by level1.
+		/// The quote change was built by level1.
 		/// </summary>
 		[Browsable(false)]
 		public bool IsByLevel1 { get; set; }
