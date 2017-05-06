@@ -45016,5 +45016,15 @@ namespace StockSharp.Localization
 		/// Items count: {0}
 		/// </summary>
 		public static string ItemsCountParam => GetString(ItemsCountParamKey);
+
+		/// <summary>
+		/// Simulator settings
+		/// </summary>
+		public const string SimulatorSettingsKey = nameof(SimulatorSettings);
+
+		/// <summary>
+		/// Simulator settings
+		/// </summary>
+		public static string SimulatorSettings => GetString(SimulatorSettingsKey);
 	}
 }
