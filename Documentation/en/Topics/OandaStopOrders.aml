@@ -7,25 +7,24 @@
 		and the <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> type of order indicating:</para>   
         <code language="C#">
         <![CDATA[
-
-var stopOrder = new Order
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
-	Portfolio = Portfolio.SelectedPortfolio,
-	Type = OrderTypes.Conditional,
-	Security = Security,
-	Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-	ExpiryDate = ExpiryDate.Value == null ? (DateTime?) null : ExpiryDate.Value.Value,
-	Volume = Volume.Text.To<decimal>(),
-	Price = Price.Text.To<decimal>(),
-	Condition = new OandaOrderCondition
+	var newOrder = new OrderConditionalWindow
 	{
-		TakeProfitOffset = TakeProfitOffset.Text.IsEmpty() ? (decimal?)null : TakeProfitOffset.Text.To<decimal>(),
-		StopLossOffset = StopLossOffset.Text.IsEmpty() ? (decimal?)null : StopLossOffset.Text.To<decimal>(),
-	}
-};
+		Order = new Order
+		{
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
+	};
 
-MainWindow.Instance.Trader.RegisterOrder(stopOrder);
-
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+}
 		]]>
 		</code>
 	</introduction>

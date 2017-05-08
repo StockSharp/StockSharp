@@ -50,7 +50,7 @@
 			<step>
 				<content>
 					<para>First, you need to create the candles manager <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-					which is by subscribing to the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>event,
+					which is by subscribing to the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>event,
 					will create candles:</para>
 			
 					<code language="C#">

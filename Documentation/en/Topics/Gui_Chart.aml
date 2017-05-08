@@ -32,7 +32,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
         Title="ChartWindow" Height="300" Width="300">
-   <charting:Chart x:Name="Chart" />
+   <charting:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="1"/>
 </Window>
 
 	  				]]>
@@ -48,7 +48,6 @@
               		<![CDATA[
               		
 private readonly Dictionary<CandleSeries, ChartWindow> _chartWindows = new Dictionary<CandleSeries, ChartWindow>();
-private QuikTrader _trader;
 
 private CandleManager _candleManager;
 private readonly LogManager _logManager;
@@ -79,51 +78,26 @@ private MovingAverageConvergenceDivergence _macd;
 				  </para>
 				    <code title="C#" language="C#">
               		<![CDATA[
-              		
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-		 
-	..........................................		 
+        ..........................................         
+        _logManager.Sources.Add(_trader);
+        _trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
-	if (_trader == null)
-	{
-		// создаем подключение
-		_trader = isLua
-			? new QuikTrader
-			{
-				LuaFixServerAddress = Address.Text.To<EndPoint>(),
-				LuaLogin = Login.Text,
-				LuaPassword = Password.Password.To<SecureString>()
-			}
-			: new QuikTrader(Path.Text) { IsDde = true };
-			
-		..........................................		 
+        _trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
 
-		_logManager.Sources.Add(_trader);
-		// подписываемся на событие об успешном восстановлении соединения
-		_trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+        _trader.MarketDataSubscriptionFailed += (security, type, error) =>
+            this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-		// подписываемся на событие разрыва соединения
-		_trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
+        Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
-		// подписываемся на ошибку обработки данных (транзакций и маркет)
-		_trader.Error += error =>
-			this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+        _trader.Connect();
 
-		// подписываемся на ошибку подписки маркет-данных
-		_trader.MarketDataSubscriptionFailed += (security, type, error) =>
-			this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-				
-		Security.SecurityProvider = new FilterableSecurityProvider(_trader);
+        _candleManager = new CandleManager(_trader);
+        _candleManager.Processing += DrawCandle;
 
-		_trader.Connect();
-
-		// инициализуруем _candleManager и подписываемся на событие получения свечи
-		_candleManager = new CandleManager(_trader);
-		_candleManager.Processing += DrawCandle;
-
-		ConnectBtn.IsEnabled = false;
-	}
+        ConnectBtn.IsEnabled = false;
+    }
 }
 	  				]]>
 				   </code>
@@ -139,49 +113,42 @@ private void ConnectClick(object sender, RoutedEventArgs e)
               		<![CDATA[
 private void ShowChartClick(object sender, RoutedEventArgs e)
 {
-	var security = SelectedSecurity;
+    var security = SelectedSecurity;
 
-	var series = new CandleSeries(CandlesSettings.Settings.CandleType, security, CandlesSettings.Settings.Arg);
+    var series = new CandleSeries(CandlesSettings.Settings.CandleType, security, CandlesSettings.Settings.Arg);
 
-	_chartWindows.SafeAdd(series, key =>
-	{
-		var wnd = new ChartWindow
-		{
-			Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name, series.Arg)
-		};
+    _chartWindows.SafeAdd(series, key =>
+    {
+        var wnd = new ChartWindow
+        {
+            Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name, series.Arg)
+        };
 
-		wnd.MakeHideable();
+        wnd.MakeHideable();
 
-		// инициализируем индикаторы
         _sma = new SimpleMovingAverage() { Length = 11 };
         _macd = new MovingAverageConvergenceDivergence();
 
-		// инициализируем элементы графика
         _smaChartElement = new ChartIndicatorElement();
         _macdChartElement = new ChartIndicatorElement();
         _candlesElem = new ChartCandleElement();
 
-		// устанавливаем стиль отображения MACD в виде гистограммы
         _macdChartElement.DrawStyle = ChartIndicatorDrawStyles.Histogram;
 
-		// инициализируем области графика
         _candlesArea = new ChartArea();
         _indicatorsArea = new ChartArea();
 
-		// добавляем области к чарту
         wnd.Chart.Areas.Add(_candlesArea);
         wnd.Chart.Areas.Add(_indicatorsArea);
 
-		// добавляем элементы к областям
         _candlesArea.Elements.Add(_candlesElem);
         _candlesArea.Elements.Add(_smaChartElement);
         _indicatorsArea.Elements.Add(_macdChartElement);
 
         return wnd;
-	}).Show();
+    }).Show();
 
-	// стартуем кандлменеджер
-	_candleManager.Start(series);
+    _candleManager.Start(series);
 }
 	  				]]>
 				   </code>
@@ -215,27 +182,28 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
               		<![CDATA[
 private void DrawCandle(CandleSeries series, Candle candle)
 {
-	var wnd = _chartWindows.TryGetValue(series);
+    var wnd = _chartWindows.TryGetValue(series);
 
-	if (wnd != null)
-	{
-		if (candle.State != CandleStates.Finished)
-			return;
+    if (wnd != null)
+    {
+        if (candle.State != CandleStates.Finished)
+            return;
 
-		var smaValue = _sma.Process(candle);
-		var macdValue = _macd.Process(candle);
+        var smaValue = _sma.Process(candle);
+        var macdValue = _macd.Process(candle);
 
-		var data = new ChartingDrawData();
-		data
-		  .Group(candle.OpenTime)
-		    .Add(_candlesElem, candle)
-		    .Add(_smaChartElement, smaValue)
-		    .Add(_macdChartElement, macdValue);
+        var data = new ChartDrawData();
+        data
+          .Group(candle.OpenTime)
+            .Add(_candlesElem, candle)
+            .Add(_smaChartElement, smaValue)
+            .Add(_macdChartElement, macdValue);
 
-        	wnd.Chart.Draw(data);
-               
-	}
-}]]>
+            wnd.Chart.Draw(data);
+
+    }
+}
+]]>
 				   </code>
 			  </content>
 		  </step>

@@ -34,7 +34,7 @@ Trader = new BlackwoodTrader
 							<para>Then you should to subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
             				<code language="C#">
             				<![CDATA[
-// subscribe on successfully connect event
+// subscribe on connection successfully event
 Trader.Connected += () =>
 {
 	// set flag (connection is established)
@@ -42,7 +42,17 @@ Trader.Connected += () =>
 
 	// update gui labes
 	this.GuiAsync(() => ChangeConnectStatus(true));
+
+	Trader.RegisterNews();
+
+	Trader.SubscribeHighLow(true);
+
+	Trader.SubscribeImbalance();
+	Trader.SubscribeCrossLock();
+	Trader.RequestPreMarketIndications();
 };
+
+Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 // subscribe on connection error event
 Trader.ConnectionError += error => this.GuiAsync(() =>
@@ -50,53 +60,46 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 	// update gui labes
 	ChangeConnectStatus(false);
 
-	MessageBox.Show(this, error.ToString(), "Connection was dropped.");	
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);	
 });
 
-// subscribe on successfully disconnect event
-Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
 // subscribe on error event
-Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Data processing error"));
+Trader.Error += error =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-// new securities received
-Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
+// subscribe on error of market data subscription event
+Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-// new own trades received
-Trader.NewMyTrades += trades => this.GuiAsync(() => _myTradesWindow.Trades.AddRange(trades));
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
 
-// new anonymous trades received
-Trader.NewTrades += trades => this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
-
-// new orders received
-Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
-
-// new stop-orders received
-Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
-
-// new portofolios (=accounts) received
-Trader.NewPortfolios += portfolios =>
+Trader.NewPortfolio += portfolio =>
 {
 	// subscribe on portfolio updates
-    portfolios.ForEach(Trader.RegisterPortfolio);
-    
-    _portfoliosWindow.Portfolios.AddRange(portfolios);
-};
+	Trader.RegisterPortfolio(portfolio);
 
-// new positions received
-Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
+	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+};
+Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 // subscribe on error of order registration event
-Trader.OrdersRegisterFailed += OrdersFailed;
-
+Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 // subscribe on error of order cancelling event
-Trader.OrdersCancelFailed += OrdersFailed;
+Trader.OrderCancelFailed += OrderFailed;
 
 // subscribe on error of stop-order registration event
-Trader.StopOrdersRegisterFailed += OrdersFailed;
-
+Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 // subscribe on error of stop-order cancelling event
-Trader.StopOrdersCancelFailed += OrdersFailed;
+Trader.StopOrderCancelFailed += OrderFailed;
+
+Trader.MassOrderCancelFailed += (transId, error) =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
+Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
 							]]>
 							</code>						
@@ -128,7 +131,7 @@ Trader.Connect();
 									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 								</listItem>
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
 									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 								</listItem>
 								<listItem>
@@ -147,13 +150,15 @@ Trader.Connect();
             				
             				<code language="C#">
             				<![CDATA[
-var criteria = new Security
+private void FindClick(object sender, RoutedEventArgs e)
 {
-	Currency = CurrencyTypes.USD,
-	Code = SecCode.Text
-};
+	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
 
-MainWindow.Instance.Trader.LookupSecurities(criteria);
+	if (!wnd.ShowModal(this))
+		return;
+
+	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
+}
 							]]>
 							</code>
 							
@@ -178,24 +183,17 @@ Trader.RegisterSecurity(SelectedSecurity);
 							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method:</para>
             				<code language="C#">
             				<![CDATA[
-private void Quotes_Click(object sender, RoutedEventArgs e)
+private void Level2Click(object sender, RoutedEventArgs e)
 {
-    var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
-    {
-        // subscribe on order book flow
-        MainWindow.Instance.Trader.RegisterMarketDepth(security);
+	foreach (var security in SecurityPicker.SelectedSecurities)
+	{
+		ShowLevel1(security);
 
-        // create order book window
-        var wnd = new QuotesWindow { Title = security.Code + " quotes" };
-        wnd.MakeHideable();
-        return wnd;
-    });
-
-    if (window.Visibility == Visibility.Visible)
-        window.Hide();
-    else
-        window.Show();
+		// subscribe on order book flow
+		MainWindow.Instance.Trader.RegisterMarketDepth(security);
+	}
 }
+
 							]]>
 							</code>
 							<mediaLink><image placement="center" xlink:href="blackwood_market_depth"/></mediaLink>
@@ -208,21 +206,18 @@ private void Quotes_Click(object sender, RoutedEventArgs e)
 							 method sends an order to the server:</para>
             				<code language="C#">
             				<![CDATA[
-private void Send_Click(object sender, RoutedEventArgs e)
+private void NewOrderClick(object sender, RoutedEventArgs e)
 {
-    var order = new Order
-    {
-        Type = IsMarket.IsChecked == true ? OrderTypes.Market : OrderTypes.Limit,
-        Portfolio = Portfolio.SelectedPortfolio,
-        Volume = Volume.Text.To<decimal>(),
-        Price = Price.Text.To<decimal>(),
-        Security = Security,
-        Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-    };
+	var newOrder = new OrderWindow
+	{
+		Order = new Order { Security = SecurityPicker.SelectedSecurity },
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+	};
 
-    MainWindow.Instance.Trader.RegisterOrder(order);
-
-    DialogResult = true;
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 }
 							]]>
 							</code>						

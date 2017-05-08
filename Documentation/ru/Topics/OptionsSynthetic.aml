@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="efad2861-7392-4ed6-957d-f7fde651a48f" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--<summary>
@@ -32,7 +32,7 @@ trader.RegisterOrder(new Order
 {
 	Security = option,
 	Volume = matchedVolume,
-	Direction = OrderDirections.Buy,
+	Direction = Sides.Buy,
 	// максимальная цена, чтобы реализовать требуемый объем
 	Price = trades.Max(t => t.Trade.Price),
 });

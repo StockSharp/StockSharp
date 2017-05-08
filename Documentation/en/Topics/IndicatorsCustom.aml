@@ -18,43 +18,44 @@
       	Here is the code for the simple moving average indicator implementation <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference>:
       </para>
       <code language="C#"><![CDATA[/// <summary>
-/// Simple moving average.
-/// </summary>
-[DisplayName("SMA")]
-[DescriptionLoc(LocalizedStrings.Str818Key)]
-public class SimpleMovingAverage : LengthIndicator<decimal>
-{
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SimpleMovingAverage"/>.
-	/// </summary>
+/// <summary> 
+/// Simple moving average. 
+/// </summary> 
+[DisplayName("SMA")] 
+[DescriptionLoc(LocalizedStrings.Str818Key)] 
+public class SimpleMovingAverage : LengthIndicator<decimal> 
+{ 
+	/// <summary> 
+	/// Initializes a new instance of the <see cref="SimpleMovingAverage"/>. 
+	/// </summary> 
 	public SimpleMovingAverage()
-	{
-		Length = 32;
-	}
-
-	/// <summary>
-	/// To handle the input value.
-	/// </summary>
-	/// <param name="input">The input value.</param>
-	/// <returns>The resulting value.</returns>
+	{ 
+		Length = 32; 
+	} 
+	/// <summary> 
+	/// To handle the input value. 
+	/// </summary> 
+	/// <param name="input">The input value.</param> 
+	/// <returns>The resulting value.</returns> 
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
-	{
-		var newValue = input.GetValue<decimal>();
-
-		if (input.IsFinal)
-		{
-			Buffer.Add(newValue);
-
-			if (Buffer.Count > Length)
-				Buffer.RemoveAt(0);
-		}
-
-		if (input.IsFinal)
-			return new DecimalIndicatorValue(this, Buffer.Sum() / Length);
-
-		return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
-	}
-}]]></code>
+	{ 
+		var newValue = input.GetValue<decimal>(); 
+        
+		if (input.IsFinal) 
+		{ 
+			Buffer.Add(newValue); 
+            
+			if (Buffer.Count > Length) 
+				Buffer.RemoveAt(0); 
+		} 
+        
+		if (input.IsFinal) 
+			return new DecimalIndicatorValue(this, Buffer.Sum() / Length); 
+        
+		return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length); 
+	} 
+} 
+]]></code>
 		<para>
 			<codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> inherits from the
 			<codeEntityReference>T:StockSharp.Algo.Indicators.LengthIndicator`1</codeEntityReference> class, from which it is necessary to inherit all of the indicators,
@@ -155,83 +156,80 @@ public class ChaikinVolatility : BaseIndicator
 		<code language="C#"><![CDATA[/// <summary>
 /// Welles Wilder Average Directional Index.
 /// </summary>
-[DisplayName("ADX")]
-[DescriptionLoc(LocalizedStrings.Str757Key)]
-public class AverageDirectionalIndex : BaseComplexIndicator
-{
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>.
-	/// </summary>
+[DisplayName("ADX")] 
+[DescriptionLoc(LocalizedStrings.Str757Key)] 
+public class AverageDirectionalIndex : BaseComplexIndicator 
+{ 
+	/// <summary> 
+	/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>. 
+	/// </summary> 
 	public AverageDirectionalIndex()
-		: this(new DirectionalIndex { Length = 14 }, new WilderMovingAverage { Length = 14 })
-	{
-	}
+		: this(new DirectionalIndex { Length = 14 }, new WilderMovingAverage { Length = 14 }) 
+	{ 	} 
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>.
-	/// </summary>
-	/// <param name="dx">Welles Wilder Directional Movement Index.</param>
-	/// <param name="movingAverage">Moving Average.</param>
+	/// <summary> 
+	/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>. 
+	/// </summary> 
+	/// <param name="dx">Welles Wilder Directional Movement Index.</param> 
+	/// <param name="movingAverage">Moving Average.</param> 
 	public AverageDirectionalIndex(DirectionalIndex dx, LengthIndicator<decimal> movingAverage)
-	{
-		if (dx == null)
-			throw new ArgumentNullException(nameof(dx));
-
-		if (movingAverage == null)
-			throw new ArgumentNullException(nameof(movingAverage));
-
-		InnerIndicators.Add(Dx = dx);
-		InnerIndicators.Add(MovingAverage = movingAverage);
-		Mode = ComplexIndicatorModes.Sequence;
-	}
-
-	/// <summary>
-	/// Welles Wilder Directional Movement Index.
-	/// </summary>
-	[Browsable(false)]
-	public DirectionalIndex Dx { get; }
-
-	/// <summary>
-	/// Moving Average.
-	/// </summary>
-	[Browsable(false)]
-	public LengthIndicator<decimal> MovingAverage { get; }
-
-	/// <summary>
-	/// Period length.
-	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str736Key)]
-	[DescriptionLoc(LocalizedStrings.Str737Key)]
-	[CategoryLoc(LocalizedStrings.GeneralKey)]
+	{ 
+		if (dx == null) throw new ArgumentNullException(nameof(dx)); 
+        
+		if (movingAverage == null) 	throw new ArgumentNullException(nameof(movingAverage)); 
+        
+		InnerIndicators.Add(Dx = dx); 
+		InnerIndicators.Add(MovingAverage = movingAverage); 
+		Mode = ComplexIndicatorModes.Sequence; 
+	} 
+    
+	/// <summary> 
+	/// Welles Wilder Directional Movement Index. 
+	/// </summary> 
+	[Browsable(false)] 
+	public DirectionalIndex Dx { get; } 
+    
+	/// <summary> 
+	/// Moving Average. 
+	/// </summary> 
+	[Browsable(false)] 
+	public LengthIndicator<decimal> MovingAverage { get; } 
+    
+	/// <summary> 
+	/// Period length. 
+	/// </summary> 
+	[DisplayNameLoc(LocalizedStrings.Str736Key)] 
+	[DescriptionLoc(LocalizedStrings.Str737Key)] 
+	[CategoryLoc(LocalizedStrings.GeneralKey)] 
 	public virtual int Length
-	{
-		get { return MovingAverage.Length; }
-		set
-		{
-			MovingAverage.Length = Dx.Length = value;
-			Reset();
-		}
-	}
+	{ 
+		get { return MovingAverage.Length; } 
+		set 
+		{ 
+			MovingAverage.Length = Dx.Length = value; 
+			Reset(); 
+		} 
+	} 
 
-	/// <summary>
-	/// Load settings.
-	/// </summary>
-	/// <param name="settings">Settings storage.</param>
+	/// <summary> 
+	/// Load settings. 
+	/// </summary> 
+	/// <param name="settings">Settings storage.</param> 
 	public override void Load(SettingsStorage settings)
-	{
-		base.Load(settings);
-		Length = settings.GetValue<int>(nameof(Length));
-	}
+	{ 
+		base.Load(settings); 
+		Length = settings.GetValue<int>(nameof(Length)); 
+	} 
 
-	/// <summary>
-	/// Save settings.
-	/// </summary>
-	/// <param name="settings">Settings storage.</param>
+	/// <summary> 
+	/// Save settings. 
+	/// </summary> 
+	/// <param name="settings">Settings storage.</param> 
 	public override void Save(SettingsStorage settings)
-	{
-		base.Save(settings);
-		settings.SetValue(nameof(Length), Length);
-	}
+	{ 
+		base.Save(settings); 
+		settings.SetValue(nameof(Length), Length); 
+	} 
 }]]></code>
 		<para>
 			Such indicators should be inherited from the <codeEntityReference>T:StockSharp.Algo.Indicators.BaseComplexIndicator</codeEntityReference> class,

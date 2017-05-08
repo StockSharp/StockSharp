@@ -6,7 +6,7 @@
        method used to register stop orders, but with the <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> type of order indicating:</para>
         <code language="C#">
         <![CDATA[
-void NewStopOrderClick(object sender, RoutedEventArgs e)
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
 	var newOrder = new OrderConditionalWindow
 	{
@@ -15,7 +15,10 @@ void NewStopOrderClick(object sender, RoutedEventArgs e)
 			Security = SecurityPicker.SelectedSecurity,
 			Type = OrderTypes.Conditional,
 		},
-		Connector = MainWindow.Instance.Trader,
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
 	};
 
 	if (newOrder.ShowModal(this))

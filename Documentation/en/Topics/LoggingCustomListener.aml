@@ -18,7 +18,7 @@
       		can be inherited or the <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference> interface can be implemented directly. The object of the
       		<codeEntityReference>T:StockSharp.Logging.LogMessage</codeEntityReference> class is passed through the
 			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Logging.ILogListener.WriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})</codeEntityReference>
-			method. This class contains the information about the message source <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Source</codeEntityReference> (например, стратегия,
+			method. This class contains the information about the message source <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Source</codeEntityReference> (
 			for example, a strategy that has generated the message), the message type <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Level</codeEntityReference>
 			(information, warning or error), as well as the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Message</codeEntityReference>.
 			text itself. The following example shows the source code of <codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference>:

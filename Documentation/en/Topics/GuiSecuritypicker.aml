@@ -119,64 +119,23 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 	{
        ......................................
 
-		if (Trader == null)
-		{
-			// создаем подключение
-			Trader = isLua
-				? new QuikTrader
-				{
-					LuaFixServerAddress = Address.Text.To<EndPoint>(),
-					LuaLogin = Login.Text,
-					LuaPassword = Password.Password.To<SecureString>()
-				}
-				: new QuikTrader(Path.Text) { IsDde = true };
+			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены ордера"));
+			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп ордера"));
+			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
-			Trader.LogLevel = LogLevels.Debug;
-			
-			_logManager.Sources.Add(Trader);
+       ......................................
 
-			// отключение автоматического запроса всех инструментов.
-			Trader.RequestAllSecurities = AllSecurities.IsChecked == true;
-
-			// возводим флаг, что соединение установлено
-			_isConnected = true;
-
-			// переподключение будет работать только во время работы биржи РТС
-			// (чтобы отключить переподключение когда торгов нет штатно, например, ночью)
-			Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-
-			// подписываемся на событие об успешном восстановлении соединения
-			Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
-
-			// подписываемся на событие разрыва соединения
-			Trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
-
-
-			// подписываемся на ошибку подписки маркет-данных
-			Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-
-			// добавляем инструменты в коллекцию инструментов SecurityPicker
-			Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-			
-			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-			Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-			Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-			Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
-			Trader.OrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-			Trader.OrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-			Trader.StopOrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-			Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-			Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-			Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
-
-			// устанавливаем поставщик маркет-данных для SecurityPicker
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
+       ......................................
 
 		Trader.Connect();
 
@@ -197,7 +156,6 @@ private void SecurityPicker_OnSecuritySelected(Security security)
 	NewStopOrder.IsEnabled = NewOrder.IsEnabled =
 	Level1.IsEnabled = Depth.IsEnabled = security != null;
 }
-
 ]]>
               </code>
           </content>

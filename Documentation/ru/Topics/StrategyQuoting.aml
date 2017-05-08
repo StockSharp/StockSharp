@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="24250c24-029c-4dbc-bc8b-4afde645e483" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
@@ -96,8 +96,10 @@ base.RegisterOrder(order);</code>
 		<para>
 		  на:
 		</para>
-		<code language="C#">var strategy = new MarketQuotingStrategy(order, 1m);
-base.ChildStrategies.Add(strategy);</code>
+<code language="C#">
+var strategy = new MarketQuotingStrategy(direction, volume);
+ChildStrategies.Add(strategy);
+</code>
 		<!--para>
 		  После этого <codeEntityReference>T:StockSharp.Algo.Strategies.RealTimeStrategyManager</codeEntityReference> выполнит до конца метод SmaStrategy.OnProcess
 		  и уже после этого будет вызывать другой метод – <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.QuotingStrategy.OnProcess</codeEntityReference>.

@@ -66,48 +66,65 @@
 			  The implementation code of the trading strategy for moving average:
 			</para>
 			<code language="C#">
-<![CDATA[class SmaStrategy : TimeFrameStrategy
+<![CDATA[
+class SmaStrategy : Strategy
 {
-	private readonly CandleManager _candleManager;
+	private readonly ICandleManager _candleManager;
+	private readonly CandleSeries _series;
 	private bool _isShortLessThenLong;
 
-	private DateTime _nextTime;
+	private readonly StrategyParam<int> _longSmaPeriod;
 
-	public SmaStrategy(CandleManager candleManager, SimpleMovingAverage longSma, SimpleMovingAverage shortSma, TimeSpan timeFrame)
-		: base(timeFrame)
+	public int LongSmaPeriod => _longSmaPeriod.Value;
+
+	private readonly StrategyParam<int> _shortSmaPeriod;
+
+	public int ShortSmaPeriod => _shortSmaPeriod.Value;
+
+	public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortS
 	{
 		_candleManager = candleManager;
-	
-		this.LongSma = longSma;
-		this.ShortSma = shortSma;
+		_series = series;
+
+		LongSma = longSma;
+		ShortSma = shortSma;
+
+		_longSmaPeriod = this.Param("LongSmaPeriod", longSma.Length);
+		_shortSmaPeriod = this.Param("ShortSmaPeriod", shortSma.Length);
 	}
 
-	public SimpleMovingAverage LongSma { get; private set; }
-	public SimpleMovingAverage ShortSma { get; private set; }
+	public SimpleMovingAverage LongSma { get; }
+	public SimpleMovingAverage ShortSma { get; }
 
-	protected override void OnStarting()
+	protected override void OnStarted()
 	{
-		_isShortLessThenLong = this.ShortSma.LastValue < this.LongSma.LastValue;
-		
-		_nextTime = base.Interval.GetCandleBounds(base.Trader).Max;
+		_candleManager
+			.WhenCandlesFinished(_series)
+			.Do(ProcessCandle)
+			.Apply(this);
 
-		base.OnStarting();
+		this
+			.GetCandleManager()
+			.Start(_series);
+
+		// store current values for short and long
+		_isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
+
+		base.OnStarted();
 	}
 
-	protected override ProcessResults OnProcess()
+	private void ProcessCandle(Candle candle)
 	{
 		// strategy are stopping
 		if (ProcessState == ProcessStates.Stopping)
 		{
 			CancelActiveOrders();
-			return ProcessResults.Stop;
+			return;
 		}
 
-		this.AddInfoLog(LocalizedStrings.Str3634Params.Put(candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security));
-
 		// process new candle
-		var longValue = LongSma.Process(candle);
-		var shortValue = ShortSma.Process(candle);
+		LongSma.Process(candle);
+		ShortSma.Process(candle);
 
 		// calc new values for short and long
 		var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
@@ -119,36 +136,21 @@
 			var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
 
 			// calc size for open position or revert
-			var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+			var volume = Position == 0 ? Volume : Position.Abs() * 2;
 
-			if (!SafeGetConnector().RegisteredMarketDepths.Contains(Security))
-			{
-				var price = Security.GetMarketPrice(Connector, direction);
+			// register order (limit order)
+			RegisterOrder(this.CreateOrder(direction, (decimal)(Security.GetCurrentPrice(this, direction) ?? 0), volume));
 
-				// register "market" order (limit order with guaranteed execution price)
-				if (price != null)
-					RegisterOrder(this.CreateOrder(direction, price.Value, volume));
-			}
-			else
-			{
-				// register order (limit order)
-				RegisterOrder(this.CreateOrder(direction, (decimal)(Security.GetCurrentPrice(this, direction) ?? 0), volume));
-
-				// or revert position via market quoting
-				//var strategy = new MarketQuotingStrategy(direction, volume)
-				//{
-				//	WaitAllTrades = true,
-				//};
-				//ChildStrategies.Add(strategy);
-			}
+			// or revert position via market quoting
+			//var strategy = new MarketQuotingStrategy(direction, volume);
+			//ChildStrategies.Add(strategy);
 
 			// store current values for short and long
 			_isShortLessThenLong = isShortLessThenLong;
 		}
-
-		return ProcessResults.Continue;
 	}
-}]]></code>
+}
+]]></code>
 			<para>
 			  At the beginning of the method through the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ProcessState</codeEntityReference>
 			  property it is checked to see if the strategy is in the process of stopping (for example, the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference>
@@ -198,116 +200,120 @@
 			</para>
 			<code language="C#">
 	<![CDATA[
-_trader = new RithmicTrader(this.Path.Text);
-
 _trader.Connected += () =>
 {
 	_candleManager = new CandleManager(_trader);
-	
-	foreach (var builder in _candleManager.Sources.OfType<CandleBuilder>())
-	{
-		builder.IsSyncRegister = true;
-	}
 
-	_trader.NewPortfolios += portfolios =>
+	_trader.NewSecurity += security =>
 	{
-		_micex = portfolios.First(p => p.Name == account);
+		if (!security.Code.CompareIgnoreCase("AAPL"))
+			return;
 
-		TryCreateStrategy();
+		_aapl  = security;
+
+		this.GuiAsync(() =>
+		{
+			Start.IsEnabled = true;
+		});
 	};
 
-	_trader.NewSecurities += securities => this.GuiAsync(() =>
-	{
-		_aapl = securities.FirstOrDefault(s => s.Code == "AAPL");
-
-		TryCreateStrategy();
-	});
-
-	_trader.NewMyTrades += trades => this.GuiAsync(() =>
+	_trader.NewMyTrade += trade =>
 	{
 		if (_strategy != null)
 		{
-			trades = trades.Where(t => _strategy.Orders.Any(o => o == t.Order));
-
-			_trades.Trades.AddRange(trades);
+			if (_strategy.Orders.Contains(trade.Order))	Trades.Trades.Add(trade);
 		}
-	});
+	};
 
-	_candleManager.CandlesStarted += (token, candles) =>
+	_candleManager.Processing += (series, candle) =>
 	{
-		DrawCandles(candles.Keys);
-
-		if (_isTodaySmaDrawn)
-			DrawSma();
+		if (_isTodaySmaDrawn && candle.State == CandleStates.Finished)	ProcessCandle(candle);
 	};
 	
-	_candleManager.CandlesChanged += (token, candles) => DrawCandles(candles.Keys);
-
 	_trader.ConnectionError += ex =>
 	{
 		if (ex != null)
 			this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
 	};
-};
 
-_trader.Connect();
+	this.GuiAsync(() =>
+	{
+		ConnectBtn.IsEnabled = false;
+		Report.IsEnabled = true;
+	});
+};
 
 ...
 
-private void TryCreateStrategy()
+private void StartClick(object sender, RoutedEventArgs e)
 {
-	if (_aapl != null)
+	if (_strategy == null)
 	{
-		var candles = File.ReadAllLines("AAPL_history.txt").Select(line =>
+		if (Portfolios.SelectedPortfolio == null)
+		{
+			MessageBox.Show(this, LocalizedStrings.Str3009);
+			return;
+		}
+
+		var series = new CandleSeries(typeof(TimeFrameCandle), _aapl, _timeFrame);
+
+		_strategy = new SmaStrategy(_candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+		{
+			Volume = 1,
+			Security = _aapl,
+			Portfolio = Portfolios.SelectedPortfolio,
+			Connector = _trader,
+		};
+		_strategy.Log += OnLog;
+		_strategy.PropertyChanged += OnStrategyPropertyChanged;
+
+		_candlesElem = new ChartCandleElement();
+		_area.Elements.Add(_candlesElem);
+
+		_longMaElem = new ChartIndicatorElement
+		{
+			Title = LocalizedStrings.Long,
+			Color = Colors.OrangeRed
+		};
+		_area.Elements.Add(_longMaElem);
+
+		_shortMaElem = new ChartIndicatorElement
+		{
+			Title = LocalizedStrings.Short,
+			Color = Colors.RoyalBlue
+		};
+		_area.Elements.Add(_shortMaElem);
+
+		IEnumerable<Candle> candles = CultureInfo.InvariantCulture.DoInCulture(() => File.ReadAllLines("LKOH_history.txt").Select(line =>
 		{
 			var parts = line.Split(',');
-			var time = DateTime.ParseExact(parts[0] + parts[1], "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
-			return new TimeFrameCandle
+			var time = (parts[0] + parts[1]).ToDateTime("yyyyMMddHHmmss").ApplyTimeZone(TimeHelper.Moscow);
+			return (Candle)new TimeFrameCandle
 			{
 				OpenPrice = parts[2].To<decimal>(),
 				HighPrice = parts[3].To<decimal>(),
 				LowPrice = parts[4].To<decimal>(),
 				ClosePrice = parts[5].To<decimal>(),
 				TimeFrame = _timeFrame,
-				Time = time,
-				TotalVolume = parts[6].To<int>(),
-				Security = _aapl,
+				OpenTime = time,
+				CloseTime = time + _timeFrame,
+				TotalVolume = parts[6].To<decimal>(),
+				Security = _lkoh,
+				State = CandleStates.Finished,
 			};
-		});
+		}).ToArray());
 
-		DrawCandles(candles.Cast<Candle>());
-
-		_strategy = new SmaStrategy(_candleManager, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 }, _timeFrame)
-		{
-			Volume = 1,
-			Security = _aapl,
-			Portfolio = this.Portfolios.SelectedPortfolio,
-			Trader = _trader,
-		};
-		_strategy.Log += OnLog;
-		_strategy.NewOrder += OnNewOrder;
-		_strategy.PropertyChanged += OnStrategyPropertyChanged;
-
-		var index = 0;
+		var lastCandleTime = default(DateTimeOffset);
 
 		foreach (var candle in candles)
 		{
-			_strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
-			_strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
-
-			if (index >= _strategy.LongSma.Length)
-				DrawSmaLines(candle.Time);
-
-			index++;
-
-			_lastCandleTime = candle.Time;
+			ProcessCandle(candle);
+			lastCandleTime = candle.OpenTime;
 		}
 
-		_candleManager.RegisterTimeFrameCandles(_lkoh, _timeFrame);
-
-		this.Start.IsEnabled = true;
-	}
-}]]></code>
+		_candleManager.Start(series);
+...
+]]></code>
 		  </content>
 		</step>
 		<step>
@@ -316,29 +322,21 @@ private void TryCreateStrategy()
 			  Start and stop of the trading strategy is as follows:
 			</para>
 			<code language="C#"><![CDATA[
-if (!_isTodaySmaDrawn)
-{
-	var bounds = _timeFrame.GetCandleBounds(_trader);
-
-	var candles = _candleManager.GetTimeFrameCandles(_strategy.Security, _timeFrame, new Range<DateTime>(_lastCandleTime + _timeFrame, bounds.Min));
-
-	foreach (var candle in candles)
+...
+	if (_strategy.ProcessState == ProcessStates.Stopped)
 	{
-		_strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
-		_strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
-
-		DrawSmaLines(candle.Time);
-
-		_lastCandleTime = candle.Time;
+		_trader.RegisterMarketDepth(_strategy.Security);
+		_strategy.Start();
+		Start.Content = LocalizedStrings.Str242;
 	}
-
-	_isTodaySmaDrawn = true;
-}
-
-if (_strategy.ProcessState == ProcessStates.Stopped)
-	_strategy.Start();
-else
-	_strategy.Stop();]]></code>
+	else
+	{
+		_trader.UnRegisterMarketDepth(_strategy.Security);
+		_strategy.Stop();
+		Start.Content = LocalizedStrings.Str2421;
+	}
+...	
+	]]></code>
 			<para>
 			  An error can occur in the process of trading strategy work. In this case, the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
 			  captures the error through the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)</codeEntityReference> method,
@@ -360,75 +358,45 @@ else
 			  Drawing on the chart of new data lines of moving average and candles showing the trend:
 			</para>
 			<code language="C#">
-			<![CDATA[_trader.CandlesStarted += (token, candles) =>
+			<![CDATA[
+foreach (var candle in candles)
 {
-	DrawCandles(candles.Keys);
-
-	if (_isTodaySmaDrawn)
-		DrawSma();
-};
-_trader.CandlesChanged += (token, candles) => DrawCandles(candles);
-
-private void DrawCandles(IEnumerable<Candle> candles)
-{
-	this.Sync(() => _chart.Candles.DrawCandles(candles));
+	ProcessCandle(candle);
+	lastCandleTime = candle.OpenTime;
 }
 
-private void DrawSma()
+_candleManager.Start(series);
+
+var bounds = _timeFrame.GetCandleBounds(_trader.CurrentTime);
+
+candles = _candleManager.Container.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
+
+foreach (var candle in candles)
 {
-	var bounds = _timeFrame.GetCandleBounds(_trader);
-
-	if (_lastCandleTime < bounds.Min)
-	{
-		var endOffset = TimeSpan.FromSeconds(1);
-
-		bounds = new Range<DateTime>(_lastCandleTime + _timeFrame, bounds.Min - endOffset);
-
-		var candles = _trader.GetTimeFrameCandles(_strategy.Security, _timeFrame, bounds);
-
-		if (candles.Count() > 0)
-		{
-			foreach (var candle in candles)
-			{
-			  	 _strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
-				 _strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
-			}
-		
-			_lastCandleTime = candles.Max(c => c.Time);
-
-			DrawSmaLines(bounds.Min);
-		}
-	}
+	ProcessCandle(candle);
 }
-
-private void DrawSmaLines(DateTime time)
+...
+private void ProcessCandle(Candle candle)
 {
-	this.GuiSync(() =>
-	{
-		_longSmaGraph.Add(new CustomChartIndicator
-		{
-			Time = time,
-			Value = (double)_strategy.LongSma.LastValue
-		});
-		_shortSmaGraph.Add(new CustomChartIndicator
-		{
-			Time = time,
-			Value = (double)_strategy.ShortSma.LastValue
-		});
-	});
-}]]></code>
+	var longValue = candle.State == CandleStates.Finished ? _strategy.LongSma.Process(candle) : null;
+	var shortValue = candle.State == CandleStates.Finished ? _strategy.ShortSma.Process(candle) : null;
+
+	var chartData = new ChartDrawData();
+
+	chartData
+		.Group(candle.OpenTime)
+			.Add(_candlesElem, candle)
+			.Add(_longMaElem, longValue)
+			.Add(_shortMaElem, shortValue);
+
+	Chart.Draw(chartData);
+}
+]]></code>
 		  </content>
 		</step>
 	  </steps>
 	</procedure>
     
-    <!--<section>
-      <title>Optional section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
 
     <nextSteps>
       <content>
@@ -437,58 +405,7 @@ private void DrawSmaLines(DateTime time)
     </nextSteps>
     
     <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
+  
     </relatedTopics>
     
   </developerWalkthroughDocument>

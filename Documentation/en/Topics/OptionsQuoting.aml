@@ -29,30 +29,117 @@
 					  <para>
 						  Creating a connection to the <token>OpenECry</token> and export starting:
 					  </para>
-					  <code language="C#">
-_trader = new OpenECryTrader(this.Path.Text);
-
-this.Portfolio.Trader = _trader;
-
-// adding all options into drop down list
-_trader.NewSecurities += securities =>
-	this.GuiAsync(() => _options.AddRange(securities.Where(s => s.Type == SecurityTypes.Option)));
-
-// tracking the last asset price
-_trader.NewTrades += trades => this.GuiAsync(() =>
+<code><![CDATA[
+					  
+private void InitConnector()
 {
-	var option = this.SelectedOption;
-	if (option != null)
+	// subscribe on connection successfully event
+	Connector.Connected += () =>
 	{
-		var future = option.GetUnderlyingAsset();
-		if (future.LastTrade != null)
-			this.BaseActivePrice.Text = future.LastTrade.Price.ToString();
+		// update gui labels
+		this.GuiAsync(() => ChangeConnectStatus(true));
+	};
+
+	// subscribe on disconnection event
+	Connector.Disconnected += () =>
+	{
+		// update gui labels
+		this.GuiAsync(() => ChangeConnectStatus(false));
+	};
+
+	// subscribe on connection error event
+	Connector.ConnectionError += error => this.GuiAsync(() =>
+	{
+		// update gui labels
+		ChangeConnectStatus(false);
+
+		MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+	});
+
+	// fill underlying asset's list
+	Connector.NewSecurity += security =>
+	{
+		if (security.Type == SecurityTypes.Future)
+			_assets.Add(security);
+	};
+
+	Connector.SecurityChanged += security =>
+	{
+		if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
+			_isDirty = true;
+	};
+
+	// subscribing on tick prices and updating asset price
+	Connector.NewTrade += trade =>
+	{
+		if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
+			_isDirty = true;
+	};
+
+	Connector.NewPosition += position => this.GuiAsync(() =>
+	{
+		var asset = SelectedAsset;
+
+		if (asset == null)
+			return;
+
+		var assetPos = position.Security == asset;
+		var newPos = position.Security.UnderlyingSecurityId == asset.Id;
+
+		if (!assetPos && !newPos)
+			return;
+
+		if (assetPos)
+			PosChart.AssetPosition = position;
+
+		if (newPos)
+			PosChart.Positions.Add(position);
+
+		RefreshChart();
+	});
+
+	Connector.PositionChanged += position => this.GuiAsync(() =>
+	{
+		if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
+			RefreshChart();
+	});
+
+	try
+	{
+		if (File.Exists(_settingsFile))
+			Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 	}
-});
+	catch
+	{
+	}
+}
+private void ConnectClick(object sender, RoutedEventArgs e)
+{
+	if (!_isConnected)
+	{
+		ConnectBtn.IsEnabled = false;
 
-_trader.Connected += () => _trader.StartExport();
+		_model.Clear();
+		_model.MarketDataProvider = Connector;
 
-_trader.Connect();</code>
+		ClearSmiles();
+
+		PosChart.Positions.Clear();
+		PosChart.AssetPosition = null;
+		PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
+
+		Portfolio.Portfolios = new PortfolioDataSource(Connector);
+
+		PosChart.MarketDataProvider = Connector;
+		PosChart.SecurityProvider = Connector;
+
+		Connector.Connect();
+	}
+	else
+		Connector.Disconnect();
+}
+
+]]></code>
 				  </content>
 			  </step>
 			  <step>
@@ -61,17 +148,51 @@ _trader.Connect();</code>
 						  Set up the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> strategy
 						  (filling the range of volatility, as well as the creation of the order, wherethrough the required volume and quoting direction are specified):
 					  </para>
-					  <code><![CDATA[// quoting 20 long option contacts
-var quoting = new VolatilityQuotingStrategy(
-		new Range<decimal>(this.VolatilityMin.Text.To<decimal>(), this.VolatilityMax.Text.To<decimal>()),
-		OrderDirections.Buy, 20)
+					  <code><![CDATA[
+private void StartClick(object sender, RoutedEventArgs e)
 {
-	// order size on order book will be always 1 contact (to hide a real size)
-	Volume = 1,
-	Security = option,
-	Portfolio = this.Portfolio.SelectedPortfolio,
-	Trader = _trader,
-};]]></code>
+	var option = SelectedOption;
+
+	// create DOM window
+	var wnd = new QuotesWindow { Title = option.Name };
+	wnd.Init(option);
+
+	// create delta hedge strategy
+	var hedge = new DeltaHedgeStrategy
+	{
+		Security = option.GetUnderlyingAsset(Connector),
+		Portfolio = Portfolio.SelectedPortfolio,
+		Connector = Connector,
+	};
+
+	// create option quoting for 20 contracts
+	var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
+			new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
+	{
+		// working size is 1 contract
+		Volume = 1,
+		Security = option,
+		Portfolio = Portfolio.SelectedPortfolio,
+		Connector = Connector,
+	};
+
+	// link quoting and hending
+	hedge.ChildStrategies.Add(quoting);
+
+	// start henging
+	hedge.Start();
+
+	wnd.Closed += (s1, e1) =>
+	{
+		// force close all strategies while the DOM was closed
+		hedge.Stop();
+	};
+
+	// show DOM
+	wnd.Show();
+}
+
+]]></code>
 				  </content>
 			  </step>
 			  <step>
@@ -79,7 +200,7 @@ var quoting = new VolatilityQuotingStrategy(
 					  <para>
 						  The quoting start:
 					  </para>
-					  <code language="C#">quoting.Start();</code>
+					  <code language="C#">hedge.Start();</code>
 				  </content>
 			  </step>
 			  <step>
@@ -89,13 +210,12 @@ var quoting = new VolatilityQuotingStrategy(
 						  of volatility through the use of the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,System.DateTimeOffset,System.Decimal,System.Decimal)</codeEntityReference>
 						  method:
 					  </para>
-					  <code language="C#"><![CDATA[var ivDepth = _depth.ImpliedVolatility();
-
-this.GuiAsync(() =>
+					  <code language="C#"><![CDATA[
+private void OnQuotesChanged()
 {
-	this.Quotes.Clear();
-	this.Quotes.AddRange(ivDepth.Select(q => new IVQuote(q)));
-});]]></code>
+    DepthCtrl.UpdateDepth(_depth.ImpliedVolatility(Connector, Connector, Connector.CurrentTime));
+}
+]]></code>
 					  <mediaLink>
 						  <image placement="center" xlink:href="sample_quote_iv" />
 					  </mediaLink>
@@ -106,7 +226,7 @@ this.GuiAsync(() =>
 					  <para>
 						  The quoting ending and the strategy stop:
 					  </para>
-					  <code>quoting.Stop();</code>
+					  <code>hedge.Stop();</code>
 				  </content>
 			  </step>
 		  </steps>

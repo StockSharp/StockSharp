@@ -36,14 +36,14 @@ private void NewOrderClick(object sender, RoutedEventArgs e)
 {
 	var newOrder = new OrderWindow
 	{
-		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		SecurityProvider = MainWindow.Instance.Trader,
-		MarketDataProvider = MainWindow.Instance.Trader,
-		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Order = new Order { Security = SelectedSecurity },
+		SecurityProvider = Trader,
+		MarketDataProvider = Trader,
+		Portfolios = new PortfolioDataSource(Trader),
 	};
 
 	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+		Trader.RegisterOrder(newOrder.Order);
 }
               		
 	  				]]>

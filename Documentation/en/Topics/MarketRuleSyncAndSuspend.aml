@@ -108,7 +108,7 @@ class FirstStrategy : Strategy
 				.Apply(this);
 
 			Security
-				.WhenNewTrades()
+				.WhenNewTrade()
 				.Do(NewTrade)
 				.Apply(this);
 		});

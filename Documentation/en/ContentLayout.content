@@ -3,7 +3,7 @@
   <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" title="About StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="StockSharp Licensing" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Reference materials" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
@@ -61,7 +61,7 @@
       </Topic>
       <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" />
     </Topic>
-    <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Connectors (Forex)">
+    <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" isExpanded="true" title="Connectors (Forex)">
       <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
         <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Getting started" />
         <Topic id="c6236e85-fb9e-4c4d-9585-6b4b687e8b35" visible="True" title="Stop orders" />
@@ -95,13 +95,14 @@
       <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Reconnections" />
       <Topic id="08b8a9ca-6658-4088-b6b8-8715b12732ab" visible="True" title="RSS" />
     </Topic>
-    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Orders management">
+    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" isExpanded="true" title="Orders management">
       <Topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" visible="True" title="Getting orders information" />
       <Topic id="41a3b3e7-a7cd-43ba-842f-13f6a7199d26" visible="True" title="Orders states" />
       <Topic id="6267fec7-64e5-4488-ba08-c72cf61fcc9e" visible="True" title="Order cancel" />
       <Topic id="10c62aa1-5e15-4b3e-8b68-e55c2f055c32" visible="True" title="Orders mass cancel" />
       <Topic id="4b427409-9aa9-41d3-bb97-98745d1bba8e" visible="True" title="Orders replacement" />
       <Topic id="cbce846a-dd31-4baa-ba77-2bac3eb38b2f" visible="True" title="Transaction number" />
+      <Topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" visible="True" isSelected="true" title="Order registration" />
     </Topic>
     <Topic id="37559237-e20a-477e-93bd-82bcad4c0243" visible="True" title="Instruments">
       <Topic id="34a9c518-60ca-45c0-a118-5e2e42165efa" visible="True" title="Instrument identifier" />
@@ -231,7 +232,7 @@
     <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Arithmetic operations" />
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Currency converter" />
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Sources setting up">
@@ -330,7 +331,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" isSelected="true" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Установка" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Быстрый запуск" />
     <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" isExpanded="true" title="Интерфейс программы">

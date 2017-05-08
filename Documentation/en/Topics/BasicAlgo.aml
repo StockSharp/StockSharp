@@ -46,7 +46,7 @@ var someOrders = new List<Order>();
 // fill the collection by own orders
 
 // to get the best big price
-Console.WriteLine(trader.GetMarketDepth(someSecurity).GetFilteredQuotes(OrderDirections.Buy, someOrders, null).Max(q => q.Price));]]></code>
+Console.WriteLine(trader.GetMarketDepth(someSecurity).GetFilteredQuotes(Sides.Buy, someOrders, null).Max(q => q.Price));]]></code>
 			  </content>
 		  </step>
 		  <!--<step>
@@ -83,8 +83,9 @@ Console.WriteLine(someSecurity.ShrinkPrice(13453.65342));</code>
 				  <para>
 					  To get the position on closed trades through the <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetPosition</codeEntityReference> method.
 					  There is the calculation on a trading strategy - the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class object in the example:</para>
-				  <code language="C#">Strategy someStrategy = ...;
-Console.WriteLine(someStrategy.Trades.GetPosition());</code>
+				  <code language="C#">
+Console.WriteLine(_trader.GetPosition(Portfolio,Security, clientCode, depoName);
+</code>
 			  </content>
 		  </step>
 		  <!--step>

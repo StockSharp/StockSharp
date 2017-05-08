@@ -52,15 +52,12 @@
               </code>
               <code title="C#" language="C#">
               		<![CDATA[
-private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+private void TraderOnMarketDepthChanged(MarketDepth depth)
 {
-	foreach (var depth in depths)
-	{
-		var wnd = _quotesWindows.TryGetValue(depth.Security);
+	var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-		if (wnd != null)
-			wnd.DepthCtrl.UpdateDepth(depth);
-	}
+	if (wnd != null)
+		wnd.DepthCtrl.UpdateDepth(depth);
 }
 	  				]]>
              </code>
