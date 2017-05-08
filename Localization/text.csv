@@ -4536,6 +4536,8 @@ Milliseconds;Milliseconds;Миллисекунды
 SpbEx;SPB Exchange;SPB Exchange
 ItemsCountParam;Items count: {0};Количество элементов: {0}
 SimulatorSettings;Simulator settings;Настройки эмуляции
+SecurityIsUsedInRunningStrategy;The security is used in the running strategy.;Инструмент используется в запущенной стратегии.
+SecurityIsUsedInSomeStrategies;The security is used in some strategies. Remove anyway?;Инструмент используется в некоторых стратегиях. Удалить?
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -45026,5 +45026,25 @@ namespace StockSharp.Localization
 		/// Simulator settings
 		/// </summary>
 		public static string SimulatorSettings => GetString(SimulatorSettingsKey);
+
+		/// <summary>
+		/// The security is used in the running strategy.
+		/// </summary>
+		public const string SecurityIsUsedInRunningStrategyKey = nameof(SecurityIsUsedInRunningStrategy);
+
+		/// <summary>
+		/// The security is used in the running strategy.
+		/// </summary>
+		public static string SecurityIsUsedInRunningStrategy => GetString(SecurityIsUsedInRunningStrategyKey);
+
+		/// <summary>
+		/// The security is used in some strategies. Remove anyway?
+		/// </summary>
+		public const string SecurityIsUsedInSomeStrategiesKey = nameof(SecurityIsUsedInSomeStrategies);
+
+		/// <summary>
+		/// The security is used in some strategies. Remove anyway?
+		/// </summary>
+		public static string SecurityIsUsedInSomeStrategies => GetString(SecurityIsUsedInSomeStrategiesKey);
 	}
 }
