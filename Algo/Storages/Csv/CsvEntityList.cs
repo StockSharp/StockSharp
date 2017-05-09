@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Save object into storage.
 		/// </summary>
 		/// <param name="entity">Trade object.</param>
-		public void Save(T entity)
+		public virtual void Save(T entity)
 		{
 			var item = _items.TryGetValue(GetNormalizedKey(entity));
 
