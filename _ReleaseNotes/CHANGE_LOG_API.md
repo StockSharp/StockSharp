@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) ExchangeBoard. Currenex.
+
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
 * (feature) Remote storage. Manage server.

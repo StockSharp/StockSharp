@@ -3000,5 +3000,14 @@ namespace StockSharp.BusinessEntities
 			Code = "BATS",
 			Exchange = Exchange.Cbot,
 		};
+
+		/// <summary>
+		/// Information about board BATS.
+		/// </summary>
+		public static ExchangeBoard Currenex { get; } = new ExchangeBoard
+		{
+			Code = "CURRENEX",
+			Exchange = Exchange.Currenex,
+		};
 	}
 }

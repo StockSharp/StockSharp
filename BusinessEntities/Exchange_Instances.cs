@@ -644,5 +644,16 @@ namespace StockSharp.BusinessEntities
 		/// Information about Icbit.
 		/// </summary>
 		public static Exchange Icbit { get; }
+
+		/// <summary>
+		/// Information about Currenex.
+		/// </summary>
+		public static Exchange Currenex { get; } = new Exchange
+		{
+			Name = "CURRENEX",
+			EngName = "Currenex",
+			RusName = "Currenex",
+			CountryCode = CountryCodes.US,
+		};
 	}
 }
