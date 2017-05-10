@@ -445,6 +445,53 @@
             Время расчёта курса валюты платежа.
             </summary>
     </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaForecastColumns">
+      <summary>
+            Поток FORTS_FORECASTIM_REPL - Прогноз рисков после возможной раздвижки.
+            Таблица part_forecast: Прогноз по объему свободных средств, блокировок и залогов для БФ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.ClientCode">
+      <summary>
+            Код БФ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.MoneyFree">
+      <summary>
+            Свободно денег.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.MoneyBlocked">
+      <summary>
+            Заблокировано денег.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.PledgeFree">
+      <summary>
+            Свободно залогов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.PledgeBlocked">
+      <summary>
+            Заблокировано залогов.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaForecastSaColumns">
+      <summary>
+            Поток FORTS_FORECASTIM_REPL - Прогноз рисков после возможной раздвижки.
+            Таблица part_sa_forecast: Прогноз объема свободных средств для РК.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastSaColumns.SettlementAccount">
+      <summary>
+            Расчетный код.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastSaColumns.MoneyFree">
+      <summary>
+            Свободно денег.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns">
       <summary>
             FORTS_FUTINFO_REPL - Фьючерсы: справочная и сессионная информация.
@@ -3166,6 +3213,16 @@
             Колонки таблицы курсов валют.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.Forecast">
+      <summary>
+            Колонки таблицы прогнозов объема свободных средств для РК.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.ForecastSa">
+      <summary>
+            Колонки таблицы прогнозов по объему свободных средств, блокировок и залогов для БФ.
+            </summary>
+    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxTradesSpot">
       <summary>
             Колонки таблицы со всеми сделками на фондовом рынке.
@@ -4340,6 +4397,16 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.CurrencyOnline">
       <summary>
             Таблица курсов валют.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Forecast">
+      <summary>
+            Прогноз объема свободных средств для РК.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.ForecastSa">
+      <summary>
+            Прогноз по объему свободных средств, блокировок и залогов для БФ.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxTradesSpot">
@@ -6567,6 +6634,11 @@
     <member name="F:StockSharp.Plaza.PlazaStreamRegistry.Rate">
       <summary>
             Курсы валют онлайн.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.PlazaStreamRegistry.Forecast">
+      <summary>
+            Прогноз рисков после возможной раздвижки.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.PlazaStreamRegistry.McxTradesSpot">

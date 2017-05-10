@@ -6,6 +6,7 @@ StockSharp API Change log
 * (bug) SecurityCsvList. Save exchange board info.
 * (bug) SecurityNativeIdMessageAdapter. Suspended messages fix.
 * (bug) Samples. Order book fetching small fix.
+* (feature) Plaza. Forecast IM support.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
