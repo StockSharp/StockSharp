@@ -59,6 +59,11 @@ P:StockSharp.Xaml.DataSourcePanel.SelectedItem/summary;DocStr9359
 P:StockSharp.Xaml.DataSourcePanel.Configure/summary;DocStr9360
 M:StockSharp.Xaml.DataSourcePanel.#ctor/summary;DocStr1
 M:StockSharp.Xaml.DataSourcePanel.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.ExtendedInfoStorageSelectWindow/summary;DocStr9769
+P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.Storages/summary;DocStr9770
+P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.SelectedStorage/summary;DocStr9771
+M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.#ctor/summary;DocStr1
+M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.GridControl.SearchBox/summary;DocStr9583
 F:StockSharp.Xaml.GridControl.SearchBox.ItemsPanelProperty/summary;DocStr29
 P:StockSharp.Xaml.GridControl.SearchBox.ItemsPanel/summary;DocStr8459
@@ -232,6 +237,7 @@ M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{Sys
 M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})/param/delay;Delay
 M:StockSharp.Xaml.SuggestionsWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityLookupWindow/summary;DocStr9348
+F:StockSharp.Xaml.SecurityLookupWindow.OkCommand/summary;DocStr8459
 M:StockSharp.Xaml.SecurityLookupWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.SecurityLookupWindow.ShowAllOption/summary;DocStr9362
 P:StockSharp.Xaml.SecurityLookupWindow.ShowDataSourcePanel/summary;DocStr9363
@@ -572,6 +578,8 @@ P:StockSharp.Xaml.NewsGrid.SelectedNews/summary;DocStr8265
 P:StockSharp.Xaml.NewsGrid.NewsProvider/summary;DocStr8921
 M:StockSharp.Xaml.NewsGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.OrderConditionalWindow/summary;DocStr8266
+F:StockSharp.Xaml.OrderConditionalWindow.ConditionalEditorModeProperty/summary;DocStr29
+P:StockSharp.Xaml.OrderConditionalWindow.OnlyEdit/summary;DocStr9772
 M:StockSharp.Xaml.OrderConditionalWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.OrderConditionalWindow.Portfolios/summary;DocStr8362
 P:StockSharp.Xaml.OrderConditionalWindow.SecurityProvider/summary;DocStr972

@@ -310,6 +310,34 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.ExtendedInfoStorageSelectWindow">
+      <summary>
+            The extended storage selection window.
+            </summary>
+      <summary>
+            ExtendedInfoStorageSelectWindow
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.Storages">
+      <summary>
+            Available storages.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.SelectedStorage">
+      <summary>
+            Selected storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExtendedInfoStorageSelectWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.GridControl.SearchBox">
       <summary>
             The search box for grid control column chooser.
@@ -1115,6 +1143,10 @@
       <summary>
             SecurityLookupWindow
             </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityLookupWindow.OkCommand">
+      <summary>
+      </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityLookupWindow.#ctor">
       <summary>
@@ -2718,6 +2750,16 @@
             </summary>
       <summary>
             OrderConditionalWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.OrderConditionalWindow.ConditionalEditorModeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.OrderConditionalWindow.OnlyEdit" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderConditionalWindow.OnlyEdit">
+      <summary>
+            Only edit mode.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.OrderConditionalWindow.#ctor">
