@@ -98,8 +98,10 @@ base.RegisterOrder(order);</code>
 		<para>
 		  to:
 		</para>
-		<code language="C#">var strategy = new MarketQuotingStrategy(order, new Unit());
-base.ChildStrategies.Add(strategy);</code>
+<code language="C#">
+var strategy = new MarketQuotingStrategy(direction, volume);
+ChildStrategies.Add(strategy);
+</code>
 		<!--para>
 		  После этого <codeEntityReference>T:StockSharp.Algo.Strategies.RealTimeStrategyManager</codeEntityReference> выполнит до конца метод SmaStrategy.OnProcess
 		  и уже после этого будет вызывать другой метод – <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.QuotingStrategy.OnProcess</codeEntityReference>.

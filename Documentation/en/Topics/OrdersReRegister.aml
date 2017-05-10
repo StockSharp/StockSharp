@@ -60,8 +60,7 @@
 	var newOrder = registeredOrder.Clone();
 
 	// changing the price to be the best on order book
-	newOrder.Price = (registeredOrder.Direction == OrderDirections.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
-
+	    newOrder.Price = (registeredOrder.Direction == Sides.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
 	// sending request the replace our order with new price
 	trader.ReRegisterOrder(registeredOrder, newOrder);
 }]]></code>

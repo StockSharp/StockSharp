@@ -16,7 +16,7 @@
 				  - the instrument change event rule.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrades(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrade(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
 				  - the rule when instrument has the new trade occurrence event.
 			  </listItem>
 			  <listItem>
@@ -243,7 +243,7 @@
 		  </para>
 		  <list class="bullet">
 		  	  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenNewMyTrades(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenNewMyTrade(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
 				  - the rule for the event of the strategy new trades occurrence.
 			  </listItem>
 			  <listItem>
@@ -348,50 +348,50 @@
 			<![CDATA[		
 private sealed class PortfolioRule : MarketRule<Portfolio, Portfolio>
 {
-	private readonly Func<Portfolio, bool> _changed;
-	private readonly Portfolio _portfolio;
-	private readonly IConnector _connector;
+    private readonly Func<Portfolio, bool> _changed;
+    private readonly Portfolio _portfolio;
+    private readonly IConnector _connector;
 
-	public PortfolioRule(Portfolio portfolio, IConnector connector, Func<Portfolio, bool> changed) : base(portfolio)
-	{
-		if (portfolio == null)
-			throw new ArgumentNullException("portfolio");
+    public PortfolioRule(Portfolio portfolio, IConnector connector, Func<Portfolio, bool> changed) : base(portfolio)
+    {
+        if (portfolio == null)
+            throw new ArgumentNullException("portfolio");
 
-		if (changed == null)
-			throw new ArgumentNullException("changed");
+        if (changed == null)
+            throw new ArgumentNullException("changed");
 
-		_changed = changed;
+        _changed = changed;
 
-		_portfolio = portfolio;
-		_connector = connector;
-		_connector.PortfoliosChanged += OnPortfoliosChanged;
-	}
+        _portfolio = portfolio;
+        _connector = connector;
+        _connector.PortfolioChanged += OnPortfolioChanged;
+    }
 
-	private void OnPortfoliosChanged(IEnumerable<Portfolio> portfolios)
-	{
-		if (portfolios.Contains(_portfolio) && _changed(_portfolio))
-			Activate(_portfolio);
-	}
+    private void OnPortfolioChanged(Portfolio portfolio)
+    {
+        if ((portfolio==_portfolio) && _changed(_portfolio))
+            Activate(_portfolio);
+    }
 
-	protected override void DisposeManaged()
-	{
-		_connector.PortfoliosChanged -= OnPortfoliosChanged;
-		base.DisposeManaged();
-	}
+    protected override void DisposeManaged()
+    {
+        _connector.PortfolioChanged -= OnPortfolioChanged;
+        base.DisposeManaged();
+    }
 }
-		
+
 public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio portfolio, Unit money)
 {
-	if (portfolio == null)
-		throw new ArgumentNullException("portfolio");
+    if (portfolio == null)
+        throw new ArgumentNullException("portfolio");
 
-	if (money == null)
-		throw new ArgumentNullException("money");
+    if (money == null)
+        throw new ArgumentNullException("money");
 
-	var finishMoney = money.Type == UnitTypes.Limit ? money : portfolio.CurrentValue + money;
+    var finishMoney = money.Type == UnitTypes.Limit ? money : portfolio.CurrentValue + money;
 
-	return new PortfolioRule(portfolio, pf => pf.CurrentValue > finishMoney)
-	{
+    return new PortfolioRule(portfolio, pf => pf.CurrentValue > finishMoney)
+    {
 		Name = "Portfolio {0} balance increased above {1}".Put(portfolio, finishMoney)
 	};
 }

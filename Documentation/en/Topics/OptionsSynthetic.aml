@@ -21,7 +21,7 @@
 var depth = trader.GetMarketDepth(option);
 
 // calc theoretical price for 100 contracts
-var trades = depth.GetTheoreticalTrades(OrderDirections.Buy, 100);
+var trades = depth.GetTheoreticalTrades(Sides.Buy, 100);
 
 // calc matched size
 var matchedVolume = trades.Sum(t => t.Trade.Volume);
@@ -31,7 +31,7 @@ trader.RegisterOrder(new Order
 {
 	Security = option,
 	Volume = matchedVolume,
-	Direction = OrderDirections.Buy,
+	Direction = Sides.Buy,
 	// using max price
 	Price = trades.Max(t => t.Trade.Price),
 });

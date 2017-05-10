@@ -7,10 +7,48 @@
 		<para>And its implementation <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - the index built from instruments with the use of weighting factors.</para>
 		<para>For example, when you want to build a spread between the two instruments ESM5 and APM5.</para>
 	</introduction>
+<procedure>
+			<title>Создание ExpressionIndexSecurity</title>
+				<steps class="ordered">
+					<step>
+						<content>
+<para>Объявить составные инструменты, которые будут входить в <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
+и сам <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
+            				<code language="C#">
+            				<![CDATA[
+private Security _instr1;
+private Security _instr2;
 
+private ExpressionIndexSecurity _indexInstr;
+
+private const string _secCode1 = "GZM5";
+private const string _secCode2 = "LKM5";
+							]]>
+							</code>
+						</content>
+					</step>
+
+					<step>
+						<content>
+<para>Создать <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
+            				<code language="C#">
+            				<![CDATA[
+_indexInstr = new ExpressionIndexSecurity
+{
+    Id = "IndexInstr@FORTS",
+    Expression = "GZM5@FORTS/LKM5@FORTS",
+    Board = ExchangeBoard.Forts,
+};
+							]]>
+							</code>						
+						</content>
+					</step>
+				</steps>
+		</procedure>
 		<procedure>
 			<title>WeightedIndexSecurity creating</title>
 				<steps class="ordered">
+				
 					<step>
 						<content>
 							<para>To declare the compound instruments that will be included in <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>

@@ -20,27 +20,30 @@
 		
 		<code language="C#">
 		<![CDATA[
-private ChartArea _area;
-private ChartCandleElement _candlesElem;
-
 // _chart - StockSharp.Xaml.Chart
 // a new chart area
-_area = new ChartArea();
-_chart.Areas.Add(_area);
+_private ChartArea _areaComb;
+private ChartCandleElement _candleElement;
+...
+var series = new CandleSeries(typeof(TimeFrameCandle),_security,TimeSpan.FromMinutes(_timeframe));
 
-// chart candle element for draw candles
-_candlesElem = new ChartCandleElement();
-_area.Elements.Add(_candlesElem);
+_candleElement = new ChartCandleElement() { FullTitle = "Candles" };
+Chart.AddElement(_areaComb, _candleElement, series);
 
 ...
 		
-_candleManager.Processing += DrawCandle;
+candleManager.Processing += CandleManagerOnProcessing;
 
 ...
 
-private void DrawCandle(CandleSeries series, Candle candle)
+private void CandleManagerOnProcessing(CandleSeries candleSeries, Candle candle)
 {
-	if (candle.State == CandleStates.Finished) this.GuiAsync(() => _chart.Draw(_candlesElem, candle) );
+    if (candle.State == CandleStates.Finished) 
+    {
+       var chartData = new ChartDrawData();
+       chartData.Group(candle.OpenTime).Add(_candleElement, candle);
+       Chart.Draw(chartData);
+    }
 }
 		]]>
 		</code>	

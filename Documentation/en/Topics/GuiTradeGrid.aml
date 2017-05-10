@@ -22,93 +22,97 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/SampleOEC</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink>
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
-<Window x:Class="Sample.TradesWindow"
+<Window x:Class="SampleOEC.MyTradesWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
-    Title="{x:Static loc:LocalizedStrings.Str985}" Height="284" Width="544">
-	<xaml:TradeGrid x:Name="TradeGrid" x:FieldModifier="public" />
+    Title="{x:Static loc:LocalizedStrings.MyTrades}" Height="284" Width="644">
+	<xaml:MyTradeGrid x:Name="TradeGrid" x:FieldModifier="public" />
 </Window>
 	  				]]>
               </code>
               <code title="C#" language="C#">
               		<![CDATA[
-private void ConnectClick(object sender, RoutedEventArgs e)
+.......................................
+
+		// create connector
+Trader = new OpenECryTrader
 {
-	if (!_isConnected)
-	{
+	//UseNativeReconnect = false,
+	EnableOECLogging = true
+};
 
-        .......................................
+Trader.Restored += () => this.GuiAsync(() =>
+{
+	// update gui labes
+	ChangeConnectStatus(true);
+	MessageBox.Show(this, LocalizedStrings.Str2958);
+});
 
-		if (Trader == null)
-		{
-			// создаем подключение
-			Trader = isLua
-				? new QuikTrader
-				{
-					LuaFixServerAddress = Address.Text.To<EndPoint>(),
-					LuaLogin = Login.Text,
-					LuaPassword = Password.Password.To<SecureString>()
-				}
-				: new QuikTrader(Path.Text) { IsDde = true };
+// subscribe on connection successfully event
+Trader.Connected += () =>
+{
+	// set flag (connection is established)
+	_isConnected = true;
 
-            .......................................			
-			
-			// Добавляем инструменты в компонент SecurityPicker
-			Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-			
-			// Добавляем свои сделки в таблицу MyTradeGrid
-			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-			
-			// Добавляем сделки в таблицу TradeGrid
-			Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-			
-			// Добавляем заявки в таблицу OrderGrid
-			Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-			
-			// Добавляем стоп-заявки в таблицу OrderGrid
-			Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
-			
-			Trader.OrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-			Trader.OrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-			Trader.StopOrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-			Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-			
-			
-			// Добавляем портфели в таблицу PortfolioGrid
-			Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-			
-			// Добавляем позиции в таблицу PortfolioGrid
-			Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+	// update gui labes
+	this.GuiAsync(() => ChangeConnectStatus(true));
 
-			// устанавливаем поставщик маркет-данных для компонента SecurityPicker
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+	// subscribe on news
+	Trader.RegisterNews();
+};
 
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
+// subscribe on connection error event
+Trader.ConnectionError += error => this.GuiAsync(() =>
+{
+	// update gui labes
+	ChangeConnectStatus(false);
 
-		Trader.Connect();
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);	
+});
 
-		_isConnected = true;
-		ConnectBtn.Content = LocalizedStrings.Disconnect;
-	}
-	else
-	{
-		Trader.Disconnect();
+Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-		_isConnected = false;
-		ConnectBtn.Content = LocalizedStrings.Connect;
-	}
+// subscribe on error event
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+Trader.NewPortfolio += portfolio =>
+{
+	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+
+	// subscribe on portfolio updates
+	Trader.RegisterPortfolio(portfolio);
+};
+Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+
+// subscribe on error of order registration event
+Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+// subscribe on error of order cancelling event
+Trader.OrderCancelFailed += OrderFailed;
+
+// subscribe on error of stop-order registration event
+Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+// subscribe on error of stop-order cancelling event
+Trader.StopOrderCancelFailed += OrderFailed;
+
+Trader.MassOrderCancelFailed += (transId, error) =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
+Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
+.......................................
 }
               		
 	  				]]>

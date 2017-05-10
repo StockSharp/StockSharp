@@ -14,14 +14,14 @@
   	  			<listItem>The <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Code</codeEntityReference> property which specifies the instrument name mask.</listItem>
   	  			<listItem>The <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> property which specifies the instrument type.</listItem>
   	  		</list>
-			All instruments found will be returned through the <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference> event.
+			All instruments found will be returned through the <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference> event.
 		</listItem>
   	  	<listItem>
   	  		A complete instruments list getting from the <token>iqfeed</token> site. In order to get the complete list of instruments, which you can use to receive data through the
   	  		<token>iqfeed</token>, you must set the <codeEntityReference qualifyHint="true">P:StockSharp.IQFeed.IQFeedTrader.IsDownloadSecurityFromSite</codeEntityReference>
   	  		property before the data export starts. Before getting the instruments list it is also necessary to install the <codeEntityReference qualifyHint="true">P:StockSharp.IQFeed.IQFeedTrader.SecurityTypesFilter</codeEntityReference>
   	  		filter, to get only the necessary instruments types. All the instruments retrieved from the archive on the <token>iqfeed</token> site, will be returned through
-  	  		<codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference> event.</listItem>
+  	  		<codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference> event.</listItem>
 	  </list>
     </introduction>
     <relatedTopics>

@@ -35,7 +35,7 @@
 		  <para>
 			  To cancel all long stop orders:
 		  </para>
-		  <code language="C#">trader.CancelOrders(true, null, OrderDirections.Buy, null, null);</code>
+		  <code language="C#">trader.CancelOrders(true, null, Sides.Buy, null, null);</code>
       </content>
     </section>
     

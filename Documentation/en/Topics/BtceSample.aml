@@ -54,43 +54,32 @@ Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Data processing error"));
 
 // new securities received
-Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 
 // new own trades received
-Trader.NewMyTrades += trades => this.GuiAsync(() => _myTradesWindow.Trades.AddRange(trades));
+Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
 
 // new anonymous trades received
-Trader.NewTrades += trades => this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
+Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
 
 // new orders received
-Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
-
-// new stop-orders received
-Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
+Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
 
 // new portofolios (=accounts) received
-Trader.NewPortfolios += portfolios =>
+Trader.NewPortfolio += portfolio =>
 {
 	// subscribe on portfolio updates
-    portfolios.ForEach(Trader.RegisterPortfolio);
-    
-    _portfoliosWindow.Portfolios.AddRange(portfolios);
-};
+	Trader.RegisterPortfolio(portfolio);
 
-// new positions received
-Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
+	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+};
+Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 // subscribe on error of order registration event
-Trader.OrdersRegisterFailed += OrdersFailed;
-
+Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 // subscribe on error of order cancelling event
-Trader.OrdersCancelFailed += OrdersFailed;
-
-// subscribe on error of stop-order registration event
-Trader.StopOrdersRegisterFailed += OrdersFailed;
-
-// subscribe on error of stop-order cancelling event
-Trader.StopOrdersCancelFailed += OrdersFailed;         
+Trader.OrderCancelFailed += OrderFailed;
+      
 							]]>
 					</code>						
 				</content>
@@ -120,7 +109,7 @@ Trader.Connect();
 									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 							</listItem>
 							<listItem>
-								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
+								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
 									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 							</listItem>
 							<listItem>
@@ -146,18 +135,20 @@ Trader.Connect();
             				<![CDATA[
 private void QuotesClick(object sender, RoutedEventArgs e)
 {
-	var security = SecurityPicker.SelectedSecurity;
 	var trader = MainWindow.Instance.Trader;
 
-	if (trader.RegisteredSecurities.Contains(security))
+	foreach (var security in SecurityPicker.SelectedSecurities)
 	{
-		trader.UnRegisterSecurity(security);
-		trader.UnRegisterTrades(security);
-	}
-	else
-	{
-		trader.RegisterSecurity(security);
-		trader.RegisterTrades(security);
+		if (trader.RegisteredSecurities.Contains(security))
+		{
+			trader.UnRegisterSecurity(security);
+			trader.UnRegisterTrades(security);
+		}
+		else
+		{
+			trader.RegisterSecurity(security);
+			trader.RegisterTrades(security);
+		}
 	}
 }
 							]]>
@@ -174,27 +165,30 @@ private void DepthClick(object sender, RoutedEventArgs e)
 {
 	var trader = MainWindow.Instance.Trader;
 
-	var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+	foreach (var security in SecurityPicker.SelectedSecurities)
 	{
-		// create order book window
-		trader.RegisterMarketDepth(security);
+		var window = _quotesWindows.SafeAdd(security, s =>
+		{
+			trader.RegisterMarketDepth(security);
+			var wnd = new QuotesWindow
+			{
+				Title = security.Id + " " + LocalizedStrings.MarketDepth
+			};
+			wnd.MakeHideable();
+			return wnd;
+		});
 
-		// create order book window
-		var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-		wnd.MakeHideable();
-		return wnd;
-	});
+		if (window.Visibility == Visibility.Visible)
+			window.Hide();
+		else
+			window.Show();
 
-	if (window.Visibility == Visibility.Visible)
-		window.Hide();
-	else
-		window.Show();
-
-	if (!_initialized)
-	{
-		TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
-		trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
-		_initialized = true;
+		if (!_initialized)
+		{
+			TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
+			trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+			_initialized = true;
+		}
 	}
 }
 							]]>
@@ -215,7 +209,9 @@ private void NewOrderClick(object sender, RoutedEventArgs e)
 	var newOrder = new OrderWindow
 	{
 		Order = new Order { Security = SecurityPicker.SelectedSecurity },
-		Connector = MainWindow.Instance.Trader,
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
 	};
 
 	if (newOrder.ShowModal(this))

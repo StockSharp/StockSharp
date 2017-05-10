@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
@@ -21,9 +21,6 @@
 		
 		<code language="C#">
 		<![CDATA[
-private ChartArea _area;
-private ChartCandleElement _candlesElem;
-...
 // CandlesChart - StockSharp.Xaml.Chart
 // Создание области графика
 private ChartArea _areaComb;

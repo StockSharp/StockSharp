@@ -48,46 +48,43 @@
               		<![CDATA[
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
-	if (!_isConnected)
-	{
-		if (Trader == null)
-		{
-			// создаем подключение
-			Trader = isLua
-				? new QuikTrader
-				{
-					LuaFixServerAddress = Address.Text.To<EndPoint>(),
-					LuaLogin = Login.Text,
-					LuaPassword = Password.Password.To<SecureString>()
-				}
-				: new QuikTrader(Path.Text) { IsDde = true };
-				
-			.........................................................	
+    if (!_isConnected)
+    {
+        if (Trader == null)
+        {
+            // создаем подключение
+            Trader = new QuikTrader
+            {
+                LuaFixServerAddress = Address.Text.To<EndPoint>(),
+                LuaLogin = Login.Text,
+                LuaPassword = Password.Password.To<SecureString>(),
+                LogLevel = LogLevels.Debug
+            };
 
+            .........................................................    
 
-			Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-			Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+            Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
+            Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
-			// устанавливаем поставщик маркет-данных
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+            _securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
+            ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
+                ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
+                    ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
+        }
 
-		Trader.Connect();
+        Trader.Connect();
 
-		_isConnected = true;
-		ConnectBtn.Content = LocalizedStrings.Disconnect;
-	}
-	else
-	{
-		Trader.Disconnect();
+        _isConnected = true;
+        ConnectBtn.Content = LocalizedStrings.Disconnect;
+    }
+    else
+    {
+        Trader.Disconnect();
 
-		_isConnected = false;
-		ConnectBtn.Content = LocalizedStrings.Connect;
-	}
+        _isConnected = false;
+        ConnectBtn.Content = LocalizedStrings.Connect;
+    }
 }
 	  				]]>
              </code>

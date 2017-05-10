@@ -6,7 +6,7 @@
 		
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> - the new order received event.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> - the new order received event.
 			</listItem>
 			<listItem>
 				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersCancelFailed</codeEntityReference> - the event on errors related to orders cancel.
@@ -19,7 +19,7 @@
 			</listItem>
 			
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewStopOrders</codeEntityReference> - the new stop order received event.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewStopOrder</codeEntityReference> - the new stop order received event.
 			</listItem>
 			<listItem>
 				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersCancelFailed</codeEntityReference> - the event on errors related to stop orders cancelling.
@@ -47,9 +47,9 @@
 		<alert class="caution">
 			<para>
 				If at the start of the application the previously registered orders have been passed from the connector, they all passed through the
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> events, regardless of their state (except the
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> events, regardless of their state (except the
 				<codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference> state). This is because the
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> event shows the new orders receiving
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> event shows the new orders receiving
 				in the program, not the event of order successful registration.
 			</para>
 		</alert>

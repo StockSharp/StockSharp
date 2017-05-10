@@ -32,74 +32,112 @@
 						  Создание подключения к <link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" /> и запуск экспорта:
 					  </para>
 					  <code title="C#" language="C#"><![CDATA[
+private void InitConnector()
+{
+	// subscribe on connection successfully event
+	Connector.Connected += () =>
+	{
+		// update gui labels
+		this.GuiAsync(() => ChangeConnectStatus(true));
+	};
+
+	// subscribe on disconnection event
+	Connector.Disconnected += () =>
+	{
+		// update gui labels
+		this.GuiAsync(() => ChangeConnectStatus(false));
+	};
+
+	// subscribe on connection error event
+	Connector.ConnectionError += error => this.GuiAsync(() =>
+	{
+		// update gui labels
+		ChangeConnectStatus(false);
+
+		MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+	});
+
+	// fill underlying asset's list
+	Connector.NewSecurity += security =>
+	{
+		if (security.Type == SecurityTypes.Future)
+			_assets.Add(security);
+	};
+
+	Connector.SecurityChanged += security =>
+	{
+		if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
+			_isDirty = true;
+	};
+
+	// subscribing on tick prices and updating asset price
+	Connector.NewTrade += trade =>
+	{
+		if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
+			_isDirty = true;
+	};
+
+	Connector.NewPosition += position => this.GuiAsync(() =>
+	{
+		var asset = SelectedAsset;
+
+		if (asset == null)
+			return;
+
+		var assetPos = position.Security == asset;
+		var newPos = position.Security.UnderlyingSecurityId == asset.Id;
+
+		if (!assetPos && !newPos)
+			return;
+
+		if (assetPos)
+			PosChart.AssetPosition = position;
+
+		if (newPos)
+			PosChart.Positions.Add(position);
+
+		RefreshChart();
+	});
+
+	Connector.PositionChanged += position => this.GuiAsync(() =>
+	{
+		if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
+			RefreshChart();
+	});
+
+	try
+	{
+		if (File.Exists(_settingsFile))
+			Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+	}
+	catch
+	{
+	}
+}
 private void ConnectClick(object sender, RoutedEventArgs e)
 {
 	if (!_isConnected)
 	{
+		ConnectBtn.IsEnabled = false;
 
-        .......................................
+		_model.Clear();
+		_model.MarketDataProvider = Connector;
 
-		if (Trader == null)
-		{
-			// создаем подключение
-	      Trader = new QuikTrader
-	      {
-	          LuaFixServerAddress = Address.Text.To<EndPoint>(),
-	          LuaLogin = Login.Text,
-	          LuaPassword = Password.Password.To<SecureString>(),
-	          LogLevel = LogLevels.Debug
-	      };
+		ClearSmiles();
 
+		PosChart.Positions.Clear();
+		PosChart.AssetPosition = null;
+		PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
 
-            .......................................			
-			
-			// Добавляем инструменты в компонент SecurityPicker
-			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-			
-			// Добавляем свои сделки в таблицу MyTradeGrid
-			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-			
-			// Добавляем сделки в таблицу TradeGrid
-			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-			
-			// Добавляем заявки в таблицу OrderGrid
-			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-			
-			// Добавляем стоп-заявки в таблицу OrderGrid
-			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-			
-			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены ордера"));
-			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп ордера"));
-			
-			
-			// Добавляем портфели в таблицу PortfolioGrid
-			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-			
-			// Добавляем позиции в таблицу PortfolioGrid
-			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+		Portfolio.Portfolios = new PortfolioDataSource(Connector);
 
-			// устанавливаем поставщик маркет-данных для компонента SecurityPicker
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+		PosChart.MarketDataProvider = Connector;
+		PosChart.SecurityProvider = Connector;
 
-			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
-				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
-					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
-		}
-
-		Trader.Connect();
-
-		_isConnected = true;
-		ConnectBtn.Content = LocalizedStrings.Disconnect;
+		Connector.Connect();
 	}
 	else
-	{
-		Trader.Disconnect();
-
-		_isConnected = false;
-		ConnectBtn.Content = LocalizedStrings.Connect;
-	}
+		Connector.Disconnect();
 }            		
 	  				]]>
              </code>
@@ -112,16 +150,48 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 						  границ волатильности, а также создание заявки, через которую указываются требуемый объем и направление котирования):
 					  </para>
 					  <code><![CDATA[
-// создаем котирование на покупку 20-ти контрактов
-var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
-		new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
+private void StartClick(object sender, RoutedEventArgs e)
 {
-	// указываем, что котирование работает с объемом в 1 контракт
-	Volume = 1,
-	Security = option,
-	Portfolio = Portfolio.SelectedPortfolio,
-	Connector = Connector,
-};
+	var option = SelectedOption;
+
+	// create DOM window
+	var wnd = new QuotesWindow { Title = option.Name };
+	wnd.Init(option);
+
+	// create delta hedge strategy
+	var hedge = new DeltaHedgeStrategy
+	{
+		Security = option.GetUnderlyingAsset(Connector),
+		Portfolio = Portfolio.SelectedPortfolio,
+		Connector = Connector,
+	};
+
+	// create option quoting for 20 contracts
+	var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
+			new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
+	{
+		// working size is 1 contract
+		Volume = 1,
+		Security = option,
+		Portfolio = Portfolio.SelectedPortfolio,
+		Connector = Connector,
+	};
+
+	// link quoting and hending
+	hedge.ChildStrategies.Add(quoting);
+
+	// start henging
+	hedge.Start();
+
+	wnd.Closed += (s1, e1) =>
+	{
+		// force close all strategies while the DOM was closed
+		hedge.Stop();
+	};
+
+	// show DOM
+	wnd.Show();
+}
 ]]></code>
 				  </content>
 			  </step>
@@ -130,7 +200,7 @@ var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
 					  <para>
 						  Запуск котирования:
 					  </para>
-					  <code language="C#">quoting.Start();</code>
+					  <code language="C#">hedge.Start();</code>
 				  </content>
 			  </step>
 			  <step>
@@ -157,7 +227,7 @@ private void OnQuotesChanged()
 					  <para>
 						  Окончание котирования и остановка стратегии:
 					  </para>
-					  <code>quoting.Stop();</code>
+					  <code>hedge.Stop();</code>
 				  </content>
 			  </step>
 		  </steps>
