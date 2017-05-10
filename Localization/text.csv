@@ -14047,3 +14047,14 @@ DocStr9756;Default editor parts mask;Маска по умолчанию
 DocStr9759;Show parts mask;Показать маску
 DocStr9760;Information about board Arca;Информация о площадке Arca
 DocStr9761;Information about board BATS;Информация о площадке BATS
+DocStr9762;Information about Currenex;Информация о Currenex
+DocStr9763;The {0} instance;Объект {0}
+DocStr9764;All {0} columns;Все колонки {0}
+DocStr9765;Optional {0} columns;Опциональные колонки {0}
+DocStr9766;Get child elements;Получить дочерние элементы
+DocStr9767;Child elements;Дочерние элементы
+DocStr9768;The socket identifier changed event;Событие изменения идентификатор сокета
+DocStr9769;The extended storage selection window;Окно выбора хранилища расширенной информации
+DocStr9770;Available storages;Доступные хранилища
+DocStr9771;Selected storage;Выбранное хранилище
+DocStr9772;Only edit mode;Режим только для редактирования

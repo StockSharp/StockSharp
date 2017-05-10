@@ -3584,6 +3584,7 @@ P:StockSharp.Algo.SecurityNativeIdMessageAdapter.Storage/summary;DocStr9329
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.INativeIdStorage)/summary;DocStr1
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.INativeIdStorage)/param/innerAdapter;DocStr1241
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.INativeIdStorage)/param/storage;DocStr9329
+M:StockSharp.Algo.SecurityNativeIdMessageAdapter.Dispose/inheritdoc;DocStr8459
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
 M:StockSharp.Algo.SecurityNativeIdMessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46

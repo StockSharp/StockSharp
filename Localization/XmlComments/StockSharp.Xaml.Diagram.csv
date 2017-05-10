@@ -68,6 +68,8 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RemoveLink(StockSharp.Xaml.D
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RemoveLink(StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket)/param/fromSocket;DocStr9711
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RemoveLink(StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket)/param/toElement;DocStr9709
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RemoveLink(StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket)/param/toSocket;DocStr9712
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.GetElements/summary;DocStr9766
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.GetElements/returns;DocStr9767
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId(System.Nullable{System.Guid})/summary;DocStr9227
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
@@ -446,6 +448,7 @@ P:StockSharp.Xaml.Diagram.DiagramSocket.IsBreak/summary;DocStr8902
 P:StockSharp.Xaml.Diagram.DiagramSocket.IsBreakActive/summary;DocStr8903
 E:StockSharp.Xaml.Diagram.DiagramSocket.Connected/summary;DocStr8017
 E:StockSharp.Xaml.Diagram.DiagramSocket.Disconnected/summary;DocStr8018
+E:StockSharp.Xaml.Diagram.DiagramSocket.SocketIdChanged/summary;DocStr9768
 E:StockSharp.Xaml.Diagram.DiagramSocket.PropertyChanged/summary;DocStr7975
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)/summary;DocStr7970
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)/param/propertyName;DocStr2622
