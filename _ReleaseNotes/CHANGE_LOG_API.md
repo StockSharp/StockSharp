@@ -9,6 +9,7 @@ StockSharp API Change log
 * (feature) Plaza. Forecast IM support.
 * (feature) ExtendedInfoStorageSelectWindow.
 * (feature) SpbEx. AddressConfig refactoring. Xaml support.
+* (feature) IQFeed. Level1 columns. Xaml support.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

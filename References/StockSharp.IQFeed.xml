@@ -4,6 +4,26 @@
     <name>StockSharp.IQFeed</name>
   </assembly>
   <members>
+    <member name="T:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox">
+      <summary>
+            The drop-down list to select a set of fields <see cref="T:StockSharp.Messages.Level1Fields" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.SelectedFieldsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.SelectedFields" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.SelectedFields">
+      <summary>
+            The list of selected fields.
+            </summary>
+    </member>
     <member name="T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter">
       <summary>
             The messages adapter for IQFeed.
@@ -175,12 +195,27 @@
             The list of all available <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />.
             </summary>
     </member>
+    <member name="P:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Instance">
+      <summary>
+            The <see cref="T:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry" /> instance.
+            </summary>
+    </member>
     <member name="P:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Item(System.String)">
       <summary>
             To get the column by name <see cref="P:StockSharp.IQFeed.IQFeedLevel1Column.Name" />.
             </summary>
       <param name="name">Column name.</param>
       <returns>Found column. If the column does not exist then <see langword="null" /> is returned.</returns>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.AllColumns">
+      <summary>
+            All <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" /> columns.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.OptionalColumns">
+      <summary>
+            Optional <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" /> columns.
+            </summary>
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Symbol">
       <summary>
