@@ -228,6 +228,12 @@
       <param name="toElement">The destination diagram element.</param>
       <param name="toSocket">The destination socket.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.GetElements">
+      <summary>
+            Get child elements.
+            </summary>
+      <returns>Child elements.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId(System.Nullable{System.Guid})">
       <summary>
             Update <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" /> for composition elements.
@@ -1550,6 +1556,11 @@
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.Disconnected">
       <summary>
             The socket disconnection event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.SocketIdChanged">
+      <summary>
+            The socket identifier changed event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.PropertyChanged">
