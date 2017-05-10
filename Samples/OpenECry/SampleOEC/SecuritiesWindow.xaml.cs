@@ -126,11 +126,13 @@ namespace SampleOEC
 				if (window.Visibility == Visibility.Visible)
 					window.Hide();
 				else
+				{
 					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
 				if (!_initialized)
 				{
-					TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
 					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 					_initialized = true;
 				}

@@ -94,11 +94,13 @@ namespace SampleAsyncTransactions
 				if (window.Visibility == Visibility.Visible)
 					window.Hide();
 				else
+				{
 					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
 				if (!_initialized)
 				{
-					TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
 					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 					_initialized = true;
 				}
@@ -113,7 +115,7 @@ namespace SampleAsyncTransactions
 			{
 				Security = SecurityPicker.SelectedSecurity,
 				Direction = Sides.Buy,
-				Price = security.BestBid != null ? security.BestBid.Price : 1,
+				Price = security.BestBid?.Price ?? 1,
 				Volume = -1,
 				Portfolio = MainWindow.Instance.Portfolio,
 			});

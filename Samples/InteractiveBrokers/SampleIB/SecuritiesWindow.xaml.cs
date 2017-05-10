@@ -154,6 +154,7 @@ namespace SampleIB
 					Trader.RegisterMarketDepth(security);
 
 					wnd.Show();
+					wnd.DepthCtrl.UpdateDepth(Trader.GetMarketDepth(security));
 				}
 				else
 				{
@@ -166,7 +167,6 @@ namespace SampleIB
 
 				if (!_mdInitialized)
 				{
-					TraderOnMarketDepthChanged(Trader.GetMarketDepth(security));
 					Trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 					_mdInitialized = true;
 				}

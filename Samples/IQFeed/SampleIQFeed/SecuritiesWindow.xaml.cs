@@ -109,11 +109,12 @@ namespace SampleIQFeed
 				if (window.Visibility == Visibility.Visible)
 					window.Hide();
 				else
+				{
 					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
 				TryInitialize();
-
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
 			}
 		}
 
