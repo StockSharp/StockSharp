@@ -4,6 +4,8 @@ StockSharp API Change log
 * (feature) ExchangeBoard. Currenex.
 * (feature) IndexCandleBuilder. TotalVolume as extended fields.
 * (bug) SecurityCsvList. Save exchange board info.
+* (bug) SecurityNativeIdMessageAdapter. Suspended messages fix.
+* (bug) Samples. Order book fetching small fix.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
