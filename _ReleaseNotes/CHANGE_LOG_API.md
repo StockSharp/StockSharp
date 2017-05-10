@@ -10,6 +10,8 @@ StockSharp API Change log
 * (feature) ExtendedInfoStorageSelectWindow.
 * (feature) SpbEx. AddressConfig refactoring. Xaml support.
 * (feature) IQFeed. Level1 columns. Xaml support.
+* (feature) Micex TEAP. Stock27 interface.
+* (feature) Micex TEAP. Addresses design time fix.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
