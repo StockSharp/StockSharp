@@ -53,9 +53,6 @@ namespace SampleSpbEx
 			_newsWindow.MakeHideable();
 
 			Instance = this;
-
-			NetworkCfg.ItemsSource = NetworkConfig.List;
-			NetworkCfg.SelectedIndex = 0;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -175,7 +172,7 @@ namespace SampleSpbEx
 
 				Trader.Login = Login.Text;
 				Trader.Password = Password.SecurePassword;
-				Trader.Config = (NetworkConfig)NetworkCfg.SelectedItem;
+				Trader.Config = NetworkCfg.SelectedConfig;
 
 				// clear password box for security reason
 				//Password.Clear();

@@ -7,6 +7,8 @@ StockSharp API Change log
 * (bug) SecurityNativeIdMessageAdapter. Suspended messages fix.
 * (bug) Samples. Order book fetching small fix.
 * (feature) Plaza. Forecast IM support.
+* (feature) ExtendedInfoStorageSelectWindow.
+* (feature) SpbEx. AddressConfig refactoring. Xaml support.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

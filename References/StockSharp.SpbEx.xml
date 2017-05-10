@@ -4,117 +4,135 @@
     <name>StockSharp.SpbEx</name>
   </assembly>
   <members>
-    <member name="T:StockSharp.SpbEx.NetworkConfig">
+    <member name="T:StockSharp.SpbEx.SpbExAddressConfig">
       <summary>
-            NetworkConfig class
+            Network configuration.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.Test">
+    <member name="T:StockSharp.SpbEx.SpbExAddressConfig.SpbExAddressConfigGroup">
       <summary>
-            Test NetworkConfig
+            Network configuration group.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.Game">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.SpbExAddressConfigGroup.UdpA">
       <summary>
-            Game NetworkConfig
+            UDP channel A.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.Real">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.SpbExAddressConfigGroup.UdpB">
       <summary>
-            Real NetworkConfig
+            UDP channel B.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.List">
+    <member name="M:StockSharp.SpbEx.SpbExAddressConfig.SpbExAddressConfigGroup.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            List of NetworkConfig
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExAddressConfig.SpbExAddressConfigGroup.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="F:StockSharp.SpbEx.SpbExAddressConfig.Test">
+      <summary>
+            Test.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.TradesIncUdpIp1">
+    <member name="F:StockSharp.SpbEx.SpbExAddressConfig.Game">
       <summary>
-            //Trades — канал сделок, заключенных на всех торговых площадках
+            Game.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.TradesIncUdpIp2">
+    <member name="F:StockSharp.SpbEx.SpbExAddressConfig.Prod">
       <summary>
-            //Trades — канал сделок, заключенных на всех торговых площадках
+            Production.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.TradesIncUdpPort">
+    <member name="F:StockSharp.SpbEx.SpbExAddressConfig.All">
       <summary>
-            //Trades — канал сделок, заключенных на всех торговых площадках
+            All available.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.BestPricesIncUdpIp1">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.InstrumentsIncremental">
       <summary>
-            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            Instruments (incremental).
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.BestPricesIncUdpIp2">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.InstrumentsSnapshot">
       <summary>
-            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            Instruments (snapshot).
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.BestPricesIncUdpPort">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.Trades">
       <summary>
-            //BestPrices — канал лучших цен в покупку и в продажу для всех торговых площадок
+            Tick trades.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookIncUdpIp1">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.BestPricesIncremental">
       <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            Best prices (incremental).
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookIncUdpIp2">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.BestPricesSnapshot">
       <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            Best prices (snapshot).
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookIncUdpPort">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.OrderBookIncremental">
       <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            Order book (incremental).
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookSnapUdpIp1">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.OrderBookSnapshot">
       <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            Order book (snapshot).
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookSnapUdpIp2">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.EntranceServer">
       <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            Entrance server address.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.OrderBookSnapUdpPort">
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.InstrumentCatalogUrl">
       <summary>
-            //OrderBook — агрегированная очередь заявок для всех торговых площадок
+            Instrument catalog url template.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.EntranceServer">
+    <member name="M:StockSharp.SpbEx.SpbExAddressConfig.#ctor(System.String)">
       <summary>
-            EntranceServer
+            Initializes a new instance of the <see cref="T:StockSharp.SpbEx.SpbExAddressConfig" />.
+            </summary>
+      <param name="name">Config name.</param>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.Name">
+      <summary>
+            Config name.
             </summary>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.EntranceServerPort">
+    <member name="M:StockSharp.SpbEx.SpbExAddressConfig.ToString">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExAddressConfig.GetByName(System.String)">
       <summary>
-            EntranceServer port
+            Get config by name.
             </summary>
+      <param name="name">Name</param>
+      <returns>Network configuration.</returns>
     </member>
-    <member name="F:StockSharp.SpbEx.NetworkConfig.InstrumentCatalogUrl">
+    <member name="M:StockSharp.SpbEx.SpbExAddressConfig.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            InstrumentCatalogUrl
+            Load settings.
             </summary>
+      <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.SpbEx.NetworkConfig.#ctor(System.String)">
+    <member name="M:StockSharp.SpbEx.SpbExAddressConfig.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-      </summary>
-      <param name="configName">
-      </param>
-    </member>
-    <member name="M:StockSharp.SpbEx.NetworkConfig.ToString">
-      <summary>
-      </summary>
-      <returns>
-      </returns>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.SpbEx.SpbExMessageAdapter">
       <summary>
@@ -141,7 +159,7 @@
     </member>
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.Config">
       <summary>
-            Server address.
+            Configuration.
             </summary>
     </member>
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.Login">
@@ -178,7 +196,7 @@
     </member>
     <member name="P:StockSharp.SpbEx.SpbExTrader.Config">
       <summary>
-            Server address.
+            Configuration.
             </summary>
     </member>
     <member name="P:StockSharp.SpbEx.SpbExTrader.Login">
@@ -189,6 +207,31 @@
     <member name="P:StockSharp.SpbEx.SpbExTrader.Password">
       <summary>
             Password.
+            </summary>
+    </member>
+    <member name="T:StockSharp.SpbEx.Xaml.SpbExAddressConfigComboBox">
+      <summary>
+            Выпадающий список для выбора <see cref="T:StockSharp.SpbEx.SpbExAddressConfig" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.SpbEx.Xaml.SpbExAddressConfigComboBox.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.SpbEx.Xaml.SpbExAddressConfigComboBox" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.Xaml.SpbExAddressConfigComboBox.SelectedConfig">
+      <summary>
+            Выбранная конфигурация.
+            </summary>
+    </member>
+    <member name="T:StockSharp.SpbEx.Xaml.SpbExAddressConfigEditor">
+      <summary>
+        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> для <see cref="T:StockSharp.SpbEx.Xaml.SpbExAddressConfigComboBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.SpbEx.Xaml.SpbExAddressConfigEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.SpbEx.Xaml.SpbExAddressConfigEditor" />.
             </summary>
     </member>
   </members>
