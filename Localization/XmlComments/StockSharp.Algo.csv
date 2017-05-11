@@ -1211,6 +1211,9 @@ M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Write(Ecng.Common.CsvFileWriter,`
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Read(Ecng.Common.FastCsvReader)/summary;DocStr9403
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Read(Ecng.Common.FastCsvReader)/param/reader;DocStr8587
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Read(Ecng.Common.FastCsvReader)/returns;DocStr9399
+M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Contains(`0)/summary;DocStr8459
+M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Contains(`0)/param/item;DocStr8459
+M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Contains(`0)/returns;DocStr8459
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.OnAdded(`0)/summary;DocStr8459
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.OnAdded(`0)/param/item;DocStr9399
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.OnRemoved(`0)/summary;DocStr8459

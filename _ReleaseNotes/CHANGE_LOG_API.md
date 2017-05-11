@@ -12,6 +12,7 @@ StockSharp API Change log
 * (feature) IQFeed. Level1 columns. Xaml support.
 * (feature) Micex TEAP. Stock27 interface.
 * (feature) Micex TEAP. Addresses design time fix.
+* (bug) Plaza. Revisions save fix.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
