@@ -150,6 +150,16 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		public override bool Contains(T item)
+		{
+			return _items.ContainsKey(GetNormalizedKey(item));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="item">Trade object.</param>
 		protected override void OnAdded(T item)
 		{

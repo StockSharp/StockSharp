@@ -367,7 +367,10 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override bool IsChanged(Security security)
 			{
-				var liteSec = _cache[security.Id];
+				var liteSec = _cache.TryGetValue(security.Id);
+
+				if (liteSec == null)
+					throw new ArgumentOutOfRangeException(nameof(security), security.Id, LocalizedStrings.Str2736);
 
 				if (!security.Name.IsEmpty() && liteSec.Name != security.Name)
 					return true;
@@ -509,8 +512,11 @@ namespace StockSharp.Algo.Storages.Csv
 
 			public override void Save(Security entity)
 			{
-				Registry.Exchanges.Save(entity.Board.Exchange);
-				Registry.ExchangeBoards.Save(entity.Board);
+				lock (Registry.Exchanges.SyncRoot)
+					Registry.Exchanges.TryAdd(entity.Board.Exchange);
+
+				lock (Registry.ExchangeBoards.SyncRoot)
+					Registry.ExchangeBoards.TryAdd(entity.Board);
 
 				base.Save(entity);
 			}
