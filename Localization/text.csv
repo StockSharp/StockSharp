@@ -14059,3 +14059,7 @@ DocStr9770;Available storages;Доступные хранилища
 DocStr9771;Selected storage;Выбранное хранилище
 DocStr9772;Only edit mode;Режим только для редактирования
 DocStr9773;To show the Security column;Показать колонку Инструмент
+DocStr9774;Add item to cache;Добавить в кэш
+DocStr9775;Update item in cache;Обновить кэш
+DocStr9776;Item;Элемент
+DocStr9777;Remove item from cache;Удалить из кэша
