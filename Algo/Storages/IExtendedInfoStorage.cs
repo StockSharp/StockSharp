@@ -188,7 +188,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var copy = ((IExtendedInfoStorageItem)this).Load();
 
-				using (var writer = new CsvFileWriter(new FileStream(_fileName, FileMode.Create, FileAccess.Write)))
+				using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create)))
 				{
 					writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
 					writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));

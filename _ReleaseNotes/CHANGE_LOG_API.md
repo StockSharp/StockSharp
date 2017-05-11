@@ -13,6 +13,7 @@ StockSharp API Change log
 * (feature) Micex TEAP. Stock27 interface.
 * (feature) Micex TEAP. Addresses design time fix.
 * (bug) Plaza. Revisions save fix.
+* (feature) Flat files. Fail over improved.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

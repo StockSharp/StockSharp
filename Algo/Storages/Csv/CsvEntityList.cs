@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if (_delayAction != null)
 				{
-					_delayActionGroup = _delayAction.CreateGroup(() => new CsvFileWriter(new FileStream(_fileName, FileMode.Append), Registry.Encoding));
+					_delayActionGroup = _delayAction.CreateGroup(() => new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Append), Registry.Encoding));
 				}
 			}
 		}
@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				ClearCache();
 
-				using (var writer = new CsvFileWriter(new FileStream(_fileName, FileMode.Create), Registry.Encoding))
+				using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create), Registry.Encoding))
 				{
 					foreach (var item in _items.CachedValues)
 						Write(writer, item);
