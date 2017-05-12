@@ -15,6 +15,7 @@ StockSharp API Change log
 * (bug) Plaza. Revisions save fix.
 * (feature) Flat files. Fail over improved.
 * (feature) StrategiesStatisticsPanel. ShowSecurity option.
+* (bug) Plaza. Blocked money translation fix.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
