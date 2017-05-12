@@ -191,6 +191,7 @@ P:StockSharp.Xaml.Diagram.DiagramElement.Name/summary;Name2
 P:StockSharp.Xaml.Diagram.DiagramElement.Description/summary;DocStr7907
 P:StockSharp.Xaml.Diagram.DiagramElement.LogLevel/summary;DocStr1679
 P:StockSharp.Xaml.Diagram.DiagramElement.ShowParameters/summary;Str3054
+P:StockSharp.Xaml.Diagram.DiagramElement.ShowSockets/summary;ShowSockets
 P:StockSharp.Xaml.Diagram.DiagramElement.Icon/summary;DocStr7908
 P:StockSharp.Xaml.Diagram.DiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.DiagramElement.Strategy/summary;DocStr7909
@@ -693,6 +694,12 @@ P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.TypeId/summary
 P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.IconName/summary;DocStr9214
 M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnStart/summary;DocStr7892
+T:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement/summary;DocStr9778
+P:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.TypeId/summary;DocStr7902
+P:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.IconName/summary;DocStr9214
+M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.#ctor/summary;DocStr1
+M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.OnStart/summary;DocStr7892
+M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement/summary;DocStr9260
 P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.IconName/summary;DocStr9214

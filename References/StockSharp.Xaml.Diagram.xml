@@ -710,6 +710,11 @@
             Show element parameters in higher order elements.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.ShowSockets">
+      <summary>
+            Show element sockets in higher order elements.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Icon">
       <summary>
             Icon.
@@ -2639,6 +2644,36 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnStart">
       <summary>
             The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement">
+      <summary>
+            Order mass cancelling element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderMassCancelElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement">
