@@ -110,21 +110,9 @@
             <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
             <returns>Historical candles.</returns>
         </member>
-        <member name="M:StockSharp.BarChart.BarChartTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
-            <summary>
-            To get time ranges for which this source of passed candles series has data.
-            </summary>
-            <param name="series">Candles series.</param>
-            <returns>Time ranges.</returns>
-        </member>
-        <member name="E:StockSharp.BarChart.BarChartTrader.NewCandles">
+        <member name="E:StockSharp.BarChart.BarChartTrader.NewCandle">
             <summary>
             Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.BarChart.BarChartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
-            </summary>
-        </member>
-        <member name="E:StockSharp.BarChart.BarChartTrader.Stopped">
-            <summary>
-            The series processing end event.
             </summary>
         </member>
         <member name="M:StockSharp.BarChart.BarChartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">

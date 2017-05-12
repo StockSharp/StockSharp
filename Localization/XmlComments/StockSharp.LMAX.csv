@@ -32,8 +32,7 @@ P:StockSharp.LMAX.LmaxTrader.Login/summary;Login
 P:StockSharp.LMAX.LmaxTrader.Password/summary;Password
 P:StockSharp.LMAX.LmaxTrader.IsDemo/summary;Str3388
 P:StockSharp.LMAX.LmaxTrader.IsDownloadSecurityFromSite/summary;Str3389
-E:StockSharp.LMAX.LmaxTrader.NewCandles/summary;DocStr90
-E:StockSharp.LMAX.LmaxTrader.Stopped/summary;DocStr91
+E:StockSharp.LMAX.LmaxTrader.NewCandle/summary;DocStr90
 M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
 M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
 M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84

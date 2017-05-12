@@ -144,14 +144,9 @@
             Token.
             </summary>
     </member>
-    <member name="E:StockSharp.Oanda.OandaTrader.NewCandles">
+    <member name="E:StockSharp.Oanda.OandaTrader.NewCandle">
       <summary>
             Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Oanda.OandaTrader.Stopped">
-      <summary>
-            The series processing end event.
             </summary>
     </member>
     <member name="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">

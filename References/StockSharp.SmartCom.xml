@@ -1704,14 +1704,9 @@
             Для отключения ограничения по времени необходимо указать <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
-    <member name="E:StockSharp.SmartCom.SmartTrader.NewCandles">
+    <member name="E:StockSharp.SmartCom.SmartTrader.NewCandle">
       <summary>
             Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.SmartCom.SmartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.SmartCom.SmartTrader.Stopped">
-      <summary>
-            Событие окончания обработки серии.
             </summary>
     </member>
     <member name="M:StockSharp.SmartCom.SmartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">

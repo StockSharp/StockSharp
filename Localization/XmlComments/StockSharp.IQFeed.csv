@@ -147,11 +147,7 @@ M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntitie
 M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)/param/to;DocStr251
 M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)/param/isSuccess;DocStr2535
 M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)/returns;XamlStr219
-M:StockSharp.IQFeed.IQFeedTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr81
-M:StockSharp.IQFeed.IQFeedTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
-M:StockSharp.IQFeed.IQFeedTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/returns;DocStr82
-E:StockSharp.IQFeed.IQFeedTrader.NewCandles/summary;DocStr90
-E:StockSharp.IQFeed.IQFeedTrader.Stopped/summary;DocStr91
+E:StockSharp.IQFeed.IQFeedTrader.NewCandle/summary;DocStr90
 M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
 M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
 M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84

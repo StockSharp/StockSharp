@@ -40,11 +40,7 @@ M:StockSharp.BarChart.BarChartTrader.GetHistoricalCandles(StockSharp.BusinessEnt
 M:StockSharp.BarChart.BarChartTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTime,System.DateTime,System.Boolean@)/param/to;DocStr251
 M:StockSharp.BarChart.BarChartTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTime,System.DateTime,System.Boolean@)/param/isSuccess;DocStr2535
 M:StockSharp.BarChart.BarChartTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTime,System.DateTime,System.Boolean@)/returns;XamlStr219
-M:StockSharp.BarChart.BarChartTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr81
-M:StockSharp.BarChart.BarChartTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
-M:StockSharp.BarChart.BarChartTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/returns;DocStr82
-E:StockSharp.BarChart.BarChartTrader.NewCandles/summary;DocStr90
-E:StockSharp.BarChart.BarChartTrader.Stopped/summary;DocStr91
+E:StockSharp.BarChart.BarChartTrader.NewCandle/summary;DocStr90
 M:StockSharp.BarChart.BarChartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
 M:StockSharp.BarChart.BarChartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
 M:StockSharp.BarChart.BarChartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84

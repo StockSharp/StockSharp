@@ -113,12 +113,11 @@ namespace SampleSmartSMA
 
 						_candleManager = new CandleManager((IExternalCandleSource)_trader);
 
-						_trader.NewCandles += (series, candles) => _historyCandles.SyncDo(col =>
+						_trader.NewCandle += (series, candle) => _historyCandles.SyncDo(col =>
 						{
-							_historyCandles.AddRange(candles.Cast<TimeFrameCandle>());
+							_historyCandles.Add((TimeFrameCandle)candle);
 
-							foreach (var candle in candles)
-								ProcessCandle(candle);
+							ProcessCandle(candle);
 						});
 
 						_trader.NewSecurity += security =>
