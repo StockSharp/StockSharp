@@ -45056,5 +45056,25 @@ namespace StockSharp.Localization
 		/// Mass orders cancelling
 		/// </summary>
 		public static string OrderMassCancelling => GetString(OrderMassCancellingKey);
+
+		/// <summary>
+		/// Sockets
+		/// </summary>
+		public const string SocketsKey = nameof(Sockets);
+
+		/// <summary>
+		/// Sockets
+		/// </summary>
+		public static string Sockets => GetString(SocketsKey);
+
+		/// <summary>
+		/// Show element sockets in higher order elements.
+		/// </summary>
+		public const string ShowSocketsKey = nameof(ShowSockets);
+
+		/// <summary>
+		/// Show element sockets in higher order elements.
+		/// </summary>
+		public static string ShowSockets => GetString(ShowSocketsKey);
 	}
 }
