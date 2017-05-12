@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Storages.Csv
 	{
 		private readonly string _fileName;
 
-		private readonly CachedSynchronizedDictionary<object, T> _items = new CachedSynchronizedDictionary<object, T>();
+		private readonly Dictionary<object, T> _items = new Dictionary<object, T>();
 
 		/// <summary>
 		/// The CSV storage of trading objects.
@@ -70,19 +70,21 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if (_delayAction != null)
 				{
-					_delayActionGroup = _delayAction.CreateGroup(() => new CsvFileWriter(new FileStream(_fileName, FileMode.Append), Registry.Encoding));
+					_delayActionGroup = _delayAction.CreateGroup(() => new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Append), Registry.Encoding));
 				}
 			}
 		}
 
 		T IStorageEntityList<T>.ReadById(object id)
 		{
-			return _items.TryGetValue(NormalizedKey(id));
+			lock (SyncRoot)
+				return _items.TryGetValue(NormalizedKey(id));
 		}
 
 		IEnumerable<T> IStorageEntityList<T>.ReadLasts(int count)
 		{
-			return _items.CachedValues.Skip(Count - count).Take(count);
+			lock (SyncRoot)
+				return _items.Values.Skip(Count - count).Take(count).ToArray();
 		}
 
 		private object GetNormalizedKey(T entity)
@@ -106,12 +108,22 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="entity">Trade object.</param>
 		public virtual void Save(T entity)
 		{
-			var item = _items.TryGetValue(GetNormalizedKey(entity));
+			lock (SyncRoot)
+			{
+				var item = _items.TryGetValue(GetNormalizedKey(entity));
 
-			if (item == null)
-				Add(entity);
-			else if (IsChanged(entity))
-				Write();
+				if (item == null)
+				{
+					Add(entity);
+					return;
+				}
+				else if (IsChanged(entity))
+					UpdateCache(entity);
+				else
+					return;
+			}
+
+			Write();
 		}
 
 		#endregion
@@ -150,13 +162,31 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		public override bool Contains(T item)
+		{
+			lock (SyncRoot)
+				return _items.ContainsKey(GetNormalizedKey(item));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="item">Trade object.</param>
 		protected override void OnAdded(T item)
 		{
 			base.OnAdded(item);
 
-			if (_items.TryAdd(GetNormalizedKey(item), item))
-				Write(item);
+			lock (SyncRoot)
+			{
+				if (!_items.TryAdd(GetNormalizedKey(item), item))
+					return;
+
+				AddCache(item);
+			}
+		
+			Write(item);
 		}
 
 		/// <summary>
@@ -167,7 +197,12 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			base.OnRemoved(item);
 
-			_items.Remove(GetNormalizedKey(item));
+			lock (SyncRoot)
+			{
+				_items.Remove(GetNormalizedKey(item));
+				RemoveCache(item);
+			}
+			
 			Write();
 		}
 
@@ -178,7 +213,12 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			base.OnCleared();
 
-			_items.Clear();
+			lock (SyncRoot)
+			{
+				_items.Clear();
+				ClearCache();
+			}
+
 			Write();
 		}
 
@@ -186,11 +226,14 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			_delayActionGroup.Add(() =>
 			{
-				ClearCache();
-
-				using (var writer = new CsvFileWriter(new FileStream(_fileName, FileMode.Create), Registry.Encoding))
+				using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create), Registry.Encoding))
 				{
-					foreach (var item in _items.CachedValues)
+					T[] values;
+
+					lock (SyncRoot)
+						values = _items.Values.ToArray();
+
+					foreach (var item in values)
 						Write(writer, item);
 				}
 			}, canBatch: false);
@@ -225,8 +268,12 @@ namespace StockSharp.Algo.Storages.Csv
 							var item = Read(reader);
 							var key = GetNormalizedKey(item);
 
-							_items.Add(key, item);
-							Add(item);
+							lock (SyncRoot)
+							{
+								InnerCollection.Add(item);
+								AddCache(item);
+								_items.Add(key, item);
+							}
 						}
 						catch (Exception ex)
 						{
@@ -244,6 +291,30 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Clear cache.
 		/// </summary>
 		protected virtual void ClearCache()
+		{
+		}
+
+		/// <summary>
+		/// Add item to cache.
+		/// </summary>
+		/// <param name="item">New item.</param>
+		protected virtual void AddCache(T item)
+		{
+		}
+
+		/// <summary>
+		/// Update item in cache.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected virtual void UpdateCache(T item)
+		{
+		}
+
+		/// <summary>
+		/// Remove item from cache.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected virtual void RemoveCache(T item)
 		{
 		}
 	}

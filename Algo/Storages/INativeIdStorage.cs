@@ -241,7 +241,7 @@ namespace StockSharp.Algo.Storages
 
 				var appendHeader = !File.Exists(fileName);
 
-				using (var writer = new CsvFileWriter(new FileStream(fileName, FileMode.Append, FileAccess.Write)))
+				using (var writer = new CsvFileWriter(new TransactionFileStream(fileName, FileMode.Append)))
 				{
 					var nativeIdType = nativeId.GetType();
 					var typleType = nativeIdType.GetGenericType(typeof(Tuple<,>));

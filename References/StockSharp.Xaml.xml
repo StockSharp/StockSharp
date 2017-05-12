@@ -4902,6 +4902,11 @@
             To show the Name Strategy column.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowSecurity">
+      <summary>
+            To show the Security column.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.StrategiesStatisticsPanel.SelectedStrategy">
       <summary>
             The selected strategy.

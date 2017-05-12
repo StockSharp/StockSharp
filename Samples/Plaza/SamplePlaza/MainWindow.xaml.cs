@@ -59,7 +59,7 @@ namespace SamplePlaza
 			_securitiesWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
-			AppName.Text = Trader.AppName;
+			//AppName.Text = Trader.AppName;
 
 			Tables.SelectedTables = Trader.Tables.Select(t => t.Id);
 
@@ -120,8 +120,7 @@ namespace SamplePlaza
 						var revisionManager = Trader.StreamManager.RevisionManager;
 
 						//revisionManager.Tables.Add(Trader.TableRegistry.IndexLog);
-						revisionManager.Tables.Add(Trader.TableRegistry.TradeFuture);
-						revisionManager.Tables.Add(Trader.TableRegistry.TradeOption);
+						revisionManager.Tables.Add(Trader.TableRegistry.AnonymousDeal);
 
 						Trader.Tables.Clear();
 						Trader.TableRegistry.SyncTables(Tables.SelectedTables);
