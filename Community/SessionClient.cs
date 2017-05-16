@@ -73,7 +73,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// Close the session.
 		/// </summary>
-		public void CloseSession()
+		private void CloseSession()
 		{
 			if (_sessionId == 0)
 				throw new InvalidOperationException();
