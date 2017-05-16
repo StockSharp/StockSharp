@@ -54,6 +54,13 @@
 			Storage.Added += OnStorageNewIdentifierAdded;
 		}
 
+		/// <inheritdoc />
+		public override void Dispose()
+		{
+			Storage.Added -= OnStorageNewIdentifierAdded;
+			base.Dispose();
+		}
+
 		/// <summary>
 		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
 		/// </summary>
@@ -142,7 +149,7 @@
 
 					base.OnInnerAdapterNewOutMessage(message);
 
-					ProcessSuspendedSecurityMessages(securityId);
+					ProcessSuspendedSecurityMessages(secMsg.SecurityId);
 
 					break;
 				}
@@ -389,6 +396,15 @@
 
 		private void ProcessSuspendedSecurityMessages(SecurityId securityId)
 		{
+			var noNativeId = securityId.Native == null ? (SecurityId?)null : securityId;
+
+			if (noNativeId != null)
+			{
+				var t = noNativeId.Value;
+				t.Native = null;
+				noNativeId = t;
+			}
+
 			List<Message> msgs = null;
 
 			lock (_syncRoot)
@@ -399,6 +415,21 @@
 				{
 					msgs = GetMessages(tuple);
 					_suspendedOutMessages.Remove(securityId);
+				}
+
+				if (noNativeId != null)
+				{
+					tuple = _suspendedOutMessages.TryGetValue(noNativeId.Value);
+
+					if (tuple != null)
+					{
+						if (msgs == null)
+							msgs = GetMessages(tuple);
+						else
+							msgs.AddRange(GetMessages(tuple));
+
+						_suspendedOutMessages.Remove(noNativeId.Value);
+					}
 				}
 
 				// find association by code and code + type
@@ -424,17 +455,35 @@
 
 				if (inMsgs != null)
 				{
-					_suspendedInMessages.Remove(securityId);
-
 					if (msgs == null)
 						msgs = inMsgs;
 					else
 						msgs.AddRange(inMsgs);
+
+					_suspendedInMessages.Remove(securityId);
+				}
+
+				if (noNativeId != null)
+				{
+					inMsgs = _suspendedInMessages.TryGetValue(noNativeId.Value);
+
+					if (inMsgs != null)
+					{
+						if (msgs == null)
+							msgs = inMsgs;
+						else
+							msgs.AddRange(inMsgs);
+
+						_suspendedInMessages.Remove(noNativeId.Value);
+					}
 				}
 			}
 
 			if (msgs == null)
 				return;
+
+			// external code shouldn't receive native ids
+			securityId.Native = null;
 
 			foreach (var msg in msgs)
 			{
@@ -454,7 +503,10 @@
 				added = _securityIds.TryAdd(nativeId, securityId);
 
 			if (added)
+			{
+				securityId.Native = nativeId;
 				RaiseNewOutMessage(new ProcessSuspendedSecurityMessage(this, securityId));
+			}
 		}
 
 		private static List<Message> GetMessages(RefPair<List<Message>, Dictionary<MessageTypes, Message>> tuple)

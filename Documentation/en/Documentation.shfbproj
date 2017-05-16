@@ -288,6 +288,7 @@
     <None Include="Topics\StockSharpInstall.aml" />
     <None Include="Topics\Rithmic.aml" />
     <None Include="Topics\StockSharpTitle.aml" />
+    <None Include="Topics\CreateNewOrder.aml" />
     <None Include="Topics\HydraSettingsConnectionParams.aml" />
     <None Include="Topics\HydraDisasterRecovery.aml" />
     <None Include="Topics\HydraBoards.aml" />

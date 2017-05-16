@@ -1,5 +1,18 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) ExchangeBoard. Currenex.
+* (feature) IndexCandleBuilder. TotalVolume as extended fields.
+* (bug) SecurityCsvList. Save exchange board info.
+* (bug) SecurityNativeIdMessageAdapter. Suspended messages fix.
+* (bug) Samples. Order book fetching small fix.
+* (feature) Plaza. Forecast IM support.
+* (feature) ExtendedInfoStorageSelectWindow.
+* (feature) SpbEx. AddressConfig refactoring. Xaml support.
+* (feature) IQFeed. Level1 columns. Xaml support.
+* (feature) Micex TEAP. Stock27 interface.
+* (feature) Micex TEAP. Addresses design time fix.
+
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
 * (feature) Remote storage. Manage server.

@@ -144,11 +144,12 @@ namespace SampleCQG
 					Connector.RegisterMarketDepth(security);
 
 					window.Show();
+
+					window.DepthCtrl.UpdateDepth(Connector.GetMarketDepth(security));
 				}
 
 				if (!_initialized)
 				{
-					OnMarketDepthChanged(Connector.GetMarketDepth(security));
 					Connector.MarketDepthChanged += OnMarketDepthChanged;
 					_initialized = true;
 				}

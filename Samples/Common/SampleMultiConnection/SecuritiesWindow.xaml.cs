@@ -101,11 +101,13 @@ namespace SampleMultiConnection
 				if (window.Visibility == Visibility.Visible)
 					window.Hide();
 				else
+				{
 					window.Show();
+					window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
+				}
 
 				if (!_initialized)
 				{
-					TraderOnMarketDepthChanged(connector.GetMarketDepth(security));
 					connector.MarketDepthChanged += TraderOnMarketDepthChanged;
 					_initialized = true;
 				}

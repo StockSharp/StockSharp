@@ -159,9 +159,10 @@ namespace SampleSterling
 				if (window.Visibility == Visibility.Visible)
 					window.Hide();
 				else
+				{
 					window.Show();
-
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 			}
 		}
 

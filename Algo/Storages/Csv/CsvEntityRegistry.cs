@@ -296,16 +296,6 @@ namespace StockSharp.Algo.Storages.Csv
 				return item.Id;
 			}
 
-			private ExchangeBoard GetBoard(string boardCode)
-			{
-				var board = Registry.ExchangeBoards.ReadById(boardCode);
-
-				if (board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
-
-				return board;
-			}
-
 			private class LiteSecurity
 			{
 				public string Name { get; set; }
@@ -335,7 +325,7 @@ namespace StockSharp.Algo.Storages.Csv
 						Code = Code,
 						Class = Class,
 						ShortName = ShortName,
-						Board = list.GetBoard(Board),
+						Board = list.Registry.GetBoard(Board),
 						UnderlyingSecurityId = UnderlyingSecurityId,
 						PriceStep = PriceStep,
 						VolumeStep = VolumeStep,
@@ -517,6 +507,14 @@ namespace StockSharp.Algo.Storages.Csv
 				});
 			}
 
+			public override void Save(Security entity)
+			{
+				Registry.Exchanges.Save(entity.Board.Exchange);
+				Registry.ExchangeBoards.Save(entity.Board);
+
+				base.Save(entity);
+			}
+
 			#endregion
 		}
 
@@ -556,15 +554,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private ExchangeBoard GetBoard(string boardCode)
 			{
-				if (boardCode.IsEmpty())
-					return null;
-
-				var board = Registry.ExchangeBoards.ReadById(boardCode);
-
-				if (board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
-
-				return board;
+				return boardCode.IsEmpty() ? null : Registry.GetBoard(boardCode);
 			}
 
 			protected override void Write(CsvFileWriter writer, Portfolio data)
@@ -829,6 +819,23 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (errors.Count > 0)
 				throw new AggregateException(errors);
+		}
+
+		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
+		private ExchangeBoard GetBoard(string boardCode)
+		{
+			var board = ExchangeBoards.ReadById(boardCode);
+
+			if (board == null)
+			{
+				board = _exchangeInfoProvider.GetExchangeBoard(boardCode);
+
+				if (board == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
+			}
+
+			return board;
 		}
 	}
 }

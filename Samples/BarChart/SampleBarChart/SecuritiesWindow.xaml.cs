@@ -104,15 +104,15 @@ namespace SampleBarChart
 				if (window.Visibility == Visibility.Visible)
 					window.Hide();
 				else
+				{
 					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
 				if (!_initialized)
 				{
 					_initialized = true;
-
 					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-
-					TraderOnMarketDepthChanged(trader.GetMarketDepth(security));
 				}
 			}
 		}
