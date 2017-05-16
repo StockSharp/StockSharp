@@ -504,8 +504,9 @@
 
 			if (added)
 			{
-				securityId.Native = nativeId;
-				RaiseNewOutMessage(new ProcessSuspendedSecurityMessage(this, securityId));
+				var temp = securityId;
+				temp.Native = nativeId;
+				RaiseNewOutMessage(new ProcessSuspendedSecurityMessage(this, temp));
 			}
 		}
 

@@ -453,14 +453,9 @@
             Subscribe to receive information about the best and worst instruments per session.
             </summary>
     </member>
-    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCandles">
+    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCandle">
       <summary>
             Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Blackwood.BlackwoodTrader.Stopped">
-      <summary>
-            The series processing end event.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">

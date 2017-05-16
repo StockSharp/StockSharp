@@ -1078,7 +1078,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="interval">The interval between data updates.</param>
 		/// <returns>Created timer.</returns>
 		public static Timer StartRealTime<TConnector>(this TConnector connector, CachedSynchronizedSet<CandleSeries> registeredSeries, TimeSpan offset, Action<CandleSeries, Range<DateTimeOffset>> requestNewCandles, TimeSpan interval)
-			where TConnector : class, IConnector, IExternalCandleSource
+			where TConnector : class, IConnector//, IExternalCandleSource
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));

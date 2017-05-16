@@ -73,10 +73,10 @@ namespace StockSharp.Messages
 			{
 				_native = value;
 
+				_nativeAsInt = 0;
+
 				if (value is long)
 					_nativeAsInt = (long)value;
-				else if (value == null)
-					_nativeAsInt = 0;
 			}
 		}
 

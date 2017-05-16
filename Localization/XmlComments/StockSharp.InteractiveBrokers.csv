@@ -394,8 +394,7 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.ServerLogLevel/summary;
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.MarketDataType/summary;DocStr3513
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UseV100Plus/summary;DocStr9646
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults/summary;DocStr3637
-E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandles/summary;DocStr90
-E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.Stopped/summary;DocStr91
+E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandle/summary;DocStr90
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport/summary;DocStr3638
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerParameters/summary;DocStr3639
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFinancialAdvise/summary;DocStr3640
@@ -439,9 +438,6 @@ M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(Sto
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)/returns;DocStr9420
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeOptionCalc(System.Int64)/summary;DocStr9426
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeOptionCalc(System.Int64)/param/transactionId;DocStr9422
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr81
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/returns;DocStr82
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84

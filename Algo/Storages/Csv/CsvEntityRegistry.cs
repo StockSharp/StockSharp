@@ -367,7 +367,10 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override bool IsChanged(Security security)
 			{
-				var liteSec = _cache[security.Id];
+				var liteSec = _cache.TryGetValue(security.Id);
+
+				if (liteSec == null)
+					throw new ArgumentOutOfRangeException(nameof(security), security.Id, LocalizedStrings.Str2736);
 
 				if (!security.Name.IsEmpty() && liteSec.Name != security.Name)
 					return true;
@@ -426,7 +429,23 @@ namespace StockSharp.Algo.Storages.Csv
 			protected override void ClearCache()
 			{
 				_cache.Clear();
-				base.ClearCache();
+			}
+
+			protected override void AddCache(Security item)
+			{
+				var sec = new LiteSecurity();
+				sec.Update(item);
+				_cache.Add(item.Id, sec);
+			}
+
+			protected override void RemoveCache(Security item)
+			{
+				_cache.Remove(item.Id);
+			}
+
+			protected override void UpdateCache(Security item)
+			{
+				_cache[item.Id].Update(item);
 			}
 
 			protected override Security Read(FastCsvReader reader)
@@ -465,17 +484,11 @@ namespace StockSharp.Algo.Storages.Csv
 					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
 
-				_cache.Add(id, security);
-
 				return security.ToSecurity(this, id);
 			}
 
 			protected override void Write(CsvFileWriter writer, Security data)
 			{
-				_cache
-					.SafeAdd(data.Id)
-					.Update(data);
-
 				writer.WriteRow(new[]
 				{
 					data.Id,
@@ -509,8 +522,11 @@ namespace StockSharp.Algo.Storages.Csv
 
 			public override void Save(Security entity)
 			{
-				Registry.Exchanges.Save(entity.Board.Exchange);
-				Registry.ExchangeBoards.Save(entity.Board);
+				lock (Registry.Exchanges.SyncRoot)
+					Registry.Exchanges.TryAdd(entity.Board.Exchange);
+
+				lock (Registry.ExchangeBoards.SyncRoot)
+					Registry.ExchangeBoards.TryAdd(entity.Board);
 
 				base.Save(entity);
 			}

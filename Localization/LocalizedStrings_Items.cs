@@ -45046,5 +45046,35 @@ namespace StockSharp.Localization
 		/// The security is used in some strategies. Remove anyway?
 		/// </summary>
 		public static string SecurityIsUsedInSomeStrategies => GetString(SecurityIsUsedInSomeStrategiesKey);
+
+		/// <summary>
+		/// Mass orders cancelling
+		/// </summary>
+		public const string OrderMassCancellingKey = nameof(OrderMassCancelling);
+
+		/// <summary>
+		/// Mass orders cancelling
+		/// </summary>
+		public static string OrderMassCancelling => GetString(OrderMassCancellingKey);
+
+		/// <summary>
+		/// Sockets
+		/// </summary>
+		public const string SocketsKey = nameof(Sockets);
+
+		/// <summary>
+		/// Sockets
+		/// </summary>
+		public static string Sockets => GetString(SocketsKey);
+
+		/// <summary>
+		/// Show element sockets in higher order elements.
+		/// </summary>
+		public const string ShowSocketsKey = nameof(ShowSockets);
+
+		/// <summary>
+		/// Show element sockets in higher order elements.
+		/// </summary>
+		public static string ShowSockets => GetString(ShowSocketsKey);
 	}
 }

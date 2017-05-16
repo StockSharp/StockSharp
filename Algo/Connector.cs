@@ -56,7 +56,7 @@ namespace StockSharp.Algo
 		private class MarketDepthInfo : RefTriple<MarketDepth, IEnumerable<QuoteChange>, IEnumerable<QuoteChange>>
 		{
 			public MarketDepthInfo(MarketDepth depth)
-				: base(depth, Enumerable.Empty<QuoteChange>(), Enumerable.Empty<QuoteChange>())
+				: base(depth, null, null)
 			{
 			}
 

@@ -220,21 +220,9 @@
             Path to log file.
             </summary>
         </member>
-        <member name="M:StockSharp.Rithmic.RithmicTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
-            <summary>
-            To get time ranges for which this source of passed candles series has data.
-            </summary>
-            <param name="series">Candles series.</param>
-            <returns>Time ranges.</returns>
-        </member>
-        <member name="E:StockSharp.Rithmic.RithmicTrader.NewCandles">
+        <member name="E:StockSharp.Rithmic.RithmicTrader.NewCandle">
             <summary>
             Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Rithmic.RithmicTrader.Stopped">
-            <summary>
-            The series processing end event.
             </summary>
         </member>
         <member name="M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">

@@ -17,7 +17,6 @@ namespace SampleAlfaCandles
 {
 	using System;
 	using System.ComponentModel;
-	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Common;
@@ -132,12 +131,12 @@ namespace SampleAlfaCandles
 				CandleType = typeof(TimeFrameCandle)
 			};
 
-			_trader.NewCandles += (candleSeries, candles) =>
+			_trader.NewCandle += (candleSeries, candle) =>
 			{
-				_trader.AddInfoLog("newcandles({0}):\n{1}", candles.Count(), candles.Select(c => c.ToString()).Join("\n"));
+				_trader.AddInfoLog("New сandle({0})", candle);
 
 				if (candleSeries == series)
-					wnd.DrawCandles(candles);
+					wnd.DrawCandles(candle);
 			};
 
 			_trader.SubscribeCandles(series, from, to);

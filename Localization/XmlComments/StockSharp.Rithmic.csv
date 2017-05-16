@@ -46,11 +46,7 @@ P:StockSharp.Rithmic.RithmicTrader.Password/summary;Password
 P:StockSharp.Rithmic.RithmicTrader.CertFile/summary;Str3466
 P:StockSharp.Rithmic.RithmicTrader.Server/summary;Str3473
 P:StockSharp.Rithmic.RithmicTrader.LogFileName/summary;Str3472
-M:StockSharp.Rithmic.RithmicTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr81
-M:StockSharp.Rithmic.RithmicTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
-M:StockSharp.Rithmic.RithmicTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)/returns;DocStr82
-E:StockSharp.Rithmic.RithmicTrader.NewCandles/summary;DocStr90
-E:StockSharp.Rithmic.RithmicTrader.Stopped/summary;DocStr91
+E:StockSharp.Rithmic.RithmicTrader.NewCandle/summary;DocStr90
 M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
 M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
 M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84

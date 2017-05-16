@@ -579,14 +579,9 @@
             Событие инициализации поля <see cref="P:StockSharp.Transaq.TransaqTrader.CandleTimeFrames" />.
             </summary>
     </member>
-    <member name="E:StockSharp.Transaq.TransaqTrader.NewCandles">
+    <member name="E:StockSharp.Transaq.TransaqTrader.NewCandle">
       <summary>
             Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Transaq.TransaqTrader.Stopped">
-      <summary>
-            Событие окончания обработки серии.
             </summary>
     </member>
     <member name="M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">

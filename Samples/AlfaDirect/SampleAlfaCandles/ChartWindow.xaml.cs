@@ -15,8 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleAlfaCandles
 {
-	using System.Collections.Generic;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.Xaml.Charting;
 
@@ -35,10 +33,9 @@ namespace SampleAlfaCandles
 			area.Elements.Add(_candlesElem);
 		}
 
-		public void DrawCandles(IEnumerable<Candle> candles)
+		public void DrawCandles(Candle candle)
 		{
-			foreach (var candle in candles)
-				Chart.Draw(_candlesElem, candle);
+			Chart.Draw(_candlesElem, candle);
 		}
 	}
 }

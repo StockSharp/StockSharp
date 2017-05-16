@@ -1781,14 +1781,9 @@
             The new results occurring event of the scanner started previously via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandles">
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandle">
       <summary>
             Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.Stopped">
-      <summary>
-            The series processing end event.
             </summary>
     </member>
     <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport">
@@ -1906,13 +1901,6 @@
             To unsubscribe from receive the estimated option values.
             </summary>
       <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)" />.</param>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To get time ranges for which this source of passed candles series has data.
-            </summary>
-      <param name="series">Candles series.</param>
-      <returns>Time ranges.</returns>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
       <summary>

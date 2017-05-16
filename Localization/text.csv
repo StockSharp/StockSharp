@@ -4538,6 +4538,9 @@ ItemsCountParam;Items count: {0};Количество элементов: {0}
 SimulatorSettings;Simulator settings;Настройки эмуляции
 SecurityIsUsedInRunningStrategy;The security is used in the running strategy.;Инструмент используется в запущенной стратегии.
 SecurityIsUsedInSomeStrategies;The security is used in some strategies. Remove anyway?;Инструмент используется в некоторых стратегиях. Удалить?
+OrderMassCancelling;Mass orders cancelling;Массовая отмена заявок
+Sockets;Sockets;Сокеты
+ShowSockets;Show element sockets in higher order elements.;Отображать сокеты элемента в элементах более высокого уровня.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14058,3 +14061,9 @@ DocStr9769;The extended storage selection window;Окно выбора хран�
 DocStr9770;Available storages;Доступные хранилища
 DocStr9771;Selected storage;Выбранное хранилище
 DocStr9772;Only edit mode;Режим только для редактирования
+DocStr9773;To show the Security column;Показать колонку Инструмент
+DocStr9774;Add item to cache;Добавить в кэш
+DocStr9775;Update item in cache;Обновить кэш
+DocStr9776;Item;Элемент
+DocStr9777;Remove item from cache;Удалить из кэша
+DocStr9778;Order mass cancelling element;Элемент массового снятия заявок

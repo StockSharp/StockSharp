@@ -30,8 +30,7 @@ T:StockSharp.Oanda.OandaTrader/summary;DocStr5925
 M:StockSharp.Oanda.OandaTrader.#ctor/summary;DocStr1
 P:StockSharp.Oanda.OandaTrader.Server/summary;Str3416
 P:StockSharp.Oanda.OandaTrader.Token/summary;DocStr3145
-E:StockSharp.Oanda.OandaTrader.NewCandles/summary;DocStr90
-E:StockSharp.Oanda.OandaTrader.Stopped/summary;DocStr91
+E:StockSharp.Oanda.OandaTrader.NewCandle/summary;DocStr90
 M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
 M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
 M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84

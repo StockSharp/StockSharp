@@ -177,8 +177,7 @@ namespace SampleIB
 		{
 			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-			if (wnd != null)
-				wnd.DepthCtrl.UpdateDepth(depth);
+			wnd?.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)
@@ -191,12 +190,11 @@ namespace SampleIB
 			Trader.LookupSecurities(wnd.Criteria);
 		}
 
-		public void AddCandles(CandleSeries series, IEnumerable<Candle> candles)
+		public void AddCandle(CandleSeries series, Candle candle)
 		{
 			var wnd = _realTimeCandles.TryGetValue(series) ?? _historyCandles.TryGetValue(series);
 
-			if (wnd != null)
-				candles.ForEach(wnd.ProcessCandles);
+			wnd?.ProcessCandles(candle);
 		}
 
 		private void HistoryCandlesClick(object sender, RoutedEventArgs e)

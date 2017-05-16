@@ -115,13 +115,14 @@ namespace StockSharp.Algo
 		{
 			Subscribed,
 			Subscribing,
-			Unsubscribing,
+			//Unsubscribing,
 		}
 
 		private readonly SynchronizedDictionary<SubscriptionInfo, SubscriptionStates> _subscriptionStates = new SynchronizedDictionary<SubscriptionInfo, SubscriptionStates>();
 		private readonly SynchronizedPairSet<SubscriptionInfo, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<SubscriptionInfo, IEnumerator<IMessageAdapter>>();
 		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionKeys = new SynchronizedDictionary<long, SubscriptionInfo>();
 		private readonly SynchronizedDictionary<SubscriptionInfo, IMessageAdapter> _subscriptions = new SynchronizedDictionary<SubscriptionInfo, IMessageAdapter>();
+		private readonly SynchronizedDictionary<SubscriptionInfo, CachedSynchronizedList<MarketDataMessage>> _suspendedSubscriptions = new SynchronizedDictionary<SubscriptionInfo, CachedSynchronizedList<MarketDataMessage>>();
 		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter>();
 		private readonly SynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>> _messageTypeAdapters = new SynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>>();
@@ -265,6 +266,7 @@ namespace StockSharp.Algo
 			_subscriptions.Clear();
 			_subscriptionKeys.Clear();
 			_subscriptionStates.Clear();
+			_suspendedSubscriptions.Clear();
 		}
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -393,7 +395,31 @@ namespace StockSharp.Algo
 							{
 								if (state != null)
 								{
-									RaiseMarketDataMessage(null, mdMsg.OriginalTransactionId, new InvalidOperationException(state.Value.ToString()), true);
+									switch (state)
+									{
+										case SubscriptionStates.Subscribed:
+										{
+											var adapter = _subscriptions.TryGetValue(key);
+
+											if (adapter != null)
+											{
+												adapter.SendInMessage(mdMsg);
+											}
+											else
+												RaiseMarketDataMessage(null, mdMsg.OriginalTransactionId, new InvalidOperationException(state.Value.ToString()), true);
+
+											break;
+										}
+
+										case SubscriptionStates.Subscribing:
+										//case SubscriptionStates.Unsubscribing:
+											_suspendedSubscriptions.SafeAdd(key).Add(mdMsg);
+											break;
+
+										default:
+											throw new ArgumentOutOfRangeException();
+									}
+
 									break;
 								}
 								else
@@ -407,10 +433,10 @@ namespace StockSharp.Algo
 								{
 									case SubscriptionStates.Subscribed:
 										canProcess = true;
-										_subscriptionStates[key] = SubscriptionStates.Unsubscribing;
+										//_subscriptionStates[key] = SubscriptionStates.Unsubscribing;
 										break;
 									case SubscriptionStates.Subscribing:
-									case SubscriptionStates.Unsubscribing:
+									//case SubscriptionStates.Unsubscribing:
 										RaiseMarketDataMessage(null, mdMsg.OriginalTransactionId, new InvalidOperationException(state.Value.ToString()), false);
 										break;
 									case null:
@@ -443,7 +469,7 @@ namespace StockSharp.Algo
 
 								if (adapter != null)
 								{
-									_subscriptions.Remove(key);
+									//_subscriptions.Remove(key);
 									adapter.SendInMessage(message);
 								}
 							}
@@ -451,7 +477,7 @@ namespace StockSharp.Algo
 							break;
 						}
 					}
-					
+
 					break;
 				}
 
@@ -634,7 +660,7 @@ namespace StockSharp.Algo
 		private void ProcessMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)
 		{
 			var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId) ?? message.CreateKey();
-			
+
 			var enumerator = _subscriptionQueue.TryGetValue(key);
 			var state = _subscriptionStates.TryGetValue2(key);
 			var error = message.Error;
@@ -650,8 +676,7 @@ namespace StockSharp.Algo
 					isSubscribe = true;
 					if (isOk)
 					{
-						_subscriptions.Add(key, adapter);
-						_subscriptionStates[key] = SubscriptionStates.Subscribed;
+						SetSubscribed(adapter, key);
 					}
 					else if (error != null)
 					{
@@ -659,18 +684,17 @@ namespace StockSharp.Algo
 						_subscriptionStates.Remove(key);
 					}
 					break;
-				case SubscriptionStates.Unsubscribing:
-					isSubscribe = false;
-					_subscriptions.Remove(key);
-					_subscriptionStates.Remove(key);
-					break;
+				//case SubscriptionStates.Unsubscribing:
+				//	isSubscribe = false;
+				//	_subscriptions.Remove(key);
+				//	_subscriptionStates.Remove(key);
+				//	break;
 				case null:
 					if (isOk)
 					{
 						if (message.IsSubscribe)
 						{
-							_subscriptions.Add(key, adapter);
-							_subscriptionStates.Add(key, SubscriptionStates.Subscribed);
+							SetSubscribed(adapter, key);
 							break;
 						}
 					}
@@ -697,6 +721,20 @@ namespace StockSharp.Algo
 			_subscriptionKeys.Remove(message.OriginalTransactionId);
 
 			RaiseMarketDataMessage(adapter, message.OriginalTransactionId, error, isSubscribe);
+		}
+
+		private void SetSubscribed(IMessageAdapter adapter, SubscriptionInfo key)
+		{
+			_subscriptions.Add(key, adapter);
+			_subscriptionStates[key] = SubscriptionStates.Subscribed;
+
+			var messages = _suspendedSubscriptions.TryGetValue(key)?.CopyAndClear();
+
+			if (messages == null)
+				return;
+
+			foreach (var mdMsg in messages)
+				adapter.SendInMessage(mdMsg);
 		}
 
 		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error, bool isSubscribe)

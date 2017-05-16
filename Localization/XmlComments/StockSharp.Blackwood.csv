@@ -98,8 +98,7 @@ M:StockSharp.Blackwood.BlackwoodTrader.RequestPreMarketIndications/summary;DocSt
 M:StockSharp.Blackwood.BlackwoodTrader.SubscribeHighLow(System.Boolean)/summary;DocStr2575
 M:StockSharp.Blackwood.BlackwoodTrader.SubscribeHighLow(System.Boolean)/param/isSubscribe;DocStr2576
 M:StockSharp.Blackwood.BlackwoodTrader.SubscribeMarketSorter/summary;DocStr2577
-E:StockSharp.Blackwood.BlackwoodTrader.NewCandles/summary;DocStr90
-E:StockSharp.Blackwood.BlackwoodTrader.Stopped/summary;DocStr91
+E:StockSharp.Blackwood.BlackwoodTrader.NewCandle/summary;DocStr90
 M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
 M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
 M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84

@@ -150,14 +150,9 @@
             Should the whole set of securities be loaded from LMAX website. Switched off by default.
             </summary>
     </member>
-    <member name="E:StockSharp.LMAX.LmaxTrader.NewCandles">
+    <member name="E:StockSharp.LMAX.LmaxTrader.NewCandle">
       <summary>
             Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.LMAX.LmaxTrader.Stopped">
-      <summary>
-            The series processing end event.
             </summary>
     </member>
     <member name="M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
