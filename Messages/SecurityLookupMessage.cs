@@ -47,11 +47,6 @@ namespace StockSharp.Messages
 		public IEnumerable<SecurityTypes> SecurityTypes { get; set; }
 
 		/// <summary>
-		/// CFI code.
-		/// </summary>
-		public string CFICode { get; set; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
 		/// </summary>
 		public SecurityLookupMessage()
@@ -69,7 +64,6 @@ namespace StockSharp.Messages
 			{
 				TransactionId = TransactionId,
 				SecurityTypes = SecurityTypes,
-				CFICode = CFICode
 			};
 			
 			CopyTo(clone);

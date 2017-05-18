@@ -445,6 +445,31 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private string _cfiCode;
+
+		/// <summary>
+		/// Type in ISO 10962 standard.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CfiCodeKey,
+			Description = LocalizedStrings.CfiCodeDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 15)]
+		public string CfiCode
+		{
+			get { return _cfiCode; }
+			set
+			{
+				if (_cfiCode == value)
+					return;
+
+				_cfiCode = value;
+				Notify(nameof(CfiCode));
+			}
+		}
+
 		[field: NonSerialized]
 		private SynchronizedDictionary<string, object> _extensionInfo;
 
@@ -1623,7 +1648,7 @@ namespace StockSharp.BusinessEntities
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
-	    event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
 			add { _propertyChanged += value; }
 			remove { _propertyChanged -= value; }
@@ -1695,6 +1720,7 @@ namespace StockSharp.BusinessEntities
 			destination.BidsVolume = BidsVolume;
 			destination.AsksCount = AsksCount;
 			destination.AsksVolume = AsksVolume;
+			destination.CfiCode = CfiCode;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

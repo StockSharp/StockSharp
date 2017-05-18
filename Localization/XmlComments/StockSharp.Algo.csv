@@ -6983,12 +6983,12 @@ M:StockSharp.Algo.TraderHelper.ToDecimal(System.Single)/param/value;DocStr65
 M:StockSharp.Algo.TraderHelper.ToDecimal(System.Single)/returns;DocStr65
 M:StockSharp.Algo.TraderHelper.Iso10962(StockSharp.Messages.SecurityMessage)/summary;DocStr2524
 M:StockSharp.Algo.TraderHelper.Iso10962(StockSharp.Messages.SecurityMessage)/param/security;DocStr2831
-M:StockSharp.Algo.TraderHelper.Iso10962(StockSharp.Messages.SecurityMessage)/returns;DocStr2525
+M:StockSharp.Algo.TraderHelper.Iso10962(StockSharp.Messages.SecurityMessage)/returns;CfiCodeDesc
 M:StockSharp.Algo.TraderHelper.Iso10962ToSecurityType(System.String)/summary;DocStr2526
-M:StockSharp.Algo.TraderHelper.Iso10962ToSecurityType(System.String)/param/cfi;DocStr2525
+M:StockSharp.Algo.TraderHelper.Iso10962ToSecurityType(System.String)/param/cfi;CfiCodeDesc
 M:StockSharp.Algo.TraderHelper.Iso10962ToSecurityType(System.String)/returns;Str360
 M:StockSharp.Algo.TraderHelper.Iso10962ToOptionType(System.String)/summary;DocStr2526
-M:StockSharp.Algo.TraderHelper.Iso10962ToOptionType(System.String)/param/cfi;DocStr2525
+M:StockSharp.Algo.TraderHelper.Iso10962ToOptionType(System.String)/param/cfi;CfiCodeDesc
 M:StockSharp.Algo.TraderHelper.Iso10962ToOptionType(System.String)/returns;Str551
 M:StockSharp.Algo.TraderHelper.SafeGetVolume(StockSharp.Messages.ExecutionMessage)/summary;DocStr2527
 M:StockSharp.Algo.TraderHelper.SafeGetVolume(StockSharp.Messages.ExecutionMessage)/param/message;DocStr2528

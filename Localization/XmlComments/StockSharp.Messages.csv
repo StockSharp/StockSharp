@@ -1212,7 +1212,6 @@ M:StockSharp.Messages.SecurityId.ToString/returns;DocStr50
 T:StockSharp.Messages.SecurityLookupMessage/summary;DocStr4431
 P:StockSharp.Messages.SecurityLookupMessage.TransactionId/summary;TransactionId
 P:StockSharp.Messages.SecurityLookupMessage.SecurityTypes/summary;Str2539
-P:StockSharp.Messages.SecurityLookupMessage.CFICode/summary;DocStr9083
 M:StockSharp.Messages.SecurityLookupMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.SecurityLookupMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.SecurityLookupMessage.Clone/returns;DocStr1116
@@ -1235,6 +1234,7 @@ P:StockSharp.Messages.SecurityMessage.Multiplier/summary;DocStr2623
 P:StockSharp.Messages.SecurityMessage.Decimals/summary;Str548
 P:StockSharp.Messages.SecurityMessage.PriceStep/summary;Str306
 P:StockSharp.Messages.SecurityMessage.SecurityType/summary;Str360
+P:StockSharp.Messages.SecurityMessage.CfiCode/summary;CfiCodeDesc
 P:StockSharp.Messages.SecurityMessage.ExpiryDate/summary;Str371
 P:StockSharp.Messages.SecurityMessage.SettlementDate/summary;Str373
 P:StockSharp.Messages.SecurityMessage.UnderlyingSecurityCode/summary;UnderlyingAssetCode

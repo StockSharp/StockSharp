@@ -308,6 +308,9 @@ namespace StockSharp.Algo.Export
 
 				if (security.SecurityType != null)
 					writer.WriteAttribute("type", security.SecurityType.Value);
+				
+				if (!security.CfiCode.IsEmpty())
+					writer.WriteAttribute("cfiCode", security.CfiCode);
 
 				if (security.OptionType != null)
 					writer.WriteAttribute("optionType", security.OptionType.Value);
