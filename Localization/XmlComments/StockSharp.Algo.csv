@@ -3885,6 +3885,9 @@ M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean,S
 M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)/param/initChannels;DocStr9210
 M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)/param/initManagers;DocStr9211
 M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)/param/supportOffline;DocStr9304
+M:StockSharp.Algo.Connector.InitializeStorage(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/summary;DocStr93
+M:StockSharp.Algo.Connector.InitializeStorage(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/param/entityRegistry;DocStr1309
+M:StockSharp.Algo.Connector.InitializeStorage(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/param/storageRegistry;DocStr8561
 P:StockSharp.Algo.Connector.ReConnectionSettings/summary;DocStr903
 P:StockSharp.Algo.Connector.EntityFactory/summary;DocStr904
 P:StockSharp.Algo.Connector.TradesKeepCount/summary;DocStr905

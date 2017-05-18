@@ -45078,12 +45078,12 @@ namespace StockSharp.Localization
 		public static string ShowSockets => GetString(ShowSocketsKey);
 
 		/// <summary>
-		/// Use autonaming
+		/// Use auto naming
 		/// </summary>
 		public const string UseAutoNamingKey = nameof(UseAutoNaming);
 
 		/// <summary>
-		/// Use autonaming
+		/// Use auto naming
 		/// </summary>
 		public static string UseAutoNaming => GetString(UseAutoNamingKey);
 	}
