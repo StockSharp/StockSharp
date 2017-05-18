@@ -14067,3 +14067,4 @@ DocStr9775;Update item in cache;Обновить кэш
 DocStr9776;Item;Элемент
 DocStr9777;Remove item from cache;Удалить из кэша
 DocStr9778;Order mass cancelling element;Элемент массового снятия заявок
+DocStr9779;Command for clear logs;Команда очисти логов

@@ -4234,7 +4234,8 @@
     </member>
     <member name="F:StockSharp.Xaml.Monitor.ClearCommand">
       <summary>
-      </summary>
+            Command for clear logs.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.Monitor.#ctor">
       <summary>
