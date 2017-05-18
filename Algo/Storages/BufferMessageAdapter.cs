@@ -229,7 +229,7 @@ namespace StockSharp.Algo.Storages
 
 		private bool CanStore(SecurityId securityId, Type messageType, object arg)
 		{
-			return _subscriptions.Contains(Tuple.Create(securityId, DataType.Create(messageType, arg)));
+			return !FilterSubscription || _subscriptions.Contains(Tuple.Create(securityId, DataType.Create(messageType, arg)));
 		}
 
 		/// <summary>
