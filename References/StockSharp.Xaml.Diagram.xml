@@ -3172,6 +3172,11 @@
             </summary>
       <typeparam name="T">Type of element.</typeparam>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.UseAutoNaming">
+      <summary>
+            Use auto naming.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Type">
       <summary>
             Data type.
