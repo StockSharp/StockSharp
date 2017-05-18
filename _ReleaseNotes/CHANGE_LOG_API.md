@@ -18,6 +18,7 @@ StockSharp API Change log
 * (bug) Plaza. Blocked money translation fix.
 * (feature) IExternalCandleSource. Removed from connectors.
 * (feature) Monitor. Clear command.
+* (feature) SamplePlaza. Storage support.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

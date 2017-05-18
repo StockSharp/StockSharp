@@ -81,8 +81,8 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _sessionStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, object[]> _securityValues = new SynchronizedDictionary<Security, object[]>();
 
-		private readonly IEntityRegistry _entityRegistry;
-		private readonly IStorageRegistry _storageRegistry;
+		private IEntityRegistry _entityRegistry;
+		private IStorageRegistry _storageRegistry;
 
 		private bool _isDisposing;
 
@@ -104,18 +104,7 @@ namespace StockSharp.Algo
 		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, bool initManagers = true, bool supportOffline = false)
 			: this(false, true, initManagers, supportOffline)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
-			_entityRegistry = entityRegistry;
-			_storageRegistry = storageRegistry;
-
-			InitAdapter();
-
-			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
+			InitializeStorage(entityRegistry, storageRegistry);
 		}
 
 		/// <summary>
@@ -162,6 +151,27 @@ namespace StockSharp.Algo
 				InitAdapter();
 				IsRestorSubscriptioneOnReconnect = true;
 			}
+		}
+
+		/// <summary>
+		/// Initialize <see cref="StorageAdapter"/>.
+		/// </summary>
+		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
+		{
+			if (entityRegistry == null)
+				throw new ArgumentNullException(nameof(entityRegistry));
+
+			if (storageRegistry == null)
+				throw new ArgumentNullException(nameof(storageRegistry));
+
+			_entityRegistry = entityRegistry;
+			_storageRegistry = storageRegistry;
+
+			InitAdapter();
+
+			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
 		}
 
 		private void InitAdapter()
