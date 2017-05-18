@@ -928,6 +928,7 @@ P:StockSharp.Xaml.LogWindow.TimeFormat/summary;DocStr8357
 P:StockSharp.Xaml.LogWindow.Messages/summary;DocStr8354
 M:StockSharp.Xaml.LogWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Monitor/summary;DocStr8358
+F:StockSharp.Xaml.Monitor.ClearCommand/summary;DocStr8459
 M:StockSharp.Xaml.Monitor.#ctor/summary;DocStr1
 F:StockSharp.Xaml.Monitor.ShowStrategiesProperty/summary;DocStr29
 P:StockSharp.Xaml.Monitor.ShowStrategies/summary;DocStr8360
