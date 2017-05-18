@@ -53,6 +53,14 @@ namespace StockSharp.Community
 		byte[] ProcessDownload(Guid operationId, int startIndex, int count);
 
 		/// <summary>
+		/// To finish downloading the file.
+		/// </summary>
+		/// <param name="operationId">Operation ID, received from <see cref="BeginDownload"/>.</param>
+		/// <param name="isCancel">Cancel the operation.</param>
+		[OperationContract]
+		void FinishDownload(Guid operationId, bool isCancel);
+
+		/// <summary>
 		/// To start uploading the file to the site.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>

@@ -20,6 +20,7 @@ StockSharp API Change log
 * (feature) Monitor. Clear command.
 * (feature) SamplePlaza. Storage support.
 * (bug) BufferMessageAdapter. FilterSubscription fix.
+* (feature) File client. Cancel operation option.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
