@@ -17,6 +17,7 @@ StockSharp API Change log
 * (feature) StrategiesStatisticsPanel. ShowSecurity option.
 * (bug) Plaza. Blocked money translation fix.
 * (feature) IExternalCandleSource. Removed from connectors.
+* (feature) Monitor. Clear command.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
