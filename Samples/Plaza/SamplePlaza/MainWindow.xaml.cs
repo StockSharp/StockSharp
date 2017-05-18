@@ -199,6 +199,8 @@ namespace SamplePlaza
 
 						if (IsStorage.IsChecked == true)
 						{
+							revisionManager.Tables.Clear();
+
 							// запоминаем настроенный адаптер, так как InitializeStorage полностью очищает ранее осуществленные настройки
 							var plazaAdaprer = Trader.Adapter.InnerAdapters.OfType<PlazaMessageAdapter>().First();
 
