@@ -338,6 +338,41 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.FileProgressWindow">
+      <summary>
+            File uploading/downloading progress bar window.
+            </summary>
+      <summary>
+            FileProgressWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.FileProgressWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.FileProgressWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.FileProgressWindow.File">
+      <summary>
+            The file data.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.FileProgressWindow.Download(System.Int64)">
+      <summary>
+            Download file.
+            </summary>
+      <param name="id">File ID.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.FileProgressWindow.Upload(System.String)">
+      <summary>
+            Upload file.
+            </summary>
+      <param name="path">Link to file.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.FileProgressWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.GridControl.SearchBox">
       <summary>
             The search box for grid control column chooser.

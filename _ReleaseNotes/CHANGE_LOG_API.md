@@ -22,6 +22,7 @@ StockSharp API Change log
 * (bug) BufferMessageAdapter. FilterSubscription fix.
 * (feature) File client. Cancel operation option.
 * (feature) Security. CfiCode.
+* (feature) FileProgressWindow.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

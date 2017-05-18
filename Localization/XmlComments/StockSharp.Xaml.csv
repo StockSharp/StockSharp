@@ -64,6 +64,14 @@ P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.Storages/summary;DocStr9770
 P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.SelectedStorage/summary;DocStr9771
 M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.FileProgressWindow/summary;DocStr9782
+M:StockSharp.Xaml.FileProgressWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.FileProgressWindow.File/summary;DocStr9032
+M:StockSharp.Xaml.FileProgressWindow.Download(System.Int64)/summary;DocStr9088
+M:StockSharp.Xaml.FileProgressWindow.Download(System.Int64)/param/id;DocStr9031
+M:StockSharp.Xaml.FileProgressWindow.Upload(System.String)/summary;DocStr426
+M:StockSharp.Xaml.FileProgressWindow.Upload(System.String)/param/path;DocStr9491
+M:StockSharp.Xaml.FileProgressWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.GridControl.SearchBox/summary;DocStr9583
 F:StockSharp.Xaml.GridControl.SearchBox.ItemsPanelProperty/summary;DocStr29
 P:StockSharp.Xaml.GridControl.SearchBox.ItemsPanel/summary;DocStr8459
