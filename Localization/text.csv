@@ -4541,6 +4541,7 @@ SecurityIsUsedInSomeStrategies;The security is used in some strategies. Remove a
 OrderMassCancelling;Mass orders cancelling;Массовая отмена заявок
 Sockets;Sockets;Сокеты
 ShowSockets;Show element sockets in higher order elements.;Отображать сокеты элемента в элементах более высокого уровня.
+UseAutoNaming;Use autonaming;Использовать автоименование
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
