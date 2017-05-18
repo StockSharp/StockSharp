@@ -45076,5 +45076,15 @@ namespace StockSharp.Localization
 		/// Show element sockets in higher order elements.
 		/// </summary>
 		public static string ShowSockets => GetString(ShowSocketsKey);
+
+		/// <summary>
+		/// Use autonaming
+		/// </summary>
+		public const string UseAutoNamingKey = nameof(UseAutoNaming);
+
+		/// <summary>
+		/// Use autonaming
+		/// </summary>
+		public static string UseAutoNaming => GetString(UseAutoNamingKey);
 	}
 }
