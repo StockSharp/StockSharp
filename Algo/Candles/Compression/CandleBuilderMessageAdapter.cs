@@ -6,7 +6,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -454,19 +453,6 @@ namespace StockSharp.Algo.Candles.Compression
 			msg.DataType = info.DataType.Value;
 			msg.TransactionId = info.TransactionId;
 			msg.From = info.LastTime;
-
-			switch (msg.DataType)
-			{
-				case MarketDataTypes.CandleTimeFrame:
-				{
-					if (msg.From != null)
-					{
-						var range = new Range<DateTimeOffset>(msg.From.Value, msg.To == null || msg.To == DateTimeOffset.MaxValue ? DateTimeOffset.Now : msg.To.Value);
-						msg.Count = info.Board.GetTimeFrameCount(range, (TimeSpan)msg.Arg);
-					}
-					break;
-				}
-			}
 
 			_seriesInfosByTransactions.Add(info.TransactionId, info);
 
