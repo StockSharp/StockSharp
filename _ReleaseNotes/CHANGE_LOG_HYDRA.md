@@ -6,6 +6,7 @@ StockSharp Data (Hydra) Change log
 * (feature) SpbEx connector (binary).
 * (feature) Security. CfiCode.
 * (bug) Index create fix.
+* (feature) ServerCredentials. Save password for auto logon only.
 
 ###v4.3.23.1:
 * (feature) Server mode. Edit users.
