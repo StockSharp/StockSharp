@@ -1,5 +1,8 @@
 StockSharp Designer Change log
 ========================
+###current:
+* (feature) ServerCredentials. Save password for auto logon only.
+
 ###v4.3.24.1:
 * (feature) CQG continuum.
 * (feature) Securities. Custom sorting for extended info added.

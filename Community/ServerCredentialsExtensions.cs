@@ -45,9 +45,27 @@ namespace StockSharp.Community
 			if (credentials == null)
 				throw new ArgumentNullException(nameof(credentials));
 
+			credentials.SaveCredentials(credentials.AutoLogon);
+		}
+
+		/// <summary>
+		/// Save the credentials to <see cref="StockSharpFolder"/>.
+		/// </summary>
+		/// <param name="credentials">The class that contains a login and password to access the services http://stocksharp.com .</param>
+		/// <param name="savePassword">Save password.</param>
+		public static void SaveCredentials(this ServerCredentials credentials, bool savePassword)
+		{
+			if (credentials == null)
+				throw new ArgumentNullException(nameof(credentials));
+
+			var clone = credentials;
+
+			if (!savePassword)
+				clone.Password = null;
+
 			var file = Path.Combine(StockSharpFolder, _credentialsFile);
 
-			new XmlSerializer<SettingsStorage>().Serialize(credentials.Save(), file);
+			new XmlSerializer<SettingsStorage>().Serialize(clone.Save(), file);
 		}
 	}
 }
