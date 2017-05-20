@@ -200,35 +200,36 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var price = value.Price;
 			var time = value.Time;
+			var volume = value.Volume;
 
 			if (price < candle.LowPrice)
 			{
 				candle.LowPrice = price;
 				candle.LowTime = time;
+				candle.LowVolume = volume;
 			}
 
 			if (price > candle.HighPrice)
 			{
 				candle.HighPrice = price;
 				candle.HighTime = time;
+				candle.HighVolume = volume;
 			}
 
 			candle.ClosePrice = price;
 
-			if (value.Volume != null)
+			if (volume != null)
 			{
-				var volume = value.Volume.Value;
+				var v = volume.Value;
 
-				candle.TotalPrice += price * volume;
+				candle.TotalPrice += price * v;
 
-				candle.LowVolume = (candle.LowVolume ?? 0m).Min(volume);
-				candle.HighVolume = (candle.HighVolume ?? 0m).Max(volume);
-				candle.CloseVolume = volume;
-				candle.TotalVolume += volume;
+				candle.CloseVolume = v;
+				candle.TotalVolume += v;
 
 				var dir = value.OrderDirection;
 				if (dir != null)
-					candle.RelativeVolume = (candle.RelativeVolume ?? 0) + (dir.Value == Sides.Buy ? volume : -volume);
+					candle.RelativeVolume = (candle.RelativeVolume ?? 0) + (dir.Value == Sides.Buy ? v : -v);
 			}
 
 			candle.CloseTime = time;
