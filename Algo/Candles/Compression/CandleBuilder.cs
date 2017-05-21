@@ -54,6 +54,22 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>A new candles changes.</returns>
 		public IEnumerable<CandleMessage> Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderSourceValue value)
 		{
+			var changes = new List<CandleMessage>();
+
+			Process(message, currentCandle, value, changes);
+
+			return changes;
+		}
+
+		/// <summary>
+		/// To process the new data.
+		/// </summary>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <param name="currentCandle">The current candle.</param>
+		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
+		/// <param name="changes">A new candles changes.</param>
+		public virtual void Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderSourceValue value, IList<CandleMessage> changes)
+		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
@@ -65,7 +81,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (candle == null)
 			{
 				// skip the value that cannot be processed
-				yield break;
+				return;
 			}
 
 			if (candle == currentCandle)
@@ -79,14 +95,14 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				//candle.State = CandleStates.Changed;
-				yield return candle;
+				changes.Add(candle);
 			}
 			else
 			{
 				if (currentCandle != null)
 				{
 					currentCandle.State = CandleStates.Finished;
-					yield return currentCandle;
+					changes.Add(currentCandle);
 				}
 
 				if (message.IsCalcVolumeProfile)
@@ -96,7 +112,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				candle.State = CandleStates.Active;
-				yield return candle;
+				changes.Add(candle);
 			}
 		}
 
