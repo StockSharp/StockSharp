@@ -3,11 +3,16 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>To create <codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference> and <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
-		candles the same procedure used as for creating the <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference> candles.</para>
-		<para>For example, create a 1 min candle for APM5 - ESM5 spread:</para>
-        <code language="C#">
-        <![CDATA[
+<para>To create 
+<codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>, 
+<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
+or 
+<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
+candles the same procedure used as for creating the 
+<codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference> 
+candles.</para>
+<para>For example, create a 1 min candle for APM5 - ESM5 spread:</para>
+<code language="C#"><![CDATA[
 private QuikTrader _trader;
 
 private Security _instr1;
@@ -51,13 +56,11 @@ _indexSeries = new CandleSeries(typeof(TimeFrameCandle), _indexInstr, _timeFrame
 ...
 
 _candleManager.Start(_indexSeries);
-		]]>
-		</code>
+]]></code>
 		
-		<para>After that, candles will come to the event handler Processing - DrawCandles. These candles can be displayed on the chart:</para>
+<para>After that, candles will come to the event handler Processing - DrawCandles. These candles can be displayed on the chart:</para>
 
-        <code language="C#">
-        <![CDATA[
+<code language="C#"><![CDATA[
 private void DrawCandles(CandleSeries series, Candle candle)
 {
     if (series == _indexSeries) 
@@ -67,8 +70,7 @@ private void DrawCandles(CandleSeries series, Candle candle)
           _chart.Draw(chartData);
        }
 }
-		]]>
-		</code>
+]]></code>
 		
 	</introduction>
 

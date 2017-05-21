@@ -3,49 +3,46 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
 		<para>With <token>hydra</token> it is possible to glue together different types of market data on different contracts into one continuous instrument.</para> 
-		<para>To do this, select the <legacyBold>Securities => Glue</legacyBold>. item in the main menu of the application. After the opening the following window will appear:</para>
-				
-		<para>Before gluing the data, it is necessary to check which market data is available. To do this, the path is selected where the data is, and the instruments
-		that are supposed to glue together are reviewed in turn. If there are gaps, it is necessary to download the required market data (for example, BarChart).</para>
-		<mediaLink><image placement="center" xlink:href="HydraGluingCheckData" /></mediaLink>
+		<para>To do this, on the <legacyBold>Common</legacyBold> tab, select <legacyBold>Instruments</legacyBold>, the <legacyBold>All Instruments</legacyBold> tab appears.</para>
+		<para>Before gluing the data, it is necessary to check which market data is 
+		available. To do this, the path is selected where the data is, and the instruments 
+		that are supposed to glue together are reviewed in turn. If there are gaps, it is 
+		necessary to download the required market data (for example, from Finam).</para>
+		<mediaLink><image  xlink:href="HydraGluingCheckData" /></mediaLink>
 		
-		<para>As an example the gluing of ticks and 5 min futures on the ES will be considered.</para>
-		<para>The first step – the creation of a continuous instrument. To do this, click the <legacyBold>Create continuous futures</legacyBold> button, to bring up the following window:</para>
-		<mediaLink><image placement="center" xlink:href="HydraGluingCSWindow" /></mediaLink>
+		<para>As an example, gluing together by futures on the RTS index will be considered.</para>
+		<para>The first step is the creation of a continuous instrument. To do this, 
+		click on the <legacyBold>All Instruments</legacyBold> tab. the <legacyBold>Create Instrument=>Continuous Instrument</legacyBold> button, 
+		after which the following window will appear:</para>
+		<mediaLink><image xlink:href="HydraGluingWindow" /></mediaLink>
 		
-		<para>To create a continuous futures it is necessary to specify the name and to add the contracts. There are two ways to add the contracts.</para>
+		<para>To create a continuous futures it is necessary to specify the name and add the contracts. 
+		There are two ways to add the contracts.</para>
 		
 		<list class="bullet">
   			<listItem>
-  				<para>•	Manually by clicking the <mediaLinkInline><image placement="left" xlink:href="hydra_add" /></mediaLinkInline> button.</para>
-  				<mediaLink><image placement="center" xlink:href="HydraGluingCSCustom" /></mediaLink>
+  				<para>Manually by clicking the <mediaLinkInline><image xlink:href="hydra_add" /></mediaLinkInline> button.</para>
+  				<mediaLink><image xlink:href="HydraGluingCSCustom" /></mediaLink>
   			</listItem>
   			<listItem>
-  				<para>•	If to specify for the name the first two letters of the contract, for example ES, and to click the <legacyBold>Auto</legacyBold> button,
-  				then all the instruments found in the database will be added.</para>
-  				<mediaLink><image placement="center" xlink:href="HydraGluingCSAuto" /></mediaLink>
+  				<para>If to specify for the name the first two letters of the contract, for example RI, 
+  				and to click the <legacyBold>Auto</legacyBold> button, then all the instruments found in the database will be added.</para>
+  				<mediaLink><image xlink:href="HydraGluingCSAuto" /></mediaLink>
   			</listItem>
 		</list>
   		
-  		<para>Once the contracts have been added, and the transition dates have been set, it is necessary to select the data type that will be glued. If the candles
-  		are selected, then it is necessary to specify the candles timeframe.</para>
-		
-		<alert class="note">
-			<para>Important: The candles must be pre-downloaded. Otherwise, nothing will glue together.</para>
-		</alert>
-		
-		<para>And click the <legacyBold>Склеить</legacyBold> button.</para>
-		<mediaLink><image placement="center" xlink:href="HydraGluingCandles" /></mediaLink>
-
-		<para>Затем Then it is necessary to select the type of tick market data and click the Glue button again.</para>
-		<mediaLink><image placement="center" xlink:href="HydraGluingTrades" /></mediaLink>
-		
-		<para>After this it is possible to view that glued instrument.</para>
-		<mediaLink><image placement="center" xlink:href="HydraGluingCheckGluingData" /></mediaLink>
-		
-		<para>And, if necessary, to upload, for example to txt,
-		<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">ticks</link> or 
-		<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">candles</link>. </para>
+  		<para>Once the contracts have been added, and the transition dates have been set, 
+  		it is necessary to click the <legacyBold>OK</legacyBold> button, after which a new instrument will be created.</para>
+		<para>Next, it is necessary to click the <link xlink:href="0adb23fa-a295-43e0-9e75-9060b1d03388" /> 
+		button on the <legacyBold>Common</legacyBold> tab, select the received instrument, the data period, 
+		in the <legacyBold>Create From:</legacyBold> field set the <legacyBold>Composite Element</legacyBold> value. Then click the <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> button.</para>
+		<mediaLink>
+<image xlink:href="HydraGluingTrades"/>
+</mediaLink>
+<para>The generated data can be exported to Excel, xml or txt formats. Export is done using the drop-down list:</para>
+    		<mediaLink>
+    			<image placement="left" xlink:href="hydra_export" />
+    		</mediaLink>
 
 	</introduction>
 	</developerWalkthroughDocument>

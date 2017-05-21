@@ -9,7 +9,7 @@
 			<step>
 				<content>
 					<para>To create a task, it is necessary to click the <legacyBold>Add tasks...</legacyBold> button, in the window that opens, check the
-					<legacyBold>Backup</legacyBold> item and click <legacyBold>ОК</legacyBold> button.</para>
+					<legacyBold>Backup</legacyBold> item and click <legacyBold>OK</legacyBold> button.</para>
 			<mediaLink>
         		<image placement="left" xlink:href="hydra_tasks_backup_add" />
 			</mediaLink>

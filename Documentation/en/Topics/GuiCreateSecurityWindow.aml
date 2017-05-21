@@ -2,13 +2,15 @@
 <topic id="3d7de2e9-079d-40f5-9800-8cd81456f477" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Компонент <codeEntityReference>T:StockSharp.Xaml.SecurityCreateWindow</codeEntityReference> - это окно для создания и редактирования инструмента. Компонент состоит из двух основных элементов:
-      специального тектового поля <codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> и сетки редактирования свойств 
-      <codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference>. Получить доступ к созданному (отредактированному) инструменту
-      можно при помощи свойства <codeEntityReference>P:StockSharp.Xaml.SecurityCreateWindow.Security</codeEntityReference>.
+      <para>The <codeEntityReference>T:StockSharp.Xaml.SecurityCreateWindow</codeEntityReference> 
+component is a window for creating and editing an instrument. The component consists of two main elements: the special text field 
+<codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> 
+the property editing grid 
+<codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference>. 
+You can access the created (edited) instrument with the <codeEntityReference>P:StockSharp.Xaml.SecurityCreateWindow.Security</codeEntityReference> property.
       </para>
       <para>
-      Ниже показан внешний вид компонента и фрагмент кода с его использованием.
+Below is the appearance of the component and the code snippet with its use.
       </para>
       <mediaLink><image placement="left" xlink:href="Gui_SecurityCreateWindow" /></mediaLink>
       

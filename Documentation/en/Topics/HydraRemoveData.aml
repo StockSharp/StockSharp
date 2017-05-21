@@ -2,11 +2,11 @@
 <topic id="45cc9b3a-117c-4567-94af-fea13087ebe9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>The application main menu item <legacyBold>Additional => Erase data...</legacyBold>.</para>
+    	<para><legacyBold>Common</legacyBold> tab, the <legacyBold>Delete data...</legacyBold> button.</para>
 		<mediaLink>
 			<image placement="left" xlink:href="hydra_data_delete" />
 		</mediaLink>
-		<para>It allows to delete the data for all or particular instruments at specific dates.</para>
+		<para>It allows to delete the data for all or particular instruments for specific dates.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

@@ -3,36 +3,30 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
        <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.NewsGrid</codeEntityReference> - таблица для отображения новостей.
+      	<codeEntityReference>T:StockSharp.Xaml.NewsGrid</codeEntityReference> - the table to display news.
       </para>
       <para>
       
-       <legacyBold>Основные свойства</legacyBold>
+       <legacyBold>Main properties</legacyBold>
       </para>
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.News</codeEntityReference> - список новостей.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.News</codeEntityReference> - the news list.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.FirstSelectedNews</codeEntityReference> - выбранная новость.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.FirstSelectedNews</codeEntityReference> - the selected news.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.SelectedNews</codeEntityReference> - выбраннаые новости.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.SelectedNews</codeEntityReference> - selected news.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.NewsProvider</codeEntityReference> - поставщик новостей.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.NewsProvider</codeEntityReference> - news provider.</para>
   			</listItem>
 		</list>
-		
-	  <!--><para>
-	  Внеший вид компонета в составе <codeEntityReference>T:StockSharp.Xaml.NewsPanel</codeEntityReference>, а также фрагменты кода см. в разделе <link xlink:href="00026219-17a5-4749-82ab-ec018aa1ab0b">NewsPanel</link>.
-      </para>-->
       <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/AlfaDirect/SampleAlfa</legacyItalic>.
+Below is the appearance of the component, as well as code snippets with its use. The code example is taken from Samples/AlfaDirect/SampleAlfa.
       </para>
-      
-      <!-- <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink> -->
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[

@@ -30,7 +30,7 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		</code>
 		
 		<para>The <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> connector provides the special
-		<codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderCondition</codeEntityReference> сlass to work with the stop orders conditions.
+		<codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderCondition</codeEntityReference> class to work with the stop orders conditions.
 		This class supports the types of stop orders indicated in the <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderConditionTypes</codeEntityReference>.</para>
 	</introduction>
   </developerConceptualDocument>

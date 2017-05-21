@@ -2,15 +2,16 @@
 <topic id="a76a0a9c-bb95-4596-9464-9903379b3096" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>
-      <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> - the graphical component that allows to plot the stock charts: candles, indicators,
-      and to display on the charts the markers of orders and trades.
-      </para>
-      <para>
-      	Below is an example of the chart plotting using the <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
-      	The example from Samples/Chart/SampleChart is taken as a basis, in which some changes were made.
-      </para>
-    </introduction>
+<para>
+<codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> 
+- the graphical component that allows to plot the stock charts: candles, indicators,
+and to display on the charts the markers of orders and trades.
+</para>
+<para>
+Below is an example of the chart plotting using the <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
+The example from Samples/Chart/SampleChart is taken as a basis, in which some changes were made.
+</para>
+</introduction>
     
      <mediaLink><image placement="left" xlink:href="Gui_ChartSample" /></mediaLink>
     
@@ -41,9 +42,11 @@
 		  </step>
 		  <step>
 			  <content>
-				  <para>
-					  В коде главного окна декларируем переменные для <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, областей графика, элементов графика и индикаторов.					  
-				  </para>
+<para>
+2.	In the main window code we declare the variables for 
+<codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, 
+the chart areas, the chart elements and indicators.				  
+</para>
 				    <code title="C#" language="C#">
               		<![CDATA[
               		
@@ -71,10 +74,12 @@ private MovingAverageConvergenceDivergence _macd;
 		    <step>
 			  <content>
 				  <para>
-					  В обработчике события <legacyBold>Click</legacyBold> кнопки <legacyBold>Connect</legacyBold>, наряду с подпиской на события коннектора и вызовом метода
-					   <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference>, инициализируем кандлменеджер и подписываемся на событие
-					   <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>. 
-					   В обработчике этого события при получении новой свечи будет выполнятся отрисовка графика.
+3.	In the <legacyBold>Click</legacyBold> event handler of the <legacyBold>Connect</legacyBold> 
+button, along with subscribing to connector events and calling the 
+<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference> 
+method, we initialize a candle manager and subscribe to the 
+<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>  
+event. of this event, The chart plotting will be performed in the handler of this event when a new candle is received.
 				  </para>
 				    <code title="C#" language="C#">
               		<![CDATA[
@@ -105,10 +110,11 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		  </step>
 		  <step>
 			  <content>
-				  <para>
-					  В обработчике кнопки <legacyBold>ShowChart</legacyBold> создаем объекты индикаторов, областей и элементов графика. Добавляем элементы к областям, а области к чарту. Открываем окно графика
-					  и запускаем работу кандлменеджера.
-				  </para>
+<para>
+In the  <legacyBold>ShowChart</legacyBold> button handler we create the objects of indicators, 
+areas and elements of the chart. Adding elements to the areas, and the areas to the chart. 
+Opening the chart window and start the candle manager.
+</para>
 				    <code title="C#" language="C#">
               		<![CDATA[
 private void ShowChartClick(object sender, RoutedEventArgs e)
@@ -150,36 +156,35 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
 
     _candleManager.Start(series);
 }
-	  				]]>
-				   </code>
+]]></code>
 			  </content>
 		  </step>
 		  		  <step>
 			  <content>
-				<para>
-					  В обработчике события <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference> производим отрисовку
-					  свечи и значений индикаторов для каждой завершенной свечи. Для этого:
+<para>
+5.	In the 
+<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference> 
+event handler we draw the candle and the values of the indicators for each completed candle. For this, we:
 				</para>
 				<list class="ordered">
   					<listItem>
-  						<para>Вычисляем значения индикаторов.</para>
+<para>Calculate the values of the indicators.</para>
   					</listItem>
   					<listItem>
-  						<para>Заполняем словарь <legacyBold>elements</legacyBold> парами "объект элемента - значение элемента"</para>
+<para>Fill the <legacyBold>elements</legacyBold> directory with pairs "element object - element value".</para>
   					</listItem>
   					<listItem>
-  						<para>Для отрисовки графика вызываем метод 
-  						<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>,
-  						в который передаем время и словарь элементов.</para>
+<para>To draw a chart, we call the 
+<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>,
+method, to which we pass the time and the dictionary of elements.</para>
   					</listItem>
 				</list>
 				  
-				 <para>
-					  Результат работы программы представлен на рисунке выше.
-				</para>
+<para>
+The result of the program is shown in the figure above.
+</para>
 				  
-				    <code title="C#" language="C#">
-              		<![CDATA[
+<code title="C#" language="C#"><![CDATA[
 private void DrawCandle(CandleSeries series, Candle candle)
 {
     var wnd = _chartWindows.TryGetValue(series);
@@ -203,8 +208,7 @@ private void DrawCandle(CandleSeries series, Candle candle)
 
     }
 }
-]]>
-				   </code>
+]]></code>
 			  </content>
 		  </step>
 		  

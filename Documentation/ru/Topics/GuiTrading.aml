@@ -2,7 +2,7 @@
 <topic id="20b858de-424e-43ee-89ab-00002d344f89" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para> В этом разделе представлены компоненты, связанные с собственными торговыми транзациями: заявками 
+      <para> В этом разделе представлены компоненты, связанные с собственными торговыми транзакциями: заявками 
       (<codeEntityReference>T:StockSharp.Xaml.OrderGrid</codeEntityReference>, <codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference>), 
       условными заявками (<codeEntityReference>T:StockSharp.Xaml.OrderConditionalGrid</codeEntityReference>, <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference>) 
       и собственными сделками (<codeEntityReference>T:StockSharp.Xaml.MyTradeGrid</codeEntityReference>).</para>

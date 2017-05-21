@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="fb79e67d-945c-493d-bdac-85d0040af828" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -619,7 +619,7 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 				 При обработке этого сообщения необходимо вызвать методы <token>smartcom</token> регистрирующий/отменяющий регистрацию получения сделок.
 				 </para>
 				 <para>
-				 Так как сообщение используется для работы со всем типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
+				 Так как сообщение используется для работы со всеми типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
 				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType</codeEntityReference>. Для сделок значение этого свойства равно
 				 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MarketDataTypes.Trades</codeEntityReference>.
 				</para>
@@ -726,46 +726,5 @@ private static ExecutionMessage CreateTrade(string smartId, DateTime time, decim
   </developerConceptualDocument>
 </topic>
 
-
-<!--<list class="ordered">
-  						<listItem>
-  							<para>При помощи метода <legacyBold>CreateTrade</legacyBold> создается исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>. 
-  							Обратите внимание, что сообщения <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> используются как для сделок, так и для заявок. 
-  							Поэтому в сообщении уточняется, что оно относится к сделке - <legacyBold>ExecutionType = ExecutionTypes.Tick</legacyBold>.</para>
-  						</listItem>
-  						<listItem>
-  							<para>Созданное сообщение передается в метод <codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(Message)</codeEntityReference> (см. ниже).</para>
-  						</listItem>
-					</list> 
-				   
-				   <para>
-				     Рассмотрим этот процесс на примере события получения новой сделки <legacyBold>_wrapper.NewTrade</legacyBold>.
-				     </para>
-				   
-						<code language="C#">
-						<![CDATA[
-// Обработчик события новой сделки						
-private void OnNewTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartOrderAction action)
-{
-	SendOutMessage(CreateTrade(smartId, time, price, volume, tradeId, action));
-}
-
-// Создаем сообщение новой сделки
-private static ExecutionMessage CreateTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartOrderAction action)
-{
-	return new ExecutionMessage
-	{
-		SecurityId = new SecurityId { Native = smartId },
-		TradeId = tradeId,
-		TradePrice = price,
-		Volume = volume,
-		OriginSide = action.ToSide(),
-		ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
-		ExecutionType = ExecutionTypes.Tick,
-	};
-}
-
-						]]>	
-						</code> -->
 
 

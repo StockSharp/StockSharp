@@ -2,33 +2,33 @@
 <topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
       <introduction>
-      <para><token>hydra</token> allows to import its own data stored in the .csv format. To import select the <legacyBold>Import</legacyBold> item in the main menu of
-      the application, and then select the type of market data that you want to import. You can import the following types:</para>
+      <para><token>hydra</token> allows to import its own data saved in the .csv format. To import open the <legacyBold>Import</legacyBold> tab 
+      and select the type of market data that you want to import. You can import the following types:</para>
       
 	<list class="bullet">
   		<listItem>
-  			<para><link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Instruments</link></para>
+  			<para><link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659"/></para>
   		</listItem>
   		<listItem>
-  			<para><link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Ticks</link></para>
+  			<para><link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990"/></para>
   		</listItem>
   		<listItem>
-  			<para><link xlink:href="6465c049-fca8-4bb4-b00a-d3495299267d">Order books</link></para>
+  			<para><link xlink:href="6465c049-fca8-4bb4-b00a-d3495299267d"/></para>
   		</listItem>
   		<listItem>
-  			<para><link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e">Candles</link></para>
+  			<para><link xlink:href="9e13ea27-629d-4403-adfa-d76bc8648c7e"/></para>
   		</listItem>
   		<listItem>
-  			<para><link xlink:href="b0088f47-8c93-46ed-a53e-820b7c66e65b">Oder log</link></para>
+  			<para><link xlink:href="b0088f47-8c93-46ed-a53e-820b7c66e65b"/></para>
   		</listItem>
   		<listItem>
-  			<para><link xlink:href="eac5ea13-e8a5-4133-82bd-4442a4df3aca">Level 1</link></para>
+  			<para><link xlink:href="eac5ea13-e8a5-4133-82bd-4442a4df3aca"/></para>
   		</listItem>
   		<listItem>
-  			<para><link xlink:href="649dd276-171b-483a-9cf1-8f77e4e1b577">News</link></para>
+  			<para><link xlink:href="649dd276-171b-483a-9cf1-8f77e4e1b577"/></para>
   		</listItem>
   		<listItem>
-  			<para><link xlink:href="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380">Transactions</link></para>
+  			<para><link xlink:href="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380"/></para>
   		</listItem>
 	</list>
 

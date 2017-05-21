@@ -12,14 +12,36 @@
       </para>
       
       <mediaLink><image placement="left" xlink:href="Gui_ChartPanel" /></mediaLink>
-      
+      <para>1 - Горизонтальная линия;</para>
+<para>2 - Вертикальная линия;</para>
+<para>3 - Подсказка;</para>
+<para>4 - Линия тренда;</para>
+<para>5 - Область;</para>
+<para>6 - Текст.</para>
       <para>
       	<legacyBold>Функционал панели инструментов</legacyBold>
       </para>
       
       <mediaLink><image placement="left" xlink:href="Gui_ChartPanelTools" /></mediaLink>
       
-      
+      <para>1 -Автоматическая публикация;</para>
+<para>2 - Сохранить данные;</para>
+<para>3 - Выставление заявок;</para>
+<para>4 - Легенда;</para>
+<para>5 - Область просмотра;</para>
+<para>6 - Показать перекрестие;</para>
+<para>7 - Показывать всплывающую подсказку;</para>
+<para>8 - Показывать значение на оси;</para>
+<para>9 - Линия;</para>
+<para>10 - Указатель;</para>
+<para>11 - Вертикальная линия;</para>
+<para>12 - Горизонтальная линия;</para>
+<para>13 - Область;</para>
+<para>14 - Текст;</para>
+<para>15 - Показать статичстику FPS;</para>
+<para>16 - Выставление заявки с графика;</para>
+<para>17 - Сохранить данные с графика;</para>
+<para>18 - Поделиться ссылкой на изображение;</para>
     </introduction>
     
      

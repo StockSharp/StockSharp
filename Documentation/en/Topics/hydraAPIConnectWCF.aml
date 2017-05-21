@@ -3,12 +3,12 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-    <para><legacyBold>S#.Data</legacyBold> может исользоваться в серверном режиме, в данном режиме можно 
-удаленно подключиться к <legacyBold>S#.Data</legacyBold> и получить имеющиеся данные в хранилище или записать новые. 
-Включение серверного режима <legacyBold>S#.Data</legacyBold> описано в 
-пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
-     <para>Для подключения к <legacyBold>S#.Data</legacyBold> через WCF в <legacyBold>S#.API</legacyBold> есть 
-класс <codeEntityReference qualifyHint="false">T: StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference>.</para>
+    <para><legacyBold>S#.Data</legacyBold> can be used in server mode, in this mode it is possible remotely to 
+    connect to <legacyBold>S#.Data</legacyBold> and get the data available in the storage or write new ones. 
+    The activation of the <legacyBold>S#.Data</legacyBold> server mode is described in the 
+    <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
+     <para>To connect to <legacyBold>S#.Data</legacyBold> through WCF there is the 
+     <codeEntityReference qualifyHint="false">T: StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in <legacyBold>S#.API</legacyBold>.</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))
@@ -18,7 +18,7 @@ var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri
 ...
 ]]></code>
 
-<para>Получение всех имеющихся в <legacyBold>S#.Data</legacyBold> инструментов</para>
+<para>Getting all the instruments available in <legacyBold>S#.Data</legacyBold></para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var storageRegistry = new StorageRegistry();
@@ -26,7 +26,7 @@ client.Refresh(storageRegistry.GetSecurityStorage(), new Security(), s => { }, (
 var allSecurity = storageRegistry.GetSecurityStorage().Lookup(new Security());
 ...
 ]]></code>
-<para>Получение всех имеющихся данных в <legacyBold>S#.Data</legacyBold> по инструменту, и сохранение в локальном хранилище</para>
+<para>Getting all available data in <legacyBold>S#.Data</legacyBold> by instrument, and saving to local storage</para>
 
 <code language="C#" title="C#"><![CDATA[
 ...

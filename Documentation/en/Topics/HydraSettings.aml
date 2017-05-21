@@ -1,58 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d845e99-6bde-437e-b7f4-059be0438894" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-    	<para>The application main menu item <legacyBold>Additional => Settings...</legacyBold>.</para>
-    	<para>
-    		It allows to setup <token>hydra</token> to work in server mode. To open the window with <token>hydra</token> settings it is necessary to click
-    		<legacyBold>Additional</legacyBold> in the main menu, and to select <legacyBold>Settings</legacyBold> in the drop-down menu.
-    	</para>
-<mediaLink><image xlink:href="hydra_settings"/></mediaLink>
-      
-       	<para> <legacyBold>S#.Data Server</legacyBold></para>
-      
-      <list class="bullet">
-        <listItem>
-          <legacyBold>Server mode</legacyBold> - switch <token>hydra</token> to the server mode.
-		</listItem>
-        <listItem>
-          <legacyBold>Authorization</legacyBold> - authorization method to access <token>hydra</token>: Anonymous/Windows/User/StockSharp.
-		</listItem>  
-		<listItem>
-          <legacyBold>Max securities</legacyBold> - the maximum number of the instruments that can be requested from the server.
-		</listItem>	
+   <introduction>
+<para>Settings
+<legacyBold>S#.Data</legacyBold> can be used in server mode, in this mode you can remotely connect to <legacyBold>S#.Data</legacyBold> 
+and get the existing data to the storage. You can connect to <legacyBold>S#.Data</legacyBold> running in 
+server mode from <legacyBold>S#.Designer</legacyBold> (as described in the 
+<link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" /> item in the <legacyBold>S#.Designer</legacyBold> documentation). 
+Also, you can connect to <legacyBold>S#.Data</legacyBold> via <legacyBold>S#.API</legacyBold> (as described in 
+<link xlink:href="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" />, 
+<link xlink:href="f143c9e7-d5a6-4464-9b01-18117183cc7a" />, 
+<link xlink:href="040cdc40-39b4-47be-b3f0-441710515562" /> items).</para>
+<para>To enable the <legacyBold>S#.Data</legacyBold> server mode, on the <legacyBold>Common</legacyBold> tab, click the <legacyBold>Settings</legacyBold> 
+button, the server mode setup window will open.</para>
 
-	  </list>			
-		
-	<para> <legacyBold>Main</legacyBold></para>
-	<list class="bullet">
-	    <listItem>
-          <legacyBold>Auto-start</legacyBold> - the quotes auto downloading at start.
-		</listItem>
-        <listItem>
-          <legacyBold>Tray icon</legacyBold> - to minimize to tray.
-		</listItem>
-        <listItem>
-          <legacyBold>Auto-stop</legacyBold> - to stop the work at specified time.
-		</listItem>		
-        <listItem>
-          <legacyBold>Auto-stop delay</legacyBold> - the time for the auto-stop option.
-		</listItem>	
-        <listItem>
-          <legacyBold>Errors (quantity)</legacyBold> - the number of errors after reaching that an email with an error message will be sent. A value of 0 means off mode.
-		</listItem>	
-        <listItem>
-          <legacyBold>Errors (email)</legacyBold> - the e-mail address, to which a message about exceeding the maximum number of errors will be sent.
-		</listItem>	
-      </list>		
-      
-      <para>Если установить <legacyBold>Авторизацию</legacyBold> отличную от <legacyBold>Анонимно</legacyBold>, 
-    на вкладке <legacyBold>Общее</legacyBold> появится кнопка <legacyBold>Пользователи</legacyBold>, 
-    после нажатия на которую появляется окно <legacyBold>Пользователи</legacyBold></para>
+   <mediaLink><image xlink:href="hydra_server"/></mediaLink>
+   
+<para><legacyBold>S#.Data server</legacyBold></para>
+<list class="bullet">
+<listItem><para><legacyBold>Server mode</legacyBold> – switch <legacyBold>S#.Data</legacyBold> to the server mode.</para></listItem>
+<listItem><para><legacyBold>Server running over the FIX protocol</legacyBold> - the server that distributes live and historical data via the FIX protocol</para></listItem>
+<listItem><para><legacyBold>Authorization</legacyBold> - authorization for access to the <legacyBold>S#.Data</legacyBold> server</para></listItem>
+<listItem><para><legacyBold>Number of instruments</legacyBold> - the maximum number of instruments that can be requested from the server</para></listItem>
+<listItem><para><legacyBold>Number of days for a candle</legacyBold> - the maximum number of days available for downloading the history of candles</para></listItem>
+<listItem><para><legacyBold>Number of days for ticks</legacyBold> - the maximum number of days available for downloading the history of tick data</para></listItem>
+
+</list>
+<para><legacyBold>CSV</legacyBold></para>
+<list class="bullet">
+<listItem>
+<legacyBold>Template</legacyBold> – the template for exporting the relevant data type
+</listItem>
+</list>
+<para><legacyBold>General</legacyBold></para>
+<list class="bullet">
+<listItem><para><legacyBold>Autostart</legacyBold> - the quotes auto downloading at start</para></listItem>
+<listItem><para><legacyBold>Tray</legacyBold> – to minimize to tray</para></listItem>
+<listItem><para><legacyBold>Auto-stop</legacyBold> - stop the work at specified time</para></listItem>
+<listItem><para><legacyBold>Time for auto-sto</legacyBold>p - the time for the auto-stop option</para></listItem>
+<listItem><para><legacyBold>Errors (quantity)</legacyBold> - the number of errors after reaching that an email with an error message will be sent. A value of 0 means off mode</para></listItem>
+<listItem><para><legacyBold>Errors (email)</legacyBold> - the email address, to which a message about exceeding the maximum number of errors will be sent.</para></listItem>
+
+</list>
+      <para>If to set the <legacyBold>Authorization</legacyBold> different from <legacyBold>Anonymous</legacyBold>, the <legacyBold>Users</legacyBold> button 
+      appears on the <legacyBold>Common</legacyBold> tab, after clicking on it, the <legacyBold>Users</legacyBold> window appears</para>
 <mediaLink>
 <image xlink:href="hydra_users"/>
 </mediaLink>
-      <para>В левой части окна можно добавить нового пользователя, а в правой установить для него права доступа.</para>
-	</introduction>
+      <para>In the left part of the window, you can add a new user, and in the right part you can set access rights for it.</para>
+
+     </introduction>
 	</developerWalkthroughDocument>
 </topic>

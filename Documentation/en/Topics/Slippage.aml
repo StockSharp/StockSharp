@@ -16,19 +16,6 @@
 
 		<para><codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> strategies use their own mechanism for slippage calculation. In this case,
 		the value of slippage can be obtained through the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Slippage</codeEntityReference> property.</para>
-		
-		<!--  самостоятельно регистрирует подсчитывает поступающие заявки на учет проскальзывания через вызов метода 
-		<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Slippage.SlippageManager.ProcessMessage(StockSharp.Messages.Message)</codeEntityReference>.</para>
-		Если для алгоритма требуется изменение в логике проскальзывания, то из кода стратегии можно вызвать метод 
-		<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Slippage.SlippageManager.Registering(StockSharp.BusinessEntities.Order,System.Decimal)</codeEntityReference>,
-		передав в него новую ожидаемую цену:</para>
-	  
-		<code language="C#">SlippageManager.Registering(myOrder, newEstimatedPrice);</code> 
-		
-		<para>Если стратегия использует механизм перерегистрации заявок (<link xlink:href="4b427409-9aa9-41d3-bb97-98745d1bba8e">Замена заявок</link>), например, как в <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link>,
-		то необходимо вызывать метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Slippage.SlippageManager.ReRegistering(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>:</para>
-		
-		<code language="C#">SlippageManager.ReRegistering(oldOrder, newOrder);</code> -->
 	</introduction>
 
 	<prerequisites>

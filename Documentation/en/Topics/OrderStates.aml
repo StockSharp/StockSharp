@@ -32,7 +32,7 @@
 				  or cancelled).
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference> - the order has not been aссepted by the exchange (or intermediate
+				  <codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference> - the order has not been accepted by the exchange (or intermediate
 				  system, such as the broker server) for any reason.
 			  </listItem>
 		  </list>

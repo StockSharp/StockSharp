@@ -2,10 +2,10 @@
 <topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>The <legacyBold>Analytics</legacyBold> option allows using plug-in  
-      <link xlink:href="83e7f4bb-733d-4463-a2c9-923ccc486d36">scripts</link> to analyze the downloaded data, and to  
-      <link xlink:href="46348bb0-292f-4c53-b075-793ecf8b3d08">display the analysis results</link> in graphical or tabular form. To download this option select the 
-      <legacyBold>Additional => Analytics</legacyBold> item in the main application menu or click the <legacyBold>Analytics</legacyBold> button on the toolbar.</para>
+      <para>The <legacyBold>Analytics</legacyBold> option allows using plug-in 
+      <link xlink:href="83e7f4bb-733d-4463-a2c9-923ccc486d36">scripts</link> to analyze the downloaded data, and 
+      <link xlink:href="46348bb0-292f-4c53-b075-793ecf8b3d08">display the analysis results</link> in graphical or 
+      tabular form. To download this option, click the <legacyBold>Analytic</legacyBold> button on the <legacyBold>Common</legacyBold> tab.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

@@ -2,23 +2,23 @@
 <topic id="af144c31-4138-4d15-8097-fd0137370830" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>В <token>stocksharp</token> имеются графические компоненты для отображения всех видов рыночных данных:</para>
+      <para>There are graphical components to display all kinds of market data in <token>stocksharp</token>:</para>
       
 	<list class="bullet">
   		<listItem>
-  			<para>Таблица для отображения сделок - <codeEntityReference>T:StockSharp.Xaml.TradeGrid</codeEntityReference>.</para>
+  			<para>Table to display trades  - <codeEntityReference>T:StockSharp.Xaml.TradeGrid</codeEntityReference>.</para>
   		</listItem>
   		<listItem>
-  			<para>Таблица для отображения Level1 - <codeEntityReference>T:StockSharp.Xaml.Level1Grid</codeEntityReference>.</para>
+  			<para>Table to display Level1  - <codeEntityReference>T:StockSharp.Xaml.Level1Grid</codeEntityReference>.</para>
   		</listItem>
   		<listItem>
-  			<para>Компонент для отображения стакана - <codeEntityReference>T:StockSharp.Xaml.MarketDepthControl</codeEntityReference>.</para>
+  			<para>Component to display an order book  - <codeEntityReference>T:StockSharp.Xaml.MarketDepthControl</codeEntityReference>.</para>
   		</listItem>
   		<listItem>
-  			<para>Таблица для отображения лога заявок - <codeEntityReference>T:StockSharp.Xaml.OrderLogGrid</codeEntityReference>.</para>
+  			<para>Table to display an order log  - <codeEntityReference>T:StockSharp.Xaml.OrderLogGrid</codeEntityReference>.</para>
   		</listItem>
   		<listItem>
-  			<para>Таблицы для отображения новостей - <codeEntityReference>T:StockSharp.Xaml.NewsGrid</codeEntityReference>, <codeEntityReference>T:StockSharp.Xaml.NewsPanel</codeEntityReference>.</para>
+  			<para>Tables to display news  - <codeEntityReference>T:StockSharp.Xaml.NewsGrid</codeEntityReference>, <codeEntityReference>T:StockSharp.Xaml.NewsPanel</codeEntityReference>.</para>
   		</listItem>
   		
 	</list>
@@ -26,11 +26,11 @@
     </introduction>
     
      <relatedTopics>
-      	<link xlink:href="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f">Тиковые сделки</link>
-      	<link xlink:href="cec80fb2-5072-4900-92d8-0e5c88becce3">Level1</link>
-       	<link xlink:href="3a23bf32-fcbd-409b-99b3-2ff1b953c85a">Стакан</link>
-       	<link xlink:href="583c9ad6-8798-4167-a6a1-667e9929fe2d">Лог заявок</link>
-       	<link xlink:href="f9005237-fc93-4086-9300-6b081056a0fa">Новости</link>
+      	<link xlink:href="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f"/>
+      	<link xlink:href="cec80fb2-5072-4900-92d8-0e5c88becce3"/>
+       	<link xlink:href="3a23bf32-fcbd-409b-99b3-2ff1b953c85a"/>
+       	<link xlink:href="583c9ad6-8798-4167-a6a1-667e9929fe2d"/>
+       	<link xlink:href="f9005237-fc93-4086-9300-6b081056a0fa"/>
     </relatedTopics>
     
   </developerConceptualDocument>

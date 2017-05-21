@@ -2,73 +2,75 @@
 <topic id="f4e84944-41ad-42f2-9d2a-2854a8665152" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Компонент <codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference> предназначен для поиска и выбора инструментов. Поддерживается как одиночный, так и множественный выбор. 
-      Компонент позволяет фильтровать список инструментов по их типу. Также этот компонент может использоваться для отображения финансовой информации (полей level1), как показано в разделе
-      <link xlink:href="de52af78-ec80-45b4-9820-0052f8add762">SecurityGrid</link>.
+      <para>The <codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference> component is designed to 
+      find and select instruments. It supports both single and multiple choice. The component allows you to filter 
+      the list of instruments by their type. This component can also be used to display financial information 
+      (level1 fields), as shown in the
+      <link xlink:href="de52af78-ec80-45b4-9820-0052f8add762">SecurityGrid</link> section.
       </para>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference> состоит из:
+      	<codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference> consists of:
       </para>	
       	
 	<list class="ordered">
   		<listItem>
-  			<para>Текстового поля, для ввода кода (или Id) инструмента. При вводе выполняется фильтрация списка по введенной подстроке.</para>
+  			<para>A text field, to enter the code (or Id) of the instrument. When you enter, the list is filtered by the entered substring.</para>
   		</listItem>
   		<listItem>
-  			<para>Специального комбинированного списка <codeEntityReference>T:StockSharp.Xaml.<codeInline></codeInline>SecurityTypeComboBox</codeEntityReference> 
-  			для фильтрации инструментов по их типу.</para>
+  			<para>The special <codeEntityReference>T:StockSharp.Xaml.<codeInline></codeInline>SecurityTypeComboBox</codeEntityReference> 
+  			combo box for filtering instruments by their type.</para>
   		</listItem>
   		<listItem>
-  			<para>Таблицы <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> для отображения списка инструментов.</para>
+  			<para>The  <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> table to display the list of instruments.</para>
   		</listItem>
 	</list>
       
       <para>
-       <legacyBold>Основные свойства</legacyBold>
+       <legacyBold>Main properties</legacyBold>
       </para>
      
 	  <list class="bullet">
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectionMode</codeEntityReference> - режим выбора инструмента: одиночный, множественный.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectionMode</codeEntityReference> - instrument selection mode: single, multiple.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ShowCommonStatColumns</codeEntityReference> - отображать основные колонки.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ShowCommonStatColumns</codeEntityReference> - to display the main columns.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ShowCommonOptionColumns</codeEntityReference> - отображать основные колонки для опционов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ShowCommonOptionColumns</codeEntityReference> - to display the main columns for options.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.Title</codeEntityReference> - заголовок, который отображается в верхней части компонента.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.Title</codeEntityReference> - the title that is displayed at the top of the component.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.Securities</codeEntityReference> - список инструментов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.Securities</codeEntityReference> - the list of instruments.</para>
   		</listItem>
   	 	<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedSecurity</codeEntityReference> - выбранный инструмент.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedSecurity</codeEntityReference> - the selected instrument.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedSecurities</codeEntityReference> - список выбранных инструментов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedSecurities</codeEntityReference> - the list of selected instruments.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.FilteredSecurities</codeEntityReference> - список отфильтрованных инструментов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.FilteredSecurities</codeEntityReference> - the list of filtered instruments.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ExcludeSecurities</codeEntityReference> - список скрытых в списке инструментов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ExcludeSecurities</codeEntityReference> - the list of hidden instruments.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedType</codeEntityReference> - выбранный тип инструмента.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedType</codeEntityReference> - the selected instrument type.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SecurityProvider</codeEntityReference> - провайдер информации об инструментах.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SecurityProvider</codeEntityReference> - the provider of information about instruments.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.MarketDataProvider</codeEntityReference> - провайдер рыночных данных.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.MarketDataProvider</codeEntityReference> - the provider of market data.</para>
   		</listItem>
   		
 	  </list>
 	  
       <para>
-       Ниже показаны внешний вид компонента и фрагмент кода с его использованием, взятый из примера <legacyItalic>Samples/Quik/Sample</legacyItalic> .
+Below is the appearance of the component and the code snippet with its using, taken from example <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
  <section>
  
@@ -125,9 +127,9 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
 			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
 			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены ордера"));
+			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "OrderCancelFailed"));
 			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп ордера"));
+			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "StopOrderCancelFailed"));
 			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
@@ -164,11 +166,6 @@ private void SecurityPicker_OnSecuritySelected(Security security)
 </section>
       
     </introduction>
-    
-         <!--<relatedTopics>
-       <link xlink:href="3dc4f866-ab4e-4c74-a627-13727abdb966">SecurityPickerWindow</link>
-    </relatedTopics>-->
-
     
   </developerConceptualDocument>
 </topic>

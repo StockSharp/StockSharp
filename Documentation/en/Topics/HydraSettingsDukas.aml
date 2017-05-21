@@ -5,13 +5,13 @@
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_ducascopy" />
       </mediaLink>
-      <para><legacyBold>Duкasсopy</legacyBold></para>
+      <para><legacyBold>Dukascopy</legacyBold></para>
       <list class="bullet">
         <listItem>
           <legacyBold>Start date</legacyBold> - from which date to begin data downloading.
 		</listItem>
         <listItem>
-          <legacyBold>Day offset</legacyBold> - time shift as the number of days from the current date. Required to prevent downloading of incomplete data in the current trading session.
+          <legacyBold>Time offset</legacyBold> - time shift as the number of days from the current date. Required to prevent downloading of incomplete data in the current trading session.
 		</listItem>
 		<listItem>
           <legacyBold>Weekend</legacyBold> - to ignore weekends and holidays (do not download data).

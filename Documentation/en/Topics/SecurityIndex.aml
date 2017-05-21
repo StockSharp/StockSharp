@@ -3,17 +3,20 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para><codeEntityReference>T:StockSharp.Algo.IndexSecurity</codeEntityReference> - the index built from instruments.</para>
-		<para>And its implementation <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - the index built from instruments with the use of weighting factors.</para>
-		<para>For example, when you want to build a spread between the two instruments ESM5 and APM5.</para>
+		<para><codeEntityReference>T:StockSharp.Algo.IndexSecurity</codeEntityReference> - the index built from instruments. 
+		For example, to set a spread in arbitrage or pair trading. It has the following implementations.</para>
+		<para>1.	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> - 
+is the index built from a combination of several instruments through the <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionFormula</codeEntityReference> mathematical formula.</para>
+		<para>2.	<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - 
+		is the index built from instruments using weighting factors.</para>
 	</introduction>
 <procedure>
-			<title>Создание ExpressionIndexSecurity</title>
+			<title>The ExpressionIndexSecurity creating</title>
 				<steps class="ordered">
 					<step>
 						<content>
-<para>Объявить составные инструменты, которые будут входить в <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
-и сам <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
+<para>To declare the compound instruments that will be included in <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> 
+and in the <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> itself:</para>
             				<code language="C#">
             				<![CDATA[
 private Security _instr1;
@@ -30,7 +33,7 @@ private const string _secCode2 = "LKM5";
 
 					<step>
 						<content>
-<para>Создать <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
+<para>To create the <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
 _indexInstr = new ExpressionIndexSecurity
@@ -46,21 +49,22 @@ _indexInstr = new ExpressionIndexSecurity
 				</steps>
 		</procedure>
 		<procedure>
-			<title>WeightedIndexSecurity creating</title>
+			<title>The WeightedIndexSecurity creating</title>
 				<steps class="ordered">
-				
 					<step>
 						<content>
-							<para>To declare the compound instruments that will be included in <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
-							and in the <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> itself:</para>
+							<para>1.	To declare the compound instruments that will be included in 
+							<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> and in the 
+							<codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> itself:</para>
             				<code language="C#">
             				<![CDATA[
 private Security _instr1;
 private Security _instr2;
+
 private WeightedIndexSecurity _indexInstr;
 
-private const string _secCode1 = "ESM5";
-private const string _secCode2 = "APM5";
+private const string _secCode1 = "GZM5";
+private const string _secCode2 = "LKM5";
 							]]>
 							</code>
 						</content>
@@ -68,10 +72,10 @@ private const string _secCode2 = "APM5";
 
 					<step>
 						<content>
-							<para>To create the <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>:</para>
+							<para>To create the  <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-_indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Associated, Id = "IndexInstr" };
+_indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Forts, Id = "IndexInstr" };
 							]]>
 							</code>						
 						</content>
@@ -79,7 +83,7 @@ _indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Associ
 					
 					<step>
 						<content>
-							<para>To add the compound instruments in it:</para>
+							<para>To add the compound instruments to it:</para>
             				<code language="C#">
             				<![CDATA[
 _indexInstr.Weights.Add(_instr1, 1);

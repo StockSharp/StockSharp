@@ -86,14 +86,6 @@
     </procedure>
 
     </introduction>
-    <!--><relatedTopics>
-     	 <externalLink>
-		<linkText>Video - Install StockSharp</linkText>
-			<linkAlternateText>Установка StockSharp</linkAlternateText>
-			<linkUri>http://youtube.com/watch?v=9YThBGMeVKE</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
- 
-    </relatedTopics>-->
+
   </developerConceptualDocument>
 </topic>

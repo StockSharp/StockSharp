@@ -2,36 +2,12 @@
 <topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
     -->
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
       <para>
 		The <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class implements the <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>
 		interface. Therefore, the strategies can be passed to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>,
 		and all of its messages will automatically get to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>.
-		
-		
-		
-		<!--можно использовать метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.AddLog(StockSharp.Algo.Strategies.ErrorStates,System.String,System.Object[])</codeEntityReference>.
-		Передавая в него отладочную информацию или данные о ведении роботом торговли, <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
-		автоматически перебрасывает их через событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.Log</codeEntityReference>.
-		Это сделано для того, чтобы внешний код (например, главное окно робота, где осуществляется запуск и остановка стратегий) мог
-		обработать полученную информацию. Например, отобразить ее на экран пользователю.
-		
-		Для логирования сообщений предоставляет вспомогательный класс <codeEntityReference>T:StockSharp.Logging.StrategyLogManager</codeEntityReference>.
-		При добавлении стратегии в коллекцию <codeEntityReference qualifyHint="true">P:StockSharp.Logging.StrategyLogManager.Strategies</codeEntityReference>
-		<codeEntityReference>T:StockSharp.Logging.StrategyLogManager</codeEntityReference> автоматически подписывается на событие
-		<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.Log</codeEntityReference>. После этого весь вывод сообщений
-		будет переадресовываться в коллекцию <codeEntityReference qualifyHint="true">P:StockSharp.Logging.StrategyLogManager.Listeners</codeEntityReference>.
-		По-умолчанию данная коллекция пустая. Чтобы сообщения из стратегий начали попадать, к примеру, в файл, нужно добавить соответствующий
-		<codeEntityReference>T:StockSharp.Logging.StrategyLogListener</codeEntityReference>.-->
 	</para>
     </introduction>
     
@@ -42,8 +18,6 @@
 			</para>
 		</content>
 	</prerequisites>
-    <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
-    <!-- One or more procedure or section with procedure -->
     <procedure>
 			<title>Logging in to test file</title>
 
@@ -139,41 +113,6 @@ emailListener.Filters.Add(msg => msg.Level == LogLevels.Warning);</code>
 				</step>
 			</steps>
 		</procedure>
-
-	<!--	<procedure>
-			<title>Передача Sms через Google Calendar</title>
-
-			<steps class="ordered">
-				<step>
-					<content>
-						<para>
-							Перед использованием <codeEntityReference>T:StockSharp.Logging.SmsLogListener</codeEntityReference>
-							необходимо настроить Google Calendar, указав в нем номер телефона, и выключив уведомление через SMS. Подробнее,
-							<token>calendar</token>.
-						</para>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>
-							Создание логгера и передача в него логина и пароля от Google сервисов:
-						</para>
-						<code language="C#">var smsListener = new SmsLogListener("имя@gmail.com", "пароль");
-
-logManager.Listeners.Add(smsListener);
-logManager.Sources.Add(lkohSmaStrategy);</code>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>
-							Установка фильтра на отсылку сообщений типа <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>:
-						</para>
-						<code language="C#">smsListener.Filters.Add(msg => msg.Level == LogLevels.Error);</code>
-					</content>
-				</step>
-			</steps>
-		</procedure> -->
 
 		<procedure>
 			<title>Logging in to the LogWindow</title>

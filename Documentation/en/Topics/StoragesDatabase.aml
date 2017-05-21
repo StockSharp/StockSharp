@@ -19,7 +19,7 @@
 	</connectionStrings>
 		]]>
 		</code>		
-		<para>For example, to replace <legacyBold>%Documents%\StockSharp\Hydra\StockSharp.db</legacyBold> with <legacyBold>С:\StockSharp.db</legacyBold>, to save the database in the root of the drive  С:\.</para>
+		<para>For example, to replace <legacyBold>%Documents%\StockSharp\Hydra\StockSharp.db</legacyBold> with <legacyBold>C:\StockSharp.db</legacyBold>, to save the database in the root of the drive  C:\.</para>
     </introduction>
 
   	<nextSteps>
