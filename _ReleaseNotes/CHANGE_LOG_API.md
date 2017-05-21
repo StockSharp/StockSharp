@@ -24,6 +24,7 @@ StockSharp API Change log
 * (feature) Security. CfiCode.
 * (feature) FileProgressWindow.
 * (feature) ServerCredentials. Save password for auto logon only.
+* (bug) CandleBuilder. Fix High/Low volumes.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

@@ -671,11 +671,11 @@ namespace StockSharp.Algo.Candles
 		[DataMember]
 		public PnFArg PnFArg { get; set; }
 
-		/// <summary>
-		/// Type of symbols.
-		/// </summary>
-		[DataMember]
-		public PnFTypes Type { get; set; }
+		///// <summary>
+		///// Type of symbols.
+		///// </summary>
+		//[DataMember]
+		//public PnFTypes Type { get; set; }
 
 		/// <summary>
 		/// Candle arg.
@@ -692,7 +692,7 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Copy.</returns>
 		public override Candle Clone()
 		{
-			return CopyTo(new PnFCandle { Type = Type });
+			return CopyTo(new PnFCandle());
 		}
 	}
 

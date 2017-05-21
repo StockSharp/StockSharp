@@ -8516,8 +8516,8 @@ DocStr4063;X (price up);Крестики (цена растет)
 DocStr4064;0 (price down);Нолики (цена падает)
 DocStr4065;Point in figure (X0) candle arg;Значение параметров пункто-цифрового графика (график крестики-нолики)
 DocStr4068;{0}, если значения равны. Иначе, {1};{0}, если значения равны. Иначе, {1}
-DocStr4069;Range of price above which create a new {0} or {1};Изменение цены, при превышении которого регистрируется новый {0} или {1}
-DocStr4070;The number of boxes (an {0} or an {1}) required to cause a reversal;Величина противоположного движения цены, при котором происходит смена {0} на {1} (или наоборот)
+DocStr4069;Range of price above which increase the candle body;Изменение цены, при превышении которого увеличивается тело свечи
+DocStr4070;The number of boxes required to cause a reversal;Величина противоположного движения цены, при котором происходит смена {0} на {1} (или наоборот)
 DocStr4071;The message contains information about the XO candle;Сообщение, содержащее данные о свече пункто-цифрового графика (график крестики-нолики)
 DocStr4072;The message contains information about the renko candle;Сообщение, содержащее данные о Рэнко свече
 DocStr4073;Change password error info;Информация об ошибке смены пароля

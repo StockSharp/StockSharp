@@ -486,25 +486,25 @@ namespace StockSharp.Messages
 		}
 	}
 
-	/// <summary>
-	/// Symbol types.
-	/// </summary>
-	[System.Runtime.Serialization.DataContract]
-	[Serializable]
-	public enum PnFTypes
-	{
-		/// <summary>
-		/// X (price up).
-		/// </summary>
-		[EnumMember]
-		X,
+	///// <summary>
+	///// Symbol types.
+	///// </summary>
+	//[System.Runtime.Serialization.DataContract]
+	//[Serializable]
+	//public enum PnFTypes
+	//{
+	//	/// <summary>
+	//	/// X (price up).
+	//	/// </summary>
+	//	[EnumMember]
+	//	X,
 
-		/// <summary>
-		/// 0 (price down).
-		/// </summary>
-		[EnumMember]
-		O,
-	}
+	//	/// <summary>
+	//	/// 0 (price down).
+	//	/// </summary>
+	//	[EnumMember]
+	//	O,
+	//}
 
 	/// <summary>
 	/// Point in figure (X0) candle arg.
@@ -516,7 +516,7 @@ namespace StockSharp.Messages
 		private Unit _boxSize = new Unit();
 
 		/// <summary>
-		/// Range of price above which create a new <see cref="PnFTypes.X"/> or <see cref="PnFTypes.O"/>.
+		/// Range of price above which increase the candle body.
 		/// </summary>
 		[DataMember]
 		public Unit BoxSize
@@ -532,7 +532,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// The number of boxes (an <see cref="PnFTypes.X"/> or an <see cref="PnFTypes.O"/>) required to cause a reversal.
+		/// The number of boxes required to cause a reversal.
 		/// </summary>
 		[DataMember]
 		public int ReversalAmount { get; set; }
@@ -600,11 +600,11 @@ namespace StockSharp.Messages
 		[DataMember]
 		public PnFArg PnFArg { get; set; }
 
-		/// <summary>
-		/// Type of symbols.
-		/// </summary>
-		[DataMember]
-		public PnFTypes PnFType { get; set; }
+		///// <summary>
+		///// Type of symbols.
+		///// </summary>
+		//[DataMember]
+		//public PnFTypes PnFType { get; set; }
 
 		/// <summary>
 		/// Create a copy of <see cref="PnFCandleMessage"/>.
@@ -615,7 +615,7 @@ namespace StockSharp.Messages
 			return CopyTo(new PnFCandleMessage
 			{
 				PnFArg = PnFArg,
-				PnFType = PnFType
+				//PnFType = PnFType
 			});
 		}
 
