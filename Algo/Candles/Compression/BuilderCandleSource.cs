@@ -38,6 +38,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 			public Candle CurrentCandle { get; set; }
 
+			public CandleMessage CurrentCandleMessage { get; set; }
+
 			public CandleSeriesInfo(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<ICandleBuilderSource> sources, Func<CandleSeriesInfo, IEnumerable<ICandleBuilderSourceValue>, DateTimeOffset> handler, Action<CandleSeries> stopped)
 			{
 				if (series == null)
@@ -223,10 +225,12 @@ namespace StockSharp.Algo.Candles.Compression
 
 			foreach (var value in values)
 			{
-				var messages = _builder.Process(info.Message, value);
+				var messages = _builder.Process(info.Message, info.CurrentCandleMessage, value);
 
 				foreach (var candleMsg in messages)
 				{
+					info.CurrentCandleMessage = candleMsg;
+
 					if (info.CurrentCandle != null && info.CurrentCandle.OpenTime == candleMsg.OpenTime)
 					{
 						if (info.CurrentCandle.State == CandleStates.Finished)

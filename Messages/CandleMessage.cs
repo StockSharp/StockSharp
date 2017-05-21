@@ -252,6 +252,22 @@ namespace StockSharp.Messages
 		[DataMember]
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
+		private CandleMessageVolumeProfile _volumeProfile;
+
+		/// <summary>
+		/// Volume profile.
+		/// </summary>
+		[Ignore]
+		public CandleMessageVolumeProfile VolumeProfile
+		{
+			get => _volumeProfile;
+			set
+			{
+				_volumeProfile = value;
+				PriceLevels = value?.PriceLevels;
+			}
+		}
+
 		/// <summary>
 		/// Candle arg.
 		/// </summary>
@@ -531,11 +547,23 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private int _reversalAmount = 1;
+
 		/// <summary>
 		/// The number of boxes required to cause a reversal.
 		/// </summary>
 		[DataMember]
-		public int ReversalAmount { get; set; }
+		public int ReversalAmount
+		{
+			get { return _reversalAmount; }
+			set
+			{
+				if (value < 1)
+					throw new ArgumentOutOfRangeException();
+
+				_reversalAmount = value;
+			}
+		}
 
 		/// <summary>
 		/// Returns a string that represents the current object.

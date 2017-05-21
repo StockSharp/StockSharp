@@ -149,6 +149,7 @@
     <Compile Include="TimeMessage.cs" />
     <Compile Include="TPlusLimits.cs" />
     <Compile Include="Unit.cs" />
+    <Compile Include="CandleMessageVolumeProfile.cs" />
     <Compile Include="WorkingTime.cs" />
     <Compile Include="WorkingTimePeriod.cs" />
   </ItemGroup>

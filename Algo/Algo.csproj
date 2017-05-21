@@ -166,7 +166,6 @@
     <Compile Include="Candles\IStorageCandleSource.cs" />
     <Compile Include="Candles\StorageCandleSource.cs" />
     <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
-    <Compile Include="Candles\Compression\VolumeProfile.cs" />
     <Compile Include="Commissions\CommissionManager.cs" />
     <Compile Include="Commissions\CommissionRule.cs" />
     <Compile Include="Commissions\ICommissionManager.cs" />
