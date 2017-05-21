@@ -2,70 +2,72 @@
 <topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>By clicking on the <legacyBold>Add</legacyBold> button in the data source window, the window for searching and adding instruments opens.</para>
-      
+      <para>Click the <legacyBold>Add</legacyBold> <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>, 
+      button, then select the <legacyBold>Instrument</legacyBold> item in the drop-down menu. The window for searching and adding instruments opens.</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_securities" />
       </mediaLink>
-      
-      <para>Initially, the instruments database in the <token>hydra</token> is empty, there is only an auxiliary instrument <legacyBold>All@All</legacyBold> (when this
-      instrument is selected the data on all available for this source instruments will be downloaded). Therefore, if you want to download data for the specific
-      instruments, they should be found (search is carried out in the instruments database, as well as in the available instruments that a specific source provides)
-      and added to the source.</para>
+      <para>Initially, the instrument database in the <token>hydra</token> is empty, 
+      there is only an auxiliary instrument <legacyBold>All@All</legacyBold> (when this instrument is selected 
+      the data on all available for this source instruments will be downloaded). Therefore, 
+      if you want to download data for the specific instruments, they should be found 
+      (search is carried out in the instrument database, as well as in the available 
+      instruments that a specific source provides) and added to the source.
+</para>
 	  
-	  <para>To find instruments you should to click the corresponding <mediaLinkInline><image xlink:href="hydra_security_find" /></mediaLinkInline> button.</para>
+	  <para>To download the instruments, you must click the corresponding <legacyBold>Download Instrument</legacyBold> button.</para>
 	  
-	  <para>Search is carried out depending on the filter settings. If the filter is empty, you will see a list of all available instruments.</para>
-	  
-	  <para>The filter can be cleaned with a corresponding <mediaLinkInline><image xlink:href="hydra_security_clear_filter" /></mediaLinkInline> button.</para>
-      
-      <para>Once the instruments are found, the window will be as shown below.</para>
+      <para>Once the instruments are received, the window will be as shown below.</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_security_full_list" />
       </mediaLink>
       <para>All the instruments available for adding will be visible in this window.</para>
       <alert class="caution">
-			Some of sources add instruments to the <token>hydra</token> base themselves as new information about trades is downloaded. Therefore, for these sources it is not
-			necessary to find and to set up instruments beforehand.
+			For <token>rts</token> and <token>ux</token> sources there is a special scheme. These sources add instruments to the 
+			<token>hydra</token> base themselves as new information about trades is downloaded. Therefore, 
+			for these sources it is not necessary to find and to set up instruments beforehand.
 	  </alert>
       <para>
-			Data sources download market data only on instruments that are added to these sources and have selected at least one type of market data.
+Data sources download market data only on instruments that are added to these sources (with the exception of sources for RTS and UrkBirzha) and have selected at least one type of market data.
 	  </para>
       <para>
-			To do this, after the instruments adding, for each instrument you should select the market data type required for download. If you do not select any type of
-			market data, then there will be an icon with an exclamation mark in line with the instrument (on the left):
+To do this, after the instruments adding, for each instrument you should select the market data type required for download. If you do not select any type of market data, then there will be an icon with an exclamation mark in line with the instrument (on the left):
 	  </para>
 	  <para>
-			If you do not set all parameters of the instrument, then in the left column of the line with the instrument the
-			<mediaLinkInline><image xlink:href="hydra_zero" /></mediaLinkInline> icon appears.
+If you do not set all parameters of the instrument, then in the left column of the line with the instrument the <mediaLinkInline><image xlink:href="hydra_zero" /></mediaLinkInline> icon appears.
 	  </para>
 	  
       <mediaLink>
         <image placement="center" xlink:href="hydra_security_select" />
       </mediaLink>
       <alert class="note">
-      		<para>When you click on the <legacyBold>All@All</legacyBold> button all added to the source instruments will be removed, and instead one auxiliary
-      		instrument All@All will be added, with which market data will be downloaded by all instruments available for the source.</para>
-      		
+      		<para>When you click on the All@All button all added to the source instruments will be deleted, and 
+      		instead one auxiliary instrument All@All will be added, with which market data will be downloaded by 
+      		all instruments available for the source. For example, for <link xlink:href="54a1e95e-ea39-4322-9613-e74859a3a596">Quik</link>, 
+      		this will be all the instruments that are in the Instruments table.</para>
       		<para>The <mediaLinkInline><image xlink:href="hydra_delete" /></mediaLinkInline> button allows you to remove unnecessary instruments.</para>
 	  </alert>      
       <para>
-			To edit the instrument (for example, when the instrument was not filled all the required data), you have to double click on the instrument or by pressing
-			the <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> button to open a window in which to make the necessary settings:
+To edit the instrument (for example, when the instrument was not filled with all the required data), 
+you have to double click on the instrument or by pressing the <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> 
+button to open a window in which to make the necessary settings:
 		</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_security_edit" />
       </mediaLink>
       <para>
-			If necessary, you can edit a group of instruments. To do this, select a group of instruments and press the <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> button.
+If necessary, you can edit a group of instruments. To do this, select a group of instruments and press the 
+<mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> button.
 		</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_securities_edit" />
       </mediaLink>
       <para>
-      		If the selected group of instruments has the same values, then this field will be filled with that value. If values are different, then this field will be
-      		empty. For example, two instruments have selected whose Price Increment value is 1, one instrument has lot size 10 and another has 100. Correspondingly the
-      		Price Increment value will be 1, and the Volume Increment value will be empty.
+If the selected group of instruments has the same values, then this field will be 
+filled with that value. If values are different, then this field will be empty. For 
+example, two instruments have selected whose Price Increment value is 1, one instrument 
+has lot size 10 and another has 100. Correspondingly the value of the Price Increment 
+field will be 1, and the Volume Increment field will be empty.
       </para>
       
     </introduction>

@@ -43,7 +43,7 @@
 				  <content>
 						<para>
 							The final step is to add the <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>
-							в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>:
+							in <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>:
 						</para>
 						<code language="C#">_logManager.Sources.Add(_trader);</code>
 					</content>
@@ -66,11 +66,5 @@
 		  </step>
       </steps>
     </procedure>
-
-    <!--relatedTopics>
-      <link xlink:href="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147">Настройка терминала</link>
-      <link xlink:href="bc7a69cf-35f2-413d-a041-de705543f23c">Пример использования</link>
-      <link xlink:href="c0f3f55c-3832-46ed-90da-30129019c8f3">Стоп-заявки</link>
-    </relatedTopics-->
   </developerWalkthroughDocument>
 </topic>

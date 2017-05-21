@@ -18,7 +18,7 @@
 	</list>
       
      	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/DDE/SampleAsyncTransactions</legacyItalic>.
+Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/DDE/SampleAsyncTransactions</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="Gui_PortfolioComboBox" /></mediaLink>

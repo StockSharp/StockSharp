@@ -1,11 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
+
     <introduction>
     	<para>Connection properties which are used in many sources.</para>
     	 <mediaLink>
@@ -17,7 +13,7 @@
           <legacyBold>Timeout</legacyBold> - timeout of successful connection/disconnection.
 		</listItem>
 		<listItem>
-          <legacyBold>Interval</legacyBold> - интервал, с которым будут происходить попытки подключения.
+          <legacyBold>Interval</legacyBold> - the interval with which will attempt to connection.
 		</listItem>
 		<listItem>
           <legacyBold>Initially</legacyBold> -  number of attempts to establish the initial connection.

@@ -11,7 +11,7 @@
 			<codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> data type can be used. It allows transparently operate with operations of addition,
 			subtraction, multiplication and division. <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> may be converted into 
 			<codeEntityReference>T:System.Decimal</codeEntityReference> (not possible, of the value is percentage, i.e. the 
-			тип <codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> is set to 
+			type <codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> is set to 
 			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.UnitTypes.Percent</codeEntityReference>) and vice versa (in this case the created value is
 			always of the absolute value, i.e. the <codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> is set to
 			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.UnitTypes.Absolute</codeEntityReference>).

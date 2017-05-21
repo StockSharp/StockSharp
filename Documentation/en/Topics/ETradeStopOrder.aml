@@ -29,7 +29,7 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		]]>
 		</code>
 		
-		<para>Для The special <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeOrderCondition</codeEntityReference> сlass is given to work with the stop orders conditions.
+		<para>The special <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeOrderCondition</codeEntityReference> class is given to work with the stop orders conditions.
 		This class supports the following types of stop orders:</para>
 
 		<list class="bullet">

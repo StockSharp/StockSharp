@@ -17,6 +17,9 @@
         <listItem>
           <legacyBold>Day offset</legacyBold> - time shift as the number of days from the current date. Required to prevent downloading of incomplete data in the current trading session.
 		</listItem>
+		        <listItem>
+          <legacyBold>Time offset</legacyBold> – the time offset in days from the current date, which is necessary to prevent the download of incomplete data for the current trading session.
+		</listItem>
 		<listItem>
           <legacyBold>Weekend</legacyBold> - to ignore weekends and holidays (do not download data).
 		</listItem>

@@ -10,10 +10,10 @@
       	To get the data the client application uses four connections through various ports:
       </para>
       <list class="ordered">
-  	  	<listItem>Level1 (порт 5009) – used for real time data on instruments (ticks, the opening price, the closing price, volatility, etc.) and news.</listItem>
-  	  	<listItem>Level2 (порт 9200) – used to get extended quotes on instruments, the best couple of quotes can get for each ECN.</listItem>
-  	  	<listItem>Lookup (порт 9100) – used for instruments search, historical data getting, obtaining extended information on the news.</listItem>
-  	  	<listItem>Admin (порт 9300) – used to obtain general information about the connection and the settings change.</listItem>
+  	  	<listItem>Level1 (port 5009) – used for real time data on instruments (ticks, the opening price, the closing price, volatility, etc.) and news.</listItem>
+  	  	<listItem>Level2 (port 9200) – used to get extended quotes on instruments, the best couple of quotes can get for each ECN.</listItem>
+  	  	<listItem>Lookup (port 9100) – used for instruments search, historical data getting, obtaining extended information on the news.</listItem>
+  	  	<listItem>Admin (port 9300) – used to obtain general information about the connection and the settings change.</listItem>
 	  </list>
 	  <para>
       	The numbers of ports in brackets are used by default to connect to the IQConnect. For client connections, you can change the port numbers in the registry,

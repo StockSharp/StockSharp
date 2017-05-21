@@ -3,62 +3,66 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.ContinuousSecurityWindow</codeEntityReference> -  визуальный редактор для создания <legacyItalic>непрерывных</legacyItalic> 
-      	(<codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>) инструментов. См. <link xlink:href="0f7cceee-bb7c-4f24-a266-ed900cb8e557">Непрерывный фьючерс</link>.
+      	<codeEntityReference>T:StockSharp.Xaml.ContinuousSecurityWindow</codeEntityReference> -  is a visual editor for creating <legacyItalic>continuous</legacyItalic> 
+      	(<codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>) instruments. See  <link xlink:href="0f7cceee-bb7c-4f24-a266-ed900cb8e557"/>.
       </para>
       <para>
-  		Этот компонент включает: 
+This component includes:
   	 </para>
 	<list class="bullet">
   			<listItem>
   				<para>
-  					Специальное текстовое поле <codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> - генерирует <legacyItalic>непрерывный</legacyItalic> инструмент при помощи введенного Id - [Code]@[Board]. 
+Special <codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> 
+text field, whivh generates a <legacyItalic>continuous</legacyItalic> instrument with the input of Id - [Code]@[Board].
   				</para>
   			</listItem>
   			<listItem>
   				<para> 
-  					Компонент <codeEntityReference>T:StockSharp.Xaml.SecurityJumpsEditor</codeEntityReference> - специальный DataGrid для работы с инструментами,
-  					входящими в состав <legacyItalic>непрерывного</legacyItalic> инструмента. Составляющие инструменты "обертываются" в класс 
-  					<codeEntityReference>T:StockSharp.Xaml.SecurityJump</codeEntityReference>, который имеет два свойства: 
-  					<codeEntityReference>P:StockSharp.Xaml.SecurityJump.Security</codeEntityReference> и 
-  					<codeEntityReference>P:StockSharp.Xaml.SecurityJump.Date</codeEntityReference> (дата роллирования).
-  					Добавленные инструменты хранятся в списке
-  					<codeEntityReference>P:StockSharp.Xaml.SecurityJumpsEditor.Jumps</codeEntityReference>. Компонент имеет функцию 
-  					<codeEntityReference>M:StockSharp.Xaml.SecurityJumpsEditor.Validate</codeEntityReference> для проверки корректности составляющих инструментов.
+The  
+<codeEntityReference>T:StockSharp.Xaml.SecurityJumpsEditor</codeEntityReference> 
+component is a special DataGrid for working with instruments that are part of a 
+<legacyItalic>continuous</legacyItalic> instrument. The component instruments are wrapped in the 
+<codeEntityReference>T:StockSharp.Xaml.SecurityJump</codeEntityReference>, 
+class, which has two properties: 
+<codeEntityReference>P:StockSharp.Xaml.SecurityJump.Security</codeEntityReference> and  
+<codeEntityReference>P:StockSharp.Xaml.SecurityJump.Date</codeEntityReference> 
+(roll forward). The added instruments are stored in the 
+<codeEntityReference>P:StockSharp.Xaml.SecurityJumpsEditor.Jumps</codeEntityReference>. list. The component has the 
+<codeEntityReference>M:StockSharp.Xaml.SecurityJumpsEditor.Validate</codeEntityReference> function to check the correctness of the component instruments.
 		  		</para>
   			</listItem>
   			<listItem>
   				<para>
-  					Кнопки добавления/удаления инструментов.
+Buttons for adding/removing instruments.
   				</para>
   			</listItem>
   			<listItem>
   				<para>
-  					Кнопка <legacyBold>Auto</legacyBold> - позволяет автоматически создавать <legacyItalic>непрерывный</legacyItalic> инструмент.
+<legacyBold>Auto</legacyBold> button allows you to automatically create a <legacyItalic>continuous</legacyItalic> instrument.
   				</para>
   			</listItem>
   			  			<listItem>
   				<para>
-  					Кнопока <legacyBold>Ok</legacyBold> - завершение создания <legacyItalic>непрерывного</legacyItalic> инструмента.
+<legacyBold>Ok</legacyBold> button completes the creation of a <legacyItalic>continuous</legacyItalic> instrument.
   				</para>
   			</listItem>
 		</list>
 
       <para>
-      	<legacyBold>Основные свойства </legacyBold>
+      	<legacyBold>Main properties</legacyBold>
       </para>
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity</codeEntityReference> - непрерывный инструмент.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity</codeEntityReference> – continuous instrument</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityProvider</codeEntityReference> - поставщик информации об инструментах.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityProvider</codeEntityReference> – provider of information about instruments.</para>
   			</listItem>
 		</list>
 		
 	  <para>
-      	Ниже приведен внешний вид компонента и фрагмент кода с его использованием. 
+Below is the appearance of the component and the code snippet with its use.
       </para>
       
       <mediaLink><image placement="left" xlink:href="HydraGluingCSCustom" /></mediaLink>
@@ -106,7 +110,7 @@ private void CreateContinuousSecurity_OnClick(object sender, RoutedEventArgs e)
     </introduction>
     
      <relatedTopics>
-       <link xlink:href="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54">Склеивание данных</link>
+       <link xlink:href="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54"/>
     </relatedTopics>
     
   </developerConceptualDocument>

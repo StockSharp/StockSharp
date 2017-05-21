@@ -6,7 +6,7 @@
         <image placement="left" xlink:href="hydra_settings_IB" />
       </mediaLink>
       
-       <para><legacyBold>Interactive Brockers</legacyBold></para>
+       <para><legacyBold>Interactive Brokers</legacyBold></para>
       <list class="bullet">
 		<listItem>
 			<legacyBold>Адрес</legacyBold> - адрес TWS.

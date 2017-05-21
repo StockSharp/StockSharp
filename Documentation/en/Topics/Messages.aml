@@ -43,12 +43,6 @@
   						</listItem>
 					</list>
 
-           		<!--	<para>
-           				<legacyItalic>Исходящие сообщения</legacyItalic> - сообщения, которые посылаются во внешнюю систему. Обычно это команды, которые генерирует программа, например, сообщение
-           				<codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference> - команда, запрашивающая соединение с сервером. <legacyItalic>Входящие</legacyItalic> сообщения - это сообщения передающие
-           				информацию о рыночных данных, транзакциях, событиях соединения (установлено, разорвано) и т.п. Например, сообщение 
-           				<codeEntityReference>T:StockSharp.Messages.QuoteChangeMessage</codeEntityReference> - передает информацию об изменении <legacyItalic>стакана</legacyItalic>.
-        			</para> -->
   			</listItem>
   			<listItem>
   				    <para>
@@ -81,7 +75,6 @@
 
 
     </introduction>
-    <!-- Описание, Адаптеры, Хранилище сообщений, Сетевое взаимодействие. -->
     <relatedTopics>
       <link xlink:href="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a">Description</link>
       <link xlink:href="fb79e67d-945c-493d-bdac-85d0040af828">Adapters</link>

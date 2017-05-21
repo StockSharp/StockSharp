@@ -2,24 +2,24 @@
 <topic id="059d6abd-2ef6-459f-bc1a-69c72213689b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-     <para><codeEntityReference>T:StockSharp.Xaml.PortfolioPickerWindow</codeEntityReference> - окно для выбора портфеля. В окне отображается список портфелей
-     и информация о денежных позициях портфелей.</para>
+     <para><codeEntityReference>T:StockSharp.Xaml.PortfolioPickerWindow</codeEntityReference> is the window for selecting a portfolio. 
+     The window displays a list of portfolios and information about the cash positions of portfolios.</para>
 
 	<para>
-		<legacyBold>Основные свойства</legacyBold>
+		<legacyBold>Main properties</legacyBold>
 	</para>
       
 	<list class="bullet">
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioPickerWindow.Portfolios</codeEntityReference> - список портфелей.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioPickerWindow.Portfolios</codeEntityReference> - the list of portfolios.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioPickerWindow.SelectedPortfolio</codeEntityReference> - выбранный портфель.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioPickerWindow.SelectedPortfolio</codeEntityReference> - the selected portfolio.</para>
   		</listItem>
 	</list>
       
      	  <para>
-	  Ниже показаны внеший вид компонента, а также фрагмент кода с его использованием.
+	Below is the appearance of the component, as well as a code snippet with its use.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_PortfolioPickerWindow" /></mediaLink>

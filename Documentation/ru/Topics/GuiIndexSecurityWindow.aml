@@ -21,22 +21,6 @@
       <mediaLink>
 <image xlink:href="GUI_IndexSecurityWindow"/>
 </mediaLink>
-      <!--para>
-  		Этот компонент включает: 
-  	 </para>
-	<list class="bullet">
-  			<listItem>
-  				<para>
-  					Специальное текстовое поле <codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> - генерирует инструмент при
-  					помощи введенного Id - [Code]@[Board].
-  				</para>
-  			</listItem>
-  			<listItem>
-  				<para> 
-  					Редактор <codeEntityReference>T:StockSharp.Algo.Expressions.Xaml.IndexEditor</codeEntityReference> - служит для создания и проверки математического выражения.
-		  		</para>
-  			</listItem>
-     </list-->
 
       <para>
       	<legacyBold>Основные свойства </legacyBold>

@@ -2,17 +2,17 @@
 <topic id="36095948-4925-4809-b621-e3188d80b739" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-     <para> В этом разделе представлены компоненты, которые используются при работе со стратегиями.</para>
+     <para> This section contains the components that are used when working with strategies.</para>
      <list class="bullet">
   		<listItem>
-  			<para>Таблица для отображения статистики работы стратегии - <codeEntityReference>T:StockSharp.Xaml.StrategiesStatisticsPanel</codeEntityReference>.</para>
+  			<para>The table for displaying the statistics of the strategy - <codeEntityReference>T:StockSharp.Xaml.StrategiesStatisticsPanel</codeEntityReference>.</para>
   		</listItem>
 	</list>
 
     </introduction>
     
       <relatedTopics>
-       <link xlink:href="2a080612-818f-4757-affd-538af4e044ef">Статистика</link>
+       <link xlink:href="2a080612-818f-4757-affd-538af4e044ef"/>
     </relatedTopics>
     
   </developerConceptualDocument>

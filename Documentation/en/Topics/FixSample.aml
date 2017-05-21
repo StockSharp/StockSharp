@@ -13,7 +13,6 @@
 							<para>First, you need to create an instance of the <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixTrader</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-// создаем шлюз
 public FixTrader Trader = new FixTrader();
 							]]>
 							</code>
@@ -184,8 +183,8 @@ private void QuotesClick(object sender, RoutedEventArgs e)
 }
 							]]>
 					</code>
-					<para>Сделки будут приходить в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>, 
-					а изменения в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference>.</para>
+					<para>Transactions will come in the event <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>, 
+					and changes in the event <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference>.</para>
 				</content>
 			</step>
 					<step>

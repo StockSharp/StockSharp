@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="6cdf7765-492b-46ac-b0c0-480adb56e059" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
     <introduction>
       <para>
       To save and load strategy settings the overrides of
@@ -43,7 +39,6 @@ public override void Save(SettingsStorage settings)
 	  <code language="C#"><![CDATA[var newStrategy = new MarketProfileStrategy();
 if (File.Exists("marketProfile.xml"))
 {
-    //Загрузка настроек стратегии из существующего конфигурационного файла
     var settingsStorage = new XmlSerializer<SettingsStorage>().Deserialize("marketProfile.xml");
     newStrategy.Load(settingsStorage);
 }]]></code>
@@ -63,7 +58,6 @@ if (File.Exists("marketProfile.xml"))
 	    
 	base.Save(settings);
 	
-	//Сохраняем настройки в файл
 	new XmlSerializer<PlazaTable>().Serialize(settings, "marketProfile.xml");
 }]]></code>
     </introduction>
@@ -73,88 +67,9 @@ if (File.Exists("marketProfile.xml"))
         <para><link xlink:href="61ad1ece-8094-44a9-a558-ec664a1ab16a">Orders and trades loading</link></para>
       </content>
     </nextSteps>
-
-    <!--<prerequisites>
-      <content>
-        <para>Optional information on prerequisites</para>
-      </content>
-    </prerequisites>-->
-    
-    <!-- One or more procedure or section elements -->
-
-    <!--<procedure>
-      <title>Optional procedure</title>
-
-      <steps class="ordered">
-        <step>
-          <content>
-            <para>The first step of the procedure</para>
-          </content>
-        </step>
-      </steps>
-    </procedure>
-    
-    <section>
-      <title>Optional section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
     
     <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
+  
     </relatedTopics>
     
   </developerWalkthroughDocument>

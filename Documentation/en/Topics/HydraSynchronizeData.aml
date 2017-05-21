@@ -2,11 +2,11 @@
 <topic id="715c9caa-2fc1-4b7d-bc01-05cdf5897794" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>The application main menu item <legacyBold>Additional => Synchronize data...</legacyBold>.</para>
+    	<para>Tab <legacyBold>Import => Synchronize...</legacyBold>.</para>
   		<mediaLink>
         	<image placement="left" xlink:href="hydra_sync" />
 		</mediaLink>
-		<para>It allows to restore the instruments on download files. See <link xlink:href="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20">Disaster recovery</link>.</para>
+		<para>It allows to recover the instruments on download files. See <link xlink:href="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20">Disaster recovery</link>.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

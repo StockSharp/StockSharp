@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-    <para><legacyBold>S#.Data</legacyBold> может исользоваться в серверном режиме, в данном режиме можно 
+    <para><legacyBold>S#.Data</legacyBold> может использоваться в серверном режиме, в данном режиме можно 
 удаленно подключиться к <legacyBold>S#.Data</legacyBold> и получить имеющиеся данные в хранилище или записать новые. 
 Включение серверного режима <legacyBold>S#.Data</legacyBold> описано в 
 пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>

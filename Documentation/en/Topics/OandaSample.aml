@@ -167,37 +167,6 @@ private void Level1Click(object sender, RoutedEventArgs e)
 							</code>						
 						</content>
 					</step>
-
-				<!--	<step>
-						<content>
-							<para>Для запроса обновлений по стаканам необходимо воспользоваться методом 
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
-            				<code language="C#">
-            				<![CDATA[
-private void QuotesClick(object sender, RoutedEventArgs e)
-{
-	var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
-	{
-		// начинаем получать котировки стакана
-		MainWindow.Instance.Trader.RegisterMarketDepth(security);
-
-		// создаем окно со стаканом
-		var wnd = new QuotesWindow { Title = security.Code + " котировки" };
-		wnd.MakeHideable();
-		return wnd;
-	});
-
-	if (window.Visibility == Visibility.Visible)
-		window.Hide();
-	else
-		window.Show();
-}
-							]]>
-							</code>
-							<mediaLink><image placement="center" xlink:href="lmax_sample_market_depth"/></mediaLink>
-						</content>
-					</step> -->
-
 					<step>
 						<content>
 							<para>For orders registration the <legacyBold>New Order</legacyBold> button used. 
