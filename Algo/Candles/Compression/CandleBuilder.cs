@@ -713,33 +713,35 @@ namespace StockSharp.Algo.Candles.Compression
 
 				TotalPrice = value.Price * (value.Volume ?? 1),
 
-				PnFType = currentCandle == null ? PnFTypes.X : (currentCandle.PnFType == PnFTypes.X ? PnFTypes.O : PnFTypes.X),
+				//PnFType = currentCandle == null ? PnFTypes.X : (currentCandle.PnFType == PnFTypes.X ? PnFTypes.O : PnFTypes.X),
 			};
+
+			var isX = candle.OpenPrice < candle.ClosePrice;
 
 			if (currentCandle == null)
 			{
 				candle.OpenPrice = boxSize.AlignPrice(value.Price, value.Price);
 
-				if (candle.PnFType == PnFTypes.X)
+				if (isX)
 					candle.ClosePrice = (decimal)(candle.OpenPrice + boxSize);
 				else
 					candle.ClosePrice = (decimal)(candle.OpenPrice - boxSize);
 			}
 			else
 			{
-				candle.OpenPrice = (decimal)((currentCandle.PnFType == PnFTypes.X)
+				candle.OpenPrice = (decimal)(isX
 					? currentCandle.ClosePrice - boxSize
 					: currentCandle.ClosePrice + boxSize);
 
 				var price = boxSize.AlignPrice(candle.OpenPrice, value.Price);
 
-				if (candle.PnFType == PnFTypes.X)
+				if (isX)
 					candle.ClosePrice = (decimal)(price + boxSize);
 				else
 					candle.ClosePrice = (decimal)(price - boxSize);
 			}
 
-			if (candle.PnFType == PnFTypes.X)
+			if (isX)
 			{
 				candle.LowPrice = candle.OpenPrice;
 				candle.HighPrice = candle.ClosePrice;
@@ -764,7 +766,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var argSize = candle.PnFArg.BoxSize * candle.PnFArg.ReversalAmount;
 
-			return candle.PnFType == PnFTypes.X
+			return candle.OpenPrice < candle.ClosePrice
 				? candle.ClosePrice - argSize > value.Price
 				: candle.ClosePrice + argSize < value.Price;
 		}
@@ -779,7 +781,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			candle.ClosePrice = candle.PnFArg.BoxSize.AlignPrice(candle.ClosePrice, value.Price);
 
-			if (candle.PnFType == PnFTypes.X)
+			if (candle.OpenPrice < candle.ClosePrice)
 				candle.HighPrice = candle.ClosePrice;
 			else
 				candle.LowPrice = candle.ClosePrice;
