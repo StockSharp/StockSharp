@@ -1,5 +1,30 @@
 StockSharp Designer Change log
 ========================
+###current:
+* (feature) ServerCredentials. Save password for auto logon only.
+
+###v4.3.24.1:
+* (feature) CQG continuum.
+* (feature) Securities. Custom sorting for extended info added.
+* (feature) SpbEx connector (binary).
+* (bug) LogicalConditionDiagramElement small fix.
+* (bug) Time span editors mask changed.
+* (bug) Fix closing without logon.
+* (feature) Risk rules.
+* (feature) Optmization. Multiple securities support.
+* (bug) Create security fix.
+* (feature) Show sockets option added.
+* (feature) OrderMassCancelElement added.
+* (bug) Multiple market depths fixes.
+* (bug) Copy/paste fixes.
+* (bug) EndPoint list in property grid fixes.
+* (bug) SecurityIndexDiagramElement fix. http://stocksharp.ru/posts/m/39908/
+* (bug) Close tabs on strategy removed fixes.
+* (feature) Check for can remove securities.
+* (feature) Simulator settings added.
+* (bug) Save/load settings for alert schemas fixes.
+* (feature) OrderRegisterDiagramElement. Conditional settings added.
+
 ###v4.3.24:
 * (bug) Fix splash screen http://stocksharp.ru/posts/m/39084/
 * (feature) Option basic strategy.

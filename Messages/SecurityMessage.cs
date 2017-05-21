@@ -109,6 +109,15 @@ namespace StockSharp.Messages
 		public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
+		/// Type in ISO 10962 standard.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CfiCodeKey)]
+		[DescriptionLoc(LocalizedStrings.CfiCodeDescKey)]
+		[MainCategory]
+		public string CfiCode { get; set; }
+
+		/// <summary>
 		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		[DataMember]
@@ -234,6 +243,7 @@ namespace StockSharp.Messages
 			destination.PriceStep = PriceStep;
 			destination.Decimals = Decimals;
 			destination.SecurityType = SecurityType;
+			destination.CfiCode = CfiCode;
 			destination.SettlementDate = SettlementDate;
 			destination.Strike = Strike;
 			destination.UnderlyingSecurityCode = UnderlyingSecurityCode;

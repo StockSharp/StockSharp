@@ -91,6 +91,16 @@
             Order book (snapshot).
             </summary>
     </member>
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.CommonsIncremental">
+      <summary>
+            Commons (incremental).
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExAddressConfig.CommonsSnapshot">
+      <summary>
+            Commons (snapshot).
+            </summary>
+    </member>
     <member name="P:StockSharp.SpbEx.SpbExAddressConfig.EntranceServer">
       <summary>
             Entrance server address.

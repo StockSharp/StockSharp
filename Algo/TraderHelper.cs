@@ -1759,6 +1759,7 @@ namespace StockSharp.Algo
 				Name = criteria.Name,
 				Code = criteria.SecurityId.SecurityCode,
 				Type = criteria.SecurityType,
+				CfiCode = criteria.CfiCode,
 				ExpiryDate = criteria.ExpiryDate,
 				ExternalId = criteria.SecurityId.ToExternalId(),
 				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetOrCreateBoard(criteria.SecurityId.BoardCode),
@@ -1866,6 +1867,9 @@ namespace StockSharp.Algo
 				if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !s.ShortName.ContainsIgnoreCase(criteria.ShortName))
 					return false;
 
+				if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !s.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
+					return false;
+
 				if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !s.SecurityId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
 					return false;
 
@@ -1961,6 +1965,9 @@ namespace StockSharp.Algo
 					return false;
 
 				if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !s.ShortName.ContainsIgnoreCase(criteria.ShortName))
+					return false;
+
+				if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !s.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
 					return false;
 
 				if (!criteria.ExternalId.Bloomberg.IsEmptyOrWhiteSpace() && !s.ExternalId.Bloomberg.ContainsIgnoreCase(criteria.ExternalId.Bloomberg))
@@ -2760,6 +2767,22 @@ namespace StockSharp.Algo
 			if (message.SecurityType != null)
 				security.Type = message.SecurityType.Value;
 
+			if (!message.CfiCode.IsEmpty())
+			{
+				security.CfiCode = message.CfiCode;
+
+				if (security.Type == null)
+					security.Type = security.CfiCode.Iso10962ToSecurityType();
+
+				if (security.Type == SecurityTypes.Option && security.OptionType == null)
+				{
+					security.OptionType = security.CfiCode.Iso10962ToOptionType();
+
+					//if (security.CfiCode.Length > 2)
+					//	security.BinaryOptionType = security.CfiCode.Substring(2);
+				}
+			}
+
 			if (!message.UnderlyingSecurityCode.IsEmpty())
 				security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode;
 
@@ -3420,7 +3443,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(cfi));
 
 			if (cfi.Length != 6)
-				throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
 
 			switch (cfi[0])
 			{
@@ -3514,7 +3538,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(cfi));
 
 			if (cfi[0] != 'O')
-				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
 
 			if (cfi.Length < 2)
 				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1605Params.Put(cfi));

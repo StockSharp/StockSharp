@@ -3885,6 +3885,9 @@ M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean,S
 M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)/param/initChannels;DocStr9210
 M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)/param/initManagers;DocStr9211
 M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)/param/supportOffline;DocStr9304
+M:StockSharp.Algo.Connector.InitializeStorage(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/summary;DocStr93
+M:StockSharp.Algo.Connector.InitializeStorage(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/param/entityRegistry;DocStr1309
+M:StockSharp.Algo.Connector.InitializeStorage(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/param/storageRegistry;DocStr8561
 P:StockSharp.Algo.Connector.ReConnectionSettings/summary;DocStr903
 P:StockSharp.Algo.Connector.EntityFactory/summary;DocStr904
 P:StockSharp.Algo.Connector.TradesKeepCount/summary;DocStr905
@@ -6980,12 +6983,12 @@ M:StockSharp.Algo.TraderHelper.ToDecimal(System.Single)/param/value;DocStr65
 M:StockSharp.Algo.TraderHelper.ToDecimal(System.Single)/returns;DocStr65
 M:StockSharp.Algo.TraderHelper.Iso10962(StockSharp.Messages.SecurityMessage)/summary;DocStr2524
 M:StockSharp.Algo.TraderHelper.Iso10962(StockSharp.Messages.SecurityMessage)/param/security;DocStr2831
-M:StockSharp.Algo.TraderHelper.Iso10962(StockSharp.Messages.SecurityMessage)/returns;DocStr2525
+M:StockSharp.Algo.TraderHelper.Iso10962(StockSharp.Messages.SecurityMessage)/returns;CfiCodeDesc
 M:StockSharp.Algo.TraderHelper.Iso10962ToSecurityType(System.String)/summary;DocStr2526
-M:StockSharp.Algo.TraderHelper.Iso10962ToSecurityType(System.String)/param/cfi;DocStr2525
+M:StockSharp.Algo.TraderHelper.Iso10962ToSecurityType(System.String)/param/cfi;CfiCodeDesc
 M:StockSharp.Algo.TraderHelper.Iso10962ToSecurityType(System.String)/returns;Str360
 M:StockSharp.Algo.TraderHelper.Iso10962ToOptionType(System.String)/summary;DocStr2526
-M:StockSharp.Algo.TraderHelper.Iso10962ToOptionType(System.String)/param/cfi;DocStr2525
+M:StockSharp.Algo.TraderHelper.Iso10962ToOptionType(System.String)/param/cfi;CfiCodeDesc
 M:StockSharp.Algo.TraderHelper.Iso10962ToOptionType(System.String)/returns;Str551
 M:StockSharp.Algo.TraderHelper.SafeGetVolume(StockSharp.Messages.ExecutionMessage)/summary;DocStr2527
 M:StockSharp.Algo.TraderHelper.SafeGetVolume(StockSharp.Messages.ExecutionMessage)/param/message;DocStr2528

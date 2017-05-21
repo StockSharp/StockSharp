@@ -45076,5 +45076,35 @@ namespace StockSharp.Localization
 		/// Show element sockets in higher order elements.
 		/// </summary>
 		public static string ShowSockets => GetString(ShowSocketsKey);
+
+		/// <summary>
+		/// Use auto naming
+		/// </summary>
+		public const string UseAutoNamingKey = nameof(UseAutoNaming);
+
+		/// <summary>
+		/// Use auto naming
+		/// </summary>
+		public static string UseAutoNaming => GetString(UseAutoNamingKey);
+
+		/// <summary>
+		/// CFI code
+		/// </summary>
+		public const string CfiCodeKey = nameof(CfiCode);
+
+		/// <summary>
+		/// CFI code
+		/// </summary>
+		public static string CfiCode => GetString(CfiCodeKey);
+
+		/// <summary>
+		/// Type in ISO 10962 standard.
+		/// </summary>
+		public const string CfiCodeDescKey = nameof(CfiCodeDesc);
+
+		/// <summary>
+		/// Type in ISO 10962 standard.
+		/// </summary>
+		public static string CfiCodeDesc => GetString(CfiCodeDescKey);
 	}
 }

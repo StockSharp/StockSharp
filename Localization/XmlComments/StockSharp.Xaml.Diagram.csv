@@ -804,6 +804,7 @@ P:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.IconName/summary;D
 M:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.#ctor/summary;DocStr1
 T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1/summary;DocStr8052
 T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1/typeparam/T;DocStr8906
+P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.UseAutoNaming/summary;UseAutoNaming
 P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Type/summary;Str2133
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.SetTypes(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Diagram.DiagramSocketType})/summary;DocStr8053

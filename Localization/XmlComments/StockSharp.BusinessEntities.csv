@@ -710,6 +710,7 @@ P:StockSharp.BusinessEntities.Security.Multiplier/summary;DocStr2623
 P:StockSharp.BusinessEntities.Security.Decimals/summary;Str548
 P:StockSharp.BusinessEntities.Security.ExpiryDate/summary;Str371
 P:StockSharp.BusinessEntities.Security.SettlementDate/summary;Str373
+P:StockSharp.BusinessEntities.Security.CfiCode/summary;CfiCodeDesc
 P:StockSharp.BusinessEntities.Security.ExtensionInfo/summary;DocStr2624
 P:StockSharp.BusinessEntities.Security.ExtensionInfo/remarks;DocStr2625
 P:StockSharp.BusinessEntities.Security.StepPrice/summary;Str290

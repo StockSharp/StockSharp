@@ -4541,6 +4541,9 @@ SecurityIsUsedInSomeStrategies;The security is used in some strategies. Remove a
 OrderMassCancelling;Mass orders cancelling;Массовая отмена заявок
 Sockets;Sockets;Сокеты
 ShowSockets;Show element sockets in higher order elements.;Отображать сокеты элемента в элементах более высокого уровня.
+UseAutoNaming;Use auto naming;Использовать автоименование
+CfiCode;CFI code;CFI код
+CfiCodeDesc;Type in ISO 10962 standard.;Тип в стандарте ISO 10962.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7033,7 +7036,6 @@ DocStr2521;The channel name;Имя канала
 DocStr2522;Message adapter, forward messages through a transport channel {0};Адаптер сообщений, пересылающий сообщения через транспортный канал {0}
 DocStr2523;To convert {0} into {1}. If the initial value is {2} or {3}, {4} is returned;Перевести {0} в {1}. Если исходное значение {2} или {3}, то будет возвращено {4}
 DocStr2524;To get the type for the instrument in the ISO 10962 standard;Получить для инструмента тип в стандарте ISO 10962
-DocStr2525;Type in ISO 10962 standard;Тип в стандарте ISO 10962
 DocStr2526;To convert the type in the ISO 10962 standard into {0};Преобразовать тип в стандарте ISO 10962 в {0}
 DocStr2527;To get the number of operations, or discard the exception, if no information available;Получить количество операции, или выбросить исключение, если информация отсутствует
 DocStr2528;Operations;Операции
@@ -13437,7 +13439,6 @@ DocStr9079;Has position in {0};Присутствует ли позиция в {
 DocStr9080;Convert all non-latin text messages to latin;Конвертировать кириллицу в латиницу
 DocStr9081;Exante;Exante
 DocStr9082;Native (internal) trading system security id represented as integer;Внутренний числовой идентификатор торговой системы
-DocStr9083;CFI code;CFI код
 DocStr9084;To get securities for the instrument code;Получить все инструменты для переданного кода
 DocStr9085;Instrument code;Код инструмента
 DocStr9086;Found securities;Найденные инструменты
@@ -14067,3 +14068,7 @@ DocStr9775;Update item in cache;Обновить кэш
 DocStr9776;Item;Элемент
 DocStr9777;Remove item from cache;Удалить из кэша
 DocStr9778;Order mass cancelling element;Элемент массового снятия заявок
+DocStr9779;Command for clear logs;Команда очисти логов
+DocStr9780;Cancel callback;Колбэк отмены
+DocStr9781;To finish downloading the file;Завершить скачивание файла
+DocStr9782;File uploading/downloading progress bar window;Окно прогресса загрузки/скачивания файла

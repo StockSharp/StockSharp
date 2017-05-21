@@ -285,6 +285,8 @@ namespace StockSharp.Algo.Storages.Csv
 					}
 				}
 			});
+
+			InnerCollection.ForEach(OnAdded);
 		}
 
 		/// <summary>
