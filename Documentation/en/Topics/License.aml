@@ -14,7 +14,7 @@
 			 It's include <token>designer</token>, <token>hydra</token>, <token>stocksharpapi</token> 
 			 (<token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
 			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>, 
-			 <token>matlab</token>, <token>btce</token>, <token>bitstamp</token>, <token>barchart</token> и RSS).
+			 <token>matlab</token>, <token>btce</token>, <token>bitstamp</token>, <token>barchart</token> and RSS).
 		</para>
 		<para>See also <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">StockSharp installation</link>.</para>
 		<para><legacyBold>Extended License</legacyBold></para>
@@ -73,21 +73,6 @@
   		</para>
 
 	</introduction>
-	
-	 <!--relatedTopics>
-     	<externalLink>
-			<linkText>Новые подходы к лицензированию</linkText>
-			<linkAlternateText>Лицензирование</linkAlternateText>
-			<linkUri>http://stocksharp.com/news/10456-novye-podhody-k-litsenzirovaniyu</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
-		<externalLink>
-			<linkText>Стоимость лицензий StockSharp</linkText>
-			<linkAlternateText>Стоимость лицензий</linkAlternateText>
-			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
-     </relatedTopics-->
 	</developerWalkthroughDocument>
 </topic>
 

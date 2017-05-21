@@ -10,50 +10,7 @@
     
     </introduction>
 
-	<!-- <procedure>
-		<title>Синхронизация правил</title>
-		<steps class="ordered">
-			<step>
-				><content>
-					<para>Для синхронизации правил необходимо создать объект синхронизации:</para>
-			
-					<code language="C#">
-					<![CDATA[
-private readonly object _syncToken = new object();
-					]]>
-					</code>					
-				</content> 
-			</step>
-			
-			<step>
-				<content>
-					<para>Затем вызвать 
-					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.Sync``1(``0,Ecng.Common.SyncObject)</codeEntityReference> 
-					у нужных правил:</para>
-					
-					<code language="C#">
-					<![CDATA[
 
-order
-	.WhenRegistered()
-	.Do(() => this.AddInfoLog("Заявка успешно зарегестрирована"))
-	.Once()
-	.Sync(_syncToken)
-	.Apply(this);
-	
-order
-	.WhenRegisterFailed()
-	.Do(() => this.AddInfoLog("Заявка не принята биржей"))
-	.Once()
-	.Sync(_syncToken)
-	.Apply(this);
-					]]>
-					</code>							
-				</content>
-			</step>			
-		</steps>
-	</procedure> -->
-	
 
     <section address="Section2">
 		<title>Rules suspension using</title>
@@ -81,7 +38,6 @@ MarketRuleHelper.SuspendRules(() =>
 		.Apply(this);
 });
 
-// регистрация заявки
 trader.RegisterOrder(order);
 							]]>
 							</code>				

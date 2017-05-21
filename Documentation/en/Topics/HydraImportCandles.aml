@@ -2,12 +2,12 @@
 <topic id="9e13ea27-629d-4403-adfa-d76bc8648c7e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>To import the ticks select the <legacyBold>Import => Candles</legacyBold> item in the main menu of the application.</para>
+      <para>To import the candles, select the <legacyBold>Import => Candles</legacyBold> item in the main menu of the application</para>
        <mediaLink>
 		  	<image placement="left" xlink:href="hydra_import_candles" />
 	   </mediaLink>
 	   <procedure>
-      <title>The candles import process</title>
+      <title>The process of importing candles</title>
       <steps class="ordered">
         <step>
           <content>
@@ -17,13 +17,18 @@
   					<para><legacyBold>Candles</legacyBold> - the importing candles parameters.</para>
   				</listItem>
 			</list>
-          	<para>Other settings see import <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Instruments</link>.</para>
+          	<para>Other settings see import <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659"/>.</para>
           </content>
         </step>
         <step>
           <content>
           	<para>To set the import parameters for the <token>stocksharp</token> fields.</para>
-          	<para>See import <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Instruments</link>.</para>
+          	<para>See import <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659"/>.</para>
+          </content>
+        </step>
+        <step>
+          <content>
+          	<para>To preview the data, click the <legacyBold>Preview</legacyBold> button.</para>
           </content>
         </step>
         <step>

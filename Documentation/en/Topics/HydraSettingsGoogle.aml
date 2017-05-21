@@ -17,6 +17,9 @@
 		<listItem>
           <legacyBold>Weekend</legacyBold> - to ignore weekends and holidays (do not download data).
 		</listItem>
+				<listItem>
+          <legacyBold>Time interval</legacyBold> - the interval in days for which data is downloaded.
+		</listItem>
 		 </list>
 		<para><legacyBold>Main</legacyBold></para>
 		<list class="bullet">

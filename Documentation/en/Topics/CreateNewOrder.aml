@@ -7,16 +7,17 @@
 
 	<introduction>
 	  <para>
-			 Для создания новой заявки необходимо создать объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
-		который содержит информацию о заявке и зарегистрировать его на бирже. 		
-		В дальнейшем, если требуется работа с заявкой (например, отменить ее или изменить),
-		то необходимо использовать именно этот объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
-		Для регистрации заявок на бирже предусмотрен 
-		метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> который 
-		отправляет заявку на сервер.</para>
+To create a new order, you should create an 
+<codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
+object that contains information about the order and register it on the exchange. 
+Further, if you want to work with the order (for example, to cancel it or change it), then this 
+<codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
+object should be used. To register orders on the exchange, the 
+<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> 
+method is provided which sends the order to the server.</para>
 
-		<para>В примере ниже показано создание заявки и регистрация ее на бирже:</para>
-		      <code language="C#"><![CDATA[
+<para>The example below shows the creation of an order and its registration on the exchange:</para>
+<code language="C#"><![CDATA[
 	var order = new Order
     {
         Type = OrderTypes.Limit,
@@ -31,12 +32,9 @@
 ]]></code>
 	</introduction>
 
-
-
-
     <relatedTopics>
       
-		<link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Снятие заявок</link>
+		<link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e"/>
     </relatedTopics>
     
   </developerHowToDocument>

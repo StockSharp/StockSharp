@@ -22,6 +22,9 @@
 		</list>
 		<para><legacyBold>Main</legacyBold></para>
 	   <list class="bullet">
+	   <listItem><para><legacyBold>Start date (candles)</legacyBold> - from which date to start downloading data.</para></listItem>
+<listItem><para><legacyBold>Start date (ticks)</legacyBold> - from which date to start downloading data.</para></listItem>
+<listItem><para><legacyBold>Header</legacyBold> - the header of the task.</para></listItem>
         <listItem>
           <legacyBold>Work from</legacyBold> - source work start time.
 		</listItem>

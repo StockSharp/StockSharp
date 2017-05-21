@@ -146,7 +146,7 @@ private sealed class GoogleSettings : HydraTaskSettings
 					<para>
 					  At the final stage it is necessary to implement the <codeEntityReference qualifyHint="true">M:StockSharp.Hydra.Core.BaseHydraTask.OnProcess</codeEntityReference>,
 					  method, in which the logic of the market data downloading is implemented. In the case of GoogleTask, all the logic is in the <token>stocksharp</token>
-					  и используется класс <codeEntityReference>T:StockSharp.Algo.History.GoogleHistorySource</codeEntityReference>:
+					  and the class <codeEntityReference>T:StockSharp.Algo.History.GoogleHistorySource</codeEntityReference> is used:
 					</para>
 					<code language="C#">
 <![CDATA[

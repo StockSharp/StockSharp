@@ -4,30 +4,30 @@
     <introduction>
        <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.Level1Grid</codeEntityReference> - таблица для отображения полей Level1. 
-      	Эта таблица использует данные в виде сообщений <codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference>. 
+      	<codeEntityReference>T:StockSharp.Xaml.Level1Grid</codeEntityReference> is the table for displaying the Level1 fields. This table uses the data as 
+<codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference> messages.
       </para>
       <para>
-       <legacyBold>Основные свойства</legacyBold>
+       <legacyBold>Main properties</legacyBold>
       </para>
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.Level1Grid.MaxCount</codeEntityReference> - максимальное число сообщений для показа.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Level1Grid.MaxCount</codeEntityReference> - the maximum number of messages to display.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.Level1Grid.Messages</codeEntityReference> - список сообщений, добавленных в таблицу.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Level1Grid.Messages</codeEntityReference> - the list of messages added to the table.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.Level1Grid.SelectedMessage</codeEntityReference> - выбранное сообщение.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Level1Grid.SelectedMessage</codeEntityReference> - the selected message.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.Level1Grid.SelectedMessages</codeEntityReference> - выбранные сообщения.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Level1Grid.SelectedMessages</codeEntityReference> - selected messages.</para>
   			</listItem>
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием.
+	  Below is the appearance of the component, as well as code snippets with its use.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_Leve1Grid" /></mediaLink>

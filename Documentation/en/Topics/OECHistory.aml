@@ -13,7 +13,7 @@
         <step>
           <content>
             <para>
-            	In order to get historic candles, call <codeEntityReference qualifyHint="true">M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>
+            	To get historical candles, call the  <codeEntityReference qualifyHint="true">M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>
             	method:
        		</para>
             <code language="C#">

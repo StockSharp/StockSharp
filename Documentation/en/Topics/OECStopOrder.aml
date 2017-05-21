@@ -32,7 +32,7 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		</code>		
 
 		<para>The <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> adapter provides the special 
-		<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryOrderCondition</codeEntityReference> сlass to work with the stop orders conditions.
+		<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryOrderCondition</codeEntityReference> class to work with the stop orders conditions.
 		This class supports the following types of stop orders:</para>
 
 		<list class="bullet">

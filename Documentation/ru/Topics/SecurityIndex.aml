@@ -4,7 +4,7 @@
 
 	<introduction>
 		<para><codeEntityReference>T:StockSharp.Algo.IndexSecurity</codeEntityReference> - индекс, построенный из инструментов. 
-		Например, для задание спреда при арбитраже или парном трейдинге. Имеет следующие реализации.</para>
+		Например, для задания спреда при арбитраже или парном трейдинге. Имеет следующие реализации.</para>
 		<para>1.	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> - 
 		индекс, построенный из комбинации нескольких инструментов через математическую 
 		формулу <codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionFormula</codeEntityReference>.</para>

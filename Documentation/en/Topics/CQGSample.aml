@@ -14,9 +14,9 @@
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>First, you need to create an instance of the
-<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference>,   
-<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference>:</para>
+					<para>1.	First, you need to create an instance of the gateway class 
+<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> or 
+<codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference>, depending on the connection used:</para>
             		<code language="C#">
             				<![CDATA[
 
@@ -30,7 +30,7 @@ Connector = new.CqgComTrader { LogLevel = LogLevels.Debug };
 			</step>
 			<step>
 				<content>
-					<para>Next, you should subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
+<para>Then we install the necessary <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> event handlers:</para>
 					<code language="C#">
             				<![CDATA[
 // subscribe on connection successfully event
@@ -99,11 +99,14 @@ Trader.Connect();
 			
 			<step>
 				<content>
-					<para>When the connection is successful, you can expect to trigger the 
-					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolio</codeEntityReference> event. In this event handler
-					you should subscribe to changes in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
-					portfolios using the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
-				</content>
+<para>When the connection is successful, you can expect to trigger the 
+<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolio</codeEntityReference> 
+event. In this event handler you should subscribe to changes in the 
+<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
+portfolios using the 
+<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> 
+method.</para>
+</content>
 			</step>
 			<step>
 				<content>
@@ -201,9 +204,9 @@ private void DepthClick(object sender, RoutedEventArgs e)
 			</step>
 			<step>
 				<content>
-					<para>For orders registration the <legacyBold>New Order</legacyBold> button used. The
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
-					method sends an order to the server:</para>
+<para>There is the  <legacyBold>New Order</legacyBold> button for registering orders. The
+<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+method sends an order to the server:</para>
             		<code language="C#">
             				<![CDATA[
 private void NewOrderClick(object sender, RoutedEventArgs e)

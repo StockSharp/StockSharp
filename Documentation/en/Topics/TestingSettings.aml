@@ -10,23 +10,6 @@
   				- time change event input interval. If trades generators are used, then the trades will be generated with this periodicity. The default is 1 minute.</para>
   			</listItem>
 
-  		<!--	<listItem>
-  				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseMarketDepth</codeEntityReference> -
-  				загружать стаканы из хранилища в эмулятор. Если зарегистрированы генераторы стаканов, хранилище использовано не будет, а будут использоваться генераторы. 
-				Это не означает что они будут использоваться для эмуляции. Для последнего надо использовать 
-				<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseMarketDepth</codeEntityReference>.</para>
-				<para>По-умолчанию стаканы не используются.</para>
-  			</listItem> -->
-
-
-  		<!--	<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> -
-				Если таймфрейм указан, то будут загружаться свечки указанного таймфрейма (вместо трейдов). Далее по свечкам будут генерироваться набор из
-				5 тиковых сделок O, X, H, L, C (не обязательно в таком порядке), соответствующих точкам в свечке. Точка X выбирается рядом с точкой O,
-				чтобы изменение цены шло по цене X строго внутри диапазона L&lt;X&lt;H (нужно для того чтобы сделки были более реалистичными - по цене близкой к O, а не H или L). 
-				По-умолчанию свечки не используются.</para>
-  			</listItem> -->
-
   			<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.Latency</codeEntityReference> -
 				The minimum value of the registered orders latency. By default, it is equal to <legacyBold>TimeSpan.Zero</legacyBold>, which means instant acceptance
@@ -40,20 +23,12 @@
 				testing). If the mode is off, then limit orders will be executed if the price is "passed through them" at least in 1 step. The option is available in
 				all modes except the order log. The default is off.</para>
   			</listItem>
-
-  		<!--	<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
-				отправлять свечки c таймфреймом	<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> в 
-				<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. Может ускорить построение свечек. По-умолчанию выключено.</para>
-  			</listItem> --> 			
   			
   			<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
 				to send the candles to	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> directly. It can speed
 				up the candles creation, but there will be no intermediate candle changes. The default is off.</para>
   			</listItem>  			
-  			
-  			
   			
   		</list>
 

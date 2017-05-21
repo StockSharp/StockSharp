@@ -2,17 +2,19 @@
 <topic id="20b858de-424e-43ee-89ab-00002d344f89" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para> В этом разделе представлены компоненты, связанные с собственными торговыми транзациями: заявками 
-      (<codeEntityReference>T:StockSharp.Xaml.OrderGrid</codeEntityReference>, <codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference>), 
-      условными заявками (<codeEntityReference>T:StockSharp.Xaml.OrderConditionalGrid</codeEntityReference>, <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference>) 
-      и собственными сделками (<codeEntityReference>T:StockSharp.Xaml.MyTradeGrid</codeEntityReference>).</para>
+      <para> This section presents the components associated with own trading transactions: orders 
+      (<codeEntityReference>T:StockSharp.Xaml.OrderGrid</codeEntityReference>, 
+      <codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference>),
+conditional orders 
+(<codeEntityReference>T:StockSharp.Xaml.OrderConditionalGrid</codeEntityReference>, <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference>) 
+and own trades (<codeEntityReference>T:StockSharp.Xaml.MyTradeGrid</codeEntityReference>).</para>
     </introduction>
     
     <relatedTopics>
-       <link xlink:href="5bb4f6f0-9057-4a88-b968-a5fd60641d4d">Заявки</link>
-       <link xlink:href="cfc729e7-65e7-4ec3-b215-57031be290c7">Ввод заявки</link>
-       <link xlink:href="94e71651-8964-41fc-866d-3ff65f513440">Ввод стоп-заявки</link>
-       <link xlink:href="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4">Собственные сделки</link>
+       <link xlink:href="5bb4f6f0-9057-4a88-b968-a5fd60641d4d"/>
+       <link xlink:href="cfc729e7-65e7-4ec3-b215-57031be290c7"/>
+       <link xlink:href="94e71651-8964-41fc-866d-3ff65f513440"/>
+       <link xlink:href="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4"/>
     </relatedTopics>
     
   </developerConceptualDocument>

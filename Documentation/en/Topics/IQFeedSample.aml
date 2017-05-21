@@ -157,24 +157,6 @@ private void DepthClick(object sender, RoutedEventArgs e)
 			</code>
 		</listItem>
 		
-		<!-- <listItem>
- 	  		<para>Для получения полной информации по выбранной новости необходимо воспользоваться методом <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetNewsStory(System.Int64)</codeEntityReference>:</para>
- 	  		<mediaLink><image placement="center" xlink:href="IQFeedNews"/></mediaLink>
-  	  		<code language="C#">
-private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-{
-	var news = List.SelectedItem as News;
-	if (news == null)
-		return;
-
-	if (news.Story.IsEmpty())
-		news.Story = MainWindow.Instance.Trader.GetNewsStory(news.Id);
-
-	MessageBox.Show(this, news.Story, news.Headline);
-}
-			</code>
-		</listItem> -->
-		
 		<listItem>
  	  		<para>For the trade history getting on the specified date the 
  	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)</codeEntityReference> method should be used:</para>

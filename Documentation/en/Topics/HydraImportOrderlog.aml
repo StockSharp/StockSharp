@@ -2,12 +2,12 @@
 <topic id="b0088f47-8c93-46ed-a53e-820b7c66e65b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>To import the ticks select the <legacyBold>Import => Order log</legacyBold> item in the main menu of the application.</para>
+      <para>To import the order log, select the <legacyBold>Import => Order log</legacyBold> item in the main menu of the application.</para>
        <mediaLink>
 		  	<image placement="left" xlink:href="hydra_import_orderlog" />
 	   </mediaLink>
 	   <procedure>
-      <title>The order log import process</title>
+      <title>The process of importing order log</title>
       <steps class="ordered">
         <step>
           <content>
@@ -19,6 +19,11 @@
           <content>
           	<para>To set the import parameters for the <token>stocksharp</token> fields.</para>
           	<para>See import <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Instruments</link>.</para>
+          </content>
+        </step>
+        <step>
+          <content>
+          	<para>To preview the data, click the <legacyBold>Preview</legacyBold> button.</para>
           </content>
         </step>
         <step>

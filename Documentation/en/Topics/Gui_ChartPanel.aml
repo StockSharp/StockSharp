@@ -3,23 +3,50 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      <codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> - расширенный компонет для построения биржевых графиков, который имеет панель
-      инструментов и дополнительный функционал. Техника построения графиков при помощи <codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> 
-      существенно не отличается от таковой при помощи <link xlink:href="a76a0a9c-bb95-4596-9464-9903379b3096">Chart</link>.
+      <codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> 
+      is an advanced component for creating stock charts, which has a toolbar and additional functionality. 
+      The charting technique with 
+      <codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference>
+      does not differ significantly from that of 
+      <link xlink:href="a76a0a9c-bb95-4596-9464-9903379b3096">Chart</link>.
       </para>
       <para>
-      	На следующих рисунках показаны внешний вид компонента, а также функции кнопок панели инструментов.
+     The following figures show the appearance of the component, as well as the functions of the toolbar buttons.
       </para>
       
       <mediaLink><image placement="left" xlink:href="Gui_ChartPanel" /></mediaLink>
-      
+<para>1 - Horizontal line;</para>
+<para>2 - Vertical line;</para>
+<para>3 - Prompt;</para>
+<para>4 - Trend line;</para>
+<para>5 - Area;</para>
+<para>6 - This is a text.</para>
+
       <para>
-      	<legacyBold>Функционал панели инструментов</legacyBold>
+      	<legacyBold>Toolbar functionality</legacyBold>
       </para>
       
       <mediaLink><image placement="left" xlink:href="Gui_ChartPanelTools" /></mediaLink>
       
-      
+<para>1 - Add panel;</para>
+<para>2 - Enable autoscrolling;</para>
+<para>3 - Enable autoscaling;</para>
+<para>4 - Enable legend;</para>
+<para>5 - Enable preview area;</para>
+<para>6 - Enable crosshair;</para>
+<para>7 - Enable prompt for bar;</para>
+<para>8 - Show values on axis;</para>
+<para>9 - Draw trend line;</para>
+<para>10 - Draw pointer;</para>
+<para>11 - Draw vertical line;</para>
+<para>12 - Draw horizontal line;</para>
+<para>13 - Select area;</para>
+<para>14 - Text label;</para>
+<para>15 - Show FPS stats;</para>
+<para>16 - Orders registering;</para>
+<para>17 - Save data;</para>
+<para>18 - Publishing;</para>
+
     </introduction>
     
      

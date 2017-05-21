@@ -22,7 +22,7 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Ниже показан внеший вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink>

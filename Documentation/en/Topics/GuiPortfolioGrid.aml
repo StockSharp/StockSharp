@@ -3,31 +3,31 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       
-      <para><codeEntityReference>T:StockSharp.Xaml.PortfolioGrid</codeEntityReference> - компонент, отображающий состояние портфелей и позиций.
+      <para><codeEntityReference>T:StockSharp.Xaml.PortfolioGrid</codeEntityReference> is a component that displays the status of portfolios and positions.
       </para>
 
 	<para>
-		<legacyBold>Основные свойства</legacyBold>
+		<legacyBold>Main properties</legacyBold>
 	</para>
       
 	<list class="bullet">
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioGrid.Portfolios</codeEntityReference> - список портфелей.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioGrid.Portfolios</codeEntityReference> – the list of portfolios.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioGrid.Positions</codeEntityReference> - спосок позиций.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioGrid.Positions</codeEntityReference> – the list of positions.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioGrid.SelectedPosition</codeEntityReference> - выбранная позиция.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioGrid.SelectedPosition</codeEntityReference> – the selected position.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioGrid.SelectedPositions</codeEntityReference> - выбранные позиции.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.PortfolioGrid.SelectedPositions</codeEntityReference> - selected positions.</para>
   		</listItem>
   		
 	</list>
       
      	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/QuikSample</legacyItalic>.
+Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/QuikSample.</legacyItalic>
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_PortfolioGrid" /></mediaLink>
@@ -52,7 +52,6 @@ private void ConnectClick(object sender, RoutedEventArgs e)
     {
         if (Trader == null)
         {
-            // создаем подключение
             Trader = new QuikTrader
             {
                 LuaFixServerAddress = Address.Text.To<EndPoint>(),
@@ -88,12 +87,7 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 }
 	  				]]>
              </code>
-      
-      
-      
-      
-      
-      
+
     </introduction>
   </developerConceptualDocument>
 </topic>

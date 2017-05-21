@@ -178,7 +178,7 @@ MarketRuleHelper
   			</listItem> 
   			
   			<listItem>
-  				<para><legacyBold>Периодичность работы правила - <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.IMarketRule.Until(System.Func{System.Boolean})</codeEntityReference>:</legacyBold></para>
+  				<para><legacyBold>Periodicity of the rule - <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.IMarketRule.Until(System.Func{System.Boolean})</codeEntityReference>:</legacyBold></para>
   				<code language="C#">
 				<![CDATA[
 bool flag = false;

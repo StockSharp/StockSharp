@@ -3,12 +3,13 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
         <introduction>
       <para>
-      	The <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference> - graphic component is the table for option desk display. It shows “Greeks”, implied
-      	volatility, the theoretical price, the best offer and bid for Put and Call options.
+The  <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>- graphic component is the 
+table for option desk display. It shows “Greeks”, implied volatility, the theoretical price, the best 
+offer and bid for Put and Call options.
       </para>
       <para>
-      	Below is the OptionCalculator example, which uses this component. The source code of the example can be found in the <legacyItalic>Samples/Options/OptionCalculator</legacyItalic> folder.
-      </para>
+Below is the <legacyBold>OptionCalculator</legacyBold> example, which uses this component. The source code 
+of the example can be found in the <legacyBold>Samples/Options/OptionCalculator</legacyBold> folder.</para>
       <mediaLink><image placement="left" xlink:href="option_desk" /></mediaLink>
     </introduction>
     
@@ -17,22 +18,22 @@
     	<steps class="ordered">
 			<step>
 				<content>
-					<para>The <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference> element is added to the XAML code and the
-					<legacyBold>Desk</legacyBold> name is assigned to it.</para>
+					<para>1.	In the XAML code, adding the <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>
+element and assigning it the <legacyBold>Desk</legacyBold> name. </para>
             		<code title="XAML" language="XAML">
 	  				<![CDATA[
-<Window x:Class="SampleOptionQuoting.MainWindow"
+<Window x:Class="OptionCalculator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="{x:Static loc:LocalizedStrings.XamlStr539}" Height="430" Width="630">
-	<Grid Margin="5">
+        Title="{x:Static loc:LocalizedStrings.XamlStr396}" Height="400" Width="1030">
+    <Grid Margin="5,5,5,5">
     
 	    .........................................................
 	    
-	    <xaml:OptionDesk x:Name="Desk" />
+	    <xaml:OptionDesk x:Name="Desk" Grid.Row="6" Grid.ColumnSpan="3" Grid.Column="0" />
     
 	</Grid>
 </Window>
@@ -42,9 +43,8 @@
 			</step>
 			<step>
 				<content>
-				<para>The connection is created in the C# code. Depending on the type of connector an instance
-					<codeEntityReference>T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> or <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>
-					is initialized.</para>
+				<para>In the C# code, creating a connection and subscribing to the necessary events.
+					</para>
             	<code title="C#" language="C#">
 <![CDATA[
 ...                 
@@ -133,7 +133,7 @@ try
 				</step>
 				<step>
 					<content>
-					<para>The messages provider for market data and instruments is specified.</para>
+					<para>When connecting, set the message provider for market data.</para>
             		<code title="C#" language="C#">
                   <![CDATA[
 private void ConnectClick(object sender, RoutedEventArgs e)
@@ -156,15 +156,7 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 				</step>
 				<step>
 				<content>
-					<para>Upon getting the instruments:</para>
-					<list class="ordered">
-  							<listItem>To fill the futures collection for the drop-down list;</listItem>
-  							<listItem>To initialize the selected instrument by the first element of this collection;</listItem>
-  							<listItem>To fill the array by the options chain, where selected instrument acts as underlying asset;</listItem>
-  							<listItem>To assign this array to the <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> property;</listItem>
-  							<listItem>To update optiondesk values using the 
-  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference> method.</listItem>
-					</list>
+					<para>When receiving instruments, we add the underlying assets to the list.</para>
             		<code title="C#" language="C#">
                   <![CDATA[
 // fill underlying asset's list
@@ -178,17 +170,15 @@ Connector.NewSecurity += security =>
 					</content>
 				</step>
 				<step>
-					<content>
-						<para>Upon options parameters change:</para>
-						<list class="ordered">
-  							<listItem>To fill the array by options that have not been previously added to the control options collection;</listItem>
-  							<listItem>If new options added, to update the <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> property value;</listItem>
-  							<listItem>
-  								If new options added or parameters of the previously added options changed, then to update option desk 
-  								<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.
-  							</listItem>
-						</list>
-            			<code title="C#" language="C#">
+				<content>
+					<para>When selecting an instrument:</para>
+					<list class="bullet">
+  							<listItem>Fill the array with a chain of options, where the selected instrument acts as the underlying asset;</listItem>
+  							<listItem>Assign this array to the <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDeskModel.Options</codeEntityReference> property;</listItem>
+  							<listItem>•	Clear the options board values using the 
+  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDeskModel.Clear</codeEntityReference> method.</listItem>
+					</list>
+            		<code title="C#" language="C#">
                   <![CDATA[
 private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 {
@@ -211,14 +201,14 @@ private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs 
 }
 
 ]]>
-                  		</code>
+                  	</code>
 					</content>
 				</step>
 			</steps>
  	</procedure>
 
     <relatedTopics>
-		<link xlink:href="063708c5-b6a8-45f6-9ff9-608f89796a88">Greeks</link>
+		<link xlink:href="063708c5-b6a8-45f6-9ff9-608f89796a88"/>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

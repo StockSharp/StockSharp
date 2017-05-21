@@ -2,7 +2,7 @@
 <topic id="938a2834-a3cc-4d92-8a41-e4c11cf84d78" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>The application main menu item  <legacyBold>Additional => Network settings</legacyBold>.</para>
+    	<para>Quick access panel of the <legacyBold>Settings => Network</legacyBold> settings application.</para>
   			<mediaLink>
         		<image placement="left" xlink:href="hydra_proxy_settings" />
 			</mediaLink>

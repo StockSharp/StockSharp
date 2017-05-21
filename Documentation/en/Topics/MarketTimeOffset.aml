@@ -5,7 +5,7 @@
     <introduction>
     <para>To work with time in <token>stocksharp</token>, the <externalLink>
 		<linkText>DateTimeOffset</linkText>
-		<linkAlternateText>Структура DateTimeOffset</linkAlternateText>
+		<linkAlternateText>structure DateTimeOffset</linkAlternateText>
 		<linkUri>https://msdn.microsoft.com/library/system.datetimeoffset.aspx</linkUri>
 		<linkTarget>_blank</linkTarget>
 	</externalLink> structure is used. This structure stores time information in the UTC (<externalLink>

@@ -255,31 +255,6 @@ var connector = new HistoryEmulationConnector(
 };
 
 ]]></code>
-					  <!--para>
-							При тестировании <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/> или <link xlink:href="ab42038e-836b-4c00-9332-0b2db2cbd948"/>
-							вместе с информацией об инструменте передается и его ликвидность через параметр securitySettings в конструкторы
-							<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.HistoryEmulationTrader.#ctor(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,System.TimeSpan},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio},StockSharp.Algo.Storages.ITradingStorage)</codeEntityReference>
-							и <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.RandomEmulationTrader.#ctor(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,System.TimeSpan},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})</codeEntityReference>.
-							Через <codeEntityReference>T:System.TimeSpan</codeEntityReference> указывается как часто меняется стакан для инструмента в процессе тестирования.
-					   	</para>
-						<para>
-							При тестировании <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/> ликвидность инструмента используется для определения разрыва в исторических
-							данных по стакану. Если за отрезок времени, который указывается через <codeEntityReference>T:System.TimeSpan</codeEntityReference>, не было загружено
-							<codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationTrader</codeEntityReference> ни одного стакану по инструменту, то это считается разрывом
-							данных по стакану, и он генерируется случайным образом <codeEntityReference>T:StockSharp.Algo.Testing.MarketDepthGenerator</codeEntityReference>
-							(по умолчанию используется реализация <codeEntityReference>T:StockSharp.Algo.Testing.ByTrendMarketDepthGenerator</codeEntityReference>, которая
-							генерирует стакан на основе массива прошедших тиковых сделок).
-						</para>
-						<para>
-							При тестировании <link xlink:href="ab42038e-836b-4c00-9332-0b2db2cbd948"/> ликвидность инструмента используется для определения момента, когда нужно
-							сгенерировать новый стакан. По умолчанию используется реализация <codeEntityReference>T:StockSharp.Algo.Testing.BySecurityMarketDepthGenerator</codeEntityReference>,
-							которая генерирует стакан на основе <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.LastTrade</codeEntityReference>,
-							<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestBid</codeEntityReference>,
-							<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestAsk</codeEntityReference>,
-							<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ClosePrice</codeEntityReference> или
-							<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.OpenPrice</codeEntityReference> (в зависимости от того, что
-							инициализировано в момент генерации стакана).
-						</para-->
 				  </content>
 			  </step>
 			  <step>
@@ -414,7 +389,7 @@ var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 						  Creation of the <token>ma</token> strategy itself:
 					  </para>
 					  <code language="C#"><![CDATA[
-// create strategy based on 80 5-min и 10 5-min
+// create strategy based on 80 5-min and 10 5-min
 var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
 {
 	Volume = 1,
@@ -516,28 +491,5 @@ foreach (var connector in _connectors)
 			  </step>
 		  </steps>
 	  </procedure>
-<!--	  
-	  <section>
-      <title>Ускорение работы</title>
-      <content>
-        <para>
-        	В процессе тестирования <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> создает несколько потоков загрузки
-        	данных. Их количество по-умолчанию равно количеству процессоров (=ядер) минус 1. Если при работе тестирования было замечено, что некоторые
-        	процессоры простаивают в работе, и при этом требуется увеличить скорость обработки исторических данных, то можно увеличить значение свойства
-        	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.LoadingThreadCount</codeEntityReference>.
-        </para>
-        <para>
-        	Если тестирование потребляет слишком больше количество памяти, то его можно ограничить свойством <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.DaysInMemory</codeEntityReference>.
-        	Данное свойство показывает, сколько максимально дней в истории может храниться в очереди для обработки данных (значение параметра напрямую
-        	зависит от <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.LoadingThreadCount</codeEntityReference>). Уменьшив
-        	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.DaysInMemory</codeEntityReference>, уменьшится и объем
-        	занимаемой памяти. <legacyBold>Внимание!</legacyBold> Уменьшение очереди может привести к замедлению работы, и стоит изменять этот параметр
-        	только в том случае, если занимаемая память превысила размер физической.
-        </para>
-      </content>
-    </section>
---> 
-
-
   </developerConceptualDocument>
 </topic>
