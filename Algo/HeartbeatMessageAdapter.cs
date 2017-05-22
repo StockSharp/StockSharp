@@ -288,7 +288,7 @@ namespace StockSharp.Algo
 						{
 							//ReConnectionSettings.RaiseTimeOut();
 
-							if (_currState == ConnectionStates.Connecting && _connectingAttemptCount > 0)
+							if (_currState == ConnectionStates.Connecting && _connectingAttemptCount != 0)
 							{
 								lock (_timeSync)
 									_currState = _reConnecting;
