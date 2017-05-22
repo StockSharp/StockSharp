@@ -642,6 +642,9 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var time = v.Time;
 
+			if (info.LastTime > time)
+				return false;
+
 			if (!(time >= info.MarketDataMessage.From && time < info.MarketDataMessage.To))
 				return false;
 

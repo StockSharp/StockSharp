@@ -27,6 +27,7 @@ namespace SampleTransaq
 		private readonly TransaqTrader _trader;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
+		private readonly CandleManager _candleManager;
 
 		public ChartWindow(CandleSeries candleSeries)
 		{
@@ -54,8 +55,9 @@ namespace SampleTransaq
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandle += ProcessNewCandle;
-			_trader.SubscribeCandles(_candleSeries, DateTime.Today - TimeSpan.FromTicks(((TimeSpan)candleSeries.Arg).Ticks * 10000), DateTimeOffset.MaxValue);
+			_candleManager = new CandleManager(_trader);
+			_candleManager.Processing += ProcessNewCandle;
+			_candleManager.Start(_candleSeries, DateTime.Today - TimeSpan.FromTicks(((TimeSpan)candleSeries.Arg).Ticks * 10000), DateTimeOffset.MaxValue);
 		}
 
 		private void ProcessNewCandle(CandleSeries series, Candle candle)
@@ -68,7 +70,9 @@ namespace SampleTransaq
 
 		protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
 		{
-			_trader.NewCandle -= ProcessNewCandle;
+            _candleManager.Processing -= ProcessNewCandle;
+			_candleManager.Stop(_candleSeries);
+
 			base.OnClosing(e);
 		}
 	}
