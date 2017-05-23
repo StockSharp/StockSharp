@@ -432,10 +432,13 @@ namespace StockSharp.Algo.Storages
 					{
 						board = _storageRegistry.ExchangeInfoProvider.GetOrCreateBoard(boardMsg.Code, code =>
 						{
-							var exchange = boardMsg.ToExchange(new Exchange
-							{
-								Name = boardMsg.ExchangeCode
-							});
+							var exchange = _storageRegistry
+								.ExchangeInfoProvider
+								.GetExchange(boardMsg.ExchangeCode) ?? boardMsg.ToExchange(new Exchange
+								{
+									Name = boardMsg.ExchangeCode
+								});
+
 							return boardMsg.ToBoard(new ExchangeBoard
 							{
 								Code = code,
