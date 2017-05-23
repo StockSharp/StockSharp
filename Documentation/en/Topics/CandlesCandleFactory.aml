@@ -61,19 +61,19 @@ public class TickCandle : Candle
 					<para>Next, you must create the candles builder, for a new type of candles. To do this, create the 
 					<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference> implementation.
 					Data of the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference> type will come to the
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
-					method. Depending on the <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Compression.ICandleBuilder.Sources</codeEntityReference>,
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+					method. Depending on the <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Sources</codeEntityReference>,
 					<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference> may contain data as about the
 					<codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Trade</codeEntityReference>,
 					tick trade, and on the <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference> order book.</para>
 					
 					<para>The  
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
 					method should return or a new candle (if new data have led to the candle creation) or update the passed one (if the data is not enough to create a new candle).
-					If the <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+					If the <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
 					method returns a new candle, then the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference>
 					calls it again, passing to the method the same value <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>.
-					The method will be called up until the <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+					The method will be called up until the <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
 					returns the passsed candle. This is done for those cases when by one incoming value <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>
 					several candles can be created:
 					</para>

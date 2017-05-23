@@ -361,7 +361,7 @@ connector.Connect();
 					  <para>
 				
 						  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>
-						  and <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolio</codeEntityReference>
+						  and <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference>
 						  are called for instruments and portfolios passed to the <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> constructor.
 					  </para>
 				  </content>

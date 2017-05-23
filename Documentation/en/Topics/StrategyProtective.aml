@@ -109,7 +109,7 @@ private void OnNewOrderTrade(MyTrade trade)
         	<codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference> and <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>
         	strategies do not track partial position closing or its reverting (for example, the position was closed by hands at the terminal and was opened in the
         	opposite direction). To automatically track such situations in the algorithm, you must use <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy</codeEntityReference>.
-        	This strategy by trades incoming into it (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})</codeEntityReference>)
+        	This strategy by trades incoming into it (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade(StockSharp.BusinessEntities.MyTrade)</codeEntityReference>)
         	decides what to do: to protect them (if there is a position opening or its increase) or to stop the protective strategies (if there is a position closing or its
         	decrease). The strategy also automatically reverts protective strategies in case of position reverting (from long to short or from short to long).
         </para>

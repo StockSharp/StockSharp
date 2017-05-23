@@ -43,7 +43,7 @@ If you do not set all parameters of the instrument, then in the left column of t
       <alert class="note">
       		<para>When you click on the All@All button all added to the source instruments will be deleted, and 
       		instead one auxiliary instrument All@All will be added, with which market data will be downloaded by 
-      		all instruments available for the source. For example, for <link xlink:href="54a1e95e-ea39-4322-9613-e74859a3a596">Quik</link>, 
+      		all instruments available for the source. For example, for <link xlink:href="0b962432-d81d-4646-a818-9fa7093cbe4f">LMAX</link>, 
       		this will be all the instruments that are in the Instruments table.</para>
       		<para>The <mediaLinkInline><image xlink:href="hydra_delete" /></mediaLinkInline> button allows you to remove unnecessary instruments.</para>
 	  </alert>      

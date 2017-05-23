@@ -100,7 +100,7 @@ Trader.Connect();
 			<step>
 				<content>
 					<para>When the connection is successful, you can expect to trigger the 
-					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolio</codeEntityReference> event. In this event handler
+					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference> event. In this event handler
 					you should subscribe to changes in the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
 					portfolios using the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
 				</content>

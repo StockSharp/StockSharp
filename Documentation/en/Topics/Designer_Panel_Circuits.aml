@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="002dce1f-2b00-4ef1-b166-8805a98f9004" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -46,7 +46,7 @@
    <para>4.	Папка <legacyBold>Торговля</legacyBold> содержит стратегии, которые добавлены 
    для запуска в торговлю. При этом стратегии, которые запущены отмечены значком<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline> 
    а которые остановлены отмечены значком <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline> . 
-   Как добавлять стратегии в папку <legacyBold>Торговля</legacyBold> и как их запустить описано в пункте <token>Live торговля</token>.</para>
+   Как добавлять стратегии в папку <legacyBold>Торговля</legacyBold> и как их запустить описано в пункте <link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" />.</para>
    
    <para>5.	Папка <legacyBold>Исходный код</legacyBold> содержит стратегии, 
    которые созданы используя библиотеку для профессиональной разработки

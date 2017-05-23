@@ -8,7 +8,7 @@
     The activation of the <legacyBold>S#.Data</legacyBold> server mode is described in the 
     <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
      <para>To connect to <legacyBold>S#.Data</legacyBold> through WCF there is the 
-     <codeEntityReference qualifyHint="false">T: StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in <legacyBold>S#.API</legacyBold>.</para>
+     <codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in <legacyBold>S#.API</legacyBold>.</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))

@@ -54,10 +54,10 @@ Buttons for adding/removing instruments.
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity</codeEntityReference> – continuous instrument</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.Security</codeEntityReference> – continuous instrument</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityProvider</codeEntityReference> – provider of information about instruments.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityStorage</codeEntityReference> – provider of information about instruments.</para>
   			</listItem>
 		</list>
 		
@@ -74,14 +74,14 @@ private void CreateContinuousSecurity_OnClick(object sender, RoutedEventArgs e)
 {
 	_continuousSecurityWindow = new ContinuousSecurityWindow
 	{
-		SecurityProvider = _entityRegistry.Securities,
-		ContinuousSecurity = new ContinuousSecurity { Board = ExchangeBoard.Associated }
+		SecurityStorage = _entityRegistry.Securities,
+		Security = new ContinuousSecurity { Board = ExchangeBoard.Associated }
 	};
 
 	if (!_continuousSecurityWindow.ShowModal(this))
 		return;
 
-	_continuousSecurity = _continuousSecurityWindow.ContinuousSecurity;
+	_continuousSecurity = _continuousSecurityWindow.Security;
 	ContinuousSecurity.Content = _continuousSecurity.Id;
 
 	var first = _continuousSecurity.InnerSecurities.First();

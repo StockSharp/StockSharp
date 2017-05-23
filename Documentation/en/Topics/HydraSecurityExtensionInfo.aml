@@ -7,7 +7,7 @@
 <legacyBold>S#.Data</legacyBold> and get the existing data in the storage or write new ones. 
 Enabling the <legacyBold>S#.Data</legacyBold> server mode is described in the <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
 <para>To connect to S#.Data through WCF there is the 
-<codeEntityReference qualifyHint="false">T: StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in S#.API.</para>
+<codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in S#.API.</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))
@@ -18,7 +18,7 @@ var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri
 ]]></code>
 
       <para>2. Saving information about the Exchange in S#.Data
-      <codeEntityReference qualifyHint="false">T: StockSharp.BusinessEntities.Exchange.Exchange</codeEntityReference> in S#.Data</para>
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Exchange</codeEntityReference> in S#.Data</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Console.WriteLine("Enter Exchange name (example: NYSE or TESTE)");
@@ -38,7 +38,7 @@ client.SaveExchanges(exchange);
 ]]></code>
 
       <para>3. Saving information about the 
-      <codeEntityReference qualifyHint="false">T: StockSharp.BusinessEntities.Exchange.ExchangeBoard</codeEntityReference>  in S#.Data</para>
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ExchangeBoard</codeEntityReference>  in S#.Data</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Console.WriteLine("Enter ExchangeBoard name (example: NYMEX or TESTB)");
@@ -58,7 +58,7 @@ client.SaveExchangeBoards(exchangeBoard);
 ...
 ]]></code>
       <para>4. Saving instrument in S#.Data (share, futures, option, etc.) 
-      <codeEntityReference qualifyHint="false">T: StockSharp.BusinessEntities.Exchange.Security</codeEntityReference></para>
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Security</codeEntityReference></para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Security[] security = new Security[]
