@@ -118,7 +118,7 @@
 </externalLink>
  - графики конкурса ЛЧИ со сделками участников.</para></listItem>
 </list>
- <para>
+ <!--<para>
  Презентации наших продуктов в виде <externalLink>
 <linkText> pdft</linkText>
 <linkUri>http://stocksharp.ru/file/102474/stocksharp_pdf/</linkUri>
@@ -127,7 +127,7 @@
 <linkText>PowerPoint</linkText>
 <linkUri>http://stocksharp.ru/file/102474/stocksharp_pdf/</linkUri>
 </externalLink>
- </para>
+ </para>-->
  <para> 
 <legacyUnderline><legacyItalic><legacyBold><token>download</token></legacyBold></legacyItalic></legacyUnderline>
 </para>

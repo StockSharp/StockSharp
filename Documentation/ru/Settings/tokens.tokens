@@ -149,7 +149,7 @@
     <ddue:linkUri>http://moex.com</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="MSDN_VS_Attach_process"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>MSDN</ddue:linkText>
+    <ddue:linkText>Присоединиться к процессам</ddue:linkText>
     <ddue:linkUri>https://msdn.microsoft.com/ru-ru/library/3s68z0b3.aspx</ddue:linkUri>
    </ddue:externalLink></item>
   <item id="net"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
