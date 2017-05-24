@@ -467,6 +467,11 @@
             Event of double-clicking the mouse on the selected item.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.BackupService">
+      <summary>
+            Backup service for sharing exports.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.BaseGridControl" />.
@@ -4398,7 +4403,7 @@
     </member>
     <member name="P:StockSharp.Xaml.SecurityPicker.FilteredSecurities">
       <summary>
-            Instruments filtered.
+            Filtered instruments.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.SecurityPicker.SelectedType">
