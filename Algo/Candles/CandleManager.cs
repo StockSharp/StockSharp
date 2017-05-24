@@ -346,9 +346,6 @@ namespace StockSharp.Algo.Candles
 					info.CurrentCandle = candleMsg.ToCandle(info.Series);
 
 				Processing?.Invoke(info.Series, info.CurrentCandle);
-
-				if (candleMsg.IsFinished)
-					Stopped?.Invoke(info.Series);
 			}
 		}
 

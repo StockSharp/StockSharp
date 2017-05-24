@@ -243,8 +243,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 					Processing?.Invoke(info.Series, info.CurrentCandle);
 
-					if (candleMsg.IsFinished)
-						OnStopped(info.Series);
+					//if (candleMsg.IsFinished)
+					//	OnStopped(info.Series);
 				}
 
 				lastValue = value;

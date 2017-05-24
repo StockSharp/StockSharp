@@ -42,7 +42,7 @@ namespace SampleChart
 		private ChartArea _areaComb;
 		private ChartCandleElement _candleElement1;
 		private TimeFrameCandle _candle;
-		private VolumeProfile _volumeProfile;
+		private CandleMessageVolumeProfile _volumeProfile;
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
 		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
 		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
@@ -285,7 +285,7 @@ namespace SampleChart
 					Security = security,
 				};
 
-				_volumeProfile = new VolumeProfile();
+				_volumeProfile = new CandleMessageVolumeProfile();
 				_candle.PriceLevels = _volumeProfile.PriceLevels;
 
 				_candle.OpenPrice = _candle.HighPrice = _candle.LowPrice = _candle.ClosePrice = price;

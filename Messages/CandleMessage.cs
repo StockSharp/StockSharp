@@ -241,12 +241,6 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// It is the last message in the requested batch of candles.
-		/// </summary>
-		[DataMember]
-		public bool IsFinished { get; set; }
-
-		/// <summary>
 		/// Price levels.
 		/// </summary>
 		[DataMember]
@@ -313,7 +307,6 @@ namespace StockSharp.Messages
 			copy.DownTicks = DownTicks;
 			copy.UpTicks = UpTicks;
 			copy.TotalTicks = TotalTicks;
-			copy.IsFinished = IsFinished;
 			copy.PriceLevels = PriceLevels?.Select(l => l.Clone()).ToArray();
 			copy.State = State;
 
