@@ -12,7 +12,7 @@ So, the time candle storage can be obtained, as shown in the following code snip
     </para>
     <code language="C#">
 	<![CDATA[
-   var security = new Security() { Id = "RIM5@FORTS" };
+   var security = new Security() { Id = "ESM5@NYSE" };
    var candleMessageStorage = _storage.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, TimeSpan.FromMinutes(1));
 	]]>
 </code>
@@ -30,7 +30,7 @@ For example, IMarketDataStorage&lt;MarketDepth&gt; can be converted to the IMark
     <code language="C#">
 	<![CDATA[
 	
-   var security = new Security() { Id = "RIM5@FORTS" };
+   var security = new Security() { Id = "ESM5@NYSE" };
    
    var depthStorage = _storage.GetMarketDepthStorage(_security);
    var quoteMessageStorage = depthStorage as IMarketDataStorage<QuoteChangeMessage>;
@@ -64,9 +64,9 @@ instrument will be received in the instrument getting event using the
 
 <code language="C#">
 					<![CDATA[
-var connector = new QuikTrader();
+var connector = new OpenECryTrader();
 
-var securityId = "RIM5@FORTS";
+var securityId = "ESM5@NYSE";
 
 // storage to historical data
 var storageRegistry = new StorageRegistry

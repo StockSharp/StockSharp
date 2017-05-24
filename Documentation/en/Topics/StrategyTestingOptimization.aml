@@ -74,10 +74,10 @@ var timeFrame = TimeSpan.FromMinutes(5);
 // create test security
 var security = new Security
 {
-	Id = "RIZ2@FORTS", // sec id has the same name as folder with historical data
-	Code = "RIZ2",
-	Name = "RTS-12.12",
-	Board = ExchangeBoard.Forts,
+	Id = "ESM2@NYSE", // sec id has the same name as folder with historical data
+	Code = "ESM2",
+	Name = "ES-12.12",
+	Board = ExchangeBoard.Nyse,
 };
 
 var startTime = new DateTime(2012, 10, 1);

@@ -175,7 +175,7 @@ public class TickCandleBuilder : CandleBuilder<TickCandle>
 					
 					<code language="C#">
 					<![CDATA[
-private QuikTrader _trader;
+private OpenECryTrader _trader;
 private CandleManager _candleManager;
 
 ...

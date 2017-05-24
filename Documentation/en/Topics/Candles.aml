@@ -35,7 +35,7 @@
 			</listItem>
 		</list>
 	  
-<para>How to work with candles is shown in the SampleCandle example, which is located in the Samples/Quik/SampleCandles folder.</para>
+<para>How to work with candles is shown in the SampleCandle example, which is located in the Samples/OpenECry/SampleOEC folder.</para>
 <para>The 
 <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> 
 and

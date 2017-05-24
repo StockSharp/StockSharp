@@ -24,14 +24,14 @@
 
       
      	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/Quik/Sample.</legacyItalic>
+Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC.</legacyItalic>
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_MytradeGrid" /></mediaLink>
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
-<Window x:Class="Sample.MyTradesWindow"
+<Window x:Class="SampleOEC.MyTradesWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

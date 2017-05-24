@@ -86,7 +86,7 @@ public void SendInMessage(Message message)
     </introduction>
     
     <procedure>
-			<title>Example of SmartCom message adapter creating</title>
+			<title>Example of Interactive Brokers message adapter creating</title>
 			<steps class="ordered">
 			   <step>
 					<content>
@@ -94,15 +94,13 @@ public void SendInMessage(Message message)
 						<legacyBold>Creating an adapter class.</legacyBold>
 						</para>
 						<para>
-						 First, we create the <legacyBold>SmartAdapter</legacyBold> message 
+						 First, we create the <legacyBold>InteractiveBrokersAdapter</legacyBold> message 
 						 adapter class, inherited from the abstract <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
-						 class. In the namespace area, along with other references, 
-						 you need to add SmartCOM3Lib. Also create a <legacyBold>_smartCom</legacyBold> variable to reference the <token>smartcom</token> library object.
+						 class:
 						</para>
 						<code language="C#">
-public class SmartAdapter: MessageAdapter 
+public class InteractiveBrokersAdapter : MessageAdapter 
 {
-	private SmartCOM3Lib.StServer _smartCom;
 }						
 						
 </code>
@@ -117,14 +115,14 @@ public class SmartAdapter: MessageAdapter
   							<listItem>
   								<para>The transactions identifier generator is passed to the adapter constructor, which will be used to create the message IDs.</para>
   							</listItem>
-  							<listItem>
+  							<!--<listItem>
   								<para>Then we fill in the <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityClassInfo</codeEntityReference> dictionary. 
-  								This dictionary maps instrument class codes in <token>smartcom</token> with the 
+  								This dictionary maps instrument class codes in <token>IB</token> with the 
   								<codeEntityReference>P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> instrument type and the board code in <token>stocksharp</token>.</para>
   							</listItem>
   							<listItem>
   								<para>The <legacyBold>PortfolioBoardCodes</legacyBold> dictionary is filled, which maps the board codes for portfolios.</para>
-  							</listItem>
+  							</listItem>-->
   							<listItem>
   								<para>
   								Using the 
@@ -137,21 +135,9 @@ public class SmartAdapter: MessageAdapter
 	
 						<code language="C#">
 						<![CDATA[
-public SmartAdapter(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
+public InteractiveBrokersAdapter(IdGenerator transactionIdGenerator)
+	: base(transactionIdGenerator)
 {
-
-	 SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
-     SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
-     SecurityClassInfo.Add("TQBR", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexTqbr.Code));
-
-     PortfolioBoardCodes = new Dictionary<string, string>
-	{
-		{ "EQ", ExchangeBoard.MicexEqbr.Code },
-		{ "FOB", ExchangeBoard.MicexFbcb.Code },
-		{ "RTS_FUT", ExchangeBoard.Forts.Code },
-	};
-	
     this.AddSupportedMessage(MessageTypes.MarketData);
     this.AddSupportedMessage(MessageTypes.SecurityLookup);
 
@@ -179,8 +165,8 @@ public SmartAdapter(IdGenerator transactionIdGenerator)
 						<para>
 						 	We override the <codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup</codeEntityReference> and 
 						 	<codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup</codeEntityReference> properties. 
-						 	Because <token>smartcom</token> supports searching for portfolios and instruments, we make the properties return ‘true’. 
-						 	Also add properties for the login, password, address and port of the <token>smartcom</token> server.
+						 	Because <token>IB</token> supports searching for portfolios and instruments, we make the properties return ‘true’. 
+						 	Also add properties for the login, password, address and port of the <token>IB</token> server.
 						</para>
 						<code language="C#">
 protected override bool IsSupportNativePortfolioLookup
@@ -192,11 +178,6 @@ protected override bool IsSupportNativeSecurityLookup
 {
 	get { return true; }
 }
-
- public string Address {set; get;}
- public ushort Port {set; get;}
- public string Login {set; get;}
- public string Password {set; get;}
 						</code>
 					</content>
 				</step>
@@ -210,7 +191,7 @@ protected override bool IsSupportNativeSecurityLookup
 					    Next, you need to override the 
 					    <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>. 
 					    method. As mentioned above, all outgoing messages are passed to this method and for each type 
-					    of message you need to write code that converts messages into <token>smartcom</token> commands.
+					    of message you need to write code that converts messages into <token>IB</token> commands.
 						</para>
 						<para>
 						When the 
@@ -222,7 +203,7 @@ protected override bool IsSupportNativeSecurityLookup
 						<para>
 			When the 
 			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference>
-			message arrives, we initialize the _smartCom variable, subscribe to <token>smartcom</token>  events and 
+			message arrives, we initialize the _ibSocket variable, subscribe to <token>IB</token> events and 
 			establish a connection using the <legacyBold>Connect</legacyBold> method 
 			of the native API. In case of successful connection, the <legacyBold>StServer.Connected</legacyBold> event should occur.
 						</para>
@@ -238,27 +219,18 @@ protected override void OnSendInMessage(Message message)
               _lookupSecuritiesId = 0;
               _lookupPortfoliosId = 0;
 
-              if (_smartCom != null)
+              if (_ibSocket != null)
               {
                   try
                   {
-                      DisposeSmartCom();
+                      DisposeSocket();
                   }
                   catch (Exception ex)
                   {
                       SendOutError(ex);
                   }
 
-                  try
-                  {
-                      _smartCom.disconnect();
-                  }
-                  catch (Exception ex)
-                  {
-                      SendOutError(ex);
-                  }
-
-                   _smartCom = null;
+                  _ibSocket = null;
               }
 
               SendOutMessage(new ResetMessage());
@@ -268,43 +240,22 @@ protected override void OnSendInMessage(Message message)
 
         case MessageTypes.Connect:
         {
-            if (_smartCom != null)
-                throw new InvalidOperationException("smartCom != null");
+            if (_ibSocket != null)
+                throw new InvalidOperationException("_ibSocket != null");
 
-            _smartCom = new StServer();
+            _ibSocket = new IBSocket();
 
-            _smartCom.Connected += smartCom_Connected;
-            _smartCom.Disconnected += smartCom_Disconnected;
-            _smartCom.AddPortfolio += smartCom_AddPortfolio;
-            _smartCom.AddSymbol += smartCom_AddSymbol;
-            _smartCom.SetPortfolio += smartCom_SetPortfolio;
-            _smartCom.UpdatePosition += smartCom_UpdatePosition;
-            _smartCom.AddTick += smartCom_AddTick;
-            _smartCom.UpdateBidAsk += smartCom_UpdateBidAsk;
-            _smartCom.UpdateQuote +=  smartCom_UpdateQuote;
-            _smartCom.AddTrade += smartCom_AddTrade;
-            _smartCom.UpdateOrder += smartCom_UpdateOrder;
-            _smartCom.SetMyClosePos += smartCom_SetMyClosePos;
-            _smartCom.SetMyOrder += smartCom_SetMyOrder;
-            _smartCom.SetMyTrade += smartCom_SetMyTrade;
-            _smartCom.OrderSucceeded += smartCom_OrderSucceeded;
-            _smartCom.OrderFailed += smartCom_OrderFailed;
-            _smartCom.OrderCancelFailed += smartCom_OrderCancelFailed;
-            _smartCom.OrderCancelSucceeded += smartCom_OrderCancelSucceeded;
-            _smartCom.OrderMoveFailed += smartCom_OrderMoveFailed;
-            _smartCom.OrderMoveSucceeded += smartCom_OrderMoveSucceeded;
-
-            _smartCom.connect(Address, Port, Login, Password);
+            _ibSocket.Connect(Address, Port);
 
             break;
         }
 
         case MessageTypes.Disconnect:
         {
-            if (_smartCom == null)
+            if (_ibSocket == null)
                 throw new InvalidOperationException(LocalizedStrings.Str1856);
                 
-            _smartCom.disconnect();
+            _ibSocket.disconnect();
 
             break;
         }
@@ -349,7 +300,7 @@ protected override void OnSendInMessage(Message message)
 				<step>
 				<content>
 					<para>
-The StServer.Connected event.
+The events.
 					</para>
 					<para>
 In the native API connection event handler, you must send the outgoing <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
@@ -387,7 +338,7 @@ class, the values of the Boolean properties will be checked:
 					</para>
 					<code language="C#">
 						<![CDATA[
-private void smartCom_Connected()
+private void IBSocket_Connected()
 {
     SendOutMessage(new ConnectMessage());
 }
@@ -402,9 +353,9 @@ Outgoing messages <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMess
 and <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference>.
 				</para>
 				<para>
-When you receive these messages, you should call <token>smartcom</token>, functions 
-that request portfolios and instruments, respectively. Calling these functions will t
-rigger <legacyBold>StServer.AddPortfolio</legacyBold> (portfolios) and <legacyBold>StServer.AddSymbol</legacyBold> (instruments) events.
+When you receive these messages, you should call <token>IB</token>, functions 
+that request portfolios and instruments, respectively. Calling these functions will trigger <legacyBold>IBSocket.NewPortfolio</legacyBold> (portfolios)
+and <legacyBold>IBSocket.NewSymbol</legacyBold> (instruments) events.
 				</para>
 				<code language="C#">
 						<![CDATA[
@@ -413,7 +364,7 @@ private void ProcessPortolioLookupMessage(PortfolioLookupMessage pfMsg)
     if (_lookupPortfoliosId == 0)
     {
         _lookupPortfoliosId = pfMsg.TransactionId;
-        _smartCom.GetPrortfolioList(); 
+        _ibSocket.GetPrortfolioList(); 
     }
     else
         SendOutError(LocalizedStrings.Str1868);
@@ -424,7 +375,7 @@ private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
     if (_lookupSecuritiesId == 0)
     {
         _lookupSecuritiesId = message.TransactionId;
-        _smartCom.GetSymbols();
+        _ibSocket.GetSymbols();
     }
     else
         SendOutError(LocalizedStrings.Str1854);
@@ -438,10 +389,10 @@ private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
 				<step>
 				<content>
 				<para>
-					 The <legacyBold>StServer.AddPortfolio</legacyBold> event.
+					 The <legacyBold>IBSocket.NewPortfolio</legacyBold> event.
 				</para>
                 <para>
-In the <legacyBold>StServer.AddPortfolio</legacyBold> event handler, the received portfolio information must 
+In the <legacyBold>IBSocket.NewPortfolio</legacyBold> event handler, the received portfolio information must 
 be converted to the incoming <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.
 message. And after receiving all the portfolios, you need to send the incoming 
 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference> message. 
@@ -450,16 +401,13 @@ property must be set to the <legacyBold>TransactionId</legacyBold> value of the 
 				</para>
 				<code language="C#">
 				<![CDATA[
-private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, string portfolioExch, SmartCOM3Lib.StPortfolioStatus portfolioStatus)
+private void IBSocket_NewPortfolio(int row, int nrows, string portfolioName, string portfolioExch)
 {
 	SendOutMessage(new PortfolioMessage
     {
 		PortfolioName = portfolioName,
 		BoardCode = PortfolioBoardCodes.TryGetValue(portfolioExch),
         ExtensionInfo = new Dictionary<object, object>
-					{
-						{ "PortfolioStatus", portfolioStatus }
-					}
      });
 
      if ((row + 1) < nrows)
@@ -475,10 +423,10 @@ private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, str
 				<step>
 				<content>
 				<para>
-					 The <legacyBold>StServer.AddSymbol</legacyBold> event.
+					 The <legacyBold>IBSocket.NewSymbol</legacyBold> event.
 				</para>
 				<para>
-In the <legacyBold>StServer.AddSymbol</legacyBold> event handler, the received information about the instrument 
+In the <legacyBold>IBSocket.NewSymbol</legacyBold> event handler, the received information about the instrument 
 must be converted to the incoming <codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference> message. 
 And after receiving all the instruments, you need to send the incoming message 
 <codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.
@@ -487,17 +435,17 @@ set to the <legacyBold>TransactionId</legacyBold> value of the corresponding out
 				</para>
 				<code language="C#">
 				<![CDATA[
-private void smartCom_AddSymbol(int row, int rowCount, string smartId, string name, string secCode, string secClass, int decimals, int lotSize, double stepPrice, double priceStep,
+private void IBSocket_NewSymbol(int row, int rowCount, long contractId, string name, string secCode, string secClass, int decimals, int lotSize, double stepPrice, double priceStep,
             string isin, string board, System.DateTime expiryDate, double daysBeforeExpiry, double strike)
 {
 	if (secCode.IsEmpty())
-    	secCode = smartId;
+    	secCode = contractId.To<string>();
 
     var securityId = new SecurityId
     {
         SecurityCode = secCode,
         BoardCode = board,
-        Native = smartId,
+        NativeAsInt = contractId,
         Isin = isin
     };
 
@@ -506,7 +454,6 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 
     DateTime? expDate = DateTime.FromOADate(0) == expiryDate ? (DateTime?)null : expiryDate;
 
-
     var secMsg = new SecurityMessage
     {
         PriceStep = priceStep.ToDecimal(),
@@ -514,81 +461,15 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
         Multiplier = lotSize,
         Name = name,
         ShortName = name,
-        ExpiryDate = expDate == null ? (DateTimeOffset?)null : expDate.Value.ApplyTimeZone(TimeHelper.Moscow),
+        ExpiryDate = expDate == null ? (DateTimeOffset?)null : expDate.Value.ApplyTimeZone(TimeHelper.EST),
         ExtensionInfo = new Dictionary<object, object>
 		{
-					{ "Class", secClass }
+			{ "Class", secClass }
 		},
         OriginalTransactionId = _lookupSecuritiesId
      };
 
-     if (secClass.CompareIgnoreCase("IDX"))
-     {
-         secMsg.SecurityType = SecurityTypes.Index;
-
-         switch (secMsg.SecurityId.BoardCode)
-         {
-             case "RUSIDX":
-                  securityId.BoardCode = secCode.ContainsIgnoreCase("MICEX") || secCode.ContainsIgnoreCase("MCX") ? ExchangeBoard.Micex.Code : ExchangeBoard.Forts.Code;
-                  break;
-         }
-     }
-     else
-     {
-         var info = SecurityClassInfo.GetSecurityClassInfo(secClass);
-
-         secMsg.SecurityType = info.Item1;
-         securityId.BoardCode = info.Item2;
-
-         if (ExchangeBoard.GetOrCreateBoard(info.Item2).IsMicex
-             &&
-                    secMsg.PriceStep != null && secMsg.PriceStep == (int)secMsg.PriceStep)
-         {
-             secMsg.PriceStep = 1m / 10m.Pow(secMsg.PriceStep.Value);
-         }
-     }
-
-     secMsg.SecurityId = securityId;
-
-     if (secMsg.SecurityType == SecurityTypes.Option)
-     {
-         var optionInfo = secMsg.Name.GetOptionInfo(ExchangeBoard.Forts);
-
-         if (optionInfo != null)
-         {
-             if (!secCode.IsEmpty())
-             {
-                 var futureInfo = optionInfo.UnderlyingSecurityId.GetFutureInfo(secCode, ExchangeBoard.Forts);
-                 if (futureInfo != null)
-                        secMsg.UnderlyingSecurityCode = futureInfo.SecurityId.SecurityCode;
-             }
-
-             secMsg.ExpiryDate = optionInfo.ExpiryDate;
-             secMsg.OptionType = optionInfo.OptionType;
-             secMsg.Strike = optionInfo.Strike;
-        }
-     }
-
      SendOutMessage(secMsg);
-
-     var stpPrice = stepPrice.ToDecimal();
-
-     if (stepPrice != null)
-     {
-         SendOutMessage(
-             new Level1ChangeMessage
-             {
-                        SecurityId = securityId,
-                        ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
-             }
-             .TryAdd(Level1Fields.StepPrice, stpPrice.Value));
-     }
-
-     if ((row + 1) < rowCount)
-          return;
-
-     SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = _lookupSecuritiesId });
-      _lookupSecuritiesId = 0;
 }
 				]]>	
 				</code>
@@ -606,7 +487,7 @@ When you call the <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrade
 				 methods, the outgoing message MarketDataMessage <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference> will be received.
 				 </para>
 				 <para>
-				When processing this message, you must call the  <token>smartcom</token> methods registering/canceling the registration of trades receiving.
+				When processing this message, you must call the  <token>IB</token> methods registering/canceling the registration of trades receiving.
 				 </para>
 				 <para>
 				Since the message is used to work with all types of market data, you need to use the 
@@ -615,18 +496,14 @@ When you call the <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrade
 				 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MarketDataTypes.Trades</codeEntityReference>.
 				</para>
 				<para>
-				After calling the <legacyBold>StServer.ListenTicks</legacyBold> method, the trades will be received in the <legacyBold>StServer.AddTick</legacyBold> event.
+				After calling the <legacyBold>IBSocket.ListenTicks</legacyBold> method, the trades will be received in the <legacyBold>IBSocket.NewTick</legacyBold> event.
 				 </para>
 				
 				<code language="C#">
                 <![CDATA[
 private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
 {
-    
-     var smartId = (string)mdMsg.SecurityId.Native;
-
-    if (smartId.IsEmpty())
-        throw new InvalidOperationException(LocalizedStrings.Str1853Params.Put(mdMsg.SecurityId));
+    var contractId = mdMsg.SecurityId.NativeAsInt;
 
     switch (mdMsg.DataType)
     {
@@ -645,9 +522,9 @@ private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
             if (mdMsg.From == null)
             {
                 if (mdMsg.IsSubscribe)
-                    _smartCom.ListenTicks(smartId);
+                    _ibSocket.ListenTicks(contractId);
                 else
-                    _smartCom.CancelTicks(smartId);
+                    _ibSocket.CancelTicks(contractId);
            }
            else
            {
@@ -674,10 +551,10 @@ private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
 			<step>
 				<content>
 				<para>
-					The <legacyBold>StServer.AddTick</legacyBold> event.
+					The <legacyBold>IBSocket.NewTick</legacyBold> event.
 				</para>
 				<para>
-In the <legacyBold>StServer.AddTick</legacyBold> event handler, the received trade information must be converted to the incoming 
+In the <legacyBold>IBSocket.NewTick</legacyBold> event handler, the received trade information must be converted to the incoming 
 <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>.
 message. Note that <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> messages are used for both trades and orders. 
 Therefore, the message states that it refers to the trade -
@@ -686,21 +563,20 @@ Therefore, the message states that it refers to the trade -
 				</para>
 				<code language="C#">
 				<![CDATA[
-private void smartCom_AddTick(string smartId, System.DateTime time, double price, double volume, string tradeId, SmartCOM3Lib.StOrder_Action action)
+private void IBSocket_NewTick(string contractId, System.DateTime time, double price, double volume, string tradeId)
 {
-    SendOutMessage(CreateTrade(smartId, time, price.ToDecimal(), volume.ToDecimal(), tradeId.To<long>(), action));
+    SendOutMessage(CreateTrade(contractId, time, price.ToDecimal(), volume.ToDecimal(), tradeId.To<long>(), action));
 }
 
-private static ExecutionMessage CreateTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartCOM3Lib.StOrder_Action action)
+private static ExecutionMessage CreateTrade(long contractId, DateTime time, decimal? price, decimal? volume, long tradeId)
 {
     return new ExecutionMessage
     {
-         SecurityId = new SecurityId { Native = smartId },
+         SecurityId = new SecurityId { NativeAsInt = contractId },
          TradeId = tradeId,
          TradePrice = price,
          Volume = volume,
-         OriginSide = action.ToSide(),
-         ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
+         ServerTime = time.ApplyTimeZone(TimeHelper.EST),
          ExecutionType = ExecutionTypes.Tick
    };
 }

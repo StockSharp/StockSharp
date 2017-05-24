@@ -38,7 +38,7 @@
 		</list>
 		
 	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_OrderConditionalWindow" /></mediaLink>

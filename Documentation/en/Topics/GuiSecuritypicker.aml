@@ -70,7 +70,7 @@
 	  </list>
 	  
       <para>
-Below is the appearance of the component and the code snippet with its using, taken from example <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Below is the appearance of the component and the code snippet with its using, taken from example <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
       </para>
  <section>
  
@@ -80,7 +80,7 @@ Below is the appearance of the component and the code snippet with its using, ta
               <mediaLink><image placement="left" xlink:href="GUI_SecurityPicker2" /></mediaLink>	
               <code title="XAML" language="XAML">
 	  		<![CDATA[
-<Window x:Class="Sample.SecuritiesWindow"
+<Window x:Class="SampleOEC.SecuritiesWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

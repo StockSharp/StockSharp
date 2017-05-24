@@ -30,7 +30,7 @@
 						  "virtual" transactions using the <legacyBold>MillisecondIncrementalIdGenerator</legacyBold> identifier generator.
 					  </para>
 					  <code language="C#"><![CDATA[
-					_connector = new RealTimeEmulationTrader<SmartComMessageAdapter>(new OpenECryMessageAdapter(new MillisecondIncrementalIdGenerator())
+					_connector = new RealTimeEmulationTrader<OpenECryMessageAdapter>(new OpenECryMessageAdapter(new MillisecondIncrementalIdGenerator())
 					{
 						Login = Login.Text,
 						Password = Password.Password.To<SecureString>(),
