@@ -7,7 +7,7 @@
 		There is the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>,
 		interface in this section, which created to describe all the possible actions with the storage and contains such properties as
 		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Securities</codeEntityReference>,
-		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Orders</codeEntityReference>
+		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Positions</codeEntityReference>
 		etc. Through these properties, it is possible to get all the previously saved trading objects, for example, instruments. All processes run as with regular
 		collection using the <codeEntityReference>T:StockSharp.Algo.Storages.IStorageEntityList`1</codeEntityReference> interface. If you want to save the trading object
 		in the storage (for example, a new order appeared or previously registered order updated), you should use the

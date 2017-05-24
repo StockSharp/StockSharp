@@ -5,24 +5,24 @@
      <para>For backtesting in the <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> class, along with
      <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference> data storage using, an alternative mechanism for working
      with data sources is provided. This mechanism allows to download data directly from servers of the historical information providers, in particular from the
-     Google Finance server, or to work with one’s own data sources.
+     Quandl, Google Finance, or to work with one’s own data sources.
      </para>
      <para>
-     Consider the work of this mechanism using the example of the data getting from the Google Finance service. To work with Google Finance there is special
-     <codeEntityReference>T:StockSharp.Algo.History.GoogleHistorySource</codeEntityReference> class in <token>stocksharp</token>,
+     Consider the work of this mechanism using the example of the data getting from the Quandl. To work with Google Finance there is special
+     <codeEntityReference>T:StockSharp.Algo.History.QuandlHistorySource</codeEntityReference> class in <token>stocksharp</token>,
      which allows to get candles, ticks and information about instruments.
      <!--Func<DateTimeOffset, IEnumerable<Message>-->
      
      </para>
      
 	<procedure>
-		<title>Testing with data downloaded from Google Finance</title>
+		<title>Testing with data downloaded from Quandl</title>
 		<steps class="ordered">
 			<step>
 				<content>
 				<para>
-				 At first we need to get information about the instruments from the Google Finance service. To do this, it is necessary to create a storage for the instruments
-				 (<legacyBold>GoogleSecurityStorage</legacyBold>). This is a class that implements the <codeEntityReference>T:StockSharp.Algo.Storages.ISecurityStorage</codeEntityReference>
+				 At first we need to get information about the instruments from the Quandl service. To do this, it is necessary to create a storage for the instruments
+				 (<legacyBold>QuandlSecurityStorage</legacyBold>). This is a class that implements the <codeEntityReference>T:StockSharp.Algo.Storages.ISecurityStorage</codeEntityReference>
 				 interface. The code of this class is in the example <legacyItalic>Samples/Testing/SampleHistoryTesting</legacyItalic>.
 				</para>
 				
@@ -41,29 +41,29 @@ var security = new Security
 				</code>
 			    </listItem>
   					<listItem>
-  					<para>Creating the instances of classes of the instrument storage and data loader from Google Finance. Note that in this example we pass one instrument to
-  					the <legacyBold>GoogleSecurityStorage</legacyBold> constructor. If it is necessary to work with multiple instruments, you can modify the constructor
+  					<para>Creating the instances of classes of the instrument storage and data loader from Quandl. Note that in this example we pass one instrument to
+  					the <legacyBold>QuandlSecurityStorage</legacyBold> constructor. If it is necessary to work with multiple instruments, you can modify the constructor
   					code to pass an array of instruments.</para>
   					<code>
 <![CDATA[
-var googleSecurityStorage = new GoogleSecurityStorage(security);
-var googleHistorySource = new GoogleHistorySource();
+var qlSecurityStorage = new QuandlSecurityStorage(security);
+var qlHistorySource = new QuandlHistorySource();
 ]]>
   					</code>
   					</listItem>
   					<listItem>
   					<para>
   					Next, it is necessary to update the instrument storage. The
-  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.GoogleHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})</codeEntityReference>
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})</codeEntityReference>
   					method is used for it. In fact, this method records to the <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExtensionInfo</codeEntityReference>
-  					property the instrument and site codes used in Google Finance, which will be used to download data by the instrument. Note that the first argument of the
+  					property the instrument and site codes used in Quandl, which will be used to download data by the instrument. Note that the first argument of the
   					method is of the <codeEntityReference>T:StockSharp.Algo.Storages.ISecurityStorage</codeEntityReference> type - this interface has been implemented
-  					in <legacyBold>GoogleSecurityStorage</legacyBold>. Also it is necessary to bear in mind that the second argument
+  					in <legacyBold>QuandlSecurityStorage</legacyBold>. Also it is necessary to bear in mind that the second argument
   					(<codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>) performs the template function while updating instruments of the storage.
   					</para>
   					<code>
 				<![CDATA[
-googleHistorySource.Refresh(googleSecurityStorage, security, s => {}, () => false);
+qlHistorySource.Refresh(qlSecurityStorage, security, s => {}, () => false);
 ]]>
   					</code>
   					</listItem>
@@ -82,7 +82,7 @@ googleHistorySource.Refresh(googleSecurityStorage, security, s => {}, () => fals
 				<para>
 				In the last argument it is necessary to specify a function that returns the market data. At that the function must return a value of the
 				<legacyBold>IEnumerable&lt;Message&gt;</legacyBold> type and take a parameter of the <codeEntityReference>T:System.DateTimeOffset</codeEntityReference> type.
-				In our case, the method that requests the candles from Google Finance is used - <codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.GoogleHistorySource.GetCandles(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>.
+				In our case, the method that requests the candles from Quandl is used - <codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.QuandlHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>.
 				</para>
 				<para>
 				The data will be downloaded after the connector’s start, and the values of the 
@@ -94,7 +94,7 @@ googleHistorySource.Refresh(googleSecurityStorage, security, s => {}, () => fals
 				<code >
 				<![CDATA[
 connector.RegisterHistorySource(security, MarketDataTypes.CandleTimeFrame, TimeSpan.FromMinutes(1), d =>
-	_googleHistorySource.GetCandles(security, TimeSpan.FromMinutes(1), d.Date, d.Date));
+	qlHistorySource.GetCandles(security, TimeSpan.FromMinutes(1), d.Date, d.Date));
 					  ]]>
 				</code>
 				</content>

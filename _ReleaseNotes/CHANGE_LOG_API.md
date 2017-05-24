@@ -26,6 +26,7 @@ StockSharp API Change log
 * (feature) ServerCredentials. Save password for auto logon only.
 * (bug) CandleBuilder. Fix High/Low volumes.
 * (bug) RenkoCandleBuilder fix.
+* (bug) PnFCandleBuilder fix.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

@@ -52,7 +52,7 @@ And for the candles of the <codeEntityReference>T:StockSharp.Algo.Candles.Volume
 	  		
 			<alert class="note">
   				<para>If in <legacyBold>Generate from:</legacyBold> choose <legacyBold>not to generate</legacyBold>, then the finished candles that 
-  				were downloaded through the source (for example, <link xlink:href="bad33f32-1a13-4ba7-a335-326e6249d1be">Finam</link>) will be searched.</para>
+  				were downloaded through the source (for example, <link xlink:href="0166d686-9fb0-4e78-8578-f5b706ad6a07">Google</link>) will be searched.</para>
 			</alert>
 
           </content>

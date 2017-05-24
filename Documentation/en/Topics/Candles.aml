@@ -72,7 +72,7 @@ _candleManager = new CandleManager(_trader);
 					
 					<alert class="note">
 <para>If for tick trades getting the source with another procedure used instead of the <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
-connector, you must implement the <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.ICandleManagerSource</codeEntityReference>
+connector, you must implement the <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.Compression.IBuilderCandleSource</codeEntityReference>
 interface and pass the implementation to <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>.</para>
 						
 <para>The following implementations of this interface are in the <token>stocksharp</token>:</para>
