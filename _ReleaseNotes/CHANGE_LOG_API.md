@@ -28,6 +28,7 @@ StockSharp API Change log
 * (bug) RenkoCandleBuilder fix.
 * (bug) PnFCandleBuilder fix.
 * (feature) Grids. Share images.
+* (feature) CandleMessage.IsFinished removed.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
