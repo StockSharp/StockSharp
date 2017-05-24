@@ -14072,3 +14072,10 @@ DocStr9779;Command for clear logs;Команда очисти логов
 DocStr9780;Cancel callback;Колбэк отмены
 DocStr9781;To finish downloading the file;Завершить скачивание файла
 DocStr9782;File uploading/downloading progress bar window;Окно прогресса загрузки/скачивания файла
+DocStr9783;Save password;Сохранить пароль
+DocStr9784;Command for sharing chart image;Команда публикации изображения
+DocStr9785;Backup service for sharing exports;Облачный сервис для публикации данных
+DocStr9786;Filtered instruments;Отфильтрованные инструменты
+DocStr9787;Check can optimize parameter;Можно ли оптимизировать параметр
+DocStr9788;Strategy parameter;Параметр стратегии
+DocStr9789;Excluded parameters;Исключенные параметры

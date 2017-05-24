@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Strategies
 		/// Check can optimize parameter.
 		/// </summary>
 		/// <param name="parameter">Strategy parameter.</param>
-		/// <param name="excludeParameters">Exclude parameters by name.</param>
+		/// <param name="excludeParameters">Excluded parameters.</param>
 		public static bool CanOptimize(this IStrategyParam parameter, ISet<string> excludeParameters)
 		{
 			if (parameter == null)

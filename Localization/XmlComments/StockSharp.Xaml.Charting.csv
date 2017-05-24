@@ -381,6 +381,7 @@ M:StockSharp.Xaml.Charting.ChartIndicatorElement.ToString/returns;DocStr50
 T:StockSharp.Xaml.Charting.ChartOrderElement/summary;DocStr7800
 M:StockSharp.Xaml.Charting.ChartOrderElement.#ctor/summary;DocStr93
 T:StockSharp.Xaml.Charting.ChartPanel/summary;DocStr7805
+F:StockSharp.Xaml.Charting.ChartPanel.ShareCommand/summary;DocStr9784
 P:StockSharp.Xaml.Charting.ChartPanel.SecurityProvider/summary;DocStr972
 F:StockSharp.Xaml.Charting.ChartPanel.RegisterOrderCommand/summary;DocStr7806
 F:StockSharp.Xaml.Charting.ChartPanel.AddAreaCommand/summary;DocStr7807
@@ -454,6 +455,7 @@ M:StockSharp.Xaml.Charting.ChartPanel.Reset(System.Collections.Generic.IEnumerab
 M:StockSharp.Xaml.Charting.ChartPanel.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})/param/elements;DocStr7715
 M:StockSharp.Xaml.Charting.ChartPanel.Draw(StockSharp.Xaml.Charting.ChartDrawData)/summary;DocStr486
 M:StockSharp.Xaml.Charting.ChartPanel.Draw(StockSharp.Xaml.Charting.ChartDrawData)/param/data;DocStr467
+P:StockSharp.Xaml.Charting.ChartPanel.BackupService/summary;DocStr9785
 M:StockSharp.Xaml.Charting.ChartPanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.ChartPanelOrderSettings/summary;DocStr8869
 P:StockSharp.Xaml.Charting.ChartPanelOrderSettings.Security/summary;DocStr8871
