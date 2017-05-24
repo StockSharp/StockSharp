@@ -110,7 +110,12 @@ namespace StockSharp.Algo
 					else
 					{
 						lock (_timeSync)
+						{
+							if (_currState == ConnectionStates.Connected)
+								_prevState = _reConnecting;
+
 							_currState = _reConnecting;
+						}
 
 						_connectionTimeOut = _reConnectionSettings.Interval;
 						_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
@@ -331,7 +336,7 @@ namespace StockSharp.Algo
 
 						_connectionTimeOut = _reConnectionSettings.Interval;
 
-						_prevState = _currState;
+						//_prevState = _currState;
 						SendInMessage(new ConnectMessage());
 					}
 					else
