@@ -281,6 +281,7 @@ namespace StockSharp.Algo.Candles
 				private readonly bool _onlyFormed;
 				private readonly IEnumerable<ICandleBuilderSourceValue> _values;
 				private CandleMessage _lastActiveCandle;
+				private CandleMessage _lastCandle;
 
 				public CandleMessageEnumerator(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<ICandleBuilderSourceValue> values)
 				{
@@ -322,7 +323,8 @@ namespace StockSharp.Algo.Candles
 					_finishedCandles.Clear();
 					_valuesEnumerator = _values.GetEnumerator();
 					_lastActiveCandle = null;
-					_candleBuilder.Reset();
+					_lastCandle = null;
+					//_candleBuilder.Reset();
 				}
 
 				public override bool MoveNext()
@@ -334,8 +336,10 @@ namespace StockSharp.Algo.Candles
 
 						_lastActiveCandle = null;
 
-						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _valuesEnumerator.Current))
+						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _valuesEnumerator.Current))
 						{
+							_lastCandle = candleMessage;
+
 							if (candleMessage.State == CandleStates.Finished)
 								_finishedCandles.Add(candleMessage);
 
@@ -1048,9 +1052,9 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candles">Candles.</param>
 		/// <returns>The area.</returns>
-		public static VolumeProfile GetValueArea(this IEnumerable<Candle> candles)
+		public static CandleMessageVolumeProfile GetValueArea(this IEnumerable<Candle> candles)
 		{
-			var area = new VolumeProfile();
+			var area = new CandleMessageVolumeProfile();
 
 			foreach (var candle in candles)
 			{

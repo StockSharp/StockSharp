@@ -13,7 +13,7 @@ Created: 2015, 12, 2, 8:18 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-namespace StockSharp.Algo.Candles.Compression
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
@@ -21,28 +21,26 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using Ecng.Collections;
 
-	using StockSharp.Messages;
-
 	/// <summary>
 	/// Volume profile.
 	/// </summary>
-	public class VolumeProfile
+	public class CandleMessageVolumeProfile
 	{
 		private readonly Dictionary<decimal, CandlePriceLevel> _volumeProfileInfo = new Dictionary<decimal, CandlePriceLevel>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VolumeProfile"/>.
+		/// Initializes a new instance of the <see cref="CandleMessageVolumeProfile"/>.
 		/// </summary>
-		public VolumeProfile()
+		public CandleMessageVolumeProfile()
 			: this(new List<CandlePriceLevel>())
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VolumeProfile"/>.
+		/// Initializes a new instance of the <see cref="CandleMessageVolumeProfile"/>.
 		/// </summary>
 		/// <param name="priceLevels">Price levels.</param>
-		public VolumeProfile(IList<CandlePriceLevel> priceLevels)
+		public CandleMessageVolumeProfile(IList<CandlePriceLevel> priceLevels)
 		{
 			if (priceLevels == null)
 				throw new ArgumentNullException(nameof(priceLevels));
@@ -72,7 +70,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public decimal VolumePercent
 		{
-			get { return _volumePercent; }
+			get => _volumePercent;
 			set
 			{
 				if (value < 0 || value > 100)
@@ -90,13 +88,15 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// To update the profile with new value.
 		/// </summary>
-		/// <param name="value">Value.</param>
-		public void Update(ICandleBuilderSourceValue value)
+		/// <param name="price">Price.</param>
+		/// <param name="volume">Volume.</param>
+		/// <param name="side">Side.</param>
+		public void Update(decimal price, decimal? volume, Sides? side)
 		{
 			//if (value.OrderDirection == null)
 			//	return;
 
-			UpdatePriceLevel(GetPriceLevel(value.Price), value);
+			UpdatePriceLevel(GetPriceLevel(price), volume, side);
 		}
 
 		/// <summary>
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Candles.Compression
 			});
 		}
 
-		private void UpdatePriceLevel(CandlePriceLevel level, ICandleBuilderSourceValue value)
+		private void UpdatePriceLevel(CandlePriceLevel level, decimal? volume, Sides? side)
 		{
 			if (level == null)
 				throw new ArgumentNullException(nameof(level));
@@ -148,26 +148,26 @@ namespace StockSharp.Algo.Candles.Compression
 			//if (side == null)
 			//	throw new ArgumentException(nameof(value));
 
-			if (value.Volume == null)
+			if (volume == null)
 				return;
 
-			var volume = value.Volume.Value;
+			var v = volume.Value;
 
-			level.TotalVolume += volume;
+			level.TotalVolume += v;
 
-			if (value.OrderDirection == Sides.Buy)
+			if (side == Sides.Buy)
 			{
-				level.BuyVolume += volume;
+				level.BuyVolume += v;
 				level.BuyCount++;
 
-				((List<decimal>)level.BuyVolumes).Add(volume);
+				((List<decimal>)level.BuyVolumes).Add(v);
 			}
-			else if (value.OrderDirection == Sides.Sell)
+			else if (side == Sides.Sell)
 			{
-				level.SellVolume += volume;
+				level.SellVolume += v;
 				level.SellCount++;
 
-				((List<decimal>)level.SellVolumes).Add(volume);
+				((List<decimal>)level.SellVolumes).Add(v);
 			}
 		}
 

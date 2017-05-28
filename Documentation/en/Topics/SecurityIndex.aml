@@ -38,9 +38,9 @@ private const string _secCode2 = "LKM5";
             				<![CDATA[
 _indexInstr = new ExpressionIndexSecurity
 {
-    Id = "IndexInstr@FORTS",
-    Expression = "GZM5@FORTS/LKM5@FORTS",
-    Board = ExchangeBoard.Forts,
+    Id = "IndexInstr@NYSE",
+    Expression = "ESM5@NYSE/APM5@NYSE",
+    Board = ExchangeBoard.Nyse,
 };
 							]]>
 							</code>						
@@ -75,7 +75,7 @@ private const string _secCode2 = "LKM5";
 							<para>To create the  <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-_indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Forts, Id = "IndexInstr" };
+_indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Nyse, Id = "IndexInstr" };
 							]]>
 							</code>						
 						</content>

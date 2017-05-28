@@ -27,14 +27,14 @@
 	</list>
       
      	  <para>
-Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/QuikSample.</legacyItalic>
+Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC.</legacyItalic>
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_PortfolioGrid" /></mediaLink>
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
-<Window x:Class="Sample.PortfoliosWindow"
+<Window x:Class="SampleOEC.PortfoliosWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -52,11 +52,11 @@ private void ConnectClick(object sender, RoutedEventArgs e)
     {
         if (Trader == null)
         {
-            Trader = new QuikTrader
+            Trader = new OpenECryTrader
             {
-                LuaFixServerAddress = Address.Text.To<EndPoint>(),
-                LuaLogin = Login.Text,
-                LuaPassword = Password.Password.To<SecureString>(),
+                Address = Address.SelectedAddress,
+                Login = Login.Text,
+                Password = Password.Password.To<SecureString>(),
                 LogLevel = LogLevels.Debug
             };
 

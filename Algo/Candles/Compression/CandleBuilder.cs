@@ -18,7 +18,6 @@ namespace StockSharp.Algo.Candles.Compression
 	using System;
 	using System.Collections.Generic;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 
@@ -34,15 +33,6 @@ namespace StockSharp.Algo.Candles.Compression
 	public abstract class CandleBuilder<TCandleMessage> : BaseLogReceiver, ICandleBuilder
 		where TCandleMessage : CandleMessage
 	{
-		private sealed class CandleInfo
-		{
-			public CandleMessage CurrentCandle { get; set; }
-
-			public VolumeProfile VolumeProfile { get; set; }
-		}
-
-		private readonly SynchronizedDictionary<MarketDataMessage, CandleInfo> _info = new SynchronizedDictionary<MarketDataMessage, CandleInfo>();
-
 		/// <summary>
 		/// The candle type.
 		/// </summary>
@@ -59,9 +49,26 @@ namespace StockSharp.Algo.Candles.Compression
 		/// To process the new data.
 		/// </summary>
 		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <param name="currentCandle">The current candle.</param>
 		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
 		/// <returns>A new candles changes.</returns>
-		public IEnumerable<CandleMessage> Process(MarketDataMessage message, ICandleBuilderSourceValue value)
+		public IEnumerable<CandleMessage> Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderSourceValue value)
+		{
+			var changes = new List<CandleMessage>();
+
+			Process(message, currentCandle, value, changes);
+
+			return changes;
+		}
+
+		/// <summary>
+		/// To process the new data.
+		/// </summary>
+		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		/// <param name="currentCandle">The current candle.</param>
+		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
+		/// <param name="changes">A new candles changes.</param>
+		public virtual void Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderSourceValue value, IList<CandleMessage> changes)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -69,57 +76,43 @@ namespace StockSharp.Algo.Candles.Compression
 			if (value == null)
 				throw new ArgumentNullException(nameof(value));
 
-			var info = _info.SafeAdd(message, k => new CandleInfo());
-
-			if (info == null)
-				yield break;
-
-			var currCandle = info.CurrentCandle;
-
-			var candle = ProcessValue(message, (TCandleMessage)currCandle, value);
+			var candle = ProcessValue(message, (TCandleMessage)currentCandle, value);
 
 			if (candle == null)
 			{
 				// skip the value that cannot be processed
-				yield break;
+				return;
 			}
 
-			if (candle == currCandle)
+			if (candle == currentCandle)
 			{
 				if (message.IsCalcVolumeProfile)
 				{
-					if (info.VolumeProfile == null)
+					if (candle.VolumeProfile == null)
 						throw new InvalidOperationException();
 
-					info.VolumeProfile.Update(value);
+					candle.VolumeProfile.Update(value);
 				}
 
 				//candle.State = CandleStates.Changed;
-				yield return candle;
+				changes.Add(candle);
 			}
 			else
 			{
-				if (currCandle != null)
+				if (currentCandle != null)
 				{
-					info.CurrentCandle = null;
-					info.VolumeProfile = null;
-
-					currCandle.State = CandleStates.Finished;
-					yield return currCandle;
+					currentCandle.State = CandleStates.Finished;
+					changes.Add(currentCandle);
 				}
-
-				info.CurrentCandle = candle;
 
 				if (message.IsCalcVolumeProfile)
 				{
-					info.VolumeProfile = new VolumeProfile();
-					info.VolumeProfile.Update(value);
-
-					candle.PriceLevels = info.VolumeProfile.PriceLevels;
+					candle.VolumeProfile = new CandleMessageVolumeProfile();
+					candle.VolumeProfile.Update(value);
 				}
 
 				candle.State = CandleStates.Active;
-				yield return candle;
+				changes.Add(candle);
 			}
 		}
 
@@ -174,7 +167,9 @@ namespace StockSharp.Algo.Candles.Compression
 			candle.CloseVolume = value.Volume;
 			candle.LowVolume = value.Volume;
 			candle.HighVolume = value.Volume;
-			candle.TotalVolume = value.Volume ?? 0;
+
+			if (value.Volume != null)
+				candle.TotalVolume = value.Volume.Value;
 
 			return candle;
 		}
@@ -200,35 +195,36 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var price = value.Price;
 			var time = value.Time;
+			var volume = value.Volume;
 
 			if (price < candle.LowPrice)
 			{
 				candle.LowPrice = price;
 				candle.LowTime = time;
+				candle.LowVolume = volume;
 			}
 
 			if (price > candle.HighPrice)
 			{
 				candle.HighPrice = price;
 				candle.HighTime = time;
+				candle.HighVolume = volume;
 			}
 
 			candle.ClosePrice = price;
 
-			if (value.Volume != null)
+			if (volume != null)
 			{
-				var volume = value.Volume.Value;
+				var v = volume.Value;
 
-				candle.TotalPrice += price * volume;
+				candle.TotalPrice += price * v;
 
-				candle.LowVolume = (candle.LowVolume ?? 0m).Min(volume);
-				candle.HighVolume = (candle.HighVolume ?? 0m).Max(volume);
-				candle.CloseVolume = volume;
-				candle.TotalVolume += volume;
+				candle.CloseVolume = v;
+				candle.TotalVolume += v;
 
 				var dir = value.OrderDirection;
 				if (dir != null)
-					candle.RelativeVolume = (candle.RelativeVolume ?? 0) + (dir.Value == Sides.Buy ? volume : -volume);
+					candle.RelativeVolume = (candle.RelativeVolume ?? 0) + (dir.Value == Sides.Buy ? v : -v);
 			}
 
 			candle.CloseTime = time;
@@ -256,14 +252,6 @@ namespace StockSharp.Algo.Candles.Compression
 			//this.AddDebugLog("UpdatedCandle {0} ForValue {1}", currentCandle, value);
 
 			return currentCandle;
-		}
-
-		/// <summary>
-		/// Reset state.
-		/// </summary>
-		public virtual void Reset()
-		{
-			_info.Clear();
 		}
 
 		///// <summary>
@@ -682,120 +670,138 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 		}
 
-		/// <summary>
-		/// To create a new candle.
-		/// </summary>
-		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		/// <param name="currentCandle">The current candle.</param>
-		/// <param name="value">Data with which a new candle should be created.</param>
-		/// <returns>Created candle.</returns>
-		protected override PnFCandleMessage CreateCandle(MarketDataMessage message, PnFCandleMessage currentCandle, ICandleBuilderSourceValue value)
+		/// <inheritdoc />
+		public override void Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderSourceValue value, IList<CandleMessage> changes)
 		{
-			var arg = (PnFArg)message.Arg;
-			var boxSize = arg.BoxSize;
+			var currentPnFCandle = (PnFCandleMessage)currentCandle;
 
+			var price = value.Price;
+			var volume = value.Volume;
+			var time = value.Time;
+			var side = value.OrderDirection;
+			var pnf = (PnFArg)message.Arg;
+
+			var pnfStep = (decimal)(1 * pnf.BoxSize);
+
+			if (currentPnFCandle == null)
+			{
+				var openPrice = MathHelper.Floor(price, pnfStep);
+				var highPrice = openPrice + pnfStep;
+
+				changes.Add(CreateCandle(message, pnf, openPrice, highPrice, openPrice, highPrice, price, volume, side, time));
+			}
+			else
+			{
+				if (currentPnFCandle.LowPrice <= price && price <= currentPnFCandle.HighPrice)
+				{
+					UpdateCandle(currentPnFCandle, price, volume, time, side);
+					changes.Add(currentPnFCandle);
+				}
+				else
+				{
+					var isX = currentPnFCandle.OpenPrice < currentPnFCandle.ClosePrice;
+
+					if (isX)
+					{
+						if (price > currentPnFCandle.HighPrice)
+						{
+							currentPnFCandle.HighPrice = currentPnFCandle.ClosePrice = MathHelper.Floor(price, pnfStep) + pnfStep;
+							UpdateCandle(currentPnFCandle, price, volume, time, side);
+							changes.Add(currentPnFCandle);
+						}
+						else if (price < (currentPnFCandle.HighPrice - pnfStep * pnf.ReversalAmount))
+						{
+							currentPnFCandle.State = CandleStates.Finished;
+							changes.Add(currentPnFCandle);
+
+							var highPrice = currentPnFCandle.HighPrice - pnfStep;
+							var lowPrice = MathHelper.Floor(price, pnfStep);
+
+							currentPnFCandle = CreateCandle(message, pnf, highPrice, highPrice, lowPrice, lowPrice, price, volume, side, time);
+							changes.Add(currentPnFCandle);
+						}
+						else
+						{
+							UpdateCandle(currentPnFCandle, price, volume, time, side);
+							changes.Add(currentPnFCandle);
+						}
+					}
+					else
+					{
+						if (price < currentPnFCandle.LowPrice)
+						{
+							currentPnFCandle.LowPrice = currentPnFCandle.ClosePrice = MathHelper.Floor(price, pnfStep);
+							UpdateCandle(currentPnFCandle, price, volume, time, side);
+							changes.Add(currentPnFCandle);
+						}
+						else if (price > (currentPnFCandle.LowPrice + pnfStep * pnf.ReversalAmount))
+						{
+							currentPnFCandle.State = CandleStates.Finished;
+							changes.Add(currentPnFCandle);
+
+							var highPrice = MathHelper.Floor(price, pnfStep) + pnfStep;
+							var lowPrice = currentPnFCandle.LowPrice + pnfStep;
+
+							currentPnFCandle = CreateCandle(message, pnf, lowPrice, highPrice, lowPrice, highPrice, price, volume, side, time);
+							changes.Add(currentPnFCandle);
+						}
+						else
+						{
+							UpdateCandle(currentPnFCandle, price, volume, time, side);
+							changes.Add(currentPnFCandle);
+						}
+					}
+				}
+			}
+		}
+
+		private static void UpdateCandle(PnFCandleMessage currentPnFCandle, decimal price, decimal? volume, DateTimeOffset time, Sides? side)
+		{
+			currentPnFCandle.TotalTicks = currentPnFCandle.TotalTicks ?? 0 + 1;
+
+			if (volume != null)
+			{
+				var v = volume.Value;
+
+				currentPnFCandle.TotalVolume += v;
+				currentPnFCandle.TotalPrice += v * price;
+
+				currentPnFCandle.RelativeVolume = currentPnFCandle.RelativeVolume ?? 0 + (side == Sides.Buy ? v : -v);
+			}
+
+			currentPnFCandle.CloseVolume = volume;
+			currentPnFCandle.CloseTime = time;
+
+			currentPnFCandle.VolumeProfile?.Update(price, volume, side);
+		}
+
+		private static PnFCandleMessage CreateCandle(MarketDataMessage message, PnFArg pnfArg, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal price, decimal? volume, Sides? side, DateTimeOffset time)
+		{
 			var candle = new PnFCandleMessage
 			{
-				PnFArg = arg,
-				OpenTime = value.Time,
-				CloseTime = value.Time,
-				HighTime = value.Time,
-				LowTime = value.Time,
-
-				//Security = value.Security,
-
-				OpenVolume = value.Volume,
-				CloseVolume = value.Volume,
-				LowVolume = value.Volume,
-				HighVolume = value.Volume,
-				TotalVolume = value.Volume ?? 0,
-
-				TotalPrice = value.Price * (value.Volume ?? 1),
-
-				PnFType = currentCandle == null ? PnFTypes.X : (currentCandle.PnFType == PnFTypes.X ? PnFTypes.O : PnFTypes.X),
+				OpenPrice = openPrice,
+				ClosePrice = closePrice,
+				HighPrice = highPrice,
+				LowPrice = lowPrice,
+				OpenVolume = volume,
+				//CloseVolume = volume,
+				HighVolume = volume,
+				LowVolume = volume,
+				SecurityId = message.SecurityId,
+				OpenTime = time,
+				//CloseTime = time,
+				HighTime = time,
+				LowTime = time,
+				PnFArg = pnfArg,
+				State = CandleStates.Active,
 			};
 
-			if (currentCandle == null)
-			{
-				candle.OpenPrice = boxSize.AlignPrice(value.Price, value.Price);
+			if (message.IsCalcVolumeProfile)
+				candle.VolumeProfile = new CandleMessageVolumeProfile();
 
-				if (candle.PnFType == PnFTypes.X)
-					candle.ClosePrice = (decimal)(candle.OpenPrice + boxSize);
-				else
-					candle.ClosePrice = (decimal)(candle.OpenPrice - boxSize);
-			}
-			else
-			{
-				candle.OpenPrice = (decimal)((currentCandle.PnFType == PnFTypes.X)
-					? currentCandle.ClosePrice - boxSize
-					: currentCandle.ClosePrice + boxSize);
-
-				var price = boxSize.AlignPrice(candle.OpenPrice, value.Price);
-
-				if (candle.PnFType == PnFTypes.X)
-					candle.ClosePrice = (decimal)(price + boxSize);
-				else
-					candle.ClosePrice = (decimal)(price - boxSize);
-			}
-
-			if (candle.PnFType == PnFTypes.X)
-			{
-				candle.LowPrice = candle.OpenPrice;
-				candle.HighPrice = candle.ClosePrice;
-			}
-			else
-			{
-				candle.LowPrice = candle.ClosePrice;
-				candle.HighPrice = candle.OpenPrice;
-			}
+			UpdateCandle(candle, price, volume, time, side);
 
 			return candle;
-		}
-
-		/// <summary>
-		/// Whether the candle is created before data adding.
-		/// </summary>
-		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		/// <param name="candle">Candle.</param>
-		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
-		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
-		protected override bool IsCandleFinishedBeforeChange(MarketDataMessage message, PnFCandleMessage candle, ICandleBuilderSourceValue value)
-		{
-			var argSize = candle.PnFArg.BoxSize * candle.PnFArg.ReversalAmount;
-
-			return candle.PnFType == PnFTypes.X
-				? candle.ClosePrice - argSize > value.Price
-				: candle.ClosePrice + argSize < value.Price;
-		}
-
-		/// <summary>
-		/// To update the candle data.
-		/// </summary>
-		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		/// <param name="candle">Candle.</param>
-		/// <param name="value">Data.</param>
-		protected override void UpdateCandle(MarketDataMessage message, PnFCandleMessage candle, ICandleBuilderSourceValue value)
-		{
-			candle.ClosePrice = candle.PnFArg.BoxSize.AlignPrice(candle.ClosePrice, value.Price);
-
-			if (candle.PnFType == PnFTypes.X)
-				candle.HighPrice = candle.ClosePrice;
-			else
-				candle.LowPrice = candle.ClosePrice;
-
-			if (value.Volume != null)
-			{
-				var volume = value.Volume.Value;
-
-				candle.TotalPrice += value.Price * volume;
-
-				candle.LowVolume = (candle.LowVolume ?? 0m).Min(volume);
-				candle.HighVolume = (candle.HighVolume ?? 0m).Max(volume);
-				candle.CloseVolume = volume;
-				candle.TotalVolume += volume;
-			}
-
-			candle.CloseTime = value.Time;
 		}
 	}
 
@@ -816,101 +822,136 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 		}
 
-		/// <summary>
-		/// To process the new data.
-		/// </summary>
-		/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		/// <param name="currentCandle">The current candle.</param>
-		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
-		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> cannot be applied to candles), then <see langword="null" /> is returned.</returns>
-		protected override RenkoCandleMessage ProcessValue(MarketDataMessage message, RenkoCandleMessage currentCandle, ICandleBuilderSourceValue value)
+		/// <inheritdoc />
+		public override void Process(MarketDataMessage message, CandleMessage currentCandle, ICandleBuilderSourceValue value, IList<CandleMessage> changes)
 		{
-			if (value == null)
-				throw new ArgumentNullException(nameof(value));
+			var currentRenkoCandle = (RenkoCandleMessage)currentCandle;
 
-			if (currentCandle == null)
-				return NewCandle(message, value.Price, value.Price, value);
+			var price = value.Price;
+			var volume = value.Volume;
+			var time = value.Time;
+			var side = value.OrderDirection;
+			var boxSize = (Unit)message.Arg;
 
-			var delta = currentCandle.BoxSize;
+			var renkoStep = (decimal)(1 * boxSize);
 
-			if (currentCandle.OpenPrice < currentCandle.ClosePrice)
+			if (currentRenkoCandle == null)
 			{
-				if ((value.Price - currentCandle.ClosePrice) > delta)
-				{
-					// New bullish candle
-					return NewCandle(message, currentCandle.ClosePrice, (decimal)(currentCandle.ClosePrice + delta), value);
-				}
+				var openPrice = MathHelper.Floor(price, renkoStep);
 
-				if ((currentCandle.OpenPrice - value.Price) > delta)
-				{
-					// New bearish candle
-					return NewCandle(message, currentCandle.OpenPrice, (decimal)(currentCandle.OpenPrice - delta), value);
-				}
+				changes.Add(CreateCandle(message, boxSize, openPrice, renkoStep, price, volume, side, time));
 			}
 			else
 			{
-				if ((value.Price - currentCandle.OpenPrice) > delta)
+				if (currentRenkoCandle.LowPrice <= price && price <= currentRenkoCandle.HighPrice)
 				{
-					// New bullish candle
-					return NewCandle(message, currentCandle.OpenPrice, (decimal)(currentCandle.OpenPrice + delta), value);
-				}
+					currentRenkoCandle.TotalTicks++;
 
-				if ((currentCandle.ClosePrice - value.Price) > delta)
+					if (volume != null)
+					{
+						currentRenkoCandle.TotalVolume += volume.Value;
+						currentRenkoCandle.TotalPrice += volume.Value * price;
+
+						currentRenkoCandle.RelativeVolume += side == Sides.Buy ? volume : -volume;
+					}
+
+					currentRenkoCandle.CloseVolume = volume;
+					currentRenkoCandle.CloseTime = time;
+
+					currentRenkoCandle.VolumeProfile?.Update(price, volume, side);
+
+					changes.Add(currentRenkoCandle);
+				}
+				else
 				{
-					// New bearish candle
-					return NewCandle(message, currentCandle.ClosePrice, (decimal)(currentCandle.ClosePrice - delta), value);
+					currentRenkoCandle.State = CandleStates.Finished;
+					changes.Add(currentRenkoCandle);
+
+					int times;
+					bool isUp;
+					decimal openPrice;
+
+					if (price < currentRenkoCandle.LowPrice)
+					{
+						times = (int)((currentRenkoCandle.LowPrice - price) / renkoStep) + 1;
+						isUp = false;
+						openPrice = currentRenkoCandle.LowPrice;
+					}
+					else
+					{
+						times = (int)((price - currentRenkoCandle.HighPrice) / renkoStep) + 1;
+						isUp = true;
+						openPrice = currentRenkoCandle.HighPrice;
+					}
+
+					for (var i = 0; i < times; i++)
+					{
+						if (isUp)
+						{
+							currentRenkoCandle = CreateCandle(message, boxSize, openPrice, renkoStep, price, volume, side, time);
+							changes.Add(currentRenkoCandle);
+							openPrice += renkoStep;
+						}
+						else
+						{
+							currentRenkoCandle = CreateCandle(message, boxSize, openPrice, -renkoStep, price, volume, side, time);
+							changes.Add(currentRenkoCandle);
+							openPrice -= renkoStep;
+						}
+
+						currentRenkoCandle.State = CandleStates.Finished;
+					}
+
+					currentRenkoCandle.State = CandleStates.Active;
 				}
 			}
-
-			return UpdateRenkoCandle(currentCandle, value);
 		}
 
-		private static RenkoCandleMessage NewCandle(MarketDataMessage message, decimal openPrice, decimal closePrice, ICandleBuilderSourceValue value)
+		private static RenkoCandleMessage CreateCandle(MarketDataMessage message, Unit boxSize, decimal openPrice, decimal renkoStep, decimal price, decimal? volume, Sides? side, DateTimeOffset time)
 		{
-			return new RenkoCandleMessage
+			var candle = new RenkoCandleMessage
 			{
 				OpenPrice = openPrice,
-				ClosePrice = closePrice,
-				HighPrice = Math.Max(openPrice, closePrice),
-				LowPrice = Math.Min(openPrice, closePrice),
-				TotalPrice = openPrice * (value.Volume ?? 1),
-				OpenVolume = value.Volume,
-				CloseVolume = value.Volume,
-				HighVolume = value.Volume,
-				LowVolume = value.Volume,
-				TotalVolume = value.Volume ?? 1,
+				ClosePrice = openPrice + renkoStep,
+				//HighPrice = openPrice + renkoStep,
+				//LowPrice = openPrice,
+				OpenVolume = volume,
+				CloseVolume = volume,
+				HighVolume = volume,
+				LowVolume = volume,
 				SecurityId = message.SecurityId,
-				OpenTime = value.Time,
-				CloseTime = value.Time,
-				HighTime = value.Time,
-				LowTime = value.Time,
-				BoxSize = (Unit)message.Arg,
-				RelativeVolume = value.OrderDirection == null ? 0 : (value.OrderDirection == Sides.Buy ? value.Volume : -value.Volume)
+				OpenTime = time,
+				CloseTime = time,
+				HighTime = time,
+				LowTime = time,
+				BoxSize = boxSize,
+				RelativeVolume = side == null ? null : (side == Sides.Buy ? volume : -volume),
+				TotalTicks = 1,
+				State = CandleStates.Active,
 			};
-		}
 
-		private static RenkoCandleMessage UpdateRenkoCandle(RenkoCandleMessage candle, ICandleBuilderSourceValue value)
-		{
-			candle.HighPrice = Math.Max(candle.HighPrice, value.Price);
-			candle.LowPrice = Math.Min(candle.LowPrice, value.Price);
-
-			if (value.Volume != null)
+			if (volume != null)
 			{
-				var volume = value.Volume.Value;
-
-				candle.HighVolume = Math.Max(candle.HighVolume ?? 0m, volume);
-				candle.LowVolume = Math.Min(candle.LowVolume ?? 0m, volume);
-
-				candle.CloseVolume = volume;
-
-				candle.TotalPrice += value.Price * volume;
-				candle.TotalVolume += volume;
+				candle.TotalPrice += price * volume.Value;
+				candle.TotalVolume += volume.Value;
 			}
 
-			if (value.OrderDirection != null)
-				candle.RelativeVolume += value.OrderDirection == Sides.Buy ? value.Volume : -value.Volume;
+			if (renkoStep > 0)
+			{
+				candle.HighPrice = candle.ClosePrice;
+				candle.LowPrice = candle.OpenPrice;
+			}
+			else
+			{
+				candle.HighPrice = candle.OpenPrice;
+				candle.LowPrice = candle.ClosePrice;
+			}
 
-			candle.CloseTime = value.Time;
+			if (message.IsCalcVolumeProfile)
+			{
+				candle.VolumeProfile = new CandleMessageVolumeProfile();
+				candle.VolumeProfile.Update(price, volume, side);
+			}
 
 			return candle;
 		}

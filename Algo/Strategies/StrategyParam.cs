@@ -22,6 +22,8 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// The strategy parameter.
 	/// </summary>
@@ -224,6 +226,24 @@ namespace StockSharp.Algo.Strategies
 			param.OptimizeStep = optimizeStep;
 
 			return param;
+		}
+
+		/// <summary>
+		/// Check can optimize parameter.
+		/// </summary>
+		/// <param name="parameter">Strategy parameter.</param>
+		/// <param name="excludeParameters">Excluded parameters.</param>
+		public static bool CanOptimize(this IStrategyParam parameter, ISet<string> excludeParameters)
+		{
+			if (parameter == null)
+				throw new ArgumentNullException(nameof(parameter));
+
+			if (excludeParameters == null)
+				throw new ArgumentNullException(nameof(excludeParameters));
+
+			var type = parameter.Value.GetType();
+
+			return (type.IsNumeric() && !type.IsEnum() || type == typeof(Unit)) && !excludeParameters.Contains(parameter.Name);
 		}
 	}
 }

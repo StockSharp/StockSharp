@@ -1407,6 +1407,11 @@
             ChartPanel
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartPanel.ShareCommand">
+      <summary>
+            Command for sharing chart image.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.SecurityProvider">
       <summary>
             The provider of information about instruments.
@@ -1655,6 +1660,11 @@
             To process the new data.
             </summary>
       <param name="data">New data.</param>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.BackupService">
+      <summary>
+            Backup service for sharing exports.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.InitializeComponent">
       <summary>

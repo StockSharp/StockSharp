@@ -14,13 +14,7 @@
  </para>
  <para>
 Available connections: 
-<link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636">Quik</link>, 
-<link xlink:href="a010f9bd-15bb-4858-a067-590101087dff">Transaq</link>, 
-<link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc">SmartCOM</link>,
-<link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391">AlfaDirect</link>, 
-<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza 2 (CGate)</link>,
-<link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link>, 
-<link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex Bridge</link>,
+<link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link> 
 <link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98">LMAX</link>, 
 <link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522">Rithmic</link>,
 <link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9">Fusion/Blackwood</link>,
@@ -76,13 +70,7 @@ and many other. Any broker or
 </para>
 <list class="bullet">
   <listItem><para>Supports many sources: (
-<link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636">Quik</link>, 
-<link xlink:href="a010f9bd-15bb-4858-a067-590101087dff">Transaq</link>, 
-<link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc">SmartCOM</link>,
-<link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391">AlfaDirect</link>, 
-<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza 2 (CGate)</link>,
 <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link>, 
-<link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex Bridge</link>,
 <link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98">LMAX</link>, 
 <link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522">Rithmic</link>,
 <link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9">Fusion/Blackwood</link>,

@@ -67,6 +67,8 @@ namespace StockSharp.Algo.Candles.Compression
 			public Tuple<DateTimeOffset, WorkingTimePeriod> CurrentPeriod { get; set; }
 
 			public ExchangeBoard Board { get; set; }
+
+			public CandleMessage CurrentCandleMessage { get; set; }
 		}
 
 		private readonly Dictionary<SecurityId, List<SeriesInfo>> _seriesInfos = new Dictionary<SecurityId, List<SeriesInfo>>();
@@ -626,16 +628,22 @@ namespace StockSharp.Algo.Candles.Compression
 
 				info.LastTime = value.Time;
 
-				var result = builder.Process(mdMsg, value);
+				var result = builder.Process(mdMsg, info.CurrentCandleMessage, value);
 
 				foreach (var candleMessage in result)
+				{
+					info.CurrentCandleMessage = candleMessage;
 					SendCandle(info, candleMessage);
+				}
 			}
 		}
 
 		private static bool CheckTime(SeriesInfo info, ICandleBuilderSourceValue v)
 		{
 			var time = v.Time;
+
+			if (info.LastTime > time)
+				return false;
 
 			if (!(time >= info.MarketDataMessage.From && time < info.MarketDataMessage.To))
 				return false;

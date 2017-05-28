@@ -477,11 +477,11 @@ namespace StockSharp.Messages
 				case UnitTypes.Absolute:
 					return Value.To<string>();
 				case UnitTypes.Step:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ø" : "s");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s");
 				case UnitTypes.Point:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ï" : "p");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p");
 				case UnitTypes.Limit:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ë" : "l");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l");
 				default:
 					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(Type));
 			}
@@ -653,8 +653,8 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Type = storage.GetValue<UnitTypes>("Type");
-			Value = storage.GetValue<decimal>("Value");
+			Type = storage.GetValue<UnitTypes>(nameof(Type));
+			Value = storage.GetValue<decimal>(nameof(Value));
 		}
 
 		/// <summary>
@@ -663,8 +663,8 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Type", Type.To<string>());
-			storage.SetValue("Value", Value);
+			storage.SetValue(nameof(Type), Type.To<string>());
+			storage.SetValue(nameof(Value), Value);
 		}
 	}
 
@@ -725,14 +725,14 @@ namespace StockSharp.Messages
 
 			switch (lastSymbol)
 			{
-				case 'ø':
+				case 'ш':
 				case 's':
 					if (getTypeValue == null)
 						throw new ArgumentNullException(nameof(getTypeValue));
 
 					type = UnitTypes.Step;
 					break;
-				case 'ï':
+				case 'п':
 				case 'p':
 					if (getTypeValue == null)
 						throw new ArgumentNullException(nameof(getTypeValue));
@@ -742,7 +742,7 @@ namespace StockSharp.Messages
 				case '%':
 					type = UnitTypes.Percent;
 					break;
-				case 'ë':
+				case 'л':
 				case 'l':
 					type = UnitTypes.Limit;
 					break;

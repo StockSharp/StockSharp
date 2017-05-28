@@ -55,7 +55,7 @@ In the figure, the <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEnti
               </code>
               <code title="C#" language="C#">
 
-Connector _connector = new QuikTrader();
+Connector _connector = new OpenECryTrader();
 
 SecurityGrid.MarketDataProvider = _connector;
 

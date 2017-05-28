@@ -18,9 +18,9 @@
 		  <para>
 			  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Child strategies</link>
 		  </para>
-		  <para>
+		  <!--para>
 			  <link xlink:href="ad145f75-a2d4-4766-af60-79489b84846c">Export of order book</link>
-		  </para>
+		  </para-->
       </content>
     </prerequisites>
     

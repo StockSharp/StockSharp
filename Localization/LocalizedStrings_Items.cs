@@ -45106,5 +45106,15 @@ namespace StockSharp.Localization
 		/// Type in ISO 10962 standard.
 		/// </summary>
 		public static string CfiCodeDesc => GetString(CfiCodeDescKey);
+
+		/// <summary>
+		/// Enable simulator
+		/// </summary>
+		public const string EnableSimulatorKey = nameof(EnableSimulator);
+
+		/// <summary>
+		/// Enable simulator
+		/// </summary>
+		public static string EnableSimulator => GetString(EnableSimulatorKey);
 	}
 }

@@ -56,6 +56,43 @@ namespace StockSharp.Algo
 				_parent = parent;
 			}
 
+			private void CreateTimer()
+			{
+				lock (_marketTimerSync)
+				{
+					_isMarketTimeHandled = true;
+
+					if (_marketTimer != null)
+						return;
+
+					_marketTimer = ThreadingHelper
+						.Timer(() =>
+						{
+							try
+							{
+								// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
+								// No need to put _marketTimeMessage again, if it still in queue.
+
+								lock (_marketTimerSync)
+								{
+									if (_marketTimer == null || !_isMarketTimeHandled)
+										return;
+
+									_isMarketTimeHandled = false;
+								}
+
+								_marketTimeMessage.LocalTime = TimeHelper.Now;
+								RaiseNewOutMessage(_marketTimeMessage);
+							}
+							catch (Exception ex)
+							{
+								ex.LogError();
+							}
+						})
+						.Interval(_parent.MarketTimeChangedInterval);
+				}
+			}
+
 			private void CloseTimer()
 			{
 				lock (_marketTimerSync)
@@ -85,36 +122,7 @@ namespace StockSharp.Algo
 						if (_marketTimer != null)
 							throw new InvalidOperationException(LocalizedStrings.Str1619);
 
-						lock (_marketTimerSync)
-						{
-							_isMarketTimeHandled = true;
-
-							_marketTimer = ThreadingHelper
-								.Timer(() =>
-								{
-									try
-									{
-										// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
-										// No need to put _marketTimeMessage again, if it still in queue.
-
-										lock (_marketTimerSync)
-										{
-											if (_marketTimer == null || !_isMarketTimeHandled)
-												return;
-
-											_isMarketTimeHandled = false;
-										}
-
-										_marketTimeMessage.LocalTime = TimeHelper.Now;
-										RaiseNewOutMessage(_marketTimeMessage);
-									}
-									catch (Exception ex)
-									{
-										ex.LogError();
-									}
-								})
-								.Interval(_parent.MarketTimeChangedInterval);
-						}
+						CreateTimer();
 						break;
 					}
 
@@ -140,7 +148,11 @@ namespace StockSharp.Algo
 						var connectMsg = (ConnectMessage)message;
 
 						if (connectMsg.Error != null)
+						{
 							CloseTimer();
+						}
+						else
+							CreateTimer();
 
 						break;
 					}
@@ -1013,6 +1025,8 @@ namespace StockSharp.Algo
 		{
 			_adapterStates[adapter] = ConnectionStates.Connected;
 
+			var isRestored = message is RestoredConnectMessage;
+
 			if (ConnectionState == ConnectionStates.Connecting)
 			{
 				if (RaiseConnectedOnFirstAdapter)
@@ -1023,10 +1037,10 @@ namespace StockSharp.Algo
 				else
 					RaiseConnectedWhenAllConnected();
 			}
-			//else if (ConnectionState == ConnectionStates.Failed)
-			//{
-			//	RaiseConnectedWhenAllConnected();
-			//}
+			else if (ConnectionState == ConnectionStates.Failed && !isRestored)
+			{
+				RaiseConnectedWhenAllConnected();
+			}
 
 			RaiseConnectedEx(adapter);
 
@@ -1043,7 +1057,7 @@ namespace StockSharp.Algo
 			if (adapter.SecurityLookupRequired)
 				SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
-			if (!(message is RestoredConnectMessage))
+			if (!isRestored)
 				return;
 
 			var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);

@@ -68,7 +68,7 @@ and <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntit
 </para>
 	  <code language="XAML">
 	  <![CDATA[
-<Window x:Class="SampleSmartSMA.MainWindow"
+<Window x:Class="SampleOEC.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

@@ -93,6 +93,7 @@ P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility/summary;DocStr899
 E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler/summary;DocStr8994
 E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged/summary;DocStr8995
 E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick/summary;DocStr9459
+P:StockSharp.Xaml.GridControl.BaseGridControl.BackupService/summary;DocStr9785
 M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor/summary;DocStr1
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)/summary;DocStr8996
 M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)/param/oldValue;DocStr8997
@@ -966,7 +967,7 @@ E:StockSharp.Xaml.SecurityPicker.SecuritySelected/summary;DocStr8377
 E:StockSharp.Xaml.SecurityPicker.GridChanged/summary;DocStr8378
 P:StockSharp.Xaml.SecurityPicker.SelectedSecurity/summary;DocStr8068
 P:StockSharp.Xaml.SecurityPicker.SelectedSecurities/summary;DocStr8294
-P:StockSharp.Xaml.SecurityPicker.FilteredSecurities/summary;DocStr1016
+P:StockSharp.Xaml.SecurityPicker.FilteredSecurities/summary;DocStr9786
 P:StockSharp.Xaml.SecurityPicker.SelectedType/summary;DocStr8308
 P:StockSharp.Xaml.SecurityPicker.SecurityFilter/summary;DocStr8379
 F:StockSharp.Xaml.SecurityPicker.TitleProperty/summary;DocStr29
