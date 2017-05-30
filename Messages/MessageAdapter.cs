@@ -179,7 +179,7 @@ namespace StockSharp.Messages
 		public virtual bool PortfolioLookupRequired => this.IsMessageSupported(MessageTypes.PortfolioLookup);
 
 		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
+		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
 		/// </summary>
 		[Browsable(false)]
 		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
