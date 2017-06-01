@@ -403,7 +403,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.CandleStateKey)]
+		[DescriptionLoc(LocalizedStrings.CandleStateKey, true)]
 		public CandleStates State
 		{
 			get { return _state; }

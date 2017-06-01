@@ -230,7 +230,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.CandleStateKey)]
+		[DescriptionLoc(LocalizedStrings.CandleStateKey, true)]
 		[MainCategory]
 		public CandleStates State { get; set; }
 

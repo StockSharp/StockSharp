@@ -130,7 +130,7 @@ TickUpCount;Number of up trending ticks.;Количество восходящи
 TickDown;Ticks (down);Тики (вниз)
 TickDownCount;Number of down trending ticks.;Количество нисходящих тиковых сделок.
 State;State;Состояние
-CandleState;Candle state.;Состояние свечи.
+CandleState;Candle state;Состояние свечи
 Portfolio;Portfolio;Портфель
 PortfolioName;Portfolio name.;Название портфеля.
 Depo;Depositary;Депозитарий
@@ -4545,6 +4545,8 @@ UseAutoNaming;Use auto naming;Использовать автоименован�
 CfiCode;CFI code;CFI код
 CfiCodeDesc;Type in ISO 10962 standard.;Тип в стандарте ISO 10962.
 EnableSimulator;Enable simulator;Использовать эмуляцию
+OrderSide;Order side;Направление заявки
+Side;Side;Направление
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5182,7 +5184,6 @@ DocStr656;Possible price change range;Изменение цены, при пре
 DocStr657;The interface that describes data of the {0} source;Интерфейс, описывающий данные источника {0}
 DocStr658;The instrument by which data has been created;Инструмент, по которому были сформированы данные
 DocStr659;The time of new data occurrence;Время появления новых данных
-DocStr660;Order side;Направление заявки
 DocStr661;The {0} source data is created on basis of {1};Данные источника {0}, созданные на основе {1}
 DocStr662;The base data source for {0} which receives data from {1};Базовый источник данных для {0}, который получает данные из {1}
 DocStr663;The connection through which new data will be received;Подключение, через которое будут получаться новые данные
@@ -14039,7 +14040,6 @@ DocStr9743;Indicators;Индикаторы
 DocStr9744;Remove all breakpoints from the scheme;Удалить все точки остановки из схемы
 DocStr9745;Whether the scheme contains the breakpoints;Содержит ли схема точки остановки
 DocStr9746;The root diagram element;Корневой элемент диаграммы
-DocStr9747;Side;Направление
 DocStr9748;Raise value on start;Вызвать значение при старте
 DocStr9749;Show days in editor;Показывать дни
 DocStr9750;To delete items;Удалить элементы
