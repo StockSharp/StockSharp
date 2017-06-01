@@ -165,7 +165,7 @@ T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue/summary;DocStr65
 P:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue.Time/summary;DocStr659
 P:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue.Price/summary;Price
 P:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue.Volume/summary;DocStr3526
-P:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue.OrderDirection/summary;DocStr660
+P:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue.OrderDirection/summary;OrderSide
 T:StockSharp.Algo.Candles.Compression.TradeCandleBuilderSourceValue/summary;DocStr661
 M:StockSharp.Algo.Candles.Compression.TradeCandleBuilderSourceValue.#ctor(StockSharp.BusinessEntities.Trade)/summary;DocStr1
 M:StockSharp.Algo.Candles.Compression.TradeCandleBuilderSourceValue.#ctor(StockSharp.BusinessEntities.Trade)/param/trade;TickTrade
@@ -5071,7 +5071,7 @@ M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(System.DateTimeOffs
 M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(System.DateTimeOffset)/param/time;Time
 M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(System.DateTimeOffset)/returns;DocStr1745
 M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(StockSharp.Messages.Sides)/summary;DocStr1746
-M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(StockSharp.Messages.Sides)/param/direction;DocStr660
+M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(StockSharp.Messages.Sides)/param/direction;OrderSide
 M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(StockSharp.Messages.Sides)/returns;DocStr1745
 M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(StockSharp.Messages.OrderStates)/summary;DocStr1747
 M:StockSharp.Algo.Strategies.Reporting.StrategyReport.Format(StockSharp.Messages.OrderStates)/param/state;DocStr1748
@@ -5284,7 +5284,7 @@ M:StockSharp.Algo.Strategies.StrategyHelper.SellAtLimit(StockSharp.Algo.Strategi
 M:StockSharp.Algo.Strategies.StrategyHelper.SellAtLimit(StockSharp.Algo.Strategies.Strategy,System.Decimal,System.Nullable{System.Decimal})/remarks;DocStr1764
 M:StockSharp.Algo.Strategies.StrategyHelper.CreateOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/summary;DocStr1770
 M:StockSharp.Algo.Strategies.StrategyHelper.CreateOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/param/strategy;Strategy
-M:StockSharp.Algo.Strategies.StrategyHelper.CreateOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/param/direction;DocStr660
+M:StockSharp.Algo.Strategies.StrategyHelper.CreateOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/param/direction;OrderSide
 M:StockSharp.Algo.Strategies.StrategyHelper.CreateOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/param/price;DocStr1771
 M:StockSharp.Algo.Strategies.StrategyHelper.CreateOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/param/volume;DocStr1765
 M:StockSharp.Algo.Strategies.StrategyHelper.CreateOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides,System.Nullable{System.Decimal},System.Nullable{System.Decimal})/returns;DocStr1766
@@ -6451,7 +6451,7 @@ M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnu
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/summary;DocStr2264
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/security;DocStr2265
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/provider;DocStr973
-M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/direction;DocStr660
+M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/direction;OrderSide
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/priceType;DocStr2266
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/orders;DocStr2262
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/returns;DocStr2267
@@ -6641,12 +6641,12 @@ M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.Order)/returns;DocStr2387
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal)/summary;DocStr2388
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal)/param/depth;DocStr2385
-M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal)/param/orderDirection;DocStr660
+M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal)/param/orderDirection;OrderSide
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal)/param/volume;DocStr2389
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal)/returns;DocStr2387
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/summary;DocStr2390
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/depth;DocStr2385
-M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/orderDirection;DocStr660
+M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/orderDirection;OrderSide
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/volume;DocStr2389
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/param/price;DocStr2391
 M:StockSharp.Algo.TraderHelper.GetTheoreticalTrades(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Sides,System.Decimal,System.Decimal)/returns;DocStr2387
@@ -6655,11 +6655,11 @@ M:StockSharp.Algo.TraderHelper.Invert(StockSharp.Messages.Sides)/param/side;DocS
 M:StockSharp.Algo.TraderHelper.Invert(StockSharp.Messages.Sides)/returns;DocStr2394
 M:StockSharp.Algo.TraderHelper.GetDirection(StockSharp.BusinessEntities.Position)/summary;DocStr2395
 M:StockSharp.Algo.TraderHelper.GetDirection(StockSharp.BusinessEntities.Position)/param/position;DocStr2397
-M:StockSharp.Algo.TraderHelper.GetDirection(StockSharp.BusinessEntities.Position)/returns;DocStr660
+M:StockSharp.Algo.TraderHelper.GetDirection(StockSharp.BusinessEntities.Position)/returns;OrderSide
 M:StockSharp.Algo.TraderHelper.GetDirection(StockSharp.BusinessEntities.Position)/remarks;DocStr2396
 M:StockSharp.Algo.TraderHelper.GetDirection(System.Decimal)/summary;DocStr2395
 M:StockSharp.Algo.TraderHelper.GetDirection(System.Decimal)/param/position;DocStr2397
-M:StockSharp.Algo.TraderHelper.GetDirection(System.Decimal)/returns;DocStr660
+M:StockSharp.Algo.TraderHelper.GetDirection(System.Decimal)/returns;OrderSide
 M:StockSharp.Algo.TraderHelper.GetDirection(System.Decimal)/remarks;DocStr2396
 M:StockSharp.Algo.TraderHelper.CancelOrders(StockSharp.BusinessEntities.IConnector,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/summary;DocStr839
 M:StockSharp.Algo.TraderHelper.CancelOrders(StockSharp.BusinessEntities.IConnector,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/connector;DocStr2398
@@ -6693,7 +6693,7 @@ M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{Sto
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Messages.OrderStates)/returns;DocStr2403
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Messages.Sides)/summary;DocStr2407
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Messages.Sides)/param/orders;DocStr2401
-M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Messages.Sides)/param/direction;DocStr660
+M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Messages.Sides)/param/direction;OrderSide
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},StockSharp.Messages.Sides)/returns;DocStr2403
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Trade},StockSharp.BusinessEntities.Security)/summary;DocStr2408
 M:StockSharp.Algo.TraderHelper.Filter(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Trade},StockSharp.BusinessEntities.Security)/param/trades;DocStr2409

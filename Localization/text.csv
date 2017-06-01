@@ -14080,3 +14080,8 @@ DocStr9786;Filtered instruments;Отфильтрованные инструме�
 DocStr9787;Check can optimize parameter;Можно ли оптимизировать параметр
 DocStr9788;Strategy parameter;Параметр стратегии
 DocStr9789;Excluded parameters;Исключенные параметры
+DocStr9790;The compiled executable (.exe) application;Сомпилированное исполняемое (.exe) приложение
+DocStr9792;Length of result buffer;Длина результирующего буфера
+DocStr9793;The default value;Значение по-умолчанию
+DocStr9794;Result buffer;Результирующий буфер
+DocStr9800;Spb exchange;СПб биржа

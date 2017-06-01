@@ -498,7 +498,7 @@ M:StockSharp.BusinessEntities.MarketDepth.GetQuotes(StockSharp.Messages.Sides)/s
 M:StockSharp.BusinessEntities.MarketDepth.GetQuotes(StockSharp.Messages.Sides)/param/orderDirection;DocStr2835
 M:StockSharp.BusinessEntities.MarketDepth.GetQuotes(StockSharp.Messages.Sides)/returns;Str1659
 M:StockSharp.BusinessEntities.MarketDepth.GetBestQuote(StockSharp.Messages.Sides)/summary;DocStr2841
-M:StockSharp.BusinessEntities.MarketDepth.GetBestQuote(StockSharp.Messages.Sides)/param/orderDirection;DocStr660
+M:StockSharp.BusinessEntities.MarketDepth.GetBestQuote(StockSharp.Messages.Sides)/param/orderDirection;OrderSide
 M:StockSharp.BusinessEntities.MarketDepth.GetBestQuote(StockSharp.Messages.Sides)/returns;DocStr2842
 M:StockSharp.BusinessEntities.MarketDepth.GetPair(System.Int32)/summary;DocStr2843
 M:StockSharp.BusinessEntities.MarketDepth.GetPair(System.Int32)/param/depthIndex;DocStr2844
@@ -549,7 +549,7 @@ M:StockSharp.BusinessEntities.MarketDepth.Remove(System.Decimal,System.Decimal,S
 M:StockSharp.BusinessEntities.MarketDepth.Remove(System.Decimal,System.Decimal,System.DateTimeOffset)/param/volume;DocStr2881
 M:StockSharp.BusinessEntities.MarketDepth.Remove(System.Decimal,System.Decimal,System.DateTimeOffset)/param/lastChangeTime;DocStr2878
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/summary;DocStr2879
-M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/direction;DocStr660
+M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/direction;OrderSide
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/price;DocStr2880
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/volume;DocStr2881
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/lastChangeTime;DocStr2878
@@ -763,6 +763,7 @@ M:StockSharp.BusinessEntities.Security.CopyTo(StockSharp.BusinessEntities.Securi
 M:StockSharp.BusinessEntities.Security.Notify(System.String)/summary;DocStr466
 M:StockSharp.BusinessEntities.Security.Notify(System.String)/param/propName;DocStr2622
 T:StockSharp.BusinessEntities.SecurityExternalId/summary;Str603
+M:StockSharp.BusinessEntities.SecurityExternalId.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.SecurityExternalId.Sedol/summary;Str351
 P:StockSharp.BusinessEntities.SecurityExternalId.Cusip/summary;Str352
 P:StockSharp.BusinessEntities.SecurityExternalId.Isin/summary;Str353
