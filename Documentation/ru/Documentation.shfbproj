@@ -2908,6 +2908,10 @@
       <ImageId>Designer_Risk_Rule</ImageId>
       <AlternateText>Designer Risk Rule</AlternateText>
     </Image>
+    <Image Include="Art\Designer_Tape_Trades.png">
+      <ImageId>Designer_Tape_Trades</ImageId>
+      <AlternateText>Designer Tape Trades</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
