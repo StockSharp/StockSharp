@@ -2,6 +2,7 @@
 <topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 <introduction>
+
 <para>S#.Designer - программа, позволяющая создавать торговые стратегии, тестировать их на 
 истории и управлять стратегиями при реальной торговле. S#.Designer предлагает следующие виды создания стратегий:
 </para>
@@ -17,6 +18,9 @@
  используя библиотеку для профессиональной разработки торговых роботов на языке <legacyBold>C# </legacyBold> <token>stocksharpapi</token>.</para>
 </listItem>
 </list>
+<mediaLink>
+<image xlink:href="StockSharpTitle_0"/>
+</mediaLink>
     </introduction>
 <relatedTopics>
 <link xlink:href="840e49ea-f9e1-4704-8324-098b002f78f9" />

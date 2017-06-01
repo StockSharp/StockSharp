@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="622b706b-f729-46f2-8509-900c5bde2244" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -38,10 +38,11 @@
 <image xlink:href="Designer_The_Properties_Panel_00"/>
 </mediaLink>
 <para>Все кубики содержат набор предопределенных свойств:</para>
-<list class="ordered">
+<list class="bullet">
   <listItem><para><legacyBold>Название</legacyBold> – название элемента, которое отображается в дизайнере.</para></listItem>
   <listItem><para><legacyBold>Уровень логирования</legacyBold> – уровень ведения логов для данного элемента.</para></listItem>
-  <listItem><para><legacyBold>Параметры</legacyBold> – определяет необходимо ли выносить параметры элемента в параметры составного элемента внутри которого он используется.</para></listItem>
+  <listItem><para><legacyBold>Параметры</legacyBold> – отображать параметры элемента в элементах более высокого уровня.</para></listItem>
+  <listItem><para><legacyBold>Сокеты</legacyBold> – отображать сокеты элемента в элементах более высокого уровня.</para></listItem>
 </list>
 
 <para>Подробно о свойствах каждого кубика описано в пункте <link xlink:href="37e547dd-5141-4a57-9ed2-8ca058e9240c" />.</para>

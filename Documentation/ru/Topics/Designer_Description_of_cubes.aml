@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="37e547dd-5141-4a57-9ed2-8ca058e9240c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -38,9 +38,9 @@
   <listItem><para><legacyBold>Темно-золотой</legacyBold> – значение индикатора.</para></listItem>
   <listItem><para><legacyBold>Оливковый</legacyBold> – заявка.</para></listItem>
   <listItem><para><legacyBold>Оливково-зеленый</legacyBold> – своя сделка.</para></listItem>
-  <listItem><para><legacyBold>Синий</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят и опущен).</para></listItem>
+  <listItem><para><legacyBold>Синий</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
   <listItem><para><legacyBold>Цвет морской волны</legacyBold> – числовое значение, может указываться в виде числа или процента.</para></listItem>
-  <listItem><para><legacyBold>Зеленый лес</legacyBold> – значения, которые допускают сравнение, например, числовые, значения индикаторов.</para></listItem>
+  <listItem><para><legacyBold>Зеленый лес</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
 </list>
 <para>Таким образом соединять между собой можно параметры одинаковых цветов (одинаковых типов данных),
  за исключением следующих типов параметров:</para>

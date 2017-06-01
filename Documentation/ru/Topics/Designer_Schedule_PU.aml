@@ -1,15 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="3efed911-8876-40b8-8203-b9b48b1c599c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Компонент <legacyBold>П/У</legacyBold> представляет собой график 
-Прибыли/Убытка (не реализованной), Прибыли/Убытка (реализованной) и комиссии. 
-В левом верхнем углу графика показаны все графические элементы, добавленные на 
-график, если убрать флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline>  на графическом элементе уберется и элемент с графика. 
-Нажав на кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline>  откроются настройки графического элемента.
+<para>Компонент <legacyBold>Стакан</legacyBold> представляет собой таблицу лимитных 
+заявок на покупку и продажу. В верхней части компонента необходимо выбрать источник 
+данных из которого будут поступать данные. Источником данных является кубик 
+<link xlink:href="181e2f26-86dd-4c4b-b737-124664ef9481" />.
 </para> 
+<para>
+В стратегии можно использовать несколько разных типов стаканов или от разных инструментов одновременно, и выводить их на разные панели.
+</para>
 <mediaLink>
-<image xlink:href="Designer_Schedule_PU_00"/>
+<image xlink:href="Designer_Panel_Market_Depth"/>
 </mediaLink>
     </introduction>
     <relatedTopics>
