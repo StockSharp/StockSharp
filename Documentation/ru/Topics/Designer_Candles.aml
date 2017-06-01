@@ -1,13 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="a89a0073-cb59-4a79-be90-463ea1683dad" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     <mediaLink>
 <image xlink:href="Designer_Candles_00"/>
 </mediaLink>
-<para>Кубик используется для построения свечей по заданному инструменту и содержит следующие основные свойства:
+<para>Кубик используется для построения свечей по заданному инструменту.
 </para>
 
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо строить свечи с заданными параметрами.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Свечи</legacyBold> – построенные свечи.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
 <list class="bullet">
   <listItem><para><legacyBold>Серия</legacyBold> – тип серии свечей и параметры 
   для указанного типа;</para></listItem>
@@ -16,11 +33,8 @@
   <listItem><para><legacyBold>Профиль объема</legacyBold> – выполнять построение 
   профиля рынка (для кластерных графиков).</para></listItem>
 </list>
-<para>На входе кубик принимает инструмент, для которого необходимо строить 
-свечи с заданными параметрами, на выходе передаются построенные свечи, 
-в зависимости от настроек, могут передаваться только полностью сформированная 
-свечи, или любое изменение в процессе построения.
-</para>
+  </definition>
+</definitionTable>
     </introduction>
     <relatedTopics>
 <link xlink:href="bc7fbe5c-9e8a-4c39-af1a-35c6c3c2a43c" />

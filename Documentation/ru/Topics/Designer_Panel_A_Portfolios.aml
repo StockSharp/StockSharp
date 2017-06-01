@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="0fc19f50-24cb-4f8b-bb22-728968686f8b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -15,6 +15,8 @@
 <mediaLink>
 <image xlink:href="Designer_Panel_A_Portfolios_01"/>
 </mediaLink>
+
+<para>При нажатии кнопки <mediaLinkInline><image xlink:href="Designer_Alert_Bell"/></mediaLinkInline> откроется окно <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" /></para>
     </introduction>
     <relatedTopics>
 <link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" />
