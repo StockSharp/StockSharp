@@ -225,7 +225,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private SecurityExternalId _externalId;
+		private SecurityExternalId _externalId = new SecurityExternalId();
 
 		/// <summary>
 		/// Security ID in other systems.
@@ -244,6 +244,9 @@ namespace StockSharp.BusinessEntities
 			get { return _externalId; }
 			set
 			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
 				_externalId = value;
 				Notify(nameof(ExternalId));
 			}
