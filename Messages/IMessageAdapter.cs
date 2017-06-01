@@ -85,7 +85,7 @@ namespace StockSharp.Messages
 		bool SecurityLookupRequired { get; }
 
 		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
+		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
 		/// </summary>
 		bool OrderStatusRequired { get; }
 

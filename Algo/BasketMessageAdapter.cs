@@ -203,7 +203,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
+		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
 		/// </summary>
 		public override bool OrderStatusRequired
 		{
