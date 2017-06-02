@@ -111,10 +111,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public T Value
 		{
-			get
-			{
-				return _value;
-			}
+			get => _value;
 			set
 			{
 				if (!AllowNull && value.IsNull())
@@ -158,8 +155,8 @@ namespace StockSharp.Algo.Strategies
 
 		object IStrategyParam.Value
 		{
-			get { return Value; }
-			set { Value = (T)value; }
+			get => Value;
+			set => Value = (T)value;
 		}
 
 		/// <summary>

@@ -98,10 +98,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				return _drive;
 			}
-			set
-			{
-				_drive = value;
-			}
+			set => _drive = value;
 		}
 
 		/// <summary>

@@ -205,7 +205,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		public ILogReceiver Application
 		{
-			get { return _application; }
+			get => _application;
 			set
 			{
 				if (value == null)
@@ -237,7 +237,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		public TimeSpan FlushInterval
 		{
-			get { return _flushTimer.Interval(); }
+			get => _flushTimer.Interval();
 			set
 			{
 				if (value < TimeSpan.FromMilliseconds(1))

@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Length
 		{
-			get { return LinearReg.Length; }
+			get => LinearReg.Length;
 			set
 			{
 				LinearReg.Length = RSquared.Length = LinearRegSlope.Length = StandardError.Length = value;

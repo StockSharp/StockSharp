@@ -99,7 +99,7 @@ namespace StockSharp.Logging
 			Order = 0)]
 		public virtual string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (value.IsEmpty())
@@ -117,7 +117,7 @@ namespace StockSharp.Logging
 		[Browsable(false)]
 		public ILogSource Parent
 		{
-			get { return _parent; }
+			get => _parent;
 			set
 			{
 				if (value == _parent)
@@ -163,8 +163,8 @@ namespace StockSharp.Logging
 		/// </summary>
 		public event Action<LogMessage> Log
 		{
-			add { _log += value; }
-			remove { _log -= value; }
+			add => _log += value;
+			remove => _log -= value;
 		}
 
 		/// <summary>

@@ -63,8 +63,8 @@ namespace StockSharp.Algo.Storages
 		/// </remarks>
 		public int MaxMessageCount
 		{
-			get { return _messageQueue.MaxSize; }
-			set { _messageQueue.MaxSize = value; }
+			get => _messageQueue.MaxSize;
+			set => _messageQueue.MaxSize = value;
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace StockSharp.Algo.Storages
 		/// </remarks>
 		public int PostTradeMarketTimeChangedCount
 		{
-			get { return _postTradeMarketTimeChangedCount; }
+			get => _postTradeMarketTimeChangedCount;
 			set
 			{
 				if (value < 0)
@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public virtual TimeSpan MarketTimeChangedInterval
 		{
-			get { return _marketTimeChangedInterval; }
+			get => _marketTimeChangedInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)

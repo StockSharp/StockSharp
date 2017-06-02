@@ -71,7 +71,7 @@ namespace StockSharp.Messages
 		[TimeSpanRangeInitializer]
 		public List<Range<TimeSpan>> Times
 		{
-			get { return _times; }
+			get => _times;
 			set
 			{
 				if (value == null)

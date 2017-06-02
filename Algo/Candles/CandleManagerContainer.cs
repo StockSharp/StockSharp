@@ -160,7 +160,7 @@ namespace StockSharp.Algo.Candles
 		/// </remarks>
 		public TimeSpan CandlesKeepTime
 		{
-			get { return _candlesKeepTime; }
+			get => _candlesKeepTime;
 			set
 			{
 				if (value < TimeSpan.Zero)

@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IdGenerator IdGenerator
 		{
-			get { return _idGenerator; }
+			get => _idGenerator;
 			set
 			{
 				if (value == null)

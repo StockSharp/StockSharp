@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public MarketDataTypes BuildCandlesFrom
 		{
-			get { return _buildCandlesFrom; }
+			get => _buildCandlesFrom;
 			set
 			{
 				switch (value)

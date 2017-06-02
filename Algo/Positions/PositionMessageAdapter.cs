@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Positions
 		/// </summary>
 		public IPositionManager PositionManager
 		{
-			get { return _positionManager; }
+			get => _positionManager;
 			set
 			{
 				if (value == null)

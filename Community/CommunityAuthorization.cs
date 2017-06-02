@@ -80,9 +80,6 @@ namespace StockSharp.Community
 		/// <summary>
 		/// Get all available users.
 		/// </summary>
-		public IEnumerable<Tuple<string, IEnumerable<IPAddress>>> AllUsers
-		{
-			get { throw new NotSupportedException(); }
-		}
+		public IEnumerable<Tuple<string, IEnumerable<IPAddress>>> AllUsers => throw new NotSupportedException();
 	}
 }

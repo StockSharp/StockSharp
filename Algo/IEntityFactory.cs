@@ -351,20 +351,20 @@ namespace StockSharp.Algo
 
 		event Action<object> IStorage.Added
 		{
-			add { throw new NotSupportedException(); }
-			remove { throw new NotSupportedException(); }
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
 		}
 
 		event Action<object> IStorage.Updated
 		{
-			add { throw new NotSupportedException(); }
-			remove { throw new NotSupportedException(); }
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
 		}
 
 		event Action<object> IStorage.Removed
 		{
-			add { throw new NotSupportedException(); }
-			remove { throw new NotSupportedException(); }
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
 		}
 	}
 }

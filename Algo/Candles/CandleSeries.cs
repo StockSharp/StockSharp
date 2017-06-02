@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual Security Security
 		{
-			get { return _security; }
+			get => _security;
 			set
 			{
 				_security = value;
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual Type CandleType
 		{
-			get { return _candleType; }
+			get => _candleType;
 			set
 			{
 				NotifyChanging(nameof(CandleType));
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual object Arg
 		{
-			get { return _arg; }
+			get => _arg;
 			set
 			{
 				NotifyChanging(nameof(Arg));

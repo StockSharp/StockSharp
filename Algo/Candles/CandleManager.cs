@@ -409,7 +409,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public ICandleManagerContainer Container
 		{
-			get { return _container; }
+			get => _container;
 			set
 			{
 				if (value == null)
@@ -430,7 +430,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public IStorageRegistry StorageRegistry
 		{
-			get { return _storageRegistry; }
+			get => _storageRegistry;
 			set
 			{
 				_storageRegistry = value;
@@ -454,10 +454,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// The source priority by speed (0 - the best).
 		/// </summary>
-		public int SpeedPriority
-		{
-			get { throw new NotSupportedException(); }
-		}
+		public int SpeedPriority => throw new NotSupportedException();
 
 		/// <summary>
 		/// A new value for processing occurrence event.

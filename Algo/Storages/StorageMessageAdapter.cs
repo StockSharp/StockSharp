@@ -128,7 +128,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public IMarketDataDrive Drive
 		{
-			get { return _drive; }
+			get => _drive;
 			set
 			{
 				if (value == null)
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public TimeSpan DaysLoad
 		{
-			get { return _daysLoad; }
+			get => _daysLoad;
 			set
 			{
 				if (value < TimeSpan.Zero)

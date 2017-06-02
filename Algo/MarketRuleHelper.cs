@@ -2430,23 +2430,20 @@ namespace StockSharp.Algo
 
 			ILogSource ILogSource.Parent
 			{
-				get { return Container; }
-				set
-				{
-					throw new NotSupportedException();
-				}
+				get => Container;
+				set => throw new NotSupportedException();
 			}
 
 			LogLevels ILogSource.LogLevel
 			{
-				get { return Container.LogLevel; }
-				set { throw new NotSupportedException(); }
+				get => Container.LogLevel;
+				set => throw new NotSupportedException();
 			}
 
 			event Action<LogMessage> ILogSource.Log
 			{
-				add { Container.Log += value; }
-				remove { Container.Log -= value; }
+				add => Container.Log += value;
+				remove => Container.Log -= value;
 			}
 
 			DateTimeOffset ILogSource.CurrentTime => Container.CurrentTime;
@@ -2481,10 +2478,7 @@ namespace StockSharp.Algo
 				throw new NotSupportedException();
 			}
 
-			IMarketRuleList IMarketRuleContainer.Rules
-			{
-				get { throw new NotSupportedException(); }
-			}
+			IMarketRuleList IMarketRuleContainer.Rules => throw new NotSupportedException();
 
 			#endregion
 

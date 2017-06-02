@@ -35,8 +35,8 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public int MaxValueCount
 		{
-			get { return _values.BufferSize; }
-			set { _values.BufferSize = value; }
+			get => _values.BufferSize;
+			set => _values.BufferSize = value;
 		}
 
 		/// <summary>

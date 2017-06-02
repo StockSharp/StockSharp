@@ -399,7 +399,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public Unit Timeout
 		{
-			get { return _timeout; }
+			get => _timeout;
 			set
 			{
 				if (value == null)

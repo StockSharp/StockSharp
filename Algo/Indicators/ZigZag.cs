@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int BackStep
 		{
-			get { return _backStep; }
+			get => _backStep;
 			set
 			{
 				if (_backStep == value)
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Depth
 		{
-			get { return _depth; }
+			get => _depth;
 			set
 			{
 				if (_depth == value)
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public Unit Deviation
 		{
-			get { return _deviation; }
+			get => _deviation;
 			set
 			{
 				if (value == null)
@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public Func<Candle, decimal> HighValueFunc
 		{
-			get { return _highValue; }
+			get => _highValue;
 			set
 			{
 				_highValue = value;
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public Func<Candle, decimal> LowValueFunc
 		{
-			get { return _lowValue; }
+			get => _lowValue;
 			set
 			{
 				_lowValue = value;
@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public Func<Candle, decimal> CurrentValueFunc
 		{
-			get { return _currentValue; }
+			get => _currentValue;
 			set
 			{
 				_currentValue = value;

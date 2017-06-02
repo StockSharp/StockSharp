@@ -86,8 +86,8 @@ namespace StockSharp.Messages
 
 		event Action<Message> IMessageChannel.NewOutMessage
 		{
-			add { _newMessage += value; }
-			remove { _newMessage -= value; }
+			add => _newMessage += value;
+			remove => _newMessage -= value;
 		}
 
 		/// <summary>

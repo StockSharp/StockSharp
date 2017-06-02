@@ -67,7 +67,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		public string DateFormat
 		{
-			get { return _dateFormat; }
+			get => _dateFormat;
 			set
 			{
 				if (value.IsEmpty())
@@ -84,7 +84,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		public string TimeFormat
 		{
-			get { return _timeFormat; }
+			get => _timeFormat;
 			set
 			{
 				if (value.IsEmpty())

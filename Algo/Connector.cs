@@ -189,8 +189,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IEntityFactory EntityFactory
 		{
-			get { return _entityCache.EntityFactory; }
-			set { _entityCache.EntityFactory = value; }
+			get => _entityCache.EntityFactory;
+			set => _entityCache.EntityFactory = value;
 		}
 
 		/// <summary>
@@ -198,8 +198,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public int TradesKeepCount
 		{
-			get { return _entityCache.TradesKeepCount; }
-			set { _entityCache.TradesKeepCount = value; }
+			get => _entityCache.TradesKeepCount;
+			set => _entityCache.TradesKeepCount = value;
 		}
 
 		/// <summary>
@@ -207,8 +207,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public int OrdersKeepCount
 		{
-			get { return _entityCache.OrdersKeepCount; }
-			set { _entityCache.OrdersKeepCount = value; }
+			get => _entityCache.OrdersKeepCount;
+			set => _entityCache.OrdersKeepCount = value;
 		}
 
 		/// <summary>
@@ -216,8 +216,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IdGenerator TransactionIdGenerator
 		{
-			get { return Adapter.TransactionIdGenerator; }
-			set { Adapter.TransactionIdGenerator = value; }
+			get => Adapter.TransactionIdGenerator;
+			set => Adapter.TransactionIdGenerator = value;
 		}
 
 		private SecurityIdGenerator _securityIdGenerator = new SecurityIdGenerator();
@@ -227,7 +227,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public SecurityIdGenerator SecurityIdGenerator
 		{
-			get { return _securityIdGenerator; }
+			get => _securityIdGenerator;
 			set
 			{
 				if (value == null)
@@ -253,24 +253,24 @@ namespace StockSharp.Algo
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { _added += value; }
-			remove { _added -= value; }
+			add => _added += value;
+			remove => _added -= value;
 		}
 
 		private Action<IEnumerable<Security>> _removed;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { _removed += value; }
-			remove { _removed -= value; }
+			add => _removed += value;
+			remove => _removed -= value;
 		}
 
 		private Action _cleared;
 
 		event Action ISecurityProvider.Cleared
 		{
-			add { _cleared += value; }
-			remove { _cleared -= value; }
+			add => _cleared += value;
+			remove => _cleared -= value;
 		}
 
 		/// <summary>
@@ -410,8 +410,8 @@ namespace StockSharp.Algo
 		[DescriptionLoc(LocalizedStrings.Str201Key)]
 		public bool CreateDepthFromLevel1
 		{
-			get { return SupportLevel1DepthBuilder; }
-			set { SupportLevel1DepthBuilder = value; }
+			get => SupportLevel1DepthBuilder;
+			set => SupportLevel1DepthBuilder = value;
 		}
 
 		/// <summary>
@@ -421,8 +421,8 @@ namespace StockSharp.Algo
 		[DescriptionLoc(LocalizedStrings.Str198Key)]
 		public bool CreateAssociatedSecurity
 		{
-			get { return SupportAssociatedSecurity; }
-			set { SupportAssociatedSecurity = value; }
+			get => SupportAssociatedSecurity;
+			set => SupportAssociatedSecurity = value;
 		}
 
 		/// <summary>
@@ -446,7 +446,7 @@ namespace StockSharp.Algo
 		[DescriptionLoc(LocalizedStrings.Str195Key)]
 		public virtual TimeSpan MarketTimeChangedInterval
 		{
-			get { return _marketTimeChangedInterval; }
+			get => _marketTimeChangedInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
@@ -466,8 +466,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool IsRestorSubscriptioneOnReconnect
 		{
-			get { return Adapter.IsRestorSubscriptioneOnReconnect; }
-			set { Adapter.IsRestorSubscriptioneOnReconnect = value; }
+			get => Adapter.IsRestorSubscriptioneOnReconnect;
+			set => Adapter.IsRestorSubscriptioneOnReconnect = value;
 		}
 
 		/// <summary>

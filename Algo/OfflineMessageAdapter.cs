@@ -34,7 +34,7 @@
 		/// </remarks>
 		public int MaxMessageCount
 		{
-			get { return _maxMessageCount; }
+			get => _maxMessageCount;
 			set
 			{
 				if (value < -1)

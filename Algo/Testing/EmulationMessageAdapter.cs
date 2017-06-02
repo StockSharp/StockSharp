@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IMarketEmulator Emulator
 		{
-			get { return _emulator; }
+			get => _emulator;
 			set
 			{
 				if (value == null)

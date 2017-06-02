@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public DelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				if (_delayAction == value)

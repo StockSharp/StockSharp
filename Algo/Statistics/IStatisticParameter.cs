@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		public string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (_name == value)
@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		public virtual TValue Value
 		{
-			get { return _value; }
+			get => _value;
 			protected set
 			{
 				if (_value.CompareTo(value) == 0)

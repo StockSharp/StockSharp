@@ -248,16 +248,16 @@ namespace StockSharp.Algo.Storages.Csv
 
 			event Action<IEnumerable<Security>> ISecurityProvider.Added
 			{
-				add { _added += value; }
-				remove { _added -= value; }
+				add => _added += value;
+				remove => _added -= value;
 			}
 
 			private Action<IEnumerable<Security>> _removed;
 
 			event Action<IEnumerable<Security>> ISecurityProvider.Removed
 			{
-				add { _removed += value; }
-				remove { _removed -= value; }
+				add => _removed += value;
+				remove => _removed -= value;
 			}
 
 			public IEnumerable<Security> Lookup(Security criteria)
@@ -719,7 +719,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public Encoding Encoding
 		{
-			get { return _encoding; }
+			get => _encoding;
 			set
 			{
 				if (value == null)
@@ -736,7 +736,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public DelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				if (value == null)

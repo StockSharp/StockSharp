@@ -201,10 +201,7 @@ namespace StockSharp.Algo.Storages
 				_parent = parent;
 			}
 
-			IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer
-			{
-				get { throw new NotSupportedException(); }
-			}
+			IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer => throw new NotSupportedException();
 
 			int IMarketDataStorage<TEntity>.Save(IEnumerable<TEntity> data)
 			{
@@ -335,10 +332,7 @@ namespace StockSharp.Algo.Storages
 				return Load(date);
 			}
 
-			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer
-			{
-				get { throw new NotSupportedException(); }
-			}
+			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => throw new NotSupportedException();
 
 			int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data)
 			{
@@ -386,10 +380,7 @@ namespace StockSharp.Algo.Storages
 					.ToCandles<TCandle>(Security);
 			}
 
-			IMarketDataSerializer<TCandle> IMarketDataStorage<TCandle>.Serializer
-			{
-				get { throw new NotSupportedException(); }
-			}
+			IMarketDataSerializer<TCandle> IMarketDataStorage<TCandle>.Serializer => throw new NotSupportedException();
 
 			protected TCandleMessage Convert(TCandle candle)
 			{
@@ -415,10 +406,7 @@ namespace StockSharp.Algo.Storages
 			{
 			}
 
-			IMarketDataSerializer<Candle> IMarketDataStorage<Candle>.Serializer
-			{
-				get { throw new NotSupportedException(); }
-			}
+			IMarketDataSerializer<Candle> IMarketDataStorage<Candle>.Serializer => throw new NotSupportedException();
 
 			int IMarketDataStorage<Candle>.Save(IEnumerable<Candle> data)
 			{
@@ -463,10 +451,7 @@ namespace StockSharp.Algo.Storages
 
 			#region Order
 
-			IMarketDataSerializer<Order> IMarketDataStorage<Order>.Serializer
-			{
-				get { throw new NotSupportedException(); }
-			}
+			IMarketDataSerializer<Order> IMarketDataStorage<Order>.Serializer => throw new NotSupportedException();
 
 			int IMarketDataStorage<Order>.Save(IEnumerable<Order> data)
 			{
@@ -492,10 +477,7 @@ namespace StockSharp.Algo.Storages
 
 			#region Trade
 
-			IMarketDataSerializer<MyTrade> IMarketDataStorage<MyTrade>.Serializer
-			{
-				get { throw new NotSupportedException(); }
-			}
+			IMarketDataSerializer<MyTrade> IMarketDataStorage<MyTrade>.Serializer => throw new NotSupportedException();
 
 			int IMarketDataStorage<MyTrade>.Save(IEnumerable<MyTrade> data)
 			{
@@ -568,7 +550,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public virtual IMarketDataDrive DefaultDrive
 		{
-			get { return _defaultDrive; }
+			get => _defaultDrive;
 			set
 			{
 				if (value == null)
@@ -589,7 +571,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
-			get { return _exchangeInfoProvider; }
+			get => _exchangeInfoProvider;
 			set
 			{
 				if (value == null)

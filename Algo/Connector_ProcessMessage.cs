@@ -212,7 +212,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IMessageChannel InMessageChannel
 		{
-			get { return _inMessageChannel; }
+			get => _inMessageChannel;
 			protected set
 			{
 				if (value == _inMessageChannel)
@@ -238,7 +238,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IMessageChannel OutMessageChannel
 		{
-			get { return _outMessageChannel; }
+			get => _outMessageChannel;
 			protected set
 			{
 				if (value == _outMessageChannel)
@@ -282,7 +282,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IMessageAdapter InnerAdapter
 		{
-			get { return _inAdapter; }
+			get => _inAdapter;
 			set
 			{
 				if (_inAdapter == value)
@@ -340,7 +340,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public BasketMessageAdapter Adapter
 		{
-			get { return _adapter; }
+			get => _adapter;
 			protected set
 			{
 				if (!_isDisposing && value == null)
@@ -430,7 +430,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportOffline
 		{
-			get { return _supportOffline; }
+			get => _supportOffline;
 			set
 			{
 				if (_supportOffline == value)
@@ -452,7 +452,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportFilteredMarketDepth
 		{
-			get { return _supportFilteredMarketDepth; }
+			get => _supportFilteredMarketDepth;
 			set
 			{
 				if (_supportFilteredMarketDepth == value)
@@ -474,7 +474,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportAssociatedSecurity
 		{
-			get { return _supportAssociatedSecurity; }
+			get => _supportAssociatedSecurity;
 			set
 			{
 				if (_supportAssociatedSecurity == value)
@@ -496,7 +496,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportLevel1DepthBuilder
 		{
-			get { return _supportLevel1DepthBuilder; }
+			get => _supportLevel1DepthBuilder;
 			set
 			{
 				if (_supportLevel1DepthBuilder == value)
@@ -518,7 +518,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportCandleBuilder
 		{
-			get { return _supportCandleBuilder; }
+			get => _supportCandleBuilder;
 			set
 			{
 				if (_supportCandleBuilder == value)

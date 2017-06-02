@@ -75,8 +75,8 @@ namespace StockSharp.Messages
 		/// </remarks>
 		public int MaxMessageCount
 		{
-			get { return _messageQueue.MaxSize; }
-			set { _messageQueue.MaxSize = value; }
+			get => _messageQueue.MaxSize;
+			set => _messageQueue.MaxSize = value;
 		}
 
 		/// <summary>

@@ -52,7 +52,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public IEnumerable<QuoteChange> Bids
 		{
-			get { return _bids; }
+			get => _bids;
 			set
 			{
 				if (value == null)
@@ -73,7 +73,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public IEnumerable<QuoteChange> Asks
 		{
-			get { return _asks; }
+			get => _asks;
 			set
 			{
 				if (value == null)

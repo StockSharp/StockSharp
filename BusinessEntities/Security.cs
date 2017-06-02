@@ -62,7 +62,7 @@ namespace StockSharp.BusinessEntities
 			Order = 0)]
 		public string Id
 		{
-			get { return _id; }
+			get => _id;
 			set
 			{
 				if (_id == value)
@@ -88,7 +88,7 @@ namespace StockSharp.BusinessEntities
 		[Required(AllowEmptyStrings = false)]
 		public string Code
 		{
-			get { return _code; }
+			get => _code;
 			set
 			{
 				if (_code == value)
@@ -115,7 +115,7 @@ namespace StockSharp.BusinessEntities
 		[Required]
 		public ExchangeBoard Board
 		{
-			get { return _board; }
+			get => _board;
 			set
 			{
 				if (_board == value)
@@ -141,7 +141,7 @@ namespace StockSharp.BusinessEntities
 			Order = 3)]
 		public SecurityTypes? Type
 		{
-			get { return _type; }
+			get => _type;
 			set
 			{
 				if (_type == value)
@@ -166,7 +166,7 @@ namespace StockSharp.BusinessEntities
 			Order = 4)]
 		public string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (_name == value)
@@ -191,7 +191,7 @@ namespace StockSharp.BusinessEntities
 			Order = 5)]
 		public string ShortName
 		{
-			get { return _shortName; }
+			get => _shortName;
 			set
 			{
 				if (_shortName == value)
@@ -217,7 +217,7 @@ namespace StockSharp.BusinessEntities
 			Order = 6)]
 		public CurrencyTypes? Currency
 		{
-			get { return _currency; }
+			get => _currency;
 			set
 			{
 				_currency = value;
@@ -241,7 +241,7 @@ namespace StockSharp.BusinessEntities
 		[InnerSchema(NullWhenAllEmpty = false)]
 		public SecurityExternalId ExternalId
 		{
-			get { return _externalId; }
+			get => _externalId;
 			set
 			{
 				if (value == null)
@@ -266,7 +266,7 @@ namespace StockSharp.BusinessEntities
 			Order = 8)]
 		public string Class
 		{
-			get { return _class; }
+			get => _class;
 			set
 			{
 				if (_class == value)
@@ -293,7 +293,7 @@ namespace StockSharp.BusinessEntities
 		[GreaterThanZero]
 		public decimal? PriceStep
 		{
-			get { return _priceStep; }
+			get => _priceStep;
 			set
 			{
 				if (_priceStep == value)
@@ -323,7 +323,7 @@ namespace StockSharp.BusinessEntities
 		[GreaterThanZero]
 		public decimal? VolumeStep
 		{
-			get { return _volumeStep; }
+			get => _volumeStep;
 			set
 			{
 				if (_volumeStep == value)
@@ -352,7 +352,7 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public decimal? Multiplier
 		{
-			get { return _multiplier; }
+			get => _multiplier;
 			set
 			{
 				if (_multiplier == value)
@@ -382,7 +382,7 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public int? Decimals
 		{
-			get { return _decimals; }
+			get => _decimals;
 			set
 			{
 				if (_decimals == value)
@@ -411,7 +411,7 @@ namespace StockSharp.BusinessEntities
 			Order = 13)]
 		public DateTimeOffset? ExpiryDate
 		{
-			get { return _expiryDate; }
+			get => _expiryDate;
 			set
 			{
 				if (_expiryDate == value)
@@ -437,7 +437,7 @@ namespace StockSharp.BusinessEntities
 			Order = 14)]
 		public DateTimeOffset? SettlementDate
 		{
-			get { return _settlementDate; }
+			get => _settlementDate;
 			set
 			{
 				if (_settlementDate == value)
@@ -462,7 +462,7 @@ namespace StockSharp.BusinessEntities
 			Order = 15)]
 		public string CfiCode
 		{
-			get { return _cfiCode; }
+			get => _cfiCode;
 			set
 			{
 				if (_cfiCode == value)
@@ -493,7 +493,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
+			get => _extensionInfo;
 			set
 			{
 				_extensionInfo = value.Sync();
@@ -519,7 +519,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? StepPrice
 		{
-			get { return _stepPrice; }
+			get => _stepPrice;
 			set
 			{
 				if (value < 0)
@@ -552,7 +552,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Trade LastTrade
 		{
-			get { return _lastTrade; }
+			get => _lastTrade;
 			set
 			{
 				if (_lastTrade == value)
@@ -587,7 +587,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? OpenPrice
 		{
-			get { return _openPrice; }
+			get => _openPrice;
 			set
 			{
 				if (_openPrice == value)
@@ -616,7 +616,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? ClosePrice
 		{
-			get { return _closePrice; }
+			get => _closePrice;
 			set
 			{
 				if (_closePrice == value)
@@ -645,7 +645,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? LowPrice
 		{
-			get { return _lowPrice; }
+			get => _lowPrice;
 			set
 			{
 				if (_lowPrice == value)
@@ -674,7 +674,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HighPrice
 		{
-			get { return _highPrice; }
+			get => _highPrice;
 			set
 			{
 				if (_highPrice == value)
@@ -703,7 +703,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Quote BestBid
 		{
-			get { return _bestBid; }
+			get => _bestBid;
 			set
 			{
 				//TODO: решить другим методом, OnEquals не тормозит, медленно работает GUI
@@ -735,7 +735,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Quote BestAsk
 		{
-			get { return _bestAsk; }
+			get => _bestAsk;
 			set
 			{
 				// if (_bestAsk == value)
@@ -782,7 +782,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public SecurityStates? State
 		{
-			get { return _state; }
+			get => _state;
 			set
 			{
 				if (_state == value)
@@ -811,7 +811,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MinPrice
 		{
-			get { return _minPrice; }
+			get => _minPrice;
 			set
 			{
 				if (_minPrice == value)
@@ -840,7 +840,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MaxPrice
 		{
-			get { return _maxPrice; }
+			get => _maxPrice;
 			set
 			{
 				if (_maxPrice == value)
@@ -869,7 +869,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MarginBuy
 		{
-			get { return _marginBuy; }
+			get => _marginBuy;
 			set
 			{
 				if (_marginBuy == value)
@@ -898,7 +898,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MarginSell
 		{
-			get { return _marginSell; }
+			get => _marginSell;
 			set
 			{
 				if (_marginSell == value)
@@ -946,7 +946,7 @@ namespace StockSharp.BusinessEntities
 			Order = 100)]
 		public string UnderlyingSecurityId
 		{
-			get { return _underlyingSecurityId; }
+			get => _underlyingSecurityId;
 			set
 			{
 				if (_underlyingSecurityId == value)
@@ -972,7 +972,7 @@ namespace StockSharp.BusinessEntities
 			Order = 101)]
 		public OptionTypes? OptionType
 		{
-			get { return _optionType; }
+			get => _optionType;
 			set
 			{
 				if (_optionType == value)
@@ -998,7 +998,7 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public decimal? Strike
 		{
-			get { return _strike; }
+			get => _strike;
 			set
 			{
 				if (_strike == value)
@@ -1026,7 +1026,7 @@ namespace StockSharp.BusinessEntities
 			Order = 103)]
 		public string BinaryOptionType
 		{
-			get { return _binaryOptionType; }
+			get => _binaryOptionType;
 			set
 			{
 				if (_binaryOptionType == value)
@@ -1055,7 +1055,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? ImpliedVolatility
 		{
-			get { return _impliedVolatility; }
+			get => _impliedVolatility;
 			set
 			{
 				if (_impliedVolatility == value)
@@ -1084,7 +1084,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HistoricalVolatility
 		{
-			get { return _historicalVolatility; }
+			get => _historicalVolatility;
 			set
 			{
 				if (_historicalVolatility == value)
@@ -1113,7 +1113,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? TheorPrice
 		{
-			get { return _theorPrice; }
+			get => _theorPrice;
 			set
 			{
 				if (_theorPrice == value)
@@ -1142,7 +1142,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Delta
 		{
-			get { return _delta; }
+			get => _delta;
 			set
 			{
 				if (_delta == value)
@@ -1171,7 +1171,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Gamma
 		{
-			get { return _gamma; }
+			get => _gamma;
 			set
 			{
 				if (_gamma == value)
@@ -1200,7 +1200,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Vega
 		{
-			get { return _vega; }
+			get => _vega;
 			set
 			{
 				if (_vega == value)
@@ -1229,7 +1229,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Theta
 		{
-			get { return _theta; }
+			get => _theta;
 			set
 			{
 				if (_theta == value)
@@ -1258,7 +1258,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Rho
 		{
-			get { return _rho; }
+			get => _rho;
 			set
 			{
 				if (_rho == value)
@@ -1287,7 +1287,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? OpenInterest
 		{
-			get { return _openInterest; }
+			get => _openInterest;
 			set
 			{
 				if (_openInterest == value)
@@ -1308,7 +1308,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		public DateTimeOffset LocalTime
 		{
-			get { return _localTime; }
+			get => _localTime;
 			set
 			{
 				_localTime = value;
@@ -1328,7 +1328,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		public DateTimeOffset LastChangeTime
 		{
-			get { return _lastChangeTime; }
+			get => _lastChangeTime;
 			set
 			{
 				_lastChangeTime = value;
@@ -1354,7 +1354,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? BidsVolume
 		{
-			get { return _bidsVolume; }
+			get => _bidsVolume;
 			set
 			{
 				_bidsVolume = value;
@@ -1380,7 +1380,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? BidsCount
 		{
-			get { return _bidsCount; }
+			get => _bidsCount;
 			set
 			{
 				_bidsCount = value;
@@ -1406,7 +1406,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? AsksVolume
 		{
-			get { return _asksVolume; }
+			get => _asksVolume;
 			set
 			{
 				_asksVolume = value;
@@ -1432,7 +1432,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? AsksCount
 		{
-			get { return _asksCount; }
+			get => _asksCount;
 			set
 			{
 				_asksCount = value;
@@ -1458,7 +1458,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? TradesCount
 		{
-			get { return _tradesCount; }
+			get => _tradesCount;
 			set
 			{
 				_tradesCount = value;
@@ -1484,7 +1484,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HighBidPrice
 		{
-			get { return _highBidPrice; }
+			get => _highBidPrice;
 			set
 			{
 				_highBidPrice = value;
@@ -1510,7 +1510,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? LowAskPrice
 		{
-			get { return _lowAskPrice; }
+			get => _lowAskPrice;
 			set
 			{
 				_lowAskPrice = value;
@@ -1536,7 +1536,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Yield
 		{
-			get { return _yield; }
+			get => _yield;
 			set
 			{
 				_yield = value;
@@ -1562,7 +1562,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? VWAP
 		{
-			get { return _vwap; }
+			get => _vwap;
 			set
 			{
 				_vwap = value;
@@ -1588,7 +1588,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? SettlementPrice
 		{
-			get { return _settlementPrice; }
+			get => _settlementPrice;
 			set
 			{
 				_settlementPrice = value;
@@ -1614,7 +1614,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? AveragePrice
 		{
-			get { return _averagePrice; }
+			get => _averagePrice;
 			set
 			{
 				_averagePrice = value;
@@ -1640,7 +1640,7 @@ namespace StockSharp.BusinessEntities
 		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Volume
 		{
-			get { return _volume; }
+			get => _volume;
 			set
 			{
 				_volume = value;
@@ -1653,8 +1653,8 @@ namespace StockSharp.BusinessEntities
 
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
-			add { _propertyChanged += value; }
-			remove { _propertyChanged -= value; }
+			add => _propertyChanged += value;
+			remove => _propertyChanged -= value;
 		}
 
 		/// <summary>
