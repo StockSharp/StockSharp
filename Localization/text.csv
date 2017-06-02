@@ -1124,7 +1124,7 @@ Str1176;Combine on touch;Сводить при касании
 Str1177;When emulating trades combination, combine orders, when trade price touched the order price (equal to order price).;При эмулировании сведения по сделкам, производить сведение заявок, когда цена сделки коснулась цены заявки (равна цене заявки).
 Str1178;Market depth (lifetime);Стакан (время жизни)
 Str1179;Maximum time, during which a market depth is in an emulator. If there was no update during that time, the market depth is erased. This property can be used to delete old market depths if there are gaps in the data.;Максимальное время, которое стакан находится в эмуляторе. Если за это время не произошло обновление, стакан стирается. Это свойство можно использовать, чтобы убирать старые стаканы при наличии дыр в данных.
-Str1180;Errors percentage.;Процент ошибок.
+Str1180;Errors percentage;Процент ошибок
 Str1181;New orders registration error percentage value. can be from 0 (no errors) to 100.;Процентное значение ошибки регистрации новых заявок. Значение может быть от 0 (не будет ни одной ошибки) до 100.
 Str1182;Percentage value cannot be less than zero.;Процентное значение не может быть отрицательным.
 Str1183;Percentage value cannot be greater than 100.;Процентное значение не может быть больше 100.

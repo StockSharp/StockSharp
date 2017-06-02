@@ -11228,12 +11228,12 @@ namespace StockSharp.Localization
 		public static string Str1179 => GetString(Str1179Key);
 
 		/// <summary>
-		/// Errors percentage.
+		/// Errors percentage
 		/// </summary>
 		public const string Str1180Key = nameof(Str1180);
 
 		/// <summary>
-		/// Errors percentage.
+		/// Errors percentage
 		/// </summary>
 		public static string Str1180 => GetString(Str1180Key);
 
