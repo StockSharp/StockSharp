@@ -13,7 +13,7 @@
   применению протокола связи MTProto.</para></listItem>
   <listItem><para>Секретные чаты обеспечивают end-to-end шифрование, истории 
   которых не хранятся ни на каком сервере, обеспечивая анонимность переписки.</para></listItem>
-    <listItem><para>Наличие таймера для самоуничтожения сообщений. </para></listItem>
+    <listItem><para>Наличие таймера для самоуничтожения сообщений.</para></listItem>
   <listItem><para>Моментальная доставка сообщений и файлов.</para></listItem>
     <listItem><para>Возможность передачи файлов любого формата размером до 1,5 Гб.</para></listItem>
   <listItem><para>Мессенджер Telegram работает на IPhone, Android, WindowsPhone. 

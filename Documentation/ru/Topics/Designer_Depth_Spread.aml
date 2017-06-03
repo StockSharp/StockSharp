@@ -5,19 +5,19 @@
 <mediaLink>
 <image xlink:href="Designer_Empty_glass_00"/>
 </mediaLink>
-<para>Кубик используется для получения разряженного стакана по заданному. </para>   
+<para>Кубик используется для получения разреженного стакана по заданному.</para>   
 <definitionTable>
   <definedTerm>Входящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Стакан</legacyBold> – стакан, который надо разрядить.</para></listItem>
+  <listItem><para><legacyBold>Стакан</legacyBold> – стакан, который надо разредить.</para></listItem>
 </list>
   </definition>
 
   <definedTerm>Исходящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Стакан</legacyBold> – разряженный стакан.</para></listItem>
+  <listItem><para><legacyBold>Стакан</legacyBold> – разреженный стакан.</para></listItem>
 </list>
   </definition>
 

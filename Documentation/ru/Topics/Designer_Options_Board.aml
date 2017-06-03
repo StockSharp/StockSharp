@@ -24,8 +24,7 @@
     <definedTerm>Параметры</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Модель Блэка</legacyBold> – флаг, указывает будут 
-  ли рассчитываться значения согласно модели Блэка — Шоулза.</para></listItem>
+  <listItem><para><legacyBold>Модель Блэка</legacyBold> – флаг, указывает будут ли рассчитываться значения согласно модели Блэка — Шоулза.</para></listItem>
 </list>
   </definition>
 </definitionTable>

@@ -26,7 +26,7 @@
     <definedTerm>Параметры</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Ценовой диапазон</legacyBold> – диапазон цен в котором будут группироваться заявки.</para></listItem>
+  <listItem><para><legacyBold>Ценовой диапазон</legacyBold> – диапазон цен, в котором будут группироваться заявки.</para></listItem>
 </list>
   </definition>
 </definitionTable>

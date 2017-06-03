@@ -5,13 +5,13 @@
 <mediaLink>
 <image xlink:href="Designer_Moving_applications_00"/>
 </mediaLink>
-<para>Кубик используется для перемещения заявки по инструменту.</para>
+<para>Кубик используется для изменения заявки по инструменту.</para>
     
     <definitionTable>
   <definedTerm>Входящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – заявка, которая будет перемещена.</para></listItem>
+  <listItem><para><legacyBold>Заявка</legacyBold> – заявка, которая будет изменена.</para></listItem>
   <listItem><para><legacyBold>Цена</legacyBold> – числовое значение новой цены.</para></listItem>
   <listItem><para><legacyBold>Объем</legacyBold> – числовое значение нового объема.</para></listItem>
 </list>
@@ -20,7 +20,7 @@
   <definedTerm>Исходящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, которая может использоваться для получения сделок по ней 
+  <listItem><para><legacyBold>Заявка</legacyBold> – измененная заявка, которая может использоваться для получения сделок по ней 
  с помощью элемента <legacyBold>Сделки</legacyBold> по заявке и отображения на графике с 
  помощью кубика <legacyBold>Панель графика</legacyBold></para></listItem>
 </list>

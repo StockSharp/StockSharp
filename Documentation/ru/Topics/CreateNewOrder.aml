@@ -19,7 +19,7 @@
 		      <code language="C#"><![CDATA[
 	var order = new Order
     {
-        // устанавливается тип ордера, в данном примере лимитный
+        // устанавливается тип заявки, в данном примере лимитный
         Type = OrderTypes.Limit,
         // устанавливается портфель для исполнения заявки
         Portfolio = Portfolio.SelectedPortfolio,

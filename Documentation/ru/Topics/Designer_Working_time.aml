@@ -5,8 +5,6 @@
 <mediaLink><image xlink:href="Designer_Working_time_00"/></mediaLink>
 <para>Кубик используется для определения рабочего времени. Например, для определения, 
 когда идут торги по определенному инструменту.</para>
-
-
  
 <definitionTable>
   <definedTerm>Входящие сокеты</definedTerm>
@@ -22,8 +20,7 @@
   <definedTerm>Исходящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> - флаг, 
- который определяет активна ли торговая сессия.</para></listItem>
+  <listItem><para><legacyBold>Флаг</legacyBold> - флаг, который определяет активна ли торговая сессия.</para></listItem>
 </list>
   </definition>
 </definitionTable>

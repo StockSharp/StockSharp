@@ -5,8 +5,8 @@
 <para>Компонент <legacyBold>П/У</legacyBold> представляет собой график 
 Прибыли/Убытка (не реализованной), Прибыли/Убытка (реализованной) и комиссии. 
 В левом верхнем углу графика показаны все графические элементы, добавленные на 
-график, если убрать флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline>  на графическом элементе уберется и элемент с графика. 
-Нажав на кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline>  откроются настройки графического элемента.
+график, если убрать флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline> на графическом элементе уберется и элемент с графика. 
+Нажав на кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline> откроются настройки графического элемента.
 </para> 
 <mediaLink>
 <image xlink:href="Designer_Schedule_PU_00"/>

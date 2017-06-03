@@ -2,17 +2,17 @@
 <topic id="31a208d0-d543-47aa-8008-389c071118d4" revisionNumber="1">
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 <introduction>
-<para>S#.Designer позволяет запускать созданные стратегии в режиме <legacyBold>Эмуляции</legacyBold>, 
-для дополнительной настройки <legacyBold>Эмуляции</legacyBold> необходимо выполнить следующие действия.</para>
+<para>S#.Designer позволяет запускать созданные стратегии в режиме <legacyBold>Симуляции</legacyBold>, 
+для дополнительной настройки <legacyBold>Симуляции</legacyBold> необходимо выполнить следующие действия:</para>
    
 <para>1.	При нажатии на стрелку возле 
 кнопки <legacyBold>Подключиться</legacyBold> <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_00"/></mediaLinkInline> 
-появится кнопка <legacyBold>Настройки эмуляции</legacyBold> </para>
+появится кнопка <legacyBold>Настройки эмуляции</legacyBold>:</para>
 <mediaLink>
 <image xlink:href="Designer_The_connection_settings_00"/>
 </mediaLink>
 
-<para>2.	При нажатии на кнопку <legacyBold>Настройки эмуляции</legacyBold>, появится окно <legacyBold>Настройки эмуляции</legacyBold></para>
+<para>2.	При нажатии на кнопку <legacyBold>Настройки эмуляции</legacyBold>, появится окно <legacyBold>Настройки эмуляции</legacyBold>:</para>
 
 
  <mediaLink>
