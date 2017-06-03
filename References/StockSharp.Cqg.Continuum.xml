@@ -38,6 +38,9 @@
     <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.SecurityLookupRequired">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.CreateOrderCondition">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Send message.
