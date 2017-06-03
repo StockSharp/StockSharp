@@ -2402,7 +2402,7 @@ Str2567;Use «native» reconnection mechanism.;Использовать «род
 Str2568;Use OpenECry API logging.;Использовать логирование OpenECry API.
 Str2570;Stop type;Тип стопа
 Str2571;Stop type.;Тип стопа.
-Str2572;Trailing stop follows the market if price change is larger than Delta.;Trailing стоп следует за рынком если изменение цены больше чем Delta.
+Str2572;Trailing stop follows the market if price change is larger than {0}.;Trailing стоп следует за рынком если изменение цены больше чем {0}.
 Str2573;Delta percentage;Delta в процентах
 Str2574;Delta expressed as a percentage.;Delta выражена в процентах.
 Str2575;Trigger field;Поле срабатывания

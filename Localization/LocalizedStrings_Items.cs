@@ -24008,12 +24008,12 @@ namespace StockSharp.Localization
 		public static string Str2571 => GetString(Str2571Key);
 
 		/// <summary>
-		/// Trailing stop follows the market if price change is larger than Delta.
+		/// Trailing stop follows the market if price change is larger than {0}.
 		/// </summary>
 		public const string Str2572Key = nameof(Str2572);
 
 		/// <summary>
-		/// Trailing stop follows the market if price change is larger than Delta.
+		/// Trailing stop follows the market if price change is larger than {0}.
 		/// </summary>
 		public static string Str2572 => GetString(Str2572Key);
 
@@ -24058,12 +24058,12 @@ namespace StockSharp.Localization
 		public static string Str2576 => GetString(Str2576Key);
 
 		/// <summary>
-		/// Trailing stop begins tracking once the price reaches ReferencePrice.
+		/// Trailing stop begins tracking once the price reaches {0}.
 		/// </summary>
 		public const string Str2577Key = nameof(Str2577);
 
 		/// <summary>
-		/// Trailing stop begins tracking once the price reaches ReferencePrice.
+		/// Trailing stop begins tracking once the price reaches {0}.
 		/// </summary>
 		public static string Str2577 => GetString(Str2577Key);
 
