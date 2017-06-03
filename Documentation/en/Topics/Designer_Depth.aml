@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="181e2f26-86dd-4c4b-b737-a24664ef9486" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Glass_00"/>
+</mediaLink>
+<para>Кубик используется для получения стакана по заданному инструменту.</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого надо получить стакан.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Стакан</legacyBold> – изменения стакана с момента подписки на получение данных (поступления инструмента на вход элемента).</para></listItem>
+</list>
+  </definition>
+  
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="c2dbe6dc-ea13-492a-b4a7-751262875d68" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

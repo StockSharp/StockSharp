@@ -185,22 +185,6 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
-    <None Include="Topics\Designer_Options_Board_Component.aml" />
-    <None Include="Topics\Designer_Tape_Trades.aml" />
-    <None Include="Topics\Designer_Risk_Rule.aml" />
-    <None Include="Topics\Designer_Properties_Live.aml" />
-    <None Include="Topics\Designer_emulation_setting.aml" />
-    <None Include="Topics\Designer_Components.aml" />
-    <None Include="Topics\Designer_Mass_Cancellations.aml" />
-    <None Include="Topics\Designer_Portfolio_Testing.aml" />
-    <None Include="Topics\Designer_notification_Setting.aml" />
-    <None Include="Topics\Designer_publish.aml" />
-    <None Include="Topics\Designer_Chat.aml" />
-    <None Include="Topics\Designer_Teamwork.aml" />
-    <None Include="Topics\Designer_Security_ExtensionInfo.aml" />
-    <None Include="Topics\Designer_Boards.aml" />
-    <None Include="Topics\Designer_Depth_panel.aml" />
-    <None Include="Topics\Designer_Panel_Market_depth.aml" />
     <None Include="Topics\HydraSettingsSpbEx.aml" />
     <None Include="Topics\SpbEx.aml" />
     <None Include="Topics\hydra_settings_Xignite.aml" />
@@ -223,7 +207,6 @@
     <None Include="Topics\OECHistory.aml" />
     <None Include="Topics\BarChart.aml" />
     <None Include="Topics\MessageStorage.aml" />
-    <None Include="Topics\Designer.aml" />
     <None Include="Topics\TwimeSample.aml" />
     <None Include="Topics\TWIME.aml" />
     <None Include="Topics\ITCHSample.aml" />
@@ -570,6 +553,7 @@
     <None Include="Topics\StrategyOrdersLoad.aml" />
     <None Include="Topics\UIMarshalling.aml" />
     <None Include="Topics\Unit.aml" />
+    <None Include="Topics\Designer.aml" />
     <None Include="Topics\Designer_A_logic_function_with_one_argument.aml" />
     <None Include="Topics\Designer_Add_strategy_Live_trade.aml" />
     <None Include="Topics\Designer_Algorithm_creation_of_cubes.aml" />
@@ -671,6 +655,22 @@
     <None Include="Topics\Designer_Workspace.aml" />
     <None Include="Topics\Designer_Backtesting_Interface.aml" />
     <None Include="Topics\Designer_Live_trade_interface.aml" />
+    <None Include="Topics\Designer_Options_Board_Component.aml" />
+    <None Include="Topics\Designer_Tape_Trades.aml" />
+    <None Include="Topics\Designer_Risk_Rule.aml" />
+    <None Include="Topics\Designer_Properties_Live.aml" />
+    <None Include="Topics\Designer_emulation_setting.aml" />
+    <None Include="Topics\Designer_Components.aml" />
+    <None Include="Topics\Designer_Mass_Cancellations.aml" />
+    <None Include="Topics\Designer_Portfolio_Testing.aml" />
+    <None Include="Topics\Designer_notification_Setting.aml" />
+    <None Include="Topics\Designer_publish.aml" />
+    <None Include="Topics\Designer_Chat.aml" />
+    <None Include="Topics\Designer_Teamwork.aml" />
+    <None Include="Topics\Designer_Security_ExtensionInfo.aml" />
+    <None Include="Topics\Designer_Boards.aml" />
+    <None Include="Topics\Designer_Depth_panel.aml" />
+    <None Include="Topics\Designer_Panel_Market_depth.aml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\hydra.png">

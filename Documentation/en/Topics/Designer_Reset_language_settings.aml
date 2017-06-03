@@ -15,17 +15,16 @@ S#.Designer, находиться кнопка настройки <mediaLinkInli
  <mediaLink>
 <image xlink:href="Designer_Start_mode_00"/>
 </mediaLink>
-<para>При выборе <legacyBold>Сбросить настройки</legacyBold> появится 
-окно требующее подтверждение.</para>
+<para>При выборе <legacyBold>Сбросить настройки</legacyBold> появится окно требующее подтверждение.</para>
  <mediaLink>
 <image xlink:href="Designer_Reset_language_settings_00"/>
 </mediaLink>
 <para>После нажатия кнопки <legacyBold>ОК</legacyBold> все настройки S#.Designer сбросятся до 
 настроек по умолчанию. Директория с настройками S#.Designer будут очищена 
-полностью,  <legacyBold>все созданные стратегии и скачанные инструменты и другая 
+полностью, <legacyBold>все созданные стратегии и скачанные инструменты и другая 
 информация хранящаяся в директории настроек будет УНИЧТОЖЕНА</legacyBold>. 
 После чего S#.Designer перезагрузится и появится окно 
-выбора <link xlink:href="57dc2e39-baa6-4c67-83a9-13278370a877" />. </para>
+выбора <link xlink:href="57dc2e39-baa6-4c67-83a9-13278370a877" />.</para>
 
     </introduction>
     <relatedTopics>

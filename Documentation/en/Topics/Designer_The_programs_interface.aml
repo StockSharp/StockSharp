@@ -5,7 +5,8 @@
 <para>Интерфейс S#.Designer состоит из: </para>
 
 <list class="ordered">
-  <listItem><para><link xlink:href="45ae6713-c28b-457d-be6b-19016f54507e" /> - по умолчанию расположенной в верхней части окна S#.Designer и предназначена для быстрого доступа к наиболее часто используемым функциям.</para></listItem>
+  <listItem><para><link xlink:href="45ae6713-c28b-457d-be6b-19016f54507e" /> - по умолчанию расположенной в верхней части окна S#.Designer и предназначена
+  для быстрого доступа к наиболее часто используемым функциям.</para></listItem>
   <listItem><para><link xlink:href="2f00e9bc-8ea7-4679-9688-b02c3424f03a" /> - идет вдоль верхней части окна приложения.</para></listItem>
   <listItem><para><link xlink:href="71792b34-7013-4e7d-a486-400ec92e2410" /> - является оконным интерфейсом с закреплением панелей.</para></listItem>
 </list>

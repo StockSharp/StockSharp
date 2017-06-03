@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="18f61c09-d6f3-4765-b180-11e9d3e74133" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Mass_Cancellations_00"/>
+</mediaLink>
+<para>Кубик используется для отмены всех заявки по инструменту.</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Портфель</legacyBold> – портфель, для которого надо отменить все заявки.</para></listItem>
+  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого надо отменить все заявки.</para></listItem>
+  <listItem><para><legacyBold>Направление</legacyBold> – направление отменяемых заявок (покупка или продажа), является сигналом отмены заявки.</para></listItem>
+</list>
+  </definition>
+
+</definitionTable>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="33d15f2c-5d73-4c95-8e67-2612d34f14a2" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

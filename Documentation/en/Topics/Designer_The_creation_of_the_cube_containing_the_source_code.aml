@@ -2,7 +2,7 @@
 <topic id="22a4dc42-dc36-41cc-a849-32aa2a8194fe" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>В S#.Designer создать свой кубик можно нажав в панели <legacyBold>Схемы</legacyBold> правую 
+<para>В S#.Designer создать свой кубик можно, нажав в панели <legacyBold>Схемы</legacyBold> правую 
 кнопку мыши на папке <legacyBold>Исходный код</legacyBold>. В появившемся меню 
 выбрать <legacyBold>Добавить</legacyBold> в случае создания новой стратегии 
 или <legacyBold>Импорт</legacyBold> в случае импорта уже готовой стратегии.</para>
@@ -10,12 +10,12 @@
 <image xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_00"/>
 </mediaLink>
 <para>Также в S#.Designer создать свой кубик можно на вкладке Общие нажав кнопку 
-добавить, и в появившемся меню выбрать Исходный код.</para>
+добавить, и в появившемся меню выбрать Исходный код:</para>
  <mediaLink>
 <image xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_01"/>
 </mediaLink>
 <para>После создания кубика в папке <legacyBold>Исходный код</legacyBold> панели <legacyBold>Схемы</legacyBold> появится новый кубик, 
-нажав на который двойным нажатием в рабочей области появится вкладка с именем 
+нажав на который двойным кликом, в рабочей области появится вкладка с именем 
 кубика, а в ленте автоматически откроется вкладка <legacyBold>Исходный код</legacyBold>.
 На вкладке <legacyBold>Исходный код</legacyBold> можно изменить название кубика, 
 дать описание кубику, отменить последнее действие, вернуть отменённое действие, 

@@ -3,18 +3,18 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para>Компонент <legacyBold>График</legacyBold> содержит в себе все 
-кубики <legacyBold>Панель графика</legacyBold> что есть в стратегии, 
-например, если в стратегии используется два кубика <legacyBold>Панель графика</legacyBold>, то в 
-компоненте <legacyBold>График</legacyBold> будут выведены 2 графика, как на рисунке. </para>
+кубики <legacyBold>Панель графика</legacyBold> что есть в стратегии. 
+Например, если в стратегии используется два кубика <legacyBold>Панель графика</legacyBold>, то в 
+компоненте <legacyBold>График</legacyBold> будут выведены 2 графика, как на рисунке.</para>
 <mediaLink>
 <image xlink:href="Designer_Panel_graphics_04"/>
 </mediaLink>
 
 <para>В левом верхнем углу каждого графика показаны все графические элементы, 
-добавленные на график, если убрать 
-флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline>  на 
+добавленные на график. Если убрать 
+флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline> на 
 графическом элементе уберется и элемент с графика. Нажав на 
-кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline>  откроются 
+кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline> откроются 
 настройки графического элемента.</para>
  <mediaLink>
 <image xlink:href="Designer_Schedule_02"/>

@@ -6,9 +6,9 @@
 <mediaLink>
 <image xlink:href="Designer_The_conclusion_of_the_candles_on_the_chart_00"/>
 </mediaLink>
-<para>Для кубика <legacyBold>Переменная</legacyBold> выбран тип данных <legacyBold>Инструмент</legacyBold>, если инструмент не указан, 
+<para>Для кубика <legacyBold>Переменная</legacyBold> выбран тип данных <legacyBold>Инструмент</legacyBold>. Если инструмент не указан, 
 но установлен флаг <legacyBold>Параметры</legacyBold> группы свойств <legacyBold>Общее</legacyBold>, то он будет взят из стратегии 
-и передан в кубик <legacyBold>Свечи</legacyBold>, для которого указаны настройки для построения 5-и минутных 
+и передан в кубик <legacyBold>Свечи</legacyBold>. Для кубика <legacyBold>Свечи</legacyBold> указаны настройки построения 5-и минутных 
 свечей и передачи только полностью сформированных свечей.</para>
 <para>Для кубика <legacyBold>Панель графика</legacyBold> добавлен один графический элемент с типом свечи, 
 для которого автоматически был добавлен входной параметр.</para>
