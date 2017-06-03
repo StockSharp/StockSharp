@@ -2912,6 +2912,10 @@
       <ImageId>Designer_Tape_Trades</ImageId>
       <AlternateText>Designer Tape Trades</AlternateText>
     </Image>
+    <Image Include="Art\Designer_Chat_00.png">
+      <ImageId>Designer_Chat_00</ImageId>
+      <AlternateText>Designer Chat 00</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

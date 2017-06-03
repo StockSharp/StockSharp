@@ -19,7 +19,7 @@
     <definedTerm>Параметры</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Тип</legacyBold> – тип сообщения (всплывающее окно, e-mail, смс и т.д.).</para></listItem>
+  <listItem><para><legacyBold>Тип</legacyBold> – тип сообщения (всплывающее окно, e-mail, смс и т.д.). Типы оповещений описаны в пункте <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para></listItem>
   <listItem><para><legacyBold>Заголовок</legacyBold> – заголовок сообщения.</para></listItem>
   <listItem><para><legacyBold>Сообщение</legacyBold> – текст сообщения.</para></listItem>
 </list>
@@ -27,7 +27,7 @@
 </definitionTable>
     </introduction>
     <relatedTopics>
-<link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" />
+<link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />
 </relatedTopics>
   </developerConceptualDocument>
 </topic>
