@@ -180,9 +180,9 @@
     <None Include="Topics\hydra_server.aml" />
     <None Include="Topics\hydra_index.aml" />
     <None Include="Topics\hydra_options.aml" />
+    <None Include="Topics\CreateNewOrder.aml" />
     <None Include="Topics\RSS.aml" />
     <None Include="Topics\HydraSettingsBarChart.aml" />
-    <None Include="Topics\Conceptual.aml" />
     <None Include="Topics\OECNews.aml" />
     <None Include="Topics\OECHistory.aml" />
     <None Include="Topics\BarChart.aml" />
@@ -287,7 +287,6 @@
     <None Include="Topics\StockSharpInstall.aml" />
     <None Include="Topics\Rithmic.aml" />
     <None Include="Topics\StockSharpTitle.aml" />
-    <None Include="Topics\CreateNewOrder.aml" />
     <None Include="Topics\HydraSettingsConnectionParams.aml" />
     <None Include="Topics\HydraDisasterRecovery.aml" />
     <None Include="Topics\HydraBoards.aml" />
@@ -2787,6 +2786,94 @@
     <Image Include="Art\hydra_settings_Xignite.png">
       <ImageId>hydra_settings_Xignite</ImageId>
       <AlternateText>hydra settings Xignite</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Panel_Market_Depth.png">
+      <ImageId>Designer_Panel_Market_Depth</ImageId>
+      <AlternateText>Designer Panel Market Depth</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Glass_Panel.png">
+      <ImageId>Designer_Glass_Panel</ImageId>
+      <AlternateText>Designer Glass Panel</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Boards.png">
+      <ImageId>Designer_Boards</ImageId>
+      <AlternateText>Designer Boards</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_ExtensionInfo_securities.png">
+      <ImageId>Designer_ExtensionInfo_securities</ImageId>
+      <AlternateText>Designer Extension Info securities</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Chat.png">
+      <ImageId>Designer_Chat</ImageId>
+      <AlternateText>Designer Chat</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Share_link_ico.png">
+      <ImageId>Designer_Share_link_ico</ImageId>
+      <AlternateText>Designer Share link ico</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Share_link_01.png">
+      <ImageId>Designer_Share_link_01</ImageId>
+      <AlternateText>Designer Share link 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Share_link.png">
+      <ImageId>Designer_Share_link</ImageId>
+      <AlternateText>Designer Share link</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Share_link_Ya_02.png">
+      <ImageId>Designer_Share_link_Ya_02</ImageId>
+      <AlternateText>Designer Share link Ya 02</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Share_link_Ya.png">
+      <ImageId>Designer_Share_link_Ya</ImageId>
+      <AlternateText>Designer Share link Ya</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Notifications_Setting_01.png">
+      <ImageId>Designer_Notifications_Setting_01</ImageId>
+      <AlternateText>Designer Notifications Setting 01</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Notifications_Setting.png">
+      <ImageId>Designer_Notifications_Setting</ImageId>
+      <AlternateText>Designer Notifications Setting</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Alert_Bell.png">
+      <ImageId>Designer_Alert_Bell</ImageId>
+      <AlternateText>Designer Alert Bell</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Portfolio_testing.png">
+      <ImageId>Designer_Portfolio_testing</ImageId>
+      <AlternateText>Designer Portfolio testing</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Conditional_Application.png">
+      <ImageId>Designer_Conditional_Application</ImageId>
+      <AlternateText>Designer Conditional Application</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Mass_Cancellations_00.png">
+      <ImageId>Designer_Mass_Cancellations_00</ImageId>
+      <AlternateText>Designer Mass Cancellations 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Components.png">
+      <ImageId>Designer_Components</ImageId>
+      <AlternateText>Designer Components</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Table_Position_00.png">
+      <ImageId>Designer_Table_Position_00</ImageId>
+      <AlternateText>Designer Table Position 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Properties_Live_00.png">
+      <ImageId>Designer_Properties_Live_00</ImageId>
+      <AlternateText>Designer Properties Live 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Risk_Rule.png">
+      <ImageId>Designer_Risk_Rule</ImageId>
+      <AlternateText>Designer Risk Rule</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Tape_Trades.png">
+      <ImageId>Designer_Tape_Trades</ImageId>
+      <AlternateText>Designer Tape Trades</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Chat_00.png">
+      <ImageId>Designer_Chat_00</ImageId>
+      <AlternateText>Designer Chat 00</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
