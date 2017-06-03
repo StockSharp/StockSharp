@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The identifier of the instrument, for which data shall be generated.
 		/// </summary>
-		public SecurityId SecurityId { get; private set; }
+		public SecurityId SecurityId { get; }
 
 		/// <summary>
 		/// Information about the trading instrument.

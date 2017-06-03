@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("%K")]
 		[Description("%K")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public StochasticK K { get; private set; }
+		public StochasticK K { get; }
 
 		/// <summary>
 		/// %D.
@@ -53,6 +53,6 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("%D")]
 		[Description("%D")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage D { get; private set; }
+		public SimpleMovingAverage D { get; }
 	}
 }
