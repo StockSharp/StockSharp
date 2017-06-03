@@ -627,3 +627,8 @@ M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadDescription(StockSharp.In
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadBoards(StockSharp.InteractiveBrokers.Web.Product)/summary;DocStr3695
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadBoards(StockSharp.InteractiveBrokers.Web.Product)/param/product;DocStr2831
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadBoards(StockSharp.InteractiveBrokers.Web.Product)/returns;Str2831
+T:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox/summary;DocStr8287
+M:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.#ctor/summary;DocStr1
+F:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFieldsProperty/summary;DocStr29
+P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFields/summary;DocStr8288
+P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.DefaultFields/summary;DocStr8289
