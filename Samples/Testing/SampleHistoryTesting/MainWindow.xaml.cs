@@ -30,7 +30,6 @@ namespace SampleHistoryTesting
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Russian.Finam;
@@ -436,7 +435,7 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(connector);
 
-				var candleManager = new CandleManager((Connector)connector);
+				var candleManager = new CandleManager(connector);
 
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 				{

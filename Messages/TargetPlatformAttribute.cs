@@ -29,12 +29,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// The target audience.
 		/// </summary>
-		public Languages PreferLanguage { get; private set; }
+		public Languages PreferLanguage { get; }
 
 		/// <summary>
 		/// Platform.
 		/// </summary>
-		public Platforms Platform { get; private set; }
+		public Platforms Platform { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TargetPlatformAttribute"/>.
