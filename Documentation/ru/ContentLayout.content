@@ -430,7 +430,7 @@
         <Topic id="24d370d1-fd00-4914-83ac-574721299e93" visible="True" title="График П/У" />
         <Topic id="31a208d0-d543-47aa-8008-389c07e1e8d4" visible="True" title="Свойства тестирования" />
         <Topic id="319208d0-d543-47aa-8008-3891079198d4" visible="True" title="Свойства Live торговли" />
-        <Topic id="b4f8c503-6589-4979-93ee-506df859d967" visible="True" title="Риски" />
+        <Topic id="b4f8c503-6589-4979-93ee-506df859d967" visible="True" isSelected="true" title="Риск-менеджмент" />
         <Topic id="a06c5482-e2d0-413d-888f-3307c80f7b65" visible="True" title="Лента сделок" />
       </Topic>
     </Topic>
@@ -483,7 +483,7 @@
           </Topic>
           <Topic id="7515073c-a2d6-40d3-adc5-b8f6f6f450df" visible="True" noFile="true" isExpanded="true" title="Опционы">
             <Topic id="1e0038a5-d74f-4898-ad8d-e2fa8750f40a" visible="True" title="Стакан подразумеваемой волатильности" />
-            <Topic id="bba01d56-3a8c-4016-af1f-d23f067dd693" visible="True" isSelected="true" title="Доска опционов" />
+            <Topic id="bba01d56-3a8c-4016-af1f-d23f067dd693" visible="True" title="Доска опционов" />
             <Topic id="4a0cd565-b871-4be3-91a2-423eadb1540f" visible="True" title="График позиций опционов" />
             <Topic id="8642146a-2f86-475a-b447-e9106195717e" visible="True" title="Блэк-Шолз" />
             <Topic id="b49f617f-7425-4c1d-bb45-c347f55d1d1e" visible="True" title="Хеджирование" />
@@ -532,6 +532,7 @@
       <Topic id="0dec6014-51ee-4463-b102-aed24464833e" visible="True" title="Интерфейс" />
       <Topic id="24d370d1-fd00-4914-83ac-57472eb99e93" visible="True" title="Панель стратегий" />
       <Topic id="91644d63-00b3-416f-8677-ca57dfa8032e" visible="True" title="Пример Live торговли" />
+      <Topic id="31a208d0-d543-47aa-8008-389c071118d4" visible="True" title="Симулятор торгов" />
     </Topic>
     <Topic id="da0010aa-3bf4-4f8d-89a0-55f1b41946ac" visible="True" isExpanded="true" title="Совместная работа">
       <Topic id="d99a1e55-2438-4e34-8ee5-ed7b15727e75" visible="True" title="Чат" />
@@ -551,7 +552,6 @@
     </Topic>
     <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" isExpanded="true" title="Настройки">
       <Topic id="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" visible="True" title="Настройки подключения" />
-      <Topic id="31a208d0-d543-47aa-8008-389c071118d4" visible="True" title="Настройки эмуляции" />
       <Topic id="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" visible="True" title="Настройки уведомлений" />
       <Topic id="57dc2e39-baa6-4c67-83a9-13278370a877" visible="True" title="Режим запуска" />
       <Topic id="7c04efc6-036c-4c25-855f-f086ee4c266d" visible="True" title="Сброс языка и настроек" />
