@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// <summary>
 	/// The candles source for <see cref="ICandleManager"/> that builds candles with <see cref="ICandleBuilder"/>.
 	/// </summary>
+	/// <typeparam name="TBuilder">Type of builder.</typeparam>
 	public class BuilderCandleSource<TBuilder> : IBuilderCandleSource
 		where TBuilder : ICandleBuilder, new()
 	{

@@ -45,6 +45,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Load extended info. 
 		/// </summary>
+		/// <param name="securityId">Security identifier.</param>
 		/// <returns>Extended information.</returns>
 		IDictionary<string, object> Load(SecurityId securityId);
 

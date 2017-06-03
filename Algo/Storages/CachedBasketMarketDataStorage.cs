@@ -125,6 +125,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CachedBasketMarketDataStorage{T}"/>.
 		/// </summary>
+		/// <param name="basketStorage">The aggregator-storage, allowing to load data simultaneously from several market data storages.</param>
 		public CachedBasketMarketDataStorage(BasketMarketDataStorage<T> basketStorage)
 		{
 			if (basketStorage == null)

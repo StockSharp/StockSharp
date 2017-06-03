@@ -40,6 +40,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Envelope"/>.
 		/// </summary>
+		/// <param name="ma">Middle line.</param>
 		public Envelope(LengthIndicator<decimal> ma)
 		{
 			InnerIndicators.Add(Middle = ma);

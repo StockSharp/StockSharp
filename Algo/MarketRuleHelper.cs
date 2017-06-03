@@ -2330,6 +2330,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="container">The rules container.</param>
 		/// <param name="rule">Rule.</param>
+		/// <returns><see langword="true" />, if rule was removed, otherwise, <see langword="false" />.</returns>
 		public static bool TryRemoveWithExclusive(this IMarketRuleContainer container, IMarketRule rule)
 		{
 			if (container == null)

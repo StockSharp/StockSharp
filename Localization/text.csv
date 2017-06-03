@@ -5169,7 +5169,7 @@ DocStr625;The default function to filter data {0};Функция по умолч
 DocStr626;The function to filter data {0};Функция для фильтрации данных {0}
 DocStr627;Base candle class (contains main parameters);Базовый класс для свечи (содержит основные параметры)
 DocStr629;Copy the message into the {0};Скопировать данные сообщения в {0}
-DocStr630;The object, which copied information;Объект, в который копируется информация
+DocStr630;The object, to which copied information;Объект, в который копируется информация
 DocStr631;Open time;Время начала свечи
 DocStr632;Close time;Время окончания свечи
 DocStr633;High time;Время с максимальной ценой в свече

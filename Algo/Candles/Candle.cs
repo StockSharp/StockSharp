@@ -377,8 +377,8 @@ namespace StockSharp.Algo.Candles
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <typeparam name="TCandle">The candle type.</typeparam>
-		/// <param name="destination">The object, which copied information.</param>
-		/// <returns>The object, which copied information.</returns>
+		/// <param name="destination">The object, to which copied information.</param>
+		/// <returns>The object, to which copied information.</returns>
 		protected TCandle CopyTo<TCandle>(TCandle destination)
 			where TCandle : Candle
 		{

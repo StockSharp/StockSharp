@@ -30,6 +30,7 @@ namespace StockSharp.Algo.Storages.Csv
 	/// <summary>
 	/// The candle serializer in the CSV format.
 	/// </summary>
+	/// <typeparam name="TCandleMessage"><see cref="CandleMessage"/> derived type.</typeparam>
 	public class CandleCsvSerializer<TCandleMessage> : CsvMarketDataSerializer<TCandleMessage>
 		where TCandleMessage : CandleMessage, new()
 	{
