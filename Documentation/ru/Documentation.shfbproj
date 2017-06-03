@@ -193,9 +193,7 @@
     <None Include="Topics\Designer_Components.aml" />
     <None Include="Topics\Designer_Mass_Cancellations.aml" />
     <None Include="Topics\Designer_Portfolio_Testing.aml" />
-    <None Include="Designer_Portfolio_Testing.aml" />
     <None Include="Topics\Designer_notification_Setting.aml" />
-    <None Include="Designer_notification_Setting.aml" />
     <None Include="Topics\Designer_publish.aml" />
     <None Include="Topics\Designer_Chat.aml" />
     <None Include="Topics\Designer_Teamwork.aml" />
