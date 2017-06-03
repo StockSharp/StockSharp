@@ -242,6 +242,7 @@ M:StockSharp.Logging.IMemoryStatisticsValue.Clear(System.Boolean)/param/resetCou
 T:StockSharp.Logging.MemoryStatisticsValue`1/summary;DocStr4004
 T:StockSharp.Logging.MemoryStatisticsValue`1/typeparam/T;DocStr4005
 M:StockSharp.Logging.MemoryStatisticsValue`1.#ctor(System.String)/summary;DocStr1
+M:StockSharp.Logging.MemoryStatisticsValue`1.#ctor(System.String)/param/name;Name2
 P:StockSharp.Logging.MemoryStatisticsValue`1.Objects/summary;DocStr4009
 P:StockSharp.Logging.MemoryStatisticsValue`1.Name/summary;Name2
 P:StockSharp.Logging.MemoryStatisticsValue`1.ObjectCount/summary;DocStr4003

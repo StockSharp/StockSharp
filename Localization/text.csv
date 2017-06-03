@@ -14085,3 +14085,15 @@ DocStr9793;The default value;Значение по-умолчанию
 DocStr9794;Result buffer;Результирующий буфер
 DocStr9800;Spb exchange;СПб биржа
 DocStr9801;All avaliable adapters;Все доступные адаптеры
+DocStr9802;Users info;Информация о пользователях
+DocStr9803;Type of builder;Тип построителя
+DocStr9804;{0} derived type;Производные типы {0}
+DocStr9805;Result values type;Тип результирующий значений
+DocStr9806;{0}, if can optimize the parameter, otherwise, {1};{0}, если параметр может быть оптимизирован, иначе, {1}
+DocStr9807;{0}, if rule was removed, otherwise, {1};{0}, если правило было удалено, иначе, {1}
+DocStr9808;Authentication url;Адрес авторизации
+DocStr9809;Increment bit index;Увеличить индекс бита
+DocStr9810;Key type;Тип ключа
+DocStr9811;New value for {0}. Can be {1};Новое значение для {0}. Может быть {1}
+DocStr9812;Delay time;Время задержки
+DocStr9813;Row;Строка

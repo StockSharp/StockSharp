@@ -278,6 +278,7 @@ M:StockSharp.Fix.Native.BinaryFixReader.ReadDecimalNullable/returns;DocStr65
 M:StockSharp.Fix.Native.BinaryFixReader.ReadChar/summary;DocStr3211
 M:StockSharp.Fix.Native.BinaryFixReader.ReadChar/returns;DocStr65
 M:StockSharp.Fix.Native.BinaryFixReader.ReadChar(System.Char)/summary;DocStr3211
+M:StockSharp.Fix.Native.BinaryFixReader.ReadChar(System.Char)/param/defaultValue;DocStr9793
 M:StockSharp.Fix.Native.BinaryFixReader.ReadChar(System.Char)/returns;DocStr65
 M:StockSharp.Fix.Native.BinaryFixReader.ReadStringDelta(System.Char[],System.Int32@)/summary;DocStr3211
 M:StockSharp.Fix.Native.BinaryFixReader.ReadStringDelta(System.Char[],System.Int32@)/param/buffer;DocStr65
@@ -1079,6 +1080,7 @@ M:StockSharp.Fix.Native.FastPMap.Reset/summary;Str3282
 M:StockSharp.Fix.Native.FastPMap.AddByte(System.Byte)/summary;DocStr8939
 M:StockSharp.Fix.Native.FastPMap.AddByte(System.Byte)/param/b;DocStr3189
 M:StockSharp.Fix.Native.FastPMap.IsCurrentBitSet(System.Boolean)/summary;DocStr8940
+M:StockSharp.Fix.Native.FastPMap.IsCurrentBitSet(System.Boolean)/param/incrementBitIndex;DocStr9809
 M:StockSharp.Fix.Native.FastPMap.IsCurrentBitSet(System.Boolean)/returns;DocStr8941
 M:StockSharp.Fix.Native.FastPMap.ToString/summary;DocStr49
 M:StockSharp.Fix.Native.FastPMap.ToString/returns;DocStr50

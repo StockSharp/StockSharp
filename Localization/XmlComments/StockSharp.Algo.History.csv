@@ -387,6 +387,7 @@ M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetExtendedStorage(System.St
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetExtendedStorage(System.String)/param/storageName;DocStr429
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetExtendedStorage(System.String)/returns;DocStr9634
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetUsers/summary;GetUsers
+M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetUsers/returns;DocStr9802
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.SaveUser(System.String,System.Security.SecureString,System.Net.IPAddress[],StockSharp.Algo.UserPermissions)/summary;DocStr9678
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.SaveUser(System.String,System.Security.SecureString,System.Net.IPAddress[],StockSharp.Algo.UserPermissions)/param/login;Login
 M:StockSharp.Algo.History.Hydra.RemoteStorageClient.SaveUser(System.String,System.Security.SecureString,System.Net.IPAddress[],StockSharp.Algo.UserPermissions)/param/password;Password
