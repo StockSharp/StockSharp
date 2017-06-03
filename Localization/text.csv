@@ -7658,9 +7658,9 @@ DocStr3142;Token. Uses in OAuth 1.0a;Token. Используется в проц
 DocStr3144;Consumer key;Consumer key
 DocStr3145;Token;Token
 DocStr3146;Secret;Secret
-DocStr3147;Token serialization;Сериализация токена
+DocStr3147;Serialize the token;Сериализация токена
 DocStr3148;Serialized as string the token;Строка с сериализованным токеном
-DocStr3149;Toke deserialization;Десериализация токена
+DocStr3149;Deserialize the token;Десериализация токена
 DocStr3150;E*TRADE authorization window;Окно авторизации E*TRADE
 DocStr3151;E*TRADE verification code to continue authorization;Код верификации для продолжения процесса авторизации в системе E*TRADE
 DocStr3152;FIX server;Сервер, работающий через FIX протокол

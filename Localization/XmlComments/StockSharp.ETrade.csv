@@ -1,4 +1,3 @@
-T:StockSharp.ETrade.Native.OrderRequestBase/summary;DocStr3097
 T:StockSharp.ETrade.Native.OAuthToken/summary;DocStr3142
 M:StockSharp.ETrade.Native.OAuthToken.#ctor(System.String,System.String,System.String)/summary;DocStr1
 M:StockSharp.ETrade.Native.OAuthToken.#ctor(System.String,System.String,System.String)/param/consumerKey;DocStr3144
@@ -10,6 +9,7 @@ P:StockSharp.ETrade.Native.OAuthToken.Secret/summary;DocStr3146
 M:StockSharp.ETrade.Native.OAuthToken.Serialize/summary;DocStr3147
 M:StockSharp.ETrade.Native.OAuthToken.Serialize/returns;DocStr3148
 M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)/summary;DocStr3149
+M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)/param/serialized;DocStr3148
 M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)/returns;DocStr3145
 T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
 P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52

@@ -2244,7 +2244,8 @@ M:StockSharp.Algo.Indicators.Covariance.OnProcess(StockSharp.Algo.Indicators.IIn
 M:StockSharp.Algo.Indicators.Covariance.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
 T:StockSharp.Algo.Indicators.MoneyFlowIndex/summary;MoneyFlowIndex
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor/summary;DocStr1
-M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor(System.Int32)/summary;DocStr8503
+M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor(System.Int32)/summary;DocStr1
+M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor(System.Int32)/param/length;Str778
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.MoneyFlowIndex.IsFormed/summary;DocStr1126
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122

@@ -4,11 +4,6 @@
     <name>StockSharp.ETrade</name>
   </assembly>
   <members>
-    <member name="T:StockSharp.ETrade.Native.OrderRequestBase">
-      <summary>
-            Base class for ETrade requests.
-            </summary>
-    </member>
     <member name="T:StockSharp.ETrade.Native.OAuthToken">
       <summary>
             Token. Uses in OAuth 1.0a.
@@ -39,14 +34,15 @@
     </member>
     <member name="M:StockSharp.ETrade.Native.OAuthToken.Serialize">
       <summary>
-            Token serialization.
+            Serialize the token.
             </summary>
       <returns>Serialized as string the token.</returns>
     </member>
     <member name="M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)">
       <summary>
-            Toke deserialization.
+            Deserialize the token.
             </summary>
+      <param name="serialized">Serialized as string the token.</param>
       <returns>Token.</returns>
     </member>
     <member name="T:StockSharp.ETrade.ETradeMessageAdapter">
