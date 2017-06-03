@@ -72,7 +72,7 @@ namespace StockSharp.Configuration
 	/// </summary>
 	public static class Extensions
 	{
-		private static readonly ConnectorInfo[] _customConnections = ArrayHelper.Empty<ConnectorInfo>();
+		private static readonly Type[] _customAdapters = ArrayHelper.Empty<Type>();
 		private static readonly IndicatorType[] _customIndicators = ArrayHelper.Empty<IndicatorType>();
 		private static readonly Type[] _customCandles = ArrayHelper.Empty<Type>();
 		private static readonly Type[] _customDiagramElements = ArrayHelper.Empty<Type>();
@@ -84,7 +84,7 @@ namespace StockSharp.Configuration
 			if (section == null)
 				return;
 
-			_customConnections = SafeAdd<ConnectionElement, ConnectorInfo>(section.CustomConnections, elem => new ConnectorInfo(elem.Type.To<Type>()));
+			_customAdapters = SafeAdd<ConnectionElement, Type>(section.CustomConnections, elem => elem.Type.To<Type>());
 			_customIndicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
 			_customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
 			_customDiagramElements = SafeAdd<DiagramElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
@@ -140,6 +140,43 @@ namespace StockSharp.Configuration
 			return adapter.Configure(owner, ref autoConnect);
 		}
 
+		private static readonly Lazy<Type[]> _adapters = new Lazy<Type[]>(() => new[]
+		{
+			typeof(AlfaDirectMessageAdapter),
+			typeof(BarChartMessageAdapter),
+			typeof(BitStampMessageAdapter),
+			typeof(BlackwoodMessageAdapter),
+			typeof(BtceMessageAdapter),
+			typeof(CqgComMessageAdapter),
+			typeof(CqgContinuumMessageAdapter),
+			typeof(ETradeMessageAdapter),
+			typeof(FixMessageAdapter),
+			typeof(InteractiveBrokersMessageAdapter),
+			typeof(IQFeedMarketDataMessageAdapter),
+			typeof(ItchMessageAdapter),
+			typeof(LmaxMessageAdapter),
+			typeof(MicexMessageAdapter),
+			typeof(OandaMessageAdapter),
+			typeof(OpenECryMessageAdapter),
+			typeof(PlazaMessageAdapter),
+			typeof(LuaFixTransactionMessageAdapter),
+			typeof(LuaFixMarketDataMessageAdapter),
+			typeof(QuikTrans2QuikAdapter),
+			typeof(QuikDdeAdapter),
+			typeof(RithmicMessageAdapter),
+			typeof(RssMarketDataMessageAdapter),
+			typeof(SmartComMessageAdapter),
+			typeof(SterlingMessageAdapter),
+			typeof(TransaqMessageAdapter),
+			typeof(TwimeMessageAdapter),
+			typeof(SpbExMessageAdapter),
+		});
+
+		/// <summary>
+		/// All avaliable adapters.
+		/// </summary>
+		public static IEnumerable<Type> Adapters => _customAdapters.Concat(_adapters.Value);
+
 		/// <summary>
 		/// Configure connection using <see cref="ConnectorWindow"/>.
 		/// </summary>
@@ -157,36 +194,10 @@ namespace StockSharp.Configuration
 
 			var wnd = new ConnectorWindow();
 
-			wnd.ConnectorsInfo.AddRange(_customConnections);
-
-			AddConnectorInfo<AlfaDirectMessageAdapter>(wnd);
-			AddConnectorInfo<BarChartMessageAdapter>(wnd);
-			AddConnectorInfo<BitStampMessageAdapter>(wnd);
-			AddConnectorInfo<BlackwoodMessageAdapter>(wnd);
-			AddConnectorInfo<BtceMessageAdapter>(wnd);
-			AddConnectorInfo<CqgComMessageAdapter>(wnd);
-			AddConnectorInfo<CqgContinuumMessageAdapter>(wnd);
-			AddConnectorInfo<ETradeMessageAdapter>(wnd);
-			AddConnectorInfo<FixMessageAdapter>(wnd);
-			AddConnectorInfo<InteractiveBrokersMessageAdapter>(wnd);
-			AddConnectorInfo<IQFeedMarketDataMessageAdapter>(wnd);
-			AddConnectorInfo<ItchMessageAdapter>(wnd);
-			AddConnectorInfo<LmaxMessageAdapter>(wnd);
-			AddConnectorInfo<MicexMessageAdapter>(wnd);
-			AddConnectorInfo<OandaMessageAdapter>(wnd);
-			AddConnectorInfo<OpenECryMessageAdapter>(wnd);
-			AddConnectorInfo<PlazaMessageAdapter>(wnd);
-			AddConnectorInfo<LuaFixTransactionMessageAdapter>(wnd);
-			AddConnectorInfo<LuaFixMarketDataMessageAdapter>(wnd);
-			AddConnectorInfo<QuikTrans2QuikAdapter>(wnd);
-			AddConnectorInfo<QuikDdeAdapter>(wnd);
-			AddConnectorInfo<RithmicMessageAdapter>(wnd);
-			AddConnectorInfo<RssMarketDataMessageAdapter>(wnd);
-			AddConnectorInfo<SmartComMessageAdapter>(wnd);
-			AddConnectorInfo<SterlingMessageAdapter>(wnd);
-			AddConnectorInfo<TransaqMessageAdapter>(wnd);
-			AddConnectorInfo<TwimeMessageAdapter>(wnd);
-			AddConnectorInfo<SpbExMessageAdapter>(wnd);
+			foreach (var a in Adapters)
+			{
+				AddConnectorInfo(wnd, a);
+			}
 
 			wnd.Adapter = (BasketMessageAdapter)adapter.Clone();
 			wnd.AutoConnect = autoConnect;
@@ -200,12 +211,12 @@ namespace StockSharp.Configuration
 			return true;
 		}
 
-		private static void AddConnectorInfo<TAdapter>(ConnectorWindow wnd)
+		private static void AddConnectorInfo(ConnectorWindow wnd, Type adapterType)
 		{
 			if (wnd == null)
 				throw new ArgumentNullException(nameof(wnd));
 
-			wnd.ConnectorsInfo.Add(new ConnectorInfo(typeof(TAdapter)));
+			wnd.ConnectorsInfo.Add(new ConnectorInfo(adapterType));
 		}
 
 		private static IndicatorType[] _indicatorTypes;

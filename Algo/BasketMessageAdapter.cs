@@ -792,9 +792,16 @@ namespace StockSharp.Algo
 
 				foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(InnerAdapters)))
 				{
-					var adapter = s.GetValue<Type>("AdapterType").CreateInstance<IMessageAdapter>(TransactionIdGenerator);
-					adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
-					InnerAdapters[adapter] = s.GetValue<int>("Priority");
+					try
+					{
+						var adapter = s.GetValue<Type>("AdapterType").CreateInstance<IMessageAdapter>(TransactionIdGenerator);
+						adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
+						InnerAdapters[adapter] = s.GetValue<int>("Priority");
+					}
+					catch (Exception e)
+					{
+						e.LogError();
+					}
 				}
 			}
 
