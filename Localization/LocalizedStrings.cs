@@ -42,8 +42,8 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static event Action<string, bool> Missing
 		{
-			add { Manager.Missing += value; }
-			remove { Manager.Missing -= value; }
+			add => Manager.Missing += value;
+			remove => Manager.Missing -= value;
 		}
 
 		/// <summary>
@@ -51,8 +51,8 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static Languages ActiveLanguage
 		{
-			get { return Manager.ActiveLanguage; }
-			set { Manager.ActiveLanguage = value; }
+			get => Manager.ActiveLanguage;
+			set => Manager.ActiveLanguage = value;
 		}
 
 		/// <summary>
