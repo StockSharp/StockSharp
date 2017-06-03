@@ -922,12 +922,52 @@
       <returns>
         <see cref="T:System.Char" /> value.</returns>
     </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadChar(System.Char)">
+      <summary>
+            Read <see cref="T:System.Char" /> value.
+            </summary>
+      <param name="defaultValue">The default value.</param>
+      <returns>
+        <see cref="T:System.Char" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadStringDelta(System.Char[],System.Int32@)">
+      <summary>
+            Read <see cref="T:System.String" /> value.
+            </summary>
+      <param name="buffer">
+        <see cref="T:System.String" /> value.</param>
+      <param name="length">Length of result buffer.</param>
+      <returns>
+        <see cref="T:System.String" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char[],System.String,System.Int32@)">
+      <summary>
+            Read <see cref="T:System.String" /> value.
+            </summary>
+      <param name="buffer">
+        <see cref="T:System.String" /> value.</param>
+      <param name="defaultValue">The default value.</param>
+      <param name="length">Length of result buffer.</param>
+      <returns>
+        <see cref="T:System.Char" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char[],System.Int32@)">
+      <summary>
+            Read <see cref="T:System.String" /> value.
+            </summary>
+      <param name="buffer">
+        <see cref="T:System.String" /> value.</param>
+      <param name="length">Length of result buffer.</param>
+      <returns>
+        <see cref="T:System.Char" /> value.</returns>
+    </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*)">
       <summary>
             Read <see cref="T:System.String" /> value.
             </summary>
       <param name="buffer">
         <see cref="T:System.String" /> value.</param>
+      <returns>Length of result buffer.</returns>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*,System.String)">
       <summary>
@@ -962,12 +1002,28 @@
             </summary>
       <param name="pmap">Presence Map.</param>
     </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadByteVectorNullable(System.Byte[],System.UInt32@)">
+      <summary>
+            Read bytes array.
+            </summary>
+      <param name="bytes">Bytes array.</param>
+      <param name="length">The number of bytes read.</param>
+      <returns>Result buffer.</returns>
+    </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadByteVectorNullable(System.Byte*)">
       <summary>
             Read bytes array.
             </summary>
       <param name="bytes">Bytes array.</param>
       <returns>The number of bytes read.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadByteVector(System.Byte[],System.UInt32@)">
+      <summary>
+            Read bytes array.
+            </summary>
+      <param name="bytes">Bytes array.</param>
+      <param name="length">The number of bytes read.</param>
+      <returns>Result buffer.</returns>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadByteVector(System.Byte*)">
       <summary>
@@ -4055,12 +4111,17 @@
             </summary>
       <param name="b">New byte.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.FastPMap.IsCurrentBitSet">
+    <member name="M:StockSharp.Fix.Native.FastPMap.IsCurrentBitSet(System.Boolean)">
       <summary>
             Check the current bit is set.
             </summary>
+      <param name="incrementBitIndex">Increment bit index.</param>
       <returns>
         <see langword="true" /> if the current bit is set; <see langword="false" /> if the current bit isn't set.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FastPMap.ToString">
+      <summary>Returns a string that represents the current object.</summary>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="T:StockSharp.Fix.Native.FixMessages">
       <summary>
@@ -4419,6 +4480,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.RptSeq">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.EncryptMethod">
       <summary>
       </summary>
@@ -4591,11 +4656,19 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MDEntryId">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MDUpdateAction">
       <summary>
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MDReqRejReason">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.OpenCloseSettleFlag">
       <summary>
       </summary>
     </member>
@@ -4852,6 +4925,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.OrdStatusReqID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TrdType">
       <summary>
       </summary>
     </member>
@@ -5483,7 +5560,7 @@
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired">
       <summary>
-        <see cref="T:StockSharp.Messages.OrderStatusMessage" /> required to get orders and ow trades.
+        <see cref="T:StockSharp.Messages.OrderStatusMessage" /> required to get orders and own trades.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SecurityLookupRequired">
@@ -5650,6 +5727,11 @@
     <member name="F:StockSharp.Fix.FixDialects.Exante">
       <summary>
             Exante.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.SpbEx">
+      <summary>
+            Spb exchange.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.FixTrader">

@@ -943,6 +943,7 @@
       <summary>
             Get users.
             </summary>
+      <returns>Users info.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.SaveUser(System.String,System.Security.SecureString,System.Net.IPAddress[],StockSharp.Algo.UserPermissions)">
       <summary>
