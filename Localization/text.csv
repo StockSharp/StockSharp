@@ -2176,7 +2176,7 @@ Str2308Params;Files processing for type {0}.;Обработка файлов д�
 Str2309Params;File written in {0}.;Запись файла за {0}.
 Str2311Params;Parameter with key {0} not found.;Параметр с ключом {0} не найден.
 Str2312;Market on close;Рыночная по закрытию
-LimitOnClose;Limit-On-Close;Лимитированная по закрытию
+LimitOnClose;Limit on close;Лимитированная по закрытию
 Str2314;At best price;По лучшей цене
 Trailing;Trailing;Скользящий
 Str2316;With offset;Со сдвигом
@@ -4547,6 +4547,16 @@ CfiCodeDesc;Type in ISO 10962 standard.;Тип в стандарте ISO 10962.
 EnableSimulator;Enable simulator;Использовать эмуляцию
 OrderSide;Order side;Направление заявки
 Side;Side;Направление
+Pegged;Pegged;Привязанная
+MarketOrBetter;Market or better;Рыночная или лучше
+MarketNoWait;Market no wait;Рыночная без ожидания
+LimitOrBetter;Limit or better;Лимитная или лучше
+LimitNoWait;Limit no wait;Лимитная без ожидания
+NoWait;Not wait;Без ожидания
+OnClose;On close;По закрытию
+ServerStop;Server stop;Серверный стоп
+ServerStopLimit;Server stop-limit;Серверный стоп-лимит
+ByLastPrice;By last price;По последней цене
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -11981,17 +11991,6 @@ DocStr7556;Перезапускать службу SmartCOM при подклю�
 DocStr7557;Ограничение по времени для перезапуска службы SmartCOM. Для отключения ограничения по времени необходимо указать {0};Ограничение по времени для перезапуска службы SmartCOM. Для отключения ограничения по времени необходимо указать {0}
 DocStr7558;The message adapter for Sterling;Адаптер сообщений для Sterling
 DocStr7559;Extended order types;Расширенные типы заявок
-DocStr7560;Market or better;Рыночная или лучше
-DocStr7561;Market no wait;Рыночная без ожидания
-DocStr7562;Limit on close;Лимитная по закрытию
-DocStr7563;Limit or better;Лимитная или лучше
-DocStr7564;Limit no wait;Лимитная без ожидания
-DocStr7565;Not wait;Без ожидания
-DocStr7566;On close;По закрытию
-DocStr7567;Pegged;Привязанная
-DocStr7568;Server stop;Серверный стоп
-DocStr7569;Server stop-limit;Серверный стоп-лимит
-DocStr7570;By last price;По последней цене
 DocStr7571;Execution instructions;Инструкции исполнения
 DocStr7572;Reservation;С резервированием
 DocStr7573;No preference;Без преференций

@@ -21758,12 +21758,12 @@ namespace StockSharp.Localization
 		public static string Str2312 => GetString(Str2312Key);
 
 		/// <summary>
-		/// Limit-On-Close
+		/// Limit on close
 		/// </summary>
 		public const string LimitOnCloseKey = nameof(LimitOnClose);
 
 		/// <summary>
-		/// Limit-On-Close
+		/// Limit on close
 		/// </summary>
 		public static string LimitOnClose => GetString(LimitOnCloseKey);
 
@@ -45136,5 +45136,105 @@ namespace StockSharp.Localization
 		/// Side
 		/// </summary>
 		public static string Side => GetString(SideKey);
+
+		/// <summary>
+		/// Pegged
+		/// </summary>
+		public const string PeggedKey = nameof(Pegged);
+
+		/// <summary>
+		/// Pegged
+		/// </summary>
+		public static string Pegged => GetString(PeggedKey);
+
+		/// <summary>
+		/// Market or better
+		/// </summary>
+		public const string MarketOrBetterKey = nameof(MarketOrBetter);
+
+		/// <summary>
+		/// Market or better
+		/// </summary>
+		public static string MarketOrBetter => GetString(MarketOrBetterKey);
+
+		/// <summary>
+		/// Market or better
+		/// </summary>
+		public const string MarketNoWaitKey = nameof(MarketNoWait);
+
+		/// <summary>
+		/// Market or better
+		/// </summary>
+		public static string MarketNoWait => GetString(MarketNoWaitKey);
+
+		/// <summary>
+		/// Limit or better
+		/// </summary>
+		public const string LimitOrBetterKey = nameof(LimitOrBetter);
+
+		/// <summary>
+		/// Limit or better
+		/// </summary>
+		public static string LimitOrBetter => GetString(LimitOrBetterKey);
+
+		/// <summary>
+		/// Limit no wait
+		/// </summary>
+		public const string LimitNoWaitKey = nameof(LimitNoWait);
+
+		/// <summary>
+		/// Limit no wait
+		/// </summary>
+		public static string LimitNoWait => GetString(LimitNoWaitKey);
+
+		/// <summary>
+		/// No wait
+		/// </summary>
+		public const string NoWaitKey = nameof(NoWait);
+
+		/// <summary>
+		/// No wait
+		/// </summary>
+		public static string NoWait => GetString(NoWaitKey);
+
+		/// <summary>
+		/// On close
+		/// </summary>
+		public const string OnCloseKey = nameof(OnClose);
+
+		/// <summary>
+		/// On close
+		/// </summary>
+		public static string OnClose => GetString(OnCloseKey);
+
+		/// <summary>
+		/// Server stop
+		/// </summary>
+		public const string ServerStopKey = nameof(ServerStop);
+
+		/// <summary>
+		/// Server stop
+		/// </summary>
+		public static string ServerStop => GetString(ServerStopKey);
+
+		/// <summary>
+		/// Server stop-limit
+		/// </summary>
+		public const string ServerStopLimitKey = nameof(ServerStopLimit);
+
+		/// <summary>
+		/// Server stop-limit
+		/// </summary>
+		public static string ServerStopLimit => GetString(ServerStopLimitKey);
+
+		/// <summary>
+		/// By last price
+		/// </summary>
+		public const string ByLastPriceKey = nameof(ByLastPrice);
+
+		/// <summary>
+		/// By last price
+		/// </summary>
+		public static string ByLastPrice => GetString(ByLastPriceKey);
 	}
 }
