@@ -333,6 +333,7 @@
   </Topic>
   <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Installing S#.Designer" />
+    <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" isSelected="true" title="Update S#.Designer" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Quick start" />
     <Topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" visible="True" isExpanded="true" title="User interface">
       <Topic id="45ae6713-c28b-457d-be6b-19016f54507e" visible="True" title="Quick access panel" />
@@ -451,6 +452,7 @@
       <Topic id="1db75098-3878-4843-9c0d-75bd9dd47a48" visible="True" title="Portfolio optimization" />
     </Topic>
     <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" isExpanded="true" title="Live execution">
+      <Topic id="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" visible="True" title="Connections settings" />
       <Topic id="628d619b-ef20-4496-9bd1-d854d4a853e4" visible="True" title="Getting started" />
       <Topic id="0dec6014-51ee-4463-b102-aed24464833e" visible="True" title="User interface" />
       <Topic id="24d370d1-fd00-4914-83ac-57472eb99e93" visible="True" title="Strategies dashboard" />
@@ -474,12 +476,10 @@
       <Topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" visible="True" title="View downloaded data" />
     </Topic>
     <Topic id="96bc7d1c-275e-4ad7-8926-9a1e91fe9da2" visible="True" noFile="true" isExpanded="true" title="Misc settings">
-      <Topic id="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" visible="True" title="Connections settings" />
       <Topic id="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" visible="True" title="Notification settings" />
       <Topic id="57dc2e39-baa6-4c67-83a9-13278370a877" visible="True" title="Launch settings" />
       <Topic id="7c04efc6-036c-4c25-855f-f086ee4c266d" visible="True" title="Reset settings" />
       <Topic id="5789f207-56f6-4ee3-8040-44913ba1f2c9" visible="True" title="Settings directory" />
-      <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Update S#.Designer" />
     </Topic>
   </Topic>
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
