@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int MaxVolume
 		{
-			get { return _maxVolume; }
+			get => _maxVolume;
 			set
 			{
 				if (value < 1)
@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int MinVolume
 		{
-			get { return _minVolume; }
+			get => _minVolume;
 			set
 			{
 				if (value < 1)
@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int MaxPriceStepCount
 		{
-			get { return _maxPriceStepCount; }
+			get => _maxPriceStepCount;
 			set
 			{
 				if (value < 1)

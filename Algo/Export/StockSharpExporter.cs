@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		public int BatchSize
 		{
-			get { return _batchSize; }
+			get => _batchSize;
 			set
 			{
 				if (value < 1)

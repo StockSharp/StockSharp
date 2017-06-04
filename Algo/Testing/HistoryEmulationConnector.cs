@@ -233,8 +233,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public int MaxMessageCount
 		{
-			get { return HistoryMessageAdapter.MaxMessageCount; }
-			set { HistoryMessageAdapter.MaxMessageCount = value; }
+			get => HistoryMessageAdapter.MaxMessageCount;
+			set => HistoryMessageAdapter.MaxMessageCount = value;
 		}
 
 		private readonly Dictionary<Portfolio, decimal?> _initialMoney;
@@ -261,7 +261,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public EmulationStates State
 		{
-			get { return _state; }
+			get => _state;
 			private set
 			{
 				if (_state == value)

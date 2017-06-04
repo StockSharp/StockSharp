@@ -142,7 +142,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public INativeIdStorage NativeIdStorage
 		{
-			get { return _nativeIdStorage; }
+			get => _nativeIdStorage;
 			set
 			{
 				if (value == null)

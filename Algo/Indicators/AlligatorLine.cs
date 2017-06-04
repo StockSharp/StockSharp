@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Shift
 		{
-			get { return _shift; }
+			get => _shift;
 			set
 			{
 				_shift = value;

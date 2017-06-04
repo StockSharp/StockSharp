@@ -1338,12 +1338,12 @@ namespace StockSharp.Localization
 		public static string State => GetString(StateKey);
 
 		/// <summary>
-		/// Candle state.
+		/// Candle state
 		/// </summary>
 		public const string CandleStateKey = nameof(CandleState);
 
 		/// <summary>
-		/// Candle state.
+		/// Candle state
 		/// </summary>
 		public static string CandleState => GetString(CandleStateKey);
 
@@ -11228,12 +11228,12 @@ namespace StockSharp.Localization
 		public static string Str1179 => GetString(Str1179Key);
 
 		/// <summary>
-		/// Errors percentage.
+		/// Errors percentage
 		/// </summary>
 		public const string Str1180Key = nameof(Str1180);
 
 		/// <summary>
-		/// Errors percentage.
+		/// Errors percentage
 		/// </summary>
 		public static string Str1180 => GetString(Str1180Key);
 
@@ -45116,5 +45116,25 @@ namespace StockSharp.Localization
 		/// Enable simulator
 		/// </summary>
 		public static string EnableSimulator => GetString(EnableSimulatorKey);
+
+		/// <summary>
+		/// Order side
+		/// </summary>
+		public const string OrderSideKey = nameof(OrderSide);
+
+		/// <summary>
+		/// Order side
+		/// </summary>
+		public static string OrderSide => GetString(OrderSideKey);
+
+		/// <summary>
+		/// Side
+		/// </summary>
+		public const string SideKey = nameof(Side);
+
+		/// <summary>
+		/// Side
+		/// </summary>
+		public static string Side => GetString(SideKey);
 	}
 }

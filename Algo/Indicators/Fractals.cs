@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public int Length
 		{
-			get { return _length; }
+			get => _length;
 			set
 			{
 				_length = value;

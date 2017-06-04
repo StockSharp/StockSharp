@@ -55,9 +55,9 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public TimeSpan TimeFrame
         {
-			get { return _timeFrame.Value; }
-            set { _timeFrame.Value = value; }
-        }
+			get => _timeFrame.Value;
+			set => _timeFrame.Value = value;
+		}
 
 		private readonly StrategyParam<TimeSpan> _interval;
 
@@ -66,8 +66,8 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public TimeSpan Interval
 		{
-			get { return _interval.Value; }
-			set { _interval.Value = value; }
+			get => _interval.Value;
+			set => _interval.Value = value;
 		}
 
 		/// <summary>

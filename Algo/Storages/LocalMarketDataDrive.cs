@@ -301,7 +301,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public override string Path
 		{
-			get { return _path; }
+			get => _path;
 			set
 			{
 				if (value.IsEmpty())

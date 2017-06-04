@@ -52,7 +52,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (_name == value)
@@ -75,7 +75,7 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public decimal? Leverage
 		{
-			get { return _leverage; }
+			get => _leverage;
 			set
 			{
 				if (_leverage == value)
@@ -128,7 +128,7 @@ namespace StockSharp.BusinessEntities
 		[Browsable(false)]
 		public PortfolioStates? State
 		{
-			get { return _state; }
+			get => _state;
 			set
 			{
 				if (_state == value)

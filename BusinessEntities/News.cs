@@ -94,7 +94,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public string Story
 		{
-			get { return _story; }
+			get => _story;
 			set
 			{
 				_story = value;
@@ -146,8 +146,8 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
-			set { _extensionInfo = value; }
+			get => _extensionInfo;
+			set => _extensionInfo = value;
 		}
 	}
 }

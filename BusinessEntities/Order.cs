@@ -57,7 +57,7 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public TimeSpan? LatencyRegistration
 		{
-			get { return _latencyRegistration; }
+			get => _latencyRegistration;
 			set
 			{
 				if (_latencyRegistration == value)
@@ -80,7 +80,7 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public TimeSpan? LatencyCancellation
 		{
-			get { return _latencyCancellation; }
+			get => _latencyCancellation;
 			set
 			{
 				if (_latencyCancellation == value)
@@ -102,7 +102,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public long? Id
 		{
-			get { return _id; }
+			get => _id;
 			set
 			{
 				if (_id == value)
@@ -124,7 +124,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public string StringId
 		{
-			get { return _stringId; }
+			get => _stringId;
 			set
 			{
 				_stringId = value;
@@ -143,7 +143,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public string BoardId
 		{
-			get { return _boardId; }
+			get => _boardId;
 			set
 			{
 				_boardId = value;
@@ -162,7 +162,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public DateTimeOffset Time
 		{
-			get { return _time; }
+			get => _time;
 			set
 			{
 				if (_time == value)
@@ -207,7 +207,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public OrderStates State
 		{
-			get { return _state; }
+			get => _state;
 			set
 			{
 				if (_state == value)
@@ -253,7 +253,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public DateTimeOffset LastChangeTime
 		{
-			get { return _lastChangeTime; }
+			get => _lastChangeTime;
 			set
 			{
 				if (_lastChangeTime == value)
@@ -275,7 +275,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public DateTimeOffset LocalTime
 		{
-			get { return _localTime; }
+			get => _localTime;
 			set
 			{
 				if (_localTime == value)
@@ -306,7 +306,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal Volume
 		{
-			get { return _volume; }
+			get => _volume;
 			set
 			{
 				_volume = value;
@@ -344,7 +344,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal Balance
 		{
-			get { return _balance; }
+			get => _balance;
 			set
 			{
 				if (_balance == value)
@@ -365,7 +365,7 @@ namespace StockSharp.BusinessEntities
 		[Browsable(false)]
 		public long? Status
 		{
-			get { return _status; }
+			get => _status;
 			set
 			{
 				if (_status == value)
@@ -388,7 +388,7 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public bool? IsSystem
 		{
-			get { return _isSystem; }
+			get => _isSystem;
 			set
 			{
 				if (_isSystem == value)
@@ -432,7 +432,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public DateTimeOffset? ExpiryDate
 		{
-			get { return _expiryDate; }
+			get => _expiryDate;
 			set
 			{
 				if (_expiryDate == value)
@@ -477,7 +477,7 @@ namespace StockSharp.BusinessEntities
 		[CategoryLoc(LocalizedStrings.Str156Key)]
 		public Order DerivedOrder
 		{
-			get { return _derivedOrder; }
+			get => _derivedOrder;
 			set
 			{
 				if (_derivedOrder == value)
@@ -522,7 +522,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
+			get => _extensionInfo;
 			set
 			{
 				_extensionInfo = value.Sync();

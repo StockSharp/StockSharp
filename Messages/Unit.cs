@@ -148,8 +148,8 @@ namespace StockSharp.Messages
 		[Ignore]
 		public Func<UnitTypes, decimal?> GetTypeValue
 		{
-			get { return _getTypeValue; }
-			set { _getTypeValue = value; }
+			get => _getTypeValue;
+			set => _getTypeValue = value;
 		}
 
 		/// <summary>

@@ -435,7 +435,7 @@ P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.UnderlyingAsset/summary;Underl
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.PnLUnreal/summary;Str258
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.PnLRealized/summary;Str259
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Commission/summary;XamlStr249
-P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Side/summary;DocStr9747
+P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Side/summary;Side
 T:StockSharp.Xaml.Diagram.DiagramSocket/summary;Str3143
 P:StockSharp.Xaml.Diagram.DiagramSocket.Id/summary;DocStr7873
 P:StockSharp.Xaml.Diagram.DiagramSocket.UniqueKey/summary;DocStr5982
@@ -505,7 +505,8 @@ F:StockSharp.Xaml.Diagram.DiagramSocketType.Unit/summary;NumericValue
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Comparable/summary;DocStr8033
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Portfolio/summary;Portfolio
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Options/summary;Options
-F:StockSharp.Xaml.Diagram.DiagramSocketType.Side/summary;DocStr9747
+F:StockSharp.Xaml.Diagram.DiagramSocketType.Side/summary;Side
+F:StockSharp.Xaml.Diagram.DiagramSocketType.CandleStates/summary;CandleState
 M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/summary;DocStr9344
 M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/param/parameterType;Str1963
 M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/returns;DocStr9345

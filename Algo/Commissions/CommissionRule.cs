@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Commissions
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public Unit Value
 		{
-			get { return _value; }
+			get => _value;
 			set
 			{
 				if (value == null)
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Commissions
 		[Browsable(false)]
 		public string Title
 		{
-			get { return _title; }
+			get => _title;
 			protected set
 			{
 				_title = value;
@@ -238,7 +238,7 @@ namespace StockSharp.Algo.Commissions
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Count
 		{
-			get { return _count; }
+			get => _count;
 			set
 			{
 				_count = value;
@@ -313,7 +313,7 @@ namespace StockSharp.Algo.Commissions
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Count
 		{
-			get { return _count; }
+			get => _count;
 			set
 			{
 				_count = value;
@@ -409,7 +409,7 @@ namespace StockSharp.Algo.Commissions
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public Security Security
 		{
-			get { return _security; }
+			get => _security;
 			set
 			{
 				_security = value;
@@ -480,7 +480,7 @@ namespace StockSharp.Algo.Commissions
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public SecurityTypes SecurityType
 		{
-			get { return _securityType; }
+			get => _securityType;
 			set
 			{
 				_securityType = value;
@@ -541,7 +541,7 @@ namespace StockSharp.Algo.Commissions
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public ExchangeBoard Board
 		{
-			get { return _board; }
+			get => _board;
 			set
 			{
 				_board = value;
@@ -607,7 +607,7 @@ namespace StockSharp.Algo.Commissions
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal TurnOver
 		{
-			get { return _turnOver; }
+			get => _turnOver;
 			set
 			{
 				_turnOver = value;

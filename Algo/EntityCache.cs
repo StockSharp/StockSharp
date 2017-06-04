@@ -179,7 +179,7 @@ namespace StockSharp.Algo
 
 		public int TradesKeepCount
 		{
-			get { return _tradesKeepCount; }
+			get => _tradesKeepCount;
 			set
 			{
 				if (_tradesKeepCount == value)
@@ -197,7 +197,7 @@ namespace StockSharp.Algo
 
 		public int OrdersKeepCount
 		{
-			get { return _ordersKeepCount; }
+			get => _ordersKeepCount;
 			set
 			{
 				if (_ordersKeepCount == value)
@@ -241,7 +241,7 @@ namespace StockSharp.Algo
 
 		public IEntityFactory EntityFactory
 		{
-			get { return _entityFactory; }
+			get => _entityFactory;
 			set
 			{
 				if (value == null)
@@ -255,7 +255,7 @@ namespace StockSharp.Algo
 
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
-			get { return _exchangeInfoProvider; }
+			get => _exchangeInfoProvider;
 			set
 			{
 				if (value == null)

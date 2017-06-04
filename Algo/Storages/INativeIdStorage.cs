@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public DelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				if (value == null)
@@ -368,8 +368,8 @@ namespace StockSharp.Algo.Storages
 
 		event Action<string, SecurityId, object> INativeIdStorage.Added
 		{
-			add { _added += value; }
-			remove { _added -= value; }
+			add => _added += value;
+			remove => _added -= value;
 		}
 
 		void INativeIdStorage.Init()

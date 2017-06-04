@@ -305,36 +305,24 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The type of market-data, operated by given storage.
 		/// </summary>
-		public virtual Type DataType
-		{
-			get { throw new NotSupportedException(); }
-		}
+		public virtual Type DataType => throw new NotSupportedException();
 
 		/// <summary>
 		/// The instrument, operated by the external storage.
 		/// </summary>
-		public virtual Security Security
-		{
-			get { throw new NotSupportedException(); }
-		}
+		public virtual Security Security => throw new NotSupportedException();
 
 		/// <summary>
 		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.
 		/// </summary>
-		public virtual object Arg
-		{
-			get { throw new NotSupportedException(); }
-		}
+		public virtual object Arg => throw new NotSupportedException();
 
-		IMarketDataStorageDrive IMarketDataStorage.Drive
-		{
-			get { throw new NotSupportedException(); }
-		}
+		IMarketDataStorageDrive IMarketDataStorage.Drive => throw new NotSupportedException();
 
 		bool IMarketDataStorage.AppendOnlyNew
 		{
-			get { throw new NotSupportedException(); }
-			set { throw new NotSupportedException(); }
+			get => throw new NotSupportedException();
+			set => throw new NotSupportedException();
 		}
 
 		int IMarketDataStorage.Save(IEnumerable data)
@@ -357,10 +345,7 @@ namespace StockSharp.Algo.Storages
 			return OnLoad(date);
 		}
 
-		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
-		{
-			get { throw new NotSupportedException(); }
-		}
+		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => throw new NotSupportedException();
 
 		int IMarketDataStorage<T>.Save(IEnumerable<T> data)
 		{
@@ -382,10 +367,7 @@ namespace StockSharp.Algo.Storages
 			throw new NotSupportedException();
 		}
 
-		IMarketDataSerializer IMarketDataStorage.Serializer
-		{
-			get { throw new NotSupportedException(); }
-		}
+		IMarketDataSerializer IMarketDataStorage.Serializer => throw new NotSupportedException();
 
 		/// <summary>
 		/// To load messages from embedded storages for specified date.

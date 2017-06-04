@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Length
 		{
-			get { return _length; }
+			get => _length;
 			set
 			{
 				if (value < 1)

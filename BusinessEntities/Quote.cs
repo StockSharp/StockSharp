@@ -69,8 +69,8 @@ namespace StockSharp.BusinessEntities
 		[Browsable(false)]
 		public Security Security
 		{
-			get { return _security; }  
-			set { _security = value; }
+			get => _security;
+			set => _security = value;
 		}
 
 		private decimal _price;
@@ -84,8 +84,8 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal Price
 		{
-			get { return _price; }
-			set { _price = value; }
+			get => _price;
+			set => _price = value;
 		}
 
 		private decimal _volume;
@@ -99,8 +99,8 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal Volume
 		{
-			get { return _volume; }
-			set { _volume = value; }
+			get => _volume;
+			set => _volume = value;
 		}
 
 		private Sides _direction;
@@ -114,8 +114,8 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public Sides OrderDirection
 		{
-			get { return _direction; }
-			set { _direction = value; }
+			get => _direction;
+			set => _direction = value;
 		}
 
 		[field: NonSerialized]
@@ -134,8 +134,8 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
-			set { _extensionInfo = value; }
+			get => _extensionInfo;
+			set => _extensionInfo = value;
 		}
 
 		/// <summary>

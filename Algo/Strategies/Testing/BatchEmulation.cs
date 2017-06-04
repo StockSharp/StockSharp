@@ -206,7 +206,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public int CurrentProgress
 		{
-			get { return _progress; }
+			get => _progress;
 			set
 			{
 				if (_progress == value)
@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public EmulationStates State
 		{
-			get { return _state; }
+			get => _state;
 			private set
 			{
 				if (_state == value)

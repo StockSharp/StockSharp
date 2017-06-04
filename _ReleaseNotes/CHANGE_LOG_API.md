@@ -29,6 +29,10 @@ StockSharp API Change log
 * (bug) PnFCandleBuilder fix.
 * (feature) Grids. Share images.
 * (feature) CandleMessage.IsFinished removed.
+* (feature) CurrencyTypes.CNT.
+* (feature) Transaq. Security id refactoring.
+* (bug) SecurityGrid. Binding fixes.
+* (bug) Alerts. Popup window. Icon quality dix.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

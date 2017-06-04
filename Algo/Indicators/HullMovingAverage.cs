@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int SqrtPeriod
 		{
-			get { return _sqrtPeriod; }
+			get => _sqrtPeriod;
 			set
 			{
 				_sqrtPeriod = value;

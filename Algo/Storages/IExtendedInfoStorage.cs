@@ -290,7 +290,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public DelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				if (value == null)

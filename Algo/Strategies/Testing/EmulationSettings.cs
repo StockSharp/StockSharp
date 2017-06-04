@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		[Browsable(false)]
 		public DateTime StartTime
 		{
-			get { return _startTime; }
+			get => _startTime;
 			set
 			{
 				_startTime = value;
@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		[Browsable(false)]
 		public DateTime StopTime
 		{
-			get { return _stopTime; }
+			get => _stopTime;
 			set
 			{
 				_stopTime = value;
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Order = 100)]
 		public TimeSpan MarketTimeChangedInterval
 		{
-			get { return _marketTimeChangedInterval; }
+			get => _marketTimeChangedInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
@@ -105,7 +105,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		[DefaultValue(typeof(TimeSpan), "00:01:00")]
 		public TimeSpan? UnrealizedPnLInterval
 		{
-			get { return _unrealizedPnLInterval; }
+			get => _unrealizedPnLInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Order = 102)]
 		public EmulationMarketDataModes TradeDataMode
 		{
-			get { return _tradeDataMode; }
+			get => _tradeDataMode;
 			set
 			{
 				_tradeDataMode = value;
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Order = 103)]
 		public EmulationMarketDataModes DepthDataMode
 		{
-			get { return _depthDataMode; }
+			get => _depthDataMode;
 			set
 			{
 				_depthDataMode = value;
@@ -171,7 +171,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Order = 104)]
 		public EmulationMarketDataModes OrderLogDataMode
 		{
-			get { return _orderLogDataMode; }
+			get => _orderLogDataMode;
 			set
 			{
 				_orderLogDataMode = value;
@@ -192,7 +192,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Order = 104)]
 		public int BatchSize
 		{
-			get { return _batchSize; }
+			get => _batchSize;
 			set
 			{
 				_batchSize = value;
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			Order = 200)]
 		public LogLevels LogLevel
 		{
-			get { return _logLevel; }
+			get => _logLevel;
 			set
 			{
 				_logLevel = value;

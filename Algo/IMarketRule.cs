@@ -160,7 +160,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (value.IsEmpty())
@@ -182,7 +182,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public virtual bool IsSuspended
 		{
-			get { return _isSuspended; }
+			get => _isSuspended;
 			set
 			{
 				_isSuspended = value;
@@ -212,7 +212,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public virtual IMarketRuleContainer Container
 		{
-			get { return _container; }
+			get => _container;
 			set
 			{
 				if (value == null)

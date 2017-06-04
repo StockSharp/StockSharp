@@ -56,7 +56,7 @@ namespace StockSharp.BusinessEntities
 		[Identity]
 		public string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (Name == value)
@@ -75,7 +75,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public string RusName
 		{
-			get { return _rusName; }
+			get => _rusName;
 			set
 			{
 				if (RusName == value)
@@ -94,7 +94,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public string EngName
 		{
-			get { return _engName; }
+			get => _engName;
 			set
 			{
 				if (EngName == value)
@@ -114,7 +114,7 @@ namespace StockSharp.BusinessEntities
 		[Nullable]
 		public CountryCodes? CountryCode
 		{
-			get { return _countryCode; }
+			get => _countryCode;
 			set
 			{
 				if (CountryCode == value)
@@ -139,7 +139,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
+			get => _extensionInfo;
 			set
 			{
 				if (value == null)
@@ -162,8 +162,8 @@ namespace StockSharp.BusinessEntities
 
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
-			add { _propertyChanged += value; }
-			remove { _propertyChanged -= value; }
+			add => _propertyChanged += value;
+			remove => _propertyChanged -= value;
 		}
 
 		private void Notify(string info)

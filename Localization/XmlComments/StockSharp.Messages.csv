@@ -354,6 +354,7 @@ F:StockSharp.Messages.CurrencyTypes.XVN/summary;DocStr4277
 F:StockSharp.Messages.CurrencyTypes.BTC/summary;DocStr4278
 F:StockSharp.Messages.CurrencyTypes.GBX/summary;DocStr4279
 F:StockSharp.Messages.CurrencyTypes.GHS/summary;DocStr4280
+F:StockSharp.Messages.CurrencyTypes.CNT/summary;DocStr4153
 T:StockSharp.Messages.DisconnectMessage/summary;DocStr4281
 M:StockSharp.Messages.DisconnectMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.DisconnectMessage.Clone/summary;DocStr643
@@ -790,7 +791,7 @@ P:StockSharp.Messages.OrderCancelMessage.OrderId/summary;DocStr4379
 P:StockSharp.Messages.OrderCancelMessage.OrderStringId/summary;DocStr4380
 P:StockSharp.Messages.OrderCancelMessage.OrderTransactionId/summary;DocStr4381
 P:StockSharp.Messages.OrderCancelMessage.Volume/summary;DocStr4382
-P:StockSharp.Messages.OrderCancelMessage.Side/summary;DocStr660
+P:StockSharp.Messages.OrderCancelMessage.Side/summary;OrderSide
 M:StockSharp.Messages.OrderCancelMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderCancelMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.OrderCancelMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
@@ -1436,7 +1437,7 @@ P:StockSharp.Messages.CandleMessageVolumeProfile.PriceLevels/summary;DocStr718
 M:StockSharp.Messages.CandleMessageVolumeProfile.Update(System.Decimal,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/summary;DocStr744
 M:StockSharp.Messages.CandleMessageVolumeProfile.Update(System.Decimal,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/param/price;Price
 M:StockSharp.Messages.CandleMessageVolumeProfile.Update(System.Decimal,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/param/volume;DocStr3526
-M:StockSharp.Messages.CandleMessageVolumeProfile.Update(System.Decimal,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/param/side;DocStr9747
+M:StockSharp.Messages.CandleMessageVolumeProfile.Update(System.Decimal,System.Nullable{System.Decimal},System.Nullable{StockSharp.Messages.Sides})/param/side;Side
 M:StockSharp.Messages.CandleMessageVolumeProfile.Update(StockSharp.Messages.CandlePriceLevel)/summary;DocStr744
 M:StockSharp.Messages.CandleMessageVolumeProfile.Update(StockSharp.Messages.CandlePriceLevel)/param/priceLevel;Str3099
 M:StockSharp.Messages.CandleMessageVolumeProfile.Calculate/summary;DocStr716

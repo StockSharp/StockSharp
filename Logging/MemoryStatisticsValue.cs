@@ -106,7 +106,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		public bool IsObjectTracking
 		{
-			get { return _isObjectTracking; }
+			get => _isObjectTracking;
 			set
 			{
 				if (!_isObjectTracking && value)

@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Multiple
 		{
-			get { return _multiple * 1000; }
+			get => _multiple * 1000;
 			set
 			{
 				decimal tmpValue = value;

@@ -59,12 +59,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.CandleOpenTimeKey, true)]
 		public DateTimeOffset OpenTime
 		{
-			get { return _openTime; }
-			set
-			{
-				//ThrowIfFinished();
-				_openTime = value;
-			}
+			get => _openTime;
+			set => _openTime = value;
 		}
 
 		private DateTimeOffset _closeTime;
@@ -77,12 +73,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.CandleCloseTimeKey, true)]
 		public DateTimeOffset CloseTime
 		{
-			get { return _closeTime; }
-			set
-			{
-				//ThrowIfFinished();
-				_closeTime = value;
-			}
+			get => _closeTime;
+			set => _closeTime = value;
 		}
 
 		private DateTimeOffset _highTime;
@@ -95,12 +87,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.CandleHighTimeKey, true)]
 		public DateTimeOffset HighTime
 		{
-			get { return _highTime; }
-			set
-			{
-				//ThrowIfFinished();
-				_highTime = value;
-			}
+			get => _highTime;
+			set => _highTime = value;
 		}
 
 		private DateTimeOffset _lowTime;
@@ -113,12 +101,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.CandleLowTimeKey, true)]
 		public DateTimeOffset LowTime
 		{
-			get { return _lowTime; }
-			set
-			{
-				//ThrowIfFinished();
-				_lowTime = value;
-			}
+			get => _lowTime;
+			set => _lowTime = value;
 		}
 
 		private decimal _openPrice;
@@ -131,12 +115,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.Str80Key)]
 		public decimal OpenPrice
 		{
-			get { return _openPrice; }
-			set
-			{
-				//ThrowIfFinished();
-				_openPrice = value;
-			}
+			get => _openPrice;
+			set => _openPrice = value;
 		}
 
 		private decimal _closePrice;
@@ -149,12 +129,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.Str86Key)]
 		public decimal ClosePrice
 		{
-			get { return _closePrice; }
-			set
-			{
-				//ThrowIfFinished();
-				_closePrice = value;
-			}
+			get => _closePrice;
+			set => _closePrice = value;
 		}
 
 		private decimal _highPrice;
@@ -167,12 +143,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.Str82Key)]
 		public decimal HighPrice
 		{
-			get { return _highPrice; }
-			set
-			{
-				//ThrowIfFinished();
-				_highPrice = value;
-			}
+			get => _highPrice;
+			set => _highPrice = value;
 		}
 
 		private decimal _lowPrice;
@@ -185,12 +157,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.Str84Key)]
 		public decimal LowPrice
 		{
-			get { return _lowPrice; }
-			set
-			{
-				//ThrowIfFinished();
-				_lowPrice = value;
-			}
+			get => _lowPrice;
+			set => _lowPrice = value;
 		}
 
 		private decimal _totalPrice;
@@ -202,12 +170,8 @@ namespace StockSharp.Algo.Candles
 		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
 		public decimal TotalPrice
 		{
-			get { return _totalPrice; }
-			set
-			{
-				//ThrowIfFinished();
-				_totalPrice = value;
-			}
+			get => _totalPrice;
+			set => _totalPrice = value;
 		}
 
 		private decimal? _openVolume;
@@ -219,12 +183,8 @@ namespace StockSharp.Algo.Candles
 		[DisplayNameLoc(LocalizedStrings.OpenVolumeKey)]
 		public decimal? OpenVolume
 		{
-			get { return _openVolume; }
-			set
-			{
-				//ThrowIfFinished();
-				_openVolume = value;
-			}
+			get => _openVolume;
+			set => _openVolume = value;
 		}
 
 		private decimal? _closeVolume;
@@ -236,12 +196,8 @@ namespace StockSharp.Algo.Candles
 		[DisplayNameLoc(LocalizedStrings.CloseVolumeKey)]
 		public decimal? CloseVolume
 		{
-			get { return _closeVolume; }
-			set
-			{
-				//ThrowIfFinished();
-				_closeVolume = value;
-			}
+			get => _closeVolume;
+			set => _closeVolume = value;
 		}
 
 		private decimal? _highVolume;
@@ -253,12 +209,8 @@ namespace StockSharp.Algo.Candles
 		[DisplayNameLoc(LocalizedStrings.HighVolumeKey)]
 		public decimal? HighVolume
 		{
-			get { return _highVolume; }
-			set
-			{
-				//ThrowIfFinished();
-				_highVolume = value;
-			}
+			get => _highVolume;
+			set => _highVolume = value;
 		}
 
 		private decimal? _lowVolume;
@@ -270,12 +222,8 @@ namespace StockSharp.Algo.Candles
 		[DisplayNameLoc(LocalizedStrings.LowVolumeKey)]
 		public decimal? LowVolume
 		{
-			get { return _lowVolume; }
-			set
-			{
-				//ThrowIfFinished();
-				_lowVolume = value;
-			}
+			get => _lowVolume;
+			set => _lowVolume = value;
 		}
 
 		private decimal _totalVolume;
@@ -288,12 +236,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.TotalCandleVolumeKey)]
 		public decimal TotalVolume
 		{
-			get { return _totalVolume; }
-			set
-			{
-				//ThrowIfFinished();
-				_totalVolume = value;
-			}
+			get => _totalVolume;
+			set => _totalVolume = value;
 		}
 
 		private decimal? _relativeVolume;
@@ -305,12 +249,8 @@ namespace StockSharp.Algo.Candles
 		[DisplayNameLoc(LocalizedStrings.RelativeVolumeKey)]
 		public decimal? RelativeVolume
 		{
-			get { return _relativeVolume; }
-			set
-			{
-				//ThrowIfFinished();
-				_relativeVolume = value;
-			}
+			get => _relativeVolume;
+			set => _relativeVolume = value;
 		}
 
 		//[field: NonSerialized]
@@ -352,12 +292,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.TickCountKey)]
 		public int? TotalTicks
 		{
-			get { return _totalTicks; }
-			set
-			{
-				//ThrowIfFinished();
-				_totalTicks = value;
-			}
+			get => _totalTicks;
+			set => _totalTicks = value;
 		}
 
 		private int? _upTicks;
@@ -370,12 +306,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.TickUpCountKey)]
 		public int? UpTicks
 		{
-			get { return _upTicks; }
-			set
-			{
-				//ThrowIfFinished();
-				_upTicks = value;
-			}
+			get => _upTicks;
+			set => _upTicks = value;
 		}
 
 		private int? _downTicks;
@@ -388,12 +320,8 @@ namespace StockSharp.Algo.Candles
 		[DescriptionLoc(LocalizedStrings.TickDownCountKey)]
 		public int? DownTicks
 		{
-			get { return _downTicks; }
-			set
-			{
-				//ThrowIfFinished();
-				_downTicks = value;
-			}
+			get => _downTicks;
+			set => _downTicks = value;
 		}
 
 		private CandleStates _state;
@@ -403,10 +331,10 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.CandleStateKey)]
+		[DescriptionLoc(LocalizedStrings.CandleStateKey, true)]
 		public CandleStates State
 		{
-			get { return _state; }
+			get => _state;
 			set
 			{
 				ThrowIfFinished();
@@ -544,8 +472,8 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public override object Arg
 		{
-			get { return TimeFrame; }
-			set { TimeFrame = (TimeSpan)value; }
+			get => TimeFrame;
+			set => TimeFrame = (TimeSpan)value;
 		}
 
 		/// <summary>
@@ -577,8 +505,8 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public override object Arg
 		{
-			get { return MaxTradeCount; }
-			set { MaxTradeCount = (int)value; }
+			get => MaxTradeCount;
+			set => MaxTradeCount = (int)value;
 		}
 
 		/// <summary>
@@ -610,8 +538,8 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public override object Arg
 		{
-			get { return Volume; }
-			set { Volume = (decimal)value; }
+			get => Volume;
+			set => Volume = (decimal)value;
 		}
 
 		/// <summary>
@@ -643,8 +571,8 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public override object Arg
 		{
-			get { return PriceRange; }
-			set { PriceRange = (Unit)value; }
+			get => PriceRange;
+			set => PriceRange = (Unit)value;
 		}
 
 		/// <summary>
@@ -682,8 +610,8 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public override object Arg
 		{
-			get { return PnFArg; }
-			set { PnFArg = (PnFArg)value; }
+			get => PnFArg;
+			set => PnFArg = (PnFArg)value;
 		}
 
 		/// <summary>
@@ -715,8 +643,8 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public override object Arg
 		{
-			get { return BoxSize; }
-			set { BoxSize = (Unit)value; }
+			get => BoxSize;
+			set => BoxSize = (Unit)value;
 		}
 
 		/// <summary>

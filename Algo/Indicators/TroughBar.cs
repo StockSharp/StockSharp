@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public Unit ReversalAmount
 		{
-			get { return _reversalAmount; }
+			get => _reversalAmount;
 			set
 			{
 				if (value == null)

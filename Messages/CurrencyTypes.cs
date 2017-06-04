@@ -1027,6 +1027,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		GHS,
+
+		/// <summary>
+		/// China, offshore RMB.
+		/// </summary>
+		[EnumMember]
+		CNT,
 // ReSharper restore InconsistentNaming
 	}
 }

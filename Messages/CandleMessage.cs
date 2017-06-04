@@ -230,7 +230,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.CandleStateKey)]
+		[DescriptionLoc(LocalizedStrings.CandleStateKey, true)]
 		[MainCategory]
 		public CandleStates State { get; set; }
 
@@ -361,8 +361,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return TimeFrame; }
-			set { TimeFrame = (TimeSpan)value; }
+			get => TimeFrame;
+			set => TimeFrame = (TimeSpan)value;
 		}
 	}
 
@@ -404,8 +404,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return MaxTradeCount; }
-			set { MaxTradeCount = (int)value; }
+			get => MaxTradeCount;
+			set => MaxTradeCount = (int)value;
 		}
 	}
 
@@ -447,8 +447,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return Volume; }
-			set { Volume = (decimal)value; }
+			get => Volume;
+			set => Volume = (decimal)value;
 		}
 	}
 
@@ -490,8 +490,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return PriceRange; }
-			set { PriceRange = (Unit)value; }
+			get => PriceRange;
+			set => PriceRange = (Unit)value;
 		}
 	}
 
@@ -530,7 +530,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public Unit BoxSize
 		{
-			get { return _boxSize; }
+			get => _boxSize;
 			set
 			{
 				if (value == null)
@@ -548,7 +548,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public int ReversalAmount
 		{
-			get { return _reversalAmount; }
+			get => _reversalAmount;
 			set
 			{
 				if (value < 1)
@@ -645,8 +645,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return PnFArg; }
-			set { PnFArg = (PnFArg)value; }
+			get => PnFArg;
+			set => PnFArg = (PnFArg)value;
 		}
 	}
 
@@ -688,8 +688,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return BoxSize; }
-			set { BoxSize = (Unit)value; }
+			get => BoxSize;
+			set => BoxSize = (Unit)value;
 		}
 	}
 }

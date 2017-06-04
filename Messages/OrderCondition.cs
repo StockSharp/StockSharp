@@ -49,7 +49,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		public IDictionary<string, object> Parameters
 		{
-			get { return _parameters; }
+			get => _parameters;
 			set
 			{
 				if (value == null)

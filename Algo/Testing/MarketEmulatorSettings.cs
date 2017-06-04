@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Testing
 			Order = 200)]
 		public bool MatchOnTouch
 		{
-			get { return _matchOnTouch; }
+			get => _matchOnTouch;
 			set
 			{
 				if (_matchOnTouch == value)
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Testing
 			Order = 201)]
 		public TimeSpan DepthExpirationTime
 		{
-			get { return _depthExpirationTime; }
+			get => _depthExpirationTime;
 			set
 			{
 				if (_depthExpirationTime == value)
@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Testing
 			Order = 202)]
 		public double Failing
 		{
-			get { return _failing; }
+			get => _failing;
 			set
 			{
 				if (value < 0)
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Testing
 			Order = 203)]
 		public TimeSpan Latency
 		{
-			get { return _latency; }
+			get => _latency;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -149,7 +149,7 @@ namespace StockSharp.Algo.Testing
 			Order = 204)]
 		public bool IsSupportAtomicReRegister
 		{
-			get { return _isSupportAtomicReRegister; }
+			get => _isSupportAtomicReRegister;
 			set
 			{
 				_isSupportAtomicReRegister = value;
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Testing
 			Order = 205)]
 		public TimeSpan BufferTime
 		{
-			get { return _bufferTime; }
+			get => _bufferTime;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Testing
 			Order = 206)]
 		public long InitialOrderId
 		{
-			get { return _initialOrderId; }
+			get => _initialOrderId;
 			set
 			{
 				_initialOrderId = value;
@@ -239,7 +239,7 @@ namespace StockSharp.Algo.Testing
 			Order = 207)]
 		public long InitialTradeId
 		{
-			get { return _initialTradeId; }
+			get => _initialTradeId;
 			set
 			{
 				_initialTradeId = value;
@@ -260,7 +260,7 @@ namespace StockSharp.Algo.Testing
 			Order = 208)]
 		public long InitialTransactionId
 		{
-			get { return _initialTransactionId; }
+			get => _initialTransactionId;
 			set
 			{
 				_initialTransactionId = value;
@@ -281,7 +281,7 @@ namespace StockSharp.Algo.Testing
 			Order = 209)]
 		public int SpreadSize
 		{
-			get { return _spreadSize; }
+			get => _spreadSize;
 			set
 			{
 				if (value < 1)
@@ -305,7 +305,7 @@ namespace StockSharp.Algo.Testing
 			Order = 210)]
 		public int MaxDepth
 		{
-			get { return _maxDepth; }
+			get => _maxDepth;
 			set
 			{
 				if (value < 1)
@@ -329,7 +329,7 @@ namespace StockSharp.Algo.Testing
 			Order = 211)]
 		public int VolumeMultiplier
 		{
-			get { return _volumeMultiplier; }
+			get => _volumeMultiplier;
 			set
 			{
 				if (value < 0)
@@ -353,7 +353,7 @@ namespace StockSharp.Algo.Testing
 			Order = 212)]
 		public TimeSpan PortfolioRecalcInterval
 		{
-			get { return _portfolioRecalcInterval; }
+			get => _portfolioRecalcInterval;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -377,7 +377,7 @@ namespace StockSharp.Algo.Testing
 			Order = 213)]
 		public bool ConvertTime
 		{
-			get { return _convertTime; }
+			get => _convertTime;
 			set
 			{
 				_convertTime = value;
@@ -398,7 +398,7 @@ namespace StockSharp.Algo.Testing
 			Order = 214)]
 		public TimeZoneInfo TimeZone
 		{
-			get { return _timeZone; }
+			get => _timeZone;
 			set
 			{
 				_timeZone = value;
@@ -419,7 +419,7 @@ namespace StockSharp.Algo.Testing
 			Order = 215)]
 		public Unit PriceLimitOffset
 		{
-			get { return _priceLimitOffset; }
+			get => _priceLimitOffset;
 			set
 			{
 				if (value == null)
@@ -442,7 +442,7 @@ namespace StockSharp.Algo.Testing
 			Order = 216)]
 		public bool IncreaseDepthVolume
 		{
-			get { return _increaseDepthVolume; }
+			get => _increaseDepthVolume;
 			set
 			{
 				_increaseDepthVolume = value;

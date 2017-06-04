@@ -54,7 +54,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str410Key)]
 		public List<WorkingTimePeriod> Periods
 		{
-			get { return _periods; }
+			get => _periods;
 			set
 			{
 				if (value == null)
@@ -75,8 +75,8 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str412Key)]
 		public List<DateTime> SpecialWorkingDays
 		{
-			get { return _specialWorkingDays; }
-			set { _specialWorkingDays = CheckDates(value); }
+			get => _specialWorkingDays;
+			set => _specialWorkingDays = CheckDates(value);
 		}
 
 		private List<DateTime> _specialHolidays = new List<DateTime>();
@@ -90,8 +90,8 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str414Key)]
 		public List<DateTime> SpecialHolidays
 		{
-			get { return _specialHolidays; }
-			set { _specialHolidays = CheckDates(value); }
+			get => _specialHolidays;
+			set => _specialHolidays = CheckDates(value);
 		}
 
 		private bool _checkDates = true;

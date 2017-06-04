@@ -45,7 +45,7 @@ namespace StockSharp.Messages
 
 			public TimeSpan TimeOut
 			{
-				get { return _timeOut; }
+				get => _timeOut;
 				set
 				{
 					if (value <= TimeSpan.Zero)
@@ -118,7 +118,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual MessageTypes[] SupportedMessages
 		{
-			get { return _supportedMessages; }
+			get => _supportedMessages;
 			set
 			{
 				if (value == null)
@@ -156,7 +156,7 @@ namespace StockSharp.Messages
 			GroupName = LocalizedStrings.Str186Key)]
 		public TimeSpan HeartbeatInterval
 		{
-			get { return _heartbeatInterval; }
+			get => _heartbeatInterval;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -253,7 +253,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public IdGenerator TransactionIdGenerator
 		{
-			get { return _transactionIdGenerator; }
+			get => _transactionIdGenerator;
 			set
 			{
 				if (value == null)
@@ -272,7 +272,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public TimeSpan LookupTimeOut
 		{
-			get { return _secLookupTimeOut.TimeOut; }
+			get => _secLookupTimeOut.TimeOut;
 			set
 			{
 				_secLookupTimeOut.TimeOut = value;

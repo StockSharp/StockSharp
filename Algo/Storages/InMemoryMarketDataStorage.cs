@@ -66,10 +66,7 @@ namespace StockSharp.Algo.Storages
 			_getData = getData;
 		}
 
-		IEnumerable<DateTime> IMarketDataStorage.Dates
-		{
-			get { throw new NotSupportedException(); }
-		}
+		IEnumerable<DateTime> IMarketDataStorage.Dates => throw new NotSupportedException();
 
 		private readonly Security _security;
 
@@ -79,10 +76,7 @@ namespace StockSharp.Algo.Storages
 
 		object IMarketDataStorage.Arg => _arg;
 
-		IMarketDataStorageDrive IMarketDataStorage.Drive
-		{
-			get { throw new NotSupportedException(); }
-		}
+		IMarketDataStorageDrive IMarketDataStorage.Drive => throw new NotSupportedException();
 
 		bool IMarketDataStorage.AppendOnlyNew { get; set; }
 
@@ -92,10 +86,7 @@ namespace StockSharp.Algo.Storages
 
 		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
 
-		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
-		{
-			get { throw new NotSupportedException(); }
-		}
+		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => throw new NotSupportedException();
 
 		/// <summary>
 		/// To load data.

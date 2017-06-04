@@ -150,10 +150,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <summary>
 		/// Options contract.
 		/// </summary>
-		public override Security Option
-		{
-			get { throw new NotSupportedException(); }
-		}
+		public override Security Option => throw new NotSupportedException();
 
 		private Security _underlyingAsset;
 

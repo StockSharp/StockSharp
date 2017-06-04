@@ -107,14 +107,8 @@ namespace StockSharp.Algo.Commissions
 			storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
 		}
 
-		string ICommissionRule.Title
-		{
-			get { throw new NotSupportedException(); }
-		}
+		string ICommissionRule.Title => throw new NotSupportedException();
 
-		Unit ICommissionRule.Value
-		{
-			get { throw new NotSupportedException(); }
-		}
+		Unit ICommissionRule.Value => throw new NotSupportedException();
 	}
 }

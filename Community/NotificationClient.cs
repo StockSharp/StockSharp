@@ -66,7 +66,7 @@ namespace StockSharp.Community
 
 				return _smsCount.Value;
 			}
-			private set { _smsCount = value; }
+			private set => _smsCount = value;
 		}
 
 		private int? _emailCount;
@@ -83,7 +83,7 @@ namespace StockSharp.Community
 
 				return _emailCount.Value;
 			}
-			private set { _emailCount = value; }
+			private set => _emailCount = value;
 		}
 
 		/// <summary>

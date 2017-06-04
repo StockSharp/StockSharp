@@ -73,7 +73,7 @@ T:StockSharp.Xaml.Charting.ChartActiveOrderInfo/summary;DocStr8944
 E:StockSharp.Xaml.Charting.ChartActiveOrderInfo.OrderStateChanged/summary;DocStr8945
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Order/summary;DocStr8946
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.State/summary;DocStr1748
-P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Direction/summary;DocStr660
+P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Direction/summary;OrderSide
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Volume/summary;Str3524
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.FilledVolume/summary;Str1757
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Price/summary;Str1341

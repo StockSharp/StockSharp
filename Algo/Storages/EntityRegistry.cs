@@ -117,8 +117,8 @@ namespace StockSharp.Algo.Storages
 
 		DelayAction IEntityRegistry.DelayAction
 		{
-			get { return DelayAction; }
-			set { DelayAction = (StorageDelayAction)value; }
+			get => DelayAction;
+			set => DelayAction = (StorageDelayAction)value;
 		}
 
 		private StorageDelayAction _delayAction;
@@ -128,7 +128,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public StorageDelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				_delayAction = value;

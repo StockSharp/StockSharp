@@ -2235,8 +2235,8 @@ namespace StockSharp.Algo
 			/// </summary>
 			decimal IPositionManager.Position
 			{
-				get { return _position.CurrentValue ?? 0; }
-				set { throw new NotSupportedException(); }
+				get => _position.CurrentValue ?? 0;
+				set => throw new NotSupportedException();
 			}
 
 			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.NewPosition
@@ -2253,14 +2253,8 @@ namespace StockSharp.Algo
 
 			IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.Positions
 			{
-				get
-				{
-					throw new NotSupportedException();
-				}
-				set
-				{
-					throw new NotSupportedException();
-				}
+				get => throw new NotSupportedException();
+				set => throw new NotSupportedException();
 			}
 
 			void IPositionManager.Reset()

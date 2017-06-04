@@ -39,7 +39,7 @@ namespace StockSharp.Community
 		/// </summary>
 		public string Email
 		{
-			get { return _email; }
+			get => _email;
 			set
 			{
 				_email = value;
@@ -54,7 +54,7 @@ namespace StockSharp.Community
 		/// </summary>
 		public SecureString Password
 		{
-			get { return _password; }
+			get => _password;
 			set
 			{
 				_password = value;
@@ -69,7 +69,7 @@ namespace StockSharp.Community
 		/// </summary>
 		public bool AutoLogon
 		{
-			get { return _autoLogon; }
+			get => _autoLogon;
 			set
 			{
 				_autoLogon = value;

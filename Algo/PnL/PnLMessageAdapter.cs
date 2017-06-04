@@ -40,7 +40,7 @@ namespace StockSharp.Algo.PnL
 		/// </summary>
 		public IPnLManager PnLManager
 		{
-			get { return _pnLManager; }
+			get => _pnLManager;
 			set
 			{
 				if (value == null)

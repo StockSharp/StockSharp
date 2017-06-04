@@ -162,16 +162,16 @@ namespace StockSharp.Algo.Storages
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { _added += value; }
-			remove { _added -= value; }
+			add => _added += value;
+			remove => _added -= value;
 		}
 
 		private Action<IEnumerable<Security>> _removed;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { _removed += value; }
-			remove { _removed -= value; }
+			add => _removed += value;
+			remove => _removed -= value;
 		}
 
 		/// <summary>

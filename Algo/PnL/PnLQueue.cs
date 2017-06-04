@@ -54,7 +54,7 @@ namespace StockSharp.Algo.PnL
 		/// </summary>
 		public decimal PriceStep
 		{
-			get { return _priceStep; }
+			get => _priceStep;
 			private set
 			{
 				if (value <= 0)
@@ -72,7 +72,7 @@ namespace StockSharp.Algo.PnL
 		/// </summary>
 		public decimal? StepPrice
 		{
-			get { return _stepPrice; }
+			get => _stepPrice;
 			private set
 			{
 				if (value <= 0)
@@ -90,7 +90,7 @@ namespace StockSharp.Algo.PnL
 		/// </summary>
 		public decimal Leverage
 		{
-			get { return _leverage; }
+			get => _leverage;
 			set
 			{
 				if (value <= 0)
@@ -108,7 +108,7 @@ namespace StockSharp.Algo.PnL
 		/// </summary>
 		public decimal LotMultiplier
 		{
-			get { return _lotMultiplier; }
+			get => _lotMultiplier;
 			set
 			{
 				if (value <= 0)

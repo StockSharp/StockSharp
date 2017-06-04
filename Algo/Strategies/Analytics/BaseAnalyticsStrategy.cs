@@ -45,8 +45,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 			Order = 0)]
 		public DateTime From
 		{
-			get { return _from.Value; }
-			set { _from.Value = value; }
+			get => _from.Value;
+			set => _from.Value = value;
 		}
 
 		private readonly StrategyParam<DateTime> _to;
@@ -62,8 +62,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 			Order = 1)]
 		public DateTime To
 		{
-			get { return _to.Value; }
-			set { _to.Value = value; }
+			get => _to.Value;
+			set => _to.Value = value;
 		}
 
 		/// <summary>
