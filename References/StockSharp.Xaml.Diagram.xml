@@ -238,6 +238,7 @@
       <summary>
             Update <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" /> for composition elements.
             </summary>
+      <param name="id">New value for <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" />. Can be <see langword="null" />.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
       <summary>
@@ -799,6 +800,7 @@
       <param name="process">The action is called at the processing of the new incoming value for socket.</param>
       <param name="index">Index in sockets list.</param>
       <param name="socketId">The connection identifier.</param>
+      <returns>Connection.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)">
       <summary>
@@ -810,6 +812,7 @@
       <param name="linkableMax">The maximum number of connections.</param>
       <param name="index">Index in sockets list.</param>
       <param name="socketId">The connection identifier.</param>
+      <returns>Connection.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket,System.Int32)">
       <summary>
@@ -828,6 +831,7 @@
       <summary>
             To remove all incoming and outgoing connections.
             </summary>
+      <param name="raiseSocketRemoved">Raise <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.SocketRemoved" /> event.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.GetSocket(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
@@ -1098,6 +1102,7 @@
       <summary>
             The diagram element parameter.
             </summary>
+      <typeparam name="T">Value type.</typeparam>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElementParam`1.ValueChanging">
       <summary>
@@ -1665,8 +1670,10 @@
       <summary>
             To register the connection type.
             </summary>
+      <typeparam name="T">Data type.</typeparam>
       <param name="name">The name of the connection type.</param>
       <param name="color">The connection color.</param>
+      <returns>Connection type.</returns>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocketType.PropertyChanged">
       <summary>
@@ -1779,6 +1786,11 @@
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Side">
       <summary>
             Side.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.CandleStates">
+      <summary>
+            Candle state.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)">
@@ -3186,6 +3198,7 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1" />.
             </summary>
+      <param name="typeParamCategory">The category of the diagram element parameter.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.SetTypes(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Diagram.DiagramSocketType})">
       <summary>
@@ -3325,6 +3338,7 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.ExportDiagramElement" />.
             </summary>
+      <param name="source">Composite element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.OnStart">
       <summary>

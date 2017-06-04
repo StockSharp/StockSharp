@@ -15,6 +15,7 @@ M:StockSharp.Algo.BasketSecurity.FromSerializedString(System.String)/param/text;
 T:StockSharp.Algo.Candles.Compression.IBuilderCandleSource/summary;DocStr9647
 P:StockSharp.Algo.Candles.Compression.IBuilderCandleSource.Sources/summary;Str3049
 T:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1/summary;DocStr9648
+T:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1/typeparam/TBuilder;DocStr9803
 P:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.SpeedPriority/summary;DocStr463
 P:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Sources/summary;Str3049
 E:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Processing/summary;DocStr464
@@ -93,6 +94,7 @@ P:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.GenerateEmptyCandle
 P:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.Timeout/summary;DocStr506
 M:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.#ctor/summary;DocStr1
 M:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)/summary;DocStr1
+M:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.#ctor(StockSharp.Algo.Storages.IExchangeInfoProvider)/param/exchangeInfoProvider;DocStr8927
 M:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.CreateCandle(StockSharp.Messages.MarketDataMessage,StockSharp.Messages.TimeFrameCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/summary;DocStr487
 M:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.CreateCandle(StockSharp.Messages.MarketDataMessage,StockSharp.Messages.TimeFrameCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/param/message;DocStr4473
 M:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder.CreateCandle(StockSharp.Messages.MarketDataMessage,StockSharp.Messages.TimeFrameCandleMessage,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/param/currentCandle;DocStr496
@@ -1219,6 +1221,7 @@ M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Add``1(StockSharp.Algo.Storages
 M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Add``1(StockSharp.Algo.Storages.Csv.CsvEntityList{``0})/param/list;DocStr9405
 M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Init/summary;DocStr9249
 T:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1/summary;DocStr8583
+T:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1/typeparam/TCandleMessage;DocStr9804
 M:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1.#ctor(StockSharp.Messages.SecurityId,System.Object,System.Text.Encoding)/summary;DocStr1
 M:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1.#ctor(StockSharp.Messages.SecurityId,System.Object,System.Text.Encoding)/param/securityId;SecurityId
 M:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1.#ctor(StockSharp.Messages.SecurityId,System.Object,System.Text.Encoding)/param/arg;DocStr548
@@ -1364,6 +1367,7 @@ M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Add(StockSharp.Messages.Secu
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Load/summary;DocStr9377
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Load/returns;ExtendedInfo
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Load(StockSharp.Messages.SecurityId)/summary;DocStr9377
+M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Load(StockSharp.Messages.SecurityId)/param/securityId;DocStr9333
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Load(StockSharp.Messages.SecurityId)/returns;ExtendedInfo
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Delete(StockSharp.Messages.SecurityId)/summary;DocStr9632
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Delete(StockSharp.Messages.SecurityId)/param/securityId;DocStr9333
@@ -1483,6 +1487,7 @@ P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.PostTradeMarketTimeCh
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.MarketTimeChangedInterval/summary;DocStr2111
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor/summary;DocStr1
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.BasketMarketDataStorage{`0})/summary;DocStr1
+M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.BasketMarketDataStorage{`0})/param/basketStorage;DocStr2093
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.AddStorage(StockSharp.Algo.Storages.IMarketDataStorage)/summary;DocStr8577
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.AddStorage(StockSharp.Algo.Storages.IMarketDataStorage)/param/storage;MarketDataStorage
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/summary;DocStr8578
@@ -2239,7 +2244,8 @@ M:StockSharp.Algo.Indicators.Covariance.OnProcess(StockSharp.Algo.Indicators.IIn
 M:StockSharp.Algo.Indicators.Covariance.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
 T:StockSharp.Algo.Indicators.MoneyFlowIndex/summary;MoneyFlowIndex
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor/summary;DocStr1
-M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor(System.Int32)/summary;DocStr8503
+M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor(System.Int32)/summary;DocStr1
+M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor(System.Int32)/param/length;Str778
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.MoneyFlowIndex.IsFormed/summary;DocStr1126
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
@@ -2621,6 +2627,7 @@ M:StockSharp.Algo.Indicators.DoubleExponentialMovingAverage.OnProcess(StockSharp
 T:StockSharp.Algo.Indicators.Envelope/summary;DocStr1199
 M:StockSharp.Algo.Indicators.Envelope.#ctor/summary;DocStr1
 M:StockSharp.Algo.Indicators.Envelope.#ctor(StockSharp.Algo.Indicators.LengthIndicator{System.Decimal})/summary;DocStr1
+M:StockSharp.Algo.Indicators.Envelope.#ctor(StockSharp.Algo.Indicators.LengthIndicator{System.Decimal})/param/ma;DocStr1194
 P:StockSharp.Algo.Indicators.Envelope.Middle/summary;DocStr1194
 P:StockSharp.Algo.Indicators.Envelope.Upper/summary;DocStr1200
 P:StockSharp.Algo.Indicators.Envelope.Lower/summary;DocStr1201
@@ -3173,6 +3180,7 @@ M:StockSharp.Algo.Indicators.MarketDepthIndicatorValue.SetValue``1(StockSharp.Al
 M:StockSharp.Algo.Indicators.MarketDepthIndicatorValue.SetValue``1(StockSharp.Algo.Indicators.IIndicator,``0)/param/value;Str3099
 M:StockSharp.Algo.Indicators.MarketDepthIndicatorValue.SetValue``1(StockSharp.Algo.Indicators.IIndicator,``0)/returns;DocStr1153
 T:StockSharp.Algo.Indicators.PairIndicatorValue`1/summary;DocStr8464
+T:StockSharp.Algo.Indicators.PairIndicatorValue`1/typeparam/TValue;DocStr1145
 M:StockSharp.Algo.Indicators.PairIndicatorValue`1.#ctor(StockSharp.Algo.Indicators.IIndicator,System.Tuple{`0,`0})/summary;DocStr1
 M:StockSharp.Algo.Indicators.PairIndicatorValue`1.#ctor(StockSharp.Algo.Indicators.IIndicator,System.Tuple{`0,`0})/param/indicator;Str1981
 M:StockSharp.Algo.Indicators.PairIndicatorValue`1.#ctor(StockSharp.Algo.Indicators.IIndicator,System.Tuple{`0,`0})/param/value;Str3099
@@ -3243,6 +3251,7 @@ M:StockSharp.Algo.Indicators.IndicatorHelper.Process(StockSharp.Algo.Indicators.
 M:StockSharp.Algo.Indicators.IndicatorHelper.Process(StockSharp.Algo.Indicators.IIndicator,System.Decimal,System.Boolean)/param/isFinal;DocStr1414
 M:StockSharp.Algo.Indicators.IndicatorHelper.Process(StockSharp.Algo.Indicators.IIndicator,System.Decimal,System.Boolean)/returns;DocStr1124
 M:StockSharp.Algo.Indicators.IndicatorHelper.Process``1(StockSharp.Algo.Indicators.IIndicator,System.Tuple{``0,``0},System.Boolean)/summary;DocStr8465
+M:StockSharp.Algo.Indicators.IndicatorHelper.Process``1(StockSharp.Algo.Indicators.IIndicator,System.Tuple{``0,``0},System.Boolean)/typeparam/TValue;DocStr1145
 M:StockSharp.Algo.Indicators.IndicatorHelper.Process``1(StockSharp.Algo.Indicators.IIndicator,System.Tuple{``0,``0},System.Boolean)/param/indicator;Str1981
 M:StockSharp.Algo.Indicators.IndicatorHelper.Process``1(StockSharp.Algo.Indicators.IIndicator,System.Tuple{``0,``0},System.Boolean)/param/value;DocStr8466
 M:StockSharp.Algo.Indicators.IndicatorHelper.Process``1(StockSharp.Algo.Indicators.IIndicator,System.Tuple{``0,``0},System.Boolean)/param/isFinal;DocStr8467
@@ -3252,6 +3261,7 @@ M:StockSharp.Algo.Indicators.IndicatorHelper.GetInputValue``1(StockSharp.Algo.In
 M:StockSharp.Algo.Indicators.IndicatorHelper.GetInputValue``1(StockSharp.Algo.Indicators.IIndicatorValue)/param/indicatorValue;IndicatorValue
 M:StockSharp.Algo.Indicators.IndicatorHelper.GetInputValue``1(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1416
 T:StockSharp.Algo.Indicators.LengthIndicator`1/summary;DocStr1162
+T:StockSharp.Algo.Indicators.LengthIndicator`1/typeparam/TResult;DocStr9805
 M:StockSharp.Algo.Indicators.LengthIndicator`1.#ctor/summary;DocStr93
 M:StockSharp.Algo.Indicators.LengthIndicator`1.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.LengthIndicator`1.Length/summary;Str779
@@ -5437,6 +5447,7 @@ M:StockSharp.Algo.Strategies.StrategyParamHelper.Optimize``1(StockSharp.Algo.Str
 M:StockSharp.Algo.Strategies.StrategyParamHelper.CanOptimize(StockSharp.Algo.Strategies.IStrategyParam,System.Collections.Generic.ISet{System.String})/summary;DocStr9787
 M:StockSharp.Algo.Strategies.StrategyParamHelper.CanOptimize(StockSharp.Algo.Strategies.IStrategyParam,System.Collections.Generic.ISet{System.String})/param/parameter;DocStr9788
 M:StockSharp.Algo.Strategies.StrategyParamHelper.CanOptimize(StockSharp.Algo.Strategies.IStrategyParam,System.Collections.Generic.ISet{System.String})/param/excludeParameters;DocStr9789
+M:StockSharp.Algo.Strategies.StrategyParamHelper.CanOptimize(StockSharp.Algo.Strategies.IStrategyParam,System.Collections.Generic.ISet{System.String})/returns;DocStr9806
 T:StockSharp.Algo.Strategies.Testing.BatchEmulation/summary;DocStr1868
 P:StockSharp.Algo.Strategies.Testing.BatchEmulation.EmulationSettings/summary;Str1408
 P:StockSharp.Algo.Strategies.Testing.BatchEmulation.EmulationConnector/summary;DocStr1873
@@ -6047,6 +6058,7 @@ M:StockSharp.Algo.MarketRuleHelper.TryRemoveRule(StockSharp.Algo.IMarketRuleCont
 M:StockSharp.Algo.MarketRuleHelper.TryRemoveWithExclusive(StockSharp.Algo.IMarketRuleContainer,StockSharp.Algo.IMarketRule)/summary;DocStr2027
 M:StockSharp.Algo.MarketRuleHelper.TryRemoveWithExclusive(StockSharp.Algo.IMarketRuleContainer,StockSharp.Algo.IMarketRule)/param/container;DocStr1378
 M:StockSharp.Algo.MarketRuleHelper.TryRemoveWithExclusive(StockSharp.Algo.IMarketRuleContainer,StockSharp.Algo.IMarketRule)/param/rule;DocStr14
+M:StockSharp.Algo.MarketRuleHelper.TryRemoveWithExclusive(StockSharp.Algo.IMarketRuleContainer,StockSharp.Algo.IMarketRule)/returns;DocStr9807
 M:StockSharp.Algo.MarketRuleHelper.Exclusive(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule)/summary;DocStr2028
 M:StockSharp.Algo.MarketRuleHelper.Exclusive(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule)/param/rule1;DocStr2029
 M:StockSharp.Algo.MarketRuleHelper.Exclusive(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule)/param/rule2;DocStr2030

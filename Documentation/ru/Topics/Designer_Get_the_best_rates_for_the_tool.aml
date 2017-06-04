@@ -2,12 +2,11 @@
 <topic id="8f13421b-0ad7-47a7-80ea-b347df00f173" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Для регистрации заявки на покупку по текущей лучшей 
-цене для инструмента может использоваться следующая схема:</para>
+<para>Для регистрации заявки на покупку по текущей лучшей цене для инструмента может использоваться следующая схема:</para>
 <mediaLink>
 <image xlink:href="Designer_Get_the_best_rates_for_the_tool_00"/>
 </mediaLink>
-<para>Для кубика <legacyBold>Переменная</legacyBold> выбран тип данных <legacyBold>Инструмент</legacyBold>, если инструмент не указан, 
+<para>Для кубика <legacyBold>Переменная</legacyBold> выбран тип данных <legacyBold>Инструмент</legacyBold>. Если инструмент не указан, 
 но установлен флаг <legacyBold>Параметры</legacyBold> группы свойств <legacyBold>Общее</legacyBold>, то он будет взят из стратегии 
 и передан в кубик <legacyBold>Стакан</legacyBold>. Кубик <legacyBold>Стакан</legacyBold>, после получения текущего инструмента из 
 переменной, передает через выходной параметр изменения стакана по выбранному 

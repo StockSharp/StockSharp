@@ -505,6 +505,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The value of the indicator, operating with pair <see ref="Tuple{TValue, TValue}" />.
 	/// </summary>
+	/// <typeparam name="TValue">Value type.</typeparam>
 	public class PairIndicatorValue<TValue> : SingleIndicatorValue<Tuple<TValue, TValue>>
 	{
 		/// <summary>

@@ -60,6 +60,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryStatisticsValue{T}"/>.
 		/// </summary>
+		/// <param name="name">Name.</param>
 		public MemoryStatisticsValue(string name/*, MemoryStatistics parent*/)
 		{
 			if (name.IsEmpty())

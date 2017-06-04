@@ -478,7 +478,7 @@
           <Topic id="9e858c2d-b68d-46fd-9977-ed4a7751f11a" visible="True" noFile="true" isExpanded="true" title="Стаканы">
             <Topic id="181e2f26-86dd-4c4b-b737-a24664ef9486" visible="True" title="Стакан" />
             <Topic id="c2dbe6dc-ea13-492a-b4a7-751262875d68" visible="True" title="Сгруппированный стакан" />
-            <Topic id="06db9cf4-55d1-4340-bdad-cfd1465fd61f" visible="True" title="Разряженный стакан" />
+            <Topic id="06db9cf4-55d1-4340-bdad-cfd1465fd61f" visible="True" title="Разреженный стакан" />
             <Topic id="181e2f26-86dd-4c4b-b737-124664ef9481" visible="True" title="Панель стакана" />
           </Topic>
           <Topic id="7515073c-a2d6-40d3-adc5-b8f6f6f450df" visible="True" noFile="true" isExpanded="true" title="Опционы">

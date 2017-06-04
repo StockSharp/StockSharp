@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Average")]
 		[DescriptionLoc(LocalizedStrings.Str772Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public RelativeVigorIndexAverage Average { get; private set; }
+		public RelativeVigorIndexAverage Average { get; }
 
 		/// <summary>
 		/// Signaling part of indicator.
@@ -64,6 +64,6 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Signal")]
 		[DescriptionLoc(LocalizedStrings.Str773Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public RelativeVigorIndexSignal Signal { get; private set; }
+		public RelativeVigorIndexSignal Signal { get; }
 	}
 }

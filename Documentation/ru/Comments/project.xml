@@ -146,7 +146,6 @@
 				<p>Базовые классы индикаторов и классы самих индикаторов.</p>
 			</summary>
 		</member>
-
 		<member name="N:StockSharp.Algo.Statistics">
 			<summary>
 				<p>Расчет статистических параметров.</p>
@@ -212,9 +211,14 @@
 				<p>Классы для конфигурирования различных компонентов StockSharp.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.CQG">
+		<member name="N:StockSharp.Cqg.Com">
 			<summary>
-				<p>Коннектор к торговой программе CQG.</p>
+				<p>Коннектор к торговой программе CQG Client.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cqg.Continuum">
+			<summary>
+				<p>Коннектор прямого доступа к торговой системе CQG.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Logging">
@@ -297,6 +301,11 @@
 				<p>Графические компоненты (график для отрисовки свечек, окно для логов, монитор работы стратегий и т.д.).</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Xaml.Converters">
+			<summary>
+				<p>WPF конвертеры.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Xaml.Charting">
 			<summary>
 				<p>График для отрисовки свечек и эквити.</p>
@@ -329,7 +338,12 @@
 		</member>
 		<member name="N:StockSharp.InteractiveBrokers.Web">
 			<summary>
-				<p>Классы для работы с Web-компонентами InteractiveBrokers.</p>
+				<p>Классы для работы с Web-компонентами <see cref="N:StockSharp.InteractiveBrokers"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.InteractiveBrokers.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.InteractiveBrokers"/>.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Oanda">
@@ -515,6 +529,16 @@
 		<member name="N:StockSharp.Xaml.PropertyGrid">
 			<summary>
 				<p>Графический компонент PropertyGridEx.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SpbEx">
+			<summary>
+				<p>Коннектор прямого подключения по бинарному протоколу к SPB Exchange.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SpbEx.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.SpbEx"/>.</p>
 			</summary>
 		</member>
 	</members>

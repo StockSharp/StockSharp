@@ -400,8 +400,8 @@ namespace StockSharp.Algo.Storages.Binary
 			ExchangeInfoProvider = exchangeInfoProvider;
 		}
 
-		protected SecurityId SecurityId { get; private set; }
-		protected int DataSize { get; private set; }
+		protected SecurityId SecurityId { get; }
+		protected int DataSize { get; }
 		protected Version Version { get; set; }
 		protected IExchangeInfoProvider ExchangeInfoProvider { get; }
 

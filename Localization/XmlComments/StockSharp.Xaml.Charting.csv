@@ -81,7 +81,7 @@ P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.PriceStep/summary;DocStr4537
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.ChartX/summary;DocStr8949
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.AutoRemoveFromChart/summary;DocStr8950
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.IsFrozen/summary;DocStr8951
-M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor(StockSharp.Xaml.Charting.ChartActiveOrderInfo)/summary;DocStr1
+M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.UpdateOrderState(StockSharp.BusinessEntities.Order,System.Boolean,System.Boolean)/summary;DocStr8952
 M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.UpdateOrderState(StockSharp.BusinessEntities.Order,System.Boolean,System.Boolean)/param/order;DocStr2163
 M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.UpdateOrderState(StockSharp.BusinessEntities.Order,System.Boolean,System.Boolean)/param/isError;DocStr8953
@@ -798,6 +798,7 @@ M:StockSharp.Xaml.Charting.IndicatorType.Load(Ecng.Serialization.SettingsStorage
 M:StockSharp.Xaml.Charting.IndicatorType.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.IndicatorType.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Charting.LineData`1/summary;DocStr9368
+T:StockSharp.Xaml.Charting.LineData`1/typeparam/TKey;DocStr9810
 P:StockSharp.Xaml.Charting.LineData`1.X/summary;DocStr9369
 P:StockSharp.Xaml.Charting.LineData`1.Y/summary;DocStr9370
 T:StockSharp.Xaml.Charting.LineElement/summary;DocStr7855

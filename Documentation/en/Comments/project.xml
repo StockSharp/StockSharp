@@ -201,9 +201,14 @@
 				<p>StockSharp configuration.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.CQG">
+		<member name="N:StockSharp.Cqg.Com">
 			<summary>
 				<p>CQG connectivity components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cqg.Continuum">
+			<summary>
+				<p>CQG DMA connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Logging">
@@ -219,6 +224,11 @@
 		<member name="N:StockSharp.Xaml">
 			<summary>
 				<p>WPF components (candle chart, tables etc.).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Converters">
+			<summary>
+				<p>WPF converters.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml.Charting">
@@ -253,7 +263,12 @@
 		</member>
 		<member name="N:StockSharp.InteractiveBrokers.Web">
 			<summary>
-				<p>InteractiveBrokers site-grabber components.</p>
+				<p><see cref="N:StockSharp.InteractiveBrokers"/> site-grabber components.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.InteractiveBrokers.Xaml">
+			<summary>
+				<p><see cref="N:StockSharp.InteractiveBrokers"/> WPF components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Oanda">

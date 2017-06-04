@@ -6,7 +6,7 @@
 <mediaLink>
 <image xlink:href="Designer_Event_model_00"/>
 </mediaLink>
-<para>Для кубика <legacyBold>Переменная</legacyBold> выбран тип данных <legacyBold>Инструмент</legacyBold>, если инструмент не указан, 
+<para>Для кубика <legacyBold>Переменная</legacyBold> выбран тип данных <legacyBold>Инструмент</legacyBold>. Если инструмент не указан, 
 но установлен флаг <legacyBold>Параметры</legacyBold> группы свойств <legacyBold>Общее</legacyBold>, то он будет взят из стратегии. 
 Для кубика <legacyBold>Конвертер</legacyBold> выбран тип данных и соответствующее поле коллекции кубиков 
 на покупку Bids. Кубик индексатор получает необходимый элемент из коллекции лучших 

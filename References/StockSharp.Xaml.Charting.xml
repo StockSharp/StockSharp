@@ -314,7 +314,7 @@
             Do not allow user to edit the order from chart.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor(StockSharp.Xaml.Charting.ChartActiveOrderInfo)">
+    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartActiveOrderInfo" />.
             </summary>
@@ -2780,6 +2780,7 @@
       <summary>
             Line data.
             </summary>
+      <typeparam name="TKey">Key type.</typeparam>
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineData`1.X">
       <summary>

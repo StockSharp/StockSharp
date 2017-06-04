@@ -11,14 +11,14 @@
   <definedTerm>Входящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)). </para></listItem>
+  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
 </list>
   </definition>
 
   <definedTerm>Исходящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)). </para></listItem>
+  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
 </list>
   </definition>
   

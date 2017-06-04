@@ -6,20 +6,20 @@
 панели <token>SchemeDis</token> нажать правой кнопкой мыши 
 на необходимой стратегии из папки <legacyBold>Стратегии</legacyBold> и 
 выбрать <mediaLinkInline><image xlink:href="Designer_Live_trade_00"/></mediaLinkInline>  <legacyBold>Торговля</legacyBold>. 
-Стратегия добавится в папку <legacyBold>Торговля</legacyBold> панели <legacyBold>Схемы</legacyBold>. </para>
+Стратегия добавится в папку <legacyBold>Торговля</legacyBold> панели <legacyBold>Схемы</legacyBold>.</para>
  <mediaLink>
 <image xlink:href="Designer_Live_trade_01"/>
 </mediaLink>
 <para>Также добавить стратегию в Live торговлю можно нажав на 
 кнопку <mediaLinkInline><image xlink:href="Designer_Live_trade_00"/></mediaLinkInline>  <legacyBold>Торговля</legacyBold> 
-на вкладке <legacyBold>Эмуляция</legacyBold></para>
+на вкладке <legacyBold>Эмуляция</legacyBold>.</para>
  <mediaLink>
 <image xlink:href="Designer_Live_trade_02"/>
 </mediaLink>
 <para>Папка Торговля содержит стратегии, которые добавлены для запуска 
-в Live торговлю. При этом стратегии, которые запущены отмечены 
-значком  <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline> а 
-которые остановлены отмечены значком  <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline>.</para>
+в Live торговлю. При этом стратегии, которые запущены, отмечены 
+значком  <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>, а 
+которые остановлены, отмечены значком  <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline>.</para>
 
     </introduction>
     <relatedTopics>

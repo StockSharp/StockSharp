@@ -6,6 +6,7 @@ T:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter/summary;DocStr9696
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
+M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.UserName/summary;Login

@@ -19,7 +19,7 @@
 <list class="bullet">
   <listItem><para><legacyBold>Заявка</legacyBold> – отмененная заявка, 
 которая может использоваться для получения сделок по ней с помощью элемента 
-<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью 
+<legacyBold>Сделки</legacyBold>, а так же отображения на графике с помощью 
 кубика <legacyBold>Панель графика</legacyBold>.</para></listItem>
 </list>
   </definition>

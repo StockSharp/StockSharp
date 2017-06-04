@@ -410,6 +410,7 @@ M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.I
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/security;DocStr844
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/securityType;DocStr9140
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestOptionParameters(StockSharp.BusinessEntities.Security)/summary;DocStr9565
+M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestOptionParameters(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestScannerParameters/summary;DocStr9557
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestSoftDollarTier/summary;DocStr9579
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)/summary;DocStr9419
@@ -627,3 +628,8 @@ M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadDescription(StockSharp.In
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadBoards(StockSharp.InteractiveBrokers.Web.Product)/summary;DocStr3695
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadBoards(StockSharp.InteractiveBrokers.Web.Product)/param/product;DocStr2831
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadBoards(StockSharp.InteractiveBrokers.Web.Product)/returns;Str2831
+T:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox/summary;DocStr8287
+M:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.#ctor/summary;DocStr1
+F:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFieldsProperty/summary;DocStr29
+P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFields/summary;DocStr8288
+P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.DefaultFields/summary;DocStr8289

@@ -4,7 +4,7 @@
     <introduction>
 <para>Для просмотра загруженных данных необходимо выбрать 
 инструмент в списке <legacyBold>Активные</legacyBold>. На панели 
-справа отобразятся все имеющиеся данные по инструменту.  </para>
+справа отобразятся все имеющиеся данные по инструменту:</para>
 <mediaLink>
 <image xlink:href="Designer_Viewing_the_downloaded_data_00"/>
 </mediaLink>

@@ -13,7 +13,7 @@
   <definedTerm>Входящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-<listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо получать сделки, если инструмент
+<listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо получать сделки. Если инструмент
  не передан, то на выход передаются сделки по всем инструментам стратегии.</para></listItem>
 </list>
   </definition>

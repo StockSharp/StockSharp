@@ -12,7 +12,7 @@
   <definedTerm>Входящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> –сигнал (флаг), который инициирует процесс оповещения.</para></listItem>
+  <listItem><para><legacyBold>Флаг</legacyBold> – сигнал (флаг), который инициирует процесс оповещения.</para></listItem>
 </list>
   </definition>
   

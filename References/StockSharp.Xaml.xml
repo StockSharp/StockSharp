@@ -66,6 +66,7 @@
       <summary>
             Check for updates.
             </summary>
+      <param name="delay">Delay time.</param>
     </member>
     <member name="M:StockSharp.Xaml.AboutWindow.InitializeComponent">
       <summary>
@@ -412,13 +413,15 @@
     </member>
     <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row">
       <summary>
-            Value.
+            Row.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs" />.
             </summary>
+      <param name="column">Column.</param>
+      <param name="row">Row.</param>
     </member>
     <member name="T:StockSharp.Xaml.GridControl.BaseGridControl">
       <summary>
@@ -771,16 +774,6 @@
     <member name="M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.InitializeComponent">
       <summary>
             InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.INotifyPropertiesChanged">
-      <summary>
-            The interface describing the type with a variable number of properties.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.PropertyGrid.INotifyPropertiesChanged.PropertiesChanged">
-      <summary>
-            The available properties change event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.PropertyGridEx">

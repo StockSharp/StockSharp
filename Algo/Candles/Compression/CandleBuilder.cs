@@ -423,6 +423,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
 		/// </summary>
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 		public TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (exchangeInfoProvider == null)

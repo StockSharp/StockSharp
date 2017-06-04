@@ -119,6 +119,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// To renew the indicator with numeric pair.
 		/// </summary>
+		/// <typeparam name="TValue">Value type.</typeparam>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="value">The pair of values.</param>
 		/// <param name="isFinal">If the pair final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>

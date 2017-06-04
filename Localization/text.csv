@@ -2176,7 +2176,7 @@ Str2308Params;Files processing for type {0}.;Обработка файлов д�
 Str2309Params;File written in {0}.;Запись файла за {0}.
 Str2311Params;Parameter with key {0} not found.;Параметр с ключом {0} не найден.
 Str2312;Market on close;Рыночная по закрытию
-LimitOnClose;Limit-On-Close;Лимитированная по закрытию
+LimitOnClose;Limit on close;Лимитированная по закрытию
 Str2314;At best price;По лучшей цене
 Trailing;Trailing;Скользящий
 Str2316;With offset;Со сдвигом
@@ -2402,7 +2402,7 @@ Str2567;Use «native» reconnection mechanism.;Использовать «род
 Str2568;Use OpenECry API logging.;Использовать логирование OpenECry API.
 Str2570;Stop type;Тип стопа
 Str2571;Stop type.;Тип стопа.
-Str2572;Trailing stop follows the market if price change is larger than Delta.;Trailing стоп следует за рынком если изменение цены больше чем Delta.
+Str2572;Trailing stop follows the market if price change is larger than {0}.;Trailing стоп следует за рынком если изменение цены больше чем {0}.
 Str2573;Delta percentage;Delta в процентах
 Str2574;Delta expressed as a percentage.;Delta выражена в процентах.
 Str2575;Trigger field;Поле срабатывания
@@ -4547,6 +4547,16 @@ CfiCodeDesc;Type in ISO 10962 standard.;Тип в стандарте ISO 10962.
 EnableSimulator;Enable simulator;Использовать эмуляцию
 OrderSide;Order side;Направление заявки
 Side;Side;Направление
+Pegged;Pegged;Привязанная
+MarketOrBetter;Market or better;Рыночная или лучше
+MarketNoWait;Market no wait;Рыночная без ожидания
+LimitOrBetter;Limit or better;Лимитная или лучше
+LimitNoWait;Limit no wait;Лимитная без ожидания
+NoWait;Not wait;Без ожидания
+OnClose;On close;По закрытию
+ServerStop;Server stop;Серверный стоп
+ServerStopLimit;Server stop-limit;Серверный стоп-лимит
+ByLastPrice;By last price;По последней цене
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5159,7 +5169,7 @@ DocStr625;The default function to filter data {0};Функция по умолч
 DocStr626;The function to filter data {0};Функция для фильтрации данных {0}
 DocStr627;Base candle class (contains main parameters);Базовый класс для свечи (содержит основные параметры)
 DocStr629;Copy the message into the {0};Скопировать данные сообщения в {0}
-DocStr630;The object, which copied information;Объект, в который копируется информация
+DocStr630;The object, to which copied information;Объект, в который копируется информация
 DocStr631;Open time;Время начала свечи
 DocStr632;Close time;Время окончания свечи
 DocStr633;High time;Время с максимальной ценой в свече
@@ -7648,9 +7658,9 @@ DocStr3142;Token. Uses in OAuth 1.0a;Token. Используется в проц
 DocStr3144;Consumer key;Consumer key
 DocStr3145;Token;Token
 DocStr3146;Secret;Secret
-DocStr3147;Token serialization;Сериализация токена
+DocStr3147;Serialize the token;Сериализация токена
 DocStr3148;Serialized as string the token;Строка с сериализованным токеном
-DocStr3149;Toke deserialization;Десериализация токена
+DocStr3149;Deserialize the token;Десериализация токена
 DocStr3150;E*TRADE authorization window;Окно авторизации E*TRADE
 DocStr3151;E*TRADE verification code to continue authorization;Код верификации для продолжения процесса авторизации в системе E*TRADE
 DocStr3152;FIX server;Сервер, работающий через FIX протокол
@@ -11981,17 +11991,6 @@ DocStr7556;Перезапускать службу SmartCOM при подклю�
 DocStr7557;Ограничение по времени для перезапуска службы SmartCOM. Для отключения ограничения по времени необходимо указать {0};Ограничение по времени для перезапуска службы SmartCOM. Для отключения ограничения по времени необходимо указать {0}
 DocStr7558;The message adapter for Sterling;Адаптер сообщений для Sterling
 DocStr7559;Extended order types;Расширенные типы заявок
-DocStr7560;Market or better;Рыночная или лучше
-DocStr7561;Market no wait;Рыночная без ожидания
-DocStr7562;Limit on close;Лимитная по закрытию
-DocStr7563;Limit or better;Лимитная или лучше
-DocStr7564;Limit no wait;Лимитная без ожидания
-DocStr7565;Not wait;Без ожидания
-DocStr7566;On close;По закрытию
-DocStr7567;Pegged;Привязанная
-DocStr7568;Server stop;Серверный стоп
-DocStr7569;Server stop-limit;Серверный стоп-лимит
-DocStr7570;By last price;По последней цене
 DocStr7571;Execution instructions;Инструкции исполнения
 DocStr7572;Reservation;С резервированием
 DocStr7573;No preference;Без преференций
@@ -14085,3 +14084,16 @@ DocStr9792;Length of result buffer;Длина результирующего б�
 DocStr9793;The default value;Значение по-умолчанию
 DocStr9794;Result buffer;Результирующий буфер
 DocStr9800;Spb exchange;СПб биржа
+DocStr9801;All avaliable adapters;Все доступные адаптеры
+DocStr9802;Users info;Информация о пользователях
+DocStr9803;Type of builder;Тип построителя
+DocStr9804;{0} derived type;Производные типы {0}
+DocStr9805;Result values type;Тип результирующий значений
+DocStr9806;{0}, if can optimize the parameter, otherwise, {1};{0}, если параметр может быть оптимизирован, иначе, {1}
+DocStr9807;{0}, if rule was removed, otherwise, {1};{0}, если правило было удалено, иначе, {1}
+DocStr9808;Authentication url;Адрес авторизации
+DocStr9809;Increment bit index;Увеличить индекс бита
+DocStr9810;Key type;Тип ключа
+DocStr9811;New value for {0}. Can be {1};Новое значение для {0}. Может быть {1}
+DocStr9812;Delay time;Время задержки
+DocStr9813;Row;Строка

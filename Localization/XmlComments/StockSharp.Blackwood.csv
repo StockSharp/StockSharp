@@ -51,7 +51,7 @@ F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitOpen/summary;DocStr2562
 F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketNyse/summary;DocStr2563
 F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitNyse/summary;DocStr2564
 F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitClose/summary;DocStr2565
-F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.Pegged/summary;DocStr7567
+F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.Pegged/summary;Pegged
 F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.ReversePegged/summary;DocStr8459
 F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.DirectPlus/summary;DocStr8459
 F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MidPegged/summary;DocStr8459

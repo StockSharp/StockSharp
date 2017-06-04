@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("MACD")]
 		[DescriptionLoc(LocalizedStrings.Str797Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public MovingAverageConvergenceDivergence Macd { get; private set; }
+		public MovingAverageConvergenceDivergence Macd { get; }
 
 		/// <summary>
 		/// Signaling Moving Average.
@@ -63,6 +63,6 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str804Key)]
 		[DescriptionLoc(LocalizedStrings.Str805Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public ExponentialMovingAverage SignalMa { get; private set; }
+		public ExponentialMovingAverage SignalMa { get; }
 	}
 }

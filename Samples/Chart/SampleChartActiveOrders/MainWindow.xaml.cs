@@ -414,7 +414,7 @@
 				}
 			};
 
-			if(NeedToDelay)
+			if (NeedToDelay)
 				DelayedAction(cancelAction, _delay, "cancel");
 			else
 				cancelAction();
@@ -424,7 +424,18 @@
 		{
 			bool isNew;
 
-			var oi = _chartOrderInfos.SafeAdd(order, o => new ChartActiveOrderInfo(initFrom), out isNew);
+			var oi = _chartOrderInfos.SafeAdd(order, o =>
+			{
+				var info = new ChartActiveOrderInfo();
+
+				if (initFrom != null)
+				{
+					info.AutoRemoveFromChart = initFrom.AutoRemoveFromChart;
+					info.ChartX = initFrom.ChartX;
+				}
+
+				return info;
+			}, out isNew);
 
 			if (isNew)
 			{

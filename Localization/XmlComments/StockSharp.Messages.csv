@@ -940,6 +940,7 @@ M:StockSharp.Messages.PortfolioMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.PortfolioMessage.Clone/returns;DocStr1116
 M:StockSharp.Messages.PortfolioMessage.CopyTo(StockSharp.Messages.PortfolioMessage)/summary;DocStr629
 M:StockSharp.Messages.PortfolioMessage.CopyTo(StockSharp.Messages.PortfolioMessage)/param/destination;DocStr630
+M:StockSharp.Messages.PortfolioMessage.CopyTo(StockSharp.Messages.PortfolioMessage)/returns;DocStr630
 T:StockSharp.Messages.PositionChangeTypes/summary;DocStr4438
 F:StockSharp.Messages.PositionChangeTypes.BeginValue/summary;Str253
 F:StockSharp.Messages.PositionChangeTypes.CurrentValue/summary;Str254

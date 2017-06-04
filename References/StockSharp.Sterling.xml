@@ -137,46 +137,6 @@
             <see cref="N:StockSharp.Sterling"/> order condition.
             </summary>
         </member>
-        <member name="T:StockSharp.Sterling.SterlingOrderCondition.SterlingOptionOrderCondition">
-            <summary>
-            Options orders settings.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingOrderCondition.SterlingOptionOrderCondition.IsOpen">
-            <summary>
-            Open time.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingOrderCondition.SterlingOptionOrderCondition.Maturity">
-            <summary>
-            Settlement date.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingOrderCondition.SterlingOptionOrderCondition.Type">
-            <summary>
-            Option type.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingOrderCondition.SterlingOptionOrderCondition.UnderlyingCode">
-            <summary>
-            Код базового актива.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingOrderCondition.SterlingOptionOrderCondition.IsCover">
-            <summary>
-            Covered option.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingOrderCondition.SterlingOptionOrderCondition.UnderlyingType">
-            <summary>
-            Asset type.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Sterling.SterlingOrderCondition.SterlingOptionOrderCondition.StrikePrice">
-            <summary>
-            Strike price.
-            </summary>
-        </member>
         <member name="M:StockSharp.Sterling.SterlingOrderCondition.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Sterling.SterlingOrderCondition"/>.
@@ -257,9 +217,39 @@
             Time.
             </summary>
         </member>
-        <member name="P:StockSharp.Sterling.SterlingOrderCondition.Options">
+        <member name="P:StockSharp.Sterling.SterlingOrderCondition.IsOpen">
             <summary>
-            Options orders settings.
+            Open time.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Sterling.SterlingOrderCondition.Maturity">
+            <summary>
+            Settlement date.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Sterling.SterlingOrderCondition.Type">
+            <summary>
+            Option type.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingCode">
+            <summary>
+            Код базового актива.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Sterling.SterlingOrderCondition.IsCover">
+            <summary>
+            Covered option.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingType">
+            <summary>
+            Asset type.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Sterling.SterlingOrderCondition.StrikePrice">
+            <summary>
+            Strike price.
             </summary>
         </member>
         <member name="T:StockSharp.Sterling.SterlingTrader">

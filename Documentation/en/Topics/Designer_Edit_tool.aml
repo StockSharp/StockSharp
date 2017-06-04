@@ -2,10 +2,9 @@
 <topic id="bc271b21-3ef5-422e-b6cf-9f0228607d2b" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>При нажатии на 
-кнопку <legacyBold>Изменить инструмент</legacyBold> <mediaLinkInline><image xlink:href="Designer_Edit_tool_00"/></mediaLinkInline>  откроется 
-окно <legacyBold>Редактирование</legacyBold> выбранного инструмента. 
-Измените необходимые параметры и нажмите кнопку <legacyBold>ОК</legacyBold>.</para>
+<para>При нажатии на кнопку <legacyBold>Изменить инструмент</legacyBold> <mediaLinkInline><image xlink:href="Designer_Edit_tool_00"/></mediaLinkInline>
+откроется окно <legacyBold>Редактирование</legacyBold> выбранного инструмента. 
+После изменения параметров, необходимо нажать кнопку <legacyBold>ОК</legacyBold>.</para>
  <mediaLink>
 <image xlink:href="Designer_Edit_tool_01"/>
 </mediaLink>

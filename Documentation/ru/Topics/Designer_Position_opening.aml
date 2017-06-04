@@ -31,7 +31,7 @@
     <definedTerm>Параметры</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Рыночная</legacyBold> – признак рыночной заявки</para></listItem>
+  <listItem><para><legacyBold>Рыночная</legacyBold> – признак рыночной заявки.</para></listItem>
   <listItem><para><legacyBold>Код клиента</legacyBold> – код клиента присвоенный дрокером,
   если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
   <listItem><para><legacyBold>Брокер</legacyBold> – код брокерской фирмы,

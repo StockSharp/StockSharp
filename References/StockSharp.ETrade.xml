@@ -4,121 +4,6 @@
     <name>StockSharp.ETrade</name>
   </assembly>
   <members>
-    <member name="T:StockSharp.ETrade.Native.AccountListResponse">
-      <summary>
-            accountlist response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.AccountInfo">
-      <summary>
-            The account information.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.AccountPositionsResponse">
-      <summary>
-            accountpositions response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.PositionInfo">
-      <summary>
-            The position information.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.ProductId">
-      <summary>
-            Position security information.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.GetOrderListResponse">
-      <summary>
-            OrderList response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.OrderListResponse">
-      <summary>
-            OrderList response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.OrderDetails">
-      <summary>
-            ETrade data container for an order.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.LegDetails">
-      <summary>
-            ETrade order leg.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.SymbolInfo">
-      <summary>
-            The instrument information.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.Order">
-      <summary>
-            THe order information ETrade.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.OrderRequestBase">
-      <summary>
-            Base class for ETrade requests.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.EquityOrderRequest">
-      <summary>
-            The order registration request.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.PlaceEquityOrderResponse">
-      <summary>
-            The order registration response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.PlaceEquityOrderResponse2">
-      <summary>
-            The order registration response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.PlaceOrderResponseMessage">
-      <summary>
-            ETrade text message about the order.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.changeEquityOrderRequest">
-      <summary>
-            The order modification request.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.placeChangeEquityOrderResponse">
-      <summary>
-            The order modification response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.cancelOrderRequest">
-      <summary>
-            The order cancellation request.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.cancelOrderResponse">
-      <summary>
-            The order cancellation response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.CancelOrderResponse2">
-      <summary>
-            The order cancellation response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.productLookupResponse">
-      <summary>
-            ProductLookup response.
-            </summary>
-    </member>
-    <member name="T:StockSharp.ETrade.Native.ProductInfo">
-      <summary>
-            The instrument information.
-            </summary>
-    </member>
     <member name="T:StockSharp.ETrade.Native.OAuthToken">
       <summary>
             Token. Uses in OAuth 1.0a.
@@ -149,14 +34,15 @@
     </member>
     <member name="M:StockSharp.ETrade.Native.OAuthToken.Serialize">
       <summary>
-            Token serialization.
+            Serialize the token.
             </summary>
       <returns>Serialized as string the token.</returns>
     </member>
     <member name="M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)">
       <summary>
-            Toke deserialization.
+            Deserialize the token.
             </summary>
+      <param name="serialized">Serialized as string the token.</param>
       <returns>Token.</returns>
     </member>
     <member name="T:StockSharp.ETrade.ETradeMessageAdapter">
@@ -339,6 +225,7 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.ETrade.Xaml.AuthDialog" />.
             </summary>
+      <param name="authUrl">Authentication url.</param>
     </member>
     <member name="P:StockSharp.ETrade.Xaml.AuthDialog.VerificationCode">
       <summary>

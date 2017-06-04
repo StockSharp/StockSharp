@@ -6,10 +6,18 @@
 <image xlink:href="Designer_DLL_Strategy_00"/>
 </mediaLink>
 <para>Кубик используется для импорта Dll библиотек со 
-стратегиями(<link xlink:href="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" />). 
-Для того чтобы добавить стратегию необходимо указать <legacyBold>Сборку</legacyBold>, после чего 
-появится возможность выбрать стратегию по имени в выпадающем списке 
-<legacyBold>Имя типа стратегии</legacyBold>. </para>
+стратегиями(<link xlink:href="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" />).</para>
+
+<definitionTable>
+  <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Сборка</legacyBold> – Dll библиотека, содержащая стратегию, которую необходимо добавить.</para></listItem>
+  <listItem><para><legacyBold>Имя типа стратегии</legacyBold> – имя типа стратегии, которую необходимо добавить.</para></listItem>
+
+</list>
+  </definition>
+</definitionTable>
     </introduction>
     <relatedTopics>
 <link xlink:href="250003df-48b4-4211-9c8e-25ac3f6a45be" />

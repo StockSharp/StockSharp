@@ -7,12 +7,12 @@
 исполнение. После остановки на необходимом кубике нажимать на 
 кнопку  <mediaLinkInline><image xlink:href="Designer_Debug_03"/></mediaLinkInline> <legacyBold>К следующему элементу</legacyBold>, 
 Дизайнер будет последовательно 
-переходить от кубика к кубику показывая пошаговое исполнение 
+переходить от кубика к кубику, показывая пошаговое исполнение 
 стратегии. Если есть необходимость зайти в <legacyBold>Составной элемент</legacyBold>, 
 то в момент, когда на кубике <legacyBold>Составного элемента</legacyBold> окажется шаг 
 пошагового исполнения необходимо нажать 
-кнопку  <mediaLinkInline><image xlink:href="Designer_Debug_04"/></mediaLinkInline> <legacyBold>В составной элемент </legacyBold>
-и следующий шаг пошагового исполнения будет внутри <legacyBold>Составного элемента</legacyBold>. 
+кнопку  <mediaLinkInline><image xlink:href="Designer_Debug_04"/></mediaLinkInline> <legacyBold>В составной элемент</legacyBold>.
+И следующий шаг пошагового исполнения будет внутри <legacyBold>Составного элемента</legacyBold>. 
 Для выхода из <legacyBold>Составного элемента</legacyBold> необходимо нажать 
 кнопку  <mediaLinkInline><image xlink:href="Designer_Debug_05"/></mediaLinkInline> <legacyBold>Из составного элемента</legacyBold>.
 </para>	

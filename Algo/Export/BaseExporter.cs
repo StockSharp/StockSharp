@@ -62,17 +62,17 @@ namespace StockSharp.Algo.Export
 		/// <summary>
 		/// Security.
 		/// </summary>
-		protected Security Security { get; private set; }
+		protected Security Security { get; }
 
 		/// <summary>
 		/// The data parameter.
 		/// </summary>
-		public object Arg { get; private set; }
+		public object Arg { get; }
 
 		/// <summary>
 		/// The path to file.
 		/// </summary>
-		protected string Path { get; private set; }
+		protected string Path { get; }
 
 		/// <summary>
 		/// To export values.

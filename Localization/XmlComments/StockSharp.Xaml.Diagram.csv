@@ -71,6 +71,7 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RemoveLink(StockSharp.Xaml.D
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.GetElements/summary;DocStr9766
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.GetElements/returns;DocStr9767
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId(System.Nullable{System.Guid})/summary;DocStr9227
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId(System.Nullable{System.Guid})/param/id;DocStr9811
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/returns;DocStr1116
@@ -221,6 +222,7 @@ M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,System.String,St
 M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32,System.String)/param/process;DocStr8898
 M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32,System.String)/param/index;DocStr9284
 M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32,System.String)/param/socketId;DocStr7873
+M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32,System.String)/returns;Str3143
 M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)/summary;DocStr7874
 M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)/param/uniqueKey;DocStr5982
 M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)/param/name;DocStr8320
@@ -228,12 +230,14 @@ M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,S
 M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)/param/linkableMax;DocStr7872
 M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)/param/index;DocStr9284
 M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)/param/socketId;DocStr7873
+M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)/returns;Str3143
 M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket,System.Int32)/summary;DocStr7875
 M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket,System.Int32)/param/socket;Str3143
 M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket,System.Int32)/param/index;DocStr9284
 M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSocket(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr7876
 M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSocket(StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;Str3143
 M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSockets(System.Boolean)/summary;DocStr7877
+M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSockets(System.Boolean)/param/raiseSocketRemoved;DocStr9006
 M:StockSharp.Xaml.Diagram.DiagramElement.GetSocket(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr9429
 M:StockSharp.Xaml.Diagram.DiagramElement.GetSocket(StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;DocStr9430
 M:StockSharp.Xaml.Diagram.DiagramElement.GetSocket(StockSharp.Xaml.Diagram.DiagramSocket)/returns;Str3143
@@ -316,6 +320,7 @@ P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsDefault/summary;DocStr7919
 P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsParam/summary;DocStr7922
 P:StockSharp.Xaml.Diagram.IDiagramElementParam.IgnoreOnSave/summary;DocStr7923
 T:StockSharp.Xaml.Diagram.DiagramElementParam`1/summary;DocStr7917
+T:StockSharp.Xaml.Diagram.DiagramElementParam`1/typeparam/T;DocStr1145
 E:StockSharp.Xaml.Diagram.DiagramElementParam`1.ValueChanging/summary;DocStr7971
 E:StockSharp.Xaml.Diagram.DiagramElementParam`1.ValueChanged/summary;DocStr7972
 P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Name/summary;Str3570
@@ -476,8 +481,10 @@ M:StockSharp.Xaml.Diagram.DiagramSocketType.#ctor(System.Type,System.String,Syst
 M:StockSharp.Xaml.Diagram.DiagramSocketType.#ctor(System.Type,System.String,System.Windows.Media.Color)/param/color;DocStr8026
 P:StockSharp.Xaml.Diagram.DiagramSocketType.AllTypes/summary;DocStr8034
 M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System.Windows.Media.Color)/summary;DocStr8027
+M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System.Windows.Media.Color)/typeparam/T;Str2133
 M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System.Windows.Media.Color)/param/name;DocStr8025
 M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System.Windows.Media.Color)/param/color;DocStr8026
+M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System.Windows.Media.Color)/returns;Str3412
 E:StockSharp.Xaml.Diagram.DiagramSocketType.PropertyChanged/summary;DocStr7975
 M:StockSharp.Xaml.Diagram.DiagramSocketType.OnPropertyChanged(System.String)/summary;DocStr7970
 M:StockSharp.Xaml.Diagram.DiagramSocketType.OnPropertyChanged(System.String)/param/propertyName;DocStr2622
@@ -808,6 +815,7 @@ T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1/typeparam/T;DocStr8906
 P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.UseAutoNaming/summary;UseAutoNaming
 P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Type/summary;Str2133
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.#ctor(System.String)/summary;DocStr1
+M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.#ctor(System.String)/param/typeParamCategory;DocStr7986
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.SetTypes(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Diagram.DiagramSocketType})/summary;DocStr8053
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.SetTypes(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Diagram.DiagramSocketType})/param/types;Str2133
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.TypeChanged/summary;DocStr8054
@@ -839,6 +847,7 @@ M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.#ctor/summary;DocStr1
 T:StockSharp.Xaml.Diagram.ExportDiagramElement/summary;DocStr8055
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)/summary;DocStr1
+M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)/param/source;XamlStr688
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3

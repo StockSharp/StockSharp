@@ -1833,6 +1833,7 @@
       <summary>
             Request option parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewOptionParameters" /> event.
             </summary>
+      <param name="security">Security.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestScannerParameters">
       <summary>
@@ -2746,6 +2747,31 @@
             </summary>
       <param name="product">Security.</param>
       <returns>Boards.</returns>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox">
+      <summary>
+            The drop-down list to select a set of fields <see cref="T:StockSharp.InteractiveBrokers.GenericFieldTypes" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFieldsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFields" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFields">
+      <summary>
+            The list of selected fields.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.DefaultFields">
+      <summary>
+            The set of selected default fields.
+            </summary>
     </member>
   </members>
 </doc>

@@ -52,8 +52,8 @@
 				  <para>
 					  Заголовок окна должен содержать через @ код и класс инструмента, по которому в <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
 					  будет происходить сопоставление объекта <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference> и стакана.
-					  Например, для Лукойла заголовок будет <legacyBold>LKOH@QJSIM</legacyBold> на демо счете, и <legacyBold>LKOH@EQBR</legacyBold> на реальном.
-					  Для инструментов <token>rts</token> класс инструмента будет равен RTS. Стакан для июньского фьючерса на индекс РТС, к примеру, будет иметь
+					  Например, для Лукойла заголовок будет <legacyBold>LKOH@TQBR</legacyBold>.
+					  Для инструментов <token>rts</token> класс инструмента будет равен FORTS. Стакан для июньского фьючерса на индекс РТС, к примеру, будет иметь
 					  заголовок <legacyBold>RIM5@FORTS</legacyBold>. Подробнее, в разделе <link xlink:href="34a9c518-60ca-45c0-a118-5e2e42165efa">Идентификатор инструмента</link>.
 				  </para>
 				  <alert class="caution">

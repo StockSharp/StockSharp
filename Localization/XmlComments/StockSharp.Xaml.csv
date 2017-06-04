@@ -10,6 +10,7 @@ P:StockSharp.Xaml.AboutWindow.LinkUri/summary;DocStr9441
 P:StockSharp.Xaml.AboutWindow.ClosingForInstall/summary;DocStr9442
 M:StockSharp.Xaml.AboutWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.AboutWindow.CheckForUpdates(System.Nullable{System.TimeSpan})/summary;Str1470
+M:StockSharp.Xaml.AboutWindow.CheckForUpdates(System.Nullable{System.TimeSpan})/param/delay;DocStr9812
 M:StockSharp.Xaml.AboutWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.AdvertisePanel/summary;DocStr8063
 F:StockSharp.Xaml.AdvertisePanel.TextColorProperty/summary;DocStr29
@@ -81,8 +82,10 @@ M:StockSharp.Xaml.GridControl.SearchBox.OnTextChanged(System.String,System.Strin
 M:StockSharp.Xaml.GridControl.SearchBox.OnTextChanged(System.String,System.String)/param/text;DocStr8459
 T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs/summary;DocStr9470
 P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Column/summary;DocStr9001
-P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row/summary;Str3099
+P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row/summary;DocStr9813
 M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)/summary;DocStr1
+M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)/param/column;DocStr9001
+M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)/param/row;DocStr9813
 T:StockSharp.Xaml.GridControl.BaseGridControl/summary;DocStr8990
 T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder/summary;DocStr8991
 P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Count/summary;DocStr8992
@@ -159,8 +162,6 @@ M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.#ctor/summary;DocStr1
 F:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings/summary;DocStr8272
 M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.PropertyGrid.INotifyPropertiesChanged/summary;DocStr8273
-E:StockSharp.Xaml.PropertyGrid.INotifyPropertiesChanged.PropertiesChanged/summary;DocStr7913
 T:StockSharp.Xaml.PropertyGrid.PropertyGridEx/summary;DocStr8274
 F:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProviderProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProvider/summary;DocStr972

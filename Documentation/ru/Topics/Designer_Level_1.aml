@@ -27,7 +27,7 @@
     <definedTerm>Параметры</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Значение</legacyBold> – <legacyBold>Level1</legacyBold> параметр 
+  <listItem><para><legacyBold>Значение</legacyBold> – <legacyBold>Level1</legacyBold> параметр, 
 который необходимо отслеживать.</para></listItem>
 </list>
   </definition>

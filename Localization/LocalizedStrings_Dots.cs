@@ -1,5 +1,7 @@
 namespace StockSharp.Localization
 {
+	using Ecng.Common;
+
 	partial class LocalizedStrings
 	{
 		/// <summary>
@@ -376,5 +378,15 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string Str1864Dot => AppendDot(Str1864);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str2572TrailingDelta => Str2572.Put(TrailingDelta);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str2577TrailingReferencePrice => Str2572.Put(TrailingReferencePrice);
 	}
 }

@@ -39,8 +39,8 @@ namespace StockSharp.Quik.Verifier
 				IsCritical = isCritical;
 			}
 
-			public string Message { get; private set; }
-			public bool IsCritical { get; private set; }
+			public string Message { get; }
+			public bool IsCritical { get; }
 		}
 
 		private readonly ThreadSafeObservableCollection<SettingsError> _settingErrors;

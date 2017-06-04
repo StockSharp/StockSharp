@@ -33,6 +33,7 @@ StockSharp API Change log
 * (feature) Transaq. Security id refactoring.
 * (bug) SecurityGrid. Binding fixes.
 * (bug) Alerts. Popup window. Icon quality dix.
+* (bug) CQG continuum. Order condition fix.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
