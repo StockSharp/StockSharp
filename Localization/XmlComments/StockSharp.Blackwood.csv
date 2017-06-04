@@ -11,7 +11,7 @@ P:StockSharp.Blackwood.BlackwoodImbalance.PairedVolume/summary;DocStr2548
 P:StockSharp.Blackwood.BlackwoodImbalance.ReferencePrice/summary;Price
 P:StockSharp.Blackwood.BlackwoodImbalance.InitTime/summary;Time
 P:StockSharp.Blackwood.BlackwoodImbalance.InitImbalanceVolume/summary;DocStr2549
-P:StockSharp.Blackwood.BlackwoodImbalance.RegImbalance/summary;DocStr8459
+P:StockSharp.Blackwood.BlackwoodImbalance.RegImbalance/summary;DocStr9815
 P:StockSharp.Blackwood.BlackwoodImbalance.InitRegImbalanceVolume/summary;DocStr2551
 P:StockSharp.Blackwood.BlackwoodImbalance.CurrInitImbalanceVolume/summary;DocStr2552
 P:StockSharp.Blackwood.BlackwoodImbalance.ClearingPrice/summary;DocStr2553

@@ -216,19 +216,13 @@
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.InitSecId(StockSharp.Messages.SecurityMessage,System.String,System.String,System.String,System.String)">
       <summary>
-      </summary>
-      <param name="message">
-      </param>
-      <param name="symbol">
-      </param>
-      <param name="securityExchange">
-      </param>
-      <param name="idSource">
-      </param>
-      <param name="idValue">
-      </param>
-      <returns>
-      </returns>
+            Init security id information.
+            </summary>
+      <param name="message">A message containing info about the security.</param>
+      <param name="symbol">Symbol.</param>
+      <param name="securityExchange">Security exchange.</param>
+      <param name="idSource">Id source.</param>
+      <param name="idValue">Id value.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.ReadExecutionReport(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.ExecutionReport,Ecng.Common.FastDateTimeParser,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
       <summary>

@@ -14097,3 +14097,10 @@ DocStr9810;Key type;Тип ключа
 DocStr9811;New value for {0}. Can be {1};Новое значение для {0}. Может быть {1}
 DocStr9812;Delay time;Время задержки
 DocStr9813;Row;Строка
+DocStr9814;Iteration count;Количество итераций
+DocStr9815;Registration imbalance;Дисбаланс
+DocStr9816;Init security id information;Инициализировать информацию об идентификаторе инструмента
+DocStr9817;Symbol;Символ
+DocStr9818;Security exchange;Биржа
+DocStr9819;Id source;Источник идентификатора
+DocStr9820;Id value;Значение идентификатора

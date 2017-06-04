@@ -5469,7 +5469,7 @@ M:StockSharp.Algo.Strategies.Testing.BatchEmulation.#ctor(StockSharp.BusinessEnt
 M:StockSharp.Algo.Strategies.Testing.BatchEmulation.#ctor(StockSharp.BusinessEntities.ISecurityProvider,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio},StockSharp.Algo.Storages.IStorageRegistry)/param/storageRegistry;MarketDataStorage
 M:StockSharp.Algo.Strategies.Testing.BatchEmulation.Start(System.Collections.Generic.IEnumerable{StockSharp.Algo.Strategies.Strategy},System.Int32)/summary;DocStr8627
 M:StockSharp.Algo.Strategies.Testing.BatchEmulation.Start(System.Collections.Generic.IEnumerable{StockSharp.Algo.Strategies.Strategy},System.Int32)/param/strategies;DocStr8628
-M:StockSharp.Algo.Strategies.Testing.BatchEmulation.Start(System.Collections.Generic.IEnumerable{StockSharp.Algo.Strategies.Strategy},System.Int32)/param/iterationCount;DocStr8459
+M:StockSharp.Algo.Strategies.Testing.BatchEmulation.Start(System.Collections.Generic.IEnumerable{StockSharp.Algo.Strategies.Strategy},System.Int32)/param/iterationCount;DocStr9814
 M:StockSharp.Algo.Strategies.Testing.BatchEmulation.Stop/summary;DocStr1872
 T:StockSharp.Algo.Strategies.Testing.EmulationMarketDataModes/summary;DocStr1882
 F:StockSharp.Algo.Strategies.Testing.EmulationMarketDataModes.Storage/summary;Str1405

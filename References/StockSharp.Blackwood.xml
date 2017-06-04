@@ -71,7 +71,8 @@
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.RegImbalance">
       <summary>
-      </summary>
+            Registration imbalance.
+            </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.InitRegImbalanceVolume">
       <summary>
