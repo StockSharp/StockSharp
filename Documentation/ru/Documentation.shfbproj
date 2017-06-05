@@ -1977,11 +1977,11 @@
       <ImageId>Designer_The_Properties_Panel_00</ImageId>
       <AlternateText>Designer The Properties Panel 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Description_of_cubes_00.png">
+    <Image Include="Art\Designer_Description_of_elements_00.png">
       <ImageId>Designer_Description_of_cubes_00</ImageId>
       <AlternateText>Designer Description of cubes 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Description_of_cubes_01.png">
+    <Image Include="Art\Designer_Description_of_elements_01.png">
       <ImageId>Designer_Description_of_cubes_01</ImageId>
       <AlternateText>Designer Description of cubes 01</AlternateText>
     </Image>
@@ -2193,59 +2193,59 @@
       <ImageId>Designer_Event_model_00</ImageId>
       <AlternateText>Designer Event model 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_13.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_13.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_13</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 13</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_00.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_00.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_00</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_01.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_01.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_01</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_02.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_02.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_02</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_03.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_03.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_03</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_04.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_04.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_04</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 04</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_05.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_05.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_05</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 05</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_06.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_06.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_06</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 06</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_07.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_07.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_07</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 07</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_08.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_08.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_08</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 08</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_09.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_09.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_09</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 09</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_10.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_10.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_10</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 10</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_11.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_11.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_11</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 11</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_12.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_12.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_12</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 12</AlternateText>
     </Image>
@@ -2289,7 +2289,7 @@
       <ImageId>Designer_The_integration_of_dice_Source_code_in_the_General_scheme_00</ImageId>
       <AlternateText>Designer The integration of dice Source code in the General scheme 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Combine_cubes_of_Source_code_and_standard_cubes_00.png">
+    <Image Include="Art\Designer_Combine_Source_code_and_standard_elements_00.png">
       <ImageId>Designer_Combine_cubes_of_Source_code_and_standard_cubes_00</ImageId>
       <AlternateText>Designer Combine cubes of Source code and standard cubes 00</AlternateText>
     </Image>
@@ -2333,27 +2333,27 @@
       <ImageId>Designer_Setting_SAPI_using_Nuget_02</ImageId>
       <AlternateText>Designer Setting SAPI using Nuget 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_00.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_00.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_00</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_01.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_01.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_01</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_02.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_02.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_02</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_03.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_03.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_03</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_04.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_04.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_04</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 04</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_05.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_05.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_05</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 05</AlternateText>
     </Image>
@@ -2501,23 +2501,23 @@
       <ImageId>Designer_Optimization_02</ImageId>
       <AlternateText>Designer Optimization 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_00.png">
+    <Image Include="Art\Designer_example_of_backtesting_00.png">
       <ImageId>Designer_An_example_of_backtesting_00</ImageId>
       <AlternateText>Designer An example of backtesting 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_01.png">
+    <Image Include="Art\Designer_example_of_backtesting_01.png">
       <ImageId>Designer_An_example_of_backtesting_01</ImageId>
       <AlternateText>Designer An example of backtesting 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_02.png">
+    <Image Include="Art\Designer_example_of_backtesting_02.png">
       <ImageId>Designer_An_example_of_backtesting_02</ImageId>
       <AlternateText>Designer An example of backtesting 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_03.png">
+    <Image Include="Art\Designer_example_of_backtesting_03.png">
       <ImageId>Designer_An_example_of_backtesting_03</ImageId>
       <AlternateText>Designer An example of backtesting 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_04.png">
+    <Image Include="Art\Designer_example_of_backtesting_04.png">
       <ImageId>Designer_An_example_of_backtesting_04</ImageId>
       <AlternateText>Designer An example of backtesting 04</AlternateText>
     </Image>
