@@ -12,7 +12,7 @@
  в возможностях при создании, и можно описать любой алгоритм, в отличие от кубиков. 
  Процесс создания стратегии проходит напрямую в <legacyBold>S#.Designer</legacyBold> или в среде разработки 
  на языке <legacyBold>C#</legacyBold> (наиболее популярной из сред разработок является <legacyBold>Microsoft Visual Studio</legacyBold>), 
- используя библиотеку для профессиональной разработки торговых роботов на языке <legacyBold>C# </legacyBold> <token>stocksharpapi</token>.
+ используя библиотеку для профессиональной разработки торговых роботов на языке <legacyBold>C#</legacyBold> и <token>stocksharpapi</token>.
 </para>
     </introduction>
     <relatedTopics>
