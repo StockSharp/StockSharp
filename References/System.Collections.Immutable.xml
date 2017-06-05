@@ -270,7 +270,7 @@
         </member>
         <member name="M:System.Collections.Immutable.IImmutableList`1.Clear">
             <summary>
-            Gets an empty list that retains the same sort or unordered semantics that this instance has.
+            Gets an empty list that retains the same sort semantics that this instance has.
             </summary>
         </member>
         <member name="M:System.Collections.Immutable.IImmutableList`1.IndexOf(`0,System.Int32,System.Int32,System.Collections.Generic.IEqualityComparer{`0})">
@@ -292,6 +292,7 @@
             </param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>
             The zero-based index of the first occurrence of item within the range of
@@ -314,6 +315,7 @@
             <param name="count">The number of elements in the section to search.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>
             The zero-based index of the last occurrence of <paramref name="item"/> within the range of elements
@@ -358,6 +360,7 @@
             <param name="value">The value to remove.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>A new list with the element removed, or this list if the element is not in this list.</returns>
         </member>
@@ -381,6 +384,7 @@
             <param name="items">The items to remove if matches are found in this list.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>
             A new list with the elements removed.
@@ -419,6 +423,7 @@
             <param name="newValue">The element to replace the old element with.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>The new list -- even if the value being replaced is equal to the new value for that position.</returns>
             <exception cref="T:System.ArgumentException">Thrown when the old value does not exist in the list.</exception>
@@ -770,9 +775,9 @@
             Gets the element at the front of the queue.
             </summary>
             <returns>
-            The element on the top of the stack. 
+            The element at the front of the queue.
             </returns>
-            <exception cref="T:System.InvalidOperationException">Thrown when the stack is empty.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the queue is empty.</exception>
         </member>
         <member name="M:System.Collections.Immutable.IImmutableQueue`1.Enqueue(`0)">
             <summary>
@@ -788,7 +793,7 @@
             Returns a queue that is missing the front element.
             </summary>
             <returns>A queue; never <c>null</c>.</returns>
-            <exception cref="T:System.InvalidOperationException">Thrown when the stack is empty.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the queue is empty.</exception>
         </member>
         <member name="T:System.Collections.Immutable.IImmutableSet`1">
             <summary>
@@ -1206,15 +1211,6 @@
             </summary>
             <param name="tree">The tree.</param>
             <returns>A balanced tree.</returns>
-        </member>
-        <member name="M:System.Collections.Immutable.SortedInt32KeyNode`1.NodeTreeFromList(System.Collections.Immutable.IOrderedCollection{System.Collections.Generic.KeyValuePair{System.Int32,`0}},System.Int32,System.Int32)">
-            <summary>
-            Creates a node tree that contains the contents of a list.
-            </summary>
-            <param name="items">An indexable list with the contents that the new node tree should contain.</param>
-            <param name="start">The starting index within <paramref name="items"/> that should be captured by the node tree.</param>
-            <param name="length">The number of elements from <paramref name="items"/> that should be captured by the node tree.</param>
-            <returns>The root of the created node tree.</returns>
         </member>
         <member name="M:System.Collections.Immutable.SortedInt32KeyNode`1.SetOrAdd(System.Int32,`0,System.Collections.Generic.IEqualityComparer{`0},System.Boolean,System.Boolean@,System.Boolean@)">
             <summary>
@@ -1652,7 +1648,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:System.Collections.Immutable.ImmutableArray`1"/> struct.
             </summary>
-            <param name="items">The array to use or copy from. May be null for "default" arrays.</param>
+            <param name="items">The array from which to copy.</param>
         </member>
         <member name="T:System.Collections.Immutable.ImmutableArray`1">
             <summary>
@@ -1895,7 +1891,10 @@
             <param name="item">The item to search for.</param>
             <param name="startIndex">The index at which to begin the search.</param>
             <param name="count">The number of elements to search.</param>
-            <param name="equalityComparer">The equality comparer to use in the search.</param>
+            <param name="equalityComparer">
+            The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
+            </param>
             <returns>The 0-based index into the array where the item was found; or -1 if it could not be found.</returns>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableArray`1.Builder.LastIndexOf(`0)">
@@ -1941,6 +1940,16 @@
             <summary>
             Sorts the array.
             </summary>
+        </member>
+        <member name="M:System.Collections.Immutable.ImmutableArray`1.Builder.Sort(System.Comparison{`0})">
+            <summary>
+            Sorts the elements in the entire array using
+            the specified <see cref="T:System.Comparison`1"/>.
+            </summary>
+            <param name="comparison">
+            The <see cref="T:System.Comparison`1"/> to use when comparing elements.
+            </param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="comparison"/> is null.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableArray`1.Builder.Sort(System.Collections.Generic.IComparer{`0})">
             <summary>
@@ -2093,7 +2102,7 @@
         </member>
         <member name="F:System.Collections.Immutable.ImmutableArray`1.array">
             <summary>
-            The backing field for this instance. References to this value should never be shared with outside code. 
+            The backing field for this instance. References to this value should never be shared with outside code.
             </summary>
             <remarks>
             This would be private, but we make it internal so that our own extension methods can access it.
@@ -2254,7 +2263,10 @@
             <param name="item">The item to search for.</param>
             <param name="startIndex">The index at which to begin the search.</param>
             <param name="count">The number of elements to search.</param>
-            <param name="equalityComparer">The equality comparer to use in the search.</param>
+            <param name="equalityComparer">
+            The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
+            </param>
             <returns>The 0-based index into the array where the item was found; or -1 if it could not be found.</returns>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableArray`1.LastIndexOf(`0)">
@@ -2390,6 +2402,7 @@
             <param name="newValue">The element to replace the old element with.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>The new list -- even if the value being replaced is equal to the new value for that position.</returns>
             <exception cref="T:System.ArgumentException">Thrown when the old value does not exist in the list.</exception>
@@ -2410,6 +2423,7 @@
             <param name="item">The item to remove.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>The new array.</returns>
         </member>
@@ -2444,6 +2458,7 @@
             <param name="items">The items to remove if matches are found in this list.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>
             A new list with the elements removed.
@@ -2493,6 +2508,17 @@
             Returns a sorted instance of this array.
             </summary>
         </member>
+        <member name="M:System.Collections.Immutable.ImmutableArray`1.Sort(System.Comparison{`0})">
+            <summary>
+            Sorts the elements in the entire <see cref="T:System.Collections.Immutable.ImmutableArray`1"/> using
+            the specified <see cref="T:System.Comparison`1"/>.
+            </summary>
+            <param name="comparison">
+            The <see cref="T:System.Comparison`1"/> to use when comparing elements.
+            </param>
+            <returns>The sorted list.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="comparison"/> is null.</exception>
+        </member>
         <member name="M:System.Collections.Immutable.ImmutableArray`1.Sort(System.Collections.Generic.IComparer{`0})">
             <summary>
             Returns a sorted instance of this array.
@@ -2524,7 +2550,7 @@
             Returns a hash code for this instance.
             </summary>
             <returns>
-            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
             </returns>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableArray`1.Equals(System.Object)">
@@ -2807,14 +2833,14 @@
             </summary>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableArray`1.ThrowInvalidOperationIfNotInitialized">
-            <summary>
-            Throws an <see cref="T:System.InvalidOperationException"/> if the <see cref="F:System.Collections.Immutable.ImmutableArray`1.array"/> field is null, i.e. the
-            <see cref="P:System.Collections.Immutable.ImmutableArray`1.IsDefault"/> property returns true.  The
-            <see cref="T:System.InvalidOperationException"/> message specifies that the operation cannot be performed
-            on a default instance of <see cref="T:System.Collections.Immutable.ImmutableArray`1"/>.
+             <summary>
+             Throws an <see cref="T:System.InvalidOperationException"/> if the <see cref="F:System.Collections.Immutable.ImmutableArray`1.array"/> field is null, i.e. the
+             <see cref="P:System.Collections.Immutable.ImmutableArray`1.IsDefault"/> property returns true.  The
+             <see cref="T:System.InvalidOperationException"/> message specifies that the operation cannot be performed
+             on a default instance of <see cref="T:System.Collections.Immutable.ImmutableArray`1"/>.
             
-            This is intended for explicitly implemented interface method and property implementations.
-            </summary>
+             This is intended for explicitly implemented interface method and property implementations.
+             </summary>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableArray`1.RemoveAtRange(System.Collections.Generic.ICollection{System.Int32})">
             <summary>
@@ -3258,7 +3284,6 @@
             <returns>
             An <see cref="T:System.Collections.IDictionaryEnumerator"/> object for the <see cref="T:System.Collections.IDictionary"/> object.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableDictionary`2.Builder.System#Collections#IDictionary#Remove(System.Object)">
             <summary>
@@ -4339,7 +4364,6 @@
             <returns>
             An <see cref="T:System.Collections.IDictionaryEnumerator"/> object for the <see cref="T:System.Collections.IDictionary"/> object.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableDictionary`2.System#Collections#IDictionary#Remove(System.Object)">
             <summary>
@@ -6769,7 +6793,10 @@
             <param name="count">
             The number of elements in the section to search.
             </param>
-            <param name="equalityComparer">The equality comparer to use in the search.</param>
+            <param name="equalityComparer">
+            The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
+            </param>
             <returns>
             The zero-based index of the first occurrence of item within the range of
             elements in the ImmutableList&lt;T&gt; that starts at index and
@@ -6926,8 +6953,9 @@
             the specified System.Comparison&lt;T&gt;.
             </summary>
             <param name="comparison">
-            The System.Comparison&lt;T&gt; to use when comparing elements.
+            The <see cref="T:System.Comparison`1"/> to use when comparing elements.
             </param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="comparison"/> is null.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.Sort(System.Collections.Generic.IComparer{`0})">
             <summary>
@@ -6935,8 +6963,8 @@
             the specified comparer.
             </summary>
             <param name="comparer">
-            The System.Collections.Generic.IComparer&lt;T&gt; implementation to use when comparing
-            elements, or null to use the default comparer System.Collections.Generic.Comparer&lt;T&gt;.Default.
+            The <see cref="T:System.Collections.Generic.IComparer`1"/> implementation to use when comparing
+            elements, or null to use <see cref="P:System.Collections.Generic.Comparer`1.Default"/>.
             </param>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.Sort(System.Int32,System.Int32,System.Collections.Generic.IComparer{`0})">
@@ -6951,8 +6979,8 @@
             The length of the range to sort.
             </param>
             <param name="comparer">
-            The System.Collections.Generic.IComparer&lt;T&gt; implementation to use when comparing
-            elements, or null to use the default comparer System.Collections.Generic.Comparer&lt;T&gt;.Default.
+            The <see cref="T:System.Collections.Generic.IComparer`1"/> implementation to use when comparing
+            elements, or null to use <see cref="P:System.Collections.Generic.Comparer`1.Default"/>.
             </param>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.BinarySearch(`0)">
@@ -7044,13 +7072,11 @@
             <returns>
             The position into which the new element was inserted, or -1 to indicate that the item was not inserted into the collection,
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#IList#Clear">
             <summary>
             Clears this instance.
             </summary>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#IList#Contains(System.Object)">
             <summary>
@@ -7060,7 +7086,6 @@
             <returns>
             true if the <see cref="T:System.Object"/> is found in the <see cref="T:System.Collections.IList"/>; otherwise, false.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#IList#IndexOf(System.Object)">
             <summary>
@@ -7070,7 +7095,6 @@
             <returns>
             The index of <paramref name="value"/> if found in the list; otherwise, -1.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#IList#Insert(System.Int32,System.Object)">
             <summary>
@@ -7078,14 +7102,12 @@
             </summary>
             <param name="index">The zero-based index at which <paramref name="value"/> should be inserted.</param>
             <param name="value">The object to insert into the <see cref="T:System.Collections.IList"/>.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#IList#IsFixedSize">
             <summary>
             Gets a value indicating whether the <see cref="T:System.Collections.IList"/> has a fixed size.
             </summary>
             <returns>true if the <see cref="T:System.Collections.IList"/> has a fixed size; otherwise, false.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#IList#IsReadOnly">
             <summary>
@@ -7093,14 +7115,12 @@
             </summary>
             <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
               </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#IList#Remove(System.Object)">
             <summary>
             Removes the first occurrence of a specific object from the <see cref="T:System.Collections.IList"/>.
             </summary>
             <param name="value">The object to remove from the <see cref="T:System.Collections.IList"/>.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#IList#Item(System.Int32)">
             <summary>
@@ -7111,7 +7131,6 @@
             </value>
             <param name="index">The index.</param>
             <returns></returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">
             <summary>
@@ -7119,21 +7138,18 @@
             </summary>
             <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
             <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#ICollection#IsSynchronized">
             <summary>
             Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe).
             </summary>
             <returns>true if access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe); otherwise, false.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.Builder.System#Collections#ICollection#SyncRoot">
             <summary>
             Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
             </summary>
             <returns>An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="F:System.Collections.Immutable.ImmutableList`1.Empty">
             <summary>
@@ -7263,6 +7279,7 @@
             </summary>
             <param name="index">The 0-based index of the element in the set to return.</param>
             <returns>The element at the given position.</returns>
+            <exception cref="T:System.IndexOutOfRangeException">Thrown from getter when <paramref name="index"/> is negative or not less than <see cref="P:System.Collections.Immutable.ImmutableList`1.Count"/>.</exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.System#Collections#Immutable#IOrderedCollection{T}#Item(System.Int32)">
             <summary>
@@ -7334,6 +7351,7 @@
             <param name="items">The items to remove if matches are found in this list.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>
             A new list with the elements removed.
@@ -7401,6 +7419,7 @@
             The <see cref="T:System.Comparison`1"/> to use when comparing elements.
             </param>
             <returns>The sorted list.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="comparison"/> is null.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Sort(System.Collections.Generic.IComparer{`0})">
             <summary>
@@ -7803,6 +7822,7 @@
             <param name="newValue">The element to replace the old element with.</param>
             <param name="equalityComparer">
             The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
             </param>
             <returns>The new list.</returns>
             <exception cref="T:System.ArgumentException">Thrown when the old value does not exist in the list.</exception>
@@ -7829,32 +7849,34 @@
             </summary>
             <param name="index">The index.</param>
             <param name="item">The item.</param>
-            <exception cref="T:System.NotSupportedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#Generic#IList{T}#RemoveAt(System.Int32)">
             <summary>
             Removes the value at the specified index.
             </summary>
             <param name="index">The index.</param>
-            <exception cref="T:System.NotSupportedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.System#Collections#Generic#IList{T}#Item(System.Int32)">
             <summary>
             Gets or sets the value at the specified index.
             </summary>
+            <exception cref="T:System.IndexOutOfRangeException">Thrown from getter when <paramref name="index"/> is negative or not less than <see cref="P:System.Collections.Immutable.ImmutableList`1.Count"/>.</exception>
+            <exception cref="T:System.NotSupportedException">Always thrown from the setter.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#Generic#ICollection{T}#Add(`0)">
             <summary>
             Adds the specified item.
             </summary>
             <param name="item">The item.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#Generic#ICollection{T}#Clear">
             <summary>
             Clears this instance.
             </summary>
-            <exception cref="T:System.NotSupportedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.System#Collections#Generic#ICollection{T}#IsReadOnly">
             <summary>
@@ -7868,8 +7890,8 @@
             Removes the specified item.
             </summary>
             <param name="item">The item.</param>
-            <returns></returns>
-            <exception cref="T:System.NotSupportedException"></exception>
+            <returns>Nothing. An exception is always thrown.</returns>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">
             <summary>
@@ -7882,22 +7904,22 @@
             </summary>
             <param name="value">The object to add to the <see cref="T:System.Collections.IList"/>.</param>
             <returns>
-            The position into which the new element was inserted, or -1 to indicate that the item was not inserted into the collection,
+            Nothing. An exception is always thrown.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#RemoveAt(System.Int32)">
             <summary>
             Removes the <see cref="T:System.Collections.IList"/> item at the specified index.
             </summary>
             <param name="index">The zero-based index of the item to remove.</param>
-            <exception cref="T:System.NotSupportedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#Clear">
             <summary>
             Clears this instance.
             </summary>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#Contains(System.Object)">
             <summary>
@@ -7907,7 +7929,6 @@
             <returns>
             true if the <see cref="T:System.Object"/> is found in the <see cref="T:System.Collections.IList"/>; otherwise, false.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#IndexOf(System.Object)">
             <summary>
@@ -7917,7 +7938,6 @@
             <returns>
             The index of <paramref name="value"/> if found in the list; otherwise, -1.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#Insert(System.Int32,System.Object)">
             <summary>
@@ -7925,14 +7945,13 @@
             </summary>
             <param name="index">The zero-based index at which <paramref name="value"/> should be inserted.</param>
             <param name="value">The object to insert into the <see cref="T:System.Collections.IList"/>.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#IsFixedSize">
             <summary>
             Gets a value indicating whether the <see cref="T:System.Collections.IList"/> has a fixed size.
             </summary>
             <returns>true if the <see cref="T:System.Collections.IList"/> has a fixed size; otherwise, false.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#IsReadOnly">
             <summary>
@@ -7940,14 +7959,13 @@
             </summary>
             <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
               </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#Remove(System.Object)">
             <summary>
             Removes the first occurrence of a specific object from the <see cref="T:System.Collections.IList"/>.
             </summary>
             <param name="value">The object to remove from the <see cref="T:System.Collections.IList"/>.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableList`1.System#Collections#IList#Item(System.Int32)">
             <summary>
@@ -7957,8 +7975,9 @@
             The <see cref="T:System.Object"/>.
             </value>
             <param name="index">The index.</param>
-            <returns></returns>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <returns>The value at the specified index.</returns>
+            <exception cref="T:System.IndexOutOfRangeException">Thrown from getter when <paramref name="index"/> is negative or not less than <see cref="P:System.Collections.Immutable.ImmutableList`1.Count"/>.</exception>
+            <exception cref="T:System.NotSupportedException">Always thrown from the setter.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.GetEnumerator">
             <summary>
@@ -7995,6 +8014,16 @@
             <param name="sequence">The sequence that may have come from an immutable list.</param>
             <param name="other">Receives the concrete <see cref="T:System.Collections.Immutable.ImmutableList`1"/> typed value if one can be found.</param>
             <returns><c>true</c> if the cast was successful; <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:System.Collections.Immutable.ImmutableList`1.IsCompatibleObject(System.Object)">
+            <summary>
+            Tests whether a value is one that might be found in this collection.
+            </summary>
+            <param name="value">The value to test.</param>
+            <returns><c>true</c> if this value might appear in the collection.</returns>
+            <devremarks>
+            This implementation comes from <see cref="T:System.Collections.Generic.List`1"/>.
+            </devremarks>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableList`1.Wrap(System.Collections.Immutable.ImmutableList{`0}.Node)">
             <summary>
@@ -8506,7 +8535,10 @@
             <param name="count">
             The number of elements in the section to search.
             </param>
-            <param name="equalityComparer">The equality comparer to use for testing the match of two elements.</param>
+            <param name="equalityComparer">
+            The equality comparer to use in the search.
+            If <c>null</c>, <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/> is used.
+            </param>
             <returns>
             The zero-based index of the first occurrence of <paramref name="item"/> within the range of
             elements in the <see cref="T:System.Collections.Immutable.ImmutableList`1"/> that starts at <paramref name="index"/> and
@@ -9017,7 +9049,7 @@
             <summary>
             Gets the element at the front of the queue.
             </summary>
-            <exception cref="T:System.InvalidOperationException">Thrown when the stack is empty.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the queue is empty.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableQueue`1.Enqueue(`0)">
             <summary>
@@ -9042,7 +9074,7 @@
             Returns a queue that is missing the front element.
             </summary>
             <returns>A queue; never <c>null</c>.</returns>
-            <exception cref="T:System.InvalidOperationException">Thrown when the stack is empty.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the queue is empty.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableQueue`1.Dequeue(`0@)">
             <summary>
@@ -9050,14 +9082,14 @@
             </summary>
             <param name="value">Receives the value from the head of the queue.</param>
             <returns>The new queue with the head element removed.</returns>
-            <exception cref="T:System.InvalidOperationException">Thrown when the stack is empty.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the queue is empty.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableQueue`1.System#Collections#Immutable#IImmutableQueue{T}#Dequeue">
             <summary>
             Returns a queue that is missing the front element.
             </summary>
             <returns>A queue; never <c>null</c>.</returns>
-            <exception cref="T:System.InvalidOperationException">Thrown when the stack is empty.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the queue is empty.</exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableQueue`1.GetEnumerator">
             <summary>
@@ -9563,7 +9595,6 @@
             <returns>
             An <see cref="T:System.Collections.IDictionaryEnumerator"/> object for the <see cref="T:System.Collections.IDictionary"/> object.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableSortedDictionary`2.Builder.System#Collections#IDictionary#Remove(System.Object)">
             <summary>
@@ -10009,7 +10040,6 @@
             <returns>
             An <see cref="T:System.Collections.IDictionaryEnumerator"/> object for the <see cref="T:System.Collections.IDictionary"/> object.
             </returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:System.Collections.Immutable.ImmutableSortedDictionary`2.System#Collections#IDictionary#Remove(System.Object)">
             <summary>
@@ -11027,21 +11057,18 @@
             </summary>
             <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
             <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableSortedSet`1.Builder.System#Collections#ICollection#IsSynchronized">
             <summary>
             Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe).
             </summary>
             <returns>true if access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe); otherwise, false.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="P:System.Collections.Immutable.ImmutableSortedSet`1.Builder.System#Collections#ICollection#SyncRoot">
             <summary>
             Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
             </summary>
             <returns>An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="F:System.Collections.Immutable.ImmutableSortedSet`1.RefillOverIncrementalThreshold">
             <summary>
@@ -11855,13 +11882,6 @@
             A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
             </returns>
         </member>
-        <member name="M:System.Collections.Immutable.ImmutableSortedSet`1.Node.NodeTreeFromSortedSet(System.Collections.Generic.SortedSet{`0})">
-            <summary>
-            Creates a node tree from an existing (mutable) collection.
-            </summary>
-            <param name="collection">The collection.</param>
-            <returns>The root of the node tree.</returns>
-        </member>
         <member name="M:System.Collections.Immutable.ImmutableSortedSet`1.Node.CopyTo(`0[],System.Int32)">
             <summary>
             See the <see cref="T:System.Collections.Generic.ICollection`1"/> interface.
@@ -12540,6 +12560,81 @@
             <returns>The rented object.</returns>
             <exception cref="T:System.ObjectDisposedException">Thrown if <paramref name="caller"/> is no longer the renter of the value.</exception>
         </member>
+        <member name="T:System.Collections.Immutable.Requires">
+            <summary>
+            Common runtime checks that throw <see cref="T:System.ArgumentException"/> upon failure.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.NotNull``1(``0,System.String)">
+            <summary>
+            Throws an exception if the specified parameter's value is null.
+            </summary>
+            <typeparam name="T">The type of the parameter.</typeparam>
+            <param name="value">The value of the argument.</param>
+            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.NotNullPassthrough``1(``0,System.String)">
+            <summary>
+            Throws an exception if the specified parameter's value is null.  It passes through the specified value back as a return value.
+            </summary>
+            <typeparam name="T">The type of the parameter.</typeparam>
+            <param name="value">The value of the argument.</param>
+            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+            <returns>The value of the parameter.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.NotNullAllowStructs``1(``0,System.String)">
+            <summary>
+            Throws an exception if the specified parameter's value is null.
+            </summary>
+            <typeparam name="T">The type of the parameter.</typeparam>
+            <param name="value">The value of the argument.</param>
+            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
+            <remarks>
+            This method exists for callers who themselves only know the type as a generic parameter which
+            may or may not be a class, but certainly cannot be null.
+            </remarks>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.FailArgumentNullException(System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentNullException"/>.
+            </summary>
+            <param name="parameterName">The name of the parameter that was null.</param>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.Range(System.Boolean,System.String,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.FailRange(System.String,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentOutOfRangeException"/>.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.Argument(System.Boolean,System.String,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentException"/> if a condition does not evaluate to true.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.Argument(System.Boolean)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentException"/> if a condition does not evaluate to true.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Immutable.Requires.FailObjectDisposed``1(``0)">
+            <summary>
+            Throws an <see cref="T:System.ObjectDisposedException"/> for a disposed object.
+            </summary>
+            <typeparam name="TDisposed">Specifies the type of the disposed object.</typeparam>
+            <param name="disposed">The disposed object.</param>
+        </member>
+        <member name="T:System.Collections.Immutable.ValidatedNotNullAttribute">
+            <summary>
+            Indicates to Code Analysis that a method validates a particular parameter.
+            </summary>
+        </member>
         <member name="T:System.Linq.ImmutableArrayExtensions">
             <summary>
             LINQ extension method overrides that offer greater efficiency for <see cref="T:System.Collections.Immutable.ImmutableArray`1"/> than the standard LINQ methods
@@ -12822,81 +12917,6 @@
         </member>
         <member name="M:System.Linq.ImmutableArrayExtensions.SelectManyIterator``3(System.Collections.Immutable.ImmutableArray{``0},System.Func{``0,System.Collections.Generic.IEnumerable{``1}},System.Func{``0,``1,``2})">
             <summary>Provides the core iterator implementation of <see cref="M:System.Linq.ImmutableArrayExtensions.SelectMany``3(System.Collections.Immutable.ImmutableArray{``0},System.Func{``0,System.Collections.Generic.IEnumerable{``1}},System.Func{``0,``1,``2})"/>.</summary>
-        </member>
-        <member name="T:Validation.Requires">
-            <summary>
-            Common runtime checks that throw <see cref="T:System.ArgumentException"/> upon failure.
-            </summary>
-        </member>
-        <member name="M:Validation.Requires.NotNull``1(``0,System.String)">
-            <summary>
-            Throws an exception if the specified parameter's value is null.
-            </summary>
-            <typeparam name="T">The type of the parameter.</typeparam>
-            <param name="value">The value of the argument.</param>
-            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
-        </member>
-        <member name="M:Validation.Requires.NotNullPassthrough``1(``0,System.String)">
-            <summary>
-            Throws an exception if the specified parameter's value is null.  It passes through the specified value back as a return value.
-            </summary>
-            <typeparam name="T">The type of the parameter.</typeparam>
-            <param name="value">The value of the argument.</param>
-            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-            <returns>The value of the parameter.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
-        </member>
-        <member name="M:Validation.Requires.NotNullAllowStructs``1(``0,System.String)">
-            <summary>
-            Throws an exception if the specified parameter's value is null.
-            </summary>
-            <typeparam name="T">The type of the parameter.</typeparam>
-            <param name="value">The value of the argument.</param>
-            <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
-            <remarks>
-            This method exists for callers who themselves only know the type as a generic parameter which
-            may or may not be a class, but certainly cannot be null.
-            </remarks>
-        </member>
-        <member name="M:Validation.Requires.FailArgumentNullException(System.String)">
-            <summary>
-            Throws an <see cref="T:System.ArgumentNullException"/>.
-            </summary>
-            <param name="parameterName">The name of the parameter that was null.</param>
-        </member>
-        <member name="M:Validation.Requires.Range(System.Boolean,System.String,System.String)">
-            <summary>
-            Throws an <see cref="T:System.ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
-            </summary>
-        </member>
-        <member name="M:Validation.Requires.FailRange(System.String,System.String)">
-            <summary>
-            Throws an <see cref="T:System.ArgumentOutOfRangeException"/>.
-            </summary>
-        </member>
-        <member name="M:Validation.Requires.Argument(System.Boolean,System.String,System.String)">
-            <summary>
-            Throws an <see cref="T:System.ArgumentException"/> if a condition does not evaluate to true.
-            </summary>
-        </member>
-        <member name="M:Validation.Requires.Argument(System.Boolean)">
-            <summary>
-            Throws an <see cref="T:System.ArgumentException"/> if a condition does not evaluate to true.
-            </summary>
-        </member>
-        <member name="M:Validation.Requires.FailObjectDisposed``1(``0)">
-            <summary>
-            Throws an <see cref="T:System.ObjectDisposedException"/> for a disposed object.
-            </summary>
-            <typeparam name="TDisposed">Specifies the type of the disposed object.</typeparam>
-            <param name="disposed">The disposed object.</param>
-        </member>
-        <member name="T:Validation.ValidatedNotNullAttribute">
-            <summary>
-            Indicates to Code Analysis that a method validates a particular parameter.
-            </summary>
         </member>
     </members>
 </doc>
