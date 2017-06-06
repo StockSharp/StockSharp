@@ -6,12 +6,11 @@ namespace StockSharp.Configuration
 	using Ecng.Common;
 
 	using StockSharp.Messages;
-	using StockSharp.Xaml.Diagram.Elements;
 
 	/// <summary>
 	/// In memory configuration message adapter's provider.
 	/// </summary>
-	public class InMemoryConfigurationMessageAdapterProvider : IConfigurationMessageAdapterProvider
+	public class InMemoryConfigurationMessageAdapterProvider : IMessageAdapterProvider
 	{
 		private readonly CachedSynchronizedList<IMessageAdapter> _adapters = new CachedSynchronizedList<IMessageAdapter>();
 
@@ -26,10 +25,6 @@ namespace StockSharp.Configuration
 				_adapters.Add(type.CreateInstance<IMessageAdapter>(idGenerator));
 		}
 
-		#region Implementation of IConfigurationMessageAdapterProvider
-
-		IEnumerable<IMessageAdapter> IConfigurationMessageAdapterProvider.Adapters => _adapters.Cache;
-
-		#endregion
+		IEnumerable<IMessageAdapter> IMessageAdapterProvider.Adapters => _adapters.Cache;
 	}
 }

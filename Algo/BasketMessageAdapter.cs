@@ -171,7 +171,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="adapterProvider">The message adapter's provider.</param>
-		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IMessageAdapterProvider adapterProvider)
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider)
 			: base(transactionIdGenerator)
 		{
 			if (adapterProvider == null)
@@ -184,7 +184,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The message adapter's provider.
 		/// </summary>
-		public IMessageAdapterProvider AdapterProvider { get; }
+		public IPortfolioMessageAdapterProvider AdapterProvider { get; }
 
 		/// <summary>
 		/// Supported by adapter message types.
