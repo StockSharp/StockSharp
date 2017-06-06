@@ -4557,6 +4557,10 @@ OnClose;On close;По закрытию
 ServerStop;Server stop;Серверный стоп
 ServerStopLimit;Server stop-limit;Серверный стоп-лимит
 ByLastPrice;By last price;По последней цене
+SendLogsNowQuestion;There are errors in the application logs, help us to improve the program by sending your logs. Send now?;В логах приложения есть ошибки, помогите нам улучшить программу, отправив ваши логи. Отправить сейчас?
+IfYouHaveAnyQuestions;If you have any questions, you can always ask them through the suggestions form. Ask now?;Если у вас возникли вопросы, вы всегда можете задать их через форму обратной связи. Задать сейчас?
+LeftToEnter;Left to enter;Осталось ввести
+GiveRatingToOurApplication;Please, give a rating to our application.;Пожалуйста, поставьте оценку нашему приложению.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
