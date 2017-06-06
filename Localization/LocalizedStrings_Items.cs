@@ -45236,5 +45236,45 @@ namespace StockSharp.Localization
 		/// By last price
 		/// </summary>
 		public static string ByLastPrice => GetString(ByLastPriceKey);
+
+		/// <summary>
+		/// There are errors in the application logs, help us to improve the program by sending your logs. Send now?
+		/// </summary>
+		public const string SendLogsNowQuestionKey = nameof(SendLogsNowQuestion);
+
+		/// <summary>
+		/// There are errors in the application logs, help us to improve the program by sending your logs. Send now?
+		/// </summary>
+		public static string SendLogsNowQuestion => GetString(SendLogsNowQuestionKey);
+
+		/// <summary>
+		/// If you have any questions, you can always ask them through the suggestions form. Ask now?
+		/// </summary>
+		public const string IfYouHaveAnyQuestionsKey = nameof(IfYouHaveAnyQuestions);
+
+		/// <summary>
+		/// If you have any questions, you can always ask them through the suggestions form. Ask now?
+		/// </summary>
+		public static string IfYouHaveAnyQuestions => GetString(IfYouHaveAnyQuestionsKey);
+
+		/// <summary>
+		/// Left to enter
+		/// </summary>
+		public const string LeftToEnterKey = nameof(LeftToEnter);
+
+		/// <summary>
+		/// Left to enter
+		/// </summary>
+		public static string LeftToEnter => GetString(LeftToEnterKey);
+
+		/// <summary>
+		/// Please, give a rating to our application.
+		/// </summary>
+		public const string GiveRatingToOurApplicationKey = nameof(GiveRatingToOurApplication);
+
+		/// <summary>
+		/// Please, give a rating to our application.
+		/// </summary>
+		public static string GiveRatingToOurApplication => GetString(GiveRatingToOurApplicationKey);
 	}
 }
