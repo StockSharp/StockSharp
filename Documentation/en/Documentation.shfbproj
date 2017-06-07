@@ -540,7 +540,7 @@
     <None Include="Topics\Designer_Example_of_backtesting.aml" />
     <None Include="Topics\Designer_Orders.aml" />
     <None Include="Topics\Designer_Association.aml" />
-    <None Include="Topics\Designer_Black_Sols.aml" />
+    <None Include="Topics\Designer_Black_Scholes.aml" />
     <None Include="Topics\Designer_Cancellations.aml" />
     <None Include="Topics\Designer_Candles.aml" />
     <None Include="Topics\Designer_Chart_Position.aml" />
@@ -613,7 +613,7 @@
     <None Include="Topics\Designer_Start_mode.aml" />
     <None Include="Topics\Designer_Statistics.aml" />
     <None Include="Topics\Designer_Step.aml" />
-    <None Include="Topics\Designer_Stopping_point.aml" />
+    <None Include="Topics\Designer_Debug_Break_Points.aml" />
     <None Include="Topics\Designer_Tape.aml" />
     <None Include="Topics\Designer_Conclusion_of_candles_on_chart.aml" />
     <None Include="Topics\Designer_Conditional_operator.aml" />
@@ -2133,9 +2133,9 @@
       <ImageId>Designer_Graph_options_positions_02</ImageId>
       <AlternateText>Designer Graph options positions 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Black_Sols_00.png">
+    <Image Include="Art\Designer_Black_Scholes_00.png">
       <ImageId>Designer_Black_Sols_00</ImageId>
-      <AlternateText>Designer Black Sols 00</AlternateText>
+      <AlternateText>Designer Black Scholes 00</AlternateText>
     </Image>
     <Image Include="Art\Designer_Hedging_00.png">
       <ImageId>Designer_Hedging_00</ImageId>
@@ -2461,13 +2461,13 @@
       <ImageId>Designer_Debug_06</ImageId>
       <AlternateText>Designer Debug 06</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Stopping_point_00.png">
+    <Image Include="Art\Designer_Debug_Break_Points_00.png">
       <ImageId>Designer_Stopping_point_00</ImageId>
-      <AlternateText>Designer Stopping point 00</AlternateText>
+      <AlternateText>Designer Debug Break Points 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Stopping_point_01.png">
+    <Image Include="Art\Designer_Debug_Break_Points_01.png">
       <ImageId>Designer_Stopping_point_01</ImageId>
-      <AlternateText>Designer Stopping point 01</AlternateText>
+      <AlternateText>Designer Debug Break Points 01</AlternateText>
     </Image>
     <Image Include="Art\Designer_Optimization_00.png">
       <ImageId>Designer_Optimization_00</ImageId>
@@ -2991,8 +2991,8 @@
       <ImageId>candleqpile</ImageId>
       <AlternateText>Таблица со свечками, созданная через QPILE.</AlternateText>
     </Image>
-    <Image Include="Art\sample.png">
-      <ImageId>sample</ImageId>
+    <Image Include="Art\sample_quik.png">
+      <ImageId>sample_quik</ImageId>
       <AlternateText>Пример создания МТС.</AlternateText>
     </Image>
     <Image Include="Art\sample_stop_order.png">
