@@ -47,6 +47,18 @@ namespace StockSharp.Community
 		/// </summary>
 		[EnumMember]
 		EncryptedSchema,
+
+		/// <summary>
+		/// The compiled executable (.exe) application.
+		/// </summary>
+		[EnumMember]
+		StandaloneApp,
+
+		/// <summary>
+		/// Indicator.
+		/// </summary>
+		[EnumMember]
+		Indicator,
 	}
 
 	/// <summary>
@@ -103,6 +115,12 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public string Description { get; set; }
+
+		/// <summary>
+		/// Strategy tags.
+		/// </summary>
+		[DataMember]
+		public string Tags { get; set; }
 
 		///// <summary>
 		///// Name (ru).
