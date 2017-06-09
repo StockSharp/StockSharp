@@ -20,9 +20,7 @@ namespace StockSharp.Community
 	using System.Threading;
 
 	using Ecng.Common;
-	using Ecng.Localization;
 
-	using StockSharp.Localization;
 	using StockSharp.Logging;
 
 	/// <summary>
@@ -49,8 +47,6 @@ namespace StockSharp.Community
 			: base(address, "notification")
 		{
 		}
-
-		private static bool IsEnglish => LocalizedStrings.ActiveLanguage != Languages.Russian;
 
 		private int? _smsCount;
 

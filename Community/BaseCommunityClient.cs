@@ -17,6 +17,10 @@ namespace StockSharp.Community
 {
 	using System;
 
+	using Ecng.Localization;
+
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// The base client for access to the StockSharp services.
 	/// </summary>
@@ -49,5 +53,10 @@ namespace StockSharp.Community
 		/// The user identifier for <see cref="SessionId"/>.
 		/// </summary>
 		public long UserId => AuthenticationClient.Instance.GetId(SessionId);
+
+		/// <summary>
+		/// Is current language is English.
+		/// </summary>
+		protected static bool IsEnglish => LocalizedStrings.ActiveLanguage != Languages.Russian;
 	}
 }
