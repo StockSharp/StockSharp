@@ -118,6 +118,27 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
+		/// Send feedback for specified product.
+		/// </summary>
+		/// <param name="product">The product.</param>
+		/// <param name="rate">Rate.</param>
+		/// <param name="comment">Text comment.</param>
+		public void SendFeedback(Products product, int rate, string comment)
+		{
+			ValidateError(Invoke(f => f.SendFeedback(SessionId, product, rate, comment)));
+		}
+
+		/// <summary>
+		/// Has feedback for specified product.
+		/// </summary>
+		/// <param name="product">The product.</param>
+		/// <returns>Check result.</returns>
+		public bool HasFeedback(Products product)
+		{
+			return Invoke(f => f.HasFeedback(SessionId, product));
+		}
+
+		/// <summary>
 		/// News received.
 		/// </summary>
 		public event Action<CommunityNews> NewsReceived; 
