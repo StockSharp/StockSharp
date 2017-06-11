@@ -205,5 +205,23 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public bool IsPrivate { get; set; }
+
+		/// <summary>
+		/// Is colocation available for the strategy.
+		/// </summary>
+		[DataMember]
+		public bool IsColocation { get; set; }
+
+		/// <summary>
+		/// Promo price.
+		/// </summary>
+		[DataMember]
+		public decimal? PromoPrice { get; set; }
+
+		/// <summary>
+		/// Promo end date.
+		/// </summary>
+		[DataMember]
+		public DateTime? PromoEnd { get; set; }
 	}
 }
