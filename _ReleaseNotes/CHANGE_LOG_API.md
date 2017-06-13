@@ -34,6 +34,11 @@ StockSharp API Change log
 * (bug) SecurityGrid. Binding fixes.
 * (bug) Alerts. Popup window. Icon quality dix.
 * (bug) CQG continuum. Order condition fix.
+* (feature) DevExp 17.1 update.
+* (feature) FeedbackWindow.
+* (feature) FIX server. Perforance boost.
+* (feature) Oanda 2.0 support.
+* (feature) FinamHistorySource. OriginSide support.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

@@ -761,6 +761,12 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.SetElementName(System.String)">
+      <summary>
+            Set element name.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)">
       <summary>
             To add a parameter.
@@ -1137,6 +1143,11 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Type">
       <summary>
             Parameter type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.CanChangeValue">
+      <summary>
+            Can change value;
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Attributes">
@@ -3038,9 +3049,14 @@
             The element which is using strategy, based on S#.API.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.SelectedStrategy">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Painter">
       <summary>
-            The selected strategy.
+            The renderer type for indicator extended drawing.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Instance">
+      <summary>
+            The instance.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.#ctor">
@@ -3067,6 +3083,13 @@
       <summary>
             Remove external sockets.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.IsTypeCompatible(System.Type)">
+      <summary>
+            Is type compatible.
+            </summary>
+      <param name="type">Type.</param>
+      <returns>Check result.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement">
       <summary>
@@ -3101,6 +3124,21 @@
     <member name="T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute">
       <summary>
             Attribute, applied to methods or parameters, to create input socket.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute">
+      <summary>
+            Attribute, applied to class, to create renderer type for indicator extended drawing.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute.Painter">
+      <summary>
+            The renderer type for indicator extended drawing.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute.#ctor(System.Type)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement">
@@ -3183,11 +3221,6 @@
             The diagram element with the changeable data type.
             </summary>
       <typeparam name="T">Type of element.</typeparam>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.UseAutoNaming">
-      <summary>
-            Use auto naming.
-            </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Type">
       <summary>

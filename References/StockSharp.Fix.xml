@@ -59,7 +59,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.IsResetCounter">
       <summary>
-            Should the number counter be cleared.
+            Should the sequence counter be resetted.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.HeartbeatInterval">
@@ -351,7 +351,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter">
       <summary>
-            Should the number counter be cleared.
+            Should the sequence counter be resetted.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.HeartbeatInterval">
@@ -5647,7 +5647,7 @@
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsResetCounter">
       <summary>
-            Should the number counter be cleared. The default is enabled.
+            Should the sequence counter be resetted.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.ReadTimeout">

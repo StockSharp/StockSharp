@@ -253,6 +253,11 @@
             </summary>
       <param name="owner">Parent window.</param>
     </member>
+    <member name="T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1">
+      <summary>
+        <see cref="T:DevExpress.Xpf.Editors.ComboBoxEdit" /> value converter.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter">
       <summary>
         <see cref="T:StockSharp.Algo.ProcessStates" /> to <see cref="T:System.Windows.Media.ImageSource" /> converter.
@@ -271,6 +276,11 @@
     <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage">
       <summary>
         <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Stopped" /> state.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.SelectedItemsCountTextConverter">
+      <summary>
+            Items count to string converter.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Converters.SeriesToStringConverter">
@@ -826,6 +836,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.PropertyGridEx" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SetSelectedObject(System.Object)">
+      <summary>
+            Change selected object.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent">
       <summary>
             InitializeComponent
@@ -839,6 +854,39 @@
     <member name="M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.RatingWindow">
+      <summary>
+            Rating window.
+            </summary>
+      <summary>
+            RatingWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.RatingWindow.RatingValueProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.RatingWindow.RatingValue" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RatingWindow.RatingValue">
+      <summary>
+            Rating value.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RatingWindow.Comment">
+      <summary>
+            Message text.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.RatingWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.RatingWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.RatingWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.StrategiesDashboard">
@@ -941,57 +989,54 @@
       <summary>
       </summary>
     </member>
-    <member name="T:StockSharp.Xaml.SuggestionsWindow">
+    <member name="T:StockSharp.Xaml.QuestionWindow">
       <summary>
             Suggestions window.
             </summary>
       <summary>
-            SuggestionsWindow
+            QuestionWindow
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.SuggestionsWindow.OkCommand">
+    <member name="F:StockSharp.Xaml.QuestionWindow.OkCommand">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.NotificationClient">
+    <member name="P:StockSharp.Xaml.QuestionWindow.NotificationClient">
       <summary>
             The client for access to the StockSharp notification service.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.DoNotShowAgain">
-      <summary>
-            Do not show this window again.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.Link">
+    <member name="P:StockSharp.Xaml.QuestionWindow.Link">
       <summary>
             Link to file.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.Product">
+    <member name="P:StockSharp.Xaml.QuestionWindow.Caption">
+      <summary>
+            Message title.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.QuestionWindow.Text">
+      <summary>
+            Message text.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.QuestionWindow.Product">
       <summary>
             Product type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.Version">
+    <member name="P:StockSharp.Xaml.QuestionWindow.Version">
       <summary>
             App version.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.SuggestionsWindow.#ctor">
+    <member name="M:StockSharp.Xaml.QuestionWindow.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SuggestionsWindow" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.QuestionWindow" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})">
-      <summary>
-            Show.
-            </summary>
-      <param name="owner">Owner window.</param>
-      <param name="handled">Handler will be called after the window was showed.</param>
-      <param name="delay">Delay.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.SuggestionsWindow.InitializeComponent">
+    <member name="M:StockSharp.Xaml.QuestionWindow.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>

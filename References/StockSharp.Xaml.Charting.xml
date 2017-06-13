@@ -1179,6 +1179,13 @@
       <param name="prefix">Name prefix.</param>
       <returns>The unique name.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.GetSimpleValues(StockSharp.Algo.Indicators.IIndicatorValue)">
+      <summary>
+            Get simple indicator values.
+            </summary>
+      <param name="value">Indicator value.</param>
+      <returns>Simple indicator values.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)">
       <summary>
             To draw the candle.

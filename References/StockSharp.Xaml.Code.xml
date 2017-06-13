@@ -9,17 +9,17 @@
             Extension class.
             </summary>
         </member>
-        <member name="M:StockSharp.Xaml.Code.CodeExtensions.CompileCode(Ecng.Roslyn.CompilationLanguages,System.String,System.String,System.Collections.Generic.IEnumerable{StockSharp.Xaml.Code.CodeReference})">
+        <member name="M:StockSharp.Xaml.Code.CodeExtensions.CompileCode(Ecng.Common.ICompiler,System.String,System.String,System.Collections.Generic.IEnumerable{StockSharp.Xaml.Code.CodeReference})">
             <summary>
             To compile the code.
             </summary>
-            <param name="language">Programming language.</param>
+            <param name="compiler">Compiler.</param>
             <param name="code">Code.</param>
             <param name="name">The build name.</param>
             <param name="references">References.</param>
             <returns>The result of the compilation.</returns>
         </member>
-        <member name="M:StockSharp.Xaml.Code.CodeExtensions.HasErrors(Ecng.Roslyn.CompilationResult)">
+        <member name="M:StockSharp.Xaml.Code.CodeExtensions.HasErrors(Ecng.Common.CompilationResult)">
             <summary>
             Are there any errors in the compilation.
             </summary>
