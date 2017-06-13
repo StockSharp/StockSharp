@@ -57,7 +57,7 @@ namespace StockSharp.Community
 		/// To get all strategies identifiers.
 		/// </summary>
 		/// <param name="lastCheckTime">Last time of calling the method.</param>
-		/// <param name="isEnglish">Request strategies on English.</param>
+		/// <param name="isEnglish">Request strategies in English store.</param>
 		/// <returns>Strategies identifiers and revisions.</returns>
 		[OperationContract]
 		IEnumerable<Tuple<long, int>> GetStrategies(DateTime lastCheckTime, bool isEnglish);

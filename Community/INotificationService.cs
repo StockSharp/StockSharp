@@ -104,10 +104,10 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="product">The product.</param>
-		/// <param name="rate">Rate.</param>
-		/// <param name="comment">Text comment.</param>
+		/// <param name="rating">Rating.</param>
+		/// <param name="comment">Comment.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
-		byte SendFeedback(Guid sessionId, Products product, int rate, string comment);
+		byte SendFeedback(Guid sessionId, Products product, int rating, string comment);
 	}
 }

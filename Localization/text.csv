@@ -4400,7 +4400,7 @@ Suggestions;Suggestions;Предложения
 DoYouHaveQuestionsOrSuggestions;Do you have any questions or suggestions? Contact us now!;У вас есть вопросы или предложения? Напишите нам сейчас!
 DoNotShowAgain;Do not show again;Больше не показывать
 ContactUs;Contact us;Напишите нам
-ThankYouForFeedback;Thank you for the valuable feedback. We will reply shortly.;Спасибо за ваше обращение. Мы ответим вам в ближайшее время.
+ThankYouForQuestion;Thank you for your question. We will reply shortly.;Спасибо за ваше обращение. Мы ответим вам в ближайшее время.
 LoginAndPasswordMustBeSpecified;Login and password must be specified.;Логин и пароль должны быть указаны.
 AddOption;Add option;Добавить опцион
 RemoveOption;Remove option;Удалить опцион
@@ -4560,7 +4560,9 @@ ByLastPrice;By last price;По последней цене
 SendLogsNowQuestion;There are errors in the application logs, help us to improve the program by sending your logs. Send now?;В логах приложения есть ошибки, помогите нам улучшить программу, отправив ваши логи. Отправить сейчас?
 IfYouHaveAnyQuestions;If you have any questions, you can always ask them through the suggestions form. Ask now?;Если у вас возникли вопросы, вы всегда можете задать их через форму обратной связи. Задать сейчас?
 LeftToEnter;Left to enter;Осталось ввести
-GiveRatingToOurApplication;Please, give a rating to our application.;Пожалуйста, поставьте оценку нашему приложению.
+GiveRatingToOurApplication;Just one minute more. Please send us feedback.;Вам всё понравилось? Что-то улучшить? Пожалуйста, напишите нам отзыв.
+TextOptional;Text (optional);Текст (необязательно)
+ThankYouForFeedback;Your feedback is very valuable to us. Thank you!;Ваш отзыв очень важен для нас. Спасибо!
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7827,7 +7829,7 @@ DocStr3309;Change list;Список изменений
 DocStr3310;FIX protocol writer;Писать FIX протокола
 DocStr3311;Transaction id generator;Генератор транзакций
 DocStr3312;The interval of the connection availability check;Интервал проверки доступности соединения
-DocStr3313;Should the number counter be cleared;Нужно ли сбрасывать счетчик номеров
+DocStr3313;Should the sequence counter be resetted;Нужно ли сбрасывать счетчик номеров
 DocStr3314;Write message {0};Записать сообщение {0}
 DocStr3315;Whether to fill gaps;Заполнять ли пробелы
 DocStr3316;The original message identifier;Идентификатор первоначального сообщения
@@ -7844,7 +7846,6 @@ DocStr3326;FIX message type;Тип FIX сообщения
 DocStr3327;The reader of data recorded in the FIX protocol format;Читатель данных, записанных в формате FIX протокола
 DocStr3328;The message containing the information for the order registration;Сообщение, содержащее информацию для регистрации заявки
 DocStr3329;The FIX protocol version. The default is {0};Версия FIX протокола. По умолчанию равно {0}
-DocStr3330;Should the number counter be cleared. The default is enabled;Нужно ли сбрасывать счетчик номеров. По умолчанию включено
 DocStr3331;The reader of data recorded in the text FIX protocol format;Читатель данных, записанных в формате текстового FIX протокола
 DocStr3332;Roles;Роли
 DocStr3333;Regular connection;Обычное подключение
@@ -14091,7 +14092,7 @@ DocStr9800;Spb exchange;СПб биржа
 DocStr9801;All avaliable adapters;Все доступные адаптеры
 DocStr9802;Users info;Информация о пользователях
 DocStr9803;Type of builder;Тип построителя
-DocStr9804;{0} derived type;Производные типы {0}
+DocStr9804;{0} derived type;Производный тип {0}
 DocStr9805;Result values type;Тип результирующий значений
 DocStr9806;{0}, if can optimize the parameter, otherwise, {1};{0}, если параметр может быть оптимизирован, иначе, {1}
 DocStr9807;{0}, if rule was removed, otherwise, {1};{0}, если правило было удалено, иначе, {1}
@@ -14108,3 +14109,24 @@ DocStr9817;Symbol;Символ
 DocStr9818;Security exchange;Биржа
 DocStr9819;Id source;Источник идентификатора
 DocStr9820;Id value;Значение идентификатора
+DocStr9821;Compiler service;Сервис компилятора
+DocStr9822;Is current language is English;Является ли английский текущим языком
+DocStr9823;Has feedback for specified product;Есть ли отзыв для продукта
+DocStr9824;Send feedback for specified product;Отправить отзыв для продукта
+DocStr9825;Rating;Рейтинг
+DocStr9827;Create strategy in English store;Создать стратегию в английском магазине
+DocStr9828;Request strategies in English store;Запросить стратегии в английском магазине
+DocStr9829;Strategy tags;Тэги стратегии
+DocStr9830;Is colocation available for the strategy;Доступна ли колокация для стратегии
+DocStr9831;Promo price;Цена акции
+DocStr9832;Promo end date;Дата окончания акции
+DocStr9833;In memory configuration message adapter's provider;Провайдер конфигурации адаптеров в памяти
+DocStr9834;Get simple indicator values;Получить простые значения индикатора
+DocStr9835;Simple indicator values;Простые значения индикатора
+DocStr9836;Compiler;Компилятор
+DocStr9837;Set element name;Set element name
+DocStr9838;Can change value;Можно ли изменить значение
+DocStr9839;The instance;Экземляр
+DocStr9840;Is type compatible;Совместим ли тип
+DocStr9842;{0} value converter;Конвертер {0}
+DocStr9845;Rating window;Окно рейтинга

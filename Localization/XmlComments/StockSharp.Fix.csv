@@ -1466,7 +1466,7 @@ P:StockSharp.Fix.FixMessageAdapter.Login/summary;Login
 P:StockSharp.Fix.FixMessageAdapter.Password/summary;Password
 P:StockSharp.Fix.FixMessageAdapter.RequestAllPortfolios/summary;RequestAllPortfolios
 P:StockSharp.Fix.FixMessageAdapter.RequestAllSecurities/summary;RequestAllSecurities
-P:StockSharp.Fix.FixMessageAdapter.IsResetCounter/summary;DocStr3330
+P:StockSharp.Fix.FixMessageAdapter.IsResetCounter/summary;DocStr3313
 P:StockSharp.Fix.FixMessageAdapter.ReadTimeout/summary;DocStr3183
 P:StockSharp.Fix.FixMessageAdapter.WriteTimeout/summary;DocStr3184
 P:StockSharp.Fix.FixMessageAdapter.IsValid/summary;DocStr53

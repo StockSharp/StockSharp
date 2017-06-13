@@ -43648,14 +43648,14 @@ namespace StockSharp.Localization
 		public static string ContactUs => GetString(ContactUsKey);
 
 		/// <summary>
-		/// Thank you for the valuable feedback. We will reply shortly.
+		/// Thank you for your question. We will reply shortly.
 		/// </summary>
-		public const string ThankYouForFeedbackKey = nameof(ThankYouForFeedback);
+		public const string ThankYouForQuestionKey = nameof(ThankYouForQuestion);
 
 		/// <summary>
-		/// Thank you for the valuable feedback. We will reply shortly.
+		/// Thank you for your question. We will reply shortly.
 		/// </summary>
-		public static string ThankYouForFeedback => GetString(ThankYouForFeedbackKey);
+		public static string ThankYouForQuestion => GetString(ThankYouForQuestionKey);
 
 		/// <summary>
 		/// Login and password must be specified.
@@ -45276,5 +45276,26 @@ namespace StockSharp.Localization
 		/// Please, give a rating to our application.
 		/// </summary>
 		public static string GiveRatingToOurApplication => GetString(GiveRatingToOurApplicationKey);
+
+		/// <summary>
+		/// Text (optional)
+		/// </summary>
+		public const string TextOptionalKey = nameof(TextOptional);
+
+		/// <summary>
+		/// Text (optional)
+		/// </summary>
+		public static string TextOptional => GetString(TextOptionalKey);
+
+
+		/// <summary>
+		/// Your feedback is very valuable to us. Thank you!
+		/// </summary>
+		public const string ThankYouForFeedbackKey = nameof(ThankYouForFeedback);
+
+		/// <summary>
+		/// Your feedback is very valuable to us. Thank you!
+		/// </summary>
+		public static string ThankYouForFeedback => GetString(ThankYouForFeedbackKey);
 	}
 }

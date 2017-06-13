@@ -312,6 +312,9 @@ T:StockSharp.Xaml.Charting.ChartHelper/summary;DocStr2939
 M:StockSharp.Xaml.Charting.ChartHelper.SeriesName(System.String)/summary;DocStr7774
 M:StockSharp.Xaml.Charting.ChartHelper.SeriesName(System.String)/param/prefix;Str2595
 M:StockSharp.Xaml.Charting.ChartHelper.SeriesName(System.String)/returns;DocStr7775
+M:StockSharp.Xaml.Charting.ChartHelper.GetSimpleValues(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr9834
+M:StockSharp.Xaml.Charting.ChartHelper.GetSimpleValues(StockSharp.Algo.Indicators.IIndicatorValue)/param/value;IndicatorValue
+M:StockSharp.Xaml.Charting.ChartHelper.GetSimpleValues(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr9835
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)/summary;DocStr7779
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)/param/chart;Str3200
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)/param/element;DocStr7766

@@ -2,6 +2,9 @@ T:StockSharp.Algo.Expressions.ExpressionFormula/summary;DocStr8476
 M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])/summary;DocStr1113
 M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])/param/values;DocStr1114
 M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])/returns;DocStr1115
+M:StockSharp.Algo.Expressions.ExpressionFormula.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})/summary;DocStr1
+M:StockSharp.Algo.Expressions.ExpressionFormula.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})/param/expression;DocStr8477
+M:StockSharp.Algo.Expressions.ExpressionFormula.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})/param/securityIds;DocStr142
 P:StockSharp.Algo.Expressions.ExpressionFormula.Expression/summary;DocStr8477
 P:StockSharp.Algo.Expressions.ExpressionFormula.Error/summary;DocStr8478
 P:StockSharp.Algo.Expressions.ExpressionFormula.SecurityIds/summary;DocStr142
@@ -19,6 +22,11 @@ M:StockSharp.Algo.Expressions.ExpressionHelper.Encode(System.String)/returns;Doc
 M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)/summary;DocStr8481
 M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)/param/expression;DocStr1107
 M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)/returns;DocStr8482
+P:StockSharp.Algo.Expressions.ExpressionHelper.Functions/summary;AvailableFunctions
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)/summary;DocStr8479
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)/param/service;DocStr9821
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)/param/expression;DocStr8480
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)/returns;DocStr8476
 T:StockSharp.Algo.Expressions.ExpressionIndexSecurity/summary;DocStr1111
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.#ctor/summary;DocStr1
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Formula/summary;DocStr8476
