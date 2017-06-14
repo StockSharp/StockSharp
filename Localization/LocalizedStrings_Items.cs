@@ -45287,7 +45287,6 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static string TextOptional => GetString(TextOptionalKey);
 
-
 		/// <summary>
 		/// Your feedback is very valuable to us. Thank you!
 		/// </summary>
@@ -45297,5 +45296,35 @@ namespace StockSharp.Localization
 		/// Your feedback is very valuable to us. Thank you!
 		/// </summary>
 		public static string ThankYouForFeedback => GetString(ThankYouForFeedbackKey);
+
+		/// <summary>
+		/// Commodity
+		/// </summary>
+		public const string CommodityKey = nameof(Commodity);
+
+		/// <summary>
+		/// Commodity
+		/// </summary>
+		public static string Commodity => GetString(CommodityKey);
+
+		/// <summary>
+		/// CFD
+		/// </summary>
+		public const string CfdKey = nameof(Cfd);
+
+		/// <summary>
+		/// CFD
+		/// </summary>
+		public static string Cfd => GetString(CfdKey);
+
+		/// <summary>
+		/// ADR
+		/// </summary>
+		public const string AdrKey = nameof(Adr);
+
+		/// <summary>
+		/// ADR
+		/// </summary>
+		public static string Adr => GetString(AdrKey);
 	}
 }

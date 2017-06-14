@@ -415,7 +415,7 @@ Bond;Bond;Облигация
 Warrant;Warrant;Варрант
 Forward;Forward;Форвард
 Swap;Swap;Своп
-Product;Product;Товар
+Product;Product;Продукт
 Str395;News;Новость
 Weather;Weather;Погода
 ShareFund;Share (Open-end fund);Паи
@@ -4563,6 +4563,9 @@ LeftToEnter;Left to enter;Осталось ввести
 GiveRatingToOurApplication;Just one minute more. Please send us feedback.;Вам всё понравилось? Что-то улучшить? Пожалуйста, напишите нам отзыв.
 TextOptional;Text (optional);Текст (необязательно)
 ThankYouForFeedback;Your feedback is very valuable to us. Thank you!;Ваш отзыв очень важен для нас. Спасибо!
+Commodity;Commodity;Товар
+Cfd;CFD;CFD
+Adr;ADR;ADR
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13084,7 +13087,6 @@ DocStr8689;A new object that is a copy of this instance;Копия текуще�
 DocStr8694;Is the mail-out enabled;Активна ли подписка на рассылку
 DocStr8696;S#.Designer;S#.Designer
 DocStr8697;Create a new activity session;Создать новую сессию
-DocStr8698;The product;Продукт
 DocStr8699;Session ID (authentication);Идентификатор сессии (авторизация)
 DocStr8700;Session ID (activity);Идентификатор сессии
 DocStr8701;Track the session is alive;Оповестить, что сессия активна
@@ -14124,7 +14126,7 @@ DocStr9833;In memory configuration message adapter's provider;Провайдер
 DocStr9834;Get simple indicator values;Получить простые значения индикатора
 DocStr9835;Simple indicator values;Простые значения индикатора
 DocStr9836;Compiler;Компилятор
-DocStr9837;Set element name;Set element name
+DocStr9837;Set element name;Установить имя элемента
 DocStr9838;Can change value;Можно ли изменить значение
 DocStr9839;The instance;Экземляр
 DocStr9840;Is type compatible;Совместим ли тип

@@ -94,7 +94,7 @@ namespace StockSharp.Community
 		/// Has feedback for specified product.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="product">The product.</param>
+		/// <param name="product">Product.</param>
 		/// <returns>Check result.</returns>
 		[OperationContract]
 		bool HasFeedback(Guid sessionId, Products product);
@@ -103,7 +103,7 @@ namespace StockSharp.Community
 		/// Send feedback for specified product.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="product">The product.</param>
+		/// <param name="product">Product.</param>
 		/// <param name="rating">Rating.</param>
 		/// <param name="comment">Comment.</param>
 		/// <returns>The execution result code.</returns>
