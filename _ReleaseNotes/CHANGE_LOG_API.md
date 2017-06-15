@@ -40,6 +40,7 @@ StockSharp API Change log
 * (feature) Oanda 2.0 support.
 * (feature) FinamHistorySource. OriginSide support.
 * (feature) ExchangeBoard.CmeMini
+* (feature) SampleChart. Select input security option.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
