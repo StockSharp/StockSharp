@@ -41,6 +41,7 @@ StockSharp API Change log
 * (feature) FinamHistorySource. OriginSide support.
 * (feature) ExchangeBoard.CmeMini
 * (feature) SampleChart. Select input security option.
+* (bug) OrderLog -> Ticks fix.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
