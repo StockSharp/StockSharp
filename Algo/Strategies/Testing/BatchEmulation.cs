@@ -547,6 +547,11 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				strategy.GetCandleManager()?.Dispose();
 
+				EmulationConnector
+					.Adapter
+					.AdapterProvider
+					.RemoveAssociation(strategy.Portfolio.Name);
+
 				var tuple = _strategyInfo.TryGetValue(strategy);
 
 				if (tuple == null)
