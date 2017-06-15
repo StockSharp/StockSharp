@@ -343,23 +343,27 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Get all available instruments.
 		/// </summary>
-		public override IEnumerable<SecurityId> AvailableSecurities
+		public override IEnumerable<SecurityId> AvailableSecurities => GetAvailableSecurities(Path);
+
+		/// <summary>
+		/// Get all available instruments.
+		/// </summary>
+		/// <param name="path">The path to the directory with data.</param>
+		/// <returns>All available instruments.</returns>
+		public static IEnumerable<SecurityId> GetAvailableSecurities(string path)
 		{
-			get
-			{
-				var idGenerator = new SecurityIdGenerator();
+			var idGenerator = new SecurityIdGenerator();
 
-				if (!Directory.Exists(Path))
-					return Enumerable.Empty<SecurityId>();
+			if (!Directory.Exists(path))
+				return Enumerable.Empty<SecurityId>();
 
-				return Directory
-					.EnumerateDirectories(Path)
-					.SelectMany(Directory.EnumerateDirectories)
-					.Select(System.IO.Path.GetFileName)
-					.Select(TraderHelper.FolderNameToSecurityId)
-					.Select(n => idGenerator.Split(n, true))
-					.Where(t => !t.IsDefault());
-			}
+			return Directory
+				.EnumerateDirectories(path)
+				.SelectMany(Directory.EnumerateDirectories)
+				.Select(IOPath.GetFileName)
+				.Select(TraderHelper.FolderNameToSecurityId)
+				.Select(n => idGenerator.Split(n, true))
+				.Where(t => !t.IsDefault());
 		}
 
 		/// <summary>
