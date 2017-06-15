@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using Compression;
+	using StockSharp.Algo.Candles.Compression;
 
 	/// <summary>
 	/// Base candle class (contains main parameters).
