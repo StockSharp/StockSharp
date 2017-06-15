@@ -802,7 +802,7 @@ M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute/summary;DocStr9316
-T:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute/summary;DocStr9841
+T:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute/summary;DocStr9846
 P:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute.Painter/summary;DocStr7851
 M:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute.#ctor(System.Type)/summary;DocStr1
 T:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement/summary;Str3137

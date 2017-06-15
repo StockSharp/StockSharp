@@ -54,7 +54,7 @@ T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter/summary;DocStr9307
 P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StartedImage/summary;DocStr9505
 P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppingImage/summary;DocStr9505
 P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage/summary;DocStr9505
-T:StockSharp.Xaml.Converters.SelectedItemsCountTextConverter/summary;DocStr9843
+T:StockSharp.Xaml.Converters.SelectedItemsCountTextConverter/summary;DocStr9847
 T:StockSharp.Xaml.Converters.SeriesToStringConverter/summary;DocStr9307
 T:StockSharp.Xaml.DataSourcePanel/summary;DocStr9358
 P:StockSharp.Xaml.DataSourcePanel.ItemsSource/summary;DocStr9159
@@ -175,14 +175,13 @@ M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Obj
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Object,System.Object)/param/oldValue;Str3140
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Object,System.Object)/param/newValue;DocStr8276
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor/summary;DocStr1
-M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SetSelectedObject(System.Object)/summary;DocStr9844
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor/summary;DocStr29
 M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor/summary;DocStr1
 T:StockSharp.Xaml.RatingWindow/summary;DocStr9845
 F:StockSharp.Xaml.RatingWindow.RatingValueProperty/summary;DocStr29
-P:StockSharp.Xaml.RatingWindow.RatingValue/summary;DocStr9846
-P:StockSharp.Xaml.RatingWindow.Comment/summary;Str3167
+P:StockSharp.Xaml.RatingWindow.RatingValue/summary;DocStr9825
+P:StockSharp.Xaml.RatingWindow.Comment/summary;Str135
 M:StockSharp.Xaml.RatingWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.RatingWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.StrategiesDashboard/summary;DocStr9506
@@ -212,7 +211,7 @@ T:StockSharp.Xaml.QuestionWindow/summary;DocStr9455
 F:StockSharp.Xaml.QuestionWindow.OkCommand/summary;DocStr8459
 P:StockSharp.Xaml.QuestionWindow.NotificationClient/summary;DocStr3070
 P:StockSharp.Xaml.QuestionWindow.Link/summary;DocStr9491
-P:StockSharp.Xaml.QuestionWindow.Caption/summary;DocStr9847
+P:StockSharp.Xaml.QuestionWindow.Caption/summary;DocStr9848
 P:StockSharp.Xaml.QuestionWindow.Text/summary;Str3167
 P:StockSharp.Xaml.QuestionWindow.Product/summary;DocStr2981
 P:StockSharp.Xaml.QuestionWindow.Version/summary;DocStr9545
