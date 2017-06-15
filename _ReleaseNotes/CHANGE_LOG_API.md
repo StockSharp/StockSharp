@@ -39,6 +39,7 @@ StockSharp API Change log
 * (feature) FIX server. Perforance boost.
 * (feature) Oanda 2.0 support.
 * (feature) FinamHistorySource. OriginSide support.
+* (feature) ExchangeBoard.CmeMini
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

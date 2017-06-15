@@ -1511,6 +1511,13 @@ namespace StockSharp.BusinessEntities
 				Exchange = Exchange.Cme,
 			};
 
+			CmeMini = new ExchangeBoard
+			{
+				Code = "CMEMINI",
+				TimeZone = chicagoTime,
+				Exchange = Exchange.Cme,
+			};
+
 			Cbot = new ExchangeBoard
 			{
 				Code = "CBOT",
@@ -2752,6 +2759,11 @@ namespace StockSharp.BusinessEntities
 		/// Information about board of <see cref="BusinessEntities.Exchange.Cme"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Cme { get; }
+
+		/// <summary>
+		/// Information about board of <see cref="BusinessEntities.Exchange.Cme"/> exchange.
+		/// </summary>
+		public static ExchangeBoard CmeMini { get; }
 
 		/// <summary>
 		/// Information about board of <see cref="BusinessEntities.Exchange.Cce"/> exchange.
