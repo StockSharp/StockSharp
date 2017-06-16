@@ -45326,5 +45326,15 @@ namespace StockSharp.Localization
 		/// ADR
 		/// </summary>
 		public static string Adr => GetString(AdrKey);
+
+		/// <summary>
+		/// Bug report
+		/// </summary>
+		public const string BugReportKey = nameof(BugReport);
+
+		/// <summary>
+		/// Bug report
+		/// </summary>
+		public static string BugReport => GetString(BugReportKey);
 	}
 }

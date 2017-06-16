@@ -4566,6 +4566,7 @@ ThankYouForFeedback;Your feedback is very valuable to us. Thank you!;Ваш от
 Commodity;Commodity;Товар
 Cfd;CFD;CFD
 Adr;ADR;ADR
+BugReport;Bug report;Отчет об ошибках
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
