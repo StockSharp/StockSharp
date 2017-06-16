@@ -183,13 +183,13 @@ namespace SampleChart
 
 			var storage = new StorageRegistry();
 
-			var maxDays = 2;
-
 			BusyIndicator.IsBusy = true;
 
 			var path = HistoryPath.Folder;
 			var isBuild = BuildFromTicks.IsChecked == true;
 			var format = Format.SelectedFormat;
+
+			var maxDays = isBuild ? 2 : 30 * (int)_timeframe.TotalMinutes;
 
 			Task.Factory.StartNew(() =>
 			{
