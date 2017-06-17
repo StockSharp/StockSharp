@@ -122,7 +122,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedPairSet<SubscriptionInfo, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<SubscriptionInfo, IEnumerator<IMessageAdapter>>();
 		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionKeys = new SynchronizedDictionary<long, SubscriptionInfo>();
 		private readonly SynchronizedDictionary<SubscriptionInfo, IMessageAdapter> _subscriptions = new SynchronizedDictionary<SubscriptionInfo, IMessageAdapter>();
-		private readonly SynchronizedDictionary<SubscriptionInfo, CachedSynchronizedList<MarketDataMessage>> _suspendedSubscriptions = new SynchronizedDictionary<SubscriptionInfo, CachedSynchronizedList<MarketDataMessage>>();
+		private readonly SynchronizedDictionary<SubscriptionInfo, List<MarketDataMessage>> _suspendedSubscriptions = new SynchronizedDictionary<SubscriptionInfo, List<MarketDataMessage>>();
 		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter>();
 		private readonly SynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>> _messageTypeAdapters = new SynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>>();
@@ -413,8 +413,12 @@ namespace StockSharp.Algo
 
 										case SubscriptionStates.Subscribing:
 										//case SubscriptionStates.Unsubscribing:
-											_suspendedSubscriptions.SafeAdd(key).Add(mdMsg);
+										{
+											lock (_suspendedSubscriptions.SyncRoot)
+												_suspendedSubscriptions.SafeAdd(key).Add(mdMsg);
+
 											break;
+										}
 
 										default:
 											throw new ArgumentOutOfRangeException();
@@ -728,10 +732,17 @@ namespace StockSharp.Algo
 			_subscriptions.Add(key, adapter);
 			_subscriptionStates[key] = SubscriptionStates.Subscribed;
 
-			var messages = _suspendedSubscriptions.TryGetValue(key)?.CopyAndClear();
+			MarketDataMessage[] messages;
 
-			if (messages == null)
-				return;
+			lock (_suspendedSubscriptions.SyncRoot)
+			{
+				var list = _suspendedSubscriptions.TryGetValue(key);
+
+				if (list == null)
+					return;
+
+				messages = list.CopyAndClear();
+			}
 
 			foreach (var mdMsg in messages)
 				adapter.SendInMessage(mdMsg);
