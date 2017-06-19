@@ -4568,6 +4568,10 @@ Cfd;CFD;CFD
 Adr;ADR;ADR
 BugReport;Bug report;Отчет об ошибках
 CandleStick;Candlestick;Японские
+NotCompatibleStrategy;Selected strategy is not compatible with S#.Designer. You can continue subscribing, but then download separately from web site. Continue subscription?;Выбранная стратегия не совместима с S#.Designer. Вы можете продолжить оформление подписки, но скачать потом отдельно через веб сайт. Продолжить подписку?
+Lifetime;Lifetime;Пожизненно
+PerMonth;Per month;Помесячно
+Annual;Annual;Ежегодно
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -4576,6 +4580,7 @@ DocStr4;Save settings;Сохранить настройки
 DocStr5;Process activation alert messages;Обработать сообщения на активацию сигнала
 DocStr6;Process activation alert message;Обработать сообщение на активацию сигнала
 DocStr7;Release resources;Освободить занятые ресурсы
+DocStr8;InitializeComponent;InitializeComponent
 DocStr9;Message type;Тип сообщения
 DocStr10;Schema change event;Событие изменения схемы
 DocStr11;Popup window for alert type {0};Всплывающее окно для типа сигнала {0}
@@ -13425,9 +13430,6 @@ DocStr9056;Strategy content types;Типы контента стратегии
 DocStr9057;Schema in visual designer (if the strategy is distributed as a schema);Схема визуального дизайнера (если стратегия распространяется как схема)
 DocStr9058;Encrypted version of {0};Зашифрованная версия {0}
 DocStr9059;Strategy price types;Типы цены стратегии
-DocStr9060;Lifetime;Пожизненно
-DocStr9061;Per month;Помесячно
-DocStr9062;Annual;Ежегодно
 DocStr9063;Name (en);Название (англ.)
 DocStr9064;Strategy description (en);Описание стратегии (англ.)
 DocStr9065;Name (ru);Название (рус.)
@@ -14133,3 +14135,8 @@ DocStr9839;The instance;Экземляр
 DocStr9840;Is type compatible;Совместим ли тип
 DocStr9842;{0} value converter;Конвертер {0}
 DocStr9845;Rating window;Окно рейтинга
+DocStr9847;Attribute, applied to class, to create renderer type for indicator extended drawing;Атрибут, применяемый к классу, для создания типа визуализатора для расширенного рисования индикатора
+DocStr9848;Items count to string converter;Конвертер количества элементов в строку
+DocStr9849;Get image by resource key;Получить изображение по ключу ресурса
+DocStr9850;Resource key;Ключ ресурса
+DocStr9851;Image;Изображение

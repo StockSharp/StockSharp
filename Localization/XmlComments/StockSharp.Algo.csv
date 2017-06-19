@@ -1789,6 +1789,9 @@ M:StockSharp.Algo.Storages.LocalMarketDataDrive.#ctor(System.String)/summary;Doc
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.#ctor(System.String)/param/path;DocStr1581
 P:StockSharp.Algo.Storages.LocalMarketDataDrive.Path/summary;DocStr1581
 P:StockSharp.Algo.Storages.LocalMarketDataDrive.AvailableSecurities/summary;DocStr2512
+M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetAvailableSecurities(System.String)/summary;DocStr2512
+M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetAvailableSecurities(System.String)/param/path;DocStr1581
+M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetAvailableSecurities(System.String)/returns;DocStr2513
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/summary;DocStr8484
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/param/securityId;DocStr8485
 M:StockSharp.Algo.Storages.LocalMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)/param/format;DocStr145

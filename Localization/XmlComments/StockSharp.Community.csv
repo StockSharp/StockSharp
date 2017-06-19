@@ -396,9 +396,9 @@ F:StockSharp.Community.StrategyContentTypes.EncryptedSchema/summary;DocStr9058
 F:StockSharp.Community.StrategyContentTypes.StandaloneApp/summary;DocStr9790
 F:StockSharp.Community.StrategyContentTypes.Indicator/summary;Str1981
 T:StockSharp.Community.StrategyPriceTypes/summary;DocStr9059
-F:StockSharp.Community.StrategyPriceTypes.Lifetime/summary;DocStr9060
-F:StockSharp.Community.StrategyPriceTypes.PerMonth/summary;DocStr9061
-F:StockSharp.Community.StrategyPriceTypes.Annual/summary;DocStr9062
+F:StockSharp.Community.StrategyPriceTypes.Lifetime/summary;Lifetime
+F:StockSharp.Community.StrategyPriceTypes.PerMonth/summary;PerMonth
+F:StockSharp.Community.StrategyPriceTypes.Annual/summary;Annual
 T:StockSharp.Community.StrategyData/summary;DocStr3052
 P:StockSharp.Community.StrategyData.Id/summary;Str361
 P:StockSharp.Community.StrategyData.CreationDate/summary;DocStr3076

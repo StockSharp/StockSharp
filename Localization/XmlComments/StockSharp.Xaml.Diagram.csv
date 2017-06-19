@@ -792,6 +792,10 @@ M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnStart/summary;Do
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnStop/summary;DocStr7894
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnReseted/summary;DocStr7896
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.RemoveExternalSockets/summary;DocStr9389
+M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.IsTypeCompatible(System.Type)/summary;DocStr9840
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.IsTypeCompatible(System.Type)/param/type;Str1963
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.IsTypeCompatible(System.Type)/returns;DocStr8659
@@ -802,7 +806,7 @@ M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute/summary;DocStr9316
-T:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute/summary;DocStr9846
+T:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute/summary;DocStr9847
 P:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute.Painter/summary;DocStr7851
 M:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute.#ctor(System.Type)/summary;DocStr1
 T:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement/summary;Str3137

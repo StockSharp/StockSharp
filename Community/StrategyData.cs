@@ -18,6 +18,8 @@ namespace StockSharp.Community
 	using System;
 	using System.Runtime.Serialization;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// Strategy content types.
 	/// </summary>
@@ -71,18 +73,21 @@ namespace StockSharp.Community
 		/// Lifetime.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.LifetimeKey)]
 		Lifetime,
 
 		/// <summary>
 		/// Per month.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.PerMonthKey)]
 		PerMonth,
 
 		/// <summary>
 		/// Annual.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.AnnualKey)]
 		Annual
 	}
 

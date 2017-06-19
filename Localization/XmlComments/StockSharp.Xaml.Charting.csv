@@ -115,7 +115,7 @@ F:StockSharp.Xaml.Charting.ChartAnnotationTypes.None/summary;Str1658
 F:StockSharp.Xaml.Charting.ChartAnnotationTypes.LineAnnotation/summary;Line
 F:StockSharp.Xaml.Charting.ChartAnnotationTypes.LineArrowAnnotation/summary;Str1899
 F:StockSharp.Xaml.Charting.ChartAnnotationTypes.TextAnnotation/summary;Str217
-F:StockSharp.Xaml.Charting.ChartAnnotationTypes.BoxAnnotation/summary;Str1900
+F:StockSharp.Xaml.Charting.ChartAnnotationTypes.BoxAnnotation/summary;Area
 F:StockSharp.Xaml.Charting.ChartAnnotationTypes.HorizontalLineAnnotation/summary;Str1901
 F:StockSharp.Xaml.Charting.ChartAnnotationTypes.VerticalLineAnnotation/summary;Str1902
 T:StockSharp.Xaml.Charting.ChartArea/summary;Str1903
@@ -177,14 +177,14 @@ M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyValueChanging(System.String,Sy
 M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyValueChanging(System.String,System.Object)/param/value;DocStr7751
 T:StockSharp.Xaml.Charting.ChartCandleDrawStyles/summary;DocStr7765
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.CandleStick/summary;Str1940
-F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.Ohlc/summary;Str1941
+F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.Ohlc/summary;Bars
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineOpen/summary;LineOpen
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineHigh/summary;LineHigh
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineLow/summary;LineLow
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineClose/summary;LineClose
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.BoxVolume/summary;DocStr8857
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.ClusterProfile/summary;ClusterProfile
-F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.Area/summary;Str1900
+F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.Area/summary;Area
 T:StockSharp.Xaml.Charting.ChartCandleElement/summary;DocStr7766
 M:StockSharp.Xaml.Charting.ChartCandleElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Charting.ChartCandleElement.Title/summary;Str1945
@@ -340,7 +340,7 @@ M:StockSharp.Xaml.Charting.ChartHelper.SaveToImage(StockSharp.Xaml.Charting.ICha
 M:StockSharp.Xaml.Charting.ChartHelper.GetArea(StockSharp.Xaml.Charting.Chart,System.Int32)/summary;DocStr7785
 M:StockSharp.Xaml.Charting.ChartHelper.GetArea(StockSharp.Xaml.Charting.Chart,System.Int32)/param/chart;Str3200
 M:StockSharp.Xaml.Charting.ChartHelper.GetArea(StockSharp.Xaml.Charting.Chart,System.Int32)/param/index;DocStr7786
-M:StockSharp.Xaml.Charting.ChartHelper.GetArea(StockSharp.Xaml.Charting.Chart,System.Int32)/returns;Str1900
+M:StockSharp.Xaml.Charting.ChartHelper.GetArea(StockSharp.Xaml.Charting.Chart,System.Int32)/returns;Area
 M:StockSharp.Xaml.Charting.ChartHelper.GetChart(StockSharp.Algo.Strategies.Strategy)/summary;DocStr7787
 M:StockSharp.Xaml.Charting.ChartHelper.GetChart(StockSharp.Algo.Strategies.Strategy)/param/strategy;Strategy
 M:StockSharp.Xaml.Charting.ChartHelper.GetChart(StockSharp.Algo.Strategies.Strategy)/returns;Str3200

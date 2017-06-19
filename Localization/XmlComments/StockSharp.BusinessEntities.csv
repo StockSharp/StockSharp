@@ -229,6 +229,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Spb/summary;DocStr8680
 P:StockSharp.BusinessEntities.ExchangeBoard.Ux/summary;DocStr2805
 P:StockSharp.BusinessEntities.ExchangeBoard.UxStock/summary;DocStr2806
 P:StockSharp.BusinessEntities.ExchangeBoard.Cme/summary;DocStr2807
+P:StockSharp.BusinessEntities.ExchangeBoard.CmeMini/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Cce/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Cbot/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Nymex/summary;DocStr2807

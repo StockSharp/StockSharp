@@ -45346,5 +45346,45 @@ namespace StockSharp.Localization
 		/// Candlestick
 		/// </summary>
 		public static string CandleStick => GetString(CandleStickKey);
+
+		/// <summary>
+		/// Selected strategy is not compatible with S#.Designer. You can continue subscribing, but then download separately from web site. Continue subscription?
+		/// </summary>
+		public const string NotCompatibleStrategyKey = nameof(NotCompatibleStrategy);
+
+		/// <summary>
+		/// Selected strategy is not compatible with S#.Designer. You can continue subscribing, but then download separately from web site. Continue subscription?
+		/// </summary>
+		public static string NotCompatibleStrategy => GetString(NotCompatibleStrategyKey);
+
+		/// <summary>
+		/// Lifetime
+		/// </summary>
+		public const string LifetimeKey = nameof(Lifetime);
+
+		/// <summary>
+		/// Lifetime
+		/// </summary>
+		public static string Lifetime => GetString(LifetimeKey);
+
+		/// <summary>
+		/// Per month
+		/// </summary>
+		public const string PerMonthKey = nameof(PerMonth);
+
+		/// <summary>
+		/// Per month
+		/// </summary>
+		public static string PerMonth => GetString(PerMonthKey);
+
+		/// <summary>
+		/// Annual
+		/// </summary>
+		public const string AnnualKey = nameof(Annual);
+
+		/// <summary>
+		/// Annual
+		/// </summary>
+		public static string Annual => GetString(AnnualKey);
 	}
 }

@@ -1147,7 +1147,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.CanChangeValue">
       <summary>
-            Can change value;
+            Can change value.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Attributes">
@@ -3083,6 +3083,18 @@
       <summary>
             Remove external sockets.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.IsTypeCompatible(System.Type)">
       <summary>
