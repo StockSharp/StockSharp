@@ -46,7 +46,7 @@ namespace SampleChart
 	public partial class MainWindow
 	{
 		private ChartArea _areaComb;
-		private ChartCandleElement _candleElement1;
+		private ChartCandleElement _candleElement;
 		private TimeFrameCandle _candle;
 		private CandleMessageVolumeProfile _volumeProfile;
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
@@ -57,6 +57,7 @@ namespace SampleChart
 		private Security _security;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 		private RandomWalkTradeGenerator _tradeGenerator;
+		private readonly CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator>();
 
 		private TimeSpan _timeframe;
 
@@ -89,6 +90,7 @@ namespace SampleChart
 		{
 			Chart.FillIndicators();
 			Chart.SubscribeIndicatorElement += Chart_OnSubscribeIndicatorElement;
+			Chart.UnSubscribeElement += Chart_OnUnSubscribeElement;
 
 			ConfigManager.RegisterService<IBackupService>(new YandexDiskService());
 
@@ -123,6 +125,16 @@ namespace SampleChart
 			}
 
 			Chart.Draw(chartData);
+
+			_indicators.Add(element, indicator);
+		}
+
+		private void Chart_OnUnSubscribeElement(IChartElement element)
+		{
+			var indElem = element as ChartIndicatorElement;
+
+			if (indElem != null)
+				_indicators.Remove(indElem);
 		}
 
 		private void RefreshCharts()
@@ -159,8 +171,8 @@ namespace SampleChart
 				_security,
 				_timeframe);
 
-			_candleElement1 = new ChartCandleElement { FullTitle = "Candles" };
-			Chart.AddElement(_areaComb, _candleElement1, series);
+			_candleElement = new ChartCandleElement { FullTitle = "Candles" };
+			Chart.AddElement(_areaComb, _candleElement, series);
 
 			LoadData(_security);
 		}
@@ -176,7 +188,7 @@ namespace SampleChart
 			_lastPrice = 0m;
 			_allCandles.Clear();
 
-			Chart.Reset(new IChartElement[] { _candleElement1 });
+			Chart.Reset(new IChartElement[] { _candleElement });
 
 			var storage = new StorageRegistry();
 
@@ -293,7 +305,14 @@ namespace SampleChart
 				if (chartData == null)
 					chartData = new ChartDrawData();
 
-				chartData.Group(candle.OpenTime).Add(_candleElement1, candle);
+				var chartGroup = chartData.Group(candle.OpenTime);
+
+				chartGroup.Add(_candleElement, candle);
+
+				foreach (var pair in _indicators.CachedPairs)
+				{
+					chartGroup.Add(pair.Key, pair.Value.Process(candle));
+				}
 			}
 
 			if (chartData != null)
