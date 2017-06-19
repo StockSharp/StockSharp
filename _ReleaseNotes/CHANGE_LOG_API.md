@@ -42,6 +42,7 @@ StockSharp API Change log
 * (feature) ExchangeBoard.CmeMini
 * (feature) SampleChart. Select input security option.
 * (bug) OrderLog -> Ticks fix.
+* (feature) ExchangeBoard.Fxcm
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

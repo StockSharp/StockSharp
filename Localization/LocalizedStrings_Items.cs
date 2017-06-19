@@ -45386,5 +45386,15 @@ namespace StockSharp.Localization
 		/// Annual
 		/// </summary>
 		public static string Annual => GetString(AnnualKey);
+
+		/// <summary>
+		/// FXCM
+		/// </summary>
+		public const string FxcmKey = nameof(Fxcm);
+
+		/// <summary>
+		/// FXCM
+		/// </summary>
+		public static string Fxcm => GetString(FxcmKey);
 	}
 }

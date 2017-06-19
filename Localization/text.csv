@@ -4572,6 +4572,7 @@ NotCompatibleStrategy;Selected strategy is not compatible with S#.Designer. You 
 Lifetime;Lifetime;Пожизненно
 PerMonth;Per month;Помесячно
 Annual;Annual;Ежегодно
+Fxcm;FXCM;FXCM
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

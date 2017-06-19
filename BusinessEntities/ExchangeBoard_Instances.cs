@@ -3021,5 +3021,14 @@ namespace StockSharp.BusinessEntities
 			Code = "CURRENEX",
 			Exchange = Exchange.Currenex,
 		};
+
+		/// <summary>
+		/// Information about board FXCM.
+		/// </summary>
+		public static ExchangeBoard Fxcm { get; } = new ExchangeBoard
+		{
+			Code = "FXCM",
+			Exchange = Exchange.Fxcm,
+		};
 	}
 }
