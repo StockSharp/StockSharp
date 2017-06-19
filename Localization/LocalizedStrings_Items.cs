@@ -18150,12 +18150,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Area
 		/// </summary>
-		public const string Str1900Key = nameof(Str1900);
+		public const string AreaKey = nameof(Area);
 
 		/// <summary>
 		/// Area
 		/// </summary>
-		public static string Str1900 => GetString(Str1900Key);
+		public static string Area => GetString(AreaKey);
 
 		/// <summary>
 		/// Horizontal line
@@ -18490,12 +18490,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Bars
 		/// </summary>
-		public const string Str1941Key = nameof(Str1941);
+		public const string BarsKey = nameof(Bars);
 
 		/// <summary>
 		/// Bars
 		/// </summary>
-		public static string Str1941 => GetString(Str1941Key);
+		public static string Bars => GetString(BarsKey);
 
 		/// <summary>
 		/// Candles settings
@@ -45336,5 +45336,15 @@ namespace StockSharp.Localization
 		/// Bug report
 		/// </summary>
 		public static string BugReport => GetString(BugReportKey);
+
+		/// <summary>
+		/// Candlestick
+		/// </summary>
+		public const string CandleStickKey = nameof(CandleStick);
+
+		/// <summary>
+		/// Candlestick
+		/// </summary>
+		public static string CandleStick => GetString(CandleStickKey);
 	}
 }

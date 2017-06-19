@@ -1815,7 +1815,7 @@ Str1896;Login is not specified.;Логин не указан.
 Str1897;Password in not specified.;Пароль не указан.
 Str1898;Line;Линия
 Str1899;Pointer;Указатель
-Str1900;Area;Область
+Area;Area;Область
 Str1901;Horizontal line;Горизонтальная линия
 Str1902;Vertical line;Вертикальная линия
 Str1903;Chart area;Область графика
@@ -1849,7 +1849,7 @@ Str1936;Axis labels;Надписи на оси
 Str1937;Show labels on the axis.;Показывать надписи на оси.
 Str1938;Labels format;Формат надписей
 Str1940;Japanese candles;Японские свечи
-Str1941;Bars;Бары
+Bars;Bars;Бары
 Str1942;Candles settings;Настройки свечей
 Str1945;Series header that will be shown on chart.;Заголовок серии, который будет отображаться на графике.
 Str1946;Style;Стиль
@@ -4567,6 +4567,7 @@ Commodity;Commodity;Товар
 Cfd;CFD;CFD
 Adr;ADR;ADR
 BugReport;Bug report;Отчет об ошибках
+CandleStick;Candlestick;Японские
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -4575,7 +4576,6 @@ DocStr4;Save settings;Сохранить настройки
 DocStr5;Process activation alert messages;Обработать сообщения на активацию сигнала
 DocStr6;Process activation alert message;Обработать сообщение на активацию сигнала
 DocStr7;Release resources;Освободить занятые ресурсы
-DocStr8;InitializeComponent;InitializeComponent
 DocStr9;Message type;Тип сообщения
 DocStr10;Schema change event;Событие изменения схемы
 DocStr11;Popup window for alert type {0};Всплывающее окно для типа сигнала {0}
