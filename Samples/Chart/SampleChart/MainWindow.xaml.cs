@@ -36,6 +36,7 @@ namespace SampleChart
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
@@ -55,6 +56,7 @@ namespace SampleChart
 		//private const decimal _priceStep = 10m;
 		private Security _security;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+		private RandomWalkTradeGenerator _tradeGenerator;
 
 		private TimeSpan _timeframe;
 
@@ -148,6 +150,10 @@ namespace SampleChart
 				Board = _exchangeInfoProvider.GetExchangeBoard(id.BoardCode) ?? ExchangeBoard.Associated
 			};
 
+			_tradeGenerator = new RandomWalkTradeGenerator(id);
+			_tradeGenerator.Init();
+			_tradeGenerator.Process(_security.ToMessage());
+
 			var series = new CandleSeries(
 				typeof(TimeFrameCandle),
 				_security,
@@ -218,6 +224,14 @@ namespace SampleChart
 						_lastTime = candle.OpenTime + _timeframe;
 						_lastPrice = _candle.ClosePrice;
 
+						_tradeGenerator.Process(new ExecutionMessage
+						{
+							ExecutionType = ExecutionTypes.Tick,
+							SecurityId = security.ToSecurityId(),
+							ServerTime = _lastTime,
+							TradePrice = _lastPrice,
+						});
+
 						if (date != candle.OpenTime.Date)
 						{
 							date = candle.OpenTime.Date;
@@ -254,15 +268,11 @@ namespace SampleChart
 		{
 			if (IsRealtime.IsChecked == true && _lastPrice != 0m)
 			{
-				var step = _security.PriceStep ?? 0.01m;
-				var price = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * (double)step), step);
-				AppendTick(_security, new ExecutionMessage
-				{
-					ServerTime = _lastTime,
-					TradePrice = price,
-					TradeVolume = RandomGen.GetInt(50) + 1,
-					OriginSide = Sides.Buy,
-				});
+				var nextTick = (ExecutionMessage)_tradeGenerator.Process(new TimeMessage { ServerTime = _lastTime });
+
+				if (nextTick != null)
+					AppendTick(_security, nextTick);
+				
 				_lastTime += TimeSpan.FromSeconds(10);
 			}
 
@@ -305,6 +315,7 @@ namespace SampleChart
 						_updatedCandles[_candle.OpenTime] = _candle;
 
 					_lastPrice = _candle.ClosePrice;
+					_tradeGenerator.Process(tick);
 				}
 
 				//var t = TimeframeSegmentDataSeries.GetTimeframePeriod(time.DateTime, _timeframe);
@@ -341,11 +352,6 @@ namespace SampleChart
 
 			lock (_updatedCandles.SyncRoot)
 				_updatedCandles[_candle.OpenTime] = _candle;
-		}
-
-		public static decimal Round(decimal value, decimal nearest)
-		{
-			return Math.Round(value / nearest) * nearest;
 		}
 
 		private void Error(string msg)
