@@ -1,4 +1,4 @@
-﻿<Window x:Class="SampleChart.MainWindow"
+﻿<dx:DXWindow x:Class="SampleChart.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:sx="http://schemas.stocksharp.com/xaml"
@@ -49,10 +49,10 @@
                 </GroupBox>
 
                 <ComboBox Margin="10,0,0,0" x:Name="Theme" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="150">
-					<!--<ComboBoxItem Content="{x:Static dx:Theme.Office2016BlackName}"/>
+					<ComboBoxItem Content="{x:Static dx:Theme.Office2016BlackName}"/>
 					<ComboBoxItem Content="{x:Static dx:Theme.Office2016WhiteName}"/>
 					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisDarkName}"/>
-					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisLightName}"/>-->
+					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisLightName}"/>
 				</ComboBox>
 
                 <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center"/>
@@ -61,4 +61,4 @@
             <sx:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="1"/>
         </Grid>
     </xctk:BusyIndicator>
-</Window>
+</dx:DXWindow>
