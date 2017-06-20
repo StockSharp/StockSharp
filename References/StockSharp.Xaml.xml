@@ -221,6 +221,11 @@
             Proxy-server settings.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.BaseApplication.HelpCommand">
+      <summary>
+            Help command.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.BaseApplication.StartIsRunning">
       <summary>
             Check if an instance of the application already started.
