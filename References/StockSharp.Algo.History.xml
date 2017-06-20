@@ -123,24 +123,24 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="T:StockSharp.Algo.History.Forex.DukasCopySource">
+    <member name="T:StockSharp.Algo.History.Forex.DukasCopyHistorySource">
       <summary>
             The source for historical data downloading from the DukasCopy.
             </summary>
     </member>
-    <member name="P:StockSharp.Algo.History.Forex.DukasCopySource.TimeFrames">
+    <member name="P:StockSharp.Algo.History.Forex.DukasCopyHistorySource.TimeFrames">
       <summary>
             Available timeframes of historical data.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.DukasCopySource" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.DukasCopyHistorySource" />.
             </summary>
       <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -149,7 +149,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
       <summary>
             To download historical tick data for the entire day.
             </summary>
@@ -157,7 +157,7 @@
       <param name="date">The time is specified up to date.</param>
       <returns>Historical ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)">
       <summary>
             To download historical tick data for the entire day.
             </summary>
@@ -165,17 +165,17 @@
       <param name="date">The time is specified up to date.</param>
       <returns>Historical ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)">
       <summary>
             To download historical timeframe candles.
             </summary>
       <param name="security">Security.</param>
-      <param name="timeFrame">Time-frame. Possible values <see cref="P:StockSharp.Algo.History.Forex.DukasCopySource.TimeFrames" />.</param>
+      <param name="timeFrame">Time-frame. Possible values <see cref="P:StockSharp.Algo.History.Forex.DukasCopyHistorySource.TimeFrames" />.</param>
       <param name="date">Date.</param>
       <param name="side">Quote type (bid or ask).</param>
       <returns>Historical time-frames.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -186,19 +186,53 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="T:StockSharp.Algo.History.Forex.GainCapitalSource">
+    <member name="T:StockSharp.Algo.History.Forex.FxcmHistorySource">
+      <summary>
+            The source for downloading historical data from FXCM.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.FxcmHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.FxcmHistorySource" />.
+            </summary>
+      <param name="nativeIdStorage">Security native identifier storage.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.FxcmHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.FxcmHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.FxcmHistorySource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
+      <summary>
+            Download historical ticks.
+            </summary>
+      <param name="security">Security.</param>
+      <param name="date">Date.</param>
+      <returns>Historical ticks.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.FxcmHistorySource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime)">
+      <summary>
+            Download historical ticks.
+            </summary>
+      <param name="securityId">Security ID.</param>
+      <param name="date">Date.</param>
+      <returns>Historical ticks.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Forex.GainCapitalHistorySource">
       <summary>
             The source for downloading historical data from Gain Capital.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.GainCapitalSource" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.GainCapitalHistorySource" />.
             </summary>
       <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -207,7 +241,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -218,7 +252,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalHistorySource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
       <summary>
             Download historical quotes.
             </summary>
@@ -226,7 +260,7 @@
       <param name="date">Date.</param>
       <returns>Historical quotes.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalHistorySource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime)">
       <summary>
             Download historical quotes.
             </summary>
@@ -234,39 +268,39 @@
       <param name="date">Date.</param>
       <returns>Historical quotes.</returns>
     </member>
-    <member name="T:StockSharp.Algo.History.Forex.MBTradingSource">
+    <member name="T:StockSharp.Algo.History.Forex.MBTradingHistorySource">
       <summary>
             The source for downloading historical data from MBTrading.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.MBTradingSource" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.MBTradingHistorySource" />.
             </summary>
       <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
-    <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.Login">
+    <member name="P:StockSharp.Algo.History.Forex.MBTradingHistorySource.Login">
       <summary>
             Login.
             </summary>
     </member>
-    <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.Password">
+    <member name="P:StockSharp.Algo.History.Forex.MBTradingHistorySource.Password">
       <summary>
             Password.
             </summary>
     </member>
-    <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.Pin">
+    <member name="P:StockSharp.Algo.History.Forex.MBTradingHistorySource.Pin">
       <summary>
             Pin.
             </summary>
     </member>
-    <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.MaxAttempt">
+    <member name="P:StockSharp.Algo.History.Forex.MBTradingHistorySource.MaxAttempt">
       <summary>
             The maximum number of attempts to login to the site. The default is 10.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -275,7 +309,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -286,7 +320,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingHistorySource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
       <summary>
             Download historical ticks.
             </summary>
@@ -295,7 +329,7 @@
       <param name="to">Till downloading date.</param>
       <returns>Historical ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingHistorySource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime)">
       <summary>
             Download historical ticks.
             </summary>
@@ -304,29 +338,29 @@
       <param name="to">Till downloading date.</param>
       <returns>Historical ticks.</returns>
     </member>
-    <member name="T:StockSharp.Algo.History.Forex.TrueFXSource">
+    <member name="T:StockSharp.Algo.History.Forex.TrueFXHistorySource">
       <summary>
             The source for downloading historical data from TrueFX.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXHistorySource.#ctor(StockSharp.Algo.Storages.INativeIdStorage,StockSharp.Algo.Storages.IExchangeInfoProvider)">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.TrueFXSource" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.TrueFXHistorySource" />.
             </summary>
       <param name="nativeIdStorage">Security native identifier storage.</param>
       <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
     </member>
-    <member name="P:StockSharp.Algo.History.Forex.TrueFXSource.Login">
+    <member name="P:StockSharp.Algo.History.Forex.TrueFXHistorySource.Login">
       <summary>
             Login.
             </summary>
     </member>
-    <member name="P:StockSharp.Algo.History.Forex.TrueFXSource.Password">
+    <member name="P:StockSharp.Algo.History.Forex.TrueFXHistorySource.Password">
       <summary>
             Password.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -335,7 +369,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -346,7 +380,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXHistorySource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
       <summary>
             Download historical ticks.
             </summary>
@@ -354,7 +388,7 @@
       <param name="date">Date.</param>
       <returns>Historical ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXHistorySource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime)">
       <summary>
             Download historical ticks.
             </summary>
