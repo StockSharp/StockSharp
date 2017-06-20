@@ -4573,6 +4573,7 @@ Lifetime;Lifetime;Пожизненно
 PerMonth;Per month;Помесячно
 Annual;Annual;Ежегодно
 Fxcm;FXCM;FXCM
+ExportDoneOpenFile;Export to '{0}' done. Would you like to open it?;Экспорт в '{1}' закончен. Открыть файл?
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
