@@ -3023,7 +3023,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about board FXCM.
+		/// Information about board <see cref="BusinessEntities.Exchange.Fxcm"/>.
 		/// </summary>
 		public static ExchangeBoard Fxcm { get; } = new ExchangeBoard
 		{

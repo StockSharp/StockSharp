@@ -351,6 +351,9 @@ M:StockSharp.Xaml.Charting.ChartHelper.SetTitle(StockSharp.Xaml.Charting.ChartCa
 M:StockSharp.Xaml.Charting.ChartHelper.SetTitle(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)/param/element;DocStr419
 M:StockSharp.Xaml.Charting.ChartHelper.SetTitle(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
 M:StockSharp.Xaml.Charting.ChartHelper.SetTitle(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)/returns;DocStr419
+M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/summary;DocStr9855
+M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/param/appTheme;DocStr9856
+M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/returns;DocStr9857
 T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles/summary;DocStr7790
 F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Line/summary;Line
 F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.NoGapLine/summary;Str1972
@@ -564,7 +567,6 @@ P:StockSharp.Xaml.Charting.EquityData.Time/summary;DocStr7832
 P:StockSharp.Xaml.Charting.EquityData.Value/summary;DocStr7833
 T:StockSharp.Xaml.Charting.ExtendedBaseApplication/summary;DocStr7834
 M:StockSharp.Xaml.Charting.ExtendedBaseApplication.#ctor/summary;DocStr93
-T:StockSharp.Xaml.Charting.Extensions/summary;DocStr4290
 T:StockSharp.Xaml.Charting.IChart/summary;DocStr7705
 P:StockSharp.Xaml.Charting.IChart.Areas/summary;DocStr7716
 P:StockSharp.Xaml.Charting.IChart.IsAutoScroll/summary;DocStr7717

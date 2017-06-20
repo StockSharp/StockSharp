@@ -13543,7 +13543,7 @@ DocStr9171;{0} if the specified credentials was loaded successfully, otherwise, 
 DocStr9172;Save the credentials to {0};Сохранить параметры в {0}
 DocStr9173;Wrap the specified action in try/catch clause with logging;Обернуть действие в try/catch условие с логирование возможной ошибки
 DocStr9174;The action;Действие
-DocStr9175;Chart themes;Chart тема
+DocStr9175;Chart themes;Cтили графика
 DocStr9176;BlackSteel theme;BlackSteel тема
 DocStr9177;BrightSpark theme;BrightSpark тема
 DocStr9178;Chrome theme;Chrome тема
@@ -14142,3 +14142,9 @@ DocStr9848;Items count to string converter;Конвертер количеств
 DocStr9849;Get image by resource key;Получить изображение по ключу ресурса
 DocStr9850;Resource key;Ключ ресурса
 DocStr9851;Image;Изображение
+DocStr9852;The source for downloading historical data from FXCM;Источник для скачивания исторических данных с FXCM
+DocStr9853;Information about FXCM;Информация о FXCM
+DocStr9855;Convert Devexpress theme to chart theme;Преобразовать Devexpress стиль в стиль графика
+DocStr9856;Devexpress theme;Devexpress стиль
+DocStr9857;Chart theme;Стиль графика
+DocStr9858;Help command;Команда Справка

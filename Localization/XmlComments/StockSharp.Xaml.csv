@@ -41,6 +41,7 @@ F:StockSharp.Xaml.BaseApplication.PlatformConfigurationFile/summary;DocStr8072
 F:StockSharp.Xaml.BaseApplication.ProxyConfigurationFile/summary;DocStr8073
 F:StockSharp.Xaml.BaseApplication.SecurityNativeIdDir/summary;DocStr9672
 P:StockSharp.Xaml.BaseApplication.ProxySettings/summary;Str1435
+P:StockSharp.Xaml.BaseApplication.HelpCommand/summary;DocStr9858
 M:StockSharp.Xaml.BaseApplication.StartIsRunning/summary;DocStr9673
 M:StockSharp.Xaml.BaseApplication.StopIsRunning/summary;DocStr9674
 P:StockSharp.Xaml.BaseApplication.AppIcon/summary;DocStr8078

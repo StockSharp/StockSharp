@@ -657,7 +657,7 @@ namespace StockSharp.BusinessEntities
 		};
 
 		/// <summary>
-		/// Information about Fxcm.
+		/// Information about FXCM.
 		/// </summary>
 		public static Exchange Fxcm { get; } = new Exchange
 		{
