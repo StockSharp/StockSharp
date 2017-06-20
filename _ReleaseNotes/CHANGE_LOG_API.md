@@ -46,6 +46,8 @@ StockSharp API Change log
 * (feature) FxcmHistorySource.
 * (feature) History. Fix naming (XXXSource -> XXXHistorySource).
 * (feature) BaseGridControl. Interactive export process.
+* (feature) Chart. Fix theme styles.
+* (feature) Chart. Draw style quick access.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

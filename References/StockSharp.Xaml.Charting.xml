@@ -1262,6 +1262,13 @@
       <param name="series">Candles series.</param>
       <returns>Element.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)">
+      <summary>
+            Convert Devexpress theme to chart theme.
+            </summary>
+      <param name="appTheme">Devexpress theme.</param>
+      <returns>Chart theme.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles">
       <summary>
             Indicator chart drawing styles.
@@ -2053,11 +2060,6 @@
     <member name="M:StockSharp.Xaml.Charting.ExtendedBaseApplication.#ctor">
       <summary>
             Initialize <see cref="T:StockSharp.Xaml.Charting.ExtendedBaseApplication" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Charting.Extensions">
-      <summary>
-            Extension class.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IChart">
