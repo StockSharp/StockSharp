@@ -950,7 +950,6 @@ namespace StockSharp.Algo
 			private readonly Security _security;
 			private readonly IExchangeInfoProvider _exchangeInfoProvider;
 			//private readonly object _candleArg;
-			private readonly Type _candleType;
 
 			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider)
 			{
@@ -965,13 +964,6 @@ namespace StockSharp.Algo
 				_exchangeInfoProvider = exchangeInfoProvider;
 			}
 			
-			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider, Type candleType)
-				: this(messages, security, exchangeInfoProvider)
-			{
-				_candleType = candleType;
-				//_candleArg = candleArg;
-			}
-
 			public IEnumerator<TEntity> GetEnumerator()
 			{
 				return _messages.Select(Convert).GetEnumerator();
@@ -1021,7 +1013,7 @@ namespace StockSharp.Algo
 						if (candleMsg == null)
 							throw new ArgumentOutOfRangeException();
 
-						return candleMsg.ToCandle(_candleType, _security).To<TEntity>();
+						return candleMsg.ToCandle(_security).To<TEntity>();
 					}
 				}
 			}
@@ -1052,7 +1044,7 @@ namespace StockSharp.Algo
 		/// <returns>Trading objects.</returns>
 		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<CandleMessage> messages, Security security, Type candleType = null)
 		{
-			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, null, candleType ?? typeof(TCandle));
+			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, null);
 		}
 
 		/// <summary>
@@ -1082,7 +1074,7 @@ namespace StockSharp.Algo
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
-			var candle = message.ToCandle(series.CandleType, series.Security);
+			var candle = message.ToCandle(series.Security);
 			//candle.Series = series;
 
 			if (candle.Arg.IsNull(true))
@@ -1102,31 +1094,40 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.ToCandle(message.GetType().ToCandleType(), security);
-		}
-
-		/// <summary>
-		/// To convert <see cref="CandleMessage"/> into candle.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <param name="type">The candle type.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>Candle.</returns>
-		public static Candle ToCandle(this CandleMessage message, Type type, Security security)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
+			Candle candle;
 
-			//if (arg == null)
-			//	throw new ArgumentNullException(nameof(arg));
+			switch (message.Type)
+			{
+				case MessageTypes.CandleTimeFrame:
+					candle = new TimeFrameCandle();
+					break;
 
-			var candle = type.CreateInstance<Candle>();
+				case MessageTypes.CandleVolume:
+					candle = new VolumeCandle();
+					break;
+
+				case MessageTypes.CandleTick:
+					candle = new TickCandle();
+					break;
+
+				case MessageTypes.CandleRange:
+					candle = new RangeCandle();
+					break;
+
+				case MessageTypes.CandleRenko:
+					candle = new RenkoCandle();
+					break;
+
+				case MessageTypes.CandlePnF:
+					candle = new PnFCandle();
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.WrongCandleType);
+			}
 
 			candle.Security = security;
 			candle.Arg = message.Arg;
