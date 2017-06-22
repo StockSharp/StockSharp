@@ -55,8 +55,8 @@ namespace SampleBlackwood
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandle += ProcessNewCandle;
-			_trader.SubscribeCandles(_candleSeries, from, to);
+			_trader.CandleSeriesProcessing += ProcessNewCandle;
+			_trader.SubscribeCandles(_candleSeries, @from, to);
 
 			Title = candleSeries.ToString();
 		}
@@ -71,7 +71,9 @@ namespace SampleBlackwood
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewCandle -= ProcessNewCandle;
+			_trader.UnSubscribeCandles(_candleSeries);
+			_trader.CandleSeriesProcessing -= ProcessNewCandle;
+
 			base.OnClosing(e);
 		}
 	}

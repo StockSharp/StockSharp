@@ -131,7 +131,7 @@ namespace SampleAlfaCandles
 				CandleType = typeof(TimeFrameCandle)
 			};
 
-			_trader.NewCandle += (candleSeries, candle) =>
+			_trader.CandleSeriesProcessing += (candleSeries, candle) =>
 			{
 				_trader.AddInfoLog("New сandle({0})", candle);
 
@@ -139,7 +139,7 @@ namespace SampleAlfaCandles
 					wnd.DrawCandles(candle);
 			};
 
-			_trader.SubscribeCandles(series, from, to);
+			_trader.SubscribeCandles(series, @from, to);
 		}
 
 		private void OnSelectedSecurity()

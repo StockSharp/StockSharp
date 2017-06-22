@@ -847,6 +847,19 @@ namespace StockSharp.Algo
 						ProcessSecurityRemoveMessage((SecurityRemoveMessage)message);
 						break;
 
+					case MessageTypes.CandleTimeFrame:
+					case MessageTypes.CandlePnF:
+					case MessageTypes.CandleRange:
+					case MessageTypes.CandleRenko:
+					case MessageTypes.CandleTick:
+					case MessageTypes.CandleVolume:
+						ProcessCandleMessage((CandleMessage)message);
+						break;
+
+					case MessageTypes.MarketDataFinished:
+						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
+						break;
+
 					// если адаптеры передают специфичные сообщения
 					//default:
 					//	throw new ArgumentOutOfRangeException(LocalizedStrings.Str2142Params.Put(message.Type));
@@ -1854,6 +1867,36 @@ namespace StockSharp.Algo
 				default:
 					throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
 			}
+		}
+
+		private void ProcessCandleMessage(CandleMessage message)
+		{
+			var info = _candleSeriesInfos.TryGetValue(message.OriginalTransactionId);
+
+			if (info == null)
+				return;
+
+			if (info.CurrentCandle != null && info.CurrentCandle.OpenTime == message.OpenTime)
+			{
+				if (info.CurrentCandle.State == CandleStates.Finished)
+					return;
+
+				info.CurrentCandle.Update(message);
+			}
+			else
+				info.CurrentCandle = message.ToCandle(info.Series);
+
+			RaiseCandleSeriesProcessing(info.Series, info.CurrentCandle);
+		}
+
+		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
+		{
+			var info = _candleSeriesInfos.TryGetValue(message.OriginalTransactionId);
+
+			if (info == null)
+				return;
+
+			RaiseCandleSeriesStopped(info.Series);
 		}
 	}
 }

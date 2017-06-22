@@ -24,7 +24,9 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	partial class Connector
@@ -183,6 +185,29 @@ namespace StockSharp.Algo
 				return subscriber;
 			}
 		}
+
+		private sealed class CandleSeriesInfo
+		{
+			public CandleSeries Series { get; }
+
+			public MarketDataMessage Message { get; }
+
+			public Candle CurrentCandle { get; set; }
+
+			public CandleSeriesInfo(CandleSeries series, MarketDataMessage message)
+			{
+				if (series == null)
+					throw new ArgumentNullException(nameof(series));
+
+				if (message == null)
+					throw new ArgumentNullException(nameof(message));
+
+				Series = series;
+				Message = message;
+			}
+		}
+
+		private readonly SynchronizedDictionary<long, CandleSeriesInfo> _candleSeriesInfos = new SynchronizedDictionary<long, CandleSeriesInfo>();
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
@@ -477,6 +502,54 @@ namespace StockSharp.Algo
 				DataType = MarketDataTypes.News,
 				IsSubscribe = false
 			});
+		}
+
+		/// <summary>
+		/// Subscribe to receive new candles.
+		/// </summary>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Count of candles.</param>
+		/// <param name="transactionId">Transaction identifier.</param>
+		/// <param name="extensionInfo">Extension info.</param>
+		public virtual void SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, 
+			long? transactionId = null, IDictionary<string, object> extensionInfo = null)
+		{
+			if (series == null)
+				throw new ArgumentNullException(nameof(series));
+
+			var mdMsg = series.ToMarketDataMessage(true, from, to, count, extensionInfo);
+			mdMsg.TransactionId = transactionId ?? TransactionIdGenerator.GetNextId();
+
+			_candleSeriesInfos.Add(mdMsg.TransactionId, new CandleSeriesInfo(series, mdMsg));
+
+			SubscribeMarketData(series.Security, mdMsg);
+		}
+
+		/// <summary>
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
+		/// </summary>
+		/// <param name="series">Candles series.</param>
+		public virtual void UnSubscribeCandles(CandleSeries series)
+		{
+			if (series == null)
+				throw new ArgumentNullException(nameof(series));
+
+			var pair = _candleSeriesInfos.FirstOrDefault(p => p.Value.Series == series);
+
+			if (pair.Value == null)
+				return;
+
+			var transactionId = pair.Key;
+
+			var mdMsg = series.ToMarketDataMessage(false);
+			mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
+			mdMsg.OriginalTransactionId = transactionId;
+
+			_candleSeriesInfos.Remove(transactionId);
+
+			UnSubscribeMarketData(series.Security, mdMsg);
 		}
 	}
 }

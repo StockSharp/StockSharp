@@ -139,7 +139,7 @@ namespace SampleIB
 						Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
 						Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
 						Trader.NewStopOrder += order => _conditionOrdersWindow.OrderGrid.Orders.Add(order);
-						Trader.NewCandle += _securitiesWindow.AddCandle;
+						Trader.CandleSeriesProcessing += _securitiesWindow.AddCandle;
 
 						Trader.NewPortfolio += portfolio =>
 						{
