@@ -199,14 +199,15 @@ namespace StockSharp.Algo.Storages.Csv
 				});
 			}
 
-			private readonly SynchronizedDictionary<object, object> _serializers = new SynchronizedDictionary<object, object>();
+			private readonly SynchronizedDictionary<Type, IXmlSerializer> _serializers = new SynchronizedDictionary<Type, IXmlSerializer>();
 
 			private string Serialize<TItem>(TItem item)
+				where TItem : class
 			{
 				if (item == null)
 					return null;
 
-				var serializer = (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem>());
+				var serializer = GetSerializer<TItem>();
 
 				using (var stream = new MemoryStream())
 				{
@@ -221,11 +222,16 @@ namespace StockSharp.Algo.Storages.Csv
 				if (value.IsEmpty())
 					return null;
 
-				var serializer = (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem>());
+				var serializer = GetSerializer<TItem>();
 				var bytes = Registry.Encoding.GetBytes(value.Replace("'", "\""));
 
 				using (var stream = new MemoryStream(bytes))
 					return serializer.Deserialize(stream);
+			}
+
+			private XmlSerializer<TItem> GetSerializer<TItem>()
+			{
+				return (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem>(false));
 			}
 		}
 
