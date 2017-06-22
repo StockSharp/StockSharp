@@ -20,12 +20,11 @@ namespace SampleLMAX
 	using System.Windows.Media;
 	
 	using StockSharp.Algo.Candles;
-	using StockSharp.LMAX;
 	using StockSharp.Xaml.Charting;
 
 	partial class ChartWindow
 	{
-		private readonly LmaxTrader _trader;
+		private readonly CandleManager _candleManager;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 
@@ -37,7 +36,7 @@ namespace SampleLMAX
 				throw new ArgumentNullException(nameof(candleSeries));
 
 			_candleSeries = candleSeries;
-			_trader = MainWindow.Instance.Trader;
+			var trader = MainWindow.Instance.Trader;
 
 			Chart.ChartTheme = ChartThemes.ExpressionDark;
 
@@ -55,8 +54,10 @@ namespace SampleLMAX
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandle += ProcessNewCandle;
-			_trader.SubscribeCandles(_candleSeries, from, to);
+			_candleManager = new CandleManager(trader);
+			_candleManager.Processing += ProcessNewCandle;
+
+			_candleManager.Start(_candleSeries, from, to);
 		}
 
 		private void ProcessNewCandle(CandleSeries series, Candle candle)
@@ -69,7 +70,9 @@ namespace SampleLMAX
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewCandle -= ProcessNewCandle;
+			_candleManager.Stop(_candleSeries);
+			_candleManager.Processing -= ProcessNewCandle;
+
 			base.OnClosing(e);
 		}
 	}

@@ -403,6 +403,9 @@ namespace StockSharp.Algo
 					if (_supportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
+					if (_supportCandleHolder)
+						_inAdapter = new CandleHolderMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
+
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
 
@@ -420,6 +423,28 @@ namespace StockSharp.Algo
 
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 				}
+			}
+		}
+
+		private bool _supportCandleHolder;
+
+		/// <summary>
+		/// Use <see cref="CandleHolderMessageAdapter"/>.
+		/// </summary>
+		public bool SupportCandleHolder
+		{
+			get => _supportCandleHolder;
+			set
+			{
+				if (_supportCandleHolder == value)
+					return;
+
+				if (value)
+					EnableAdapter(a => new CandleHolderMessageAdapter(a) { OwnInnerAdaper = true }, typeof(StorageMessageAdapter), false);
+				else
+					DisableAdapter<CandleHolderMessageAdapter>();
+
+				_supportCandleHolder = value;
 			}
 		}
 

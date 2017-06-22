@@ -115,6 +115,7 @@
     <Compile Include="BasketSecurity.cs" />
     <Compile Include="Candles\Compression\BuilderCandleSource.cs" />
     <Compile Include="Candles\Compression\CandleBuilderMessageAdapter.cs" />
+    <Compile Include="Candles\Compression\CandleHolderMessageAdapter.cs" />
     <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="DataType.cs" />
