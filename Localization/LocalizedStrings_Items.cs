@@ -45416,5 +45416,25 @@ namespace StockSharp.Localization
 		/// Show spread on chart...
 		/// </summary>
 		public static string ChartShowSpread => GetString(ChartShowSpreadKey);
+
+		/// <summary>
+		/// Import securities?
+		/// </summary>
+		public const string ImportSecuritiesKey = nameof(ImportSecurities);
+
+		/// <summary>
+		/// Import securities?
+		/// </summary>
+		public static string ImportSecurities => GetString(ImportSecuritiesKey);
+
+		/// <summary>
+		/// Remove selected storage?
+		/// </summary>
+		public const string RemoveDriveQuestionKey = nameof(RemoveDriveQuestion);
+
+		/// <summary>
+		/// Remove selected storage?
+		/// </summary>
+		public static string RemoveDriveQuestion => GetString(RemoveDriveQuestionKey);
 	}
 }
