@@ -32,12 +32,4 @@ P:StockSharp.LMAX.LmaxTrader.Login/summary;Login
 P:StockSharp.LMAX.LmaxTrader.Password/summary;Password
 P:StockSharp.LMAX.LmaxTrader.IsDemo/summary;Str3388
 P:StockSharp.LMAX.LmaxTrader.IsDownloadSecurityFromSite/summary;Str3389
-E:StockSharp.LMAX.LmaxTrader.NewCandle/summary;DocStr90
-M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
-M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
-M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84
-M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/to;DocStr85
-M:StockSharp.LMAX.LmaxTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr86
-M:StockSharp.LMAX.LmaxTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
-M:StockSharp.LMAX.LmaxTrader.OnProcessMessage(StockSharp.Messages.Message)/summary;DocStr80
-M:StockSharp.LMAX.LmaxTrader.OnProcessMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/inheritdoc;DocStr8459

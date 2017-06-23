@@ -4123,7 +4123,7 @@ TemporaryFiles;Temporary files;Временные файлы
 Use;Use;Использовать
 NotUse;Not use;Не использовать
 UseAndDelete;Use and delete;Использовать и удалять
-HddId;Hardware ID;ИД компьютера
+HddId;Hardware ID;ID компьютера
 SelectAppMode;Select application launch mode (available features are marked);Выберите режим запуска (доступная функциональность выделена)
 InProgress;In progress. Please wait...;Пожалуйста, подождите...
 UnknownField;Unknown field with number {0}.;Неизвестное поле с номером {0}.
@@ -14148,3 +14148,7 @@ DocStr9855;Convert Devexpress theme to chart theme;Преобразовать De
 DocStr9856;Devexpress theme;Devexpress стиль
 DocStr9857;Chart theme;Стиль графика
 DocStr9858;Help command;Команда Справка
+DocStr9859;Candle holder adapter;Адаптер состояния свечей
+DocStr9860;Control loading handler;Обработчик загрузки контрола
+DocStr9864;Get strategy info;Получить информацию о стратегии
+DocStr9865;File format version;Версия формата файла

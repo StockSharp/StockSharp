@@ -14,6 +14,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox" />.
             </summary>
     </member>
+    <member name="M:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.OnLoadedInternal">
+      <summary>
+            Control loading handler.
+            </summary>
+    </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.SelectedFieldsProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.SelectedFields" />.
@@ -605,30 +610,11 @@
       <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
       <returns>Historical candles.</returns>
     </member>
-    <member name="E:StockSharp.IQFeed.IQFeedTrader.NewCandle">
-      <summary>
-            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
-      <summary>
-            Subscribe to receive new candles.
-            </summary>
-      <param name="series">Candles series.</param>
-      <param name="from">The initial date from which you need to get data.</param>
-      <param name="to">The final date by which you need to get data.</param>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-      <param name="series">Candles series.</param>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <summary>
-            Process message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
   </members>
 </doc>

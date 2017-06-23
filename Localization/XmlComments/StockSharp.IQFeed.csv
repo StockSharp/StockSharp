@@ -1,5 +1,6 @@
 T:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox/summary;DocStr8287
 M:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.#ctor/summary;DocStr1
+M:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.OnLoadedInternal/summary;DocStr9860
 F:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.SelectedFieldsProperty/summary;DocStr29
 P:StockSharp.IQFeed.IQFeedLevel1ColumnComboBox.SelectedFields/summary;DocStr8288
 T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter/summary;DocStr3696
@@ -147,12 +148,5 @@ M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntitie
 M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)/param/to;DocStr251
 M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)/param/isSuccess;DocStr2535
 M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)/returns;XamlStr219
-E:StockSharp.IQFeed.IQFeedTrader.NewCandle/summary;DocStr90
-M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
-M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
-M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84
-M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/to;DocStr85
-M:StockSharp.IQFeed.IQFeedTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr86
-M:StockSharp.IQFeed.IQFeedTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
-M:StockSharp.IQFeed.IQFeedTrader.OnProcessMessage(StockSharp.Messages.Message)/summary;DocStr80
-M:StockSharp.IQFeed.IQFeedTrader.OnProcessMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/inheritdoc;DocStr8459
+M:StockSharp.IQFeed.IQFeedTrader.OnProcessMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459

@@ -177,8 +177,6 @@ M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Obj
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Object,System.Object)/param/newValue;DocStr8276
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor/summary;DocStr29
-M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor/summary;DocStr1
 T:StockSharp.Xaml.RatingWindow/summary;DocStr9845
 F:StockSharp.Xaml.RatingWindow.RatingValueProperty/summary;DocStr29
 P:StockSharp.Xaml.RatingWindow.RatingValue/summary;DocStr9825
@@ -595,6 +593,7 @@ P:StockSharp.Xaml.PortfolioGrid.SelectedPositions/summary;DocStr8286
 M:StockSharp.Xaml.PortfolioGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Level1FieldsComboBox/summary;DocStr8287
 M:StockSharp.Xaml.Level1FieldsComboBox.#ctor/summary;DocStr1
+M:StockSharp.Xaml.Level1FieldsComboBox.OnLoadedInternal/summary;DocStr9860
 F:StockSharp.Xaml.Level1FieldsComboBox.SelectedFieldsProperty/summary;DocStr29
 P:StockSharp.Xaml.Level1FieldsComboBox.SelectedFields/summary;DocStr8288
 P:StockSharp.Xaml.Level1FieldsComboBox.DefaultFields/summary;DocStr8289
@@ -651,6 +650,7 @@ P:StockSharp.Xaml.SecurityTypeComboBox.NullItem/summary;DocStr8307
 P:StockSharp.Xaml.SecurityTypeComboBox.SelectedType/summary;DocStr8308
 T:StockSharp.Xaml.SecurityTypesComboBox/summary;DocStr8309
 M:StockSharp.Xaml.SecurityTypesComboBox.#ctor/summary;DocStr1
+M:StockSharp.Xaml.SecurityTypesComboBox.OnLoadedInternal/summary;DocStr9860
 F:StockSharp.Xaml.SecurityTypesComboBox.SelectedTypesProperty/summary;DocStr29
 P:StockSharp.Xaml.SecurityTypesComboBox.SelectedTypes/summary;DocStr8310
 T:StockSharp.Xaml.ConnectorWindow/summary;DocStr8322

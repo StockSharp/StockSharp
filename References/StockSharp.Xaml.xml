@@ -846,16 +846,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor">
-      <summary>
-        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.Xaml.SecurityTypesComboBox" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor" />.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.RatingWindow">
       <summary>
             Rating window.
@@ -2824,6 +2814,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Level1FieldsComboBox" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Level1FieldsComboBox.OnLoadedInternal">
+      <summary>
+            Control loading handler.
+            </summary>
+    </member>
     <member name="F:StockSharp.Xaml.Level1FieldsComboBox.SelectedFieldsProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Level1FieldsComboBox.SelectedFields" />.
@@ -3111,6 +3106,11 @@
     <member name="M:StockSharp.Xaml.SecurityTypesComboBox.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityTypesComboBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityTypesComboBox.OnLoadedInternal">
+      <summary>
+            Control loading handler.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.SecurityTypesComboBox.SelectedTypesProperty">

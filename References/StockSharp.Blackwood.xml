@@ -454,25 +454,6 @@
             Subscribe to receive information about the best and worst instruments per session.
             </summary>
     </member>
-    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCandle">
-      <summary>
-            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
-      <summary>
-            Subscribe to receive new candles.
-            </summary>
-      <param name="series">Candles series.</param>
-      <param name="from">The initial date from which you need to get data.</param>
-      <param name="to">The final date by which you need to get data.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-      <param name="series">Candles series.</param>
-    </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestNewsStory(StockSharp.BusinessEntities.News)">
       <summary>
             Request news <see cref="P:StockSharp.BusinessEntities.News.Story" /> body. After receiving the event <see cref="E:StockSharp.Algo.Connector.NewsChanged" /> will be triggered.

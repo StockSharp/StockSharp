@@ -387,6 +387,9 @@ M:StockSharp.Community.StrategyClient.StartBacktest(StockSharp.Community.Strateg
 M:StockSharp.Community.StrategyClient.StartBacktest(StockSharp.Community.StrategyBacktest)/param/backtest;DocStr9110
 M:StockSharp.Community.StrategyClient.StopBacktest(StockSharp.Community.StrategyBacktest)/summary;DocStr9114
 M:StockSharp.Community.StrategyClient.StopBacktest(StockSharp.Community.StrategyBacktest)/param/backtest;DocStr9110
+M:StockSharp.Community.StrategyClient.GetDescription(System.Int64)/summary;DocStr9864
+M:StockSharp.Community.StrategyClient.GetDescription(System.Int64)/param/id;Str361
+M:StockSharp.Community.StrategyClient.GetDescription(System.Int64)/returns;DocStr3052
 M:StockSharp.Community.StrategyClient.DisposeManaged/summary;DocStr7
 T:StockSharp.Community.StrategyContentTypes/summary;DocStr9056
 F:StockSharp.Community.StrategyContentTypes.SourceCode/summary;DocStr3079
@@ -424,6 +427,8 @@ P:StockSharp.Community.StrategySubscription.StrategyId/summary;DocStr9072
 P:StockSharp.Community.StrategySubscription.Start/summary;StartTime
 P:StockSharp.Community.StrategySubscription.End/summary;XamlStr387
 P:StockSharp.Community.StrategySubscription.Amount/summary;DocStr9073
+P:StockSharp.Community.StrategySubscription.HardwareId/summary;DocStr3872
+P:StockSharp.Community.StrategySubscription.Account/summary;DocStr3873
 P:StockSharp.Community.StrategySubscription.IsAutoRenew/summary;DocStr9043
 T:StockSharp.Community.Products/summary;DocStr2998
 F:StockSharp.Community.Products.Api/summary;DocStr2999
