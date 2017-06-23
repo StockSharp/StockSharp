@@ -26,7 +26,6 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	partial class Connector
@@ -510,9 +509,9 @@ namespace StockSharp.Algo
 		/// <param name="series">Candles series.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		/// <param name="count">Count of candles.</param>
-		/// <param name="transactionId">Transaction identifier.</param>
-		/// <param name="extensionInfo">Extension info.</param>
+		/// <param name="count">Candles count.</param>
+		/// <param name="transactionId">Transaction ID.</param>
+		/// <param name="extensionInfo">Extended information.</param>
 		public virtual void SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, 
 			long? transactionId = null, IDictionary<string, object> extensionInfo = null)
 		{

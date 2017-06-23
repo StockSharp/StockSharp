@@ -1709,8 +1709,8 @@ namespace StockSharp.Algo
 		/// <param name="isSubscribe"></param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		/// <param name="count">Count of candles.</param>
-		/// <param name="extensionInfo">Extension info.</param>
+		/// <param name="count">Candles count.</param>
+		/// <param name="extensionInfo">Extended information.</param>
 		/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
 		public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null, 
 			long? count = null, IDictionary<string, object> extensionInfo = null)

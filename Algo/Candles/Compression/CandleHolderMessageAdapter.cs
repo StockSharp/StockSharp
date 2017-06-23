@@ -195,7 +195,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="CandleBuilderMessageAdapter"/>.
+		/// Create a copy of <see cref="CandleHolderMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
