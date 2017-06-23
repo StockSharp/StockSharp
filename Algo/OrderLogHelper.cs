@@ -233,7 +233,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
-					Reset();
+					Current = null;
 					_itemsEnumerator.Dispose();
 				}
 			}
@@ -361,6 +361,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
+					Current = null;
 					_itemsEnumerator.Dispose();
 				}
 			}

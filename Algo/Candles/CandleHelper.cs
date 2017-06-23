@@ -327,6 +327,18 @@ namespace StockSharp.Algo.Candles
 					//_candleBuilder.Reset();
 				}
 
+				protected override void DisposeManaged()
+				{
+					_finishedCandles.Clear();
+					_lastActiveCandle = null;
+					_lastCandle = null;
+
+					_valuesEnumerator.Dispose();
+					_candleBuilder.Dispose();
+
+					base.DisposeManaged();
+				}
+
 				public override bool MoveNext()
 				{
 					while (_finishedCandles.Count == 0)
@@ -369,15 +381,6 @@ namespace StockSharp.Algo.Candles
 
 					Current = null;
 					return false;
-				}
-
-				protected override void DisposeManaged()
-				{
-					Reset();
-
-					_candleBuilder.Dispose();
-
-					base.DisposeManaged();
 				}
 			}
 
@@ -641,7 +644,7 @@ namespace StockSharp.Algo.Candles
 
 				public void Dispose()
 				{
-					Reset();
+					Current = null;
 					_valuesEnumerator.Dispose();
 				}
 

@@ -3635,7 +3635,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
-					Reset();
+					Current = null;
 					_level1Enumerator.Dispose();
 				}
 			}
@@ -3776,7 +3776,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
-					Reset();
+					Current = null;
 					_level1Enumerator.Dispose();
 				}
 			}
