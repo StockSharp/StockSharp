@@ -45406,5 +45406,15 @@ namespace StockSharp.Localization
 		/// Export to '{0}' done. Would you like to open it?
 		/// </summary>
 		public static string ExportDoneOpenFile => GetString(ExportDoneOpenFileKey);
+
+		/// <summary>
+		/// Show spread on chart...
+		/// </summary>
+		public const string ChartShowSpreadKey = nameof(ChartShowSpread);
+
+		/// <summary>
+		/// Show spread on chart...
+		/// </summary>
+		public static string ChartShowSpread => GetString(ChartShowSpreadKey);
 	}
 }
