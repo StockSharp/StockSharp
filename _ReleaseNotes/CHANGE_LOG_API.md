@@ -48,6 +48,7 @@ StockSharp API Change log
 * (feature) BaseGridControl. Interactive export process.
 * (feature) Chart. Fix theme styles.
 * (feature) Chart. Draw style quick access.
+* (feature) Licensing. Strategy subscription support.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

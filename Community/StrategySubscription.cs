@@ -40,6 +40,18 @@ namespace StockSharp.Community
 		public decimal Amount { get; set; }
 
 		/// <summary>
+		/// Hardware id of the computer for which the license is issued.
+		/// </summary>
+		[DataMember]
+		public string HardwareId { get; set; }
+
+		/// <summary>
+		/// The account number for which the license is issued.
+		/// </summary>
+		[DataMember]
+		public string Account { get; set; }
+
+		/// <summary>
 		/// Is auto renewable subscription.
 		/// </summary>
 		[DataMember]

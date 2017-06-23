@@ -1,433 +1,440 @@
 <?xml version="1.0"?>
 <doc>
-    <assembly>
-        <name>StockSharp.Licensing</name>
-    </assembly>
-    <members>
-        <member name="T:StockSharp.Licensing.Broker">
-            <summary>
+  <assembly>
+    <name>StockSharp.Licensing</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.Licensing.Broker">
+      <summary>
             Broker information.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.Broker.Id">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.Broker.Id">
+      <summary>
             Identifier.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.Broker.Name">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.Broker.Name">
+      <summary>
             Name.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.Broker.Criteria">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.Broker.Criteria">
+      <summary>
             Criteria.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.Broker.OpenAccountLink">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.Broker.OpenAccountLink">
+      <summary>
             Open an account link.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.Broker.OpenDemoAccountLink">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.Broker.OpenDemoAccountLink">
+      <summary>
             Open a demo account link.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.Broker.Picture">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.Broker.Picture">
+      <summary>
             Picture id.
             </summary>
-        </member>
-        <member name="T:StockSharp.Licensing.ILicenseService">
-            <summary>
+    </member>
+    <member name="T:StockSharp.Licensing.ILicenseService">
+      <summary>
             License service interface.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetTrialLicense(System.String)">
-            <summary>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.GetTrialLicense(System.String)">
+      <summary>
             Get trial license.
             </summary>
-            <param name="hardwareId">Hardware id.</param>
-            <returns>Trial license.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.DownloadFullLicense(System.Guid,System.String)">
-            <summary>
+      <param name="hardwareId">Hardware id.</param>
+      <returns>Trial license.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.DownloadFullLicense(System.Guid,System.String)">
+      <summary>
             Get full license.
             </summary>
-            <param name="sessionId">Session ID.</param>
-            <param name="hardwareId">Hardware id.</param>
-            <returns>Full license.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.RenewLicense(System.Guid,System.Int64)">
-            <summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="hardwareId">Hardware id.</param>
+      <returns>Full license.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.RenewLicense(System.Guid,System.Int64)">
+      <summary>
             Renew license.
             </summary>
-            <param name="sessionId">Session ID.</param>
-            <param name="licenseId">License id.</param>
-            <returns>Renewed license.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetFeatures(System.Guid)">
-            <summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="licenseId">License id.</param>
+      <returns>Renewed license.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.GetFeatures(System.Guid)">
+      <summary>
             Get possible features list.
             </summary>
-            <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
-            <returns>Possible features list.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokers(System.Guid)">
-            <summary>
+      <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
+      <returns>Possible features list.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.GetBrokers(System.Guid)">
+      <summary>
             Get broker list.
             </summary>
-            <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
-            <returns>Broker list.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokerCriterias(System.Guid)">
-            <summary>
+      <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
+      <returns>Broker list.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.GetBrokerCriterias(System.Guid)">
+      <summary>
             Get a list of search criteria.
             </summary>
-            <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
-            <returns>A list of search criteria.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.RequestLicense(System.Guid,System.Int64,System.String)">
-            <summary>
+      <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
+      <returns>A list of search criteria.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.RequestLicense(System.Guid,System.Int64,System.String)">
+      <summary>
             Request a license by the account number.
             </summary>
-            <param name="sessionId">Session ID.</param>
-            <param name="brokerId">Broker id.</param>
-            <param name="account">Account number.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.ApproveLicense(System.Guid,System.Int64,System.String)">
-            <summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="brokerId">Broker id.</param>
+      <param name="account">Account number.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.ApproveLicense(System.Guid,System.Int64,System.String)">
+      <summary>
             Approve client license.
             </summary>
-            <param name="sessionId">Session ID.</param>
-            <param name="licenseId">License id.</param>
-            <param name="features">List of features to be added to the license.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.RevokeLicense(System.Guid,System.Int64)">
-            <summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="licenseId">License id.</param>
+      <param name="features">List of features to be added to the license.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.RevokeLicense(System.Guid,System.Int64)">
+      <summary>
             Revoke client license.
             </summary>
-            <param name="sessionId">Session ID.</param>
-            <param name="licenseId">License id.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetAwaitingLicenses(System.Guid)">
-            <summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="licenseId">License id.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.GetAwaitingLicenses(System.Guid)">
+      <summary>
             Get unapproved client licenses.
             </summary>
-            <param name="sessionId">Session ID.</param>
-            <returns>Unapproved client licenses.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.DeleteLicense(System.Guid,System.Int64)">
-            <summary>
+      <param name="sessionId">Session ID.</param>
+      <returns>Unapproved client licenses.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.DeleteLicense(System.Guid,System.Int64)">
+      <summary>
             Delete license.
             </summary>
-            <param name="sessionId">Session ID.</param>
-            <param name="licenseId">License id.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.CreateLicense(System.Guid,System.String,System.String,System.String,System.String,System.DateTime)">
-            <summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="licenseId">License id.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.ILicenseService.CreateLicense(System.Guid,System.String,System.String,System.String,System.String,System.DateTime)">
+      <summary>
             Create license.
             </summary>
-            <param name="sessionId">Session ID.</param>
-            <param name="issuedTo">License owner name.</param>
-            <param name="account">Account number.</param>
-            <param name="hardwareId">Hardware id.</param>
-            <param name="features">List of features to be added to the license.</param>
-            <param name="expirationDate">License expiry date.</param>
-            <returns>License.</returns>
-        </member>
-        <member name="T:StockSharp.Licensing.License">
-            <summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="issuedTo">License owner name.</param>
+      <param name="account">Account number.</param>
+      <param name="hardwareId">Hardware id.</param>
+      <param name="features">List of features to be added to the license.</param>
+      <param name="expirationDate">License expiry date.</param>
+      <returns>License.</returns>
+    </member>
+    <member name="T:StockSharp.Licensing.License">
+      <summary>
             License.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.FileName">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.FileName">
+      <summary>
             License file name.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.Id">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.Version">
+      <summary>
+            File format version.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.Id">
+      <summary>
             License id.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.IssuedTo">
-            <summary>
-            Licensee (full name or company name <see cref="P:StockSharp.Licensing.License.Company"/>).
+    </member>
+    <member name="P:StockSharp.Licensing.License.IssuedTo">
+      <summary>
+            Licensee (full name or company name <see cref="P:StockSharp.Licensing.License.Company" />).
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.Company">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.Company">
+      <summary>
             The name of the company for which the license is issued. The value is equal to <see langword="null" /> if a license is granted to an individual.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.IssuedBy">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.IssuedBy">
+      <summary>
             Issued by.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.IssuedDate">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.IssuedDate">
+      <summary>
             Date of licensing.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.ExpirationDate">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.ExpirationDate">
+      <summary>
             License expiry date.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.HardwareId">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.HardwareId">
+      <summary>
             Hardware id of the computer for which the license is issued.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.Account">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.Account">
+      <summary>
             The account number for which the license is issued.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.Features">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.Features">
+      <summary>
             Possible feature list.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.Signature">
-            <summary>
-            Signature.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.Body">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.Body">
+      <summary>
             License body.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.License.ExpireAction">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.ExpireAction">
+      <summary>
             Action when the license expired.
             </summary>
-        </member>
-        <member name="T:StockSharp.Licensing.LicenseClient">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.License.StrategySubscriptions">
+      <summary>
+            Active subscriptions.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Licensing.LicenseClient">
+      <summary>
             StockSharp licensing service client.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Licensing.LicenseClient"/>.
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Licensing.LicenseClient" />.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.#ctor(System.Uri)">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Licensing.LicenseClient"/>.
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.#ctor(System.Uri)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Licensing.LicenseClient" />.
             </summary>
-            <param name="address">Service address.</param>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseClient.Features">
-            <summary>
+      <param name="address">Service address.</param>
+    </member>
+    <member name="P:StockSharp.Licensing.LicenseClient.Features">
+      <summary>
             All license features.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseClient.Brokers">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.LicenseClient.Brokers">
+      <summary>
             All brokers.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseClient.BrokerCriterias">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.LicenseClient.BrokerCriterias">
+      <summary>
             Criteria search of brokerage.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseClient.AwaitingLicenses">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.LicenseClient.AwaitingLicenses">
+      <summary>
             Unapproved client licenses.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.GetAnonymousLicense">
-            <summary>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.GetAnonymousLicense">
+      <summary>
             Get the anonymous license.
             </summary>
-            <returns>Anonymous license.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.GetFullLicense">
-            <summary>
+      <returns>Anonymous license.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.GetFullLicense">
+      <summary>
             Get full license.
             </summary>
-            <returns>Full license.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.RenewLicense(StockSharp.Licensing.License)">
-            <summary>
+      <returns>Full license.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.RenewLicense(StockSharp.Licensing.License)">
+      <summary>
             Renew license.
             </summary>
-            <param name="license">Old license.</param>
-            <returns>Renewed license.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.RequestLicense(System.Int64,System.String)">
-            <summary>
+      <param name="license">Old license.</param>
+      <returns>Renewed license.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.RequestLicense(System.Int64,System.String)">
+      <summary>
             Request a license by the account number.
             </summary>
-            <param name="brokerId">Broker id.</param>
-            <param name="account">Account number.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.ApproveLicense(System.Int64,System.String)">
-            <summary>
+      <param name="brokerId">Broker id.</param>
+      <param name="account">Account number.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.ApproveLicense(System.Int64,System.String)">
+      <summary>
             Approve client license.
             </summary>
-            <param name="licenseId">License id.</param>
-            <param name="features">List of features to be added to the license.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.RevokeLicense(System.Int64)">
-            <summary>
+      <param name="licenseId">License id.</param>
+      <param name="features">List of features to be added to the license.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.RevokeLicense(System.Int64)">
+      <summary>
             Revoke client license.
             </summary>
-            <param name="licenseId">License id.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.DeleteLicense(System.Int64)">
-            <summary>
+      <param name="licenseId">License id.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.DeleteLicense(System.Int64)">
+      <summary>
             Delete license.
             </summary>
-            <param name="licenseId">License id.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.CreateLicense(System.String,System.String,System.String,System.String,System.DateTime)">
-            <summary>
+      <param name="licenseId">License id.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseClient.CreateLicense(System.String,System.String,System.String,System.String,System.DateTime)">
+      <summary>
             Create license.
             </summary>
-            <param name="issuedTo">License owner name.</param>
-            <param name="account">Account number.</param>
-            <param name="hardwareId">Hardware id.</param>
-            <param name="features">List of features to be added to the license.</param>
-            <param name="expirationDate">License expiry date.</param>
-            <returns>License.</returns>
-        </member>
-        <member name="T:StockSharp.Licensing.LicenseErrorLogSource">
-            <summary>
-            Log source, send information about license errors <see cref="E:StockSharp.Licensing.LicenseHelper.LicenseError"/>.
+      <param name="issuedTo">License owner name.</param>
+      <param name="account">Account number.</param>
+      <param name="hardwareId">Hardware id.</param>
+      <param name="features">List of features to be added to the license.</param>
+      <param name="expirationDate">License expiry date.</param>
+      <returns>License.</returns>
+    </member>
+    <member name="T:StockSharp.Licensing.LicenseErrorLogSource">
+      <summary>
+            Log source, send information about license errors <see cref="E:StockSharp.Licensing.LicenseHelper.LicenseError" />.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseErrorLogSource.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Licensing.LicenseErrorLogSource"/>.
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseErrorLogSource.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Licensing.LicenseErrorLogSource" />.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseErrorLogSource.Name">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.LicenseErrorLogSource.Name">
+      <summary>
             Name.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged">
-            <summary>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged">
+      <summary>
             Release resources.
             </summary>
-        </member>
-        <member name="T:StockSharp.Licensing.LicenseExpireActions">
-            <summary>
+    </member>
+    <member name="T:StockSharp.Licensing.LicenseExpireActions">
+      <summary>
             Actions when a license expired.
             </summary>
-        </member>
-        <member name="F:StockSharp.Licensing.LicenseExpireActions.PreventWork">
-            <summary>
+    </member>
+    <member name="F:StockSharp.Licensing.LicenseExpireActions.PreventWork">
+      <summary>
             Prevent work.
             </summary>
-        </member>
-        <member name="F:StockSharp.Licensing.LicenseExpireActions.PreventUpgrade">
-            <summary>
+    </member>
+    <member name="F:StockSharp.Licensing.LicenseExpireActions.PreventUpgrade">
+      <summary>
             Prevent upgrade.
             </summary>
-        </member>
-        <member name="T:StockSharp.Licensing.LicenseHelper">
-            <summary>
+    </member>
+    <member name="T:StockSharp.Licensing.LicenseHelper">
+      <summary>
             Extension class for licenses.
             </summary>
-        </member>
-        <member name="E:StockSharp.Licensing.LicenseHelper.LicenseChanged">
-            <summary>
-            <see cref="P:StockSharp.Licensing.LicenseHelper.Licenses"/> change event.
+    </member>
+    <member name="E:StockSharp.Licensing.LicenseHelper.LicenseChanged">
+      <summary>
+        <see cref="P:StockSharp.Licensing.LicenseHelper.Licenses" /> change event.
             </summary>
-        </member>
-        <member name="E:StockSharp.Licensing.LicenseHelper.LicenseError">
-            <summary>
+    </member>
+    <member name="E:StockSharp.Licensing.LicenseHelper.LicenseError">
+      <summary>
             License verification error event.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseHelper.Licenses">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.LicenseHelper.Licenses">
+      <summary>
             Download licenses.
             </summary>
-        </member>
-        <member name="F:StockSharp.Licensing.LicenseHelper.RenewOffset">
-            <summary>
+    </member>
+    <member name="F:StockSharp.Licensing.LicenseHelper.RenewOffset">
+      <summary>
             Date offset from the expiry date of the current license, when it can be renewed. The default is 2 days.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.CanRenew(StockSharp.Licensing.License)">
-            <summary>
-            Check the possibility of license renewal (until the end of time, the license remains less <see cref="F:StockSharp.Licensing.LicenseHelper.RenewOffset"/>).
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseHelper.CanRenew(StockSharp.Licensing.License)">
+      <summary>
+            Check the possibility of license renewal (until the end of time, the license remains less <see cref="F:StockSharp.Licensing.LicenseHelper.RenewOffset" />).
             </summary>
-            <param name="license">License.</param>
-            <returns><see langword="true" />, if the license can be renewed, otherwise, <see langword="false" />.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.GetEstimatedTime(StockSharp.Licensing.License)">
-            <summary>
+      <param name="license">License.</param>
+      <returns>
+        <see langword="true" />, if the license can be renewed, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseHelper.GetEstimatedTime(StockSharp.Licensing.License)">
+      <summary>
             Get the remaining time of the license.
             </summary>
-            <param name="license">License.</param>
-            <returns>Remaining time of the license. If the license is expired, the value <see cref="F:System.TimeSpan.Zero"/> will be returned.</returns>
-        </member>
-        <member name="F:StockSharp.Licensing.LicenseHelper.SpecialSplitter">
-            <summary>
+      <param name="license">License.</param>
+      <returns>Remaining time of the license. If the license is expired, the value <see cref="F:System.TimeSpan.Zero" /> will be returned.</returns>
+    </member>
+    <member name="F:StockSharp.Licensing.LicenseHelper.SpecialSplitter">
+      <summary>
             The special combination of '!!!' for the separation of account numbers.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)">
-            <summary>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)">
+      <summary>
             Check the license supported the feature.
             </summary>
-            <param name="featureName">Feature.</param>
-            <param name="portfolioName">The account number that will be used for verification.</param>
-            <param name="component">Component.</param>
-            <returns>Error info, if the license does not support the feature.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.Save(StockSharp.Licensing.License)">
-            <summary>
+      <param name="featureName">Feature.</param>
+      <param name="portfolioName">The account number that will be used for verification.</param>
+      <param name="component">Component.</param>
+      <returns>Error info, if the license does not support the feature.</returns>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseHelper.Save(StockSharp.Licensing.License)">
+      <summary>
             Save the license on local disk.
             </summary>
-            <param name="license">License.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.Remove(StockSharp.Licensing.License)">
-            <summary>
+      <param name="license">License.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseHelper.Remove(StockSharp.Licensing.License)">
+      <summary>
             Delete license.
             </summary>
-            <param name="license">License.</param>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)">
-            <summary>
+      <param name="license">License.</param>
+    </member>
+    <member name="M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)">
+      <summary>
             License it trial.
             </summary>
-            <param name="license">License.</param>
-            <returns><see langword="true" />, if the license if trial, otherwise, <see langword="false" />.</returns>
-        </member>
-        <member name="T:StockSharp.Licensing.Xaml.LicensePanel">
-            <summary>
-            UI component for <see cref="T:StockSharp.Licensing.License"/>.
+      <param name="license">License.</param>
+      <returns>
+        <see langword="true" />, if the license if trial, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="T:StockSharp.Licensing.Xaml.LicensePanel">
+      <summary>
+            UI component for <see cref="T:StockSharp.Licensing.License" />.
             </summary>
-            <summary>
+      <summary>
             LicensePanel
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.Xaml.LicensePanel.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Licensing.Xaml.LicensePanel"/>.
+    </member>
+    <member name="M:StockSharp.Licensing.Xaml.LicensePanel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Licensing.Xaml.LicensePanel" />.
             </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.Xaml.LicensePanel.Licenses">
-            <summary>
+    </member>
+    <member name="P:StockSharp.Licensing.Xaml.LicensePanel.Licenses">
+      <summary>
             Licenses.
             </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.Xaml.LicensePanel.InitializeComponent">
-            <summary>
+    </member>
+    <member name="M:StockSharp.Licensing.Xaml.LicensePanel.InitializeComponent">
+      <summary>
             InitializeComponent
             </summary>
-        </member>
-    </members>
+    </member>
+  </members>
 </doc>

@@ -389,6 +389,16 @@ namespace StockSharp.Community
 			ValidateError(Invoke(f => f.StopBacktest(SessionId, backtest.Id)));
 		}
 
+		/// <summary>
+		/// Get strategy info.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <returns>The strategy data.</returns>
+		public StrategyData GetDescription(long id)
+		{
+			return Invoke(f => f.GetDescription(new[] { id }))?.FirstOrDefault();
+		}
+
 		private static void ValidateError(byte errorCode, params object[] args)
 		{
 			((ErrorCodes)errorCode).ThrowIfError(args);
