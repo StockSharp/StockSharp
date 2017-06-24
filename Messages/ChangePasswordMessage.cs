@@ -27,10 +27,19 @@ namespace StockSharp.Messages
 	public class ChangePasswordMessage : Message
 	{
 		/// <summary>
+		/// Initialize <see cref="ChangePasswordMessage"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		protected ChangePasswordMessage(MessageTypes type)
+			: base(type)
+		{
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ChangePasswordMessage"/>.
 		/// </summary>
 		public ChangePasswordMessage()
-			: base(MessageTypes.ChangePassword)
+			: this(MessageTypes.ChangePassword)
 		{
 		}
 
@@ -41,7 +50,7 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// ID of the original message <see cref="ChangePasswordMessage.TransactionId"/> for which this message is a response.
+		/// ID of the original message <see cref="TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }

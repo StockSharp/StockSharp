@@ -512,14 +512,15 @@ namespace StockSharp.Algo
 		/// <param name="count">Candles count.</param>
 		/// <param name="transactionId">Transaction ID.</param>
 		/// <param name="extensionInfo">Extended information.</param>
-		public virtual void SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null, 
-			long? transactionId = null, IDictionary<string, object> extensionInfo = null)
+		public virtual void SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null,
+			long? count = null, long? transactionId = null, IDictionary<string, object> extensionInfo = null)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
-			var mdMsg = series.ToMarketDataMessage(true, from, to, count, extensionInfo);
+			var mdMsg = series.ToMarketDataMessage(true, from, to, count);
 			mdMsg.TransactionId = transactionId ?? TransactionIdGenerator.GetNextId();
+			mdMsg.ExtensionInfo = extensionInfo;
 
 			_candleSeriesInfos.Add(mdMsg.TransactionId, new CandleSeriesInfo(series, mdMsg));
 
