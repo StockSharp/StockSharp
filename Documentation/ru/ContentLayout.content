@@ -133,6 +133,7 @@
         <Topic id="5389994b-68d4-456d-8ea0-52d07dbc185d" visible="True" title="Стоп-заявки" />
         <Topic id="ad7e6528-705a-4e3f-8df6-e9b129279c08" visible="True" title="Исторические данные" />
       </Topic>
+      <Topic id="92073cd8-8e10-498e-8de9-47d3f77d278a" visible="True" title="FXCM" />
     </Topic>
     <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Коннекторы Bitcoins">
       <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isExpanded="true" title="BTC-E">
@@ -338,6 +339,8 @@
         <Topic id="6a99aea5-1142-4b2e-b183-554fcc890fad" visible="True" title="OANDA" />
         <Topic id="21734ebc-faae-4b42-9088-1c2f4c92ead4" visible="True" title="OANDA (история)" />
         <Topic id="a92bca75-1a0c-4581-a75a-6f13afd7975e" visible="True" title="TrueFX" />
+        <Topic id="24a5983b-28a7-4620-b4b8-9356f683a9ba" visible="True" title="FXCM" />
+        <Topic id="e81e69f8-bfcf-49f8-aefe-cd18270c1d9e" visible="True" title="FXCM (история)" />
       </Topic>
       <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" title="Крипто-валюта">
         <Topic id="7a11d9ff-17c9-406b-ab88-c4b9c080912d" visible="True" title="BitStamp" />

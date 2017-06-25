@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
@@ -104,6 +104,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Twime.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.SpbEx.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.SpbEx.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Fxcm.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Fxcm.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
@@ -185,6 +187,9 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraSettingsFxcmHistory.aml" />
+    <None Include="Topics\HydraSettingsFxcm.aml" />
+    <None Include="Topics\Fxcm.aml" />
     <None Include="Topics\HydraSettingsSpbEx.aml" />
     <None Include="Topics\SpbEx.aml" />
     <None Include="Topics\hydra_settings_Xignite.aml" />
@@ -2894,6 +2899,14 @@
     <Image Include="Art\Designer_Chat_00.png">
       <ImageId>Designer_Chat_00</ImageId>
       <AlternateText>Designer Chat 00</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_fxcm.png">
+      <ImageId>hydra_settings_fxcm</ImageId>
+      <AlternateText>hydra settings fxcm</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_fxcm_history.png">
+      <ImageId>hydra_settings_fxcm_history</ImageId>
+      <AlternateText>hydra settings fxcm history</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
