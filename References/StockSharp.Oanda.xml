@@ -6,7 +6,7 @@
   <members>
     <member name="T:StockSharp.Oanda.OandaMessageAdapter">
       <summary>
-            The messages adapter for OANDA (REST protocol).
+            The messages adapter for OANDA.
             </summary>
     </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
@@ -153,9 +153,6 @@
       <summary>
             Compression.
             </summary>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})">
-      <inheritdoc />
     </member>
   </members>
 </doc>

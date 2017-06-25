@@ -431,6 +431,161 @@
             </summary>
       <returns>The messages.</returns>
     </member>
+    <member name="T:StockSharp.Fix.ExtendedMessageTypes">
+      <summary>
+            FIX server extended messages.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.ExtendedMessageTypes.SeqReset">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixSeqResetMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.ExtendedMessageTypes.ResendRequest">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixResendRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.ExtendedMessageTypes.UserRequest">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixUserRequestMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.ExtendedMessageTypes.UserResponse">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixUserResponseMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.ExtendedMessageTypes.UserForceLogoff">
+      <summary>
+        <see cref="T:StockSharp.Fix.FixUserForceLogoffMessage" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixUserRequestTypes">
+      <summary>
+            Request types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserRequestTypes.Lookup">
+      <summary>
+            Lookup.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserRequestTypes.LogoffForce">
+      <summary>
+            Force log off.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserRequestTypes.ChangePassword">
+      <summary>
+            Change password.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixUserRequestMessage">
+      <summary>
+            FIX server extended message for user based action.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixUserRequestMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixUserRequestMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixUserRequestMessage.RequestType">
+      <summary>
+            Request type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixUserRequestMessage.UserName">
+      <summary>
+            User name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixUserRequestMessage.OldPassword">
+      <summary>
+            Old password.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixUserResponseTypes">
+      <summary>
+            Response types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.PasswordChanged">
+      <summary>
+            Password changed.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.UserFound">
+      <summary>
+            User found.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.UserLoggedOff">
+      <summary>
+            User logged off.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.UserNotFound">
+      <summary>
+            User not found.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.UserBlocked">
+      <summary>
+            User blocked.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.OldPasswordIncorrect">
+      <summary>
+            Old password is incorrect.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.NewPasswordIncorrect">
+      <summary>
+            New password is incorrect.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixUserResponseTypes.NotSupported">
+      <summary>
+            Not supported.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixUserResponseMessage">
+      <summary>
+            FIX server extended message for user based action result.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixUserResponseMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixUserResponseMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixUserResponseMessage.ResponseType">
+      <summary>
+            Response type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixUserResponseMessage.OriginalTransactionId">
+      <summary>
+            ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixUserForceLogoffMessage">
+      <summary>
+            FIX server extended message for force logoff message.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixUserForceLogoffMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.FixUserForceLogoffMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixUserForceLogoffMessage.OriginalTransactionId">
+      <summary>
+            ID of the original message <see cref="P:StockSharp.Messages.ChangePasswordMessage.TransactionId" /> for which this message is a response.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixServer">
       <summary>
             FIX server.
@@ -512,16 +667,6 @@
     <member name="E:StockSharp.Fix.FixServer.StateChanged">
       <summary>
         <see cref="P:StockSharp.Fix.FixServer.State" /> change event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.UserPasswordChanging">
-      <summary>
-            Password change event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.UserFinding">
-      <summary>
-            User lookup event.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixServer.Start">

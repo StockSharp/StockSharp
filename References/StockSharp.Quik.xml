@@ -2039,7 +2039,7 @@
     </member>
     <member name="M:StockSharp.Quik.DdeTable.Clone">
       <summary>
-             Создать копию <see cref="T:StockSharp.Quik.DdeTable" />.
+            Создать копию <see cref="T:StockSharp.Quik.DdeTable" />.
             </summary>
       <returns>Копия.</returns>
     </member>
@@ -2182,13 +2182,6 @@
       <param name="item">Колонка.</param>
       <returns>
         <see langword="true" />, если колонку можно вставить. Иначе, <see langword="false" />.</returns>
-    </member>
-    <member name="M:StockSharp.Quik.DdeTableColumnList.OnClearing">
-      <summary>
-            Удаление всех колонок.
-            </summary>
-      <returns>
-        <see langword="true" />, если можно удалить все колонки. Иначе, <see langword="false" />.</returns>
     </member>
     <member name="T:StockSharp.Quik.DdeTradeColumns">
       <summary>

@@ -32,4 +32,3 @@ P:StockSharp.LMAX.LmaxTrader.Login/summary;Login
 P:StockSharp.LMAX.LmaxTrader.Password/summary;Password
 P:StockSharp.LMAX.LmaxTrader.IsDemo/summary;Str3388
 P:StockSharp.LMAX.LmaxTrader.IsDownloadSecurityFromSite/summary;Str3389
-M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/inheritdoc;DocStr8459

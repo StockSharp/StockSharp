@@ -32,4 +32,3 @@ M:StockSharp.Oanda.OandaTrader.#ctor/summary;DocStr1
 P:StockSharp.Oanda.OandaTrader.Server/summary;Str3416
 P:StockSharp.Oanda.OandaTrader.Token/summary;DocStr3145
 P:StockSharp.Oanda.OandaTrader.UseCompression/summary;Str3423
-M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/inheritdoc;DocStr8459

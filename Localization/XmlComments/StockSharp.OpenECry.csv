@@ -61,7 +61,6 @@ P:StockSharp.OpenECry.OpenECryTrader.EnableOECLogging/summary;DocStr5952
 M:StockSharp.OpenECry.OpenECryTrader.SendMessage(System.String,System.String)/summary;DocStr5950
 M:StockSharp.OpenECry.OpenECryTrader.SendMessage(System.String,System.String)/param/userName;DocStr5951
 M:StockSharp.OpenECry.OpenECryTrader.SendMessage(System.String,System.String)/param/text;Str3167
-M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})/inheritdoc;DocStr8459
 T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox/summary;DocStr5933
 M:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox.#ctor/summary;DocStr1
 T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor/summary;DocStr29

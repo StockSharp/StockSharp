@@ -256,29 +256,6 @@
             </summary>
             <remarks>Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</remarks>
         </member>
-        <member name="M:StockSharp.AlfaDirect.AlfaTrader.OnProcessMessage(StockSharp.Messages.Message)">
-            <summary>
-            Обработать сообщение.
-            </summary>
-            <param name="message">Сообщение.</param>
-        </member>
-        <member name="M:StockSharp.AlfaDirect.AlfaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})">
-            <summary>
-            Подписаться на получение свечек.
-            </summary>
-            <param name="series">Серия свечек.</param>
-            <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-            <param name="to">Конечная дата, до которой необходимо получать данные.</param>
-            <param name="count">Количество свечей.</param>
-            <param name="transactionId">Номер транзакции.</param>
-            <param name="extensionInfo">Расширенная информация.</param>
-        </member>
-        <member name="M:StockSharp.AlfaDirect.AlfaTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-            <summary>
-            Остановить подписку получения свечек, ранее созданную через <see cref="M:StockSharp.AlfaDirect.AlfaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})"/>.
-            </summary>
-            <param name="series">Серия свечек.</param>
-        </member>
         <member name="M:StockSharp.AlfaDirect.AlfaTrader.Load(Ecng.Serialization.SettingsStorage)">
             <summary>
             Загрузить настройки.

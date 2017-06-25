@@ -112,6 +112,8 @@ P:StockSharp.Messages.CandlePriceLevel.SellVolumes/summary;DocStr8825
 M:StockSharp.Messages.CandlePriceLevel.Clone/summary;DocStr643
 M:StockSharp.Messages.CandlePriceLevel.Clone/returns;DocStr1116
 T:StockSharp.Messages.ChangePasswordMessage/summary;DocStr3318
+M:StockSharp.Messages.ChangePasswordMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
+M:StockSharp.Messages.ChangePasswordMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
 M:StockSharp.Messages.ChangePasswordMessage.#ctor/summary;DocStr1
 P:StockSharp.Messages.ChangePasswordMessage.TransactionId/summary;DocStr3166
 P:StockSharp.Messages.ChangePasswordMessage.OriginalTransactionId/summary;DocStr4056
