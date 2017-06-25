@@ -4573,6 +4573,7 @@ Lifetime;Lifetime;Пожизненно
 PerMonth;Per month;Помесячно
 Annual;Annual;Ежегодно
 Fxcm;FXCM;FXCM
+FxcmHistory;FXCM (history);FXCM (история)
 ExportDoneOpenFile;Export to '{0}' done. Would you like to open it?;Экспорт в '{1}' закончен. Открыть файл?
 ChartShowSpread;Show spread on chart...;Показать спред на графике...
 ImportSecurities;Import securities?;Импортировать инструменты?
@@ -10384,7 +10385,7 @@ DocStr5919;a list of the available instruments;a list of the available instrumen
 DocStr5920;Gets the current rates for the given instruments;Gets the current rates for the given instruments
 DocStr5921;The list of instruments to request;The list of instruments to request
 DocStr5922;The list of prices;The list of prices
-DocStr5923;The messages adapter for OANDA (REST protocol);Адаптер сообщений для OANDA через протокол REST
+DocStr5923;The messages adapter for OANDA;Адаптер сообщений для OANDA
 DocStr5924;Servers types;Виды серверов
 DocStr5925;The interface {0} implementation which provides a connection to the OANDA;Реализация интерфейса {0} для взаимодействия с брокером OANDA
 DocStr5926;The messages adapter for OpenECry;Адаптер сообщений для OpenECry
@@ -14155,3 +14156,53 @@ DocStr9859;Candle holder adapter;Адаптер состояния свечей
 DocStr9860;Control loading handler;Обработчик загрузки контрола
 DocStr9864;Get strategy info;Получить информацию о стратегии
 DocStr9865;File format version;Версия формата файла
+DocStr9866;FIX server extended messages;Расширенные сообщения FIX сервера
+DocStr9867;Request types;Типы запросов
+DocStr9868;Lookup;Запрос
+DocStr9869;Force log off;Принудительное отключение
+DocStr9870;FIX server extended message for user based action;Расширенное сообщение FIX сервера на действие с пользователем
+DocStr9871;Request type;Тип запроса
+DocStr9872;Old password;Старый пароль
+DocStr9873;Response types;Типы ответов
+DocStr9874;Password changed;Пароль изменен
+DocStr9875;User found;Пользователь найден
+DocStr9876;User logged off;Пользовтель отключен
+DocStr9877;Old password is incorrect;Старый пароль неверный
+DocStr9878;New password is incorrect;Новый пароль неверный
+DocStr9879;Not supported;Не поддерживается
+DocStr9880;FIX server extended message for user based action result;Расширенное сообщение FIX сервера ответа на действие с пользователем
+DocStr9881;Response type;Тип ответа
+DocStr9882;FIX server extended message for force logoff message;Расширенное сообщение FIX сервера на принудительное отключение
+DocStr9883;The message adapter for FXCM;Адаптер сообщений для FXCM
+DocStr9884;Default value for {0};Значение по умолчанию для {0}
+DocStr9885;Market Open order;Заявка типа Market Open
+DocStr9886;Market Open Range order;Заявка типа Market Open Range
+DocStr9887;True Market Close order;Заявка типа True Market Close
+DocStr9888;Market Close order;Заявка типа Market Close
+DocStr9889;Market Close Range order;Заявка типа Market Close Range
+DocStr9890;Stop Entry order;Заявка типа Stop Entry
+DocStr9891;Limit Entry order;Заявка типа Limit Entry
+DocStr9892;Range Entry order;Заявка типа Range Entry
+DocStr9893;Range Trailing Entry order;Заявка типа Range Trailing Entry
+DocStr9894;Entry order;Заявка типа Entry
+DocStr9895;Stop order;Заявка типа Stop
+DocStr9896;Open Limit order;Заявка типа Open Limit
+DocStr9897;Close Limit order;Заявка типа Close Limit
+DocStr9898;The interface {0} implementation which provides a connection to the FXCM;Реализация интерфейса {0} для взаимодействия с FXCM
+DocStr9899;The types of the contingent order;Типы условной заявки
+DocStr9900;One Cancels Other;One Cancels Other
+DocStr9901;One Triggers Other;One Triggers Other
+DocStr9902;Entry with Limit and Stop;Entry with Limit and Stop
+DocStr9903;One Triggers {0};One Triggers {0}
+DocStr9904;The minimum price at which the order can be filled;Минимальная цена, при которой заявка может быть исполнена
+DocStr9905;The maximum price at which the order can be filled;Максимальная цена, при которой заявка может быть исполнена
+DocStr9906;The distance from the Rate within which the trader allows the order to be executed;Отступ от цены Rate, в пределах которого трейдер может исполнить свою заявку
+DocStr9907;The type of the contingent order to which the order is linked;Тип заявки непредвиденного случая, с которой связана текущая заявка
+DocStr9908;The unique identifier of an existing contingency group which the order is linked to;Унимальный идентификатор существующей группы непредвиденного случая, с которой связана текущая заявка
+DocStr9909;The price used to calculate the pegged order price;Цена используется для вычисления цены привязанной заявки
+DocStr9910;The offset to the price specified in the {0} field;Отступ для цены, указанной в поле {0}
+DocStr9911;Min value for {0};Минимальное значение для {0}
+DocStr9912;Max value for {0};Максимальное значение для {0}
+DocStr9913;The market price at the time the order automatically moves following the market fluctuations;Рыночная цена в моменте, когда заявка автоматически движется за колебанием рынка
+DocStr9914;The number of pips the market should move before the order moves the same number of pips after it;Количество шагов цены, которые должен пройти рынок, прежде чем цена передвинется
+DocStr9915;The unique identifier of the environment that is used to place the order;Унимальный идентификатор системы, в которую была отправлена заявка

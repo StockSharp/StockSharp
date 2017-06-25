@@ -50,6 +50,7 @@ StockSharp API Change log
 * (feature) Chart. Draw style quick access.
 * (feature) Licensing. Strategy subscription support.
 * (feature) Connector. Subscribe/unsubscribe methods for candles added.
+* (feature) FXCM connector.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

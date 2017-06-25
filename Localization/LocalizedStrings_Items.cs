@@ -45398,6 +45398,16 @@ namespace StockSharp.Localization
 		public static string Fxcm => GetString(FxcmKey);
 
 		/// <summary>
+		/// FXCM (history)
+		/// </summary>
+		public const string FxcmHistoryKey = nameof(FxcmHistory);
+
+		/// <summary>
+		/// FXCM (history)
+		/// </summary>
+		public static string FxcmHistory => GetString(FxcmHistoryKey);
+
+		/// <summary>
 		/// Export to '{0}' done. Would you like to open it?
 		/// </summary>
 		public const string ExportDoneOpenFileKey = nameof(ExportDoneOpenFile);

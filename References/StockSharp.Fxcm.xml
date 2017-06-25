@@ -1,0 +1,280 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Fxcm</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Fxcm.FxcmMessageAdapter">
+            <summary>
+            The message adapter for FXCM.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fxcm.FxcmMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsNativeIdentifiers">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmMessageAdapter.DefaultAddress">
+            <summary>
+            Default value for <see cref="P:StockSharp.Fxcm.FxcmMessageAdapter.Address"/>.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmMessageAdapter.DefaultConnection">
+            <summary>
+            Default value for <see cref="P:StockSharp.Fxcm.FxcmMessageAdapter.Connection"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Address">
+            <summary>
+            Server address.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Connection">
+            <summary>
+            Connection.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Login">
+            <summary>
+            Login.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Password">
+            <summary>
+            Password.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Pin">
+            <summary>
+            Pin.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.TimeFrames">
+            <summary>
+            Available time frames.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="T:StockSharp.Fxcm.FxcmExtendedOrderTypes">
+            <summary>
+            Extended order types.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.MarketOpen">
+            <summary>
+            Market Open order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.MarketOpenRange">
+            <summary>
+            Market Open Range order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.TrueMarketClose">
+            <summary>
+            True Market Close order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.MarketClose">
+            <summary>
+            Market Close order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.MarketCloseRange">
+            <summary>
+            Market Close Range order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.StopEntry">
+            <summary>
+            Stop Entry order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.LimitEntry">
+            <summary>
+            Limit Entry order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.RangeEntry">
+            <summary>
+            Range Entry order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.RangeTrailingEntry">
+            <summary>
+            Range Trailing Entry order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.Entry">
+            <summary>
+            Entry order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.Stop">
+            <summary>
+            Stop order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.OpenLimit">
+            <summary>
+            Open Limit order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.CloseLimit">
+            <summary>
+            Close Limit order.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Fxcm.FxcmContingencyTypes">
+            <summary>
+            The types of the contingent order.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmContingencyTypes.Oco">
+            <summary>
+            One Cancels Other.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmContingencyTypes.Oto">
+            <summary>
+            One Triggers Other.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmContingencyTypes.Els">
+            <summary>
+            Entry with Limit and Stop.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Fxcm.FxcmContingencyTypes.Otoco">
+            <summary>
+            One Triggers <see cref="F:StockSharp.Fxcm.FxcmContingencyTypes.Oco"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Fxcm.FxcmOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Fxcm"/> order condition.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.ExtendedType">
+            <summary>
+            Extended condition.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.RateMin">
+            <summary>
+            The minimum price at which the order can be filled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.RateMax">
+            <summary>
+            The maximum price at which the order can be filled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.AtMarket">
+            <summary>
+            The distance from the Rate within which the trader allows the order to be executed.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.ContingencyType">
+            <summary>
+            The type of the contingent order to which the order is linked.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.ContingentOrderId">
+            <summary>
+            The unique identifier of an existing contingency group which the order is linked to.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.PegType">
+            <summary>
+            The price used to calculate the pegged order price.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.PegOffset">
+            <summary>
+            The offset to the price specified in the <see cref="P:StockSharp.Fxcm.FxcmOrderCondition.PegType"/> field.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.PegOffsetMin">
+            <summary>
+            Min value for <see cref="P:StockSharp.Fxcm.FxcmOrderCondition.PegOffset"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.PegOffsetMax">
+            <summary>
+            Max value for <see cref="P:StockSharp.Fxcm.FxcmOrderCondition.PegOffset"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.TrailRate">
+            <summary>
+            The market price at the time the order automatically moves following the market fluctuations.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.TrailStep">
+            <summary>
+            The number of pips the market should move before the order moves the same number of pips after it.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmOrderCondition.Parties">
+            <summary>
+            The unique identifier of the environment that is used to place the order.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Fxcm.FxcmTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the FXCM.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Fxcm.FxcmTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fxcm.FxcmTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmTrader.Login">
+            <summary>
+            Login.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmTrader.Password">
+            <summary>
+            Password.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmTrader.Address">
+            <summary>
+            Server address.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmTrader.Connection">
+            <summary>
+            Connection.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Fxcm.FxcmTrader.Pin">
+            <summary>
+            Pin.
+            </summary>
+        </member>
+    </members>
+</doc>

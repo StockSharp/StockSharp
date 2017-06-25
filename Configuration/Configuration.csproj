@@ -127,6 +127,10 @@
       <Project>{3edd3bf7-3f1e-4192-87aa-54dfaa17340c}</Project>
       <Name>Cqg.Continuum</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Fxcm\Fxcm.csproj">
+      <Project>{358B4D44-CB92-4DED-AFD4-3DAC72D167E5}</Project>
+      <Name>Fxcm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>
