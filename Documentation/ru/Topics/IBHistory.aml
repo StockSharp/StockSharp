@@ -14,7 +14,7 @@
           <content>
             <para>
             	Для того, чтобы получить исторические свечи, необходимо вызвать 
-            	метод <codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
+            	метод <codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>:
        		</para>
             <code language="C#">
             <![CDATA[
@@ -32,11 +32,11 @@ Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), 
         <step>
         	<para>
             	Исторические свечи передаются через событие 
-            	<codeEntityReference qualifyHint="true">E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandles</codeEntityReference>:
+            	<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>:
        		</para>
           <code language="C#">
             <![CDATA[
-Trader.NewCandles += _securitiesWindow.AddHistoricalCandles;
+Trader.CandleSeriesProcessing += _securitiesWindow.ProcessCandle;
 			]]>
 			</code>
         </step>

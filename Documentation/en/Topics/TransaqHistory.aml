@@ -12,13 +12,13 @@
 
 		<para>
 			Для получения исторических свечек необходимо подписаться на событие
-			<codeEntityReference qualifyHint="false">E:StockSharp.Transaq.TransaqTrader.NewCandles</codeEntityReference> и вызвать метод
-			<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
+			<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> и вызвать метод
+			<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>:
 		</para>
 		
 		<code language="C#">
 		<![CDATA[
-_trader.NewCandles += ProcessNewCandles;
+_trader.CandleSeriesProcessing += ProcessCandle;
 _trader.SubscribeCandles(_candleSeries, 100, true);
 		]]>
 		</code>
