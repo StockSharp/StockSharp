@@ -1871,32 +1871,22 @@ namespace StockSharp.Algo
 
 		private void ProcessCandleMessage(CandleMessage message)
 		{
-			var info = _candleSeriesInfos.TryGetValue(message.OriginalTransactionId);
+			var series = _entityCache.UpdateCandle(message, out var candle);
 
-			if (info == null)
+			if (series == null)
 				return;
 
-			if (info.CurrentCandle != null && info.CurrentCandle.OpenTime == message.OpenTime)
-			{
-				if (info.CurrentCandle.State == CandleStates.Finished)
-					return;
-
-				info.CurrentCandle.Update(message);
-			}
-			else
-				info.CurrentCandle = message.ToCandle(info.Series);
-
-			RaiseCandleSeriesProcessing(info.Series, info.CurrentCandle);
+			RaiseCandleSeriesProcessing(series, candle);
 		}
 
 		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
 		{
-			var info = _candleSeriesInfos.TryGetValue(message.OriginalTransactionId);
+			var series = _entityCache.TryGetCandleSeries(message.OriginalTransactionId);
 
-			if (info == null)
+			if (series == null)
 				return;
 
-			RaiseCandleSeriesStopped(info.Series);
+			RaiseCandleSeriesStopped(series);
 		}
 	}
 }

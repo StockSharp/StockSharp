@@ -185,29 +185,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private sealed class CandleSeriesInfo
-		{
-			public CandleSeries Series { get; }
-
-			public MarketDataMessage Message { get; }
-
-			public Candle CurrentCandle { get; set; }
-
-			public CandleSeriesInfo(CandleSeries series, MarketDataMessage message)
-			{
-				if (series == null)
-					throw new ArgumentNullException(nameof(series));
-
-				if (message == null)
-					throw new ArgumentNullException(nameof(message));
-
-				Series = series;
-				Message = message;
-			}
-		}
-
-		private readonly SynchronizedDictionary<long, CandleSeriesInfo> _candleSeriesInfos = new SynchronizedDictionary<long, CandleSeriesInfo>();
-
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
 		/// </summary>
@@ -522,7 +499,7 @@ namespace StockSharp.Algo
 			mdMsg.TransactionId = transactionId ?? TransactionIdGenerator.GetNextId();
 			mdMsg.ExtensionInfo = extensionInfo;
 
-			_candleSeriesInfos.Add(mdMsg.TransactionId, new CandleSeriesInfo(series, mdMsg));
+			_entityCache.CreateCandleSeries(mdMsg, series);
 
 			SubscribeMarketData(series.Security, mdMsg);
 		}
@@ -533,21 +510,10 @@ namespace StockSharp.Algo
 		/// <param name="series">Candles series.</param>
 		public virtual void UnSubscribeCandles(CandleSeries series)
 		{
-			if (series == null)
-				throw new ArgumentNullException(nameof(series));
+			var mdMsg = _entityCache.RemoveCandleSeries(series, TransactionIdGenerator.GetNextId);
 
-			var pair = _candleSeriesInfos.FirstOrDefault(p => p.Value.Series == series);
-
-			if (pair.Value == null)
+			if (mdMsg == null)
 				return;
-
-			var transactionId = pair.Key;
-
-			var mdMsg = series.ToMarketDataMessage(false);
-			mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
-			mdMsg.OriginalTransactionId = transactionId;
-
-			_candleSeriesInfos.Remove(transactionId);
 
 			UnSubscribeMarketData(series.Security, mdMsg);
 		}
