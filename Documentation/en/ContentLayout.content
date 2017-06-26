@@ -50,6 +50,7 @@
       <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" title="CQG">
         <Topic id="436fc377-85ff-4d37-ad62-4846313a8563" visible="True" title="Getting started" />
         <Topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" visible="True" title="Stop orders" />
+        <Topic id="20bbe0ce-703e-46c3-9af4-d1b517a00e82" visible="True" title="Historical data" />
       </Topic>
       <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" title="Rithmic">
         <Topic id="3e8732d0-71a5-44ab-be04-c482d5a41d71" visible="True" title="Getting started" />
@@ -76,6 +77,7 @@
         <Topic id="59f72b02-f133-49a5-9248-b8d9bcb9f5c9" visible="True" title="Getting started" />
         <Topic id="17231700-6f92-4495-8b66-b3520f8c76ba" visible="True" title="Stop orders" />
         <Topic id="94c3b2be-a927-4fea-86ac-e8254321cee8" visible="True" title="Historical data" />
+        <Topic id="9978237f-cadb-4388-b334-7c293c080561" visible="True" title="News" />
       </Topic>
     </Topic>
     <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Connectors (Bitcoins)">

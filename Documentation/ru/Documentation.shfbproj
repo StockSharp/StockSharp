@@ -187,6 +187,8 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\FxcmNews.aml" />
+    <None Include="Topics\CQGHistory.aml" />
     <None Include="Topics\FxcmHistory.aml" />
     <None Include="Topics\FxcmStopOrders.aml" />
     <None Include="Topics\FxcmSample.aml" />
