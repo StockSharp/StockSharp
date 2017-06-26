@@ -1611,7 +1611,7 @@
       <ImageId>hydra_source_first</ImageId>
       <AlternateText>hydra source first</AlternateText>
     </Image>
-    <Image Include="Art\hydra_settings_oanda_hist2.png">
+    <Image Include="Art\hydra_settings_oanda_hist.png">
       <ImageId>hydra_settings_oanda_hist2</ImageId>
       <AlternateText>hydra settings oanda hist 2</AlternateText>
     </Image>
