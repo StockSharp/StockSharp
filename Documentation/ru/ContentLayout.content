@@ -133,7 +133,11 @@
         <Topic id="5389994b-68d4-456d-8ea0-52d07dbc185d" visible="True" title="Стоп-заявки" />
         <Topic id="ad7e6528-705a-4e3f-8df6-e9b129279c08" visible="True" title="Исторические данные" />
       </Topic>
-      <Topic id="92073cd8-8e10-498e-8de9-47d3f77d278a" visible="True" title="FXCM" />
+      <Topic id="92073cd8-8e10-498e-8de9-47d3f77d278a" visible="True" title="FXCM">
+        <Topic id="59f72b02-f133-49a5-9248-b8d9bcb9f5c9" visible="True" title="Пример работы с FxcmTrader" />
+        <Topic id="17231700-6f92-4495-8b66-b3520f8c76ba" visible="True" title="Стоп-заявки" />
+        <Topic id="94c3b2be-a927-4fea-86ac-e8254321cee8" visible="True" title="Исторические данные" />
+      </Topic>
     </Topic>
     <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Коннекторы Bitcoins">
       <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isExpanded="true" title="BTC-E">

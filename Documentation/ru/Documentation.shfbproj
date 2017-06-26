@@ -187,6 +187,9 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\FxcmHistory.aml" />
+    <None Include="Topics\FxcmStopOrders.aml" />
+    <None Include="Topics\FxcmSample.aml" />
     <None Include="Topics\HydraSettingsFxcmHistory.aml" />
     <None Include="Topics\HydraSettingsFxcm.aml" />
     <None Include="Topics\Fxcm.aml" />
@@ -2907,6 +2910,14 @@
     <Image Include="Art\hydra_settings_fxcm_history.png">
       <ImageId>hydra_settings_fxcm_history</ImageId>
       <AlternateText>hydra settings fxcm history</AlternateText>
+    </Image>
+    <Image Include="Art\FxcmSample.png">
+      <ImageId>FxcmSample</ImageId>
+      <AlternateText>Fxcm Sample</AlternateText>
+    </Image>
+    <Image Include="Art\FxcmSecurities.png">
+      <ImageId>FxcmSecurities</ImageId>
+      <AlternateText>Fxcm Securities</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
