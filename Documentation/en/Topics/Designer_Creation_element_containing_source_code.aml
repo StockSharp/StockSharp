@@ -2,14 +2,14 @@
 <topic id="22a4dc42-dc36-41cc-a849-32aa2a8194fe" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>В S#.Designer создать свой кубик можно, нажав в панели <legacyBold>Схемы</legacyBold> правую 
+<para>В <token>designer</token> создать свой кубик можно, нажав в панели <legacyBold>Схемы</legacyBold> правую 
 кнопку мыши на папке <legacyBold>Исходный код</legacyBold>. В появившемся меню 
 выбрать <legacyBold>Добавить</legacyBold> в случае создания новой стратегии 
 или <legacyBold>Импорт</legacyBold> в случае импорта уже готовой стратегии.</para>
  <mediaLink>
 <image placement="center" xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_00"/>
 </mediaLink>
-<para>Также в S#.Designer создать свой кубик можно на вкладке Общие нажав кнопку 
+<para>Также в <token>designer</token> создать свой кубик можно на вкладке Общие нажав кнопку 
 добавить, и в появившемся меню выбрать Исходный код:</para>
  <mediaLink>
 <image placement="center" xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_01"/>

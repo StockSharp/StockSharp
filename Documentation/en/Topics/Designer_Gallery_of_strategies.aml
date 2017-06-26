@@ -14,7 +14,7 @@
 
 <para>1.	На вкладке <legacyBold>Галерея стратегий</legacyBold> отображается текущей баланс, 
 на который можно приобретать стратегии. Нажав на кнопку <legacyBold>Пополнить баланс</legacyBold>, 
-S#.Designer перенаправит на страницу, где можно пополнить баланс.</para>
+<token>designer</token> перенаправит на страницу, где можно пополнить баланс.</para>
 <para>2.	Для быстрого поиска стратегий на вкладке <legacyBold>Галерея стратегий</legacyBold>
  есть фильтры <legacyBold>Все стратегии</legacyBold>, <legacyBold>Купленные стратегии</legacyBold>, 
  <legacyBold>Бесплатные стратегии</legacyBold>, <legacyBold>Свои стратегии</legacyBold>.

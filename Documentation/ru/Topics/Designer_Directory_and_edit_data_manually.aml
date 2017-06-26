@@ -2,16 +2,16 @@
 <topic id="5789f207-56f6-4ee3-8040-44913ba1f2c9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Для работы S#.Designer важными являются следующие директории:</para>
-<para>1.	Директория куда был установлен S#.Designer, из этой папки можно запустить 
-S#.Designer запустив файл <legacyBold>Designer.exe</legacyBold>. Или обновить S#.Designer, запустив 
+<para>Для работы <token>designer</token> важными являются следующие директории:</para>
+<para>1.	Директория куда был установлен <token>designer</token>, из этой папки можно запустить 
+<token>designer</token> запустив файл <legacyBold>Designer.exe</legacyBold>. Или обновить <token>designer</token>, запустив 
 файл <legacyBold>Designer.Update.exe</legacyBold>. Удаление этой директории приведет к удалению 
-S#.Designer, но настройки S#.Designer удалены не будут.</para>
-<para>2.	Директория настроек S#.Designer она расположена в документах 
+<token>designer</token>, но настройки <token>designer</token> удалены не будут.</para>
+<para>2.	Директория настроек <token>designer</token> она расположена в документах 
 пользователя папках …\StockSharp\Designer\ (например, 
 c:\Users\ПОЛЬЗОВАТЕЛЬ\Documents\StockSharp\Designer\). 
 Удаление этой директории приведет к тому, что все настройки 
-S#.Designer сбросятся до настроек по умолчанию, 
+<token>designer</token> сбросятся до настроек по умолчанию, 
 <legacyBold>все созданные стратегии и скачанные инструменты и 
 другая информация, хранящаяся в директории настроек, будет УНИЧТОЖЕНА</legacyBold>.</para>
  <mediaLink>
@@ -36,7 +36,7 @@ S#.Designer сбросятся до настроек по умолчанию,
 это может привести к неисправности соответствующей стратегии.</para></listItem>
 
   <listItem><para>Папка <legacyBold>Logs</legacyBold>, в ней содержатся все аварийные 
-логи S#.Designer что упрощает диагностику работы неисправностей S#.Designer.</para></listItem>
+логи <token>designer</token>, что упрощает диагностику работы неисправностей <token>designer</token>.</para></listItem>
 
   <listItem><para>Папка <legacyBold>SourceCode</legacyBold>, в ней содержатся в виде XML файлов все кубики 
 которые содержит папка <legacyBold>Исходный код</legacyBold> панели <token>SchemeDis</token>.
@@ -52,10 +52,10 @@ S#.Designer сбросятся до настроек по умолчанию,
 удалению стратегии из папки Стратегии панели Схемы. Редактировать файлы 
 этой директории вручную не следует, это может привести к неисправности 
 соответствующей стратегии. Если в ручную добавить файл стратегии в 
-эту папку и перезагрузить S#.Designer, стратегия появится в 
+эту папку и перезагрузить <token>designer</token>, стратегия появится в 
 папке <legacyBold>Стратегии</legacyBold> панели <token>SchemeDis</token>.</para></listItem>
 
-  <listItem><para>Папка <legacyBold>Storage</legacyBold>, маркет-данные скачанные S#.Designer 
+  <listItem><para>Папка <legacyBold>Storage</legacyBold> - маркет-данные, скачанные <token>designer</token> 
 в соответствующее <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />. Папка создается при 
 создании <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />. По умолчанию путь указан 
 в эту папку. Удаление этой папки приведет к удалению всех скаченных 
@@ -69,25 +69,25 @@ S#.Designer сбросятся до настроек по умолчанию,
 
   <listItem><para>Файл <legacyBold>security.csv</legacyBold> содержит все полученные и 
 созданные инструменты по всем источникам. Удаление этого файла приведет 
-к удалению всех инструментов в S#.Designer. О добавлении новых инструментов 
+к удалению всех инструментов в <token>designer</token>. О добавлении новых инструментов 
 описано в пунктах <link xlink:href="d0a1bb26-7a29-4607-992c-4f539632c2eb" />, 
 <link xlink:href="2ee93171-34db-4f23-a5d3-30ff5c81dda3" />. Этот файл может 
 быть отредактированны стандартным блокнотом или MS Excel.</para></listItem>
 
   <listItem><para>Файлы <legacyBold>portfolio.csv и position.csv</legacyBold> содержат все 
 полученные и созданные портфели и текущую позицию по ним. Удаление этих файлов 
-приведёт к удалению соответствующих данных в S#.Designer. Если информацию о 
-портфелях S#.Designer получает при каждом подключении, то информацию о позициях 
+приведёт к удалению соответствующих данных в <token>designer</token>. Если информацию о 
+портфелях <token>designer</token> получает при каждом подключении, то информацию о позициях 
 может быть утеряна безвозвратно. Эти файлы могут быть отредактированны 
 стандартным блокнотом или MS Excel.</para></listItem>
 
   <listItem><para>Файл <legacyBold>settings.xml</legacyBold> содержит текущие настройки. 
-Этот файл S#.Designer создаёт при изменении настроек или при закрытии программы. 
+Этот файл <token>designer</token> создаёт при изменении настроек или при закрытии программы. 
 Удаление этого файла приведет к сбросу текущих настроек до настроек по умолчанию. 
-Редактировать этот файл вручную не следует, это может привести к неисправности S#.Designer.</para></listItem>
+Редактировать этот файл вручную не следует, это может привести к неисправности <token>designer</token>.</para></listItem>
 </list>
 
-<para>При необходимости редактирования отдельных файлов или сброса настроек S#.Designer 
+<para>При необходимости редактирования отдельных файлов или сброса настроек <token>designer</token> 
 полезным будет делать резервные копии как отдельных файлов так и всей директории.</para>
 
     </introduction>

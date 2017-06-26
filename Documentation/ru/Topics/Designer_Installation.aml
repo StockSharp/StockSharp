@@ -5,7 +5,7 @@
 		  <steps class="ordered">
 			  <step>
 				  <content>
-		  				<para>Для установки S#.Designer необходимо перейти на страницу <token>download</token>:</para>
+		  				<para>Для установки <token>designer</token> необходимо перейти на страницу <token>download</token>:</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Installation_00"/>
 </mediaLink>
@@ -13,7 +13,7 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Скачать дистрибутив S#.Designer.</para>
+		  				<para>Скачать дистрибутив <token>designer</token>.</para>
 				  </content>
 			  </step>
 			  <step>

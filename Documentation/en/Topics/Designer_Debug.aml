@@ -4,7 +4,7 @@
     <introduction>
 <para>В процессе тестирования стратегий часто возникает необходимость проверить какие 
 данные поступают на вход того или иного кубика или передаются 
-на его выходе. Для этого в Дизайнере существует <legacyBold>Отладчик</legacyBold>.</para>
+на его выходе. Для этого в <token>designer</token> существует <legacyBold>Отладчик</legacyBold>.</para>
  <mediaLink>
 <image placement="center" xlink:href="Designer_Debug_00"/>
 </mediaLink>

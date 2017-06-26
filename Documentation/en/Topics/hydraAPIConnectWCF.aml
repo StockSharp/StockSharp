@@ -3,11 +3,11 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-    <para><legacyBold>S#.Data</legacyBold> can be used in server mode, in this mode it is possible remotely to 
-    connect to <legacyBold>S#.Data</legacyBold> and get the data available in the storage or write new ones. 
-    The activation of the <legacyBold>S#.Data</legacyBold> server mode is described in the 
+    <para><token>hydra</token> can be used in server mode, in this mode it is possible remotely to 
+    connect to <token>hydra</token> and get the data available in the storage or write new ones. 
+    The activation of the <token>hydra</token> server mode is described in the 
     <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
-     <para>To connect to <legacyBold>S#.Data</legacyBold> through WCF there is the 
+     <para>To connect to <token>hydra</token> through WCF there is the 
      <codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in <legacyBold>S#.API</legacyBold>.</para>
 <code language="C#" title="C#"><![CDATA[
 ...
@@ -18,7 +18,7 @@ var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri
 ...
 ]]></code>
 
-<para>Getting all the instruments available in <legacyBold>S#.Data</legacyBold></para>
+<para>Getting all the instruments available in <token>hydra</token>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var storageRegistry = new StorageRegistry();
@@ -26,7 +26,7 @@ client.Refresh(storageRegistry.GetSecurityStorage(), new Security(), s => { }, (
 var allSecurity = storageRegistry.GetSecurityStorage().Lookup(new Security());
 ...
 ]]></code>
-<para>Getting all available data in <legacyBold>S#.Data</legacyBold> by instrument, and saving to local storage</para>
+<para>Getting all available data in <token>hydra</token> by instrument, and saving to local storage:</para>
 
 <code language="C#" title="C#"><![CDATA[
 ...

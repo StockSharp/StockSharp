@@ -29,7 +29,7 @@
 <mediaLink>
 <image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_04"/>
 </mediaLink>
-<para>После чего в S#.Designer, нажав на 
+<para>После чего в <token>designer</token>, нажав на 
 кнопку <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_00"/></mediaLinkInline> , добавить 
 новое хранилище. В настройках хранилища в поле адрес указываем «net.tcp://localhost:8000». Нажать ОК. 
 При использовании <token>hydra</token> в качестве удаленного хранилища не стоит забывать, что <token>hydra</token> должна быть 

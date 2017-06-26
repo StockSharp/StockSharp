@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 <introduction>
 
-<para>S#.Designer - программа, позволяющая создавать торговые стратегии, тестировать их на 
+<para><legacyBold>S#.Designer</legacyBold> - программа, позволяющая создавать торговые стратегии, тестировать их на 
 истории и управлять стратегиями при реальной торговле. S#.Designer предлагает следующие виды создания стратегий:
 </para>
 

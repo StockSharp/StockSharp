@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para>Источниками расширенной информации по инструментам являются <legacyBold>CSV</legacyBold> файлы, расположенные в папке 
-"c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", которые автоматически загружаются при загрузке <legacyBold>S#.Data</legacyBold>.</para>
+"c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", которые автоматически загружаются при загрузке <token>hydra</token>.</para>
 
 <para>Расширенной информацией может являться любая необходимая информация по инструменту (например, страна, город, сайт и др.). </para>
 <para>Каждый источник расширенной информации (<legacyBold>CSV</legacyBold> файл) содержит список инструментов и свойств расширенной информации 

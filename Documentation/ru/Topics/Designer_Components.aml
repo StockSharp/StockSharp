@@ -4,7 +4,7 @@
 
     <introduction>
 <para>Во время тестирования или торговли появляется необходимость полноценно контролировать процесс. 
-Для полного контроля и анализа в <legacyBold>Дизайнере</legacyBold> предусмотрены графические компоненты, 
+Для полного контроля и анализа в <token>designer</token> предусмотрены графические компоненты, 
 которые можно добавить, выбрав их в <legacyBold>Ленте</legacyBold> группы <legacyBold>Компоненты</legacyBold>:</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Components" />

@@ -3,11 +3,11 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-<para><legacyBold>S#.Data</legacyBold> может исользоватся в серверном режиме, в данном режиме можно 
-удаленно подключиться к <legacyBold>S#.Data</legacyBold> и получить имеющиеся данные в хранилище или записать новые.
-Включение серверного режима <legacyBold>S#.Data</legacyBold> описано в 
+<para><token>hydra</token> может исользоватся в серверном режиме, в данном режиме можно 
+удаленно подключиться к <token>hydra</token> и получить имеющиеся данные в хранилище или записать новые.
+Включение серверного режима <token>hydra</token> описано в 
 пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
-<para>Для подключения к <legacyBold>S#.Data</legacyBold> через WCF в <legacyBold>S#.API</legacyBold> есть 
+<para>Для подключения к <token>hydra</token> через WCF в <legacyBold>S#.API</legacyBold> есть 
 класс <codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference>.</para>
 <code language="C#" title="C#"><![CDATA[
 ...
@@ -18,8 +18,8 @@ var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri
 ...
 ]]></code>
 
-      <para>2. Сохранение в <legacyBold>S#.Data</legacyBold> информации о бирже 
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Exchange</codeEntityReference></para>
+      <para>2. Сохранение в <token>hydra</token> информации о бирже 
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Exchange</codeEntityReference>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Console.WriteLine("Enter Exchange name (example: NYSE or TESTE)");
@@ -38,8 +38,8 @@ client.SaveExchanges(exchange);
 ...
 ]]></code>
 
-      <para>3. Сохранение в <legacyBold>S#.Data</legacyBold> информации о биржевой площадке
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ExchangeBoard</codeEntityReference></para>
+      <para>3. Сохранение в <token>hydra</token> информации о биржевой площадке
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ExchangeBoard</codeEntityReference>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Console.WriteLine("Enter ExchangeBoard name (example: NYMEX or TESTB)");
@@ -58,8 +58,8 @@ var exchangeBoard = new ExchangeBoard[]
 client.SaveExchangeBoards(exchangeBoard);
 ...
 ]]></code>
-      <para>4. Сохранение в <legacyBold>S#.Data</legacyBold> инструмента (акция, фьючерс, опцион и т.д.)
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Security</codeEntityReference></para>
+      <para>4. Сохранение в <token>hydra</token> инструмента (акция, фьючерс, опцион и т.д.)
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Security</codeEntityReference>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Security[] security = new Security[]
@@ -77,7 +77,7 @@ Security[] security = new Security[]
 client.SaveSecurities(security);
 ...
 ]]></code>
-      <para>5. Получение из <legacyBold>S#.Data</legacyBold> данных</para>
+      <para>5. Получение из <token>hydra</token> данных:</para>
 <code language="C#" title="C#"><![CDATA[
 ... 
 Console.WriteLine("All Exchange");
@@ -107,7 +107,7 @@ foreach (var i in allSecurity)
 
 
 
-<para>6. Получение из <legacyBold>S#.Data</legacyBold> хранилища расширенной информации и сохранения в него расширеной информации</para>
+<para>6. Получение из <token>hydra</token> хранилища расширенной информации и сохранения в него расширеной информации:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var extendedStorage = client.GetExtendedStorage("MyExtendedStorage");

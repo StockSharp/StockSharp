@@ -3,9 +3,9 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-<para><legacyBold>S#.Data</legacyBold> can be used in server mode, in this mode 
-it is possible remotely to connect to <legacyBold>S#.Data</legacyBold> and get the data available in the storage. 
-The activation of the S#.Data server mode is described in the  
+<para><token>hydra</token> can be used in server mode, in this mode 
+it is possible remotely to connect to <token>hydra</token> and get the data available in the storage. 
+The activation of the <token>hydra</token> server mode is described in the  
 <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
 
 <para>To connect via <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" /> , you need to create and configure FixTrader 

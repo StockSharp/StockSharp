@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para>Sources of extended information on instruments are <legacyBold>CSV</legacyBold> files located in the 
-folder "c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", which are automatically loaded when <legacyBold>S#.Data</legacyBold> is started.</para>
+folder "c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", which are automatically loaded when <token>hydra</token> is started.</para>
 
 <para>The extended information can be any necessary information on the instrument (for example, a country, a city, a site, etc.).</para>
 <para>Each source of extended information (<legacyBold>CSV</legacyBold> file) contains a list of instruments 
