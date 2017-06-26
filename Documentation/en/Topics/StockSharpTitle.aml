@@ -42,7 +42,7 @@ and many other. Any broker or
  </para>
  <title>S#.Designer</title>
  <mediaLink>
-<image xlink:href="StockSharpTitle_0"/>
+<image placement="center" xlink:href="StockSharpTitle_0"/>
 </mediaLink>
  <para>
 <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> - universal algorithmic strategies application for easy strategy creation:
@@ -64,7 +64,7 @@ and many other. Any broker or
 
  <title>S#.Data</title>
  <mediaLink>
-<image xlink:href="StockSharpTitle_1"/>
+<image placement="center" xlink:href="StockSharpTitle_1"/>
 </mediaLink>
  <para>
 <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> - the program for automatic download of historical and real-time market data:
@@ -115,14 +115,10 @@ a professional programmer in algotrading.
   <listItem><para><link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - library for writing trading robots on <token>csharp</token>.</para></listItem>
   <listItem><para> <externalLink>
 <linkText>S#.Terminal</linkText>
-<linkUri>http://stocksharp.com/products/studio/</linkUri>
+<linkUri>http://stocksharp.com/products/terminal/</linkUri>
 </externalLink>
  - trading terminal.</para></listItem>
-  <listItem><para><externalLink>
-<linkText>S#.MatLab</linkText>
-<linkUri>http://stocksharp.com/products/matlab/</linkUri>
-</externalLink>
- - MatLab integration with trading systems. Trade from MatLab scripts.</para></listItem>
+  <listItem><para><link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" /> - MatLab integration with trading systems. Trade from MatLab scripts.</para></listItem>
   <listItem><para><externalLink>
 <linkText>BPI Viewer</linkText>
 <linkUri>http://stocksharp.com/products/lci/</linkUri>

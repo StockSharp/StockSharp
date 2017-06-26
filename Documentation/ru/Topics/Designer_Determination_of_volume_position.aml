@@ -5,7 +5,7 @@
 <para>Для получения объема, необходимого для переворота текущий позиции на 
 противоположную, может использоваться схема используемая в пример-стратегии SMA:</para>
 <mediaLink>
-<image xlink:href="Designer_Determination_of_the_volume_position_00"/>
+<image placement="center" xlink:href="Designer_Determination_of_the_volume_position_00"/>
 </mediaLink>
 <para>Для кубика <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> выбран тип данных <legacyBold>Инструмент</legacyBold>. Если инструмент не указан, 
 но установлен флаг <legacyBold>Параметры</legacyBold> группы <legacyBold>Общее</legacyBold>, то он будет взят из стратегии, 

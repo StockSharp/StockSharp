@@ -8,12 +8,12 @@
 кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline> , откроются настройки графического элемента.
 </para>
 <mediaLink>
-<image xlink:href="Designer_Chart_Position_00"/>
+<image placement="center" xlink:href="Designer_Chart_Position_00"/>
 </mediaLink>
 
 <para>Компонент <legacyBold>Позиции</legacyBold> представляет собой таблицу позиций по инструментам стратегии.</para> 
 <mediaLink>
-<image xlink:href="Designer_Table_Position_00"/>
+<image placement="center" xlink:href="Designer_Table_Position_00"/>
 </mediaLink>
     </introduction>
     <relatedTopics>

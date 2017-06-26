@@ -71,7 +71,7 @@ using StockSharp.Algo;
 <para>После объявления переменных необходимо задать свойства кубика. Эти свойства 
 будут отображаться в панели <legacyBold>Свойства</legacyBold> на общей схеме:</para>
  <mediaLink>
-<image xlink:href="Designer_Creating_a_strategy_from_the_source_code_00"/>
+<image placement="center" xlink:href="Designer_Creating_a_strategy_from_the_source_code_00"/>
 </mediaLink>
 <code language="C#" title="C#"><![CDATA[
 public int Long

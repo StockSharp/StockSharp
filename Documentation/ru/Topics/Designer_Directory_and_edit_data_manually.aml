@@ -15,7 +15,7 @@ S#.Designer сбросятся до настроек по умолчанию,
 <legacyBold>все созданные стратегии и скачанные инструменты и 
 другая информация, хранящаяся в директории настроек, будет УНИЧТОЖЕНА</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_Directory_and_edit_the_data_manually_00"/>
+<image placement="center" xlink:href="Designer_Directory_and_edit_the_data_manually_00"/>
 </mediaLink>
 <para>В этой директории расположены следующие паки и файлы:</para>
 

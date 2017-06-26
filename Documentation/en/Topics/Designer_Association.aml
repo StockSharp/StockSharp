@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <mediaLink>
-<image xlink:href="Designer_Association_00"/>
+<image placement="center" xlink:href="Designer_Association_00"/>
 </mediaLink>
 <para>Кубик используется для объединения однотипных данных поступающих из разных
  кубиков в один выходной параметр для дальнейшей передачи в какой-либо элемент.

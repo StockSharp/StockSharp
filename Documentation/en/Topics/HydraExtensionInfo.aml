@@ -15,19 +15,19 @@ in the list of all instruments.</para>
 <para>To select the required extended information, click the 
 <legacyBold>Extended information</legacyBold> button on the instruments tab.</para>
 <mediaLink>
-<image xlink:href="hydra_ExtensionInfo_securities"/>
+<image placement="center" xlink:href="hydra_ExtensionInfo_securities"/>
 </mediaLink>
 <para>After that the window for selecting the extended information appears</para>
     <mediaLink>
-<image xlink:href="hydra_ExtensionInfo_window"/>
+<image placement="center" xlink:href="hydra_ExtensionInfo_window"/>
 </mediaLink>
 <para>Below is an example of a <legacyBold>CSV</legacyBold> file of extended information, opened in different editors of <legacyBold>MS Excel</legacyBold> and <legacyBold>NotePad</legacyBold></para>
 <mediaLink>
-<image xlink:href="hydra_ExtensionInfo_csv_excel"/>
+<image placement="center" xlink:href="hydra_ExtensionInfo_csv_excel"/>
 </mediaLink>
 
 <mediaLink>
-<image xlink:href="hydra_ExtensionInfo_csv_notepad"/>
+<image placement="center" xlink:href="hydra_ExtensionInfo_csv_notepad"/>
 </mediaLink>
     </introduction>
 

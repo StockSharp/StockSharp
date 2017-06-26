@@ -2921,6 +2921,10 @@
       <ImageId>FxcmSecurities</ImageId>
       <AlternateText>Fxcm Securities</AlternateText>
     </Image>
+    <Image Include="Art\matlab_stocksharp.png">
+      <ImageId>matlab_stocksharp</ImageId>
+      <AlternateText>matlab stocksharp</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

@@ -13,18 +13,18 @@
 выбора имени стратегии в поле <legacyBold>Имя типа стратегии</legacyBold>. После 
 загрузки DLL в память можно будет присоединить к процессу.</para>
 <mediaLink>
-<image xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_03"/>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_03"/>
 </mediaLink>
 <para>2.	В Visual Studio выбрать пункт <legacyBold>Отладка -> Присоединить к процессу</legacyBold>.</para>
   <mediaLink>
-<image xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_00"/>
+<image placement="center" xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_00"/>
 </mediaLink>
 <para>3.	В диалоговом окне <legacyBold>Присоединение к процессу</legacyBold> найти
 в списке <legacyBold>Доступные процессы</legacyBold> процесс <legacyBold>Designer.exe</legacyBold>,
 к которому требуется присоединиться.</para>
 
  <mediaLink>
-<image xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_01"/>
+<image placement="center" xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_01"/>
 </mediaLink>
 
 <para>Если процесс выполняется с другой учетной записи пользователя, 
@@ -44,7 +44,7 @@
 
 
  <mediaLink>
-<image xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_02"/>
+<image placement="center" xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_02"/>
 </mediaLink>
 <para>5.	Нажать кнопку Присоединить.</para>
 <para>6.	В Visual Studio в коде необходимо расставить точки останова. 
@@ -59,7 +59,7 @@
 передаваться значения свечей, в Visual Studio произойдет остановка в 
 месте установки точки останова. Далее можно будет отследить ход выполнения кода:</para>
  <mediaLink>
-<image xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_05"/>
+<image placement="center" xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_05"/>
 </mediaLink>
     </introduction>
     <relatedTopics>

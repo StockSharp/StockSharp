@@ -8,7 +8,7 @@
 При выделении кубика мышкой можно просмотреть в панели <legacyBold>Свойства</legacyBold> его свойства,
  и при необходимости изменить некоторые параметры.</para>
  <mediaLink>
-<image xlink:href="Designer_Description_of_cubes_00"/>
+<image placement="center" xlink:href="Designer_Description_of_cubes_00"/>
 </mediaLink>
 <para>Слева и справа от кубика цветными квадратиками показаны входящие (слева) 
 и исходящие (справа) параметры.</para>
@@ -19,7 +19,7 @@
  элемента <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />. Или передать их в 
  метод, определяющий размер свечи.</para>
  <mediaLink>
-<image xlink:href="Designer_Description_of_cubes_01"/>
+<image placement="center" xlink:href="Designer_Description_of_cubes_01"/>
 </mediaLink>
 <para>Цветом обозначается тип данных, которые передаются в параметрах. 
 Разные параметры у разных кубиков могут принимать и передавать различные 

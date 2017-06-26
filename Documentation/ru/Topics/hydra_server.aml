@@ -14,7 +14,7 @@ S#.Data работающей в серверном режиме можно по�
 кнопку <legacyBold>Настройки</legacyBold> откроется 
 окно настройки серверного режима.</para>
 
-   <mediaLink><image xlink:href="hydra_server"/></mediaLink>
+   <mediaLink><image placement="center" xlink:href="hydra_server"/></mediaLink>
    
 <para><legacyBold>S#.Data сервер</legacyBold></para>
 <list class="bullet">

@@ -10,7 +10,7 @@
 кнопку <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline> появится 
 возможность сменить режим запуска программы, язык интерфейса или полностью сбросить настройки S#.Designer. </para>
 <mediaLink>
-<image xlink:href="Designer_Start_mode_00"/>
+<image placement="center" xlink:href="Designer_Start_mode_00"/>
 </mediaLink>
 <para>При выборе <legacyBold>Режим запуска</legacyBold> появится окно, 
 в котором можно сменить язык интерфейса. Режим запуска возможен в 
@@ -19,7 +19,7 @@
 значком <mediaLinkInline><image xlink:href="Designer_Start_mode_01"/></mediaLinkInline> например при 64-ех 
 битном режиме могут быть не доступны некоторые подключения (выделены к окне).</para>
 <mediaLink>
-<image xlink:href="Designer_Start_mode_02"/>
+<image placement="center" xlink:href="Designer_Start_mode_02"/>
 </mediaLink>
 <para>При выборе <legacyBold>Запомнить выбор</legacyBold> последующие запуски S#.Designer 
 будут с установленными настройками.</para>

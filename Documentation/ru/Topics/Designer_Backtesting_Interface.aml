@@ -9,7 +9,7 @@
       области появится новая вкладка со стратегией, при переходе на которую в 
       ленте автоматически откроется вкладка <legacyBold>Эмуляция</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_Interface_Backtesting_00"/>
+<image placement="center" xlink:href="Designer_Interface_Backtesting_00"/>
 </mediaLink>
 
 <para>На вкладке <legacyBold>Эмуляция</legacyBold> можно изменить название стратегии и дать ей краткое описание.</para>

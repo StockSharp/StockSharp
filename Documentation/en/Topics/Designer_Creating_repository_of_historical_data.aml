@@ -10,7 +10,7 @@
 кнопку <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_02"/></mediaLinkInline> , можно 
 удалить из списка хранилищ текущее хранилище.</para>
 <mediaLink>
-<image xlink:href="Designer_Creating_a_repository_of_historical_data_03"/>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_03"/>
 </mediaLink>
 <para>Хранилище исторических данных может быть локальное или удаленное.</para>
  
@@ -27,7 +27,7 @@
 их в локальном хранилище. Для этого <token>hydra</token> необходимо перевести в серверный 
 режим, данный функционал доступен в расширенной лицензии (<link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5" />).</para>
 <mediaLink>
-<image xlink:href="Designer_Creating_a_repository_of_historical_data_04"/>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_04"/>
 </mediaLink>
 <para>После чего в S#.Designer, нажав на 
 кнопку <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_00"/></mediaLinkInline> , добавить 
@@ -35,12 +35,12 @@
 При использовании <token>hydra</token> в качестве удаленного хранилища не стоит забывать, что <token>hydra</token> должна быть 
 запущена и настроена соответствующим образом.</para>
 <mediaLink>
-<image xlink:href="Designer_Creating_a_repository_of_historical_data_05"/>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_05"/>
 </mediaLink>
    
 <para>После добавления нового хранилища, его можно выбрать в выпадающем списке <legacyBold>Хранилище</legacyBold>.</para>
 <mediaLink>
-<image xlink:href="Designer_Creating_a_repository_of_historical_data_06"/>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_06"/>
 </mediaLink>
 
 <para> Также необходимо выбрать формат файлов хранилища BIN или CSV. 

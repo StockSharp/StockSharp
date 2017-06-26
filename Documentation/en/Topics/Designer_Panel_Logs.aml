@@ -12,7 +12,7 @@
  или нажать кнопку <legacyBold>Логи </legacyBold> на <legacyBold>Панели быстрого доступа</legacyBold>. 
  Если в панели <legacyBold>Логи</legacyBold> появились ошибки 
  на <legacyBold>Панели быстрого доступа</legacyBold> начнет мигать значок <mediaLinkInline><image xlink:href="Designer_Panel_Logs_00"/></mediaLinkInline> .</para>
- <mediaLinkInline><image xlink:href="Designer_Panel_Logs_01"/></mediaLinkInline>
+ <mediaLink><image placement="center" xlink:href="Designer_Panel_Logs_01"/></mediaLink>
     </introduction>
       <relatedTopics>
 <link xlink:href="0fc19f50-24cb-4f8b-bb22-728968686f8b" />

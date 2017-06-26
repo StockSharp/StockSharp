@@ -10,14 +10,14 @@
   <listItem><para>На вкладке <legacyBold>Общее</legacyBold> нажать кнопку <legacyBold>Экспорт</legacyBold>:</para></listItem>
 </list>
 <mediaLink>
-<image xlink:href="Designer_Export_strategies_00"/>
+<image placement="center" xlink:href="Designer_Export_strategies_00"/>
 </mediaLink>
 
 <para>После нажатия <legacyBold>Экспорт</legacyBold> появится 
 окно <legacyBold>Экспортировать схему</legacyBold>, в котором необходимо 
 указать имя файла, в который будет экспортироваться стратегия:</para> 
 <mediaLink>
-<image xlink:href="Designer_Export_strategies_01"/>
+<image placement="center" xlink:href="Designer_Export_strategies_01"/>
 </mediaLink>
 
     </introduction>

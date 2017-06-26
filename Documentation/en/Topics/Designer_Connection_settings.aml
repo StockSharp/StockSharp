@@ -6,11 +6,11 @@
 кнопки <legacyBold>Подключиться</legacyBold> <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_00"/></mediaLinkInline> 
 появится кнопка <legacyBold>Настройки подключения</legacyBold>:</para>
 <mediaLink>
-<image xlink:href="Designer_The_connection_settings_00"/>
+<image placement="center" xlink:href="Designer_The_connection_settings_00"/>
 </mediaLink>
 <para>2.	При нажатии на кнопку Настройки подключения, появится окно <legacyBold>Настройки подключения</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_The_connection_settings_01"/>
+<image placement="center" xlink:href="Designer_The_connection_settings_01"/>
 </mediaLink>
 <para>Окно Настройки подключения разделено на 3 зоны.</para>
 <para>3.	При нажатии на кнопку <mediaLinkInline><image xlink:href="Designer_The_connection_settings_02"/></mediaLinkInline> выпадет 
@@ -33,14 +33,14 @@
 окно с ошибкой, описывающей причину неудачного подключения. 
 При удачной проверке появится окно:</para>
 <mediaLink>
-<image xlink:href="Designer_The_connection_settings_10"/>
+<image placement="center" xlink:href="Designer_The_connection_settings_10"/>
 </mediaLink>
 <para>7.	В зоне №3 отображены типы данных, которые будут получены или переданы 
 коннектором. При нажатии на флажок <mediaLinkInline><image xlink:href="Designer_The_connection_settings_11"/></mediaLinkInline>/<mediaLinkInline><image xlink:href="Designer_The_connection_settings_12"/></mediaLinkInline>
 можно включать/отключать передачу или получение этого типа данных.</para>
 <para>8.	При нажатии на кнопку <legacyBold>Настройки сети</legacyBold> откроется 
 окно <legacyBold>Настройки прокси сервера</legacyBold>:</para>
- <mediaLinkInline><image xlink:href="Designer_The_connection_settings_13"/></mediaLinkInline>
+ <mediaLinkInline><image placement="center" xlink:href="Designer_The_connection_settings_13"/></mediaLinkInline>
 
     </introduction>
     <relatedTopics>

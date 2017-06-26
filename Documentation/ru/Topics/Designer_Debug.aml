@@ -6,7 +6,7 @@
 данные поступают на вход того или иного кубика или передаются 
 на его выходе. Для этого в Дизайнере существует <legacyBold>Отладчик</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_Debug_00"/>
+<image placement="center" xlink:href="Designer_Debug_00"/>
 </mediaLink>
 <para>На вкладке <legacyBold>Эмуляция</legacyBold> ленты в группе <legacyBold>Отладчик</legacyBold> расположены кнопки:</para>
 

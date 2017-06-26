@@ -25,7 +25,7 @@
 части стратегии пересечения скользящих средних, где определяется момент пересечения 
 скользящих средних, показан на рисунке ниже:</para>
 <mediaLink>
-<image xlink:href="Designer_Creating_a_composite_elements_00"/>
+<image placement="center" xlink:href="Designer_Creating_a_composite_elements_00"/>
 </mediaLink>
 <para>Т.к. пересечение скользящих средних отличаются только возможным направлением 
 пересечения (короткая пересекает сверху-вниз или снизу-вверх), то часть схемы, 
@@ -34,7 +34,7 @@
 для определения алгоритма пересечения скользящих средних. Схема составного элемента, 
 с помощью которого определяется пересечение, показана на рисунке ниже:</para>
 <mediaLink>
-<image xlink:href="Designer_Crossing_01"/>
+<image placement="center" xlink:href="Designer_Crossing_01"/>
 </mediaLink>
 <para>Схема составного элемента состоит из элементов простого типа и основана на запоминании 
 текущего значений (Prev In 1 и Prev In 2) и сравнении пар, текущих (CurrComparison) 
@@ -53,7 +53,7 @@
 составного элемента <link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" />, которые далее будут указаны при использовании 
 составного элемента в схеме стратегии.</para> 
 <mediaLink>
-<image xlink:href="Designer_Crossing_00"/>
+<image placement="center" xlink:href="Designer_Crossing_00"/>
 </mediaLink>
     </introduction>
     <relatedTopics>

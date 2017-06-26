@@ -4,7 +4,7 @@
     <introduction>
 <para>Для получения необходимой строки покупок из стакана может использоваться следующая схема:</para>
 <mediaLink>
-<image xlink:href="Designer_Event_model_00"/>
+<image placement="center" xlink:href="Designer_Event_model_00"/>
 </mediaLink>
 <para>Для кубика <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> выбран тип данных <legacyBold>Инструмент</legacyBold>. Если инструмент не указан, 
 но установлен флаг <legacyBold>Параметры</legacyBold> группы свойств <legacyBold>Общее</legacyBold>, то он будет взят из стратегии. 

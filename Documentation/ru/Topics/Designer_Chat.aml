@@ -24,11 +24,11 @@
 свой номер телефон и дождаться СМС с кодом активации. После авторизации вы 
 получаете полноценный мессенджер <legacyBold>Telegram</legacyBold> прямо в <legacyBold>Дизайнере</legacyBold>.</para>
 <mediaLink>
-<image xlink:href="Designer_Chat"/>
+<image placement="center" xlink:href="Designer_Chat"/>
 </mediaLink>
 <para>После регистрации окно примет вид:</para>
 <mediaLink>
-<image xlink:href="Designer_Chat_00"/>
+<image placement="center" xlink:href="Designer_Chat_00"/>
 </mediaLink>
     </introduction>
 

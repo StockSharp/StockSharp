@@ -7,12 +7,12 @@
 выбрать <legacyBold>Добавить</legacyBold> в случае создания новой стратегии 
 или <legacyBold>Импорт</legacyBold> в случае импорта уже готовой стратегии.</para>
  <mediaLink>
-<image xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_00"/>
+<image placement="center" xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_00"/>
 </mediaLink>
 <para>Также в S#.Designer создать свой кубик можно на вкладке Общие нажав кнопку 
 добавить, и в появившемся меню выбрать Исходный код:</para>
  <mediaLink>
-<image xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_01"/>
+<image placement="center" xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_01"/>
 </mediaLink>
 <para>После создания кубика в папке <legacyBold>Исходный код</legacyBold> панели <legacyBold>Схемы</legacyBold> появится новый кубик, 
 нажав на который двойным кликом, в рабочей области появится вкладка с именем 
@@ -21,7 +21,7 @@
 дать описание кубику, отменить последнее действие, вернуть отменённое действие, 
 а также добавить Dll библиотеку нажав кнопку <legacyBold>Ссылки</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_02"/>
+<image placement="center" xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_02"/>
 </mediaLink>
 <para>Вкладка нового кубика в рабочей области состоит из панелей, 
 <legacyBold>Исходный код</legacyBold> и <legacyBold>Список ошибок</legacyBold>. 

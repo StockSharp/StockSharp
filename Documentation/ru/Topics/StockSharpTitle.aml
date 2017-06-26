@@ -39,7 +39,7 @@
  </para>
  <title>S#.Designer</title>
  <mediaLink>
-<image xlink:href="StockSharpTitle_0"/>
+<image placement="center" xlink:href="StockSharpTitle_0"/>
 </mediaLink>
  <para>
 <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> - универсальная программа для создания торговых роботов и стратегий:
@@ -58,7 +58,7 @@
 
  <title>S#.Data</title>
  <mediaLink>
-<image xlink:href="StockSharpTitle_1"/>
+<image placement="center" xlink:href="StockSharpTitle_1"/>
 </mediaLink>
  <para>
 <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> - программа для автоматического скачивания исторических и реал-тайм маркет-данных:
@@ -104,14 +104,10 @@
   <listItem><para><link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - библиотека для написания торговых роботов на языке <token>csharp</token> в Visual Studio.</para></listItem>
   <listItem><para> <externalLink>
 <linkText>S#.Terminal</linkText>
-<linkUri>http://www.url.com</linkUri>
+<linkUri>http://stocksharp.ru/products/terminal/</linkUri>
 </externalLink>
  - торговый терминал.</para></listItem>
-  <listItem><para><externalLink>
-<linkText>S#.MatLab</linkText>
-<linkUri>http://stocksharp.ru/products/matlab/</linkUri>
-</externalLink>
- - интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.</para></listItem>
+  <listItem><para><link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" /> - интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.</para></listItem>
   <listItem><para><externalLink>
 <linkText>ЛЧИ Viewer</linkText>
 <linkUri>http://stocksharp.ru/products/lci/</linkUri>

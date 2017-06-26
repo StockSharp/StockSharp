@@ -9,7 +9,7 @@
  
  <content>
 <mediaLink>
-<image plasement = "left" xlink:href="Designer_Workspace_00"/>
+<image placement="center" xlink:href="Designer_Workspace_00"/>
 </mediaLink>
 </content>
     </introduction>

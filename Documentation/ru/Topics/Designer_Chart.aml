@@ -7,7 +7,7 @@
 Например, если в стратегии используется два кубика <legacyBold>Панель графика</legacyBold>, то в 
 компоненте <legacyBold>График</legacyBold> будут выведены 2 графика, как на рисунке.</para>
 <mediaLink>
-<image xlink:href="Designer_Panel_graphics_04"/>
+<image placement="center" xlink:href="Designer_Panel_graphics_04"/>
 </mediaLink>
 
 <para>В левом верхнем углу каждого графика показаны все графические элементы, 
@@ -17,13 +17,13 @@
 кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline> откроются 
 настройки графического элемента.</para>
  <mediaLink>
-<image xlink:href="Designer_Schedule_02"/>
+<image placement="center" xlink:href="Designer_Schedule_02"/>
 </mediaLink>
 <para>Над графиком расположена лента инструментов, на которой можно выбрать режимы автопрокрутки, 
 авто-масштабирования, показа легенды и других общих настроек графика. 
 Также можно выбрать элементы для рисования на графике линии, уровни, указатели, прямоугольник, текст.</para>
   <mediaLink>
-<image xlink:href="Designer_Schedule_03"/>
+<image placement="center" xlink:href="Designer_Schedule_03"/>
 </mediaLink>
 
     </introduction>

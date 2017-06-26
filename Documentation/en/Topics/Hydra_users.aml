@@ -7,7 +7,7 @@
     на вкладке <legacyBold>Общее</legacyBold> появиться кнопка <legacyBold>Пользователи</legacyBold>, 
     после нажатия на которую появляется окно <legacyBold>Пользователи</legacyBold></para>
 <mediaLink>
-<image xlink:href="hydra_users"/>
+<image placement="center" xlink:href="hydra_users"/>
 </mediaLink>
       <para>В левой части окна можно дабавить нового пользователя, а в правой установить для него права доступа.</para>
     </introduction>

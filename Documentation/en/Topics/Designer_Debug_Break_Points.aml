@@ -6,7 +6,7 @@
 кнопку <mediaLinkInline><image xlink:href="Designer_Debug_01"/></mediaLinkInline> <legacyBold>Добавить точку остановки</legacyBold>. 
 Места остановки выделятся красным кружком:</para>
 <mediaLink>
-<image xlink:href="Designer_Stopping_point_00"/>
+<image placement="center" xlink:href="Designer_Stopping_point_00"/>
 </mediaLink>
  
 <para>В момент срабатывания точки останова на элементе, фон элемента меняется 
@@ -16,7 +16,7 @@
 Пример просмотра значений на входе и выходе составного элемента в процессе 
 выполнения стратегии приведен на рисунке ниже:</para>
 <mediaLink>
-<image xlink:href="Designer_Stopping_point_01"/>
+<image placement="center" xlink:href="Designer_Stopping_point_01"/>
 </mediaLink>
  
 <para>Точки останова могут быть добавлены как до запуска 

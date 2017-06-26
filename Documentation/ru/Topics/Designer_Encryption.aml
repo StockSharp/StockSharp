@@ -5,11 +5,11 @@
 <para>В окне <legacyBold>Экспортировать схему</legacyBold> (<link xlink:href="559d140c-5b71-4582-a65e-ca3cad7a66e8" />), 
 есть возможность установить шифрование.</para>
  <mediaLink>
-<image xlink:href="Designer_Encryption_00"/>
+<image placement="center" xlink:href="Designer_Encryption_00"/>
 </mediaLink>
 <para>Если после шифрования открыть xml файл, то видно, что описание схемы не читаемо:</para>
  <mediaLink>
-<image xlink:href="Designer_Encryption_01"/>
+<image placement="center" xlink:href="Designer_Encryption_01"/>
 </mediaLink>
 <para>При импорте зашифрованного файла, необходимо ввести пароль, который был введен при зашифровке файла.</para>
 

@@ -9,20 +9,20 @@
       <para>Для публикации необходимо нажать на кнопку <mediaLinkInline><image xlink:href="Designer_Share_link_ico"/></mediaLinkInline>. </para>
      
       <mediaLink>
-<image xlink:href="Designer_Share_link"/>
+<image placement="center" xlink:href="Designer_Share_link"/>
 </mediaLink>
 
  <para>В первый раз необходимо будет заполнить логин и пароль, и подтвердить разрешение доступа приложению StockSharp:</para>
  <mediaLink>
-<image xlink:href="Designer_Share_link_Ya"/>
+<image placement="center" xlink:href="Designer_Share_link_Ya"/>
 </mediaLink>
  <mediaLink>
-<image xlink:href="Designer_Share_link_Ya_02"/>
+<image placement="center" xlink:href="Designer_Share_link_Ya_02"/>
 </mediaLink>
  <para>Для автоматической публикации необходимо раскрыть меню кнопки <mediaLinkInline><image xlink:href="Designer_Share_link_ico"/></mediaLinkInline>, 
  установить флаг автопубликация и выбрать период:</para>
   <mediaLink>
-<image xlink:href="Designer_Share_link_01"/>
+<image placement="center" xlink:href="Designer_Share_link_01"/>
 </mediaLink>
     </introduction>
   

@@ -8,13 +8,13 @@
 		available. To do this, the path is selected where the data is, and the instruments 
 		that are supposed to glue together are reviewed in turn. If there are gaps, it is 
 		necessary to download the required market data (for example, from Finam).</para>
-		<mediaLink><image  xlink:href="HydraGluingCheckData" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="HydraGluingCheckData" /></mediaLink>
 		
 		<para>As an example, gluing together by futures on the RTS index will be considered.</para>
 		<para>The first step is the creation of a continuous instrument. To do this, 
 		click on the <legacyBold>All Instruments</legacyBold> tab. the <legacyBold>Create Instrument=>Continuous Instrument</legacyBold> button, 
 		after which the following window will appear:</para>
-		<mediaLink><image xlink:href="HydraGluingWindow" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="HydraGluingWindow" /></mediaLink>
 		
 		<para>To create a continuous futures it is necessary to specify the name and add the contracts. 
 		There are two ways to add the contracts.</para>
@@ -37,11 +37,11 @@
 		button on the <legacyBold>Common</legacyBold> tab, select the received instrument, the data period, 
 		in the <legacyBold>Create From:</legacyBold> field set the <legacyBold>Composite Element</legacyBold> value. Then click the <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> button.</para>
 		<mediaLink>
-<image xlink:href="HydraGluingTrades"/>
+<image placement="center" xlink:href="HydraGluingTrades"/>
 </mediaLink>
 <para>The generated data can be exported to Excel, xml or txt formats. Export is done using the drop-down list:</para>
     		<mediaLink>
-    			<image placement="left" xlink:href="hydra_export" />
+    			<image placement="center" xlink:href="hydra_export" />
     		</mediaLink>
 
 	</introduction>

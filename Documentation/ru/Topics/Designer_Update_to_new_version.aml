@@ -6,7 +6,7 @@
 S#.Designer. После чего запустить <legacyBold>Designer.Update.exe</legacyBold> в папке расположения  
 S#.Designer, и нажать кнопку <legacyBold>Обновить</legacyBold>.</para>
 <mediaLink>
-<image xlink:href="Designer_Installation_02"/>
+<image placement="center" xlink:href="Designer_Installation_02"/>
 </mediaLink>
     </introduction>
     <relatedTopics>

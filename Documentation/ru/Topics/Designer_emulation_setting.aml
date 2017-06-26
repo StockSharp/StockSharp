@@ -9,14 +9,14 @@
 кнопки <legacyBold>Подключиться</legacyBold> <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_00"/></mediaLinkInline> 
 появится кнопка <legacyBold>Настройки эмуляции</legacyBold>:</para>
 <mediaLink>
-<image xlink:href="Designer_The_connection_settings_00"/>
+<image placement="center" xlink:href="Designer_The_connection_settings_00"/>
 </mediaLink>
 
 <para>2.	При нажатии на кнопку <legacyBold>Настройки эмуляции</legacyBold>, появится окно <legacyBold>Настройки эмуляции</legacyBold>:</para>
 
 
  <mediaLink>
-<image xlink:href="Designer_Properties_emulation_00"/>
+<image placement="center" xlink:href="Designer_Properties_emulation_00"/>
 </mediaLink>
 <para>1.<legacyBold>Симулятор</legacyBold></para>
 <list class="bullet">

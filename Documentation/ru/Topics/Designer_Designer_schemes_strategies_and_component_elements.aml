@@ -8,7 +8,7 @@
 <legacyBold>Дизайнер</legacyBold>, <legacyBold>Свойства</legacyBold>. </para>
 <mediaLink>
 <caption placement="after">_</caption>
-<image xlink:href="Designer_Designer_schemes_strategies_and_component_elements_00"/>
+<image placement="center" xlink:href="Designer_Designer_schemes_strategies_and_component_elements_00"/>
 </mediaLink>
 <title>Панель Палитра</title>
 
@@ -35,7 +35,7 @@
  панели <legacyBold>Дизайнер</legacyBold> рамка вокруг него окрашивается в черный цвет.
 </para> 
 <mediaLink>
-<image xlink:href="Designer_The_Properties_Panel_00"/>
+<image placement="center" xlink:href="Designer_The_Properties_Panel_00"/>
 </mediaLink>
 <para>Все кубики содержат набор предопределенных свойств:</para>
 <list class="bullet">

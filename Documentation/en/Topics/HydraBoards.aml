@@ -5,7 +5,7 @@
       <para><legacyBold>Common</legacyBold> tab, <legacyBold>Boards</legacyBold> button.</para>
       <para>Here it is possible to view basic information about the trading boards, as well as set the time zone and the schedule of their work.</para>
       <mediaLink>
-       		<image placement="left" xlink:href="hydra_boards" />
+       		<image placement="center" xlink:href="hydra_boards" />
 	  </mediaLink>
     </introduction>
     

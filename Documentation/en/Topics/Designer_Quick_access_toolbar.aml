@@ -13,7 +13,7 @@
   <listItem><para>При нажатии на кнопки <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline> 
   появится возможность сменить настройки программы, режим запуска (<link xlink:href="57dc2e39-baa6-4c67-83a9-13278370a877" />), 
   язык интерфейса, или полностью сбросить (<link xlink:href="7c04efc6-036c-4c25-855f-f086ee4c266d" />) настройки S#.Designer.</para></listItem></list>
-  <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_03"/></mediaLinkInline>
+  <mediaLink><image placement="center" xlink:href="Designer_The_quick_access_toolbar_03"/></mediaLink>
     </introduction>
     <relatedTopics>
 <link xlink:href="2f00e9bc-8ea7-4679-9688-b02c3424f03a" />

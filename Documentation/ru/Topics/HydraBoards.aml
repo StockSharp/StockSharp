@@ -5,7 +5,7 @@
       <para>Вкладка <legacyBold>Общее</legacyBold> кнопка <legacyBold>Площадки</legacyBold>.</para>
       <para>Здесь можно просмотреть основную информацию о торговых площадках, а также настроить часовой пояс и расписание их работы.</para>
       <mediaLink>
-       		<image placement="left" xlink:href="hydra_boards" />
+       		<image placement="center" xlink:href="hydra_boards" />
 	  </mediaLink>
     </introduction>
     

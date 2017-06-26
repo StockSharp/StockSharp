@@ -30,16 +30,16 @@
  
  <para>Необходимо установить выбранные параметры:</para>
  <mediaLink>
-<image xlink:href="Designer_An_example_of_backtesting_00"/>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_00"/>
 </mediaLink>
 <mediaLink>
-<image xlink:href="Designer_An_example_of_backtesting_01"/>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_01"/>
 </mediaLink>
 <para>После установки всех необходимых параметров, запускаем тестирование стратегии, нажав 
 кнопку <mediaLinkInline><image xlink:href="Designer_Interface_Backtesting_01"/></mediaLinkInline>. </para>
 <para>Во время или после тестирования можно рассмотреть графики и таблицы с информацией о тестировании.</para>
  <mediaLink>
-<image xlink:href="Designer_An_example_of_backtesting_02"/>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_02"/>
 </mediaLink>
 <para>На графике видно, что сделки проходят на пересечении скользящих средних, 
 как и задумано стратегией. Также видно, что заявки удовлетворяются за 
@@ -47,7 +47,7 @@
 стакан, что увеличивает реалистичность тестирования. То, что заявки 
 удовлетворяются за несколько сделок, видно и из таблиц Сделки, Статистика, графика Позиции.</para>
 <mediaLink>
-<image xlink:href="Designer_An_example_of_backtesting_03"/>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_03"/>
 </mediaLink>
  
 <para>На графике <legacyBold>Позиции</legacyBold> видно, что у стратегии уменьшился оперируемый объём. 
@@ -56,7 +56,7 @@
 А так как стратегия только переворачивает позицию, то каждый раз, когда 
 глубины стакана не хватало удовлетворить заявку, оперируемый объём уменьшался.</para>
  <mediaLink>
-<image xlink:href="Designer_An_example_of_backtesting_04"/>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_04"/>
 </mediaLink>
 <para>График <legacyBold>П/У</legacyBold> говорит об убыточности стратегии при таких параметрах.</para>
 

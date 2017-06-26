@@ -6,7 +6,7 @@
 			При первом запуске будет показано следующее окно:
 		</para>
 		<mediaLink>
-<image xlink:href="hydra_Quick_start_00"/>
+<image placement="center" xlink:href="hydra_Quick_start_00"/>
 </mediaLink>
 <para>Необходимо выбрать режим запуска и нажать кнопку <legacyBold>ОК</legacyBold>.</para>
 		<steps class="ordered">

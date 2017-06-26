@@ -14,7 +14,7 @@ Also, you can connect to <legacyBold>S#.Data</legacyBold> via <legacyBold>S#.API
 <para>To enable the <legacyBold>S#.Data</legacyBold> server mode, on the <legacyBold>Common</legacyBold> tab, click the <legacyBold>Settings</legacyBold> 
 button, the server mode setup window will open.</para>
 
-   <mediaLink><image xlink:href="hydra_server"/></mediaLink>
+   <mediaLink><image placement="center" xlink:href="hydra_server"/></mediaLink>
    
 <para><legacyBold>S#.Data server</legacyBold></para>
 <list class="bullet">
@@ -45,7 +45,7 @@ button, the server mode setup window will open.</para>
       <para>If to set the <legacyBold>Authorization</legacyBold> different from <legacyBold>Anonymous</legacyBold>, the <legacyBold>Users</legacyBold> button 
       appears on the <legacyBold>Common</legacyBold> tab, after clicking on it, the <legacyBold>Users</legacyBold> window appears</para>
 <mediaLink>
-<image xlink:href="hydra_users"/>
+<image placement="center" xlink:href="hydra_users"/>
 </mediaLink>
       <para>In the left part of the window, you can add a new user, and in the right part you can set access rights for it.</para>
 

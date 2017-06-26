@@ -10,7 +10,7 @@
 <legacyBold>Схемы</legacyBold>, и нажать на кнопку <legacyBold>Добавить</legacyBold>  
 <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> в выпавшем меню:</para>
 <mediaLink>
-<image xlink:href="Designer_The_creation_of_a_strategy_00"/>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_00"/>
 </mediaLink>
 <para>После нажатия кнопки <legacyBold>Добавить</legacyBold> 
 <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>
@@ -20,7 +20,7 @@
  На вкладке <legacyBold>Эмуляция</legacyBold> можно изменить название стратегии 
  и дать ей краткое описание:</para>
  <mediaLink>
-<image xlink:href="Designer_The_creation_of_a_strategy_01"/>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_01"/>
 </mediaLink>
 <para>2.	Вкладка стратегии состоит из панелей <legacyBold>Схема</legacyBold> (<link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />)
 и <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />. Область <legacyBold>График</legacyBold> необходима для 

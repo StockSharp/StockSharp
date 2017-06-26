@@ -6,7 +6,7 @@
 откроется окно <legacyBold>Редактирование</legacyBold>. Для создания инструмента необходимо заполнить свойства инструмента и
  нажать кнопку <legacyBold>ОК</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_Creation_tool_01"/>
+<image placement="center" xlink:href="Designer_Creation_tool_01"/>
 </mediaLink>
 <para>Инструменты из разных источников имеют унифицированные идентификаторы. 
 Это сделано для того, чтобы код торгового робота не зависел от типа подключения (Plaza II, Quik, SmartCOM и т.д.).

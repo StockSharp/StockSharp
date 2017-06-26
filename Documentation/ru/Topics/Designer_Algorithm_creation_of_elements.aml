@@ -13,7 +13,7 @@
  нажав правой кнопкой мыши на папке <legacyBold>Стратегии</legacyBold> панели <legacyBold>Схемы</legacyBold>, и 
  нажать на кнопку Добавить <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> в выпавшем меню.</para>
 <mediaLink>
-<image xlink:href="Designer_The_creation_of_a_strategy_00"/>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_00"/>
 </mediaLink>
 <para>После нажатия кнопки Добавить <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>  в 
 папке <legacyBold>Стратегии</legacyBold> панели <legacyBold>Схемы</legacyBold> появится новая стратегия. 
@@ -22,14 +22,14 @@
 На вкладке <legacyBold>Эмуляция</legacyBold> можно изменить название стратегии 
 и дать ей краткое описание.</para>
 <mediaLink>
-<image xlink:href="Designer_The_creation_of_a_strategy_01"/>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_01"/>
 </mediaLink>
 <para>2.	Для удобной работы стоит раскрыть и зафиксировать 
 панели <legacyBold>Палитра</legacyBold> и <legacyBold>Свойства</legacyBold> области <legacyBold>Схема</legacyBold>, 
 нажав кнопку <mediaLinkInline><image xlink:href="Designer_Algorithm_creation_of_cubes_13"/></mediaLinkInline>. 
 В результате получиться окно следующего вида.</para>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_00"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_00"/>
 </mediaLink>
 <para>3.	Суть стратегии скользящих средних (SMA) заключается в следующем:</para>
 
@@ -55,28 +55,28 @@
 флажок параметры, стратегия при тестировании выдаст ошибку о не установленном значении 
 кубика <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" />.</para>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_01"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_01"/>
 </mediaLink>
 <para>Если в стратегии необходимо использовать несколько инструментов или портфелей,
  то для каждого кубика необходимо снять флажок <legacyBold>Параметры</legacyBold> и прописать  
  значение инструмента или портфеля.</para>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_02"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_02"/>
 </mediaLink>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_03"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_03"/>
 </mediaLink>
 <para>5.	После добавления инструмента и портфеля, следует добавить два кубика <link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" /> 
 выбрать тип SMA назвать первый Long SMA установить период 80 свечей, второй назвать 
 Short SMA установить период 10 свечей.</para>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_04"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_04"/>
 </mediaLink>
 <para>6.	Для работы индикаторов необходимо на них подать серию свечей. 
 Для этого необходимо создать кубик <link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" />. В примере используется только сформированные 
 свечи с таймфреймом 5 минут.</para>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_05"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_05"/>
 </mediaLink>
 <para>7.	После добавления индикаторов следует добавить два кубика, определяющие пересечения 
 индикаторов. Это кубики <link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" /> из составных элементов. Первый кубик называется 
@@ -88,18 +88,18 @@ Crossing Up. Он определяет пересечение снизу вве�
 Оператор CurrComparison устанавливается в значение меньше, оператор PrevComparison 
 устанавливается в значение Больше или равно.</para>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_06"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_06"/>
 </mediaLink>
 <para>8.	Для наглядного отображения свечей, индикаторов и сделок стоит 
 добавить <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />. В ней добавим элементы отображения, 
 Свечи, два индикатора и сделки.</para>
     <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_07"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_07"/>
 </mediaLink>
  <para>9.	В качестве источника сделок для отображения на графике используется 
     кубик <legacyBold>Сделки</legacyBold> стратегии. В примере называется Strategy trades.</para>
  <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_08"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_08"/>
 </mediaLink>   
     <para>10.	Для открытия позиции необходимо добавить два кубика <link xlink:href="33d15f2c-5d73-4c95-8e67-2612d34f14a2" />. 
     Первый кубик на покупку рыночной заявкой, на вход которого подается <legacyBold>Инструмент</legacyBold>, 
@@ -107,18 +107,18 @@ Crossing Up. Он определяет пересечение снизу вве�
     Второй кубик на продажу рыночной заявкой, на вход которого подается <legacyBold>Инструмент</legacyBold>, 
     сигнал на открытие позиции от кубика пересечения Crossing Down, <legacyBold>Портфель</legacyBold> и Объём заявки.</para>
     <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_09"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_09"/>
 </mediaLink>
     <para>11.	Соединив линиями (<link xlink:href="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" />) 
     вышеперечисленные элементы, получается схема без учета текущей позиции стратегии.
     В таком состоянии она будет набирать лишнее количество лотов.</para>
     <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_10"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_10"/>
 </mediaLink>
 <para>Для контроля позиции необходимо добавить кубик <link xlink:href="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" />, 
 на вход которого подается <legacyBold>Инструмент</legacyBold> и <legacyBold>Портфель</legacyBold>.</para>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_11"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_11"/>
 </mediaLink>
 <para>Для обработки текущей позиции можно воспользоваться уже готовой схемой, описанной 
 в пункте <link xlink:href="486b67a3-790c-48c6-87bf-045e058f2a96" />. Эта схема определяет 
@@ -126,7 +126,7 @@ Crossing Up. Он определяет пересечение снизу вве�
 позиции она подаст удвоенное значение портфеля.</para>
 <para>12.	В результате законченная стратегия имеет вид:</para>
 <mediaLink>
-<image xlink:href="Designer_Algorithm_creation_of_cubes_12"/>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_12"/>
 </mediaLink>
     </introduction>
     <relatedTopics>

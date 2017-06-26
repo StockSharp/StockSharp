@@ -9,7 +9,7 @@
  панели <token>SchemeDis</token>. При открытии панели <legacyBold>Галереи стратегий</legacyBold> 
  автоматически откроется вкладка <legacyBold>Галерея стратегий</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_The_gallery_of_strategies_00"/>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_00"/>
 </mediaLink>
 
 <para>1.	На вкладке <legacyBold>Галерея стратегий</legacyBold> отображается текущей баланс, 
@@ -29,12 +29,12 @@ S#.Designer перенаправит на страницу, где можно п
  и выбрать <legacyBold>Опубликовать</legacyBold>. Или перейдя на панель стратегии и нажать на кнопку 
  <legacyBold>Опубликовать</legacyBold> на вкладке <legacyBold>Эмуляция</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_The_gallery_of_strategies_01"/>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_01"/>
 </mediaLink>
 <para>5. После нажатия на кнопку <legacyBold>Опубликовать</legacyBold> появится 
 окно <legacyBold>Опубликовать</legacyBold> с параметрами публикации:</para>
 <mediaLink>
-<image xlink:href="Designer_The_gallery_of_strategies_02"/>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_02"/>
 </mediaLink>
 <para>6. В окне <legacyBold>Опубликовать</legacyBold> необходимо дать название стратегии, 
 краткое описание, логотип, цену. Также в окне <legacyBold>Опубликовать</legacyBold> можно установить 
@@ -44,7 +44,7 @@ S#.Designer перенаправит на страницу, где можно п
 будет надпись: <legacyBold>«Стратегия зашифрована и не может быть просмотрена»</legacyBold>. 
 Также о шифровании стратегий можно посмотреть в пункте <link xlink:href="66413582-a15e-414a-a413-8d77fe00f0e0" />.</para>
 <mediaLink>
-<image xlink:href="Designer_The_gallery_of_strategies_03"/>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_03"/>
 </mediaLink>
 <para>После нажатия на кнопку <legacyBold>ОК</legacyBold>, стратегия появится в 
 панели <legacyBold>Галерея стратегий</legacyBold>. Ее можно будет быстро найти при установке фильтра <legacyBold>Свои стратегии</legacyBold>.</para>

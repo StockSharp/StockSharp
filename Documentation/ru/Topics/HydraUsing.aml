@@ -6,14 +6,7 @@
 			  <step>
 				  <content>
 		  				<para>
-							Для установки <token>hydra</token> необходимо на сайте <token>StockSharp</token>
- 							перейти в <externalLink>
-							<linkText>раздел скачивания</linkText>
-								<linkAlternateText>stocksharp.ru/products/download</linkAlternateText>
-								<linkUri>http://stocksharp.ru/products/download/</linkUri>
-								<linkTarget>_blank</linkTarget>
-							</externalLink>
-.
+							Для установки <token>hydra</token> необходимо перейти на страницу <token>download</token>.
 		  				</para>
 		  				<mediaLink><image placement="center" xlink:href="hydra_setup1" /></mediaLink>	
 				  </content>

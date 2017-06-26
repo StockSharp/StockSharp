@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <mediaLink>
-<image xlink:href="Designer_The_conditional_operator_00"/>
+<image placement="center" xlink:href="Designer_The_conditional_operator_00"/>
 </mediaLink>
 <para>Элемент условный оператор возвращает одно из двух значений в зависимости от равенства 
 двух входных параметров. Элемент содержит четыре входа, три из которых могут быть
@@ -43,7 +43,7 @@
 
  
  <mediaLink>
-<image xlink:href="Designer_The_conditional_operator_01"/>
+<image placement="center" xlink:href="Designer_The_conditional_operator_01"/>
 </mediaLink>
 <para>Схема элемента состоит из простых элементов и основана на запоминании в элементе 
 <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> (VarIn2, VarOutEqual, VarOutNotEqual) значений, которые были переданы 

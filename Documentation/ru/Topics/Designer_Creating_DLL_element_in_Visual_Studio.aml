@@ -4,7 +4,7 @@
     <introduction>
 <para>Для написания кода в Visual Studio необходимо создать проект в Visual Studio:</para>
  <mediaLink>
-<image xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_00"/>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_00"/>
 </mediaLink>
 
 
@@ -21,17 +21,17 @@
 После создания стратегии необходимо собрать проект, нажав <legacyBold>Собрать решение</legacyBold>
 во вкладке <legacyBold>Сборка</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_01"/>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_01"/>
 </mediaLink>
 <para>В Visual Studio по умолчанию проект собирается в папку …\bin\Debug\ .</para>
  <mediaLink>
-<image xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_02"/>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_02"/>
 </mediaLink>
 <para>Для добавления Dll в общую схему необходимо вынести кубик <link xlink:href="6971235a-c9e5-4606-a266-5df4a3b9da94" />, 
 в панели свойства указать в поле <legacyBold>Сборка</legacyBold> Dll сборку. После чего появится 
 возможность выбрать кубик по имени в поле <legacyBold>Имя типа стратегии</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_03"/>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_03"/>
 </mediaLink>
 
     </introduction>
