@@ -6,7 +6,7 @@
 удаленно подключиться к <token>hydra</token> и получить имеющиеся данные в хранилище. К 
 <token>hydra</token>, работающей в серверном режиме, можно подключиться из <token>designer</token>
  (как это сделать описано в пункте <link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" /> документации 
- по <token>designer</token>). Также к <token>hydra</token> можно подключиться через <legacyBold>S#.API</legacyBold> (как 
+ по <token>designer</token>). Также к <token>hydra</token> можно подключиться через <token>stocksharpapi</token> (как 
  это сделать описано в пунктах <link xlink:href="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" />, <link xlink:href="f143c9e7-d5a6-4464-9b01-18117183cc7a" />, <link xlink:href="040cdc40-39b4-47be-b3f0-441710515562" />).</para>
 <para>Для включения серверного режима <token>hydra</token> необходимо на вкладке <legacyBold>Общее</legacyBold> нажать 
 кнопку <legacyBold>Настройки</legacyBold> откроется 

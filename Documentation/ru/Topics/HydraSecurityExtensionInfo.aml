@@ -7,7 +7,7 @@
 удаленно подключиться к <token>hydra</token> и получить имеющиеся данные в хранилище или записать новые.
 Включение серверного режима <token>hydra</token> описано в 
 пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
-<para>Для подключения к <token>hydra</token> через WCF в <legacyBold>S#.API</legacyBold> есть 
+<para>Для подключения к <token>hydra</token> через WCF в <token>stocksharpapi</token> есть 
 класс <codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference>.</para>
 <code language="C#" title="C#"><![CDATA[
 ...
