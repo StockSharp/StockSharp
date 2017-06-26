@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
        <para>
-			The <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> should be used for trading algorithms creating for <token>rithmic</token>.
+			The <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> should be used for trading algorithms creating for <token>rithmic_external</token>.
 		</para>
     </introduction>
      <relatedTopics>

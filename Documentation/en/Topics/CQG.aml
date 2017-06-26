@@ -2,7 +2,7 @@
 <topic id="aac980b1-ac5b-415b-811c-a8d128942391" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>To create trading algorithms for CQG it is necessary to use:</para>
+<para>To create trading algorithms for <token>cqg_external</token> it is necessary to use:</para>
 
 <list class="bullet">
   <listItem><para><codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> 
