@@ -182,12 +182,10 @@
     <None Include="Topics\hydra_settings_Xignite.aml" />
     <None Include="Topics\hydra_CQG_Continuum.aml" />
     <None Include="Topics\hydra_CQG_Com.aml" />
-    <None Include="Topics\Hydra_users.aml" />
     <None Include="Topics\HydraSecurityExtensionInfo.aml" />
     <None Include="Topics\hydraAPIConnectWCF.aml" />
     <None Include="Topics\HydraExtensionInfo.aml" />
     <None Include="Topics\hydraAPIConnect.aml" />
-    <None Include="Topics\hydra_server.aml" />
     <None Include="Topics\hydra_index.aml" />
     <None Include="Topics\hydra_options.aml" />
     <None Include="Topics\CreateNewOrder.aml" />
@@ -206,7 +204,6 @@
     <None Include="Topics\ITCH.aml" />
     <None Include="Topics\ConnectorCreating.aml" />
     <None Include="Topics\Gui_EquityCurveChartd.aml" />
-    <None Include="Topics\Gui_BufferedChart.aml" />
     <None Include="Topics\Gui_ChartPanel.aml" />
     <None Include="Topics\Gui_Chart.aml" />
     <None Include="Topics\StrategyTestingFinam.aml" />
@@ -226,24 +223,17 @@
     <None Include="Topics\GuiOrderLogGrid.aml" />
     <None Include="Topics\GuiIndexSecurityWindow.aml" />
     <None Include="Topics\GuiContinuousSecurityWindow.aml" />
-    <None Include="Topics\GuiNewsPanel.aml" />
     <None Include="Topics\GuiNewsGrid.aml" />
     <None Include="Topics\GuiMarketDepthControl.aml" />
     <None Include="Topics\GuiLevel1Grid.aml" />
     <None Include="Topics\GuiTradeGrid.aml" />
-    <None Include="Topics\GUILogWindow.aml" />
-    <None Include="Topics\GUIMonitorWindow.aml" />
     <None Include="Topics\GUILogControlWindow.aml" />
     <None Include="Topics\GUIMonitor.aml" />
     <None Include="Topics\GUILogControl.aml" />
     <None Include="Topics\GuiTrading.aml" />
     <None Include="Topics\GuiMarketData.aml" />
-    <None Include="Topics\GuiUniversalGrid.aml" />
     <None Include="Topics\GuiSecurityGrid.aml" />
-    <None Include="Topics\GuiSecurityLookupPanel.aml" />
     <None Include="Topics\GuiCreateSecurityWindow.aml" />
-    <None Include="Topics\GuiSecurityEditor.aml" />
-    <None Include="Topics\GuiSecurityPickerWindow.aml" />
     <None Include="Topics\GuiSecurityPicker.aml" />
     <None Include="Topics\HydraTasksBackup.aml" />
     <None Include="Topics\HydraBackup_recovery.aml" />
@@ -265,7 +255,6 @@
     <None Include="Topics\FixServer.aml" />
     <None Include="Topics\ConnectorsFixFast.aml" />
     <None Include="Topics\OptionPositionChart.aml" />
-    <None Include="Topics\OptionCalculator.aml" />
     <None Include="Topics\OptionDesk.aml" />
     <None Include="Topics\GUIOptions.aml" />
     <None Include="Topics\OptionsGUI.aml" />
@@ -301,7 +290,6 @@
     <None Include="Topics\HydraDisasterRecovery.aml" />
     <None Include="Topics\HydraBoards.aml" />
     <None Include="Topics\HydraBackup.aml" />
-    <None Include="Topics\HydraAdditional.aml" />
     <None Include="Topics\HydraImportExecutions.aml" />
     <None Include="Topics\HydraImportNews.aml" />
     <None Include="Topics\HydraImportLevel1.aml" />
@@ -344,7 +332,6 @@
     <None Include="Topics\CQG.aml" />
     <None Include="Topics\Sterling.aml" />
     <None Include="Comments\project.xml" />
-    <None Include="Topics\LicenseInstructions.aml" />
     <None Include="Topics\HydraTasks.aml" />
     <None Include="Topics\HydraSettingsTransaq.aml" />
     <None Include="Topics\HydraSettingsMicex.aml" />
@@ -387,7 +374,6 @@
     <None Include="Topics\Transaq.aml" />
     <None Include="Topics\PlazaCGate.aml" />
     <None Include="Topics\QuikMksByDde.aml" />
-    <None Include="Topics\NotifyService.aml" />
     <None Include="Topics\TestingSettings.aml" />
     <None Include="Topics\HydraGluingData.aml" />
     <None Include="Topics\HydraSettingsIB.aml" />
@@ -405,7 +391,6 @@
     <None Include="Topics\ConnectorsRussian.aml" />
     <None Include="Topics\WealthLab.aml" />
     <None Include="Topics\QuikSecuritiesChangesTable.aml" />
-    <None Include="Topics\QuikAsyncMode.aml" />
     <None Include="Topics\OrdersEvents.aml" />
     <None Include="Topics\OrdersTransactionId.aml" />
     <None Include="Topics\MatLab.aml" />
@@ -453,7 +438,6 @@
     <None Include="Topics\BasketTrader.aml" />
     <None Include="Topics\Candles.aml" />
     <None Include="Topics\CandlesCandleFactory.aml" />
-    <None Include="Topics\CandlesICandleSource.aml" />
     <None Include="Topics\CandlesPatterns.aml" />
     <None Include="Topics\CandlesUI.aml" />
     <None Include="Topics\CandlesIndex.aml" />
@@ -467,7 +451,6 @@
     <None Include="Topics\HydraUsing.aml" />
     <None Include="Topics\Indicators.aml" />
     <None Include="Topics\IndicatorsCustom.aml" />
-    <None Include="Topics\IndicatorsHistory.aml" />
     <None Include="Topics\IndicatorsChart.aml" />
     <None Include="Topics\Latency.aml" />
     <None Include="Topics\Logging.aml" />
@@ -481,7 +464,6 @@
     <None Include="Topics\OrdersReRegister.aml" />
     <None Include="Topics\OrdersCancel.aml" />
     <None Include="Topics\OrdersCancelGroup.aml" />
-    <None Include="Topics\OrdersTransaction.aml" />
     <None Include="Topics\Options.aml" />
     <None Include="Topics\OptionsGreeks.aml" />
     <None Include="Topics\OptionsHedge.aml" />
@@ -521,7 +503,6 @@
     <None Include="Topics\SmartStopOrders.aml" />
     <None Include="Topics\StockSharpAbout.aml" />
     <None Include="Topics\StockSharpArchitecture.aml" />
-    <None Include="Topics\StockSharpIndependence.aml" />
     <None Include="Topics\StockSharpSamples.aml" />
     <None Include="Topics\StockSharpTradingAlgo.aml" />
     <None Include="Topics\Storages.aml" />
@@ -595,7 +576,6 @@
     <None Include="Topics\Designer_Indexer.aml" />
     <None Include="Topics\Designer_Indicator.aml" />
     <None Include="Topics\Designer_Installation.aml" />
-    <None Include="Topics\Designer_Introduction.aml" />
     <None Include="Topics\Designer_Level_1.aml" />
     <None Include="Topics\Designer_Line.aml" />
     <None Include="Topics\Designer_Live_trade.aml" />

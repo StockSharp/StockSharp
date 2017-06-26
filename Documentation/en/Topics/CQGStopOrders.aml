@@ -30,7 +30,7 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		<para>Next, the <legacyBold>Conditional Order Register</legacyBold> dialogue opened where you need to specify the type and parameters of such order.</para>
 		
 		<para>Behind the scenes the conditions are created and configured in the <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference>
-		code using the <codeEntityReference>T:StockSharp.CQG.CQGOrderCondition</codeEntityReference> class.</para>
+		code using the <codeEntityReference>T:StockSharp.Cqg.Com.CqgComOrderCondition</codeEntityReference> class.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>
