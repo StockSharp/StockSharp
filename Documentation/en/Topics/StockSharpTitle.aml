@@ -28,7 +28,8 @@ Available connections:
 <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
 <link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, 
 <link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link>,
-<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link> 
+<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link>,
+<link xlink:href="92073cd8-8e10-498e-8de9-47d3f77d278a">FXCM</link> 
 and many other. Any broker or
 <externalLink>
 <linkText>partner broker</linkText>
@@ -84,7 +85,8 @@ and many other. Any broker or
 <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
 <link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, 
 <link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link>,
-<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link>
+<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link>,
+<link xlink:href="92073cd8-8e10-498e-8de9-47d3f77d278a">FXCM</link>
   and many other).</para></listItem>
   <listItem><para>High compression ratio (2 bytes per trade, 7 bytes per order book).</para></listItem>
   <listItem><para>Any data type (candles, ticks, order book, order-log, options, news and other).</para></listItem>

@@ -9,7 +9,7 @@
       <list class="bullet">
         <listItem>
          	<para><legacyBold>Россия:</legacyBold></para>
-			<list class="bullet">
+		<list class="bullet">
         		<listItem>
           			<para><link xlink:href="2a908a19-0272-48e1-b143-df7ff9e2607c">Альфа-Директ</link> - российский терминал.</para>
         		</listItem>
@@ -46,21 +46,21 @@
         		<listItem>
           			<para><link xlink:href="184da0f9-29db-4397-8497-1ed4c8f7ea0d">UX</link> - с украинской биржи.</para>
         		</listItem>
-			</list>
+		</list>
         </listItem>
 		<listItem>
 			<para><legacyBold>Америка:</legacyBold></para>
-				<list class="bullet">
+			<list class="bullet">
 			        <listItem>
         				<para><link xlink:href="89a8b34c-63cf-4623-bbb7-90251d53e8e6">Blackwood(Fusion)</link> - западная торговая платформа.</para>
         			</listItem>
-					<listItem>
+				<listItem>
           				<para><link xlink:href="34b9a25a-ecb2-4d82-b342-3fa46ec155ba">FinViz</link> - зарубежный сервис исторических данных.</para>
         			</listItem>
 			        <listItem>
-            			<para><link xlink:href="0166d686-9fb0-4e78-8578-f5b706ad6a07">Google</link> - зарубежный сервис исторических данных.</para>
-					</listItem>
-					<listItem>
+            				<para><link xlink:href="0166d686-9fb0-4e78-8578-f5b706ad6a07">Google</link> - зарубежный сервис исторических данных.</para>
+				</listItem>
+				<listItem>
         				<para><link xlink:href="bcb8050d-d330-4071-affc-b6ed5639e1fb">Interactive Brokers</link> - западный брокер.</para>
         			</listItem>
         			<listItem>
@@ -75,23 +75,35 @@
 			        <listItem>
           				<para><link xlink:href="26ff0aad-623b-47e2-a8f8-a337506cd2ff">Rithmic</link> - западная торговая платформа.</para>
         			</listItem>
-			         <listItem>
+				<listItem>
           				<para><link xlink:href="f43591c9-c215-4dee-b297-4b9ed34fd465">Sterling</link> - западная торговая платформа.</para>
         			</listItem>
- 					<listItem>
+ 				<listItem>
           				<para><link xlink:href="c60b2dd2-518c-49e5-8ba4-edabbda04222">Yahoo Finance</link> - зарубежный сервис исторических данных.</para>
         			</listItem>
         			<listItem>
           				<para><link xlink:href="1e3811a4-60e6-4f6c-bb55-0d3b3c2e246f">ITCH</link> - протокол прямого доступа к биржевым данным.</para>
         			</listItem>
-				</list>
-      	</listItem>
-      	<listItem>
-      		<para><legacyBold>Форекс:</legacyBold></para>
-				<list class="bullet">
-					<listItem>
+				<listItem>
+          				<para><link xlink:href="48a0cef2-f3f7-4bf1-aa3b-043a130777c7">BarChart</link> - западный источник маркет-данных.</para>
+        			</listItem>
+			        <listItem>
+          				<para><link xlink:href="19e07661-3563-4eb2-b781-d0f0106fd769">CQG COM</link> - западная торговая платформа.</para>
+        			</listItem>
+			        <listItem>
+          				<para><link xlink:href="f3eda329-0077-4517-99f2-aabdea2a930d">CQG Continuum</link> - западная торговая платформа.</para>
+        			</listItem>
+				<listItem>
+          				<para><link xlink:href="3adf98fb-fa41-46ad-93cb-583fb67c1d6b">Xignite</link> - западный источник маркет-данных.</para>
+        			</listItem>
+			</list>
+      		</listItem>
+      		<listItem>
+      			<para><legacyBold>Форекс:</legacyBold></para>
+			<list class="bullet">
+				<listItem>
           				<para><link xlink:href="bba0059b-526b-406c-ba6e-a80d6c9e4ae0">DucasCopy</link></para>
-					</listItem>
+				</listItem>
 			        <listItem>
         				<para><link xlink:href="c1863414-25cb-4994-818f-3e4fa511f21b">GainCapital</link></para>
         			</listItem>
@@ -107,14 +119,19 @@
         			<listItem>
           				<para><link xlink:href="21734ebc-faae-4b42-9088-1c2f4c92ead4">OANDA (история)</link></para>
         			</listItem>
-
  			        <listItem>
-    			      	<para><link xlink:href="a92bca75-1a0c-4581-a75a-6f13afd7975e">TrueFX</link></para>
+    			      		<para><link xlink:href="a92bca75-1a0c-4581-a75a-6f13afd7975e">TrueFX</link></para>
  		       		</listItem>
-				</list>
-      	</listItem>
-      	<listItem>
-      		<para><legacyBold>Крипто-валюта:</legacyBold></para>
+				<listItem>
+          				<para><link xlink:href="24a5983b-28a7-4620-b4b8-9356f683a9ba">FXCM</link></para>
+        			</listItem>
+        			<listItem>
+          				<para><link xlink:href="e81e69f8-bfcf-49f8-aefe-cd18270c1d9e">FXCM (история)</link></para>
+        			</listItem>
+			</list>
+      		</listItem>
+      		<listItem>
+      			<para><legacyBold>Крипто-валюта:</legacyBold></para>
       			<list class="bullet">
 			        <listItem>
           				<para><link xlink:href="7a11d9ff-17c9-406b-ab88-c4b9c080912d">BitStamp</link> - криптовалюты.</para>
@@ -123,9 +140,9 @@
           				<para><link xlink:href="4e435654-38af-4ede-9987-e268a6ae3b96">BTCE</link> - криптовалюты.</para>
         			</listItem>
       			</list>
-      	</listItem>
-      	<listItem>
-      		<para><legacyBold>Другие:</legacyBold></para>
+      		</listItem>
+      		<listItem>
+      			<para><legacyBold>Другие:</legacyBold></para>
       			<list class="bullet">
 			        <listItem>
         				<para><link xlink:href="e81b1b7f-5c96-488e-a90d-e60cb8675977">FIX</link> - прямое подключение через FIX/FAST.</para>
@@ -137,7 +154,7 @@
           				<para><link xlink:href="91454878-ec26-4872-9a85-1bfbc76dc77a">RSS</link> - новостные ленты.</para>
         			</listItem>
       			</list>
-      	</listItem>
+      		</listItem>
       </list>
     </introduction>
   </developerWalkthroughDocument>
