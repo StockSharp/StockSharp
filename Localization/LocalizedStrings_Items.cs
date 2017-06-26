@@ -24388,12 +24388,12 @@ namespace StockSharp.Localization
 		public static string Str2613 => GetString(Str2613Key);
 
 		/// <summary>
-		/// Use orders log to create ticks7. Disabled by default.
+		/// Use orders log to create ticks. Disabled by default.
 		/// </summary>
 		public const string Str2614Key = nameof(Str2614);
 
 		/// <summary>
-		/// Use orders log to create ticks7. Disabled by default.
+		/// Use orders log to create ticks. Disabled by default.
 		/// </summary>
 		public static string Str2614 => GetString(Str2614Key);
 
@@ -25828,12 +25828,12 @@ namespace StockSharp.Localization
 		public static string Str2757 => GetString(Str2757Key);
 
 		/// <summary>
-		/// Stream completed its work. Opening stream {1}.
+		/// Stream '{0}' completed its work. Opening stream '{1}'
 		/// </summary>
 		public const string Str2758ParamsKey = nameof(Str2758Params);
 
 		/// <summary>
-		/// Stream completed its work. Opening stream {1}.
+		/// Stream '{0}' completed its work. Opening stream '{1}'
 		/// </summary>
 		public static string Str2758Params => GetString(Str2758ParamsKey);
 
@@ -33118,12 +33118,12 @@ namespace StockSharp.Localization
 		public static string Str3571 => GetString(Str3571Key);
 
 		/// <summary>
-		/// The bounds From ({0}) and To ({2}) must be different.
+		/// The bounds From ({0}) and To ({1}) must be different.
 		/// </summary>
 		public const string Str3572ParamsKey = nameof(Str3572Params);
 
 		/// <summary>
-		/// The bounds From ({0}) and To ({2}) must be different.
+		/// The bounds From ({0}) and To ({1}) must be different.
 		/// </summary>
 		public static string Str3572Params => GetString(Str3572ParamsKey);
 
@@ -34228,12 +34228,12 @@ namespace StockSharp.Localization
 		public static string Str3695 => GetString(Str3695Key);
 
 		/// <summary>
-		/// Market data address.
+		/// Market data address
 		/// </summary>
 		public const string Str3696Key = nameof(Str3696);
 
 		/// <summary>
-		/// Market data address.
+		/// Market data address
 		/// </summary>
 		public static string Str3696 => GetString(Str3696Key);
 
@@ -40956,6 +40956,16 @@ namespace StockSharp.Localization
 		/// Typed value handler has not been set.
 		/// </summary>
 		public static string UnitHandlerNotSet => GetString(UnitHandlerNotSetKey);
+
+		/// <summary>
+		/// Price step cost is equal to zero.
+		/// </summary>
+		public const string PriceStepIsZeroKey = nameof(PriceStepIsZero);
+
+		/// <summary>
+		/// Price step cost is equal to zero.
+		/// </summary>
+		public static string PriceStepIsZero => GetString(PriceStepIsZeroKey);
 
 		/// <summary>
 		/// In progress. Please wait...

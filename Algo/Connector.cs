@@ -390,7 +390,7 @@ namespace StockSharp.Algo
 		public virtual bool CreateDepthFromOrdersLog { get; set; }
 
 		/// <summary>
-		/// Use orders log to create ticks7. Disabled by default.
+		/// Use orders log to create ticks. Disabled by default.
 		/// </summary>
 		public virtual bool CreateTradesFromOrdersLog { get; set; }
 
