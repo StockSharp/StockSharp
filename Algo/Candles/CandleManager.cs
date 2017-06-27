@@ -210,6 +210,8 @@ namespace StockSharp.Algo.Candles
 
 		private sealed class ConnectorCandleSource : Disposable, ICandleSource<Candle>
 		{
+			private readonly SynchronizedSet<CandleSeries> _candleSeries = new CachedSynchronizedSet<CandleSeries>();
+
 			private readonly Connector _connector;
 
 			public int SpeedPriority => 1;
@@ -232,11 +234,13 @@ namespace StockSharp.Algo.Candles
 
 			private void OnConnectorProcessingCandle(CandleSeries series, Candle candle)
 			{
-				Processing?.Invoke(series, candle);
+				if (_candleSeries.Contains(series))
+					Processing?.Invoke(series, candle);
 			}
 
 			private void OnConnectorCandleSeriesStopped(CandleSeries series)
 			{
+				_candleSeries.Remove(series);
 				Stopped?.Invoke(series);
 			}
 
@@ -247,12 +251,14 @@ namespace StockSharp.Algo.Candles
 
 			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 			{
-				_connector.SubscribeCandles(series, @from, to);
+				_candleSeries.Add(series);
+				_connector.SubscribeCandles(series, from, to);
 			}
 
 			void ICandleSource<Candle>.Stop(CandleSeries series)
 			{
 				_connector.UnSubscribeCandles(series);
+				_candleSeries.Remove(series);
 			}
 
 			/// <summary>
