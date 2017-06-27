@@ -14206,3 +14206,4 @@ DocStr9912;Max value for {0};Максимальное значение для {0
 DocStr9913;The market price at the time the order automatically moves following the market fluctuations;Рыночная цена в моменте, когда заявка автоматически движется за колебанием рынка
 DocStr9914;The number of pips the market should move before the order moves the same number of pips after it;Количество шагов цены, которые должен пройти рынок, прежде чем цена передвинется
 DocStr9915;The unique identifier of the environment that is used to place the order;Унимальный идентификатор системы, в которую была отправлена заявка
+DocStr9916;Quotes updating interval;Интервал обновления котировок

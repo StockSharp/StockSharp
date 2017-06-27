@@ -649,6 +649,11 @@
             Convert all non-latin text messages to latin.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixServer.QuotesInterval">
+      <summary>
+            Quotes updating interval.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.FixServer.TransactionSession">
       <summary>
             Transactional session.

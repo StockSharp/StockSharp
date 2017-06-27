@@ -291,9 +291,6 @@
       <param name="userName">The recipient name.</param>
       <param name="text">Message text.</param>
     </member>
-    <member name="M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})">
-      <inheritdoc />
-    </member>
     <member name="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox">
       <summary>
             The drop-down list to select the OpenECry server address.

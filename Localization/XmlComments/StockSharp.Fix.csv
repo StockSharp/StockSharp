@@ -187,6 +187,7 @@ M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.IRemoteAuthorization)/summary;D
 M:StockSharp.Fix.FixServer.#ctor(StockSharp.Algo.IRemoteAuthorization)/param/authorization;DocStr3162
 P:StockSharp.Fix.FixServer.InitialTransactionId/summary;DocStr3172
 P:StockSharp.Fix.FixServer.ConvertToLatin/summary;DocStr9080
+P:StockSharp.Fix.FixServer.QuotesInterval/summary;DocStr9916
 P:StockSharp.Fix.FixServer.TransactionSession/summary;TransactionalSession
 P:StockSharp.Fix.FixServer.MarketDataSession/summary;TransactionalSession
 P:StockSharp.Fix.FixServer.State/summary;DocStr3173

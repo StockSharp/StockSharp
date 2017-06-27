@@ -78,6 +78,11 @@
             Конвертировать кириллицу в латиницу.
             </summary>
     </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixServer.QuotesInterval">
+      <summary>
+            Интервал обновления котировок.
+            </summary>
+    </member>
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.SingleSlash">
       <summary>
             https://forum.quik.ru/forum10/topic1218/
