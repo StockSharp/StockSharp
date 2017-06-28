@@ -111,7 +111,7 @@ namespace SampleFxcm
 				var window = _quotesWindows.SafeAdd(security, s =>
 				{
 					// subscribe on order book flow
-					trader.RegisterMarketDepth(security);
+					//trader.RegisterMarketDepth(security);
 
 					// create order book window
 					var wnd = new QuotesWindow
@@ -159,24 +159,22 @@ namespace SampleFxcm
 				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
-		private void FindClick(object sender, RoutedEventArgs e)
-		{
-			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "USD" } };
+		//private void FindClick(object sender, RoutedEventArgs e)
+		//{
+		//	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "USD" } };
 
-			if (!wnd.ShowModal(this))
-				return;
+		//	if (!wnd.ShowModal(this))
+		//		return;
 
-			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
-		}
+		//	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
+		//}
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
 		{
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
-
-				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.MaxValue).Show();
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, (TimeSpan)CandlesPeriods.SelectedItem);
+				new ChartWindow(series).Show();
 			}
 		}
 

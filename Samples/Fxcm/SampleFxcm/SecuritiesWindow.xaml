@@ -13,9 +13,9 @@
 		<sx:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
 
 		<StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
-			<Button x:Name="Find" Width="100" Click="FindClick">
+			<!--<Button x:Name="Find" Width="100" Click="FindClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
-			</Button>
+			</Button>-->
 			<Button x:Name="Level1" Content="Level1" Width="100" IsEnabled="False" Click="Level1Click" />
 			<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>

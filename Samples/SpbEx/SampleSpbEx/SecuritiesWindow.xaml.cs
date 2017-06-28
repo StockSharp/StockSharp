@@ -18,17 +18,14 @@ namespace SampleSpbEx
 	using System;
 	using System.Linq;
 	using System.Windows;
-	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.SpbEx;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
 
@@ -64,7 +61,7 @@ namespace SampleSpbEx
 		{
 			Depth.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled =
 			Quotes.IsEnabled = security != null;
-			TryEnableCandles();
+			//TryEnableCandles();
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -163,22 +160,22 @@ namespace SampleSpbEx
 			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
 		}
 
-		private void CandlesClick(object sender, RoutedEventArgs e)
-		{
-			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
-			var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
+		//private void CandlesClick(object sender, RoutedEventArgs e)
+		//{
+		//	var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+		//	var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
 
-			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.MaxValue).Show();
-		}
+		//	new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.MaxValue).Show();
+		//}
 
-		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			TryEnableCandles();
-		}
+		//private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		//{
+		//	TryEnableCandles();
+		//}
 
-		private void TryEnableCandles()
-		{
-			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
-		}
+		//private void TryEnableCandles()
+		//{
+		//	Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
+		//}
 	}
 }

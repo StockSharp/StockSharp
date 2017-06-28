@@ -125,9 +125,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ChartWindow.xaml.cs">
-      <DependentUpon>ChartWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="NewsWindow.xaml.cs">
       <DependentUpon>NewsWindow.xaml</DependentUpon>
     </Compile>
@@ -179,10 +176,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ChartWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

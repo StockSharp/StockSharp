@@ -184,10 +184,9 @@ namespace SampleCQG
 		{
 			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, (TimeSpan)CandlesPeriods.SelectedItem);
 
-				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.MaxValue).Show();
+				new ChartWindow(series).Show();
 			}
 		}
 

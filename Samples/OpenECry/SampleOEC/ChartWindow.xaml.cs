@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleOEC
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows.Media;
 	
@@ -27,11 +26,10 @@ namespace SampleOEC
 	partial class ChartWindow
 	{
 		private readonly OpenECryTrader _trader;
-		private readonly CandleManager _manager;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 
-		public ChartWindow(CandleSeries candleSeries, DateTime from, DateTime to)
+		public ChartWindow(CandleSeries candleSeries)
 		{
 			InitializeComponent();
 
@@ -57,9 +55,10 @@ namespace SampleOEC
 
 			area.Elements.Add(_candleElem);
 
-			_manager = new CandleManager(_trader);
-			_manager.Processing += ProcessNewCandles;
-			_manager.Start(_candleSeries, from, to);
+			var tf = (TimeSpan)candleSeries.Arg;
+
+			_trader.CandleSeriesProcessing += ProcessNewCandles;
+			_trader.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTimeOffset.MaxValue);
 		}
 
 		private void ProcessNewCandles(CandleSeries series, Candle candle)
@@ -72,7 +71,8 @@ namespace SampleOEC
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_manager.Processing -= ProcessNewCandles;
+			_trader.UnSubscribeCandles(_candleSeries);
+			_trader.CandleSeriesProcessing -= ProcessNewCandles;
 			base.OnClosing(e);
 		}
 	}
