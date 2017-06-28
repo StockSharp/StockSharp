@@ -320,6 +320,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void ProcessTime()
 		{
+			return;
 			// TODO check for calls from different threads
 			lock (_sync)
 			{
