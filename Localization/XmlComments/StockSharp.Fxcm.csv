@@ -5,9 +5,8 @@ P:StockSharp.Fxcm.FxcmMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Fxcm.FxcmMessageAdapter.DefaultAddress/summary;DocStr9884
-F:StockSharp.Fxcm.FxcmMessageAdapter.DefaultConnection/summary;DocStr9884
 P:StockSharp.Fxcm.FxcmMessageAdapter.Address/summary;ServerAddress
-P:StockSharp.Fxcm.FxcmMessageAdapter.Connection/summary;Str3143
+P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo/summary;Str3388
 P:StockSharp.Fxcm.FxcmMessageAdapter.Login/summary;Login
 P:StockSharp.Fxcm.FxcmMessageAdapter.Password/summary;Password
 P:StockSharp.Fxcm.FxcmMessageAdapter.Pin/summary;Pin
@@ -26,7 +25,7 @@ F:StockSharp.Fxcm.FxcmExtendedOrderTypes.StopEntry/summary;DocStr9890
 F:StockSharp.Fxcm.FxcmExtendedOrderTypes.LimitEntry/summary;DocStr9891
 F:StockSharp.Fxcm.FxcmExtendedOrderTypes.RangeEntry/summary;DocStr9892
 F:StockSharp.Fxcm.FxcmExtendedOrderTypes.RangeTrailingEntry/summary;DocStr9893
-F:StockSharp.Fxcm.FxcmExtendedOrderTypes.Entry/summary;DocStr9894
+F:StockSharp.Fxcm.FxcmExtendedOrderTypes.Limit/summary;DocStr9894
 F:StockSharp.Fxcm.FxcmExtendedOrderTypes.Stop/summary;DocStr9895
 F:StockSharp.Fxcm.FxcmExtendedOrderTypes.OpenLimit/summary;DocStr9896
 F:StockSharp.Fxcm.FxcmExtendedOrderTypes.CloseLimit/summary;DocStr9897
@@ -54,5 +53,5 @@ M:StockSharp.Fxcm.FxcmTrader.#ctor/summary;DocStr1
 P:StockSharp.Fxcm.FxcmTrader.Login/summary;Login
 P:StockSharp.Fxcm.FxcmTrader.Password/summary;Password
 P:StockSharp.Fxcm.FxcmTrader.Address/summary;ServerAddress
-P:StockSharp.Fxcm.FxcmTrader.Connection/summary;Str3143
+P:StockSharp.Fxcm.FxcmTrader.IsDemo/summary;Str3388
 P:StockSharp.Fxcm.FxcmTrader.Pin/summary;Pin

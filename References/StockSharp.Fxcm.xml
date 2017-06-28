@@ -29,19 +29,14 @@
             Default value for <see cref="P:StockSharp.Fxcm.FxcmMessageAdapter.Address" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Fxcm.FxcmMessageAdapter.DefaultConnection">
-      <summary>
-            Default value for <see cref="P:StockSharp.Fxcm.FxcmMessageAdapter.Connection" />.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Address">
       <summary>
             Server address.
             </summary>
     </member>
-    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Connection">
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo">
       <summary>
-            Connection.
+            Connect to demo trading instead of real trading server.
             </summary>
     </member>
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Login">
@@ -126,9 +121,9 @@
             Range Trailing Entry order.
             </summary>
     </member>
-    <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.Entry">
+    <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.Limit">
       <summary>
-            Entry order.
+            Limit order.
             </summary>
     </member>
     <member name="F:StockSharp.Fxcm.FxcmExtendedOrderTypes.Stop">
@@ -266,9 +261,9 @@
             Server address.
             </summary>
     </member>
-    <member name="P:StockSharp.Fxcm.FxcmTrader.Connection">
+    <member name="P:StockSharp.Fxcm.FxcmTrader.IsDemo">
       <summary>
-            Connection.
+            Connect to demo trading instead of real trading server.
             </summary>
     </member>
     <member name="P:StockSharp.Fxcm.FxcmTrader.Pin">
