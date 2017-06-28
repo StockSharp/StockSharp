@@ -3980,7 +3980,7 @@ XamlStr681;Create strategy;Создать стратегию
 XamlStr682;Create element;Создать элемент
 XamlStr684;Message:;Сообщение:
 XamlStr685;Messages;Сообщений
-XamlStr687;Mapping between portfolios and connections;Сопоставление портфелей и подключений
+XamlStr687;Portfolios <-> connections;Портфели <-> подключения
 XamlStr688;Composite element;Составной элемент
 XamlStr691;Save data from the chart;Сохранить данные с графика
 XamlStr692;Save security;Сохранить инструмент
@@ -14184,7 +14184,7 @@ DocStr9890;Stop Entry order;Заявка типа Stop Entry
 DocStr9891;Limit Entry order;Заявка типа Limit Entry
 DocStr9892;Range Entry order;Заявка типа Range Entry
 DocStr9893;Range Trailing Entry order;Заявка типа Range Trailing Entry
-DocStr9894;Entry order;Заявка типа Entry
+DocStr9894;Limit order;Заявка типа Limit
 DocStr9895;Stop order;Заявка типа Stop
 DocStr9896;Open Limit order;Заявка типа Open Limit
 DocStr9897;Close Limit order;Заявка типа Close Limit

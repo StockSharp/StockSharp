@@ -653,7 +653,7 @@ T:StockSharp.Messages.BaseChangeMessage`1/typeparam/TField;DocStr4328
 P:StockSharp.Messages.BaseChangeMessage`1.ServerTime/summary;Str168
 P:StockSharp.Messages.BaseChangeMessage`1.Changes/summary;DocStr8448
 M:StockSharp.Messages.BaseChangeMessage`1.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
-M:StockSharp.Messages.BaseChangeMessage`1.#ctor(StockSharp.Messages.MessageTypes)/param/type;Str2133
+M:StockSharp.Messages.BaseChangeMessage`1.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
 M:StockSharp.Messages.BaseChangeMessage`1.ToString/summary;DocStr49
 M:StockSharp.Messages.BaseChangeMessage`1.ToString/returns;DocStr50
 T:StockSharp.Messages.ErrorMessage/summary;DocStr4329

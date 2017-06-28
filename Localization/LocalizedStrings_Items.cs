@@ -39698,12 +39698,12 @@ namespace StockSharp.Localization
 		public static string XamlStr685 => GetString(XamlStr685Key);
 
 		/// <summary>
-		/// Mapping between portfolios and connections
+		/// Portfolios &lt;-&gt; connections
 		/// </summary>
 		public const string XamlStr687Key = nameof(XamlStr687);
 
 		/// <summary>
-		/// Mapping between portfolios and connections
+		/// Portfolios &lt;-&gt; connections
 		/// </summary>
 		public static string XamlStr687 => GetString(XamlStr687Key);
 

@@ -3702,7 +3702,6 @@ P:StockSharp.Algo.Connector.InMessageChannel/summary;DocStr8544
 P:StockSharp.Algo.Connector.OutMessageChannel/summary;DocStr863
 P:StockSharp.Algo.Connector.InnerAdapter/summary;DocStr9208
 P:StockSharp.Algo.Connector.Adapter/summary;DocStr864
-P:StockSharp.Algo.Connector.SupportCandleHolder/summary;DocStr9304
 P:StockSharp.Algo.Connector.SupportOffline/summary;DocStr9304
 P:StockSharp.Algo.Connector.SupportFilteredMarketDepth/summary;DocStr9304
 P:StockSharp.Algo.Connector.SupportAssociatedSecurity/summary;DocStr9304
