@@ -51,6 +51,7 @@ StockSharp API Change log
 * (feature) Licensing. Strategy subscription support.
 * (feature) Connector. Subscribe/unsubscribe methods for candles added.
 * (feature) FXCM connector.
+* (feature) Xaml.Code moved to Xaml proj.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.
