@@ -7,7 +7,7 @@ agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
 Removal of this comment is a violation of the license agreement.
 
 Project: SampleFxcm.SampleFxcmPublic
-File: TradesWindow.xaml.cs
+File: NewsWindow.xaml.cs
 Created: 2015, 11, 11, 2:32 PM
 
 Copyright 2010 by StockSharp, LLC
@@ -15,9 +15,9 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleFxcm
 {
-	public partial class TradesWindow
+	public partial class NewsWindow
 	{
-		public TradesWindow()
+		public NewsWindow()
 		{
 			InitializeComponent();
 		}

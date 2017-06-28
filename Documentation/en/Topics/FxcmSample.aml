@@ -19,7 +19,7 @@ Trader = new FxcmTrader();
 Trader.Login = Login.Text;
 Trader.Password = Password.Password;
 Trader.Address = Address.Text.To<Uri>();
-Trader.Connection = Connection.Text;
+Trader.IsDemo = IsDemo.IsChecked == true;
 							]]>
 					</code>
 				</content>

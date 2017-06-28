@@ -18,11 +18,11 @@ namespace SampleFxcm
 		public FxcmTrader Trader;
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
-		private readonly TradesWindow _tradesWindow = new TradesWindow();
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly StopOrdersWindow _stopOrdersWindow = new StopOrdersWindow();
+		private readonly NewsWindow _newsWindow = new NewsWindow();
 
 		public MainWindow()
 		{
@@ -32,13 +32,10 @@ namespace SampleFxcm
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
-			_tradesWindow.MakeHideable();
+			_newsWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
-
-			Address.Text = FxcmMessageAdapter.DefaultAddress.To<string>();
-			Connection.Text = FxcmMessageAdapter.DefaultConnection;
 
 			Instance = this;
 		}
@@ -47,13 +44,13 @@ namespace SampleFxcm
 		{
 			_ordersWindow.DeleteHideable();
 			_myTradesWindow.DeleteHideable();
-			_tradesWindow.DeleteHideable();
+			_newsWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
 			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
-			_tradesWindow.Close();
+			_newsWindow.Close();
 			_myTradesWindow.Close();
 			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
@@ -124,7 +121,6 @@ namespace SampleFxcm
 
 					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-					Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
 					Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
 					Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
 					
@@ -150,18 +146,19 @@ namespace SampleFxcm
 					Trader.MassOrderCancelFailed += (transId, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
+					Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
+
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
-					ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
+					ShowSecurities.IsEnabled = ShowNews.IsEnabled =
 					ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = 
 					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;
 				}
 
 				Trader.Login = Login.Text;
 				Trader.Password = Password.Password;
-				Trader.Address = Address.Text.To<Uri>();
-				Trader.Connection = Connection.Text;
+				Trader.IsDemo = IsDemo.IsChecked == true;
 
 				// clear password box for security reason
 				//Password.Clear();
@@ -193,9 +190,9 @@ namespace SampleFxcm
 			ShowOrHide(_securitiesWindow);
 		}
 
-		private void ShowTradesClick(object sender, RoutedEventArgs e)
+		private void ShowNewsClick(object sender, RoutedEventArgs e)
 		{
-			ShowOrHide(_tradesWindow);
+			ShowOrHide(_newsWindow);
 		}
 
 		private void ShowMyTradesClick(object sender, RoutedEventArgs e)
