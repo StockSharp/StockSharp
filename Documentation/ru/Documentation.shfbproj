@@ -183,6 +183,13 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_Orders_conditional.aml" />
+    <None Include="Topics\Designer_Gallery_publish.aml" />
+    <None Include="Topics\Designer_contact_us.aml" />
+    <None Include="Topics\Designer_connection_mapping.aml" />
+    <None Include="Topics\Designer_Options.aml" />
+    <None Include="Topics\Designer_Commission_Rule.aml" />
+    <None Include="Topics\Designer_Creating_indicator_from_source_code.aml.aml" />
     <None Include="Topics\FxcmNews.aml" />
     <None Include="Topics\CQGHistory.aml" />
     <None Include="Topics\FxcmHistory.aml" />
