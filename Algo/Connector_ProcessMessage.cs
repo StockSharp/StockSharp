@@ -400,51 +400,26 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdaper = true };
 
-					if (_supportOffline)
+					if (SupportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
-
-					if (_supportCandleHolder)
-						_inAdapter = new CandleHolderMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
 
-					if (_supportCandleBuilder)
+					if (SupportCandleBuilder)
 						_inAdapter = new CandleBuilderMessageAdapter(_inAdapter, _entityCache.ExchangeInfoProvider) { OwnInnerAdaper = true };
 
-					if (_supportLevel1DepthBuilder)
+					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (_supportAssociatedSecurity)
+					if (SupportAssociatedSecurity)
 						_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (_supportFilteredMarketDepth)
+					if (SupportFilteredMarketDepth)
 						_inAdapter = new FilteredMarketDepthAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 				}
-			}
-		}
-
-		private bool _supportCandleHolder;
-
-		/// <summary>
-		/// Use <see cref="CandleHolderMessageAdapter"/>.
-		/// </summary>
-		public bool SupportCandleHolder
-		{
-			get => _supportCandleHolder;
-			set
-			{
-				if (_supportCandleHolder == value)
-					return;
-
-				if (value)
-					EnableAdapter(a => new CandleHolderMessageAdapter(a) { OwnInnerAdaper = true }, typeof(StorageMessageAdapter), false);
-				else
-					DisableAdapter<CandleHolderMessageAdapter>();
-
-				_supportCandleHolder = value;
 			}
 		}
 

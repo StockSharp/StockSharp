@@ -25,6 +25,7 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -271,6 +272,8 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
+			adapter = new CandleHolderMessageAdapter(adapter);
+
 			if (adapter.IsNativeIdentifiers)
 			{
 				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage);
