@@ -201,6 +201,12 @@ namespace StockSharp.Messages
 		public string Description { get; set; }
 
 		/// <summary>
+		/// ID of the original message <see cref="PortfolioMessage.TransactionId"/> for which this message is a response.
+		/// </summary>
+		[DataMember]
+		public long OriginalTransactionId { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		public PositionChangeMessage()
@@ -223,6 +229,8 @@ namespace StockSharp.Messages
 				ServerTime = ServerTime,
 				LimitType = LimitType,
 				Description = Description,
+				OriginalTransactionId = OriginalTransactionId,
+				ClientCode = ClientCode,
 			};
 
 			msg.Changes.AddRange(Changes);

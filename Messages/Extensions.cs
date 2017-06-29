@@ -61,8 +61,9 @@ namespace StockSharp.Messages
 		/// <param name="adapter">Trading system adapter.</param>
 		/// <param name="pfName">Portfolio name.</param>
 		/// <param name="securityId">Security ID.</param>
+		/// <param name="depoName">The depositary where the physical security.</param>
 		/// <returns>Position change message.</returns>
-		public static PositionChangeMessage CreatePositionChangeMessage(this IMessageAdapter adapter, string pfName, SecurityId securityId)
+		public static PositionChangeMessage CreatePositionChangeMessage(this IMessageAdapter adapter, string pfName, SecurityId securityId, string depoName = null)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -75,6 +76,7 @@ namespace StockSharp.Messages
 				SecurityId = securityId,
 				LocalTime = time,
 				ServerTime = time,
+				DepoName = depoName
 			};
 		}
 
@@ -286,7 +288,7 @@ namespace StockSharp.Messages
 			adapter.AddSupportedMessage(MessageTypes.OrderStatus);
 			adapter.AddSupportedMessage(MessageTypes.Portfolio);
 			adapter.AddSupportedMessage(MessageTypes.PortfolioLookup);
-			adapter.AddSupportedMessage(MessageTypes.Position);
+			//adapter.AddSupportedMessage(MessageTypes.Position);
 		}
 
 		/// <summary>
@@ -303,7 +305,7 @@ namespace StockSharp.Messages
 			adapter.RemoveSupportedMessage(MessageTypes.OrderStatus);
 			adapter.RemoveSupportedMessage(MessageTypes.Portfolio);
 			adapter.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
-			adapter.RemoveSupportedMessage(MessageTypes.Position);
+			//adapter.RemoveSupportedMessage(MessageTypes.Position);
 		}
 
 		/// <summary>

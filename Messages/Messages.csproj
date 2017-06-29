@@ -129,7 +129,6 @@
     <Compile Include="PortfolioLookupResultMessage.cs" />
     <Compile Include="PortfolioMessage.cs" />
     <Compile Include="PositionChangeMessage.cs" />
-    <Compile Include="PositionMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuoteChange.cs" />
     <Compile Include="QuoteChangeMessage.cs" />

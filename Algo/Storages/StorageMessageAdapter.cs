@@ -217,7 +217,7 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var position in _entityRegistry.Positions)
 			{
-				RaiseStorageMessage(position.ToMessage());
+				//RaiseStorageMessage(position.ToMessage());
 				RaiseStorageMessage(position.ToChangeMessage());
 			}
 
@@ -484,9 +484,31 @@ namespace StockSharp.Algo.Storages
 					break;
 				}
 
-				case MessageTypes.Position:
+				//case MessageTypes.Position:
+				//{
+				//	var positionMsg = (PositionMessage)message;
+				//	var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
+
+				//	if (position == null)
+				//		break;
+
+				//	if (!positionMsg.DepoName.IsEmpty())
+				//		position.DepoName = positionMsg.DepoName;
+
+				//	if (positionMsg.LimitType != null)
+				//		position.LimitType = positionMsg.LimitType;
+
+				//	if (!positionMsg.Description.IsEmpty())
+				//		position.Description = positionMsg.Description;
+
+				//	_entityRegistry.Positions.Save(position);
+
+				//	break;
+				//}
+
+				case MessageTypes.PositionChange:
 				{
-					var positionMsg = (PositionMessage)message;
+					var positionMsg = (PositionChangeMessage)message;
 					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
 
 					if (position == null)
@@ -500,19 +522,6 @@ namespace StockSharp.Algo.Storages
 
 					if (!positionMsg.Description.IsEmpty())
 						position.Description = positionMsg.Description;
-
-					_entityRegistry.Positions.Save(position);
-
-					break;
-				}
-
-				case MessageTypes.PositionChange:
-				{
-					var positionMsg = (PositionChangeMessage)message;
-					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
-
-					if (position == null)
-						break;
 
 					position.ApplyChanges(positionMsg);
 					_entityRegistry.Positions.Save(position);

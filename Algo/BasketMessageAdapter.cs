@@ -590,10 +590,10 @@ namespace StockSharp.Algo
 						AdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, innerAdapter);
 						break;
 
-					case MessageTypes.Position:
-						var posMsg = (PositionMessage)message;
-						AdapterProvider.SetAdapter(posMsg.PortfolioName, innerAdapter);
-						break;
+					//case MessageTypes.Position:
+					//	var posMsg = (PositionMessage)message;
+					//	AdapterProvider.SetAdapter(posMsg.PortfolioName, innerAdapter);
+					//	break;
 
 					case MessageTypes.PositionChange:
 						var posChangeMsg = (PositionChangeMessage)message;

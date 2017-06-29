@@ -764,24 +764,24 @@ namespace StockSharp.Algo
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.CurrentValue);
 		}
 
-		/// <summary>
-		/// To convert the position into message.
-		/// </summary>
-		/// <param name="position">Position.</param>
-		/// <returns>Message.</returns>
-		public static PositionMessage ToMessage(this Position position)
-		{
-			if (position == null)
-				throw new ArgumentNullException(nameof(position));
+		///// <summary>
+		///// To convert the position into message.
+		///// </summary>
+		///// <param name="position">Position.</param>
+		///// <returns>Message.</returns>
+		//public static PositionMessage ToMessage(this Position position)
+		//{
+		//	if (position == null)
+		//		throw new ArgumentNullException(nameof(position));
 
-			return new PositionMessage
-			{
-				PortfolioName = position.Portfolio.Name,
-				SecurityId = position.Security.ToSecurityId(),
-				DepoName = position.DepoName,
-				LimitType = position.LimitType,
-			};
-		}
+		//	return new PositionMessage
+		//	{
+		//		PortfolioName = position.Portfolio.Name,
+		//		SecurityId = position.Security.ToSecurityId(),
+		//		DepoName = position.DepoName,
+		//		LimitType = position.LimitType,
+		//	};
+		//}
 
 		/// <summary>
 		/// To convert the position into message.

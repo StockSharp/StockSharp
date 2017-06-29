@@ -154,12 +154,12 @@
 					break;
 				}
 
-				case MessageTypes.Position:
-				{
-					var positionMsg = (PositionMessage)message;
-					ProcessMessage(positionMsg.SecurityId, positionMsg, null);
-					break;
-				}
+				//case MessageTypes.Position:
+				//{
+				//	var positionMsg = (PositionMessage)message;
+				//	ProcessMessage(positionMsg.SecurityId, positionMsg, null);
+				//	break;
+				//}
 
 				case MessageTypes.PositionChange:
 				{

@@ -135,12 +135,12 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Position:
-				{
-					var positionMsg = (PositionMessage)message;
-					positionMsg.SecurityId = securityId;
-					break;
-				}
+				//case MessageTypes.Position:
+				//{
+				//	var positionMsg = (PositionMessage)message;
+				//	positionMsg.SecurityId = securityId;
+				//	break;
+				//}
 
 				case MessageTypes.PositionChange:
 				{
