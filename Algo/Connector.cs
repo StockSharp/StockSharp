@@ -1037,9 +1037,9 @@ namespace StockSharp.Algo
 		{
 			var regMsg = order.CreateRegisterMessage(GetSecurityId(order.Security));
 
-			var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
-			if (depoName != null)
-				regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
+			//var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
+			//if (depoName != null)
+			//	regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
 
 			SendInMessage(regMsg);
 		}

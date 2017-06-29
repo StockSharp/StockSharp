@@ -101,6 +101,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
+		[Obsolete]
 		ExtensionInfo,
 
 		/// <summary>
@@ -129,6 +130,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str264Key)]
+		[Obsolete]
 		DepoName,
 
 		/// <summary>
