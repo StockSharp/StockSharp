@@ -127,6 +127,15 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<Level1ChangeMessage> GetLevel1MessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
+		/// To get the storage of position changes data.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The storage of position changes data.</returns>
+		IMarketDataStorage<PositionChangeMessage> GetPositionMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+
+		/// <summary>
 		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleMessageType">The type of candle message.</param>
@@ -222,6 +231,12 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="storage">The storage of level1 data.</param>
 		void RegisterLevel1Storage(IMarketDataStorage<Level1ChangeMessage> storage);
+
+		/// <summary>
+		/// To register the storage of position changes data.
+		/// </summary>
+		/// <param name="storage">The storage of position changes data.</param>
+		void RegisterPositionStorage(IMarketDataStorage<PositionChangeMessage> storage);
 
 		/// <summary>
 		/// To register the candles storage.

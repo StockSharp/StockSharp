@@ -124,6 +124,8 @@
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
     <Compile Include="IRemoteAuthorization.cs" />
+    <Compile Include="Storages\Binary\PositionBinarySerializer.cs" />
+    <Compile Include="Storages\Csv\PositionCsvSerializer.cs" />
     <Compile Include="Storages\IExchangeInfoProvider.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />

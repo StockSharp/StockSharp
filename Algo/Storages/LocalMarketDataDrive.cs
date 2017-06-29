@@ -431,6 +431,7 @@ namespace StockSharp.Algo.Storages
 			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction), "transactions" },
 			{ DataType.Create(typeof(QuoteChangeMessage), null), "quotes" },
 			{ DataType.Create(typeof(Level1ChangeMessage), null), "security" },
+			{ DataType.Create(typeof(PositionChangeMessage), null), "position" },
 			{ DataType.Create(typeof(NewsMessage), null), "news" },
 		};
 
