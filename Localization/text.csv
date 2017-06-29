@@ -5979,9 +5979,9 @@ DocStr1422;To get the storage of orders log for the specified instrument;Пол�
 DocStr1423;The storage of orders log;Хранилище лога заявок
 DocStr1424;To get the storage of level1 data;Получить хранилище level1 данных
 DocStr1425;The storage of level1 data;Хранилище level1 данных
-DocStr1426;To get the candles storage the specified instrument;Получить хранилище свечек для заданного инструмента
+DocStr1426;To get the candles storage for the specified instrument;Получить хранилище свечек для заданного инструмента
 DocStr1427;The candles storage;Хранилище свечек
-DocStr1428;To get the transactions storage the specified instrument;Получить хранилище транзакций для заданного инструмента
+DocStr1428;To get the transactions storage for the specified instrument;Получить хранилище транзакций для заданного инструмента
 DocStr1429;The transactions storage;Хранилище транзакций
 DocStr1430;To get the market-data storage;Получить хранилище маркет-данных
 DocStr1431;The storage for the instrument;Хранилище для инструмента
@@ -13041,7 +13041,7 @@ DocStr8614;Max days to load stored data;Дней для загрузки дан�
 DocStr8615;Load save data from storage;Загрузить сохраненные данные из хранилища
 DocStr8616;Read instrument by identifier;Загрузить инструмент по идентификатору
 DocStr8617;Instrument storage collection;Хранилище коллекции инструментов
-DocStr8619;To get the {0} storage the specified instrument;Получить хранилище {0} для переданного инструмента
+DocStr8619;To get the {0} storage for the specified instrument;Получить хранилище {0} для переданного инструмента
 DocStr8620;The {0} storage;Хранилище {0}
 DocStr8621;The aggregator-storage enumerator;Перечислитель агрегатора
 DocStr8622;Available message types;Доступные тип сообщений

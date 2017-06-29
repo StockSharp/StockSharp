@@ -724,7 +724,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>
 		/// <param name="security">Security.</param>
@@ -796,7 +796,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get the transactions storage the specified instrument.
+		/// To get the transactions storage for the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
@@ -845,7 +845,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleMessageType">The type of candle message.</param>
 		/// <param name="security">Security.</param>
@@ -890,7 +890,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get the <see cref="ExecutionMessage"/> storage the specified instrument.
+		/// To get the <see cref="ExecutionMessage"/> storage for the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>

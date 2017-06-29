@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<Level1ChangeMessage> GetLevel1Storage(IMarketDataSerializer<Level1ChangeMessage> serializer);
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>
 		/// <param name="arg">Candle arg.</param>
@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<CandleMessage> GetCandleStorage(Type candleType, object arg, IMarketDataSerializer<CandleMessage> serializer);
 
 		/// <summary>
-		/// To get the transactions storage the specified instrument.
+		/// To get the transactions storage for the specified instrument.
 		/// </summary>
 		/// <param name="serializer">The serializer.</param>
 		/// <returns>The transactions storage.</returns>
@@ -665,7 +665,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>
 		/// <param name="arg">Candle arg.</param>
@@ -683,7 +683,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get the transactions storage the specified instrument.
+		/// To get the transactions storage for the specified instrument.
 		/// </summary>
 		/// <param name="serializer">The serializer.</param>
 		/// <returns>The transactions storage.</returns>

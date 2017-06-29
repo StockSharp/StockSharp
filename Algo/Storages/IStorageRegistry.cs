@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<OrderLogItem> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>
 		/// <param name="security">Security.</param>
@@ -127,7 +127,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<Level1ChangeMessage> GetLevel1MessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleMessageType">The type of candle message.</param>
 		/// <param name="security">Security.</param>
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleMessageType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the <see cref="ExecutionMessage"/> storage the specified instrument.
+		/// To get the <see cref="ExecutionMessage"/> storage for the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the transactions storage the specified instrument.
+		/// To get the transactions storage for the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
