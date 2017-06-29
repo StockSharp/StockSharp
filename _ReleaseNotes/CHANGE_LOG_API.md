@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
 * (feature) IndexCandleBuilder. TotalVolume as extended fields.
 * (bug) SecurityCsvList. Save exchange board info.
