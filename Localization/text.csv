@@ -4578,6 +4578,8 @@ ExportDoneOpenFile;Export to '{0}' done. Would you like to open it?;Экспор
 ChartShowSpread;Show spread on chart...;Показать спред на графике...
 ImportSecurities;Import securities?;Импортировать инструменты?
 RemoveDriveQuestion;Remove selected storage?;Удалить выбранное хранилище?
+OnlyTransactions;Transactions only;Только транзакции
+OnlyTransactionsLog;Write log messages only for transaction stream.;Записывать лог сообщения только для транзакционного потока.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

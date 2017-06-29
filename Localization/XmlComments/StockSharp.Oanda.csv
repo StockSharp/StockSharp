@@ -10,6 +10,7 @@ M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Messa
 P:StockSharp.Oanda.OandaMessageAdapter.Server/summary;Str3416
 P:StockSharp.Oanda.OandaMessageAdapter.Token/summary;DocStr3145
 P:StockSharp.Oanda.OandaMessageAdapter.UseCompression/summary;Str3423
+P:StockSharp.Oanda.OandaMessageAdapter.LogOnlyTransactions/summary;OnlyTransactionsLog
 P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames/summary;DocStr2531
 M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
@@ -32,3 +33,4 @@ M:StockSharp.Oanda.OandaTrader.#ctor/summary;DocStr1
 P:StockSharp.Oanda.OandaTrader.Server/summary;Str3416
 P:StockSharp.Oanda.OandaTrader.Token/summary;DocStr3145
 P:StockSharp.Oanda.OandaTrader.UseCompression/summary;Str3423
+P:StockSharp.Oanda.OandaTrader.LogOnlyTransactions/summary;OnlyTransactionsLog

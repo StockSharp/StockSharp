@@ -45456,5 +45456,25 @@ namespace StockSharp.Localization
 		/// Remove selected storage?
 		/// </summary>
 		public static string RemoveDriveQuestion => GetString(RemoveDriveQuestionKey);
+
+		/// <summary>
+		/// Transactions only
+		/// </summary>
+		public const string OnlyTransactionsKey = nameof(OnlyTransactions);
+
+		/// <summary>
+		/// Transactions only
+		/// </summary>
+		public static string OnlyTransactions => GetString(OnlyTransactionsKey);
+
+		/// <summary>
+		/// Write log messages only for transaction stream.
+		/// </summary>
+		public const string OnlyTransactionsLogKey = nameof(OnlyTransactionsLog);
+
+		/// <summary>
+		/// Write log messages only for transaction stream.
+		/// </summary>
+		public static string OnlyTransactionsLog => GetString(OnlyTransactionsLogKey);
 	}
 }

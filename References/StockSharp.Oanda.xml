@@ -52,6 +52,11 @@
             Compression.
             </summary>
     </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.LogOnlyTransactions">
+      <summary>
+            Write log messages only for transaction stream.
+            </summary>
+    </member>
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames">
       <summary>
             Available time frames.
@@ -152,6 +157,11 @@
     <member name="P:StockSharp.Oanda.OandaTrader.UseCompression">
       <summary>
             Compression.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaTrader.LogOnlyTransactions">
+      <summary>
+            Write log messages only for transaction stream.
             </summary>
     </member>
   </members>
