@@ -507,5 +507,12 @@ namespace StockSharp.Messages
 			else
 				return info[from] / info[to];
 		}
+
+		/// <summary>
+		/// Is the specified <see cref="PositionChangeTypes"/> was marked by <see cref="ObsoleteAttribute"/>.
+		/// </summary>
+		/// <param name="type"><see cref="PositionChangeTypes"/> value.</param>
+		/// <returns>Result.</returns>
+		public static bool IsObsolete(this PositionChangeTypes type) => type.GetAttributeOfType<ObsoleteAttribute>() != null;
 	}
 }

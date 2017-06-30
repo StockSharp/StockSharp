@@ -115,6 +115,7 @@ namespace StockSharp.Algo.Storages
 		private readonly DataBuffer<SecurityId, QuoteChangeMessage> _orderBooksBuffer = new DataBuffer<SecurityId, QuoteChangeMessage>();
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _orderLogBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
 		private readonly DataBuffer<SecurityId, Level1ChangeMessage> _level1Buffer = new DataBuffer<SecurityId, Level1ChangeMessage>();
+		private readonly DataBuffer<SecurityId, PositionChangeMessage> _positionChangesBuffer = new DataBuffer<SecurityId, PositionChangeMessage>();
 		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
 		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>();
@@ -210,6 +211,15 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
+		/// Get accumulated position changes.
+		/// </summary>
+		/// <returns>Position changes.</returns>
+		public IDictionary<SecurityId, IEnumerable<PositionChangeMessage>> GetPositionChanges()
+		{
+			return _positionChangesBuffer.Get();
+		}
+
+		/// <summary>
 		/// Get accumulated order books.
 		/// </summary>
 		/// <returns>Order books.</returns>
@@ -250,6 +260,7 @@ namespace StockSharp.Algo.Storages
 					_orderBooksBuffer.Clear();
 					_transactionsBuffer.Clear();
 					_newsBuffer.Clear();
+					_positionChangesBuffer.Clear();
 					//SendOutMessage(new ResetMessage());
 					break;
 				}
@@ -396,10 +407,15 @@ namespace StockSharp.Algo.Storages
 				//	break;
 				//case MessageTypes.Portfolio:
 				//	break;
-				//case MessageTypes.PositionChange:
-				//	break;
-				//case MessageTypes.PortfolioChange:
-				//	break;
+				case MessageTypes.PositionChange:
+				{
+					var posMsg = (PositionChangeMessage)message;
+					_positionChangesBuffer.Add(posMsg.SecurityId, (PositionChangeMessage)posMsg.Clone());
+					break;
+				}
+				case MessageTypes.PortfolioChange:
+					// TODO
+					break;
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);

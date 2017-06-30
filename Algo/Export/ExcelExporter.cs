@@ -53,10 +53,7 @@ namespace StockSharp.Algo.Export
 			_breaked = breaked;
 		}
 
-		/// <summary>
-		/// To export <see cref="ExecutionMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			switch ((ExecutionTypes)Arg)
@@ -209,10 +206,7 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="QuoteChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Do(worker =>
@@ -244,10 +238,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="Level1ChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			Do(worker =>
@@ -341,10 +332,61 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="CandleMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<PositionChangeMessage> messages)
+		{
+			Do(worker =>
+			{
+				var columns = new Dictionary<PositionChangeTypes, int>();
+
+				worker
+					.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
+
+				var row = 1;
+
+				foreach (var message in messages)
+				{
+					worker.SetCell(0, row, message.LocalTime);
+
+					foreach (var pair in message.Changes)
+					{
+						var type = pair.Key;
+
+						var columnIndex = columns.TryGetValue2(type);
+
+						if (columnIndex == null)
+						{
+							columnIndex = columns.Count;
+							columns.Add(type, columnIndex.Value);
+
+							worker.SetCell(columnIndex.Value, 0, type.GetDisplayName());
+							ApplyCellStyle(worker, type, columnIndex.Value);
+						}
+
+						worker.SetCell(columns[type], row, pair.Value);
+					}
+
+					if (!Check(++row))
+						break;
+				}
+			});
+		}
+
+		private static void ApplyCellStyle(ExcelWorker worker, PositionChangeTypes type, int column)
+		{
+			switch (type)
+			{
+				case PositionChangeTypes.Currency:
+				case PositionChangeTypes.State:
+					worker.SetStyle(column, typeof(string));
+					break;
+				default:
+					worker.SetStyle(column, typeof(decimal));
+					break;
+			}
+		}
+
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			Do(worker =>
@@ -381,10 +423,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="NewsMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			Do(worker =>
@@ -421,10 +460,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="SecurityMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			Do(worker =>

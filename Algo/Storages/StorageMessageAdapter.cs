@@ -102,6 +102,11 @@ namespace StockSharp.Algo.Storages
 						GetStorage(pair.Key.Item1, pair.Key.Item2, pair.Key.Item3).Save(pair.Value);
 					}
 
+					foreach (var pair in GetPositionChanges())
+					{
+						GetStorage(pair.Key, typeof(PositionChangeMessage), null).Save(pair.Value);
+					}
+
 					var news = GetNews().ToArray();
 
 					if (news.Length > 0)
