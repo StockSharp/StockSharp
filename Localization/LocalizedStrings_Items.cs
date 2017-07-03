@@ -45476,5 +45476,15 @@ namespace StockSharp.Localization
 		/// Write log messages only for transaction stream.
 		/// </summary>
 		public static string OnlyTransactionsLog => GetString(OnlyTransactionsLogKey);
+
+		/// <summary>
+		/// Last position time
+		/// </summary>
+		public const string LastPosChangeTimeKey = nameof(LastPosChangeTime);
+
+		/// <summary>
+		/// Last position time
+		/// </summary>
+		public static string LastPosChangeTime => GetString(LastPosChangeTimeKey);
 	}
 }
