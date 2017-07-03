@@ -4580,6 +4580,9 @@ ImportSecurities;Import securities?;Импортировать инструме�
 RemoveDriveQuestion;Remove selected storage?;Удалить выбранное хранилище?
 OnlyTransactions;Transactions only;Только транзакции
 OnlyTransactionsLog;Write log messages only for transaction stream.;Записывать лог сообщения только для транзакционного потока.
+SecurityCodesAdaptersCodes;Security codes <-> Adapters codes;Инструменты <-> Инструменты в адаптерах
+SecuritiesAndConnections;Securities and connections;Инструменты и подключения
+AdapterCode;Adapter code;Код в адаптере
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

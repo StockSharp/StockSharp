@@ -45476,5 +45476,35 @@ namespace StockSharp.Localization
 		/// Write log messages only for transaction stream.
 		/// </summary>
 		public static string OnlyTransactionsLog => GetString(OnlyTransactionsLogKey);
+
+		/// <summary>
+		/// Security codes <-> Adapters codes
+		/// </summary>
+		public const string SecurityCodesAdaptersCodesKey = nameof(SecurityCodesAdaptersCodes);
+
+		/// <summary>
+		/// Security codes <-> Adapters codes
+		/// </summary>
+		public static string SecurityCodesAdaptersCodes => GetString(SecurityCodesAdaptersCodesKey);
+
+		/// <summary>
+		/// Securities and connections
+		/// </summary>
+		public const string SecuritiesAndConnectionsKey = nameof(SecuritiesAndConnections);
+
+		/// <summary>
+		/// Securities and connections
+		/// </summary>
+		public static string SecuritiesAndConnections => GetString(SecuritiesAndConnectionsKey);
+
+		/// <summary>
+		/// Adapter code
+		/// </summary>
+		public const string AdapterCodeKey = nameof(AdapterCode);
+
+		/// <summary>
+		/// Adapter code
+		/// </summary>
+		public static string AdapterCode => GetString(AdapterCodeKey);
 	}
 }
