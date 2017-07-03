@@ -268,7 +268,7 @@ namespace SampleChart
 				{
 					BusyIndicator.IsBusy = false;
 					Chart.IsAutoRange = false;
-					_areaComb.YAxises.First().AutoRange = false;
+					//_areaComb.YAxises.First().AutoRange = false;
 				});
 
 			}, TaskScheduler.FromCurrentSynchronizationContext());
