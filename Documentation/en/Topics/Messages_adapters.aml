@@ -79,7 +79,7 @@ public void SendInMessage(Message message)
 		</para>
 		
 		<para>
-		Below see description of own adapter creation process for <token>btce</token>.
+		Below see description of own adapter creation process for <token>ib</token>.
 		</para>
        
        
@@ -205,7 +205,9 @@ protected override bool IsSupportNativeSecurityLookup
 			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference>
 			message arrives, we initialize the _ibSocket variable, subscribe to <token>IB</token> events and 
 			establish a connection using the <legacyBold>Connect</legacyBold> method 
-			of the native API. In case of successful connection, the <legacyBold>StServer.Connected</legacyBold> event should occur.
+			of the native API. In case of successful connection, the <legacyBold>IBSocket.Connected</legacyBold> event should occur
+			where reverse <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference>
+			instance should be generated.
 						</para>
 
 						<code language="C#">
