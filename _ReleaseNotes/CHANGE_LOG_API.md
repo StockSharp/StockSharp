@@ -1,5 +1,15 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) Position tracking storage.
+* (feature) MarketDepthControl. Show histogram for volumes.
+* (feature) MarketDepthControl. Single column for volume.
+* (feature) MarketDataGrid. Show Transaction data.
+* (feature) ConnectorWindow. Enable/disable checkbox moved to grid row.
+* (feature) PositionChangeTypesComboBox.
+* (feature) PositionChangeGrid.
+* (bug) Binary storage. Fix local time saving.
+
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
 * (feature) IndexCandleBuilder. TotalVolume as extended fields.
@@ -32,11 +42,11 @@ StockSharp API Change log
 * (feature) CurrencyTypes.CNT.
 * (feature) Transaq. Security id refactoring.
 * (bug) SecurityGrid. Binding fixes.
-* (bug) Alerts. Popup window. Icon quality dix.
+* (bug) Alerts. Popup window. Icon quality fix.
 * (bug) CQG continuum. Order condition fix.
 * (feature) DevExp 17.1 update.
 * (feature) FeedbackWindow.
-* (feature) FIX server. Perforance boost.
+* (feature) FIX server. Performance boost.
 * (feature) Oanda 2.0 support.
 * (feature) FinamHistorySource. OriginSide support.
 * (feature) ExchangeBoard.CmeMini
