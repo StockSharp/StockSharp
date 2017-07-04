@@ -1254,14 +1254,6 @@
       <param name="strategy">Strategy.</param>
       <param name="chart">Chart.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.SetTitle(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To set a title for the element.
-            </summary>
-      <param name="element">Element.</param>
-      <param name="series">Candles series.</param>
-      <returns>Element.</returns>
-    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)">
       <summary>
             Convert Devexpress theme to chart theme.

@@ -625,6 +625,74 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="T:StockSharp.Xaml.PositionChangeGrid">
+      <summary>
+            The table to display a message <see cref="T:StockSharp.Messages.PositionChangeMessage" />.
+            </summary>
+      <summary>
+            PositionChangeGrid
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PositionChangeGrid.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PositionChangeGrid" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeGrid.MaxCount">
+      <summary>
+            The maximum number of messages to display. The -1 value means an unlimited amount. The default value is 10000.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeGrid.Messages">
+      <summary>
+            The list of messages added to the table.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeGrid.SelectedMessage">
+      <summary>
+            The selected message.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeGrid.SelectedMessages">
+      <summary>
+            Selected messages.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PositionChangeGrid.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PositionChangeTypesComboBox">
+      <summary>
+            The drop-down list to select a set of types <see cref="T:StockSharp.Messages.PositionChangeTypes" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PositionChangeTypesComboBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PositionChangeTypesComboBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PositionChangeTypesComboBox.OnLoadedInternal">
+      <summary>
+            Control loading handler.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PositionChangeTypesComboBox.SelectedTypesProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PositionChangeTypesComboBox.SelectedTypes" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeTypesComboBox.SelectedTypes">
+      <summary>
+            Selected types.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeTypesComboBox.DefaultTypes">
+      <summary>
+            Default value for <see cref="P:StockSharp.Xaml.PositionChangeTypesComboBox.SelectedTypes" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.MarketRuleGrid">
       <summary>
             The panel for the list editing <see cref="T:StockSharp.Algo.IMarketRule" />.
@@ -2558,6 +2626,11 @@
             Board.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthColumns.Volume">
+      <summary>
+            Volume.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.MarketDepthControl">
       <summary>
             The visual control displaying the order book with quotes (<see cref="T:StockSharp.BusinessEntities.MarketDepth" />).
@@ -2594,6 +2667,16 @@
             The maximum depth of order book display. The default value is <see cref="F:StockSharp.Xaml.MarketDepthControl.DefaultDepth" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.ShowOwnVolumeColumnsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.ShowOwnVolumeColumns" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.ShowOwnVolumeColumns">
+      <summary>
+            Show own volume columns.
+            </summary>
+    </member>
     <member name="F:StockSharp.Xaml.MarketDepthControl.ShowBoardColumnProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.ShowBoardColumn" />.
@@ -2602,6 +2685,16 @@
     <member name="P:StockSharp.Xaml.MarketDepthControl.ShowBoardColumn">
       <summary>
             Show Board column.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.ShowSingleVolumeColumnProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.ShowSingleVolumeColumn" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.ShowSingleVolumeColumn">
+      <summary>
+            Show single <see cref="F:StockSharp.Xaml.MarketDepthColumns.Volume" /> column. The default value is <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.IsBidsOnTop">
@@ -2622,6 +2715,36 @@
     <member name="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat">
       <summary>
             The amount format. The default value is "0".
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.MaxVolumeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.MaxVolume" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.MaxVolume">
+      <summary>
+            The maximum volume of all quotes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.MaxBuyVolumeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.MaxBuyVolume" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.MaxBuyVolume">
+      <summary>
+            The maximum volume of all bids.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.MaxSellVolumeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.MaxSellVolume" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.MaxSellVolume">
+      <summary>
+            The maximum volume of all asks.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)">

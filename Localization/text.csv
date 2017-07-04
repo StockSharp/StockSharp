@@ -14208,5 +14208,19 @@ DocStr9911;Min value for {0};Минимальное значение для {0}
 DocStr9912;Max value for {0};Максимальное значение для {0}
 DocStr9913;The market price at the time the order automatically moves following the market fluctuations;Рыночная цена в моменте, когда заявка автоматически движется за колебанием рынка
 DocStr9914;The number of pips the market should move before the order moves the same number of pips after it;Количество шагов цены, которые должен пройти рынок, прежде чем цена передвинется
-DocStr9915;The unique identifier of the environment that is used to place the order;Унимальный идентификатор системы, в которую была отправлена заявка
+DocStr9915;The unique identifier of the environment that is used to place the order;Уникальный идентификатор системы, в которую была отправлена заявка
 DocStr9916;Quotes updating interval;Интервал обновления котировок
+DocStr9917;The position change serializer in the CSV format;Сериализатор изменения позиций в формате CSV
+DocStr9918;Get accumulated position changes;Получить аккумулированные изменения позиций
+DocStr9919;Position changes;Изменения позиций
+DocStr9920;To get the storage of position changes data;Получить хранилище изменения позиций
+DocStr9921;The storage of position changes data;Хранилище изменения позиций
+DocStr9922;To register the storage of position changes data;Зарегистрировать хранилище изменения позиций
+DocStr9923;Is the specified {0} was marked by {1};Если указанные {0} был помечен {1}
+DocStr9924;The drop-down list to select a set of types {0};Выпадающие список для выбора множества {0}
+DocStr9925;Selected types;Выбранные типы
+DocStr9927;Show own volume columns;Показать колонки с собственным объемом
+DocStr9928;Show single {0} column. The default value is {1};Показать колонку {0} как единственную. Значение по-умолчанию равно {1}
+DocStr9929;The maximum volume of all quotes;Максимальный объем всех котировок
+DocStr9930;The maximum volume of all bids;Максимальный объем всех бидов
+DocStr9931;The maximum volume of all asks;Максимальный объем всех оферов
