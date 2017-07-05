@@ -183,6 +183,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\HydraSymbolMapping.aml" />
     <None Include="Topics\Designer_Orders_conditional.aml" />
     <None Include="Topics\Designer_Gallery_publish.aml" />
     <None Include="Topics\Designer_contact_us.aml" />
