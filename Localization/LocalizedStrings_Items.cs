@@ -45478,6 +45478,16 @@ namespace StockSharp.Localization
 		public static string OnlyTransactionsLog => GetString(OnlyTransactionsLogKey);
 
 		/// <summary>
+		/// Last position time
+		/// </summary>
+		public const string LastPosChangeTimeKey = nameof(LastPosChangeTime);
+
+		/// <summary>
+		/// Last position time
+		/// </summary>
+		public static string LastPosChangeTime => GetString(LastPosChangeTimeKey);
+
+		/// <summary>
 		/// Security codes <-> Adapters codes
 		/// </summary>
 		public const string SecurityCodesAdaptersCodesKey = nameof(SecurityCodesAdaptersCodes);

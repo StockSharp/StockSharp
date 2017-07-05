@@ -65,8 +65,7 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			LocalOffset = DateTimeOffset.Now.Offset;
 
-			FirstLocalTime = date;
-			LastLocalTime = date;
+			FirstLocalTime = LastLocalTime = DateTime.UtcNow;
 		}
 
 		public Version Version { get; set; }
