@@ -2866,6 +2866,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, Sides? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value);
+		}
+
+		/// <summary>
 		/// To add a change to the collection, if value is other than 0.
 		/// </summary>
 		/// <typeparam name="TMessage">Change message type.</typeparam>
@@ -2953,6 +2971,24 @@ namespace StockSharp.Algo
 				return message;
 
 			return message.Add(type, value);
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than 0 and <see langword="null" />.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, long? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null || value == 0)
+				return null;
+
+			return message.Add(type, value.Value);
 		}
 
 		/// <summary>
