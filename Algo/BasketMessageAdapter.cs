@@ -153,12 +153,12 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private ISecurityCodeMappingStorage _securityCodeMappingStorage;
+		private ISecurityMappingStorage _securityCodeMappingStorage;
 
 		/// <summary>
 		/// Security code mappings storage.
 		/// </summary>
-		public ISecurityCodeMappingStorage SecurityCodeMappingStorage
+		public ISecurityMappingStorage SecurityCodeMappingStorage
 		{
 			get => _securityCodeMappingStorage;
 			set
@@ -298,7 +298,7 @@ namespace StockSharp.Algo
 
 			if (SecurityCodeMappingStorage != null)
 			{
-				adapter = new SecurityCodeMappingMessageAdapter(adapter, SecurityCodeMappingStorage);
+				adapter = new SecurityMappingMessageAdapter(adapter, SecurityCodeMappingStorage);
 			}
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())

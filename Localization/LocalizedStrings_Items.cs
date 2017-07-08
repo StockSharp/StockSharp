@@ -45606,5 +45606,45 @@ namespace StockSharp.Localization
 		/// Settings file
 		/// </summary>
 		public static string SettingsFile => GetString(SettingsFileKey);
+
+		/// <summary>
+		/// Adapter board code
+		/// </summary>
+		public const string AdapterBoardKey = nameof(AdapterBoard);
+
+		/// <summary>
+		/// Adapter board code
+		/// </summary>
+		public static string AdapterBoard => GetString(AdapterBoardKey);
+
+		/// <summary>
+		/// Connection not specified for {0}
+		/// </summary>
+		public const string ConnectionNotSpecifiedParamsKey = nameof(ConnectionNotSpecifiedParams);
+
+		/// <summary>
+		/// Connection not specified for {0}
+		/// </summary>
+		public static string ConnectionNotSpecifiedParams => GetString(ConnectionNotSpecifiedParamsKey);
+
+		/// <summary>
+		/// Security or board code not specified for {0}
+		/// </summary>
+		public const string SecurityOrBoardCodeNotSpecifiedParamsKey = nameof(SecurityOrBoardCodeNotSpecifiedParams);
+
+		/// <summary>
+		/// Security or board code not specified for {0}
+		/// </summary>
+		public static string SecurityOrBoardCodeNotSpecifiedParams => GetString(SecurityOrBoardCodeNotSpecifiedParamsKey);
+
+		/// <summary>
+		/// Security or board code are duplicated for {0}
+		/// </summary>
+		public const string SecurityOrBoardCodeDuplicatedParamsKey = nameof(SecurityOrBoardCodeDuplicatedParams);
+
+		/// <summary>
+		/// Security or board code are duplicated for {0}
+		/// </summary>
+		public static string SecurityOrBoardCodeDuplicatedParams => GetString(SecurityOrBoardCodeDuplicatedParamsKey);
 	}
 }
