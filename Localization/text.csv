@@ -2473,12 +2473,12 @@ Str2643;Options: server hours utility table;Опционы: служебная �
 Str2644;Order log. Anonymous order_log;Журнал заявок. Анонимный order_log
 Str2645;Order log (multileg). Anonymous order_log;Журнал заявок по связкам. Анонимный order_log
 AnonymousTradesLog;Anonymous trades log.;Поток анонимных сделок. Журнал сделок.
-Str2646;Market depth shashot. Orders log table.;Срез стакана. Логовая таблица заявок.
-Str2647;Market depth shashot. Common info.;Срез стакана. Информация о стаканах.
-Str2648;Futures: market depth shashot (common info);Фьючерсы: срез стакана (информация о стаканах)
-Str2649;Futures: market depth shashot (orders log);Фьючерсы: срез стакана (логовая таблица заявок)
-Str2650;Options: market depth shashot (common info);Опционы: срез стакана (информация о стаканах)
-Str2651;Options: market depth shashot (orders log);Опционы: срез стакана (логовая таблица заявок)
+Str2646;Market depth shapshot. Orders log table.;Срез стакана. Логовая таблица заявок.
+Str2647;Market depth shapshot. Common info.;Срез стакана. Информация о стаканах.
+Str2648;Futures: market depth shapshot (common info);Фьючерсы: срез стакана (информация о стаканах)
+Str2649;Futures: market depth shapshot (orders log);Фьючерсы: срез стакана (логовая таблица заявок)
+Str2650;Options: market depth shapshot (common info);Опционы: срез стакана (информация о стаканах)
+Str2651;Options: market depth shapshot (orders log);Опционы: срез стакана (логовая таблица заявок)
 Str2652;Futures: session information;Фьючерсы: общая информация по сессии
 Str2653;Options: session information;Опционы: общая информация по сессии
 Str2654;Futures: 20 quotes deep market depth;Фьючерсы: стакан глубиной 20 котировок
@@ -4584,6 +4584,15 @@ LastPosChangeTime;Last position time;Послед. позиция
 SecurityCodesAdaptersCodes;Security codes <-> Adapters codes;Инструменты <-> Инструменты в адаптерах
 SecuritiesAndConnections;Securities and connections;Инструменты и подключения
 AdapterCode;Adapter code;Код в адаптере
+Incremental;Incremental;Инкрементальный
+IncrementalFeed;Incremental data feed.;Инкрементальный поток данных.
+Snapshot;Snapshot;Срез
+SnapshotFeed;Snapshot data feed.;Поток срезов.
+FastSettings;FAST settings;Настройки FAST
+NewsSkrin;News (SKRIN);Новости (СКРИН)
+Enabled;Enabled;Включено
+Fast;FAST;FAST
+SettingsFile;Settings file;Файл с настройками
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

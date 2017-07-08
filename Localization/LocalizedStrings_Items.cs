@@ -24618,22 +24618,22 @@ namespace StockSharp.Localization
 		public static string Str2636 => GetString(Str2636Key);
 
 		/// <summary>
-		/// Futures: bundled trades log
+		/// Futures: multileg trades log
 		/// </summary>
 		public const string Str2637Key = nameof(Str2637);
 
 		/// <summary>
-		/// Futures: bundled trades log
+		/// Futures: multileg trades log
 		/// </summary>
 		public static string Str2637 => GetString(Str2637Key);
 
 		/// <summary>
-		/// Futures: bundled orders log
+		/// Futures: multileg orders log
 		/// </summary>
 		public const string Str2638Key = nameof(Str2638);
 
 		/// <summary>
-		/// Futures: bundled orders log
+		/// Futures: multileg orders log
 		/// </summary>
 		public static string Str2638 => GetString(Str2638Key);
 
@@ -24688,82 +24688,82 @@ namespace StockSharp.Localization
 		public static string Str2643 => GetString(Str2643Key);
 
 		/// <summary>
-		/// Journal of bids. Anonymous order_log
+		/// Order log. Anonymous order_log
 		/// </summary>
 		public const string Str2644Key = nameof(Str2644);
 
 		/// <summary>
-		/// Journal of bids. Anonymous order_log
+		/// Order log. Anonymous order_log
 		/// </summary>
 		public static string Str2644 => GetString(Str2644Key);
 
 		/// <summary>
-		/// Journal of bids in bundles. Anonymous order_log
+		/// Order log (multileg). Anonymous order_log
 		/// </summary>
 		public const string Str2645Key = nameof(Str2645);
 
 		/// <summary>
-		/// Journal of bids in bundles. Anonymous order_log
+		/// Order log (multileg). Anonymous order_log
 		/// </summary>
 		public static string Str2645 => GetString(Str2645Key);
 
 		/// <summary>
-		/// Market depth slice. Orders log table.
+		/// Market depth shapshot. Orders log table.
 		/// </summary>
 		public const string Str2646Key = nameof(Str2646);
 
 		/// <summary>
-		/// Market depth slice. Orders log table.
+		/// Market depth shapshot. Orders log table.
 		/// </summary>
 		public static string Str2646 => GetString(Str2646Key);
 
 		/// <summary>
-		/// Market depth slice. Information about market depths.
+		/// Market depth shapshot. Information about market depths.
 		/// </summary>
 		public const string Str2647Key = nameof(Str2647);
 
 		/// <summary>
-		/// Market depth slice. Information about market depths.
+		/// Market depth shapshot. Information about market depths.
 		/// </summary>
 		public static string Str2647 => GetString(Str2647Key);
 
 		/// <summary>
-		/// Futures: market depth slice (market depths information)
+		/// Futures: market depth shapshot (market depths information)
 		/// </summary>
 		public const string Str2648Key = nameof(Str2648);
 
 		/// <summary>
-		/// Futures: market depth slice (market depths information)
+		/// Futures: market depth shapshot (market depths information)
 		/// </summary>
 		public static string Str2648 => GetString(Str2648Key);
 
 		/// <summary>
-		/// Futures: market depth slice (orders log table)
+		/// Futures: market depth shapshot (orders log table)
 		/// </summary>
 		public const string Str2649Key = nameof(Str2649);
 
 		/// <summary>
-		/// Futures: market depth slice (orders log table)
+		/// Futures: market depth shapshot (orders log table)
 		/// </summary>
 		public static string Str2649 => GetString(Str2649Key);
 
 		/// <summary>
-		/// Options: market depth slice (information about market depths)
+		/// Options: market depth shapshot (information about market depths)
 		/// </summary>
 		public const string Str2650Key = nameof(Str2650);
 
 		/// <summary>
-		/// Options: market depth slice (information about market depths)
+		/// Options: market depth shapshot (information about market depths)
 		/// </summary>
 		public static string Str2650 => GetString(Str2650Key);
 
 		/// <summary>
-		/// Options: market depth slice (orders log table)
+		/// Options: market depth shapshot (orders log table)
 		/// </summary>
 		public const string Str2651Key = nameof(Str2651);
 
 		/// <summary>
-		/// Options: market depth slice (orders log table)
+		/// Options: market depth shapshot (orders log table)
 		/// </summary>
 		public static string Str2651 => GetString(Str2651Key);
 
@@ -45516,5 +45516,95 @@ namespace StockSharp.Localization
 		/// Adapter code
 		/// </summary>
 		public static string AdapterCode => GetString(AdapterCodeKey);
+
+		/// <summary>
+		/// Incremental
+		/// </summary>
+		public const string IncrementalKey = nameof(Incremental);
+
+		/// <summary>
+		/// Incremental
+		/// </summary>
+		public static string Incremental => GetString(IncrementalKey);
+
+		/// <summary>
+		/// Incremental data feed.
+		/// </summary>
+		public const string IncrementalFeedKey = nameof(IncrementalFeed);
+
+		/// <summary>
+		/// Incremental data feed.
+		/// </summary>
+		public static string IncrementalFeed => GetString(IncrementalFeedKey);
+
+		/// <summary>
+		/// Snapshot
+		/// </summary>
+		public const string SnapshotKey = nameof(Snapshot);
+
+		/// <summary>
+		/// Snapshot
+		/// </summary>
+		public static string Snapshot => GetString(SnapshotKey);
+
+		/// <summary>
+		/// Snapshot data feed.
+		/// </summary>
+		public const string SnapshotFeedKey = nameof(SnapshotFeed);
+
+		/// <summary>
+		/// Snapshot data feed.
+		/// </summary>
+		public static string SnapshotFeed => GetString(SnapshotFeedKey);
+
+		/// <summary>
+		/// FAST settings
+		/// </summary>
+		public const string FastSettingsKey = nameof(FastSettings);
+
+		/// <summary>
+		/// FAST settings
+		/// </summary>
+		public static string FastSettings => GetString(FastSettingsKey);
+
+		/// <summary>
+		/// News (SKRIN)
+		/// </summary>
+		public const string NewsSkrinKey = nameof(NewsSkrin);
+
+		/// <summary>
+		/// News (SKRIN)
+		/// </summary>
+		public static string NewsSkrin => GetString(NewsSkrinKey);
+
+		/// <summary>
+		/// Enabled
+		/// </summary>
+		public const string EnabledKey = nameof(Enabled);
+
+		/// <summary>
+		/// Enabled
+		/// </summary>
+		public static string Enabled => GetString(EnabledKey);
+
+		/// <summary>
+		/// FAST
+		/// </summary>
+		public const string FastKey = nameof(Fast);
+
+		/// <summary>
+		/// FAST
+		/// </summary>
+		public static string Fast => GetString(FastKey);
+
+		/// <summary>
+		/// Settings file
+		/// </summary>
+		public const string SettingsFileKey = nameof(SettingsFile);
+
+		/// <summary>
+		/// Settings file
+		/// </summary>
+		public static string SettingsFile => GetString(SettingsFileKey);
 	}
 }
