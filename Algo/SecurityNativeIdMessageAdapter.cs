@@ -248,6 +248,7 @@
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
 				case MessageTypes.OrderCancel:
+				case MessageTypes.OrderGroupCancel:
 				case MessageTypes.MarketData:
 				{
 					var secMsg = (SecurityMessage)message;
@@ -256,18 +257,10 @@
 					if ((secMsg as MarketDataMessage)?.DataType == MarketDataTypes.News && securityId.IsDefault())
 						break;
 
-					object native;
+					var native = GetNativeId(secMsg, securityId);
 
-					lock (_syncRoot)
-					{
-						native = _securityIds.TryGetKey(securityId);
-
-						if (native == null)
-						{
-							_suspendedInMessages.SafeAdd(securityId).Add(message.Clone());
-							return;
-						}
-					}
+					if (native == null)
+						return;
 
 					securityId.Native = native;
 					message.ReplaceSecurityId(securityId);
@@ -278,7 +271,25 @@
 				case MessageTypes.OrderPairReplace:
 				{
 					var pairMsg = (OrderPairReplaceMessage)message;
-					// TODO
+
+					var securityId1 = pairMsg.Message1.SecurityId;
+					var securityId2 = pairMsg.Message2.SecurityId;
+
+					var nativeId1 = GetNativeId(pairMsg, securityId1);
+
+					if (nativeId1 == null)
+						return;
+
+					var nativeId2 = GetNativeId(pairMsg, securityId2);
+
+					if (nativeId2 == null)
+						return;
+
+					securityId1.Native = nativeId1;
+					pairMsg.Message1.ReplaceSecurityId(securityId1);
+
+					securityId2.Native = nativeId2;
+					pairMsg.Message2.ReplaceSecurityId(securityId2);
 					break;
 				}
 
@@ -288,6 +299,20 @@
 			}
 
 			base.SendInMessage(message);
+		}
+
+		private object GetNativeId(Message message, SecurityId securityId)
+		{
+			lock (_syncRoot)
+			{
+				var native = _securityIds.TryGetKey(securityId);
+
+				if (native != null)
+					return native;
+
+				_suspendedInMessages.SafeAdd(securityId).Add(message.Clone());
+				return null;
+			}
 		}
 
 		/// <summary>
