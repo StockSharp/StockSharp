@@ -153,20 +153,20 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private ISecurityMappingStorage _securityCodeMappingStorage;
+		private ISecurityMappingStorage _securityMappingStorage;
 
 		/// <summary>
 		/// Security code mappings storage.
 		/// </summary>
-		public ISecurityMappingStorage SecurityCodeMappingStorage
+		public ISecurityMappingStorage SecurityMappingStorage
 		{
-			get => _securityCodeMappingStorage;
+			get => _securityMappingStorage;
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
-				_securityCodeMappingStorage = value;
+				_securityMappingStorage = value;
 			}
 		}
 
@@ -296,9 +296,9 @@ namespace StockSharp.Algo
 				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage);
 			}
 
-			if (SecurityCodeMappingStorage != null)
+			if (SecurityMappingStorage != null)
 			{
-				adapter = new SecurityMappingMessageAdapter(adapter, SecurityCodeMappingStorage);
+				adapter = new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage);
 			}
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())

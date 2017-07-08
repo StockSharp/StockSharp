@@ -303,6 +303,9 @@
 
 		private object GetNativeId(Message message, SecurityId securityId)
 		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
 			lock (_syncRoot)
 			{
 				var native = _securityIds.TryGetKey(securityId);
