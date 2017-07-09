@@ -40,6 +40,8 @@ F:StockSharp.Xaml.BaseApplication.AppDataPath/summary;DocStr8071
 F:StockSharp.Xaml.BaseApplication.PlatformConfigurationFile/summary;DocStr8072
 F:StockSharp.Xaml.BaseApplication.ProxyConfigurationFile/summary;DocStr8073
 F:StockSharp.Xaml.BaseApplication.SecurityNativeIdDir/summary;DocStr9672
+F:StockSharp.Xaml.BaseApplication.SecurityMappingDir/summary;DocStr9959
+F:StockSharp.Xaml.BaseApplication.SecurityExtendedInfo/summary;DocStr9960
 P:StockSharp.Xaml.BaseApplication.ProxySettings/summary;Str1435
 P:StockSharp.Xaml.BaseApplication.HelpCommand/summary;DocStr9858
 M:StockSharp.Xaml.BaseApplication.StartIsRunning/summary;DocStr9673
@@ -225,6 +227,13 @@ P:StockSharp.Xaml.RatingWindow.RatingValue/summary;DocStr9825
 P:StockSharp.Xaml.RatingWindow.Comment/summary;Str135
 M:StockSharp.Xaml.RatingWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.RatingWindow.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.SecurityMappingWindow/summary;DocStr9961
+F:StockSharp.Xaml.SecurityMappingWindow.RemoveCommand/summary;DocStr8269
+F:StockSharp.Xaml.SecurityMappingWindow.AddCommand/summary;DocStr8270
+P:StockSharp.Xaml.SecurityMappingWindow.ConnectorsInfo/summary;DocStr8314
+P:StockSharp.Xaml.SecurityMappingWindow.Storage/summary;DocStr9935
+M:StockSharp.Xaml.SecurityMappingWindow.#ctor/summary;DocStr1
+M:StockSharp.Xaml.SecurityMappingWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.StrategiesDashboard/summary;DocStr9506
 F:StockSharp.Xaml.StrategiesDashboard.StartCommand/summary;DocStr8459
 F:StockSharp.Xaml.StrategiesDashboard.StopCommand/summary;DocStr8459
@@ -306,6 +315,7 @@ P:StockSharp.Xaml.ConnectorInfo.Category/summary;DocStr8321
 P:StockSharp.Xaml.ConnectorInfo.PreferLanguage/summary;DocStr4324
 P:StockSharp.Xaml.ConnectorInfo.Platform/summary;DocStr4325
 P:StockSharp.Xaml.ConnectorInfo.AdapterType/summary;DocStr8909
+P:StockSharp.Xaml.ConnectorInfo.StorageName/summary;DocStr429
 M:StockSharp.Xaml.ConnectorInfo.#ctor(System.Type)/summary;DocStr1
 M:StockSharp.Xaml.ConnectorInfo.#ctor(System.Type)/param/adapterType;DocStr8910
 T:StockSharp.Xaml.ConnectorSupportedMessagesPanel/summary;DocStr8911

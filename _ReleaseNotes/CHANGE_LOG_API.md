@@ -9,6 +9,9 @@ StockSharp API Change log
 * (feature) PositionChangeTypesComboBox.
 * (feature) PositionChangeGrid.
 * (bug) Binary storage. Fix local time saving.
+* (feature) SecurityMappingAdapter.
+* (bug) BTCE fix.
+* (feature) SecurityMappingWindow.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

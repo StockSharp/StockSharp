@@ -216,6 +216,16 @@
             The path to the directory with native security identifiers.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.BaseApplication.SecurityMappingDir">
+      <summary>
+            The path to the directory with securities id mapping.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.BaseApplication.SecurityExtendedInfo">
+      <summary>
+            The path to the directory with securities extended info.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.BaseApplication.ProxySettings">
       <summary>
             Proxy-server settings.
@@ -1050,6 +1060,44 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.SecurityMappingWindow">
+      <summary>
+            The window for creation and editing of symbols mapping.
+            </summary>
+      <summary>
+            SecurityMappingWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMappingWindow.RemoveCommand">
+      <summary>
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove comparison.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMappingWindow.AddCommand">
+      <summary>
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to add comparison.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMappingWindow.ConnectorsInfo">
+      <summary>
+            Visual description of available connections.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMappingWindow.Storage">
+      <summary>
+            Security identifier mappings storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMappingWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityMappingWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMappingWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.StrategiesDashboard">
       <summary>
             Strategies dashboard.
@@ -1437,6 +1485,11 @@
     <member name="P:StockSharp.Xaml.ConnectorInfo.AdapterType">
       <summary>
             The type of adapter.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ConnectorInfo.StorageName">
+      <summary>
+            Storage name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.ConnectorInfo.#ctor(System.Type)">
