@@ -1,5 +1,10 @@
 StockSharp Data (Hydra) Change log
 ========================
+###current:
+* (feature) Symbol mapping manager.
+* (feature) FAST protocol plugin.
+* (bug) BTCE fix.
+
 ###v4.3.25.1:
 * (feature) CQG continuum.
 * (feature) Securities. Custom sorting for extended info added.

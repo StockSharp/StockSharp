@@ -1,6 +1,6 @@
 StockSharp Designer Change log
 ========================
-###current:
+###v4.3.25.2:
 * (feature) ServerCredentials. Save password for auto logon only.
 * (feature) Finam. OriginSide support.
 * (bug) Renko and PnF candles fix.
@@ -17,6 +17,15 @@ StockSharp Designer Change log
 * (feature) DevExp 17.1 update.
 * (feature) C# editor. Support C# 7.0.
 * (feature) Save only subscribed market data.
+* (feature) IndicatorPainterAttribute.
+* (bug) Show all allowed adapters in conditional window.
+* (bug) Quik stop order condition. Fix conditional window.
+* (feature) Save only subscribed market data.
+* (bug) Transaq fix.
+* (feature) Logs. Clear messages from context menu.
+* (bug) Minor live connection fixes.
+* (bug) BTCE fixes.
+* (feature) Symbol mapping manager.
 
 ###v4.3.24.1:
 * (feature) CQG continuum.
