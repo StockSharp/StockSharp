@@ -94,15 +94,13 @@ namespace StockSharp.Algo
 						BoardCode = boardCode
 					};
 
-					SecurityId securityId;
+					SecurityId? stockSharpId;
 
 					lock (_syncRoot)
-						securityId = _securityIds.TryGetValue(adapterId);
+						stockSharpId = _securityIds.TryGetValue2(adapterId);
 
-					if (!adapterId.IsDefault())
-					{
-						secMsg.SecurityId = securityId;
-					}
+					if (stockSharpId != null)
+						secMsg.SecurityId = stockSharpId.Value;
 
 					base.OnInnerAdapterNewOutMessage(message);
 					break;
@@ -218,12 +216,10 @@ namespace StockSharp.Algo
 			SecurityId? adapterId;
 
 			lock (_syncRoot)
-				adapterId = _securityIds.TryGetKey2(stockSharpId);
+				adapterId = _securityIds.TryGetValue2(stockSharpId);
 
 			if (adapterId != null)
-			{
 				message.ReplaceSecurityId(adapterId.Value);
-			}
 		}
 
 		private void ProcessMessage<TMessage>(SecurityId adapterId, TMessage message)
@@ -231,15 +227,13 @@ namespace StockSharp.Algo
 		{
 			if (!adapterId.IsDefault())
 			{
-				SecurityId? securityId;
+				SecurityId? stockSharpId;
 
 				lock (_syncRoot)
-					securityId = _securityIds.TryGetValue2(adapterId);
+					stockSharpId = _securityIds.TryGetKey2(adapterId);
 
-				if (securityId != null)
-				{
-					message.ReplaceSecurityId(securityId.Value);
-				}
+				if (stockSharpId != null)
+					message.ReplaceSecurityId(stockSharpId.Value);
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
