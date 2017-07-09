@@ -12,6 +12,7 @@ StockSharp API Change log
 * (feature) SecurityMappingAdapter.
 * (bug) BTCE fix.
 * (feature) SecurityMappingWindow.
+* (feature) FastMessageAdapter. Extracted from FixMessageAdapter.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

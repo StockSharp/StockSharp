@@ -152,6 +152,7 @@ namespace StockSharp.Configuration
 			typeof(CqgContinuumMessageAdapter),
 			typeof(ETradeMessageAdapter),
 			typeof(FixMessageAdapter),
+			typeof(FastMessageAdapter),
 			typeof(InteractiveBrokersMessageAdapter),
 			typeof(IQFeedMarketDataMessageAdapter),
 			typeof(ItchMessageAdapter),
