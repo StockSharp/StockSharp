@@ -14242,3 +14242,32 @@ DocStr9928;Show single {0} column. The default value is {1};Показать к�
 DocStr9929;The maximum volume of all quotes;Максимальный объем всех котировок
 DocStr9930;The maximum volume of all bids;Максимальный объем всех бидов
 DocStr9931;The maximum volume of all asks;Максимальный объем всех оферов
+DocStr9932;Security identifier mapping;Преобразование идентификаторов инструментов
+DocStr9933;StockSharp format;Формат StockSharp
+DocStr9934;Adapter format;Формат адаптера
+DocStr9935;Security identifier mappings storage;Хранилище преобразований идентификаторов инструментов
+DocStr9936;Get storage names;Получить имена хранилищ
+DocStr9937;Get security identifier mappings for storage;Получить преобразования для индектификатора инструмента
+DocStr9938;Security identifiers mapping;Преобразования идентификатора инструмента
+DocStr9939;Add security identifier mapping;Добавить преобразование идентификатора инструмента
+DocStr9940;{0} if security mapping was added. If was changed, {1};{0} если преобразование было добавлено. Если было изменено, то {1}
+DocStr9941;Remove security mapping;Удалить преобразование идентификатора инструмента
+DocStr9942;{0} if mapping was added. Otherwise, {1};{0} если преобразование было добавлено. Иначе, {1}
+DocStr9943;In memory security identifier mappings storage;Хранилище преобразований идентификаторов инструментов, хранящий данные в памяти
+DocStr9944;CSV security identifier mappings storage;CSV хранилище преобразований идентификаторов инструментов
+DocStr9945;Security identifier mappings message adapter;Адаптер сообщений преобразовывания идентификаторов инструментов
+DocStr9947;To add a change to the collection, if value is other than {0};Добавить изменение в коллекцию, если значение отлично от {0}
+DocStr9948;Base class describing the dialect of the FAST protocol;Базовый класс диалектов FAST протокола
+DocStr9949;The interface describing the dialect of the FAST protocol;Интерфейс, описывающий диалект FAST протокола
+DocStr9950;Load settings from specified file;Загрузить настройки из указанного файла
+DocStr9951;Network configuration group;Группа сетевой конфигурации
+DocStr9952;Network configuration group address;Адрес группы сетевой конфигурации
+DocStr9953;UDP channel A;UDP канал A
+DocStr9954;UDP channel B;UDP канал B
+DocStr9955;FAST message adapter;Адаптер сообщений, работающий через FAST протокол
+DocStr9956;Create FAST protocol dialect;Создать диалект FAST протокола
+DocStr9957;The FAST dialect;Диалект FAST протокола
+DocStr9958;The FAST dialect. The default is {0};FAST диалект. По-умолчанию равно {0}
+DocStr9959;The path to the directory with securities id mapping;Путь к директории с преобразованием идентификаторов инструментов
+DocStr9960;The path to the directory with securities extended info;Путь к директории с расширенной информацией инструментов
+DocStr9961;The window for creation and editing of symbols mapping;Окно создания и редактирования преобразования идентификаторов инструментов
