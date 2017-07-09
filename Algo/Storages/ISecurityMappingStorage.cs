@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Storages
 		event Action<string, SecurityIdMapping> Changed;
 
 		/// <summary>
-		/// Get storae names.
+		/// Get storage names.
 		/// </summary>
 		/// <returns>Storage names.</returns>
 		IEnumerable<string> GetStorageNames();
@@ -86,11 +86,11 @@ namespace StockSharp.Algo.Storages
 		bool Add(string storageName, SecurityIdMapping mapping);
 
 		/// <summary>
-		/// Remove security code mapping.
+		/// Remove security mapping.
 		/// </summary>
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="stockSharpId">StockSharp format.</param>
-		/// <returns><see langword="true"/> if code mapping was added. Otherwise, <see langword="false" />.</returns>
+		/// <returns><see langword="true"/> if mapping was added. Otherwise, <see langword="false" />.</returns>
 		bool Remove(string storageName, SecurityId stockSharpId);
 	}
 

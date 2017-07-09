@@ -45488,12 +45488,12 @@ namespace StockSharp.Localization
 		public static string LastPosChangeTime => GetString(LastPosChangeTimeKey);
 
 		/// <summary>
-		/// Security codes <-> Adapters codes
+		/// Security codes &lt;-&gt; Adapters codes
 		/// </summary>
 		public const string SecurityCodesAdaptersCodesKey = nameof(SecurityCodesAdaptersCodes);
 
 		/// <summary>
-		/// Security codes <-> Adapters codes
+		/// Security codes &lt;-&gt; Adapters codes
 		/// </summary>
 		public static string SecurityCodesAdaptersCodes => GetString(SecurityCodesAdaptersCodesKey);
 

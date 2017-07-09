@@ -156,7 +156,7 @@ namespace StockSharp.Algo
 		private ISecurityMappingStorage _securityMappingStorage;
 
 		/// <summary>
-		/// Security code mappings storage.
+		/// Security identifier mappings storage.
 		/// </summary>
 		public ISecurityMappingStorage SecurityMappingStorage
 		{
