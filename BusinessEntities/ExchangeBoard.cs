@@ -76,7 +76,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Identity]
 		[DisplayNameLoc(LocalizedStrings.CodeKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string Code
 		{

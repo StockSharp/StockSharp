@@ -988,12 +988,12 @@ namespace StockSharp.Localization
 		public static string Code => GetString(CodeKey);
 
 		/// <summary>
-		/// Board code.
+		/// Board code
 		/// </summary>
 		public const string BoardCodeKey = nameof(BoardCode);
 
 		/// <summary>
-		/// Board code.
+		/// Board code
 		/// </summary>
 		public static string BoardCode => GetString(BoardCodeKey);
 
@@ -45646,5 +45646,25 @@ namespace StockSharp.Localization
 		/// Security or board code are duplicated for {0}
 		/// </summary>
 		public static string SecurityOrBoardCodeDuplicatedParams => GetString(SecurityOrBoardCodeDuplicatedParamsKey);
+
+		/// <summary>
+		/// Bytes
+		/// </summary>
+		public const string BytesKey = nameof(Bytes);
+
+		/// <summary>
+		/// Bytes
+		/// </summary>
+		public static string Bytes => GetString(BytesKey);
+
+		/// <summary>
+		/// Project
+		/// </summary>
+		public const string ProjectKey = nameof(Project);
+
+		/// <summary>
+		/// Project
+		/// </summary>
+		public static string Project => GetString(ProjectKey);
 	}
 }
