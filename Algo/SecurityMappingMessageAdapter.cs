@@ -53,16 +53,13 @@ namespace StockSharp.Algo
 			{
 				case MessageTypes.Connect:
 				{
-					var pairs = Storage.Get(InnerAdapter.StorageName);
+					var mappings = Storage.Get(InnerAdapter.StorageName);
 
 					lock (_syncRoot)
 					{
-						foreach (var tuple in pairs)
+						foreach (var mapping in mappings)
 						{
-							var securityCode = tuple.Item1;
-							var adapterCode = tuple.Item2;
-
-							_securityIds.Add(adapterCode, securityCode);
+							_securityIds.Add(mapping.StockSharpId, mapping.AdapterId);
 						}
 					}
 
@@ -213,15 +210,15 @@ namespace StockSharp.Algo
 		private void ReplaceSecurityId(Message message)
 		{
 			var secMsg = (SecurityMessage)message;
-			var securityId = secMsg.SecurityId;
+			var stockSharpId = secMsg.SecurityId;
 
-			if ((secMsg as MarketDataMessage)?.DataType == MarketDataTypes.News && securityId.IsDefault())
+			if ((secMsg as MarketDataMessage)?.DataType == MarketDataTypes.News && stockSharpId.IsDefault())
 				return;
 
 			SecurityId? adapterId;
 
 			lock (_syncRoot)
-				adapterId = _securityIds.TryGetKey2(securityId);
+				adapterId = _securityIds.TryGetKey2(stockSharpId);
 
 			if (adapterId != null)
 			{
@@ -248,7 +245,7 @@ namespace StockSharp.Algo
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private void OnStorageMappingChanged(string storageName, SecurityId securityId, SecurityId adapterId)
+		private void OnStorageMappingChanged(string storageName, SecurityIdMapping mapping)
 		{
 			if (!InnerAdapter.StorageName.CompareIgnoreCase(storageName))
 				return;
@@ -256,10 +253,13 @@ namespace StockSharp.Algo
 			// if adapter code is empty means mapping removed
 			// also mapping can be changed (new adapter code for old security code)
 
-			_securityIds.RemoveByValue(securityId);
+			lock (_syncRoot)
+			{
+				_securityIds.RemoveByValue(mapping.StockSharpId);
 
-			if (!adapterId.IsDefault())
-				_securityIds.Add(securityId, adapterId);
+				if (!mapping.AdapterId.IsDefault())
+					_securityIds.Add(mapping.StockSharpId, mapping.AdapterId);	
+			}
 		}
 	}
 }
