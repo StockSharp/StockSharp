@@ -65,6 +65,11 @@ namespace StockSharp.Algo.Storages
 		event Action<string, SecurityIdMapping> Changed;
 
 		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
+
+		/// <summary>
 		/// Get storage names.
 		/// </summary>
 		/// <returns>Storage names.</returns>
@@ -107,6 +112,10 @@ namespace StockSharp.Algo.Storages
 		{
 			add => _changed += value;
 			remove => _changed -= value;
+		}
+
+		void ISecurityMappingStorage.Init()
+		{
 		}
 
 		IEnumerable<string> ISecurityMappingStorage.GetStorageNames()

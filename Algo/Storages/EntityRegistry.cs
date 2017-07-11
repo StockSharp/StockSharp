@@ -115,6 +115,10 @@ namespace StockSharp.Algo.Storages
 		///// </summary>
 		//public virtual IStorageEntityList<News> News { get; }
 
+		void IEntityRegistry.Init()
+		{
+		}
+
 		DelayAction IEntityRegistry.DelayAction
 		{
 			get => DelayAction;
