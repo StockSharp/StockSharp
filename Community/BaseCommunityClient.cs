@@ -47,12 +47,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To get the <see cref="SessionId"/> if the user was authorized.
 		/// </summary>
-		protected virtual Guid? TryGetSession => AuthenticationClient.Instance.TryGetSession;
-
-		/// <summary>
-		/// The user identifier for <see cref="SessionId"/>.
-		/// </summary>
-		public long UserId => AuthenticationClient.Instance.GetId(SessionId);
+		protected virtual Guid? NullableSessionId => AuthenticationClient.Instance.NullableSessionId;
 
 		/// <summary>
 		/// Is current language is English.
