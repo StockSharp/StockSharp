@@ -1,12 +1,37 @@
 StockSharp Data (Hydra) Change log
 ========================
 ###current:
+* (feature) Symbol mapping manager.
+* (feature) FAST protocol plugin.
+* (bug) BTCE fix.
+
+###v4.3.25.1:
 * (feature) CQG continuum.
 * (feature) Securities. Custom sorting for extended info added.
 * (feature) SpbEx connector (binary).
 * (feature) Security. CfiCode.
 * (bug) Index create fix.
 * (feature) ServerCredentials. Save password for auto logon only.
+* (feature) FXCM source. Historical + real time.
+* (feature) Documentation embedded links.
+* (feature) Positions tracking.
+* (feature) Depths. Show histogram for volumes.
+* (feature) Depths and level1. Show spread chart.
+* (feature) Oanda. REST 2.0 support.
+* (feature) Ticks pane. Show tick chart.
+* (feature) Feedback feature.
+* (feature) Micex TEAP. Stock27 interface.
+* (feature) Micex TEAP. Addresses design time fix.
+* (feature) Security. CfiCode.
+* (feature) DevExp 17.1 update.
+* (bug) OrderLog -> Ticks fix.
+* (feature) Finam. OriginSide support.
+* (bug) Candles. Volume profile chart fix.
+* (bug) Renko and PnF candles fix.
+* (feature) Market data panel. Show Transaction data.
+* (feature) ExchangeBoard. Currenex, Fxcm, CmeMini.
+* (feature) Tables. Share image into Yandex.Disk.
+* (bug) Binary storage. Fix local time saving.
 
 ###v4.3.23.1:
 * (feature) Server mode. Edit users.

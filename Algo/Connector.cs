@@ -389,7 +389,7 @@ namespace StockSharp.Algo
 		public virtual bool CreateDepthFromOrdersLog { get; set; }
 
 		/// <summary>
-		/// Use orders log to create ticks7. Disabled by default.
+		/// Use orders log to create ticks. Disabled by default.
 		/// </summary>
 		public virtual bool CreateTradesFromOrdersLog { get; set; }
 
@@ -1037,9 +1037,9 @@ namespace StockSharp.Algo
 		{
 			var regMsg = order.CreateRegisterMessage(GetSecurityId(order.Security));
 
-			var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
-			if (depoName != null)
-				regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
+			//var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
+			//if (depoName != null)
+			//	regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
 
 			SendInMessage(regMsg);
 		}

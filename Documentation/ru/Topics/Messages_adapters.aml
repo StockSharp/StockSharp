@@ -121,7 +121,7 @@ public class SmartAdapter: MessageAdapter
   							<listItem>
   								<para>В конструктор адаптера передается генератор идентификаторов транзакций, который будет использоваться для создания идентификаторов сообщений.</para>
   							</listItem>
-  							<listItem>
+  							<!--<listItem>
   								<para>Далее заполняем словарь <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityClassInfo</codeEntityReference>. 
   								Этот словарь сопоставляет коды классов инструментов в <token>smartcom</token> с типом инструмента 
   								<codeEntityReference>P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> и кодом площадки в <token>stocksharp</token>.</para>
@@ -129,7 +129,7 @@ public class SmartAdapter: MessageAdapter
   							<listItem>
   								<para>Заполняется словарь <legacyBold>PortfolioBoardCodes</legacyBold>, который сопоставляет
   								коды площадок для портфелей.</para>
-  							</listItem>
+  							</listItem>-->
   							<listItem>
   								<para>
   								При помощи метода 
@@ -145,18 +145,6 @@ public class SmartAdapter: MessageAdapter
 public SmartAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 {
-
-	 SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
-     SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
-     SecurityClassInfo.Add("TQBR", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexTqbr.Code));
-
-     PortfolioBoardCodes = new Dictionary<string, string>
-	{
-		{ "EQ", ExchangeBoard.MicexEqbr.Code },
-		{ "FOB", ExchangeBoard.MicexFbcb.Code },
-		{ "RTS_FUT", ExchangeBoard.Forts.Code },
-	};
-	
 	// Сообщения, связанные с маркет-данными
     this.AddSupportedMessage(MessageTypes.MarketData);
     this.AddSupportedMessage(MessageTypes.SecurityLookup);

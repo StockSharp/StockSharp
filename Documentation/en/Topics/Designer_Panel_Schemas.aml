@@ -12,7 +12,7 @@
  осуществляется двойным кликом мышки по нужному элементу в списке. При этом выбранная схема 
  откроется в дизайнере для просмотра и редактирования. Ниже приведено описание папок панели <legacyBold>Схемы</legacyBold>:</para>
 <mediaLink>
-<image xlink:href="Designer_Panel_Circuits_00"/>
+<image placement="center" xlink:href="Designer_Panel_Circuits_00"/>
 </mediaLink>  
    <para>1. Папка <legacyBold>Составные элементы</legacyBold> содержит элементы, 
    которые представляют собой законченный функционал и могут быть использованы в различных схемах 

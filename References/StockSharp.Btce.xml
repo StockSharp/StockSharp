@@ -41,6 +41,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Btce.BtceMessageAdapter.Domain">
+            <summary>
+            Domain address.
+            </summary>
+        </member>
         <member name="P:StockSharp.Btce.BtceMessageAdapter.IsValid">
             <summary>
             The parameters validity check.

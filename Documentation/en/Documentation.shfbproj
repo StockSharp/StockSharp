@@ -88,6 +88,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Xaml.Diagram.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Xaml.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Xaml.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Fxcm.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Fxcm.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.com</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
@@ -165,22 +167,36 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Art\candle_qpile.png">
-      <ImageId>candle_qpile</ImageId>
-      <AlternateText>candle qpile</AlternateText>
-    </None>
+    <None Include="Topics\HydraSymbolMapping.aml" />
+    <None Include="Topics\Designer_Orders_conditional.aml" />
+    <None Include="Topics\Designer_Gallery_publish.aml" />
+    <None Include="Topics\Designer_contact_us.aml" />
+    <None Include="Topics\Designer_connection_mapping.aml" />
+    <None Include="Topics\Designer_Options.aml" />
+    <None Include="Topics\Designer_Commission_Rule.aml" />
+    <None Include="Topics\Designer_Creating_indicator_from_source_code.aml.aml" />
+    <None Include="Topics\FxcmNews.aml" />
+    <None Include="Topics\CQGHistory.aml" />
+    <None Include="Topics\FxcmHistory.aml" />
+    <None Include="Topics\FxcmStopOrders.aml" />
+    <None Include="Topics\FxcmSample.aml" />
+    <None Include="Topics\HydraSettingsFxcmHistory.aml" />
+    <None Include="Topics\HydraSettingsFxcm.aml" />
+    <None Include="Topics\Fxcm.aml" />
+    <None Include="Topics\HydraSettingsSpbEx.aml" />
+    <None Include="Topics\SpbEx.aml" />
     <None Include="Topics\hydra_settings_Xignite.aml" />
     <None Include="Topics\hydra_CQG_Continuum.aml" />
     <None Include="Topics\hydra_CQG_Com.aml" />
-    <None Include="Topics\Hydra_users.aml" />
     <None Include="Topics\HydraSecurityExtensionInfo.aml" />
     <None Include="Topics\hydraAPIConnectWCF.aml" />
     <None Include="Topics\HydraExtensionInfo.aml" />
     <None Include="Topics\hydraAPIConnect.aml" />
-    <None Include="Topics\hydra_server.aml" />
     <None Include="Topics\hydra_index.aml" />
     <None Include="Topics\hydra_options.aml" />
     <None Include="Topics\CreateNewOrder.aml" />
+    <None Include="Topics\QuikLuaFirstStrategy.aml" />
+    <None Include="Topics\QuikLuaStrategy.aml.aml" />
     <None Include="Topics\RSS.aml" />
     <None Include="Topics\HydraSettingsBarChart.aml" />
     <None Include="Topics\OECNews.aml" />
@@ -196,7 +212,6 @@
     <None Include="Topics\ITCH.aml" />
     <None Include="Topics\ConnectorCreating.aml" />
     <None Include="Topics\Gui_EquityCurveChartd.aml" />
-    <None Include="Topics\Gui_BufferedChart.aml" />
     <None Include="Topics\Gui_ChartPanel.aml" />
     <None Include="Topics\Gui_Chart.aml" />
     <None Include="Topics\StrategyTestingFinam.aml" />
@@ -216,24 +231,17 @@
     <None Include="Topics\GuiOrderLogGrid.aml" />
     <None Include="Topics\GuiIndexSecurityWindow.aml" />
     <None Include="Topics\GuiContinuousSecurityWindow.aml" />
-    <None Include="Topics\GuiNewsPanel.aml" />
     <None Include="Topics\GuiNewsGrid.aml" />
     <None Include="Topics\GuiMarketDepthControl.aml" />
     <None Include="Topics\GuiLevel1Grid.aml" />
     <None Include="Topics\GuiTradeGrid.aml" />
-    <None Include="Topics\GUILogWindow.aml" />
-    <None Include="Topics\GUIMonitorWindow.aml" />
     <None Include="Topics\GUILogControlWindow.aml" />
     <None Include="Topics\GUIMonitor.aml" />
     <None Include="Topics\GUILogControl.aml" />
     <None Include="Topics\GuiTrading.aml" />
     <None Include="Topics\GuiMarketData.aml" />
-    <None Include="Topics\GuiUniversalGrid.aml" />
     <None Include="Topics\GuiSecurityGrid.aml" />
-    <None Include="Topics\GuiSecurityLookupPanel.aml" />
     <None Include="Topics\GuiCreateSecurityWindow.aml" />
-    <None Include="Topics\GuiSecurityEditor.aml" />
-    <None Include="Topics\GuiSecurityPickerWindow.aml" />
     <None Include="Topics\GuiSecurityPicker.aml" />
     <None Include="Topics\HydraTasksBackup.aml" />
     <None Include="Topics\HydraBackup_recovery.aml" />
@@ -255,7 +263,6 @@
     <None Include="Topics\FixServer.aml" />
     <None Include="Topics\ConnectorsFixFast.aml" />
     <None Include="Topics\OptionPositionChart.aml" />
-    <None Include="Topics\OptionCalculator.aml" />
     <None Include="Topics\OptionDesk.aml" />
     <None Include="Topics\GUIOptions.aml" />
     <None Include="Topics\OptionsGUI.aml" />
@@ -291,7 +298,6 @@
     <None Include="Topics\HydraDisasterRecovery.aml" />
     <None Include="Topics\HydraBoards.aml" />
     <None Include="Topics\HydraBackup.aml" />
-    <None Include="Topics\HydraAdditional.aml" />
     <None Include="Topics\HydraImportExecutions.aml" />
     <None Include="Topics\HydraImportNews.aml" />
     <None Include="Topics\HydraImportLevel1.aml" />
@@ -334,7 +340,6 @@
     <None Include="Topics\CQG.aml" />
     <None Include="Topics\Sterling.aml" />
     <None Include="Comments\project.xml" />
-    <None Include="Topics\LicenseInstructions.aml" />
     <None Include="Topics\HydraTasks.aml" />
     <None Include="Topics\HydraSettingsTransaq.aml" />
     <None Include="Topics\HydraSettingsMicex.aml" />
@@ -377,7 +382,6 @@
     <None Include="Topics\Transaq.aml" />
     <None Include="Topics\PlazaCGate.aml" />
     <None Include="Topics\QuikMksByDde.aml" />
-    <None Include="Topics\NotifyService.aml" />
     <None Include="Topics\TestingSettings.aml" />
     <None Include="Topics\HydraGluingData.aml" />
     <None Include="Topics\HydraSettingsIB.aml" />
@@ -395,7 +399,6 @@
     <None Include="Topics\ConnectorsRussian.aml" />
     <None Include="Topics\WealthLab.aml" />
     <None Include="Topics\QuikSecuritiesChangesTable.aml" />
-    <None Include="Topics\QuikAsyncMode.aml" />
     <None Include="Topics\OrdersEvents.aml" />
     <None Include="Topics\OrdersTransactionId.aml" />
     <None Include="Topics\MatLab.aml" />
@@ -443,7 +446,6 @@
     <None Include="Topics\BasketTrader.aml" />
     <None Include="Topics\Candles.aml" />
     <None Include="Topics\CandlesCandleFactory.aml" />
-    <None Include="Topics\CandlesICandleSource.aml" />
     <None Include="Topics\CandlesPatterns.aml" />
     <None Include="Topics\CandlesUI.aml" />
     <None Include="Topics\CandlesIndex.aml" />
@@ -457,7 +459,6 @@
     <None Include="Topics\HydraUsing.aml" />
     <None Include="Topics\Indicators.aml" />
     <None Include="Topics\IndicatorsCustom.aml" />
-    <None Include="Topics\IndicatorsHistory.aml" />
     <None Include="Topics\IndicatorsChart.aml" />
     <None Include="Topics\Latency.aml" />
     <None Include="Topics\Logging.aml" />
@@ -471,7 +472,6 @@
     <None Include="Topics\OrdersReRegister.aml" />
     <None Include="Topics\OrdersCancel.aml" />
     <None Include="Topics\OrdersCancelGroup.aml" />
-    <None Include="Topics\OrdersTransaction.aml" />
     <None Include="Topics\Options.aml" />
     <None Include="Topics\OptionsGreeks.aml" />
     <None Include="Topics\OptionsHedge.aml" />
@@ -511,7 +511,6 @@
     <None Include="Topics\SmartStopOrders.aml" />
     <None Include="Topics\StockSharpAbout.aml" />
     <None Include="Topics\StockSharpArchitecture.aml" />
-    <None Include="Topics\StockSharpIndependence.aml" />
     <None Include="Topics\StockSharpSamples.aml" />
     <None Include="Topics\StockSharpTradingAlgo.aml" />
     <None Include="Topics\Storages.aml" />
@@ -534,37 +533,37 @@
     <None Include="Topics\UIMarshalling.aml" />
     <None Include="Topics\Unit.aml" />
     <None Include="Topics\Designer.aml" />
-    <None Include="Topics\Designer_A_logic_function_with_one_argument.aml" />
+    <None Include="Topics\Designer_Logic_function_with_one_argument.aml" />
     <None Include="Topics\Designer_Add_strategy_Live_trade.aml" />
-    <None Include="Topics\Designer_Algorithm_creation_of_cubes.aml" />
-    <None Include="Topics\Designer_An_example_of_backtesting.aml" />
+    <None Include="Topics\Designer_Algorithm_creation_of_elements.aml" />
+    <None Include="Topics\Designer_Example_of_backtesting.aml" />
     <None Include="Topics\Designer_Orders.aml" />
     <None Include="Topics\Designer_Association.aml" />
-    <None Include="Topics\Designer_Black_Sols.aml" />
+    <None Include="Topics\Designer_Black_Scholes.aml" />
     <None Include="Topics\Designer_Cancellations.aml" />
     <None Include="Topics\Designer_Candles.aml" />
     <None Include="Topics\Designer_Chart_Position.aml" />
-    <None Include="Topics\Designer_Combine_cubes_of_Source_code_and_standard_cubes.aml" />
+    <None Include="Topics\Designer_Combine_Source_code_and_standard_elements.aml" />
     <None Include="Topics\Designer_Comparison.aml" />
     <None Include="Topics\Designer_Converter.aml" />
-    <None Include="Topics\Designer_Creating_a_composite_elements.aml" />
-    <None Include="Topics\Designer_Creating_a_DLL_cube_in_Visual_Studio.aml" />
-    <None Include="Topics\Designer_Creating_a_repository_of_historical_data.aml" />
-    <None Include="Topics\Designer_Creating_a_strategy_from_the_source_code.aml" />
-    <None Include="Topics\Designer_Creating_a_strategy_out_of_blocks.aml" />
+    <None Include="Topics\Designer_Creating_composite_elements.aml" />
+    <None Include="Topics\Designer_Creating_DLL_element_in_Visual_Studio.aml" />
+    <None Include="Topics\Designer_Creating_repository_of_historical_data.aml" />
+    <None Include="Topics\Designer_Creating_strategy_from_source_code.aml" />
+    <None Include="Topics\Designer_Creating_strategy_out_of_blocks.aml" />
     <None Include="Topics\Designer_Creating_strategy_from_code.aml" />
     <None Include="Topics\Designer_Creation_tool.aml" />
     <None Include="Topics\Designer_Crossing.aml" />
     <None Include="Topics\Designer_Deals_on_request.aml" />
     <None Include="Topics\Designer_Debug.aml" />
-    <None Include="Topics\Designer_Debugging_DLL_cube_using_Visual_Studio.aml" />
+    <None Include="Topics\Designer_Debugging_DLL_using_Visual_Studio.aml" />
     <None Include="Topics\Designer_Derivatives.aml" />
-    <None Include="Topics\Designer_Description_of_cubes.aml" />
+    <None Include="Topics\Designer_Description_of_elements.aml" />
     <None Include="Topics\Designer_Designer_schemes_strategies_and_component_elements.aml" />
-    <None Include="Topics\Designer_Determination_of_the_volume_position.aml" />
-    <None Include="Topics\Designer_Directory_and_edit_the_data_manually.aml" />
+    <None Include="Topics\Designer_Determination_of_volume_position.aml" />
+    <None Include="Topics\Designer_Directory_and_edit_data_manually.aml" />
     <None Include="Topics\Designer_DLL_Strategy.aml" />
-    <None Include="Topics\Designer_Download_the_tools.aml" />
+    <None Include="Topics\Designer_Download_instruments.aml" />
     <None Include="Topics\Designer_Downloading_data.aml" />
     <None Include="Topics\Designer_Edit_tool.aml" />
     <None Include="Topics\Designer_Depth_Spread.aml" />
@@ -574,7 +573,7 @@
     <None Include="Topics\Designer_Export_strategies.aml" />
     <None Include="Topics\Designer_Formula_with_one_argument.aml" />
     <None Include="Topics\Designer_Formula_with_two_arguments.aml" />
-    <None Include="Topics\Designer_Get_the_best_rates_for_the_tool.aml" />
+    <None Include="Topics\Designer_Get_best_quote_for_instrument.aml" />
     <None Include="Topics\Designer_Depth.aml" />
     <None Include="Topics\Designer_Depth_implied_volatility.aml" />
     <None Include="Topics\Designer_Graph_options_positions.aml" />
@@ -585,16 +584,15 @@
     <None Include="Topics\Designer_Indexer.aml" />
     <None Include="Topics\Designer_Indicator.aml" />
     <None Include="Topics\Designer_Installation.aml" />
-    <None Include="Topics\Designer_Introduction.aml" />
     <None Include="Topics\Designer_Level_1.aml" />
     <None Include="Topics\Designer_Line.aml" />
     <None Include="Topics\Designer_Live_trade.aml" />
     <None Include="Topics\Designer_Orders_Moving.aml" />
     <None Include="Topics\Designer_Notice.aml" />
-    <None Include="Topics\Designer_Depth_Obtaining_a_specified_level.aml" />
+    <None Include="Topics\Designer_Depth_Obtaining_Specified_level.aml" />
     <None Include="Topics\Designer_Optimization.aml" />
     <None Include="Topics\Designer_Options_Board.aml" />
-    <None Include="Topics\Designer_Panel_A_Portfolios.aml" />
+    <None Include="Topics\Designer_Panel_Portfolios.aml" />
     <None Include="Topics\Designer_Panel_Schemas.aml" />
     <None Include="Topics\Designer_Panel_graphics.aml" />
     <None Include="Topics\Designer_Panel_Logs.aml" />
@@ -613,24 +611,24 @@
     <None Include="Topics\Designer_Start_mode.aml" />
     <None Include="Topics\Designer_Statistics.aml" />
     <None Include="Topics\Designer_Step.aml" />
-    <None Include="Topics\Designer_Stopping_point.aml" />
+    <None Include="Topics\Designer_Debug_Break_Points.aml" />
     <None Include="Topics\Designer_Tape.aml" />
-    <None Include="Topics\Designer_The_conclusion_of_the_candles_on_the_chart.aml" />
-    <None Include="Topics\Designer_The_conditional_operator.aml" />
-    <None Include="Topics\Designer_The_connection_settings.aml" />
-    <None Include="Topics\Designer_The_creation_of_a_strategy.aml" />
-    <None Include="Topics\Designer_The_creation_of_the_cube_containing_the_source_code.aml" />
-    <None Include="Topics\Designer_The_gallery_of_strategies.aml" />
-    <None Include="Topics\Designer_The_integration_of_dice_Source_code_in_the_General_scheme.aml" />
-    <None Include="Topics\Designer_The_logical_condition.aml" />
-    <None Include="Topics\Designer_The_previous_value.aml" />
-    <None Include="Topics\Designer_The_programs_interface.aml" />
-    <None Include="Topics\Designer_The_quick_access_toolbar.aml" />
-    <None Include="Topics\Designer_The_transaction.aml" />
-    <None Include="Topics\Designer_The_transaction_strategy.aml" />
+    <None Include="Topics\Designer_Conclusion_of_candles_on_chart.aml" />
+    <None Include="Topics\Designer_Conditional_operator.aml" />
+    <None Include="Topics\Designer_Connection_settings.aml" />
+    <None Include="Topics\Designer_Creation_strategy.aml" />
+    <None Include="Topics\Designer_Creation_element_containing_source_code.aml" />
+    <None Include="Topics\Designer_Gallery_of_strategies.aml" />
+    <None Include="Topics\Designer_Integration_Source_code_in_scheme.aml" />
+    <None Include="Topics\Designer_Logical_condition.aml" />
+    <None Include="Topics\Designer_Previous_value.aml" />
+    <None Include="Topics\Designer_Programs_interface.aml" />
+    <None Include="Topics\Designer_Quick_access_toolbar.aml" />
+    <None Include="Topics\Designer_Trades.aml" />
+    <None Include="Topics\Designer_Trades_strategy.aml" />
     <None Include="Topics\Designer_Update_to_new_version.aml" />
     <None Include="Topics\Designer_Variable.aml" />
-    <None Include="Topics\Designer_Viewing_the_downloaded_data.aml" />
+    <None Include="Topics\Designer_Viewing_downloaded_data.aml" />
     <None Include="Topics\Designer_Working_time.aml" />
     <None Include="Topics\Designer_Workspace.aml" />
     <None Include="Topics\Designer_Backtesting_Interface.aml" />
@@ -653,18 +651,6 @@
     <None Include="Topics\Designer_Panel_Market_depth.aml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Art\hydra.png">
-      <ImageId>hydra</ImageId>
-      <AlternateText>hydra</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\hydra_main_first.png">
-      <ImageId>hydra_main_first</ImageId>
-      <AlternateText>hydra main first</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Art\hydra_securities.png">
       <ImageId>hydra_securities</ImageId>
       <AlternateText>hydra securities</AlternateText>
@@ -680,36 +666,6 @@
     <None Include="Art\hydra_security_select.png">
       <ImageId>hydra_security_select</ImageId>
       <AlternateText>hydra security select</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\hydra_settings.png">
-      <ImageId>hydra_settings</ImageId>
-      <AlternateText>hydra settings</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\platform_independency.png">
-      <ImageId>platform_independency</ImageId>
-      <AlternateText>platform independency</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\portfolio_derivative_dde.png">
-      <ImageId>portfolio_derivative_dde</ImageId>
-      <AlternateText>portfolio derivative dde</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\portfolio_equity_dde.png">
-      <ImageId>portfolio_equity_dde</ImageId>
-      <AlternateText>portfolio equity dde</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\sample_candle_qpile.png">
-      <ImageId>sample_candle_qpile</ImageId>
-      <AlternateText>sample candle qpile</AlternateText>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -737,14 +693,6 @@
       <ImageId>hydra_candles</ImageId>
       <AlternateText>hydra candles</AlternateText>
     </Image>
-    <Image Include="Art\hydra_candles_build.png">
-      <ImageId>hydra_candles_build</ImageId>
-      <AlternateText>hydra candles build</AlternateText>
-    </Image>
-    <Image Include="Art\LicenseTool.png">
-      <ImageId>LicenseTool</ImageId>
-      <AlternateText>License Tool</AlternateText>
-    </Image>
     <Image Include="Art\OECTrader.png">
       <ImageId>OECTrader</ImageId>
       <AlternateText>OECTrader</AlternateText>
@@ -760,10 +708,6 @@
     <Image Include="Art\OECTraderSettings.png">
       <ImageId>OECTraderSettings</ImageId>
       <AlternateText>OECTrader Settings</AlternateText>
-    </Image>
-    <Image Include="Art\LicenseToolSend.png">
-      <ImageId>LicenseToolSend</ImageId>
-      <AlternateText>License Tool Send</AlternateText>
     </Image>
     <Image Include="Art\hydra_candles_main.png">
       <ImageId>hydra_candles_main</ImageId>
@@ -941,17 +885,9 @@
       <ImageId>hydra_settings_IQFeed</ImageId>
       <AlternateText>hydra settings IQFeed</AlternateText>
     </Image>
-    <Image Include="Art\HydraGluingCandles.png">
-      <ImageId>HydraGluingCandles</ImageId>
-      <AlternateText>Hydra Gluing Candles</AlternateText>
-    </Image>
     <Image Include="Art\HydraGluingCheckData.png">
       <ImageId>HydraGluingCheckData</ImageId>
       <AlternateText>Hydra Gluing Check Data</AlternateText>
-    </Image>
-    <Image Include="Art\HydraGluingCheckGluingData.png">
-      <ImageId>HydraGluingCheckGluingData</ImageId>
-      <AlternateText>Hydra Gluing Check Gluing Data</AlternateText>
     </Image>
     <Image Include="Art\HydraGluingCSAuto.png">
       <ImageId>HydraGluingCSAuto</ImageId>
@@ -960,10 +896,6 @@
     <Image Include="Art\HydraGluingCSCustom.png">
       <ImageId>HydraGluingCSCustom</ImageId>
       <AlternateText>Hydra GluingCSCustom</AlternateText>
-    </Image>
-    <Image Include="Art\HydraGluingCSWindow.png">
-      <ImageId>HydraGluingCSWindow</ImageId>
-      <AlternateText>Hydra GluingCSWindow</AlternateText>
     </Image>
     <Image Include="Art\HydraGluingTrades.png">
       <ImageId>HydraGluingTrades</ImageId>
@@ -1237,25 +1169,9 @@
       <ImageId>hydra_settings_micex</ImageId>
       <AlternateText>hydra settings micex</AlternateText>
     </Image>
-    <Image Include="Art\hydra_security_clear_filter.png">
-      <ImageId>hydra_security_clear_filter</ImageId>
-      <AlternateText>hydra security clear filter</AlternateText>
-    </Image>
-    <Image Include="Art\hydra_security_find.png">
-      <ImageId>hydra_security_find</ImageId>
-      <AlternateText>hydra security find</AlternateText>
-    </Image>
     <Image Include="Art\hydra_main.png">
       <ImageId>hydra_main</ImageId>
       <AlternateText>hydra main</AlternateText>
-    </Image>
-    <Image Include="Art\LicenseAccount.png">
-      <ImageId>LicenseAccount</ImageId>
-      <AlternateText>License Account</AlternateText>
-    </Image>
-    <Image Include="Art\LicenseActivate.png">
-      <ImageId>LicenseActivate</ImageId>
-      <AlternateText>License Activate</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_allor.png">
       <ImageId>hydra_settings_allor</ImageId>
@@ -1337,10 +1253,6 @@
       <ImageId>hydra_tasks</ImageId>
       <AlternateText>hydra tasks</AlternateText>
     </Image>
-    <Image Include="Art\hydra_tasks_option.png">
-      <ImageId>hydra_tasks_option</ImageId>
-      <AlternateText>hydra tasks option</AlternateText>
-    </Image>
     <Image Include="Art\hydra_tasks_converter.png">
       <ImageId>hydra_tasks_converter</ImageId>
       <AlternateText>hydra tasks converter</AlternateText>
@@ -1377,10 +1289,6 @@
       <ImageId>hydra_analitics_main</ImageId>
       <AlternateText>hydra analitics main</AlternateText>
     </Image>
-    <Image Include="Art\hydra_analitics_folder.png">
-      <ImageId>hydra_analitics_folder</ImageId>
-      <AlternateText>hydra analitics folder</AlternateText>
-    </Image>
     <Image Include="Art\hydra_analitics_compile.png">
       <ImageId>hydra_analitics_compile</ImageId>
       <AlternateText>hydra analitics compile</AlternateText>
@@ -1413,17 +1321,9 @@
       <ImageId>hydra_candles_ind_chart</ImageId>
       <AlternateText>hydra candles ind chart</AlternateText>
     </Image>
-    <Image Include="Art\hydra_candles_newarea.png">
-      <ImageId>hydra_candles_newarea</ImageId>
-      <AlternateText>hydra candles newarea</AlternateText>
-    </Image>
     <Image Include="Art\hydra_import_securities.png">
       <ImageId>hydra_import_securities</ImageId>
       <AlternateText>hydra import securities</AlternateText>
-    </Image>
-    <Image Include="Art\hydra_import_association.png">
-      <ImageId>hydra_import_association</ImageId>
-      <AlternateText>hydra import association</AlternateText>
     </Image>
     <Image Include="Art\hydra_import_trades.png">
       <ImageId>hydra_import_trades</ImageId>
@@ -1488,10 +1388,6 @@
     <Image Include="Art\hydra_settings_connectionperiods.png">
       <ImageId>hydra_settings_connectionperiods</ImageId>
       <AlternateText>hydra settings connectionperiods</AlternateText>
-    </Image>
-    <Image Include="Art\StockSharp_logo.png">
-      <ImageId>StockSharp_logo</ImageId>
-      <AlternateText>Stock Sharp logo</AlternateText>
     </Image>
     <Image Include="Art\stocksharp_instalation1.png">
       <ImageId>stocksharp_instalation1</ImageId>
@@ -1569,10 +1465,6 @@
       <ImageId>FixSecurities</ImageId>
       <AlternateText>Fix Securities</AlternateText>
     </Image>
-    <Image Include="Art\sample_candles.png">
-      <ImageId>sample_candles</ImageId>
-      <AlternateText>sample candles</AlternateText>
-    </Image>
     <Image Include="Art\sample_candleschart.png">
       <ImageId>sample_candleschart</ImageId>
       <AlternateText>sample candleschart</AlternateText>
@@ -1621,13 +1513,9 @@
       <ImageId>hydra_source_first</ImageId>
       <AlternateText>hydra source first</AlternateText>
     </Image>
-    <Image Include="Art\hydra_settings_oanda_hist2.png">
+    <Image Include="Art\hydra_settings_oanda_hist.png">
       <ImageId>hydra_settings_oanda_hist2</ImageId>
       <AlternateText>hydra settings oanda hist 2</AlternateText>
-    </Image>
-    <Image Include="Art\Aws3_NewAccount.png">
-      <ImageId>Aws3_NewAccount</ImageId>
-      <AlternateText>Aws 3 New Account</AlternateText>
     </Image>
     <Image Include="Art\Aws3_CallMeNow.png">
       <ImageId>Aws3_CallMeNow</ImageId>
@@ -1681,22 +1569,6 @@
       <ImageId>sample_realtaime_emulation</ImageId>
       <AlternateText>sample realtaime emulation</AlternateText>
     </Image>
-    <Image Include="Art\giu_UniversalGridContext.png">
-      <ImageId>giu_UniversalGridContext</ImageId>
-      <AlternateText>giu Universal Grid Context</AlternateText>
-    </Image>
-    <Image Include="Art\giu_UniversalGridExport.png">
-      <ImageId>giu_UniversalGridExport</ImageId>
-      <AlternateText>giu Universal Grid Export</AlternateText>
-    </Image>
-    <Image Include="Art\giu_UniversalGridFormat.png">
-      <ImageId>giu_UniversalGridFormat</ImageId>
-      <AlternateText>giu Universal Grid Format</AlternateText>
-    </Image>
-    <Image Include="Art\GUI_SecurityPicker.png">
-      <ImageId>GUI_SecurityPicker</ImageId>
-      <AlternateText>GUI Security Picker</AlternateText>
-    </Image>
     <Image Include="Art\GUI_SecurityPicker2.png">
       <ImageId>GUI_SecurityPicker2</ImageId>
       <AlternateText>GUI Security Picker 2</AlternateText>
@@ -1704,10 +1576,6 @@
     <Image Include="Art\Gui_SecurityCreateWindow.png">
       <ImageId>Gui_SecurityCreateWindow</ImageId>
       <AlternateText>Gui Security Create Window</AlternateText>
-    </Image>
-    <Image Include="Art\Gui_SecurityEditor.png">
-      <ImageId>Gui_SecurityEditor</ImageId>
-      <AlternateText>Gui Security Editor</AlternateText>
     </Image>
     <Image Include="Art\GUI_TradeGrid.png">
       <ImageId>GUI_TradeGrid</ImageId>
@@ -1785,10 +1653,6 @@
       <ImageId>Gui_BoxChart</ImageId>
       <AlternateText>Gui Box Chart</AlternateText>
     </Image>
-    <Image Include="Art\ITCHSample.png">
-      <ImageId>ITCHSample</ImageId>
-      <AlternateText>ITCHSample</AlternateText>
-    </Image>
     <Image Include="Art\ITCHSettings.png">
       <ImageId>ITCHSettings</ImageId>
       <AlternateText>ITCHSettings</AlternateText>
@@ -1853,19 +1717,19 @@
       <ImageId>Designer_Quick_start_06</ImageId>
       <AlternateText>Designer Quick start 06</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_quick_access_toolbar_00.png">
+    <Image Include="Art\Designer_quick_access_toolbar_00.png">
       <ImageId>Designer_The_quick_access_toolbar_00</ImageId>
       <AlternateText>Designer The quick access toolbar 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_quick_access_toolbar_01.png">
+    <Image Include="Art\Designer_quick_access_toolbar_01.png">
       <ImageId>Designer_The_quick_access_toolbar_01</ImageId>
       <AlternateText>Designer The quick access toolbar 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_quick_access_toolbar_02.png">
+    <Image Include="Art\Designer_quick_access_toolbar_02.png">
       <ImageId>Designer_The_quick_access_toolbar_02</ImageId>
       <AlternateText>Designer The quick access toolbar 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_quick_access_toolbar_03.png">
+    <Image Include="Art\Designer_quick_access_toolbar_03.png">
       <ImageId>Designer_The_quick_access_toolbar_03</ImageId>
       <AlternateText>Designer The quick access toolbar 03</AlternateText>
     </Image>
@@ -1917,35 +1781,35 @@
       <ImageId>Designer_Panel_Logs_01</ImageId>
       <AlternateText>Designer Panel Logs 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Panel_A_Portfolios_00.png">
+    <Image Include="Art\Designer_Panel_Portfolios_00.png">
       <ImageId>Designer_Panel_A_Portfolios_00</ImageId>
-      <AlternateText>Designer Panel A Portfolios 00</AlternateText>
+      <AlternateText>Designer Panel Portfolios 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Panel_A_Portfolios_01.png">
+    <Image Include="Art\Designer_Panel_Portfolios_01.png">
       <ImageId>Designer_Panel_A_Portfolios_01</ImageId>
       <AlternateText>Designer Panel A Portfolios 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_gallery_of_strategies_00.png">
+    <Image Include="Art\Designer_gallery_of_strategies_00.png">
       <ImageId>Designer_The_gallery_of_strategies_00</ImageId>
       <AlternateText>Designer The gallery of strategies 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_gallery_of_strategies_01.png">
+    <Image Include="Art\Designer_gallery_of_strategies_01.png">
       <ImageId>Designer_The_gallery_of_strategies_01</ImageId>
       <AlternateText>Designer The gallery of strategies 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_gallery_of_strategies_02.png">
+    <Image Include="Art\Designer_gallery_of_strategies_02.png">
       <ImageId>Designer_The_gallery_of_strategies_02</ImageId>
       <AlternateText>Designer The gallery of strategies 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_gallery_of_strategies_03.png">
+    <Image Include="Art\Designer_gallery_of_strategies_03.png">
       <ImageId>Designer_The_gallery_of_strategies_03</ImageId>
       <AlternateText>Designer The gallery of strategies 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_creation_of_a_strategy_00.png">
+    <Image Include="Art\Designer_creation_of_strategy_00.png">
       <ImageId>Designer_The_creation_of_a_strategy_00</ImageId>
       <AlternateText>Designer The creation of a strategy 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_creation_of_a_strategy_01.png">
+    <Image Include="Art\Designer_creation_of_strategy_01.png">
       <ImageId>Designer_The_creation_of_a_strategy_01</ImageId>
       <AlternateText>Designer The creation of a strategy 01</AlternateText>
     </Image>
@@ -1953,15 +1817,15 @@
       <ImageId>Designer_Designer_schemes_strategies_and_component_elements_00</ImageId>
       <AlternateText>Designer Designer schemes strategies and component elements 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_Properties_Panel_00.png">
+    <Image Include="Art\Designer_Properties_Panel_00.png">
       <ImageId>Designer_The_Properties_Panel_00</ImageId>
       <AlternateText>Designer The Properties Panel 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Description_of_cubes_00.png">
+    <Image Include="Art\Designer_Description_of_elements_00.png">
       <ImageId>Designer_Description_of_cubes_00</ImageId>
       <AlternateText>Designer Description of cubes 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Description_of_cubes_01.png">
+    <Image Include="Art\Designer_Description_of_elements_01.png">
       <ImageId>Designer_Description_of_cubes_01</ImageId>
       <AlternateText>Designer Description of cubes 01</AlternateText>
     </Image>
@@ -2005,7 +1869,7 @@
       <ImageId>Designer_Indicator_01</ImageId>
       <AlternateText>Designer Indicator 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_logical_condition_00.png">
+    <Image Include="Art\Designer_logical_condition_00.png">
       <ImageId>Designer_The_logical_condition_00</ImageId>
       <AlternateText>Designer The logical condition 00</AlternateText>
     </Image>
@@ -2033,7 +1897,7 @@
       <ImageId>Designer_Position_00</ImageId>
       <AlternateText>Designer Position 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_previous_value_00.png">
+    <Image Include="Art\Designer_previous_value_00.png">
       <ImageId>Designer_The_previous_value_00</ImageId>
       <AlternateText>Designer The previous value 00</AlternateText>
     </Image>
@@ -2049,7 +1913,7 @@
       <ImageId>Designer_DLL_Strategy_00</ImageId>
       <AlternateText>Designer DLL Strategy 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_transaction_strategy_00.png">
+    <Image Include="Art\Designer_trades_strategy_00.png">
       <ImageId>Designer_The_transaction_strategy_00</ImageId>
       <AlternateText>Designer The transaction strategy 00</AlternateText>
     </Image>
@@ -2081,7 +1945,7 @@
       <ImageId>Designer_Converter_00</ImageId>
       <AlternateText>Designer Converter 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_A_logic_function_with_one_argument_00.png">
+    <Image Include="Art\Designer_logic_function_with_one_argument_00.png">
       <ImageId>Designer_A_logic_function_with_one_argument_00</ImageId>
       <AlternateText>Designer A logic function with one argument 00</AlternateText>
     </Image>
@@ -2133,9 +1997,9 @@
       <ImageId>Designer_Graph_options_positions_02</ImageId>
       <AlternateText>Designer Graph options positions 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Black_Sols_00.png">
+    <Image Include="Art\Designer_Black_Scholes_00.png">
       <ImageId>Designer_Black_Sols_00</ImageId>
-      <AlternateText>Designer Black Sols 00</AlternateText>
+      <AlternateText>Designer Black Scholes 00</AlternateText>
     </Image>
     <Image Include="Art\Designer_Hedging_00.png">
       <ImageId>Designer_Hedging_00</ImageId>
@@ -2157,11 +2021,11 @@
       <ImageId>Designer_Crossing_01</ImageId>
       <AlternateText>Designer Crossing 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_conditional_operator_00.png">
+    <Image Include="Art\Designer_conditional_operator_00.png">
       <ImageId>Designer_The_conditional_operator_00</ImageId>
       <AlternateText>Designer The conditional operator 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_conditional_operator_01.png">
+    <Image Include="Art\Designer_conditional_operator_01.png">
       <ImageId>Designer_The_conditional_operator_01</ImageId>
       <AlternateText>Designer The conditional operator 01</AlternateText>
     </Image>
@@ -2173,167 +2037,143 @@
       <ImageId>Designer_Event_model_00</ImageId>
       <AlternateText>Designer Event model 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_13.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_13.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_13</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 13</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_00.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_00.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_00</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_01.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_01.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_01</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_02.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_02.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_02</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_03.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_03.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_03</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_04.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_04.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_04</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 04</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_05.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_05.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_05</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 05</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_06.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_06.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_06</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 06</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_07.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_07.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_07</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 07</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_08.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_08.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_08</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 08</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_09.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_09.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_09</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 09</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_10.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_10.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_10</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 10</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_11.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_11.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_11</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 11</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Algorithm_creation_of_cubes_12.png">
+    <Image Include="Art\Designer_Algorithm_creation_of_elements_12.png">
       <ImageId>Designer_Algorithm_creation_of_cubes_12</ImageId>
       <AlternateText>Designer Algorithm creation of cubes 12</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_composite_elements_00.png">
+    <Image Include="Art\Designer_Creating_composite_elements_00.png">
       <ImageId>Designer_Creating_a_composite_elements_00</ImageId>
       <AlternateText>Designer Creating a composite elements 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_conclusion_of_the_candles_on_the_chart_00.png">
+    <Image Include="Art\Designer_conclusion_of_candles_on_chart_00.png">
       <ImageId>Designer_The_conclusion_of_the_candles_on_the_chart_00</ImageId>
       <AlternateText>Designer The conclusion of the candles on the chart 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Get_the_best_rates_for_the_tool_00.png">
+    <Image Include="Art\Designer_Get_best_quote_for_instrument_00.png">
       <ImageId>Designer_Get_the_best_rates_for_the_tool_00</ImageId>
       <AlternateText>Designer Get the best rates for the tool 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Determination_of_the_volume_position_00.png">
+    <Image Include="Art\Designer_Determination_of_volume_position_00.png">
       <ImageId>Designer_Determination_of_the_volume_position_00</ImageId>
       <AlternateText>Designer Determination of the volume position 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_creation_of_the_cube_containing_the_source_code_00.png">
+    <Image Include="Art\Designer_creation_of_element_containing_source_code_00.png">
       <ImageId>Designer_The_creation_of_the_cube_containing_the_source_code_00</ImageId>
       <AlternateText>Designer The creation of the cube containing the source code 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_creation_of_the_cube_containing_the_source_code_01.png">
+    <Image Include="Art\Designer_creation_of_element_containing_source_code_01.png">
       <ImageId>Designer_The_creation_of_the_cube_containing_the_source_code_01</ImageId>
       <AlternateText>Designer The creation of the cube containing the source code 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_creation_of_the_cube_containing_the_source_code_02.png">
+    <Image Include="Art\Designer_creation_of_element_containing_source_code_02.png">
       <ImageId>Designer_The_creation_of_the_cube_containing_the_source_code_02</ImageId>
       <AlternateText>Designer The creation of the cube containing the source code 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_creation_of_the_cube_containing_the_source_code_03.png">
+    <Image Include="Art\Designer_creation_of_element_containing_source_code_03.png">
       <ImageId>Designer_The_creation_of_the_cube_containing_the_source_code_03</ImageId>
       <AlternateText>Designer The creation of the cube containing the source code 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_strategy_from_the_source_code_00.png">
+    <Image Include="Art\Designer_Creating_strategy_from_source_code_00.png">
       <ImageId>Designer_Creating_a_strategy_from_the_source_code_00</ImageId>
       <AlternateText>Designer Creating a strategy from the source code 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_integration_of_dice_Source_code_in_the_General_scheme_00.png">
+    <Image Include="Art\Designer_integration_Source_code_in_scheme_00.png">
       <ImageId>Designer_The_integration_of_dice_Source_code_in_the_General_scheme_00</ImageId>
       <AlternateText>Designer The integration of dice Source code in the General scheme 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Combine_cubes_of_Source_code_and_standard_cubes_00.png">
+    <Image Include="Art\Designer_Combine_Source_code_and_standard_elements_00.png">
       <ImageId>Designer_Combine_cubes_of_Source_code_and_standard_cubes_00</ImageId>
       <AlternateText>Designer Combine cubes of Source code and standard cubes 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_DLL_cube_in_Visual_Studio_00.png">
+    <Image Include="Art\Designer_Creating_DLL_element_in_Visual_Studio_00.png">
       <ImageId>Designer_Creating_a_DLL_cube_in_Visual_Studio_00</ImageId>
       <AlternateText>Designer Creating a DLL cube in Visual Studio 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_DLL_cube_in_Visual_Studio_01.png">
+    <Image Include="Art\Designer_Creating_DLL_element_in_Visual_Studio_01.png">
       <ImageId>Designer_Creating_a_DLL_cube_in_Visual_Studio_01</ImageId>
       <AlternateText>Designer Creating a DLL cube in Visual Studio 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_DLL_cube_in_Visual_Studio_02.png">
+    <Image Include="Art\Designer_Creating_DLL_element_in_Visual_Studio_02.png">
       <ImageId>Designer_Creating_a_DLL_cube_in_Visual_Studio_02</ImageId>
       <AlternateText>Designer Creating a DLL cube in Visual Studio 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_DLL_cube_in_Visual_Studio_03.png">
+    <Image Include="Art\Designer_Creating_DLL_element_in_Visual_Studio_03.png">
       <ImageId>Designer_Creating_a_DLL_cube_in_Visual_Studio_03</ImageId>
       <AlternateText>Designer Creating a DLL cube in Visual Studio 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Setting_SAPI_from_GitHub_00.png">
-      <ImageId>Designer_Setting_SAPI_from_GitHub_00</ImageId>
-      <AlternateText>120 Designer RU Setting SAPI from Git Hub</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_Setting_SAPI_from_GitHub_01.png">
-      <ImageId>Designer_Setting_SAPI_from_GitHub_01</ImageId>
-      <AlternateText>121 Designer RU Setting SAPI from Git Hub</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_Setting_SAPI_from_GitHub_02.png">
-      <ImageId>Designer_Setting_SAPI_from_GitHub_02</ImageId>
-      <AlternateText>122 Designer RU Setting SAPI from Git Hub</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_Setting_SAPI_using_Nuget_00.png">
-      <ImageId>Designer_Setting_SAPI_using_Nuget_00</ImageId>
-      <AlternateText>Designer Setting SAPI using Nuget 00</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_Setting_SAPI_using_Nuget_01.png">
-      <ImageId>Designer_Setting_SAPI_using_Nuget_01</ImageId>
-      <AlternateText>Designer Setting SAPI using Nuget 01</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_Setting_SAPI_using_Nuget_02.png">
-      <ImageId>Designer_Setting_SAPI_using_Nuget_02</ImageId>
-      <AlternateText>Designer Setting SAPI using Nuget 02</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_00.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_00.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_00</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_01.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_01.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_01</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_02.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_02.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_02</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_03.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_03.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_03</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_04.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_04.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_04</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 04</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Debugging_DLL_cube_using_Visual_Studio_05.png">
+    <Image Include="Art\Designer_Debugging_DLL_using_Visual_Studio_05.png">
       <ImageId>Designer_Debugging_DLL_cube_using_Visual_Studio_05</ImageId>
       <AlternateText>Designer Debugging DLL cube using Visual Studio 05</AlternateText>
     </Image>
@@ -2417,7 +2257,7 @@
       <ImageId>Designer_Applications_00</ImageId>
       <AlternateText>Designer Applications 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_transaction_00.png">
+    <Image Include="Art\Designer_trades_00.png">
       <ImageId>Designer_The_transaction_00</ImageId>
       <AlternateText>Designer The transaction 00</AlternateText>
     </Image>
@@ -2461,13 +2301,13 @@
       <ImageId>Designer_Debug_06</ImageId>
       <AlternateText>Designer Debug 06</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Stopping_point_00.png">
+    <Image Include="Art\Designer_Debug_Break_Points_00.png">
       <ImageId>Designer_Stopping_point_00</ImageId>
-      <AlternateText>Designer Stopping point 00</AlternateText>
+      <AlternateText>Designer Debug Break Points 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Stopping_point_01.png">
+    <Image Include="Art\Designer_Debug_Break_Points_01.png">
       <ImageId>Designer_Stopping_point_01</ImageId>
-      <AlternateText>Designer Stopping point 01</AlternateText>
+      <AlternateText>Designer Debug Break Points 01</AlternateText>
     </Image>
     <Image Include="Art\Designer_Optimization_00.png">
       <ImageId>Designer_Optimization_00</ImageId>
@@ -2481,23 +2321,23 @@
       <ImageId>Designer_Optimization_02</ImageId>
       <AlternateText>Designer Optimization 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_00.png">
+    <Image Include="Art\Designer_example_of_backtesting_00.png">
       <ImageId>Designer_An_example_of_backtesting_00</ImageId>
       <AlternateText>Designer An example of backtesting 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_01.png">
+    <Image Include="Art\Designer_example_of_backtesting_01.png">
       <ImageId>Designer_An_example_of_backtesting_01</ImageId>
       <AlternateText>Designer An example of backtesting 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_02.png">
+    <Image Include="Art\Designer_example_of_backtesting_02.png">
       <ImageId>Designer_An_example_of_backtesting_02</ImageId>
       <AlternateText>Designer An example of backtesting 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_03.png">
+    <Image Include="Art\Designer_example_of_backtesting_03.png">
       <ImageId>Designer_An_example_of_backtesting_03</ImageId>
       <AlternateText>Designer An example of backtesting 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_An_example_of_backtesting_04.png">
+    <Image Include="Art\Designer_example_of_backtesting_04.png">
       <ImageId>Designer_An_example_of_backtesting_04</ImageId>
       <AlternateText>Designer An example of backtesting 04</AlternateText>
     </Image>
@@ -2517,63 +2357,55 @@
       <ImageId>Designer_Interface_Live_trade_00</ImageId>
       <AlternateText>Designer Interface Live trade 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Interface_Live_trade_01.png">
-      <ImageId>Designer_Interface_Live_trade_01</ImageId>
-      <AlternateText>Designer Interface Live trade 01</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_The_connection_settings_00.png">
+    <Image Include="Art\Designer_connection_settings_00.png">
       <ImageId>Designer_The_connection_settings_00</ImageId>
       <AlternateText>Designer The connection settings 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_01.png">
+    <Image Include="Art\Designer_connection_settings_01.png">
       <ImageId>Designer_The_connection_settings_01</ImageId>
       <AlternateText>Designer The connection settings 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_02.png">
+    <Image Include="Art\Designer_connection_settings_02.png">
       <ImageId>Designer_The_connection_settings_02</ImageId>
       <AlternateText>Designer The connection settings 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_03.png">
+    <Image Include="Art\Designer_connection_settings_03.png">
       <ImageId>Designer_The_connection_settings_03</ImageId>
       <AlternateText>Designer The connection settings 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_04.png">
+    <Image Include="Art\Designer_connection_settings_04.png">
       <ImageId>Designer_The_connection_settings_04</ImageId>
       <AlternateText>Designer The connection settings 04</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_05.png">
+    <Image Include="Art\Designer_connection_settings_05.png">
       <ImageId>Designer_The_connection_settings_05</ImageId>
       <AlternateText>Designer The connection settings 05</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_06.png">
+    <Image Include="Art\Designer_connection_settings_06.png">
       <ImageId>Designer_The_connection_settings_06</ImageId>
       <AlternateText>Designer The connection settings 06</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_07.png">
+    <Image Include="Art\Designer_connection_settings_07.png">
       <ImageId>Designer_The_connection_settings_07</ImageId>
       <AlternateText>Designer The connection settings 07</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_08.png">
-      <ImageId>Designer_The_connection_settings_08</ImageId>
-      <AlternateText>Designer The connection settings 08</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_The_connection_settings_09.png">
+    <Image Include="Art\Designer_connection_settings_09.png">
       <ImageId>Designer_The_connection_settings_09</ImageId>
       <AlternateText>Designer The connection settings 09</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_10.png">
+    <Image Include="Art\Designer_connection_settings_10.png">
       <ImageId>Designer_The_connection_settings_10</ImageId>
       <AlternateText>Designer The connection settings 10</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_11.png">
+    <Image Include="Art\Designer_connection_settings_11.png">
       <ImageId>Designer_The_connection_settings_11</ImageId>
       <AlternateText>Designer The connection settings 11</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_12.png">
+    <Image Include="Art\Designer_connection_settings_12.png">
       <ImageId>Designer_The_connection_settings_12</ImageId>
       <AlternateText>Designer The connection settings 12</AlternateText>
     </Image>
-    <Image Include="Art\Designer_The_connection_settings_13.png">
+    <Image Include="Art\Designer_connection_settings_13.png">
       <ImageId>Designer_The_connection_settings_13</ImageId>
       <AlternateText>Designer The connection settings 13</AlternateText>
     </Image>
@@ -2613,35 +2445,35 @@
       <ImageId>Designer_Repository_of_historical_data_00</ImageId>
       <AlternateText>Designer Repository of historical data 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_00.png">
+    <Image Include="Art\Designer_Creating_repository_of_historical_data_00.png">
       <ImageId>Designer_Creating_a_repository_of_historical_data_00</ImageId>
       <AlternateText>Designer Creating a repository of historical data 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_01.png">
+    <Image Include="Art\Designer_Creating_repository_of_historical_data_01.png">
       <ImageId>Designer_Creating_a_repository_of_historical_data_01</ImageId>
       <AlternateText>Designer Creating a repository of historical data 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_02.png">
+    <Image Include="Art\Designer_Creating_repository_of_historical_data_02.png">
       <ImageId>Designer_Creating_a_repository_of_historical_data_02</ImageId>
       <AlternateText>Designer Creating a repository of historical data 02</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_03.png">
+    <Image Include="Art\Designer_Creating_repository_of_historical_data_03.png">
       <ImageId>Designer_Creating_a_repository_of_historical_data_03</ImageId>
       <AlternateText>Designer Creating a repository of historical data 03</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_04.png">
+    <Image Include="Art\Designer_Creating_repository_of_historical_data_04.png">
       <ImageId>Designer_Creating_a_repository_of_historical_data_04</ImageId>
       <AlternateText>Designer Creating a repository of historical data 04</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_05.png">
+    <Image Include="Art\Designer_Creating_repository_of_historical_data_05.png">
       <ImageId>Designer_Creating_a_repository_of_historical_data_05</ImageId>
       <AlternateText>Designer Creating a repository of historical data 05</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Creating_a_repository_of_historical_data_06.png">
+    <Image Include="Art\Designer_Creating_repository_of_historical_data_06.png">
       <ImageId>Designer_Creating_a_repository_of_historical_data_06</ImageId>
       <AlternateText>Designer Creating a repository of historical data 06</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Download_the_tools_00.png">
+    <Image Include="Art\Designer_Download_instruments_00.png">
       <ImageId>Designer_Download_the_tools_00</ImageId>
       <AlternateText>Designer Download the tools 00</AlternateText>
     </Image>
@@ -2661,7 +2493,7 @@
       <ImageId>Designer_Edit_tool_01</ImageId>
       <AlternateText>Designer Edit tool 01</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Viewing_the_downloaded_data_00.png">
+    <Image Include="Art\Designer_Viewing_downloaded_data_00.png">
       <ImageId>Designer_Viewing_the_downloaded_data_00</ImageId>
       <AlternateText>Designer Viewing the downloaded data 00</AlternateText>
     </Image>
@@ -2681,18 +2513,9 @@
       <ImageId>Designer_Reset_language_settings_00</ImageId>
       <AlternateText>Designer Reset language settings 00</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Directory_and_edit_the_data_manually_00.png">
+    <Image Include="Art\Designer_Directory_and_edit_data_manually_00.png">
       <ImageId>Designer_Directory_and_edit_the_data_manually_00</ImageId>
       <AlternateText>Designer Directory and edit the data manually 00</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_Directory_and_edit_the_data_manually_01.png">
-      <ImageId>Designer_Directory_and_edit_the_data_manually_01</ImageId>
-      <AlternateText>Designer Directory and edit the data manually 01</AlternateText>
-    </Image>
-    <Image Include="Art\Designer_Event_model0_00.png">
-      <ImageId>Designer_Event_model0_00</ImageId>
-      <AlternateText>091 Designer RU Event model 0</AlternateText>
-      <CopyToMedia>False</CopyToMedia>
     </Image>
     <Image Include="Art\QuikLuaFirstStrategy.png">
       <ImageId>QuikLuaFirstStrategy</ImageId>
@@ -2714,10 +2537,6 @@
     <Image Include="Art\hydra_settings_Barchart.png">
       <ImageId>hydra_settings_Barchart</ImageId>
       <AlternateText>hydra settings Barchart</AlternateText>
-    </Image>
-    <Image Include="Art\hydra_tasks_analitic.png">
-      <ImageId>hydra_tasks_analitic</ImageId>
-      <AlternateText>hydra tasks analitic</AlternateText>
     </Image>
     <Image Include="Art\hydra_view_export.png">
       <ImageId>hydra_view_export</ImageId>
@@ -2742,10 +2561,6 @@
     <Image Include="Art\hydra_server.png">
       <ImageId>hydra_server</ImageId>
       <AlternateText>hydra server</AlternateText>
-    </Image>
-    <Image Include="Art\hydra_securities_menu.png">
-      <ImageId>hydra_securities_menu</ImageId>
-      <AlternateText>hydra securities menu</AlternateText>
     </Image>
     <Image Include="Art\hydra_users.png">
       <ImageId>hydra_users</ImageId>
@@ -2827,10 +2642,6 @@
       <ImageId>Designer_Share_link_Ya</ImageId>
       <AlternateText>Designer Share link Ya</AlternateText>
     </Image>
-    <Image Include="Art\Designer_Notifications_Setting_01.png">
-      <ImageId>Designer_Notifications_Setting_01</ImageId>
-      <AlternateText>Designer Notifications Setting 01</AlternateText>
-    </Image>
     <Image Include="Art\Designer_Notifications_Setting.png">
       <ImageId>Designer_Notifications_Setting</ImageId>
       <AlternateText>Designer Notifications Setting</AlternateText>
@@ -2875,6 +2686,26 @@
       <ImageId>Designer_Chat_00</ImageId>
       <AlternateText>Designer Chat 00</AlternateText>
     </Image>
+    <Image Include="Art\hydra_settings_fxcm.png">
+      <ImageId>hydra_settings_fxcm</ImageId>
+      <AlternateText>hydra settings fxcm</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_fxcm_history.png">
+      <ImageId>hydra_settings_fxcm_history</ImageId>
+      <AlternateText>hydra settings fxcm history</AlternateText>
+    </Image>
+    <Image Include="Art\FxcmSample.png">
+      <ImageId>FxcmSample</ImageId>
+      <AlternateText>Fxcm Sample</AlternateText>
+    </Image>
+    <Image Include="Art\FxcmSecurities.png">
+      <ImageId>FxcmSecurities</ImageId>
+      <AlternateText>Fxcm Securities</AlternateText>
+    </Image>
+    <Image Include="Art\matlab_stocksharp.png">
+      <ImageId>matlab_stocksharp</ImageId>
+      <AlternateText>matlab stocksharp</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
@@ -2886,24 +2717,6 @@
     <None Include="Art\sample_quote_iv.png">
       <ImageId>sample_quote_iv</ImageId>
       <AlternateText>sample quote iv</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\security_options.png">
-      <ImageId>security_options</ImageId>
-      <AlternateText>security options</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\security_dde.png">
-      <ImageId>security_dde</ImageId>
-      <AlternateText>security dde</AlternateText>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Art\strategy_logging.png">
-      <ImageId>strategy_logging</ImageId>
-      <AlternateText>strategy logging</AlternateText>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2990,10 +2803,6 @@
     <Image Include="Art\candle_qpile.png">
       <ImageId>candleqpile</ImageId>
       <AlternateText>Таблица со свечками, созданная через QPILE.</AlternateText>
-    </Image>
-    <Image Include="Art\sample.png">
-      <ImageId>sample</ImageId>
-      <AlternateText>Пример создания МТС.</AlternateText>
     </Image>
     <Image Include="Art\sample_stop_order.png">
       <ImageId>samplestoporder</ImageId>
@@ -3167,165 +2976,29 @@
       <ImageId>sample_history_test_parallel</ImageId>
       <AlternateText>Оптимизация на истории.</AlternateText>
     </Image>
-    <None Include="Art\verifier_warning.png">
-      <ImageId>verifier_warning</ImageId>
-      <AlternateText>verifier warning</AlternateText>
-    </None>
-    <None Include="Art\verifier_success.png">
-      <ImageId>verifier_success</ImageId>
-      <AlternateText>verifier success</AlternateText>
-    </None>
-    <None Include="Art\verifier_refresh.png">
-      <ImageId>verifier_refresh</ImageId>
-      <AlternateText>verifier refresh</AlternateText>
-    </None>
-    <None Include="Art\verifier_error.png">
-      <ImageId>verifier_error</ImageId>
-      <AlternateText>verifier error</AlternateText>
-    </None>
     <None Include="Art\transactions.png">
       <ImageId>transactions</ImageId>
       <AlternateText>transactions</AlternateText>
-    </None>
-    <None Include="Art\trade_my_dde.png">
-      <ImageId>trade_my_dde</ImageId>
-      <AlternateText>trade my dde</AlternateText>
-    </None>
-    <None Include="Art\trade_dde.png">
-      <ImageId>trade_dde</ImageId>
-      <AlternateText>trade dde</AlternateText>
-    </None>
-    <None Include="Art\strategy_childs.png">
-      <ImageId>strategy_childs</ImageId>
-      <AlternateText>strategy childs</AlternateText>
     </None>
     <None Include="Art\strategy.png">
       <ImageId>strategy</ImageId>
       <AlternateText>strategy</AlternateText>
     </None>
-    <None Include="Art\stoporder_dde.png">
-      <ImageId>stoporder_dde</ImageId>
-      <AlternateText>stoporder dde</AlternateText>
-    </None>
     <None Include="Art\SmartTrader.png">
       <ImageId>SmartTrader</ImageId>
       <AlternateText>Smart Trader</AlternateText>
-    </None>
-    <None Include="Art\security_ex_dde.png">
-      <ImageId>security_ex_dde</ImageId>
-      <AlternateText>security ex dde</AlternateText>
-    </None>
-    <None Include="Art\sample_stop_order.png">
-      <ImageId>sample_stop_order</ImageId>
-      <AlternateText>sample stop order</AlternateText>
     </None>
     <None Include="Art\sample_smart_sma.png">
       <ImageId>sample_smart_sma</ImageId>
       <AlternateText>sample smart sma</AlternateText>
     </None>
-    <None Include="Art\sample_smart_history.png">
-      <ImageId>sample_smart_history</ImageId>
-      <AlternateText>sample smart history</AlternateText>
-    </None>
-    <None Include="Art\sample_sma.png">
-      <ImageId>sample_sma</ImageId>
-      <AlternateText>sample sma</AlternateText>
-    </None>
-    <None Include="Art\sample_securities_ex.png">
-      <ImageId>sample_securities_ex</ImageId>
-      <AlternateText>sample securities ex</AlternateText>
-    </None>
-    <None Include="Art\sample_quik_smart.png">
-      <ImageId>sample_quik_smart</ImageId>
-      <AlternateText>sample quik smart</AlternateText>
-    </None>
-    <None Include="Art\sample_quote_ex.png">
-      <ImageId>sample_quote_ex</ImageId>
-      <AlternateText>sample quote ex</AlternateText>
-    </None>
-    <None Include="Art\sample_portfolio.png">
-      <ImageId>sample_portfolio</ImageId>
-      <AlternateText>sample portfolio</AlternateText>
-    </None>
-    <None Include="Art\sample_metadata_trades.png">
-      <ImageId>sample_metadata_trades</ImageId>
-      <AlternateText>sample metadata trades</AlternateText>
-    </None>
-    <None Include="Art\sample_metadata_securities.png">
-      <ImageId>sample_metadata_securities</ImageId>
-      <AlternateText>sample metadata securities</AlternateText>
-    </None>
-    <None Include="Art\sample_metadata_quik_trades.png">
-      <ImageId>sample_metadata_quik_trades</ImageId>
-      <AlternateText>sample metadata quik trades</AlternateText>
-    </None>
-    <None Include="Art\sample_metadata_quik_securities.png">
-      <ImageId>sample_metadata_quik_securities</ImageId>
-      <AlternateText>sample metadata quik securities</AlternateText>
-    </None>
-    <None Include="Art\sample_currency.png">
-      <ImageId>sample_currency</ImageId>
-      <AlternateText>sample currency</AlternateText>
-    </None>
-    <None Include="Art\sample_connection_restored.png">
-      <ImageId>sample_connection_restored</ImageId>
-      <AlternateText>sample connection restored</AlternateText>
-    </None>
-    <None Include="Art\sample_connection_error.png">
-      <ImageId>sample_connection_error</ImageId>
-      <AlternateText>sample connection error</AlternateText>
-    </None>
-    <None Include="Art\sample_async_error.png">
-      <ImageId>sample_async_error</ImageId>
-      <AlternateText>sample async error</AlternateText>
-    </None>
     <None Include="Art\sample.png">
       <ImageId>sample</ImageId>
       <AlternateText>sample</AlternateText>
     </None>
-    <None Include="Art\quote_ex_dde.png">
-      <ImageId>quote_ex_dde</ImageId>
-      <AlternateText>quote ex dde</AlternateText>
-    </None>
-    <None Include="Art\quote_dde.png">
-      <ImageId>quote_dde</ImageId>
-      <AlternateText>quote dde</AlternateText>
-    </None>
-    <None Include="Art\quik_new_order.png">
-      <ImageId>quik_new_order</ImageId>
-      <AlternateText>quik new order</AlternateText>
-    </None>
-    <None Include="Art\quik_connections.png">
-      <ImageId>quik_connections</ImageId>
-      <AlternateText>quik connections</AlternateText>
-    </None>
     <None Include="Art\QuikTrader.png">
       <ImageId>QuikTrader</ImageId>
       <AlternateText>Quik Trader</AlternateText>
-    </None>
-    <None Include="Art\position_equity_dde.png">
-      <ImageId>position_equity_dde</ImageId>
-      <AlternateText>position equity dde</AlternateText>
-    </None>
-    <None Include="Art\position_derivative_dde.png">
-      <ImageId>position_derivative_dde</ImageId>
-      <AlternateText>position derivative dde</AlternateText>
-    </None>
-    <None Include="Art\portfolio_dde.png">
-      <ImageId>portfolio_dde</ImageId>
-      <AlternateText>portfolio dde</AlternateText>
-    </None>
-    <None Include="Art\order_dde.png">
-      <ImageId>order_dde</ImageId>
-      <AlternateText>order dde</AlternateText>
-    </None>
-    <None Include="Art\Ecng.Trading.png">
-      <ImageId>Ecng.Trading</ImageId>
-      <AlternateText>Ecng.Trading</AlternateText>
-    </None>
-    <None Include="Art\compile_x86.png">
-      <ImageId>compile_x86</ImageId>
-      <AlternateText>compile x 86</AlternateText>
     </None>
   </ItemGroup>
   <ItemGroup>

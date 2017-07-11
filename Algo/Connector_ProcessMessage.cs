@@ -400,22 +400,22 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdaper = true };
 
-					if (_supportOffline)
+					if (SupportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
 
-					if (_supportCandleBuilder)
+					if (SupportCandleBuilder)
 						_inAdapter = new CandleBuilderMessageAdapter(_inAdapter, _entityCache.ExchangeInfoProvider) { OwnInnerAdaper = true };
 
-					if (_supportLevel1DepthBuilder)
+					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (_supportAssociatedSecurity)
+					if (SupportAssociatedSecurity)
 						_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (_supportFilteredMarketDepth)
+					if (SupportFilteredMarketDepth)
 						_inAdapter = new FilteredMarketDepthAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
@@ -771,9 +771,9 @@ namespace StockSharp.Algo
 						ProcessPortfolioChangeMessage((PortfolioChangeMessage)message);
 						break;
 
-					case MessageTypes.Position:
-						ProcessPositionMessage((PositionMessage)message);
-						break;
+					//case MessageTypes.Position:
+					//	ProcessPositionMessage((PositionMessage)message);
+					//	break;
 
 					case MessageTypes.PositionChange:
 						ProcessPositionChangeMessage((PositionChangeMessage)message);
@@ -820,6 +820,19 @@ namespace StockSharp.Algo
 
 					case ExtendedMessageTypes.RemoveSecurity:
 						ProcessSecurityRemoveMessage((SecurityRemoveMessage)message);
+						break;
+
+					case MessageTypes.CandleTimeFrame:
+					case MessageTypes.CandlePnF:
+					case MessageTypes.CandleRange:
+					case MessageTypes.CandleRenko:
+					case MessageTypes.CandleTick:
+					case MessageTypes.CandleVolume:
+						ProcessCandleMessage((CandleMessage)message);
+						break;
+
+					case MessageTypes.MarketDataFinished:
+						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
 					// если адаптеры передают специфичные сообщения
@@ -1256,14 +1269,14 @@ namespace StockSharp.Algo
 			});
 		}
 
-		private void ProcessPositionMessage(PositionMessage message)
-		{
-			var security = LookupSecurity(message.SecurityId);
-			var portfolio = GetPortfolio(message.PortfolioName);
-			var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
+		//private void ProcessPositionMessage(PositionMessage message)
+		//{
+		//	var security = LookupSecurity(message.SecurityId);
+		//	var portfolio = GetPortfolio(message.PortfolioName);
+		//	var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
 
-			message.CopyExtensionInfo(position);
-		}
+		//	message.CopyExtensionInfo(position);
+		//}
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
@@ -1829,6 +1842,26 @@ namespace StockSharp.Algo
 				default:
 					throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
 			}
+		}
+
+		private void ProcessCandleMessage(CandleMessage message)
+		{
+			var series = _entityCache.UpdateCandle(message, out var candle);
+
+			if (series == null)
+				return;
+
+			RaiseCandleSeriesProcessing(series, candle);
+		}
+
+		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
+		{
+			var series = _entityCache.TryGetCandleSeries(message.OriginalTransactionId);
+
+			if (series == null)
+				return;
+
+			RaiseCandleSeriesStopped(series);
 		}
 	}
 }

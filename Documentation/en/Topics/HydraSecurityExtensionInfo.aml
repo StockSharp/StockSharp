@@ -3,11 +3,11 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-<para><legacyBold>S#.Data</legacyBold> can be used in server mode, in this mode you can remotely connect to 
-<legacyBold>S#.Data</legacyBold> and get the existing data in the storage or write new ones. 
-Enabling the <legacyBold>S#.Data</legacyBold> server mode is described in the <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
-<para>To connect to S#.Data through WCF there is the 
-<codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in S#.API.</para>
+<para><token>hydra</token> can be used in server mode, in this mode you can remotely connect to 
+<token>hydra</token> and get the existing data in the storage or write new ones. 
+Enabling the <token>hydra</token> server mode is described in the <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
+<para>To connect to <token>hydra</token> through WCF there is the 
+<codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in <token>stocksharpapi</token>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))
@@ -17,8 +17,8 @@ var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri
 ...
 ]]></code>
 
-      <para>2. Saving information about the Exchange in S#.Data
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Exchange</codeEntityReference> in S#.Data</para>
+      <para>2. Saving information about the
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Exchange</codeEntityReference> in <token>hydra</token>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Console.WriteLine("Enter Exchange name (example: NYSE or TESTE)");
@@ -38,7 +38,7 @@ client.SaveExchanges(exchange);
 ]]></code>
 
       <para>3. Saving information about the 
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ExchangeBoard</codeEntityReference>  in S#.Data</para>
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ExchangeBoard</codeEntityReference> in <token>hydra</token>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Console.WriteLine("Enter ExchangeBoard name (example: NYMEX or TESTB)");
@@ -57,8 +57,8 @@ var exchangeBoard = new ExchangeBoard[]
 client.SaveExchangeBoards(exchangeBoard);
 ...
 ]]></code>
-      <para>4. Saving instrument in S#.Data (share, futures, option, etc.) 
-      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Security</codeEntityReference></para>
+      <para>4. Saving instrument in <token>hydra</token> (share, futures, option, etc.) 
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Security</codeEntityReference>:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Security[] security = new Security[]
@@ -76,7 +76,7 @@ Security[] security = new Security[]
 client.SaveSecurities(security);
 ...
 ]]></code>
-      <para>5. Getting data from <legacyBold>S#.Data</legacyBold></para>
+      <para>5. Getting data from <token>hydra</token>:</para>
 <code language="C#" title="C#"><![CDATA[
 ... 
 Console.WriteLine("All Exchange");
@@ -106,7 +106,7 @@ foreach (var i in allSecurity)
 
 
 
-<para>6. Getting the extended information from <legacyBold>S#.Data</legacyBold> storage and saving the extended information to it.</para>
+<para>6. Getting the extended information from <token>hydra</token> storage and saving the extended information to it:</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 var extendedStorage = client.GetExtendedStorage("MyExtendedStorage");

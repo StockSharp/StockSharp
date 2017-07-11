@@ -29,7 +29,7 @@ namespace SampleLMAX
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 
-		public ChartWindow(CandleSeries candleSeries, DateTime from, DateTime to)
+		public ChartWindow(CandleSeries candleSeries)
 		{
 			InitializeComponent();
 
@@ -55,8 +55,10 @@ namespace SampleLMAX
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandle += ProcessNewCandle;
-			_trader.SubscribeCandles(_candleSeries, from, to);
+			var tf = (TimeSpan)candleSeries.Arg;
+
+			_trader.CandleSeriesProcessing += ProcessNewCandle;
+			_trader.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTimeOffset.MaxValue);
 		}
 
 		private void ProcessNewCandle(CandleSeries series, Candle candle)
@@ -69,7 +71,9 @@ namespace SampleLMAX
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewCandle -= ProcessNewCandle;
+			_trader.UnSubscribeCandles(_candleSeries);
+			_trader.CandleSeriesProcessing -= ProcessNewCandle;
+
 			base.OnClosing(e);
 		}
 	}

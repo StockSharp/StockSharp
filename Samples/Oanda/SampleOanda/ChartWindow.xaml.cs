@@ -55,8 +55,8 @@ namespace SampleOanda
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandle += ProcessNewCandle;
-			_trader.SubscribeCandles(_candleSeries, from, to);
+			_trader.CandleSeriesProcessing += ProcessNewCandle;
+			_trader.SubscribeCandles(_candleSeries, @from, to);
 		}
 
 		private void ProcessNewCandle(CandleSeries series, Candle candle)
@@ -69,7 +69,7 @@ namespace SampleOanda
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewCandle -= ProcessNewCandle;
+			_trader.CandleSeriesProcessing -= ProcessNewCandle;
 			base.OnClosing(e);
 		}
 	}

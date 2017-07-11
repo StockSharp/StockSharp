@@ -394,7 +394,6 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.ServerLogLevel/summary;
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.MarketDataType/summary;DocStr3513
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UseV100Plus/summary;DocStr9646
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults/summary;DocStr3637
-E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandle/summary;DocStr90
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport/summary;DocStr3638
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerParameters/summary;DocStr3639
 E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFinancialAdvise/summary;DocStr3640
@@ -439,12 +438,6 @@ M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(Sto
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)/returns;DocStr9420
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeOptionCalc(System.Int64)/summary;DocStr9426
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeOptionCalc(System.Int64)/param/transactionId;DocStr9422
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/to;DocStr85
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr86
-M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnProcessMessage(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnProcessMessage(StockSharp.Messages.Message)/param/message;Str3166
 T:StockSharp.InteractiveBrokers.OptionCalcMarketDataMessage/summary;DocStr3629
@@ -630,6 +623,7 @@ M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadBoards(StockSharp.Interac
 M:StockSharp.InteractiveBrokers.Web.Downloader.DownloadBoards(StockSharp.InteractiveBrokers.Web.Product)/returns;Str2831
 T:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox/summary;DocStr8287
 M:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.#ctor/summary;DocStr1
+M:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.OnLoadedInternal/summary;DocStr9860
 F:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFieldsProperty/summary;DocStr29
 P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFields/summary;DocStr8288
 P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.DefaultFields/summary;DocStr8289

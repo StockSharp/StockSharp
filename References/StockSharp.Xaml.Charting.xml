@@ -1179,6 +1179,13 @@
       <param name="prefix">Name prefix.</param>
       <returns>The unique name.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.GetSimpleValues(StockSharp.Algo.Indicators.IIndicatorValue)">
+      <summary>
+            Get simple indicator values.
+            </summary>
+      <param name="value">Indicator value.</param>
+      <returns>Simple indicator values.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)">
       <summary>
             To draw the candle.
@@ -1247,13 +1254,12 @@
       <param name="strategy">Strategy.</param>
       <param name="chart">Chart.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.SetTitle(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)">
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)">
       <summary>
-            To set a title for the element.
+            Convert Devexpress theme to chart theme.
             </summary>
-      <param name="element">Element.</param>
-      <param name="series">Candles series.</param>
-      <returns>Element.</returns>
+      <param name="appTheme">Devexpress theme.</param>
+      <returns>Chart theme.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles">
       <summary>
@@ -2046,11 +2052,6 @@
     <member name="M:StockSharp.Xaml.Charting.ExtendedBaseApplication.#ctor">
       <summary>
             Initialize <see cref="T:StockSharp.Xaml.Charting.ExtendedBaseApplication" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Charting.Extensions">
-      <summary>
-            Extension class.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IChart">

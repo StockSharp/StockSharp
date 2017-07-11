@@ -65,6 +65,8 @@ M:StockSharp.Configuration.IndicatorElementCollection.CreateNewElement/returns;D
 M:StockSharp.Configuration.IndicatorElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/summary;DocStr8708
 M:StockSharp.Configuration.IndicatorElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/returns;DocStr8709
 M:StockSharp.Configuration.IndicatorElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/param/element;DocStr8710
+T:StockSharp.Configuration.InMemoryConfigurationMessageAdapterProvider/summary;DocStr9833
+M:StockSharp.Configuration.InMemoryConfigurationMessageAdapterProvider.#ctor/summary;DocStr93
 T:StockSharp.Configuration.StockSharpSection/summary;DocStr8737
 P:StockSharp.Configuration.StockSharpSection.CustomConnections/summary;DocStr8738
 P:StockSharp.Configuration.StockSharpSection.CustomCandles/summary;DocStr8739

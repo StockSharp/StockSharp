@@ -28,7 +28,8 @@ Available connections:
 <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
 <link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, 
 <link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link>,
-<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link> 
+<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link>,
+<link xlink:href="92073cd8-8e10-498e-8de9-47d3f77d278a">FXCM</link> 
 and many other. Any broker or
 <externalLink>
 <linkText>partner broker</linkText>
@@ -41,7 +42,7 @@ and many other. Any broker or
  </para>
  <title>S#.Designer</title>
  <mediaLink>
-<image xlink:href="StockSharpTitle_0"/>
+<image placement="center" xlink:href="StockSharpTitle_0"/>
 </mediaLink>
  <para>
 <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> - universal algorithmic strategies application for easy strategy creation:
@@ -63,7 +64,7 @@ and many other. Any broker or
 
  <title>S#.Data</title>
  <mediaLink>
-<image xlink:href="StockSharpTitle_1"/>
+<image placement="center" xlink:href="StockSharpTitle_1"/>
 </mediaLink>
  <para>
 <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> - the program for automatic download of historical and real-time market data:
@@ -84,7 +85,8 @@ and many other. Any broker or
 <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
 <link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, 
 <link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link>,
-<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link>
+<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link>,
+<link xlink:href="92073cd8-8e10-498e-8de9-47d3f77d278a">FXCM</link>
   and many other).</para></listItem>
   <listItem><para>High compression ratio (2 bytes per trade, 7 bytes per order book).</para></listItem>
   <listItem><para>Any data type (candles, ticks, order book, order-log, options, news and other).</para></listItem>
@@ -113,14 +115,10 @@ a professional programmer in algotrading.
   <listItem><para><link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - library for writing trading robots on <token>csharp</token>.</para></listItem>
   <listItem><para> <externalLink>
 <linkText>S#.Terminal</linkText>
-<linkUri>http://stocksharp.com/products/studio/</linkUri>
+<linkUri>http://stocksharp.com/products/terminal/</linkUri>
 </externalLink>
  - trading terminal.</para></listItem>
-  <listItem><para><externalLink>
-<linkText>S#.MatLab</linkText>
-<linkUri>http://stocksharp.com/products/matlab/</linkUri>
-</externalLink>
- - MatLab integration with trading systems. Trade from MatLab scripts.</para></listItem>
+  <listItem><para><link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" /> - MatLab integration with trading systems. Trade from MatLab scripts.</para></listItem>
   <listItem><para><externalLink>
 <linkText>BPI Viewer</linkText>
 <linkUri>http://stocksharp.com/products/lci/</linkUri>

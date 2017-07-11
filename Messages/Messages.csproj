@@ -32,8 +32,8 @@
     <DocumentationFile>bin\Release\StockSharp.Messages.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Mvvm.v15.2">
-      <HintPath>..\References\DevExpress.Mvvm.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Mvvm.v17.1">
+      <HintPath>..\References\DevExpress.Mvvm.v17.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
@@ -129,7 +129,6 @@
     <Compile Include="PortfolioLookupResultMessage.cs" />
     <Compile Include="PortfolioMessage.cs" />
     <Compile Include="PositionChangeMessage.cs" />
-    <Compile Include="PositionMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuoteChange.cs" />
     <Compile Include="QuoteChangeMessage.cs" />

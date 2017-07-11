@@ -162,7 +162,7 @@ namespace SamplePerformance
 			{
 				Id = _securityId,
 				PriceStep = _priceStep,
-				Board = _exchangeInfoProvider.GetExchangeBoard(id.BoardCode)
+				Board = _exchangeInfoProvider.GetExchangeBoard(id.BoardCode) ?? ExchangeBoard.Associated
 			};
 
 			Chart.Reset(new IChartElement[] { _candleElement });

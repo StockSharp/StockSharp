@@ -327,6 +327,18 @@ namespace StockSharp.Algo.Candles
 					//_candleBuilder.Reset();
 				}
 
+				protected override void DisposeManaged()
+				{
+					_finishedCandles.Clear();
+					_lastActiveCandle = null;
+					_lastCandle = null;
+
+					_valuesEnumerator.Dispose();
+					_candleBuilder.Dispose();
+
+					base.DisposeManaged();
+				}
+
 				public override bool MoveNext()
 				{
 					while (_finishedCandles.Count == 0)
@@ -369,15 +381,6 @@ namespace StockSharp.Algo.Candles
 
 					Current = null;
 					return false;
-				}
-
-				protected override void DisposeManaged()
-				{
-					Reset();
-
-					_candleBuilder.Dispose();
-
-					base.DisposeManaged();
 				}
 			}
 
@@ -641,7 +644,7 @@ namespace StockSharp.Algo.Candles
 
 				public void Dispose()
 				{
-					Reset();
+					Current = null;
 					_valuesEnumerator.Dispose();
 				}
 
@@ -1071,56 +1074,56 @@ namespace StockSharp.Algo.Candles
 			return area;
 		}
 
-		/// <summary>
-		/// To start timer of getting from sent <paramref name="connector" /> of real time candles.
-		/// </summary>
-		/// <typeparam name="TConnector">The type of the connection implementing <see cref="IExternalCandleSource"/>.</typeparam>
-		/// <param name="connector">The connection implementing <see cref="IExternalCandleSource"/>.</param>
-		/// <param name="registeredSeries">All registered candles series.</param>
-		/// <param name="offset">The time shift for the new request to obtain a new candle. It is needed for the server will have time to create data in its candles storage.</param>
-		/// <param name="requestNewCandles">The handler getting new candles.</param>
-		/// <param name="interval">The interval between data updates.</param>
-		/// <returns>Created timer.</returns>
-		public static Timer StartRealTime<TConnector>(this TConnector connector, CachedSynchronizedSet<CandleSeries> registeredSeries, TimeSpan offset, Action<CandleSeries, Range<DateTimeOffset>> requestNewCandles, TimeSpan interval)
-			where TConnector : class, IConnector//, IExternalCandleSource
-		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
+		///// <summary>
+		///// To start timer of getting from sent <paramref name="connector" /> of real time candles.
+		///// </summary>
+		///// <typeparam name="TConnector">The type of the connection implementing <see cref="IExternalCandleSource"/>.</typeparam>
+		///// <param name="connector">The connection implementing <see cref="IExternalCandleSource"/>.</param>
+		///// <param name="registeredSeries">All registered candles series.</param>
+		///// <param name="offset">The time shift for the new request to obtain a new candle. It is needed for the server will have time to create data in its candles storage.</param>
+		///// <param name="requestNewCandles">The handler getting new candles.</param>
+		///// <param name="interval">The interval between data updates.</param>
+		///// <returns>Created timer.</returns>
+		//public static Timer StartRealTime<TConnector>(this TConnector connector, CachedSynchronizedSet<CandleSeries> registeredSeries, TimeSpan offset, Action<CandleSeries, Range<DateTimeOffset>> requestNewCandles, TimeSpan interval)
+		//	where TConnector : class, IConnector//, IExternalCandleSource
+		//{
+		//	if (connector == null)
+		//		throw new ArgumentNullException(nameof(connector));
 
-			if (registeredSeries == null)
-				throw new ArgumentNullException(nameof(registeredSeries));
+		//	if (registeredSeries == null)
+		//		throw new ArgumentNullException(nameof(registeredSeries));
 
-			if (requestNewCandles == null)
-				throw new ArgumentNullException(nameof(requestNewCandles));
+		//	if (requestNewCandles == null)
+		//		throw new ArgumentNullException(nameof(requestNewCandles));
 
-			return ThreadingHelper.Timer(() =>
-			{
-				try
-				{
-					if (connector.ConnectionState != ConnectionStates.Connected)
-						return;
+		//	return ThreadingHelper.Timer(() =>
+		//	{
+		//		try
+		//		{
+		//			if (connector.ConnectionState != ConnectionStates.Connected)
+		//				return;
 
-					lock (registeredSeries.SyncRoot)
-					{
-						foreach (var series in registeredSeries.Cache)
-						{
-							var tf = (TimeSpan)series.Arg;
-							var time = connector.CurrentTime;
-							var bounds = tf.GetCandleBounds(time, series.Security.Board);
+		//			lock (registeredSeries.SyncRoot)
+		//			{
+		//				foreach (var series in registeredSeries.Cache)
+		//				{
+		//					var tf = (TimeSpan)series.Arg;
+		//					var time = connector.CurrentTime;
+		//					var bounds = tf.GetCandleBounds(time, series.Security.Board);
 
-							var beginTime = (time - bounds.Min) < offset ? (bounds.Min - tf) : bounds.Min;
-							var finishTime = bounds.Max;
+		//					var beginTime = (time - bounds.Min) < offset ? (bounds.Min - tf) : bounds.Min;
+		//					var finishTime = bounds.Max;
 
-							requestNewCandles(series, new Range<DateTimeOffset>(beginTime, finishTime));
-						}
-					}
-				}
-				catch (Exception ex)
-				{
-					ex.LogError();
-				}
-			})
-			.Interval(interval);
-		}
+		//					requestNewCandles(series, new Range<DateTimeOffset>(beginTime, finishTime));
+		//				}
+		//			}
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			ex.LogError();
+		//		}
+		//	})
+		//	.Interval(interval);
+		//}
 	}
 }

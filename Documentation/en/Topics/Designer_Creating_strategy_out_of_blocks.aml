@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6974891d-4c8d-46e1-bdeb-fc7391bc0625" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>1.	Добавить новую стратегию можно, нажав на 
+кнопку <legacyBold>Добавить</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> во 
+вкладке <legacyBold>Общие</legacyBold> и выбрать <legacyBold>Стратегия</legacyBold>. 
+Или, нажав правой кнопкой мыши на папке <legacyBold>Стратегии</legacyBold> панели 
+<legacyBold>Схемы</legacyBold>, и нажать на кнопку <legacyBold>Добавить</legacyBold>  
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> в выпавшем меню:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_00"/>
+</mediaLink>
+<para>После нажатия кнопки <legacyBold>Добавить</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>
+ в папке <legacyBold>Стратегии</legacyBold> панели <legacyBold>Схемы</legacyBold> появится новая 
+ стратегия. В рабочей области появится новая вкладка со стратегией, 
+ при переходе на которую в ленте автоматически откроется вкладка <legacyBold>Эмуляция</legacyBold>. 
+ На вкладке <legacyBold>Эмуляция</legacyBold> можно изменить название стратегии 
+ и дать ей краткое описание:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_01"/>
+</mediaLink>
+<para>2.	Вкладка стратегии состоит из панелей <legacyBold>Схема</legacyBold> (<link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />)
+и <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />. Область <legacyBold>График</legacyBold> необходима для 
+отображения результатов тестирования стратегии, созданной в области <legacyBold>Схема</legacyBold>. 
+Подробно о тестировании стратегий описано в пункте <link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

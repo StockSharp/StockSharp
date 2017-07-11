@@ -15,6 +15,9 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateOrderCondition">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
       <summary>
             Create FIX protocol dialect.
@@ -73,6 +76,11 @@
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.ConvertToLatin">
       <summary>
             Конвертировать кириллицу в латиницу.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixServer.QuotesInterval">
+      <summary>
+            Интервал обновления котировок.
             </summary>
     </member>
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.SingleSlash">
@@ -2036,7 +2044,7 @@
     </member>
     <member name="M:StockSharp.Quik.DdeTable.Clone">
       <summary>
-             Создать копию <see cref="T:StockSharp.Quik.DdeTable" />.
+            Создать копию <see cref="T:StockSharp.Quik.DdeTable" />.
             </summary>
       <returns>Копия.</returns>
     </member>
@@ -2059,6 +2067,18 @@
             Получить строковое представление.
             </summary>
       <returns>Строковое представление.</returns>
+    </member>
+    <member name="M:StockSharp.Quik.DdeTable.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Quik.DdeTable.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
     </member>
     <member name="T:StockSharp.Quik.DdeTableColumn">
       <summary>
@@ -2113,6 +2133,18 @@
             </summary>
       <returns>Строковое представление.</returns>
     </member>
+    <member name="M:StockSharp.Quik.DdeTableColumn.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Quik.DdeTableColumn.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
     <member name="T:StockSharp.Quik.DdeTableColumnList">
       <summary>
             Коллекция метаданных о колонках таблиц, экспортируемых через DDE.
@@ -2155,13 +2187,6 @@
       <param name="item">Колонка.</param>
       <returns>
         <see langword="true" />, если колонку можно вставить. Иначе, <see langword="false" />.</returns>
-    </member>
-    <member name="M:StockSharp.Quik.DdeTableColumnList.OnClearing">
-      <summary>
-            Удаление всех колонок.
-            </summary>
-      <returns>
-        <see langword="true" />, если можно удалить все колонки. Иначе, <see langword="false" />.</returns>
     </member>
     <member name="T:StockSharp.Quik.DdeTradeColumns">
       <summary>
@@ -2657,6 +2682,16 @@
             Создать копию <see cref="T:StockSharp.Quik.QuikOrderCondition" />.
             </summary>
       <returns>Копия.</returns>
+    </member>
+    <member name="E:StockSharp.Quik.QuikOrderCondition.PropertiesChanged">
+      <summary>
+            The available properties change event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Quik.QuikOrderCondition.RaisePropertiesChanged">
+      <summary>
+            To call the available properties change event.
+            </summary>
     </member>
     <member name="T:StockSharp.Quik.QuikTrader">
       <summary>
@@ -4360,15 +4395,18 @@
     </member>
     <member name="F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.LeftDoubleClickCommand">
       <summary>
-      </summary>
+            Команда на двойной клик.
+            </summary>
     </member>
     <member name="F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.AddCommand">
       <summary>
-      </summary>
+            Команда на добавление колонки.
+            </summary>
     </member>
     <member name="F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.RemoveCommand">
       <summary>
-      </summary>
+            Команда на удаление колонки.
+            </summary>
     </member>
     <member name="E:StockSharp.Quik.Xaml.DdeTableColumnsPicker.SelectedColumnsCountChange">
       <summary>
@@ -4410,7 +4448,8 @@
     </member>
     <member name="F:StockSharp.Quik.Xaml.DdeColumnsPicker.LeftDoubleClickCommand">
       <summary>
-      </summary>
+            Команда на двойной клик.
+            </summary>
     </member>
     <member name="E:StockSharp.Quik.Xaml.DdeColumnsPicker.SelectedColumnsCountChange">
       <summary>

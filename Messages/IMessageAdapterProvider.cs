@@ -12,7 +12,18 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// All available adapters.
 		/// </summary>
-		IEnumerable<KeyValuePair<string, IMessageAdapter>> Adapters { get; }
+		IEnumerable<IMessageAdapter> Adapters { get; }
+	}
+
+	/// <summary>
+	/// The message adapter's provider interface. 
+	/// </summary>
+	public interface IPortfolioMessageAdapterProvider : IMessageAdapterProvider
+	{
+		/// <summary>
+		/// All available adapters.
+		/// </summary>
+		IEnumerable<KeyValuePair<string, IMessageAdapter>> PortfolioAdapters { get; }
 
 		/// <summary>
 		/// Get adapter by portfolio name.
@@ -39,7 +50,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// In memory message adapter's provider.
 	/// </summary>
-	public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
+	public class InMemoryMessageAdapterProvider : IPortfolioMessageAdapterProvider
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryMessageAdapterProvider"/>.
@@ -50,10 +61,13 @@ namespace StockSharp.Messages
 
 		private readonly CachedSynchronizedDictionary<string, IMessageAdapter> _adapters = new CachedSynchronizedDictionary<string, IMessageAdapter>();
 
+		/// <inheritdoc />
+		public IEnumerable<IMessageAdapter> Adapters => _adapters.CachedValues;
+
 		/// <summary>
 		/// All available adapters.
 		/// </summary>
-		public virtual IEnumerable<KeyValuePair<string, IMessageAdapter>> Adapters => _adapters.CachedPairs;
+		public virtual IEnumerable<KeyValuePair<string, IMessageAdapter>> PortfolioAdapters => _adapters.CachedPairs;
 
 		/// <summary>
 		/// Get adapter by portfolio name.

@@ -10,7 +10,7 @@
     	</para>
     	
     	<mediaLink>
-        <image placement="left" xlink:href="hydra_tasks" />
+        <image placement="center" xlink:href="hydra_tasks" />
       </mediaLink>
     	<para>Currently, there are three classes of tasks in <token>hydra</token></para>
     	

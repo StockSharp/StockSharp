@@ -6,13 +6,7 @@
 			  <step>
 				  <content>
 		  				<para>
-							To install the <token>hydra</token> you should go to the
-							<externalLink>
-								<linkAlternateText>stocksharp.com/products/download</linkAlternateText>
-								<linkUri>http://stocksharp.com/products/download/</linkUri>
-								<linkTarget>_blank</linkTarget>
-							</externalLink> section of the <token>StockSharp</token> site.
-.
+							To install the <token>hydra</token> you should go to the <token>download</token> page.
 		  				</para>
 		  				<mediaLink><image placement="center" xlink:href="hydra_setup1" /></mediaLink>	
 				  </content>

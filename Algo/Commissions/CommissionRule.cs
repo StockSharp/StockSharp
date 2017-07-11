@@ -537,7 +537,7 @@ namespace StockSharp.Algo.Commissions
 		/// Board code.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public ExchangeBoard Board
 		{

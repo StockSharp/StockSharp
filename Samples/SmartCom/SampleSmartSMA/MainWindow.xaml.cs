@@ -111,9 +111,9 @@ namespace SampleSmartSMA
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
 
-						_candleManager = new CandleManager((IExternalCandleSource)_trader);
+						_candleManager = new CandleManager(_trader);
 
-						_trader.NewCandle += (series, candle) => _historyCandles.SyncDo(col =>
+						_trader.CandleSeriesProcessing += (series, candle) => _historyCandles.SyncDo(col =>
 						{
 							_historyCandles.Add((TimeFrameCandle)candle);
 

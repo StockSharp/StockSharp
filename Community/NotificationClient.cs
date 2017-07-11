@@ -20,9 +20,7 @@ namespace StockSharp.Community
 	using System.Threading;
 
 	using Ecng.Common;
-	using Ecng.Localization;
 
-	using StockSharp.Localization;
 	using StockSharp.Logging;
 
 	/// <summary>
@@ -49,8 +47,6 @@ namespace StockSharp.Community
 			: base(address, "notification")
 		{
 		}
-
-		private static bool IsEnglish => LocalizedStrings.ActiveLanguage != Languages.Russian;
 
 		private int? _smsCount;
 
@@ -122,6 +118,27 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
+		/// Send feedback for specified product.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <param name="rating">Rating.</param>
+		/// <param name="comment">Comment.</param>
+		public void SendFeedback(Products product, int rating, string comment)
+		{
+			ValidateError(Invoke(f => f.SendFeedback(SessionId, product, rating, comment)));
+		}
+
+		/// <summary>
+		/// Has feedback for specified product.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <returns>Check result.</returns>
+		public bool HasFeedback(Products product)
+		{
+			return Invoke(f => f.HasFeedback(SessionId, product));
+		}
+
+		/// <summary>
 		/// News received.
 		/// </summary>
 		public event Action<CommunityNews> NewsReceived; 
@@ -154,7 +171,7 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews2(TryGetSession ?? Guid.Empty, IsEnglish, 0));
+			var news = Invoke(f => f.GetNews2(NullableSessionId ?? Guid.Empty, IsEnglish, 0));
 
 			//if (news.Length <= 0)
 			//	return;

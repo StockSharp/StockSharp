@@ -165,7 +165,7 @@ namespace StockSharp.Community
 
 		private void Refresh()
 		{
-			var ids = Invoke(f => f.GetStrategies(_lastCheckTime)).ToArray();
+			var ids = Invoke(f => f.GetStrategies(_lastCheckTime, IsEnglish)).ToArray();
 
 			foreach (var tuple in ids.Where(t => t.Item2 < 0))
 			{
@@ -259,7 +259,7 @@ namespace StockSharp.Community
 		/// <param name="strategy">The strategy data.</param>
 		public void CreateStrategy(StrategyData strategy)
 		{
-			var id = Invoke(f => f.CreateStrategy(SessionId, strategy));
+			var id = Invoke(f => f.CreateStrategy(SessionId, IsEnglish, strategy));
 
 			if (id < 0)
 				ValidateError((byte)-id, strategy.Id, strategy.Price);
@@ -387,6 +387,16 @@ namespace StockSharp.Community
 		public void StopBacktest(StrategyBacktest backtest)
 		{
 			ValidateError(Invoke(f => f.StopBacktest(SessionId, backtest.Id)));
+		}
+
+		/// <summary>
+		/// Get strategy info.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <returns>The strategy data.</returns>
+		public StrategyData GetDescription(long id)
+		{
+			return Invoke(f => f.GetDescription(new[] { id }))?.FirstOrDefault();
 		}
 
 		private static void ValidateError(byte errorCode, params object[] args)

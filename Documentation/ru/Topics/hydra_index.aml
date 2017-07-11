@@ -8,12 +8,12 @@
 		Для этого выбирается путь где лежат данные и по очереди просматриваются 
 		инструменты, которые предполагается будут участвовать в расчете индекса.
 		Если имеются пропуски, то необходимо докачать нужные маркет-данные (например, с финама).</para>
-		<mediaLink><image  xlink:href="HydraGluingCheckData" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="HydraGluingCheckData" /></mediaLink>
 		
 		<para>В качестве примера будет рассмотрен индекс отношений инструментов LKOH@TQBR/SBER@TQBR</para>
 		<para>Первый шаг - создание <legacyBold>Индекса</legacyBold>. Для этого необходимо нажать на вкладке <legacyBold>Все инструменты.</legacyBold>
 		кнопку <legacyBold>Создать инструмент=>Индекс</legacyBold>, после чего появится окно следующего вида:</para>
-		<mediaLink><image xlink:href="hydra_index_sec" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="hydra_index_sec" /></mediaLink>
 		
 		<para>Для создания инструмента <legacyBold>Индекса</legacyBold> необходимо задать имя и добавить 
 		математическую формулу комбинации нескольких инструментов.
@@ -47,7 +47,7 @@
 </mediaLink>
 <para>Сгенерированные данные можно экспортировать в форматы Excel, xml или txt. Экспорт выполняется при помощи раскрывающегося списка:</para>
     		<mediaLink>
-    			<image placement="left" xlink:href="hydra_export" />
+    			<image placement="center" xlink:href="hydra_export" />
     		</mediaLink>
 	</introduction>
 

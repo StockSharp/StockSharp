@@ -94,7 +94,6 @@
     <Compile Include="StrategySubscription.cs" />
     <Compile Include="Products.cs" />
     <Compile Include="ISessionService.cs" />
-    <Compile Include="SessionClient.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileData.cs" />
     <Compile Include="StrategyBacktest.cs" />

@@ -12,6 +12,7 @@
            a specific number of sub-topics when creating the outline.  Specify
            http://www.mathworks.com  -->
       <!-- <autoOutline /> -->
+      <mediaLink><image placement="center" xlink:href="matlab_stocksharp"/></mediaLink>
       <para>
 		  <token>matlab</token> создан для трейдеров, которые пишут торговые алгоритмы внутри среды <externalLink>
 			<linkText>MatLab MathWorks</linkText>

@@ -96,37 +96,31 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="ExecutionMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			Export(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="QuoteChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Export(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="Level1ChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			Export(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="CandleMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<PositionChangeMessage> messages)
+		{
+			Export(messages);
+		}
+
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			foreach (var group in messages.GroupBy(m => m.GetType()))
@@ -138,10 +132,7 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="NewsMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			Export(messages);

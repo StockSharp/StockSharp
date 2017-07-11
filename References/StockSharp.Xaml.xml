@@ -216,9 +216,24 @@
             The path to the directory with native security identifiers.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.BaseApplication.SecurityMappingDir">
+      <summary>
+            The path to the directory with securities id mapping.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.BaseApplication.SecurityExtendedInfo">
+      <summary>
+            The path to the directory with securities extended info.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.BaseApplication.ProxySettings">
       <summary>
             Proxy-server settings.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BaseApplication.HelpCommand">
+      <summary>
+            Help command.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.BaseApplication.StartIsRunning">
@@ -253,6 +268,114 @@
             </summary>
       <param name="owner">Parent window.</param>
     </member>
+    <member name="T:StockSharp.Xaml.Code.CodeExtensions">
+      <summary>
+            Extension class.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeExtensions.CompileCode(Ecng.Common.ICompiler,System.String,System.String,System.Collections.Generic.IEnumerable{StockSharp.Xaml.Code.CodeReference})">
+      <summary>
+            To compile the code.
+            </summary>
+      <param name="compiler">Compiler.</param>
+      <param name="code">Code.</param>
+      <param name="name">The build name.</param>
+      <param name="references">References.</param>
+      <returns>The result of the compilation.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeExtensions.HasErrors(Ecng.Common.CompilationResult)">
+      <summary>
+            Are there any errors in the compilation.
+            </summary>
+      <param name="result">The result of the compilation.</param>
+      <returns>
+        <see langword="true" /> - If there are errors, <see langword="true" /> - If the compilation is performed without errors.</returns>
+    </member>
+    <member name="P:StockSharp.Xaml.Code.CodeExtensions.DefaultReferences">
+      <summary>
+            Default builds.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeExtensions.ToReference(System.String,System.Reflection.Assembly[])">
+      <summary>
+            To modify the build name to <see cref="T:StockSharp.Xaml.Code.CodeReference" />.
+            </summary>
+      <param name="referenceName">The build name.</param>
+      <param name="assemblies">Previously loaded builds.</param>
+      <returns>
+        <see cref="T:StockSharp.Xaml.Code.CodeReference" />.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeExtensions.ToReferences(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            To modify build names to the <see cref="T:StockSharp.Xaml.Code.CodeReference" />.
+            </summary>
+      <param name="referenceNames">Build names.</param>
+      <returns>
+        <see cref="T:StockSharp.Xaml.Code.CodeReference" />.</returns>
+    </member>
+    <member name="T:StockSharp.Xaml.Code.CodeReference">
+      <summary>
+            The link to the .NET build.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeReference.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Code.CodeReference" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Code.CodeReference.Name">
+      <summary>
+            The build name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Code.CodeReference.Location">
+      <summary>
+            The path to the build.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Code.CodeReferencesWindow">
+      <summary>
+            The window for editing the list of references to the .NET builds.
+            </summary>
+      <summary>
+            CodeReferencesWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Code.CodeReferencesWindow.OkCommand">
+      <summary>
+            The command for the applying changes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Code.CodeReferencesWindow.AddCommand">
+      <summary>
+            The command for the adding references.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Code.CodeReferencesWindow.RemoveCommand">
+      <summary>
+            The command for the removing references.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeReferencesWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Code.CodeReferencesWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Code.CodeReferencesWindow.References">
+      <summary>
+            References.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeReferencesWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1">
+      <summary>
+        <see cref="T:DevExpress.Xpf.Editors.ComboBoxEdit" /> value converter.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter">
       <summary>
         <see cref="T:StockSharp.Algo.ProcessStates" /> to <see cref="T:System.Windows.Media.ImageSource" /> converter.
@@ -271,6 +394,11 @@
     <member name="P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppedImage">
       <summary>
         <see cref="T:System.Windows.Media.ImageSource" /> for the <see cref="F:StockSharp.Algo.ProcessStates.Stopped" /> state.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Converters.SelectedItemsCountTextConverter">
+      <summary>
+            Items count to string converter.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Converters.SeriesToStringConverter">
@@ -506,6 +634,74 @@
             Save settings.
             </summary>
       <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.PositionChangeGrid">
+      <summary>
+            The table to display a message <see cref="T:StockSharp.Messages.PositionChangeMessage" />.
+            </summary>
+      <summary>
+            PositionChangeGrid
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PositionChangeGrid.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PositionChangeGrid" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeGrid.MaxCount">
+      <summary>
+            The maximum number of messages to display. The -1 value means an unlimited amount. The default value is 10000.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeGrid.Messages">
+      <summary>
+            The list of messages added to the table.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeGrid.SelectedMessage">
+      <summary>
+            The selected message.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeGrid.SelectedMessages">
+      <summary>
+            Selected messages.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PositionChangeGrid.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PositionChangeTypesComboBox">
+      <summary>
+            The drop-down list to select a set of types <see cref="T:StockSharp.Messages.PositionChangeTypes" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PositionChangeTypesComboBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PositionChangeTypesComboBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PositionChangeTypesComboBox.OnLoadedInternal">
+      <summary>
+            Control loading handler.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PositionChangeTypesComboBox.SelectedTypesProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PositionChangeTypesComboBox.SelectedTypes" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeTypesComboBox.SelectedTypes">
+      <summary>
+            Selected types.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PositionChangeTypesComboBox.DefaultTypes">
+      <summary>
+            Default value for <see cref="P:StockSharp.Xaml.PositionChangeTypesComboBox.SelectedTypes" />.
+            </summary>
     </member>
     <member name="T:StockSharp.Xaml.MarketRuleGrid">
       <summary>
@@ -831,14 +1027,75 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor">
+    <member name="T:StockSharp.Xaml.RatingWindow">
       <summary>
-        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.Xaml.SecurityTypesComboBox" />.
+            Rating window.
+            </summary>
+      <summary>
+            RatingWindow
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor">
+    <member name="F:StockSharp.Xaml.RatingWindow.RatingValueProperty">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor" />.
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.RatingWindow.RatingValue" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RatingWindow.RatingValue">
+      <summary>
+            Rating.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.RatingWindow.Comment">
+      <summary>
+            Comment.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.RatingWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.RatingWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.RatingWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.SecurityMappingWindow">
+      <summary>
+            The window for creation and editing of symbols mapping.
+            </summary>
+      <summary>
+            SecurityMappingWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMappingWindow.RemoveCommand">
+      <summary>
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to remove comparison.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecurityMappingWindow.AddCommand">
+      <summary>
+        <see cref="T:System.Windows.Input.RoutedCommand" /> to add comparison.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMappingWindow.ConnectorsInfo">
+      <summary>
+            Visual description of available connections.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityMappingWindow.Storage">
+      <summary>
+            Security identifier mappings storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMappingWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityMappingWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMappingWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.StrategiesDashboard">
@@ -941,57 +1198,43 @@
       <summary>
       </summary>
     </member>
-    <member name="T:StockSharp.Xaml.SuggestionsWindow">
+    <member name="T:StockSharp.Xaml.QuestionWindow">
       <summary>
             Suggestions window.
             </summary>
       <summary>
-            SuggestionsWindow
+            QuestionWindow
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.SuggestionsWindow.OkCommand">
+    <member name="F:StockSharp.Xaml.QuestionWindow.OkCommand">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.NotificationClient">
+    <member name="P:StockSharp.Xaml.QuestionWindow.NotificationClient">
       <summary>
             The client for access to the StockSharp notification service.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.DoNotShowAgain">
-      <summary>
-            Do not show this window again.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.Link">
+    <member name="P:StockSharp.Xaml.QuestionWindow.Link">
       <summary>
             Link to file.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.Product">
+    <member name="M:StockSharp.Xaml.QuestionWindow.#ctor">
       <summary>
-            Product type.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.QuestionWindow" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.SuggestionsWindow.Version">
+    <member name="M:StockSharp.Xaml.QuestionWindow.Init(StockSharp.Community.Products,System.Version,System.String,System.String)">
       <summary>
-            App version.
+            Variables initial initialization.
             </summary>
+      <param name="product">Product type.</param>
+      <param name="version">App version.</param>
+      <param name="caption">The message title.</param>
+      <param name="text">Message text.</param>
     </member>
-    <member name="M:StockSharp.Xaml.SuggestionsWindow.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SuggestionsWindow" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.SuggestionsWindow.Show(System.Windows.Window,System.Action{System.Boolean},System.Nullable{System.TimeSpan})">
-      <summary>
-            Show.
-            </summary>
-      <param name="owner">Owner window.</param>
-      <param name="handled">Handler will be called after the window was showed.</param>
-      <param name="delay">Delay.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.SuggestionsWindow.InitializeComponent">
+    <member name="M:StockSharp.Xaml.QuestionWindow.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -1242,6 +1485,11 @@
     <member name="P:StockSharp.Xaml.ConnectorInfo.AdapterType">
       <summary>
             The type of adapter.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ConnectorInfo.StorageName">
+      <summary>
+            Storage name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.ConnectorInfo.#ctor(System.Type)">
@@ -1722,11 +1970,10 @@
     </member>
     <member name="M:StockSharp.Xaml.IconsExtension.GetImage(System.String)">
       <summary>
-      </summary>
-      <param name="key">
-      </param>
-      <returns>
-      </returns>
+            Get image by resource key.
+            </summary>
+      <param name="key">Resource key.</param>
+      <returns>Image.</returns>
     </member>
     <member name="T:StockSharp.Xaml.SecretWindow">
       <summary>
@@ -2432,6 +2679,11 @@
             Board.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthColumns.Volume">
+      <summary>
+            Volume.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.MarketDepthControl">
       <summary>
             The visual control displaying the order book with quotes (<see cref="T:StockSharp.BusinessEntities.MarketDepth" />).
@@ -2468,6 +2720,16 @@
             The maximum depth of order book display. The default value is <see cref="F:StockSharp.Xaml.MarketDepthControl.DefaultDepth" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.ShowOwnVolumeColumnsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.ShowOwnVolumeColumns" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.ShowOwnVolumeColumns">
+      <summary>
+            Show own volume columns.
+            </summary>
+    </member>
     <member name="F:StockSharp.Xaml.MarketDepthControl.ShowBoardColumnProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.ShowBoardColumn" />.
@@ -2476,6 +2738,16 @@
     <member name="P:StockSharp.Xaml.MarketDepthControl.ShowBoardColumn">
       <summary>
             Show Board column.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.ShowSingleVolumeColumnProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.ShowSingleVolumeColumn" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.ShowSingleVolumeColumn">
+      <summary>
+            Show single <see cref="F:StockSharp.Xaml.MarketDepthColumns.Volume" /> column. The default value is <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.IsBidsOnTop">
@@ -2496,6 +2768,36 @@
     <member name="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat">
       <summary>
             The amount format. The default value is "0".
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.MaxVolumeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.MaxVolume" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.MaxVolume">
+      <summary>
+            The maximum volume of all quotes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.MaxBuyVolumeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.MaxBuyVolume" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.MaxBuyVolume">
+      <summary>
+            The maximum volume of all bids.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.MaxSellVolumeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.MaxSellVolume" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.MaxSellVolume">
+      <summary>
+            The maximum volume of all asks.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)">
@@ -2791,6 +3093,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Level1FieldsComboBox" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Level1FieldsComboBox.OnLoadedInternal">
+      <summary>
+            Control loading handler.
+            </summary>
+    </member>
     <member name="F:StockSharp.Xaml.Level1FieldsComboBox.SelectedFieldsProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Level1FieldsComboBox.SelectedFields" />.
@@ -3078,6 +3385,11 @@
     <member name="M:StockSharp.Xaml.SecurityTypesComboBox.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityTypesComboBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityTypesComboBox.OnLoadedInternal">
+      <summary>
+            Control loading handler.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.SecurityTypesComboBox.SelectedTypesProperty">

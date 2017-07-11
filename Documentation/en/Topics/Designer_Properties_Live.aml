@@ -7,7 +7,7 @@
 При выделении определенного свойства внизу таблицы появится подробное описание 
 этого свойства. Все свойства сгруппированы в группы:</para>
  <mediaLink>
-<image xlink:href="Designer_Properties_Live_00"/>
+<image placement="center" xlink:href="Designer_Properties_Live_00"/>
 </mediaLink>
 <para><legacyBold>Уровень логирования</legacyBold></para>
 <list class="bullet">

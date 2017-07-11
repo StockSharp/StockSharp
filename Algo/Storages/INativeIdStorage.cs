@@ -104,14 +104,10 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// The new native security identifier added to storage.
-		/// </summary>
+		/// <inheritdoc />
 		public event Action<string, SecurityId, object> Added;
 
-		/// <summary>
-		/// Initialize the storage.
-		/// </summary>
+		/// <inheritdoc />
 		public void Init()
 		{
 			if (!Directory.Exists(_path))
@@ -137,11 +133,7 @@ namespace StockSharp.Algo.Storages
 				throw new AggregateException(errors);
 		}
 
-		/// <summary>
-		/// Get native security identifiers for storage. 
-		/// </summary>
-		/// <param name="name">Storage name.</param>
-		/// <returns>Security identifiers.</returns>
+		/// <inheritdoc />
 		public Tuple<SecurityId, object>[] Get(string name)
 		{
 			if (name.IsEmpty())
@@ -158,14 +150,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// Try add native security identifier to storage.
-		/// </summary>
-		/// <param name="name">Storage name.</param>
-		/// <param name="securityId">Security identifier.</param>
-		/// <param name="nativeId">Native (internal) trading system security id.</param>
-		/// <param name="isPersistable">Save the identifier as a permanent.</param>
-		/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
+		/// <inheritdoc />
 		public bool TryAdd(string name, SecurityId securityId, object nativeId, bool isPersistable)
 		{
 			if (name.IsEmpty())
@@ -191,12 +176,7 @@ namespace StockSharp.Algo.Storages
 			return true;
 		}
 
-		/// <summary>
-		/// Try get security identifier by native identifier.
-		/// </summary>
-		/// <param name="name">Storage name.</param>
-		/// <param name="nativeId">Native (internal) trading system security id.</param>
-		/// <returns>Security identifier.</returns>
+		/// <inheritdoc />
 		public SecurityId? TryGetByNativeId(string name, object nativeId)
 		{
 			if (name.IsEmpty())
@@ -218,12 +198,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// Try get native security identifier by identifier.
-		/// </summary>
-		/// <param name="name">Storage name.</param>
-		/// <param name="securityId">Security identifier.</param>
-		/// <returns>Native (internal) trading system security id.</returns>
+		/// <inheritdoc />
 		public object TryGetBySecurityId(string name, SecurityId securityId)
 		{
 			if (name.IsEmpty())

@@ -110,6 +110,8 @@ namespace StockSharp.Algo.Export
 					Export(((IEnumerable<Security>)values).Select(s => s.ToMessage()));
 				else if (dataType == typeof(SecurityMessage))
 					Export((IEnumerable<SecurityMessage>)values);
+				else if (dataType == typeof(PositionChangeMessage))
+					Export((IEnumerable<PositionChangeMessage>)values);
 				else
 					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
 			});
@@ -160,5 +162,11 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="messages">Messages.</param>
 		protected abstract void Export(IEnumerable<SecurityMessage> messages);
+
+		/// <summary>
+		/// To export <see cref="PositionChangeMessage"/>.
+		/// </summary>
+		/// <param name="messages">Messages.</param>
+		protected abstract void Export(IEnumerable<PositionChangeMessage> messages);
 	}
 }

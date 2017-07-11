@@ -11,7 +11,7 @@
     	</para>
     	
     	<mediaLink>
-        <image placement="left" xlink:href="hydra_tasks" />
+        <image placement="center" xlink:href="hydra_tasks" />
       </mediaLink>
     	<para>На текущий момент в <token>hydra</token> существуют три класса задач:</para>
     	

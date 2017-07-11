@@ -6,7 +6,7 @@
   <members>
     <member name="T:StockSharp.Oanda.OandaMessageAdapter">
       <summary>
-            The messages adapter for OANDA (REST protocol).
+            The messages adapter for OANDA.
             </summary>
     </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
@@ -45,6 +45,16 @@
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.Token">
       <summary>
             Token.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.UseCompression">
+      <summary>
+            Compression.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.LogOnlyTransactions">
+      <summary>
+            Write log messages only for transaction stream.
             </summary>
     </member>
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames">
@@ -144,30 +154,15 @@
             Token.
             </summary>
     </member>
-    <member name="E:StockSharp.Oanda.OandaTrader.NewCandle">
+    <member name="P:StockSharp.Oanda.OandaTrader.UseCompression">
       <summary>
-            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            Compression.
             </summary>
     </member>
-    <member name="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+    <member name="P:StockSharp.Oanda.OandaTrader.LogOnlyTransactions">
       <summary>
-            Subscribe to receive new candles.
+            Write log messages only for transaction stream.
             </summary>
-      <param name="series">Candles series.</param>
-      <param name="from">The initial date from which you need to get data.</param>
-      <param name="to">The final date by which you need to get data.</param>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-      <param name="series">Candles series.</param>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <summary>
-            Process message.
-            </summary>
-      <param name="message">Message.</param>
     </member>
   </members>
 </doc>

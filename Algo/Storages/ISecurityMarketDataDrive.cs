@@ -69,7 +69,14 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<Level1ChangeMessage> GetLevel1Storage(IMarketDataSerializer<Level1ChangeMessage> serializer);
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the storage of position changes data.
+		/// </summary>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The storage of position changes data.</returns>
+		IMarketDataStorage<PositionChangeMessage> GetPositionMessageStorage(IMarketDataSerializer<PositionChangeMessage> serializer);
+
+		/// <summary>
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>
 		/// <param name="arg">Candle arg.</param>
@@ -78,7 +85,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<CandleMessage> GetCandleStorage(Type candleType, object arg, IMarketDataSerializer<CandleMessage> serializer);
 
 		/// <summary>
-		/// To get the transactions storage the specified instrument.
+		/// To get the transactions storage for the specified instrument.
 		/// </summary>
 		/// <param name="serializer">The serializer.</param>
 		/// <returns>The transactions storage.</returns>
@@ -483,9 +490,17 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private sealed class Level1Storage : MarketDataStorage<Level1ChangeMessage, DateTimeOffset>//, IMarketDataStorage<SecurityChange>, IMarketDataStorageInfo<SecurityChange>
+		private sealed class Level1Storage : MarketDataStorage<Level1ChangeMessage, DateTimeOffset>
 		{
 			public Level1Storage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<Level1ChangeMessage> serializer)
+				: base(security, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
+			{
+			}
+		}
+
+		private sealed class PositionStorage : MarketDataStorage<PositionChangeMessage, DateTimeOffset>
+		{
+			public PositionStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<PositionChangeMessage> serializer)
 				: base(security, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
 			{
 			}
@@ -624,53 +639,37 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// To get the storage of tick trades for the specified instrument.
-		/// </summary>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>The storage of tick trades.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetTickStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
 			return new TradeStorage(this, Security, GetStorageDrive(serializer, ExecutionTypes.Tick), serializer);
 		}
 
-		/// <summary>
-		/// To get the storage of order books for the specified instrument.
-		/// </summary>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>The order books storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<QuoteChangeMessage> GetQuoteStorage(IMarketDataSerializer<QuoteChangeMessage> serializer)
 		{
 			return new MarketDepthStorage(this, Security, GetStorageDrive(serializer), serializer);
 		}
 
-		/// <summary>
-		/// To get the storage of orders log for the specified instrument.
-		/// </summary>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>The storage of orders log.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetOrderLogStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
 			return new OrderLogStorage(this, Security, GetStorageDrive(serializer, ExecutionTypes.OrderLog), serializer);
 		}
 
-		/// <summary>
-		/// To get the storage of level1 data.
-		/// </summary>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>The storage of level1 data.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<Level1ChangeMessage> GetLevel1Storage(IMarketDataSerializer<Level1ChangeMessage> serializer)
 		{
 			return new Level1Storage(Security, GetStorageDrive(serializer), serializer);
 		}
 
-		/// <summary>
-		/// To get the candles storage the specified instrument.
-		/// </summary>
-		/// <param name="candleType">The candle type.</param>
-		/// <param name="arg">Candle arg.</param>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>The candles storage.</returns>
+		/// <inheritdoc />
+		public IMarketDataStorage<PositionChangeMessage> GetPositionMessageStorage(IMarketDataSerializer<PositionChangeMessage> serializer)
+		{
+			return new PositionStorage(Security, GetStorageDrive(serializer), serializer);
+		}
+
+		/// <inheritdoc />
 		public IMarketDataStorage<CandleMessage> GetCandleStorage(Type candleType, object arg, IMarketDataSerializer<CandleMessage> serializer)
 		{
 			if (candleType == null)
@@ -682,23 +681,13 @@ namespace StockSharp.Algo.Storages
 			return typeof(CandleStorage<,>).Make(candleType, candleType.ToCandleType()).CreateInstance<IMarketDataStorage<CandleMessage>>(Security, arg, GetStorageDrive(serializer, candleType, arg), serializer);
 		}
 
-		/// <summary>
-		/// To get the transactions storage the specified instrument.
-		/// </summary>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>The transactions storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetTransactionStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
 			return new TransactionStorage(Security, GetStorageDrive(serializer, ExecutionTypes.Transaction), serializer);
 		}
 
-		/// <summary>
-		/// To get the market-data storage.
-		/// </summary>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>Market-data storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage GetStorage(Type dataType, object arg, IMarketDataSerializer serializer)
 		{
 			if (dataType == null)

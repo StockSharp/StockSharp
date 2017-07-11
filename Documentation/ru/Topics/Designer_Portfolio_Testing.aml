@@ -4,11 +4,11 @@
 
     <introduction>
 
-      <para>В <legacyBold>Дизайнере</legacyBold> есть возможность протестировать одну стратегию на разных инструментах одновременно. 
+      <para>В <token>designer</token> есть возможность протестировать одну стратегию на разных инструментах одновременно. 
       Для этого необходимо нажать кнопку <link xlink:href="b162bfe7-9e25-4f36-92b0-00872dca443f" />.</para>
       
        <mediaLink>
-<image xlink:href="Designer_Portfolio_testing"/>
+<image placement="center" xlink:href="Designer_Portfolio_testing"/>
 </mediaLink>
 <para>В параметрах оптимизации необходимо установить параметр <legacyBold>Инструмент</legacyBold>, 
 выбрать из списка те инструменты по которым необходимо провести тестирование. 

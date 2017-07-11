@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <mediaLink>
-<image xlink:href="Designer_Panel_graphics_00"/>
+<image placement="center" xlink:href="Designer_Panel_graphics_00"/>
 </mediaLink>
 <para>Кубик предназначен для отображения данных на графике в панели <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />. 
 Каждый элемент соответствует одной области на графике и содержит набор свойств, 

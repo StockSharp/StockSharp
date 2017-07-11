@@ -391,5 +391,10 @@
 				<p>PropertyGridEx compontent.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Fxcm">
+			<summary>
+				<p>FXCM connectivity components.</p>
+			</summary>
+		</member>
 	</members>
 </doc>

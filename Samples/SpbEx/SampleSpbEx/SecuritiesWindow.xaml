@@ -23,9 +23,9 @@
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
-			<Button x:Name="Find" Width="100" Click="FindClick">
+			<!--<Button x:Name="Find" Width="100" Click="FindClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
-			</Button>
+			</Button>-->
 			<Button x:Name="Quotes" Grid.Column="1" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
 			<Button x:Name="Depth" Grid.Column="2" Width="100" IsEnabled="False" Click="DepthClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
@@ -36,8 +36,8 @@
 			<Button x:Name="NewStopOrder" Grid.Column="4" Width="120" IsEnabled="False" Click="NewStopOrderClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
 			</Button>
-			<Button x:Name="Candles" Grid.Column="5" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
-			<ComboBox x:Name="CandlesPeriods" Grid.Column="6" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
+			<!--<Button x:Name="Candles" Grid.Column="5" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
+			<ComboBox x:Name="CandlesPeriods" Grid.Column="6" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />-->
 		</Grid>
    </Grid>
 </Window>

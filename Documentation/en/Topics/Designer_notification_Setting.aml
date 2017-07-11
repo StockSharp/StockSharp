@@ -8,7 +8,7 @@
       Для открытия окна уведомления необходимо нажать на кнопку <mediaLinkInline><image xlink:href="Designer_Alert_Bell"/></mediaLinkInline> (<link xlink:href="0fc19f50-24cb-4f8b-bb22-728968686f8b" />, <link xlink:href="a06c5482-e2d0-413d-888f-3307c80f7b65" />). 
       Появиться окно <legacyBold>Настройки уведомлений</legacyBold>.</para>
 <mediaLink>
-<image xlink:href="Designer_Notifications_Setting"/>
+<image placement="center" xlink:href="Designer_Notifications_Setting"/>
 </mediaLink>
       <para>Уведомление можно настроить на изменение следующих типов данных: Портфель, 
       Код клиента, Брокер, Депозитарий, Серверное время, Транзакция, Тип данных, Отмена, Идентификатор заявки, 

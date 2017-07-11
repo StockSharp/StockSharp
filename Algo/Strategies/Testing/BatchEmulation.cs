@@ -383,7 +383,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// Start emulation.
 		/// </summary>
 		/// <param name="strategies">The strategies.</param>
-		/// <param name="iterationCount"></param>
+		/// <param name="iterationCount">Iteration count.</param>
 		public void Start(IEnumerable<Strategy> strategies, int iterationCount)
 		{
 			if (strategies == null)
@@ -546,6 +546,11 @@ namespace StockSharp.Algo.Strategies.Testing
 				strategy.Stop();
 
 				strategy.GetCandleManager()?.Dispose();
+
+				EmulationConnector
+					.Adapter
+					.AdapterProvider
+					.RemoveAssociation(strategy.Portfolio.Name);
 
 				var tuple = _strategyInfo.TryGetValue(strategy);
 

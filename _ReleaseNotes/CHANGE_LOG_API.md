@@ -1,6 +1,20 @@
 StockSharp API Change log
 ========================
 ###current:
+* (feature) Position tracking storage.
+* (feature) MarketDepthControl. Show histogram for volumes.
+* (feature) MarketDepthControl. Single column for volume.
+* (feature) MarketDataGrid. Show Transaction data.
+* (feature) ConnectorWindow. Enable/disable checkbox moved to grid row.
+* (feature) PositionChangeTypesComboBox.
+* (feature) PositionChangeGrid.
+* (bug) Binary storage. Fix local time saving.
+* (feature) SecurityMappingAdapter.
+* (bug) BTCE fix.
+* (feature) SecurityMappingWindow.
+* (feature) FastMessageAdapter. Extracted from FixMessageAdapter.
+
+###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
 * (feature) IndexCandleBuilder. TotalVolume as extended fields.
 * (bug) SecurityCsvList. Save exchange board info.
@@ -32,8 +46,26 @@ StockSharp API Change log
 * (feature) CurrencyTypes.CNT.
 * (feature) Transaq. Security id refactoring.
 * (bug) SecurityGrid. Binding fixes.
-* (bug) Alerts. Popup window. Icon quality dix.
+* (bug) Alerts. Popup window. Icon quality fix.
 * (bug) CQG continuum. Order condition fix.
+* (feature) DevExp 17.1 update.
+* (feature) FeedbackWindow.
+* (feature) FIX server. Performance boost.
+* (feature) Oanda 2.0 support.
+* (feature) FinamHistorySource. OriginSide support.
+* (feature) ExchangeBoard.CmeMini
+* (feature) SampleChart. Select input security option.
+* (bug) OrderLog -> Ticks fix.
+* (feature) ExchangeBoard.Fxcm
+* (feature) FxcmHistorySource.
+* (feature) History. Fix naming (XXXSource -> XXXHistorySource).
+* (feature) BaseGridControl. Interactive export process.
+* (feature) Chart. Fix theme styles.
+* (feature) Chart. Draw style quick access.
+* (feature) Licensing. Strategy subscription support.
+* (feature) Connector. Subscribe/unsubscribe methods for candles added.
+* (feature) FXCM connector.
+* (feature) Xaml.Code moved to Xaml proj.
 
 ###v4.3.24:
 * (feature) Remote storage. Edit users.

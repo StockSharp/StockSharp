@@ -4,7 +4,7 @@
    
     <introduction>
     	<para>
-     		The <codeEntityReference qualifyHint="false">T:StockSharp.Oanda.OandaTrader</codeEntityReference> should be used for trading algorithms creating for <token>oanda</token>.
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Oanda.OandaTrader</codeEntityReference> should be used for trading algorithms creating for <token>oanda_external</token>.
 		</para>
      </introduction>
       

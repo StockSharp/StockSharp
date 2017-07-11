@@ -253,7 +253,7 @@ namespace StockSharp.Messages
 			var func = GetTypeValue ?? getTypeValue;
 
 			if (func == null)
-				throw new InvalidOperationException("The handler is not set.");
+				throw new InvalidOperationException(LocalizedStrings.UnitHandlerNotSet);
 
 			var value = func(Type);
 
@@ -524,7 +524,7 @@ namespace StockSharp.Messages
 						var point = getTypeValue(UnitTypes.Point);
 
 						if (point == null || point == 0)
-							throw new InvalidOperationException("Price step cost is equal to zero.".Translate());
+							throw new InvalidOperationException(LocalizedStrings.PriceStepIsZeroKey);
 
 						value /= point.Value;
 						break;

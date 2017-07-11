@@ -34,6 +34,23 @@ namespace StockSharp.Community
 		Guid Login(string email, string password);
 
 		/// <summary>
+		/// To log in.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <param name="email">Email.</param>
+		/// <param name="password">Password.</param>
+		/// <returns>Session ID.</returns>
+		[OperationContract]
+		Tuple<Guid, long> Login2(Products product, string email, string password);
+
+		/// <summary>
+		/// Track the session is alive.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		[OperationContract]
+		void Ping(Guid sessionId);
+
+		/// <summary>
 		/// Logout.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>

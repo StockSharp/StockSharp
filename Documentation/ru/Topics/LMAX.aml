@@ -10,9 +10,9 @@
 		<mediaLink><image placement="center" xlink:href="LMaxTrader"/></mediaLink>
 	</introduction>
 	<relatedTopics>
-    	<link xlink:href="9cd10cbc-8534-4d44-bf3b-60b0a3f03590">Пример работы с LMaxTrader</link>
+    	<link xlink:href="9cd10cbc-8534-4d44-bf3b-60b0a3f03590">Пример работы с LmaxTrader</link>
     	<link xlink:href="c6236e85-fb9e-4c4d-9585-6b4b687e8b35">Стоп-заявки</link>
-    	<link xlink:href="3220f956-8ab0-43bb-b063-c6861ccceaf1">Исторические данные</link>-->
+    	<link xlink:href="3220f956-8ab0-43bb-b063-c6861ccceaf1">Исторические данные</link>
     </relatedTopics>
   </developerWalkthroughDocument>
 </topic>

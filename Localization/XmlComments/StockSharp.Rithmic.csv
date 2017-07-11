@@ -46,15 +46,6 @@ P:StockSharp.Rithmic.RithmicTrader.Password/summary;Password
 P:StockSharp.Rithmic.RithmicTrader.CertFile/summary;Str3466
 P:StockSharp.Rithmic.RithmicTrader.Server/summary;Str3473
 P:StockSharp.Rithmic.RithmicTrader.LogFileName/summary;Str3472
-E:StockSharp.Rithmic.RithmicTrader.NewCandle/summary;DocStr90
-M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83
-M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/series;CandlesSeries
-M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/from;DocStr84
-M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/param/to;DocStr85
-M:StockSharp.Rithmic.RithmicTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/summary;DocStr86
-M:StockSharp.Rithmic.RithmicTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
-M:StockSharp.Rithmic.RithmicTrader.OnProcessMessage(StockSharp.Messages.Message)/summary;DocStr80
-M:StockSharp.Rithmic.RithmicTrader.OnProcessMessage(StockSharp.Messages.Message)/param/message;Str3166
 T:StockSharp.Rithmic.Xaml.RithmicServerComboBox/summary;DocStr7416
 M:StockSharp.Rithmic.Xaml.RithmicServerComboBox.#ctor/summary;DocStr1
 F:StockSharp.Rithmic.Xaml.RithmicServerComboBox.SelectedServerProperty/summary;DocStr29

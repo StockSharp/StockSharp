@@ -18,6 +18,8 @@ namespace StockSharp.Community
 	using System;
 	using System.Runtime.Serialization;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// Strategy content types.
 	/// </summary>
@@ -47,6 +49,18 @@ namespace StockSharp.Community
 		/// </summary>
 		[EnumMember]
 		EncryptedSchema,
+
+		/// <summary>
+		/// The compiled executable (.exe) application.
+		/// </summary>
+		[EnumMember]
+		StandaloneApp,
+
+		/// <summary>
+		/// Indicator.
+		/// </summary>
+		[EnumMember]
+		Indicator,
 	}
 
 	/// <summary>
@@ -59,18 +73,21 @@ namespace StockSharp.Community
 		/// Lifetime.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.LifetimeKey)]
 		Lifetime,
 
 		/// <summary>
 		/// Per month.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.PerMonthKey)]
 		PerMonth,
 
 		/// <summary>
 		/// Annual.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.AnnualKey)]
 		Annual
 	}
 
@@ -103,6 +120,12 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public string Description { get; set; }
+
+		/// <summary>
+		/// Strategy tags.
+		/// </summary>
+		[DataMember]
+		public string Tags { get; set; }
 
 		///// <summary>
 		///// Name (ru).
@@ -187,5 +210,23 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public bool IsPrivate { get; set; }
+
+		/// <summary>
+		/// Is colocation available for the strategy.
+		/// </summary>
+		[DataMember]
+		public bool IsColocation { get; set; }
+
+		/// <summary>
+		/// Promo price.
+		/// </summary>
+		[DataMember]
+		public decimal? PromoPrice { get; set; }
+
+		/// <summary>
+		/// Promo end date.
+		/// </summary>
+		[DataMember]
+		public DateTime? PromoEnd { get; set; }
 	}
 }

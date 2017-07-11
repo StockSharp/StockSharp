@@ -33,6 +33,16 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	{
+		private class ReconnectMessage : Message
+		{
+			public const MessageTypes ReconnectMessageType = (MessageTypes)(-17000);
+
+			public ReconnectMessage()
+				: base(ReconnectMessageType)
+			{
+			}
+		}
+
 		// дополнительные состояния для ConnectionStates
 		private const ConnectionStates _none = (ConnectionStates)0 - 1;
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
@@ -175,6 +185,12 @@ namespace StockSharp.Algo
 
 					break;
 				}
+
+				case ReconnectMessage.ReconnectMessageType:
+				{
+					SendInMessage(new ConnectMessage());
+					break;
+				}
 			}
 
 			base.SendInMessage(message);
@@ -274,7 +290,7 @@ namespace StockSharp.Algo
 						switch (_currState)
 						{
 							case ConnectionStates.Connecting:
-								RaiseNewOutMessage(new ConnectMessage{  Error = new TimeoutException(LocalizedStrings.Str170) });
+								RaiseNewOutMessage(new ConnectMessage{ Error = new TimeoutException(LocalizedStrings.Str170) });
 								break;
 							case ConnectionStates.Disconnecting:
 								RaiseNewOutMessage(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.Str171) });
@@ -337,7 +353,11 @@ namespace StockSharp.Algo
 						_connectionTimeOut = _reConnectionSettings.Interval;
 
 						//_prevState = _currState;
-						SendInMessage(new ConnectMessage());
+						RaiseNewOutMessage(new ReconnectMessage
+						{
+							IsBack = true,
+							Adapter = this
+						});
 					}
 					else
 					{

@@ -655,5 +655,16 @@ namespace StockSharp.BusinessEntities
 			RusName = "Currenex",
 			CountryCode = CountryCodes.US,
 		};
+
+		/// <summary>
+		/// Information about FXCM.
+		/// </summary>
+		public static Exchange Fxcm { get; } = new Exchange
+		{
+			Name = "FXCM",
+			EngName = "FXCM",
+			RusName = "FXCM",
+			CountryCode = CountryCodes.US,
+		};
 	}
 }

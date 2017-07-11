@@ -25,6 +25,7 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -122,7 +123,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedPairSet<SubscriptionInfo, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<SubscriptionInfo, IEnumerator<IMessageAdapter>>();
 		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionKeys = new SynchronizedDictionary<long, SubscriptionInfo>();
 		private readonly SynchronizedDictionary<SubscriptionInfo, IMessageAdapter> _subscriptions = new SynchronizedDictionary<SubscriptionInfo, IMessageAdapter>();
-		private readonly SynchronizedDictionary<SubscriptionInfo, CachedSynchronizedList<MarketDataMessage>> _suspendedSubscriptions = new SynchronizedDictionary<SubscriptionInfo, CachedSynchronizedList<MarketDataMessage>>();
+		private readonly SynchronizedDictionary<SubscriptionInfo, List<MarketDataMessage>> _suspendedSubscriptions = new SynchronizedDictionary<SubscriptionInfo, List<MarketDataMessage>>();
 		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter>();
 		private readonly SynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>> _messageTypeAdapters = new SynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>>();
@@ -152,6 +153,23 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private ISecurityMappingStorage _securityMappingStorage;
+
+		/// <summary>
+		/// Security identifier mappings storage.
+		/// </summary>
+		public ISecurityMappingStorage SecurityMappingStorage
+		{
+			get => _securityMappingStorage;
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				_securityMappingStorage = value;
+			}
+		}
+
 		/// <summary>
 		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
 		/// </summary>
@@ -171,7 +189,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="adapterProvider">The message adapter's provider.</param>
-		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IMessageAdapterProvider adapterProvider)
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider)
 			: base(transactionIdGenerator)
 		{
 			if (adapterProvider == null)
@@ -184,7 +202,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The message adapter's provider.
 		/// </summary>
-		public IMessageAdapterProvider AdapterProvider { get; }
+		public IPortfolioMessageAdapterProvider AdapterProvider { get; }
 
 		/// <summary>
 		/// Supported by adapter message types.
@@ -271,9 +289,16 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
+			adapter = new CandleHolderMessageAdapter(adapter);
+
 			if (adapter.IsNativeIdentifiers)
 			{
 				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage);
+			}
+
+			if (SecurityMappingStorage != null)
+			{
+				adapter = new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage);
 			}
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
@@ -413,8 +438,12 @@ namespace StockSharp.Algo
 
 										case SubscriptionStates.Subscribing:
 										//case SubscriptionStates.Unsubscribing:
-											_suspendedSubscriptions.SafeAdd(key).Add(mdMsg);
+										{
+											lock (_suspendedSubscriptions.SyncRoot)
+												_suspendedSubscriptions.SafeAdd(key).Add(mdMsg);
+
 											break;
+										}
 
 										default:
 											throw new ArgumentOutOfRangeException();
@@ -583,10 +612,10 @@ namespace StockSharp.Algo
 						AdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, innerAdapter);
 						break;
 
-					case MessageTypes.Position:
-						var posMsg = (PositionMessage)message;
-						AdapterProvider.SetAdapter(posMsg.PortfolioName, innerAdapter);
-						break;
+					//case MessageTypes.Position:
+					//	var posMsg = (PositionMessage)message;
+					//	AdapterProvider.SetAdapter(posMsg.PortfolioName, innerAdapter);
+					//	break;
 
 					case MessageTypes.PositionChange:
 						var posChangeMsg = (PositionChangeMessage)message;
@@ -728,10 +757,17 @@ namespace StockSharp.Algo
 			_subscriptions.Add(key, adapter);
 			_subscriptionStates[key] = SubscriptionStates.Subscribed;
 
-			var messages = _suspendedSubscriptions.TryGetValue(key)?.CopyAndClear();
+			MarketDataMessage[] messages;
 
-			if (messages == null)
-				return;
+			lock (_suspendedSubscriptions.SyncRoot)
+			{
+				var list = _suspendedSubscriptions.TryGetValue(key);
+
+				if (list == null)
+					return;
+
+				messages = list.CopyAndClear();
+			}
 
 			foreach (var mdMsg in messages)
 				adapter.SendInMessage(mdMsg);

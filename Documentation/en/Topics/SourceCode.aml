@@ -37,15 +37,7 @@
   					<para><link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db">TWIME</link> - коннектор для управления заявками на срочном рынке Московской Биржи.</para>
   				</listItem>
   				<listItem>
-  					<para>
-  				<externalLink>
-					<linkText>S#.Shell</linkText>
-					<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
-					<linkUri>http://stocksharp.com/products/shell/</linkUri>
-					<linkTarget>_blank</linkTarget>
-				</externalLink> 			- готовый каркас для торговых стратегий.
- 			</para>
-  					
+  					<para><token>stocksharpshell</token> - готовый каркас для торговых стратегий.</para>
   				</listItem>
   				<listItem>
   					<para><token>hydra</token> - программа автоматической загрузки и хранения маркет-данных.</para>

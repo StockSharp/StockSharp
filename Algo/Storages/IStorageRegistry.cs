@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<OrderLogItem> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>
 		/// <param name="security">Security.</param>
@@ -127,7 +127,16 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<Level1ChangeMessage> GetLevel1MessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the candles storage the specified instrument.
+		/// To get the storage of position changes data.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The storage of position changes data.</returns>
+		IMarketDataStorage<PositionChangeMessage> GetPositionMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+
+		/// <summary>
+		/// To get the candles storage for the specified instrument.
 		/// </summary>
 		/// <param name="candleMessageType">The type of candle message.</param>
 		/// <param name="security">Security.</param>
@@ -138,7 +147,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleMessageType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the <see cref="ExecutionMessage"/> storage the specified instrument.
+		/// To get the <see cref="ExecutionMessage"/> storage for the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
@@ -148,7 +157,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the transactions storage the specified instrument.
+		/// To get the transactions storage for the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
@@ -222,6 +231,12 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="storage">The storage of level1 data.</param>
 		void RegisterLevel1Storage(IMarketDataStorage<Level1ChangeMessage> storage);
+
+		/// <summary>
+		/// To register the storage of position changes data.
+		/// </summary>
+		/// <param name="storage">The storage of position changes data.</param>
+		void RegisterPositionStorage(IMarketDataStorage<PositionChangeMessage> storage);
 
 		/// <summary>
 		/// To register the candles storage.

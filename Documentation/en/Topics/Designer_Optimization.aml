@@ -5,7 +5,7 @@
 <para>Чтобы перейти в режим оптимизации стратегии необходимо 
 нажать на кнопку <legacyBold>Оптимизация</legacyBold> на вкладки <legacyBold>Эмуляция</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_Optimization_00"/>
+<image placement="center" xlink:href="Designer_Optimization_00"/>
 </mediaLink>
 <para>В рабочей области откроется вкладка с названием Оптимизация + «Имя стратегии». 
 Вкладка <legacyBold>Оптимизация</legacyBold> разделена на три 
@@ -33,13 +33,13 @@
 средний как параметры оптимизации необходимо в 
 кубике Индикаторе SMA установить флажок <legacyBold>Параметр</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_Optimization_01"/>
+<image placement="center" xlink:href="Designer_Optimization_01"/>
 </mediaLink>
 <para>После установки флажка <legacyBold>Параметр</legacyBold> в необходимых блоках 
 для оптимизации, и нажав на кнопку <legacyBold>Оптимизация</legacyBold>, откроется 
 вкладка <legacyBold>Оптимизация SMA</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_Optimization_02"/>
+<image placement="center" xlink:href="Designer_Optimization_02"/>
 </mediaLink>
 <para>В примере взят один параметр оптимизации Длину короткой скользящей средней 
 Short SMA, от 10 до 20 с шагом 1. Всего получается 11 стратегий SMA с разными параметрами.</para>

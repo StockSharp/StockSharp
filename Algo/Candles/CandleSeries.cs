@@ -121,8 +121,6 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public bool IsCalcVolumeProfile { get; set; }
 
-		internal bool IsNew { get; set; }
-
 		/// <summary>
 		/// The initial date from which you need to get data.
 		/// </summary>

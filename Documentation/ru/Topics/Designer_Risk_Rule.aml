@@ -10,7 +10,7 @@
 (Закрыть позиции, Остановить торговлю, Отменить заявки), которое будет выполняться при наступлении условия <legacyBold>Риск-правил</legacyBold>.</para>
 
 <mediaLink>
-<image xlink:href="Designer_Risk_Rule"/>
+<image placement="center" xlink:href="Designer_Risk_Rule"/>
 </mediaLink>
 
 <definitionTable>

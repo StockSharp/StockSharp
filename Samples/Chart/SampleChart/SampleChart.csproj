@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -41,20 +41,26 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Data.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Data.v17.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisDark.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.MetropolisLight.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisLight.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisDark.v17.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016Black.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisLight.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.MetropolisLight.v17.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016Black.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016Black.v17.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Backup">
+      <HintPath>..\..\..\References\Ecng.Backup.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
@@ -64,6 +70,9 @@
     </Reference>
     <Reference Include="Ecng.ComponentModel">
       <HintPath>..\..\..\References\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Configuration">
+      <HintPath>..\..\..\References\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\..\..\References\Ecng.Serialization.dll</HintPath>
@@ -144,6 +153,10 @@
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
+      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
+      <Name>Xaml</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>

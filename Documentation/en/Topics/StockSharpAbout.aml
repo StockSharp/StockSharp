@@ -32,7 +32,7 @@ or exchange API and can work with any connection. For example, it is easy to mov
 </step>
 <step>
 <content>
-<legacyBold><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e"/></legacyBold> - NASDAQ, NYSE, CME, etc. trading by means of <token>OpenECry</token>, <token>IB</token>, <token>etrade</token> and 
+<legacyBold>Any markets and brokers</legacyBold> - NASDAQ, NYSE, CME, etc. trading by means of <token>OpenECry</token>, <token>IB</token>, <token>etrade</token> and 
 <externalLink>
 <linkText>other brokers</linkText>
 <linkUri>http://stocksharp.ru/broker/</linkUri>

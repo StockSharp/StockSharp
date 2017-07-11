@@ -432,9 +432,17 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private sealed class Level1Storage : MarketDataStorage<Level1ChangeMessage, DateTimeOffset>//, IMarketDataStorage<SecurityChange>, IMarketDataStorageInfo<SecurityChange>
+		private sealed class Level1Storage : MarketDataStorage<Level1ChangeMessage, DateTimeOffset>
 		{
 			public Level1Storage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<Level1ChangeMessage> serializer)
+				: base(security, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
+			{
+			}
+		}
+
+		private sealed class PositionStorage : MarketDataStorage<PositionChangeMessage, DateTimeOffset>
+		{
+			public PositionStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<PositionChangeMessage> serializer)
 				: base(security, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
 			{
 			}
@@ -522,6 +530,7 @@ namespace StockSharp.Algo.Storages
 
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>> _depthStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>> _level1Storages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<PositionChangeMessage>> _positionStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<PositionChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>> _candleStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>> _executionStorages = new SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>>();
 		private readonly SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>> _newsStorages = new SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>>();
@@ -581,76 +590,67 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// To add the tick trades storage.
-		/// </summary>
-		/// <param name="storage">The storage of tick trades.</param>
+		/// <inheritdoc />
 		public void RegisterTradeStorage(IMarketDataStorage<Trade> storage)
 		{
 			RegisterTradeStorage((IMarketDataStorage<ExecutionMessage>)storage);
 		}
 
-		/// <summary>
-		/// To add the order books storage.
-		/// </summary>
-		/// <param name="storage">The order books storage.</param>
+		/// <inheritdoc />
 		public void RegisterMarketDepthStorage(IMarketDataStorage<MarketDepth> storage)
 		{
 			RegisterMarketDepthStorage((IMarketDataStorage<QuoteChangeMessage>)storage);
 		}
 
-		/// <summary>
-		/// To register the order log storage.
-		/// </summary>
-		/// <param name="storage">The storage of orders log.</param>
+		/// <inheritdoc />
 		public void RegisterOrderLogStorage(IMarketDataStorage<OrderLogItem> storage)
 		{
 			RegisterOrderLogStorage((IMarketDataStorage<ExecutionMessage>)storage);
 		}
 
-		/// <summary>
-		/// To add the candles storage.
-		/// </summary>
-		/// <param name="storage">The candles storage.</param>
+		/// <inheritdoc />
 		public void RegisterCandleStorage(IMarketDataStorage<Candle> storage)
 		{
 			RegisterCandleStorage((IMarketDataStorage<CandleMessage>)storage);
 		}
 
-		/// <summary>
-		/// To register tick trades storage.
-		/// </summary>
-		/// <param name="storage">The storage of tick trades.</param>
+		/// <inheritdoc />
 		public void RegisterTradeStorage(IMarketDataStorage<ExecutionMessage> storage)
 		{
 			RegisterStorage(_executionStorages, ExecutionTypes.Tick, storage);
 		}
 
-		/// <summary>
-		/// To register the order books storage.
-		/// </summary>
-		/// <param name="storage">The order books storage.</param>
+		/// <inheritdoc />
 		public void RegisterMarketDepthStorage(IMarketDataStorage<QuoteChangeMessage> storage)
 		{
 			RegisterStorage(_depthStorages, storage);
 		}
 
-		/// <summary>
-		/// To register the order log storage.
-		/// </summary>
-		/// <param name="storage">The storage of orders log.</param>
+		/// <inheritdoc />
 		public void RegisterOrderLogStorage(IMarketDataStorage<ExecutionMessage> storage)
 		{
 			RegisterStorage(_executionStorages, ExecutionTypes.OrderLog, storage);
 		}
 
-		/// <summary>
-		/// To register storage of instrument changes.
-		/// </summary>
-		/// <param name="storage">The storage of instrument changes.</param>
+		/// <inheritdoc />
 		public void RegisterLevel1Storage(IMarketDataStorage<Level1ChangeMessage> storage)
 		{
 			RegisterStorage(_level1Storages, storage);
+		}
+
+		/// <inheritdoc />
+		public void RegisterPositionStorage(IMarketDataStorage<PositionChangeMessage> storage)
+		{
+			RegisterStorage(_positionStorages, storage);
+		}
+
+		/// <inheritdoc />
+		public void RegisterCandleStorage(IMarketDataStorage<CandleMessage> storage)
+		{
+			if (storage == null)
+				throw new ArgumentNullException(nameof(storage));
+
+			_candleStorages.Add(Tuple.Create(storage.Security.ToSecurityId(), storage.Drive), storage);
 		}
 
 		private static void RegisterStorage<T>(SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<T>> storages, IMarketDataStorage<T> storage)
@@ -675,87 +675,38 @@ namespace StockSharp.Algo.Storages
 			storages.Add(Tuple.Create(storage.Security.ToSecurityId(), type, storage.Drive), storage);
 		}
 
-		/// <summary>
-		/// To register the candles storage.
-		/// </summary>
-		/// <param name="storage">The candles storage.</param>
-		public void RegisterCandleStorage(IMarketDataStorage<CandleMessage> storage)
-		{
-			if (storage == null)
-				throw new ArgumentNullException(nameof(storage));
 
-			_candleStorages.Add(Tuple.Create(storage.Security.ToSecurityId(), storage.Drive), storage);
-		}
-
-		/// <summary>
-		/// To get the storage of tick trades for the specified instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The storage of tick trades.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<Trade> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return (IMarketDataStorage<Trade>)GetTickMessageStorage(security, drive, format);
 		}
 
-		/// <summary>
-		/// To get the storage of order books for the specified instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The order books storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<MarketDepth> GetMarketDepthStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return (IMarketDataStorage<MarketDepth>)GetQuoteMessageStorage(security, drive, format);
 		}
 
-		/// <summary>
-		/// To get the storage of orders log for the specified instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The storage of orders log.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<OrderLogItem> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return (IMarketDataStorage<OrderLogItem>)GetOrderLogMessageStorage(security, drive, format);
 		}
 
-		/// <summary>
-		/// To get the candles storage the specified instrument.
-		/// </summary>
-		/// <param name="candleType">The candle type.</param>
-		/// <param name="security">Security.</param>
-		/// <param name="arg">Candle arg.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The candles storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<Candle> GetCandleStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return (IMarketDataStorage<Candle>)GetCandleMessageStorage(candleType.ToCandleMessageType(), security, arg, drive, format);
 		}
 
-		/// <summary>
-		/// To get the storage of tick trades for the specified instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The storage of tick trades.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetTickMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetExecutionMessageStorage(security, ExecutionTypes.Tick, drive, format);
 		}
 
-		/// <summary>
-		/// To get the storage of order books for the specified instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The order books storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (security == null)
@@ -783,37 +734,19 @@ namespace StockSharp.Algo.Storages
 			});
 		}
 
-		/// <summary>
-		/// To get the storage of orders log for the specified instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The storage of orders log.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetOrderLogMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetExecutionMessageStorage(security, ExecutionTypes.OrderLog, drive, format);
 		}
 
-		/// <summary>
-		/// To get the transactions storage the specified instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The transactions storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetTransactionStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return GetExecutionMessageStorage(security, ExecutionTypes.Transaction, drive, format);
 		}
 
-		/// <summary>
-		/// To get the storage of instrument changes.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The storage of instrument changes.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<Level1ChangeMessage> GetLevel1MessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (security == null)
@@ -844,15 +777,38 @@ namespace StockSharp.Algo.Storages
 			});
 		}
 
-		/// <summary>
-		/// To get the candles storage the specified instrument.
-		/// </summary>
-		/// <param name="candleMessageType">The type of candle message.</param>
-		/// <param name="security">Security.</param>
-		/// <param name="arg">Candle arg.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The candles storage.</returns>
+		/// <inheritdoc />
+		public IMarketDataStorage<PositionChangeMessage> GetPositionMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			var securityId = security.ToSecurityId();
+
+			return _positionStorages.SafeAdd(Tuple.Create(securityId, (drive ?? DefaultDrive).GetStorageDrive(securityId, typeof(PositionChangeMessage), null, format)), key =>
+			{
+				//if (security.Board == ExchangeBoard.Associated)
+				//	return new AllSecurityMarketDataStorage<Level1ChangeMessage>(security, null, md => md.ServerTime, md => ToSecurity(md.SecurityId), (s, d) => GetLevel1MessageStorage(s, d, format), key.Item2, ExchangeInfoProvider);
+
+				IMarketDataSerializer<PositionChangeMessage> serializer;
+
+				switch (format)
+				{
+					case StorageFormats.Binary:
+						serializer = new PositionBinarySerializer(key.Item1, ExchangeInfoProvider);
+						break;
+					case StorageFormats.Csv:
+						serializer = new PositionCsvSerializer(key.Item1);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(format));
+				}
+
+				return new PositionStorage(security, key.Item2, serializer);
+			});
+		}
+
+		/// <inheritdoc />
 		public IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleMessageType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (candleMessageType == null)
@@ -889,14 +845,7 @@ namespace StockSharp.Algo.Storages
 			});
 		}
 
-		/// <summary>
-		/// To get the <see cref="ExecutionMessage"/> storage the specified instrument.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The <see cref="ExecutionMessage"/> storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (security == null)
@@ -971,15 +920,7 @@ namespace StockSharp.Algo.Storages
 			});
 		}
 
-		/// <summary>
-		/// To get the market-data storage.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="dataType">Market data type.</param>
-		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="drive">Storage.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>Market-data storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage GetStorage(Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (dataType == null)
@@ -997,6 +938,8 @@ namespace StockSharp.Algo.Storages
 			}
 			else if (dataType == typeof(Level1ChangeMessage))
 				return GetLevel1MessageStorage(security, drive, format);
+			else if (dataType == typeof(PositionChangeMessage))
+				return GetPositionMessageStorage(security, drive, format);
 			else if (dataType == typeof(QuoteChangeMessage))
 				return GetQuoteMessageStorage(security, drive, format);
 			else if (dataType == typeof(NewsMessage))
@@ -1007,22 +950,17 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1018);
 		}
 
-		private Security ToSecurity(SecurityId securityId)
-		{
-			return new Security
-			{
-				Id = securityId.ToStringId(),
-				Code = securityId.SecurityCode,
-				Board = ExchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode)
-			};
-		}
+		//private Security ToSecurity(SecurityId securityId)
+		//{
+		//	return new Security
+		//	{
+		//		Id = securityId.ToStringId(),
+		//		Code = securityId.SecurityCode,
+		//		Board = ExchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode)
+		//	};
+		//}
 
-		/// <summary>
-		/// To get news storage.
-		/// </summary>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="StorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The news storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<News> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return (IMarketDataStorage<News>)GetNewsMessageStorage(drive, format);
@@ -1030,12 +968,7 @@ namespace StockSharp.Algo.Storages
 
 		private static readonly Security _newsSecurity = new Security { Id = "NEWS@NEWS" };
 
-		/// <summary>
-		/// To get news storage.
-		/// </summary>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="StorageRegistry.DefaultDrive"/> will be used.</param>
-		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The news storage.</returns>
+		/// <inheritdoc />
 		public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			return _newsStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(_newsSecurity.ToSecurityId(), typeof(NewsMessage), null, format), key =>

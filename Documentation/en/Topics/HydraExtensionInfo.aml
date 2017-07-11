@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para>Sources of extended information on instruments are <legacyBold>CSV</legacyBold> files located in the 
-folder "c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", which are automatically loaded when <legacyBold>S#.Data</legacyBold> is started.</para>
+folder "c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", which are automatically loaded when <token>hydra</token> is started.</para>
 
 <para>The extended information can be any necessary information on the instrument (for example, a country, a city, a site, etc.).</para>
 <para>Each source of extended information (<legacyBold>CSV</legacyBold> file) contains a list of instruments 
@@ -15,19 +15,19 @@ in the list of all instruments.</para>
 <para>To select the required extended information, click the 
 <legacyBold>Extended information</legacyBold> button on the instruments tab.</para>
 <mediaLink>
-<image xlink:href="hydra_ExtensionInfo_securities"/>
+<image placement="center" xlink:href="hydra_ExtensionInfo_securities"/>
 </mediaLink>
 <para>After that the window for selecting the extended information appears</para>
     <mediaLink>
-<image xlink:href="hydra_ExtensionInfo_window"/>
+<image placement="center" xlink:href="hydra_ExtensionInfo_window"/>
 </mediaLink>
 <para>Below is an example of a <legacyBold>CSV</legacyBold> file of extended information, opened in different editors of <legacyBold>MS Excel</legacyBold> and <legacyBold>NotePad</legacyBold></para>
 <mediaLink>
-<image xlink:href="hydra_ExtensionInfo_csv_excel"/>
+<image placement="center" xlink:href="hydra_ExtensionInfo_csv_excel"/>
 </mediaLink>
 
 <mediaLink>
-<image xlink:href="hydra_ExtensionInfo_csv_notepad"/>
+<image placement="center" xlink:href="hydra_ExtensionInfo_csv_notepad"/>
 </mediaLink>
     </introduction>
 

@@ -22,8 +22,13 @@ namespace SampleChart
 	using System.Windows.Controls;
 	using System.Windows.Threading;
 
+	using DevExpress.Xpf.Core;
+
+	using Ecng.Backup;
+	using Ecng.Backup.Yandex;
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Configuration;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
@@ -31,6 +36,7 @@ namespace SampleChart
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
@@ -40,23 +46,20 @@ namespace SampleChart
 	public partial class MainWindow
 	{
 		private ChartArea _areaComb;
-		private ChartCandleElement _candleElement1;
+		private ChartCandleElement _candleElement;
 		private TimeFrameCandle _candle;
 		private CandleMessageVolumeProfile _volumeProfile;
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
 		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
 		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
 		private decimal _lastPrice;
-		private const decimal _priceStep = 10m;
-		private Security _security = new Security
-		{
-			Id = "RIZ2@FORTS",
-			PriceStep = _priceStep,
-			Board = ExchangeBoard.Forts
-		};
+		//private const decimal _priceStep = 10m;
+		private Security _security;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+		private RandomWalkTradeGenerator _tradeGenerator;
+		private readonly CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator>();
 
-		private int _timeframe;
+		private TimeSpan _timeframe;
 
 		public MainWindow()
 		{
@@ -73,15 +76,30 @@ namespace SampleChart
 			Theme.SelectedIndex = 1;
 		}
 
+		private void HistoryPath_OnFolderChanged(string path)
+		{
+			var secs = LocalMarketDataDrive.GetAvailableSecurities(path).ToArray();
+
+			Securities.ItemsSource = secs;
+
+			if (secs.Length > 0)
+				Securities.SelectedIndex = 0;
+		}
+
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
 			Chart.FillIndicators();
-			InitCharts();
-
 			Chart.SubscribeIndicatorElement += Chart_OnSubscribeIndicatorElement;
+			Chart.UnSubscribeElement += Chart_OnUnSubscribeElement;
+
+			ConfigManager.RegisterService<IBackupService>(new YandexDiskService());
 
 			HistoryPath.Folder = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
-			LoadData();
+
+			if (Securities.SelectedItem == null)
+				return;
+
+			RefreshCharts();
 		}
 
 		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -90,19 +108,8 @@ namespace SampleChart
 			if (theme.IsEmpty())
 				return;
 
-			//DevExpress.Xpf.Core.ThemeManager.ApplicationThemeName = theme;
-
-			//switch (theme)
-			//{
-			//	case DevExpress.Xpf.Core.Theme.Office2016BlackName:
-			//	case DevExpress.Xpf.Core.Theme.MetropolisDarkName:
-			//		Chart.ChartTheme = ChartThemes.ExpressionDark;
-			//		break;
-			//	case DevExpress.Xpf.Core.Theme.Office2016WhiteName:
-			//	case DevExpress.Xpf.Core.Theme.MetropolisLightName:
-			//		Chart.ChartTheme = ChartThemes.Chrome;
-			//		break;
-			//}
+			ApplicationThemeHelper.ApplicationThemeName = theme;
+			Chart.ChartTheme = ApplicationThemeHelper.ApplicationThemeName.ToChartTheme();
 		}
 
 		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator)
@@ -111,16 +118,26 @@ namespace SampleChart
 
 			foreach (var candle in _allCandles.Cache)
 			{
-				if (candle.State != CandleStates.Finished)
-					candle.State = CandleStates.Finished;
+				//if (candle.State != CandleStates.Finished)
+				//	candle.State = CandleStates.Finished;
 
 				chartData.Group(candle.OpenTime).Add(element, indicator.Process(candle));
 			}
 
 			Chart.Draw(chartData);
+
+			_indicators.Add(element, indicator);
 		}
 
-		private void InitCharts()
+		private void Chart_OnUnSubscribeElement(IChartElement element)
+		{
+			var indElem = element as ChartIndicatorElement;
+
+			if (indElem != null)
+				_indicators.Remove(indElem);
+		}
+
+		private void RefreshCharts()
 		{
 			Chart.ClearAreas();
 
@@ -134,69 +151,111 @@ namespace SampleChart
 
 			Chart.AddArea(_areaComb);
 
-			_timeframe = int.Parse((string)((ComboBoxItem)Timeframe.SelectedItem).Tag);
+			_timeframe = TimeSpan.FromMinutes(((ComboBoxItem)Timeframe.SelectedItem).Tag.To<int>());
+
+			var id = (SecurityId)Securities.SelectedItem;
+
+			_security = new Security
+			{
+				Id = id.ToStringId(),
+				PriceStep = id.SecurityCode.StartsWith("RI", StringComparison.InvariantCultureIgnoreCase) ? 10 : 0.01m,
+				Board = _exchangeInfoProvider.GetExchangeBoard(id.BoardCode) ?? ExchangeBoard.Associated
+			};
+
+			_tradeGenerator = new RandomWalkTradeGenerator(id);
+			_tradeGenerator.Init();
+			_tradeGenerator.Process(_security.ToMessage());
 
 			var series = new CandleSeries(
 				typeof(TimeFrameCandle),
 				_security,
-				TimeSpan.FromMinutes(_timeframe));
+				_timeframe);
 
-			_candleElement1 = new ChartCandleElement() { FullTitle = "Candles" };
-			Chart.AddElement(_areaComb, _candleElement1, series);
+			_candleElement = new ChartCandleElement { FullTitle = "Candles" };
+			Chart.AddElement(_areaComb, _candleElement, series);
+
+			LoadData(_security);
 		}
 
 		private void Draw_Click(object sender, RoutedEventArgs e)
 		{
-			InitCharts();
-			LoadData();
+			RefreshCharts();
 		}
 
-		private void LoadData()
+		private void LoadData(Security security)
 		{
 			_candle = null;
 			_lastPrice = 0m;
 			_allCandles.Clear();
 
-			var id = SecurityId.Text.ToSecurityId();
-
-			_security = new Security
-			{
-				Id = SecurityId.Text,
-				PriceStep = _priceStep,
-				Board = _exchangeInfoProvider.GetExchangeBoard(id.BoardCode)
-			};
-
-			Chart.Reset(new IChartElement[] { _candleElement1 });
+			Chart.Reset(new IChartElement[] { _candleElement });
 
 			var storage = new StorageRegistry();
-
-			var maxDays = 2;
 
 			BusyIndicator.IsBusy = true;
 
 			var path = HistoryPath.Folder;
+			var isBuild = BuildFromTicks.IsChecked == true;
+			var format = Format.SelectedFormat;
+
+			var maxDays = isBuild ? 2 : 30 * (int)_timeframe.TotalMinutes;
 
 			Task.Factory.StartNew(() =>
 			{
 				var date = DateTime.MinValue;
 
-				foreach (var tick in storage.GetTickMessageStorage(_security, new LocalMarketDataDrive(path)).Load())
+				if (isBuild)
 				{
-					AppendTick(_security, tick);
-
-					_lastTime = tick.ServerTime;
-
-					if (date != tick.ServerTime.Date)
+					foreach (var tick in storage.GetTickMessageStorage(security, new LocalMarketDataDrive(path), format).Load())
 					{
-						date = tick.ServerTime.Date;
+						AppendTick(security, tick);
 
-						var str = date.To<string>();
-						this.GuiAsync(() => BusyIndicator.BusyContent = str);
+						_lastTime = tick.ServerTime;
 
-						maxDays--;
+						if (date != tick.ServerTime.Date)
+						{
+							date = tick.ServerTime.Date;
 
-						if (maxDays == 0)
-							break;
+							var str = date.To<string>();
+							this.GuiAsync(() => BusyIndicator.BusyContent = str);
+
+							maxDays--;
+
+							if (maxDays == 0)
+								break;
+						}
+					}
+				}
+				else
+				{
+					foreach (var candle in storage.GetCandleStorage(typeof(TimeFrameCandle), security, _timeframe, new LocalMarketDataDrive(path), format).Load())
+					{
+						lock (_updatedCandles.SyncRoot)
+							_updatedCandles[candle.OpenTime] = _candle = (TimeFrameCandle)candle;
+
+						_lastTime = candle.OpenTime + _timeframe;
+						_lastPrice = _candle.ClosePrice;
+
+						_tradeGenerator.Process(new ExecutionMessage
+						{
+							ExecutionType = ExecutionTypes.Tick,
+							SecurityId = security.ToSecurityId(),
+							ServerTime = _lastTime,
+							TradePrice = _lastPrice,
+						});
+
+						if (date != candle.OpenTime.Date)
+						{
+							date = candle.OpenTime.Date;
+
+							var str = date.To<string>();
+							this.GuiAsync(() => BusyIndicator.BusyContent = str);
+
+							maxDays--;
+
+							if (maxDays == 0)
+								break;
+						}
 					}
 				}
 			})
@@ -209,7 +268,7 @@ namespace SampleChart
 				{
 					BusyIndicator.IsBusy = false;
 					Chart.IsAutoRange = false;
-					_areaComb.YAxises.First().AutoRange = false;
+					//_areaComb.YAxises.First().AutoRange = false;
 				});
 
 			}, TaskScheduler.FromCurrentSynchronizationContext());
@@ -221,15 +280,11 @@ namespace SampleChart
 		{
 			if (IsRealtime.IsChecked == true && _lastPrice != 0m)
 			{
-				var step = _priceStep;
-				var price = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * (double) step), step);
-				AppendTick(_security, new ExecutionMessage
-				{
-					ServerTime = _lastTime,
-					TradePrice = price,
-					TradeVolume = RandomGen.GetInt(50) + 1,
-					OriginSide = Sides.Buy,
-				});
+				var nextTick = (ExecutionMessage)_tradeGenerator.Process(new TimeMessage { ServerTime = _lastTime });
+
+				if (nextTick != null)
+					AppendTick(_security, nextTick);
+				
 				_lastTime += TimeSpan.FromSeconds(10);
 			}
 
@@ -243,16 +298,24 @@ namespace SampleChart
 			var lastCandle = _allCandles.LastOrDefault();
 			_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.OpenTime != lastCandle.OpenTime));
 
-			var hasValue = false;
-			var chartData = new ChartDrawData();
+			ChartDrawData chartData = null;
 
 			foreach (var candle in candlesToUpdate)
 			{
-				chartData.Group(candle.OpenTime).Add(_candleElement1, candle);
-				hasValue = true;
+				if (chartData == null)
+					chartData = new ChartDrawData();
+
+				var chartGroup = chartData.Group(candle.OpenTime);
+
+				chartGroup.Add(_candleElement, candle);
+
+				foreach (var pair in _indicators.CachedPairs)
+				{
+					chartGroup.Add(pair.Key, pair.Value.Process(candle));
+				}
 			}
 
-			if (hasValue)
+			if (chartData != null)
 				Chart.Draw(chartData);
 		}
 
@@ -267,19 +330,19 @@ namespace SampleChart
 				{
 					_candle.State = CandleStates.Finished;
 
-					lock(_updatedCandles.SyncRoot)
+					lock (_updatedCandles.SyncRoot)
 						_updatedCandles[_candle.OpenTime] = _candle;
 
 					_lastPrice = _candle.ClosePrice;
+					_tradeGenerator.Process(tick);
 				}
 
 				//var t = TimeframeSegmentDataSeries.GetTimeframePeriod(time.DateTime, _timeframe);
-				var tf = TimeSpan.FromMinutes(_timeframe);
-				var bounds = tf.GetCandleBounds(time, _security.Board);
+				var bounds = _timeframe.GetCandleBounds(time, security.Board);
 
 				_candle = new TimeFrameCandle
 				{
-					TimeFrame = tf,
+					TimeFrame = _timeframe,
 					OpenTime = bounds.Min,
 					CloseTime = bounds.Max,
 					Security = security,
@@ -306,13 +369,8 @@ namespace SampleChart
 
 			_volumeProfile.Update(new TickCandleBuilderSourceValue(tick));
 
-			lock(_updatedCandles.SyncRoot)
+			lock (_updatedCandles.SyncRoot)
 				_updatedCandles[_candle.OpenTime] = _candle;
-		}
-
-		public static decimal Round(decimal value, decimal nearest)
-		{
-			return Math.Round(value / nearest) * nearest;
 		}
 
 		private void Error(string msg)
@@ -322,6 +380,11 @@ namespace SampleChart
 				.Error()
 				.Text(msg)
 				.Show();
+		}
+
+		private void Securities_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			Draw.IsEnabled = Securities.SelectedItem != null;
 		}
 	}
 }

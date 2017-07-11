@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e6218e30-74f0-4a0b-b189-5ed71b7aded9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Пример написания кода стратегии SMA, приведенный в 
+пункте <link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" />, можно оптимизировать путем грамотного комбинирования 
+кубиков <link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> и стандартных кубиков. 
+Вынесем из кода все действия стратегии, которые проще создать из стандартных 
+кубиков <link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" />, <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />,
+<link xlink:href="250003df-48b4-4211-9c8e-25ac3f6a45be" />.</para>
+<para>Так как Индикаторы SMA были вынесены в отдельные кубики, необходимо 
+переписать метод ProcessCandle(Candle candle) так чтобы он принимал кроме 
+свечей (Candle candle) еще и два 
+индикатора ProcessCandle(DecimalIndicatorValue ssma, DecimalIndicatorValue lsma, Candle candle). 
+И на базе этих значений рассчитывал стратегию. А также необходимо удалить все лишнее в коде. 
+Окончательный вариант исходного кода кубика выглядит следующим образом:</para>
+<code language="C#" title="C#"><![CDATA[
+using Ecng.Common;
+using StockSharp.Messages;
+using StockSharp.Algo;
+using StockSharp.Algo.Candles;
+using StockSharp.Algo.Strategies;
+using StockSharp.Algo.Indicators;
+using StockSharp.Xaml.Diagram.Elements;
+
+public class NewStrategy : Strategy
+{
+    private bool _isShortLessThenLong;
+    [DiagramExternal]
+    public void ProcessCandle(DecimalIndicatorValue ssma, DecimalIndicatorValue lsma, Candle candle)
+    {
+        // strategy are stopping
+        if (ProcessState == ProcessStates.Stopping)
+        {
+            CancelActiveOrders();
+            return;
+        }
+
+        // calc new values for short and long
+        var isShortLessThenLong = ssma.Value < lsma.Value;
+
+        // crossing happened
+        if (_isShortLessThenLong != isShortLessThenLong)
+        {
+            // if short less than long, the sale, otherwise buy
+            var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+
+            // calc size for open position or revert
+            var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+
+            // calc order price as a close price + offset
+            var price = candle.ClosePrice + ((direction == Sides.Buy ? Security.PriceStep : -Security.PriceStep) ?? 1);
+
+            RegisterOrder(this.CreateOrder(direction, price, volume));
+
+            // store current values for short and long
+            _isShortLessThenLong = isShortLessThenLong;
+        }
+    }
+}
+]]></code>
+
+<para>На общую схему необходимо вынести 
+кубики <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> с 
+Типом <legacyBold>Инструмент</legacyBold>, <link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" />, 
+2 <link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" /> SMA, <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />,
+<link xlink:href="250003df-48b4-4211-9c8e-25ac3f6a45be" />.
+Как это сделать подробно описано в пункте <link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" />. Также 
+на общую схему необходимо вынести кубик <link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" />, перенеся 
+его в панель <legacyBold>Дизайнер</legacyBold> из панели <legacyBold>Палитра</legacyBold>. 
+В свойствах кубика <link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> необходимо выбрать имя стратегии. 
+Так как метод <legacyBold>ProcessCandle(DecimalIndicatorValue ssma, 
+DecimalIndicatorValue lsma, Candle candle)</legacyBold> принимает три параметра, 
+то и на входе кубика будет три параметра. Первые два параметра 
+типа Значения индикатора, а третий типа Свеча. Соединив все кубики линиями, получается схема:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Combine_cubes_of_Source_code_and_standard_cubes_00"/>
+</mediaLink>
+<para>В результате код стратегии уменьшился с 213 строк до 43. Но добавилось всего 
+4 стандартных кубика. Если сравнивать с такой же стратегией, созданной из 
+кубиков в пункте <link xlink:href="6974891d-4c8d-46e1-bdeb-fc7391bc0625" />, то количество 
+кубиков уменьшилось с 17 до 7.
+</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -29,7 +29,7 @@
   				<para>S#.Data server.</para>
   			</listItem>
   			<listItem>
-  				<para>S#.Shell source code.</para>
+  				<para><token>stocksharpshell</token> source code.</para>
   			</listItem>
   			<listItem>
   				<para>Extended samples.</para>
@@ -60,13 +60,8 @@
 
 		<para><legacyBold>Source codes</legacyBold></para>
 		<para>Includes any of our ready-to-use applications 
-		(<token>hydra</token>, <token>designer</token>, <externalLink>
-				<linkText>S#.Shell</linkText>
-				<linkAlternateText>Shell</linkAlternateText>
-				<linkUri>http://stocksharp.com/products/shell/</linkUri>
-				<linkTarget>_blank</linkTarget>
-			</externalLink>),
-		and the whole S#.API.</para>
+		(<token>hydra</token>, <token>designer</token>, <token>stocksharpshell</token>),
+		and the whole <token>stocksharpapi</token>.</para>
 
 		<para>
   			For more details please visit the <token>stocksharppricing</token>.

@@ -541,5 +541,10 @@
 				<p>Графические компоненты для <see cref="N:StockSharp.SpbEx"/>.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Fxcm">
+			<summary>
+				<p>Коннектор к брокеру FXCM.</p>
+			</summary>
+		</member>
 	</members>
 </doc>

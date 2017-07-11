@@ -36,6 +36,10 @@
 		  <ddue:linkUri>http://en.wikipedia.org/wiki/Component_Object_Model</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="cqg"><ddue:link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">CQG</ddue:link></item>
+  <item id="cqg_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>CQG</ddue:linkText>
+    <ddue:linkUri>https://www.cqg.com/</ddue:linkUri>
+  </ddue:externalLink></item>
   <item id="csharp"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>C#</ddue:linkText>
 		  <ddue:linkUri>https://en.wikipedia.org/wiki/C_Sharp_(programming_language)</ddue:linkUri>
@@ -161,6 +165,15 @@
 		  <ddue:linkUri>https://en.wikipedia.org/wiki/Windows_service</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="oanda"><ddue:link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">OANDA</ddue:link></item>
+  <item id="oanda_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>OANDA</ddue:linkText>
+    <ddue:linkUri>https://www.oanda.com/</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="fxcm"><ddue:link xlink:href="92073cd8-8e10-498e-8de9-47d3f77d278a" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FXCM</ddue:link></item>
+  <item id="fxcm_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>FXCM</ddue:linkText>
+    <ddue:linkUri>https://www.fxcm.com/</ddue:linkUri>
+  </ddue:externalLink></item>
   <item id="OECApi"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
  <ddue:linkText>OEC API</ddue:linkText>
  <ddue:linkUri>http://openecry.com/trading/api/index.cfm</ddue:linkUri>
@@ -207,6 +220,10 @@
 		  <ddue:linkUri>https://en.wikipedia.org/wiki/Replication_(computing)</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="rithmic"><ddue:link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Rithmic</ddue:link></item>
+  <item id="rithmic_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>Rithmic</ddue:linkText>
+    <ddue:linkUri>http://www3.rithmic.com/</ddue:linkUri>
+  </ddue:externalLink></item>
   <item id="rts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>RTS</ddue:linkText>
 		  <ddue:linkUri>http://moex.com/en/derivatives/</ddue:linkUri>

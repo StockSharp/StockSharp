@@ -3,24 +3,24 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    <introduction>
 <para>Settings
-<legacyBold>S#.Data</legacyBold> can be used in server mode, in this mode you can remotely connect to <legacyBold>S#.Data</legacyBold> 
-and get the existing data to the storage. You can connect to <legacyBold>S#.Data</legacyBold> running in 
+<token>hydra</token> can be used in server mode, in this mode you can remotely connect to <token>hydra</token> 
+and get the existing data to the storage. You can connect to <token>hydra</token> running in 
 server mode from <legacyBold>S#.Designer</legacyBold> (as described in the 
 <link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" /> item in the <legacyBold>S#.Designer</legacyBold> documentation). 
-Also, you can connect to <legacyBold>S#.Data</legacyBold> via <legacyBold>S#.API</legacyBold> (as described in 
+Also, you can connect to <token>hydra</token> via <token>stocksharpapi</token> (as described in 
 <link xlink:href="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" />, 
 <link xlink:href="f143c9e7-d5a6-4464-9b01-18117183cc7a" />, 
 <link xlink:href="040cdc40-39b4-47be-b3f0-441710515562" /> items).</para>
-<para>To enable the <legacyBold>S#.Data</legacyBold> server mode, on the <legacyBold>Common</legacyBold> tab, click the <legacyBold>Settings</legacyBold> 
+<para>To enable the <token>hydra</token> server mode, on the <legacyBold>Common</legacyBold> tab, click the <legacyBold>Settings</legacyBold> 
 button, the server mode setup window will open.</para>
 
-   <mediaLink><image xlink:href="hydra_server"/></mediaLink>
+   <mediaLink><image placement="center" xlink:href="hydra_server"/></mediaLink>
    
 <para><legacyBold>S#.Data server</legacyBold></para>
 <list class="bullet">
-<listItem><para><legacyBold>Server mode</legacyBold> – switch <legacyBold>S#.Data</legacyBold> to the server mode.</para></listItem>
+<listItem><para><legacyBold>Server mode</legacyBold> – switch <token>hydra</token> to the server mode.</para></listItem>
 <listItem><para><legacyBold>Server running over the FIX protocol</legacyBold> - the server that distributes live and historical data via the FIX protocol</para></listItem>
-<listItem><para><legacyBold>Authorization</legacyBold> - authorization for access to the <legacyBold>S#.Data</legacyBold> server</para></listItem>
+<listItem><para><legacyBold>Authorization</legacyBold> - authorization for access to the <token>hydra</token> server</para></listItem>
 <listItem><para><legacyBold>Number of instruments</legacyBold> - the maximum number of instruments that can be requested from the server</para></listItem>
 <listItem><para><legacyBold>Number of days for a candle</legacyBold> - the maximum number of days available for downloading the history of candles</para></listItem>
 <listItem><para><legacyBold>Number of days for ticks</legacyBold> - the maximum number of days available for downloading the history of tick data</para></listItem>
@@ -45,7 +45,7 @@ button, the server mode setup window will open.</para>
       <para>If to set the <legacyBold>Authorization</legacyBold> different from <legacyBold>Anonymous</legacyBold>, the <legacyBold>Users</legacyBold> button 
       appears on the <legacyBold>Common</legacyBold> tab, after clicking on it, the <legacyBold>Users</legacyBold> window appears</para>
 <mediaLink>
-<image xlink:href="hydra_users"/>
+<image placement="center" xlink:href="hydra_users"/>
 </mediaLink>
       <para>In the left part of the window, you can add a new user, and in the right part you can set access rights for it.</para>
 

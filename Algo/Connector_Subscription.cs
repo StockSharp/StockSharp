@@ -24,6 +24,7 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -477,6 +478,44 @@ namespace StockSharp.Algo
 				DataType = MarketDataTypes.News,
 				IsSubscribe = false
 			});
+		}
+
+		/// <summary>
+		/// Subscribe to receive new candles.
+		/// </summary>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Candles count.</param>
+		/// <param name="transactionId">Transaction ID.</param>
+		/// <param name="extensionInfo">Extended information.</param>
+		public virtual void SubscribeCandles(CandleSeries series, DateTimeOffset? from = null, DateTimeOffset? to = null,
+			long? count = null, long? transactionId = null, IDictionary<string, object> extensionInfo = null)
+		{
+			if (series == null)
+				throw new ArgumentNullException(nameof(series));
+
+			var mdMsg = series.ToMarketDataMessage(true, from, to, count);
+			mdMsg.TransactionId = transactionId ?? TransactionIdGenerator.GetNextId();
+			mdMsg.ExtensionInfo = extensionInfo;
+
+			_entityCache.CreateCandleSeries(mdMsg, series);
+
+			SubscribeMarketData(series.Security, mdMsg);
+		}
+
+		/// <summary>
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
+		/// </summary>
+		/// <param name="series">Candles series.</param>
+		public virtual void UnSubscribeCandles(CandleSeries series)
+		{
+			var mdMsg = _entityCache.RemoveCandleSeries(series, TransactionIdGenerator.GetNextId);
+
+			if (mdMsg == null)
+				return;
+
+			UnSubscribeMarketData(series.Security, mdMsg);
 		}
 	}
 }

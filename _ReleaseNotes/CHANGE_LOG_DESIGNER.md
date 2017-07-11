@@ -1,7 +1,31 @@
 StockSharp Designer Change log
 ========================
-###current:
+###v4.3.25.2:
 * (feature) ServerCredentials. Save password for auto logon only.
+* (feature) Finam. OriginSide support.
+* (bug) Renko and PnF candles fix.
+* (feature) Market data panel. Show Transaction data.
+* (feature) ExchangeBoard. Currenex, Fxcm, CmeMini.
+* (feature) Tables. Share image into Yandex.Disk.
+* (feature) Oanda. REST 2.0 support.
+* (feature) FXCM connector.
+* (feature) Quik lua. Performance boost.
+* (feature) Feedback window. Usability improvements.
+* (feature) Depths. Show histogram for volumes.
+* (feature) Connectors window. Enable/disable checkbox moved to grid row.
+* (feature) Create indicators from C# embedded editor.
+* (feature) DevExp 17.1 update.
+* (feature) C# editor. Support C# 7.0.
+* (feature) Save only subscribed market data.
+* (feature) IndicatorPainterAttribute.
+* (bug) Show all allowed adapters in conditional window.
+* (bug) Quik stop order condition. Fix conditional window.
+* (feature) Save only subscribed market data.
+* (bug) Transaq fix.
+* (feature) Logs. Clear messages from context menu.
+* (bug) Minor live connection fixes.
+* (bug) BTCE fixes.
+* (feature) Symbol mapping manager.
 
 ###v4.3.24.1:
 * (feature) CQG continuum.

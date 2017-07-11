@@ -45,6 +45,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Cqg.Com;
 	using StockSharp.ETrade;
 	using StockSharp.Fix;
+	using StockSharp.Fxcm;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.IQFeed;
 	using StockSharp.ITCH;
@@ -151,6 +152,7 @@ namespace StockSharp.Configuration
 			typeof(CqgContinuumMessageAdapter),
 			typeof(ETradeMessageAdapter),
 			typeof(FixMessageAdapter),
+			typeof(FastMessageAdapter),
 			typeof(InteractiveBrokersMessageAdapter),
 			typeof(IQFeedMarketDataMessageAdapter),
 			typeof(ItchMessageAdapter),
@@ -170,6 +172,7 @@ namespace StockSharp.Configuration
 			typeof(TransaqMessageAdapter),
 			typeof(TwimeMessageAdapter),
 			typeof(SpbExMessageAdapter),
+			typeof(FxcmMessageAdapter),
 		});
 
 		/// <summary>

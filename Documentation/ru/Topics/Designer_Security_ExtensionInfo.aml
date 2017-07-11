@@ -4,7 +4,7 @@
     <introduction>
       <para>Расширенной информацией может являться любая необходимая информация по инструменту (например, страна, город, сайт и др.).</para>
 <mediaLink>
-<image xlink:href="Designer_ExtensionInfo_securities"/>
+<image placement="center" xlink:href="Designer_ExtensionInfo_securities"/>
 </mediaLink>
       <para>Более подробно о раасширенной информации можно узнать в пункте <link xlink:href="b7f2c08a-2920-42a4-9887-eb0441c246cb" /> документации по 
       <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />.</para>

@@ -388,5 +388,35 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string Str2577TrailingReferencePrice => Str2572.Put(TrailingReferencePrice);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3423Dot => AppendDot(Str3423);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string FastSettingsDot => AppendDot(FastSettings);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string NewsDot => AppendDot(News);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string NewsSkrinDot => AppendDot(NewsSkrin);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string EnabledDot => AppendDot(Enabled);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string SettingsFileDot => AppendDot(SettingsFile);
 	}
 }
