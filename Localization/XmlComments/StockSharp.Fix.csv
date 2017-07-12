@@ -9,6 +9,7 @@ M:StockSharp.Fix.Dialects.BaseFastDialect.Open/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Close/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.BaseFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.IO.Stream})/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.LoadSettingsFromFile(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr466
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
@@ -124,6 +125,8 @@ P:StockSharp.Fix.Dialects.IFastDialect.StorageName/summary;DocStr9382
 P:StockSharp.Fix.Dialects.IFastDialect.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Fix.Dialects.IFastDialect.SecurityExtendedFields/summary;DocStr9383
 P:StockSharp.Fix.Dialects.IFastDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
+M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.IO.Stream})/summary;DocStr9962
+M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.IO.Stream})/param/dumpStreams;DocStr9963
 M:StockSharp.Fix.Dialects.IFastDialect.LoadSettingsFromFile(System.String)/summary;DocStr9950
 M:StockSharp.Fix.Dialects.IFastDialect.LoadSettingsFromFile(System.String)/param/settingsFile;SettingsFile
 T:StockSharp.Fix.Dialects.IFixDialect/summary;DocStr8773
@@ -165,6 +168,7 @@ M:StockSharp.Fix.FastFeedGroup.FastFeedGroupAddress.Load(Ecng.Serialization.Sett
 M:StockSharp.Fix.FastFeedGroup.FastFeedGroupAddress.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Fix.FastFeedGroup.FastFeedGroupAddress.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Fix.FastFeedGroup.FastFeedGroupAddress.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Fix.FastFeedGroup.FastFeedGroupAddress.ToString/inheritdoc;DocStr8459
 P:StockSharp.Fix.FastFeedGroup.UdpA/summary;DocStr9953
 P:StockSharp.Fix.FastFeedGroup.UdpB/summary;DocStr9954
 P:StockSharp.Fix.FastFeedGroup.ReplayAddress/summary;DocStr3793
@@ -172,6 +176,7 @@ M:StockSharp.Fix.FastFeedGroup.Load(Ecng.Serialization.SettingsStorage)/summary;
 M:StockSharp.Fix.FastFeedGroup.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Fix.FastFeedGroup.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Fix.FastFeedGroup.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Fix.FastFeedGroup.ToString/inheritdoc;DocStr8459
 T:StockSharp.Fix.FastMessageAdapter/summary;DocStr9955
 M:StockSharp.Fix.FastMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fix.FastMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311

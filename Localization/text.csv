@@ -4599,6 +4599,7 @@ SecurityOrBoardCodeNotSpecifiedParams;Security or board code not specified for {
 SecurityOrBoardCodeDuplicatedParams;Security or board code are duplicated for {0};Код инструмента или площадк повторяется для {0}
 Bytes;Bytes;Байты
 Project;Project;Проект
+Later;Later;Позднее
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14271,3 +14272,5 @@ DocStr9958;The FAST dialect. The default is {0};FAST диалект. По-умо
 DocStr9959;The path to the directory with securities id mapping;Путь к директории с преобразованием идентификаторов инструментов
 DocStr9960;The path to the directory with securities extended info;Путь к директории с расширенной информацией инструментов
 DocStr9961;The window for creation and editing of symbols mapping;Окно создания и редактирования преобразования идентификаторов инструментов
+DocStr9962;Test dump files;Протестировать дамп-файлы
+DocStr9963;Dump files;Дамп-файлы

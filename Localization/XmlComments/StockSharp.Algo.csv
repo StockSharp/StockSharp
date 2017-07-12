@@ -1108,6 +1108,7 @@ M:StockSharp.Algo.Storages.SecurityIdMapping.op_Explicit(StockSharp.Algo.Storage
 M:StockSharp.Algo.Storages.SecurityIdMapping.op_Explicit(StockSharp.Algo.Storages.SecurityIdMapping)~System.Collections.Generic.KeyValuePair{StockSharp.Messages.SecurityId,StockSharp.Messages.SecurityId}/returns;DocStr65
 T:StockSharp.Algo.Storages.ISecurityMappingStorage/summary;DocStr9935
 E:StockSharp.Algo.Storages.ISecurityMappingStorage.Changed/summary;DocStr9687
+M:StockSharp.Algo.Storages.ISecurityMappingStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.ISecurityMappingStorage.GetStorageNames/summary;DocStr9936
 M:StockSharp.Algo.Storages.ISecurityMappingStorage.GetStorageNames/returns;DocStr9641
 M:StockSharp.Algo.Storages.ISecurityMappingStorage.Get(System.String)/summary;DocStr9937
@@ -1381,6 +1382,7 @@ M:StockSharp.Algo.Storages.StorageExchangeInfoProvider.Save(StockSharp.BusinessE
 T:StockSharp.Algo.Storages.IExtendedInfoStorageItem/summary;DocStr9374
 P:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Fields/summary;DocStr9630
 P:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Securities/summary;DocStr9637
+M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Add(StockSharp.Messages.SecurityId,System.Collections.Generic.IDictionary{System.String,System.Object})/summary;DocStr9376
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Add(StockSharp.Messages.SecurityId,System.Collections.Generic.IDictionary{System.String,System.Object})/param/securityId;DocStr9333
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Add(StockSharp.Messages.SecurityId,System.Collections.Generic.IDictionary{System.String,System.Object})/param/extensionInfo;ExtendedInfo
@@ -1393,6 +1395,7 @@ M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Delete(StockSharp.Messages.S
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Delete(StockSharp.Messages.SecurityId)/param/securityId;DocStr9333
 T:StockSharp.Algo.Storages.IExtendedInfoStorage/summary;DocStr9374
 P:StockSharp.Algo.Storages.IExtendedInfoStorage.StoragesNames/summary;DocStr9643
+M:StockSharp.Algo.Storages.IExtendedInfoStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Get(System.String)/summary;DocStr9644
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Get(System.String)/param/storageName;DocStr429
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Get(System.String)/returns;Str1405
@@ -1654,6 +1657,7 @@ P:StockSharp.Algo.Storages.IEntityRegistry.ExchangeBoards/summary;DocStr1563
 P:StockSharp.Algo.Storages.IEntityRegistry.Securities/summary;DocStr1564
 P:StockSharp.Algo.Storages.IEntityRegistry.Portfolios/summary;DocStr1565
 P:StockSharp.Algo.Storages.IEntityRegistry.Positions/summary;DocStr1566
+M:StockSharp.Algo.Storages.IEntityRegistry.Init/summary;DocStr9249
 T:StockSharp.Algo.Storages.IMarketDataSerializer/summary;DocStr1280
 P:StockSharp.Algo.Storages.IMarketDataSerializer.Format/summary;StorageFormat
 P:StockSharp.Algo.Storages.IMarketDataSerializer.TimePrecision/summary;DocStr9660
