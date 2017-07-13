@@ -45666,5 +45666,15 @@ namespace StockSharp.Localization
 		/// Project
 		/// </summary>
 		public static string Project => GetString(ProjectKey);
+
+		/// <summary>
+		/// Later
+		/// </summary>
+		public const string LaterKey = nameof(Later);
+
+		/// <summary>
+		/// Later
+		/// </summary>
+		public static string Later => GetString(LaterKey);
 	}
 }

@@ -83,5 +83,10 @@ namespace StockSharp.Algo.Storages
 		///// The list of news.
 		///// </summary>
 		//IStorageEntityList<News> News { get; }
+
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
 	}
 }

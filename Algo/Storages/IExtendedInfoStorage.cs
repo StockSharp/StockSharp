@@ -30,6 +30,11 @@ namespace StockSharp.Algo.Storages
 		IEnumerable<SecurityId> Securities { get; }
 
 		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
+
+		/// <summary>
 		/// Add extended info.
 		/// </summary>
 		/// <param name="securityId">Security identifier.</param>
@@ -65,6 +70,11 @@ namespace StockSharp.Algo.Storages
 		/// Get all extended storage names.
 		/// </summary>
 		IEnumerable<string> StoragesNames { get; }
+
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
 
 		/// <summary>
 		/// To get storage for the specified name.
