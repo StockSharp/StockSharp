@@ -1095,21 +1095,23 @@ namespace StockSharp.Algo
 		{
 			_adapterStates[adapter] = ConnectionStates.Failed;
 
+			error = error ?? message.Error;
+
 			// raise ConnectionError only one time
 			if (ConnectionState == checkState)
 			{
-				RaiseConnectionError(error ?? message.Error);
+				RaiseConnectionError(error);
 
 				if (raiseTimeOut)
 				{
-					if (message.Error is TimeoutException)
+					if (error is TimeoutException)
 						RaiseTimeOut();
 				}
 			}
 			else
-				RaiseError(error ?? message.Error);
+				RaiseError(error);
 
-			RaiseConnectionErrorEx(adapter, message.Error);
+			RaiseConnectionErrorEx(adapter, error);
 		}
 
 		private void ProcessSessionMessage(SessionMessage message)
