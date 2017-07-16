@@ -45676,5 +45676,35 @@ namespace StockSharp.Localization
 		/// Later
 		/// </summary>
 		public static string Later => GetString(LaterKey);
+
+		/// <summary>
+		/// The source is obsolete and can no longer be used.
+		/// </summary>
+		public const string SourceObsoleteKey = nameof(SourceObsolete);
+
+		/// <summary>
+		/// The source is obsolete and can no longer be used.
+		/// </summary>
+		public static string SourceObsolete => GetString(SourceObsoleteKey);
+
+		/// <summary>
+		/// Currency market
+		/// </summary>
+		public const string CurrencyMarketKey = nameof(CurrencyMarket);
+
+		/// <summary>
+		/// Currency market
+		/// </summary>
+		public static string CurrencyMarket => GetString(CurrencyMarketKey);
+
+		/// <summary>
+		/// Fond market
+		/// </summary>
+		public const string FondMarketKey = nameof(FondMarket);
+
+		/// <summary>
+		/// Fond market
+		/// </summary>
+		public static string FondMarket => GetString(FondMarketKey);
 	}
 }
