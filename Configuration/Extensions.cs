@@ -210,13 +210,15 @@ namespace StockSharp.Configuration
 			wnd.Adapter = (BasketMessageAdapter)adapter.Clone();
 			wnd.AutoConnect = autoConnect;
 
-			windowSettings = wnd.Save();
-
 			if (!wnd.ShowModal(owner))
+			{
+				windowSettings = wnd.Save();
 				return false;
+			}
 
 			adapter.Load(wnd.Adapter.Save());
 			autoConnect = wnd.AutoConnect;
+			windowSettings = wnd.Save();
 
 			return true;
 		}
