@@ -138,7 +138,8 @@ namespace StockSharp.Configuration
 		public static bool Configure(this BasketMessageAdapter adapter, Window owner)
 		{
 			var autoConnect = false;
-			return adapter.Configure(owner, ref autoConnect);
+			SettingsStorage settings = null;
+			return adapter.Configure(owner, ref autoConnect, ref settings);
 		}
 
 		private static readonly Lazy<Type[]> _adapters = new Lazy<Type[]>(() => new[]
@@ -186,8 +187,9 @@ namespace StockSharp.Configuration
 		/// <param name="adapter">The connection.</param>
 		/// <param name="owner">UI thread owner.</param>
 		/// <param name="autoConnect">Auto connect.</param>
+		/// <param name="windowSettings"><see cref="ConnectorWindow"/> settings.</param>
 		/// <returns><see langword="true"/> if the specified connection was configured, otherwise, <see langword="false"/>.</returns>
-		public static bool Configure(this BasketMessageAdapter adapter, Window owner, ref bool autoConnect)
+		public static bool Configure(this BasketMessageAdapter adapter, Window owner, ref bool autoConnect, ref SettingsStorage windowSettings)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -197,6 +199,9 @@ namespace StockSharp.Configuration
 
 			var wnd = new ConnectorWindow();
 
+			if (windowSettings != null)
+				wnd.Load(windowSettings);
+
 			foreach (var a in Adapters)
 			{
 				AddConnectorInfo(wnd, a);
@@ -204,6 +209,8 @@ namespace StockSharp.Configuration
 
 			wnd.Adapter = (BasketMessageAdapter)adapter.Clone();
 			wnd.AutoConnect = autoConnect;
+
+			windowSettings = wnd.Save();
 
 			if (!wnd.ShowModal(owner))
 				return false;
