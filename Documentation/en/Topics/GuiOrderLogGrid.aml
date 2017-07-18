@@ -27,7 +27,7 @@
 Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/ITCH/SampleITCH.</legacyItalic>
       </para>
       
-      <mediaLink><image placement="left" xlink:href="hydra_export_order_log" /></mediaLink>
+      <mediaLink><image placement="left" xlink:href="GUI_orderlog" /></mediaLink>
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
