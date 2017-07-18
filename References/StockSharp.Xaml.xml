@@ -620,8 +620,7 @@
       <summary>
             Initializes a new instance of the <see cref="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility" />.
             </summary>
-      <param name="columns">
-      </param>
+      <param name="columns">Columns.</param>
     </member>
     <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility">
       <summary>

@@ -1706,7 +1706,7 @@ namespace StockSharp.Algo
 		/// Cast <see cref="CandleSeries"/> to <see cref="MarketDataMessage"/>.
 		/// </summary>
 		/// <param name="series">Candles series.</param>
-		/// <param name="isSubscribe"></param>
+		/// <param name="isSubscribe">The message is market-data subscription.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
 		/// <param name="count">Candles count.</param>
