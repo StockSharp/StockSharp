@@ -520,9 +520,9 @@
       </Topic>
       <Topic id="20a8932b-09cb-4f13-bade-770a68ac96fd" visible="True" isExpanded="true" title="Использование C#">
         <Topic id="22a4dc42-dc36-41cc-a849-32aa2a8194fe" visible="True" title="Интерфейс" />
-        <Topic id="5327010f-dc4c-4e6c-8812-e02e6e36a423" visible="True" isSelected="true" title="Добаление Dll библиотек" />
         <Topic id="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" visible="True" title="Пример стратегии на C#" />
         <Topic id="77322bb8-139a-40e8-b871-8a13ddc96b13" visible="True" title="Интеграция C# кода на общую схему" />
+        <Topic id="5327010f-dc4c-4e6c-8812-e02e6e36a423" visible="True" title="Добавление Dll библиотек" />
         <Topic id="e6218e30-74f0-4a0b-b189-5ed71b7aded9" visible="True" title="Комбинирование C# и стандартных кубиков" />
         <Topic id="de0fbe51-4b00-42ed-9b8a-20857bfa8b58" visible="True" title="Создание индикатора на C#" />
         <Topic id="78280412-de2f-4927-a654-fa5d3cd4173a" visible="True" noFile="true" isExpanded="true" title="Написание кода в Visual Studio">
