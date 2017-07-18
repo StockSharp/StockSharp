@@ -366,6 +366,18 @@
             References.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Code.CodeReferencesWindow.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeReferencesWindow.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="M:StockSharp.Xaml.Code.CodeReferencesWindow.InitializeComponent">
       <summary>
             InitializeComponent
@@ -466,6 +478,39 @@
       <summary>
             InitializeComponent
             </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Extensions">
+      <summary>
+            Extension class.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.LoadWindowSettings(System.Windows.Window,Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="window">Window instance.</param>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.SaveWindowSettings(System.Windows.Window,Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="window">Window instance.</param>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.SaveDevExpressControl(System.Windows.DependencyObject)">
+      <summary>
+            Save DevExpress control settings.
+            </summary>
+      <param name="obj">Control.</param>
+      <returns>Settings.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.LoadDevExpressControl(System.Windows.DependencyObject,System.String)">
+      <summary>
+            Load DevExpress control settings.
+            </summary>
+      <param name="obj">Control.</param>
+      <param name="settings">Settings.</param>
     </member>
     <member name="T:StockSharp.Xaml.FileProgressWindow">
       <summary>
@@ -1092,6 +1137,18 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityMappingWindow" />.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMappingWindow.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityMappingWindow.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.SecurityMappingWindow.InitializeComponent">
       <summary>
@@ -3040,6 +3097,18 @@
             Available portfolios.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.PortfolioMessageAdaptersWindow.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.PortfolioMessageAdaptersWindow.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="M:StockSharp.Xaml.PortfolioMessageAdaptersWindow.InitializeComponent">
       <summary>
             InitializeComponent
@@ -3439,6 +3508,18 @@
       <summary>
             Visual description of available connections.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ConnectorWindow.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ConnectorWindow.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.ConnectorWindow.InitializeComponent">
       <summary>
