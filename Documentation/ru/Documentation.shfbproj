@@ -183,6 +183,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_Add_Dll_Lib.aml" />
     <None Include="Topics\HydraSymbolMapping.aml" />
     <None Include="Topics\Designer_Orders_conditional.aml" />
     <None Include="Topics\Designer_Gallery_publish.aml" />
@@ -2721,6 +2722,46 @@
     <Image Include="Art\matlab_stocksharp.png">
       <ImageId>matlab_stocksharp</ImageId>
       <AlternateText>matlab stocksharp</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_About.png">
+      <ImageId>Designer_About</ImageId>
+      <AlternateText>Designer About</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_contact_us_1.png">
+      <ImageId>Designer_contact_us_1</ImageId>
+      <AlternateText>Designer contact us 1</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_contact_us_0.png">
+      <ImageId>Designer_contact_us_0</ImageId>
+      <AlternateText>Designer contact us 0</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Orders_conditional.png">
+      <ImageId>Designer_Orders_conditional</ImageId>
+      <AlternateText>Designer Orders conditional</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_connection_mapping_1.png">
+      <ImageId>Designer_connection_mapping_1</ImageId>
+      <AlternateText>Designer connection mapping 1</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_connection_mapping_0.png">
+      <ImageId>Designer_connection_mapping_0</ImageId>
+      <AlternateText>Designer connection mapping 0</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Add_Dll_Lib.png">
+      <ImageId>Designer_Add_Dll_Lib</ImageId>
+      <AlternateText>Designer Add Dll Lib</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Commission_Rule.png">
+      <ImageId>Designer_Commission_Rule</ImageId>
+      <AlternateText>Designer Commission Rule</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Schedule_04.png">
+      <ImageId>Designer_Schedule_04</ImageId>
+      <AlternateText>Designer Schedule 04</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Schedule_05.png">
+      <ImageId>Designer_Schedule_05</ImageId>
+      <AlternateText>Designer Schedule 05</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
