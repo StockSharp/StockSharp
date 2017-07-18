@@ -13,8 +13,8 @@
 <para>В левом верхнем углу каждого графика показаны все графические элементы, 
 добавленные на график. Если убрать 
 флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline> на 
-графическом элементе уберется и элемент с графика. Нажав на 
-кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline> откроются 
+графическом элементе, уберется и элемент с графика. Нажав на 
+кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline>, откроются 
 настройки графического элемента. Также, настроить графический элимент можно в свойствах кубика <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />.</para>
  <mediaLink>
 <image placement="center" xlink:href="Designer_Schedule_02"/>
