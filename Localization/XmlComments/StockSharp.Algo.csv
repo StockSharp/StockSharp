@@ -524,7 +524,7 @@ M:StockSharp.Algo.Candles.CandleHelper.ToCandles(System.Collections.Generic.IEnu
 M:StockSharp.Algo.Candles.CandleHelper.ToCandles(System.Collections.Generic.IEnumerable{StockSharp.Messages.QuoteChangeMessage},StockSharp.Algo.Candles.CandleSeries,StockSharp.Algo.Candles.Compression.DepthCandleSourceTypes,System.Boolean)/returns;XamlStr631
 M:StockSharp.Algo.Candles.CandleHelper.ToTrades(System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Candle})/summary;DocStr553
 M:StockSharp.Algo.Candles.CandleHelper.ToTrades(System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Candle})/param/candles;XamlStr631
-M:StockSharp.Algo.Candles.CandleHelper.ToTrades(System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Candle})/returns;DocStr3572
+M:StockSharp.Algo.Candles.CandleHelper.ToTrades(System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Candle})/returns;Str985
 M:StockSharp.Algo.Candles.CandleHelper.ToTrades(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},System.Decimal)/summary;DocStr554
 M:StockSharp.Algo.Candles.CandleHelper.ToTrades(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},System.Decimal)/param/candles;XamlStr631
 M:StockSharp.Algo.Candles.CandleHelper.ToTrades(System.Collections.Generic.IEnumerable{StockSharp.Messages.CandleMessage},System.Decimal)/param/volumeStep;VolumeStep
@@ -6542,7 +6542,7 @@ M:StockSharp.Algo.TraderHelper.UnGroup(StockSharp.BusinessEntities.MarketDepth)/
 M:StockSharp.Algo.TraderHelper.UnGroup(StockSharp.BusinessEntities.MarketDepth)/returns;DocStr2345
 M:StockSharp.Algo.TraderHelper.EmulateTrades(StockSharp.BusinessEntities.MarketDepth,System.Collections.Generic.IEnumerable{StockSharp.Messages.ExecutionMessage})/summary;DocStr2346
 M:StockSharp.Algo.TraderHelper.EmulateTrades(StockSharp.BusinessEntities.MarketDepth,System.Collections.Generic.IEnumerable{StockSharp.Messages.ExecutionMessage})/param/depth;DocStr2347
-M:StockSharp.Algo.TraderHelper.EmulateTrades(StockSharp.BusinessEntities.MarketDepth,System.Collections.Generic.IEnumerable{StockSharp.Messages.ExecutionMessage})/param/trades;DocStr3572
+M:StockSharp.Algo.TraderHelper.EmulateTrades(StockSharp.BusinessEntities.MarketDepth,System.Collections.Generic.IEnumerable{StockSharp.Messages.ExecutionMessage})/param/trades;Str985
 M:StockSharp.Algo.TraderHelper.Group(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},StockSharp.Messages.Unit)/summary;DocStr2348
 M:StockSharp.Algo.TraderHelper.Group(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},StockSharp.Messages.Unit)/param/quotes;DocStr2349
 M:StockSharp.Algo.TraderHelper.Group(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},StockSharp.Messages.Unit)/param/priceRange;DocStr2342
@@ -6592,7 +6592,7 @@ M:StockSharp.Algo.TraderHelper.IsMatchedEmpty(StockSharp.Messages.ExecutionMessa
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/summary;DocStr2373
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/order;Orders
 M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
-M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/returns;DocStr3572
+M:StockSharp.Algo.TraderHelper.GetTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/returns;Str985
 M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)/summary;DocStr2374
 M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)/param/order;DocStr2375
 M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)/param/connector;DocStr2398
