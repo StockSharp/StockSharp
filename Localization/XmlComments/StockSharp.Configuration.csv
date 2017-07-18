@@ -33,11 +33,12 @@ M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAda
 M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window)/param/owner;DocStr8719
 M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window)/returns;DocStr8720
 P:StockSharp.Configuration.Extensions.Adapters/summary;DocStr9801
-M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@)/summary;DocStr8717
-M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@)/param/adapter;DocStr8718
-M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@)/param/owner;DocStr8719
-M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@)/param/autoConnect;XamlStr16
-M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@)/returns;DocStr8720
+M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/summary;DocStr8717
+M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/param/adapter;DocStr8718
+M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/param/owner;DocStr8719
+M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/param/autoConnect;XamlStr16
+M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/param/windowSettings;DocStr9964
+M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.BasketMessageAdapter,System.Windows.Window,System.Boolean@,Ecng.Serialization.SettingsStorage@)/returns;DocStr8720
 M:StockSharp.Configuration.Extensions.GetIndicatorTypes/summary;DocStr8721
 M:StockSharp.Configuration.Extensions.GetIndicatorTypes/returns;DocStr8722
 M:StockSharp.Configuration.Extensions.FillIndicators(StockSharp.Xaml.Charting.IChart)/summary;DocStr8723

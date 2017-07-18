@@ -429,7 +429,7 @@ P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.MarketDepth/summary;MarketDept
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Order/summary;Str504
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.MyTrade/summary;OwnTrade
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Trade/summary;Str506
-P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Trades/summary;DocStr3572
+P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Trades/summary;Str985
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.FirstOperand/summary;DocStr9720
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.SecondOperand/summary;DocStr9721
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Input/summary;Input
@@ -629,7 +629,7 @@ T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement/summary;ChartPanelElement
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.CandleElements/summary;XamlStr631
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.IndicatorElements/summary;DocStr9743
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OrderElements/summary;Orders
-P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.TradeElements/summary;DocStr3572
+P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.TradeElements/summary;Str985
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.XAxes/summary;DocStr7759
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.YAxes/summary;DocStr7760
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.#ctor/summary;DocStr1

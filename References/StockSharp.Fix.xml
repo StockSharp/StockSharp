@@ -29,6 +29,11 @@
             Native identifier can be stored.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend">
+      <summary>
+            Enable suspend mode (enqueue non ordered FAST messages).
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Clone">
       <inheritdoc />
     </member>
@@ -47,6 +52,9 @@
     <member name="E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.LoadSettingsFromFile(System.String)">
       <inheritdoc />
     </member>
@@ -55,6 +63,12 @@
             To call the event <see cref="E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage" />.
             </summary>
       <param name="message">The message.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.Dialects.BaseFixDialect">
       <summary>
@@ -387,6 +401,17 @@
             Native identifier can be stored.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.EnableSuspend">
+      <summary>
+            Enable suspend mode (enqueue non ordered FAST messages).
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
+      <summary>
+            Test dump files.
+            </summary>
+      <param name="dumpFiles">Dump files.</param>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFastDialect.LoadSettingsFromFile(System.String)">
       <summary>
             Load settings from specified file.
@@ -557,6 +582,9 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="M:StockSharp.Fix.FastFeedGroup.FastFeedGroupAddress.ToString">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.FastFeedGroup.UdpA">
       <summary>
             UDP channel A.
@@ -583,6 +611,9 @@
             Save settings.
             </summary>
       <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FastFeedGroup.ToString">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Fix.FastMessageAdapter">
       <summary>

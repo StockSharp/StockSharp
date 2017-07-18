@@ -418,5 +418,40 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string SettingsFileDot => AppendDot(SettingsFile);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string FondMarketDot => AppendDot(FondMarket);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string CurrencyMarketDot => AppendDot(CurrencyMarket);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str436Dot => AppendDot(Str436);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string OrdersDot => AppendDot(Orders);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str985Dot => AppendDot(Str985);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string SecuritiesDot => AppendDot(Securities);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str1324Dot => AppendDot(Str1324);
 	}
 }

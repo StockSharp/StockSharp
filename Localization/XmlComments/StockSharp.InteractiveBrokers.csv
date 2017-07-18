@@ -344,7 +344,7 @@ F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.Frozen/summary
 F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.Delayed/summary;DocStr9576
 F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.DelayedFrozen/summary;DocStr9577
 T:StockSharp.InteractiveBrokers.CandleDataTypes/summary;DocStr3589
-F:StockSharp.InteractiveBrokers.CandleDataTypes.Trades/summary;DocStr3572
+F:StockSharp.InteractiveBrokers.CandleDataTypes.Trades/summary;Str985
 F:StockSharp.InteractiveBrokers.CandleDataTypes.Midpoint/summary;SpreadMiddle
 F:StockSharp.InteractiveBrokers.CandleDataTypes.Bid/summary;Str565
 F:StockSharp.InteractiveBrokers.CandleDataTypes.Ask/summary;BestAsk

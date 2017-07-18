@@ -4600,6 +4600,9 @@ SecurityOrBoardCodeDuplicatedParams;Security or board code are duplicated for {0
 Bytes;Bytes;Байты
 Project;Project;Проект
 Later;Later;Позднее
+SourceObsolete;The source is obsolete and can no longer be used.;Источник устарел и больше не может быть использован.
+CurrencyMarket;Currency market;Валютный рынок
+FondMarket;Fond market;Фондовый рынок
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -8124,7 +8127,6 @@ DocStr3568;Bond Yield for Bid Price;Bond Yield for Bid Price
 DocStr3569;Bond Yield for Ask Price;Bond Yield for Ask Price
 DocStr3570;Bond Yield for Last Price;Bond Yield for Last Price
 DocStr3571;returns calculated implied volatility as a result of an calculateImpliedVolatility( ) request;returns calculated implied volatility as a result of an calculateImpliedVolatility( ) request
-DocStr3572;Trades;Trades
 DocStr3573;Trades per Minute;Trades per Minute
 DocStr3574;Volume per Minute;Volume per Minute
 DocStr3575;Last Regular Trading Hours Trade;Last Regular Trading Hours Trade
@@ -9220,8 +9222,6 @@ DocStr4732;Признак расщепления цены;Признак рас�
 DocStr4733;По разным ценам;По разным ценам
 DocStr4734;По одной цене;По одной цене
 DocStr4735;Признак торговой системы;Признак торговой системы
-DocStr4736;Валютный рынок;Валютный рынок
-DocStr4737;Фондовый рынок;Фондовый рынок
 DocStr4738;Состояние события;Состояние события
 DocStr4739;Актуально;Актуально
 DocStr4740;Выполнено;Выполнено
@@ -14274,3 +14274,9 @@ DocStr9960;The path to the directory with securities extended info;Путь к �
 DocStr9961;The window for creation and editing of symbols mapping;Окно создания и редактирования преобразования идентификаторов инструментов
 DocStr9962;Test dump files;Протестировать дамп-файлы
 DocStr9963;Dump files;Дамп-файлы
+DocStr9964;{0} settings;Настройки {0}
+DocStr9965;Enable suspend mode (enqueue non ordered FAST messages);Включить режим приостановки (добавлять в очередь неупорядоченные сообщения FAST)
+DocStr9966;Window instance;Объект окна
+DocStr9967;Save DevExpress control settings;Сохранить настройки компонента DevExpress
+DocStr9968;Control;Компонент
+DocStr9969;Load DevExpress control settings;Загрузить настройки компонента DevExpress
