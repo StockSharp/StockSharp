@@ -112,16 +112,16 @@ namespace StockSharp.Algo.Storages.Csv
 						var id = reader.ReadNullableLong();
 
 						if (id != null)
-							level1.Changes.Add(field, id);
+							level1.Changes.Add(field, id.Value);
 
 						break;
 					case Level1Fields.AsksCount:
 					case Level1Fields.BidsCount:
 					case Level1Fields.TradesCount:
-						var count = reader.ReadNullableLong();
+						var count = reader.ReadNullableInt();
 
 						if (count != null)
-							level1.Changes.Add(field, count);
+							level1.Changes.Add(field, count.Value);
 
 						break;
 					case Level1Fields.LastTradeUpDown:
@@ -129,21 +129,21 @@ namespace StockSharp.Algo.Storages.Csv
 						var flag = reader.ReadNullableBool();
 
 						if (flag != null)
-							level1.Changes.Add(field, flag);
+							level1.Changes.Add(field, flag.Value);
 
 						break;
 					case Level1Fields.State:
 						var state = reader.ReadNullableEnum<SecurityStates>();
 
 						if (state != null)
-							level1.Changes.Add(field, state);
+							level1.Changes.Add(field, state.Value);
 
 						break;
 					default:
 						var value = reader.ReadNullableDecimal();
 
 						if (value != null)
-							level1.Changes.Add(field, value);
+							level1.Changes.Add(field, value.Value);
 
 						break;
 				}

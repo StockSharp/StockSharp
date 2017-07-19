@@ -3200,7 +3200,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the instrument by the system identifier.
 		/// </summary>
-		/// <param name="provider"></param>
+		/// <param name="provider">The provider of information about instruments.</param>
 		/// <param name="nativeIdStorage">Security native identifier storage.</param>
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="nativeId">Native (internal) trading system security id.</param>

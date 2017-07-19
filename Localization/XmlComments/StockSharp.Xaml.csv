@@ -142,7 +142,7 @@ T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder/summary;Doc
 P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Count/summary;DocStr8992
 P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Item(System.Int32)/summary;DocStr8993
 M:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.#ctor(DevExpress.Xpf.Grid.GridColumnCollection)/summary;DocStr1
-M:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.#ctor(DevExpress.Xpf.Grid.GridColumnCollection)/param/columns;DocStr8459
+M:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.#ctor(DevExpress.Xpf.Grid.GridColumnCollection)/param/columns;DocStr9970
 P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility/summary;DocStr8993
 E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler/summary;DocStr8994
 E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged/summary;DocStr8995

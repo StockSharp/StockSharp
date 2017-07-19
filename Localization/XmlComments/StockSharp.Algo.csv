@@ -6399,7 +6399,7 @@ M:StockSharp.Algo.MessageConverterHelper.ToMessageType(System.Type,System.Object
 M:StockSharp.Algo.MessageConverterHelper.ToMessageType(System.Type,System.Object@)/returns;DocStr9
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/summary;DocStr4113
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/series;CandlesSeries
-M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/isSubscribe;DocStr8459
+M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/isSubscribe;DocStr4475
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/from;DocStr84
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/to;DocStr85
 M:StockSharp.Algo.MessageConverterHelper.ToMarketDataMessage(StockSharp.Algo.Candles.CandleSeries,System.Boolean,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64})/param/count;DocStr3776
@@ -6913,7 +6913,7 @@ M:StockSharp.Algo.TraderHelper.LookupById(StockSharp.BusinessEntities.ISecurityP
 M:StockSharp.Algo.TraderHelper.LookupById(StockSharp.BusinessEntities.ISecurityProvider,System.String)/param/id;SecurityId
 M:StockSharp.Algo.TraderHelper.LookupById(StockSharp.BusinessEntities.ISecurityProvider,System.String)/returns;DocStr2510
 M:StockSharp.Algo.TraderHelper.LookupByNativeId(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.Algo.Storages.INativeIdStorage,System.String,System.Object)/summary;DocStr9354
-M:StockSharp.Algo.TraderHelper.LookupByNativeId(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.Algo.Storages.INativeIdStorage,System.String,System.Object)/param/provider;DocStr8459
+M:StockSharp.Algo.TraderHelper.LookupByNativeId(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.Algo.Storages.INativeIdStorage,System.String,System.Object)/param/provider;DocStr972
 M:StockSharp.Algo.TraderHelper.LookupByNativeId(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.Algo.Storages.INativeIdStorage,System.String,System.Object)/param/nativeIdStorage;DocStr9329
 M:StockSharp.Algo.TraderHelper.LookupByNativeId(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.Algo.Storages.INativeIdStorage,System.String,System.Object)/param/storageName;DocStr429
 M:StockSharp.Algo.TraderHelper.LookupByNativeId(StockSharp.BusinessEntities.ISecurityProvider,StockSharp.Algo.Storages.INativeIdStorage,System.String,System.Object)/param/nativeId;DocStr802
