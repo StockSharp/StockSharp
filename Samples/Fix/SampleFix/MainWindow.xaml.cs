@@ -30,6 +30,7 @@ namespace SampleFix
 	using StockSharp.Fix;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
@@ -78,6 +79,7 @@ namespace SampleFix
 
 			_logManager.Sources.Add(Trader);
 			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_Fix" });
+			_logManager.Listeners.Add(new GuiLogListener(LogControl));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
