@@ -183,6 +183,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Designer_Security_mapping.aml" />
     <None Include="Topics\Designer_Add_Dll_Lib.aml" />
     <None Include="Topics\HydraSymbolMapping.aml" />
     <None Include="Topics\Designer_Orders_conditional.aml" />
@@ -2762,6 +2763,14 @@
     <Image Include="Art\Designer_Schedule_05.png">
       <ImageId>Designer_Schedule_05</ImageId>
       <AlternateText>Designer Schedule 05</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Security_mapping_00.png">
+      <ImageId>Designer_Security_mapping_00</ImageId>
+      <AlternateText>Designer Security mapping 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Security_mapping_01.png">
+      <ImageId>Designer_Security_mapping_01</ImageId>
+      <AlternateText>Designer Security mapping 01</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
