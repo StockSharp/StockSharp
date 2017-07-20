@@ -25,6 +25,8 @@ namespace SampleSpbEx
 	using StockSharp.BusinessEntities;
 	using StockSharp.SpbEx;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
@@ -38,6 +40,8 @@ namespace SampleSpbEx
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
+
+		private readonly LogManager _logManager = new LogManager();
 
 		public MainWindow()
 		{
@@ -53,6 +57,9 @@ namespace SampleSpbEx
 			_newsWindow.MakeHideable();
 
 			Instance = this;
+
+			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_Fix" });
+			_logManager.Listeners.Add(new GuiLogListener(LogControl));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -96,8 +103,9 @@ namespace SampleSpbEx
 				if (Trader == null)
 				{
 					// create connector
-					//Trader = new FixTrader();
 					Trader = new SpbExTrader();
+
+					_logManager.Sources.Add(Trader);
 
 					Trader.Restored += () => this.GuiAsync(() =>
 					{
@@ -114,9 +122,6 @@ namespace SampleSpbEx
 
 						// update gui labes
 						this.GuiAsync(() => ChangeConnectStatus(true));
-
-						// subscribe on news
-						Trader.RegisterNews();
 					};
 
 					// subscribe on connection error event

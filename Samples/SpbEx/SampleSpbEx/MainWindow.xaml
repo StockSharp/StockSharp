@@ -3,8 +3,9 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:spbex="clr-namespace:StockSharp.SpbEx.Xaml;assembly=StockSharp.SpbEx"
-		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="134" Width="501">
-    <Grid Height="92">
+		xmlns:xaml="http://schemas.stocksharp.com/xaml"
+		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="600">
+    <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
 			<ColumnDefinition />
@@ -14,6 +15,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal">
@@ -34,5 +36,7 @@
 		<Button x:Name="ShowTrades" Grid.Column="0" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Ticks}" Click="ShowTradesClick" />
 		<Button x:Name="ShowMyTrades" Grid.Column="1" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
 		<Button x:Name="ShowOrders" Grid.Column="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
-    </Grid>
+
+		<xaml:LogControl Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" AutoResize="True" AutoScroll="True" x:Name="LogControl" TimeFormat="HH:mm:ss.fff"/>
+	</Grid>
 </Window>
