@@ -164,8 +164,20 @@
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.StorageName">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.SecurityLookupRequired">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.PortfolioLookupRequired">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
+    </member>
+    <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.Dump(System.Collections.Generic.IDictionary{System.Net.EndPoint,System.String})">
+      <summary>
+            Test dump files.
+            </summary>
+      <param name="dumpFiles">Dump files.</param>
     </member>
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.Config">
       <summary>
@@ -180,6 +192,11 @@
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.Password">
       <summary>
             Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.EnableSuspend">
+      <summary>
+            Enable suspend mode (enqueue non ordered messages).
             </summary>
     </member>
     <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">

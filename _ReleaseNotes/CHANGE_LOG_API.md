@@ -13,6 +13,10 @@ StockSharp API Change log
 * (bug) BTCE fix.
 * (feature) SecurityMappingWindow.
 * (feature) FastMessageAdapter. Extracted from FixMessageAdapter.
+* (bug) FAST fixes.
+* (bug) SpbEx fixes.
+* (bug) Level1CsvSerializer fix.
+* (bug) Fix index creation http://stocksharp.ru/forum/8409/v-gidre-pri-raschete-indeksa-vydaetsya-soobshshenie-method-must-have-a-return-type/
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
