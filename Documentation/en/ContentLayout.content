@@ -238,7 +238,6 @@
     <Topic id="16070956-6e63-4cef-b6a8-6eb42372c424" visible="True" title="Exchange time" />
     <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Arithmetic operations" />
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Currency converter" />
-    <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
   </Topic>
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />

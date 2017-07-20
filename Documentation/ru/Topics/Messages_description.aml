@@ -148,11 +148,11 @@
   		
   		<row>
     	<entry>
-    		<para><codeEntityReference>T:StockSharp.Messages.PositionMessage</codeEntityReference></para>
+    		<para><codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию о позиции. Также существует сообщение <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference>,
-    		которое содержит информацию об изменении определенного свойства позиции. Тип свойства определяется в перечислении <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
+    		<para>Содержит информацию о позиции. Содержит информацию об изменении определенного свойства позиции. Тип свойства определяется в
+		перечислении <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
     	</entry>
   		</row>
 
