@@ -4603,6 +4603,8 @@ Later;Later;Позднее
 SourceObsolete;The source is obsolete and can no longer be used.;Источник устарел и больше не может быть использован.
 CurrencyMarket;Currency market;Валютный рынок
 FondMarket;Fond market;Фондовый рынок
+Suspend;Enqueue non ordered;Буферизация неупорядоченного
+SuspendDesc;Enable suspend mode (enqueue non ordered messages).;Включить режим приостановки (добавлять в очередь неупорядоченные сообщения).
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14275,7 +14277,6 @@ DocStr9961;The window for creation and editing of symbols mapping;Окно со�
 DocStr9962;Test dump files;Протестировать дамп-файлы
 DocStr9963;Dump files;Дамп-файлы
 DocStr9964;{0} settings;Настройки {0}
-DocStr9965;Enable suspend mode (enqueue non ordered FAST messages);Включить режим приостановки (добавлять в очередь неупорядоченные сообщения FAST)
 DocStr9966;Window instance;Объект окна
 DocStr9967;Save DevExpress control settings;Сохранить настройки компонента DevExpress
 DocStr9968;Control;Компонент

@@ -45706,5 +45706,25 @@ namespace StockSharp.Localization
 		/// Fond market
 		/// </summary>
 		public static string FondMarket => GetString(FondMarketKey);
+
+		/// <summary>
+		/// Enqueue non ordered
+		/// </summary>
+		public const string SuspendKey = nameof(Suspend);
+
+		/// <summary>
+		/// Enqueue non ordered
+		/// </summary>
+		public static string Suspend => GetString(SuspendKey);
+
+		/// <summary>
+		/// Enable suspend mode (enqueue non ordered messages).
+		/// </summary>
+		public const string SuspendDescKey = nameof(SuspendDesc);
+
+		/// <summary>
+		/// Enable suspend mode (enqueue non ordered messages).
+		/// </summary>
+		public static string SuspendDesc => GetString(SuspendDescKey);
 	}
 }

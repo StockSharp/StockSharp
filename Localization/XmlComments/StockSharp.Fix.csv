@@ -3,7 +3,9 @@ P:StockSharp.Fix.Dialects.BaseFastDialect.StorageName/summary;DocStr9382
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Fix.Dialects.BaseFastDialect.SecurityExtendedFields/summary;DocStr9383
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
-P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend/summary;DocStr9965
+P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend/summary;SuspendDesc
+P:StockSharp.Fix.Dialects.BaseFastDialect.Login/summary;Login
+P:StockSharp.Fix.Dialects.BaseFastDialect.Password/summary;Password
 M:StockSharp.Fix.Dialects.BaseFastDialect.Clone/inheritdoc;DocStr8459
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsOpened/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Open/inheritdoc;DocStr8459
@@ -128,7 +130,9 @@ P:StockSharp.Fix.Dialects.IFastDialect.StorageName/summary;DocStr9382
 P:StockSharp.Fix.Dialects.IFastDialect.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Fix.Dialects.IFastDialect.SecurityExtendedFields/summary;DocStr9383
 P:StockSharp.Fix.Dialects.IFastDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
-P:StockSharp.Fix.Dialects.IFastDialect.EnableSuspend/summary;DocStr9965
+P:StockSharp.Fix.Dialects.IFastDialect.EnableSuspend/summary;SuspendDesc
+P:StockSharp.Fix.Dialects.IFastDialect.Login/summary;Login
+P:StockSharp.Fix.Dialects.IFastDialect.Password/summary;Password
 M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})/summary;DocStr9962
 M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})/param/dumpFiles;DocStr9963
 M:StockSharp.Fix.Dialects.IFastDialect.LoadSettingsFromFile(System.String)/summary;DocStr9950
