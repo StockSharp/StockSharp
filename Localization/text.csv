@@ -4165,6 +4165,7 @@ TemplateTxtOrderLog;Order log txt export template.;Шаблон экспорта
 TemplateTxtTransaction;Transactions txt export template.;Шаблон экспорта в txt для транзакций.
 TemplateTxtSecurity;Security txt export template.;Шаблон экспорта в txt для инструментов.
 TemplateTxtNews;News txt export template.;Шаблон экспорта в txt для новостей.
+TemplateTxtIndicator;Indicator's value txt export template.;Шаблон экспорта в txt для значений индикатора.
 TemplateDepth;Depth template;Шаблон стаканов
 TemplateTick;Ticks template;Шаблон тиков
 TemplateCandle;Candles template;Шаблон свечей
@@ -4174,6 +4175,7 @@ TemplateOrderLog;Order log template;Шаблон лога заявок
 TemplateTransaction;Transactions template;Шаблон транзакций
 TemplateSecurity;Security template;Шаблон инструментов
 TemplateNews;News template;Шаблон новостей
+TemplateIndicator;Indicator template;Шаблон индикатора
 CsvImportError;Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.;Ошибка парсинга. Строка {0}, колонка {1}, значение в файле '{2}', поле {3}.
 CsvHeader;Header at the first line. Do not add header while empty string.;Заголовок, идущий первой строкой. Если передается пустая строка, то заголовок не будет добавлен в файл.
 RequestNewsBody;Request news body;Получить текст новости

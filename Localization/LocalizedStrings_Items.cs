@@ -41358,6 +41358,16 @@ namespace StockSharp.Localization
 		public static string TemplateTxtNews => GetString(TemplateTxtNewsKey);
 
 		/// <summary>
+		/// Indicator's value txt export template.
+		/// </summary>
+		public const string TemplateTxtIndicatorKey = nameof(TemplateTxtIndicator);
+
+		/// <summary>
+		/// Indicator's value txt export template.
+		/// </summary>
+		public static string TemplateTxtIndicator => GetString(TemplateTxtIndicatorKey);
+
+		/// <summary>
 		/// Depth template
 		/// </summary>
 		public const string TemplateDepthKey = nameof(TemplateDepth);
@@ -41446,6 +41456,16 @@ namespace StockSharp.Localization
 		/// News template
 		/// </summary>
 		public static string TemplateNews => GetString(TemplateNewsKey);
+
+		/// <summary>
+		/// Indicator template.
+		/// </summary>
+		public const string TemplateIndicatorKey = nameof(TemplateIndicator);
+
+		/// <summary>
+		/// Indicator template
+		/// </summary>
+		public static string TemplateIndicator => GetString(TemplateIndicatorKey);
 
 		/// <summary>
 		/// Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.
