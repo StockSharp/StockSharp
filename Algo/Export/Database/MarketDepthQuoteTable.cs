@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Export.Database
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
-	internal class MarketDepthQuoteTable : Table<TimeQuoteChange>
+	class MarketDepthQuoteTable : Table<TimeQuoteChange>
 	{
 		public MarketDepthQuoteTable(Security security)
 			: base("MarketDepthQuote", CreateColumns(security))
