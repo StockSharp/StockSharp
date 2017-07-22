@@ -45726,5 +45726,15 @@ namespace StockSharp.Localization
 		/// Enable suspend mode (enqueue non ordered messages).
 		/// </summary>
 		public static string SuspendDesc => GetString(SuspendDescKey);
+
+		/// <summary>
+		/// Breakpoints
+		/// </summary>
+		public const string BreakpointsKey = nameof(Breakpoints);
+
+		/// <summary>
+		/// Breakpoints
+		/// </summary>
+		public static string Breakpoints => GetString(BreakpointsKey);
 	}
 }

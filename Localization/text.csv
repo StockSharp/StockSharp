@@ -4605,6 +4605,7 @@ CurrencyMarket;Currency market;Валютный рынок
 FondMarket;Fond market;Фондовый рынок
 Suspend;Enqueue non ordered;Буферизация неупорядоченного
 SuspendDesc;Enable suspend mode (enqueue non ordered messages).;Включить режим приостановки (добавлять в очередь неупорядоченные сообщения).
+Breakpoints;Breakpoints;Точки останова
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
