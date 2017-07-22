@@ -129,6 +129,12 @@ namespace StockSharp.Algo.Export
 			Do(messages, () => new PositionChangeTable(Security));
 		}
 
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(values, () => new IndicatorValueTable());
+		}
+
 		private void Do<TValue, TTable>(IEnumerable<TValue> values, Func<TTable> getTable)
 			where TTable : Table<TValue>
 		{

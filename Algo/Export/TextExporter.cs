@@ -98,6 +98,12 @@ namespace StockSharp.Algo.Export
 			Do(messages);
 		}
 
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(values);
+		}
+
 		private void Do<TValue>(IEnumerable<TValue> values)
 		{
 			using (var writer = new StreamWriter(Path, true))

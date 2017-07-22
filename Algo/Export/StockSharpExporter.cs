@@ -121,6 +121,12 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			foreach (var group in messages.GroupBy(m => m.GetType()))
@@ -138,10 +144,7 @@ namespace StockSharp.Algo.Export
 			Export(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="SecurityMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			throw new NotSupportedException();

@@ -223,6 +223,20 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(values, "values", (writer, value) =>
+			{
+				writer.WriteStartElement("value");
+
+				writer.WriteAttribute("time", value.Time.ToString(_timeFormat));
+				writer.WriteAttribute("value", value.ValueAsDecimal);
+
+				writer.WriteEndElement();
+			});
+		}
+
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			Do(messages, "candles", (writer, candle) =>

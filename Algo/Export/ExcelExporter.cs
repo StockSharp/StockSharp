@@ -372,6 +372,31 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(worker =>
+			{
+				var row = 0;
+
+				worker
+					.SetCell(0, row, LocalizedStrings.Time)
+					.SetCell(1, row, LocalizedStrings.Str3099);
+
+				row++;
+
+				foreach (var value in values)
+				{
+					worker
+						.SetCell(0, row, value.Time)
+						.SetCell(1, row, value.ValueAsDecimal);
+				
+					if (!Check(++row))
+						break;
+				}
+			});
+		}
+
 		private static void ApplyCellStyle(ExcelWorker worker, PositionChangeTypes type, int column)
 		{
 			switch (type)
@@ -391,33 +416,33 @@ namespace StockSharp.Algo.Export
 		{
 			Do(worker =>
 			{
-				worker
-					.SetCell(0, 0, LocalizedStrings.Str726).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(1, 0, LocalizedStrings.Str727).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(2, 0, "O").SetStyle(2, typeof(decimal))
-					.SetCell(3, 0, "H").SetStyle(3, typeof(decimal))
-					.SetCell(4, 0, "L").SetStyle(4, typeof(decimal))
-					.SetCell(5, 0, "C").SetStyle(5, typeof(decimal))
-					.SetCell(6, 0, "V").SetStyle(6, typeof(decimal))
-					.SetCell(7, 0, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
+				var row = 0;
 
-				var index = 1;
+				worker
+					.SetCell(0, row, LocalizedStrings.Str726).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
+					.SetCell(1, row, LocalizedStrings.Str727).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
+					.SetCell(2, row, "O").SetStyle(2, typeof(decimal))
+					.SetCell(3, row, "H").SetStyle(3, typeof(decimal))
+					.SetCell(4, row, "L").SetStyle(4, typeof(decimal))
+					.SetCell(5, row, "C").SetStyle(5, typeof(decimal))
+					.SetCell(6, row, "V").SetStyle(6, typeof(decimal))
+					.SetCell(7, row, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
+
+				row++;
 
 				foreach (var candle in messages)
 				{
 					worker
-						.SetCell(0, index, candle.OpenTime)
-						.SetCell(1, index, candle.CloseTime)
-						.SetCell(2, index, candle.OpenPrice)
-						.SetCell(3, index, candle.HighPrice)
-						.SetCell(4, index, candle.LowPrice)
-						.SetCell(5, index, candle.ClosePrice)
-						.SetCell(6, index, candle.TotalVolume)
-						.SetCell(7, index, candle.OpenInterest);
+						.SetCell(0, row, candle.OpenTime)
+						.SetCell(1, row, candle.CloseTime)
+						.SetCell(2, row, candle.OpenPrice)
+						.SetCell(3, row, candle.HighPrice)
+						.SetCell(4, row, candle.LowPrice)
+						.SetCell(5, row, candle.ClosePrice)
+						.SetCell(6, row, candle.TotalVolume)
+						.SetCell(7, row, candle.OpenInterest);
 
-					index++;
-
-					if (!Check(index))
+					if (!Check(++row))
 						break;
 				}
 			});
@@ -428,33 +453,33 @@ namespace StockSharp.Algo.Export
 		{
 			Do(worker =>
 			{
-				worker
-					.SetCell(0, 0, LocalizedStrings.Id).SetStyle(0, typeof(string))
-					.SetCell(1, 0, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(2, 0, LocalizedStrings.Security).SetStyle(2, typeof(string))
-					.SetCell(3, 0, LocalizedStrings.Board).SetStyle(3, typeof(string))
-					.SetCell(4, 0, LocalizedStrings.Str215).SetStyle(4, typeof(string))
-					.SetCell(5, 0, LocalizedStrings.Str217).SetStyle(5, typeof(string))
-					.SetCell(6, 0, LocalizedStrings.Str213).SetStyle(6, typeof(string))
-					.SetCell(7, 0, LocalizedStrings.Str221).SetStyle(6, typeof(string));
+				var row = 0;
 
-				var index = 1;
+				worker
+					.SetCell(0, row, LocalizedStrings.Id).SetStyle(0, typeof(string))
+					.SetCell(1, row, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
+					.SetCell(2, row, LocalizedStrings.Security).SetStyle(2, typeof(string))
+					.SetCell(3, row, LocalizedStrings.Board).SetStyle(3, typeof(string))
+					.SetCell(4, row, LocalizedStrings.Str215).SetStyle(4, typeof(string))
+					.SetCell(5, row, LocalizedStrings.Str217).SetStyle(5, typeof(string))
+					.SetCell(6, row, LocalizedStrings.Str213).SetStyle(6, typeof(string))
+					.SetCell(7, row, LocalizedStrings.Str221).SetStyle(6, typeof(string));
+
+				row++;
 
 				foreach (var n in messages)
 				{
 					worker
-						.SetCell(0, index, n.Id)
-						.SetCell(1, index, n.ServerTime)
-						.SetCell(2, index, n.SecurityId == null ? null : n.SecurityId.Value.SecurityCode)
-						.SetCell(3, index, n.BoardCode)
-						.SetCell(4, index, n.Headline)
-						.SetCell(5, index, n.Story)
-						.SetCell(6, index, n.Source)
-						.SetCell(7, index, n.Url);
+						.SetCell(0, row, n.Id)
+						.SetCell(1, row, n.ServerTime)
+						.SetCell(2, row, n.SecurityId?.SecurityCode)
+						.SetCell(3, row, n.BoardCode)
+						.SetCell(4, row, n.Headline)
+						.SetCell(5, row, n.Story)
+						.SetCell(6, row, n.Source)
+						.SetCell(7, row, n.Url);
 
-					index++;
-
-					if (!Check(index))
+					if (!Check(++row))
 						break;
 				}
 			});

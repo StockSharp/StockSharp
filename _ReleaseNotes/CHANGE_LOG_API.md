@@ -17,6 +17,7 @@ StockSharp API Change log
 * (bug) SpbEx fixes.
 * (bug) Level1CsvSerializer fix.
 * (bug) Fix index creation http://stocksharp.ru/forum/8409/v-gidre-pri-raschete-indeksa-vydaetsya-soobshshenie-method-must-have-a-return-type/
+* (feature) Export. Indicator values.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
