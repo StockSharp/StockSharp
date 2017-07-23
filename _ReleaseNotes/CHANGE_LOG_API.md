@@ -18,6 +18,8 @@ StockSharp API Change log
 * (bug) Level1CsvSerializer fix.
 * (bug) Fix index creation http://stocksharp.ru/forum/8409/v-gidre-pri-raschete-indeksa-vydaetsya-soobshshenie-method-must-have-a-return-type/
 * (feature) Export. Indicator values.
+* (feature) Level1Grid. Duration, BuyBackDate, BuyBackPrice.
+* (feature) CSV importing.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

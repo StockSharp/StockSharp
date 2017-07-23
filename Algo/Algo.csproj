@@ -126,6 +126,10 @@
     <Compile Include="Export\IndicatorValue.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="Import\CsvImporter.cs" />
+    <Compile Include="Import\CsvParser.cs" />
+    <Compile Include="Import\FieldMapping.cs" />
+    <Compile Include="Import\FieldMappingValue.cs" />
     <Compile Include="IRemoteAuthorization.cs" />
     <Compile Include="Storages\ISecurityMappingStorage.cs" />
     <Compile Include="SecurityMappingMessageAdapter.cs" />
