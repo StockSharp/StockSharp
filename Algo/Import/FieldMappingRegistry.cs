@@ -9,6 +9,9 @@ namespace StockSharp.Algo.Import
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
+	/// <summary>
+	/// Importing fields registry.
+	/// </summary>
 	public static class FieldMappingRegistry
 	{
 		/// <summary>
@@ -111,12 +114,12 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<CandleMessage, string>(GetSecurityCodeField(nameof(CandleMessage.SecurityId)), LocalizedStrings.Security, secCodeDescr, SetSecCode) { IsRequired = true });
 				fields.Add(new FieldMapping<CandleMessage, string>(GetBoardCodeField(nameof(CandleMessage.SecurityId)), LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
-				fields.Add(new FieldMapping<CandleMessage, DateTimeOffset>(nameof(CandleMessage.OpenTime), LocalizedStrings.Date, dateDescr, (i, v) =>
+				fields.Add(new FieldMapping<CandleMessage, DateTimeOffset>(GetDateField(nameof(CandleMessage.OpenTime)), LocalizedStrings.Date, dateDescr, (i, v) =>
 				{
 					i.OpenTime = v + i.OpenTime.TimeOfDay;
 					i.CloseTime = v + i.CloseTime.TimeOfDay;
 				}) { IsRequired = true });
-				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(nameof(CandleMessage.OpenTime), LocalizedStrings.Str2860, LocalizedStrings.CandleOpenTime, (i, v) => i.OpenTime += v));
+				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(GetTimeOfDayField(nameof(CandleMessage.OpenTime)), LocalizedStrings.Str2860, LocalizedStrings.CandleOpenTime, (i, v) => i.OpenTime += v));
 				fields.Add(new FieldMapping<CandleMessage, TimeSpan>(nameof(CandleMessage.CloseTime), LocalizedStrings.Str2861, LocalizedStrings.CandleCloseTime, (i, v) => i.CloseTime += v));
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.OpenInterest), LocalizedStrings.Str150, string.Empty, (i, v) => i.OpenInterest = v));
 				fields.Add(new FieldMapping<CandleMessage, decimal>(nameof(CandleMessage.OpenPrice), "O", LocalizedStrings.Str80, (i, v) => i.OpenPrice = v) { IsRequired = true });
