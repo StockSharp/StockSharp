@@ -4608,6 +4608,10 @@ FondMarket;Fond market;Фондовый рынок
 Suspend;Enqueue non ordered;Буферизация неупорядоченного
 SuspendDesc;Enable suspend mode (enqueue non ordered messages).;Включить режим приостановки (добавлять в очередь неупорядоченные сообщения).
 Breakpoints;Breakpoints;Точки останова
+ImportAuto;Import (auto);Импорт (авто)
+ImportAutoTask;Task designed for automatic schedule data importing from text files.;Задача предназначена для автоматического импорта данных по расписанию из внешних текстовых файлов.
+SubDirectories;Subdirectories;Подкаталоги
+SubDirectoriesInclude;Include subdirectories.;Включать подкаталоги.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5672,7 +5676,7 @@ DocStr1084;To get the option position for synthetic sale of the base asset;По�
 DocStr1085;To get the option position for the synthetic base asset;Получить опционную позицию для синтетического базового актива
 DocStr1086;The base class of export;Базовый класс экспорта
 DocStr1087;The data parameter;Параметр данных
-DocStr1088;The processor, returning export interruption sign;Обработчик, возвращающий признак прерывания экспорта
+DocStr1088;The processor, returning process interruption sign;Обработчик, возвращающий признак прерывания процесса
 DocStr1089;The path to file;Путь к файлу
 DocStr1090;To export values;Экспортировать значения
 DocStr1091;Is it possible to continue export;Можно ли продолжать экспорт

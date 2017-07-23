@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
-		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		/// <param name="breaked">The processor, which will be called if maximal value of strings is exceeded.</param>
 		public ExcelExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, Action breaked)

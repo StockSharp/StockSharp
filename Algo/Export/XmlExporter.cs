@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
-		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		public XmlExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName)
 			: base(security, arg, isCancelled, fileName)

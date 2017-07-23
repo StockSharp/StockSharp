@@ -45756,5 +45756,45 @@ namespace StockSharp.Localization
 		/// Breakpoints
 		/// </summary>
 		public static string Breakpoints => GetString(BreakpointsKey);
+
+		/// <summary>
+		/// Import (auto)
+		/// </summary>
+		public const string ImportAutoKey = nameof(ImportAuto);
+
+		/// <summary>
+		/// Import (auto)
+		/// </summary>
+		public static string ImportAuto => GetString(ImportAutoKey);
+
+		/// <summary>
+		/// Task designed for automatic schedule data importing from text files.
+		/// </summary>
+		public const string ImportAutoTaskKey = nameof(ImportAutoTask);
+
+		/// <summary>
+		/// Task designed for automatic schedule data importing from text files.
+		/// </summary>
+		public static string ImportAutoTask => GetString(ImportAutoTaskKey);
+
+		/// <summary>
+		/// Subdirectories
+		/// </summary>
+		public const string SubDirectoriesKey = nameof(SubDirectories);
+
+		/// <summary>
+		/// Subdirectories
+		/// </summary>
+		public static string SubDirectories => GetString(SubDirectoriesKey);
+
+		/// <summary>
+		/// Include subdirectories.
+		/// </summary>
+		public const string SubDirectoriesIncludeKey = nameof(SubDirectoriesInclude);
+
+		/// <summary>
+		/// Include subdirectories.
+		/// </summary>
+		public static string SubDirectoriesInclude => GetString(SubDirectoriesIncludeKey);
 	}
 }
