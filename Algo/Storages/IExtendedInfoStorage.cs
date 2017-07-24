@@ -145,7 +145,7 @@ namespace StockSharp.Algo.Storages
 
 							var fields = new string[reader.ColumnCount - 1];
 
-							for (var i = 0; i < reader.ColumnCount - 1; i++)
+							for (var i = 0; i < fields.Length; i++)
 								fields[i] = reader.ReadString();
 
 							reader.NextLine();
@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Storages
 
 							var types = new Type[reader.ColumnCount - 1];
 
-							for (var i = 0; i < reader.ColumnCount - 1; i++)
+							for (var i = 0; i < types.Length; i++)
 							{
 								types[i] = reader.ReadString().To<Type>();
 								//_fieldTypes.Add(fields[i], types[i]);
