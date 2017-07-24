@@ -296,7 +296,7 @@ namespace StockSharp.Algo
 				adapter = new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage);
 			}
 
-			if (SecurityMappingStorage != null)
+			if (SecurityMappingStorage != null && !adapter.StorageName.IsEmpty())
 			{
 				adapter = new SecurityMappingMessageAdapter(adapter, SecurityMappingStorage);
 			}

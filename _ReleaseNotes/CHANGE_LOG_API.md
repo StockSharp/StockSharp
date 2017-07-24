@@ -20,6 +20,7 @@ StockSharp API Change log
 * (feature) Export. Indicator values.
 * (feature) Level1Grid. Duration, BuyBackDate, BuyBackPrice.
 * (feature) CSV importing.
+* (bug) Fix symbol mapping http://stocksharp.ru/forum/8433/problema-podklyucheniya-k-quik-lua-v-designer-versii-43252/
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
