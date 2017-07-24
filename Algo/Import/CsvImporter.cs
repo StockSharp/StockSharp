@@ -49,6 +49,11 @@
 		}
 
 		/// <summary>
+		/// Update duplicate securities if they already exists.
+		/// </summary>
+		public bool UpdateDuplicateSecurities { get; set; }
+
+		/// <summary>
 		/// Import from CSV file.
 		/// </summary>
 		/// <param name="fileName">File name.</param>
@@ -79,7 +84,35 @@
 					}
 					else
 					{
-						_entityRegistry.Securities.Save(secMsg.ToSecurity(_exchangeInfoProvider));
+						var security = _entityRegistry.Securities.ReadBySecurityId(secMsg.SecurityId);
+
+						if (security != null)
+						{
+							if (!UpdateDuplicateSecurities)
+								throw new InvalidOperationException(LocalizedStrings.Str1453.Put(secMsg.SecurityId));
+
+							security.Type = secMsg.SecurityType ?? secMsg.SecurityId.SecurityType;
+							security.CfiCode = secMsg.CfiCode;
+							security.Strike = secMsg.Strike;
+							security.OptionType = secMsg.OptionType;
+							security.Name = secMsg.Name;
+							security.ShortName = secMsg.ShortName;
+							security.Class = secMsg.Class;
+							security.BinaryOptionType = secMsg.BinaryOptionType;
+							security.ExternalId = secMsg.SecurityId.ToExternalId();
+							security.ExpiryDate = secMsg.ExpiryDate;
+							security.SettlementDate = secMsg.SettlementDate;
+							security.UnderlyingSecurityId = secMsg.UnderlyingSecurityCode + "@" + secMsg.SecurityId.BoardCode;
+							security.Currency = secMsg.Currency;
+							security.PriceStep = secMsg.PriceStep;
+							security.Decimals = secMsg.Decimals;
+							security.VolumeStep = secMsg.VolumeStep;
+							security.Multiplier = secMsg.Multiplier;
+						}
+						else
+							security = secMsg.ToSecurity(_exchangeInfoProvider);
+
+						_entityRegistry.Securities.Save(security);
 
 						if (ExtendedInfoStorageItem != null)
 						{
