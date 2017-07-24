@@ -194,6 +194,11 @@ M:StockSharp.Xaml.OptionDeskModel.Refresh(System.Nullable{System.DateTimeOffset}
 M:StockSharp.Xaml.OptionDeskModel.Refresh(System.Nullable{System.DateTimeOffset},System.Nullable{System.Decimal})/param/assetPrice;DocStr8221
 T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor/summary;DocStr8144
 M:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor.#ctor/summary;DocStr9444
+T:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor/summary;DocStr10008
+M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.#ctor/summary;DocStr1
+M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.AssignToEditCore(DevExpress.Xpf.Editors.IBaseEdit)/summary;DocStr8459
+M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.AssignToEditCore(DevExpress.Xpf.Editors.IBaseEdit)/param/edit;DocStr8459
+M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PropertyGrid.RiskRulesEditor/summary;DocStr8144
 M:StockSharp.Xaml.PropertyGrid.RiskRulesEditor.#ctor/summary;DocStr9444
 T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor/summary;DocStr8144
@@ -238,6 +243,13 @@ M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Obj
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Object,System.Object)/param/newValue;DocStr8276
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.ExtendedInfoStorageComboBox/summary;DocStr10009
+M:StockSharp.Xaml.ExtendedInfoStorageComboBox.CreateEditorSettings/summary;DocStr8459
+M:StockSharp.Xaml.ExtendedInfoStorageComboBox.CreateEditorSettings/returns;DocStr8459
+M:StockSharp.Xaml.ExtendedInfoStorageComboBox.OnLoadedInternal/summary;DocStr8459
+P:StockSharp.Xaml.ExtendedInfoStorageComboBox.StorageNames/summary;DocStr9770
+P:StockSharp.Xaml.ExtendedInfoStorageComboBox.SelectedStorageName/summary;DocStr9771
+M:StockSharp.Xaml.ExtendedInfoStorageComboBox.#ctor/summary;DocStr1
 T:StockSharp.Xaml.RatingWindow/summary;DocStr9845
 F:StockSharp.Xaml.RatingWindow.RatingValueProperty/summary;DocStr29
 P:StockSharp.Xaml.RatingWindow.RatingValue/summary;DocStr9825

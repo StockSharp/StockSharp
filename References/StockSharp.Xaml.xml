@@ -844,6 +844,30 @@
             Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor">
+      <summary>
+            Editor for extended storage.
+            </summary>
+      <summary>
+            ExtendedInfoStorageEditor
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.AssignToEditCore(DevExpress.Xpf.Editors.IBaseEdit)">
+      <summary>
+      </summary>
+      <param name="edit">
+      </param>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.RiskRulesEditor">
       <summary>
             Editor for <see cref="T:StockSharp.Algo.Risk.IRiskRule" />.
@@ -1069,6 +1093,36 @@
     <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent">
       <summary>
             InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ExtendedInfoStorageComboBox">
+      <summary>
+            The drop-down list for extended storage selection.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageComboBox.CreateEditorSettings">
+      <summary>
+      </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageComboBox.OnLoadedInternal">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageComboBox.StorageNames">
+      <summary>
+            Available storages.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageComboBox.SelectedStorageName">
+      <summary>
+            Selected storage.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageComboBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExtendedInfoStorageComboBox" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.RatingWindow">

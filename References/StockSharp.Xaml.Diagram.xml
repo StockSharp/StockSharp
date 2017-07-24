@@ -1607,6 +1607,71 @@
             </summary>
       <returns>A string that represents the current object.</returns>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint">
+      <summary>
+        <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" /> breakpoint.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Socket">
+      <summary>
+            Diagram socket.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.SocketId">
+      <summary>
+            Diagram socket identifier.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.ElementId">
+      <summary>
+            Element identifiers.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.IsConditional">
+      <summary>
+            Is conditional.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.MinValue">
+      <summary>
+            Minimum value.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.MaxValue">
+      <summary>
+            Maximum value.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor(StockSharp.Xaml.Diagram.DiagramSocket)">
+      <summary>
+            Initialize <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint" />.
+            </summary>
+      <param name="socket">Diagram socket.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.NeedBreak">
+      <summary>
+            Whether need to break on socket.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketListBox">
       <summary>
             The graphical component to display the diagram element connections list.

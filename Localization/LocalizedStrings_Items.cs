@@ -45796,5 +45796,35 @@ namespace StockSharp.Localization
 		/// Include subdirectories.
 		/// </summary>
 		public static string SubDirectoriesInclude => GetString(SubDirectoriesIncludeKey);
+
+		/// <summary>
+		/// Save imported extended fields into extended storage.
+		/// </summary>
+		public const string ExtendedInfoImportKey = nameof(ExtendedInfoImport);
+
+		/// <summary>
+		/// Save imported extended fields into extended storage.
+		/// </summary>
+		public static string ExtendedInfoImport => GetString(ExtendedInfoImportKey);
+
+		/// <summary>
+		/// Duplicates
+		/// </summary>
+		public const string DuplicatesKey = nameof(Duplicates);
+
+		/// <summary>
+		/// Duplicates
+		/// </summary>
+		public static string Duplicates => GetString(DuplicatesKey);
+
+		/// <summary>
+		/// Update duplicate securities if they already exists.
+		/// </summary>
+		public const string UpdateDuplicateSecuritiesKey = nameof(UpdateDuplicateSecurities);
+
+		/// <summary>
+		/// Update duplicate securities if they already exists.
+		/// </summary>
+		public static string UpdateDuplicateSecurities => GetString(UpdateDuplicateSecuritiesKey);
 	}
 }
