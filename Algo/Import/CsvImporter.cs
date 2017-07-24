@@ -78,7 +78,14 @@
 							FlushBuffer(buffer);
 					}
 					else
+					{
 						_entityRegistry.Securities.Save(secMsg.ToSecurity(_exchangeInfoProvider));
+
+						if (ExtendedInfoStorageItem != null)
+						{
+							ExtendedInfoStorageItem.Add(secMsg.SecurityId, secMsg.ExtensionInfo);
+						}
+					}
 
 					var percent = (int)(((double)lineIndex / len) * 100 - 1).Round();
 

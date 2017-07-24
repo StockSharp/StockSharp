@@ -2,10 +2,12 @@ namespace StockSharp.Algo.Import
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -264,6 +266,19 @@ namespace StockSharp.Algo.Import
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1655);
 
 			return fields;
+		}
+
+		/// <summary>
+		/// Generate extended fields for the specified storage.
+		/// </summary>
+		/// <param name="storage">Extended info <see cref="Message.ExtensionInfo"/> storage.</param>
+		/// <returns>Extended fields.</returns>
+		public static FieldMapping[] CreateExtendedFields(IExtendedInfoStorageItem storage)
+		{
+			return storage
+				.Fields
+				.Select(t => (FieldMapping)new FieldMapping<SecurityMessage, object>($"{nameof(SecurityMessage.ExtensionInfo)}[{t.Item1}]", t.Item1, string.Empty, (s, v) => s.ExtensionInfo[t.Item1] = v))
+				.ToArray();
 		}
 
 		private static void SetSecCode(dynamic message, string code)

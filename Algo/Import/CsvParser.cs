@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Import
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -28,6 +29,11 @@ namespace StockSharp.Algo.Import
 		/// Importing fields.
 		/// </summary>
 		public IEnumerable<FieldMapping> Fields { get; }
+
+		/// <summary>
+		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
+		/// </summary>
+		public IExtendedInfoStorageItem ExtendedInfoStorageItem { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvParser"/>.
@@ -129,9 +135,7 @@ namespace StockSharp.Algo.Import
 
 					var msgType = DataType.MessageType;
 
-					dynamic instance = msgType == typeof(QuoteChangeMessage)
-						? new TimeQuoteChange()
-						: msgType.CreateInstance<object>();
+					dynamic instance = CreateInstance(msgType);
 
 					foreach (var field in fields)
 					{
@@ -174,6 +178,23 @@ namespace StockSharp.Algo.Import
 					yield return instance;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Create instance for the specified type.
+		/// </summary>
+		/// <param name="msgType">Message type.</param>
+		/// <returns>Instance.</returns>
+		protected virtual object CreateInstance(Type msgType)
+		{
+			var instance = msgType == typeof(QuoteChangeMessage)
+				? new TimeQuoteChange()
+				: msgType.CreateInstance<object>();
+
+			if (msgType == typeof(SecurityMessage) && ExtendedInfoStorageItem != null)
+				((SecurityMessage)instance).ExtensionInfo = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+
+			return instance;
 		}
 	}
 }
