@@ -221,7 +221,7 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var field in _fields)
 					{
-						var value = extensionInfo[field.Item1];
+						var value = extensionInfo.TryGetValue(field.Item1);
 
 						if (value == null)
 							continue;
