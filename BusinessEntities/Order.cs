@@ -295,8 +295,6 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal Price { get; set; }
 
-		private decimal _volume;
-
 		/// <summary>
 		/// Number of contracts in the order.
 		/// </summary>
@@ -304,15 +302,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.OrderVolumeKey)]
 		[MainCategory]
-		public decimal Volume
-		{
-			get => _volume;
-			set
-			{
-				_volume = value;
-				VisibleVolume = value;
-			}
-		}
+		public decimal Volume { get; set; }
 
 		/// <summary>
 		/// Visible quantity of contracts in order.
