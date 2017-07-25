@@ -14331,3 +14331,5 @@ DocStr10006;Maximum value;Максимальное значение
 DocStr10007;Whether need to break on socket;Нужно ли останавливаться
 DocStr10008;Editor for extended storage;Редактор для расширенного хранилища
 DocStr10009;The drop-down list for extended storage selection;Выпадающий список для выбора расширенного хранилища
+DocStr10010;Child element added;Добавление дочернего элемента
+DocStr10011;Child element removed;Удаление дочернего элемента

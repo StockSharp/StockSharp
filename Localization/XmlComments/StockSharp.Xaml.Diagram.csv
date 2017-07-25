@@ -14,6 +14,8 @@ P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable/summary;DocStr7
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Type/summary;DocStr9200
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors/summary;DocStr7915
 E:StockSharp.Xaml.Diagram.CompositionDiagramElement.Changed/summary;DocStr7916
+E:StockSharp.Xaml.Diagram.CompositionDiagramElement.ElementAdded/summary;DocStr10010
+E:StockSharp.Xaml.Diagram.CompositionDiagramElement.ElementRemoved/summary;DocStr10011
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RaiseParameterValueChanged(System.String)/summary;DocStr9215
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RaiseParameterValueChanged(System.String)/param/parameterName;Str3570
@@ -470,13 +472,14 @@ P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Socket/summary;DocStr9716
 P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.SocketId/summary;DocStr10002
 P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.ElementId/summary;DocStr10003
 P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.IsConditional/summary;DocStr10004
-P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.MinValue/summary;DocStr10005
-P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.MaxValue/summary;DocStr10006
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor/summary;DocStr93
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr93
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor(StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;DocStr9716
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.NeedBreak/summary;DocStr10007
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.NeedBreak/returns;DocStr8459
+M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.OnNeedBreak(System.Object)/summary;DocStr10007
+M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.OnNeedBreak(System.Object)/param/value;Str254
+M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.OnNeedBreak(System.Object)/returns;DocStr8459
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

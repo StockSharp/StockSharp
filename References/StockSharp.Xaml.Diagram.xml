@@ -84,6 +84,16 @@
             The composite element diagram change event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Diagram.CompositionDiagramElement.ElementAdded">
+      <summary>
+            Child element added.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.CompositionDiagramElement.ElementRemoved">
+      <summary>
+            Child element removed.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
@@ -1632,16 +1642,6 @@
             Is conditional.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.MinValue">
-      <summary>
-            Minimum value.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.MaxValue">
-      <summary>
-            Maximum value.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor">
       <summary>
             Initialize <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint" />.
@@ -1657,6 +1657,14 @@
       <summary>
             Whether need to break on socket.
             </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.OnNeedBreak(System.Object)">
+      <summary>
+            Whether need to break on socket.
+            </summary>
+      <param name="value">Current value.</param>
       <returns>
       </returns>
     </member>

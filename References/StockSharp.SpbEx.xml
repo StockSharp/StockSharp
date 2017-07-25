@@ -199,6 +199,11 @@
             Enable suspend mode (enqueue non ordered messages).
             </summary>
     </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.CancelOnDisconnect">
+      <summary>
+            Cancel On Disconnect.
+            </summary>
+    </member>
     <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
@@ -234,6 +239,16 @@
     <member name="P:StockSharp.SpbEx.SpbExTrader.Password">
       <summary>
             Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExTrader.EnableSuspend">
+      <summary>
+            Enable suspend mode (enqueue non ordered messages).
+            </summary>
+    </member>
+    <member name="P:StockSharp.SpbEx.SpbExTrader.CancelOnDisconnect">
+      <summary>
+            Cancel On Disconnect.
             </summary>
     </member>
     <member name="T:StockSharp.SpbEx.Xaml.SpbExAddressConfigComboBox">
