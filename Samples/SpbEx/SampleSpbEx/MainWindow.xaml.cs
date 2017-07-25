@@ -58,7 +58,7 @@ namespace SampleSpbEx
 
 			Instance = this;
 
-			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_Fix" });
+			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_SpbEx" });
 			_logManager.Listeners.Add(new GuiLogListener(LogControl));
 		}
 
