@@ -2641,6 +2641,9 @@ namespace StockSharp.Algo
 						case Level1Fields.Volume:
 							security.Volume = (decimal)value;
 							break;
+						case Level1Fields.Turnover:
+							security.Turnover = (decimal)value;
+							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
 					}

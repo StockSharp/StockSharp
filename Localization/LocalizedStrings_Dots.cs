@@ -458,5 +458,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string CancelOnDisconnectDot => AppendDot(CancelOnDisconnect);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string TurnoverDot => AppendDot(Turnover);
 	}
 }
