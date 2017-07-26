@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 		#region IStorageEntityList<T>
 
-		private DelayAction.Group _delayActionGroup;
+		private DelayAction.IGroup<CsvFileWriter> _delayActionGroup;
 		private DelayAction _delayAction;
 
 		/// <summary>
@@ -70,7 +70,12 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if (_delayAction != null)
 				{
-					_delayActionGroup = _delayAction.CreateGroup(() => new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Append), Registry.Encoding));
+					_delayActionGroup = _delayAction.CreateGroup(() =>
+					{
+						var stream = new TransactionFileStream(_fileName, FileMode.Open);
+						stream.Seek(0, SeekOrigin.End);
+						return new CsvFileWriter(stream, Registry.Encoding);
+					});
 				}
 			}
 		}
@@ -121,9 +126,9 @@ namespace StockSharp.Algo.Storages.Csv
 					UpdateCache(entity);
 				else
 					return;
-			}
 
-			Write();
+				WriteMany(_items.Values.ToArray());
+			}
 		}
 
 		#endregion
@@ -184,9 +189,9 @@ namespace StockSharp.Algo.Storages.Csv
 					return;
 
 				AddCache(item);
+
+				_delayActionGroup.Add((writer, i) => Write(writer, i), item);
 			}
-		
-			Write(item);
 		}
 
 		/// <summary>
@@ -201,9 +206,9 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				_items.Remove(GetNormalizedKey(item));
 				RemoveCache(item);
+
+				WriteMany(_items.Values.ToArray());
 			}
-			
-			Write();
 		}
 
 		/// <summary>
@@ -217,34 +222,20 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				_items.Clear();
 				ClearCache();
+
+				_delayActionGroup.Add(writer => writer.Writer.Truncate());
 			}
-
-			Write();
 		}
 
-		private void Write()
+		private void WriteMany(T[] values)
 		{
-			_delayActionGroup.Add(() =>
+			_delayActionGroup.Add((writer, state) =>
 			{
-				using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create), Registry.Encoding))
-				{
-					T[] values;
+				writer.Writer.Truncate();
 
-					lock (SyncRoot)
-						values = _items.Values.ToArray();
-
-					foreach (var item in values)
-						Write(writer, item);
-				}
-			}, canBatch: false);
-		}
-
-		private void Write(T entity)
-		{
-			_delayActionGroup.Add(s =>
-			{
-				Write((CsvFileWriter)s, entity);
-			});
+				foreach (var item in state)
+					Write(writer, item);
+			}, values);
 		}
 
 		internal void ReadItems(List<Exception> errors)
