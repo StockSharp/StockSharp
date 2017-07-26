@@ -198,6 +198,10 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.IsNativeIdentifiers => InnerAdapter.IsNativeIdentifiers;
 
+		bool IMessageAdapter.IsFullCandlesOnly => InnerAdapter.IsFullCandlesOnly;
+
+		bool IMessageAdapter.IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
+
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
 		string IMessageAdapter.AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;

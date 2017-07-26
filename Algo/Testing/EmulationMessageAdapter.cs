@@ -86,9 +86,7 @@ namespace StockSharp.Algo.Testing
 
 		private DateTimeOffset _currentTime;
 
-		/// <summary>
-		/// The current time.
-		/// </summary>
+		/// <inheritdoc />
 		public override DateTimeOffset CurrentTime => _currentTime;
 
 		/// <summary>
@@ -96,10 +94,13 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public int ProcessedMessageCount { get; private set; }
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
+		public override bool IsFullCandlesOnly => false;
+
+		/// <inheritdoc />
+		public override bool IsSupportSubscriptions => false;
+
+		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
 			var localTime = message.LocalTime;

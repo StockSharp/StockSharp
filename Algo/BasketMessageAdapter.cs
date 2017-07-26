@@ -289,7 +289,10 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
-			adapter = new CandleHolderMessageAdapter(adapter);
+			if (adapter.IsFullCandlesOnly)
+			{
+				adapter = new CandleHolderMessageAdapter(adapter);
+			}
 
 			if (adapter.IsNativeIdentifiers)
 			{
@@ -306,7 +309,12 @@ namespace StockSharp.Algo
 				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage.Create(adapter.StorageName, adapter.SecurityExtendedFields));
 			}
 
-			return new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestorSubscriptioneOnReconnect };
+			if (adapter.IsSupportSubscriptions)
+			{
+				adapter = new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestorSubscriptioneOnReconnect };
+			}
+
+			return adapter;
 		}
 
 		/// <summary>

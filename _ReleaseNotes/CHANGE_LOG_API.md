@@ -22,6 +22,7 @@ StockSharp API Change log
 * (feature) CSV importing.
 * (bug) Fix symbol mapping http://stocksharp.ru/forum/8433/problema-podklyucheniya-k-quik-lua-v-designer-versii-43252/
 * (feature) Order.VisibleVolume. Made as optional param.
+* (feature) IMessageAdapter. IsFullCandlesOnly, IsSupportSubscriptions.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
