@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					_delayActionGroup = _delayAction.CreateGroup(() =>
 					{
-						var stream = new TransactionFileStream(_fileName, FileMode.Open);
+						var stream = new TransactionFileStream(_fileName, FileMode.OpenOrCreate);
 						stream.Seek(0, SeekOrigin.End);
 						return new CsvFileWriter(stream, Registry.Encoding);
 					});
