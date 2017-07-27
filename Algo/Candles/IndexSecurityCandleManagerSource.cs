@@ -34,15 +34,15 @@ namespace StockSharp.Algo.Candles
 		{
 			private readonly ICandleManager _candleManager;
 			private readonly ISet<CandleSeries> _innerSeries;
-			private readonly DateTimeOffset? _from;
-			private readonly DateTimeOffset? _to;
+			private readonly DateTimeOffset _from;
+			private readonly DateTimeOffset _to;
 			private readonly Action<Candle> _processing;
 			private readonly Action _stopped;
 			//private int _startedSeriesCount;
 			private readonly object _lock = new object();
 			private readonly IndexCandleBuilder _builder;
 
-			public IndexSeriesInfo(ICandleManager candleManager, Type candleType, IEnumerable<CandleSeries> innerSeries, DateTimeOffset? from, DateTimeOffset? to, IndexSecurity security, Action<Candle> processing, Action stopped)
+			public IndexSeriesInfo(ICandleManager candleManager, Type candleType, IEnumerable<CandleSeries> innerSeries, DateTimeOffset from, DateTimeOffset to, IndexSecurity security, Action<Candle> processing, Action stopped)
 			{
 				if (candleManager == null)
 					throw new ArgumentNullException(nameof(candleManager));
@@ -146,12 +146,12 @@ namespace StockSharp.Algo.Candles
 		}
 
 		private readonly ISecurityProvider _securityProvider;
-		private readonly DateTimeOffset? _from;
-		private readonly DateTimeOffset? _to;
+		private readonly DateTimeOffset _from;
+		private readonly DateTimeOffset _to;
 		private readonly SynchronizedDictionary<CandleSeries, IndexSeriesInfo> _info = new SynchronizedDictionary<CandleSeries, IndexSeriesInfo>();
 		private readonly ICandleManager _candleManager;
 
-		public IndexSecurityCandleManagerSource(ICandleManager candleManager, ISecurityProvider securityProvider, DateTimeOffset? from, DateTimeOffset? to)
+		public IndexSecurityCandleManagerSource(ICandleManager candleManager, ISecurityProvider securityProvider, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (candleManager == null)
 				throw new ArgumentNullException(nameof(candleManager));
@@ -178,11 +178,11 @@ namespace StockSharp.Algo.Candles
 
 			if (series.Security is IndexSecurity)
 			{
-				yield return new Range<DateTimeOffset>(_from ?? DateTimeOffset.MinValue, _to ?? DateTimeOffset.MaxValue);
+				yield return new Range<DateTimeOffset>(_from, _to);
 			}
 		}
 
-		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
+		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));

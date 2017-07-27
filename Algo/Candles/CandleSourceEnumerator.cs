@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Candles
 		private bool _manualStopped;
 		private DateTimeOffset? _nextSourceBegin;
 
-		public CandleSourceEnumerator(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to, IEnumerable<TSource> sources, Func<TValue, DateTimeOffset> processing, Action stopped)
+		public CandleSourceEnumerator(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<TSource> sources, Func<TValue, DateTimeOffset> processing, Action stopped)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Candles
 
 			var info = new List<SourceInfo>();
 
-			var requestRanges = new List<Range<DateTimeOffset>>(new[] { new Range<DateTimeOffset>(from ?? DateTimeOffset.MinValue, to ?? DateTimeOffset.MaxValue) });
+			var requestRanges = new List<Range<DateTimeOffset>>(new[] { new Range<DateTimeOffset>(from, to) });
 
 			foreach (var group in sources.GroupBy(s => s.SpeedPriority).OrderBy(g => g.Key))
 			{
@@ -155,10 +155,7 @@ namespace StockSharp.Algo.Candles
 			var next = _sources.Count > 0 ? _sources.Peek() : null;
 			_nextSourceBegin = next?.Range.Min;
 
-			var from = info.Range.Min != DateTimeOffset.MinValue ? info.Range.Min : (DateTimeOffset?)null;
-			var to = info.Range.Max != DateTimeOffset.MaxValue ? info.Range.Max : (DateTimeOffset?)null;
-
-			CurrentSource.Start(_series, from, to);
+			CurrentSource.Start(_series, info.Range.Min, info.Range.Max);
 		}
 
 		private void RaiseStop()

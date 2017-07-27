@@ -124,12 +124,12 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// The initial date from which you need to get data.
 		/// </summary>
-		public DateTimeOffset? From { get; set; }
+		public DateTimeOffset From { get; set; } = DateTimeOffset.MinValue;
 
 		/// <summary>
 		/// The final date by which you need to get data.
 		/// </summary>
-		public DateTimeOffset? To { get; set; }
+		public DateTimeOffset To { get; set; } = DateTimeOffset.MaxValue;
 
 		/// <summary>
 		/// Build candles mode.

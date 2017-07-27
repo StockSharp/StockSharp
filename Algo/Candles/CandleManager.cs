@@ -162,7 +162,7 @@ namespace StockSharp.Algo.Candles
 				return _source.GetSupportedRanges(series);
 			}
 
-			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
+			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 			{
 				_series.Add(series);
                 _source.SubscribeCandles(series, from, to);
@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Candles
 				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
 			}
 
-			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
+			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 			{
 				_candleSeries.Add(series);
 				_connector.SubscribeCandles(series, from, to);
@@ -414,7 +414,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">The candles series for which data receiving should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		public virtual void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
+		public virtual void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -443,11 +443,8 @@ namespace StockSharp.Algo.Candles
 				_series.Add(series, enumerator);
 
 				//series.CandleManager = this;
-				if (from != null)
-					series.From = from;
-
-				if (to != null)
-					series.To = to;
+				series.From = from;
+				series.To = to;
 
 				Container.Start(series, from, to);
 			}
