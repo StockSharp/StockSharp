@@ -24,9 +24,12 @@ namespace SampleMultiConnection
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+
+	using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
 	public partial class SecuritiesWindow
 	{
@@ -143,6 +146,27 @@ namespace SampleMultiConnection
 				return;
 
 			MainWindow.Instance.Connector.LookupSecurities(wnd.Criteria);
+		}
+
+		private void CandlesClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var t = (TimeSpan)CandlesPeriods.SelectedItem;
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, t);
+
+				new ChartWindow(series).Show();
+			}
+		}
+
+		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
+		{
+			TryEnableCandles();
+		}
+
+		private void TryEnableCandles()
+		{
+			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
 		}
 	}
 }
