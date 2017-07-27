@@ -192,23 +192,21 @@ namespace StockSharp.Algo.Storages
 
 			private void Flush()
 			{
-				_storage.DelayAction.DefaultGroup.Add(OnFlush, canBatch: false);
-			}
-
-			private void OnFlush()
-			{
-				var copy = ((IExtendedInfoStorageItem)this).Load();
-
-				using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create)))
+				_storage.DelayAction.DefaultGroup.Add(() =>
 				{
-					writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
-					writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
+					var copy = ((IExtendedInfoStorageItem)this).Load();
 
-					foreach (var pair in copy)
+					using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create)))
 					{
-						writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
+						writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
+						writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
+
+						foreach (var pair in copy)
+						{
+							writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
+						}
 					}
-				}
+				});
 			}
 
 			IEnumerable<Tuple<string, Type>> IExtendedInfoStorageItem.Fields => _fields;
