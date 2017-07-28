@@ -149,11 +149,11 @@
   		
   		<row>
     	<entry>
-    		<para><codeEntityReference>T:StockSharp.Messages.PositionMessage</codeEntityReference></para>
+    		<para><codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Contains position information. Also, there is the <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference>
-    		message, containing information on change of the position's certain feature. The feature type is determined in the listing <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
+    		<para>Contains position information. Containing information on change of the position's certain feature.
+		The feature type is determined in the listing <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
     	</entry>
   		</row>
 

@@ -105,6 +105,16 @@ namespace StockSharp.Messages
 		bool IsNativeIdentifiers { get; }
 
 		/// <summary>
+		/// Translates <see cref="CandleMessage"/> as only fully filled.
+		/// </summary>
+		bool IsFullCandlesOnly { get; }
+
+		/// <summary>
+		/// Support any subscriptions (ticks, order books etc.).
+		/// </summary>
+		bool IsSupportSubscriptions { get; }
+
+		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
 		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }

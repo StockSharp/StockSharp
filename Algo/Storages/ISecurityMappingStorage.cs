@@ -426,7 +426,7 @@ namespace StockSharp.Algo.Storages
 						});
 					}
 				}
-			}, canBatch: false);
+			});
 		}
 	}
 }

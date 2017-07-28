@@ -122,12 +122,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChartWindow.xaml.cs">
+      <DependentUpon>ChartWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StopOrdersWindow.xaml.cs">
       <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="ChartWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

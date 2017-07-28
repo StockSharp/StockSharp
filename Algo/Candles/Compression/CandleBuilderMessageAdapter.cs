@@ -649,7 +649,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (info.LastTime > time)
 				return false;
 
-			if (!(time >= info.MarketDataMessage.From && time < info.MarketDataMessage.To))
+			if (!((info.MarketDataMessage.From == null || time >= info.MarketDataMessage.From) && (info.MarketDataMessage.To == null || time < info.MarketDataMessage.To)))
 				return false;
 
 			if (info.CurrentPeriod == null || info.CurrentPeriod.Item1.Date.Date != time.Date.Date)

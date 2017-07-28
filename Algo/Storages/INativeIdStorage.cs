@@ -268,7 +268,7 @@ namespace StockSharp.Algo.Storages
 						});
 					}
 				}
-			}, canBatch: false);
+			});
 		}
 
 		private static string GetTypeName(Type nativeIdType)

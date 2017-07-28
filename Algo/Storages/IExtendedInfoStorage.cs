@@ -145,7 +145,7 @@ namespace StockSharp.Algo.Storages
 
 							var fields = new string[reader.ColumnCount - 1];
 
-							for (var i = 0; i < reader.ColumnCount - 1; i++)
+							for (var i = 0; i < fields.Length; i++)
 								fields[i] = reader.ReadString();
 
 							reader.NextLine();
@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Storages
 
 							var types = new Type[reader.ColumnCount - 1];
 
-							for (var i = 0; i < reader.ColumnCount - 1; i++)
+							for (var i = 0; i < types.Length; i++)
 							{
 								types[i] = reader.ReadString().To<Type>();
 								//_fieldTypes.Add(fields[i], types[i]);
@@ -192,23 +192,21 @@ namespace StockSharp.Algo.Storages
 
 			private void Flush()
 			{
-				_storage.DelayAction.DefaultGroup.Add(OnFlush, canBatch: false);
-			}
-
-			private void OnFlush()
-			{
-				var copy = ((IExtendedInfoStorageItem)this).Load();
-
-				using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create)))
+				_storage.DelayAction.DefaultGroup.Add(() =>
 				{
-					writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
-					writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
+					var copy = ((IExtendedInfoStorageItem)this).Load();
 
-					foreach (var pair in copy)
+					using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create)))
 					{
-						writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
+						writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
+						writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
+
+						foreach (var pair in copy)
+						{
+							writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
+						}
 					}
-				}
+				});
 			}
 
 			IEnumerable<Tuple<string, Type>> IExtendedInfoStorageItem.Fields => _fields;
@@ -221,7 +219,7 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var field in _fields)
 					{
-						var value = extensionInfo[field.Item1];
+						var value = extensionInfo.TryGetValue(field.Item1);
 
 						if (value == null)
 							continue;

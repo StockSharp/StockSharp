@@ -619,6 +619,13 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.BuyBackPriceKey)]
 		BuyBackPrice,
+
+		/// <summary>
+		/// Turnover.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.TurnoverKey)]
+		Turnover,
 	}
 
 	/// <summary>

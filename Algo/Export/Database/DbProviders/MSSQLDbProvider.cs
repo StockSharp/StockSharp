@@ -65,7 +65,8 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 				throw new ArgumentNullException(nameof(parameters));
 
 			var sb = new StringBuilder();
-			sb.AppendLine("IF NOT EXISTS (SELECT * FROM {0} WHERE {1})".Put(table.Name, table.Columns.Where(c => c.IsPrimaryKey).Select(c => "{0} = @{0}".Put(c.Name)).Join(" AND ")));
+			var where = table.Columns.Where(c => c.IsPrimaryKey).Select(c => "{0} = @{0}".Put(c.Name)).Join(" AND ");
+			sb.AppendLine($"IF NOT EXISTS (SELECT * FROM {table.Name} WHERE {where})");
 			sb.AppendLine("BEGIN");
 			sb.Append("INSERT INTO ");
 			sb.Append(table.Name);
@@ -124,14 +125,14 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			return result;
 		}
 
-		protected override string CreatePrimaryKeyString(IEnumerable<ColumnDescription> columns)
+		protected override string CreatePrimaryKeyString(Table table, IEnumerable<ColumnDescription> columns)
 		{
-			var str = columns.Select(c => "[{0}]".Put(c.Name)).Join(",");
+			var str = columns.Select(c => $"[{c.Name}]").Join(",");
 
 			if (str.IsEmpty())
 				return null;
 
-			return "PRIMARY KEY (" + str + ")";
+			return $"CONSTRAINT {table.Name}_pk PRIMARY KEY ({str})";
 		}
 
 		protected override string GetDbType(Type t, object restriction)

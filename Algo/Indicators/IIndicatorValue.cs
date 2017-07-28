@@ -452,17 +452,17 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The converter, taking from the order book the best bid price <see cref="MarketDepth.BestBid"/>.
 		/// </summary>
-		public static readonly Func<MarketDepth, decimal?> ByBestBid = d => d.BestBid != null ? d.BestBid.Price : (decimal?)null;
+		public static readonly Func<MarketDepth, decimal?> ByBestBid = d => d.BestBid?.Price;
 
 		/// <summary>
 		/// The converter, taking from the order book the best offer price <see cref="MarketDepth.BestAsk"/>.
 		/// </summary>
-		public static readonly Func<MarketDepth, decimal?> ByBestAsk = d => d.BestAsk != null ? d.BestAsk.Price : (decimal?)null;
+		public static readonly Func<MarketDepth, decimal?> ByBestAsk = d => d.BestAsk?.Price;
 
 		/// <summary>
 		/// The converter, taking from the order book the middle of the spread <see cref="MarketDepthPair.MiddlePrice"/>.
 		/// </summary>
-		public static readonly Func<MarketDepth, decimal?> ByMiddle = d => d.BestPair == null ? (decimal?)null : d.BestPair.MiddlePrice;
+		public static readonly Func<MarketDepth, decimal?> ByMiddle = d => d.BestPair?.MiddlePrice;
 
 		/// <summary>
 		/// Does value support data type, required for the indicator.

@@ -41358,6 +41358,16 @@ namespace StockSharp.Localization
 		public static string TemplateTxtNews => GetString(TemplateTxtNewsKey);
 
 		/// <summary>
+		/// Indicator's value txt export template.
+		/// </summary>
+		public const string TemplateTxtIndicatorKey = nameof(TemplateTxtIndicator);
+
+		/// <summary>
+		/// Indicator's value txt export template.
+		/// </summary>
+		public static string TemplateTxtIndicator => GetString(TemplateTxtIndicatorKey);
+
+		/// <summary>
 		/// Depth template
 		/// </summary>
 		public const string TemplateDepthKey = nameof(TemplateDepth);
@@ -41446,6 +41456,16 @@ namespace StockSharp.Localization
 		/// News template
 		/// </summary>
 		public static string TemplateNews => GetString(TemplateNewsKey);
+
+		/// <summary>
+		/// Indicator template.
+		/// </summary>
+		public const string TemplateIndicatorKey = nameof(TemplateIndicator);
+
+		/// <summary>
+		/// Indicator template
+		/// </summary>
+		public static string TemplateIndicator => GetString(TemplateIndicatorKey);
 
 		/// <summary>
 		/// Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.
@@ -45706,5 +45726,105 @@ namespace StockSharp.Localization
 		/// Fond market
 		/// </summary>
 		public static string FondMarket => GetString(FondMarketKey);
+
+		/// <summary>
+		/// Enqueue non ordered
+		/// </summary>
+		public const string SuspendKey = nameof(Suspend);
+
+		/// <summary>
+		/// Enqueue non ordered
+		/// </summary>
+		public static string Suspend => GetString(SuspendKey);
+
+		/// <summary>
+		/// Enable suspend mode (enqueue non ordered messages).
+		/// </summary>
+		public const string SuspendDescKey = nameof(SuspendDesc);
+
+		/// <summary>
+		/// Enable suspend mode (enqueue non ordered messages).
+		/// </summary>
+		public static string SuspendDesc => GetString(SuspendDescKey);
+
+		/// <summary>
+		/// Breakpoints
+		/// </summary>
+		public const string BreakpointsKey = nameof(Breakpoints);
+
+		/// <summary>
+		/// Breakpoints
+		/// </summary>
+		public static string Breakpoints => GetString(BreakpointsKey);
+
+		/// <summary>
+		/// Import (auto)
+		/// </summary>
+		public const string ImportAutoKey = nameof(ImportAuto);
+
+		/// <summary>
+		/// Import (auto)
+		/// </summary>
+		public static string ImportAuto => GetString(ImportAutoKey);
+
+		/// <summary>
+		/// Task designed for automatic schedule data importing from text files.
+		/// </summary>
+		public const string ImportAutoTaskKey = nameof(ImportAutoTask);
+
+		/// <summary>
+		/// Task designed for automatic schedule data importing from text files.
+		/// </summary>
+		public static string ImportAutoTask => GetString(ImportAutoTaskKey);
+
+		/// <summary>
+		/// Subdirectories
+		/// </summary>
+		public const string SubDirectoriesKey = nameof(SubDirectories);
+
+		/// <summary>
+		/// Subdirectories
+		/// </summary>
+		public static string SubDirectories => GetString(SubDirectoriesKey);
+
+		/// <summary>
+		/// Include subdirectories.
+		/// </summary>
+		public const string SubDirectoriesIncludeKey = nameof(SubDirectoriesInclude);
+
+		/// <summary>
+		/// Include subdirectories.
+		/// </summary>
+		public static string SubDirectoriesInclude => GetString(SubDirectoriesIncludeKey);
+
+		/// <summary>
+		/// Save imported extended fields into extended storage.
+		/// </summary>
+		public const string ExtendedInfoImportKey = nameof(ExtendedInfoImport);
+
+		/// <summary>
+		/// Save imported extended fields into extended storage.
+		/// </summary>
+		public static string ExtendedInfoImport => GetString(ExtendedInfoImportKey);
+
+		/// <summary>
+		/// Duplicates
+		/// </summary>
+		public const string DuplicatesKey = nameof(Duplicates);
+
+		/// <summary>
+		/// Duplicates
+		/// </summary>
+		public static string Duplicates => GetString(DuplicatesKey);
+
+		/// <summary>
+		/// Update duplicate securities if they already exists.
+		/// </summary>
+		public const string UpdateDuplicateSecuritiesKey = nameof(UpdateDuplicateSecurities);
+
+		/// <summary>
+		/// Update duplicate securities if they already exists.
+		/// </summary>
+		public static string UpdateDuplicateSecurities => GetString(UpdateDuplicateSecuritiesKey);
 	}
 }

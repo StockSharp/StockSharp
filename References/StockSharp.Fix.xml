@@ -31,7 +31,17 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend">
       <summary>
-            Enable suspend mode (enqueue non ordered FAST messages).
+            Enable suspend mode (enqueue non ordered messages).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.Password">
+      <summary>
+            Password.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Clone">
@@ -403,7 +413,17 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFastDialect.EnableSuspend">
       <summary>
-            Enable suspend mode (enqueue non ordered FAST messages).
+            Enable suspend mode (enqueue non ordered messages).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.Password">
+      <summary>
+            Password.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">

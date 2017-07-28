@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
-		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		public XmlExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName)
 			: base(security, arg, isCancelled, fileName)
@@ -217,6 +217,20 @@ namespace StockSharp.Algo.Export
 
 				foreach (var pair in message.Changes.Where(c => !c.Key.IsObsolete()))
 					writer.WriteAttribute(pair.Key.ToString(), (pair.Value as DateTime?)?.ToString(_timeFormat) ?? pair.Value);
+
+				writer.WriteEndElement();
+			});
+		}
+
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(values, "values", (writer, value) =>
+			{
+				writer.WriteStartElement("value");
+
+				writer.WriteAttribute("time", value.Time.ToString(_timeFormat));
+				writer.WriteAttribute("value", value.ValueAsDecimal);
 
 				writer.WriteEndElement();
 			});

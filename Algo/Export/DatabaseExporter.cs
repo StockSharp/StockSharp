@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
-		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="connection">The connection to DB.</param>
 		public DatabaseExporter(Security security, object arg, Func<int, bool> isCancelled, DatabaseConnectionPair connection)
 			: base(security, arg, isCancelled, connection.ToString())
@@ -127,6 +127,12 @@ namespace StockSharp.Algo.Export
 		protected override void Export(IEnumerable<PositionChangeMessage> messages)
 		{
 			Do(messages, () => new PositionChangeTable(Security));
+		}
+
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(values, () => new IndicatorValueTable());
 		}
 
 		private void Do<TValue, TTable>(IEnumerable<TValue> values, Func<TTable> getTable)

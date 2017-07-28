@@ -1648,6 +1648,31 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _turnover;
+
+		/// <summary>
+		/// Turnover.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TurnoverKey,
+			Description = LocalizedStrings.TurnoverKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 232)]
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
+		public decimal? Turnover
+		{
+			get => _turnover;
+			set
+			{
+				_turnover = value;
+				Notify(nameof(Turnover));
+			}
+		}
+
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
@@ -1724,6 +1749,7 @@ namespace StockSharp.BusinessEntities
 			destination.AsksCount = AsksCount;
 			destination.AsksVolume = AsksVolume;
 			destination.CfiCode = CfiCode;
+			destination.Turnover = Turnover;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

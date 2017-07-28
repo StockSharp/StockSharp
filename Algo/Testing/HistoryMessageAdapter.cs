@@ -191,11 +191,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IDictionary<SecurityId, IOrderLogMarketDepthBuilder> OrderLogMarketDepthBuilders { get; } = new Dictionary<SecurityId, IOrderLogMarketDepthBuilder>();
 
-		/// <summary>
-		/// Create market depth builder.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns>Order log to market depth builder.</returns>
+		/// <inheritdoc />
 		public override IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		{
 			return OrderLogMarketDepthBuilders[securityId];
@@ -218,15 +214,13 @@ namespace StockSharp.Algo.Testing
 			base.DisposeManaged();
 		}
 
-		/// <summary>
-		/// <see cref="SecurityLookupMessage"/> required to get securities.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool SecurityLookupRequired => true;
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
+		public override bool IsFullCandlesOnly => false;
+
+		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)

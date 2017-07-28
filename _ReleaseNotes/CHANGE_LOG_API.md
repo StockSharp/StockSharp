@@ -13,6 +13,17 @@ StockSharp API Change log
 * (bug) BTCE fix.
 * (feature) SecurityMappingWindow.
 * (feature) FastMessageAdapter. Extracted from FixMessageAdapter.
+* (bug) FAST fixes.
+* (bug) SpbEx fixes.
+* (bug) Level1CsvSerializer fix.
+* (bug) Fix index creation http://stocksharp.ru/forum/8409/v-gidre-pri-raschete-indeksa-vydaetsya-soobshshenie-method-must-have-a-return-type/
+* (feature) Export. Indicator values.
+* (feature) Level1Grid. Duration, BuyBackDate, BuyBackPrice.
+* (feature) CSV importing.
+* (bug) Fix symbol mapping http://stocksharp.ru/forum/8433/problema-podklyucheniya-k-quik-lua-v-designer-versii-43252/
+* (feature) Order.VisibleVolume. Made as optional param.
+* (feature) IMessageAdapter. IsFullCandlesOnly, IsSupportSubscriptions.
+* (feature) Security.Turnover.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

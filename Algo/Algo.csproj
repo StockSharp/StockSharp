@@ -120,10 +120,17 @@
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="DataType.cs" />
     <Compile Include="Export\Database\CandleTable.cs" />
+    <Compile Include="Export\Database\IndicatorValueTable.cs" />
     <Compile Include="Export\Database\PositionChangeTable.cs" />
     <Compile Include="Export\Database\SecurityTable.cs" />
+    <Compile Include="Export\IndicatorValue.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="Import\CsvImporter.cs" />
+    <Compile Include="Import\CsvParser.cs" />
+    <Compile Include="Import\FieldMapping.cs" />
+    <Compile Include="Import\FieldMappingRegistry.cs" />
+    <Compile Include="Import\FieldMappingValue.cs" />
     <Compile Include="IRemoteAuthorization.cs" />
     <Compile Include="Storages\ISecurityMappingStorage.cs" />
     <Compile Include="SecurityMappingMessageAdapter.cs" />

@@ -80,14 +80,14 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			return sb.ToString();
 		}
 
-		protected override string CreatePrimaryKeyString(IEnumerable<ColumnDescription> columns)
+		protected override string CreatePrimaryKeyString(Table table, IEnumerable<ColumnDescription> columns)
 		{
-			var str = columns.Select(c => "[{0}]".Put(c.Name)).Join(",");
+			var str = columns.Select(c => $"[{c.Name}]").Join(",");
 
 			if (str.IsEmpty())
 				return null;
 
-			return "UNIQUE (" + str + ")";
+			return $"UNIQUE ({str})";
 		}
 
 		protected override string CreateIsTableExistsString(Table table)

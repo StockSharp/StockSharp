@@ -197,6 +197,18 @@ namespace StockSharp.Messages
 		public virtual bool IsNativeIdentifiers => false;
 
 		/// <summary>
+		/// Translates <see cref="CandleMessage"/> as only fully filled.
+		/// </summary>
+		[Browsable(false)]
+		public virtual bool IsFullCandlesOnly => true;
+
+		/// <summary>
+		/// Support any subscriptions (ticks, order books etc.).
+		/// </summary>
+		[Browsable(false)]
+		public virtual bool IsSupportSubscriptions => true;
+
+		/// <summary>
 		/// The storage name, associated with the adapter.
 		/// </summary>
 		[Browsable(false)]
