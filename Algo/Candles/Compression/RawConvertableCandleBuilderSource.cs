@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="series">The candles series for which data receiving should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		public override void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));

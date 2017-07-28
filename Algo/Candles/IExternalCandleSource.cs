@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to);
+		void SubscribeCandles(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to);
 
 		/// <summary>
 		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
