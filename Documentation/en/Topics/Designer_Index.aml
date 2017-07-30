@@ -18,7 +18,7 @@
     <definedTerm>Параметры</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Индекс</legacyBold> – математическая формула комбинации нескольких инструментов  (например, (SBER@TQBR+10)*(abs(20/LKOH@TQBR)).</para></listItem>
+  <listItem><para><legacyBold>Индекс</legacyBold> – математическая формула комбинации нескольких инструментов  (например, (AAPL@NASDAQ+10)*(abs(20/GOOG@NYSE)).</para></listItem>
   <listItem><para><legacyBold>Игнорировать ошибки</legacyBold> – установленный флаг 
   обозначает, что при расчете индекса будут игнорироваться ошибки;</para></listItem>
   <listItem><para><legacyBold>Вычислять расширенную информацию</legacyBold> - установленный флаг обозначает, 
