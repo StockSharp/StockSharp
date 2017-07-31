@@ -4845,6 +4845,11 @@
             Filtered instruments.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.SecurityPicker.UnderlyingGrid">
+      <summary>
+            The table showing financial instruments (<see cref="T:StockSharp.BusinessEntities.Security" />).
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.SecurityPicker.SelectedType">
       <summary>
             The selected instrument type.

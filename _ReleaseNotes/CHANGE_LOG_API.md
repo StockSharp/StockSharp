@@ -25,6 +25,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter. IsFullCandlesOnly, IsSupportSubscriptions.
 * (feature) Security.Turnover.
 * (feature) SmartCOM 4.
+* (feature) SecurityPicker.UnderlyingGrid.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
