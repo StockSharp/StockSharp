@@ -14333,3 +14333,5 @@ DocStr10008;Editor for extended storage;Редактор для расширен
 DocStr10009;The drop-down list for extended storage selection;Выпадающий список для выбора расширенного хранилища
 DocStr10010;Child element added;Добавление дочернего элемента
 DocStr10011;Child element removed;Удаление дочернего элемента
+DocStr10012;Translates {0} as only fully filled;Пересылает {0} только полностью заполненным
+DocStr10013;Support any subscriptions (ticks, order books etc.);Поддерживаются ли какие-то подписки (тики, стаканы и т.д.)

@@ -25,7 +25,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Configuration;
 	using Ecng.Interop;
 
 	using StockSharp.Algo.Candles;

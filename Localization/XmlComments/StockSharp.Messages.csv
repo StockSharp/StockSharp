@@ -533,6 +533,8 @@ P:StockSharp.Messages.IMessageAdapter.OrderStatusRequired/summary;DocStr451
 P:StockSharp.Messages.IMessageAdapter.StorageName/summary;DocStr9382
 P:StockSharp.Messages.IMessageAdapter.IsNativeIdentifiersPersistable/summary;DocStr9388
 P:StockSharp.Messages.IMessageAdapter.IsNativeIdentifiers/summary;DocStr9381
+P:StockSharp.Messages.IMessageAdapter.IsFullCandlesOnly/summary;DocStr10012
+P:StockSharp.Messages.IMessageAdapter.IsSupportSubscriptions/summary;DocStr10013
 P:StockSharp.Messages.IMessageAdapter.OrderCancelVolumeRequired/summary;DocStr8752
 P:StockSharp.Messages.IMessageAdapter.AssociatedBoardCode/summary;Str199
 P:StockSharp.Messages.IMessageAdapter.SecurityExtendedFields/summary;DocStr9383
@@ -679,6 +681,8 @@ P:StockSharp.Messages.MessageAdapter.PortfolioLookupRequired/summary;DocStr450
 P:StockSharp.Messages.MessageAdapter.OrderStatusRequired/summary;DocStr451
 P:StockSharp.Messages.MessageAdapter.IsNativeIdentifiersPersistable/summary;DocStr9388
 P:StockSharp.Messages.MessageAdapter.IsNativeIdentifiers/summary;DocStr9381
+P:StockSharp.Messages.MessageAdapter.IsFullCandlesOnly/summary;DocStr10012
+P:StockSharp.Messages.MessageAdapter.IsSupportSubscriptions/summary;DocStr10013
 P:StockSharp.Messages.MessageAdapter.StorageName/summary;DocStr9382
 P:StockSharp.Messages.MessageAdapter.OrderCancelVolumeRequired/summary;DocStr8752
 P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
@@ -1099,6 +1103,7 @@ F:StockSharp.Messages.Level1Fields.Duration/summary;Duration
 F:StockSharp.Messages.Level1Fields.IssueSize/summary;IssueSize
 F:StockSharp.Messages.Level1Fields.BuyBackDate/summary;BuyBackDate
 F:StockSharp.Messages.Level1Fields.BuyBackPrice/summary;BuyBackPrice
+F:StockSharp.Messages.Level1Fields.Turnover/summary;Turnover
 T:StockSharp.Messages.Level1ChangeMessage/summary;DocStr4470
 P:StockSharp.Messages.Level1ChangeMessage.SecurityId/summary;SecurityId
 M:StockSharp.Messages.Level1ChangeMessage.#ctor/summary;DocStr1

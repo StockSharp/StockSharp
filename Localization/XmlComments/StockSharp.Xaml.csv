@@ -1080,6 +1080,7 @@ E:StockSharp.Xaml.SecurityPicker.GridChanged/summary;DocStr8378
 P:StockSharp.Xaml.SecurityPicker.SelectedSecurity/summary;DocStr8068
 P:StockSharp.Xaml.SecurityPicker.SelectedSecurities/summary;DocStr8294
 P:StockSharp.Xaml.SecurityPicker.FilteredSecurities/summary;DocStr9786
+P:StockSharp.Xaml.SecurityPicker.UnderlyingGrid/summary;DocStr8293
 P:StockSharp.Xaml.SecurityPicker.SelectedType/summary;DocStr8308
 P:StockSharp.Xaml.SecurityPicker.SecurityFilter/summary;DocStr8379
 F:StockSharp.Xaml.SecurityPicker.TitleProperty/summary;DocStr29

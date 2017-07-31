@@ -1627,24 +1627,9 @@
             Diagram socket.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.SocketId">
-      <summary>
-            Diagram socket identifier.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.ElementId">
-      <summary>
-            Element identifiers.
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.IsConditional">
       <summary>
             Is conditional.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor">
-      <summary>
-            Initialize <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor(StockSharp.Xaml.Diagram.DiagramSocket)">
