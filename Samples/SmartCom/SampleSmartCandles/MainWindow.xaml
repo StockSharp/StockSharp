@@ -32,8 +32,8 @@
             <Label Content="{x:Static loc:LocalizedStrings.XamlStr651}" HorizontalAlignment="Right" />
 			<smartCom:SmartComAddressComboBox x:Name="Address" />
 
-			<Label Content="SmartCOM 3:" HorizontalAlignment="Right" />
-			<CheckBox x:Name="IsSmartCom3" Margin="5" IsChecked="True" />
+			<Label Content="SmartCOM 4:" HorizontalAlignment="Right" />
+			<CheckBox x:Name="IsSmartCom4" Margin="5" IsChecked="True" />
 
 			<Button x:Name="ConnectBtn" Width="100" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		</StackPanel>

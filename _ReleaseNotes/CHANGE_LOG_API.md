@@ -24,6 +24,7 @@ StockSharp API Change log
 * (feature) Order.VisibleVolume. Made as optional param.
 * (feature) IMessageAdapter. IsFullCandlesOnly, IsSupportSubscriptions.
 * (feature) Security.Turnover.
+* (feature) SmartCOM 4.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

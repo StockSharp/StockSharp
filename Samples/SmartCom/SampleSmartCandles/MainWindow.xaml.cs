@@ -70,7 +70,7 @@ namespace SampleSmartCandles
 				Address = Address.SelectedAddress,
 
 				// применить нужную версию SmartCOM
-				Version = IsSmartCom3.IsChecked == true ? SmartComVersions.V3 : SmartComVersions.V2,
+				Version = IsSmartCom4.IsChecked == true ? SmartComVersions.V4 : SmartComVersions.V3,
 			};
 
 			// очищаем из текстового поля в целях безопасности
@@ -86,7 +86,7 @@ namespace SampleSmartCandles
 
 			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
-			_candleManager = new CandleManager((IExternalCandleSource)_trader);
+			_candleManager = new CandleManager(_trader);
 
             _trader.Connect();
 			ConnectBtn.IsEnabled = false;
