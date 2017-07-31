@@ -33,7 +33,7 @@
 			<smartCom:SmartComAddressComboBox x:Name="Address" />
 
 			<Label Content="SmartCOM 4:" HorizontalAlignment="Right" />
-			<CheckBox x:Name="IsSmartCom4" Margin="5" IsChecked="True" />
+			<CheckBox x:Name="IsSmartCom4" Margin="5" IsChecked="False" />
 
 			<Button x:Name="ConnectBtn" Width="100" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		</StackPanel>
