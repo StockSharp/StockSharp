@@ -456,9 +456,14 @@ namespace StockSharp.Algo.Candles.Compression
 			info.DataType = GetCurrentDataType(info);
 
 			var msg = (MarketDataMessage)info.MarketDataMessage.Clone();
-			msg.DataType = info.DataType.Value;
 			msg.TransactionId = info.TransactionId;
 			msg.From = info.LastTime;
+
+			if (msg.DataType != info.DataType.Value)
+			{
+				msg.DataType = info.DataType.Value;
+				msg.Arg = null;
+			}
 
 			_seriesInfosByTransactions.Add(info.TransactionId, info);
 
