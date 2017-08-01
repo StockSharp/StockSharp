@@ -26,6 +26,7 @@ StockSharp API Change log
 * (feature) Security.Turnover.
 * (feature) SmartCOM 4.
 * (feature) SecurityPicker.UnderlyingGrid.
+* (feature) TraderHelper.FromMicexCurrencyName. Error handler.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

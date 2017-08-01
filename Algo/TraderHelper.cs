@@ -3014,8 +3014,9 @@ namespace StockSharp.Algo
 		/// To convert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
 		/// </summary>
 		/// <param name="name">The currency name in the MICEX format.</param>
+		/// <param name="errorHandler">Error handler.</param>
 		/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
-		public static CurrencyTypes? FromMicexCurrencyName(this string name)
+		public static CurrencyTypes? FromMicexCurrencyName(this string name, Action<Exception> errorHandler = null)
 		{
 			if (name.IsEmpty())
 				return null;
@@ -3031,7 +3032,17 @@ namespace StockSharp.Algo
 				case "SLV":
 					return null;
 				default:
-					return name.To<CurrencyTypes>();
+				{
+					try
+					{
+						return name.To<CurrencyTypes>();
+					}
+					catch (Exception ex)
+					{
+						errorHandler?.Invoke(ex);
+						return null;
+					}
+				}
 			}
 		}
 
