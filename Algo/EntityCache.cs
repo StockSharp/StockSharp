@@ -527,6 +527,7 @@ namespace StockSharp.Algo
 					o.UserOrderId = message.UserOrderId;
 					o.ClientCode = message.ClientCode;
 					o.BrokerCode = message.BrokerCode;
+					o.IsMarketMaker = message.IsMarketMaker;
 
 					if (message.PortfolioName.IsEmpty())
 						o.Portfolio = _portfolios.FirstOrDefault().Value;

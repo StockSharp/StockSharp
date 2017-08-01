@@ -446,6 +446,7 @@ namespace StockSharp.Algo
 				BrokerCode = order.BrokerCode,
 				ClientCode = order.ClientCode,
 				Currency = order.Currency,
+				IsMarketMaker = order.IsMarketMaker,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg);

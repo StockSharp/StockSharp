@@ -290,6 +290,9 @@ namespace StockSharp.Algo.Storages
 						VisibleVolume = regMsg.VisibleVolume,
 						LocalTime = regMsg.LocalTime,
 						TransactionId = regMsg.TransactionId,
+						IsMarketMaker = regMsg.IsMarketMaker,
+						OrderType = regMsg.OrderType,
+						UserOrderId = regMsg.UserOrderId,
 						//RepoInfo = regMsg.RepoInfo?.Clone(),
 						//RpsInfo = regMsg.RpsInfo?.Clone(),
 					});
