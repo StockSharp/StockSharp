@@ -96,6 +96,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ExpiryDate?.ToString("zzz"),
 				data.LocalTime.WriteTimeMls(),
 				data.LocalTime.ToString("zzz"),
+				data.IsMarketMaker.ToString(),
 			};
 			writer.WriteRow(row);
 
@@ -156,6 +157,7 @@ namespace StockSharp.Algo.Storages.Csv
 				TradeStatus = reader.ReadNullableInt(),
 				OrderStatus = reader.ReadNullableLong(),
 				Latency = reader.ReadNullableLong().To<TimeSpan?>(),
+				IsMarketMaker = reader.ReadNullableBool(),
 			};
 
 			var error = reader.ReadString();

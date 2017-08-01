@@ -27,6 +27,7 @@ StockSharp API Change log
 * (feature) SmartCOM 4.
 * (feature) SecurityPicker.UnderlyingGrid.
 * (feature) TraderHelper.FromMicexCurrencyName. Error handler.
+* (feature) Storages (binary and csv) support Order.IsMarketMaker info.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
