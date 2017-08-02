@@ -14345,3 +14345,4 @@ DocStr10014;Delete extended info storage;Удалить хранилище ра�
 DocStr10015;Delete storage;Удалить хранилище
 DocStr10016;The storage was created;Хранилище было создано
 DocStr10017;The storage was deleted;Хранилище было удалено
+DocStr10018;Is field extended;Расширенное ли поле
