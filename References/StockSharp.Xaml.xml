@@ -451,30 +451,30 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.ExtendedInfoStorageSelectWindow">
+    <member name="T:StockSharp.Xaml.ExtendedInfoStorageWindow">
       <summary>
             The extended storage selection window.
             </summary>
       <summary>
-            ExtendedInfoStorageSelectWindow
+            ExtendedInfoStorageWindow
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.Storages">
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageWindow.Storages">
       <summary>
             Available storages.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.SelectedStorage">
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageWindow.SelectedStorage">
       <summary>
             Selected storage.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.#ctor">
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageWindow.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExtendedInfoStorageSelectWindow" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExtendedInfoStorageWindow" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.InitializeComponent">
+    <member name="M:StockSharp.Xaml.ExtendedInfoStorageWindow.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -1110,12 +1110,12 @@
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ExtendedInfoStorageComboBox.StorageNames">
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageComboBox.Storages">
       <summary>
             Available storages.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ExtendedInfoStorageComboBox.SelectedStorageName">
+    <member name="P:StockSharp.Xaml.ExtendedInfoStorageComboBox.SelectedStorage">
       <summary>
             Selected storage.
             </summary>

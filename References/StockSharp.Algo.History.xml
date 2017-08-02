@@ -631,6 +631,13 @@
       <param name="storageName">Storage name.</param>
       <param name="fields">Extended fields (names and types).</param>
     </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteSecurityExtendedFields(System.Guid,System.String)">
+      <summary>
+            Delete extended info storage.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="storageName">Storage name.</param>
+    </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.AddSecurityExtendedInfo(System.Guid,System.String,System.String,System.String[])">
       <summary>
             Add extended info.

@@ -98,11 +98,11 @@ P:StockSharp.Xaml.DataSourcePanel.SelectedItem/summary;DocStr9359
 P:StockSharp.Xaml.DataSourcePanel.Configure/summary;DocStr9360
 M:StockSharp.Xaml.DataSourcePanel.#ctor/summary;DocStr1
 M:StockSharp.Xaml.DataSourcePanel.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.ExtendedInfoStorageSelectWindow/summary;DocStr9769
-P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.Storages/summary;DocStr9770
-P:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.SelectedStorage/summary;DocStr9771
-M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.#ctor/summary;DocStr1
-M:StockSharp.Xaml.ExtendedInfoStorageSelectWindow.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.ExtendedInfoStorageWindow/summary;DocStr9769
+P:StockSharp.Xaml.ExtendedInfoStorageWindow.Storages/summary;DocStr9770
+P:StockSharp.Xaml.ExtendedInfoStorageWindow.SelectedStorage/summary;DocStr9771
+M:StockSharp.Xaml.ExtendedInfoStorageWindow.#ctor/summary;DocStr1
+M:StockSharp.Xaml.ExtendedInfoStorageWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Extensions/summary;DocStr4290
 M:StockSharp.Xaml.Extensions.LoadWindowSettings(System.Windows.Window,Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Extensions.LoadWindowSettings(System.Windows.Window,Ecng.Serialization.SettingsStorage)/param/window;DocStr9966
@@ -247,8 +247,8 @@ T:StockSharp.Xaml.ExtendedInfoStorageComboBox/summary;DocStr10009
 M:StockSharp.Xaml.ExtendedInfoStorageComboBox.CreateEditorSettings/summary;DocStr8459
 M:StockSharp.Xaml.ExtendedInfoStorageComboBox.CreateEditorSettings/returns;DocStr8459
 M:StockSharp.Xaml.ExtendedInfoStorageComboBox.OnLoadedInternal/summary;DocStr8459
-P:StockSharp.Xaml.ExtendedInfoStorageComboBox.StorageNames/summary;DocStr9770
-P:StockSharp.Xaml.ExtendedInfoStorageComboBox.SelectedStorageName/summary;DocStr9771
+P:StockSharp.Xaml.ExtendedInfoStorageComboBox.Storages/summary;DocStr9770
+P:StockSharp.Xaml.ExtendedInfoStorageComboBox.SelectedStorage/summary;DocStr9771
 M:StockSharp.Xaml.ExtendedInfoStorageComboBox.#ctor/summary;DocStr1
 T:StockSharp.Xaml.RatingWindow/summary;DocStr9845
 F:StockSharp.Xaml.RatingWindow.RatingValueProperty/summary;DocStr29

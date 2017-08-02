@@ -267,6 +267,9 @@ M:StockSharp.Algo.History.Hydra.IRemoteStorage.CreateSecurityExtendedFields(Syst
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.CreateSecurityExtendedFields(System.Guid,System.String,System.Tuple{System.String,System.String}[])/param/sessionId;DocStr138
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.CreateSecurityExtendedFields(System.Guid,System.String,System.Tuple{System.String,System.String}[])/param/storageName;DocStr429
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.CreateSecurityExtendedFields(System.Guid,System.String,System.Tuple{System.String,System.String}[])/param/fields;DocStr9630
+M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteSecurityExtendedFields(System.Guid,System.String)/summary;DocStr10014
+M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteSecurityExtendedFields(System.Guid,System.String)/param/sessionId;DocStr138
+M:StockSharp.Algo.History.Hydra.IRemoteStorage.DeleteSecurityExtendedFields(System.Guid,System.String)/param/storageName;DocStr429
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.AddSecurityExtendedInfo(System.Guid,System.String,System.String,System.String[])/summary;DocStr9376
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.AddSecurityExtendedInfo(System.Guid,System.String,System.String,System.String[])/param/sessionId;DocStr138
 M:StockSharp.Algo.History.Hydra.IRemoteStorage.AddSecurityExtendedInfo(System.Guid,System.String,System.String,System.String[])/param/storageName;DocStr429
