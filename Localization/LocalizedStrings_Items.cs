@@ -44688,6 +44688,16 @@ namespace StockSharp.Localization
 		public static string RemoteStorageCreateSecurityExtendedFields => GetString(RemoteStorageCreateSecurityExtendedFieldsKey);
 
 		/// <summary>
+		/// Session {0}. Delete extended '{1}' storage.
+		/// </summary>
+		public const string RemoteStorageDeleteSecurityExtendedFieldsKey = nameof(RemoteStorageDeleteSecurityExtendedFields);
+
+		/// <summary>
+		/// Session {0}. Delete extended '{1}' storage.
+		/// </summary>
+		public static string RemoteStorageDeleteSecurityExtendedFields => GetString(RemoteStorageDeleteSecurityExtendedFieldsKey);
+
+		/// <summary>
 		/// Session {0}. Add extended info to '{1}' storage for '{2}' security.
 		/// </summary>
 		public const string RemoteStorageAddSecurityExtendedInfoKey = nameof(RemoteStorageAddSecurityExtendedInfo);
@@ -45826,5 +45836,25 @@ namespace StockSharp.Localization
 		/// Update duplicate securities if they already exists.
 		/// </summary>
 		public static string UpdateDuplicateSecurities => GetString(UpdateDuplicateSecuritiesKey);
+
+		/// <summary>
+		/// Create from sample
+		/// </summary>
+		public const string CreateFromSampleKey = nameof(CreateFromSample);
+
+		/// <summary>
+		/// Create from sample
+		/// </summary>
+		public static string CreateFromSample => GetString(CreateFromSampleKey);
+
+		/// <summary>
+		/// Storage '{0}' already exist.
+		/// </summary>
+		public const string StorageAlreadyExistKey = nameof(StorageAlreadyExist);
+
+		/// <summary>
+		/// Storage '{0}' already exist.
+		/// </summary>
+		public static string StorageAlreadyExist => GetString(StorageAlreadyExistKey);
 	}
 }

@@ -4505,6 +4505,7 @@ RemoteStorageDeleteExchanges;Session {0}. Deleting '{1}' exchanges.;Сессия
 RemoteStorageDeleteExchangeBoards;Session {0}. Deleting '{1}' boards.;Сессия {0}. Удаление '{1}' площадок.
 RemoteStorageGetSecurityExtendedFields;Session {0}. Get extended fields for '{1}' storage.;Сессия {0}. Получение расширенных полей для хранилища '{1}'.
 RemoteStorageCreateSecurityExtendedFields;Session {0}. Create extended '{1}' storage with '{2}' fields.;Сессия {0}. Создание хранилища расширенной информации '{1}' с полями '{2}'.
+RemoteStorageDeleteSecurityExtendedFields;Session {0}. Delete extended '{1}' storage.;Сессия {0}. Удаление хранилища расширенной информации '{1}'.
 RemoteStorageAddSecurityExtendedInfo;Session {0}. Add extended info to '{1}' storage for '{2}' security.;Сессия {0}. Добавление расширенной информации в хранилище '{1}' для инструмента '{2}'.
 RemoteStorageDeleteSecurityExtendedInfo;Session {0}. Delete extended info from '{1}' storage for '{2}' security.;Сессия {0}. Удаление расширенной информации из хранилища '{1}' для инструмента '{2}'.
 RemoteStorageGetSecurityExtendedStorages;Session {0}. Get extended info storages.;Сессия {0}. Получение хранилищ расширенной информации.
@@ -4615,6 +4616,8 @@ SubDirectoriesInclude;Include subdirectories.;Включать подкатал�
 ExtendedInfoImport;Save imported extended fields into extended storage.;Сохранять расширенные импортированные поля в хранилище расширенной информации.
 Duplicates;Duplicates;Дубликаты
 UpdateDuplicateSecurities;Update duplicate securities if they already exists.;Обновлять дубликаты инструментов, если они уже существуют.
+CreateFromSample;Create from sample;Создать из примера
+StorageAlreadyExist;Storage '{0}' already exist.;Хранилище '{0}' уже существует.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

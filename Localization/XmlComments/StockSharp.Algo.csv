@@ -6963,9 +6963,10 @@ M:StockSharp.Algo.TraderHelper.TryAdd``2(``0,``1,System.Nullable{System.Int64})/
 M:StockSharp.Algo.TraderHelper.ToMicexCurrencyName(StockSharp.Messages.CurrencyTypes)/summary;DocStr2489
 M:StockSharp.Algo.TraderHelper.ToMicexCurrencyName(StockSharp.Messages.CurrencyTypes)/param/type;DocStr2490
 M:StockSharp.Algo.TraderHelper.ToMicexCurrencyName(StockSharp.Messages.CurrencyTypes)/returns;DocStr2491
-M:StockSharp.Algo.TraderHelper.FromMicexCurrencyName(System.String)/summary;DocStr2492
-M:StockSharp.Algo.TraderHelper.FromMicexCurrencyName(System.String)/param/name;DocStr2491
-M:StockSharp.Algo.TraderHelper.FromMicexCurrencyName(System.String)/returns;DocStr2493
+M:StockSharp.Algo.TraderHelper.FromMicexCurrencyName(System.String,System.Action{System.Exception})/summary;DocStr2492
+M:StockSharp.Algo.TraderHelper.FromMicexCurrencyName(System.String,System.Action{System.Exception})/param/name;DocStr2491
+M:StockSharp.Algo.TraderHelper.FromMicexCurrencyName(System.String,System.Action{System.Exception})/param/errorHandler;DocStr4311
+M:StockSharp.Algo.TraderHelper.FromMicexCurrencyName(System.String,System.Action{System.Exception})/returns;DocStr2493
 M:StockSharp.Algo.TraderHelper.GetPeriod(StockSharp.Messages.WorkingTime,System.DateTime)/summary;DocStr2494
 M:StockSharp.Algo.TraderHelper.GetPeriod(StockSharp.Messages.WorkingTime,System.DateTime)/param/time;DocStr2495
 M:StockSharp.Algo.TraderHelper.GetPeriod(StockSharp.Messages.WorkingTime,System.DateTime)/param/date;DocStr2496
