@@ -3896,15 +3896,15 @@ namespace StockSharp.Algo
 			return date.DateTime == DateTime.Today;
 		}
 
-		/// <summary>
-		/// To check the specified date is GTC.
-		/// </summary>
-		/// <param name="date">The specified date.</param>
-		/// <returns><see langword="true"/> if the specified date is GTC, otherwise, <see langword="false"/>.</returns>
-		public static bool IsGtc(this DateTimeOffset date)
-		{
-			return date == DateTimeOffset.MaxValue;
-		}
+		///// <summary>
+		///// To check the specified date is GTC.
+		///// </summary>
+		///// <param name="date">The specified date.</param>
+		///// <returns><see langword="true"/> if the specified date is GTC, otherwise, <see langword="false"/>.</returns>
+		//public static bool IsGtc(this DateTimeOffset date)
+		//{
+		//	return date == DateTimeOffset.MaxValue;
+		//}
 
 		/// <summary>
 		/// Extract <see cref="TimeInForce"/> from bits flag.

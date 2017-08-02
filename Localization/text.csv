@@ -8797,7 +8797,7 @@ DocStr4280;Ghana, Ghanaian Cedi;Ghana, Ghanaian Cedi
 DocStr4281;Disconnect from a server message (uses as a command in outgoing case, event in incoming case);Сообщение об отключении от торговой системы (при отправке используется как команда, при получении является событием отключения)
 DocStr4282;The types of data that contain information in {0};Типы данных, информация о которых содержится {0}
 DocStr4283;The message contains information about the execution;Сообщение, содержащее информацию об исполнении
-DocStr4284;If the value is equal {0} or {1}, order will be GTC (good til cancel). Or uses exact date;Если значение равно {0} или {1}, то заявка выставляется до отмены (GTC). Иначе, указывается конкретный срок
+DocStr4284;If the value is equal {0}, order will be GTC (good til cancel). Or uses exact date;Если значение равно {0}, то заявка выставляется до отмены (GTC). Иначе, указывается конкретный срок
 DocStr4285;Is tick uptrend or downtrend in price. Uses only {0} for {1};Является ли тик восходящим или нисходящим в цене. Заполняется только для {0} равным {1}
 DocStr4286;Commission (broker, exchange etc.). Uses when {0} set to {1} or {2};Комиссия (брокерская, биржевая и т.д.). Заполняется при {0} равном {1} или {2}
 DocStr4287;Network latency. Uses when {0} set to {1};Сетевая задержка. Заполняется при {0} равном {1}
@@ -14338,3 +14338,7 @@ DocStr10010;Child element added;Добавление дочернего элем
 DocStr10011;Child element removed;Удаление дочернего элемента
 DocStr10012;Translates {0} as only fully filled;Пересылает {0} только полностью заполненным
 DocStr10013;Support any subscriptions (ticks, order books etc.);Поддерживаются ли какие-то подписки (тики, стаканы и т.д.)
+DocStr10014;Delete extended info storage;Удалить хранилище расширенной информации
+DocStr10015;Delete storage;Удалить хранилище
+DocStr10016;The storage was created;Хранилище было создано
+DocStr10017;The storage was deleted;Хранилище было удалено

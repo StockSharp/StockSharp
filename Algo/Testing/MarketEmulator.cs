@@ -602,7 +602,7 @@ namespace StockSharp.Algo.Testing
 						{
 							_activeOrders.Add(replyMsg.TransactionId, replyMsg);
 
-							if (replyMsg.ExpiryDate != null && replyMsg.ExpiryDate != DateTimeOffset.MaxValue)
+							if (replyMsg.ExpiryDate != null)
 								_expirableOrders.Add(replyMsg, replyMsg.ExpiryDate.Value.EndOfDay() - replyMsg.LocalTime);
 
 							// изменяем текущие котировки, добавляя туда наши цену и объем

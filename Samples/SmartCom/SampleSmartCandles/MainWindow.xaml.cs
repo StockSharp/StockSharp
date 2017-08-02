@@ -146,9 +146,9 @@ namespace SampleSmartCandles
 			}).Show();
 
 			if (IsRealTime.IsChecked == true)
-				_candleManager.Start(series, DateTime.Today, DateTimeOffset.MaxValue);
+				_candleManager.Start(series, DateTime.Today, null);
 			else
-				_candleManager.Start(series, (DateTimeOffset)From.Value, (DateTimeOffset)To.Value);
+				_candleManager.Start(series, From.Value, To.Value);
 		}
 
 		private void OnSecuritySelected()

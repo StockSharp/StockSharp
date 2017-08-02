@@ -414,7 +414,7 @@ namespace StockSharp.BusinessEntities
 		/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
 		/// </summary>
 		/// <remarks>
-		/// If the value is <see cref="DateTimeOffset.MaxValue"/>, then the order is registered until cancel. Otherwise, the period is specified.
+		/// If the value is <see langword="null"/>, then the order is registered until cancel. Otherwise, the period is specified.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]

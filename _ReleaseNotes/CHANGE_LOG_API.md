@@ -30,6 +30,7 @@ StockSharp API Change log
 * (feature) Storages (binary and csv) support Order.IsMarketMaker info.
 * (feature) OrderGrid, ExecutionGrid, OrderWindow. Show IsMarketMaker property.
 * (feature) Extended storages. Delete support.
+* (feature) Order.ExpiryDate. GTC mean only nullable value.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

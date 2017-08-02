@@ -58,7 +58,7 @@ namespace SampleOEC
 			var tf = (TimeSpan)candleSeries.Arg;
 
 			_trader.CandleSeriesProcessing += ProcessNewCandles;
-			_trader.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTimeOffset.MaxValue);
+			_trader.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)));
 		}
 
 		private void ProcessNewCandles(CandleSeries series, Candle candle)

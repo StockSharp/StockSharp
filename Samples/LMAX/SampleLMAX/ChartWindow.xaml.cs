@@ -58,7 +58,7 @@ namespace SampleLMAX
 			var tf = (TimeSpan)candleSeries.Arg;
 
 			_trader.CandleSeriesProcessing += ProcessNewCandle;
-			_trader.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTimeOffset.MaxValue);
+			_trader.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)));
 		}
 
 		private void ProcessNewCandle(CandleSeries series, Candle candle)

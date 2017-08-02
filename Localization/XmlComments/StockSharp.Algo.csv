@@ -1473,6 +1473,7 @@ M:StockSharp.Algo.Storages.StorageExchangeInfoProvider.Save(StockSharp.BusinessE
 T:StockSharp.Algo.Storages.IExtendedInfoStorageItem/summary;DocStr9374
 P:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Fields/summary;DocStr9630
 P:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Securities/summary;DocStr9637
+P:StockSharp.Algo.Storages.IExtendedInfoStorageItem.StorageName/summary;DocStr429
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Add(StockSharp.Messages.SecurityId,System.Collections.Generic.IDictionary{System.String,System.Object})/summary;DocStr9376
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Add(StockSharp.Messages.SecurityId,System.Collections.Generic.IDictionary{System.String,System.Object})/param/securityId;DocStr9333
@@ -1485,7 +1486,7 @@ M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Load(StockSharp.Messages.Sec
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Delete(StockSharp.Messages.SecurityId)/summary;DocStr9632
 M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Delete(StockSharp.Messages.SecurityId)/param/securityId;DocStr9333
 T:StockSharp.Algo.Storages.IExtendedInfoStorage/summary;DocStr9374
-P:StockSharp.Algo.Storages.IExtendedInfoStorage.StoragesNames/summary;DocStr9643
+P:StockSharp.Algo.Storages.IExtendedInfoStorage.Storages/summary;DocStr9643
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Get(System.String)/summary;DocStr9644
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Get(System.String)/param/storageName;DocStr429
@@ -1494,6 +1495,10 @@ M:StockSharp.Algo.Storages.IExtendedInfoStorage.Create(System.String,System.Tupl
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Create(System.String,System.Tuple{System.String,System.Type}[])/param/storageName;DocStr429
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Create(System.String,System.Tuple{System.String,System.Type}[])/param/fields;DocStr9630
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Create(System.String,System.Tuple{System.String,System.Type}[])/returns;Str1405
+M:StockSharp.Algo.Storages.IExtendedInfoStorage.Delete(StockSharp.Algo.Storages.IExtendedInfoStorageItem)/summary;DocStr10015
+M:StockSharp.Algo.Storages.IExtendedInfoStorage.Delete(StockSharp.Algo.Storages.IExtendedInfoStorageItem)/param/storage;Str1405
+E:StockSharp.Algo.Storages.IExtendedInfoStorage.Created/summary;DocStr10016
+E:StockSharp.Algo.Storages.IExtendedInfoStorage.Deleted/summary;DocStr10017
 T:StockSharp.Algo.Storages.CsvExtendedInfoStorage/summary;DocStr9379
 M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.#ctor(System.String)/param/path;DocStr9340
@@ -3337,10 +3342,11 @@ M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.SetValue``1(StockSharp.Algo.I
 M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.SetValue``1(StockSharp.Algo.Indicators.IIndicator,``0)/param/value;Str3099
 M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.SetValue``1(StockSharp.Algo.Indicators.IIndicator,``0)/returns;DocStr1159
 T:StockSharp.Algo.ExtendedInfoStorageMessageAdapter/summary;DocStr9372
-M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExtendedInfoStorageItem)/summary;DocStr1
-M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExtendedInfoStorageItem)/param/innerAdapter;DocStr8563
-M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExtendedInfoStorageItem)/param/storage;DocStr9374
-P:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.Storage/summary;DocStr9374
+M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExtendedInfoStorage,System.String,System.Tuple{System.String,System.Type}[])/summary;DocStr1
+M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExtendedInfoStorage,System.String,System.Tuple{System.String,System.Type}[])/param/innerAdapter;DocStr8563
+M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExtendedInfoStorage,System.String,System.Tuple{System.String,System.Type}[])/param/extendedInfoStorage;DocStr9374
+M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExtendedInfoStorage,System.String,System.Tuple{System.String,System.Type}[])/param/storageName;DocStr429
+M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExtendedInfoStorage,System.String,System.Tuple{System.String,System.Type}[])/param/fields;DocStr9630
 M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
 M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
 M:StockSharp.Algo.ExtendedInfoStorageMessageAdapter.Clone/summary;DocStr643
@@ -7075,9 +7081,6 @@ M:StockSharp.Algo.TraderHelper.IsContainsQuotes(StockSharp.Messages.Level1Change
 M:StockSharp.Algo.TraderHelper.IsToday(System.DateTimeOffset)/summary;DocStr8660
 M:StockSharp.Algo.TraderHelper.IsToday(System.DateTimeOffset)/param/date;DocStr8661
 M:StockSharp.Algo.TraderHelper.IsToday(System.DateTimeOffset)/returns;DocStr8662
-M:StockSharp.Algo.TraderHelper.IsGtc(System.DateTimeOffset)/summary;DocStr8663
-M:StockSharp.Algo.TraderHelper.IsGtc(System.DateTimeOffset)/param/date;DocStr8661
-M:StockSharp.Algo.TraderHelper.IsGtc(System.DateTimeOffset)/returns;DocStr8664
 M:StockSharp.Algo.TraderHelper.GetPlazaTimeInForce(System.Int64)/summary;DocStr8665
 M:StockSharp.Algo.TraderHelper.GetPlazaTimeInForce(System.Int64)/param/status;DocStr8666
 M:StockSharp.Algo.TraderHelper.GetPlazaTimeInForce(System.Int64)/returns;DocStr608

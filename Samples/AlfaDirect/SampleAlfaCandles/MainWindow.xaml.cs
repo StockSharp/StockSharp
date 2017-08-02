@@ -109,8 +109,8 @@ namespace SampleAlfaCandles
 
 			var timeFrame = (TimeSpan)HistoryInterval.SelectedItem;
 
-			var from = From.Value ?? DateTimeOffset.MinValue;
-			var to = RealTime.IsChecked == true ? DateTimeOffset.MaxValue : To.Value ?? DateTimeOffset.MaxValue;
+			var from = (DateTimeOffset?)From.Value;
+			var to = RealTime.IsChecked == true ? null : (DateTimeOffset?)To.Value;
 
 			if (from > to)
 			{
@@ -139,7 +139,7 @@ namespace SampleAlfaCandles
 					wnd.DrawCandles(candle);
 			};
 
-			_trader.SubscribeCandles(series, @from, to);
+			_trader.SubscribeCandles(series, from, to);
 		}
 
 		private void OnSelectedSecurity()

@@ -58,7 +58,7 @@ namespace SampleCQG
 			var tf = (TimeSpan)candleSeries.Arg;
 
 			_connector.CandleSeriesProcessing += ProcessNewCandles;
-			_connector.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTimeOffset.MaxValue);
+			_connector.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)));
 		}
 
 		private void ProcessNewCandles(CandleSeries series, Candle candle)

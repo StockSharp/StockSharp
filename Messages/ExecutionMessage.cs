@@ -328,7 +328,7 @@ namespace StockSharp.Messages
 		/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
 		/// </summary>
 		/// <remarks>
-		/// If the value is equal <see langword="null" /> or <see cref="DateTimeOffset.MaxValue"/>, order will be GTC (good til cancel). Or uses exact date.
+		/// If the value is equal <see langword="null" />, order will be GTC (good til cancel). Or uses exact date.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
