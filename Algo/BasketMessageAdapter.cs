@@ -306,7 +306,7 @@ namespace StockSharp.Algo
 
 			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
 			{
-				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage.Create(adapter.StorageName, adapter.SecurityExtendedFields));
+				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage, adapter.StorageName, adapter.SecurityExtendedFields);
 			}
 
 			if (adapter.IsSupportSubscriptions)

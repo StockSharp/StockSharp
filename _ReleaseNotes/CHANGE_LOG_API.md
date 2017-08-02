@@ -29,6 +29,7 @@ StockSharp API Change log
 * (feature) TraderHelper.FromMicexCurrencyName. Error handler.
 * (feature) Storages (binary and csv) support Order.IsMarketMaker info.
 * (feature) OrderGrid, ExecutionGrid, OrderWindow. Show IsMarketMaker property.
+* (feature) Extended storages. Delete support.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
