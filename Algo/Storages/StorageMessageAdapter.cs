@@ -262,7 +262,7 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessMarketDataMessage(MarketDataMessage msg)
 		{
-			if (msg.IsBack || DaysLoad == TimeSpan.Zero)
+			if (msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero))
 			{
 				base.SendInMessage(msg);
 				return;
