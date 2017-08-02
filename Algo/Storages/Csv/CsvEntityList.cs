@@ -235,7 +235,19 @@ namespace StockSharp.Algo.Storages.Csv
 
 				foreach (var item in state)
 					Write(writer, item);
-			}, values);
+			}, values, compareStates: (v1, v2) =>
+			{
+				if (v1 == null)
+					return v2 == null;
+
+				if (v2 == null)
+					return false;
+
+				if (v1.Length != v2.Length)
+					return false;
+
+				return v1.SequenceEqual(v2);
+			});
 		}
 
 		internal void ReadItems(List<Exception> errors)

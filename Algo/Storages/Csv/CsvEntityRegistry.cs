@@ -378,22 +378,22 @@ namespace StockSharp.Algo.Storages.Csv
 				if (liteSec == null)
 					throw new ArgumentOutOfRangeException(nameof(security), security.Id, LocalizedStrings.Str2736);
 
-				if (!security.Name.IsEmpty() && liteSec.Name != security.Name)
+				if (!security.Name.IsEmpty() && (liteSec.Name == null || !liteSec.Name.CompareIgnoreCase(security.Name)))
 					return true;
 
-				if (!security.Code.IsEmpty() && liteSec.Code != security.Code)
+				if (!security.Code.IsEmpty() && (liteSec.Code == null || !liteSec.Code.CompareIgnoreCase(security.Code)))
 					return true;
 
-				if (!security.Class.IsEmpty() && liteSec.Class != security.Class)
+				if (!security.Class.IsEmpty() && (liteSec.Class == null || !liteSec.Class.CompareIgnoreCase(security.Class)))
 					return true;
 
-				if (!security.ShortName.IsEmpty() && liteSec.ShortName != security.ShortName)
+				if (!security.ShortName.IsEmpty() && (liteSec.ShortName == null || !liteSec.ShortName.CompareIgnoreCase(security.ShortName)))
 					return true;
 
-				if (security.Board != null && liteSec.Board != security.Board.Code)
+				if (security.Board != null && (liteSec.Board == null || !liteSec.Board.CompareIgnoreCase(security.Board.Code)))
 					return true;
 
-				if (!security.UnderlyingSecurityId.IsEmpty() && liteSec.UnderlyingSecurityId != security.UnderlyingSecurityId)
+				if (!security.UnderlyingSecurityId.IsEmpty() && (liteSec.UnderlyingSecurityId == null || !liteSec.UnderlyingSecurityId.CompareIgnoreCase(security.UnderlyingSecurityId)))
 					return true;
 
 				if (security.PriceStep != null && liteSec.PriceStep != security.PriceStep)
