@@ -4618,6 +4618,9 @@ Duplicates;Duplicates;Дубликаты
 UpdateDuplicateSecurities;Update duplicate securities if they already exists.;Обновлять дубликаты инструментов, если они уже существуют.
 CreateFromSample;Create from sample;Создать из примера
 StorageAlreadyExist;Storage '{0}' already exist.;Хранилище '{0}' уже существует.
+IgnoreNonIdSecurities;Ingore non id;Игнорировать без ИД
+IgnoreNonIdSecuritiesDesc;Ignore securities without identifiers.;Игнорировать инструменты без идентификатора.
+LineNoSecurityId;Line '{0}' does not contain security identifier.;Строка '{0}' не содержит идентификатор инструмента.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -45856,5 +45856,35 @@ namespace StockSharp.Localization
 		/// Storage '{0}' already exist.
 		/// </summary>
 		public static string StorageAlreadyExist => GetString(StorageAlreadyExistKey);
+
+		/// <summary>
+		/// Ingore non id
+		/// </summary>
+		public const string IgnoreNonIdSecuritiesKey = nameof(IgnoreNonIdSecurities);
+
+		/// <summary>
+		/// Ingore non id
+		/// </summary>
+		public static string IgnoreNonIdSecurities => GetString(IgnoreNonIdSecuritiesKey);
+
+		/// <summary>
+		/// Ignore securities without identifiers.
+		/// </summary>
+		public const string IgnoreNonIdSecuritiesDescKey = nameof(IgnoreNonIdSecuritiesDesc);
+
+		/// <summary>
+		/// Ignore securities without identifiers.
+		/// </summary>
+		public static string IgnoreNonIdSecuritiesDesc => GetString(IgnoreNonIdSecuritiesDescKey);
+
+		/// <summary>
+		/// Line '{0}' does not contain security identifier.
+		/// </summary>
+		public const string LineNoSecurityIdKey = nameof(LineNoSecurityId);
+
+		/// <summary>
+		/// Line '{0}' does not contain security identifier.
+		/// </summary>
+		public static string LineNoSecurityId => GetString(LineNoSecurityIdKey);
 	}
 }

@@ -36,6 +36,11 @@ namespace StockSharp.Algo.Import
 		public IExtendedInfoStorageItem ExtendedInfoStorageItem { get; set; }
 
 		/// <summary>
+		/// Ignore securities without identifiers.
+		/// </summary>
+		public bool IgnoreNonIdSecurities { get; set; } = true;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="CsvParser"/>.
 		/// </summary>
 		/// <param name="dataType">Data type info.</param>
@@ -173,6 +178,13 @@ namespace StockSharp.Algo.Import
 
 						if (candleMsg != null)
 							candleMsg.State = CandleStates.Finished;
+					}
+					else if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
+					{
+						if (IgnoreNonIdSecurities)
+							continue;
+
+						throw new InvalidOperationException(LocalizedStrings.LineNoSecurityId.Put(line));
 					}
 
 					yield return instance;
