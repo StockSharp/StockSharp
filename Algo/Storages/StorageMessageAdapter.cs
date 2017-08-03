@@ -362,7 +362,7 @@ namespace StockSharp.Algo.Storages
 		private DateTimeOffset LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset from, DateTimeOffset to, Func<TMessage, DateTimeOffset> func) 
 			where TMessage : Message
 		{
-			var messages = storage.Load(from, to);
+			var messages = storage.Load(from.Date, to.Date.EndOfDay());
 			var lastTime = from;
 
 			foreach (var message in messages)
@@ -379,7 +379,7 @@ namespace StockSharp.Algo.Storages
 		private DateTimeOffset LoadMessages(SecurityId securityId, object arg, DateTimeOffset from, DateTimeOffset to, long transactionId)
 		{
 			var tickStorage = GetStorage<ExecutionMessage>(securityId, arg);
-			var tickDates = tickStorage.GetDates(from.DateTime, to.DateTime).ToArray();
+			var tickDates = tickStorage.GetDates(from.Date, to.Date.EndOfDay()).ToArray();
 
 			var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
 
