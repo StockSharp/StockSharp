@@ -1147,6 +1147,8 @@ P:StockSharp.Fix.Native.ExecutionReport.MaxFloor/summary;DocStr9139
 P:StockSharp.Fix.Native.ExecutionReport.MassStatusReqId/summary;DocStr9461
 P:StockSharp.Fix.Native.ExecutionReport.OrderCapacity/summary;DocStr9699
 P:StockSharp.Fix.Native.ExecutionReport.OrderRestrictions/summary;DocStr9700
+P:StockSharp.Fix.Native.ExecutionReport.ExtendedOrderStatus/summary;DocStr10019
+P:StockSharp.Fix.Native.ExecutionReport.ExtendedTradeStatus/summary;DocStr10020
 F:StockSharp.Fix.Native.ExecutionReport.Price/summary;DocStr8792
 F:StockSharp.Fix.Native.ExecutionReport.Symbol/summary;DocStr8793
 F:StockSharp.Fix.Native.ExecutionReport.SecurityExchange/summary;DocStr8794
@@ -1385,6 +1387,8 @@ F:StockSharp.Fix.Native.FixTags.NewPassword/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.UserStatus/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.UserStatusText/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.MDOtherValue/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.ExtendedOrderStatus/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.ExtendedTradeStatus/summary;DocStr8459
 T:StockSharp.Fix.Native.FixBase/summary;DocStr3186
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr93
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr1295
