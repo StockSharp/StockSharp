@@ -25,7 +25,8 @@ namespace StockSharp.Algo.Import
 		/// <param name="displayName">Display name.</param>
 		/// <param name="description">Description.</param>
 		/// <param name="type">Field type.</param>
-		protected FieldMapping(string name, string displayName, string description, Type type)
+		/// <param name="isExtended">Is field extended.</param>
+		protected FieldMapping(string name, string displayName, string description, Type type, bool isExtended)
 		{
 			//if (settings == null)
 			//	throw new ArgumentNullException(nameof(settings));
@@ -47,6 +48,7 @@ namespace StockSharp.Algo.Import
 			DisplayName = displayName;
 			Description = description;
 			Type = type;
+			IsExtended = isExtended;
 			IsEnabled = true;
 
 			Values = new ObservableCollection<FieldMappingValue>();
@@ -64,6 +66,11 @@ namespace StockSharp.Algo.Import
 		/// Name.
 		/// </summary>
 		public string Name { get; private set; }
+
+		/// <summary>
+		/// Is field extended.
+		/// </summary>
+		public bool IsExtended { get; private set; }
 		
 		/// <summary>
 		/// Display name.
@@ -112,6 +119,7 @@ namespace StockSharp.Algo.Import
 		public void Load(SettingsStorage storage)
 		{
 			Name = storage.GetValue<string>(nameof(Name));
+			IsExtended = storage.GetValue<bool>(nameof(IsExtended));
 			//Number = storage.GetValue<int>(nameof(Number));
 			Values.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => PersistableHelper.Load<FieldMappingValue>(s)));
 			DefaultValue = storage.GetValue<string>(nameof(DefaultValue));
@@ -122,6 +130,7 @@ namespace StockSharp.Algo.Import
 		void IPersistable.Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Name), Name);
+			storage.SetValue(nameof(IsExtended), IsExtended);
 			//storage.SetValue(nameof(Number), Number);
 			storage.SetValue(nameof(Values), Values.Select(v => v.Save()).ToArray());
 			storage.SetValue(nameof(DefaultValue), DefaultValue);
@@ -259,8 +268,9 @@ namespace StockSharp.Algo.Import
 		/// <param name="displayName">Display name.</param>
 		/// <param name="description">Description.</param>
 		/// <param name="apply">Apply field value action.</param>
-		public FieldMapping(string name, string displayName, string description, Action<TInstance, TValue> apply)
-			: base(name, displayName, description, typeof(TValue))
+		/// <param name="isExtended">Is field extended.</param>
+		public FieldMapping(string name, string displayName, string description, Action<TInstance, TValue> apply, bool isExtended = false)
+			: base(name, displayName, description, typeof(TValue), isExtended)
 		{
 			if (apply == null)
 				throw new ArgumentNullException(nameof(apply));

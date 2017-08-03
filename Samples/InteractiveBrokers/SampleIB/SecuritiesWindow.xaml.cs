@@ -238,7 +238,7 @@ namespace SampleIB
 						Title = security.Id + LocalizedStrings.Str2973
 					};
 					_realTimeCandles.Add(series, wnd);
-					Trader.SubscribeCandles(series, DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
+					Trader.SubscribeCandles(series);
 					wnd.Show();
 
 					RealTimeCandles.IsChecked = true;

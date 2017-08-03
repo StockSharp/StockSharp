@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Import
 		{
 			return storage
 				.Fields
-				.Select(t => (FieldMapping)new FieldMapping<SecurityMessage, object>($"{nameof(SecurityMessage.ExtensionInfo)}[{t.Item1}]", t.Item1, string.Empty, (s, v) => s.ExtensionInfo[t.Item1] = v))
+				.Select(t => (FieldMapping)new FieldMapping<SecurityMessage, object>($"{nameof(SecurityMessage.ExtensionInfo)}[{t.Item1}]", t.Item1, string.Empty, (s, v) => s.ExtensionInfo[t.Item1] = v, true))
 				.ToArray();
 		}
 

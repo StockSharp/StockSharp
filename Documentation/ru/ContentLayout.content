@@ -398,6 +398,7 @@
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" title="Утилиты">
       <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Конвертер" />
       <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Экспорт (авто)" />
+      <Topic id="ec33258b-c0bb-4f2b-bef3-368e607a92a4" visible="True" title="Импорт (авто)" />
       <Topic id="f2b919bd-cb33-4cf1-818f-315c8f79b5ce" visible="True" title="Бэкап данных" />
     </Topic>
     <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" title="Аналитика">

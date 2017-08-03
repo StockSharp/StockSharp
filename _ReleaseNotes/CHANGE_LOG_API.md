@@ -32,6 +32,8 @@ StockSharp API Change log
 * (feature) Extended storages. Delete support.
 * (feature) Order.ExpiryDate. GTC mean only nullable value.
 * (feature) ExtendedInfoStorageSelectWindow -> ExtendedInfoStorageWindow. Provide manage extended storages.
+* (bug) FIX server. Fix crash while client's disconnecting.
+* (bug) QuikLua. Fix authorization http://stocksharp.ru/forum/8432/problema-pri-podklyuchenii-k-quik-(lua)/
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

@@ -183,6 +183,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\HydraTasksImport.aml" />
     <None Include="Topics\Designer_Security_mapping.aml" />
     <None Include="Topics\Designer_Add_Dll_Lib.aml" />
     <None Include="Topics\HydraSymbolMapping.aml" />
