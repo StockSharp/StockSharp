@@ -4388,6 +4388,16 @@
             Restrictions associated with an order. If more than one restriction is applicable to an order, this field can contain multiple instructions separated by space.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.ExtendedOrderStatus">
+      <summary>
+            Extended order status.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.ExtendedTradeStatus">
+      <summary>
+            Extended trade status.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Price">
       <summary>
             Price per unit of quantity (e.g. per share).
@@ -5377,6 +5387,14 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MDOtherValue">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ExtendedOrderStatus">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ExtendedTradeStatus">
       <summary>
       </summary>
     </member>

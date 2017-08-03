@@ -1,5 +1,10 @@
 StockSharp Designer Change log
 ========================
+###current:
+* (bug) Fix symbol mapping http://stocksharp.ru/forum/8433/problema-podklyucheniya-k-quik-lua-v-designer-versii-43252/
+* (bug) Double click on optimization iteration result.
+* (bug) Sample candles strategy restart fixes.
+
 ###v4.3.25.2:
 * (feature) ServerCredentials. Save password for auto logon only.
 * (feature) Finam. OriginSide support.

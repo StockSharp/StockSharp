@@ -1,9 +1,22 @@
 StockSharp Data (Hydra) Change log
 ========================
-###current:
+###v4.3.26:
 * (feature) Symbol mapping manager.
 * (feature) FAST protocol plugin.
 * (bug) BTCE fix.
+* (bug) Fix index creation http://stocksharp.ru/forum/8409/v-gidre-pri-raschete-indeksa-vydaetsya-soobshshenie-method-must-have-a-return-type/
+* (feature) Import data plugin.
+* (bug) Quick pane navigation fix.
+* (bug) Navigation pane layout fix.
+* (feature) Indicator values building.
+* (feature) Import position changes.
+* (bug) Import level1 fix.
+* (feature) Auto importing tool.
+* (bug) Database export connections fixes.
+* (feature) Erase data for positions and news.
+* (feature) CSV importing. Extended fields for securities.
+* (feature) Extended storages window. Fields info.
+* (bug) Fix MFD http://stocksharp.ru/posts/m/40528/
 
 ###v4.3.25.1:
 * (feature) CQG continuum.
