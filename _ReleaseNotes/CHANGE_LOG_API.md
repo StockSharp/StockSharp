@@ -34,6 +34,7 @@ StockSharp API Change log
 * (feature) ExtendedInfoStorageSelectWindow -> ExtendedInfoStorageWindow. Provide manage extended storages.
 * (bug) FIX server. Fix crash while client's disconnecting.
 * (bug) QuikLua. Fix authorization http://stocksharp.ru/forum/8432/problema-pri-podklyuchenii-k-quik-(lua)/
+* (feature) QuikLua. Market maker support.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
