@@ -1,9 +1,21 @@
 StockSharp Designer Change log
 ========================
 ###current:
+* (feature) Breakpoints. Extended conditions.
+* (feature) CSV storage. Performance boost.
 * (bug) Fix symbol mapping http://stocksharp.ru/forum/8433/problema-podklyucheniya-k-quik-lua-v-designer-versii-43252/
 * (bug) Double click on optimization iteration result.
 * (bug) Sample candles strategy restart fixes.
+* (feature) OrderGrid, ExecutionGrid, OrderWindow. Show IsMarketMaker property.
+* (feature) Extended storages. Delete support.
+* (feature) Security.Turnover.
+* (feature) SmartCOM 4.
+* (bug) FIX server. Fix crash while client's disconnecting.
+* (bug) QuikLua. Fix authorization http://stocksharp.ru/forum/8432/problema-pri-podklyuchenii-k-quik-(lua)/
+* (feature) QuikLua. Market maker support.
+* (bug) FAST fixes.
+* (bug) SpbEx fixes.
+* (feature) QuikLua. Index securities support (O H L C values).
 
 ###v4.3.25.2:
 * (feature) ServerCredentials. Save password for auto logon only.

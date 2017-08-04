@@ -35,6 +35,8 @@ StockSharp API Change log
 * (bug) FIX server. Fix crash while client's disconnecting.
 * (bug) QuikLua. Fix authorization http://stocksharp.ru/forum/8432/problema-pri-podklyuchenii-k-quik-(lua)/
 * (feature) QuikLua. Market maker support.
+* (feature) xNet. v3.3.3
+* (feature) QuikLua. Index securities support (O H L C values).
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

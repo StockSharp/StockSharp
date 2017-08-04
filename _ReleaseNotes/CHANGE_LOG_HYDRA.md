@@ -17,6 +17,9 @@ StockSharp Data (Hydra) Change log
 * (feature) CSV importing. Extended fields for securities.
 * (feature) Extended storages window. Fields info.
 * (bug) Fix MFD http://stocksharp.ru/posts/m/40528/
+* (bug) SpbEx fixes.
+* (feature) QuikLua. Index securities support (O H L C values).
+* (feature) Security.Turnover.
 
 ###v4.3.25.1:
 * (feature) CQG continuum.
