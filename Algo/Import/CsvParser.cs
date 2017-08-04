@@ -181,10 +181,10 @@ namespace StockSharp.Algo.Import
 					}
 					else if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
 					{
-						if (IgnoreNonIdSecurities)
-							continue;
+						if (!IgnoreNonIdSecurities)
+							this.AddErrorLog(LocalizedStrings.LineNoSecurityId.Put(line));
 
-						throw new InvalidOperationException(LocalizedStrings.LineNoSecurityId.Put(line));
+						continue;
 					}
 
 					yield return instance;

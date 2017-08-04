@@ -89,7 +89,10 @@
 						if (security != null)
 						{
 							if (!UpdateDuplicateSecurities)
-								throw new InvalidOperationException(LocalizedStrings.Str1453.Put(secMsg.SecurityId));
+							{
+								this.AddErrorLog(LocalizedStrings.Str1453.Put(secMsg.SecurityId));
+								continue;
+							}
 
 							security.Type = secMsg.SecurityType ?? secMsg.SecurityId.SecurityType;
 							security.CfiCode = secMsg.CfiCode;
