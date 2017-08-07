@@ -38,6 +38,7 @@ StockSharp API Change log
 * (feature) xNet. v3.3.3
 * (feature) QuikLua. Index securities support (O H L C values).
 * (feature) FinamHistorySource. Ticks origin side as optional.
+* (bug) BaseGridControl. Export fixes http://stocksharp.ru/posts/m/40578/
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
