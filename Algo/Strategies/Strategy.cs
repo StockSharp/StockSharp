@@ -1548,14 +1548,13 @@ namespace StockSharp.Algo.Strategies
 				}
 				else if (isChanging)
 				{
-					OnOrderChanged(order);
-
 					var pos = PositionManager.ProcessMessage(order.ToMessage());
+					StatisticManager.AddChangedOrder(order);
+
+					OnOrderChanged(order);
 
 					if (pos != null)
 						RaisePositionChanged();
-
-					StatisticManager.AddChangedOrder(order);
 				}
 			});
 		}
