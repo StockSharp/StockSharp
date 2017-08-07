@@ -1,5 +1,9 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.26.1:
+* (feature) Finam. Ticks origin side as optional.
+* (feature) Grids. Export fixes http://stocksharp.ru/posts/m/40578/
+
 ###v4.3.26:
 * (feature) Symbol mapping manager.
 * (feature) FAST protocol plugin.
