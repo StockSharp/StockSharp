@@ -14348,3 +14348,4 @@ DocStr10017;The storage was deleted;Хранилище было удалено
 DocStr10018;Is field extended;Расширенное ли поле
 DocStr10019;Extended order status;Расширенный статус заявки
 DocStr10020;Extended trade status;Расширенный статус сделки
+DocStr10021;Fill {0};Заполнять {0}

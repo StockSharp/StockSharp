@@ -37,6 +37,7 @@ StockSharp API Change log
 * (feature) QuikLua. Market maker support.
 * (feature) xNet. v3.3.3
 * (feature) QuikLua. Index securities support (O H L C values).
+* (feature) FinamHistorySource. Ticks origin side as optional.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

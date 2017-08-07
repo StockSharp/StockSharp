@@ -1204,13 +1204,14 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean)">
       <summary>
             Load historical ticks.
             </summary>
       <param name="security">The instrument for which you need to get all trades.</param>
       <param name="from">Begin period.</param>
       <param name="to">End period.</param>
+      <param name="includeOrigin">Fill <see cref="P:StockSharp.Messages.ExecutionMessage.OriginSide" />.</param>
       <returns>Historical ticks.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
