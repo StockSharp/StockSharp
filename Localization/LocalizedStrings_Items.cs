@@ -45886,5 +45886,15 @@ namespace StockSharp.Localization
 		/// Line '{0}' does not contain security identifier.
 		/// </summary>
 		public static string LineNoSecurityId => GetString(LineNoSecurityIdKey);
+
+		/// <summary>
+		/// QuantFEED
+		/// </summary>
+		public const string QuantFeedKey = nameof(QuantFeed);
+
+		/// <summary>
+		/// QuantFEED
+		/// </summary>
+		public static string QuantFeed => GetString(QuantFeedKey);
 	}
 }

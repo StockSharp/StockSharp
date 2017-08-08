@@ -16,6 +16,7 @@ StockSharp Designer Change log
 * (bug) FAST fixes.
 * (bug) SpbEx fixes.
 * (feature) QuikLua. Index securities support (O H L C values).
+* (feature) QuantFEED.
 
 ###v4.3.25.2:
 * (feature) ServerCredentials. Save password for auto logon only.

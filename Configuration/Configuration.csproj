@@ -91,6 +91,10 @@
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\QuantHouse\QuantHouse.csproj">
+      <Project>{E818D294-DBF6-4126-AF13-D83EF9740536}</Project>
+      <Name>QuantHouse</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SpbEx\SpbEx.csproj">
       <Project>{EF303E28-DCD1-4FA4-B10D-BF3506FDF9B8}</Project>
       <Name>SpbEx</Name>

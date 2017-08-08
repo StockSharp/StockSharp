@@ -167,6 +167,8 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\HydraSettingsQuantFeed.aml" />
+    <None Include="Topics\QuantFeed.aml" />
     <None Include="Topics\HydraTasksImport.aml" />
     <None Include="Topics\Designer_Security_mapping.aml" />
     <None Include="Topics\Designer_Add_Dll_Lib.aml" />

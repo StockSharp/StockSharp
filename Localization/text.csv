@@ -4621,6 +4621,7 @@ StorageAlreadyExist;Storage '{0}' already exist.;Хранилище '{0}' уже
 IgnoreNonIdSecurities;Ingore non id;Игнорировать без ИД
 IgnoreNonIdSecuritiesDesc;Ignore securities without identifiers.;Игнорировать инструменты без идентификатора.
 LineNoSecurityId;Line '{0}' does not contain security identifier.;Строка '{0}' не содержит идентификатор инструмента.
+QuantFeed;QuantFEED;QuantFEED
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14349,3 +14350,5 @@ DocStr10018;Is field extended;Расширенное ли поле
 DocStr10019;Extended order status;Расширенный статус заявки
 DocStr10020;Extended trade status;Расширенный статус сделки
 DocStr10021;Fill {0};Заполнять {0}
+DocStr10022;QuantFEED market-data message adapter;Маркет-дата адаптер сообщений для QuantFEED
+DocStr10023;The implementation of the interface {0} for interaction with QuantFEED;Реализация интерфейса {0} для подключения к сервису QuantFEED

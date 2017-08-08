@@ -55,6 +55,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Oanda;
 	using StockSharp.OpenECry;
 	using StockSharp.Plaza;
+	using StockSharp.QuantHouse;
 	using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Rithmic;
@@ -174,6 +175,7 @@ namespace StockSharp.Configuration
 			typeof(TwimeMessageAdapter),
 			typeof(SpbExMessageAdapter),
 			typeof(FxcmMessageAdapter),
+			typeof(QuantFeedMessageAdapter),
 		});
 
 		/// <summary>

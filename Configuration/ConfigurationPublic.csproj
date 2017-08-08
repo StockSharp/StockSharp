@@ -76,6 +76,9 @@
     <Reference Include="StockSharp.Plaza">
       <HintPath>..\References\StockSharp.Plaza.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.QuantHouse">
+      <HintPath>..\References\StockSharp.QuantHouse.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.SpbEx">
       <HintPath>..\References\StockSharp.SpbEx.dll</HintPath>
     </Reference>

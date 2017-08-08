@@ -39,6 +39,8 @@ StockSharp API Change log
 * (feature) QuikLua. Index securities support (O H L C values).
 * (feature) FinamHistorySource. Ticks origin side as optional.
 * (bug) BaseGridControl. Export fixes http://stocksharp.ru/posts/m/40578/
+* (feature) Strategy.OrderChanged. Invoke after position calculation.
+* (feature) QuantFEED.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
