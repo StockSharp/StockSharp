@@ -157,7 +157,6 @@ namespace StockSharp.Algo.Storages.Csv
 				TradeStatus = reader.ReadNullableInt(),
 				OrderStatus = reader.ReadNullableLong(),
 				Latency = reader.ReadNullableLong().To<TimeSpan?>(),
-				IsMarketMaker = reader.ReadNullableBool(),
 			};
 
 			var error = reader.ReadString();
@@ -175,6 +174,7 @@ namespace StockSharp.Algo.Storages.Csv
 				reader.Skip(2);
 
 			msg.LocalTime = reader.ReadTime(metaInfo.Date);
+			msg.IsMarketMaker = reader.ReadNullableBool();
 
 			return msg;
 		}
