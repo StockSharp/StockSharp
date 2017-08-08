@@ -1,0 +1,43 @@
+<Window x:Class="SampleQuantFeed.SecuritiesWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+	xmlns:sx="http://schemas.stocksharp.com/xaml"
+	Title="{x:Static loc:LocalizedStrings.Securities}" Height="415" Width="1081">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<sx:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
+
+		<Grid Grid.Row="1" HorizontalAlignment="Right">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<!--<Button x:Name="Find" Width="100" Click="FindClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
+			</Button>-->
+			<Button x:Name="Quotes" Grid.Column="1" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
+			<Button x:Name="Depth" Grid.Column="2" Width="100" IsEnabled="False" Click="DepthClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
+			</Button>
+			<Button x:Name="NewOrder" Grid.Column="3" Width="100" IsEnabled="False" Click="NewOrderClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
+			</Button>
+			<Button x:Name="NewStopOrder" Grid.Column="4" Width="120" IsEnabled="False" Click="NewStopOrderClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
+			</Button>
+			<!--<Button x:Name="Candles" Grid.Column="5" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
+			<ComboBox x:Name="CandlesPeriods" Grid.Column="6" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />-->
+		</Grid>
+   </Grid>
+</Window>
