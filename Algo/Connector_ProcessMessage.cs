@@ -721,7 +721,7 @@ namespace StockSharp.Algo
 		protected virtual void OnProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.Time && message.Type != MessageTypes.QuoteChange)
-				this.AddDebugLog("BP:{0}", message);
+				this.AddVerboseLog("BP:{0}", message);
 
 			ProcessTimeInterval(message);
 

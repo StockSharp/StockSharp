@@ -45896,5 +45896,15 @@ namespace StockSharp.Localization
 		/// QuantFEED
 		/// </summary>
 		public static string QuantFeed => GetString(QuantFeedKey);
+
+		/// <summary>
+		/// Verbose
+		/// </summary>
+		public const string VerboseKey = nameof(Verbose);
+
+		/// <summary>
+		/// Verbose
+		/// </summary>
+		public static string Verbose => GetString(VerboseKey);
 	}
 }

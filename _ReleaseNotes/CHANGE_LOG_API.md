@@ -41,6 +41,7 @@ StockSharp API Change log
 * (bug) BaseGridControl. Export fixes http://stocksharp.ru/posts/m/40578/
 * (feature) Strategy.OrderChanged. Invoke after position calculation.
 * (feature) QuantFEED.
+* (feature) LogLeves.Verbose.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

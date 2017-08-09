@@ -4622,6 +4622,7 @@ IgnoreNonIdSecurities;Ingore non id;Игнорировать без ИД
 IgnoreNonIdSecuritiesDesc;Ignore securities without identifiers.;Игнорировать инструменты без идентификатора.
 LineNoSecurityId;Line '{0}' does not contain security identifier.;Строка '{0}' не содержит идентификатор инструмента.
 QuantFeed;QuantFEED;QuantFEED
+Verbose;Verbose;Подробно
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -8502,7 +8503,7 @@ DocStr3971;Logger sending out messages to {0};Логгер, отсылающий
 DocStr3972;The function returns the text for {0};Функция, возвращающая текст для {0}
 DocStr3973;To record a warning to the log;Записать предупреждение в лог
 DocStr3974;To record an error to the log;Записать ошибку в лог
-DocStr3975;To record a debugging to the log;Записать отладку в лог
+DocStr3975;To record a debug message to the log;Записать отладку в лог
 DocStr3976;To record an error to the {0};Записать ошибку в {0}
 DocStr3977;Get {0} for the source. If the value is equal to {1}, then parental source level is taken;Получить {0} для источника. Если значение равно {1}, то берется уровень родительского источника
 DocStr3978;The log source;Источник логов
@@ -14352,3 +14353,6 @@ DocStr10020;Extended trade status;Расширенный статус сделк
 DocStr10021;Fill {0};Заполнять {0}
 DocStr10022;QuantFEED market-data message adapter;Маркет-дата адаптер сообщений для QuantFEED
 DocStr10023;The implementation of the interface {0} for interaction with QuantFEED;Реализация интерфейса {0} для подключения к сервису QuantFEED
+DocStr10024;To send a verbose message;Отправить детальное сообщение
+DocStr10025;To record a verbose message to the log;Записать детальное сообщение в лог
+DocStr10027;Verbose message, debug message, information, warnings and errors;Детальное сообщение, отладочное, информационное, предупреждение и ошибки

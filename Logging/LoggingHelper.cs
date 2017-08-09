@@ -83,7 +83,18 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// To record a debugging to the log.
+		/// To record a verbose message to the log.
+		/// </summary>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+		public static void AddVerboseLog(this ILogReceiver receiver, string message, params object[] args)
+		{
+			receiver.AddMessage(LogLevels.Verbose, message, args);
+		}
+
+		/// <summary>
+		/// To record a debug message to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
 		/// <param name="message">Text message.</param>

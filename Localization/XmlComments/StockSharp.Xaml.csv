@@ -521,6 +521,7 @@ P:StockSharp.Xaml.LogMessageCollection.InfoCount/summary;DocStr8218
 P:StockSharp.Xaml.LogMessageCollection.WarningCount/summary;DocStr8218
 P:StockSharp.Xaml.LogMessageCollection.ErrorCount/summary;DocStr8218
 P:StockSharp.Xaml.LogMessageCollection.DebugCount/summary;DocStr8218
+P:StockSharp.Xaml.LogMessageCollection.VerboseCount/summary;DocStr8218
 M:StockSharp.Xaml.LogMessageCollection.Add(StockSharp.Logging.LogMessage)/summary;DocStr8215
 M:StockSharp.Xaml.LogMessageCollection.Add(StockSharp.Logging.LogMessage)/param/item;DocStr8216
 M:StockSharp.Xaml.LogMessageCollection.AddRange(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})/summary;DocStr1352
@@ -971,6 +972,8 @@ F:StockSharp.Xaml.LogControl.ShowInfoProperty/summary;DocStr29
 P:StockSharp.Xaml.LogControl.ShowInfo/summary;DocStr8353
 F:StockSharp.Xaml.LogControl.ShowDebugProperty/summary;DocStr29
 P:StockSharp.Xaml.LogControl.ShowDebug/summary;DocStr8353
+F:StockSharp.Xaml.LogControl.ShowVerboseProperty/summary;DocStr29
+P:StockSharp.Xaml.LogControl.ShowVerbose/summary;DocStr8353
 F:StockSharp.Xaml.LogControl.MessagesProperty/summary;DocStr29
 P:StockSharp.Xaml.LogControl.Messages/summary;DocStr8354
 F:StockSharp.Xaml.LogControl.ClearCommandProperty/summary;DocStr29

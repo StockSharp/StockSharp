@@ -2422,6 +2422,11 @@
             Number of messages of type <see cref="F:StockSharp.Logging.LogLevels.Debug" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.LogMessageCollection.VerboseCount">
+      <summary>
+            Number of messages of type <see cref="F:StockSharp.Logging.LogLevels.Verbose" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.LogMessageCollection.Add(StockSharp.Logging.LogMessage)">
       <summary>
             To add item.
@@ -4382,6 +4387,16 @@
     <member name="P:StockSharp.Xaml.LogControl.ShowDebug">
       <summary>
             To show messages of type <see cref="F:StockSharp.Logging.LogLevels.Debug" />. Enabled by default.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.LogControl.ShowVerboseProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.LogControl.ShowVerbose" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.LogControl.ShowVerbose">
+      <summary>
+            To show messages of type <see cref="F:StockSharp.Logging.LogLevels.Verbose" />. Enabled by default.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.LogControl.MessagesProperty">

@@ -33,6 +33,13 @@ namespace StockSharp.Logging
 		Inherit,
 
 		/// <summary>
+		/// Verbose message, debug message, information, warnings and errors.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.VerboseKey)]
+		Verbose,
+
+		/// <summary>
 		/// Debug message, information, warnings and errors.
 		/// </summary>
 		[EnumMember]

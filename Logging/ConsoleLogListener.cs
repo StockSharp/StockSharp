@@ -52,6 +52,7 @@ namespace StockSharp.Logging
 
 			switch (message.Level)
 			{
+				case LogLevels.Verbose:
 				case LogLevels.Debug:
 				case LogLevels.Info:
 					color = ConsoleHelper.Info;
