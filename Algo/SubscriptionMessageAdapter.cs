@@ -238,6 +238,7 @@ namespace StockSharp.Algo
 		{
 			var sendIn = false;
 			MarketDataMessage sendOutMsg = null;
+			RefPair<MarketDataMessage, int> pair;
 
 			lock (_sync)
 			{
@@ -249,7 +250,7 @@ namespace StockSharp.Algo
 					{
 						var subscriber = message.NewsId ?? string.Empty;
 
-						var pair = _newsSubscribers.TryGetValue(subscriber) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
+						pair = _newsSubscribers.TryGetValue(subscriber) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
 						var subscribersCount = pair.Second;
 
 						if (isSubscribe)
@@ -300,7 +301,7 @@ namespace StockSharp.Algo
 					{
 						var key = Tuple.Create(message.DataType, message.SecurityId, message.Arg);
 
-						var pair = _candleSubscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
+						pair = _candleSubscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
 						var subscribersCount = pair.Second;
 
 						if (isSubscribe)
@@ -348,7 +349,7 @@ namespace StockSharp.Algo
 					{
 						var key = message.CreateKey();
 
-						var pair = _subscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
+						pair = _subscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
 						var subscribersCount = pair.Second;
 
 						if (isSubscribe)
@@ -395,7 +396,12 @@ namespace StockSharp.Algo
 			}
 
 			if (sendIn)
+			{
+				if (!message.IsSubscribe && message.OriginalTransactionId == 0)
+					message.OriginalTransactionId = pair.First.TransactionId;
+
 				base.SendInMessage(message);
+			}
 
 			if (sendOutMsg != null)
 				RaiseNewOutMessage(sendOutMsg);

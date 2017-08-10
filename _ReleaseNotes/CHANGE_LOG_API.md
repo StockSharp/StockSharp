@@ -44,6 +44,7 @@ StockSharp API Change log
 * (feature) LogLeves.Verbose.
 * (feature) Order.DerivedOrder is deprecated.
 * (feature) BufferMessageAdapter. Enabled option.
+* (feature) SubscriptionMessageAdapter. Send original subscription id.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
