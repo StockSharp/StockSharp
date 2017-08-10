@@ -136,7 +136,7 @@ namespace StockSharp.Algo
 			foreach (var order in ownOrders)
 			{
 				if (!dict.SafeAdd(Tuple.Create(order.Direction, order.Price)).Add(order))
-					throw new InvalidOperationException();
+					throw new InvalidOperationException(LocalizedStrings.Str415Params.Put(order));
 			}
 
 			var retVal = new List<Quote>(quotes.Select(q => q.Clone()));
@@ -978,8 +978,26 @@ namespace StockSharp.Algo
 		/// <returns>Changes.</returns>
 		public static IEnumerable<QuoteChange> GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side)
 		{
-			var mapTo = to.ToDictionary(q => q.Price);
-			var mapFrom = from.ToDictionary(q => q.Price);
+			if (from == null)
+				throw new ArgumentNullException(nameof(from));
+
+			if (to == null)
+				throw new ArgumentNullException(nameof(to));
+
+			var mapFrom = new Dictionary<decimal, QuoteChange>();
+			var mapTo = new Dictionary<decimal, QuoteChange>();
+
+			foreach (var change in from)
+			{
+				if (!mapFrom.TryAdd(change.Price, change))
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(from));
+			}
+
+			foreach (var change in to)
+			{
+				if (!mapTo.TryAdd(change.Price, change))
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(to));
+			}
 
 			foreach (var pair in mapFrom)
 			{
@@ -996,7 +1014,7 @@ namespace StockSharp.Algo
 				else
 				{
 					var empty = quoteFrom.Clone();
-					empty.Volume = 0;				// была а теперь нет
+					empty.Volume = 0;				// была, а теперь нет
 					mapTo[price] = empty;
 				}
 			}
