@@ -469,7 +469,6 @@ M:StockSharp.Xaml.Diagram.DiagramSocket.ToString/summary;DocStr49
 M:StockSharp.Xaml.Diagram.DiagramSocket.ToString/returns;DocStr50
 T:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint/summary;DocStr10001
 P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Socket/summary;DocStr9716
-P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.IsConditional/summary;DocStr10004
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr93
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor(StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;DocStr9716
 M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.NeedBreak/summary;DocStr10007

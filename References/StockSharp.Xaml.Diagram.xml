@@ -1627,11 +1627,6 @@
             Diagram socket.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.IsConditional">
-      <summary>
-            Is conditional.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.#ctor(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
             Initialize <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint" />.

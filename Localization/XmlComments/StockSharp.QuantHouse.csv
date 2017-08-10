@@ -2,9 +2,9 @@ T:StockSharp.QuantHouse.QuantFeedMessageAdapter/summary;DocStr10022
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Address/summary;ServerAddress
 P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Login/summary;Login
 P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Password/summary;Password
-P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Address/summary;ServerAddress
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

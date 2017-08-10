@@ -18,6 +18,11 @@
     <member name="M:StockSharp.QuantHouse.QuantFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Address">
+      <summary>
+            Server address.
+            </summary>
+    </member>
     <member name="P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Login">
       <summary>
             Login.
@@ -26,11 +31,6 @@
     <member name="P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Password">
       <summary>
             Password.
-            </summary>
-    </member>
-    <member name="P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Address">
-      <summary>
-            Server address.
             </summary>
     </member>
     <member name="M:StockSharp.QuantHouse.QuantFeedMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
