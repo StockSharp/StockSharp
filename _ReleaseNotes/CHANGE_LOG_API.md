@@ -43,6 +43,7 @@ StockSharp API Change log
 * (feature) QuantFEED.
 * (feature) LogLeves.Verbose.
 * (feature) Order.DerivedOrder is deprecated.
+* (feature) BufferMessageAdapter. Enabled option.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

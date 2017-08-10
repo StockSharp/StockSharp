@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Storages
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using MoreLinq;
 
@@ -270,25 +271,30 @@ namespace StockSharp.Algo.Storages
 
 			if (msg.IsSubscribe)
 			{
-				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
-				var to = msg.To ?? DateTimeOffset.Now;
-				var transactionId = msg.TransactionId;
+				if (Enabled)
+				{
+					var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
+					var to = msg.To ?? DateTimeOffset.Now;
+					var transactionId = msg.TransactionId;
 
-				RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId, IsHistory = true });
+					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
-				var lastTime = LoadMessages(msg, from, to, transactionId);
+					var lastTime = LoadMessages(msg, from, to, transactionId);
 
-				RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
+					RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
-				if (msg.IsHistory)
-					return;
+					if (msg.IsHistory)
+						return;
 
-				Subscribe(msg.SecurityId, CreateDataType(msg));
+					Subscribe(msg.SecurityId, CreateDataType(msg));
 
-				var clone = (MarketDataMessage)msg.Clone();
-				clone.From = lastTime;
+					var clone = (MarketDataMessage)msg.Clone();
+					clone.From = lastTime;
 
-				base.SendInMessage(clone);
+					base.SendInMessage(clone);	
+				}
+				else
+					base.SendInMessage(msg);
 			}
 			else
 			{
@@ -655,6 +661,32 @@ namespace StockSharp.Algo.Storages
 		{
 			msg.OriginalTransactionId = transactionId;
 			return msg.ServerTime;
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			storage.SetValue(nameof(Drive), Drive.SaveEntire(false));
+			storage.SetValue(nameof(Format), Format);
+			storage.SetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
+			storage.SetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
+			storage.SetValue(nameof(DaysLoad), DaysLoad);
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			if (storage.ContainsKey(nameof(Drive)))
+				Drive = storage.GetValue<SettingsStorage>(nameof(Drive)).LoadEntire<IMarketDataDrive>();
+
+			Format = storage.GetValue(nameof(Format), Format);
+			UseCandlesInsteadTrades = storage.GetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
+			CandlesTimeFrame = storage.GetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
+			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
 		}
 
 		/// <summary>

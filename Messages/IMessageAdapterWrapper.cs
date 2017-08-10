@@ -125,12 +125,20 @@ namespace StockSharp.Messages
 		/// </summary>
 		public virtual event Action<Message> NewOutMessage;
 
-		void IPersistable.Load(SettingsStorage storage)
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public virtual void Load(SettingsStorage storage)
 		{
 			InnerAdapter.Load(storage);
 		}
 
-		void IPersistable.Save(SettingsStorage storage)
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public virtual void Save(SettingsStorage storage)
 		{
 			InnerAdapter.Save(storage);
 		}

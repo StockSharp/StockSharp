@@ -21,6 +21,7 @@ namespace StockSharp.Algo.Storages
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -136,6 +137,11 @@ namespace StockSharp.Algo.Storages
 		public bool FilterSubscription { get; set; }
 
 		/// <summary>
+		/// Enable storage.
+		/// </summary>
+		public bool Enabled { get; set; } = true;
+
+		/// <summary>
 		/// Update filter with new subscription.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
@@ -237,8 +243,17 @@ namespace StockSharp.Algo.Storages
 			return _newsBuffer.SyncGet(c => c.CopyAndClear());
 		}
 
-		private bool CanStore(SecurityId securityId, Type messageType, object arg)
+		private bool CanStore<TMessage>(SecurityId securityId, object arg = null)
+			where TMessage : Message
 		{
+			return CanStore(securityId, typeof(TMessage), arg);
+		}
+
+		private bool CanStore(SecurityId securityId, Type messageType, object arg = null)
+		{
+			if (!Enabled)
+				return false;
+
 			return !FilterSubscription || _subscriptions.Contains(Tuple.Create(securityId, DataType.Create(messageType, arg)));
 		}
 
@@ -268,7 +283,7 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
 
-					if (!CanStore(regMsg.SecurityId, typeof(ExecutionMessage), ExecutionTypes.Transaction))
+					if (!CanStore<ExecutionMessage>(regMsg.SecurityId, ExecutionTypes.Transaction))
 						break;
 
 					_transactionsBuffer.Add(regMsg.SecurityId, new ExecutionMessage
@@ -300,7 +315,7 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.OrderCancel:
 					var cancelMsg = (OrderCancelMessage)message;
 
-					if (!CanStore(cancelMsg.SecurityId, typeof(ExecutionMessage), ExecutionTypes.Transaction))
+					if (!CanStore<ExecutionMessage>(cancelMsg.SecurityId, ExecutionTypes.Transaction))
 						break;
 
 					_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
@@ -334,7 +349,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var level1Msg = (Level1ChangeMessage)message.Clone();
 
-					if (CanStore(level1Msg.SecurityId, typeof(Level1ChangeMessage), null))
+					if (CanStore<Level1ChangeMessage>(level1Msg.SecurityId))
 						_level1Buffer.Add(level1Msg.SecurityId, level1Msg);
 
 					break;
@@ -343,7 +358,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var quotesMsg = (QuoteChangeMessage)message.Clone();
 
-					if (CanStore(quotesMsg.SecurityId, typeof(QuoteChangeMessage), null))
+					if (CanStore<QuoteChangeMessage>(quotesMsg.SecurityId))
 						_orderBooksBuffer.Add(quotesMsg.SecurityId, quotesMsg);
 
 					break;
@@ -380,7 +395,7 @@ namespace StockSharp.Algo.Storages
 							throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(execType));
 					}
 
-					if (CanStore(secId, typeof(ExecutionMessage), execType))
+					if (CanStore<ExecutionMessage>(secId, execType))
 						buffer.Add(secId, (ExecutionMessage)message.Clone());
 
 					break;
@@ -401,7 +416,7 @@ namespace StockSharp.Algo.Storages
 				}
 				case MessageTypes.News:
 				{
-					if (CanStore(default(SecurityId), typeof(NewsMessage), null))
+					if (CanStore<NewsMessage>(default(SecurityId)))
 						_newsBuffer.Add((NewsMessage)message.Clone());
 
 					break;
@@ -413,7 +428,11 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.PositionChange:
 				{
 					var posMsg = (PositionChangeMessage)message;
-					_positionChangesBuffer.Add(posMsg.SecurityId, (PositionChangeMessage)posMsg.Clone());
+					var secId = posMsg.SecurityId;
+
+					if (CanStore<PositionChangeMessage>(secId))
+						_positionChangesBuffer.Add(secId, (PositionChangeMessage)posMsg.Clone());
+
 					break;
 				}
 				case MessageTypes.PortfolioChange:
@@ -422,6 +441,24 @@ namespace StockSharp.Algo.Storages
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			storage.SetValue(nameof(Enabled), Enabled);
+			storage.SetValue(nameof(FilterSubscription), FilterSubscription);
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			Enabled = storage.GetValue(nameof(Enabled), Enabled);
+			FilterSubscription = storage.GetValue(nameof(FilterSubscription), FilterSubscription);
 		}
 
 		/// <summary>
