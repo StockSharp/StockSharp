@@ -183,24 +183,24 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string OrderBoardId { get; set; }
 
-		/// <summary>
-		/// Derived order ID (e.g., conditional order generated a real exchange order).
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.DerivedKey)]
-		[DescriptionLoc(LocalizedStrings.DerivedOrderIdKey)]
-		[MainCategory]
-		[Nullable]
-		public long? DerivedOrderId { get; set; }
+		///// <summary>
+		///// Derived order ID (e.g., conditional order generated a real exchange order).
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.DerivedKey)]
+		//[DescriptionLoc(LocalizedStrings.DerivedOrderIdKey)]
+		//[MainCategory]
+		//[Nullable]
+		//public long? DerivedOrderId { get; set; }
 
-		/// <summary>
-		/// Derived order ID (e.g., conditional order generated a real exchange order).
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.DerivedStringKey)]
-		[DescriptionLoc(LocalizedStrings.DerivedStringDescKey)]
-		[MainCategory]
-		public string DerivedOrderStringId { get; set; }
+		///// <summary>
+		///// Derived order ID (e.g., conditional order generated a real exchange order).
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.DerivedStringKey)]
+		//[DescriptionLoc(LocalizedStrings.DerivedStringDescKey)]
+		//[MainCategory]
+		//public string DerivedOrderStringId { get; set; }
 
 		/// <summary>
 		/// Is the message contains order info.
@@ -584,8 +584,8 @@ namespace StockSharp.Messages
 				Slippage = Slippage,
 				UserOrderId = UserOrderId,
 
-				DerivedOrderId = DerivedOrderId,
-				DerivedOrderStringId = DerivedOrderStringId,
+				//DerivedOrderId = DerivedOrderId,
+				//DerivedOrderStringId = DerivedOrderStringId,
 
 				PnL = PnL,
 				Position = Position,

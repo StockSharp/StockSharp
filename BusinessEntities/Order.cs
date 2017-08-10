@@ -459,12 +459,14 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Exchange order that was created by the stop-order when the condition is activated (<see langword="null" /> if a stop condition has not been activated).
 		/// </summary>
-		[DataMember]
-		[InnerSchema]
+		//[DataMember]
+		//[InnerSchema]
 		[Ignore]
+		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str532Key)]
 		[DescriptionLoc(LocalizedStrings.Str533Key)]
 		[CategoryLoc(LocalizedStrings.Str156Key)]
+		[Obsolete("No longer used.")]
 		public Order DerivedOrder
 		{
 			get => _derivedOrder;

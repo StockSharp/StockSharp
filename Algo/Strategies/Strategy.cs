@@ -1976,23 +1976,23 @@ namespace StockSharp.Algo.Strategies
 			{
 				OnStopOrderChanged(order);
 
-				if (order.DerivedOrder == null)
-					continue;
+				//if (order.DerivedOrder == null)
+				//	continue;
 
-				lock (_ordersInfo.SyncRoot)
-				{
-					var derivedOrder = order.DerivedOrder;
+				//lock (_ordersInfo.SyncRoot)
+				//{
+				//	var derivedOrder = order.DerivedOrder;
 
-					if (_ordersInfo.ContainsKey(derivedOrder))
-						continue;
+				//	if (_ordersInfo.ContainsKey(derivedOrder))
+				//		continue;
 
-					AssignOrderStrategyId(derivedOrder);
-					_ordersInfo.Add(derivedOrder, new OrderInfo { IsOwn = true });
-					ProcessOrder(derivedOrder);
+				//	AssignOrderStrategyId(derivedOrder);
+				//	_ordersInfo.Add(derivedOrder, new OrderInfo { IsOwn = true });
+				//	ProcessOrder(derivedOrder);
 
-					//заявка могла придти позже сделок по ней
-					SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder).ForEach(OnConnectorNewMyTrade);
-				}
+				//	//заявка могла придти позже сделок по ней
+				//	SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder).ForEach(OnConnectorNewMyTrade);
+				//}
 			}
 		}
 

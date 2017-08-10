@@ -279,7 +279,7 @@ namespace StockSharp.Algo
 
 			private void OnNewMyTrade(MyTrade trade)
 			{
-				if (trade.Order != Order && (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder))
+				if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
 					return;
 
 				_receivedVolume += trade.Trade.Volume;
@@ -344,7 +344,7 @@ namespace StockSharp.Algo
 
 			private void OnNewMyTrade(MyTrade trade)
 			{
-				if (trade.Order != Order && (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder))
+				if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
 					return;
 
 				_receivedVolume += trade.Trade.Volume;

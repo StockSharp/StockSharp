@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("transactionId", item.TransactionId);
 						writer.WriteAttribute("originalTransactionId", item.OriginalTransactionId);
 						writer.WriteAttribute("orderId", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
-						writer.WriteAttribute("derivedOrderId", item.DerivedOrderId == null ? item.DerivedOrderStringId : item.DerivedOrderId.To<string>());
+						//writer.WriteAttribute("derivedOrderId", item.DerivedOrderId == null ? item.DerivedOrderStringId : item.DerivedOrderId.To<string>());
 						writer.WriteAttribute("orderPrice", item.OrderPrice);
 						writer.WriteAttribute("orderVolume", item.OrderVolume);
 						writer.WriteAttribute("orderType", item.OrderType);

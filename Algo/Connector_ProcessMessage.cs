@@ -1626,15 +1626,15 @@ namespace StockSharp.Algo
 					var isNew = tuple.Item2;
 					var isChanged = tuple.Item3;
 
-					if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
-					{
-						var derivedOrder = _entityCache.GetOrder(order.Security, 0L, message.DerivedOrderId ?? 0, message.DerivedOrderStringId);
+					//if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
+					//{
+					//	var derivedOrder = _entityCache.GetOrder(order.Security, 0L, message.DerivedOrderId ?? 0, message.DerivedOrderStringId);
 
-						if (derivedOrder == null)
-							_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o1) => s.DerivedOrder = o1));
-						else
-							order.DerivedOrder = derivedOrder;
-					}
+					//	if (derivedOrder == null)
+					//		_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o1) => s.DerivedOrder = o1));
+					//	else
+					//		order.DerivedOrder = derivedOrder;
+					//}
 
 					if (isNew)
 					{
@@ -1663,7 +1663,7 @@ namespace StockSharp.Algo
 					if (!order.StringId.IsEmpty())
 						ProcessMyTrades(order, order.StringId, _nonAssociatedByStringIdMyTrades);
 
-					ProcessConditionOrders(order);
+					//ProcessConditionOrders(order);
 				}
 			}
 			else
@@ -1710,28 +1710,28 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessConditionOrders(Order order)
-		{
-			var changedStopOrders = new List<Order>();
+		//private void ProcessConditionOrders(Order order)
+		//{
+		//	var changedStopOrders = new List<Order>();
 
-			var key = Tuple.Create(order.Id, order.StringId);
+		//	var key = Tuple.Create(order.Id, order.StringId);
 
-			var collection = _orderStopOrderAssociations.TryGetValue(key);
+		//	var collection = _orderStopOrderAssociations.TryGetValue(key);
 
-			if (collection == null)
-				return;
+		//	if (collection == null)
+		//		return;
 
-			foreach (var pair in collection)
-			{
-				pair.Second(pair.First, order);
-				changedStopOrders.TryAdd(pair.First);
-			}
+		//	foreach (var pair in collection)
+		//	{
+		//		pair.Second(pair.First, order);
+		//		changedStopOrders.TryAdd(pair.First);
+		//	}
 
-			_orderStopOrderAssociations.Remove(key);
+		//	_orderStopOrderAssociations.Remove(key);
 
-			if (changedStopOrders.Count > 0)
-				RaiseStopOrdersChanged(changedStopOrders);
-		}
+		//	if (changedStopOrders.Count > 0)
+		//		RaiseStopOrdersChanged(changedStopOrders);
+		//}
 
 		private void ProcessMyTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 		{

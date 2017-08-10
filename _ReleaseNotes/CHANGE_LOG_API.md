@@ -42,6 +42,7 @@ StockSharp API Change log
 * (feature) Strategy.OrderChanged. Invoke after position calculation.
 * (feature) QuantFEED.
 * (feature) LogLeves.Verbose.
+* (feature) Order.DerivedOrder is deprecated.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.
