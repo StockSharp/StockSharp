@@ -210,6 +210,8 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
 
+		bool IMessageAdapter.IsSupportSubscriptionBySecurity => InnerAdapter.IsSupportSubscriptionBySecurity;
+
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
 		string IMessageAdapter.AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;

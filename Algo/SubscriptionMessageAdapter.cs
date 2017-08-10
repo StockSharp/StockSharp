@@ -239,6 +239,7 @@ namespace StockSharp.Algo
 			var sendIn = false;
 			MarketDataMessage sendOutMsg = null;
 			RefPair<MarketDataMessage, int> pair;
+			var secIdKey = InnerAdapter.IsSupportSubscriptionBySecurity ? message.SecurityId : default(SecurityId);
 
 			lock (_sync)
 			{
@@ -299,7 +300,7 @@ namespace StockSharp.Algo
 					case MarketDataTypes.CandleTick:
 					case MarketDataTypes.CandleVolume:
 					{
-						var key = Tuple.Create(message.DataType, message.SecurityId, message.Arg);
+						var key = Tuple.Create(message.DataType, secIdKey, message.Arg);
 
 						pair = _candleSubscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
 						var subscribersCount = pair.Second;
@@ -347,7 +348,7 @@ namespace StockSharp.Algo
 					}
 					default:
 					{
-						var key = message.CreateKey();
+						var key = message.CreateKey(secIdKey);
 
 						pair = _subscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
 						var subscribersCount = pair.Second;

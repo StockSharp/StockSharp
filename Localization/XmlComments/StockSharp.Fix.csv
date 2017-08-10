@@ -12,6 +12,7 @@ M:StockSharp.Fix.Dialects.BaseFastDialect.Open/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Close/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSubscriptionBySecurity/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.LoadSettingsFromFile(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr466
@@ -133,6 +134,7 @@ P:StockSharp.Fix.Dialects.IFastDialect.IsNativeIdentifiersPersistable/summary;Do
 P:StockSharp.Fix.Dialects.IFastDialect.EnableSuspend/summary;SuspendDesc
 P:StockSharp.Fix.Dialects.IFastDialect.Login/summary;Login
 P:StockSharp.Fix.Dialects.IFastDialect.Password/summary;Password
+P:StockSharp.Fix.Dialects.IFastDialect.IsSupportSubscriptionBySecurity/summary;DocStr10029
 M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})/summary;DocStr9962
 M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})/param/dumpFiles;DocStr9963
 M:StockSharp.Fix.Dialects.IFastDialect.LoadSettingsFromFile(System.String)/summary;DocStr9950
@@ -188,10 +190,11 @@ M:StockSharp.Fix.FastFeedGroup.ToString/inheritdoc;DocStr8459
 T:StockSharp.Fix.FastMessageAdapter/summary;DocStr9955
 M:StockSharp.Fix.FastMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fix.FastMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.Fix.FastMessageAdapter.IsNativeIdentifiers/summary;DocStr9381
-P:StockSharp.Fix.FastMessageAdapter.IsNativeIdentifiersPersistable/summary;DocStr9388
-P:StockSharp.Fix.FastMessageAdapter.StorageName/summary;DocStr9382
-P:StockSharp.Fix.FastMessageAdapter.SecurityExtendedFields/summary;DocStr9383
+P:StockSharp.Fix.FastMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
+P:StockSharp.Fix.FastMessageAdapter.IsNativeIdentifiersPersistable/inheritdoc;DocStr8459
+P:StockSharp.Fix.FastMessageAdapter.StorageName/inheritdoc;DocStr8459
+P:StockSharp.Fix.FastMessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
+P:StockSharp.Fix.FastMessageAdapter.IsSupportSubscriptionBySecurity/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/summary;DocStr9956
 M:StockSharp.Fix.FastMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/param/dialect;DocStr9957

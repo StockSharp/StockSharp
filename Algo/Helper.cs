@@ -222,12 +222,12 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public static Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?> CreateKey(this MarketDataMessage message)
+		public static Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?> CreateKey(this MarketDataMessage message, SecurityId? securityId = null)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return Tuple.Create(message.DataType, message.SecurityId, message.Arg, message.From, message.To, message.Count, message.MaxDepth);
+			return Tuple.Create(message.DataType, securityId ?? message.SecurityId, message.Arg, message.From, message.To, message.Count, message.MaxDepth);
 		}
 	}
 }

@@ -170,6 +170,9 @@
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.PortfolioLookupRequired">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsSupportSubscriptionBySecurity">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.SpbEx.SpbExMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>

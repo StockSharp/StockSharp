@@ -115,6 +115,11 @@ namespace StockSharp.Messages
 		bool IsSupportSubscriptions { get; }
 
 		/// <summary>
+		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
+		/// </summary>
+		bool IsSupportSubscriptionBySecurity { get; }
+
+		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
 		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }

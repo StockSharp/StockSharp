@@ -45,6 +45,7 @@ StockSharp API Change log
 * (feature) Order.DerivedOrder is deprecated.
 * (feature) BufferMessageAdapter. Enabled option.
 * (feature) SubscriptionMessageAdapter. Send original subscription id.
+* (feature) SubscriptionMessageAdapter. Support non filterable subscriptions.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

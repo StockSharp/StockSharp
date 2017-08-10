@@ -1551,6 +1551,7 @@ M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Get/returns;DocStr1
 M:StockSharp.Algo.Storages.BufferMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
 M:StockSharp.Algo.Storages.BufferMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr8563
 P:StockSharp.Algo.Storages.BufferMessageAdapter.FilterSubscription/summary;DocStr9532
+P:StockSharp.Algo.Storages.BufferMessageAdapter.Enabled/summary;DocStr10028
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Subscribe(StockSharp.Messages.SecurityId,StockSharp.Algo.DataType)/summary;DocStr9533
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Subscribe(StockSharp.Messages.SecurityId,StockSharp.Algo.DataType)/param/securityId;SecurityId
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Subscribe(StockSharp.Messages.SecurityId,StockSharp.Algo.DataType)/param/dataType;DocStr8490
@@ -1580,6 +1581,8 @@ M:StockSharp.Algo.Storages.BufferMessageAdapter.SendInMessage(StockSharp.Message
 M:StockSharp.Algo.Storages.BufferMessageAdapter.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.Storages.BufferMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
 M:StockSharp.Algo.Storages.BufferMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
+M:StockSharp.Algo.Storages.BufferMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Storages.BufferMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Clone/summary;DocStr643
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.Storages.CacheableMarketDataDrive/summary;DocStr1296
@@ -1936,6 +1939,8 @@ M:StockSharp.Algo.Storages.StorageMessageAdapter.SendInMessage(StockSharp.Messag
 M:StockSharp.Algo.Storages.StorageMessageAdapter.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.Storages.StorageMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
 M:StockSharp.Algo.Storages.StorageMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
+M:StockSharp.Algo.Storages.StorageMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Algo.Storages.StorageMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Algo.Storages.StorageMessageAdapter.Clone/summary;DocStr643
 M:StockSharp.Algo.Storages.StorageMessageAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.Storages.StorageFormats/summary;DocStr1598

@@ -62,6 +62,9 @@
     <member name="E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSubscriptionBySecurity">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
       <inheritdoc />
     </member>
@@ -426,6 +429,11 @@
             Password.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsSupportSubscriptionBySecurity">
+      <summary>
+            Support filtering subscriptions (subscribe/unsubscribe for specified security).
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
       <summary>
             Test dump files.
@@ -647,24 +655,19 @@
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.IsNativeIdentifiers">
-      <summary>
-            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.IsNativeIdentifiersPersistable">
-      <summary>
-            Native identifier can be stored.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.StorageName">
-      <summary>
-            The storage name, associated with the adapter.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.SecurityExtendedFields">
-      <summary>
-            Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
-            </summary>
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportSubscriptionBySecurity">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />

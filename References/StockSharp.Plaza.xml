@@ -6271,6 +6271,11 @@
             Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsSupportSubscriptionBySecurity">
+      <summary>
+            Поддерживает ли фильтрация подписки (подписка/отписка для указанного инструмента).
+            </summary>
+    </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
       <summary>
             Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
