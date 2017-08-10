@@ -33,8 +33,6 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	using Wintellect.PowerCollections;
-
 	/// <summary>
 	/// Price rounding rules.
 	/// </summary>
@@ -133,11 +131,12 @@ namespace StockSharp.Algo
 			if (orders == null)
 				throw new ArgumentNullException(nameof(orders));
 
-			var dict = new MultiDictionary<Tuple<Sides, decimal>, Order>(false);
+			var dict = new Dictionary<Tuple<Sides, decimal>, HashSet<Order>>();
 
 			foreach (var order in ownOrders)
 			{
-				dict.Add(Tuple.Create(order.Direction, order.Price), order);
+				if (!dict.SafeAdd(Tuple.Create(order.Direction, order.Price)).Add(order))
+					throw new InvalidOperationException();
 			}
 
 			var retVal = new List<Quote>(quotes.Select(q => q.Clone()));
@@ -1242,10 +1241,12 @@ namespace StockSharp.Algo
 			{
 				//throw new ArgumentException("Стоп-заявки не могут иметь реализованный объем.", "order");
 
-				order = order.DerivedOrder;
+				throw new ArgumentException(nameof(order));
 
-				if (order == null)
-					return 0;
+				//order = order.DerivedOrder;
+
+				//if (order == null)
+				//	return 0;
 			}
 
 			return byOrder ? order.Volume - order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume);

@@ -40,7 +40,7 @@ namespace XMLCommToHTM
 			{
 				body.Add(BuildNsSection(
 					kind, 
-					ns.Types.Where(_=>_.TypeKind==kind).ToArray()
+					ns.Types.OrderBy(t => t.SimpleName).Where(_=>_.TypeKind==kind).ToArray()
 				));
 			}
 			return doc.ToString();
