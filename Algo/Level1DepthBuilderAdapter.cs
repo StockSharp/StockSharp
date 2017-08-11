@@ -51,6 +51,7 @@ namespace StockSharp.Algo
 					ServerTime = message.ServerTime,
 					LocalTime = message.LocalTime,
 					IsByLevel1 = true,
+					IsSorted = true,
 					Bids = bidPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, bidPrice.Value, bidVolume ?? 0) },
 					Asks = askPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, askPrice.Value, askVolume ?? 0) },
 				};
