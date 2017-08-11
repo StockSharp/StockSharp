@@ -56,6 +56,9 @@
     <Reference Include="DevExpress.Xpf.LayoutControl.v17.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.1.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
     </Reference>

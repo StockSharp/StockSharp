@@ -47,6 +47,7 @@ StockSharp API Change log
 * (feature) SubscriptionMessageAdapter. Send original subscription id.
 * (feature) SubscriptionMessageAdapter. Support non filterable subscriptions.
 * (bug) SecurityMappingMessageAdapter, SecurityNativeIdMessageAdapter. Group cancel orders fix.
+* (bug) Not found themes. Fix http://stocksharp.ru/forum/8404/ne-rabotayut-primery-stocksharp_4325/
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

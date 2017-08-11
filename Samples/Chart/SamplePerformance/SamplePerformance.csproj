@@ -79,6 +79,9 @@
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

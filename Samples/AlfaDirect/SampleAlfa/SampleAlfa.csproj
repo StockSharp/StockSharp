@@ -49,6 +49,9 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
     </Reference>

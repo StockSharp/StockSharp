@@ -101,6 +101,9 @@
     <Reference Include="DevExpress.Data.v17.1">
       <HintPath>..\..\..\References\DevExpress.Data.v17.1.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
