@@ -49,9 +49,6 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.PropertyGrid.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v17.1.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
     </Reference>
@@ -84,6 +81,9 @@
     <Reference Include="DevExpress.Data.v17.1">
       <HintPath>..\..\..\References\DevExpress.Data.v17.1.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Mvvm.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Mvvm.v17.1.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Xpf.Core.v17.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
     </Reference>
@@ -92,6 +92,12 @@
     </Reference>
     <Reference Include="DevExpress.Xpf.Grid.v17.1.Core">
       <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v17.1.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>

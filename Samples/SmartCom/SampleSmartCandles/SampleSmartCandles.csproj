@@ -100,6 +100,21 @@
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Data.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Data.v17.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v17.1.Core">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.1.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
       <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>
     </Reference>
