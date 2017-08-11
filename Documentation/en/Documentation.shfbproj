@@ -90,6 +90,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Xaml.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Fxcm.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.Fxcm.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.QuantHouse.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\en\StockSharp.QuantHouse.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.com</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>

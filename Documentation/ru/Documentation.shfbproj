@@ -106,6 +106,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.SpbEx.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Fxcm.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Fxcm.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.QuantHouse.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.QuantHouse.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
