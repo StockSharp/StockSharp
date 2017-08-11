@@ -70,10 +70,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\MoreLinq.dll</HintPath>
+      <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.QuantHouse">
       <HintPath>..\..\..\References\StockSharp.QuantHouse.dll</HintPath>
@@ -87,31 +87,31 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Data.v17.1">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\DevExpress.Data.v17.1.dll</HintPath>
+      <HintPath>..\..\..\References\DevExpress.Data.v17.1.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Xpf.Core.v17.1">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Xpf.Grid.v17.1">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\DevExpress.Xpf.Grid.v17.1.dll</HintPath>
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Xpf.Grid.v17.1.Core">
-      <HintPath>..\..\..\..\StockSharp (GitHub)\References\DevExpress.Xpf.Grid.v17.1.Core.dll</HintPath>
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -208,23 +208,23 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitHub%29\Algo\Algo.csproj">
+    <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitHub%29\BusinessEntities\BusinessEntities.csproj">
+    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitHub%29\Localization\Localization.csproj">
+    <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitHub%29\Logging\Logging.csproj">
+    <ProjectReference Include="..\..\..\Logging\Logging.csproj">
       <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
       <Name>Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitHub%29\Messages\Messages.csproj">
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj">
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
