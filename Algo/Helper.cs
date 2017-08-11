@@ -229,5 +229,18 @@ namespace StockSharp.Algo
 
 			return Tuple.Create(message.DataType, securityId ?? message.SecurityId, message.Arg, message.From, message.To, message.Count, message.MaxDepth);
 		}
+
+		public static bool NotRequiredSecurityId(this SecurityMessage secMsg)
+		{
+			if (secMsg == null)
+				throw new ArgumentNullException(nameof(secMsg));
+
+			if (secMsg.Type == MessageTypes.MarketData && ((MarketDataMessage)secMsg).DataType == MarketDataTypes.News)
+				return secMsg.SecurityId.IsDefault();
+			else if (secMsg.Type == MessageTypes.OrderGroupCancel)
+				return secMsg.SecurityId.IsDefault();
+
+			return false;
+		}
 	}
 }

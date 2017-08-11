@@ -252,10 +252,11 @@
 				case MessageTypes.MarketData:
 				{
 					var secMsg = (SecurityMessage)message;
-					var securityId = secMsg.SecurityId;
 
-					if ((secMsg as MarketDataMessage)?.DataType == MarketDataTypes.News && securityId.IsDefault())
+					if (secMsg.NotRequiredSecurityId())
 						break;
+
+					var securityId = secMsg.SecurityId;
 
 					var native = GetNativeId(secMsg, securityId);
 

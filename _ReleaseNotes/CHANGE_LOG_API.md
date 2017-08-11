@@ -46,6 +46,7 @@ StockSharp API Change log
 * (feature) BufferMessageAdapter. Enabled option.
 * (feature) SubscriptionMessageAdapter. Send original subscription id.
 * (feature) SubscriptionMessageAdapter. Support non filterable subscriptions.
+* (bug) SecurityMappingMessageAdapter, SecurityNativeIdMessageAdapter. Group cancel orders fix.
 
 ###v4.3.25:
 * (feature) ExchangeBoard. Currenex.

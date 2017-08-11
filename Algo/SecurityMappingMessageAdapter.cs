@@ -208,12 +208,12 @@ namespace StockSharp.Algo
 		private void ReplaceSecurityId(Message message)
 		{
 			var secMsg = (SecurityMessage)message;
-			var stockSharpId = secMsg.SecurityId;
 
-			if ((secMsg as MarketDataMessage)?.DataType == MarketDataTypes.News && stockSharpId.IsDefault())
+			if (secMsg.NotRequiredSecurityId())
 				return;
 
 			SecurityId? adapterId;
+			var stockSharpId = secMsg.SecurityId;
 
 			lock (_syncRoot)
 				adapterId = _securityIds.TryGetValue2(stockSharpId);
