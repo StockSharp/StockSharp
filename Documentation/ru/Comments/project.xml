@@ -546,5 +546,10 @@
 				<p>Коннектор к брокеру FXCM.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.QuantHouse">
+			<summary>
+				<p>Коннектор к сервисам QuantHouse (QuantFEED и т.д.).</p>
+			</summary>
+		</member>
 	</members>
 </doc>

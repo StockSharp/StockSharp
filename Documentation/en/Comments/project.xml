@@ -396,5 +396,10 @@
 				<p>FXCM connectivity components.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.QuantHouse">
+			<summary>
+				<p>QuantHouse connectivity components (QuantFEED etc.).</p>
+			</summary>
+		</member>
 	</members>
 </doc>

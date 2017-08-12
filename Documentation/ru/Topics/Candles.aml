@@ -116,7 +116,7 @@ private void DrawCandle(CandleSeries series, Candle candle)
 			<step>
 				<content>
 					<para>Необходимо объявить, какие именно свечи требуются для робота и запустить получение данных через 
-					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:</para>
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})</codeEntityReference>:</para>
 
 					<code language="C#">
 					<![CDATA[

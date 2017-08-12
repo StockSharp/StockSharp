@@ -123,7 +123,7 @@ To display candles the graphical component <codeEntityReference>T:StockSharp.Xam
 			<step>
 				<content>
 <para>You must declare exactly which candles are required for the algorithm and start data receiving through 
-<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:</para>
+<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})</codeEntityReference>:</para>
 
 <code language="C#">
 					<![CDATA[
