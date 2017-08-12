@@ -49,7 +49,7 @@ StockSharp API Change log
 * (bug) SecurityMappingMessageAdapter, SecurityNativeIdMessageAdapter. Group cancel orders fix.
 * (bug) Not found themes. Fix http://stocksharp.ru/forum/8404/ne-rabotayut-primery-stocksharp_4325/
 
-###v4.3.25:
+## v4.3.25:
 * (feature) ExchangeBoard. Currenex.
 * (feature) IndexCandleBuilder. TotalVolume as extended fields.
 * (bug) SecurityCsvList. Save exchange board info.
@@ -102,7 +102,7 @@ StockSharp API Change log
 * (feature) FXCM connector.
 * (feature) Xaml.Code moved to Xaml proj.
 
-###v4.3.24:
+## v4.3.24:
 * (feature) Remote storage. Edit users.
 * (feature) Remote storage. Manage server.
 * (feature) Xaml. All XXXWindows's derived from DXWindow.
@@ -128,7 +128,7 @@ StockSharp API Change log
 * (feature) Validation attributes added to Security.
 * (feature) TimeSpanEditorAttribute added.
 
-###v4.3.23:
+## v4.3.23:
 * (feature) InteractiveBrokers. OptionParameters, Histogram and news story requests.
 * (bug) BasketMessageAdapter and SubscriptionMessageAdapter. Fix derived MarketDataMessage types handling.
 * (bug) Strategy.MyTrades fill fix.
@@ -162,7 +162,7 @@ StockSharp API Change log
 * (feature) IRemoteAuthorization. Moved from Algo.History -> Algo.
 * (bug) RiskPanel and CommissionPanel. Refresh Title fix.
 
-###v4.3.22:
+## v4.3.22:
 * (bug) SampleOptionsQuoting fix.
 * (bug) Transaq. Demo address fix.
 * (bug) ContinuousSecurityWindow fixes.
@@ -193,7 +193,7 @@ StockSharp API Change log
 * (feature) ISecurityStorage. Removed GetSecurityIds
 * (feature) ExpressionFormula.Functions
 
-###v4.3.21:
+## v4.3.21:
 * (feature) IConnector.OrderStatusFailed
 * (bug) CQG fixes.
 * (bug) InteractiveBrokers fixes.
@@ -234,13 +234,13 @@ StockSharp API Change log
 * (bug) CandleSettingsEditor fix. https://github.com/StockSharp/StockSharp/issues/290
 * (bug) Fix http://stocksharp.ru/forum/8058/problemy-s-sootvetstviem-neskolkih-kodov-klienta-i-torgovogo-scheta-v-kvike/
 
-###v4.3.19.5:
+## v4.3.19.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
 
-###v4.3.19.4:
+## v4.3.19.4:
 * (bug) FIX connection establish fix http://stocksharp.ru/posts/m/37571/
 
-###v4.3.19.2:
+## v4.3.19.2:
 * (feature) SecurityPicker performance improve.
 * (feature) OptionVolatilitySmileChart.
 * (bug) OptionDesk fix.
@@ -259,14 +259,14 @@ StockSharp API Change log
 * (feature) SampleIQFeed. Refactoring.
 * (bug) https://github.com/StockSharp/StockSharp/issues/278 fix
 
-###v4.3.19.1:
+## v4.3.19.1:
 * (bug) SmartCOM candles fix.
 * (bug) OpenECry candles fix.
 * (bug) Backtesting fix.
 * (bug) SecurityNativeIdMessageAdapter. Clone fixes.
 * (feature) IndexSecurity. IgnoreErrors.
 
-###v4.3.19:
+## v4.3.19:
 * (feature) IConnector. SubscribeMarketData and UnSubscribeMarketData. MarketDataTypes -> MarketDataMessage.
 * (feature) ExchangeBoard. Removed IsSupportAtomicReRegister, IsSupportMarketOrders
 * (feature) Plaza router. v5.1.3.754
@@ -296,7 +296,7 @@ StockSharp API Change log
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/47
 * (bug) QUIK. ALL subscription fix
 
-###v4.3.18:
+## v4.3.18:
 * (feature) Rithmic. v9.5.0.0
 * (bug) Transaq. UseCredit fixes.
 * (bug) Finam. New address.
@@ -308,7 +308,7 @@ StockSharp API Change log
 * (bug) Chart samples fixes.
 * (bug) Build index candles.
 
-###v4.3.17:
+## v4.3.17:
 * (feature) Quik lua. Duration, IssueSize, BuyBackDate, BuyBackPrice.
 * (bug) Quik lua. Fix ClientCode duplicate issue.
 * (feature) Position.ClientCode
@@ -323,11 +323,11 @@ StockSharp API Change log
 * (feature) OrderCancelVolumeRequireTypes enum.
 * (feature) MatLab connector update.
 
-###v4.3.16.1:
+## v4.3.16.1:
 * (feature) MicexDownloader + FortsDownloader -> MoexDownloader
 * (feature) StockSharp.Xaml.Code
 
-###v4.3.16:
+## v4.3.16:
 * (feature) IConnector.CancelOrders. SecurityType filter.
 * (feature) FIX connector. Exante dialect
 * (feature) TwimeTrader.PortfolioName
@@ -349,7 +349,7 @@ StockSharp API Change log
 * (bug) PropertyGridEx. Nullable and unsigned number fixes.
 * (bug) Xaml.Diagram minor fixes.
 
-###v4.3.15:
+## v4.3.15:
 * (feature) TWIME connector.
 * (feature) IConnector. MassOrderCanceled, MassOrderCancelFailed.
 * (feature) SecurityAdapter.
@@ -371,18 +371,18 @@ StockSharp API Change log
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/227
 * (feature) PnLManager. Uses leverage.
 
-###v4.3.14.2:
+## v4.3.14.2:
 * (feature) Chart. Active orders.
 * (bug) https://github.com/StockSharp/StockSharp/issues/222
 * (feature) IBTrader -> InteractiveBrokersTrader, OECTrader -> OpenECryTrader
 * (bug) TargetPlatformWindow fix.
 
-###v4.3.14.1:
+## v4.3.14.1:
 * (bug) Transaq. double <-> decimal conversation fix.
 * (feature) Blackwood. Embed zlib into resources.
 * (bug) Nuget fixed.
 
-###v4.3.14:
+## v4.3.14:
 * (feature) BaseCandleBuilderSource.RaiseProcessing perf fixes.
 * (feature) Ecng.Backup
 * (feature) Ecng.Roslyn
@@ -459,13 +459,13 @@ StockSharp API Change log
 * (bug) Transaq fix.
 * (feature) Backtesting. Use history source (Finam, Google, Yahoo) directly.
 
-###v4.3.13:
+## v4.3.13:
 * (bug) MessageAdaptersPanel fix.
 * (bug) Chart fix (draw values in hidden mode).
 * (bug) SmartCOM sec info fix.
 * (feature) Connectors. Doc + Icon attributes.
 
-###v4.3.12:
+## v4.3.12:
 * (feature) ISecurityStorage. CSV implementation.
 * (feature) ICandleBuilder. Direct value processing.
 * (feature) Correlation indicator.
@@ -480,7 +480,7 @@ StockSharp API Change log
 * (feature) Interactive Brokers. 9.72
 * (feature) Backtesting on level1.
 
-###v4.3.11:
+## v4.3.11:
 * (feature) CSV storage. Time zone.
 * (feature) Transaq. v2.16.1
 * (feature) level1 -> depths.
@@ -512,7 +512,7 @@ StockSharp API Change log
 * (feature) SampleRealTimeEmulation. IQFeed support.
 * (bug) TraderHelper.ToDecimal fix.
 
-###v4.3.10
+## v4.3.10
 * (bug) Storage. Level1 fix.
 * (bug) ITCH. Fixes.
 * (feature) HistoryEmulationConnector refactoring.
@@ -531,12 +531,12 @@ StockSharp API Change log
 * (feature) IpAddressEditor.
 * (feature) AdvertisePanel.
 
-###v4.3.9.1:
+## v4.3.9.1:
 * (feature) Candle.RelativeVolume is nullable.
 * (feature) Candle. Ticks fields are nullable.
 * (feature) CandleSerializer. Ticks fields.
 
-###v4.3.9:
+## v4.3.9:
 * (bug) RecoveryFactorParameter fix.
 * (bug) OrderLogMarketDepthBuilder fix.
 * (feature) Algo.Storages.Backup - clients for cloud storage backup services.
@@ -544,7 +544,7 @@ StockSharp API Change log
 * (feature) LicenseHelper.LicenseError
 * (feature) Connector. Not track ticks option.
 
-###v4.3.8:
+## v4.3.8:
 * (feature) ITCH connector.
 * (bug) FIX connector and FixServer. Many fixes.
 * (bug) CSV storage fix.
@@ -575,7 +575,7 @@ StockSharp API Change log
 * (feature) FIX connector. ExecMsg.ClientCode.
 * (feature) FIX connector. Read/write timeouts.
 
-###v4.3.7:
+## v4.3.7:
 * (feature) MessageDirections. Removed.
 * (feature) Connector. OnRegisterXXX OnUnRegisterXXX removed.
 * (feature) Micex. Update protocol.
@@ -597,13 +597,13 @@ StockSharp API Change log
 * (feature) Chart update.
 * (feature) WPF Toolkit. 2.4.0
 
-###v4.3.6:
+## v4.3.6:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/90
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/93
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/92
 * (feature) https://github.com/StockSharp/StockSharp/commit/62a19979280ab678679aee7660f73c9b9614de93
 
-###v4.3.5:
+## v4.3.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/87
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/83
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/70
@@ -613,7 +613,7 @@ StockSharp API Change log
 * (bug) https://github.com/StockSharp/StockSharp/pull/81
 * (bug) Fix http://stocksharp.com/forum/yaf_postsm35263_FixServer-System-ArgumentOutOfRangeException.aspx#post35263
 
-###v4.3.4:
+## v4.3.4:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/46
 * (feature) OEC 3.5.14
 * (feature) ILogSource.IsRoot
@@ -624,20 +624,20 @@ StockSharp API Change log
 * (feature) FIX. Check sum is uint.
 * (bug) FixServer. Sync writers.
 
-###v4.3.3:
+## v4.3.3:
 * (feature) OverrideDll option.
 * (bug) BasketMessageAdapter. Disconnect fix.
 * (feature) Transaq. UTC
 * (bug) Back testing. Fixes.
 
-###v4.3.2:
+## v4.3.2:
 * (bug) BTCE. Security decimals fix.
 
-###v4.3.1:
+## v4.3.1:
 * (feature) BitStamp, IQFeed, ETrade and Oanda source code.
 * (bug) Fix http://stocksharp.com/forum/yaf_postst5619_Oshibka-nie-udalos--naiti-chast--puti.aspx
 
-###v4.3.0:
+## v4.3.0:
 * (feature) IMessageChannel. Message thread model refactoring.
 * (feature) IConnector. Removed Start/Stop export.
 * (feature) Connector uses BasketMessageAdapter.
@@ -676,7 +676,7 @@ StockSharp API Change log
 * (feature) FixServer. Logout fixes.
 * (bug) FIX connector. Request portfolios support.
 
-###v4.2.75:
+## v4.2.75:
 * (feature) FixServer. No longer use QuickFix.
 * (feature) FixServer. Implements IMessageChannel.
 * (feature) FixServer. Separate market data and transactional endpoints.
@@ -693,7 +693,7 @@ StockSharp API Change log
 * (feature) MessageConverterHelper. MessageTypes <-> MarketDataTypes for candles
 * (feature) PlazaTrader.IsControlConnectionLost
 
-###v4.2.74:
+## v4.2.74:
 * (feature) FIX connector. IFixWriter IFixReader interfaces.
 * (feature) TextExporter refactoring.
 * (feature) Xaml. NewsMessageGrid
@@ -705,7 +705,7 @@ StockSharp API Change log
 * (feature) Plaza. Spectra 4 (ASTS).
 * (feature) Security. PriceStep, VolumeStep, Decimals, Multiplier, MinPrice, MaxPrice are nullable.
 
-###v4.2.73:
+## v4.2.73:
 * (feature) FIX connector. Client side no longer use QuickFix
 * (bug) LuaFixServer. Level1 thread safety.
 * (bug) EntityCache. Fix ExecMsg.OridinTransId == OrderStatusMsg.TransactionId
@@ -713,7 +713,7 @@ StockSharp API Change log
 * (feature) Security.Strike is nullable
 * (feature) QuikOrderCondition. Nullable fields.
 
-###v4.2.72:
+## v4.2.72:
 * (feature) SecurityMessage.Decimals
 * (feature) Security.State nullable
 * (feature) IOHelper.ToFullPath
@@ -722,24 +722,24 @@ StockSharp API Change log
 * (bug) Micex. Decimals fix
 * (bug) SecurityGrid. Fix PriceStep, Decimals and VolumeStep columns.
 
-###v4.2.71:
+## v4.2.71:
 * (feature) Strategy.StartedTime is DTO
 * (bug) Fix http://stocksharp.com/forum/yaf_postst5556_S--Api.aspx
 * (bug) Fix RtsHistorySource
 
-###v4.2.70:
+## v4.2.70:
 * (feature) SecurityGrid. Add columns.
 * (feature) Security. O H L C V fields marked as nullable.
 * (bug) FIX connector. Level1 small fix.
 * (bug) Quik lua. Level1 value type fix.
 * (bug) Fix https://github.com/stocksharp/stocksharp/issues/31
 
-###v4.2.69:
+## v4.2.69:
 * (feature) LicensePanel. Xaml -> Licensing
 * (feature) MarketEmu. Depth fill improve.
 * (bug) LicenseTool fixes.
 
-###v4.2.68:
+## v4.2.68:
 * (bug) Quik lua. Turned off license check.
 * (bug) Protective strategies. Fix price calc with big offset value.
 * (bug) Fix http://stocksharp.com/forum/yaf_postsm34658_Kotirovaniie.aspx#post34658
@@ -751,10 +751,10 @@ StockSharp API Change log
 * (bug) Connector.ClearCache fix
 * (bug) SecurityEditor. Update text fix.
 
-###v4.2.67:
+## v4.2.67:
 * (feature) Ecng update.
 
-###v4.2.66:
+## v4.2.66:
 * (feature) Quik lua. Support ALL@ALL security for market data subscription.
 * (feature) Quik lua. Level1 subscription check optimization.
 * (feature) Quik lua. Check Level1 duplicates.
@@ -763,48 +763,48 @@ StockSharp API Change log
 * (feature) OrderStatMsg. Single order details.
 * (bug) Emulator small fix.
 
-###v4.2.65:
+## v4.2.65:
 * (feature) QuandlHistorySource
 * (feature) Quoting refactoring
 * (bug) Fix Quik LUA. Fix http://stocksharp.com/forum/yaf_postst5525_Oshibka-Lua-podkliuchieniia-pri-rabotie-s-aktsiiami.aspx
 * (bug) Fix Quik LUA. Fix exception handling
 
-###v4.2.64:
+## v4.2.64:
 * (feature) Source codes for Quik and InteractiveBrokers
 
-###v4.2.63:
+## v4.2.63:
 * (bug) OpenECry. Fix double <-> decimal casting.
 * (bug) Fix https://github.com/stocksharp/stocksharp/issues/16
 
-###v4.2.62:
+## v4.2.62:
 * (bug) Micex. Format price fix
 * (feature) Source codes for Messages, BE, Algo, Xaml, Localization, Logging, Community and few connectors (SmartCOM, AlfaDirect, Transaq, BTCE, OpenECry, LMAX, MatLab, CQG, Sterling, RSS, Alor)
 
-###v4.2.61:
+## v4.2.61:
 * (bug) Quik. Fix https://github.com/stocksharp/stocksharp/issues/13
 * (bug) Fusion/Blackwood. Fix http://stocksharp.com/forum/yaf_postst5511_4-2-60---Exception-pri-otpravkie-ordiera.aspx
 * (bug) LogManager.Application. Replacing fix
 * (bug) Plaza. Level1 ServerTime fill
 * (bug) YahooHistorySource. Time fix
 
-###v4.2.60:
+## v4.2.60:
 * (bug) Fusion/Blackwood. Fix http://stocksharp.com/forum/yaf_postst5498_Probliema-na-rieal-nom-schietie.aspx
 * (feature) Quik. Process request performance boost
 * (feature) OrderWindow. Disable ByMarket checkbox
 * (feature) Plaza. Anonym deals turned on by default
 * (bug) Fix https://github.com/stocksharp/stocksharp/issues/11
 
-###v4.2.59:
+## v4.2.59:
 * (feature) Fusion/Blackwood. 3.1.8
 * (bug) Micex. OrderBookDepth fix
 * (bug) Micex. RequestAllDepths fix
 * (bug) OpenECry. Order processing fix
 
-###v4.2.58:
+## v4.2.58:
 * (feature) Micex. RequestAllDepths
 * (bug) Micex. Tick subscribe fix
 
-###v4.2.57:
+## v4.2.57:
 * (feature) QuikLua. Removed atomic reregister for micex
 * (feature) Micex. Added IFC_Broker24 interface
 * (feature) Micex. OrderBookDepth
@@ -813,56 +813,56 @@ StockSharp API Change log
 * (bug) Fix https://github.com/stocksharp/stocksharp/issues/7
 * (bug) Fix https://github.com/stocksharp/stocksharp/issues/3
 
-###v4.2.56:
+## v4.2.56:
 * (bug) AlfaDirect. Fix cadle subscription. Fix http://stocksharp.com/forum/yaf_postst5483_primier-SampleAlfaCandles.aspx
 * (bug) OpenECry fixes
 * (bug) Localization fixes
 * (bug) Chart. Fix indicator adding
 
-###v4.2.55:
+## v4.2.55:
 * (feature) Export executions
 * (bug) Localization fixes
 
-###v4.2.54:
+## v4.2.54:
 * (bug) Execution storage fix
 * (bug) Plaza. Fix handling non Message based transaction
 * (bug) Localization fixes
 
-###v4.2.53:
+## v4.2.53:
 * (bug) Localization fixes
 
-###v4.2.52:
+## v4.2.52:
 * (bug) Localization fixes
 
-###v4.2.51:
+## v4.2.51:
 * (bug) Oanda. Security lookup and market data subscription fixes
 * (bug) Localization fixes
 * (feature) OrderFail. ServerTime and LocalTime fields
 * (bug) TrueFX and GainCapital historical sources fixes
 * (bug) Unit. Fix serialization
 
-###v4.2.50:
+## v4.2.50:
 * (bug) Error loading candles from storage
 * (bug) FortsDailyData.GetRate fix
 
-###v4.2.49:
+## v4.2.49:
 * (bug) PriceStep fixes for Oanda
 * (bug) Filling empty Arg for Candles from CandleSeries
 * (feature) Tick origin side added for FIX (QuikLua) http://stocksharp.com/forum/yaf_postst5476_S--API.aspx
 * (feature) TimeZoneComboBox
 
-###v4.2.48:
+## v4.2.48:
 * (feature) Plaza supports MM and limit transactions
 * (bug) Localization fixes for Xaml
 
-###v4.2.47:
+## v4.2.47:
 * (bug) Localization fixes
 
-###v4.2.46:
+## v4.2.46:
 * (feature) Filling Security.Status for QuikLua http://stocksharp.com/forum/yaf_postsm34270_Novyi-konniektor-k-Quik.aspx#post34270
 * (bug) Building market depth from OL fixes
 * (feature) Zero or negative prices for spreads in Storage
 * (feature) ExpirationDate added to OrderWindow
 
-###v4.2.0-4.2.43
+## v4.2.0-4.2.43
 Available on [forum](http://stocksharp.com/forum/yaf_postst4219_S--API-4-2.aspx)
