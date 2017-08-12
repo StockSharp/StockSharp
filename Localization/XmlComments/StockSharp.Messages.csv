@@ -689,8 +689,8 @@ P:StockSharp.Messages.MessageAdapter.IsSupportSubscriptions/inheritdoc;DocStr845
 P:StockSharp.Messages.MessageAdapter.IsSupportSubscriptionBySecurity/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.StorageName/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.OrderCancelVolumeRequired/inheritdoc;DocStr8459
-P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
-P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
+P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
 P:StockSharp.Messages.MessageAdapter.Platform/summary;DocStr4335
 P:StockSharp.Messages.MessageAdapter.SecurityExtendedFields/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459

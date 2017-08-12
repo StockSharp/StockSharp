@@ -1,10 +1,9 @@
 T:StockSharp.BitStamp.BitStampMessageAdapter/summary;DocStr2538
 M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
-P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
-M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
-M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
+M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.BitStamp.BitStampMessageAdapter.Key/summary;Str3304
 P:StockSharp.BitStamp.BitStampMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.BitStamp.BitStampMessageAdapter.ClientId/summary;Str3308

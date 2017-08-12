@@ -6,7 +6,8 @@ P:StockSharp.Fix.Dialects.BaseFastDialect.IsNativeIdentifiersPersistable/summary
 P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend/summary;SuspendDesc
 P:StockSharp.Fix.Dialects.BaseFastDialect.Login/summary;Login
 P:StockSharp.Fix.Dialects.BaseFastDialect.Password/summary;Password
-M:StockSharp.Fix.Dialects.BaseFastDialect.Clone/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.BaseFastDialect.Clone/summary;DocStr643
+M:StockSharp.Fix.Dialects.BaseFastDialect.Clone/returns;DocStr1116
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsOpened/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Open/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Close/inheritdoc;DocStr8459

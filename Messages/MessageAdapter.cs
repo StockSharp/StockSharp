@@ -202,10 +202,14 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; } = null;
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Gets a value indicating whether the connector supports security lookup.
+		/// </summary>
 		protected virtual bool IsSupportNativeSecurityLookup => false;
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Gets a value indicating whether the connector supports position lookup.
+		/// </summary>
 		protected virtual bool IsSupportNativePortfolioLookup => false;
 
 		/// <summary>

@@ -45,7 +45,10 @@
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Clone">
-      <inheritdoc />
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Fix.Dialects.IFastDialect" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsOpened">
       <inheritdoc />

@@ -961,13 +961,19 @@
       <inheritdoc />
     </member>
     <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.SubscribeEvents">
-      <inheritdoc />
+      <summary>
+            Подписаться на события.
+            </summary>
     </member>
     <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.UnSubscribeEvents">
-      <inheritdoc />
+      <summary>
+            Отписаться от событий.
+            </summary>
     </member>
     <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.OnDisconnect">
-      <inheritdoc />
+      <summary>
+            Отключиться от SmartCOM.
+            </summary>
     </member>
     <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.LookupSecurities">
       <inheritdoc />
