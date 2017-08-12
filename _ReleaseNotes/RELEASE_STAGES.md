@@ -18,7 +18,7 @@
 | BarChart | Beta |
 | CQG | Stable |
 | E*Trade | Stable |
-| FXCM | Beta |
+| FXCM | Stable |
 | FIX/FAST | Stable |
 | IQFeed | Stable |
 | ITCH | Stable |
@@ -29,7 +29,8 @@
 | OpenECry (GainFutures) | Stable |
 | Rithmic | Beta |
 | RSS | Stable |
-| Sterling | Beta |
+| Sterling | Stable |
+| QuantHouse | Beta |
 
 ## BitCoin
 
