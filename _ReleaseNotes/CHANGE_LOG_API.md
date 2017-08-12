@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.26.2:
 * (feature) Position tracking storage.
 * (feature) MarketDepthControl. Show histogram for volumes.
 * (feature) MarketDepthControl. Single column for volume.
