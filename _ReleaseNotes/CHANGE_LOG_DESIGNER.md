@@ -1,6 +1,6 @@
 StockSharp Designer Change log
 ========================
-###current:
+## current:
 * (feature) Breakpoints. Extended conditions.
 * (feature) CSV storage. Performance boost.
 * (bug) Fix symbol mapping http://stocksharp.ru/forum/8433/problema-podklyucheniya-k-quik-lua-v-designer-versii-43252/
@@ -18,7 +18,7 @@ StockSharp Designer Change log
 * (feature) QuikLua. Index securities support (O H L C values).
 * (feature) QuantFEED.
 
-###v4.3.25.2:
+## v4.3.25.2:
 * (feature) ServerCredentials. Save password for auto logon only.
 * (feature) Finam. OriginSide support.
 * (bug) Renko and PnF candles fix.
@@ -45,7 +45,7 @@ StockSharp Designer Change log
 * (bug) BTCE fixes.
 * (feature) Symbol mapping manager.
 
-###v4.3.24.1:
+## v4.3.24.1:
 * (feature) CQG continuum.
 * (feature) Securities. Custom sorting for extended info added.
 * (feature) SpbEx connector (binary).
@@ -67,7 +67,7 @@ StockSharp Designer Change log
 * (bug) Save/load settings for alert schemas fixes.
 * (feature) OrderRegisterDiagramElement. Conditional settings added.
 
-###v4.3.24:
+## v4.3.24:
 * (bug) Fix splash screen http://stocksharp.ru/posts/m/39084/
 * (feature) Option basic strategy.
 * (bug) Fix grouped market depth. http://stocksharp.ru/posts/m/38969/
@@ -100,14 +100,14 @@ StockSharp Designer Change log
 * (bug) Transaq. Fix https://github.com/StockSharp/StockSharp/issues/288
 * (bug) SmartCOM. PriceStep fixes.
 
-###v4.3.19.4:
+## v4.3.19.4:
 * (bug) FIX connection establish fix http://stocksharp.ru/posts/m/37571/
 * (bug) x86 launch fix http://stocksharp.ru/posts/m/37572/
 
-###v4.3.19.3:
+## v4.3.19.3:
 * (bug) refs update fix.
 
-###v4.3.19.2:
+## v4.3.19.2:
 * (feature) C# code editor. Design elements and strategies via C#. http://stocksharp.ru/posts/m/37286/
 * (feature) Embed into diagram ready to use dll strategies. http://stocksharp.ru/posts/m/37188/
 * (feature) Index element. http://stocksharp.ru/posts/m/37459/
@@ -119,7 +119,7 @@ StockSharp Designer Change log
 * (bug) Converter element fixes http://stocksharp.ru/posts/m/37153/
 * (bug) Optimizer fixes.
 
-###v4.3.17:
+## v4.3.17:
 * (feature) Selection lines on hover http://stocksharp.ru/posts/m/37025/
 * (bug) Fix candle settings editor http://stocksharp.ru/posts/m/36987/
 * (feature) Autonaming some elements.
@@ -132,7 +132,7 @@ StockSharp Designer Change log
 * (feature) Open pos element. Price socket hide/show http://stocksharp.ru/posts/m/37025/
 * (feature) Show error element http://stocksharp.ru/posts/m/37044/
 
-###v4.3.16.1:
+## v4.3.16.1:
 * (feature) Optimizator.
 * (feature) Strategy gallery.
 * (feature) Import/export with optional encryption.
@@ -142,13 +142,13 @@ StockSharp Designer Change log
 * (feature) Live trading.
 * (bug) Many minor fixes.
 
-###v4.3.16:
+## v4.3.16:
 * (feature) See next release.
 
-###v4.3.14.2:
+## v4.3.14.2:
 * (feature) New design.
 * (feature) Finam history downloading.
 * (feature) Chat embedded.
 
-###v4.3.14:
+## v4.3.14:
 * (feature) Available for download
