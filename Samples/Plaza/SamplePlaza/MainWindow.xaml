@@ -47,9 +47,12 @@
 		<TextBox x:Name="AppName" Grid.Column="1" Grid.Row="1" VerticalContentAlignment="Center">SS</TextBox>
 		<plaza:PlazaTableComboBox x:Name="Tables" Grid.Row="1" Grid.Column="2" />
 
-		<CheckBox x:Name="IsCGate" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" IsChecked="True">CGate</CheckBox>
-		<CheckBox x:Name="IsDemo" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" IsEnabled="{Binding ElementName=IsCGate, Path=IsChecked}" IsChecked="True">Demo</CheckBox>
-		<CheckBox x:Name="IsFastRepl" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center">FASTREPL</CheckBox>
+		<StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal">
+			<CheckBox x:Name="IsCGate" VerticalAlignment="Center" Width="100" IsChecked="True">CGate</CheckBox>
+			<CheckBox x:Name="IsDemo" VerticalAlignment="Center" Width="100" IsEnabled="{Binding ElementName=IsCGate, Path=IsChecked}" IsChecked="True">Demo</CheckBox>
+			<CheckBox x:Name="IsFastRepl" VerticalAlignment="Center" Width="100">FASTREPL</CheckBox>
+			<CheckBox x:Name="IsStorage" VerticalAlignment="Center" Width="100" IsChecked="False" Content="{x:Static loc:LocalizedStrings.Str1405}" />
+		</StackPanel>
 
 		<Button x:Name="ShowSecurities" Grid.Column="0" Grid.Row="3" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
 		<Button x:Name="ShowPortfolios" Grid.Column="1" Grid.Row="3" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />

@@ -190,7 +190,6 @@ namespace StockSharp.Algo.Candles
 
 					try
 					{
-						indexCandle.TotalVolume = Calculate(buffer, false, c => c.TotalVolume);
 						indexCandle.OpenPrice = Calculate(buffer, true, c => c.OpenPrice);
 						indexCandle.ClosePrice = Calculate(buffer, true, c => c.ClosePrice);
 						indexCandle.HighPrice = Calculate(buffer, true, c => c.HighPrice);
@@ -198,6 +197,8 @@ namespace StockSharp.Algo.Candles
 
 						if (_security.CalculateExtended)
 						{
+							indexCandle.TotalVolume = Calculate(buffer, false, c => c.TotalVolume);
+
 							indexCandle.TotalPrice = Calculate(buffer, true, c => c.TotalPrice);
 							indexCandle.OpenVolume = Calculate(buffer, false, c => c.OpenVolume ?? 0);
 							indexCandle.CloseVolume = Calculate(buffer, false, c => c.CloseVolume ?? 0);

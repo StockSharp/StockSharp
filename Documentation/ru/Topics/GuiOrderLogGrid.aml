@@ -24,7 +24,7 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/ITCH/SampleITCH</legacyItalic>.
+Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/ITCH/SampleITCH</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_orderlog" /></mediaLink>

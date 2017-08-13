@@ -602,7 +602,7 @@ namespace StockSharp.Algo.Testing
 						{
 							_activeOrders.Add(replyMsg.TransactionId, replyMsg);
 
-							if (replyMsg.ExpiryDate != null && replyMsg.ExpiryDate != DateTimeOffset.MaxValue)
+							if (replyMsg.ExpiryDate != null)
 								_expirableOrders.Add(replyMsg, replyMsg.ExpiryDate.Value.EndOfDay() - replyMsg.LocalTime);
 
 							// изменяем текущие котировки, добавляя туда наши цену и объем
@@ -1280,18 +1280,18 @@ namespace StockSharp.Algo.Testing
 			{
 				var beginValue = posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue).To<decimal?>() ?? 0m;
 
-				if (!_moneys.ContainsKey(posMsg.SecurityId))
-				{
-					result.Add(new PositionMessage
-					{
-						SecurityId = posMsg.SecurityId,
-						PortfolioName = posMsg.PortfolioName,
-						DepoName = posMsg.DepoName,
-						LocalTime = posMsg.LocalTime
-					});
-				}
+				//if (!_moneys.ContainsKey(posMsg.SecurityId))
+				//{
+				//	result.Add(new PositionMessage
+				//	{
+				//		SecurityId = posMsg.SecurityId,
+				//		PortfolioName = posMsg.PortfolioName,
+				//		DepoName = posMsg.DepoName,
+				//		LocalTime = posMsg.LocalTime
+				//	});
+				//}
 
-				var money = GetMoney(posMsg.SecurityId, posMsg.LocalTime, result);
+				var money = GetMoney(posMsg.SecurityId/*, posMsg.LocalTime, result*/);
 
 				var prevPrice = money.PositionPrice;
 
@@ -1327,27 +1327,27 @@ namespace StockSharp.Algo.Testing
 				AddPortfolioChangeMessage(pfChangeMsg.ServerTime, result);
 			}
 
-			private MoneyInfo GetMoney(SecurityId securityId, DateTimeOffset time, ICollection<Message> result)
+			private MoneyInfo GetMoney(SecurityId securityId/*, DateTimeOffset time, ICollection<Message> result*/)
 			{
-				bool isNew;
-				var money = _moneys.SafeAdd(securityId, k => new MoneyInfo(_parent.GetEmulator(securityId)), out isNew);
+				//bool isNew;
+				var money = _moneys.SafeAdd(securityId, k => new MoneyInfo(_parent.GetEmulator(securityId)));
 
-				if (isNew)
-				{
-					result.Add(new PositionMessage
-					{
-						LocalTime = time,
-						PortfolioName = _name,
-						SecurityId = securityId,
-					});
-				}
+				//if (isNew)
+				//{
+				//	result.Add(new PositionMessage
+				//	{
+				//		LocalTime = time,
+				//		PortfolioName = _name,
+				//		SecurityId = securityId,
+				//	});
+				//}
 
 				return money;
 			}
 
 			public decimal? ProcessOrder(ExecutionMessage orderMsg, decimal? cancelBalance, ICollection<Message> result)
 			{
-				var money = GetMoney(orderMsg.SecurityId, orderMsg.LocalTime, result);
+				var money = GetMoney(orderMsg.SecurityId/*, orderMsg.LocalTime, result*/);
 
 				var prevPrice = money.TotalPrice;
 
@@ -1390,7 +1390,7 @@ namespace StockSharp.Algo.Testing
 				if (position == null)
 					return;
 
-				var money = GetMoney(tradeMsg.SecurityId, time, result);
+				var money = GetMoney(tradeMsg.SecurityId/*, time, result*/);
 
 				var prevPrice = money.TotalPrice;
 
@@ -1487,7 +1487,7 @@ namespace StockSharp.Algo.Testing
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
 				var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
 
-				var money = GetMoney(execMsg.SecurityId, execMsg.LocalTime, result);
+				var money = GetMoney(execMsg.SecurityId/*, execMsg.LocalTime, result*/);
 
 				var needBlock = money.GetPrice(execMsg.Side == Sides.Buy ? volume : 0, execMsg.Side == Sides.Sell ? volume : 0);
 

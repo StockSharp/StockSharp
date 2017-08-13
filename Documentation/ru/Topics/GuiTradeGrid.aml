@@ -22,7 +22,7 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Ниже показан внеший вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink>
@@ -78,9 +78,9 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
 			
 			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
-			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены ордера"));
+			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены заявки"));
 			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
-			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп ордера"));
+			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп заявки"));
 			
 			
 			// Добавляем портфели в таблицу PortfolioGrid

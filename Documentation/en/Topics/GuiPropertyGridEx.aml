@@ -3,18 +3,12 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> - таблица для редактирования свойств объектов. Этот компонент создан
-      	на основе <externalLink>
-<linkText>PropertyGrid</linkText>
-<linkAlternateText>PropertyGrid</linkAlternateText>
-<linkUri>http://wpftoolkit.codeplex.com/wikipage?title=PropertyGrid</linkUri>
-<linkTarget>_blank</linkTarget>
-</externalLink>
- из библиотеки Xceed.Wpf.Toolkit. В состав компонента входит набор дополнительных редакторов для системных типов и типов <token>stocksharp</token>.
-      </para>
-      
+      	<codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> - the table for editing object properties. The component includes a set of additional editors for system types and <token>stocksharp</token> types.
+      	
+      	</para>
+      	     
       <para>
-      <codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> имеет собственные редакторы для следующих типов:
+      <codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> has its own editors for the following types:
       </para>
       
 		<list class="bullet">
@@ -50,19 +44,19 @@
   			</listItem>
   			<listItem>
   				<para>
-  				Словарь <legacyBold>ExtensionInfo</legacyBold>.
+  				<legacyBold>ExtensionInfo</legacyBold> directory.
   				</para>
   			</listItem>
   			<listItem>
   				<para>
 			      	<codeEntityReference qualifyHint="true">T:System.TimeSpan</codeEntityReference>, 
-      				<codeEntityReference qualifyHint="true">T:System.DateTime</codeEntityReference> и 
+      				<codeEntityReference qualifyHint="true">T:System.DateTime</codeEntityReference> and  
       				<codeEntityReference qualifyHint="true">T:System.DateTimeOffset</codeEntityReference>.
   				</para>
   			</listItem>
   			<listItem>
   				<para>
-  				      	<codeEntityReference qualifyHint="true">T:System.Net.EndPoint</codeEntityReference> и 
+  				      	<codeEntityReference qualifyHint="true">T:System.Net.EndPoint</codeEntityReference> and 
       					<codeEntityReference qualifyHint="true">T:System.Net.IPAddress</codeEntityReference>.
   				</para>
   			</listItem>
@@ -84,34 +78,34 @@
 		</list>
      
       <para>
-       <legacyBold>Основные свойства</legacyBold>
+       <legacyBold>Main properties</legacyBold>
       </para>
       
 		<list class="bullet">
   			<listItem>
   				<para>
-  				<codeEntityReference>P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProvider</codeEntityReference> - поставщик информации об инструментах.
+  				<codeEntityReference>P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProvider</codeEntityReference> - the provider of information about instruments.
   				</para>
   			</listItem>
   			<listItem>
   				<para>
-  					<codeEntityReference>P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.ExchangeInfoProvider</codeEntityReference> - поставщик информации о площадках.
+  					<codeEntityReference>P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.ExchangeInfoProvider</codeEntityReference> - the provider of site information.
   				</para>
   			</listItem>
   			<listItem>
   				<para>
-  					<codeEntityReference>P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.Portfolios</codeEntityReference> - список доступных портфелей.
+  					<codeEntityReference>P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.Portfolios</codeEntityReference> - the list of available portfolios.
   				</para>
   			</listItem>
   			<listItem>
   				<para>
-  					<legacyBold>SelectedObject</legacyBold> - объект, чьи свойства будут отображены в таблице.
+  					<legacyBold>SelectedObject</legacyBold> - the object whose properties will be displayed in the table.
   				</para>
   			</listItem>
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Fix/SampleFix</legacyItalic>.
+Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/Fix/SampleFix</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_PropertyDataGridEx" /></mediaLink>

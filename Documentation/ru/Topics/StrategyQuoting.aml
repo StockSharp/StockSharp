@@ -79,7 +79,7 @@
           <content>
             <para>
 				Для того, чтобы алгоритм скользящей средней, описанный в разделе <link xlink:href="a8159c99-256b-46e4-80fe-7cf92944b4c9">Итерационная модель</link>, 
-				стал работать совместно с котировщиком, перед началом работы необходимо зпустить экспорт стакана:</para>
+				стал работать совместно с котировщиком, перед началом работы необходимо запустить экспорт стакана:</para>
 			  <code language="C#">if (!_isLkohOrderBookStarted)
 {
 	// для алгоритма котирования необходимо включить экспорт стакана
@@ -96,8 +96,10 @@ base.RegisterOrder(order);</code>
 		<para>
 		  на:
 		</para>
-		<code language="C#">var strategy = new MarketQuotingStrategy(order, 1m);
-base.ChildStrategies.Add(strategy);</code>
+<code language="C#">
+var strategy = new MarketQuotingStrategy(direction, volume);
+ChildStrategies.Add(strategy);
+</code>
 		<!--para>
 		  После этого <codeEntityReference>T:StockSharp.Algo.Strategies.RealTimeStrategyManager</codeEntityReference> выполнит до конца метод SmaStrategy.OnProcess
 		  и уже после этого будет вызывать другой метод – <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.QuotingStrategy.OnProcess</codeEntityReference>.

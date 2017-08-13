@@ -8,31 +8,28 @@
 		
         <code language="C#">
         <![CDATA[
-private void SendClick(object sender, RoutedEventArgs e)
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
-	varstopOrder = new Order
+	var newOrder = new OrderConditionalWindow
 	{
-		Portfolio = Portfolio.SelectedPortfolio,
-		Type = OrderTypes.Conditional,
-		Volume = Volume.Text.To<decimal>(),
-		Price = Price.Text.To<decimal>(),
-		Security = Security,
-		Direction = IsBuy.IsChecked == true ?OrderDirections.Buy : OrderDirections.Sell,
-		ExpiryDate = IsOneDay.IsChecked == true ?DateTime.Today : DateTime.MaxValue,
-		Condition = new ETradeOrderCondition
+		Order = new Order
 		{
-			StopType = StopMarket ? ETradeStopTypes.StopMarket : ETradeStopTypes.StopLimit,
-			StopPrice = StopPrice.Text.To<decimal>()
-		}
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
 	};
 
-	MainWindow.Instance.Trader.RegisterOrder(stopOrder);
-	DialogResult = true;
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 }
 		]]>
 		</code>
 		
-		<para>Для The special <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeOrderCondition</codeEntityReference> сlass is given to work with the stop orders conditions.
+		<para>The special <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeOrderCondition</codeEntityReference> class is given to work with the stop orders conditions.
 		This class supports the following types of stop orders:</para>
 
 		<list class="bullet">

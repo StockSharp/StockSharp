@@ -39,7 +39,7 @@
   			</listItem>
   			  			<listItem>
   				<para>
-  					Кнопока <legacyBold>Ok</legacyBold> - завершение создания <legacyItalic>непрерывного</legacyItalic> инструмента.
+  					Кнопка <legacyBold>Ok</legacyBold> - завершение создания <legacyItalic>непрерывного</legacyItalic> инструмента.
   				</para>
   			</listItem>
 		</list>
@@ -71,14 +71,14 @@ private void CreateContinuousSecurity_OnClick(object sender, RoutedEventArgs e)
 {
 	_continuousSecurityWindow = new ContinuousSecurityWindow
 	{
-		SecurityProvider = _entityRegistry.Securities,
-		ContinuousSecurity = new ContinuousSecurity { Board = ExchangeBoard.Associated }
+		SecurityStorage = _entityRegistry.Securities,
+		Security = new ContinuousSecurity { Board = ExchangeBoard.Associated }
 	};
 
 	if (!_continuousSecurityWindow.ShowModal(this))
 		return;
 
-	_continuousSecurity = _continuousSecurityWindow.ContinuousSecurity;
+	_continuousSecurity = _continuousSecurityWindow.Security;
 	ContinuousSecurity.Content = _continuousSecurity.Id;
 
 	var first = _continuousSecurity.InnerSecurities.First();

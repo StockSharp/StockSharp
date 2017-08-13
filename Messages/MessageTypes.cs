@@ -80,6 +80,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Position.
 		/// </summary>
+		[Obsolete]
 		Position,
 
 		/// <summary>

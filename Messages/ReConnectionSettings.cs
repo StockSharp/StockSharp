@@ -47,7 +47,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str176Key)]
 		public TimeSpan Interval
 		{
-			get { return _interval; }
+			get => _interval;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -67,7 +67,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str179Key)]
 		public int AttemptCount
 		{
-			get { return _attemptCount; }
+			get => _attemptCount;
 			set
 			{
 				if (value < -1)
@@ -87,7 +87,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str181Key)]
 		public int ReAttemptCount
 		{
-			get { return _reAttemptCount; }
+			get => _reAttemptCount;
 			set
 			{
 				if (value < -1)
@@ -107,7 +107,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str183Key)]
 		public TimeSpan TimeOutInterval
 		{
-			get { return _timeOutInterval; }
+			get => _timeOutInterval;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -127,7 +127,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str185Key)]
 		public WorkingTime WorkingTime
 		{
-			get { return _workingTime; }
+			get => _workingTime;
 			set
 			{
 				if (value == null)

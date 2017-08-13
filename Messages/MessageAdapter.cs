@@ -45,7 +45,7 @@ namespace StockSharp.Messages
 
 			public TimeSpan TimeOut
 			{
-				get { return _timeOut; }
+				get => _timeOut;
 				set
 				{
 					if (value <= TimeSpan.Zero)
@@ -112,13 +112,11 @@ namespace StockSharp.Messages
 
 		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
 
-		/// <summary>
-		/// Supported by adapter message types.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual MessageTypes[] SupportedMessages
 		{
-			get { return _supportedMessages; }
+			get => _supportedMessages;
 			set
 			{
 				if (value == null)
@@ -132,15 +130,11 @@ namespace StockSharp.Messages
 			}
 		}
 
-		/// <summary>
-		/// The parameters validity check.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool IsValid => true;
 
-		/// <summary>
-		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
@@ -156,7 +150,7 @@ namespace StockSharp.Messages
 			GroupName = LocalizedStrings.Str186Key)]
 		public TimeSpan HeartbeatInterval
 		{
-			get { return _heartbeatInterval; }
+			get => _heartbeatInterval;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -166,21 +160,15 @@ namespace StockSharp.Messages
 			}
 		}
 
-		/// <summary>
-		/// <see cref="SecurityLookupMessage"/> required to get securities.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool SecurityLookupRequired => this.IsMessageSupported(MessageTypes.SecurityLookup);
 
-		/// <summary>
-		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool PortfolioLookupRequired => this.IsMessageSupported(MessageTypes.PortfolioLookup);
 
-		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
 
@@ -190,21 +178,27 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual bool IsNativeIdentifiersPersistable => true;
 
-		/// <summary>
-		/// Identify security in messages by native identifier <see cref="SecurityId.Native"/>.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool IsNativeIdentifiers => false;
 
-		/// <summary>
-		/// The storage name, associated with the adapter.
-		/// </summary>
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsFullCandlesOnly => true;
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportSubscriptions => true;
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual bool IsSupportSubscriptionBySecurity => true;
+
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual string StorageName { get; }
 
-		/// <summary>
-		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; } = null;
 
@@ -224,36 +218,27 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public Platforms Platform { get; protected set; }
 
-		/// <summary>
-		/// Names of extended security fields in <see cref="SecurityMessage"/>.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual Tuple<string, Type>[] SecurityExtendedFields { get; } = ArrayHelper.Empty<Tuple<string, Type>>();
 
-		/// <summary>
-		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
-		/// </summary>
-		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
+		/// <inheritdoc />
 		public virtual OrderCondition CreateOrderCondition()
 		{
 			return null;
 		}
 
-		/// <summary>
-		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
-		/// </summary>
+		/// <inheritdoc />
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
 		private IdGenerator _transactionIdGenerator;
 
-		/// <summary>
-		/// Transaction id generator.
-		/// </summary>
+		/// <inheritdoc />
 		[Browsable(false)]
 		public IdGenerator TransactionIdGenerator
 		{
-			get { return _transactionIdGenerator; }
+			get => _transactionIdGenerator;
 			set
 			{
 				if (value == null)
@@ -272,7 +257,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public TimeSpan LookupTimeOut
 		{
-			get { return _secLookupTimeOut.TimeOut; }
+			get => _secLookupTimeOut.TimeOut;
 			set
 			{
 				_secLookupTimeOut.TimeOut = value;
@@ -482,7 +467,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="description">Error detais.</param>
+		/// <param name="description">Error details.</param>
 		protected void SendOutError(string description)
 		{
 			SendOutError(new InvalidOperationException(description));
@@ -491,7 +476,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="error">Error detais.</param>
+		/// <param name="error">Error details.</param>
 		protected void SendOutError(Exception error)
 		{
 			SendOutMessage(error.ToErrorMessage());

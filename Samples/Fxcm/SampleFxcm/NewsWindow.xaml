@@ -1,0 +1,9 @@
+<Window
+		x:Class="SampleFxcm.NewsWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:xaml="http://schemas.stocksharp.com/xaml"
+		Title="{x:Static loc:LocalizedStrings.News}" Height="300" Width="1050">
+	<xaml:NewsPanel x:Name="NewsPanel"/>
+</Window>

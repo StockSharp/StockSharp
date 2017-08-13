@@ -4,7 +4,7 @@
    
     <introduction>
     	<para>
-     		Для написания торговых роботов под торговую платформу <token>oanda</token> необходимо использовать
+     		Для написания торговых роботов под брокера <token>oanda_external</token> необходимо использовать
 			<codeEntityReference qualifyHint="false">T:StockSharp.Oanda.OandaTrader</codeEntityReference>.
 		</para>
      </introduction>
@@ -12,7 +12,7 @@
      <relatedTopics>
     	<link xlink:href="bf4d89d7-32a7-4755-beab-3bfd0581db6c">Пример работы с OandaTrader</link>
     	<link xlink:href="5389994b-68d4-456d-8ea0-52d07dbc185d">Стоп-заявки</link>
-    	<link xlink:href="ad7e6528-705a-4e3f-8df6-e9b129279c08">Исторические данные</link>-->
+    	<link xlink:href="ad7e6528-705a-4e3f-8df6-e9b129279c08">Исторические данные</link>
     </relatedTopics>
       
   </developerConceptualDocument>

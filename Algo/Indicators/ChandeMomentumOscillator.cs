@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Chande Momentum Oscillator.
+	/// Chande Momentum Oscillator.
 	/// </summary>
 	[DisplayName("CMO")]
 	[DescriptionLoc(LocalizedStrings.Str759Key)]

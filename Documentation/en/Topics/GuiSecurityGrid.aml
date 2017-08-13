@@ -2,31 +2,32 @@
 <topic id="de52af78-ec80-45b4-9820-0052f8add762" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Компонент <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> предназначен для отображения финансовой
-      информации (поля level1) и ее изменения, относящейся к инструментам, в табличном виде. Компонент позволяет выбирать один или несколько инструментов.
+      <para>The <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> component is designed to 
+      display financial information (level1 fields) and its changes relating to instruments in a tabular form. 
+      The component allows you to select one or more instruments.
       </para>
       <para>
-      <legacyBold>Основные свойства</legacyBold>
+      <legacyBold>Main properties</legacyBold>
       </para>
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.Securities</codeEntityReference> - список инструментов.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.Securities</codeEntityReference> - the list of instruments.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectedSecurity</codeEntityReference> - выбранный инструмент.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectedSecurity</codeEntityReference> - the selected instrument.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectedSecurities</codeEntityReference> - список выбранных инструментов.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectedSecurities</codeEntityReference> - the list of selected instruments.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.MarketDataProvider</codeEntityReference> - провайдер рыночных данных.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.MarketDataProvider</codeEntityReference> - the provider of market data.</para>
   			</listItem>
 		</list>
       <para>
-       Обратите внимание, что для отображения изменений рыночной информации необходимо задать провайдер рыночных данных.
+Please note that for the display of changes in market information, you must specify a provider of market data.
       </para>
       <para>
-       Ниже показаны внешний вид компонента и фрагмент кода с его использованием.
+Below is the appearance of the component and the code snippet with its use.
       </para>
       
  <section>
@@ -35,9 +36,9 @@
  	<section address="SubSection1">
      	<content>
               <mediaLink><image placement="left" xlink:href="GUI_SecurityPicker2" /></mediaLink>
-     	<para>
-              На рисунке компонент <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> показан в составе
-              графического компонента <link xlink:href="f4e84944-41ad-42f2-9d2a-2854a8665152">SecurityPicker</link>.
+      <para>         
+In the figure, the <codeEntityReference>T:StockSharp.Xaml.SecurityGrid</codeEntityReference> component is shown in the 
+<link xlink:href="f4e84944-41ad-42f2-9d2a-2854a8665152">SecurityPicker</link> graphical component.
         </para>
               <code title="XAML" language="XAML">
 	  				<![CDATA[
@@ -54,26 +55,22 @@
               </code>
               <code title="C#" language="C#">
 
-Connector _connector = new QuikTrader();
+Connector _connector = new OpenECryTrader();
 
-// Назначаем провайдер рыночных данных
 SecurityGrid.MarketDataProvider = _connector;
 
 ..........................
 
-// Добавляем в сетку инструменты
-_connector.NewSecurities += securities =>
+_connector.NewSecurity += security =>
 {
-	SecurityGrid.Securities.AddRange(securities);
+	SecurityGrid.Securities.Add(security);
 };
 
 ..........................
 
-// Здесь показано, как можно изменить видимость колонок в сетке
 private void ColumnsFilter()
 {
-	// Задаем список видимых колонок
-	string[] сolumns = { "Board", "BestAsk.Price", "BestAsk.Volume" };
+	string[] columns = { "Board", "BestAsk.Price", "BestAsk.Volume" };
 	
 	foreach (var column in SecurityGrid.Columns)
 	{

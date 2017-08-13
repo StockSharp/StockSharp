@@ -76,11 +76,11 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Identity]
 		[DisplayNameLoc(LocalizedStrings.CodeKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string Code
 		{
-			get { return _code; }
+			get => _code;
 			set
 			{
 				if (value == null)
@@ -107,7 +107,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		public TimeSpan ExpiryTime
 		{
-			get { return _expiryTime; }
+			get => _expiryTime;
 			set
 			{
 				if (ExpiryTime == value)
@@ -128,14 +128,8 @@ namespace StockSharp.BusinessEntities
 		{
 			// XmlSerializer does not support TimeSpan, so use this property for 
 			// serialization instead.
-			get
-			{
-				return XmlConvert.ToString(ExpiryTime);
-			}
-			set
-			{
-				ExpiryTime = value.IsEmpty() ? TimeSpan.Zero : XmlConvert.ToTimeSpan(value);
-			}
+			get => XmlConvert.ToString(ExpiryTime);
+			set => ExpiryTime = value.IsEmpty() ? TimeSpan.Zero : XmlConvert.ToTimeSpan(value);
 		}
 
 		/// <summary>
@@ -198,7 +192,7 @@ namespace StockSharp.BusinessEntities
 		[InnerSchema]
 		public WorkingTime WorkingTime
 		{
-			get { return _workingTime; }
+			get => _workingTime;
 			set
 			{
 				if (value == null)
@@ -223,7 +217,7 @@ namespace StockSharp.BusinessEntities
 		//[DataMember]
 		public TimeZoneInfo TimeZone
 		{
-			get { return _timeZone; }
+			get => _timeZone;
 			set
 			{
 				if (value == null)
@@ -245,8 +239,8 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		public string TimeZoneStr
 		{
-			get { return TimeZone.To<string>(); }
-			set { TimeZone = value.To<TimeZoneInfo>(); }
+			get => TimeZone.To<string>();
+			set => TimeZone = value.To<TimeZoneInfo>();
 		}
 
 		[field: NonSerialized]
@@ -263,7 +257,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
+			get => _extensionInfo;
 			set
 			{
 				if (value == null)
@@ -286,8 +280,8 @@ namespace StockSharp.BusinessEntities
 
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
-			add { _propertyChanged += value; }
-			remove { _propertyChanged -= value; }
+			add => _propertyChanged += value;
+			remove => _propertyChanged -= value;
 		}
 
 		private void Notify(string info)

@@ -36,7 +36,7 @@
   				<para>S#.Data server.</para>
   			</listItem>
 			<listItem>
-  				<para>S#.Shell исходные коды.</para>
+  				<para><token>stocksharpshell</token> исходные коды.</para>
   			</listItem>
   			<listItem>
   				<para>Расширенные примеры.</para>
@@ -77,13 +77,8 @@
 
 		<para><legacyBold>Корпоративная плюс</legacyBold></para>
 		<para>Включает в себя исходные коды любого из наших готовых программных решений 
-		(<token>hydra</token>, <token>designer</token>,   			<externalLink>
-				<linkText>S#.Shell</linkText>
-				<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
-				<linkUri>http://stocksharp.ru/products/shell/</linkUri>
-				<linkTarget>_blank</linkTarget>
-			</externalLink>),
-		а также исходные коды самой платформы: S#.API.</para>
+		(<token>hydra</token>, <token>designer</token>, <token>stocksharpshell</token>),
+		а также исходные коды самой платформы: <token>stocksharpapi</token>.</para>
 
 		<para>
   			Подробную информацию о лицензиях см. <token>stocksharppricing</token>.

@@ -17,7 +17,6 @@ namespace SampleAlfaCandles
 {
 	using System;
 	using System.ComponentModel;
-	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Common;
@@ -110,8 +109,8 @@ namespace SampleAlfaCandles
 
 			var timeFrame = (TimeSpan)HistoryInterval.SelectedItem;
 
-			var from = From.Value ?? DateTimeOffset.MinValue;
-			var to = RealTime.IsChecked == true ? DateTimeOffset.MaxValue : To.Value ?? DateTimeOffset.MaxValue;
+			var from = (DateTimeOffset?)From.Value;
+			var to = RealTime.IsChecked == true ? null : (DateTimeOffset?)To.Value;
 
 			if (from > to)
 			{
@@ -132,12 +131,12 @@ namespace SampleAlfaCandles
 				CandleType = typeof(TimeFrameCandle)
 			};
 
-			_trader.NewCandles += (candleSeries, candles) =>
+			_trader.CandleSeriesProcessing += (candleSeries, candle) =>
 			{
-				_trader.AddInfoLog("newcandles({0}):\n{1}", candles.Count(), candles.Select(c => c.ToString()).Join("\n"));
+				_trader.AddInfoLog("New сandle({0})", candle);
 
 				if (candleSeries == series)
-					wnd.DrawCandles(candles);
+					wnd.DrawCandles(candle);
 			};
 
 			_trader.SubscribeCandles(series, from, to);

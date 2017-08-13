@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="250003df-48b4-4211-9c8e-25ac3f6a45be" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_The_transaction_strategy_00"/>
+</mediaLink>
+<para>Кубик используется для получения всех сделок стратегии.
+</para>
+
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+<listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо получать сделки. Если инструмент
+ не передан, то на выход передаются сделки по всем инструментам стратегии.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Сделки</legacyBold> – сделки, возникающие по переданному инструменту. 
+  Могут использоваться как для отображения на графике с помощью элемента
+<legacyBold>Панель графика</legacyBold>, так и для защиты позиции с помощью 
+элемента <legacyBold>Защита позиции</legacyBold>.</para></listItem>
+</list>
+  </definition>
+
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="67a08284-5d80-42f1-b311-f6c78789c48d" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

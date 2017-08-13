@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="17231700-6f92-4495-8b66-b3520f8c76ba" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+		<para>The same <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
+		method is used to register stop orders, but with stop condition <codeEntityReference qualifyHint="false">T:StockSharp.Fxcm.FxcmOrderCondition</codeEntityReference>
+		and the <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> type of order indicating:</para>   
+        <code language="C#">
+        <![CDATA[
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
+{
+	var newOrder = new OrderConditionalWindow
+	{
+		Order = new Order
+		{
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
+	};
+
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+}
+		]]>
+		</code>
+	</introduction>
+  </developerConceptualDocument>
+</topic>

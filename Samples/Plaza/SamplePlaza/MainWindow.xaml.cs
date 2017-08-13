@@ -22,8 +22,11 @@ namespace SamplePlaza
 	using System.Windows;
 
 	using Ecng.Common;
+	using Ecng.Configuration;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Plaza;
@@ -44,6 +47,8 @@ namespace SamplePlaza
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 
 		private readonly LogManager _logManager = new LogManager();
+		private readonly CsvEntityRegistry _entityRegistry;
+		private readonly IStorageRegistry _storageRegistry;
 
 		public MainWindow()
 		{
@@ -59,7 +64,20 @@ namespace SamplePlaza
 			_securitiesWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
-			AppName.Text = Trader.AppName;
+			const string dataPath = "Data";
+
+			_entityRegistry = new CsvEntityRegistry(dataPath);
+
+			ConfigManager.RegisterService<IEntityRegistry>(_entityRegistry);
+			// ecng.serialization invoke in several places IStorage obj
+			ConfigManager.RegisterService(_entityRegistry.Storage);
+
+			_storageRegistry = new StorageRegistry
+			{
+				DefaultDrive = new LocalMarketDataDrive(dataPath)
+			};
+
+			//AppName.Text = Trader.AppName;
 
 			Tables.SelectedTables = Trader.Tables.Select(t => t.Id);
 
@@ -84,6 +102,8 @@ namespace SamplePlaza
 			_portfoliosWindow.Close();
 
 			Trader.Dispose();
+
+			_entityRegistry.DelayAction.DefaultGroup.WaitFlush(true);
 
 			base.OnClosing(e);
 		}
@@ -120,8 +140,7 @@ namespace SamplePlaza
 						var revisionManager = Trader.StreamManager.RevisionManager;
 
 						//revisionManager.Tables.Add(Trader.TableRegistry.IndexLog);
-						revisionManager.Tables.Add(Trader.TableRegistry.TradeFuture);
-						revisionManager.Tables.Add(Trader.TableRegistry.TradeOption);
+						revisionManager.Tables.Add(Trader.TableRegistry.AnonymousDeal);
 
 						Trader.Tables.Clear();
 						Trader.TableRegistry.SyncTables(Tables.SelectedTables);
@@ -177,6 +196,33 @@ namespace SamplePlaza
 
 						// устанавливаем поставщик маркет-данных
 						_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+
+						if (IsStorage.IsChecked == true)
+						{
+							revisionManager.Tables.Clear();
+
+							// запоминаем настроенный адаптер, так как InitializeStorage полностью очищает ранее осуществленные настройки
+							var plazaAdaprer = Trader.Adapter.InnerAdapters.OfType<PlazaMessageAdapter>().First();
+
+							Trader.InitializeStorage(_entityRegistry, _storageRegistry);
+
+							Trader.Adapter.InnerAdapters.Add(plazaAdaprer);
+
+							try
+							{
+								_entityRegistry.Init();
+							}
+							catch (Exception ex)
+							{
+								MessageBox.Show(this, ex.ToString());
+							}
+
+							Trader.StorageAdapter.Format = StorageFormats.Csv;
+							Trader.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
+							Trader.StorageAdapter.Load();
+
+							ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(_entityRegistry));
+						}
 					}
 
 					Trader.Connect();
@@ -212,7 +258,8 @@ namespace SamplePlaza
 
 			ShowOrdersLog.IsEnabled = isConnected;
 
-			IsCGate.IsEnabled = IsFastRepl.IsEnabled = IsAutorization.IsEnabled = Tables.IsEnabled = !isConnected;
+			IsCGate.IsEnabled = IsDemo.IsEnabled = IsStorage.IsEnabled = IsFastRepl.IsEnabled
+				= IsAutorization.IsEnabled = Tables.IsEnabled = !isConnected;
 		}
 
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)

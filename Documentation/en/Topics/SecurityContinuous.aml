@@ -5,7 +5,7 @@
 	<introduction>
 		<para><codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference> - continuous instrument (typically futures), containing the instruments affected by expiration (expiry of period of activity).</para> 
 		
-		<para>For example, two futures of the ES index - <legacyBold>ESM5</legacyBold> и <legacyBold>ESU5</legacyBold>. When the <legacyBold>ESM5</legacyBold> expired it automatically switches to the next instrument - <legacyBold>ESU5</legacyBold>.</para>
+		<para>For example, two futures of the ES index - <legacyBold>ESM5</legacyBold> and <legacyBold>ESU5</legacyBold>. When the <legacyBold>ESM5</legacyBold> expired it automatically switches to the next instrument - <legacyBold>ESU5</legacyBold>.</para>
 		
 		<para><codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference> can be traded in the same way as <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>.
 		Prior to the <legacyBold>RIM5</legacyBold> expiration an algo will be carried with this instrument. After the expiration an algo will be carried with <legacyBold>RIU5</legacyBold>, etc.</para>

@@ -2,29 +2,32 @@
 <topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>The task – is repetitive action in a certain time.</para>
-    	<para>To view a list of tasks it is necessary to select the <mediaLinkInline>
-<image xlink:href="hydra_tasks_option"/></mediaLinkInline> item in the left pane.
-The working with tasks is exactly the same as with the sources – the task can be added, deleted, edited, enabled/disabled.</para>
+    	<para>The tool is a repeating action at a specific time.</para>
+    	<para>To view the list of tools, select the <legacyBold>Tools</legacyBold> item in the left pane. 
+    	Work with tools is the same as with sources - the tool can be added, deleted, 
+    	edited, enabled/disabled. To add the <legacyBold>Tool</legacyBold>, on the <legacyBold>General</legacyBold> tab, 
+    	select <legacyBold>Add => Tools</legacyBold>. A corresponding window will appear on which you can select the required <legacyBold>Tool</legacyBold>...
+    	</para>
+    	
     	<mediaLink>
-        <image placement="left" xlink:href="hydra_tasks" />
+        <image placement="center" xlink:href="hydra_tasks" />
       </mediaLink>
-    	<para>Currently, there are three classes of tasks in <token>hydra</token>:</para>
+    	<para>Currently, there are three classes of tasks in <token>hydra</token></para>
     	
       <list class="bullet">
         <listItem>
           <para>
-            <link xlink:href="272eef99-c7e4-4245-ae83-7efa4d2345bc"><legacyBold>Converter</legacyBold></link> - the task is to convert the exchange data to the ticks, candles or order books.
+            <link xlink:href="272eef99-c7e4-4245-ae83-7efa4d2345bc"/> - the task is to convert the exchange data to the ticks, candles or order books.
           </para>
         </listItem>
         <listItem>
           <para>
-            <link xlink:href="9e075b32-abb2-4fad-bfb2-b822dd7d9f30"><legacyBold>Export (auto)</legacyBold></link> - the task is to export market data to different formats (txt, excel).
+            <link xlink:href="9e075b32-abb2-4fad-bfb2-b822dd7d9f30"/> - the task is to export candles to different formats.
           </para>
         </listItem>
         <listItem>
           <para>
-            <link xlink:href="5a056352-64c7-41ea-87a8-2e112935e3b9"><legacyBold>Backup</legacyBold></link> - the task is to backup data to the cloud service.
+            <link xlink:href="5a056352-64c7-41ea-87a8-2e112935e3b9"/> - the task is to backup data to the cloud service.
           </para>
         </listItem>
 

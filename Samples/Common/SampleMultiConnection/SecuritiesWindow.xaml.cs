@@ -24,9 +24,12 @@ namespace SampleMultiConnection
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+
+	using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
 	public partial class SecuritiesWindow
 	{
@@ -82,40 +85,49 @@ namespace SampleMultiConnection
 		{
 			var connector = MainWindow.Instance.Connector;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				connector.RegisterMarketDepth(security);
+				var window = _quotesWindows.SafeAdd(security, s =>
+				{
+					// subscribe on order book flow
+					connector.RegisterMarketDepth(security);
 
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+				{
+					window.Show();
+					window.DepthCtrl.UpdateDepth(connector.GetMarketDepth(security));
+				}
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthChanged(connector.GetMarketDepth(SecurityPicker.SelectedSecurity));
-				connector.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					connector.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
-
 			var connector = MainWindow.Instance.Connector;
 
-			if (connector.RegisteredSecurities.Contains(security))
-				connector.UnRegisterSecurity(security);
-			else
-				connector.RegisterSecurity(security);
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				if (connector.RegisteredSecurities.Contains(security))
+					connector.UnRegisterSecurity(security);
+				else
+					connector.RegisterSecurity(security);
+			}
 		}
 
 		private void TraderOnMarketDepthChanged(MarketDepth depth)
@@ -134,6 +146,27 @@ namespace SampleMultiConnection
 				return;
 
 			MainWindow.Instance.Connector.LookupSecurities(wnd.Criteria);
+		}
+
+		private void CandlesClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var t = (TimeSpan)CandlesPeriods.SelectedItem;
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, t);
+
+				new ChartWindow(series).Show();
+			}
+		}
+
+		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
+		{
+			TryEnableCandles();
+		}
+
+		private void TryEnableCandles()
+		{
+			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
 		}
 	}
 }

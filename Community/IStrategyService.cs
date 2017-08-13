@@ -29,10 +29,11 @@ namespace StockSharp.Community
 		/// To add the strategy to the store.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
+		/// <param name="isEnglish">Create strategy in English store.</param>
 		/// <param name="strategy">The strategy data.</param>
 		/// <returns>The strategy identifier.</returns>
 		[OperationContract]
-		long CreateStrategy(Guid sessionId, StrategyData strategy);
+		long CreateStrategy(Guid sessionId, bool isEnglish, StrategyData strategy);
 
 		/// <summary>
 		/// To update the strategy in the store.
@@ -56,9 +57,10 @@ namespace StockSharp.Community
 		/// To get all strategies identifiers.
 		/// </summary>
 		/// <param name="lastCheckTime">Last time of calling the method.</param>
+		/// <param name="isEnglish">Request strategies in English store.</param>
 		/// <returns>Strategies identifiers and revisions.</returns>
 		[OperationContract]
-		IEnumerable<Tuple<long, int>> GetStrategies(DateTime lastCheckTime);
+		IEnumerable<Tuple<long, int>> GetStrategies(DateTime lastCheckTime, bool isEnglish);
 
 		/// <summary>
 		/// To get the name and description of strategies.
@@ -134,16 +136,16 @@ namespace StockSharp.Community
 		byte StopBacktest(Guid sessionId, long backtestId);
 
 		/// <summary>
-		/// To get the count of completed interations.
+		/// To get the count of completed iterations.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="backtestId">The backtesting session identifier.</param>
-		/// <returns>The count of completed interations.</returns>
+		/// <returns>The count of completed iterations.</returns>
 		[OperationContract]
 		int GetCompletedIterationCount(Guid sessionId, long backtestId);
 
 		/// <summary>
-		/// To gey the identifier of formatted file.
+		/// To get the identifier of formatted file.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="backtestId">The backtesting session identifier.</param>

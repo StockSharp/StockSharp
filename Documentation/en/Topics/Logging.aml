@@ -38,10 +38,6 @@
 					<codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference> - sends messages to the specified email address. It is recommended
 					to use if the algorithm is located at not controlled computer (at hoster’s server).
 				</listItem>
-				<!-- <listItem>
-					<codeEntityReference>T:StockSharp.Logging.SmsLogListener</codeEntityReference> - отсылает сообщения на телефон через Google
-					Calendar. Рекомендуется использовать, если робот расположен на непостоянно контролируемом компьютере (на сервере у провайдера).
-				</listItem> -->
 				<listItem>
 					<codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference> - displays messages through the special
 					<codeEntityReference>T:StockSharp.Xaml.LogWindow</codeEntityReference> window. Able to work in two modes: when all messages output in a single

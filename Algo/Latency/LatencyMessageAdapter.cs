@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Latency
 		/// </summary>
 		public ILatencyManager LatencyManager
 		{
-			get { return _latencyManager; }
+			get => _latencyManager;
 			set
 			{
 				if (value == null)

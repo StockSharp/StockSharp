@@ -16,20 +16,13 @@
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
     <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativeSecurityLookup">
-      <summary>
-            Gets a value indicating whether the connector supports security lookup.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativePortfolioLookup">
-      <summary>
-            Gets a value indicating whether the connector supports position lookup.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.Key">
       <summary>

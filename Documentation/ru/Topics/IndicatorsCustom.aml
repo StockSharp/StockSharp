@@ -50,7 +50,8 @@ public class SimpleMovingAverage : LengthIndicator<decimal>
 			return new DecimalIndicatorValue(this, Buffer.Sum() / Length);
 		return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
 	}
-}]]></code>
+}
+]]></code>
 		<para>
 			<codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> наследуется от класса
 			<codeEntityReference>T:StockSharp.Algo.Indicators.LengthIndicator`1</codeEntityReference>, от которого необходимо наследовать все индикаторы,
@@ -123,7 +124,8 @@ public class ChaikinVolatility : BaseIndicator<IIndicatorValue>
 
 		return input;				
 	}
-}]]></code>
+}
+]]></code>
 		<para>
 			Последний вид индикаторов - это те, которые не просто состоят из других индикаторов, но так же графически отображаются несколькими состояниями
 			одновременно (несколькими линиями). Например, <codeEntityReference>T:StockSharp.Algo.Indicators.AverageDirectionalIndex</codeEntityReference>:

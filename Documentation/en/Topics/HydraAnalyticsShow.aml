@@ -8,7 +8,7 @@
       		<para>Running the script and the analysis results display</para>
       	</title>
 	    <mediaLink>
-    	    <image placement="left" xlink:href="hydra_analitics_toolbar" />
+    	    <image placement="center" xlink:href="hydra_analitics_toolbar" />
       	</mediaLink>
 	    <steps class="ordered">
     	    <step>
@@ -16,7 +16,7 @@
 	          	<para>Select data for analysis:</para>
 				<list class="bullet">
   					<listItem>
-  						<para>Open the <legacyBold>Parameters</legacyBold> window clicking the appropriate button on the toolbar.</para>
+  						<para>In the <legacyBold>Parameters</legacyBold> window located on the right side of the program.</para>
   						<mediaLink>
     	    				<image placement="left" xlink:href="hydra_analitics_parameters" />
       					</mediaLink>
@@ -42,7 +42,7 @@
           			<para>View the results:</para>
 					<list class="bullet">
   					<listItem>
-  						<para>To view the graphical results select the <legacyBold>Chart</legacyBold> tab.</para>
+  						<para>To view the chart, select the <legacyBold>Chart</legacyBold> tab.</para>
   						<mediaLink>
     	    				<image placement="left" xlink:href="hydra_analitics_chart" />
       					</mediaLink>

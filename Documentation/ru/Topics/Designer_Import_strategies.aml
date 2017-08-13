@@ -9,21 +9,21 @@
   мыши на папке стратегии, в появившемся меню выбрать <legacyBold>Импорт</legacyBold>.</para></listItem>
   <listItem><para>На вкладке <legacyBold>Общее</legacyBold> нажать 
   кнопку <legacyBold>Импорт</legacyBold> в появившемся меню 
-  выбрать <legacyBold>Составной элемент</legacyBold> или <legacyBold>Стратегии</legacyBold></para></listItem>
+  выбрать <legacyBold>Составной элемент</legacyBold> или <legacyBold>Стратегии</legacyBold>:</para></listItem>
 </list>
 <mediaLink>
-<image xlink:href="Designer_Import_strategies_00"/>
+<image placement="center" xlink:href="Designer_Import_strategies_00"/>
 </mediaLink>
  
 <para>Если стратегия с этим именем есть, то появится окно 
-с предложением перезаписать, добавить с другим названием.</para>
+с предложением перезаписать, добавить с другим названием:</para>
  <mediaLink>
-<image xlink:href="Designer_Import_strategies_01"/>
+<image placement="center" xlink:href="Designer_Import_strategies_01"/>
 </mediaLink>
 <para>При импорте зашифрованного файла, необходимо ввести пароль, 
-который был введен при шифровке файла</para>
+который был введен при шифровке файла:</para>
  <mediaLink>
-<image xlink:href="Designer_Import_strategies_02"/>
+<image placement="center" xlink:href="Designer_Import_strategies_02"/>
 </mediaLink>
 
     </introduction>

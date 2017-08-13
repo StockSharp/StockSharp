@@ -18,17 +18,18 @@ namespace SampleCQG
 	using System;
 	using System.ComponentModel;
 	using System.Windows.Media;
-	
+
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Xaml.Charting;
 
 	partial class ChartWindow
 	{
-		private readonly CandleManager _manager;
+		private readonly Connector _connector;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 
-		public ChartWindow(CandleSeries candleSeries, DateTime from, DateTime to)
+		public ChartWindow(CandleSeries candleSeries)
 		{
 			InitializeComponent();
 
@@ -36,6 +37,7 @@ namespace SampleCQG
 				throw new ArgumentNullException(nameof(candleSeries));
 
 			_candleSeries = candleSeries;
+			_connector = MainWindow.Instance.Connector;
 
 			Chart.ChartTheme = ChartThemes.ExpressionDark;
 
@@ -53,9 +55,10 @@ namespace SampleCQG
 
 			area.Elements.Add(_candleElem);
 
-			_manager = new CandleManager(MainWindow.Instance.Connector);
-			_manager.Processing += ProcessNewCandles;
-			_manager.Start(_candleSeries, from, to);
+			var tf = (TimeSpan)candleSeries.Arg;
+
+			_connector.CandleSeriesProcessing += ProcessNewCandles;
+			_connector.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)));
 		}
 
 		private void ProcessNewCandles(CandleSeries series, Candle candle)
@@ -68,7 +71,8 @@ namespace SampleCQG
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_manager.Processing -= ProcessNewCandles;
+			_connector.UnSubscribeCandles(_candleSeries);
+			_connector.CandleSeriesProcessing -= ProcessNewCandles;
 			base.OnClosing(e);
 		}
 	}

@@ -1511,6 +1511,13 @@ namespace StockSharp.BusinessEntities
 				Exchange = Exchange.Cme,
 			};
 
+			CmeMini = new ExchangeBoard
+			{
+				Code = "CMEMINI",
+				TimeZone = chicagoTime,
+				Exchange = Exchange.Cme,
+			};
+
 			Cbot = new ExchangeBoard
 			{
 				Code = "CBOT",
@@ -2754,6 +2761,11 @@ namespace StockSharp.BusinessEntities
 		public static ExchangeBoard Cme { get; }
 
 		/// <summary>
+		/// Information about board of <see cref="BusinessEntities.Exchange.Cme"/> exchange.
+		/// </summary>
+		public static ExchangeBoard CmeMini { get; }
+
+		/// <summary>
 		/// Information about board of <see cref="BusinessEntities.Exchange.Cce"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Cce { get; }
@@ -2983,5 +2995,40 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Mfd { get; }
 
+		/// <summary>
+		/// Information about board Arca.
+		/// </summary>
+		public static ExchangeBoard Arca { get; } = new ExchangeBoard
+		{
+			Code = "ARCA",
+			Exchange = Exchange.Nyse,
+		};
+
+		/// <summary>
+		/// Information about board BATS.
+		/// </summary>
+		public static ExchangeBoard Bats { get; } = new ExchangeBoard
+		{
+			Code = "BATS",
+			Exchange = Exchange.Cbot,
+		};
+
+		/// <summary>
+		/// Information about board BATS.
+		/// </summary>
+		public static ExchangeBoard Currenex { get; } = new ExchangeBoard
+		{
+			Code = "CURRENEX",
+			Exchange = Exchange.Currenex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Fxcm"/>.
+		/// </summary>
+		public static ExchangeBoard Fxcm { get; } = new ExchangeBoard
+		{
+			Code = "FXCM",
+			Exchange = Exchange.Fxcm,
+		};
 	}
 }

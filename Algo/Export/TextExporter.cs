@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
-		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		/// <param name="template">The string formatting template.</param>
 		/// <param name="header">Header at the first line. Do not add header while empty string.</param>
@@ -56,58 +56,52 @@ namespace StockSharp.Algo.Export
 			_header = header;
 		}
 
-		/// <summary>
-		/// To export <see cref="ExecutionMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			Do(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="QuoteChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Do(messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d))));
 		}
 
-		/// <summary>
-		/// To export <see cref="Level1ChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			Do(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="CandleMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			Do(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="NewsMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			Do(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="SecurityMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			Do(messages);
+		}
+
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<PositionChangeMessage> messages)
+		{
+			Do(messages);
+		}
+
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(values);
 		}
 
 		private void Do<TValue>(IEnumerable<TValue> values)

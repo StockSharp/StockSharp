@@ -16,6 +16,13 @@
             <param name="values">Values of basket composite instruments <see cref="P:StockSharp.Algo.BasketSecurity.InnerSecurityIds"/>.</param>
             <returns>The basket value.</returns>
         </member>
+        <member name="M:StockSharp.Algo.Expressions.ExpressionFormula.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Expressions.ExpressionFormula"/>.
+            </summary>
+            <param name="expression">The mathematic formula.</param>
+            <param name="securityIds">IDs securities.</param>
+        </member>
         <member name="P:StockSharp.Algo.Expressions.ExpressionFormula.Expression">
             <summary>
             The mathematic formula.
@@ -68,6 +75,19 @@
             </summary>
             <param name="expression">The source text.</param>
             <returns>The unscreened text.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Expressions.ExpressionHelper.Functions">
+            <summary>
+            Available functions.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)">
+            <summary>
+            Compile mathematical formula.
+            </summary>
+            <param name="service">Compiler service.</param>
+            <param name="expression">Text expression.</param>
+            <returns>Compiled mathematical formula.</returns>
         </member>
         <member name="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity">
             <summary>

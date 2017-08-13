@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
@@ -78,7 +78,7 @@ public class TickCandle : Candle
 <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference> 
 не вернет переданную свечу. Это сделано для тех случаев, когда по одному входящему значению 
 <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>
-может быть сформированно несколько свечей:
+может быть сформировано несколько свечей:
 </para>
 <code language="C#">
 <![CDATA[

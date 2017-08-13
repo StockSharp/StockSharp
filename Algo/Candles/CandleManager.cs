@@ -162,7 +162,7 @@ namespace StockSharp.Algo.Candles
 				return _source.GetSupportedRanges(series);
 			}
 
-			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 			{
 				_series.Add(series);
                 _source.SubscribeCandles(series, from, to);
@@ -210,30 +210,9 @@ namespace StockSharp.Algo.Candles
 
 		private sealed class ConnectorCandleSource : Disposable, ICandleSource<Candle>
 		{
-			private sealed class SeriesInfo
-			{
-				public CandleSeries Series { get; }
+			private readonly SynchronizedSet<CandleSeries> _candleSeries = new CachedSynchronizedSet<CandleSeries>();
 
-				public MarketDataMessage Message { get; }
-
-				public Candle CurrentCandle { get; set; }
-
-				public SeriesInfo(CandleSeries series, MarketDataMessage message)
-				{
-					if (series == null)
-						throw new ArgumentNullException(nameof(series));
-
-					if (message == null)
-						throw new ArgumentNullException(nameof(message));
-
-					Series = series;
-					Message = message;
-				}
-			}
-
-			private readonly SynchronizedDictionary<long, SeriesInfo> _seriesInfos = new SynchronizedDictionary<long, SeriesInfo>();
-
-			private readonly IConnector _connector;
+			private readonly Connector _connector;
 
 			public int SpeedPriority => 1;
 
@@ -243,13 +222,26 @@ namespace StockSharp.Algo.Candles
 
 			public event Action<Exception> Error;
 
-			public ConnectorCandleSource(IConnector connector)
+			public ConnectorCandleSource(Connector connector)
 			{
 				if (connector == null)
 					throw new ArgumentNullException(nameof(connector));
 
 				_connector = connector;
-				_connector.NewMessage += OnConnectorNewMessage;
+				_connector.CandleSeriesProcessing += OnConnectorProcessingCandle;
+				_connector.CandleSeriesStopped += OnConnectorCandleSeriesStopped;
+			}
+
+			private void OnConnectorProcessingCandle(CandleSeries series, Candle candle)
+			{
+				if (_candleSeries.Contains(series))
+					Processing?.Invoke(series, candle);
+			}
+
+			private void OnConnectorCandleSeriesStopped(CandleSeries series)
+			{
+				_candleSeries.Remove(series);
+				Stopped?.Invoke(series);
 			}
 
 			IEnumerable<Range<DateTimeOffset>> ICandleSource<Candle>.GetSupportedRanges(CandleSeries series)
@@ -257,36 +249,16 @@ namespace StockSharp.Algo.Candles
 				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
 			}
 
-			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 			{
-				var transactionId = _connector.TransactionIdGenerator.GetNextId();
-
-				var mdMsg = series.ToMarketDataMessage(true, from, to);
-				mdMsg.TransactionId = transactionId;
-
-				mdMsg.FillSecurityInfo(_connector, series.Security);
-
-				_seriesInfos.Add(transactionId, new SeriesInfo(series, mdMsg));
-				((Connector)_connector).SendInMessage(mdMsg); // TODO remove cast
+				_candleSeries.Add(series);
+				_connector.SubscribeCandles(series, from, to);
 			}
 
 			void ICandleSource<Candle>.Stop(CandleSeries series)
 			{
-				var pair = _seriesInfos.FirstOrDefault(p => p.Value.Series == series);
-
-				if (pair.Value == null)
-					return;
-
-				var transactionId = pair.Key;
-
-				var mdMsg = series.ToMarketDataMessage(false);
-				mdMsg.TransactionId = _connector.TransactionIdGenerator.GetNextId();
-                mdMsg.OriginalTransactionId = transactionId;
-
-				mdMsg.FillSecurityInfo(_connector, series.Security);
-
-				_seriesInfos.Remove(transactionId);
-				_connector.MarketDataAdapter.SendInMessage(mdMsg);
+				_connector.UnSubscribeCandles(series);
+				_candleSeries.Remove(series);
 			}
 
 			/// <summary>
@@ -294,61 +266,10 @@ namespace StockSharp.Algo.Candles
 			/// </summary>
 			protected override void DisposeManaged()
 			{
-				_connector.NewMessage -= OnConnectorNewMessage;
+				_connector.CandleSeriesProcessing -= OnConnectorProcessingCandle;
+				_connector.CandleSeriesStopped -= OnConnectorCandleSeriesStopped;
 
 				base.DisposeManaged();
-			}
-
-			private void OnConnectorNewMessage(Message message)
-			{
-				switch (message.Type)
-				{
-					case MessageTypes.CandleTimeFrame:
-					case MessageTypes.CandlePnF:
-					case MessageTypes.CandleRange:
-					case MessageTypes.CandleRenko:
-					case MessageTypes.CandleTick:
-					case MessageTypes.CandleVolume:
-					{
-						var candleMsg = (CandleMessage)message;
-						var info = _seriesInfos.TryGetValue(candleMsg.OriginalTransactionId);
-
-						if (info != null)
-							ProcessCandle(info, candleMsg);
-
-						break;
-					}
-
-					case MessageTypes.MarketDataFinished:
-					{
-						var msg = (MarketDataFinishedMessage)message;
-						var info = _seriesInfos.TryGetValue(msg.OriginalTransactionId);
-
-						if (info == null)
-							break;
-
-						Stopped?.Invoke(info.Series);
-						break;
-					}
-				}
-			}
-
-			private void ProcessCandle(SeriesInfo info, CandleMessage candleMsg)
-			{
-				if (info.CurrentCandle != null && info.CurrentCandle.OpenTime == candleMsg.OpenTime)
-				{
-					if (info.CurrentCandle.State == CandleStates.Finished)
-						return;
-
-					info.CurrentCandle.Update(candleMsg);
-				}
-				else
-					info.CurrentCandle = candleMsg.ToCandle(info.Series);
-
-				Processing?.Invoke(info.Series, info.CurrentCandle);
-
-				if (candleMsg.IsFinished)
-					Stopped?.Invoke(info.Series);
 			}
 		}
 
@@ -389,7 +310,7 @@ namespace StockSharp.Algo.Candles
 		/// Initializes a new instance of the <see cref="CandleManager"/>.
 		/// </summary>
 		/// <param name="connector">The connection to trading system to create the source for tick trades by default.</param>
-		public CandleManager(IConnector connector)
+		public CandleManager(Connector connector)
 			: this()
 		{
 			Sources.Add(new ConnectorCandleSource(connector));
@@ -412,7 +333,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public ICandleManagerContainer Container
 		{
-			get { return _container; }
+			get => _container;
 			set
 			{
 				if (value == null)
@@ -433,7 +354,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public IStorageRegistry StorageRegistry
 		{
-			get { return _storageRegistry; }
+			get => _storageRegistry;
 			set
 			{
 				_storageRegistry = value;
@@ -457,10 +378,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// The source priority by speed (0 - the best).
 		/// </summary>
-		public int SpeedPriority
-		{
-			get { throw new NotSupportedException(); }
-		}
+		public int SpeedPriority => throw new NotSupportedException();
 
 		/// <summary>
 		/// A new value for processing occurrence event.
@@ -496,7 +414,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">The candles series for which data receiving should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		public virtual void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		public virtual void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -525,8 +443,11 @@ namespace StockSharp.Algo.Candles
 				_series.Add(series, enumerator);
 
 				//series.CandleManager = this;
-				series.From = from;
-				series.To = to;
+				if (from != null)
+					series.From = from;
+
+				if (to != null)
+					series.To = to;
 
 				Container.Start(series, from, to);
 			}

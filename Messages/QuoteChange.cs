@@ -86,7 +86,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string BoardCode { get; set; }
 
@@ -106,8 +106,8 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
-			set { _extensionInfo = value; }
+			get => _extensionInfo;
+			set => _extensionInfo = value;
 		}
 
 		/// <summary>

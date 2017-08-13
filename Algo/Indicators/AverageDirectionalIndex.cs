@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public virtual int Length
 		{
-			get { return MovingAverage.Length; }
+			get => MovingAverage.Length;
 			set
 			{
 				MovingAverage.Length = Dx.Length = value;

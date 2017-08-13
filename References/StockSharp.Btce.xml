@@ -16,20 +16,13 @@
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
         <member name="P:StockSharp.Btce.BtceMessageAdapter.IsSupportNativeSecurityLookup">
-            <summary>
-            Gets a value indicating whether the connector supports security lookup.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.Btce.BtceMessageAdapter.IsSupportNativePortfolioLookup">
-            <summary>
-            Gets a value indicating whether the connector supports position lookup.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <summary>
-            Send message.
-            </summary>
-            <param name="message">Message.</param>
+            <inheritdoc />
         </member>
         <member name="P:StockSharp.Btce.BtceMessageAdapter.Key">
             <summary>
@@ -39,6 +32,11 @@
         <member name="P:StockSharp.Btce.BtceMessageAdapter.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceMessageAdapter.Domain">
+            <summary>
+            Domain address.
             </summary>
         </member>
         <member name="P:StockSharp.Btce.BtceMessageAdapter.IsValid">

@@ -54,11 +54,13 @@ namespace StockSharp.Community
 		/// To get the file data.
 		/// </summary>
 		/// <param name="id">File ID.</param>
+		/// <param name="progress">Progress callback.</param>
+		/// <param name="cancel">Cancel callback.</param>
 		/// <returns>The file data.</returns>
-		public FileData GetFile(long id)
+		public FileData GetFile(long id, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			var data = GetFileInfo(id);
-			Download(data);
+			Download(data, progress, cancel);
 			return data;
 		}
 
@@ -69,14 +71,16 @@ namespace StockSharp.Community
 		/// <returns>The file data.</returns>
 		public FileData GetFileInfo(long id)
 		{
-			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo(TryGetSession ?? Guid.Empty, id)));
+			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo(NullableSessionId ?? Guid.Empty, id)));
 		}
 
 		/// <summary>
 		/// Download file.
 		/// </summary>
 		/// <param name="data">The file data.</param>
-		public void Download(FileData data)
+		/// <param name="progress">Progress callback.</param>
+		/// <param name="cancel">Cancel callback.</param>
+		public void Download(FileData data, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -90,9 +94,17 @@ namespace StockSharp.Community
 
 			while (body.Count < data.BodyLength)
 			{
+				if (cancel?.Invoke() == true)
+				{
+					Invoke(f => f.FinishDownload(operationId, true));
+					return;
+				}
+
 				body.AddRange(Invoke(f => f.ProcessDownload(operationId, body.Count, _partSize)));
+				progress?.Invoke(body.Count);
 			}
 
+			Invoke(f => f.FinishDownload(operationId, false));
 			data.Body = body.ToArray();
 		}
 
@@ -101,7 +113,8 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <param name="data">File data.</param>
 		/// <param name="progress">Progress callback.</param>
-		public void Update(FileData data, Action<int> progress = null)
+		/// <param name="cancel">Cancel callback.</param>
+		public void Update(FileData data, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -113,15 +126,21 @@ namespace StockSharp.Community
 				throw new ArgumentOutOfRangeException(nameof(data));
 
 			var operationId = Invoke(f => f.BeginUploadExisting(AuthenticationClient.Instance.SessionId, data.Id));
-			Upload(operationId, data.Body, progress);
+			Upload(operationId, data.Body, progress, cancel);
 		}
 
-		private long Upload(Guid operationId, byte[] body, Action<int> progress)
+		private long Upload(Guid operationId, byte[] body, Action<int> progress, Func<bool> cancel)
 		{
 			var sentCount = 0;
 
 			foreach (var part in body.Batch(_partSize))
 			{
+				if (cancel?.Invoke() == true)
+				{
+					Invoke(f => f.FinishUpload(operationId, true));
+					return 0;
+				}
+
 				var arr = part.ToArray();
 
 				ValidateError(Invoke(f => f.ProcessUpload(operationId, arr)));
@@ -145,8 +164,9 @@ namespace StockSharp.Community
 		/// <param name="body">File body.</param>
 		/// <param name="isPublic">Is the file available for public.</param>
 		/// <param name="progress">Progress callback.</param>
+		/// <param name="cancel">Cancel callback.</param>
 		/// <returns>File data.</returns>
-		public FileData Upload(string fileName, byte[] body, bool isPublic, Action<int> progress = null)
+		public FileData Upload(string fileName, byte[] body, bool isPublic, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			if (fileName.IsEmpty())
 				throw new ArgumentNullException(nameof(fileName));
@@ -159,7 +179,7 @@ namespace StockSharp.Community
 
 			var operationId = Invoke(f => f.BeginUpload(AuthenticationClient.Instance.SessionId, fileName, isPublic));
 
-			var id = Upload(operationId, body, progress);
+			var id = Upload(operationId, body, progress, cancel);
 
 			var data = new FileData
 			{

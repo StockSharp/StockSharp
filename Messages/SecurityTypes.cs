@@ -93,17 +93,17 @@ namespace StockSharp.Messages
 		Swap,
 
 		/// <summary>
-		/// Product.
+		/// Commodity.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.ProductKey)]
+		[EnumDisplayNameLoc(LocalizedStrings.CommodityKey)]
 		Commodity,
 
 		/// <summary>
 		/// CFD.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("CFD")]
+		[EnumDisplayName(LocalizedStrings.CfdKey)]
 		Cfd,
 
 		/// <summary>
@@ -131,7 +131,7 @@ namespace StockSharp.Messages
 		/// American Depositary Receipts.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("ADR")]
+		[EnumDisplayName(LocalizedStrings.AdrKey)]
 		Adr,
 
 		/// <summary>

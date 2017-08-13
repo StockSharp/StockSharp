@@ -30,8 +30,8 @@ namespace StockSharp.Configuration
 		[ConfigurationProperty(_typeKey, IsRequired = true, IsKey = true)]
 		public string Type
 		{
-			get { return (string)this[_typeKey]; }
-			set { this[_typeKey] = value; }
+			get => (string)this[_typeKey];
+			set => this[_typeKey] = value;
 		}
 
 		private const string _painterKey = "painter";
@@ -42,8 +42,8 @@ namespace StockSharp.Configuration
 		[ConfigurationProperty(_painterKey, IsRequired = false)]
 		public string Painter
 		{
-			get { return (string)this[_painterKey]; }
-			set { this[_painterKey] = value; }
+			get => (string)this[_painterKey];
+			set => this[_painterKey] = value;
 		}
 	}
 }

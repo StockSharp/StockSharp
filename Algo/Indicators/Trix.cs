@@ -53,8 +53,8 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int RocLength
 		{
-			get { return _roc.Length; }
-			set { _roc.Length = value; }
+			get => _roc.Length;
+			set => _roc.Length = value;
 		}
 
 		/// <summary>

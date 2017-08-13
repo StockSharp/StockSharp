@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="50685c1a-72e3-443d-9b0d-6c71055cc56c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_The_logical_condition_00"/>
+</mediaLink>
+<para>Элемент используется для вычисления логической формулы с двумя аргументами.</para>
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
+  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Оператор</legacyBold> - предопределенный набор логических формул И, ИЛИ, Исключающее ИЛИ.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="18f61c09-d6f3-4765-b180-11e9d3e74d33" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

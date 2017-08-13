@@ -13,7 +13,7 @@
         <step>
           <content>
             <para>
-            	In order to get historic candles, call <codeEntityReference qualifyHint="true">M:StockSharp.OpenECry.OpenECryTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>
+            	To get historical candles, call the <codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>
             	method:
        		</para>
             <code language="C#">
@@ -27,11 +27,11 @@ Trader.SubscribeCandles(SelectedSecurity, DateTime.Now.Subtract(TimeSpan.FromTic
         </step>
         <step>
         	<para>
-            	Historical candles passed through the <codeEntityReference qualifyHint="true">E:StockSharp.OpenECry.OpenECryTrader.NewCandles</codeEntityReference> event:
+            	Historical candles passed through the <codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> event:
        		</para>
           <code language="C#">
             <![CDATA[
-Trader.NewCandles += _securitiesWindow.AddHistoricalCandles;
+Trader.CandleSeriesProcessing += ProcessCandle;
 			]]>
 			</code>
         </step>

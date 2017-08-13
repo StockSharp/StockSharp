@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4b3ab78a-1a3d-4cd0-9e25-c52948de52ee" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для получения необходимой строки покупок из стакана может использоваться следующая схема:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Event_model_00"/>
+</mediaLink>
+<para>Для кубика <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> выбран тип данных <legacyBold>Инструмент</legacyBold>. Если инструмент не указан, 
+но установлен флаг <legacyBold>Параметры</legacyBold> группы свойств <legacyBold>Общее</legacyBold>, то он будет взят из стратегии. 
+Для кубика <link xlink:href="d12b6321-af41-40f1-a8c6-87ea59d1b51c" /> выбран тип данных и соответствующее поле коллекции кубиков 
+на покупку Bids. Кубик индексатор получает необходимый элемент из коллекции лучших 
+цен на покупку. Для получения конкретного значения цены или объема на уровне 
+может использоваться кубик <link xlink:href="d12b6321-af41-40f1-a8c6-87ea59d1b51c" />.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="22a4dc42-dc36-41cc-a849-32aa2a8194fe" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

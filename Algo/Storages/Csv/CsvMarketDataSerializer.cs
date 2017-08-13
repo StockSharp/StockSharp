@@ -59,8 +59,8 @@ namespace StockSharp.Algo.Storages.Csv
 
 		public override object LastId
 		{
-			get { return _lastId; }
-			set { _lastId = value; }
+			get => _lastId;
+			set => _lastId = value;
 		}
 
 		public override void Write(Stream stream)

@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str839Key)]
 		[DescriptionLoc(LocalizedStrings.Str839Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public AlligatorLine Teeth { get; private set; }
+		public AlligatorLine Teeth { get; }
 
 		/// <summary>
 		/// Lips.
@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str840Key)]
 		[DescriptionLoc(LocalizedStrings.Str840Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public AlligatorLine Lips { get; private set; }
+		public AlligatorLine Lips { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.

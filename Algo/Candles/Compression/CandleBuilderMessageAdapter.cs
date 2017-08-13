@@ -9,6 +9,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -67,6 +68,8 @@ namespace StockSharp.Algo.Candles.Compression
 			public Tuple<DateTimeOffset, WorkingTimePeriod> CurrentPeriod { get; set; }
 
 			public ExchangeBoard Board { get; set; }
+
+			public CandleMessage CurrentCandleMessage { get; set; }
 		}
 
 		private readonly Dictionary<SecurityId, List<SeriesInfo>> _seriesInfos = new Dictionary<SecurityId, List<SeriesInfo>>();
@@ -84,7 +87,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public MarketDataTypes BuildCandlesFrom
 		{
-			get { return _buildCandlesFrom; }
+			get => _buildCandlesFrom;
 			set
 			{
 				switch (value)
@@ -96,7 +99,7 @@ namespace StockSharp.Algo.Candles.Compression
 						break;
 
 					default:
-						throw new ArgumentOutOfRangeException(nameof(value), value, null);
+						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str721);
 				}
 			}
 		}
@@ -268,6 +271,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void ProcessMarketDataMessage(MarketDataMessage msg)
 		{
+			var securityId = msg.SecurityId;
+
 			if (msg.IsSubscribe)
 			{
 				if (msg.IsBack)
@@ -283,25 +288,25 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					MarketDataMessage = (MarketDataMessage)msg.Clone(),
 					LastTime = msg.From,
-					Board = !msg.SecurityId.BoardCode.IsEmpty() ? _exchangeInfoProvider.GetOrCreateBoard(msg.SecurityId.BoardCode) : ExchangeBoard.Test
+					Board = !securityId.BoardCode.IsEmpty() ? _exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode) : ExchangeBoard.Associated
 				};
 
 				_seriesInfos
-					.SafeAdd(msg.SecurityId)
+					.SafeAdd(securityId)
 					.Add(info);
 
 				_seriesInfosByDates
 					.Add(new KeyValuePair<DateTimeOffset, SeriesInfo>(msg.To ?? DateTimeOffset.MaxValue, info));
 
 				_series
-					.SafeAdd(Tuple.Create(msg.SecurityId, msg.DataType, msg.Arg))
+					.SafeAdd(Tuple.Create(securityId, msg.DataType, msg.Arg))
 					.Add(info);
 
 				Subscribe(info, false);
 			}
 			else
 			{
-				var subscriptions = _seriesInfos.TryGetValue(msg.SecurityId);
+				var subscriptions = _seriesInfos.TryGetValue(securityId);
 
 				if (subscriptions == null)
 					return;
@@ -315,6 +320,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void ProcessTime()
 		{
+			return;
 			// TODO check for calls from different threads
 			lock (_sync)
 			{
@@ -450,9 +456,14 @@ namespace StockSharp.Algo.Candles.Compression
 			info.DataType = GetCurrentDataType(info);
 
 			var msg = (MarketDataMessage)info.MarketDataMessage.Clone();
-			msg.DataType = info.DataType.Value;
 			msg.TransactionId = info.TransactionId;
 			msg.From = info.LastTime;
+
+			if (msg.DataType != info.DataType.Value)
+			{
+				msg.DataType = info.DataType.Value;
+				msg.Arg = null;
+			}
 
 			_seriesInfosByTransactions.Add(info.TransactionId, info);
 
@@ -626,10 +637,13 @@ namespace StockSharp.Algo.Candles.Compression
 
 				info.LastTime = value.Time;
 
-				var result = builder.Process(mdMsg, value);
+				var result = builder.Process(mdMsg, info.CurrentCandleMessage, value);
 
 				foreach (var candleMessage in result)
+				{
+					info.CurrentCandleMessage = candleMessage;
 					SendCandle(info, candleMessage);
+				}
 			}
 		}
 
@@ -637,7 +651,10 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var time = v.Time;
 
-			if (!(time >= info.MarketDataMessage.From && time < info.MarketDataMessage.To))
+			if (info.LastTime > time)
+				return false;
+
+			if (!((info.MarketDataMessage.From == null || time >= info.MarketDataMessage.From) && (info.MarketDataMessage.To == null || time < info.MarketDataMessage.To)))
 				return false;
 
 			if (info.CurrentPeriod == null || info.CurrentPeriod.Item1.Date.Date != time.Date.Date)

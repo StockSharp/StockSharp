@@ -49,7 +49,7 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.CertFile">
             <summary>
-            Path to certificate file, necessary yo connect to Rithmic system.
+            Path to certificate file, necessary to connect to Rithmic system.
             </summary>
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TransactionalUserName">
@@ -64,7 +64,7 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.LogFileName">
             <summary>
-            Path to lg file.
+            Path to log file.
             </summary>
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.Server">
@@ -207,7 +207,7 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicTrader.CertFile">
             <summary>
-            Path to certificate file, necessary yo connect to Rithmic system.
+            Path to certificate file, necessary to connect to Rithmic system.
             </summary>
         </member>
         <member name="P:StockSharp.Rithmic.RithmicTrader.Server">
@@ -217,45 +217,8 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicTrader.LogFileName">
             <summary>
-            Path to lg file.
+            Path to log file.
             </summary>
-        </member>
-        <member name="M:StockSharp.Rithmic.RithmicTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
-            <summary>
-            To get time ranges for which this source of passed candles series has data.
-            </summary>
-            <param name="series">Candles series.</param>
-            <returns>Time ranges.</returns>
-        </member>
-        <member name="E:StockSharp.Rithmic.RithmicTrader.NewCandles">
-            <summary>
-            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Rithmic.RithmicTrader.Stopped">
-            <summary>
-            The series processing end event.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
-            <summary>
-            Subscribe to receive new candles.
-            </summary>
-            <param name="series">Candles series.</param>
-            <param name="from">The initial date from which you need to get data.</param>
-            <param name="to">The final date by which you need to get data.</param>
-        </member>
-        <member name="M:StockSharp.Rithmic.RithmicTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-            <summary>
-            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
-            </summary>
-            <param name="series">Candles series.</param>
-        </member>
-        <member name="M:StockSharp.Rithmic.RithmicTrader.OnProcessMessage(StockSharp.Messages.Message)">
-            <summary>
-            Process message.
-            </summary>
-            <param name="message">Message.</param>
         </member>
         <member name="T:StockSharp.Rithmic.Xaml.RithmicServerComboBox">
             <summary>

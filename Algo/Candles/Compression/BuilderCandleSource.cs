@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// <summary>
 	/// The candles source for <see cref="ICandleManager"/> that builds candles with <see cref="ICandleBuilder"/>.
 	/// </summary>
+	/// <typeparam name="TBuilder">Type of builder.</typeparam>
 	public class BuilderCandleSource<TBuilder> : IBuilderCandleSource
 		where TBuilder : ICandleBuilder, new()
 	{
@@ -38,7 +39,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 			public Candle CurrentCandle { get; set; }
 
-			public CandleSeriesInfo(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<ICandleBuilderSource> sources, Func<CandleSeriesInfo, IEnumerable<ICandleBuilderSourceValue>, DateTimeOffset> handler, Action<CandleSeries> stopped)
+			public CandleMessage CurrentCandleMessage { get; set; }
+
+			public CandleSeriesInfo(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to, IEnumerable<ICandleBuilderSource> sources, Func<CandleSeriesInfo, IEnumerable<ICandleBuilderSourceValue>, DateTimeOffset> handler, Action<CandleSeries> stopped)
 			{
 				if (series == null)
 					throw new ArgumentNullException(nameof(series));
@@ -175,7 +178,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="series">The candles series for which data receiving should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		public void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		public void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -223,10 +226,12 @@ namespace StockSharp.Algo.Candles.Compression
 
 			foreach (var value in values)
 			{
-				var messages = _builder.Process(info.Message, value);
+				var messages = _builder.Process(info.Message, info.CurrentCandleMessage, value);
 
 				foreach (var candleMsg in messages)
 				{
+					info.CurrentCandleMessage = candleMsg;
+
 					if (info.CurrentCandle != null && info.CurrentCandle.OpenTime == candleMsg.OpenTime)
 					{
 						if (info.CurrentCandle.State == CandleStates.Finished)
@@ -239,8 +244,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 					Processing?.Invoke(info.Series, info.CurrentCandle);
 
-					if (candleMsg.IsFinished)
-						OnStopped(info.Series);
+					//if (candleMsg.IsFinished)
+					//	OnStopped(info.Series);
 				}
 
 				lastValue = value;

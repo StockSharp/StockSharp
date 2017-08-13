@@ -46,19 +46,6 @@
 			<para><codeEntityReference>T:StockSharp.Algo.Candles.CandleHelper</codeEntityReference> also provides a variety of algorithms for candles to simplify writing of code:</para>
 		  
 			<list class="bullet">
-				<!--><listItem>
-					<para>Получение времени свечки (время ее создания) через метод 
-					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetCandleTime(System.TimeSpan,System.DateTimeOffset)</codeEntityReference>:</para>
-					
-					<code language="C#">
-					<![CDATA[
-
-var candleTimeFrame = TimeSpan.FromMinutes(10.5);
-
-Console.WriteLine(candleTimeFrame.GetCandleTime(_trader));
-					]]>
-					</code>
-				</listItem>-->
 
 				<listItem>
 					<para>The candle time range getting through the <codeEntityReference>Overload:StockSharp.Algo.Candles.CandleHelper.GetCandleBounds</codeEntityReference> method.
@@ -77,7 +64,7 @@ Console.WriteLine(candleTimeFrame.GetCandleBounds(DateTime.Now).Max);
 					<para>To get the candle length, its body, its shadows through
 					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetLength(StockSharp.Algo.Candles.Candle)</codeEntityReference>,
 					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetBody(StockSharp.Algo.Candles.Candle)</codeEntityReference>,
-					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetTopShadow(StockSharp.Algo.Candles.Candle)</codeEntityReference> и
+					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetTopShadow(StockSharp.Algo.Candles.Candle)</codeEntityReference> and
 					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetBottomShadow(StockSharp.Algo.Candles.Candle)</codeEntityReference>:</para>
 				  
 					<code language="C#">

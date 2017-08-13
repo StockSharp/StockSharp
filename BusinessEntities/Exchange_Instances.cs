@@ -136,7 +136,7 @@ namespace StockSharp.BusinessEntities
 			{
 				Name = "TSE",
 				RusName = "Токийская фондовая биржа",
-				EngName = "Tokio Stock Exchange",
+				EngName = "Tokyo Stock Exchange",
 				CountryCode = CountryCodes.JP,
 			};
 
@@ -471,7 +471,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange Lse { get; }
 
 		/// <summary>
-		/// Information about TSE (Tokio Stock Exchange).
+		/// Information about TSE (Tokyo Stock Exchange).
 		/// </summary>
 		public static Exchange Tse { get; }
 
@@ -644,5 +644,27 @@ namespace StockSharp.BusinessEntities
 		/// Information about Icbit.
 		/// </summary>
 		public static Exchange Icbit { get; }
+
+		/// <summary>
+		/// Information about Currenex.
+		/// </summary>
+		public static Exchange Currenex { get; } = new Exchange
+		{
+			Name = "CURRENEX",
+			EngName = "Currenex",
+			RusName = "Currenex",
+			CountryCode = CountryCodes.US,
+		};
+
+		/// <summary>
+		/// Information about FXCM.
+		/// </summary>
+		public static Exchange Fxcm { get; } = new Exchange
+		{
+			Name = "FXCM",
+			EngName = "FXCM",
+			RusName = "FXCM",
+			CountryCode = CountryCodes.US,
+		};
 	}
 }

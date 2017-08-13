@@ -56,6 +56,43 @@ namespace StockSharp.Algo
 				_parent = parent;
 			}
 
+			private void CreateTimer()
+			{
+				lock (_marketTimerSync)
+				{
+					_isMarketTimeHandled = true;
+
+					if (_marketTimer != null)
+						return;
+
+					_marketTimer = ThreadingHelper
+						.Timer(() =>
+						{
+							try
+							{
+								// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
+								// No need to put _marketTimeMessage again, if it still in queue.
+
+								lock (_marketTimerSync)
+								{
+									if (_marketTimer == null || !_isMarketTimeHandled)
+										return;
+
+									_isMarketTimeHandled = false;
+								}
+
+								_marketTimeMessage.LocalTime = TimeHelper.Now;
+								RaiseNewOutMessage(_marketTimeMessage);
+							}
+							catch (Exception ex)
+							{
+								ex.LogError();
+							}
+						})
+						.Interval(_parent.MarketTimeChangedInterval);
+				}
+			}
+
 			private void CloseTimer()
 			{
 				lock (_marketTimerSync)
@@ -85,36 +122,7 @@ namespace StockSharp.Algo
 						if (_marketTimer != null)
 							throw new InvalidOperationException(LocalizedStrings.Str1619);
 
-						lock (_marketTimerSync)
-						{
-							_isMarketTimeHandled = true;
-
-							_marketTimer = ThreadingHelper
-								.Timer(() =>
-								{
-									try
-									{
-										// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
-										// No need to put _marketTimeMessage again, if it still in queue.
-
-										lock (_marketTimerSync)
-										{
-											if (_marketTimer == null || !_isMarketTimeHandled)
-												return;
-
-											_isMarketTimeHandled = false;
-										}
-
-										_marketTimeMessage.LocalTime = TimeHelper.Now;
-										RaiseNewOutMessage(_marketTimeMessage);
-									}
-									catch (Exception ex)
-									{
-										ex.LogError();
-									}
-								})
-								.Interval(_parent.MarketTimeChangedInterval);
-						}
+						CreateTimer();
 						break;
 					}
 
@@ -140,7 +148,11 @@ namespace StockSharp.Algo
 						var connectMsg = (ConnectMessage)message;
 
 						if (connectMsg.Error != null)
+						{
 							CloseTimer();
+						}
+						else
+							CreateTimer();
 
 						break;
 					}
@@ -200,7 +212,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IMessageChannel InMessageChannel
 		{
-			get { return _inMessageChannel; }
+			get => _inMessageChannel;
 			protected set
 			{
 				if (value == _inMessageChannel)
@@ -226,7 +238,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IMessageChannel OutMessageChannel
 		{
-			get { return _outMessageChannel; }
+			get => _outMessageChannel;
 			protected set
 			{
 				if (value == _outMessageChannel)
@@ -270,7 +282,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IMessageAdapter InnerAdapter
 		{
-			get { return _inAdapter; }
+			get => _inAdapter;
 			set
 			{
 				if (_inAdapter == value)
@@ -328,7 +340,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public BasketMessageAdapter Adapter
 		{
-			get { return _adapter; }
+			get => _adapter;
 			protected set
 			{
 				if (!_isDisposing && value == null)
@@ -388,22 +400,22 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdaper = true };
 
-					if (_supportOffline)
+					if (SupportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
 
-					if (_supportCandleBuilder)
+					if (SupportCandleBuilder)
 						_inAdapter = new CandleBuilderMessageAdapter(_inAdapter, _entityCache.ExchangeInfoProvider) { OwnInnerAdaper = true };
 
-					if (_supportLevel1DepthBuilder)
+					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (_supportAssociatedSecurity)
+					if (SupportAssociatedSecurity)
 						_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (_supportFilteredMarketDepth)
+					if (SupportFilteredMarketDepth)
 						_inAdapter = new FilteredMarketDepthAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
@@ -418,7 +430,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportOffline
 		{
-			get { return _supportOffline; }
+			get => _supportOffline;
 			set
 			{
 				if (_supportOffline == value)
@@ -440,7 +452,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportFilteredMarketDepth
 		{
-			get { return _supportFilteredMarketDepth; }
+			get => _supportFilteredMarketDepth;
 			set
 			{
 				if (_supportFilteredMarketDepth == value)
@@ -462,7 +474,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportAssociatedSecurity
 		{
-			get { return _supportAssociatedSecurity; }
+			get => _supportAssociatedSecurity;
 			set
 			{
 				if (_supportAssociatedSecurity == value)
@@ -484,7 +496,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportLevel1DepthBuilder
 		{
-			get { return _supportLevel1DepthBuilder; }
+			get => _supportLevel1DepthBuilder;
 			set
 			{
 				if (_supportLevel1DepthBuilder == value)
@@ -506,7 +518,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool SupportCandleBuilder
 		{
-			get { return _supportCandleBuilder; }
+			get => _supportCandleBuilder;
 			set
 			{
 				if (_supportCandleBuilder == value)
@@ -577,7 +589,7 @@ namespace StockSharp.Algo
 					var nextWrapper = adapter as IMessageAdapterWrapper;
 
 					if (prevWrapper == null)
-						throw new InvalidOperationException("Adapter wrapper can not be added to the beginning of the chain.");
+						throw new InvalidOperationException("Adapter wrapper cannot be added to the beginning of the chain.");
 
 					if (nextWrapper == null)
 						throw new InvalidOperationException(LocalizedStrings.TypeNotImplemented.Put(adapter.GetType(), nameof(IMessageAdapterWrapper)));
@@ -696,7 +708,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Send error message.
 		/// </summary>
-		/// <param name="error">Error detais.</param>
+		/// <param name="error">Error details.</param>
 		public void SendOutError(Exception error)
 		{
 			SendOutMessage(error.ToErrorMessage());
@@ -709,7 +721,7 @@ namespace StockSharp.Algo
 		protected virtual void OnProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.Time && message.Type != MessageTypes.QuoteChange)
-				this.AddDebugLog("BP:{0}", message);
+				this.AddVerboseLog("BP:{0}", message);
 
 			ProcessTimeInterval(message);
 
@@ -759,9 +771,9 @@ namespace StockSharp.Algo
 						ProcessPortfolioChangeMessage((PortfolioChangeMessage)message);
 						break;
 
-					case MessageTypes.Position:
-						ProcessPositionMessage((PositionMessage)message);
-						break;
+					//case MessageTypes.Position:
+					//	ProcessPositionMessage((PositionMessage)message);
+					//	break;
 
 					case MessageTypes.PositionChange:
 						ProcessPositionChangeMessage((PositionChangeMessage)message);
@@ -808,6 +820,19 @@ namespace StockSharp.Algo
 
 					case ExtendedMessageTypes.RemoveSecurity:
 						ProcessSecurityRemoveMessage((SecurityRemoveMessage)message);
+						break;
+
+					case MessageTypes.CandleTimeFrame:
+					case MessageTypes.CandlePnF:
+					case MessageTypes.CandleRange:
+					case MessageTypes.CandleRenko:
+					case MessageTypes.CandleTick:
+					case MessageTypes.CandleVolume:
+						ProcessCandleMessage((CandleMessage)message);
+						break;
+
+					case MessageTypes.MarketDataFinished:
+						ProcessMarketDataFinishedMessage((MarketDataFinishedMessage)message);
 						break;
 
 					// если адаптеры передают специфичные сообщения
@@ -1013,6 +1038,8 @@ namespace StockSharp.Algo
 		{
 			_adapterStates[adapter] = ConnectionStates.Connected;
 
+			var isRestored = message is RestoredConnectMessage;
+
 			if (ConnectionState == ConnectionStates.Connecting)
 			{
 				if (RaiseConnectedOnFirstAdapter)
@@ -1023,10 +1050,10 @@ namespace StockSharp.Algo
 				else
 					RaiseConnectedWhenAllConnected();
 			}
-			//else if (ConnectionState == ConnectionStates.Failed)
-			//{
-			//	RaiseConnectedWhenAllConnected();
-			//}
+			else if (ConnectionState == ConnectionStates.Failed && !isRestored)
+			{
+				RaiseConnectedWhenAllConnected();
+			}
 
 			RaiseConnectedEx(adapter);
 
@@ -1043,7 +1070,7 @@ namespace StockSharp.Algo
 			if (adapter.SecurityLookupRequired)
 				SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
-			if (!(message is RestoredConnectMessage))
+			if (!isRestored)
 				return;
 
 			var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
@@ -1068,21 +1095,23 @@ namespace StockSharp.Algo
 		{
 			_adapterStates[adapter] = ConnectionStates.Failed;
 
+			error = error ?? message.Error;
+
 			// raise ConnectionError only one time
 			if (ConnectionState == checkState)
 			{
-				RaiseConnectionError(error ?? message.Error);
+				RaiseConnectionError(error);
 
 				if (raiseTimeOut)
 				{
-					if (message.Error is TimeoutException)
+					if (error is TimeoutException)
 						RaiseTimeOut();
 				}
 			}
 			else
-				RaiseError(error ?? message.Error);
+				RaiseError(error);
 
-			RaiseConnectionErrorEx(adapter, message.Error);
+			RaiseConnectionErrorEx(adapter, error);
 		}
 
 		private void ProcessSessionMessage(SessionMessage message)
@@ -1242,14 +1271,14 @@ namespace StockSharp.Algo
 			});
 		}
 
-		private void ProcessPositionMessage(PositionMessage message)
-		{
-			var security = LookupSecurity(message.SecurityId);
-			var portfolio = GetPortfolio(message.PortfolioName);
-			var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
+		//private void ProcessPositionMessage(PositionMessage message)
+		//{
+		//	var security = LookupSecurity(message.SecurityId);
+		//	var portfolio = GetPortfolio(message.PortfolioName);
+		//	var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
 
-			message.CopyExtensionInfo(position);
-		}
+		//	message.CopyExtensionInfo(position);
+		//}
 
 		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
@@ -1597,15 +1626,15 @@ namespace StockSharp.Algo
 					var isNew = tuple.Item2;
 					var isChanged = tuple.Item3;
 
-					if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
-					{
-						var derivedOrder = _entityCache.GetOrder(order.Security, 0L, message.DerivedOrderId ?? 0, message.DerivedOrderStringId);
+					//if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
+					//{
+					//	var derivedOrder = _entityCache.GetOrder(order.Security, 0L, message.DerivedOrderId ?? 0, message.DerivedOrderStringId);
 
-						if (derivedOrder == null)
-							_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o1) => s.DerivedOrder = o1));
-						else
-							order.DerivedOrder = derivedOrder;
-					}
+					//	if (derivedOrder == null)
+					//		_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o1) => s.DerivedOrder = o1));
+					//	else
+					//		order.DerivedOrder = derivedOrder;
+					//}
 
 					if (isNew)
 					{
@@ -1634,7 +1663,7 @@ namespace StockSharp.Algo
 					if (!order.StringId.IsEmpty())
 						ProcessMyTrades(order, order.StringId, _nonAssociatedByStringIdMyTrades);
 
-					ProcessConditionOrders(order);
+					//ProcessConditionOrders(order);
 				}
 			}
 			else
@@ -1681,28 +1710,28 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessConditionOrders(Order order)
-		{
-			var changedStopOrders = new List<Order>();
+		//private void ProcessConditionOrders(Order order)
+		//{
+		//	var changedStopOrders = new List<Order>();
 
-			var key = Tuple.Create(order.Id, order.StringId);
+		//	var key = Tuple.Create(order.Id, order.StringId);
 
-			var collection = _orderStopOrderAssociations.TryGetValue(key);
+		//	var collection = _orderStopOrderAssociations.TryGetValue(key);
 
-			if (collection == null)
-				return;
+		//	if (collection == null)
+		//		return;
 
-			foreach (var pair in collection)
-			{
-				pair.Second(pair.First, order);
-				changedStopOrders.TryAdd(pair.First);
-			}
+		//	foreach (var pair in collection)
+		//	{
+		//		pair.Second(pair.First, order);
+		//		changedStopOrders.TryAdd(pair.First);
+		//	}
 
-			_orderStopOrderAssociations.Remove(key);
+		//	_orderStopOrderAssociations.Remove(key);
 
-			if (changedStopOrders.Count > 0)
-				RaiseStopOrdersChanged(changedStopOrders);
-		}
+		//	if (changedStopOrders.Count > 0)
+		//		RaiseStopOrdersChanged(changedStopOrders);
+		//}
 
 		private void ProcessMyTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 		{
@@ -1815,6 +1844,26 @@ namespace StockSharp.Algo
 				default:
 					throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
 			}
+		}
+
+		private void ProcessCandleMessage(CandleMessage message)
+		{
+			var series = _entityCache.UpdateCandle(message, out var candle);
+
+			if (series == null)
+				return;
+
+			RaiseCandleSeriesProcessing(series, candle);
+		}
+
+		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
+		{
+			var series = _entityCache.TryGetCandleSeries(message.OriginalTransactionId);
+
+			if (series == null)
+				return;
+
+			RaiseCandleSeriesStopped(series);
 		}
 	}
 }

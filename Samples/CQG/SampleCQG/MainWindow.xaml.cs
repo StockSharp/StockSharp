@@ -24,6 +24,7 @@ namespace SampleCQG
 
 	using SampleCQG.Properties;
 
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Cqg.Com;
@@ -45,7 +46,7 @@ namespace SampleCQG
 			set { SetValue(IsConnectedProperty, value); }
 		}
 
-		public IConnector Connector { get; private set; }
+		public Connector Connector { get; private set; }
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();

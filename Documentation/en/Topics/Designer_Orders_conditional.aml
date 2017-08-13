@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="acc5951e-e627-453b-896e-d53f1687e3fb" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <introduction>
+<para>Компонент <legacyBold>Условные заявки</legacyBold> 
+представляет собой таблицу с заявками, в которой отображается полная информация о всех <legacyBold>Условных заявках</legacyBold> стратегии.
+</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Orders_conditional"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="697bcab0-932a-4bba-a1fd-4285d4b45930" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

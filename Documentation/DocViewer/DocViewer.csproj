@@ -166,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\References\stocksharp.ico">
-      <Link>stocksharp.ico</Link>
+      <Link>Properties\stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -20,9 +20,7 @@ namespace StockSharp.Community
 	using System.Threading;
 
 	using Ecng.Common;
-	using Ecng.Localization;
 
-	using StockSharp.Localization;
 	using StockSharp.Logging;
 
 	/// <summary>
@@ -50,8 +48,6 @@ namespace StockSharp.Community
 		{
 		}
 
-		private static bool IsEnglish => LocalizedStrings.ActiveLanguage != Languages.Russian;
-
 		private int? _smsCount;
 
 		/// <summary>
@@ -66,7 +62,7 @@ namespace StockSharp.Community
 
 				return _smsCount.Value;
 			}
-			private set { _smsCount = value; }
+			private set => _smsCount = value;
 		}
 
 		private int? _emailCount;
@@ -83,7 +79,7 @@ namespace StockSharp.Community
 
 				return _emailCount.Value;
 			}
-			private set { _emailCount = value; }
+			private set => _emailCount = value;
 		}
 
 		/// <summary>
@@ -108,7 +104,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// To send an message.
+		/// To send a message.
 		/// </summary>
 		/// <param name="title">The message title.</param>
 		/// <param name="body">Message body.</param>
@@ -119,6 +115,27 @@ namespace StockSharp.Community
 				throw new ArgumentNullException(nameof(attachments));
 
 			ValidateError(Invoke(f => f.SendMessage(SessionId, title, body, attachments.Select(a => a.Id).ToArray(), IsEnglish)));
+		}
+
+		/// <summary>
+		/// Send feedback for specified product.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <param name="rating">Rating.</param>
+		/// <param name="comment">Comment.</param>
+		public void SendFeedback(Products product, int rating, string comment)
+		{
+			ValidateError(Invoke(f => f.SendFeedback(SessionId, product, rating, comment)));
+		}
+
+		/// <summary>
+		/// Has feedback for specified product.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <returns>Check result.</returns>
+		public bool HasFeedback(Products product)
+		{
+			return Invoke(f => f.HasFeedback(SessionId, product));
 		}
 
 		/// <summary>
@@ -154,7 +171,7 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews2(TryGetSession ?? Guid.Empty, IsEnglish, 0));
+			var news = Invoke(f => f.GetNews2(NullableSessionId ?? Guid.Empty, IsEnglish, 0));
 
 			//if (news.Length <= 0)
 			//	return;

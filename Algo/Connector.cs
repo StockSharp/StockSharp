@@ -35,8 +35,6 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	using Wintellect.PowerCollections;
-
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
@@ -56,7 +54,7 @@ namespace StockSharp.Algo
 		private class MarketDepthInfo : RefTriple<MarketDepth, IEnumerable<QuoteChange>, IEnumerable<QuoteChange>>
 		{
 			public MarketDepthInfo(MarketDepth depth)
-				: base(depth, Enumerable.Empty<QuoteChange>(), Enumerable.Empty<QuoteChange>())
+				: base(depth, null, null)
 			{
 			}
 
@@ -69,7 +67,7 @@ namespace StockSharp.Algo
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
-		private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
+		//private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
 
 		private readonly List<Security> _lookupResult = new List<Security>();
 		private readonly SynchronizedQueue<SecurityLookupMessage> _lookupQueue = new SynchronizedQueue<SecurityLookupMessage>();
@@ -81,8 +79,8 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _sessionStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, object[]> _securityValues = new SynchronizedDictionary<Security, object[]>();
 
-		private readonly IEntityRegistry _entityRegistry;
-		private readonly IStorageRegistry _storageRegistry;
+		private IEntityRegistry _entityRegistry;
+		private IStorageRegistry _storageRegistry;
 
 		private bool _isDisposing;
 
@@ -104,18 +102,7 @@ namespace StockSharp.Algo
 		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, bool initManagers = true, bool supportOffline = false)
 			: this(false, true, initManagers, supportOffline)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
-			_entityRegistry = entityRegistry;
-			_storageRegistry = storageRegistry;
-
-			InitAdapter();
-
-			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
+			InitializeStorage(entityRegistry, storageRegistry);
 		}
 
 		/// <summary>
@@ -164,6 +151,27 @@ namespace StockSharp.Algo
 			}
 		}
 
+		/// <summary>
+		/// Initialize <see cref="StorageAdapter"/>.
+		/// </summary>
+		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		public void InitializeStorage(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
+		{
+			if (entityRegistry == null)
+				throw new ArgumentNullException(nameof(entityRegistry));
+
+			if (storageRegistry == null)
+				throw new ArgumentNullException(nameof(storageRegistry));
+
+			_entityRegistry = entityRegistry;
+			_storageRegistry = storageRegistry;
+
+			InitAdapter();
+
+			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
+		}
+
 		private void InitAdapter()
 		{
 			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
@@ -179,8 +187,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IEntityFactory EntityFactory
 		{
-			get { return _entityCache.EntityFactory; }
-			set { _entityCache.EntityFactory = value; }
+			get => _entityCache.EntityFactory;
+			set => _entityCache.EntityFactory = value;
 		}
 
 		/// <summary>
@@ -188,8 +196,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public int TradesKeepCount
 		{
-			get { return _entityCache.TradesKeepCount; }
-			set { _entityCache.TradesKeepCount = value; }
+			get => _entityCache.TradesKeepCount;
+			set => _entityCache.TradesKeepCount = value;
 		}
 
 		/// <summary>
@@ -197,8 +205,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public int OrdersKeepCount
 		{
-			get { return _entityCache.OrdersKeepCount; }
-			set { _entityCache.OrdersKeepCount = value; }
+			get => _entityCache.OrdersKeepCount;
+			set => _entityCache.OrdersKeepCount = value;
 		}
 
 		/// <summary>
@@ -206,8 +214,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public IdGenerator TransactionIdGenerator
 		{
-			get { return Adapter.TransactionIdGenerator; }
-			set { Adapter.TransactionIdGenerator = value; }
+			get => Adapter.TransactionIdGenerator;
+			set => Adapter.TransactionIdGenerator = value;
 		}
 
 		private SecurityIdGenerator _securityIdGenerator = new SecurityIdGenerator();
@@ -217,7 +225,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public SecurityIdGenerator SecurityIdGenerator
 		{
-			get { return _securityIdGenerator; }
+			get => _securityIdGenerator;
 			set
 			{
 				if (value == null)
@@ -243,24 +251,24 @@ namespace StockSharp.Algo
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { _added += value; }
-			remove { _added -= value; }
+			add => _added += value;
+			remove => _added -= value;
 		}
 
 		private Action<IEnumerable<Security>> _removed;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { _removed += value; }
-			remove { _removed -= value; }
+			add => _removed += value;
+			remove => _removed -= value;
 		}
 
 		private Action _cleared;
 
 		event Action ISecurityProvider.Cleared
 		{
-			add { _cleared += value; }
-			remove { _cleared -= value; }
+			add => _cleared += value;
+			remove => _cleared -= value;
 		}
 
 		/// <summary>
@@ -379,7 +387,7 @@ namespace StockSharp.Algo
 		public virtual bool CreateDepthFromOrdersLog { get; set; }
 
 		/// <summary>
-		/// Use orders log to create ticks7. Disabled by default.
+		/// Use orders log to create ticks. Disabled by default.
 		/// </summary>
 		public virtual bool CreateTradesFromOrdersLog { get; set; }
 
@@ -400,8 +408,8 @@ namespace StockSharp.Algo
 		[DescriptionLoc(LocalizedStrings.Str201Key)]
 		public bool CreateDepthFromLevel1
 		{
-			get { return SupportLevel1DepthBuilder; }
-			set { SupportLevel1DepthBuilder = value; }
+			get => SupportLevel1DepthBuilder;
+			set => SupportLevel1DepthBuilder = value;
 		}
 
 		/// <summary>
@@ -411,8 +419,8 @@ namespace StockSharp.Algo
 		[DescriptionLoc(LocalizedStrings.Str198Key)]
 		public bool CreateAssociatedSecurity
 		{
-			get { return SupportAssociatedSecurity; }
-			set { SupportAssociatedSecurity = value; }
+			get => SupportAssociatedSecurity;
+			set => SupportAssociatedSecurity = value;
 		}
 
 		/// <summary>
@@ -436,7 +444,7 @@ namespace StockSharp.Algo
 		[DescriptionLoc(LocalizedStrings.Str195Key)]
 		public virtual TimeSpan MarketTimeChangedInterval
 		{
-			get { return _marketTimeChangedInterval; }
+			get => _marketTimeChangedInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
@@ -456,8 +464,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool IsRestorSubscriptioneOnReconnect
 		{
-			get { return Adapter.IsRestorSubscriptioneOnReconnect; }
-			set { Adapter.IsRestorSubscriptioneOnReconnect = value; }
+			get => Adapter.IsRestorSubscriptioneOnReconnect;
+			set => Adapter.IsRestorSubscriptioneOnReconnect = value;
 		}
 
 		/// <summary>
@@ -939,7 +947,7 @@ namespace StockSharp.Algo
 
 		private static void CheckOnNew(Order order, bool checkVolume = true, bool checkTransactionId = true)
 		{
-			ChechOrderState(order);
+			CheckOrderState(order);
 
 			if (checkVolume)
 			{
@@ -965,13 +973,13 @@ namespace StockSharp.Algo
 
 		private static void CheckOnOld(Order order)
 		{
-			ChechOrderState(order);
+			CheckOrderState(order);
 
 			if (order.TransactionId == 0 && order.Id == null && order.StringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str899, nameof(order));
 		}
 
-		private static void ChechOrderState(Order order)
+		private static void CheckOrderState(Order order)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
@@ -1027,9 +1035,9 @@ namespace StockSharp.Algo
 		{
 			var regMsg = order.CreateRegisterMessage(GetSecurityId(order.Security));
 
-			var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
-			if (depoName != null)
-				regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
+			//var depoName = order.Portfolio.GetValue<string>(nameof(PositionChangeTypes.DepoName));
+			//if (depoName != null)
+			//	regMsg.AddValue(nameof(PositionChangeTypes.DepoName), depoName);
 
 			SendInMessage(regMsg);
 		}

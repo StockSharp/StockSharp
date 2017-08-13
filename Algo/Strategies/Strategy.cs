@@ -268,8 +268,8 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public override Guid Id
 		{
-			get { return _id.Value; }
-			set { _id.Value = value; }
+			get => _id.Value;
+			set => _id.Value = value;
 		}
 
 		private readonly StrategyParam<LogLevels> _logLevel;
@@ -283,8 +283,8 @@ namespace StockSharp.Algo.Strategies
 		[DescriptionLoc(LocalizedStrings.Str1358Key)]
 		public override LogLevels LogLevel
 		{
-			get { return _logLevel.Value; }
-			set { _logLevel.Value = value; }
+			get => _logLevel.Value;
+			set => _logLevel.Value = value;
 		}
 
 		private readonly StrategyParam<string> _name;
@@ -300,7 +300,7 @@ namespace StockSharp.Algo.Strategies
 			Order = 0)]
 		public override string Name
 		{
-			get { return _name.Value; }
+			get => _name.Value;
 			set
 			{
 				if (value == Name)
@@ -325,7 +325,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public virtual IConnector Connector
 		{
-			get { return _connector; }
+			get => _connector;
 			set
 			{
 				if (Connector == value)
@@ -409,7 +409,7 @@ namespace StockSharp.Algo.Strategies
 			Order = 1)]
 		public virtual Portfolio Portfolio
 		{
-			get { return _portfolio; }
+			get => _portfolio;
 			set
 			{
 				if (_portfolio == value)
@@ -444,7 +444,7 @@ namespace StockSharp.Algo.Strategies
 			Order = 2)]
 		public virtual Security Security
 		{
-			get { return _security; }
+			get => _security;
 			set
 			{
 				if (_security == value)
@@ -491,7 +491,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public IPnLManager PnLManager
 		{
-			get { return _pnLManager; }
+			get => _pnLManager;
 			set
 			{
 				if (value == null)
@@ -543,7 +543,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public IPositionManager PositionManager
 		{
-			get { return _positionManager; }
+			get => _positionManager;
 			set
 			{
 				if (value == null)
@@ -559,7 +559,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public decimal Position
 		{
-			get { return PositionManager.Position; }
+			get => PositionManager.Position;
 			set
 			{
 				if (Position == value)
@@ -600,7 +600,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public StatisticManager StatisticManager
 		{
-			get { return _statisticManager; }
+			get => _statisticManager;
 			protected set
 			{
 				if (value == null)
@@ -618,7 +618,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public IRiskManager RiskManager
 		{
-			get { return _riskManager; }
+			get => _riskManager;
 			set
 			{
 				if (value == null)
@@ -668,7 +668,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public int MaxErrorCount
 		{
-			get { return _maxErrorCount.Value; }
+			get => _maxErrorCount.Value;
 			set
 			{
 				if (value < 1)
@@ -686,7 +686,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public int ErrorCount
 		{
-			get { return _errorCount; }
+			get => _errorCount;
 			private set
 			{
 				if (_errorCount == value)
@@ -705,7 +705,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public virtual ProcessStates ProcessState
 		{
-			get { return _processState; }
+			get => _processState;
 			private set
 			{
 				if (_processState == value)
@@ -838,8 +838,8 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public virtual bool CancelOrdersWhenStopping
 		{
-			get { return _cancelOrdersWhenStopping.Value; }
-			set { _cancelOrdersWhenStopping.Value = value; }
+			get => _cancelOrdersWhenStopping.Value;
+			set => _cancelOrdersWhenStopping.Value = value;
 		}
 
 		/// <summary>
@@ -868,7 +868,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public TimeSpan OrdersKeepTime
 		{
-			get { return _ordersKeepTime.Value; }
+			get => _ordersKeepTime.Value;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -920,7 +920,7 @@ namespace StockSharp.Algo.Strategies
 			Order = 4)]
 		public decimal Volume
 		{
-			get { return _volume.Value; }
+			get => _volume.Value;
 			set
 			{
 				if (value < 0)
@@ -938,7 +938,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public LogLevels ErrorState
 		{
-			get { return _errorState; }
+			get => _errorState;
 			private set
 			{
 				if (_errorState == value)
@@ -971,7 +971,7 @@ namespace StockSharp.Algo.Strategies
 		[ReadOnly(true)]
 		public DateTimeOffset StartedTime
 		{
-			get { return _startedTime; }
+			get => _startedTime;
 			private set
 			{
 				_startedTime = value;
@@ -1017,8 +1017,8 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool DisposeOnStop
 		{
-			get { return _disposeOnStop.Value; }
-			set { _disposeOnStop.Value = value; }
+			get => _disposeOnStop.Value;
+			set => _disposeOnStop.Value = value;
 		}
 
 		private readonly StrategyParam<bool> _waitAllTrades;
@@ -1032,8 +1032,8 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool WaitAllTrades
 		{
-			get { return _waitAllTrades.Value; }
-			set { _waitAllTrades.Value = value; }
+			get => _waitAllTrades.Value;
+			set => _waitAllTrades.Value = value;
 		}
 
 		private readonly StrategyParam<bool> _commentOrders;
@@ -1047,8 +1047,8 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool CommentOrders
 		{
-			get { return _commentOrders.Value; }
-			set { _commentOrders.Value = value; }
+			get => _commentOrders.Value;
+			set => _commentOrders.Value = value;
 		}
 
 		/// <summary>
@@ -1548,14 +1548,13 @@ namespace StockSharp.Algo.Strategies
 				}
 				else if (isChanging)
 				{
-					OnOrderChanged(order);
-
 					var pos = PositionManager.ProcessMessage(order.ToMessage());
+					StatisticManager.AddChangedOrder(order);
+
+					OnOrderChanged(order);
 
 					if (pos != null)
 						RaisePositionChanged();
-
-					StatisticManager.AddChangedOrder(order);
 				}
 			});
 		}
@@ -1834,7 +1833,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public virtual TimeSpan UnrealizedPnLInterval
 		{
-			get { return _unrealizedPnLInterval; }
+			get => _unrealizedPnLInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
@@ -1977,23 +1976,23 @@ namespace StockSharp.Algo.Strategies
 			{
 				OnStopOrderChanged(order);
 
-				if (order.DerivedOrder == null)
-					continue;
+				//if (order.DerivedOrder == null)
+				//	continue;
 
-				lock (_ordersInfo.SyncRoot)
-				{
-					var derivedOrder = order.DerivedOrder;
+				//lock (_ordersInfo.SyncRoot)
+				//{
+				//	var derivedOrder = order.DerivedOrder;
 
-					if (_ordersInfo.ContainsKey(derivedOrder))
-						continue;
+				//	if (_ordersInfo.ContainsKey(derivedOrder))
+				//		continue;
 
-					AssignOrderStrategyId(derivedOrder);
-					_ordersInfo.Add(derivedOrder, new OrderInfo { IsOwn = true });
-					ProcessOrder(derivedOrder);
+				//	AssignOrderStrategyId(derivedOrder);
+				//	_ordersInfo.Add(derivedOrder, new OrderInfo { IsOwn = true });
+				//	ProcessOrder(derivedOrder);
 
-					//заявка могла придти позже сделок по ней
-					SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder).ForEach(OnConnectorNewMyTrade);
-				}
+				//	//заявка могла придти позже сделок по ней
+				//	SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder).ForEach(OnConnectorNewMyTrade);
+				//}
 			}
 		}
 
@@ -2602,20 +2601,20 @@ namespace StockSharp.Algo.Strategies
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { SafeGetConnector().Added += value; }
-			remove { SafeGetConnector().Added -= value; }
+			add => SafeGetConnector().Added += value;
+			remove => SafeGetConnector().Added -= value;
 		}
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { SafeGetConnector().Removed += value; }
-			remove { SafeGetConnector().Removed -= value; }
+			add => SafeGetConnector().Removed += value;
+			remove => SafeGetConnector().Removed -= value;
 		}
 
 		event Action ISecurityProvider.Cleared
 		{
-			add { SafeGetConnector().Cleared += value; }
-			remove { SafeGetConnector().Cleared -= value; }
+			add => SafeGetConnector().Cleared += value;
+			remove => SafeGetConnector().Cleared -= value;
 		}
 
 		/// <summary>

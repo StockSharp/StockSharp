@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -8,7 +8,7 @@
 в серый цвет, но при наведении на кубик к которому они относится линии окрашиваются 
 в черный цвет.</para>
 <mediaLink>
-<image xlink:href="Designer_Line_00"/>
+<image placement="center" xlink:href="Designer_Line_00"/>
 </mediaLink>
 <para>Каждое соединение можно выделить, наведя на него и нажав левую кнопку мыши. 
 Выделенное соединение будет отмечена кружками на концах линии, взяв за которые 
@@ -17,12 +17,12 @@
 за исключением следующих типов параметров:</para>
 
 <list class="bullet">
-  <listItem><para>Параметр <legacyBold>черного</legacyBold> цвета может принимать любые данные, 
-  наиболее часто такие параметры используются для передачи сигналов для каких-либо 
-  действий внутри элемента, например, элемент <legacyBold>Переменная</legacyBold> хранит некое значение и при 
+  <listItem><para>Параметр <legacyBold>черного</legacyBold> цвета может принимать любые данные. 
+  Наиболее часто такие параметры используются для передачи сигналов для каких-либо 
+  действий внутри элемента. Например, элемент <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> хранит некое значение и при 
   получении сигнала передает его на выход.</para></listItem>
   <listItem><para>Параметр <legacyBold>зеленого</legacyBold> цвета может принимать на вход различные 
-  сравниваемые типы данных, например, числовые, значения индикатора, строки и т.д.</para></listItem>
+  сравниваемые типы данных. Например, числовые, значения индикатора, строки и т.д.</para></listItem>
 </list>
     </introduction>
     <relatedTopics>

@@ -175,7 +175,7 @@ namespace SampleSmart
 				Trader.Address = Address.SelectedAddress;
 
 				// применить нужную версию SmartCOM
-				Trader.Version = IsSmartCom3.IsChecked == true ? SmartComVersions.V3 : SmartComVersions.V2;
+				Trader.Version = IsSmartCom4.IsChecked == true ? SmartComVersions.V4 : SmartComVersions.V3;
 
 				// очищаем из текстового поля в целях безопасности
 				//Password.Clear();

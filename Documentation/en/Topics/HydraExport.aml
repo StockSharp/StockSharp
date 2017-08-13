@@ -8,11 +8,11 @@
     -->
     <introduction>
       <para>
-		  The <token>hydra</token> allows you to view downloaded data in special windows. 
+		  The <token>hydra</token> allows you to view downloaded data in special windows.
 	  </para>
 
       <para>
-		  To do this, in the toolbox of the main window you should click on one of the following buttons -
+		  To do this, on the <legacyBold>Common</legacyBold> tab you should click one of the following buttons -
 	  </para>
 	  
 	  	
@@ -59,7 +59,7 @@
         </listItem>
       </list> 
       
-      <para>Or select the appropriate menu item in the main menu Export.</para>
+      <para>Or right-click on the instrument, select the required data type in the drop-down menu. As it shown on the picture.</para>
 	  
 	  
 	  <mediaLink>
@@ -69,47 +69,9 @@
 
 
     </introduction>
-    <!-- Optional procedures followed by optional code example but must have
-         at least one procedure or code example -->
-    
-    <!-- <codeExample>Optional code example</codeExample> -->
-    <!-- <buildInstructions>Optional instructions for building a
-         code example.</buildInstructions> -->
-    <!-- <robustProgramming>Optional discussion of error handling and other
-         issues related to writing solid code.</robustProgramming> -->
-    <!-- <security>Optional discussion of security issues.</security> -->
+
     <relatedTopics>
-      <!-- One or more of the following:
-           - A local link
-           - An external link
-           - A code entity reference
 
-      <link xlink:href="Other Topic's ID">Link text</link>
-      <externalLink>
-          <linkText>Link text</linkText>
-          <linkAlternateText>Optional alternate link text</linkAlternateText>
-          <linkUri>URI</linkUri>
-      </externalLink>
-      <codeEntityReference>API member ID</codeEntityReference>
-
-      Examples:
-
-      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
-
-      <externalLink>
-          <linkText>SHFB on CodePlex</linkText>
-          <linkAlternateText>Go to CodePlex</linkAlternateText>
-          <linkUri>http://shfb.codeplex.com</linkUri>
-      </externalLink>
-
-      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-      -->
     </relatedTopics>
   </developerHowToDocument>
 </topic>

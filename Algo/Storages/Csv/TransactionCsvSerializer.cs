@@ -79,8 +79,8 @@ namespace StockSharp.Algo.Storages.Csv
 				data.Currency.ToString(),
 				data.Comment,
 				data.SystemComment,
-				data.DerivedOrderId.ToString(),
-				data.DerivedOrderStringId,
+				/*data.DerivedOrderId.ToString()*/string.Empty,
+				/*data.DerivedOrderStringId*/string.Empty,
 				data.IsUpTick.ToString(),
 				data.IsCancelled.ToString(),
 				data.OpenInterest.ToString(),
@@ -96,6 +96,7 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ExpiryDate?.ToString("zzz"),
 				data.LocalTime.WriteTimeMls(),
 				data.LocalTime.ToString("zzz"),
+				data.IsMarketMaker.ToString(),
 			};
 			writer.WriteRow(row);
 
@@ -145,18 +146,22 @@ namespace StockSharp.Algo.Storages.Csv
 				Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 				Comment = reader.ReadString(),
 				SystemComment = reader.ReadString(),
-				DerivedOrderId = reader.ReadNullableLong(),
-				DerivedOrderStringId = reader.ReadString(),
-				IsUpTick = reader.ReadNullableBool(),
-				IsCancelled = reader.ReadBool(),
-				OpenInterest = reader.ReadNullableDecimal(),
-				PnL = reader.ReadNullableDecimal(),
-				Position = reader.ReadNullableDecimal(),
-				Slippage = reader.ReadNullableDecimal(),
-				TradeStatus = reader.ReadNullableInt(),
-				OrderStatus = reader.ReadNullableLong(),
-				Latency = reader.ReadNullableLong().To<TimeSpan?>(),
+				//DerivedOrderId = reader.ReadNullableLong(),
+				//DerivedOrderStringId = reader.ReadString(),
 			};
+
+			reader.ReadNullableLong();
+			reader.ReadString();
+
+			msg.IsUpTick = reader.ReadNullableBool();
+			msg.IsCancelled = reader.ReadBool();
+			msg.OpenInterest = reader.ReadNullableDecimal();
+			msg.PnL = reader.ReadNullableDecimal();
+			msg.Position = reader.ReadNullableDecimal();
+			msg.Slippage = reader.ReadNullableDecimal();
+			msg.TradeStatus = reader.ReadNullableInt();
+			msg.OrderStatus = reader.ReadNullableLong();
+			msg.Latency = reader.ReadNullableLong().To<TimeSpan?>();
 
 			var error = reader.ReadString();
 
@@ -173,6 +178,7 @@ namespace StockSharp.Algo.Storages.Csv
 				reader.Skip(2);
 
 			msg.LocalTime = reader.ReadTime(metaInfo.Date);
+			msg.IsMarketMaker = reader.ReadNullableBool();
 
 			return msg;
 		}

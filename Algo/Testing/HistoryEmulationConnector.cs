@@ -22,19 +22,17 @@ namespace StockSharp.Algo.Testing
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The emulational connection. It uses historical data and/or occasionally generated.
+	/// The emulation connection. It uses historical data and/or occasionally generated.
 	/// </summary>
 	public class HistoryEmulationConnector : BaseEmulationConnector//, IExternalCandleSource
 	{
@@ -110,16 +108,15 @@ namespace StockSharp.Algo.Testing
 							try
 							{
 								var sended = _historyMessageAdapter.SendOutMessage();
+								var block = !sended;
 
 								Message message;
 
-								if (!_messageQueue.TryDequeue(out message, true, !sended))
+								while (_messageQueue.TryDequeue(out message, true, block))
 								{
-									if (!sended)
-										break;
-								}
-								else
 									NewOutMessage?.Invoke(message);
+									block = false;
+								}
 							}
 							catch (Exception ex)
 							{
@@ -236,8 +233,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public int MaxMessageCount
 		{
-			get { return HistoryMessageAdapter.MaxMessageCount; }
-			set { HistoryMessageAdapter.MaxMessageCount = value; }
+			get => HistoryMessageAdapter.MaxMessageCount;
+			set => HistoryMessageAdapter.MaxMessageCount = value;
 		}
 
 		private readonly Dictionary<Portfolio, decimal?> _initialMoney;
@@ -264,7 +261,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public EmulationStates State
 		{
-			get { return _state; }
+			get => _state;
 			private set
 			{
 				if (_state == value)

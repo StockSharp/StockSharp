@@ -2,14 +2,22 @@
 <topic id="aac980b1-ac5b-415b-811c-a8d128942391" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>
-			The <codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference> should be used for trading algorithms creating for <token>cqg</token>.
-			User authentication is required when you start the <legacyBold>CQG Integrated Client</legacyBold> terminal.
-		</para>
+<para>To create trading algorithms for <token>cqg_external</token> it is necessary to use:</para>
+
+<list class="bullet">
+  <listItem><para><codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> 
+  - when working with the terminal. Authorization is performed when the 
+  <legacyBold>CQG Integrated Client</legacyBold> 
+  terminal is started.</para></listItem>
+  <listItem><para><codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> 
+  - when working with the server.</para></listItem>
+</list>
+
     </introduction>
      <relatedTopics>
-    	<link xlink:href="436fc377-85ff-4d37-ad62-4846313a8563">Getting started</link>
-  		<link xlink:href="355f6b70-c920-48b6-b2f1-31584ebb82f3">Stop orders</link>
+	<link xlink:href="436fc377-85ff-4d37-ad62-4846313a8563">Getting started</link>
+  	<link xlink:href="355f6b70-c920-48b6-b2f1-31584ebb82f3">Stop orders</link>
+	<link xlink:href="20bbe0ce-703e-46c3-9af4-d1b517a00e82">Historical data</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

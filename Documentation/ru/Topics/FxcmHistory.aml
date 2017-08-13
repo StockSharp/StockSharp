@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="94c3b2be-a927-4fea-86ac-e8254321cee8" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+      	<token>fxcm</token> предоставляет исторические свечи, которые можно использовать как для тестирования, так и для инициализации <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">индикаторов</link>.
+	  </para>
+    </introduction>
+    
+    <procedure>
+      <title>Работа с историческими свечи</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>
+            	Для того, чтобы получить исторические свечи, необходимо вызвать метод 
+            	<codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>:
+       		</para>
+            <code language="C#">
+            <![CDATA[
+var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, tf);
+_trader.SubscribeCandles(SelectedSecurity, DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now);
+			]]>
+			</code>
+          </content>
+        </step>
+        <step>
+        	<para>
+            	Исторически свечи передаются через событие 
+            	<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>:
+       		</para>
+          <code language="C#">
+            <![CDATA[
+_trader.CandleSeriesProcessing += ProcessCandle;
+			]]>
+			</code>
+        </step>
+        <step>
+          <content>
+            <para>Появившиеся свечи можно отрисовывать через <link xlink:href="287125e1-7c7e-4be3-a8ce-5018538e613f">графический контрол</link>.</para>
+          </content>
+        </step>
+      </steps>
+    </procedure>
+
+    <relatedTopics>
+      <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечи</link>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

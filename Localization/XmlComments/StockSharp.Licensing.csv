@@ -1,6 +1,6 @@
 T:StockSharp.Licensing.Broker/summary;DocStr3835
 P:StockSharp.Licensing.Broker.Id/summary;Str361
-P:StockSharp.Licensing.Broker.Name/summary;DocStr3082
+P:StockSharp.Licensing.Broker.Name/summary;Name2
 P:StockSharp.Licensing.Broker.Criteria/summary;DocStr3836
 P:StockSharp.Licensing.Broker.OpenAccountLink/summary;DocStr3837
 P:StockSharp.Licensing.Broker.OpenDemoAccountLink/summary;DocStr9141
@@ -53,6 +53,7 @@ M:StockSharp.Licensing.ILicenseService.CreateLicense(System.Guid,System.String,S
 M:StockSharp.Licensing.ILicenseService.CreateLicense(System.Guid,System.String,System.String,System.String,System.String,System.DateTime)/returns;License
 T:StockSharp.Licensing.License/summary;License
 P:StockSharp.Licensing.License.FileName/summary;DocStr3866
+P:StockSharp.Licensing.License.Version/summary;DocStr9865
 P:StockSharp.Licensing.License.Id/summary;DocStr3848
 P:StockSharp.Licensing.License.IssuedTo/summary;DocStr3868
 P:StockSharp.Licensing.License.Company/summary;DocStr3869
@@ -62,9 +63,9 @@ P:StockSharp.Licensing.License.ExpirationDate/summary;DocStr3865
 P:StockSharp.Licensing.License.HardwareId/summary;DocStr3872
 P:StockSharp.Licensing.License.Account/summary;DocStr3873
 P:StockSharp.Licensing.License.Features/summary;DocStr3874
-P:StockSharp.Licensing.License.Signature/summary;DocStr3875
 P:StockSharp.Licensing.License.Body/summary;DocStr3876
 P:StockSharp.Licensing.License.ExpireAction/summary;DocStr8817
+P:StockSharp.Licensing.License.StrategySubscriptions/summary;DocStr9042
 T:StockSharp.Licensing.LicenseClient/summary;DocStr3877
 M:StockSharp.Licensing.LicenseClient.#ctor/summary;DocStr1
 M:StockSharp.Licensing.LicenseClient.#ctor(System.Uri)/summary;DocStr1
@@ -99,7 +100,7 @@ M:StockSharp.Licensing.LicenseClient.CreateLicense(System.String,System.String,S
 M:StockSharp.Licensing.LicenseClient.CreateLicense(System.String,System.String,System.String,System.String,System.DateTime)/returns;License
 T:StockSharp.Licensing.LicenseErrorLogSource/summary;DocStr3884
 M:StockSharp.Licensing.LicenseErrorLogSource.#ctor/summary;DocStr1
-P:StockSharp.Licensing.LicenseErrorLogSource.Name/summary;DocStr3082
+P:StockSharp.Licensing.LicenseErrorLogSource.Name/summary;Name2
 M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged/summary;DocStr7
 T:StockSharp.Licensing.LicenseExpireActions/summary;DocStr8818
 F:StockSharp.Licensing.LicenseExpireActions.PreventWork/summary;DocStr8819

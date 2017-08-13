@@ -109,7 +109,7 @@ public class DeltaHedgeStrategy : HedgeStrategy
 		</para>
 		<code language="C#">
 _tradingStrategy
-	.WhenNewMyTrades()
+	.WhenNewMyTrade()
 	.Do(ReHedge).Apply(this);
 		</code>
 		<para>

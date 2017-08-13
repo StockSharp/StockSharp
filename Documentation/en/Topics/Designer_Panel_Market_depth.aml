@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="24d370d1-fd00-4914-83ac-574721299e93" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>Компонент <legacyBold>П/У</legacyBold> представляет собой график 
+Прибыли/Убытка (не реализованной), Прибыли/Убытка (реализованной) и комиссии. 
+В левом верхнем углу графика показаны все графические элементы, добавленные на 
+график, если убрать флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline> на графическом элементе уберется и элемент с графика. 
+Нажав на кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline> откроются настройки графического элемента.
+</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Schedule_PU_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="91644d63-00b3-416f-8677-ca57dfa8032e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

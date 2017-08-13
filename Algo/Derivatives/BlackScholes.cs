@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		public virtual int RoundDecimals
 		{
-			get { return _roundDecimals; }
+			get => _roundDecimals;
 			set
 			{
 				if (value < -1)

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -142,17 +142,17 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Запращивает информацию о портфелях по заданному критерию. Результат запроса возвращается при помощи сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.</para>
+    		<para>Запрашивает информацию о портфелях по заданному критерию. Результат запроса возвращается при помощи сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.</para>
     	</entry>
   		</row>
   		
   		<row>
     	<entry>
-    		<para><codeEntityReference>T:StockSharp.Messages.PositionMessage</codeEntityReference></para>
+    		<para><codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию о позиции. Также существует сообщение <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference>,
-    		которое содержит информацию об изменении определенного свойства позиции. Тип свойства определяется в перечислении <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
+    		<para>Содержит информацию о позиции. Содержит информацию об изменении определенного свойства позиции. Тип свойства определяется в
+		перечислении <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
     	</entry>
   		</row>
 
@@ -188,7 +188,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Запращивает список инструментов по заданному критерию. Результат запроса будет возвращен при помощи сообщения
+    		<para>Запрашивает список инструментов по заданному критерию. Результат запроса будет возвращен при помощи сообщения
     		<codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.</para>
     	</entry>
   		</row>

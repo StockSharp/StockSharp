@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("SenkouA")]
 		[DescriptionLoc(LocalizedStrings.Str766Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public IchimokuSenkouALine SenkouA { get; private set; }
+		public IchimokuSenkouALine SenkouA { get; }
 
 		/// <summary>
 		/// Senkou (B) line.
@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("SenkouB")]
 		[DescriptionLoc(LocalizedStrings.Str767Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public IchimokuSenkouBLine SenkouB { get; private set; }
+		public IchimokuSenkouBLine SenkouB { get; }
 
 		/// <summary>
 		/// Chinkou line.
@@ -101,6 +101,6 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Chinkou")]
 		[DescriptionLoc(LocalizedStrings.Str768Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public IchimokuChinkouLine Chinkou { get; private set; }
+		public IchimokuChinkouLine Chinkou { get; }
 	}
 }

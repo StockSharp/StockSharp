@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Slippage
 		/// </summary>
 		public ISlippageManager SlippageManager
 		{
-			get { return _slippageManager; }
+			get => _slippageManager;
 			set
 			{
 				if (value == null)

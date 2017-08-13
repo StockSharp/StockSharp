@@ -55,9 +55,7 @@ _commissionManager.Rules.Add(commissionRule);;
 		<para>The commission can be calculated both by the trades and by orders. To calculate the commission by the trade the 
 		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.Process(StockSharp.Messages.Message)</codeEntityReference>
 		method is called, in which as a parameter the <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Message</codeEntityReference> is passed
-		(<codeEntityReference qualifyHint="false">T:StockSharp.Messages.ExecutionMessage</codeEntityReference> or <codeEntityReference qualifyHint="false">T:StockSharp.Messages.OrderRegistryMessage</codeEntityReference>).</para>
-		<!-- <para>Для подсчета комиссии по заявке вызывается метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.ProcessOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
-		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Order</codeEntityReference>.</para>-->
+		(<codeEntityReference qualifyHint="false">T:StockSharp.Messages.ExecutionMessage</codeEntityReference> or <codeEntityReference qualifyHint="false">T:StockSharp.Messages.OrderRegisterMessage</codeEntityReference>).</para>
 		<para>The total value of the commission can be found through the <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Commissions.CommissionManager.Commission</codeEntityReference>.</para>
 	</summary>
     

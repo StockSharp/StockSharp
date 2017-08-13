@@ -29,6 +29,6 @@ namespace SampleDdeCustomTable
 			Candles = new ThreadSafeObservableCollection<QuikCandle>(candlesSource);
 		}
 
-		public IListEx<QuikCandle> Candles { get; private set; }
+		public IListEx<QuikCandle> Candles { get; }
 	}
 }

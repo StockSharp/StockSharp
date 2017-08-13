@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Deviation
 		{
-			get { return _deviation; }
+			get => _deviation;
 			set
 			{
 				if (value == 0)
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public Func<Candle, decimal> ByPrice
 		{
-			get { return _byPrice; }
+			get => _byPrice;
 			set
 			{
 				_byPrice = value;

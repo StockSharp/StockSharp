@@ -79,7 +79,7 @@ namespace SampleIQFeed
 			window.Close();
 		}
 
-		public Security SelectedSecurity => SecurityPicker.SelectedSecurity;
+		//public Security SelectedSecurity => SecurityPicker.SelectedSecurity;
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
@@ -90,45 +90,60 @@ namespace SampleIQFeed
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				trader.RegisterMarketDepth(security);
+				var window = _quotesWindows.SafeAdd(security, s =>
+				{
+					// subscribe on order book flow
+					trader.RegisterMarketDepth(security);
 
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+				{
+					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
-			TryInitialize();
+				TryInitialize();
+			}
 		}
 
 		private void Level1Click(object sender, RoutedEventArgs e)
 		{
 			TryInitialize();
 
-			var window = _level1Windows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create level1 window
-				var wnd = new Level1Window { Title = security.Code + " level1" };
+				var window = _level1Windows.SafeAdd(security, s =>
+				{
+					// create level1 window
+					var wnd = new Level1Window
+					{
+						Title = security.Code + " level1"
+					};
 
-				// subscribe on level1
-				MainWindow.Instance.Trader.RegisterSecurity(security);
+					// subscribe on level1
+					MainWindow.Instance.Trader.RegisterSecurity(security);
 
-				wnd.MakeHideable();
-				return wnd;
-			});
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
+			}
 		}
 
 		private void TryInitialize()
@@ -141,8 +156,6 @@ namespace SampleIQFeed
 
 				trader.ValuesChanged += TraderOnValuesChanged;
 				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
 			}
 		}
 
@@ -173,34 +186,40 @@ namespace SampleIQFeed
 
 		private void HistoryLevel1Click(object sender, RoutedEventArgs e)
 		{
-			var window = _historyLevel1Windows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create historical level1 window
-				var wnd = new HistoryLevel1Window(SelectedSecurity);
-				wnd.MakeHideable();
-				return wnd;
-			});
+				var window = _historyLevel1Windows.SafeAdd(security, s =>
+				{
+					// create historical level1 window
+					var wnd = new HistoryLevel1Window(security);
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
+			}
 		}
 
 		private void HistoryCandlesClick(object sender, RoutedEventArgs e)
 		{
-			var window = _historyCandlesWindows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create historical candles window
-				var wnd = new HistoryCandlesWindow(SelectedSecurity);
-				wnd.MakeHideable();
-				return wnd;
-			});
+				var window = _historyCandlesWindows.SafeAdd(security, s =>
+				{
+					// create historical candles window
+					var wnd = new HistoryCandlesWindow(security);
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
+			}
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)

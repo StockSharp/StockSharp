@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0E498B61-BE10-480A-94A4-E25B77E3FE82}</ProjectGuid>
+    <ProjectGuid>{9BD6083A-0333-4180-8B29-CE14C68CDB73}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SampleCQG</RootNamespace>
@@ -69,20 +69,20 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Data.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Data.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Data.v17.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v15.2.Core">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v15.2.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v17.1.Core">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.LayoutControl.v15.2">
-      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v17.1">
+      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.1.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

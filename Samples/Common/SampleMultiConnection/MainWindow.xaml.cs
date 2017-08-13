@@ -47,6 +47,7 @@ namespace SampleMultiConnection
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
 
 		private const string _settingsFile = "connection.xml";
+		private const string _defaultDataPath = "Data";
 
 		public MainWindow()
 		{
@@ -65,13 +66,20 @@ namespace SampleMultiConnection
 			var logManager = new LogManager();
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
 
-			var entityRegistry = new CsvEntityRegistry("Data");
+			var path = _defaultDataPath.ToFullPath();
+
+			HistoryPath.Folder = path;
+
+			var entityRegistry = new CsvEntityRegistry(path);
+			var storageRegistry = new StorageRegistry
+			{
+				DefaultDrive = new LocalMarketDataDrive(path)
+			};
 
 			ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
+			ConfigManager.RegisterService<IStorageRegistry>(storageRegistry);
 			// ecng.serialization invoke in several places IStorage obj
 			ConfigManager.RegisterService(entityRegistry.Storage);
-
-			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
 
 			Connector = new Connector(entityRegistry, storageRegistry);
 			logManager.Sources.Add(Connector);
@@ -250,6 +258,15 @@ namespace SampleMultiConnection
 				window.Hide();
 			else
 				window.Show();
+		}
+
+		private void HistoryPath_OnFolderChanged(string path)
+		{
+			if (Connector == null)
+				return;
+
+			Connector.StorageAdapter.Drive = new LocalMarketDataDrive(path.ToFullPath());
+			Connector.StorageAdapter.Load();
 		}
 	}
 }

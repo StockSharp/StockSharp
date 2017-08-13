@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleLMAX
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows.Media;
 	
@@ -30,7 +29,7 @@ namespace SampleLMAX
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 
-		public ChartWindow(CandleSeries candleSeries, DateTime from, DateTime to)
+		public ChartWindow(CandleSeries candleSeries)
 		{
 			InitializeComponent();
 
@@ -56,24 +55,25 @@ namespace SampleLMAX
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandles += ProcessNewCandles;
-			_trader.SubscribeCandles(_candleSeries, from, to);
+			var tf = (TimeSpan)candleSeries.Arg;
+
+			_trader.CandleSeriesProcessing += ProcessNewCandle;
+			_trader.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)));
 		}
 
-		private void ProcessNewCandles(CandleSeries series, IEnumerable<Candle> candles)
+		private void ProcessNewCandle(CandleSeries series, Candle candle)
 		{
 			if (series != _candleSeries)
 				return;
 
-			foreach (var timeFrameCandle in candles)
-			{
-				Chart.Draw(_candleElem, timeFrameCandle);
-			}
+			Chart.Draw(_candleElem, candle);
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewCandles -= ProcessNewCandles;
+			_trader.UnSubscribeCandles(_candleSeries);
+			_trader.CandleSeriesProcessing -= ProcessNewCandle;
+
 			base.OnClosing(e);
 		}
 	}

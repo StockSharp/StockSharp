@@ -333,7 +333,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (!isEmptyPf)
 				{
 					metaInfo.Portfolios.TryAdd(message.PortfolioName);
-					writer.WriteInt(metaInfo.Portfolios.IndexOf(message.PortfolioName));	
+					writer.WriteInt(metaInfo.Portfolios.IndexOf(message.PortfolioName));
 				}
 
 				if (metaInfo.Version < MarketDataVersions.Version51)

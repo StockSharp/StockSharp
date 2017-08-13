@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="ad145f75-a2d4-4766-af60-79489b84846c" revisionNumber="0">
  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -7,7 +7,7 @@
       <para>
 		  Для стратегий, которым необходима информация о стакане по инструменту, в <token>stocksharp</token> предусмотрен метод
 		  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.GetMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.
-		  Данный метод возвращает <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>, который позволяет получить группированно
+		  Данный метод возвращает <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>, который позволяет получить группировано
 		  по типу котировки (биды и оффера), а так же удобную работу с лучшими котировками и спредом.
 	  </para>
    </introduction> 
@@ -33,7 +33,7 @@
 					  <token>quik</token>-е, как показано на рисунке:
 				  </para>
 				  <alert class="note">
-					  Если стакан для необходимого инструмента еще ни разу не окрывался в <token>quik</token>-е, то <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
+					  Если стакан для необходимого инструмента еще ни разу не открывался в <token>quik</token>-е, то <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
 					  самостоятельно создаст окно в терминале и настроит его при вызове метода 
 					  <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>
 					  из кода программы. Или можно принудительно закрыть стакан в <token>quik</token>-е и он будет переоткрыт с уже корректными для <token>stocksharp</token>
@@ -52,8 +52,8 @@
 				  <para>
 					  Заголовок окна должен содержать через @ код и класс инструмента, по которому в <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
 					  будет происходить сопоставление объекта <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference> и стакана.
-					  Например, для Лукойла заголовок будет <legacyBold>LKOH@QJSIM</legacyBold> на демо счете, и <legacyBold>LKOH@EQBR</legacyBold> на реальном.
-					  Для инструментов <token>rts</token> класс инструмента будет равен RTS. Стакан для июньского фьючерса на индекс РТС, к примеру, будет иметь
+					  Например, для Лукойла заголовок будет <legacyBold>LKOH@TQBR</legacyBold>.
+					  Для инструментов <token>rts</token> класс инструмента будет равен FORTS. Стакан для июньского фьючерса на индекс РТС, к примеру, будет иметь
 					  заголовок <legacyBold>RIM5@FORTS</legacyBold>. Подробнее, в разделе <link xlink:href="34a9c518-60ca-45c0-a118-5e2e42165efa">Идентификатор инструмента</link>.
 				  </para>
 				  <alert class="caution">

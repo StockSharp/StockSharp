@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual Security Security
 		{
-			get { return _security; }
+			get => _security;
 			set
 			{
 				_security = value;
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual Type CandleType
 		{
-			get { return _candleType; }
+			get => _candleType;
 			set
 			{
 				NotifyChanging(nameof(CandleType));
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual object Arg
 		{
-			get { return _arg; }
+			get => _arg;
 			set
 			{
 				NotifyChanging(nameof(Arg));
@@ -121,17 +121,15 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public bool IsCalcVolumeProfile { get; set; }
 
-		internal bool IsNew { get; set; }
-
 		/// <summary>
 		/// The initial date from which you need to get data.
 		/// </summary>
-		public DateTimeOffset From { get; set; } = DateTimeOffset.MinValue;
+		public DateTimeOffset? From { get; set; }
 
 		/// <summary>
 		/// The final date by which you need to get data.
 		/// </summary>
-		public DateTimeOffset To { get; set; } = DateTimeOffset.MaxValue;
+		public DateTimeOffset? To { get; set; }
 
 		/// <summary>
 		/// Build candles mode.

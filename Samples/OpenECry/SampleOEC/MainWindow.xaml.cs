@@ -242,6 +242,11 @@ namespace SampleOEC
 			ShowOrHide(_stopOrdersWindow);
 		}
 
+		private void ShowNewsClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_newsWindow);
+		}
+
 		private static void ShowOrHide(Window window)
 		{
 			if (window == null)

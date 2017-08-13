@@ -11,7 +11,7 @@
 			  <listItem>
 				  <codeEntityReference>F:StockSharp.Messages.OrderStates.Pending</codeEntityReference> - the order has been sent to the registration
 				  (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>) and the
-				  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> event for it has been called.
+				  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> event for it has been called.
 				  The confirmation of the order acceptance from the exchange is expected. If successful, the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>,
 				  event will be called and the order will be changed to the <codeEntityReference>F:StockSharp.Messages.OrderStates.Active</codeEntityReference> state.
 				  Also the <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference> and <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Time</codeEntityReference>
@@ -22,7 +22,7 @@
 				  <codeEntityReference>F:StockSharp.Messages.OrderStates.Active</codeEntityReference> - the order is active on exchange. Such order will be active as long as all of the order
 				  <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Volume</codeEntityReference> volume is matched, or it will be forcibly cancelled through
 				  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>.
-				  If the order matched partially the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrades</codeEntityReference>
+				  If the order matched partially the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrade</codeEntityReference>
 				  events about new trades on issued order have been called, as well as the <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference> 
 				  event, which the <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Balance</codeEntityReference> notification about the order balance change passed.
 				  The latest event will be arised in the case of the order cancellation.
@@ -32,7 +32,7 @@
 				  or cancelled).
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference> - the order has not been aссepted by the exchange (or intermediate
+				  <codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference> - the order has not been accepted by the exchange (or intermediate
 				  system, such as the broker server) for any reason.
 			  </listItem>
 		  </list>

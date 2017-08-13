@@ -19,18 +19,18 @@
 		      <code language="C#"><![CDATA[
 	var order = new Order
     {
-        // устанавливается тип ордера, в данном примере лимитный
+        // устанавливается тип заявки, в данном примере лимитный
         Type = OrderTypes.Limit,
         // устанавливается портфель для исполнения заявки
         Portfolio = Portfolio.SelectedPortfolio,
-        // устанавливается обьем заявки
+        // устанавливается объём заявки
         Volume = Volume.Text.To<decimal>(),
         // устанавливается цена заявки
         Price = Price.Text.To<decimal>(),
         // устанавливается инструмент
         Security = Security,
         // устанавливается направление заявки, в данном примере покупка
-        Direction = OrderDirections.Buy,
+        Direction = Sides.Buy,
     };
 	//Метод RegisterOrder отправляет заявку на сервер
     Trader.RegisterOrder(order);

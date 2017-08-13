@@ -109,27 +109,35 @@ namespace SampleITCH
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				trader.RegisterOrderLog(security);
+				var window = _quotesWindows.SafeAdd(security, s =>
+				{
+					// subscribe on order book flow
+					trader.RegisterOrderLog(security);
 
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+				{
+					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
-				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 

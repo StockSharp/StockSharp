@@ -60,16 +60,6 @@
             Освободить занятые ресурсы.
             </summary>
     </member>
-    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.IsNativeIdentifiers">
-      <summary>
-            Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.IsNativeIdentifiersPersistable">
-      <summary>
-            Системные идентификаторы постоянные.
-            </summary>
-    </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.CreateOrderCondition">
       <summary>
             Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
@@ -187,7 +177,7 @@
     </member>
     <member name="F:StockSharp.Transaq.TransaqOrderConditionTypes.TakeProfit">
       <summary>
-            TP предназначен для закрытия позиции с фиксацие прибыли.
+            TP предназначен для закрытия позиции с фиксацией прибыли.
             </summary>
     </member>
     <member name="F:StockSharp.Transaq.TransaqOrderConditionTypes.TakeProfitStopLoss">
@@ -302,12 +292,12 @@
     </member>
     <member name="P:StockSharp.Transaq.TransaqOrderCondition.StopLossActivationPrice">
       <summary>
-            Цена активации, при достижении которой будет выставлена заявка по цене указанной в <see cref="P:StockSharp.Transaq.TransaqOrderCondition.StopLossOrderPrice" />.
+            Цена активации, при достижении которой будет выставлена заявка по цене, указанной в <see cref="P:StockSharp.Transaq.TransaqOrderCondition.StopLossOrderPrice" />.
             </summary>
     </member>
     <member name="P:StockSharp.Transaq.TransaqOrderCondition.StopLossOrderPrice">
       <summary>
-            Цена выставляемой заявки, которая будет отправлена на биржу при активации по цене указанной в <see cref="P:StockSharp.Transaq.TransaqOrderCondition.StopLossActivationPrice" />. 
+            Цена выставляемой заявки, которая будет отправлена на биржу при активации по цене, указанной в <see cref="P:StockSharp.Transaq.TransaqOrderCondition.StopLossActivationPrice" />. 
             Абсолютное значение, или в процентах.
             </summary>
     </member>
@@ -578,36 +568,6 @@
       <summary>
             Событие инициализации поля <see cref="P:StockSharp.Transaq.TransaqTrader.CandleTimeFrames" />.
             </summary>
-    </member>
-    <member name="E:StockSharp.Transaq.TransaqTrader.NewCandles">
-      <summary>
-            Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Transaq.TransaqTrader.Stopped">
-      <summary>
-            Событие окончания обработки серии.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
-      <summary>
-            Подписаться на получение свечек.
-            </summary>
-      <param name="series">Серия свечек.</param>
-      <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-      <param name="to">Конечная дата, до которой необходимо получать данные.</param>
-    </member>
-    <member name="M:StockSharp.Transaq.TransaqTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            Остановить подписку получения свечек, ранее созданную через <see cref="M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-      <param name="series">Серия свечек.</param>
-    </member>
-    <member name="M:StockSharp.Transaq.TransaqTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <summary>
-            Обработать сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
     </member>
   </members>
 </doc>

@@ -143,8 +143,8 @@ namespace StockSharp.BusinessEntities
 			Order = 100)]
 		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
-			set { _extensionInfo = value; }
+			get => _extensionInfo;
+			set => _extensionInfo = value;
 		}
 
 		/// <summary>

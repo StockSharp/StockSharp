@@ -33,8 +33,6 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	using Wintellect.PowerCollections;
-
 	/// <summary>
 	/// Price rounding rules.
 	/// </summary>
@@ -102,7 +100,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Chech the possibility order's state change.
+		/// Check the possibility order's state change.
 		/// </summary>
 		/// <param name="prev">Previous order's state.</param>
 		/// <param name="curr">Current order's state.</param>
@@ -133,11 +131,12 @@ namespace StockSharp.Algo
 			if (orders == null)
 				throw new ArgumentNullException(nameof(orders));
 
-			var dict = new MultiDictionary<Tuple<Sides, decimal>, Order>(false);
+			var dict = new Dictionary<Tuple<Sides, decimal>, HashSet<Order>>();
 
 			foreach (var order in ownOrders)
 			{
-				dict.Add(Tuple.Create(order.Direction, order.Price), order);
+				if (!dict.SafeAdd(Tuple.Create(order.Direction, order.Price)).Add(order))
+					throw new InvalidOperationException(LocalizedStrings.Str415Params.Put(order));
 			}
 
 			var retVal = new List<Quote>(quotes.Select(q => q.Clone()));
@@ -979,8 +978,26 @@ namespace StockSharp.Algo
 		/// <returns>Changes.</returns>
 		public static IEnumerable<QuoteChange> GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side)
 		{
-			var mapTo = to.ToDictionary(q => q.Price);
-			var mapFrom = from.ToDictionary(q => q.Price);
+			if (from == null)
+				throw new ArgumentNullException(nameof(from));
+
+			if (to == null)
+				throw new ArgumentNullException(nameof(to));
+
+			var mapFrom = new Dictionary<decimal, QuoteChange>();
+			var mapTo = new Dictionary<decimal, QuoteChange>();
+
+			foreach (var change in from)
+			{
+				if (!mapFrom.TryAdd(change.Price, change))
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(from));
+			}
+
+			foreach (var change in to)
+			{
+				if (!mapTo.TryAdd(change.Price, change))
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(to));
+			}
 
 			foreach (var pair in mapFrom)
 			{
@@ -997,7 +1014,7 @@ namespace StockSharp.Algo
 				else
 				{
 					var empty = quoteFrom.Clone();
-					empty.Volume = 0;				// была а теперь нет
+					empty.Volume = 0;				// была, а теперь нет
 					mapTo[price] = empty;
 				}
 			}
@@ -1242,10 +1259,12 @@ namespace StockSharp.Algo
 			{
 				//throw new ArgumentException("Стоп-заявки не могут иметь реализованный объем.", "order");
 
-				order = order.DerivedOrder;
+				throw new ArgumentException(nameof(order));
 
-				if (order == null)
-					return 0;
+				//order = order.DerivedOrder;
+
+				//if (order == null)
+				//	return 0;
 			}
 
 			return byOrder ? order.Volume - order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume);
@@ -1504,7 +1523,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Find inner security instancies.
+		/// Find inner security instances.
 		/// </summary>
 		/// <param name="security">Instruments basket.</param>
 		/// <param name="securityProvider">The provider of information about instruments.</param>
@@ -1564,7 +1583,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To ilter orders for the given condition.
+		/// To filter orders for the given condition.
 		/// </summary>
 		/// <param name="orders">All orders, in which the required shall be searched for.</param>
 		/// <param name="state">Order state.</param>
@@ -1759,6 +1778,7 @@ namespace StockSharp.Algo
 				Name = criteria.Name,
 				Code = criteria.SecurityId.SecurityCode,
 				Type = criteria.SecurityType,
+				CfiCode = criteria.CfiCode,
 				ExpiryDate = criteria.ExpiryDate,
 				ExternalId = criteria.SecurityId.ToExternalId(),
 				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetOrCreateBoard(criteria.SecurityId.BoardCode),
@@ -1795,6 +1815,117 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(board));
 
 			return securities.Where(s => s.Board == board);
+		}
+
+		/// <summary>
+		/// To filter instruments by the given criteria.
+		/// </summary>
+		/// <param name="securities">Securities.</param>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Instruments filtered.</returns>
+		public static IEnumerable<SecurityMessage> Filter(this IEnumerable<SecurityMessage> securities, SecurityLookupMessage criteria)
+		{
+			if (securities == null)
+				throw new ArgumentNullException(nameof(securities));
+
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria.IsLookupAll())
+				return securities.ToArray();
+
+			//if (!criteria.SecurityId.IsDefault())
+			//	return securities.Where(s => s.Id == criteria.Id).ToArray();
+
+			var secId = criteria.SecurityId;
+
+			return securities.Where(s =>
+			{
+				if (!secId.SecurityCode.IsEmpty() && !s.SecurityId.SecurityCode.ContainsIgnoreCase(secId.SecurityCode))
+					return false;
+
+				if (!secId.BoardCode.IsEmpty() && !s.SecurityId.BoardCode.CompareIgnoreCase(secId.BoardCode))
+					return false;
+
+				var secType = criteria.SecurityType;
+
+				if (secType != null && s.SecurityType != secType)
+					return false;
+
+				var secTypes = criteria.SecurityTypes;
+
+				if (secTypes != null && !secTypes.IsEmpty())
+				{
+					if (s.SecurityType == null)
+						return false;
+
+					if (!secTypes.Contains(s.SecurityType.Value))
+						return false;
+				}
+
+				var underSecCode = criteria.UnderlyingSecurityCode;
+
+				if (!underSecCode.IsEmpty() && s.UnderlyingSecurityCode != underSecCode)
+					return false;
+
+				if (criteria.Strike != null && s.Strike != criteria.Strike)
+					return false;
+
+				if (criteria.OptionType != null && s.OptionType != criteria.OptionType)
+					return false;
+
+				if (criteria.Currency != null && s.Currency != criteria.Currency)
+					return false;
+
+				if (!criteria.Class.IsEmptyOrWhiteSpace() && !s.Class.ContainsIgnoreCase(criteria.Class))
+					return false;
+
+				if (!criteria.Name.IsEmptyOrWhiteSpace() && !s.Name.ContainsIgnoreCase(criteria.Name))
+					return false;
+
+				if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !s.ShortName.ContainsIgnoreCase(criteria.ShortName))
+					return false;
+
+				if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !s.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
+					return false;
+
+				if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !s.SecurityId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
+					return false;
+
+				if (!secId.Cusip.IsEmptyOrWhiteSpace() && !s.SecurityId.Cusip.ContainsIgnoreCase(secId.Cusip))
+					return false;
+
+				if (!secId.IQFeed.IsEmptyOrWhiteSpace() && !s.SecurityId.IQFeed.ContainsIgnoreCase(secId.IQFeed))
+					return false;
+
+				if (!secId.Isin.IsEmptyOrWhiteSpace() && !s.SecurityId.Isin.ContainsIgnoreCase(secId.Isin))
+					return false;
+
+				if (!secId.Ric.IsEmptyOrWhiteSpace() && !s.SecurityId.Ric.ContainsIgnoreCase(secId.Ric))
+					return false;
+
+				if (!secId.Sedol.IsEmptyOrWhiteSpace() && !s.SecurityId.Sedol.ContainsIgnoreCase(secId.Sedol))
+					return false;
+
+				if (criteria.ExpiryDate != null && s.ExpiryDate != null && s.ExpiryDate != criteria.ExpiryDate)
+					return false;
+
+				if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
+				{
+					if (s.ExtensionInfo == null)
+						return false;
+
+					foreach (var pair in criteria.ExtensionInfo)
+					{
+						var value = s.ExtensionInfo.TryGetValue(pair.Key);
+
+						if (!pair.Value.Equals(value))
+							return false;
+					}
+				}
+
+				return true;
+			}).ToArray();
 		}
 
 		/// <summary>
@@ -1853,6 +1984,9 @@ namespace StockSharp.Algo
 					return false;
 
 				if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !s.ShortName.ContainsIgnoreCase(criteria.ShortName))
+					return false;
+
+				if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !s.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
 					return false;
 
 				if (!criteria.ExternalId.Bloomberg.IsEmptyOrWhiteSpace() && !s.ExternalId.Bloomberg.ContainsIgnoreCase(criteria.ExternalId.Bloomberg))
@@ -1995,14 +2129,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get real expirating instruments for base part of the code.
+		/// To get real expiration instruments for base part of the code.
 		/// </summary>
 		/// <param name="baseCode">The base part of the instrument code.</param>
 		/// <param name="from">The start of the expiration range.</param>
 		/// <param name="to">The end of the expiration range.</param>
 		/// <param name="getSecurity">The function to get instrument by the code.</param>
 		/// <param name="throwIfNotExists">To generate exception, if some of instruments are not available.</param>
-		/// <returns>Expirating instruments.</returns>
+		/// <returns>Expiration instruments.</returns>
 		public static IEnumerable<Security> GetFortsJumps(this string baseCode, DateTime from, DateTime to, Func<string, Security> getSecurity, bool throwIfNotExists = true)
 		{
 			if (baseCode.IsEmpty())
@@ -2060,7 +2194,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get real expirating instruments for the continuous instrument.
+		/// To get real expiration instruments for the continuous instrument.
 		/// </summary>
 		/// <param name="continuousSecurity">Continuous security.</param>
 		/// <param name="provider">The provider of information about instruments.</param>
@@ -2068,7 +2202,7 @@ namespace StockSharp.Algo
 		/// <param name="from">The start of the expiration range.</param>
 		/// <param name="to">The end of the expiration range.</param>
 		/// <param name="throwIfNotExists">To generate exception, if some of instruments for passed <paramref name="continuousSecurity" /> are not available.</param>
-		/// <returns>Expirating instruments.</returns>
+		/// <returns>Expiration instruments.</returns>
 		public static IEnumerable<Security> GetFortsJumps(this ContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists = true)
 		{
 			if (continuousSecurity == null)
@@ -2120,8 +2254,8 @@ namespace StockSharp.Algo
 			/// </summary>
 			decimal IPositionManager.Position
 			{
-				get { return _position.CurrentValue ?? 0; }
-				set { throw new NotSupportedException(); }
+				get => _position.CurrentValue ?? 0;
+				set => throw new NotSupportedException();
 			}
 
 			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.NewPosition
@@ -2138,14 +2272,8 @@ namespace StockSharp.Algo
 
 			IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.Positions
 			{
-				get
-				{
-					throw new NotSupportedException();
-				}
-				set
-				{
-					throw new NotSupportedException();
-				}
+				get => throw new NotSupportedException();
+				set => throw new NotSupportedException();
 			}
 
 			void IPositionManager.Reset()
@@ -2296,10 +2424,10 @@ namespace StockSharp.Algo
 					case PositionChangeTypes.AveragePrice:
 						position.AveragePrice = (decimal)change.Value;
 						break;
-					case PositionChangeTypes.ExtensionInfo:
-						var pair = change.Value.To<KeyValuePair<string, object>>();
-						position.ExtensionInfo[pair.Key] = pair.Value;
-						break;
+					//case PositionChangeTypes.ExtensionInfo:
+					//	var pair = change.Value.To<KeyValuePair<string, object>>();
+					//	position.ExtensionInfo[pair.Key] = pair.Value;
+					//	break;
 					case PositionChangeTypes.RealizedPnL:
 						position.RealizedPnL = (decimal)change.Value;
 						break;
@@ -2312,9 +2440,9 @@ namespace StockSharp.Algo
 					case PositionChangeTypes.VariationMargin:
 						position.VariationMargin = (decimal)change.Value;
 						break;
-					case PositionChangeTypes.DepoName:
-						position.ExtensionInfo[nameof(PositionChangeTypes.DepoName)] = change.Value;
-						break;
+					//case PositionChangeTypes.DepoName:
+					//	position.ExtensionInfo[nameof(PositionChangeTypes.DepoName)] = change.Value;
+					//	break;
 					case PositionChangeTypes.Currency:
 						position.Currency = (CurrencyTypes)change.Value;
 						break;
@@ -2532,6 +2660,9 @@ namespace StockSharp.Algo
 						case Level1Fields.Volume:
 							security.Volume = (decimal)value;
 							break;
+						case Level1Fields.Turnover:
+							security.Turnover = (decimal)value;
+							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
 					}
@@ -2652,6 +2783,22 @@ namespace StockSharp.Algo
 			if (message.SecurityType != null)
 				security.Type = message.SecurityType.Value;
 
+			if (!message.CfiCode.IsEmpty())
+			{
+				security.CfiCode = message.CfiCode;
+
+				if (security.Type == null)
+					security.Type = security.CfiCode.Iso10962ToSecurityType();
+
+				if (security.Type == SecurityTypes.Option && security.OptionType == null)
+				{
+					security.OptionType = security.CfiCode.Iso10962ToOptionType();
+
+					//if (security.CfiCode.Length > 2)
+					//	security.BinaryOptionType = security.CfiCode.Substring(2);
+				}
+			}
+
 			if (!message.UnderlyingSecurityCode.IsEmpty())
 				security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode;
 
@@ -2720,6 +2867,42 @@ namespace StockSharp.Algo
 			where TMessage : BaseChangeMessage<TChange>
 		{
 			return message.Add(type, (object)value);
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, SecurityStates? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value);
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, Sides? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value);
 		}
 
 		/// <summary>
@@ -2813,6 +2996,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To add a change to the collection, if value is other than 0 and <see langword="null" />.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, long? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null || value == 0)
+				return null;
+
+			return message.Add(type, value.Value);
+		}
+
+		/// <summary>
 		/// To convert the currency type into the name in the MICEX format.
 		/// </summary>
 		/// <param name="type">Currency type.</param>
@@ -2832,8 +3033,9 @@ namespace StockSharp.Algo
 		/// To convert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
 		/// </summary>
 		/// <param name="name">The currency name in the MICEX format.</param>
+		/// <param name="errorHandler">Error handler.</param>
 		/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
-		public static CurrencyTypes? FromMicexCurrencyName(this string name)
+		public static CurrencyTypes? FromMicexCurrencyName(this string name, Action<Exception> errorHandler = null)
 		{
 			if (name.IsEmpty())
 				return null;
@@ -2849,7 +3051,17 @@ namespace StockSharp.Algo
 				case "SLV":
 					return null;
 				default:
-					return name.To<CurrencyTypes>();
+				{
+					try
+					{
+						return name.To<CurrencyTypes>();
+					}
+					catch (Exception ex)
+					{
+						errorHandler?.Invoke(ex);
+						return null;
+					}
+				}
 			}
 		}
 
@@ -2872,7 +3084,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="securityClassInfo">Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.</param>
 		/// <param name="secClass">Security class.</param>
-		/// <returns>The instrument description. If the class is not found, than <see langword="null" /> value is returned as instrument type.</returns>
+		/// <returns>The instrument description. If the class is not found, then <see langword="null" /> value is returned as instrument type.</returns>
 		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
 		{
 			var pair = securityClassInfo.TryGetValue(secClass);
@@ -3021,7 +3233,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the instrument by the system identifier.
 		/// </summary>
-		/// <param name="provider"></param>
+		/// <param name="provider">The provider of information about instruments.</param>
 		/// <param name="nativeIdStorage">Security native identifier storage.</param>
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="nativeId">Native (internal) trading system security id.</param>
@@ -3065,6 +3277,11 @@ namespace StockSharp.Algo
 		public static readonly Security LookupAllCriteria = new Security { Code = "*" };
 
 		/// <summary>
+		/// Lookup all securities predefined criteria.
+		/// </summary>
+		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = new SecurityLookupMessage { SecurityId = new SecurityId { SecurityCode = "*" } };
+
+		/// <summary>
 		/// Determine the <paramref name="criteria"/> contains lookup all filter.
 		/// </summary>
 		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
@@ -3081,6 +3298,24 @@ namespace StockSharp.Algo
 				criteria.Id.IsEmpty() &&
 				criteria.Code == "*" &&
 				criteria.Type == null;
+		}
+
+		/// <summary>
+		/// Determine the <paramref name="criteria"/> contains lookup all filter.
+		/// </summary>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLookupAll(this SecurityLookupMessage criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria == LookupAllCriteriaMessage)
+				return true;
+
+			return
+				criteria.SecurityId.SecurityCode == "*" &&
+				criteria.SecurityType == null;
 		}
 
 		/// <summary>
@@ -3289,7 +3524,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(cfi));
 
 			if (cfi.Length != 6)
-				throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
 
 			switch (cfi[0])
 			{
@@ -3383,7 +3619,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(cfi));
 
 			if (cfi[0] != 'O')
-				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
 
 			if (cfi.Length < 2)
 				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1605Params.Put(cfi));
@@ -3485,7 +3722,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
-					Reset();
+					Current = null;
 					_level1Enumerator.Dispose();
 				}
 			}
@@ -3626,7 +3863,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
-					Reset();
+					Current = null;
 					_level1Enumerator.Dispose();
 				}
 			}
@@ -3678,15 +3915,15 @@ namespace StockSharp.Algo
 			return date.DateTime == DateTime.Today;
 		}
 
-		/// <summary>
-		/// To check the specified date is GTC.
-		/// </summary>
-		/// <param name="date">The specified date.</param>
-		/// <returns><see langword="true"/> if the specified date is GTC, otherwise, <see langword="false"/>.</returns>
-		public static bool IsGtc(this DateTimeOffset date)
-		{
-			return date == DateTimeOffset.MaxValue;
-		}
+		///// <summary>
+		///// To check the specified date is GTC.
+		///// </summary>
+		///// <param name="date">The specified date.</param>
+		///// <returns><see langword="true"/> if the specified date is GTC, otherwise, <see langword="false"/>.</returns>
+		//public static bool IsGtc(this DateTimeOffset date)
+		//{
+		//	return date == DateTimeOffset.MaxValue;
+		//}
 
 		/// <summary>
 		/// Extract <see cref="TimeInForce"/> from bits flag.

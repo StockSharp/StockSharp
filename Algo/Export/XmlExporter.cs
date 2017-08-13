@@ -37,17 +37,14 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
-		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		public XmlExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName)
 			: base(security, arg, isCancelled, fileName)
 		{
 		}
 
-		/// <summary>
-		/// To export <see cref="ExecutionMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			switch ((ExecutionTypes)Arg)
@@ -123,7 +120,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("transactionId", item.TransactionId);
 						writer.WriteAttribute("originalTransactionId", item.OriginalTransactionId);
 						writer.WriteAttribute("orderId", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
-						writer.WriteAttribute("derivedOrderId", item.DerivedOrderId == null ? item.DerivedOrderStringId : item.DerivedOrderId.To<string>());
+						//writer.WriteAttribute("derivedOrderId", item.DerivedOrderId == null ? item.DerivedOrderStringId : item.DerivedOrderId.To<string>());
 						writer.WriteAttribute("orderPrice", item.OrderPrice);
 						writer.WriteAttribute("orderVolume", item.OrderVolume);
 						writer.WriteAttribute("orderType", item.OrderType);
@@ -161,10 +158,7 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="QuoteChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Do(messages, "depths", (writer, depth) =>
@@ -189,15 +183,12 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="Level1ChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
-			Do(messages, "messages", (writer, message) =>
+			Do(messages, "level1", (writer, message) =>
 			{
-				writer.WriteStartElement("message");
+				writer.WriteStartElement("change");
 
 				writer.WriteAttribute("serverTime", message.ServerTime.ToString(_timeFormat));
 				writer.WriteAttribute("localTime", message.LocalTime.ToString(_timeFormat));
@@ -209,10 +200,43 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="CandleMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<PositionChangeMessage> messages)
+		{
+			Do(messages, "positions", (writer, message) =>
+			{
+				writer.WriteStartElement("change");
+
+				writer.WriteAttribute("serverTime", message.ServerTime.ToString(_timeFormat));
+				writer.WriteAttribute("localTime", message.LocalTime.ToString(_timeFormat));
+
+				writer.WriteAttribute("portfolio", message.PortfolioName);
+				writer.WriteAttribute("clientCode", message.ClientCode);
+				writer.WriteAttribute("depoName", message.DepoName);
+				writer.WriteAttribute("limit", message.LimitType);
+
+				foreach (var pair in message.Changes.Where(c => !c.Key.IsObsolete()))
+					writer.WriteAttribute(pair.Key.ToString(), (pair.Value as DateTime?)?.ToString(_timeFormat) ?? pair.Value);
+
+				writer.WriteEndElement();
+			});
+		}
+
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(values, "values", (writer, value) =>
+			{
+				writer.WriteStartElement("value");
+
+				writer.WriteAttribute("time", value.Time.ToString(_timeFormat));
+				writer.WriteAttribute("value", value.ValueAsDecimal);
+
+				writer.WriteEndElement();
+			});
+		}
+
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			Do(messages, "candles", (writer, candle) =>
@@ -235,10 +259,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="NewsMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			Do(messages, "news", (writer, n) =>
@@ -272,10 +293,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="SecurityMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			Do(messages, "securities", (writer, security) =>
@@ -308,6 +326,9 @@ namespace StockSharp.Algo.Export
 
 				if (security.SecurityType != null)
 					writer.WriteAttribute("type", security.SecurityType.Value);
+				
+				if (!security.CfiCode.IsEmpty())
+					writer.WriteAttribute("cfiCode", security.CfiCode);
 
 				if (security.OptionType != null)
 					writer.WriteAttribute("optionType", security.OptionType.Value);

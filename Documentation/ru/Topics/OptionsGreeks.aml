@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="063708c5-b6a8-45f6-9ff9-608f89796a88" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
@@ -25,7 +25,7 @@ decimal iv = bs.ImpliedVolatility(currentTime, premium);  // где premium - п
 ]]>
 			</code>
 			<para>
-		  	Кроме того в дистрибутив входит пример OptionCalculator, в котором расчитываются и визуализируются все "греки" при помощи графического компонента
+		  	Кроме того в дистрибутив входит пример OptionCalculator, в котором рассчитываются и визуализируются все "греки" при помощи графического компонента
 		  	<codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>. См. <link xlink:href="667d9230-82d2-4052-9e23-6cdd983d3461">Графические компоненты для опционов</link>.
 		  </para>
 	  </introduction>

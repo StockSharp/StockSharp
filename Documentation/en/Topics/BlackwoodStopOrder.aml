@@ -8,40 +8,29 @@
 		
         <code language="C#">
         <![CDATA[
-private void SendClick(object sender, RoutedEventArgs e)
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
-	var condType = StopOrderType.GetSelectedValue<BlackwoodOrderConditionTypes>();
-
-	if (condType == null)
+	var newOrder = new OrderConditionalWindow
 	{
-		MessageBox.Show(this, "Conditional type must be selected.");
-		return;
-	}
-
-	var stopOrder = new Order
-	{
-		Portfolio = Portfolio.SelectedPortfolio,
-		Type = OrderTypes.Conditional,
-		Security = Security,
-		Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-		ExpiryDate = ExpiryDate.Value == null ? (DateTime?) null : ExpiryDate.Value.Value,
-		Volume = Volume.Text.To<decimal>(),
-		Price = Price.Text.To<decimal>(),
-		Condition = new BlackwoodOrderCondition
+		Order = new Order
 		{
-			Type = condType.Value,
-			StopPrice = StopPrice.Text.To<decimal>()
-		}
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
 	};
 
-	MainWindow.Instance.Trader.RegisterOrder(stopOrder);
-	DialogResult = true;
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 }
 		]]>
 		</code>
 		
 		<para>The <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> connector provides the special
-		<codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderCondition</codeEntityReference> сlass to work with the stop orders conditions.
+		<codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderCondition</codeEntityReference> class to work with the stop orders conditions.
 		This class supports the types of stop orders indicated in the <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderConditionTypes</codeEntityReference>.</para>
 	</introduction>
   </developerConceptualDocument>

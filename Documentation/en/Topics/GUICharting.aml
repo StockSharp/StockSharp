@@ -18,9 +18,6 @@
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> - the advanced graphical component for displaying the exchange charts.</para>
   		</listItem>
-  		<!--listItem>
-  			<para><codeEntityReference>T:StockSharp.Xaml.Charting.BufferedChart</codeEntityReference> - графический компонент для отображения биржевых графиков, который использует буфферизацию при выводе данных.</para>
-  		</listItem-->
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> - the graphical component for displaying the equity curve.</para>
   		</listItem>

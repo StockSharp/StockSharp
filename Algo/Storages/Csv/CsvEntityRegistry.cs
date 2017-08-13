@@ -199,14 +199,15 @@ namespace StockSharp.Algo.Storages.Csv
 				});
 			}
 
-			private readonly SynchronizedDictionary<object, object> _serializers = new SynchronizedDictionary<object, object>();
+			private readonly SynchronizedDictionary<Type, IXmlSerializer> _serializers = new SynchronizedDictionary<Type, IXmlSerializer>();
 
 			private string Serialize<TItem>(TItem item)
+				where TItem : class
 			{
 				if (item == null)
 					return null;
 
-				var serializer = (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem>());
+				var serializer = GetSerializer<TItem>();
 
 				using (var stream = new MemoryStream())
 				{
@@ -221,11 +222,16 @@ namespace StockSharp.Algo.Storages.Csv
 				if (value.IsEmpty())
 					return null;
 
-				var serializer = (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem>());
+				var serializer = GetSerializer<TItem>();
 				var bytes = Registry.Encoding.GetBytes(value.Replace("'", "\""));
 
 				using (var stream = new MemoryStream(bytes))
 					return serializer.Deserialize(stream);
+			}
+
+			private XmlSerializer<TItem> GetSerializer<TItem>()
+			{
+				return (XmlSerializer<TItem>)_serializers.SafeAdd(typeof(TItem), k => new XmlSerializer<TItem>(false));
 			}
 		}
 
@@ -248,16 +254,16 @@ namespace StockSharp.Algo.Storages.Csv
 
 			event Action<IEnumerable<Security>> ISecurityProvider.Added
 			{
-				add { _added += value; }
-				remove { _added -= value; }
+				add => _added += value;
+				remove => _added -= value;
 			}
 
 			private Action<IEnumerable<Security>> _removed;
 
 			event Action<IEnumerable<Security>> ISecurityProvider.Removed
 			{
-				add { _removed += value; }
-				remove { _removed -= value; }
+				add => _removed += value;
+				remove => _removed -= value;
 			}
 
 			public IEnumerable<Security> Lookup(Security criteria)
@@ -296,16 +302,6 @@ namespace StockSharp.Algo.Storages.Csv
 				return item.Id;
 			}
 
-			private ExchangeBoard GetBoard(string boardCode)
-			{
-				var board = Registry.ExchangeBoards.ReadById(boardCode);
-
-				if (board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
-
-				return board;
-			}
-
 			private class LiteSecurity
 			{
 				public string Name { get; set; }
@@ -335,7 +331,7 @@ namespace StockSharp.Algo.Storages.Csv
 						Code = Code,
 						Class = Class,
 						ShortName = ShortName,
-						Board = list.GetBoard(Board),
+						Board = list.Registry.GetBoard(Board),
 						UnderlyingSecurityId = UnderlyingSecurityId,
 						PriceStep = PriceStep,
 						VolumeStep = VolumeStep,
@@ -371,75 +367,91 @@ namespace StockSharp.Algo.Storages.Csv
 					Currency = security.Currency;
 					ExternalId = security.ExternalId.Clone();
 				}
-
-				public bool IsChanged(Security security)
-				{
-					if (Name != security.Name)
-						return true;
-
-					if (Code != security.Code)
-						return true;
-
-					if (Class != security.Class)
-						return true;
-
-					if (ShortName != security.ShortName)
-						return true;
-
-					if (Board != security.Board.Code)
-						return true;
-
-					if (UnderlyingSecurityId != security.UnderlyingSecurityId)
-						return true;
-
-					if (PriceStep != security.PriceStep)
-						return true;
-
-					if (VolumeStep != security.VolumeStep)
-						return true;
-
-					if (Multiplier != security.Multiplier)
-						return true;
-
-					if (Decimals != security.Decimals)
-						return true;
-
-					if (Type != security.Type)
-						return true;
-
-					if (ExpiryDate != security.ExpiryDate)
-						return true;
-
-					if (SettlementDate != security.SettlementDate)
-						return true;
-
-					if (Strike != security.Strike)
-						return true;
-
-					if (OptionType != security.OptionType)
-						return true;
-
-					if (Currency != security.Currency)
-						return true;
-
-					if (ExternalId != security.ExternalId)
-						return true;
-
-					return false;
-				}
 			}
 
 			private readonly Dictionary<string, LiteSecurity> _cache = new Dictionary<string, LiteSecurity>(StringComparer.InvariantCultureIgnoreCase);
 
-			protected override bool IsChanged(Security entity)
+			protected override bool IsChanged(Security security)
 			{
-				return _cache[entity.Id].IsChanged(entity);
+				var liteSec = _cache.TryGetValue(security.Id);
+
+				if (liteSec == null)
+					throw new ArgumentOutOfRangeException(nameof(security), security.Id, LocalizedStrings.Str2736);
+
+				if (!security.Name.IsEmpty() && (liteSec.Name == null || !liteSec.Name.CompareIgnoreCase(security.Name)))
+					return true;
+
+				if (!security.Code.IsEmpty() && (liteSec.Code == null || !liteSec.Code.CompareIgnoreCase(security.Code)))
+					return true;
+
+				if (!security.Class.IsEmpty() && (liteSec.Class == null || !liteSec.Class.CompareIgnoreCase(security.Class)))
+					return true;
+
+				if (!security.ShortName.IsEmpty() && (liteSec.ShortName == null || !liteSec.ShortName.CompareIgnoreCase(security.ShortName)))
+					return true;
+
+				if (security.Board != null && (liteSec.Board == null || !liteSec.Board.CompareIgnoreCase(security.Board.Code)))
+					return true;
+
+				if (!security.UnderlyingSecurityId.IsEmpty() && (liteSec.UnderlyingSecurityId == null || !liteSec.UnderlyingSecurityId.CompareIgnoreCase(security.UnderlyingSecurityId)))
+					return true;
+
+				if (security.PriceStep != null && liteSec.PriceStep != security.PriceStep)
+					return true;
+
+				if (security.VolumeStep != null && liteSec.VolumeStep != security.VolumeStep)
+					return true;
+
+				if (security.Multiplier != null && liteSec.Multiplier != security.Multiplier)
+					return true;
+
+				if (security.Decimals != null && liteSec.Decimals != security.Decimals)
+					return true;
+
+				if (security.Type != null && liteSec.Type != security.Type)
+					return true;
+
+				if (security.ExpiryDate != null && liteSec.ExpiryDate != security.ExpiryDate)
+					return true;
+
+				if (security.SettlementDate != null && liteSec.SettlementDate != security.SettlementDate)
+					return true;
+
+				if (security.Strike != null && liteSec.Strike != security.Strike)
+					return true;
+
+				if (security.OptionType != null && liteSec.OptionType != security.OptionType)
+					return true;
+
+				if (security.Currency != null && liteSec.Currency != security.Currency)
+					return true;
+
+				if (!security.ExternalId.IsDefault() && liteSec.ExternalId != security.ExternalId)
+					return true;
+
+				return false;
 			}
 
 			protected override void ClearCache()
 			{
 				_cache.Clear();
-				base.ClearCache();
+			}
+
+			protected override void AddCache(Security item)
+			{
+				var sec = new LiteSecurity();
+				sec.Update(item);
+				_cache.Add(item.Id, sec);
+			}
+
+			protected override void RemoveCache(Security item)
+			{
+				_cache.Remove(item.Id);
+			}
+
+			protected override void UpdateCache(Security item)
+			{
+				_cache[item.Id].Update(item);
 			}
 
 			protected override Security Read(FastCsvReader reader)
@@ -478,17 +490,11 @@ namespace StockSharp.Algo.Storages.Csv
 					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
 
-				_cache.Add(id, security);
-
 				return security.ToSecurity(this, id);
 			}
 
 			protected override void Write(CsvFileWriter writer, Security data)
 			{
-				_cache
-					.SafeAdd(data.Id)
-					.Update(data);
-
 				writer.WriteRow(new[]
 				{
 					data.Id,
@@ -518,6 +524,17 @@ namespace StockSharp.Algo.Storages.Csv
 					data.ExternalId.Plaza,
 					//Serialize(data.ExtensionInfo)
 				});
+			}
+
+			public override void Save(Security entity)
+			{
+				lock (Registry.Exchanges.SyncRoot)
+					Registry.Exchanges.TryAdd(entity.Board.Exchange);
+
+				lock (Registry.ExchangeBoards.SyncRoot)
+					Registry.ExchangeBoards.TryAdd(entity.Board);
+
+				base.Save(entity);
 			}
 
 			#endregion
@@ -559,15 +576,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private ExchangeBoard GetBoard(string boardCode)
 			{
-				if (boardCode.IsEmpty())
-					return null;
-
-				var board = Registry.ExchangeBoards.ReadById(boardCode);
-
-				if (board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
-
-				return board;
+				return boardCode.IsEmpty() ? null : Registry.GetBoard(boardCode);
 			}
 
 			protected override void Write(CsvFileWriter writer, Portfolio data)
@@ -716,7 +725,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public Encoding Encoding
 		{
-			get { return _encoding; }
+			get => _encoding;
 			set
 			{
 				if (value == null)
@@ -733,7 +742,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public DelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				if (value == null)
@@ -832,6 +841,23 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (errors.Count > 0)
 				throw new AggregateException(errors);
+		}
+
+		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
+		private ExchangeBoard GetBoard(string boardCode)
+		{
+			var board = ExchangeBoards.ReadById(boardCode);
+
+			if (board == null)
+			{
+				board = _exchangeInfoProvider.GetExchangeBoard(boardCode);
+
+				if (board == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1217Params.Put(boardCode));
+			}
+
+			return board;
 		}
 	}
 }

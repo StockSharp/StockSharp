@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="5794f4b0-c536-4713-ad08-955a4a01b196" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -16,8 +16,8 @@
 		<list class="bullet">
   			<listItem>
   			       <para>
-           				<legacyBold>Сообщение</legacyBold> выполняет роль агента, передающего информацию. Сообшения имеют свой тип <codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference>.
-           				Каждому типу сообщения соответсвует определенный класс. В свою очередь все классы сообщений наследуют от абстрактного класса <codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference>, который
+           				<legacyBold>Сообщение</legacyBold> выполняет роль агента, передающего информацию. Сообщения имеют свой тип <codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference>.
+           				Каждому типу сообщения соответствует определенный класс. В свою очередь все классы сообщений наследуют от абстрактного класса <codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference>, который
            				наделяет потомков такими свойствами, как тип сообщения <codeEntityReference>P:StockSharp.Messages.Message.Type</codeEntityReference> и 
            				<codeEntityReference>P:StockSharp.Messages.Message.LocalTime</codeEntityReference> - локальное время создания/получения сообщения.
            			</para>

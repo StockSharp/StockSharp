@@ -24,7 +24,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IsAutoScroll">
       <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.Chart.Areas" /> areas automatically when new data occured. The default is off.
+            To scroll <see cref="P:StockSharp.Xaml.Charting.Chart.Areas" /> areas automatically when new data occurred. The default is off.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IsAutoRange">
@@ -177,7 +177,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.TimeZone">
       <summary>
-            Local time zone for all <see cref="T:System.DateTimeOffset" /> values convertion.
+            Local time zone for all <see cref="T:System.DateTimeOffset" /> values conversion.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IndicatorTypes">
@@ -314,7 +314,7 @@
             Do not allow user to edit the order from chart.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor(StockSharp.Xaml.Charting.ChartActiveOrderInfo)">
+    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartActiveOrderInfo" />.
             </summary>
@@ -809,7 +809,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.AntiAliasing">
       <summary>
-            Candles rendering smothing (enabled by default).
+            Candles rendering smoothing (enabled by default).
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor">
@@ -1179,6 +1179,13 @@
       <param name="prefix">Name prefix.</param>
       <returns>The unique name.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.GetSimpleValues(StockSharp.Algo.Indicators.IIndicatorValue)">
+      <summary>
+            Get simple indicator values.
+            </summary>
+      <param name="value">Indicator value.</param>
+      <returns>Simple indicator values.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)">
       <summary>
             To draw the candle.
@@ -1247,13 +1254,12 @@
       <param name="strategy">Strategy.</param>
       <param name="chart">Chart.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.SetTitle(StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)">
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)">
       <summary>
-            To set a title for the element.
+            Convert Devexpress theme to chart theme.
             </summary>
-      <param name="element">Element.</param>
-      <param name="series">Candles series.</param>
-      <returns>Element.</returns>
+      <param name="appTheme">Devexpress theme.</param>
+      <returns>Chart theme.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles">
       <summary>
@@ -1327,7 +1333,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartIndicatorElement.AdditionalColor">
       <summary>
-            Additional line color (bars etc), which will be drawn on the chart indicator.
+            Additional line color (bars, etc.), which will be drawn on the chart indicator.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartIndicatorElement.StrokeThickness">
@@ -1405,6 +1411,11 @@
             </summary>
       <summary>
             ChartPanel
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartPanel.ShareCommand">
+      <summary>
+            Command for sharing chart image.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.SecurityProvider">
@@ -1641,7 +1652,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsAutoScroll">
       <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occured. The default is enabled.
+            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occurred. The default is enabled.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})">
@@ -1655,6 +1666,11 @@
             To process the new data.
             </summary>
       <param name="data">New data.</param>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.BackupService">
+      <summary>
+            Backup service for sharing exports.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPanel.InitializeComponent">
       <summary>
@@ -2038,11 +2054,6 @@
             Initialize <see cref="T:StockSharp.Xaml.Charting.ExtendedBaseApplication" />.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Charting.Extensions">
-      <summary>
-            Extension class.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Charting.IChart">
       <summary>
             The interface for work with the chart.
@@ -2055,7 +2066,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IChart.IsAutoScroll">
       <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occured. The default is enabled.
+            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occurred. The default is enabled.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IChart.IsAutoRange">
@@ -2770,6 +2781,7 @@
       <summary>
             Line data.
             </summary>
+      <typeparam name="TKey">Key type.</typeparam>
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineData`1.X">
       <summary>
@@ -2793,12 +2805,12 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineElement.Color">
       <summary>
-            Line color (bar and etc.), with which it will be drawn on chart.
+            Line color (bars, etc.), with which it will be drawn on chart.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineElement.AdditionalColor">
       <summary>
-            Additional line color (bars etc), with which it will be drawn on the chart.
+            Additional line color (bars, etc.), with which it will be drawn on the chart.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineElement.StrokeThickness">

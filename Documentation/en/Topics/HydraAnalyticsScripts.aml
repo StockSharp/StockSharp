@@ -2,22 +2,24 @@
 <topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>You can download the ready script using the <mediaLinkInline><image xlink:href="hydra_analitics_folder"/></mediaLinkInline> button or create it in the
-      	<token>hydra</token> editor. The script must be a class inherited from the <legacyItalic>BaseAnalyticsStrategy</legacyItalic> class. The ready script must be
-      	compiled using the <mediaLinkInline><image xlink:href="hydra_analitics_compile"/></mediaLinkInline> button. The compilation result is displayed in the
-      	<legacyBold>Error list</legacyBold> window. To connect the necessary libraries using the <mediaLinkInline><image xlink:href="hydra_analitics_references"/></mediaLinkInline> button.</para>
+      <para>After clicking the <legacyBold>Analytics</legacyBold> button, a window will appear with the choice 
+      of the ready-made script or an empty template for editing it in the <token>hydra</token> editor. 
+      The script must be a class inherited from the <legacyItalic>BaseAnalyticsStrategy</legacyItalic> class. To start 
+      the analytics, you must click the <legacyBold>Start</legacyBold> 
+      <mediaLinkInline><image xlink:href="hydra_analitics_compile"/></mediaLinkInline> 
+      button. The result of the compilation is displayed in the <legacyBold>Error List</legacyBold> window. 
+      To connect the required libraries, the <legacyBold>Links</legacyBold> 
+      <mediaLinkInline><image xlink:href="hydra_analitics_references"/></mediaLinkInline> 
+      button is used.</para>
       <mediaLink>
-        <image placement="left" xlink:href="hydra_analitics_main" />
+        <image placement="center" xlink:href="hydra_analitics_main" />
       </mediaLink>
       
      <alert class="note">
-  		<para>The <token>hydra</token> standard installation kit includes two ready-made scripts: "the volume analysis broken down by the hours" and "volume analysis
-  		broken down by the price".</para>
+  		<para>The standard delivery of <token>hydra</token> 
+includes two ready-made scripts: "Volume within a day" and "Volume profile".</para>
 	 </alert>
-
-      
     </introduction>
-   
   </developerConceptualDocument>
 </topic>
 

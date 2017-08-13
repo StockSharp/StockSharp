@@ -6,33 +6,27 @@
 			At first start you will see the following window:
 		</para>
 		<mediaLink>
-			<image xlink:href="hydra_Quick_start_00"/>
+			<image placement="center" xlink:href="hydra_Quick_start_00"/>
 		</mediaLink>
-
+<para>You must select the startup mode and click OK button.</para>
 		<steps class="ordered">
 			<step>
 				<content>
 				<para>
-					At first, add the data sources. To do this, from the main application menu select <legacyBold>File => Add Sources...</legacyBold> 
-					or click the <legacyBold>Sources</legacyBold> button.
+Then the window for selecting data sources appears. You can also open this window in the <legacyBold>Common</legacyBold> tab, where you need to select <legacyBold>Add => Sources</legacyBold>.
 				</para>
 					<mediaLink>
 						  <image placement="left" xlink:href="hydra_source_add" />
 					</mediaLink>
 				<para>
-					In the opened window select the required sources. You can use filters by: the region, the electronic board, the data type, the free or paid,
-					real-time or not. When the choice is finished click <legacyBold>OK</legacyBold> button. After that, the sources are added to the left panel of the
-					main application window
+In the window select the required sources. You can use filters by the region, the electronic board, the data type, the free or paid, real-time or not. When the choice is finished click <legacyBold>OK</legacyBold> button. After that, the sources will be added to the left panel of the main application window.
 				</para>
 				</content>
 			</step>
 			<step>
 				<content>
 				<para>
-					You can create multiple instances of one source. For example, several instances of Finam, which will save the downloaded data to different folders.
-					This can be done as well as during the initial addition, from the menu <legacyBold>File => Add Source</legacyBold> or by the clicking the
-					<legacyBold>Add Source</legacyBold> button.
-					Unnecessary sources can be removed by clicking the <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline> button.
+					2.	You can create multiple instances of one source. For example, several instances of Finam, which will save the downloaded data to different folders. This can be done as well as during the initial addition, from the <legacyBold>Common tab</legacyBold>, selecting <legacyBold>Add => Sources</legacyBold>. Unnecessary sources can be removed by clicking the <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline> button.
 				</para>
 				</content>
 			</step>
@@ -51,7 +45,7 @@
 			</step>
 			<step>
 				<content>
-					<para>Then, add the instruments. To do this, double-click on the source icon. This opens the window shown in the following figure.</para>
+					<para>Then, it is necessary to add instruments. To do this, double-click on the source icon. The window shown in the following figure opens.</para>
 					<mediaLink>
 						  <image placement="left" xlink:href="hydra_source_first" />
 					</mediaLink>					  
@@ -83,9 +77,9 @@
 			<step>
 				<content>
 					<para>
-						When all the settings will be applied and the instruments will be selected, then you can click the <legacyBold>Старт</legacyBold> button in the
-						main window. This will launch active sources and they will start to download the data. The process of work can be seen in a special window,
-						which can be opened from the <legacyBold>Logs => Graphical monitoring</legacyBold> menu. Also logs are stored in files in the local directory.
+When all the settings are applied and the instruments are selected, on the <legacyBold>Common</legacyBold> tab, you can click the <legacyBold>Start</legacyBold> button. 
+This will launch active sources and they will start to download the data. The work process can be observed in the 
+special <legacyBold>Logs</legacyBold> tab, which is fixed at the bottom of the program. Also, logs are stored in files in the local directory.
 					</para>
 					<mediaLink>
 						  <image placement="left" xlink:href="hydra_main_start" />

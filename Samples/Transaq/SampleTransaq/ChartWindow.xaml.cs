@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleTransaq
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Windows.Media;
 
 	using StockSharp.Algo.Candles;
@@ -55,24 +54,23 @@ namespace SampleTransaq
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandles += ProcessNewCandles;
-			_trader.SubscribeCandles(_candleSeries, DateTime.Today - TimeSpan.FromTicks(((TimeSpan)candleSeries.Arg).Ticks * 10000), DateTimeOffset.MaxValue);
+			_trader.CandleSeriesProcessing += ProcessNewCandle;
+			_trader.SubscribeCandles(_candleSeries, DateTime.Today - TimeSpan.FromTicks(((TimeSpan)candleSeries.Arg).Ticks * 10000));
 		}
 
-		private void ProcessNewCandles(CandleSeries series, IEnumerable<Candle> candles)
+		private void ProcessNewCandle(CandleSeries series, Candle candle)
 		{
 			if (series != _candleSeries)
 				return;
 
-			foreach (var timeFrameCandle in candles)
-			{
-				Chart.Draw(_candleElem, timeFrameCandle);
-			}
+			Chart.Draw(_candleElem, candle);
 		}
 
 		protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
 		{
-			_trader.NewCandles -= ProcessNewCandles;
+			_trader.CandleSeriesProcessing -= ProcessNewCandle;
+			_trader.UnSubscribeCandles(_candleSeries);
+
 			base.OnClosing(e);
 		}
 	}

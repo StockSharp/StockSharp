@@ -99,14 +99,11 @@ namespace StockSharp.Algo.Risk
 
 		RiskActions IRiskRule.Action
 		{
-			get { throw new NotSupportedException(); }
-			set { throw new NotSupportedException(); }
+			get => throw new NotSupportedException();
+			set => throw new NotSupportedException();
 		}
 
-		string IRiskRule.Title
-		{
-			get { throw new NotSupportedException(); }
-		}
+		string IRiskRule.Title => throw new NotSupportedException();
 
 		bool IRiskRule.ProcessMessage(Message message)
 		{

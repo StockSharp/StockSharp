@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
     <introduction>
 		<para>
 			The <token>stocksharp</token> provides a reports generating mechanism for strategies created on the basis of <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>.
@@ -60,7 +56,7 @@
         <step>
           <content>
 			  <para>You need to add the report generate button on the form:</para>
-			  <code><![CDATA[<Button x:Name="Report" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="11" IsEnabled="False" Content="Отчет" Click="Report_Click" />]]></code>
+			  <code><![CDATA[<Button x:Name="Report" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="11" IsEnabled="False" Content="Report" Click="Report_Click" />]]></code>
           </content>
         </step>
 		  <step>

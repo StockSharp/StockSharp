@@ -3,12 +3,13 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
         <introduction>
       <para>
-      	The <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference> - graphic component is the table for option desk display. It shows “Greeks”, implied
-      	volatility, the theoretical price, the best offer and bid for Put and Call options.
+The  <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>- graphic component is the 
+table for option desk display. It shows “Greeks”, implied volatility, the theoretical price, the best 
+offer and bid for Put and Call options.
       </para>
       <para>
-      	Below is the OptionCalculator example, which uses this component. The source code of the example can be found in the <legacyItalic>Samples/Options/OptionCalculator</legacyItalic> folder.
-      </para>
+Below is the <legacyBold>OptionCalculator</legacyBold> example, which uses this component. The source code 
+of the example can be found in the <legacyBold>Samples/Options/OptionCalculator</legacyBold> folder.</para>
       <mediaLink><image placement="left" xlink:href="option_desk" /></mediaLink>
     </introduction>
     
@@ -17,8 +18,8 @@
     	<steps class="ordered">
 			<step>
 				<content>
-					<para>The <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference> element is added to the XAML code and the
-					<legacyBold>Desk</legacyBold> name is assigned to it.</para>
+					<para>1.	In the XAML code, adding the <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>
+element and assigning it the <legacyBold>Desk</legacyBold> name. </para>
             		<code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="OptionCalculator.MainWindow"
@@ -42,133 +43,172 @@
 			</step>
 			<step>
 				<content>
-				<para>The connection is created in the C# code. Depending on the type of connector an instance
-					<codeEntityReference>T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> or <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>
-					is initialized.</para>
+				<para>In the C# code, creating a connection and subscribing to the necessary events.
+					</para>
             	<code title="C#" language="C#">
-                  <![CDATA[
-if (_connector == null)
+<![CDATA[
+...                 
+public readonly Connector Connector = new Connector();
+...                 
+// subscribe on connection successfully event
+Connector.Connected += () =>
 {
-	if (IsOpenECry.IsChecked == true)
-	{
-		var trader = new OpenECryTrader
-		{
-			// ... initialization
-		};
+	// update gui labels
+	this.GuiAsync(() => ChangeConnectStatus(true));
+};
 
-		_connector = trader;
-	}
-	else
-	{
-		var trader = new RithmicTrader
-		{
-			// ... initialization
-		};
+// subscribe on disconnection event
+Connector.Disconnected += () =>
+{
+	// update gui labels
+	this.GuiAsync(() => ChangeConnectStatus(false));
+};
 
-		_connector = trader;
-	}
+// subscribe on connection error event
+Connector.ConnectionError += error => this.GuiAsync(() =>
+{
+	// update gui labels
+	ChangeConnectStatus(false);
+
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+});
+
+// fill underlying asset's list
+Connector.NewSecurity += security =>
+{
+	if (security.Type == SecurityTypes.Future)
+		_assets.Add(security);
+};
+
+Connector.SecurityChanged += security =>
+{
+	if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
+		_isDirty = true;
+};
+
+// subscribing on tick prices and updating asset price
+Connector.NewTrade += trade =>
+{
+	if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
+		_isDirty = true;
+};
+
+Connector.NewPosition += position => this.GuiAsync(() =>
+{
+	var asset = SelectedAsset;
+
+	if (asset == null)
+		return;
+
+	var assetPos = position.Security == asset;
+	var newPos = position.Security.UnderlyingSecurityId == asset.Id;
+
+	if (!assetPos && !newPos)
+		return;
+
+	if (assetPos)
+		PosChart.AssetPosition = position;
+
+	if (newPos)
+		PosChart.Positions.Add(position);
+
+	RefreshChart();
+});
+
+Connector.PositionChanged += position => this.GuiAsync(() =>
+{
+	if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
+		RefreshChart();
+});
+
+try
+{
+	if (File.Exists(_settingsFile))
+		Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 }
+...
 ]]>
                   	</code>
 				</content>
 				</step>
 				<step>
 					<content>
-					<para>The messages provider for market data and instruments is specified.</para>
+					<para>When connecting, set the message provider for market data.</para>
             		<code title="C#" language="C#">
                   <![CDATA[
-Desk.MarketDataProvider = _connector;
-Desk.SecurityProvider = _connector;
-Desk.CurrentTime = null;
+private void ConnectClick(object sender, RoutedEventArgs e)
+{
+	if (!_isConnected)
+	{
+		ConnectBtn.IsEnabled = false;
+
+		_model.Clear();
+		_model.MarketDataProvider = Connector;
+...
+		Connector.Connect();
+	}
+	else
+		Connector.Disconnect();
+}
 ]]>
                    </code>
 				</content>
 				</step>
 				<step>
 				<content>
-					<para>Upon getting the instruments:</para>
-					<list class="ordered">
-  							<listItem>To fill the futures collection for the drop-down list;</listItem>
-  							<listItem>To initialize the selected instrument by the first element of this collection;</listItem>
-  							<listItem>To fill the array by the options chain, where selected instrument acts as underlying asset;</listItem>
-  							<listItem>To assign this array to the <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> property;</listItem>
-  							<listItem>To update optiondesk values using the 
-  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference> method.</listItem>
-					</list>
+					<para>When receiving instruments, we add the underlying assets to the list.</para>
             		<code title="C#" language="C#">
                   <![CDATA[
-_connector.NewSecurities += securities =>
-	this.GuiAsync(() =>
-	{
-		_assets.AddRange(securities.Where(s => s.Type == SecurityTypes.Future));
-
-		if (SelectedAsset == null && _assets.Count > 0)
-			SelectedAsset = _assets.First();
-
-		if (SelectedAsset != null)
-		{
-			var newStrikes = securities
-				.Where(s => s.Type == SecurityTypes.Option && s.UnderlyingSecurityId.CompareIgnoreCase(SelectedAsset.Id))
-				.ToArray();
-
-			if (newStrikes.Length > 0)
-			{
-				_options.AddRange(newStrikes);
-				Desk.Options = _options;
-				Desk.RefreshOptions();
-			}
-		}
-	});
+// fill underlying asset's list
+Connector.NewSecurity += security =>
+{
+	if (security.Type == SecurityTypes.Future)
+		_assets.Add(security);
+};
 ]]>
                   	</code>
 					</content>
 				</step>
 				<step>
-					<content>
-						<para>Upon options parameters change:</para>
-						<list class="ordered">
-  							<listItem>To fill the array by options that have not been previously added to the control options collection;</listItem>
-  							<listItem>If new options added, to update the <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> property value;</listItem>
-  							<listItem>
-  								If new options added or parameters of the previously added options changed, then to update option desk 
-  								<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.
-  							</listItem>
-						</list>
-            			<code title="C#" language="C#">
+				<content>
+					<para>When selecting an instrument:</para>
+					<list class="bullet">
+  							<listItem>Fill the array with a chain of options, where the selected instrument acts as the underlying asset;</listItem>
+  							<listItem>Assign this array to the <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDeskModel.Options</codeEntityReference> property;</listItem>
+  							<listItem>•	Clear the options board values using the 
+  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDeskModel.Clear</codeEntityReference> method.</listItem>
+					</list>
+            		<code title="C#" language="C#">
                   <![CDATA[
-_connector.SecuritiesChanged += securities =>
+private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 {
-	this.GuiAsync(() =>
+	var asset = SelectedAsset;
+
+	_model.UnderlyingAsset = asset;
+
+	_model.Clear();
+	_options.Clear();
+
+	var options = asset.GetDerivatives(Connector);
+
+	foreach (var security in options)
 	{
-		if (SelectedAsset == null)
-			return;
-			
-		var newStrikes = securities
-				.Where(s => s.Type == SecurityTypes.Option && s.UnderlyingSecurityId.CompareIgnoreCase(SelectedAsset.Id))
-				.Where(s => !_options.Contains(s))
-				.ToArray();
+		_model.Add(security);
+		_options.Add(security);
+	}
 
-		if (newStrikes.Length > 0)
-		{
-			_options.AddRange(newStrikes);
-			Desk.Options = _options;
-			Desk.RefreshOptions();
-		}
-
-		if (Desk.Options.Intersect(securities).Any())
-			Desk.RefreshOptions();
-	});
-};
+	ProcessPositions();
+}
 
 ]]>
-                  		</code>
+                  	</code>
 					</content>
 				</step>
 			</steps>
  	</procedure>
 
     <relatedTopics>
-		<link xlink:href="063708c5-b6a8-45f6-9ff9-608f89796a88">Greeks</link>
+		<link xlink:href="063708c5-b6a8-45f6-9ff9-608f89796a88"/>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

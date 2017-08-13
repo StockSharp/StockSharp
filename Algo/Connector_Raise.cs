@@ -20,6 +20,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -283,7 +284,7 @@ namespace StockSharp.Algo
 		public event Action<IMessageAdapter, Exception> ConnectionErrorEx;
 
 		/// <summary>
-		/// Dats process error.
+		/// Data process error.
 		/// </summary>
 		public event Action<Exception> Error;
 
@@ -336,6 +337,16 @@ namespace StockSharp.Algo
 		/// Connection timed-out.
 		/// </summary>
 		public event Action TimeOut;
+
+		/// <summary>
+		/// A new value for processing occurrence event.
+		/// </summary>
+		public event Action<CandleSeries, Candle> CandleSeriesProcessing;
+
+		/// <summary>
+		/// The series processing end event.
+		/// </summary>
+		public event Action<CandleSeries> CandleSeriesStopped;
 
 		private void RaiseNewMyTrade(MyTrade trade)
 		{
@@ -685,6 +696,16 @@ namespace StockSharp.Algo
 		private void RaiseTimeOut()
 		{
 			TimeOut?.Invoke();
+		}
+
+		private void RaiseCandleSeriesProcessing(CandleSeries series, Candle candle)
+		{
+			CandleSeriesProcessing?.Invoke(series, candle);
+		}
+
+		private void RaiseCandleSeriesStopped(CandleSeries series)
+		{
+			CandleSeriesStopped?.Invoke(series);
 		}
 	}
 }

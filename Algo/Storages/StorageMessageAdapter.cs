@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Storages
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using MoreLinq;
 
@@ -102,6 +103,11 @@ namespace StockSharp.Algo.Storages
 						GetStorage(pair.Key.Item1, pair.Key.Item2, pair.Key.Item3).Save(pair.Value);
 					}
 
+					foreach (var pair in GetPositionChanges())
+					{
+						GetStorage(pair.Key, typeof(PositionChangeMessage), null).Save(pair.Value);
+					}
+
 					var news = GetNews().ToArray();
 
 					if (news.Length > 0)
@@ -128,7 +134,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public IMarketDataDrive Drive
 		{
-			get { return _drive; }
+			get => _drive;
 			set
 			{
 				if (value == null)
@@ -150,7 +156,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public TimeSpan DaysLoad
 		{
-			get { return _daysLoad; }
+			get => _daysLoad;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -217,7 +223,7 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var position in _entityRegistry.Positions)
 			{
-				RaiseStorageMessage(position.ToMessage());
+				//RaiseStorageMessage(position.ToMessage());
 				RaiseStorageMessage(position.ToChangeMessage());
 			}
 
@@ -257,7 +263,7 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessMarketDataMessage(MarketDataMessage msg)
 		{
-			if (msg.IsBack || DaysLoad == TimeSpan.Zero)
+			if (msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero))
 			{
 				base.SendInMessage(msg);
 				return;
@@ -265,25 +271,30 @@ namespace StockSharp.Algo.Storages
 
 			if (msg.IsSubscribe)
 			{
-				var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
-				var to = msg.To ?? DateTimeOffset.Now;
-				var transactionId = msg.TransactionId;
+				if (Enabled)
+				{
+					var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
+					var to = msg.To ?? DateTimeOffset.Now;
+					var transactionId = msg.TransactionId;
 
-				RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId, IsHistory = true });
+					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
-				var lastTime = LoadMessages(msg, from, to, transactionId);
+					var lastTime = LoadMessages(msg, from, to, transactionId);
 
-				RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
+					RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
-				if (msg.IsHistory)
-					return;
+					if (msg.IsHistory)
+						return;
 
-				Subscribe(msg.SecurityId, CreateDataType(msg));
+					Subscribe(msg.SecurityId, CreateDataType(msg));
 
-				var clone = (MarketDataMessage)msg.Clone();
-				clone.From = lastTime;
+					var clone = (MarketDataMessage)msg.Clone();
+					clone.From = lastTime;
 
-				base.SendInMessage(clone);
+					base.SendInMessage(clone);	
+				}
+				else
+					base.SendInMessage(msg);
 			}
 			else
 			{
@@ -357,7 +368,7 @@ namespace StockSharp.Algo.Storages
 		private DateTimeOffset LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset from, DateTimeOffset to, Func<TMessage, DateTimeOffset> func) 
 			where TMessage : Message
 		{
-			var messages = storage.Load(from, to);
+			var messages = storage.Load(from.Date, to.Date.EndOfDay());
 			var lastTime = from;
 
 			foreach (var message in messages)
@@ -374,7 +385,7 @@ namespace StockSharp.Algo.Storages
 		private DateTimeOffset LoadMessages(SecurityId securityId, object arg, DateTimeOffset from, DateTimeOffset to, long transactionId)
 		{
 			var tickStorage = GetStorage<ExecutionMessage>(securityId, arg);
-			var tickDates = tickStorage.GetDates(from.DateTime, to.DateTime).ToArray();
+			var tickDates = tickStorage.GetDates(from.Date, to.Date.EndOfDay()).ToArray();
 
 			var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
 
@@ -432,10 +443,13 @@ namespace StockSharp.Algo.Storages
 					{
 						board = _storageRegistry.ExchangeInfoProvider.GetOrCreateBoard(boardMsg.Code, code =>
 						{
-							var exchange = boardMsg.ToExchange(new Exchange
-							{
-								Name = boardMsg.ExchangeCode
-							});
+							var exchange = _storageRegistry
+								.ExchangeInfoProvider
+								.GetExchange(boardMsg.ExchangeCode) ?? boardMsg.ToExchange(new Exchange
+								{
+									Name = boardMsg.ExchangeCode
+								});
+
 							return boardMsg.ToBoard(new ExchangeBoard
 							{
 								Code = code,
@@ -481,9 +495,31 @@ namespace StockSharp.Algo.Storages
 					break;
 				}
 
-				case MessageTypes.Position:
+				//case MessageTypes.Position:
+				//{
+				//	var positionMsg = (PositionMessage)message;
+				//	var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
+
+				//	if (position == null)
+				//		break;
+
+				//	if (!positionMsg.DepoName.IsEmpty())
+				//		position.DepoName = positionMsg.DepoName;
+
+				//	if (positionMsg.LimitType != null)
+				//		position.LimitType = positionMsg.LimitType;
+
+				//	if (!positionMsg.Description.IsEmpty())
+				//		position.Description = positionMsg.Description;
+
+				//	_entityRegistry.Positions.Save(position);
+
+				//	break;
+				//}
+
+				case MessageTypes.PositionChange:
 				{
-					var positionMsg = (PositionMessage)message;
+					var positionMsg = (PositionChangeMessage)message;
 					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
 
 					if (position == null)
@@ -497,19 +533,6 @@ namespace StockSharp.Algo.Storages
 
 					if (!positionMsg.Description.IsEmpty())
 						position.Description = positionMsg.Description;
-
-					_entityRegistry.Positions.Save(position);
-
-					break;
-				}
-
-				case MessageTypes.PositionChange:
-				{
-					var positionMsg = (PositionChangeMessage)message;
-					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
-
-					if (position == null)
-						break;
 
 					position.ApplyChanges(positionMsg);
 					_entityRegistry.Positions.Save(position);
@@ -638,6 +661,32 @@ namespace StockSharp.Algo.Storages
 		{
 			msg.OriginalTransactionId = transactionId;
 			return msg.ServerTime;
+		}
+
+		/// <inheritdoc />
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			storage.SetValue(nameof(Drive), Drive.SaveEntire(false));
+			storage.SetValue(nameof(Format), Format);
+			storage.SetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
+			storage.SetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
+			storage.SetValue(nameof(DaysLoad), DaysLoad);
+		}
+
+		/// <inheritdoc />
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			if (storage.ContainsKey(nameof(Drive)))
+				Drive = storage.GetValue<SettingsStorage>(nameof(Drive)).LoadEntire<IMarketDataDrive>();
+
+			Format = storage.GetValue(nameof(Format), Format);
+			UseCandlesInsteadTrades = storage.GetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
+			CandlesTimeFrame = storage.GetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
+			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
 		}
 
 		/// <summary>

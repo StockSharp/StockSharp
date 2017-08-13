@@ -4,9 +4,9 @@
     <introduction>
 <para>В процессе тестирования стратегий часто возникает необходимость проверить какие 
 данные поступают на вход того или иного кубика или передаются 
-на его выходе. Для этого в Дизайнере существует <legacyBold>Отладчик</legacyBold>. </para>
+на его выходе. Для этого в <token>designer</token> существует <legacyBold>Отладчик</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_Debug_00"/>
+<image placement="center" xlink:href="Designer_Debug_00"/>
 </mediaLink>
 <para>На вкладке <legacyBold>Эмуляция</legacyBold> ленты в группе <legacyBold>Отладчик</legacyBold> расположены кнопки:</para>
 
@@ -17,15 +17,14 @@
  которых добавлена точка останова, выделяются красной рамкой.</para></listItem>
   <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_02"/></mediaLinkInline> <legacyBold>Убрать 
 точку остановки</legacyBold> – удалить точку останова.</para></listItem>
-  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_03"/></mediaLinkInline> <legacyBold>К 
-следующему элементу</legacyBold> – при сработавшей точке останова выполняет переход к следующему 
-элементу схемы.</para></listItem>
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_03"/></mediaLinkInline> <legacyBold>К следующему элементу</legacyBold> –
+ при сработавшей точке останова выполняет переход к следующему элементу схемы.</para></listItem>
   <listItem><para><legacyBold>Step to out</legacyBold> 
 – при сработавшей точке останова выполняет переход к выходу текущего элемента, 
 используется для проверки значений, которые передаются на выходе элемента.</para></listItem>
-  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_04"/></mediaLinkInline> <legacyBold>В 
-составной элемент</legacyBold> – при сработавшей точке останова выполняет переход внутрь составного 
-элемента, при этом автоматически открывается схема составного элемента и выполняется 
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_04"/></mediaLinkInline> <legacyBold>В составной элемент</legacyBold> – 
+при сработавшей точке останова выполняет переход внутрь составного 
+элемента. При этом автоматически открывается схема составного элемента и выполняется 
 остановка на элементе, в который первым передаются данные.</para></listItem>
   <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_05"/></mediaLinkInline> <legacyBold>Из 
 составного элемента</legacyBold> – при сработавшей точке останова и нахождении внутри составного 

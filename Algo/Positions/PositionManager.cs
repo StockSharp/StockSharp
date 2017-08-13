@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Positions
 		/// </summary>
 		public IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> Positions
 		{
-			get { return _positions.CachedPairs; }
+			get => _positions.CachedPairs;
 			set
 			{
 				if (value == null)

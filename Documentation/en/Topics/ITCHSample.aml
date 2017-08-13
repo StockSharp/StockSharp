@@ -3,8 +3,8 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	The application SampleITCH shows an example of working with <codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference>
-      	as shown in the figure below. The example source code is in the <legacyItalic>Samples/ITCH</legacyItalic> folder of the installation package.
+The SampleITCH application shows an example of working with <codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference> as 
+shown in the figure below. The example source code is in the <legacyItalic>Samples/ITCH</legacyItalic> folder of the installation package.<legacyItalic>Samples/ITCH</legacyItalic>.
       </para>
       <mediaLink><image placement="center" xlink:href="ITCHSettings"/></mediaLink>
     </introduction>
@@ -12,12 +12,10 @@
 		<steps class="ordered">
 			<step>
 				<content>
-				
-					<para>В конструкторе главного окна: 1) создаем экземпляр коннектора и, чтобы получать стаканы, устанавливаем
-					для свойства
-					<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Connector.CreateDepthFromOrdersLog</codeEntityReference>
-					значение true, 2) передаем в элемент Settings (PropertyGridEx) адаптер рыночных данных коннектора. 
-					Настройка свойств адаптера проводится в графическом интерфейсе см. рисунок выше.
+<para>In the designer of the main window: 1) creating an instance of the connector, and to get order books, setting the 
+<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Connector.CreateDepthFromOrdersLog</codeEntityReference>
+property to ‘true’, 2) passing the connector's market data adapter to the Settings (PropertyGridEx) element. 
+The adapter properties are configured in the graphical interface, see the figure above.
 					</para>
             		<code language="C#">
             				<![CDATA[
@@ -45,9 +43,12 @@ public MainWindow()
 			</step>
 			<step>
 				<content>
-					<para>Далее устанавливаем необходимые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>.
-					В обработчике события <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult</codeEntityReference> подписываемся
-					на получение лога заявок. Потоки инструментов, заявок, сделок и лога заявок подключаем к соответсвующим графическим элементам. Устанавливаем соединение.</para>
+					<para>2.	Then we install the necessary 
+					<codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> 
+					event handlers. In the handler of the 
+					<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult</codeEntityReference> 
+					event, we subscribe to the receiving of the order log. We connect streams of instruments, orders, trades and the order log 
+					to the corresponding graphic elements. Establishing the connection.</para>
 					<code language="C#">
             				<![CDATA[
 private void ConnectClick(object sender, RoutedEventArgs e)
@@ -88,9 +89,10 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 			Trader.MarketDataSubscriptionFailed += (security, type, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-			Trader.NewSecurities += _securitiesWindow.SecurityPicker.Securities.AddRange;
-			Trader.NewTrades += _tradesWindow.TradeGrid.Trades.AddRange;
-			Trader.NewOrderLogItems += _orderLogWindow.OrderLogGrid.LogItems.AddRange;
+			Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+			Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+			Trader.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
+
 
 			var subscribed = false;
 			//if (AllDepths.IsChecked == true)
@@ -127,12 +129,6 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 
 			]]>
 					</code>						
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>Для вывода сделок и логов заявок нужно открыть окна при помощи кнопок <legacyBold>Тики</legacyBold> и <legacyBold>Лог заявок</legacyBold> соответственно. Для получения стакана нужно открыть окно инструментов, выбрать нужный инструмент
-					и открыть стакан при помощи кнопки <legacyBold>Стакан</legacyBold>.</para>
 				</content>
 			</step>
 		</steps>

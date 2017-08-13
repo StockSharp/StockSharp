@@ -7,7 +7,7 @@
 		There is the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>,
 		interface in this section, which created to describe all the possible actions with the storage and contains such properties as
 		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Securities</codeEntityReference>,
-		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Orders</codeEntityReference>
+		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Positions</codeEntityReference>
 		etc. Through these properties, it is possible to get all the previously saved trading objects, for example, instruments. All processes run as with regular
 		collection using the <codeEntityReference>T:StockSharp.Algo.Storages.IStorageEntityList`1</codeEntityReference> interface. If you want to save the trading object
 		in the storage (for example, a new order appeared or previously registered order updated), you should use the
@@ -16,7 +16,7 @@
 		<para>The default implementation of the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>
 		interface is the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> class.
 		It interacts with the data through a low-level system interface <codeEntityReference>T:Ecng.Serialization.IStorage</codeEntityReference>. 
-		This interface provides a transparent work with <link xlink:href="38595e78-cff6-44ed-b525-2be13e6c17e4">Базами данных</link>, hiding details.</para>
+		This interface provides a transparent work with <link xlink:href="38595e78-cff6-44ed-b525-2be13e6c17e4">databases</link>, hiding details.</para>
 		  
 		<para>The work with market data, such as tick trades or order books, takes place through the certain interface
 		<codeEntityReference>T:StockSharp.Algo.Storages.IMarketDataStorage`1</codeEntityReference>, which is obtained based on the information about the instrument through
@@ -31,7 +31,7 @@
 		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.Path</codeEntityReference> property of the
 		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.IStorageRegistry.DefaultDrive</codeEntityReference> storage.</para>
 		
-		<para>По The folders with the names equal <link xlink:href="34a9c518-60ca-45c0-a118-5e2e42165efa">instruments identifiers</link> (separate folder for each
+		<para>The folders with the names equal <link xlink:href="34a9c518-60ca-45c0-a118-5e2e42165efa">instruments identifiers</link> (separate folder for each
 		instrument) will be created at this path.</para>
 				
 		<para>Subfolders, indicating the date of the market data will be created inside each of these folders. For example, if you save the tick trades for a period of

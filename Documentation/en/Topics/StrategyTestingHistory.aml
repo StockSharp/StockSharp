@@ -42,50 +42,93 @@ var settings = new[]
 {
 	Tuple.Create(
 		TicksCheckBox,
-		TicksTestingProcess,
+		TicksProgress,
 		TicksParameterGrid,
-		
 		// ticks
-		new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Ticks}),
+		new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Ticks},
+		TicksChart,
+		TicksEquity,
+		TicksPosition),
 
 	Tuple.Create(
 		TicksAndDepthsCheckBox,
-		TicksAndDepthsTestingProcess,
+		TicksAndDepthsProgress,
 		TicksAndDepthsParameterGrid,
-		
 		// ticks + order book
-		new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.XamlStr757}),
+		new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.XamlStr757},
+		TicksAndDepthsChart,
+		TicksAndDepthsEquity,
+		TicksAndDepthsPosition),
 
 	Tuple.Create(
 		DepthsCheckBox,
-		DepthsTestingProcess,
+		DepthsProgress,
 		DepthsParameterGrid,
-		
 		// order book
-		new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.MarketDepths}),
-
+		new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.MarketDepths},
+		DepthsChart,
+		DepthsEquity,
+		DepthsPosition),
 
 	Tuple.Create(
 		CandlesCheckBox,
-		CandlesTestingProcess,
+		CandlesProgress,
 		CandlesParameterGrid,
 		// candles
-		new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.Candles}),
-				
+		new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.Candles},
+		CandlesChart,
+		CandlesEquity,
+		CandlesPosition),
+	
 	Tuple.Create(
 		CandlesAndDepthsCheckBox,
-		CandlesAndDepthsTestingProcess,
+		CandlesAndDepthsProgress,
 		CandlesAndDepthsParameterGrid,
-		
 		// candles + orderbook
-		new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.XamlStr635}),
-			
+		new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.XamlStr635},
+		CandlesAndDepthsChart,
+		CandlesAndDepthsEquity,
+		CandlesAndDepthsPosition),
+
 	Tuple.Create(
 		OrderLogCheckBox,
-		OrderLogTestingProcess,
+		OrderLogProgress,
 		OrderLogParameterGrid,
 		// order log
-		new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog})
+		new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog},
+		OrderLogChart,
+		OrderLogEquity,
+		OrderLogPosition),
+
+	Tuple.Create(
+		Level1CheckBox,
+		Level1Progress,
+		Level1ParameterGrid,
+		// order log
+		new EmulationInfo {UseLevel1 = true, CurveColor = Colors.Aquamarine, StrategyName = LocalizedStrings.Level1},
+		Level1Chart,
+		Level1Equity,
+		Level1Position),
+
+	Tuple.Create(
+		FinamCandlesCheckBox,
+		FinamCandlesProgress,
+		FinamCandlesParameterGrid,
+		// candles
+		new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
+		FinamCandlesChart,
+		FinamCandlesEquity,
+		FinamCandlesPosition),
+
+	Tuple.Create(
+		YahooCandlesCheckBox,
+		YahooCandlesProgress,
+		YahooCandlesParameterGrid,
+		// candles
+		new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource(_exchangeInfoProvider).GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
+		YahooCandlesChart,
+		YahooCandlesEquity,
+		YahooCandlesPosition),
 };
 		]]>
 		</code>
@@ -99,10 +142,11 @@ var settings = new[]
 						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> will get historical data:
 					  </para>
 					  <code language="C#"><![CDATA[
+// storage to historical data
 var storageRegistry = new StorageRegistry
 {
 	// set historical path
-	DefaultDrive = new LocalMarketDataDrive(HistoryPath.Text)
+	DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
 };
 ]]></code>
 					  <alert class="caution">
@@ -124,9 +168,9 @@ var storageRegistry = new StorageRegistry
         <code language="C#">
         <![CDATA[
 foreach (var set in settings)
-   {
-     if (set.Item1.IsChecked == false)
-         continue;
+{
+	if (set.Item1.IsChecked == false)
+		continue;
    .................
 
 }	
@@ -164,60 +208,53 @@ var portfolio = new Portfolio
 						  <codeEntityReference>T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference> storage interface, and testing settings are passed:
 					  </para>
 					  <code language="C#"><![CDATA[
-var connector = new HistoryEmulationConnector(new[] { security }, new[] { portfolio })
+var connector = new HistoryEmulationConnector(
+	new[] { security },
+	new[] { portfolio })
 {
-	StorageRegistry = storageRegistry,
-	MarketEmulator =
+	EmulationAdapter =
 	{
-		Settings =
+		Emulator =
 		{
-			// match order if historical price touched our limit order price. 
-			// It is terned off, and price should go through limit order price level
-			// (more "severe" test mode)
-			MatchOnTouch = false,
+			Settings =
+			{
+				// match order if historical price touched our limit order price. 
+				// It is terned off, and price should go through limit order price level
+				// (more "severe" test mode)
+				MatchOnTouch = false,
+			}
 		}
 	},
 
-	UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
-    CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
-    CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
-    
-    HistoryMessageAdapter =
-    {
-        StorageRegistry = storageRegistry,
-        // set history range
-        StartDate = startTime,
-        StopDate = stopTime,
-    },
+	//UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
 
-    // set market time freq as time frame
-    MarketTimeChangedInterval = timeFrame,
-};]]></code>
-					  <!--para>
-							При тестировании <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/> или <link xlink:href="ab42038e-836b-4c00-9332-0b2db2cbd948"/>
-							вместе с информацией об инструменте передается и его ликвидность через параметр securitySettings в конструкторы
-							<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.HistoryEmulationTrader.#ctor(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,System.TimeSpan},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio},StockSharp.Algo.Storages.ITradingStorage)</codeEntityReference>
-							и <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.RandomEmulationTrader.#ctor(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.Security,System.TimeSpan},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})</codeEntityReference>.
-							Через <codeEntityReference>T:System.TimeSpan</codeEntityReference> указывается как часто меняется стакан для инструмента в процессе тестирования.
-					   	</para>
-						<para>
-							При тестировании <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/> ликвидность инструмента используется для определения разрыва в исторических
-							данных по стакану. Если за отрезок времени, который указывается через <codeEntityReference>T:System.TimeSpan</codeEntityReference>, не было загружено
-							<codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationTrader</codeEntityReference> ни одного стакану по инструменту, то это считается разрывом
-							данных по стакану, и он генерируется случайным образом <codeEntityReference>T:StockSharp.Algo.Testing.MarketDepthGenerator</codeEntityReference>
-							(по умолчанию используется реализация <codeEntityReference>T:StockSharp.Algo.Testing.ByTrendMarketDepthGenerator</codeEntityReference>, которая
-							генерирует стакан на основе массива прошедших тиковых сделок).
-						</para>
-						<para>
-							При тестировании <link xlink:href="ab42038e-836b-4c00-9332-0b2db2cbd948"/> ликвидность инструмента используется для определения момента, когда нужно
-							сгенерировать новый стакан. По умолчанию используется реализация <codeEntityReference>T:StockSharp.Algo.Testing.BySecurityMarketDepthGenerator</codeEntityReference>,
-							которая генерирует стакан на основе <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.LastTrade</codeEntityReference>,
-							<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestBid</codeEntityReference>,
-							<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestAsk</codeEntityReference>,
-							<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ClosePrice</codeEntityReference> или
-							<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.OpenPrice</codeEntityReference> (в зависимости от того, что
-							инициализировано в момент генерации стакана).
-						</para-->
+	CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
+	CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
+
+	HistoryMessageAdapter =
+	{
+		StorageRegistry = storageRegistry,
+
+		// set history range
+		StartDate = startTime,
+		StopDate = stopTime,
+
+		OrderLogMarketDepthBuilders =
+		{
+			{
+				secId,
+				LocalizedStrings.ActiveLanguage == Languages.Russian
+					? (IOrderLogMarketDepthBuilder)new PlazaOrderLogMarketDepthBuilder(secId)
+					: new ItchOrderLogMarketDepthBuilder(secId)
+			}
+		}
+	},
+
+	// set market time freq as time frame
+	MarketTimeChangedInterval = timeFrame,
+};
+
+]]></code>
 				  </content>
 			  </step>
 			  <step>
@@ -228,58 +265,89 @@ var connector = new HistoryEmulationConnector(new[] { security }, new[] { portfo
 						 the emulator itself.
 					  </para>
 					  <code language="C#"><![CDATA[
-connector.NewSecurities += securities =>
+connector.NewSecurity += s =>
 {
-    if (securities.All(s => s != security))
-        return;
+	if (s != security)
+		return;
 
-    // fill level1 values
-    connector.SendInMessage(level1Info);
+	// fill level1 values
+	connector.HistoryMessageAdapter.SendOutMessage(level1Info);
 
-    if (emulationInfo.UseMarketDepth)
-    {
-        connector.RegisterMarketDepth(security);
+	if (emulationInfo.HistorySource != null)
+	{
+		if (emulationInfo.UseCandleTimeFrame != null)
+		{
+			connector.RegisterHistorySource(security, MarketDataTypes.CandleTimeFrame, emulationInfo.UseCandleTimeFrame.Value, emulationInfo.HistorySource);
+		}
 
-        if (
-            // if order book will be generated
-                generateDepths ||
-            // of backtesting will be on candles
-                emulationInfo.UseCandleTimeFrame != TimeSpan.Zero
-            )
-        {
-            // if no have order book historical data, but strategy is required,
-            // use generator based on last prices
-            connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
-            {
-                Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
-                MaxAsksDepth = maxDepth,
-                MaxBidsDepth = maxDepth,
-                UseTradeVolume = true,
-                MaxVolume = maxVolume,
-                MinSpreadStepCount = 2,	// min spread generation is 2 pips
-                MaxSpreadStepCount = 5,	// max spread generation size (prevent extremely size)
-                MaxPriceStepCount = 3	// pips size,
-            });
-        }
-    }
+		if (emulationInfo.UseTicks)
+		{
+			connector.RegisterHistorySource(security, MarketDataTypes.Trades, null, emulationInfo.HistorySource);
+		}
 
-    if (emulationInfo.UseOrderLog)
-    {
-        connector.RegisterOrderLog(security);
-    }
+		if (emulationInfo.UseLevel1)
+		{
+			connector.RegisterHistorySource(security, MarketDataTypes.Level1, null, emulationInfo.HistorySource);
+		}
 
-    if (emulationInfo.UseTicks)
-    {
-        connector.RegisterTrades(security);
-    }
+		if (emulationInfo.UseMarketDepth)
+		{
+			connector.RegisterHistorySource(security, MarketDataTypes.MarketDepth, null, emulationInfo.HistorySource);
+		}
+	}
+	else
+	{
+		if (emulationInfo.UseMarketDepth)
+		{
+			connector.RegisterMarketDepth(security);
 
-    // start strategy before emulation started
-    strategy.Start();
-    candleManager.Start(series);
+			if (
+				// if order book will be generated
+					generateDepths ||
+				// of backtesting will be on candles
+					emulationInfo.UseCandleTimeFrame != TimeSpan.Zero
+				)
+			{
+				// if no have order book historical data, but strategy is required,
+				// use generator based on last prices
+				connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
+				{
+					Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
+					MaxAsksDepth = maxDepth,
+					MaxBidsDepth = maxDepth,
+					UseTradeVolume = true,
+					MaxVolume = maxVolume,
+					MinSpreadStepCount = 2,	// min spread generation is 2 pips
+					MaxSpreadStepCount = 5,	// max spread generation size (prevent extremely size)
+					MaxPriceStepCount = 3	// pips size,
+				});
+			}
+		}
 
-    // start historical data loading when connection established successfully and all data subscribed
-    connector.Start();
-};]]></code>
+		if (emulationInfo.UseOrderLog)
+		{
+			connector.RegisterOrderLog(security);
+		}
+
+		if (emulationInfo.UseTicks)
+		{
+			connector.RegisterTrades(security);
+		}
+
+		if (emulationInfo.UseLevel1)
+		{
+			connector.RegisterSecurity(security);
+		}
+	}
+
+	// start strategy before emulation started
+	strategy.Start();
+	candleManager.Start(series);
+
+	// start historical data loading when connection established successfully and all data subscribed
+	connector.Start();
+};
+]]></code>
 				  </content>
 			  </step>				  
 			  <step>
@@ -288,12 +356,12 @@ connector.NewSecurities += securities =>
 						  Connection:
 					  </para>
 					  <code language="C#">
-trader.Connect();
+connector.Connect();
 					</code>
 					  <para>
 				
-						  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
-						  and <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolios</codeEntityReference>
+						  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>
+						  and <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference>
 						  are called for instruments and portfolios passed to the <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> constructor.
 					  </para>
 				  </content>
@@ -306,10 +374,11 @@ trader.Connect();
 						  in which the <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> is specified as the source:
 					  </para>
 					  <code language="C#"><![CDATA[
-			 var candleManager = emulationInfo.UseCandleTimeFrame == null
-                    ? new CandleManager(new TradeCandleBuilderSourceEx(connector))
-                    : new CandleManager(connector);
-             var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+var candleManager = new CandleManager((Connector)connector);
+var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
+{
+	BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? BuildCandlesModes.Build : BuildCandlesModes.Load
+};
 ]]></code>
 
 				  </content>
@@ -320,7 +389,8 @@ trader.Connect();
 						  Creation of the <token>ma</token> strategy itself:
 					  </para>
 					  <code language="C#"><![CDATA[
-var strategy = new SmaStrategy(_bufferedChart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, series)
+// create strategy based on 80 5-min and 10 5-min
+var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
 {
 	Volume = 1,
 	Portfolio = portfolio,
@@ -345,14 +415,16 @@ var strategy = new SmaStrategy(_bufferedChart, _candlesElem, _tradesElem, _short
 					  </para>
 						<code language="C#">
 						<![CDATA[
+// fill parameters panel
 statistic.Parameters.Clear();
 statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 
-var pnlCurve = Curve.CreateCurve("P&L " + emulationInfo.StrategyName, emulationInfo.CurveColor, EquityCurveChartStyles.Area);
-var unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal + emulationInfo.StrategyName, Colors.Black);
-var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, EquityCurveChartStyles.DashedLine);
-var posItems = PositionCurve.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
+var equity = set.Item6;
 
+var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, emulationInfo.CurveColor, LineChartStyles.Area);
+var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black);
+var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, LineChartStyles.DashedLine);
+var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
 strategy.PnLChanged += () =>
 {
 	var pnl = new EquityData
@@ -364,7 +436,7 @@ strategy.PnLChanged += () =>
 	var unrealizedPnL = new EquityData
 	{
 		Time = strategy.CurrentTime,
-		Value = strategy.PnLManager.UnrealizedPnL
+		Value = strategy.PnLManager.UnrealizedPnL ?? 0
 	};
 
 	var commission = new EquityData
@@ -376,17 +448,22 @@ strategy.PnLChanged += () =>
 	pnlCurve.Add(pnl);
 	unrealizedPnLCurve.Add(unrealizedPnL);
 	commissionCurve.Add(commission);
-};						
-					
+};
+
+strategy.PositionChanged += () => posItems.Add(new EquityData { Time = strategy.CurrentTime, Value = strategy.Position });
+
+var nextTime = startTime + progressStep;
+
+// handle historical time for update ProgressBar
 connector.MarketTimeChanged += d =>
 {
 	if (connector.CurrentTime < nextTime && connector.CurrentTime < stopTime)
 		return;
 
 	var steps = (connector.CurrentTime - startTime).Ticks / progressStep.Ticks + 1;
-		nextTime = startTime + (steps * progressStep.Ticks).To<TimeSpan>();
-		this.GuiAsync(() => progressBar.Value = steps);
-};
+	nextTime = startTime + (steps * progressStep.Ticks).To<TimeSpan>();
+	this.GuiAsync(() => progressBar.Value = steps);
+}
 					]]>
 					</code>				
 				  </content>
@@ -397,42 +474,22 @@ connector.MarketTimeChanged += d =>
 						  Starting the beginning of the testing:
 					  </para>
 					  <code language="C#"><![CDATA[
+// start emulation
 foreach (var connector in _connectors)
 {
-		connector.Connect();
+	// raise NewSecurity and NewPortfolio for full fill strategy properties
+	connector.Connect();
 
-		connector.SendInMessage(new CommissionRuleMessage
-		{
-			Rule = new CommissionPerTradeRule { Value = 0.01m }
-		});
+	// 1 cent commission for trade
+	connector.SendInMessage(new CommissionRuleMessage
+	{
+		Rule = new CommissionPerTradeRule { Value = 0.01m }
+	});
 }
 					 ]]> </code>
 				  </content>
 			  </step>
 		  </steps>
 	  </procedure>
-<!--	  
-	  <section>
-      <title>Ускорение работы</title>
-      <content>
-        <para>
-        	В процессе тестирования <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> создает несколько потоков загрузки
-        	данных. Их количество по-умолчанию равно количеству процессоров (=ядер) минус 1. Если при работе тестирования было замечено, что некоторые
-        	процессоры простаивают в работе, и при этом требуется увеличить скорость обработки исторических данных, то можно увеличить значение свойства
-        	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.LoadingThreadCount</codeEntityReference>.
-        </para>
-        <para>
-        	Если тестирование потребляет слишком больше количество памяти, то его можно ограничить свойством <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.DaysInMemory</codeEntityReference>.
-        	Данное свойство показывает, сколько максимально дней в истории может храниться в очереди для обработки данных (значение параметра напрямую
-        	зависит от <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.LoadingThreadCount</codeEntityReference>). Уменьшив
-        	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.DaysInMemory</codeEntityReference>, уменьшится и объем
-        	занимаемой памяти. <legacyBold>Внимание!</legacyBold> Уменьшение очереди может привести к замедлению работы, и стоит изменять этот параметр
-        	только в том случае, если занимаемая память превысила размер физической.
-        </para>
-      </content>
-    </section>
---> 
-
-
   </developerConceptualDocument>
 </topic>

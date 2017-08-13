@@ -1,5 +1,7 @@
 namespace StockSharp.Localization
 {
+	using Ecng.Common;
+
 	partial class LocalizedStrings
 	{
 		/// <summary>
@@ -371,5 +373,95 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string Str135Dot => AppendDot(Str135);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str1864Dot => AppendDot(Str1864);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str2572TrailingDelta => Str2572.Put(TrailingDelta);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str2577TrailingReferencePrice => Str2572.Put(TrailingReferencePrice);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3423Dot => AppendDot(Str3423);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string FastSettingsDot => AppendDot(FastSettings);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string NewsDot => AppendDot(News);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string NewsSkrinDot => AppendDot(NewsSkrin);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string EnabledDot => AppendDot(Enabled);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string SettingsFileDot => AppendDot(SettingsFile);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string FondMarketDot => AppendDot(FondMarket);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string CurrencyMarketDot => AppendDot(CurrencyMarket);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str436Dot => AppendDot(Str436);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string OrdersDot => AppendDot(Orders);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str985Dot => AppendDot(Str985);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string SecuritiesDot => AppendDot(Securities);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str1324Dot => AppendDot(Str1324);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string CancelOnDisconnectDot => AppendDot(CancelOnDisconnect);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string TurnoverDot => AppendDot(Turnover);
 	}
 }

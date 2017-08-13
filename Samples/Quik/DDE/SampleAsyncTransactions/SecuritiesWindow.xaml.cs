@@ -75,27 +75,35 @@ namespace SampleAsyncTransactions
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// начинаем получать котировку стакана
-				trader.RegisterMarketDepth(security);
+				var window = _quotesWindows.SafeAdd(security, s =>
+				{
+					// начинаем получать котировку стакана
+					trader.RegisterMarketDepth(security);
 
-				// создаем окно со стаканом
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// создаем окно со стаканом
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+				{
+					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
-				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 
@@ -107,7 +115,7 @@ namespace SampleAsyncTransactions
 			{
 				Security = SecurityPicker.SelectedSecurity,
 				Direction = Sides.Buy,
-				Price = security.BestBid != null ? security.BestBid.Price : 1,
+				Price = security.BestBid?.Price ?? 1,
 				Volume = -1,
 				Portfolio = MainWindow.Instance.Portfolio,
 			});

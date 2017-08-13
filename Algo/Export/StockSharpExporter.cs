@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
-		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="drive">Storage.</param>
 		/// <param name="format">Format type.</param>
@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		public int BatchSize
 		{
-			get { return _batchSize; }
+			get => _batchSize;
 			set
 			{
 				if (value < 1)
@@ -96,37 +96,37 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="ExecutionMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			Export(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="QuoteChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Export(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="Level1ChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			Export(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="CandleMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<PositionChangeMessage> messages)
+		{
+			Export(messages);
+		}
+
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			foreach (var group in messages.GroupBy(m => m.GetType()))
@@ -138,19 +138,13 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="NewsMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			Export(messages);
 		}
 
-		/// <summary>
-		/// To export <see cref="SecurityMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			throw new NotSupportedException();

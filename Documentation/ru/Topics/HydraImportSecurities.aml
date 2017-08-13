@@ -39,7 +39,7 @@
   					<para><legacyBold>Часовой пояс</legacyBold> - часовой пояс.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Формат</legacyBold> - формат хранилища, а которое необходимо импортировать данные.</para>
+  					<para><legacyBold>Формат</legacyBold> - формат хранилища, в которое необходимо импортировать данные.</para>
   				</listItem>
 
 			</list>

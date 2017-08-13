@@ -12,7 +12,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// Create a new activity session.
 		/// </summary>
-		/// <param name="product">The product.</param>
+		/// <param name="product">Product.</param>
 		/// <param name="sessionId">Session ID (authentication).</param>
 		/// <returns>Session ID (activity).</returns>
 		[OperationContract]

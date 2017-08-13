@@ -17,7 +17,7 @@
 	  <para>The main limitation of the Windows visual API is that it is impossible to access to the window elements from another thread. This is due to the Windows
 	  architectural limitations (described in more detail here <token>messagepump</token>). The <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
 	  interface implementations work in multithreaded mode to improve productivity. Therefore, by subscribing to an event, for example,
-	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
+	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
 	  it is impossible to directly display the data in a user window. To do this, in is necessary to perform the synchronizing operation via the special 
 	  <externalLink>
 		<linkText>Dispatcher</linkText>
@@ -28,12 +28,12 @@
 	  <para>Here is a simple example of how this is done:</para>
 	  <code language="C#">
 // the BeginInvoke method must be invoked for access to any UI compenents in market-data handles
-_trader.NewSecurities += securities => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
+_trader.NewSecurity += security => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
 	  <para>
 		<token>stocksharp</token> already has special methods that hide the Dispatcher use and simplify coding:
 	  </para>
 	  <code language="C#">// the same as a prev example but uses short notation
-_trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
+_trader.NewSecurity += security => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
 
 <section address="optionalAddress">
   <title>Graphical components of S#</title>
@@ -68,7 +68,7 @@ and <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntit
 </para>
 	  <code language="XAML">
 	  <![CDATA[
-<Window x:Class="SampleSmartSMA.MainWindow"
+<Window x:Class="SampleOEC.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

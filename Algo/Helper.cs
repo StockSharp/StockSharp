@@ -135,12 +135,12 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Position:
-				{
-					var positionMsg = (PositionMessage)message;
-					positionMsg.SecurityId = securityId;
-					break;
-				}
+				//case MessageTypes.Position:
+				//{
+				//	var positionMsg = (PositionMessage)message;
+				//	positionMsg.SecurityId = securityId;
+				//	break;
+				//}
 
 				case MessageTypes.PositionChange:
 				{
@@ -222,12 +222,25 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public static Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?> CreateKey(this MarketDataMessage message)
+		public static Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?> CreateKey(this MarketDataMessage message, SecurityId? securityId = null)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return Tuple.Create(message.DataType, message.SecurityId, message.Arg, message.From, message.To, message.Count, message.MaxDepth);
+			return Tuple.Create(message.DataType, securityId ?? message.SecurityId, message.Arg, message.From, message.To, message.Count, message.MaxDepth);
+		}
+
+		public static bool NotRequiredSecurityId(this SecurityMessage secMsg)
+		{
+			if (secMsg == null)
+				throw new ArgumentNullException(nameof(secMsg));
+
+			if (secMsg.Type == MessageTypes.MarketData && ((MarketDataMessage)secMsg).DataType == MarketDataTypes.News)
+				return secMsg.SecurityId.IsDefault();
+			else if (secMsg.Type == MessageTypes.OrderGroupCancel)
+				return secMsg.SecurityId.IsDefault();
+
+			return false;
 		}
 	}
 }

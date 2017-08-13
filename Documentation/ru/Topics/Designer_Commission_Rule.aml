@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e8449e6a-bd7f-4bc9-a1a6-e92404e3a44b" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+
+<para>На панели <link xlink:href="31a208d0-d543-47aa-8008-389c07e1e8d4" /> 
+можно установить настройки контроля комиссии.</para>
+<para>В окне <legacyBold>Комиссии</legacyBold> необходимо выбрать тип комиссии, 
+настроить значение комиссии и условие, при котором комиссия будет начисляться.</para>
+
+<mediaLink>
+<image placement="center" xlink:href="Designer_Commission_Rule"/>
+</mediaLink>
+
+<definitionTable>
+  <definedTerm>Список типов комиссий</definedTerm>
+  <definition>
+<list class="bullet">
+<listItem><para><legacyBold>Заявки (количество)</legacyBold> - Комиссия за количество заявок.</para></listItem>
+<listItem><para><legacyBold>Заявка</legacyBold> - Комиссия за заявку.</para></listItem>
+<listItem><para><legacyBold>Заявка (объем)</legacyBold> - Комиссия за объем в заявке.</para></listItem>
+<listItem><para><legacyBold>Сделка (количество)</legacyBold> - Комиссия за количество сделок.</para></listItem>
+<listItem><para><legacyBold>Сделка (цена)</legacyBold> - Комиссия за цену в сделке.</para></listItem>
+<listItem><para><legacyBold>Сделка</legacyBold> - Комиссия за сделку.</para></listItem>
+<listItem><para><legacyBold>Сделка (объем)</legacyBold> - Комиссия за объем в сделке.</para></listItem>
+<listItem><para><legacyBold>Инструмент</legacyBold> - Комиссия инструмента.</para></listItem>
+<listItem><para><legacyBold>Инструмент (тип)</legacyBold> - Комиссия типа инструмента.</para></listItem>
+<listItem><para><legacyBold>Оборот</legacyBold> - Комиссия за оборот .</para></listItem>
+<listItem><para><legacyBold>Площадка</legacyBold> - Комиссия площадки.</para></listItem>
+
+</list>
+  </definition>
+</definitionTable>
+
+</introduction>
+  </developerConceptualDocument>
+</topic>

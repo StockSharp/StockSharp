@@ -55,6 +55,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public static readonly Version Version58 = new Version(5, 8);
 		public static readonly Version Version59 = new Version(5, 9);
 		public static readonly Version Version60 = new Version(6, 0);
+		public static readonly Version Version61 = new Version(6, 1);
 	}
 
 	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo
@@ -65,8 +66,7 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			LocalOffset = DateTimeOffset.Now.Offset;
 
-			FirstLocalTime = date;
-			LastLocalTime = date;
+			FirstLocalTime = LastLocalTime = DateTime.UtcNow;
 		}
 
 		public Version Version { get; set; }
@@ -400,8 +400,8 @@ namespace StockSharp.Algo.Storages.Binary
 			ExchangeInfoProvider = exchangeInfoProvider;
 		}
 
-		protected SecurityId SecurityId { get; private set; }
-		protected int DataSize { get; private set; }
+		protected SecurityId SecurityId { get; }
+		protected int DataSize { get; }
 		protected Version Version { get; set; }
 		protected IExchangeInfoProvider ExchangeInfoProvider { get; }
 

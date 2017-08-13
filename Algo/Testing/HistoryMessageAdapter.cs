@@ -33,6 +33,8 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class HistoryMessageAdapter : MessageAdapter
 	{
+		private readonly HashSet<Tuple<SecurityId, MarketDataTypes>> _generators = new HashSet<Tuple<SecurityId, MarketDataTypes>>();
+
 		private bool _isSuspended;
 		private bool _isStarted;
 
@@ -49,8 +51,8 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int PostTradeMarketTimeChangedCount
 		{
-			get { return BasketStorage.PostTradeMarketTimeChangedCount; }
-			set { BasketStorage.PostTradeMarketTimeChangedCount = value; }
+			get => BasketStorage.PostTradeMarketTimeChangedCount;
+			set => BasketStorage.PostTradeMarketTimeChangedCount = value;
 		}
 
 		private IStorageRegistry _storageRegistry;
@@ -60,7 +62,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IStorageRegistry StorageRegistry
 		{
-			get { return _storageRegistry; }
+			get => _storageRegistry;
 			set
 			{
 				_storageRegistry = value;
@@ -77,7 +79,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IMarketDataDrive Drive
 		{
-			get { return _drive; }
+			get => _drive;
 			set
 			{
 				if (value == null && StorageRegistry != null)
@@ -110,8 +112,8 @@ namespace StockSharp.Algo.Testing
 		[DescriptionLoc(LocalizedStrings.Str195Key)]
 		public virtual TimeSpan MarketTimeChangedInterval
 		{
-			get { return BasketStorage.MarketTimeChangedInterval; }
-			set { BasketStorage.MarketTimeChangedInterval = value; }
+			get => BasketStorage.MarketTimeChangedInterval;
+			set => BasketStorage.MarketTimeChangedInterval = value;
 		}
 
 		/// <summary>
@@ -124,8 +126,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public int MaxMessageCount
 		{
-			get { return BasketStorage.MaxMessageCount; }
-			set { BasketStorage.MaxMessageCount = value; }
+			get => BasketStorage.MaxMessageCount;
+			set => BasketStorage.MaxMessageCount = value;
 		}
 
 		/// <summary>
@@ -163,6 +165,7 @@ namespace StockSharp.Algo.Testing
 			this.AddMarketDataSupport();
 			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
 			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>
@@ -170,8 +173,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public DateTimeOffset StartDate
 		{
-			get { return BasketStorage.StartDate; }
-			set { BasketStorage.StartDate = value; }
+			get => BasketStorage.StartDate;
+			set => BasketStorage.StartDate = value;
 		}
 
 		/// <summary>
@@ -179,8 +182,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public DateTimeOffset StopDate
 		{
-			get { return BasketStorage.StopDate; }
-			set { BasketStorage.StopDate = value; }
+			get => BasketStorage.StopDate;
+			set => BasketStorage.StopDate = value;
 		}
 
 		/// <summary>
@@ -188,11 +191,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IDictionary<SecurityId, IOrderLogMarketDepthBuilder> OrderLogMarketDepthBuilders { get; } = new Dictionary<SecurityId, IOrderLogMarketDepthBuilder>();
 
-		/// <summary>
-		/// Create market depth builder.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns>Order log to market depth builder.</returns>
+		/// <inheritdoc />
 		public override IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		{
 			return OrderLogMarketDepthBuilders[securityId];
@@ -215,15 +214,13 @@ namespace StockSharp.Algo.Testing
 			base.DisposeManaged();
 		}
 
-		/// <summary>
-		/// <see cref="SecurityLookupMessage"/> required to get securities.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool SecurityLookupRequired => true;
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
+		public override bool IsFullCandlesOnly => false;
+
+		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -232,7 +229,8 @@ namespace StockSharp.Algo.Testing
 				{
 					_isSuspended = false;
 					_currentTime = default(DateTimeOffset);
-					BasketStorage.Reset();
+					_generators.Clear();
+                    BasketStorage.Reset();
 					
 					LoadedMessageCount = 0;
 
@@ -336,6 +334,19 @@ namespace StockSharp.Algo.Testing
 						SendOutMessage(new EmulationStateMessage { State = EmulationStates.Suspended });
 
 					return;
+
+				case ExtendedMessageTypes.Generator:
+				{
+					var generatorMsg = (GeneratorMessage)message;
+					var item = Tuple.Create(generatorMsg.SecurityId, generatorMsg.DataType);
+
+					if (generatorMsg.IsSubscribe)
+						_generators.Add(item);
+					else
+						_generators.Remove(item);
+
+					break;
+				}
 			}
 
 			//SendOutMessage(message);
@@ -366,6 +377,9 @@ namespace StockSharp.Algo.Testing
 			{
 				case MarketDataTypes.Level1:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+						break;
+
 					if (message.IsSubscribe)
 					{
 						if (history == null)
@@ -398,6 +412,9 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.MarketDepth:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+						break;
+
 					if (message.IsSubscribe)
 					{
 						BasketStorage.AddStorage(history == null
@@ -412,6 +429,9 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.Trades:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+						break;
+
 					if (message.IsSubscribe)
 					{
 						BasketStorage.AddStorage(history == null
@@ -426,6 +446,9 @@ namespace StockSharp.Algo.Testing
 
 				case MarketDataTypes.OrderLog:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, message.DataType)))
+						break;
+
 					if (message.IsSubscribe)
 					{
 						BasketStorage.AddStorage(history == null
@@ -445,6 +468,14 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.CandlePnF:
 				case MarketDataTypes.CandleRenko:
 				{
+					if (_generators.Contains(Tuple.Create(message.SecurityId, MarketDataTypes.Trades)))
+					{
+						if (message.IsSubscribe)
+							SendOutMarketDataNotSupported(message.TransactionId);
+
+						return;
+					}
+
 					var msgType = message.DataType.ToCandleMessageType();
 
 					if (message.IsSubscribe)

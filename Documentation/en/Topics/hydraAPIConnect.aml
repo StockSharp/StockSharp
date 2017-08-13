@@ -3,12 +3,13 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-<para><legacyBold>S#.Data</legacyBold> может исользоваться в серверном режиме, в данном режиме можно 
-удаленно подключиться к <legacyBold>S#.Data</legacyBold> и получить имеющиеся данные в хранилище. 
-Включение серверного режима <legacyBold>S#.Data</legacyBold> описано в 
-пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
+<para><token>hydra</token> can be used in server mode, in this mode 
+it is possible remotely to connect to <token>hydra</token> and get the data available in the storage. 
+The activation of the <token>hydra</token> server mode is described in the  
+<link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
 
-<para>Для подключение через <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" /> небходимо содать и настроить FixTrader(<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" />).</para>
+<para>To connect via <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" /> , you need to create and configure FixTrader 
+(<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" />).</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 FixTrader Trader = new FixTrader();
@@ -29,7 +30,7 @@ transactionDataAdapter.Password = "qwerty".To<SecureString>();
 
 ...
 ]]></code>
-<para>Подписаться на события получения данных и подключиться</para>
+<para>To subscribe to getting data events and connect</para>
 <code language="C#" title="C#"><![CDATA[
 ...
 Trader.Connected += () =>

@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Commissions
 		/// </summary>
 		public ICommissionManager CommissionManager
 		{
-			get { return _commissionManager; }
+			get => _commissionManager;
 			set
 			{
 				if (value == null)

@@ -25,7 +25,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-	using Ecng.Configuration;
 	using Ecng.Interop;
 
 	using StockSharp.Algo.Candles;
@@ -319,7 +318,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(storage));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014);
+				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
 
 			var dates = storage.Dates.ToArray();
 
@@ -411,7 +410,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Read instrument by indentifier.
+		/// Read instrument by identifier.
 		/// </summary>
 		/// <param name="securities">Instrument storage collection.</param>
 		/// <param name="securityId">Identifier.</param>

@@ -6,15 +6,15 @@
 			При первом запуске будет показано следующее окно:
 		</para>
 		<mediaLink>
-<image xlink:href="hydra_Quick_start_00"/>
+<image placement="center" xlink:href="hydra_Quick_start_00"/>
 </mediaLink>
 <para>Необходимо выбрать режим запуска и нажать кнопку <legacyBold>ОК</legacyBold>.</para>
 		<steps class="ordered">
 			<step>
 				<content>
 				<para>
-					После чего появится окно выбора источники данных. Также это окно можно открыть
-					вкладке <legacyBold>Общее</legacyBold> нужно выбрать <legacyBold>Добавить => Источники</legacyBold>.
+					После чего появится окно выбора источники данных. Также это окно можно открыть со
+					вкладки <legacyBold>Общее</legacyBold>, нужно выбрать <legacyBold>Добавить => Источники</legacyBold>.
 				</para>
 					<mediaLink>
 						  <image placement="left" xlink:href="hydra_source_add" />
@@ -45,7 +45,7 @@
 			</step>
 		  	<step>
 				<content>
-					  <para>Чтобы источник после нажатия кнопки <legacyBold>Старт</legacyBold> стал скачивать данные, его нужно влючить. Для этого следует выбрать значок
+					  <para>Чтобы источник после нажатия кнопки <legacyBold>Старт</legacyBold> стал скачивать данные, его нужно включить. Для этого следует выбрать значок
 					  источника на левой панели и использовать кнопку <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> для включения или выключения.
 					  Эту операцию можно выполнить до, или после добавления инструментов для скачивания, что описано ниже.</para>
 				</content>

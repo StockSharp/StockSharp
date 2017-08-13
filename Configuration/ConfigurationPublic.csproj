@@ -35,8 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v15.2">
-      <HintPath>..\References\DevExpress.Xpf.Core.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v17.1">
+      <HintPath>..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
@@ -76,6 +76,12 @@
     <Reference Include="StockSharp.Plaza">
       <HintPath>..\References\StockSharp.Plaza.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.QuantHouse">
+      <HintPath>..\References\StockSharp.QuantHouse.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.SpbEx">
+      <HintPath>..\References\StockSharp.SpbEx.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Twime">
       <HintPath>..\References\StockSharp.Twime.dll</HintPath>
     </Reference>
@@ -101,6 +107,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IndicatorElement.cs" />
     <Compile Include="IndicatorElementCollection.cs" />
+    <Compile Include="InMemoryConfigurationMessageAdapterProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
@@ -181,9 +188,9 @@
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharpApps\Xaml.Diagram\Xaml.DiagramPublic.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Xaml.Diagram\Xaml.Diagram.csproj">
       <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
-      <Name>Xaml.DiagramPublic</Name>
+      <Name>Xaml.Diagram</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
@@ -212,6 +219,10 @@
     <ProjectReference Include="..\Messages\Messages.csproj">
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Fxcm\Fxcm.csproj">
+      <Project>{358B4D44-CB92-4DED-AFD4-3DAC72D167E5}</Project>
+      <Name>Fxcm</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

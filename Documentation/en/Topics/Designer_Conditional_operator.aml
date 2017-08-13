@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_conditional_operator_00"/>
+</mediaLink>
+<para>Элемент условный оператор возвращает одно из двух значений в зависимости от равенства 
+двух входных параметров. Элемент содержит четыре входа, три из которых могут быть
+ указаны в виде свойств, и один выход. In1 и In2 используются для сравнения, 
+ OutEqual и OutNotEqual используются для задания значений, которые будут возвращаться 
+ на выходе элемента в зависимости от равенства входных параметров. Значения для OutEqual, 
+ OutNotEqual и In2 могут быть заданы в свойствах элемента, значение In1 обязательно должно 
+ передаваться через входной параметр.</para>
+ 
+ <definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>In1</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+  <listItem><para><legacyBold>In2</legacyBold> –  значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+  <listItem><para><legacyBold>OutEqual</legacyBold> – значение, которые будет возвращаться на выходе элемента в зависимости от равенства входных параметров.</para></listItem>
+  <listItem><para><legacyBold>OutNotEqual </legacyBold> – значение, которые будет возвращаться на выходе элемента в зависимости от равенства входных параметров.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Результат</legacyBold> – числовое значение</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>In2</legacyBold> –  значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+  <listItem><para><legacyBold>OutEqual</legacyBold> – значение, которые будет возвращаться на выходе элемента в зависимости от равенства входных параметров.</para></listItem>
+  <listItem><para><legacyBold>OutNotEqual </legacyBold> – значение, которые будет возвращаться на выходе элемента в зависимости от равенства входных параметров.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+ 
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_conditional_operator_01"/>
+</mediaLink>
+<para>Схема элемента состоит из простых элементов и основана на запоминании в элементе 
+<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> (VarIn2, VarOutEqual, VarOutNotEqual) значений, которые были переданы 
+на вход элемента, или использования значений по умолчанию, которые заданы с помощью
+ свойств элемента. При поступлении нового значения на первом входе выполняется 
+ сравнение (In1 == In2) нового значения со значением, которое было запомнено в 
+ переменной для второго входа. Если значения совпадают, то подачей сигнала на 
+ вход-триггер переменной VarOutEqual подается сигнал и соответствующее значение 
+ передается на выход составного элемента. Аналогично выполняется передача сигнала 
+ на элемент переменной VarOutNotEqual с помощью логического отрицания (Not).</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

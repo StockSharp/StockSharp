@@ -58,7 +58,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Security.
 		/// </summary>
-		public Security Security { get; private set; }
+		public Security Security { get; }
 
 		/// <summary>
 		/// Bid.

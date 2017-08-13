@@ -67,6 +67,7 @@ namespace StockSharp.Logging
 
 			switch (level)
 			{
+				case LogLevels.Verbose:
 				case LogLevels.Debug:
 				case LogLevels.Info:
 					Trace.TraceInformation(str);

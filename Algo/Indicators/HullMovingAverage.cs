@@ -45,14 +45,14 @@ namespace StockSharp.Algo.Indicators
 		private int _sqrtPeriod;
 
 		/// <summary>
-		/// Peiod of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.
+		/// Period of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str787Key)]
 		[DescriptionLoc(LocalizedStrings.Str788Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int SqrtPeriod
 		{
-			get { return _sqrtPeriod; }
+			get => _sqrtPeriod;
 			set
 			{
 				_sqrtPeriod = value;

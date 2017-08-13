@@ -30,6 +30,16 @@ namespace StockSharp.Algo.Storages
 		IEnumerable<SecurityId> Securities { get; }
 
 		/// <summary>
+		/// Storage name.
+		/// </summary>
+		string StorageName { get; }
+
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
+
+		/// <summary>
 		/// Add extended info.
 		/// </summary>
 		/// <param name="securityId">Security identifier.</param>
@@ -45,6 +55,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Load extended info. 
 		/// </summary>
+		/// <param name="securityId">Security identifier.</param>
 		/// <returns>Extended information.</returns>
 		IDictionary<string, object> Load(SecurityId securityId);
 
@@ -61,9 +72,14 @@ namespace StockSharp.Algo.Storages
 	public interface IExtendedInfoStorage
 	{
 		/// <summary>
-		/// Get all extended storage names.
+		/// Get all extended storages.
 		/// </summary>
-		IEnumerable<string> StoragesNames { get; }
+		IEnumerable<IExtendedInfoStorageItem> Storages { get; }
+
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
 
 		/// <summary>
 		/// To get storage for the specified name.
@@ -79,6 +95,22 @@ namespace StockSharp.Algo.Storages
 		/// <param name="fields">Extended fields (names and types).</param>
 		/// <returns>Storage.</returns>
 		IExtendedInfoStorageItem Create(string storageName, Tuple<string, Type>[] fields);
+
+		/// <summary>
+		/// Delete storage.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		void Delete(IExtendedInfoStorageItem storage);
+
+		/// <summary>
+		/// The storage was created.
+		/// </summary>
+		event Action<IExtendedInfoStorageItem> Created;
+
+		/// <summary>
+		/// The storage was deleted.
+		/// </summary>
+		event Action<IExtendedInfoStorageItem> Deleted;
 	}
 
 	/// <summary>
@@ -119,6 +151,8 @@ namespace StockSharp.Algo.Storages
 				_fields = fields;
 			}
 
+			public string StorageName => Path.GetFileNameWithoutExtension(_fileName);
+
 			public void Init()
 			{
 				if (File.Exists(_fileName))
@@ -134,7 +168,7 @@ namespace StockSharp.Algo.Storages
 
 							var fields = new string[reader.ColumnCount - 1];
 
-							for (var i = 0; i < reader.ColumnCount - 1; i++)
+							for (var i = 0; i < fields.Length; i++)
 								fields[i] = reader.ReadString();
 
 							reader.NextLine();
@@ -142,7 +176,7 @@ namespace StockSharp.Algo.Storages
 
 							var types = new Type[reader.ColumnCount - 1];
 
-							for (var i = 0; i < reader.ColumnCount - 1; i++)
+							for (var i = 0; i < types.Length; i++)
 							{
 								types[i] = reader.ReadString().To<Type>();
 								//_fieldTypes.Add(fields[i], types[i]);
@@ -176,28 +210,41 @@ namespace StockSharp.Algo.Storages
 				{
 					if (_fields == null)
 						throw new InvalidOperationException();
+
+					Write(Enumerable.Empty<Tuple<SecurityId, IDictionary<string, object>>>());
 				}
 			}
 
 			private void Flush()
 			{
-				_storage.DelayAction.DefaultGroup.Add(OnFlush, canBatch: false);
+				_storage.DelayAction.DefaultGroup.Add(() => Write(((IExtendedInfoStorageItem)this).Load()));
 			}
 
-			private void OnFlush()
+			private void Write(IEnumerable<Tuple<SecurityId, IDictionary<string, object>>> values)
 			{
-				var copy = ((IExtendedInfoStorageItem)this).Load();
+				if (values == null)
+					throw new ArgumentNullException(nameof(values));
 
-				using (var writer = new CsvFileWriter(new FileStream(_fileName, FileMode.Create, FileAccess.Write)))
+				using (var writer = new CsvFileWriter(new TransactionFileStream(_fileName, FileMode.Create)))
 				{
 					writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.Item1)));
 					writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.Item2)).Select(t => Converter.GetAlias(t) ?? t.GetTypeName(false)));
 
-					foreach (var pair in copy)
+					foreach (var pair in values)
 					{
 						writer.WriteRow(new[] { pair.Item1.ToStringId() }.Concat(_fields.Select(f => pair.Item2.TryGetValue(f.Item1)?.To<string>())));
 					}
 				}
+			}
+
+			public void Delete()
+			{
+				_storage.DelayAction.DefaultGroup.Add(() =>
+				{
+					File.Delete(_fileName);
+				});
+
+				_storage._deleted?.Invoke(this);
 			}
 
 			IEnumerable<Tuple<string, Type>> IExtendedInfoStorageItem.Fields => _fields;
@@ -210,7 +257,7 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var field in _fields)
 					{
-						var value = extensionInfo[field.Item1];
+						var value = extensionInfo.TryGetValue(field.Item1);
 
 						if (value == null)
 							continue;
@@ -290,7 +337,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public DelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				if (value == null)
@@ -305,14 +352,44 @@ namespace StockSharp.Algo.Storages
 			if (storageName.IsEmpty())
 				throw new ArgumentNullException(nameof(storageName));
 
-			var fileName = Path.Combine(_path, storageName + ".csv");
-
-			return _items.SafeAdd(storageName, key =>
+			var retVal = _items.SafeAdd(storageName, key =>
 			{
-				var item = new CsvExtendedInfoStorageItem(this, fileName, fields);
+				var item = new CsvExtendedInfoStorageItem(this, Path.Combine(_path, key + ".csv"), fields);
 				item.Init();
 				return item;
-			});
+			}, out var isNew);
+
+			if (isNew)
+				_created?.Invoke(retVal);
+
+			return retVal;
+		}
+
+		void IExtendedInfoStorage.Delete(IExtendedInfoStorageItem storage)
+		{
+			if (storage == null)
+				throw new ArgumentNullException(nameof(storage));
+
+			if (_items.Remove(storage.StorageName))
+			{
+				((CsvExtendedInfoStorageItem)storage).Delete();
+			}
+		}
+
+		private Action<IExtendedInfoStorageItem> _created;
+
+		event Action<IExtendedInfoStorageItem> IExtendedInfoStorage.Created
+		{
+			add => _created += value;
+			remove => _created -= value;
+		}
+
+		private Action<IExtendedInfoStorageItem> _deleted;
+
+		event Action<IExtendedInfoStorageItem> IExtendedInfoStorage.Deleted
+		{
+			add => _deleted += value;
+			remove => _deleted -= value;
 		}
 
 		IExtendedInfoStorageItem IExtendedInfoStorage.Get(string storageName)
@@ -323,7 +400,7 @@ namespace StockSharp.Algo.Storages
 			return _items.TryGetValue(storageName);
 		}
 
-		IEnumerable<string> IExtendedInfoStorage.StoragesNames => _items.CachedKeys;
+		IEnumerable<IExtendedInfoStorageItem> IExtendedInfoStorage.Storages => _items.CachedValues;
 
 		/// <summary>
 		/// Initialize the storage.

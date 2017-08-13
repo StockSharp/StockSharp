@@ -30,8 +30,8 @@ namespace StockSharp.Configuration
 		[ConfigurationProperty(_typeKey)]
 		public string Type
 		{
-			get { return (string)this[_typeKey]; }
-			set { this[_typeKey] = value; }
+			get => (string)this[_typeKey];
+			set => this[_typeKey] = value;
 		}
 	}
 }

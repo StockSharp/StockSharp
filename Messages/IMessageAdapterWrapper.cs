@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		public IMessageAdapter InnerAdapter
 		{
-			get { return _innerAdapter; }
+			get => _innerAdapter;
 			set
 			{
 				if (_innerAdapter == value)
@@ -125,12 +125,20 @@ namespace StockSharp.Messages
 		/// </summary>
 		public virtual event Action<Message> NewOutMessage;
 
-		void IPersistable.Load(SettingsStorage storage)
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public virtual void Load(SettingsStorage storage)
 		{
 			InnerAdapter.Load(storage);
 		}
 
-		void IPersistable.Save(SettingsStorage storage)
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public virtual void Save(SettingsStorage storage)
 		{
 			InnerAdapter.Save(storage);
 		}
@@ -141,14 +149,14 @@ namespace StockSharp.Messages
 
 		ILogSource ILogSource.Parent
 		{
-			get { return InnerAdapter.Parent; }
-			set { InnerAdapter.Parent = value; }
+			get => InnerAdapter.Parent;
+			set => InnerAdapter.Parent = value;
 		}
 
 		LogLevels ILogSource.LogLevel
 		{
-			get { return InnerAdapter.LogLevel; }
-			set { InnerAdapter.LogLevel = value; }
+			get => InnerAdapter.LogLevel;
+			set => InnerAdapter.LogLevel = value;
 		}
 
 		DateTimeOffset ILogSource.CurrentTime => InnerAdapter.CurrentTime;
@@ -157,8 +165,8 @@ namespace StockSharp.Messages
 
 		event Action<LogMessage> ILogSource.Log
 		{
-			add { InnerAdapter.Log += value; }
-			remove { InnerAdapter.Log -= value; }
+			add => InnerAdapter.Log += value;
+			remove => InnerAdapter.Log -= value;
 		}
 
 		void ILogReceiver.AddLog(LogMessage message)
@@ -172,8 +180,8 @@ namespace StockSharp.Messages
 
 		MessageTypes[] IMessageAdapter.SupportedMessages
 		{
-			get { return InnerAdapter.SupportedMessages; }
-			set { InnerAdapter.SupportedMessages = value; }
+			get => InnerAdapter.SupportedMessages;
+			set => InnerAdapter.SupportedMessages = value;
 		}
 
 		bool IMessageAdapter.IsValid => InnerAdapter.IsValid;
@@ -182,8 +190,8 @@ namespace StockSharp.Messages
 
 		TimeSpan IMessageAdapter.HeartbeatInterval
 		{
-			get { return InnerAdapter.HeartbeatInterval; }
-			set { InnerAdapter.HeartbeatInterval = value; }
+			get => InnerAdapter.HeartbeatInterval;
+			set => InnerAdapter.HeartbeatInterval = value;
 		}
 
 		bool IMessageAdapter.PortfolioLookupRequired => InnerAdapter.PortfolioLookupRequired;
@@ -197,6 +205,12 @@ namespace StockSharp.Messages
 		bool IMessageAdapter.IsNativeIdentifiersPersistable => InnerAdapter.IsNativeIdentifiersPersistable;
 
 		bool IMessageAdapter.IsNativeIdentifiers => InnerAdapter.IsNativeIdentifiers;
+
+		bool IMessageAdapter.IsFullCandlesOnly => InnerAdapter.IsFullCandlesOnly;
+
+		bool IMessageAdapter.IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
+
+		bool IMessageAdapter.IsSupportSubscriptionBySecurity => InnerAdapter.IsSupportSubscriptionBySecurity;
 
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 

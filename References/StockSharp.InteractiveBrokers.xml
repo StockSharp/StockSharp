@@ -6,7 +6,7 @@
   <members>
     <member name="T:StockSharp.InteractiveBrokers.FinancialAdviseMessage">
       <summary>
-            The messgae with financial advice.
+            Message with financial advice.
             </summary>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.FinancialAdviseMessage.#ctor">
@@ -1315,7 +1315,7 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TrailStopVolumePercentage">
       <summary>
-            Trailing stop volume вas percentage.
+            Trailing stop volume as percentage.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisor">
@@ -1460,7 +1460,7 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtOperator">
       <summary>
-            Regulartory attribute that applies to all US Commodity (Futures) Exchanges, 
+            Regulatory attribute that applies to all US Commodity (Futures) Exchanges, 
             provided to allow client to comply with CFTC Tag 50 Rules.
             </summary>
     </member>
@@ -1781,16 +1781,6 @@
             The new results occurring event of the scanner started previously via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter)" />.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandles">
-      <summary>
-            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-    </member>
-    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.Stopped">
-      <summary>
-            The series processing end event.
-            </summary>
-    </member>
     <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport">
       <summary>
             The new report occurring event obtained by subscription <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports)" />.
@@ -1838,6 +1828,7 @@
       <summary>
             Request option parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewOptionParameters" /> event.
             </summary>
+      <param name="security">Security.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.RequestScannerParameters">
       <summary>
@@ -1906,27 +1897,6 @@
             To unsubscribe from receive the estimated option values.
             </summary>
       <param name="transactionId">Subscription id, received from <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal)" />.</param>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To get time ranges for which this source of passed candles series has data.
-            </summary>
-      <param name="series">Candles series.</param>
-      <returns>Time ranges.</returns>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
-      <summary>
-            Subscribe to receive new candles.
-            </summary>
-      <param name="series">Candles series.</param>
-      <param name="from">The initial date from which you need to get data.</param>
-      <param name="to">The final date by which you need to get data.</param>
-    </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-      <param name="series">Candles series.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnProcessMessage(StockSharp.Messages.Message)">
       <summary>
@@ -2758,6 +2728,36 @@
             </summary>
       <param name="product">Security.</param>
       <returns>Boards.</returns>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox">
+      <summary>
+            The drop-down list to select a set of fields <see cref="T:StockSharp.InteractiveBrokers.GenericFieldTypes" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.OnLoadedInternal">
+      <summary>
+            Control loading handler.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFieldsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFields" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.SelectedFields">
+      <summary>
+            The list of selected fields.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.Xaml.GenericFieldsComboBox.DefaultFields">
+      <summary>
+            The set of selected default fields.
+            </summary>
     </member>
   </members>
 </doc>

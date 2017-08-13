@@ -120,9 +120,9 @@ namespace StockSharp.Algo.Strategies.Reporting
 									new XElement("volume", o.Volume),
 									new XElement("latencyRegistration", Format(o.LatencyRegistration)),
 									new XElement("latencyCancellation", Format(o.LatencyCancellation)),
-									new XElement("derivedOrderId", o.DerivedOrder != null ? (object)o.DerivedOrder.Id : string.Empty),
+									//new XElement("derivedOrderId", o.DerivedOrder != null ? (object)o.DerivedOrder.Id : string.Empty),
 									new XElement("parameters", o.Condition.Parameters.Select(p => new XElement(p.Key, p.Value)))
-									)))
+								)))
 					))
 				).Save(FileName);
 		}

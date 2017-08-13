@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="002dce1f-2b00-4ef1-b166-8805a98f9004" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Чтобы открыть панель <legacyBold>Схемы</legacyBold> необходимо нажать на кнопку <legacyBold>Схемы</legacyBold> 
+во вкладке <legacyBold>Общие</legacyBold>. Панель <legacyBold>Схемы</legacyBold> содержит дерево скриптов, сгруппированных 
+в папки по назначению. Схемы стратегий и составных элементов ничем не отличаются. Для их редактирования 
+используется один общий редактор <link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />. 
+Но, чтобы не возникало путаницы между ними, они разделены на две независимых списка и хранятся в 
+различных папках (стратегии в папке <legacyBold>Стратегии</legacyBold>, составные элементы в
+ папке <legacyBold>Составные элементы</legacyBold>). Выбор схемы для редактирования 
+ осуществляется двойным кликом мышки по нужному элементу в списке. При этом выбранная схема 
+ откроется в дизайнере для просмотра и редактирования. Ниже приведено описание папок панели <legacyBold>Схемы</legacyBold>:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Panel_Circuits_00"/>
+</mediaLink>  
+   <para>1. Папка <legacyBold>Составные элементы</legacyBold> содержит элементы, 
+   которые представляют собой законченный функционал и могут быть использованы в различных схемах 
+   или одной схеме множество раз с различными значениями свойств. 
+   Подобные наборы элементов можно вынести в отдельный составной элемент,
+   который дальше будет использоваться как любой обычный элемент. <legacyBold>Составной элемент</legacyBold> 
+   представляет собой обычную схему, которая сохраняется/загружается/редактируется
+   как любая схема стратегии. 
+   Добавить новый составной элемент можно нажав на кнопку <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>  
+   во вкладке <legacyBold>Общие</legacyBold> и выбрать <legacyBold>Составной элемент</legacyBold>.
+   Или нажав правой кнопкой мыши на папке <legacyBold>Составные элементы</legacyBold> панели <legacyBold>Схемы</legacyBold>, 
+   и нажать на кнопку <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> в выпавшем меню.
+   При добавлении новых составных элементов, они автоматически добавляются
+   в <legacyBold>Палитру элементов</legacyBold>, в группу <legacyBold>Составные элементы</legacyBold> и 
+   могут использоваться при создании других схем стратегий и составных элементов. 
+   Подробно о <legacyBold>Составных элементах</legacyBold> описано в пункте <link xlink:href="cab51564-727a-483e-8cf1-d179ebcb2944" />. </para>
+   
+   <para>2.	Папка <legacyBold>Стратегии</legacyBold> содержит стратегии, 
+   которые представляют собой схему из набора элементов и связей между ними, 
+   называемых соединениями. Добавить новую стратегию можно нажав на кнопку <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>  
+   во вкладке <legacyBold>Общие</legacyBold> и выбрать <legacyBold>Стратегия</legacyBold>. 
+   Или нажав правой кнопкой мыши на папке <legacyBold>Стратегии</legacyBold> панели <legacyBold>Схемы</legacyBold>, 
+   и нажать на кнопку <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>
+   выпавшем меню. Подробно о <legacyBold>Стратегиях</legacyBold> описано в пункте <link xlink:href="6974891d-4c8d-46e1-bdeb-fc7391bc0625" />.</para>
+   
+   <para>3.	Папка <legacyBold>Галерея стратегий</legacyBold> содержит стратегии, 
+   на которые вы подписались на панели <legacyBold>Галерея стратегий</legacyBold>. 
+   Подробно о <legacyBold>Галереи стратегий</legacyBold> описано в пункте <link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" />.</para>
+   
+   <para>4.	Папка <legacyBold>Торговля</legacyBold> содержит стратегии, которые добавлены 
+   для запуска в торговлю. При этом стратегии, которые запущены отмечены значком <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline> ,
+   а которые остановлены - отмечены значком <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline> . 
+   Как добавлять стратегии в папку <legacyBold>Торговля</legacyBold> и как их запустить описано в пункте <link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" />.</para>
+   
+   <para>5.	Папка <legacyBold>Исходный код</legacyBold> содержит стратегии, 
+   которые созданы используя библиотеку для профессиональной разработки
+   торговых роботов на языке C# <token>stocksharpapi</token>. 
+   Добавить новую стратегию в папку <legacyBold>Исходный код</legacyBold> 
+   можно, нажав на кнопку <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>  
+   во вкладке <legacyBold>Общие</legacyBold> и выбрать <legacyBold>Исходный код</legacyBold>. 
+   Или нажав правой кнопкой мыши на папке <legacyBold>Исходный код</legacyBold> панели <legacyBold>Схемы</legacyBold> 
+   и нажать на кнопку <legacyBold>Добавить</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> в выпавшем меню.</para>
+   
+   
+   </introduction>
+   <relatedTopics>
+<link xlink:href="d416a6d9-0a42-40c0-8f9f-0c1df29f5cda" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

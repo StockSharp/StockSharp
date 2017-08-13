@@ -279,7 +279,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To convert thee order into message.
+		/// To convert the order into message.
 		/// </summary>
 		/// <param name="order">Order.</param>
 		/// <returns>Message.</returns>
@@ -323,7 +323,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To convert the error description into message.
 		/// </summary>
-		/// <param name="fail">Error detais.</param>
+		/// <param name="fail">Error details.</param>
 		/// <param name="originalTransactionId">ID of original transaction, for which this message is the answer.</param>
 		/// <returns>Message.</returns>
 		public static ExecutionMessage ToMessage(this OrderFail fail, long originalTransactionId)
@@ -446,6 +446,7 @@ namespace StockSharp.Algo
 				BrokerCode = order.BrokerCode,
 				ClientCode = order.ClientCode,
 				Currency = order.Currency,
+				IsMarketMaker = order.IsMarketMaker,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg);
@@ -581,6 +582,7 @@ namespace StockSharp.Algo
 				Multiplier = security.Multiplier,
 				Currency = security.Currency,
 				SecurityType = security.Type,
+				CfiCode = security.CfiCode,
 				OptionType = security.OptionType,
 				Strike = security.Strike,
 				BinaryOptionType = security.BinaryOptionType,
@@ -652,6 +654,7 @@ namespace StockSharp.Algo
 				PriceStep = criteria.PriceStep,
 				Decimals = criteria.Decimals,
 				Currency = criteria.Currency,
+				CfiCode = criteria.CfiCode,
 				SettlementDate = criteria.SettlementDate,
 				OptionType = criteria.OptionType,
 				Strike = criteria.Strike,
@@ -680,6 +683,7 @@ namespace StockSharp.Algo
 				Code = message.SecurityId.SecurityCode,
 				Board = exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode),
 				Type = message.SecurityType ?? message.SecurityId.SecurityType,
+				CfiCode = message.CfiCode,
 				Strike = message.Strike,
 				OptionType = message.OptionType,
 				Name = message.Name,
@@ -761,24 +765,24 @@ namespace StockSharp.Algo
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.CurrentValue);
 		}
 
-		/// <summary>
-		/// To convert the position into message.
-		/// </summary>
-		/// <param name="position">Position.</param>
-		/// <returns>Message.</returns>
-		public static PositionMessage ToMessage(this Position position)
-		{
-			if (position == null)
-				throw new ArgumentNullException(nameof(position));
+		///// <summary>
+		///// To convert the position into message.
+		///// </summary>
+		///// <param name="position">Position.</param>
+		///// <returns>Message.</returns>
+		//public static PositionMessage ToMessage(this Position position)
+		//{
+		//	if (position == null)
+		//		throw new ArgumentNullException(nameof(position));
 
-			return new PositionMessage
-			{
-				PortfolioName = position.Portfolio.Name,
-				SecurityId = position.Security.ToSecurityId(),
-				DepoName = position.DepoName,
-				LimitType = position.LimitType,
-			};
-		}
+		//	return new PositionMessage
+		//	{
+		//		PortfolioName = position.Portfolio.Name,
+		//		SecurityId = position.Security.ToSecurityId(),
+		//		DepoName = position.DepoName,
+		//		LimitType = position.LimitType,
+		//	};
+		//}
 
 		/// <summary>
 		/// To convert the position into message.
@@ -947,7 +951,6 @@ namespace StockSharp.Algo
 			private readonly Security _security;
 			private readonly IExchangeInfoProvider _exchangeInfoProvider;
 			//private readonly object _candleArg;
-			private readonly Type _candleType;
 
 			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider)
 			{
@@ -962,13 +965,6 @@ namespace StockSharp.Algo
 				_exchangeInfoProvider = exchangeInfoProvider;
 			}
 			
-			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, IExchangeInfoProvider exchangeInfoProvider, Type candleType)
-				: this(messages, security, exchangeInfoProvider)
-			{
-				_candleType = candleType;
-				//_candleArg = candleArg;
-			}
-
 			public IEnumerator<TEntity> GetEnumerator()
 			{
 				return _messages.Select(Convert).GetEnumerator();
@@ -1018,7 +1014,7 @@ namespace StockSharp.Algo
 						if (candleMsg == null)
 							throw new ArgumentOutOfRangeException();
 
-						return candleMsg.ToCandle(_candleType, _security).To<TEntity>();
+						return candleMsg.ToCandle(_security).To<TEntity>();
 					}
 				}
 			}
@@ -1049,7 +1045,7 @@ namespace StockSharp.Algo
 		/// <returns>Trading objects.</returns>
 		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<CandleMessage> messages, Security security, Type candleType = null)
 		{
-			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, null, candleType ?? typeof(TCandle));
+			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, null);
 		}
 
 		/// <summary>
@@ -1079,7 +1075,7 @@ namespace StockSharp.Algo
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
-			var candle = message.ToCandle(series.CandleType, series.Security);
+			var candle = message.ToCandle(series.Security);
 			//candle.Series = series;
 
 			if (candle.Arg.IsNull(true))
@@ -1099,31 +1095,40 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.ToCandle(message.GetType().ToCandleType(), security);
-		}
-
-		/// <summary>
-		/// To convert <see cref="CandleMessage"/> into candle.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		/// <param name="type">The candle type.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>Candle.</returns>
-		public static Candle ToCandle(this CandleMessage message, Type type, Security security)
-		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
+			Candle candle;
 
-			//if (arg == null)
-			//	throw new ArgumentNullException(nameof(arg));
+			switch (message.Type)
+			{
+				case MessageTypes.CandleTimeFrame:
+					candle = new TimeFrameCandle();
+					break;
 
-			var candle = type.CreateInstance<Candle>();
+				case MessageTypes.CandleVolume:
+					candle = new VolumeCandle();
+					break;
+
+				case MessageTypes.CandleTick:
+					candle = new TickCandle();
+					break;
+
+				case MessageTypes.CandleRange:
+					candle = new RangeCandle();
+					break;
+
+				case MessageTypes.CandleRenko:
+					candle = new RenkoCandle();
+					break;
+
+				case MessageTypes.CandlePnF:
+					candle = new PnFCandle();
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.WrongCandleType);
+			}
 
 			candle.Security = security;
 			candle.Arg = message.Arg;
@@ -1702,11 +1707,12 @@ namespace StockSharp.Algo
 		/// Cast <see cref="CandleSeries"/> to <see cref="MarketDataMessage"/>.
 		/// </summary>
 		/// <param name="series">Candles series.</param>
-		/// <param name="isSubscribe"></param>
+		/// <param name="isSubscribe">The message is market-data subscription.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
+		/// <param name="count">Candles count.</param>
 		/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
-		public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		public static MarketDataMessage ToMarketDataMessage(this CandleSeries series, bool isSubscribe, DateTimeOffset? from = null, DateTimeOffset? to = null, long? count = null)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -1723,8 +1729,10 @@ namespace StockSharp.Algo
 				IsSubscribe = isSubscribe,
 				From = from ?? series.From,
 				To = to ?? series.To,
+				Count = count,
 				BuildCandlesMode = series.BuildCandlesMode,
-				IsCalcVolumeProfile = series.IsCalcVolumeProfile
+				IsCalcVolumeProfile = series.IsCalcVolumeProfile,
+				//ExtensionInfo = extensionInfo
 			};
 
 			mdMsg.FillSecurityInfo(series.Security);

@@ -72,7 +72,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string BoardCode { get; set; }
 
@@ -144,7 +144,8 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">The object, which copied information.</param>
+		/// <param name="destination">The object, to which copied information.</param>
+		/// <returns>The object, to which copied information.</returns>
 		protected PortfolioMessage CopyTo(PortfolioMessage destination)
 		{
 			destination.PortfolioName = PortfolioName;

@@ -35,8 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v15.2">
-      <HintPath>..\References\DevExpress.Xpf.Core.v15.2.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v17.1">
+      <HintPath>..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
@@ -86,10 +86,19 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IndicatorElement.cs" />
     <Compile Include="IndicatorElementCollection.cs" />
+    <Compile Include="InMemoryConfigurationMessageAdapterProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\QuantHouse\QuantHouse.csproj">
+      <Project>{E818D294-DBF6-4126-AF13-D83EF9740536}</Project>
+      <Name>QuantHouse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SpbEx\SpbEx.csproj">
+      <Project>{EF303E28-DCD1-4FA4-B10D-BF3506FDF9B8}</Project>
+      <Name>SpbEx</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Connectors\Blackwood\Blackwood.csproj">
       <Project>{C0D530DD-1E5A-4BE4-9AC6-FF11E5FC9B26}</Project>
       <Name>Blackwood</Name>
@@ -121,6 +130,10 @@
     <ProjectReference Include="..\..\StockSharpApps\Connectors\Cqg.Continuum\Cqg.Continuum.csproj">
       <Project>{3edd3bf7-3f1e-4192-87aa-54dfaa17340c}</Project>
       <Name>Cqg.Continuum</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Fxcm\Fxcm.csproj">
+      <Project>{358B4D44-CB92-4DED-AFD4-3DAC72D167E5}</Project>
+      <Name>Fxcm</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>

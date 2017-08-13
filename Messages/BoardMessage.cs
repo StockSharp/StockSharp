@@ -41,7 +41,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CodeKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string Code { get; set; }
 
@@ -83,7 +83,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public WorkingTime WorkingTime
 		{
-			get { return _workingTime; }
+			get => _workingTime;
 			set
 			{
 				if (value == null)
@@ -108,7 +108,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public TimeZoneInfo TimeZone
 		{
-			get { return _timeZone; }
+			get => _timeZone;
 			set
 			{
 				if (value == null)

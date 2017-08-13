@@ -209,16 +209,16 @@ namespace StockSharp.Algo.Storages
 
 		event Action<IEnumerable<T>> ICollectionEx<T>.AddedRange
 		{
-			add { _addedRange += value; }
-			remove { _addedRange -= value; }
+			add => _addedRange += value;
+			remove => _addedRange -= value;
 		}
 
 		private Action<IEnumerable<T>> _removedRange;
 
 		event Action<IEnumerable<T>> ICollectionEx<T>.RemovedRange
 		{
-			add { _removedRange += value; }
-			remove { _removedRange -= value; }
+			add => _removedRange += value;
+			remove => _removedRange -= value;
 		}
 	}
 }

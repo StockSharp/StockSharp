@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Commissions
 		/// To calculate commission.
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
-		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
+		/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
 		decimal? Process(Message message);
 	}
 }

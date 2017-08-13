@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public virtual int Length
 		{
-			get { return Plus.Length; }
+			get => Plus.Length;
 			set
 			{
 				Plus.Length = Minus.Length = value;

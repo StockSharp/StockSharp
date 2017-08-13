@@ -211,7 +211,7 @@
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.Delta">
       <summary>
-            Trailing stop follows the market if price change is larger than Delta.
+            Trailing stop follows the market if price change is larger than <see cref="P:StockSharp.OpenECry.OpenECryOrderCondition.Delta" />.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.IsPercentDelta">

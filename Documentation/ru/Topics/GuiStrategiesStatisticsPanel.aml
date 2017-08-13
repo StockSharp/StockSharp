@@ -29,7 +29,7 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Testing/SampleHistoryTestingParallel</legacyItalic>.
+Ниже показан внеший вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Testing/SampleHistoryTestingParallel</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_StrategiesStatisticsPanel" /></mediaLink>

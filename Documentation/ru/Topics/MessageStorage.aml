@@ -24,7 +24,7 @@
     </para>
    	<para>
 	    Обратите внимание, что <token>stocksharp</token> позволяет приводить типы хранилища торговых объектов к соответствующим типам
-	    хранилищ сообщений и наоборот. Например, IMarketDataStorage&lt;MarketDepth&gt; можно привести к типу IMarketDataStorage&lt;QuoteChangeMessage&gt; и наборот.
+	    хранилищ сообщений и наоборот. Например, IMarketDataStorage&lt;MarketDepth&gt; можно привести к типу IMarketDataStorage&lt;QuoteChangeMessage&gt; и наоборот.
     </para>
     <code language="C#">
 	<![CDATA[
@@ -41,8 +41,8 @@
 </code>
 <para>
 	Следует обратить внимание на актуальность использования хранилища сообщений для хранения собственных заявок и сделок. Дело в том, что для этих торговых
-	объектов нет соответсвующих хранилищ. В этом случае придется использовать хранилище сообщений IMarketDataStorage&lt;ExecutionMessage&gt;.
-	В следующем примере покано, как сохранить в хранилище собственные сделки.
+	объектов нет соответствующих хранилищ. В этом случае придется использовать хранилище сообщений IMarketDataStorage&lt;ExecutionMessage&gt;.
+	В следующем примере показано, как сохранить в хранилище собственные сделки.
 </para>
 	
 	</introduction>
@@ -53,8 +53,10 @@
 			<step>
 				<content>
 				<para>
-				 Сначала создается экземпляр коннектора, а также хранилище. Кроме того мы определяем идентификатор инструменты, с которым будем работать
-				 и декларируем переменную для хранилища транзакций. Само хранилище транзакций для заданного инструмета будет получено в событии получения
+				 Сначала создается экземпляр коннектора, а также хранилище. 
+				 Кроме того мы определяем идентификатор инструмента, с которым будем работать
+				 и декларируем переменную для хранилища транзакций. 
+				 Само хранилище транзакций для заданного инструмента будет получено в событии получения
 				 инструментов при помощи метода	
 				 <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetTransactionStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>.
 		</para>		
@@ -75,7 +77,7 @@ var storage = new StorageRegistry() { DefaultDrive = new LocalMarketDataDrive(st
 // Декларируем хранилище транзакций
 IMarketDataStorage<ExecutionMessage> tranStorage = null;
 
-// В обработчике событии получения инстументов
+// В обработчике событии получения инструментов
 // получаем хранилище транзакций для заданного инструмента
 connector.NewSecurity += security =>
 {

@@ -74,10 +74,10 @@ var timeFrame = TimeSpan.FromMinutes(5);
 // create test security
 var security = new Security
 {
-	Id = "RIZ2@FORTS", // sec id has the same name as folder with historical data
-	Code = "RIZ2",
-	Name = "RTS-12.12",
-	Board = ExchangeBoard.Forts,
+	Id = "ESM2@NYSE", // sec id has the same name as folder with historical data
+	Code = "ESM2",
+	Name = "ES-12.12",
+	Board = ExchangeBoard.Nyse,
 };
 
 var startTime = new DateTime(2012, 10, 1);
@@ -101,7 +101,6 @@ var portfolio = new Portfolio
 	Name = "test account",
 	BeginValue = 1000000,
 };
-
 ]]></code>
 				</content>
 			</step>
@@ -136,7 +135,6 @@ var batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio },
 						is created for each period.
 					</para>
 					<code language="C#"><![CDATA[
-
 // handle historical time for update ProgressBar
 batchEmulation.ProgressChanged += (curr, total) => this.GuiAsync(() => TestingProcess.Value = total);
 
@@ -162,9 +160,9 @@ var connector = batchEmulation.EmulationConnector;
 
 logManager.Sources.Add(connector);
 
-connector.NewSecurities += securities =>
+connector.NewSecurity += s =>
 {
-	if (securities.All(s => s != security))
+	if (s != security)
 		return;
 
 	// fill level1 values
@@ -182,12 +180,11 @@ TestingProcess.Value = 0;
 
 _startEmulationTime = DateTime.Now;
 
-
 var strategies = periods
 	.Select(period =>
 	{
 		var candleManager = new CandleManager(connector);
-		var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+        var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 		// create strategy based SMA
 		var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
@@ -219,8 +216,8 @@ var strategies = periods
 		Stat.AddStrategies(new[] { strategy });
 
 		return strategy;
-	})
-	.ToEx(periods.Length);
+	});
+
 ]]></code>
 				</content>
 			</step>
@@ -231,8 +228,7 @@ var strategies = periods
 					</para>
 					<code language="C#"><![CDATA[
 // start emulation
-batchEmulation.Start(strategies);
-
+batchEmulation.Start(strategies, periods.Length);
 ]]></code>
 				</content>
 			</step>

@@ -47,11 +47,7 @@
 				<listItem>
 					The isolation of the trading logic from the system that allows to transfer strategy in a compiled code between computers.
 				</listItem>
-				
-				<!--listItem>
-				  Автоматическое <link xlink:href="be71faa5-8db9-460a-bd8f-cdc0689dca82">Сохранение и восстановление</link> стратегий из <token>xml</token> файла.
-				</listItem-->
-				
+
 				<listItem>
 					Flexible <link xlink:href="82437493-cd53-41eb-b756-d913af0f4f8e">Logging</link>.
 				</listItem>

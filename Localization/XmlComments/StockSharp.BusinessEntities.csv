@@ -92,6 +92,8 @@ P:StockSharp.BusinessEntities.Exchange.Btce/summary;DocStr2686
 P:StockSharp.BusinessEntities.Exchange.BitStamp/summary;DocStr2687
 P:StockSharp.BusinessEntities.Exchange.BtcChina/summary;DocStr2688
 P:StockSharp.BusinessEntities.Exchange.Icbit/summary;DocStr2689
+P:StockSharp.BusinessEntities.Exchange.Currenex/summary;DocStr9762
+P:StockSharp.BusinessEntities.Exchange.Fxcm/summary;DocStr9853
 T:StockSharp.BusinessEntities.ExchangeBoard/summary;DocStr2692
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/summary;DocStr2693
 M:StockSharp.BusinessEntities.ExchangeBoard.EnumerateExchanges/returns;DocStr2694
@@ -228,6 +230,7 @@ P:StockSharp.BusinessEntities.ExchangeBoard.Spb/summary;DocStr8680
 P:StockSharp.BusinessEntities.ExchangeBoard.Ux/summary;DocStr2805
 P:StockSharp.BusinessEntities.ExchangeBoard.UxStock/summary;DocStr2806
 P:StockSharp.BusinessEntities.ExchangeBoard.Cme/summary;DocStr2807
+P:StockSharp.BusinessEntities.ExchangeBoard.CmeMini/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Cce/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Cbot/summary;DocStr2807
 P:StockSharp.BusinessEntities.ExchangeBoard.Nymex/summary;DocStr2807
@@ -274,6 +277,10 @@ P:StockSharp.BusinessEntities.ExchangeBoard.BtcChina/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Icbit/summary;DocStr2809
 P:StockSharp.BusinessEntities.ExchangeBoard.Finam/summary;DocStr2810
 P:StockSharp.BusinessEntities.ExchangeBoard.Mfd/summary;DocStr2811
+P:StockSharp.BusinessEntities.ExchangeBoard.Arca/summary;DocStr9760
+P:StockSharp.BusinessEntities.ExchangeBoard.Bats/summary;DocStr9761
+P:StockSharp.BusinessEntities.ExchangeBoard.Currenex/summary;DocStr9761
+P:StockSharp.BusinessEntities.ExchangeBoard.Fxcm/summary;DocStr2809
 T:StockSharp.BusinessEntities.IConnector/summary;DocStr2825
 E:StockSharp.BusinessEntities.IConnector.NewMyTrade/summary;DocStr8546
 E:StockSharp.BusinessEntities.IConnector.NewMyTrades/summary;DocStr867
@@ -494,7 +501,7 @@ M:StockSharp.BusinessEntities.MarketDepth.GetQuotes(StockSharp.Messages.Sides)/s
 M:StockSharp.BusinessEntities.MarketDepth.GetQuotes(StockSharp.Messages.Sides)/param/orderDirection;DocStr2835
 M:StockSharp.BusinessEntities.MarketDepth.GetQuotes(StockSharp.Messages.Sides)/returns;Str1659
 M:StockSharp.BusinessEntities.MarketDepth.GetBestQuote(StockSharp.Messages.Sides)/summary;DocStr2841
-M:StockSharp.BusinessEntities.MarketDepth.GetBestQuote(StockSharp.Messages.Sides)/param/orderDirection;DocStr660
+M:StockSharp.BusinessEntities.MarketDepth.GetBestQuote(StockSharp.Messages.Sides)/param/orderDirection;OrderSide
 M:StockSharp.BusinessEntities.MarketDepth.GetBestQuote(StockSharp.Messages.Sides)/returns;DocStr2842
 M:StockSharp.BusinessEntities.MarketDepth.GetPair(System.Int32)/summary;DocStr2843
 M:StockSharp.BusinessEntities.MarketDepth.GetPair(System.Int32)/param/depthIndex;DocStr2844
@@ -545,7 +552,7 @@ M:StockSharp.BusinessEntities.MarketDepth.Remove(System.Decimal,System.Decimal,S
 M:StockSharp.BusinessEntities.MarketDepth.Remove(System.Decimal,System.Decimal,System.DateTimeOffset)/param/volume;DocStr2881
 M:StockSharp.BusinessEntities.MarketDepth.Remove(System.Decimal,System.Decimal,System.DateTimeOffset)/param/lastChangeTime;DocStr2878
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/summary;DocStr2879
-M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/direction;DocStr660
+M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/direction;OrderSide
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/price;DocStr2880
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/volume;DocStr2881
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/lastChangeTime;DocStr2878
@@ -706,6 +713,7 @@ P:StockSharp.BusinessEntities.Security.Multiplier/summary;DocStr2623
 P:StockSharp.BusinessEntities.Security.Decimals/summary;Str548
 P:StockSharp.BusinessEntities.Security.ExpiryDate/summary;Str371
 P:StockSharp.BusinessEntities.Security.SettlementDate/summary;Str373
+P:StockSharp.BusinessEntities.Security.CfiCode/summary;CfiCodeDesc
 P:StockSharp.BusinessEntities.Security.ExtensionInfo/summary;DocStr2624
 P:StockSharp.BusinessEntities.Security.ExtensionInfo/remarks;DocStr2625
 P:StockSharp.BusinessEntities.Security.StepPrice/summary;Str290
@@ -749,6 +757,7 @@ P:StockSharp.BusinessEntities.Security.VWAP/summary;DocStr7578
 P:StockSharp.BusinessEntities.Security.SettlementPrice/summary;Str312
 P:StockSharp.BusinessEntities.Security.AveragePrice/summary;Str311
 P:StockSharp.BusinessEntities.Security.Volume/summary;Str310
+P:StockSharp.BusinessEntities.Security.Turnover/summary;Turnover
 M:StockSharp.BusinessEntities.Security.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Security.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.Security.Clone/summary;DocStr643
@@ -758,6 +767,7 @@ M:StockSharp.BusinessEntities.Security.CopyTo(StockSharp.BusinessEntities.Securi
 M:StockSharp.BusinessEntities.Security.Notify(System.String)/summary;DocStr466
 M:StockSharp.BusinessEntities.Security.Notify(System.String)/param/propName;DocStr2622
 T:StockSharp.BusinessEntities.SecurityExternalId/summary;Str603
+M:StockSharp.BusinessEntities.SecurityExternalId.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.SecurityExternalId.Sedol/summary;Str351
 P:StockSharp.BusinessEntities.SecurityExternalId.Cusip/summary;Str352
 P:StockSharp.BusinessEntities.SecurityExternalId.Isin/summary;Str353
@@ -792,7 +802,7 @@ P:StockSharp.BusinessEntities.Trade.StringId/summary;Str146
 P:StockSharp.BusinessEntities.Trade.Security/summary;DocStr2935
 P:StockSharp.BusinessEntities.Trade.Time/summary;Str605
 P:StockSharp.BusinessEntities.Trade.LocalTime/summary;Str606
-P:StockSharp.BusinessEntities.Trade.Volume/summary;TradeVolume
+P:StockSharp.BusinessEntities.Trade.Volume/summary;DocStr8830
 P:StockSharp.BusinessEntities.Trade.Price/summary;TradePrice
 P:StockSharp.BusinessEntities.Trade.OrderDirection/summary;Str608
 P:StockSharp.BusinessEntities.Trade.IsSystem/summary;IsSystemTrade

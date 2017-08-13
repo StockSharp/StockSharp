@@ -185,12 +185,12 @@ namespace StockSharp.Algo.Strategies.Testing
 		public EmulationSettings EmulationSettings { get; }
 
 		/// <summary>
-		/// The emulational connection.
+		/// The emulation connection.
 		/// </summary>
 		public HistoryEmulationConnector EmulationConnector { get; }
 
 		/// <summary>
-		/// The startegy for testing.
+		/// The strategies for testing.
 		/// </summary>
 		public IEnumerable<Strategy> Strategies { get; set; }
 
@@ -206,7 +206,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public int CurrentProgress
 		{
-			get { return _progress; }
+			get => _progress;
 			set
 			{
 				if (_progress == value)
@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		public EmulationStates State
 		{
-			get { return _state; }
+			get => _state;
 			private set
 			{
 				if (_state == value)
@@ -383,7 +383,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// Start emulation.
 		/// </summary>
 		/// <param name="strategies">The strategies.</param>
-		/// <param name="iterationCount"></param>
+		/// <param name="iterationCount">Iteration count.</param>
 		public void Start(IEnumerable<Strategy> strategies, int iterationCount)
 		{
 			if (strategies == null)
@@ -546,6 +546,11 @@ namespace StockSharp.Algo.Strategies.Testing
 				strategy.Stop();
 
 				strategy.GetCandleManager()?.Dispose();
+
+				EmulationConnector
+					.Adapter
+					.AdapterProvider
+					.RemoveAssociation(strategy.Portfolio.Name);
 
 				var tuple = _strategyInfo.TryGetValue(strategy);
 

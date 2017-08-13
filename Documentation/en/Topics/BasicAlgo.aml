@@ -1,124 +1,68 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="e1d2c02b-ee6e-41ab-93c5-f2286f1fe897" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
 
     <introduction>
       <para>Along with <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Quoting</link>, the <token>stocksharp</token> contains the 
-	  <codeEntityReference>T:StockSharp.Algo.TraderHelper</codeEntityReference> class, which includes a variety of simple trading algorithms methods:</para>
+	  <codeEntityReference>T:StockSharp.Algo.TraderHelper</codeEntityReference>  
+	  class, which includes a variety of simple trading algorithms methods:</para>
     </introduction>
 
-    <!--<prerequisites>
-      <content>
-        <para>Optional information on prerequisites</para>
-      </content>
-    </prerequisites>-->
-    
-    <!-- One or more procedure or section elements -->
-
     <procedure>
-      <!--<title>Optional procedure</title>-->
-
-      <steps class="ordered">
-		  <!--<step>
+         <steps class="ordered">
+			  <step>
 			  <content>
-				  <para>
-					  Рассчитать размер спреда по инструменту через метод <codeEntityReference>M:StockSharp.Algo.TraderHelper.GetSpreadSize(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
-				  <code language="C#">// любой инструмент
-var someSecurity = trader.Securities.First();
-Console.WriteLine(someSecurity.GetSpreadSize());</code>
-			  </content>
-		  </step>-->
-		  
-		  
-		  
-		  <step>
-			  <content>
-				  <para>To clear the order book from its own orders through the 
-				  <codeEntityReference>M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>
-				  method (to register the orders in relation to other market players and to prevent own algorithms to fight each other):</para>
-				  <code language="C#"><![CDATA[// the sample security
+<para>To clear the order book from its own orders through the
+<codeEntityReference>M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>
+method (to register the orders in relation to other market players and to prevent own algorithms to fight each other):</para>
+<code language="C#"><![CDATA[
+// the sample security
 var someSecurity = trader.Securities.First();
 
 var someOrders = new List<Order>();
 // fill the collection by own orders
 
 // to get the best big price
-Console.WriteLine(trader.GetMarketDepth(someSecurity).GetFilteredQuotes(OrderDirections.Buy, someOrders, null).Max(q => q.Price));]]></code>
-			  </content>
-		  </step>
-		  <!--<step>
-			  <content>
-				  <para>
-					  Получить из стакана разреженный через метод <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.Invert</codeEntityReference>
-					  с шагом равным минимальному шагу цены:</para>
-				  <code language="C#">// любой инструмент
-trader.GetMarketDepth(someSecurity).Invert(someSecurity.MinStepSize);</code>
-			  </content>
-		  </step>-->
-		  <!--<step>
-			  <content>
-				  <para>
-					  To calculate the market price by instrument through the 
-					  <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.TraderHelper.GetMarketPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Sides)</codeEntityReference>:</para>
-				  <code language="C#">// the sample security
-var someSecurity = trader.Securities.First();
-Console.WriteLine(someSecurity.GetMarketPrice(OrderDirections.Buy));</code>
-			  </content>
-		  </step>-->
+Console.WriteLine(trader.GetMarketDepth(someSecurity).GetFilteredQuotes(Sides.Buy, someOrders, null).Max(q => q.Price));
+]]></code>
+</content>
+</step>
 		  <step>
 			  <content>
-				  <para>
-					  To adjust the price through the <codeEntityReference>M:StockSharp.Algo.TraderHelper.ShrinkPrice(StockSharp.BusinessEntities.Security,System.Decimal,StockSharp.Algo.ShrinkRules)</codeEntityReference>
-					  method, so it become a multiple of price increment and trading system accepts the order:</para>
-				  <code language="C#">// the sample security
+<para>
+To adjust the price through the 
+<codeEntityReference>M:StockSharp.Algo.TraderHelper.ShrinkPrice(StockSharp.BusinessEntities.Security,System.Decimal,StockSharp.Algo.ShrinkRules)</codeEntityReference>
+method, so it become a multiple of price increment and trading system accepts the order:</para>
+<code language="C#">
+// the sample security
 var someSecurity = trader.Securities.First();
-Console.WriteLine(someSecurity.ShrinkPrice(13453.65342));</code>
+Console.WriteLine(someSecurity.ShrinkPrice(13453.65342));
+</code>
 			  </content>
 		  </step>
 		  <step>
 			  <content>
-				  <para>
-					  To get the position on closed trades through the <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetPosition</codeEntityReference> method.
-					  There is the calculation on a trading strategy - the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class object in the example:</para>
-				  <code language="C#">Strategy someStrategy = ...;
-Console.WriteLine(someStrategy.Trades.GetPosition());</code>
+<para>
+To get the position on closed trades through the 
+<codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetPosition</codeEntityReference> 
+method:</para>
+<code language="C#">
+Console.WriteLine(_trader.GetPosition(Portfolio,Security, clientCode, depoName);
+</code>
 			  </content>
 		  </step>
-		  <!--step>
-			  <content>
-				  <para>
-					  Получить общую прибыль-убыток по совершенным сделкам через метод <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetPnL</codeEntityReference>:
-				  </para>
-				  <code language="C#">// любой инструмент
-var someSecurity = trader.Securities.First();
-
-Console.WriteLine(someSecurity.GetPnL(trader.GetMyTrades(someSecurity)));</code>
-			  </content>
-		  </step-->
-		  <!--<step>
-			<content>
-			  <para>
-				  Получить проскальзывание по сделке через <codeEntityReference>M:StockSharp.Algo.TraderHelper.GetSlippage</codeEntityReference>:
-			  </para>
-			  <code language="C#">// любая сделка
-var someTrade = trader.MyTrades.First();
-
-Console.WriteLine(someTrade.GetSlippage(someTrade.Order.Price));</code>
-			</content>
-		  </step> -->
 		  <step>
 			  <content>
-				  <para>
-					  To check whether the current time traded (is session closed? is clearing started?) through the
-					  <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.IsTradeTime</codeEntityReference> method:
-				  </para>
-				  <code language="C#">// the sample security
+<para>
+To check whether the current time traded (is session closed? is clearing started?) through the
+<codeEntityReference>Overload:StockSharp.Algo.TraderHelper.IsTradeTime</codeEntityReference> method:
+</para>
+<code language="C#">
+// the sample security
 var someSecurity = trader.Securities.First();
 
-Console.WriteLine(someSecurity.Exchange.IsTradeTime(currentTime));</code>
+Console.WriteLine(someSecurity.Exchange.IsTradeTime(currentTime));
+</code>
 			  </content>
 		  </step>
 		  <step>
@@ -132,77 +76,13 @@ Console.WriteLine(someSecurity.Exchange.IsTradeTime(currentTime));</code>
 		  </step>
       </steps>
     </procedure>
-    
-    <!--<section>
-      <title>Optional section</title>
 
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>
-
-    <nextSteps>
-      <content>
-        <para>Optional next steps after reading this walk-through</para>
-      </content>
-    </nextSteps>-->
     
     <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
 
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
 		<link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Quoting</link>
 		<link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Order cancel</link>
 		<link xlink:href="4b427409-9aa9-41d3-bb97-98745d1bba8e">Order replace</link>
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
     </relatedTopics>
     
   </developerWalkthroughDocument>

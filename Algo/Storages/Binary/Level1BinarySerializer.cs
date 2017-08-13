@@ -76,6 +76,7 @@ namespace StockSharp.Algo.Storages.Binary
 			HistoricalVolatilityWeek = new RefPair<decimal, decimal>();
 			HistoricalVolatilityMonth = new RefPair<decimal, decimal>();
 			AveragePrice = new RefPair<decimal, decimal>();
+			Turnover = new RefPair<decimal, decimal>();
 		}
 
 		public RefPair<decimal, decimal> Price { get; private set; }
@@ -121,6 +122,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public RefPair<decimal, decimal> HistoricalVolatilityWeek { get; private set; }
 		public RefPair<decimal, decimal> HistoricalVolatilityMonth { get; private set; }
 		public RefPair<decimal, decimal> AveragePrice { get; private set; }
+		public RefPair<decimal, decimal> Turnover { get; private set; }
 
 		public DateTime FirstFieldTime { get; set; }
 		public DateTime LastFieldTime { get; set; }
@@ -215,6 +217,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WriteOffsets(stream);
+
+			if (Version < MarketDataVersions.Version56)
+				return;
+
+			Write(stream, Turnover);
 		}
 
 		public override void Read(Stream stream)
@@ -307,6 +314,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadOffsets(stream);
+
+			if (Version < MarketDataVersions.Version56)
+				return;
+
+			Turnover = ReadInfo(stream);
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -369,6 +381,7 @@ namespace StockSharp.Algo.Storages.Binary
 			HistoricalVolatilityWeek = src.HistoricalVolatilityWeek;
 			HistoricalVolatilityMonth = src.HistoricalVolatilityMonth;
 			AveragePrice = src.AveragePrice;
+			Turnover = src.Turnover;
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
@@ -410,7 +423,7 @@ namespace StockSharp.Algo.Storages.Binary
 		};
 
 		public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 50, MarketDataVersions.Version55, exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version56, exchangeInfoProvider)
 		{
 		}
 
@@ -848,6 +861,11 @@ namespace StockSharp.Algo.Storages.Binary
 							writer.Write((bool)change.Value);
 							break;
 						}
+						case Level1Fields.Turnover:
+						{
+							SerializeChange(writer, metaInfo.Turnover, (decimal)change.Value);
+							break;
+						}
 						default:
 							throw new ArgumentOutOfRangeException(nameof(messages), change.Key, LocalizedStrings.Str922);
 					}
@@ -1254,6 +1272,11 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.IsSystem:
 					{
 						l1Msg.Add(field, reader.Read());
+						break;
+					}
+					case Level1Fields.Turnover:
+					{
+						l1Msg.Add(field, DeserializeChange(reader, metaInfo.Turnover));
 						break;
 					}
 					default:

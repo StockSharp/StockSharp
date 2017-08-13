@@ -109,6 +109,15 @@ namespace StockSharp.Messages
 		public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
+		/// Type in ISO 10962 standard.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CfiCodeKey)]
+		[DescriptionLoc(LocalizedStrings.CfiCodeDescKey)]
+		[MainCategory]
+		public string CfiCode { get; set; }
+
+		/// <summary>
 		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		[DataMember]
@@ -218,7 +227,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">The object, which copied information.</param>
+		/// <param name="destination">The object, to which copied information.</param>
 		public void CopyTo(SecurityMessage destination)
 		{
 			if (destination == null)
@@ -234,6 +243,7 @@ namespace StockSharp.Messages
 			destination.PriceStep = PriceStep;
 			destination.Decimals = Decimals;
 			destination.SecurityType = SecurityType;
+			destination.CfiCode = CfiCode;
 			destination.SettlementDate = SettlementDate;
 			destination.Strike = Strike;
 			destination.UnderlyingSecurityCode = UnderlyingSecurityCode;

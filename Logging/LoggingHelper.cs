@@ -83,7 +83,18 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// To record a debugging to the log.
+		/// To record a verbose message to the log.
+		/// </summary>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+		public static void AddVerboseLog(this ILogReceiver receiver, string message, params object[] args)
+		{
+			receiver.AddMessage(LogLevels.Verbose, message, args);
+		}
+
+		/// <summary>
+		/// To record a debug message to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
 		/// <param name="message">Text message.</param>
@@ -108,7 +119,7 @@ namespace StockSharp.Logging
 		/// To record an error to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
-		/// <param name="exception">Error detais.</param>
+		/// <param name="exception">Error details.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, Exception exception)
 		{
 			receiver.AddErrorLog(exception, null);
@@ -118,7 +129,7 @@ namespace StockSharp.Logging
 		/// To record an error to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
-		/// <param name="exception">Error detais.</param>
+		/// <param name="exception">Error details.</param>
 		/// <param name="format">A format string.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, Exception exception, string format)
 		{

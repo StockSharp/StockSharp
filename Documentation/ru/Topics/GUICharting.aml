@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="956b3163-c537-4e1d-af29-cf80b633db3c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -41,13 +41,13 @@
 	</para>
 	
 	<para>
-	  На следующем рисунке показаны основные элементы графического компонета.
+	  На следующем рисунке показаны основные элементы графического компонента.
 	</para>
 	 <mediaLink><image placement="left" xlink:href="Gui_ChartElements" /></mediaLink>
 
 	
 	<sections>
-	 <title>Элементы графического компонета</title>
+	 <title>Элементы графического компонента</title>
 	 <section>
       <title>Chart</title>
       <content>
@@ -164,10 +164,10 @@
 		Классы визуальных элементов имеют ряд свойств для настройки внешнего вида графика. Можно настроить цвета, толщину линий и стиль элементов. Например,
 		при помощи свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle</codeEntityReference> можно изменять внешний вид 
 		свечи (свеча или бар). При помощи свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.DrawStyle</codeEntityReference> 
-		можно установить стиль линии индикатора. Так чтобы отображать индикатор в виде гистограмы нужно использовать значение 
+		можно установить стиль линии индикатора. Так чтобы отображать индикатор в виде гистограммы нужно использовать значение 
 		<codeEntityReference qualifyHint="true">F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Histogram</codeEntityReference>.
 		Свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker</codeEntityReference> и
-		<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker</codeEntityReference> позволяют включать/выключать отбражения
+		<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker</codeEntityReference> позволяют включать/выключать отображения
 		маркёров (см. рисунок) на осях графика.  
 		</para>   
 		

@@ -64,8 +64,8 @@ public class MyStrategy : Strategy
 		
 		// applying rules to track the order's trades
 		longPos
-			.WhenNewTrades()
-			.Do(OnNewOrderTrades)
+			.WhenNewTrade()
+			.Do(OnNewOrderTrade)
 			.Apply(this);
 		
 		RegisterOrder(longPos);
@@ -83,22 +83,19 @@ public class MyStrategy : Strategy
 				This strategy automatically changes the one of strategies volume with partial activation (for example, at the touch of a stop-loss level only part of
 				the position has been closed, and then the market came back to break-even zone):
           	</para>
-			<code language="C#"><![CDATA[private void OnNewOrderTrades(IEnumerable<MyTrade> trades)
+			<code language="C#"><![CDATA[
+private void OnNewOrderTrade(MyTrade trade)
 {
-	// for each trade creating a couple of protective strategies
-	var protectiveStrategies = trades.Select(t =>
-	{
-		// take is 40 points
-		var takeProfit = new TakeProfitStrategy(t, 40);
+    // take is 40 points
+    var takeProfit = new TakeProfitStrategy(trade, 40);
 
-		// stop is 20 points
-		var stopLoss = new StopLossStrategy(t, 20);
+    // stop is 20 points
+    var stopLoss = new StopLossStrategy(trade, 20);
 
-		return new TakeProfitStopLossStrategy(takeProfit, stopLoss);
-	});
-
-	ChildStrategies.AddRange(protectiveStrategies);
-}]]></code>
+    var protectiveStrategies = new TakeProfitStopLossStrategy(takeProfit, stopLoss);
+    ChildStrategies.AddRange(protectiveStrategies);
+}
+]]></code>
           </content>
         </step>
       </steps>
@@ -112,7 +109,7 @@ public class MyStrategy : Strategy
         	<codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference> and <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>
         	strategies do not track partial position closing or its reverting (for example, the position was closed by hands at the terminal and was opened in the
         	opposite direction). To automatically track such situations in the algorithm, you must use <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy</codeEntityReference>.
-        	This strategy by trades incoming into it (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})</codeEntityReference>)
+        	This strategy by trades incoming into it (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade(StockSharp.BusinessEntities.MyTrade)</codeEntityReference>)
         	decides what to do: to protect them (if there is a position opening or its increase) or to stop the protective strategies (if there is a position closing or its
         	decrease). The strategy also automatically reverts protective strategies in case of position reverting (from long to short or from short to long).
         </para>

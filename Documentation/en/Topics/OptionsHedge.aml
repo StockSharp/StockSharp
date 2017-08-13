@@ -7,8 +7,8 @@
 
     <introduction>
 		<para>
-			If you want to protect positions by option strategies (for example, as <link xlink:href="6fe5b321-a23d-415d-b3e3-af9de9212a20">Volatility trading</link>),
-			you can use the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>.
+If you want to protect positions by option strategies (for example, as <link xlink:href="6fe5b321-a23d-415d-b3e3-af9de9212a20"/>)
+you can use the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> hedging strategy by delta.
 		</para>
     </introduction>
 
@@ -19,124 +19,73 @@
 			  <step>
 				  <content>
 					  <para>
-						  As a demonstration of the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>
-						  work the SampleOptionQuoting example is modified (for details see <link xlink:href="6fe5b321-a23d-415d-b3e3-af9de9212a20">Volatility trading</link>).
+As a demonstration of the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> 
+work the SampleOptionQuoting example is modified (for details see <link xlink:href="6fe5b321-a23d-415d-b3e3-af9de9212a20"/>).
 					  </para>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
 					  <para>
-						  The <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference>
-						  strategy itself does not start, but instead it is packed in the <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference>,
-						  from which the strategy start method is called:
+The  <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> 
+strategy does not start, but instead it is passed as a child, for the 
+<codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> strategy.
 					  </para>
-					  <code language="C#">var basket = new BasketStrategy(BasketStrategyFinishModes.All);
-basket.ChildStrategies.Add(quoting);
+					  	
+<code title="C#" language="C#"><![CDATA[
 
-// starting quoting
-basket.Start();</code>
-					  <para>
-						  The <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> takes the parental strategy that contains
-						  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">child strategies</link> working separately on their strike. Thus
-						  <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> controls the total position of all
-						  option strategies. As an example works with only one strike and therefore with one option strategy, this strategy has been packed in the
-						  special strategies “basket” - <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference>.
-						  <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference> does not contain trading logic and is made to create
-						  the strategies hierarchy, which is needed by <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>.
-					  </para>
-				  </content>
-			  </step>
-			  <step>
-				  <content>
-					  <para>
-						  After baskets for quoting creating, you must create and start the delta hedging:
-					  </para>
-					  <code>// initializing delta-hedge strategy
-var hedge = new DeltaHedgeStrategy(basket)
+
+// create delta hedge strategy
+var hedge = new DeltaHedgeStrategy
 {
-	Security = option.GetUnderlyingAsset(),
-	Portfolio = this.Portfolio.SelectedPortfolio,
-	Trader = _trader,
+	Security = option.GetUnderlyingAsset(Connector),
+	Portfolio = Portfolio.SelectedPortfolio,
+	Connector = Connector,
 };
 
-// starting delta hedge
-hedge.Start();</code>
+// create option quoting for 20 contracts
+var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
+		new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
+{
+        // working size is 1 contract
+	Volume = 1,
+	Security = option,
+	Portfolio = Portfolio.SelectedPortfolio,
+	Connector = Connector,
+};
+
+// link quoting and hending
+hedge.ChildStrategies.Add(quoting);
+
+// start henging
+hedge.Start();
+
+
+]]></code>
+					  <para>
+The <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> 
+takes strategies, working separately on their strike, as 
+<link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">child strategies</link>. Thus, 
+						  <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>
+controls the total position by all child option strategies.
+					  </para>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
 					  <para>
-						  Completing the delta hedging:
+Completing the delta hedging:
 					  </para>
 					  <code>hedge.Stop();
-basket.Stop();</code>
+</code>
 				  </content>
 			  </step>
 		  </steps>
 	  </procedure>
 
-    <!--<section>
-      <title>A topic section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
 
     <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-        
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
+ 
     </relatedTopics>
 
   </developerConceptualDocument>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="06db9cf4-55d1-4340-bdad-cfd1465fd61f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Empty_glass_00"/>
+</mediaLink>
+<para>Кубик используется для получения разреженного стакана по заданному.</para>   
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Стакан</legacyBold> – стакан, который надо разредить.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Стакан</legacyBold> – разреженный стакан.</para></listItem>
+</list>
+  </definition>
+
+</definitionTable>
+ </introduction>
+ <relatedTopics>
+<link xlink:href="1e0038a5-d74f-4898-ad8d-e2fa8750f40a" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

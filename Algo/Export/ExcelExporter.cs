@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Export
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
-		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="isCancelled">The processor, returning process interruption sign.</param>
 		/// <param name="fileName">The path to file.</param>
 		/// <param name="breaked">The processor, which will be called if maximal value of strings is exceeded.</param>
 		public ExcelExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, Action breaked)
@@ -53,10 +53,7 @@ namespace StockSharp.Algo.Export
 			_breaked = breaked;
 		}
 
-		/// <summary>
-		/// To export <see cref="ExecutionMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			switch ((ExecutionTypes)Arg)
@@ -209,10 +206,7 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="QuoteChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Do(worker =>
@@ -244,10 +238,7 @@ namespace StockSharp.Algo.Export
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="Level1ChangeMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			Do(worker =>
@@ -341,90 +332,160 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		/// <summary>
-		/// To export <see cref="CandleMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<PositionChangeMessage> messages)
+		{
+			Do(worker =>
+			{
+				var columns = new Dictionary<PositionChangeTypes, int>();
+
+				worker
+					.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
+
+				var row = 1;
+
+				foreach (var message in messages)
+				{
+					worker.SetCell(0, row, message.LocalTime);
+
+					foreach (var pair in message.Changes)
+					{
+						var type = pair.Key;
+
+						var columnIndex = columns.TryGetValue2(type);
+
+						if (columnIndex == null)
+						{
+							columnIndex = columns.Count;
+							columns.Add(type, columnIndex.Value);
+
+							worker.SetCell(columnIndex.Value, 0, type.GetDisplayName());
+							ApplyCellStyle(worker, type, columnIndex.Value);
+						}
+
+						worker.SetCell(columns[type], row, pair.Value);
+					}
+
+					if (!Check(++row))
+						break;
+				}
+			});
+		}
+
+		/// <inheritdoc />
+		protected override void Export(IEnumerable<IndicatorValue> values)
+		{
+			Do(worker =>
+			{
+				var row = 0;
+
+				worker
+					.SetCell(0, row, LocalizedStrings.Time)
+					.SetCell(1, row, LocalizedStrings.Str3099);
+
+				row++;
+
+				foreach (var value in values)
+				{
+					worker
+						.SetCell(0, row, value.Time)
+						.SetCell(1, row, value.ValueAsDecimal);
+				
+					if (!Check(++row))
+						break;
+				}
+			});
+		}
+
+		private static void ApplyCellStyle(ExcelWorker worker, PositionChangeTypes type, int column)
+		{
+			switch (type)
+			{
+				case PositionChangeTypes.Currency:
+				case PositionChangeTypes.State:
+					worker.SetStyle(column, typeof(string));
+					break;
+				default:
+					worker.SetStyle(column, typeof(decimal));
+					break;
+			}
+		}
+
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			Do(worker =>
 			{
-				worker
-					.SetCell(0, 0, LocalizedStrings.Str726).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(1, 0, LocalizedStrings.Str727).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(2, 0, "O").SetStyle(2, typeof(decimal))
-					.SetCell(3, 0, "H").SetStyle(3, typeof(decimal))
-					.SetCell(4, 0, "L").SetStyle(4, typeof(decimal))
-					.SetCell(5, 0, "C").SetStyle(5, typeof(decimal))
-					.SetCell(6, 0, "V").SetStyle(6, typeof(decimal))
-					.SetCell(7, 0, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
+				var row = 0;
 
-				var index = 1;
+				worker
+					.SetCell(0, row, LocalizedStrings.Str726).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff")
+					.SetCell(1, row, LocalizedStrings.Str727).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
+					.SetCell(2, row, "O").SetStyle(2, typeof(decimal))
+					.SetCell(3, row, "H").SetStyle(3, typeof(decimal))
+					.SetCell(4, row, "L").SetStyle(4, typeof(decimal))
+					.SetCell(5, row, "C").SetStyle(5, typeof(decimal))
+					.SetCell(6, row, "V").SetStyle(6, typeof(decimal))
+					.SetCell(7, row, LocalizedStrings.OI).SetStyle(7, typeof(decimal));
+
+				row++;
 
 				foreach (var candle in messages)
 				{
 					worker
-						.SetCell(0, index, candle.OpenTime)
-						.SetCell(1, index, candle.CloseTime)
-						.SetCell(2, index, candle.OpenPrice)
-						.SetCell(3, index, candle.HighPrice)
-						.SetCell(4, index, candle.LowPrice)
-						.SetCell(5, index, candle.ClosePrice)
-						.SetCell(6, index, candle.TotalVolume)
-						.SetCell(7, index, candle.OpenInterest);
+						.SetCell(0, row, candle.OpenTime)
+						.SetCell(1, row, candle.CloseTime)
+						.SetCell(2, row, candle.OpenPrice)
+						.SetCell(3, row, candle.HighPrice)
+						.SetCell(4, row, candle.LowPrice)
+						.SetCell(5, row, candle.ClosePrice)
+						.SetCell(6, row, candle.TotalVolume)
+						.SetCell(7, row, candle.OpenInterest);
 
-					index++;
-
-					if (!Check(index))
+					if (!Check(++row))
 						break;
 				}
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="NewsMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			Do(worker =>
 			{
-				worker
-					.SetCell(0, 0, LocalizedStrings.Id).SetStyle(0, typeof(string))
-					.SetCell(1, 0, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
-					.SetCell(2, 0, LocalizedStrings.Security).SetStyle(2, typeof(string))
-					.SetCell(3, 0, LocalizedStrings.Board).SetStyle(3, typeof(string))
-					.SetCell(4, 0, LocalizedStrings.Str215).SetStyle(4, typeof(string))
-					.SetCell(5, 0, LocalizedStrings.Str217).SetStyle(5, typeof(string))
-					.SetCell(6, 0, LocalizedStrings.Str213).SetStyle(6, typeof(string))
-					.SetCell(7, 0, LocalizedStrings.Str221).SetStyle(6, typeof(string));
+				var row = 0;
 
-				var index = 1;
+				worker
+					.SetCell(0, row, LocalizedStrings.Id).SetStyle(0, typeof(string))
+					.SetCell(1, row, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
+					.SetCell(2, row, LocalizedStrings.Security).SetStyle(2, typeof(string))
+					.SetCell(3, row, LocalizedStrings.Board).SetStyle(3, typeof(string))
+					.SetCell(4, row, LocalizedStrings.Str215).SetStyle(4, typeof(string))
+					.SetCell(5, row, LocalizedStrings.Str217).SetStyle(5, typeof(string))
+					.SetCell(6, row, LocalizedStrings.Str213).SetStyle(6, typeof(string))
+					.SetCell(7, row, LocalizedStrings.Str221).SetStyle(6, typeof(string));
+
+				row++;
 
 				foreach (var n in messages)
 				{
 					worker
-						.SetCell(0, index, n.Id)
-						.SetCell(1, index, n.ServerTime)
-						.SetCell(2, index, n.SecurityId == null ? null : n.SecurityId.Value.SecurityCode)
-						.SetCell(3, index, n.BoardCode)
-						.SetCell(4, index, n.Headline)
-						.SetCell(5, index, n.Story)
-						.SetCell(6, index, n.Source)
-						.SetCell(7, index, n.Url);
+						.SetCell(0, row, n.Id)
+						.SetCell(1, row, n.ServerTime)
+						.SetCell(2, row, n.SecurityId?.SecurityCode)
+						.SetCell(3, row, n.BoardCode)
+						.SetCell(4, row, n.Headline)
+						.SetCell(5, row, n.Story)
+						.SetCell(6, row, n.Source)
+						.SetCell(7, row, n.Url);
 
-					index++;
-
-					if (!Check(index))
+					if (!Check(++row))
 						break;
 				}
 			});
 		}
 
-		/// <summary>
-		/// To export <see cref="SecurityMessage"/>.
-		/// </summary>
-		/// <param name="messages">Messages.</param>
+		/// <inheritdoc />
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			Do(worker =>
@@ -447,6 +508,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(colIndex, 0, LocalizedStrings.ExpiryDate).SetStyle(colIndex++, "yyyy-MM-dd")
 					.SetCell(colIndex, 0, LocalizedStrings.SettlementDate).SetStyle(colIndex++, "yyyy-MM-dd")
 					.SetCell(colIndex, 0, LocalizedStrings.Currency).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.CfiCode).SetStyle(colIndex++, typeof(string))
 
 					.SetCell(colIndex, 0, "Bloomberg").SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, "CUSIP").SetStyle(colIndex++, typeof(string))
@@ -480,6 +542,7 @@ namespace StockSharp.Algo.Export
 						.SetCell(colIndex++, rowIndex, security.ExpiryDate)
 						.SetCell(colIndex++, rowIndex, security.SettlementDate)
 						.SetCell(colIndex++, rowIndex, security.Currency == null ? string.Empty : security.Currency.Value.GetDisplayName())
+						.SetCell(colIndex++, rowIndex, security.CfiCode)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Bloomberg)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Cusip)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.IQFeed)

@@ -3,33 +3,34 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    	<introduction>
 					<para>
-	    Наряду с использованием хранилищ торговых объектов, можно использовать хранилища сообщений. Работа с этими хранилищами также осуществляется
-	    через интерфейс <codeEntityReference>T:StockSharp.Algo.Storages.IMarketDataStorage`1</codeEntityReference>. Например, для работы со свечками
-	    можно использовать хранилище типа IMarketDataStorage&lt;CandleMessage&gt;.
-	    <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference> также содержит набор методов для получения
-	    нужных хранилищ сообщений. Так хранилище временных свечей можно получить, как показано в следующем фрагменте кода.
+Along with the use of trading object storages, you can use message storages. Work with these storages is also carried out through the 
+<codeEntityReference>T:StockSharp.Algo.Storages.IMarketDataStorage`1</codeEntityReference>. interface. For example, to work with candles, you can use the storage of the 
+IMarketDataStorage&lt;CandleMessage&gt; type. 
+<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference> 
+also contains a set of methods for obtaining the required message storages. 
+So, the time candle storage can be obtained, as shown in the following code snippet.
     </para>
     <code language="C#">
 	<![CDATA[
-   var security = new Security() { Id = "RIM5@FORTS" };
+   var security = new Security() { Id = "ESM5@NYSE" };
    var candleMessageStorage = _storage.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, TimeSpan.FromMinutes(1));
 	]]>
 </code>
 	<para>
-	    Далее с хранилищем можно работать при помощи методов
-	    
-	    <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Load(System.DateTime)</codeEntityReference> и/или 
-	    <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Save(System.Collections.IEnumerable)</codeEntityReference>, как показано в примере в
-	    <link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">предыдущем разделе</link>.
+Then you can work with the storage using 	    
+<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Load(System.DateTime)</codeEntityReference> and/or  
+<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Save(System.Collections.IEnumerable)</codeEntityReference>  methods, as shown in the example in the 
+<link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a"/>.
     </para>
    	<para>
-	    Обратите внимание, что <token>stocksharp</token> позволяет приводить типы хранилища торговых объектов к соответствующим типам
-	    хранилищ сообщений и наоборот. Например, IMarketDataStorage&lt;MarketDepth&gt; можно привести к типу IMarketDataStorage&lt;QuoteChangeMessage&gt; и наборот.
+Note that <token>stocksharp</token> allows you to convert the trading object 
+storage types to the corresponding types of message storages and vice versa. 
+For example, IMarketDataStorage&lt;MarketDepth&gt; can be converted to the IMarketDataStorage&lt;QuoteChangeMessage&gt; type and vice versa.
     </para>
     <code language="C#">
 	<![CDATA[
 	
-   var security = new Security() { Id = "RIM5@FORTS" };
+   var security = new Security() { Id = "ESM5@NYSE" };
    
    var depthStorage = _storage.GetMarketDepthStorage(_security);
    var quoteMessageStorage = depthStorage as IMarketDataStorage<QuoteChangeMessage>;
@@ -40,50 +41,46 @@
 	]]>
 </code>
 <para>
-	Следует обратить внимание на актуальность использования хранилища сообщений для хранения собственных заявок и сделок. Дело в том, что для этих торговых
-	объектов нет соответсвующих хранилищ. В этом случае придется использовать хранилище сообщений IMarketDataStorage&lt;ExecutionMessage&gt;.
-	В следующем примере покано, как сохранить в хранилище собственные сделки.
+It should pay attention to the relevance of using the message storage to store own 
+orders and trades. The matter is that for these trading objects there are no corresponding 
+storages. In this case, you must use the IMarketDataStorage&lt;ExecutionMessage&gt; 
+message storage. The following example shows how to store own trades in the storage.
 </para>
 	
 	</introduction>
 
 	<procedure>
-		<title>Пример сохранения собственных сделок</title>
+		<title>Example of saving own trades</title>
 		<steps class="ordered">
 			<step>
 				<content>
 				<para>
-				 Сначала создается экземпляр коннектора, а также хранилище. Кроме того мы определяем идентификатор инструменты, с которым будем работать
-				 и декларируем переменную для хранилища транзакций. Само хранилище транзакций для заданного инструмета будет получено в событии получения
-				 инструментов при помощи метода	
-				 <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetTransactionStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>.
+1.	First, an instance of the connector is created, as well as a storage. In addition, 
+we specify the identifier of the instrument with which we will work and declare a 
+variable for the transaction storage. The transaction storage itself for the specified 
+instrument will be received in the instrument getting event using the 
+<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetTransactionStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference> method.
 		</para>		
 
 <code language="C#">
 					<![CDATA[
-// Создаем коннектор
-var connector = new QuikTrader();
+var connector = new OpenECryTrader();
 
-// Путь к корневой папке хранилища
-var storagePath = @"....";
+var securityId = "ESM5@NYSE";
 
-var securityId = "RIM5@FORTS";
+// storage to historical data
+var storageRegistry = new StorageRegistry
+{
+	// set historical path
+	DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
+};
 
-// Создаем хранилище
-var storage = new StorageRegistry() { DefaultDrive = new LocalMarketDataDrive(storagePath) };
-
-// Декларируем хранилище транзакций
 IMarketDataStorage<ExecutionMessage> tranStorage = null;
 
-// В обработчике событии получения инстументов
-// получаем хранилище транзакций для заданного инструмента
-connector.NewSecurities += securities =>
+connector.NewSecurity += security =>
 {
-	securities.ForEach(s =>
-	{
-		if (s.Id == securityId)
-			tranStorage = _storage.GetTransactionStorage(s);
-	});
+		if (security.Id == securityId)
+			tranStorage = _storage.GetTransactionStorage(security);
 };
 
  ]]>
@@ -92,18 +89,15 @@ connector.NewSecurities += securities =>
 			</step>
 			<step>
 		<content>
-		
-		   <!--System.Action<System.Collections.Generic.IEnumerable<StockSharp.BusinessEntities.MyTrade>> NewMyTrades-->
-		
-			<para>Сохранение собственных сделок будет выполняться в обработчике события
-			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrades</codeEntityReference> при помощи метода
+
+			<para>Saving own trades will be performed in the 
+			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrades</codeEntityReference> event handler using the 
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IMarketDataStorage.Save(System.Collections.IEnumerable)</codeEntityReference>. 
-			Перед сохранением список собственных сделок приводится к типу IEnumerable&lt;ExecutionMessage&gt;.
-			Сама процедура выставления заявок в этим примере опущена. 
+method. Before saving, the list of own trades is converted to the IEnumerable&lt;ExecutionMessage&gt; 
+type. The procedure for order registering itself in this example is omitted.
             </para>
 					<code language="C#">
 					<![CDATA[
-// сохраняем сделки в хранилище
 connector.NewMyTrades += trades =>
 {
 	tranStorage.Save((IEnumerable<ExecutionMessage>)trades);

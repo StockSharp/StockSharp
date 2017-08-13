@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleRithmic
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows.Media;
 	
@@ -56,26 +55,25 @@ namespace SampleRithmic
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandles += ProcessNewCandles;
-			_trader.SubscribeCandles(_candleSeries, from, to);
+			_trader.CandleSeriesProcessing += ProcessNewCandle;
+			_trader.SubscribeCandles(_candleSeries, @from, to);
 
 			Title = candleSeries.ToString();
 		}
 
-		private void ProcessNewCandles(CandleSeries series, IEnumerable<Candle> candles)
+		private void ProcessNewCandle(CandleSeries series, Candle candle)
 		{
 			if (series != _candleSeries)
 				return;
 
-			foreach (var timeFrameCandle in candles)
-			{
-				Chart.Draw(_candleElem, timeFrameCandle);
-			}
+			Chart.Draw(_candleElem, candle);
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewCandles -= ProcessNewCandles;
+			_trader.UnSubscribeCandles(_candleSeries);
+			_trader.CandleSeriesProcessing -= ProcessNewCandle;
+
 			base.OnClosing(e);
 		}
 	}

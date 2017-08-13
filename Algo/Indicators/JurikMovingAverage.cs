@@ -120,10 +120,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Phase
 		{
-			get
-			{
-				return _phase;
-			}
+			get => _phase;
 			set
 			{
 				_phase = value;

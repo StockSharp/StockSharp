@@ -95,7 +95,7 @@ namespace XMLCommToHTM.DOM
 				.Select(_ =>
 				{
 					var ns = new NamespaceDom(_.Key);
-					ns.Types.AddMany(_.Value);
+					ns.Types.AddRange(_.Value);
 					return ns;
 				})
 				.ToArray();

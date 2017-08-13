@@ -85,7 +85,7 @@ namespace StockSharp.Messages
 		bool SecurityLookupRequired { get; }
 
 		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
+		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
 		/// </summary>
 		bool OrderStatusRequired { get; }
 
@@ -103,6 +103,21 @@ namespace StockSharp.Messages
 		/// Identify security in messages by native identifier <see cref="SecurityId.Native"/>.
 		/// </summary>
 		bool IsNativeIdentifiers { get; }
+
+		/// <summary>
+		/// Translates <see cref="CandleMessage"/> as only fully filled.
+		/// </summary>
+		bool IsFullCandlesOnly { get; }
+
+		/// <summary>
+		/// Support any subscriptions (ticks, order books etc.).
+		/// </summary>
+		bool IsSupportSubscriptions { get; }
+
+		/// <summary>
+		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
+		/// </summary>
+		bool IsSupportSubscriptionBySecurity { get; }
 
 		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.

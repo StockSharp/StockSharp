@@ -3,12 +3,12 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    <introduction>
       <para>
-      	    The graphic component <codeEntityReference>T:StockSharp.Xaml.Charting.OptionPositionChart</codeEntityReference> - is the chart showing the position and
-      	    the options “Greeks” relating to the underlying asset.
+The graphic component <codeEntityReference>T:StockSharp.Xaml.Charting.OptionPositionChart</codeEntityReference> 
+is the chart showing the position and the options “Greeks” relating to the underlying asset.
       </para>
       <para>
-            The following is the example SampleOptionQuoting, in which this chart is used. The source code of the example can be found in the folder <legacyItalic>Samples/Options/SampleOptionQuoting</legacyItalic>.
-      </para>
+The following is the example SampleOptionQuoting, in which this chart is used. 
+The source code of the example can be found in the <legacyItalic>Samples/Options/SampleOptionQuoting</legacyItalic> folder.      </para>
       
       <mediaLink><image placement="left" xlink:href="option_volsmile" /></mediaLink>
    </introduction>
@@ -19,8 +19,8 @@
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>The <codeEntityReference>T:StockSharp.Xaml.Charting.OptionPositionChart</codeEntityReference> element is added to the XAML code and the
-					<legacyBold>PosChart</legacyBold> name is assigned to it:</para>
+					<para>In the XAML code, add the <codeEntityReference>T:StockSharp.Xaml.Charting.OptionPositionChart</codeEntityReference>
+element and assign it the <legacyBold>PosChart</legacyBold>.</para>
             		<code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="OptionCalculator.MainWindow"
@@ -44,117 +44,209 @@
 			</step>
 			<step>
 				<content>
-					<para>The <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> connection is created in the C# code:</para>
+					<para>In the C# code, creating a connection, and subscribing to the necessary events.</para>
             		<code title="C#" language="C#">
-                  <![CDATA[
-Connector = new RithmicTrader
+<![CDATA[
+...                 
+public readonly Connector Connector = new Connector();
+...                 
+// subscribe on connection successfully event
+Connector.Connected += () =>
 {
-
+	// update gui labels
+	this.GuiAsync(() => ChangeConnectStatus(true));
 };
 
-]]>
-                  	</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>To set the initial control settings:</para>
-						<list class="ordered">
-  							<listItem>
-  									To reset to zero options positions collections
-  									<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.Positions</codeEntityReference> and the underlying instrument
-									<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.AssetPosition</codeEntityReference> of control;
-							</listItem>
-  							<listItem>
-  									To redraw the chart with the initial values
-									<codeEntityReference>M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Decimal,System.Decimal,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>;
-							</listItem>
-							<listItem>To specify messages provider for market data and instruments.</listItem>
-						</list>
-            			<code title="C#" language="C#">
-                  <![CDATA[
-PosChart.Positions.Clear();
-PosChart.AssetPosition = null;
-PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
-
-PosChart.MarketDataProvider = Connector;
-PosChart.SecurityProvider = Connector;
-
-
-]]>
-                  		</code>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>Upon getting the instruments to add underlying assets to the list:</para>
-            			<code title="C#" language="C#">
-                  <![CDATA[
-Connector.NewSecurities += securities =>
-		_assets.AddRange(securities.Where(s => s.Type == SecurityTypes.Future));
-]]>
-                  		</code>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>Upon changing the Level1 of the underlying instrument or options, as well as getting a new trade to set the _isDirty flag.
-						This allows to call the RefreshChart method (see below) in the timer event (the code is omitted) to redraw the chart.
-						Thus we control the frequency of redrawing:</para>
-            			<code title="C#" language="C#">
-                  <![CDATA[
-Connector.SecuritiesChanged += securities =>
+// subscribe on disconnection event
+Connector.Disconnected += () =>
 {
-	if ((PosChart.AssetPosition != null && securities.Contains(PosChart.AssetPosition.Security)) || PosChart.Positions.Cache.Select(p => p.Security).Intersect(securities).Any())
+	// update gui labels
+	this.GuiAsync(() => ChangeConnectStatus(false));
+};
+
+// subscribe on connection error event
+Connector.ConnectionError += error => this.GuiAsync(() =>
+{
+	// update gui labels
+	ChangeConnectStatus(false);
+
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+});
+
+// fill underlying asset's list
+Connector.NewSecurity += security =>
+{
+	if (security.Type == SecurityTypes.Future)
+		_assets.Add(security);
+};
+
+Connector.SecurityChanged += security =>
+{
+	if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
 		_isDirty = true;
 };
 
-Connector.NewTrades += trades =>
+// subscribing on tick prices and updating asset price
+Connector.NewTrade += trade =>
 {
-	var assetPos = PosChart.AssetPosition;
-	if (assetPos != null && trades.Any(t => t.Security == assetPos.Security))
+	if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
 		_isDirty = true;
 };
-]]>
-                  		</code>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>In the new position occurrence event handler to update the
-							<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.Positions</codeEntityReference> and
-							<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.AssetPosition</codeEntityReference> properties of the control.
-							In this case, as well as upon position change, to call redraw the chart:</para>
-            			<code title="C#" language="C#">
-                  <![CDATA[
-Connector.NewPositions += positions => this.GuiAsync(() =>
+
+Connector.NewPosition += position => this.GuiAsync(() =>
 {
 	var asset = SelectedAsset;
 
 	if (asset == null)
 		return;
 
-	var assetPos = positions.FirstOrDefault(p => p.Security == asset);
-	var newPos = positions.Where(p => p.Security.UnderlyingSecurityId == asset.Id).ToArray();
+	var assetPos = position.Security == asset;
+	var newPos = position.Security.UnderlyingSecurityId == asset.Id;
 
-	if (assetPos == null && newPos.Length == 0)
+	if (!assetPos && !newPos)
 		return;
 
-	if (assetPos != null)
-		PosChart.AssetPosition = assetPos;
+	if (assetPos)
+		PosChart.AssetPosition = position;
 
-	if (newPos.Length > 0)
-		PosChart.Positions.AddRange(newPos);
+	if (newPos)
+		PosChart.Positions.Add(position);
 
 	RefreshChart();
 });
 
-Connector.PositionsChanged += positions => this.GuiAsync(() =>
+Connector.PositionChanged += position => this.GuiAsync(() =>
 {
-	if ((PosChart.AssetPosition != null && positions.Contains(PosChart.AssetPosition)) || positions.Intersect(PosChart.Positions.Cache).Any())
+	if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
 		RefreshChart();
 });
 
+try
+{
+	if (File.Exists(_settingsFile))
+		Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+}
+...
+]]>
+                  	</code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>When connecting, set the initial control settings:</para>
+						<list class="ordered">
+  							<listItem>
+Resetting the 
+<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.Positions</codeEntityReference> option position collections and the underlying instrument of the 
+<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.AssetPosition</codeEntityReference> control;
+							</listItem>
+  							<listItem>
+Redrawing the chart with the initial values 
+<codeEntityReference>M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Decimal,System.Decimal,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>;
+							</listItem>
+<listItem>Specifying message provider for market data and instruments.</listItem>
+						</list>
+            			<code title="C#" language="C#">
+                  <![CDATA[
+private void ConnectClick(object sender, RoutedEventArgs e)
+{
+	if (!_isConnected)
+	{
+		ConnectBtn.IsEnabled = false;
+...
+
+		PosChart.Positions.Clear();
+		PosChart.AssetPosition = null;
+		PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
+
+...
+
+		PosChart.MarketDataProvider = Connector;
+		PosChart.SecurityProvider = Connector;
+
+		Connector.Connect();
+	}
+	else
+		Connector.Disconnect();
+}
+
+]]>
+                  		</code>
+					</content>
+				</step>
+				<step>
+					<content>
+<para>When receiving instruments, we add the underlying assets to the list.</para>
+            			<code title="C#" language="C#">
+                  <![CDATA[
+Connector.NewSecurity += security =>
+{
+	if (security.Type == SecurityTypes.Future)
+		_assets.Add(security);
+};
+]]>
+                  		</code>
+					</content>
+				</step>
+				<step>
+					<content>
+<para>Upon changing the Level1 of the underlying instrument or options, as well as 
+getting a new trade we set the _isDirty flag. This allows to call the RefreshChart 
+method (see below) in the timer event (the code is omitted) to redraw the chart. 
+Thus we control the frequency of redrawing.</para>
+            			<code title="C#" language="C#">
+                  <![CDATA[
+Connector.SecurityChanged += security =>
+{
+	if (_model.UnderlyingAsset == security || _model.UnderlyingAsset.Id == security.UnderlyingSecurityId)
+		_isDirty = true;
+};
+
+Connector.NewTrade += trade =>
+{
+	if (_model.UnderlyingAsset == trade.Security || _model.UnderlyingAsset.Id == trade.Security.UnderlyingSecurityId)
+		_isDirty = true;
+};
+
+]]>
+                  		</code>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>In the new position occurrence event handler we update the 
+							<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.Positions</codeEntityReference> and 
+							<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.AssetPosition</codeEntityReference> properties of the control. 
+							In this case, as well as upon position change, we call redraw the chart.</para>
+            			<code title="C#" language="C#">
+                  <![CDATA[
+Connector.NewPosition += position => this.GuiAsync(() =>
+{
+	var asset = SelectedAsset;
+
+	if (asset == null)
+		return;
+
+	var assetPos = position.Security == asset;
+	var newPos = position.Security.UnderlyingSecurityId == asset.Id;
+
+	if (!assetPos && !newPos)
+		return;
+
+	if (assetPos)
+		PosChart.AssetPosition = position;
+
+	if (newPos)
+		PosChart.Positions.Add(position);
+
+	RefreshChart();
+});
+
+Connector.PositionChanged += position => this.GuiAsync(() =>
+{
+	if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
+		RefreshChart();
+});
 ]]>
                  			</code>
 						</content>
@@ -170,9 +262,8 @@ private void RefreshChart()
 	var trade = asset.LastTrade;
 
 	if (trade != null)
-		PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.Now, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
+		PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.NowWithOffset, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
 }
-
 ]]>
                		</code>
 				</content>
@@ -181,7 +272,7 @@ private void RefreshChart()
  	</procedure>
 
     <relatedTopics>
-		<link xlink:href="6fe5b321-a23d-415d-b3e3-af9de9212a20">Volatility trading</link>
+		<link xlink:href="6fe5b321-a23d-415d-b3e3-af9de9212a20"/>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

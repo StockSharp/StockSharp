@@ -426,7 +426,7 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaCurrencyOnlineColumns">
       <summary>
-            Поток MOEX_RATES_REPL - Курсы валют он-лайн.
+            Поток MOEX_RATES_REPL - Курсы валют онлайн.
             Таблица curr_online - Значения курсов валют.
             </summary>
     </member>
@@ -443,6 +443,53 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaCurrencyOnlineColumns.Moment">
       <summary>
             Время расчёта курса валюты платежа.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaForecastColumns">
+      <summary>
+            Поток FORTS_FORECASTIM_REPL - Прогноз рисков после возможной раздвижки.
+            Таблица part_forecast: Прогноз по объему свободных средств, блокировок и залогов для БФ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.ClientCode">
+      <summary>
+            Код БФ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.MoneyFree">
+      <summary>
+            Свободно денег.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.MoneyBlocked">
+      <summary>
+            Заблокировано денег.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.PledgeFree">
+      <summary>
+            Свободно залогов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastColumns.PledgeBlocked">
+      <summary>
+            Заблокировано залогов.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaForecastSaColumns">
+      <summary>
+            Поток FORTS_FORECASTIM_REPL - Прогноз рисков после возможной раздвижки.
+            Таблица part_sa_forecast: Прогноз объема свободных средств для РК.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastSaColumns.SettlementAccount">
+      <summary>
+            Расчетный код.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaForecastSaColumns.MoneyFree">
+      <summary>
+            Свободно денег.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns">
@@ -588,12 +635,12 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.StepPriceClr">
       <summary>
-            Cтоимость шага цены вечернего клиринга.
+            Стоимость шага цены вечернего клиринга.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.StepPriceInterClr">
       <summary>
-            Cтоимость шага цены пром. клиринга.
+            Стоимость шага цены пром. клиринга.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.StepPriceCurr">
@@ -925,13 +972,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxBcMessagesCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица BCMESSAGES: сообщения.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxBcMessagesSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица BCMESSAGES: сообщения.
             </summary>
     </member>
@@ -969,13 +1016,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxBoardsCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица BOARDS: режимы торгов.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxBoardsSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица BOARDS: режимы торгов.
             </summary>
     </member>
@@ -1203,7 +1250,7 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.LCurrentPrice">
       <summary>
-            Официальная текущая цена, рассчитываемая как средневзвешенная цена сделок заключенных за последние 10 минут.
+            Официальная текущая цена, рассчитываемая как средневзвешенная цена сделок, заключенных за последние 10 минут.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.LClosePrice">
@@ -1260,13 +1307,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxCurrencyCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица CURRENCY: справочник валют.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxCurrencySpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица CURRENCY: справочник валют.
             </summary>
     </member>
@@ -1344,13 +1391,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxIndexCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица INDEXES: индексы.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxIndexSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица INDEXES: индексы.
             </summary>
     </member>
@@ -1383,13 +1430,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxMarketsCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица MARKETS: рынки.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxMarketsSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица MARKETS: рынки.
             </summary>
     </member>
@@ -1501,7 +1548,7 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.MarketCode">
       <summary>
-            Идентификатор рынка на котором торгуется финансовый инструмент.
+            Идентификатор рынка, на котором торгуется финансовый инструмент.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.InstrId">
@@ -1570,7 +1617,7 @@
             Дата досрочного выкупа облигации, заполняется если бумага предусматривает досрочный выкуп (до погашения).
             </summary>
       <remarks>
-            Если указана, то расчет доходности производится с успользованием этой даты, в качестве даты погашения.
+            Если указана, то расчет доходности производится с использованием этой даты, в качестве даты погашения.
             </remarks>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.AgentId">
@@ -1600,7 +1647,7 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица SECURITIES: финансовые инструменты.
             </summary>
     </member>
@@ -1611,7 +1658,7 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица SECURITIES: финансовые инструменты.
             </summary>
     </member>
@@ -1767,13 +1814,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSecSettleCodeCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица SEC_SETTLECODE: накопленный доход и ставки РЕПО на дату расчетов.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSecSettleCodeSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица SEC_SETTLECODE: накопленный доход и ставки РЕПО на дату расчетов.
             </summary>
     </member>
@@ -1826,13 +1873,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSettleCodesCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица SETTLECODES: коды расчетов.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSettleCodesSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица SETTLECODES: коды расчетов.
             </summary>
     </member>
@@ -1870,13 +1917,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxStatsCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица STATS: информация о торговом сервере.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxStatsSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица STATS: информация о торговом сервере.
             </summary>
     </member>
@@ -1909,13 +1956,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTeSysTimeCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица TESYSTIME: системное время торгового сервера.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTeSysTimeSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица TESYSTIME: системное время торгового сервера.
             </summary>
     </member>
@@ -1973,7 +2020,7 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesColumns.BuySell">
       <summary>
-            Направленность заявки инициирующей заключение сделки - "купля/продажа".
+            Направленность заявки, инициирующей заключение сделки - "купля/продажа".
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesColumns.Value">
@@ -2082,13 +2129,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTradeTimeCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица TRADETIME: расписание торгов.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTradeTimeSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица TRADETIME: расписание торгов.
             </summary>
     </member>
@@ -2111,13 +2158,13 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTrdTimeTypesCurrencyColumns">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Поток MCXCC_INFO_REPL - Валютный рынок: справочная информация.
             Таблица TRDTIMETYPES: типы событий расписания торгов.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTrdTimeTypesSpotColumns">
       <summary>
-            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок: справочная информация.
             Таблица TRDTIMETYPES: типы событий расписания торгов.
             </summary>
     </member>
@@ -2828,12 +2875,12 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.HeartBeatFuture">
       <summary>
-            Колонки служебной таблицы cерверных часов.
+            Колонки служебной таблицы серверных часов.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.HeartBeatOption">
       <summary>
-            Колонки служебной таблицы cерверных часов.
+            Колонки служебной таблицы серверных часов.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.Index">
@@ -2963,7 +3010,7 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.SysMessages">
       <summary>
-            Колонки таблицы с cообщениями торговой системы.
+            Колонки таблицы с сообщениями торговой системы.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.SessionSettlementOption">
@@ -3164,6 +3211,16 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.CurrencyOnline">
       <summary>
             Колонки таблицы курсов валют.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.Forecast">
+      <summary>
+            Колонки таблицы прогнозов объема свободных средств для РК.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.ForecastSa">
+      <summary>
+            Колонки таблицы прогнозов по объему свободных средств, блокировок и залогов для БФ.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxTradesSpot">
@@ -3867,7 +3924,7 @@
     </member>
     <member name="P:StockSharp.Plaza.Metadata.PlazaTableRegistry.Item(System.String)">
       <summary>
-            Найти таблицу по иднентификатору <see cref="P:StockSharp.Plaza.Metadata.PlazaTable.Id" />.
+            Найти таблицу по идентификатору <see cref="P:StockSharp.Plaza.Metadata.PlazaTable.Id" />.
             </summary>
       <param name="id">Идентификатор таблицы.</param>
       <returns>Найденная таблица.</returns>
@@ -3989,7 +4046,7 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.HeartBeatFuture">
       <summary>
-            Фьючерсы: служебная талица серверных часов.
+            Фьючерсы: служебная таблица серверных часов.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.TradeFutureSysEvents">
@@ -3999,7 +4056,7 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.HeartBeatOption">
       <summary>
-            Опционы: служебная талица серверных часов.
+            Опционы: служебная таблица серверных часов.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.TradeOptionSysEvents">
@@ -4134,7 +4191,7 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.InfoSysMessages">
       <summary>
-            Cообщения торговой системы для потока <see cref="F:StockSharp.Plaza.PlazaStreamRegistry.Info" />.
+            Сообщения торговой системы для потока <see cref="F:StockSharp.Plaza.PlazaStreamRegistry.Info" />.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.SessionSettlementOption">
@@ -4340,6 +4397,16 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.CurrencyOnline">
       <summary>
             Таблица курсов валют.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Forecast">
+      <summary>
+            Прогноз объема свободных средств для РК.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.ForecastSa">
+      <summary>
+            Прогноз по объему свободных средств, блокировок и залогов для БФ.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxTradesSpot">
@@ -5270,7 +5337,7 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaHeartBeatColumns">
       <summary>
-            Таблица heartbeat: Служебная таблица cерверных часов.
+            Таблица heartbeat: Служебная таблица серверных часов.
             Данная таблица наполняется ядром торговой системы с определенной периодичностью и может быть
             использована для задач синхронизации (например, для проверки прихода всех сделок за определенный
             момент времени).
@@ -6150,7 +6217,7 @@
             Время, в течение которого ожидается получение сообщения из потока данных или отправка транзакций.
             </summary>
       <remarks>
-            По-умолчанию равно 10 милисекундам.
+            По-умолчанию равно 10 миллисекундам.
             </remarks>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.UseLocalProtocol">
@@ -6202,6 +6269,11 @@
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsNativeIdentifiers">
       <summary>
             Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsSupportSubscriptionBySecurity">
+      <summary>
+            Поддерживает ли фильтрация подписки (подписка/отписка для указанного инструмента).
             </summary>
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
@@ -6344,6 +6416,10 @@
       <summary>
             Менеджер транзакций.
             </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.TransactionSynchronizer">
+      <summary>
+      </summary>
     </member>
     <member name="T:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder">
       <summary>
@@ -6562,7 +6638,12 @@
     </member>
     <member name="F:StockSharp.Plaza.PlazaStreamRegistry.Rate">
       <summary>
-            Курсы валют он-лайн.
+            Курсы валют онлайн.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.PlazaStreamRegistry.Forecast">
+      <summary>
+            Прогноз рисков после возможной раздвижки.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.PlazaStreamRegistry.McxTradesSpot">
@@ -6673,19 +6754,19 @@
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.RestrictLocalLogin">
       <summary>
             Ограничить доступ к роутеру локальным пользователям.
-            По умолчнию его значение равно <see langword="false" />.
+            По умолчанию его значение равно <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.TcpNoDelayIn">
       <summary>
             Отключен ли алгоритм Nagl'e для входящих пакетов, что ускоряет их пересылку.
-            По умолчнию его значение равно <see langword="true" />.
+            По умолчанию его значение равно <see langword="true" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.TcpNoDelayOut">
       <summary>
             Отключен ли алгоритм Nagl'e для исходящих пакетов, что ускоряет их пересылку.
-            По умолчнию его значение равно <see langword="true" />.
+            По умолчанию его значение равно <see langword="true" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.UserName">
@@ -6700,7 +6781,7 @@
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.DefaultConnection">
       <summary>
-            Соединение по умочланию.
+            Соединение по умолчанию.
             Адрес указывается в формате {ip-адрес | имя FQDN}:{номер порта}.
             </summary>
     </member>
@@ -6940,7 +7021,7 @@
     </member>
     <member name="P:StockSharp.Plaza.Transaction.Hedge">
       <summary>
-            Признак хэдж-заявки.
+            Признак хедж-заявки.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.Transaction.Trust">
@@ -7183,7 +7264,7 @@
     </member>
     <member name="T:StockSharp.Plaza.PlazaRouter">
       <summary>
-            Класс для управляения и настройки программы P2MQRouter.exe, которая осуществляет подключение к Plaza 2.
+            Класс для управления и настройки программы P2MQRouter.exe, которая осуществляет подключение к Plaza 2.
             </summary>
     </member>
     <member name="M:StockSharp.Plaza.PlazaRouter.GetConsoleProcess">
@@ -7419,7 +7500,7 @@
             Время, в течение которого ожидается получение сообщения из потока данных или отправка транзакций.
             </summary>
       <remarks>
-            По-умолчанию равно 10 милисекундам.
+            По-умолчанию равно 10 миллисекундам.
             </remarks>
     </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.UseLocalProtocol">
@@ -7481,7 +7562,7 @@
     </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.Router">
       <summary>
-            Получить управляение и настройки программы P2MQRouter.exe, которая осуществляет подключение к Plaza 2.
+            Получить управление и настройки программы P2MQRouter.exe, которая осуществляет подключение к Plaza 2.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.TransactionManager">
@@ -7727,7 +7808,7 @@
             Установить <see cref="P:StockSharp.Plaza.Transaction.Hedge" />.
             </summary>
       <param name="transaction">Транзакция.</param>
-      <param name="isHedge">Признак хэдж-заявки.</param>
+      <param name="isHedge">Признак хедж-заявки.</param>
       <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionHelper.SetTrust(StockSharp.Plaza.Transaction,System.Boolean)">

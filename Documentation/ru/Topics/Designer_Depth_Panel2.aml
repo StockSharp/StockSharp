@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="3efed911-8876-40b8-8203-b9b48b1c599c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Компонент <legacyBold>Стакан</legacyBold> представляет собой таблицу лимитных 
+заявок на покупку и продажу. В верхней части компонента необходимо выбрать источник 
+данных, из которого будут поступать данные. Источником данных является кубик 
+<link xlink:href="181e2f26-86dd-4c4b-b737-124664ef9481" />.
+</para> 
+<para>
+В стратегии можно использовать несколько разных типов стаканов (или от разных инструментов) одновременно, и выводить их на разные панели.
+</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Panel_Market_Depth"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="1ea96e9e-7018-41b9-891f-f47617cce648" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

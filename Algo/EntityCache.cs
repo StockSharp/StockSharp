@@ -24,6 +24,7 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -170,6 +171,29 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<string, News> _newsById = new SynchronizedDictionary<string, News>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedList<News> _newsWithoutId = new SynchronizedList<News>();
 
+		private sealed class CandleSeriesInfo
+		{
+			public CandleSeries Series { get; }
+
+			public MarketDataMessage Message { get; }
+
+			public Candle CurrentCandle { get; set; }
+
+			public CandleSeriesInfo(CandleSeries series, MarketDataMessage message)
+			{
+				if (series == null)
+					throw new ArgumentNullException(nameof(series));
+
+				if (message == null)
+					throw new ArgumentNullException(nameof(message));
+
+				Series = series;
+				Message = message;
+			}
+		}
+
+		private readonly SynchronizedDictionary<long, CandleSeriesInfo> _candleSeriesInfos = new SynchronizedDictionary<long, CandleSeriesInfo>();
+
 		public IEnumerable<News> News
 		{
 			get { return _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray(); }
@@ -179,7 +203,7 @@ namespace StockSharp.Algo
 
 		public int TradesKeepCount
 		{
-			get { return _tradesKeepCount; }
+			get => _tradesKeepCount;
 			set
 			{
 				if (_tradesKeepCount == value)
@@ -197,7 +221,7 @@ namespace StockSharp.Algo
 
 		public int OrdersKeepCount
 		{
-			get { return _ordersKeepCount; }
+			get => _ordersKeepCount;
 			set
 			{
 				if (_ordersKeepCount == value)
@@ -241,7 +265,7 @@ namespace StockSharp.Algo
 
 		public IEntityFactory EntityFactory
 		{
-			get { return _entityFactory; }
+			get => _entityFactory;
 			set
 			{
 				if (value == null)
@@ -255,7 +279,7 @@ namespace StockSharp.Algo
 
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
-			get { return _exchangeInfoProvider; }
+			get => _exchangeInfoProvider;
 			set
 			{
 				if (value == null)
@@ -330,6 +354,8 @@ namespace StockSharp.Algo
 			_orderRegisterFails.Clear();
 
 			_positions.Clear();
+
+			_candleSeriesInfos.Clear();
 		}
 
 		public void AddOrderStatusTransactionId(long transactionId)
@@ -501,6 +527,7 @@ namespace StockSharp.Algo
 					o.UserOrderId = message.UserOrderId;
 					o.ClientCode = message.ClientCode;
 					o.BrokerCode = message.BrokerCode;
+					o.IsMarketMaker = message.IsMarketMaker;
 
 					if (message.PortfolioName.IsEmpty())
 						o.Portfolio = _portfolios.FirstOrDefault().Value;
@@ -1105,6 +1132,78 @@ namespace StockSharp.Algo
 					pair.Value.OrdersByStringId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
 				}
 			}
+		}
+
+		public void CreateCandleSeries(MarketDataMessage mdMsg, CandleSeries series)
+		{
+			if (mdMsg == null)
+				throw new ArgumentNullException(nameof(mdMsg));
+
+			if (series == null)
+				throw new ArgumentNullException(nameof(series));
+
+			if (mdMsg.TransactionId == 0)
+				throw new ArgumentException(nameof(mdMsg));
+
+			_candleSeriesInfos.Add(mdMsg.TransactionId, new CandleSeriesInfo(series, mdMsg));
+		}
+
+		public MarketDataMessage RemoveCandleSeries(CandleSeries series, Func<long> getTransactionId)
+		{
+			if (series == null)
+				throw new ArgumentNullException(nameof(series));
+
+			if (getTransactionId == null)
+				throw new ArgumentNullException(nameof(getTransactionId));
+
+			long transactionId;
+
+			lock (_candleSeriesInfos.SyncRoot)
+				transactionId = _candleSeriesInfos.FirstOrDefault(p => p.Value.Series == series).Key;
+
+			if (transactionId == 0)
+				return null;
+
+			var mdMsg = series.ToMarketDataMessage(false);
+			mdMsg.TransactionId = getTransactionId();
+			mdMsg.OriginalTransactionId = transactionId;
+
+			_candleSeriesInfos.Remove(transactionId);
+
+			return mdMsg;
+		}
+
+		private CandleSeriesInfo TryGetCandleSeriesInfo(long transactionId)
+		{
+			return _candleSeriesInfos.TryGetValue(transactionId);
+		}
+
+		public CandleSeries TryGetCandleSeries(long transactionId)
+		{
+			return TryGetCandleSeriesInfo(transactionId)?.Series;
+		}
+
+		public CandleSeries UpdateCandle(CandleMessage message, out Candle candle)
+		{
+			var info = TryGetCandleSeriesInfo(message.OriginalTransactionId);
+
+			candle = null;
+
+			if (info == null)
+				return null;
+
+			if (info.CurrentCandle != null && info.CurrentCandle.OpenTime == message.OpenTime)
+			{
+				if (info.CurrentCandle.State == CandleStates.Finished)
+					return null;
+
+				info.CurrentCandle.Update(message);
+			}
+			else
+				info.CurrentCandle = message.ToCandle(info.Series);
+
+			candle = info.CurrentCandle;
+			return info.Series;
 		}
 	}
 }

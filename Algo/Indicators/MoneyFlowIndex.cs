@@ -38,10 +38,11 @@ namespace StockSharp.Algo.Indicators
 		{
 		    Length = 14;
 		}
-		
+
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MoneyFlowIndex"/> using a specified length.
+		/// Initializes a new instance of the <see cref="MoneyFlowIndex"/>.
 		/// </summary>
+		/// <param name="length">Period length.</param>
 		public MoneyFlowIndex(int length)
 		{
 		    Length = length;

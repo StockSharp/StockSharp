@@ -6,14 +6,14 @@
 кнопку <legacyBold>Торговля</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_strategies_00"/></mediaLinkInline>  
 откроется панель <legacyBold>Торговля</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_Panel_strategies_01"/>
+<image placement="center" xlink:href="Designer_Panel_strategies_01"/>
 </mediaLink>
 <para>Панель <legacyBold>Торговля</legacyBold> представляет из себя таблицу, 
 на которой отображены все стратегии, добавленные в <legacyBold>Live торговлю</legacyBold>. 
 На панели <legacyBold>Торговля</legacyBold> можно посмотреть текущее состояние стратегии, 
 а также запустить или остановить стратегию кнопками <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>, <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline>.</para>
  <mediaLink>
-<image xlink:href="Designer_Panel_strategies_02"/>
+<image placement="center" xlink:href="Designer_Panel_strategies_02"/>
 </mediaLink>
 
 

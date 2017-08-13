@@ -29,11 +29,15 @@ namespace StockSharp.Community
 	/// </summary>
 	public class CommunityAuthorization : IAuthorization
 	{
+		private readonly Products _product;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CommunityAuthorization"/>.
 		/// </summary>
-		public CommunityAuthorization()
+		/// <param name="product">Product.</param>
+		public CommunityAuthorization(Products product)
 		{
+			_product = product;
 		}
 
 		/// <summary>
@@ -47,7 +51,7 @@ namespace StockSharp.Community
 		{
 			try
 			{
-				AuthenticationClient.Instance.Login(login, password);
+				AuthenticationClient.Instance.Login(_product, login, password);
 				return Guid.NewGuid();
 			}
 			catch (Exception ex)
@@ -80,9 +84,6 @@ namespace StockSharp.Community
 		/// <summary>
 		/// Get all available users.
 		/// </summary>
-		public IEnumerable<Tuple<string, IEnumerable<IPAddress>>> AllUsers
-		{
-			get { throw new NotSupportedException(); }
-		}
+		public IEnumerable<Tuple<string, IEnumerable<IPAddress>>> AllUsers => throw new NotSupportedException();
 	}
 }

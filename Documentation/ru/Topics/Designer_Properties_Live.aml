@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="319208d0-d543-47aa-8008-3891079198d4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Панель <legacyBold>Свойства</legacyBold> по умолчанию свернута справа во вкладки 
+стратегии. Данная панель представляет собой таблицу свойств эмуляции или Live торговли. 
+При выделении определенного свойства внизу таблицы появится подробное описание 
+этого свойства. Все свойства сгруппированы в группы:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Properties_Live_00"/>
+</mediaLink>
+<para><legacyBold>Уровень логирования</legacyBold></para>
+<list class="bullet">
+<listItem><para><legacyBold>Уровень логирования</legacyBold> – уровень ведения логов для данного элемента.</para></listItem>
+</list>
+
+
+<para><legacyBold>Инициализация</legacyBold></para>
+<list class="bullet">
+  <listItem><para><legacyBold>Тип данных</legacyBold> - тип данных.</para></listItem>
+<listItem><para><legacyBold>Тайм-фрейм</legacyBold> - использовать свечи с заданным тайм-фреймом.</para></listItem>
+<listItem><para><legacyBold>Дней истории</legacyBold> - количество дней истории для инициализации стратегии. </para></listItem>
+</list>
+<para><legacyBold>Настройки</legacyBold></para>
+<list class="bullet">
+<listItem><para><link xlink:href="b4f8c503-6589-4979-93ee-506df859d967" /> - настройка контроля рисков.</para></listItem>
+</list>
+<para><legacyBold>Параметры схемы</legacyBold> </para>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> - инструмент.</para></listItem>
+<listItem><para><legacyBold>Портфель</legacyBold> - портфель.</para></listItem>
+</list>
+<para>Если не заполнять <legacyBold>Параметры схемы</legacyBold>,
+ то при эмуляции инструмент будет использоваться из 
+ поля <legacyBold>Инструмент</legacyBold> вкладки <legacyBold>Эмуляция</legacyBold>, а портфель 
+ будет использоваться тестовый портфель по умолчанию.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

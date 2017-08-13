@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Strategies
 		public bool AutoGenerateStrategyName { get; set; }
 
 		/// <summary>
-		/// The startegy brief name.
+		/// The strategy brief name.
 		/// </summary>
 		public string ShortName { get; }
 
@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public string Pattern
 		{
-			get { return _pattern; }
+			get => _pattern;
 			set
 			{
 				if (_pattern == value)
@@ -151,7 +151,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public string Value
 		{
-			get { return _value ?? (_value = _strategy.Name); }
+			get => _value ?? (_value = _strategy.Name);
 			set
 			{
 				if (AutoGenerateStrategyName)

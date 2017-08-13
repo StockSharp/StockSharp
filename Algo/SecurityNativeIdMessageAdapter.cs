@@ -54,6 +54,13 @@
 			Storage.Added += OnStorageNewIdentifierAdded;
 		}
 
+		/// <inheritdoc />
+		public override void Dispose()
+		{
+			Storage.Added -= OnStorageNewIdentifierAdded;
+			base.Dispose();
+		}
+
 		/// <summary>
 		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
 		/// </summary>
@@ -142,17 +149,17 @@
 
 					base.OnInnerAdapterNewOutMessage(message);
 
-					ProcessSuspendedSecurityMessages(securityId);
+					ProcessSuspendedSecurityMessages(secMsg.SecurityId);
 
 					break;
 				}
 
-				case MessageTypes.Position:
-				{
-					var positionMsg = (PositionMessage)message;
-					ProcessMessage(positionMsg.SecurityId, positionMsg, null);
-					break;
-				}
+				//case MessageTypes.Position:
+				//{
+				//	var positionMsg = (PositionMessage)message;
+				//	ProcessMessage(positionMsg.SecurityId, positionMsg, null);
+				//	break;
+				//}
 
 				case MessageTypes.PositionChange:
 				{
@@ -241,26 +248,20 @@
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
 				case MessageTypes.OrderCancel:
+				case MessageTypes.OrderGroupCancel:
 				case MessageTypes.MarketData:
 				{
 					var secMsg = (SecurityMessage)message;
-					var securityId = secMsg.SecurityId;
 
-					if ((secMsg as MarketDataMessage)?.DataType == MarketDataTypes.News && securityId.IsDefault())
+					if (secMsg.NotRequiredSecurityId())
 						break;
 
-					object native;
+					var securityId = secMsg.SecurityId;
 
-					lock (_syncRoot)
-					{
-						native = _securityIds.TryGetKey(securityId);
+					var native = GetNativeId(secMsg, securityId);
 
-						if (native == null)
-						{
-							_suspendedInMessages.SafeAdd(securityId).Add(message.Clone());
-							return;
-						}
-					}
+					if (native == null)
+						return;
 
 					securityId.Native = native;
 					message.ReplaceSecurityId(securityId);
@@ -271,7 +272,25 @@
 				case MessageTypes.OrderPairReplace:
 				{
 					var pairMsg = (OrderPairReplaceMessage)message;
-					// TODO
+
+					var securityId1 = pairMsg.Message1.SecurityId;
+					var securityId2 = pairMsg.Message2.SecurityId;
+
+					var nativeId1 = GetNativeId(pairMsg, securityId1);
+
+					if (nativeId1 == null)
+						return;
+
+					var nativeId2 = GetNativeId(pairMsg, securityId2);
+
+					if (nativeId2 == null)
+						return;
+
+					securityId1.Native = nativeId1;
+					pairMsg.Message1.ReplaceSecurityId(securityId1);
+
+					securityId2.Native = nativeId2;
+					pairMsg.Message2.ReplaceSecurityId(securityId2);
 					break;
 				}
 
@@ -281,6 +300,23 @@
 			}
 
 			base.SendInMessage(message);
+		}
+
+		private object GetNativeId(Message message, SecurityId securityId)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			lock (_syncRoot)
+			{
+				var native = _securityIds.TryGetKey(securityId);
+
+				if (native != null)
+					return native;
+
+				_suspendedInMessages.SafeAdd(securityId).Add(message.Clone());
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -389,6 +425,15 @@
 
 		private void ProcessSuspendedSecurityMessages(SecurityId securityId)
 		{
+			var noNativeId = securityId.Native == null ? (SecurityId?)null : securityId;
+
+			if (noNativeId != null)
+			{
+				var t = noNativeId.Value;
+				t.Native = null;
+				noNativeId = t;
+			}
+
 			List<Message> msgs = null;
 
 			lock (_syncRoot)
@@ -399,6 +444,21 @@
 				{
 					msgs = GetMessages(tuple);
 					_suspendedOutMessages.Remove(securityId);
+				}
+
+				if (noNativeId != null)
+				{
+					tuple = _suspendedOutMessages.TryGetValue(noNativeId.Value);
+
+					if (tuple != null)
+					{
+						if (msgs == null)
+							msgs = GetMessages(tuple);
+						else
+							msgs.AddRange(GetMessages(tuple));
+
+						_suspendedOutMessages.Remove(noNativeId.Value);
+					}
 				}
 
 				// find association by code and code + type
@@ -424,17 +484,35 @@
 
 				if (inMsgs != null)
 				{
-					_suspendedInMessages.Remove(securityId);
-
 					if (msgs == null)
 						msgs = inMsgs;
 					else
 						msgs.AddRange(inMsgs);
+
+					_suspendedInMessages.Remove(securityId);
+				}
+
+				if (noNativeId != null)
+				{
+					inMsgs = _suspendedInMessages.TryGetValue(noNativeId.Value);
+
+					if (inMsgs != null)
+					{
+						if (msgs == null)
+							msgs = inMsgs;
+						else
+							msgs.AddRange(inMsgs);
+
+						_suspendedInMessages.Remove(noNativeId.Value);
+					}
 				}
 			}
 
 			if (msgs == null)
 				return;
+
+			// external code shouldn't receive native ids
+			securityId.Native = null;
 
 			foreach (var msg in msgs)
 			{
@@ -454,7 +532,11 @@
 				added = _securityIds.TryAdd(nativeId, securityId);
 
 			if (added)
-				RaiseNewOutMessage(new ProcessSuspendedSecurityMessage(this, securityId));
+			{
+				var temp = securityId;
+				temp.Native = nativeId;
+				RaiseNewOutMessage(new ProcessSuspendedSecurityMessage(this, temp));
+			}
 		}
 
 		private static List<Message> GetMessages(RefPair<List<Message>, Dictionary<MessageTypes, Message>> tuple)

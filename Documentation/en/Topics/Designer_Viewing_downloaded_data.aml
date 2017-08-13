@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для просмотра загруженных данных необходимо выбрать 
+инструмент в списке <legacyBold>Активные</legacyBold>. На панели 
+справа отобразятся все имеющиеся данные по инструменту:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Viewing_the_downloaded_data_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="57dc2e39-baa6-4c67-83a9-13278370a877" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Risk
 		/// </summary>
 		public IRiskManager RiskManager
 		{
-			get { return _riskManager; }
+			get => _riskManager;
 			set
 			{
 				if (value == null)

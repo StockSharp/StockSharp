@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="RelativeVigorIndex"/>.
 		/// </summary>
 		/// <param name="average">Average indicator part.</param>
-		/// <param name="signal">Signalling part of indicator.</param>
+		/// <param name="signal">Signaling part of indicator.</param>
 		public RelativeVigorIndex(RelativeVigorIndexAverage average, RelativeVigorIndexSignal signal)
 			: base(average, signal)
 		{
@@ -55,15 +55,15 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Average")]
 		[DescriptionLoc(LocalizedStrings.Str772Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public RelativeVigorIndexAverage Average { get; private set; }
+		public RelativeVigorIndexAverage Average { get; }
 
 		/// <summary>
-		/// Signalling part of indicator.
+		/// Signaling part of indicator.
 		/// </summary>
 		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Signal")]
 		[DescriptionLoc(LocalizedStrings.Str773Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public RelativeVigorIndexSignal Signal { get; private set; }
+		public RelativeVigorIndexSignal Signal { get; }
 	}
 }

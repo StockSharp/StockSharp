@@ -62,7 +62,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.MaxDepthOfBookKey)]
 		public int MaxDepth
 		{
-			get { return _maxDepth; }
+			get => _maxDepth;
 			set
 			{
 				if (value < 1)
@@ -131,14 +131,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str282Key)]
 		public Quote[] Bids 
 		{
-			get
-			{
-				return _bids;
-				//lock (_syncRoot)
-				//{
-				//    return _bidsCache ?? (_bidsCache = _bids.Select(q => q.Clone()).ToArray());
-				//}
-			}
+			get => _bids;
 			private set
 			{
 				if (value == null)
@@ -159,14 +152,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str284Key)]
 		public Quote[] Asks 
 		{ 
-			get
-			{
-				return _asks;
-				//lock (_syncRoot)
-				//{
-				//    return _asksCache ?? (_asksCache = _asks.Select(q => q.Clone()).ToArray());
-				//}
-			}
+			get => _asks;
 			private set
 			{
 				if (value == null)
@@ -300,7 +286,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str1197Key)]
 		public int Depth
 		{
-			get { return _depth; }
+			get => _depth;
 			private set
 			{
 				if (_depth == value)

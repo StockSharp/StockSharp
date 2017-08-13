@@ -33,6 +33,16 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	{
+		private class ReconnectMessage : Message
+		{
+			public const MessageTypes ReconnectMessageType = (MessageTypes)(-17000);
+
+			public ReconnectMessage()
+				: base(ReconnectMessageType)
+			{
+			}
+		}
+
 		// дополнительные состояния для ConnectionStates
 		private const ConnectionStates _none = (ConnectionStates)0 - 1;
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
@@ -110,7 +120,12 @@ namespace StockSharp.Algo
 					else
 					{
 						lock (_timeSync)
+						{
+							if (_currState == ConnectionStates.Connected)
+								_prevState = _reConnecting;
+
 							_currState = _reConnecting;
+						}
 
 						_connectionTimeOut = _reConnectionSettings.Interval;
 						_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
@@ -168,6 +183,12 @@ namespace StockSharp.Algo
 					lock (_timeSync)
 						_canSendTime = false;
 
+					break;
+				}
+
+				case ReconnectMessage.ReconnectMessageType:
+				{
+					SendInMessage(new ConnectMessage());
 					break;
 				}
 			}
@@ -269,7 +290,7 @@ namespace StockSharp.Algo
 						switch (_currState)
 						{
 							case ConnectionStates.Connecting:
-								RaiseNewOutMessage(new ConnectMessage{  Error = new TimeoutException(LocalizedStrings.Str170) });
+								RaiseNewOutMessage(new ConnectMessage{ Error = new TimeoutException(LocalizedStrings.Str170) });
 								break;
 							case ConnectionStates.Disconnecting:
 								RaiseNewOutMessage(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.Str171) });
@@ -288,7 +309,7 @@ namespace StockSharp.Algo
 						{
 							//ReConnectionSettings.RaiseTimeOut();
 
-							if (_currState == ConnectionStates.Connecting && _connectingAttemptCount > 0)
+							if (_currState == ConnectionStates.Connecting && _connectingAttemptCount != 0)
 							{
 								lock (_timeSync)
 									_currState = _reConnecting;
@@ -331,8 +352,12 @@ namespace StockSharp.Algo
 
 						_connectionTimeOut = _reConnectionSettings.Interval;
 
-						_prevState = _currState;
-						SendInMessage(new ConnectMessage());
+						//_prevState = _currState;
+						RaiseNewOutMessage(new ReconnectMessage
+						{
+							IsBack = true,
+							Adapter = this
+						});
 					}
 					else
 					{

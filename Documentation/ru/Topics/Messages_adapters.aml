@@ -121,7 +121,7 @@ public class SmartAdapter: MessageAdapter
   							<listItem>
   								<para>В конструктор адаптера передается генератор идентификаторов транзакций, который будет использоваться для создания идентификаторов сообщений.</para>
   							</listItem>
-  							<listItem>
+  							<!--<listItem>
   								<para>Далее заполняем словарь <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityClassInfo</codeEntityReference>. 
   								Этот словарь сопоставляет коды классов инструментов в <token>smartcom</token> с типом инструмента 
   								<codeEntityReference>P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> и кодом площадки в <token>stocksharp</token>.</para>
@@ -129,7 +129,7 @@ public class SmartAdapter: MessageAdapter
   							<listItem>
   								<para>Заполняется словарь <legacyBold>PortfolioBoardCodes</legacyBold>, который сопоставляет
   								коды площадок для портфелей.</para>
-  							</listItem>
+  							</listItem>-->
   							<listItem>
   								<para>
   								При помощи метода 
@@ -145,18 +145,6 @@ public class SmartAdapter: MessageAdapter
 public SmartAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 {
-
-	 SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
-     SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
-     SecurityClassInfo.Add("TQBR", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexTqbr.Code));
-
-     PortfolioBoardCodes = new Dictionary<string, string>
-	{
-		{ "EQ", ExchangeBoard.MicexEqbr.Code },
-		{ "FOB", ExchangeBoard.MicexFbcb.Code },
-		{ "RTS_FUT", ExchangeBoard.Forts.Code },
-	};
-	
 	// Сообщения, связанные с маркет-данными
     this.AddSupportedMessage(MessageTypes.MarketData);
     this.AddSupportedMessage(MessageTypes.SecurityLookup);
@@ -379,13 +367,13 @@ protected override void OnSendInMessage(Message message)
   						<listItem>
   							<para>
   								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.OrderStatusRequired</codeEntityReference> - необходимо ли сообщение
-  									<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> для получения заявок и собственых сделок.
+  									<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> для получения заявок и собственных сделок.
   							</para>
   						</listItem>
 					</list>
 					<para>
-					 Если значение <legacyBold>true</legacyBold>, то соответсвующее сообщение будет послано. По умолчанию значения этих свойств зависят от
-					 наличия соответсвующего типа сообщения в списке поддерживаемых сообщений. В нашем примере (см. Конструктор адаптера.) в этот список были
+					 Если значение <legacyBold>true</legacyBold>, то соответствующее сообщение будет послано. По умолчанию значения этих свойств зависят от
+					 наличия соответствующего типа сообщения в списке поддерживаемых сообщений. В нашем примере (см. Конструктор адаптера.) в этот список были
 					 добавлены типы 
 					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> и  
 					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference>, поэтому
@@ -492,7 +480,7 @@ private void smartCom_AddPortfolio(int row, int nrows, string portfolioName, str
 					 А после получения всех инструментов необходимо послать входящее сообщение 
 					 <codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.
 					 Обратите внимание, что свойству <legacyBold>OriginalTransactionId</legacyBold> обоих входящих сообщений нужно 
-					 присвоить значение <legacyBold>TransactionId</legacyBold> соответсвующего исходящего сообщения.  
+					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -619,12 +607,12 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 				 При обработке этого сообщения необходимо вызвать методы <token>smartcom</token> регистрирующий/отменяющий регистрацию получения сделок.
 				 </para>
 				 <para>
-				 Так как сообщение используется для работы со всем типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
+				 Так как сообщение используется для работы со всеми типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
 				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType</codeEntityReference>. Для сделок значение этого свойства равно
 				 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MarketDataTypes.Trades</codeEntityReference>.
 				</para>
 				<para>
-				  Посде вызова метода <legacyBold>StServer.ListenTicks</legacyBold> сделки будут поступать в событии <legacyBold>StServer.AddTick</legacyBold>.
+				  После вызова метода <legacyBold>StServer.ListenTicks</legacyBold> сделки будут поступать в событии <legacyBold>StServer.AddTick</legacyBold>.
 				 </para>
 				
 				<code language="C#">
@@ -726,46 +714,5 @@ private static ExecutionMessage CreateTrade(string smartId, DateTime time, decim
   </developerConceptualDocument>
 </topic>
 
-
-<!--<list class="ordered">
-  						<listItem>
-  							<para>При помощи метода <legacyBold>CreateTrade</legacyBold> создается исходящее сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>. 
-  							Обратите внимание, что сообщения <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> используются как для сделок, так и для заявок. 
-  							Поэтому в сообщении уточняется, что оно относится к сделке - <legacyBold>ExecutionType = ExecutionTypes.Tick</legacyBold>.</para>
-  						</listItem>
-  						<listItem>
-  							<para>Созданное сообщение передается в метод <codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(Message)</codeEntityReference> (см. ниже).</para>
-  						</listItem>
-					</list> 
-				   
-				   <para>
-				     Рассмотрим этот процесс на примере события получения новой сделки <legacyBold>_wrapper.NewTrade</legacyBold>.
-				     </para>
-				   
-						<code language="C#">
-						<![CDATA[
-// Обработчик события новой сделки						
-private void OnNewTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartOrderAction action)
-{
-	SendOutMessage(CreateTrade(smartId, time, price, volume, tradeId, action));
-}
-
-// Создаем сообщение новой сделки
-private static ExecutionMessage CreateTrade(string smartId, DateTime time, decimal? price, decimal? volume, long tradeId, SmartOrderAction action)
-{
-	return new ExecutionMessage
-	{
-		SecurityId = new SecurityId { Native = smartId },
-		TradeId = tradeId,
-		TradePrice = price,
-		Volume = volume,
-		OriginSide = action.ToSide(),
-		ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
-		ExecutionType = ExecutionTypes.Tick,
-	};
-}
-
-						]]>	
-						</code> -->
 
 

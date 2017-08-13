@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 
 			public decimal Volume
 			{
-				get { return _volume; }
+				get => _volume;
 				set
 				{
 					_volume = value;
@@ -56,8 +56,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 			Order = 0)]
 		public TimeSpan TimeFrame
 		{
-			get { return _timeFrame.Value; }
-			set { _timeFrame.Value = value; }
+			get => _timeFrame.Value;
+			set => _timeFrame.Value = value;
 		}
 
 		/// <summary>

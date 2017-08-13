@@ -44,7 +44,7 @@ var isShortLessThenLong = ShortSma.GetValue<decimal>(0) < LongSma.GetValue<decim
 if (_isShortLessThenLong != isShortLessThenLong)
 {
 	// short is less than long - sell, otherwise, buy.
-	var direction = isShortLessThenLong ? OrderDirections.Sell : OrderDirections.Buy;
+	var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
 
 	// creating a new order
 	var order = this.CreateOrder(direction, Security.GetMarketPrice(direction), Volume);

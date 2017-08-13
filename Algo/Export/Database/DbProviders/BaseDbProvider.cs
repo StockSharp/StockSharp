@@ -139,39 +139,48 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			sb.Append(tableName);
 			sb.Append("] (");
 
+			var hasColumns = false;
+
 			foreach (var column in table.Columns)
 			{
+				hasColumns = true;
+
 				sb.Append("[");
 				sb.Append(column.Name);
 				sb.Append("]");
+
 				var type = column.DbType;
+				
 				var isNullable = false;
+				
 				if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
 				{
 					isNullable = true;
 					type = type.GetGenericArguments()[0];
 				}
-				if (type == typeof(string))
+				else if (type == typeof(string))
 					isNullable = true;
+
 				sb.Append(" ");
 				sb.Append(GetDbType(type, column.ValueRestriction));
+
 				if (!isNullable)
 					sb.Append(" NOT NULL");
+
 				sb.Append(", ");
 			}
 
-			var primaryKeyString = CreatePrimaryKeyString(table.Columns.Where(c => c.IsPrimaryKey));
+			var primaryKeyString = CreatePrimaryKeyString(table, table.Columns.Where(c => c.IsPrimaryKey));
 			if (!primaryKeyString.IsEmpty())
 				sb.AppendFormat(" {0}", primaryKeyString);
-			else
-				sb.Remove(sb.Length - 1, 1);
-
+			else if (hasColumns)
+				sb.Remove(sb.Length - ", ".Length, ", ".Length);
 			
 			sb.Append(")");
 			return sb.ToString();
 		}
 
-		protected abstract string CreatePrimaryKeyString(IEnumerable<ColumnDescription> columns);
+		protected abstract string CreatePrimaryKeyString(Table table, IEnumerable<ColumnDescription> columns);
 
 		protected virtual string GetDbType(Type type, object restriction)
 		{
@@ -184,7 +193,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 				if (srest != null)
 				{
 					if (srest.IsFixedSize)
-						return "nchar({0})".Put(srest.MaxLength);
+						return $"nchar({srest.MaxLength})";
 					else if (srest.MaxLength > 0)
 						return "nvarchar({0})".Put(srest.MaxLength == int.MaxValue ? "max" : srest.MaxLength.To<string>());
 				}
@@ -200,7 +209,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			if (type == typeof(decimal))
 			{
 				var drest = restriction as DecimalRestriction;
-				return drest != null ? "decimal({0},{1})".Put(drest.Precision, drest.Scale) : "double";
+				return drest != null ? $"decimal({drest.Precision},{drest.Scale})": "decimal";
 			}
 
 			if (type == typeof(Enum))

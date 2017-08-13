@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Risk
 		[Browsable(false)]
 		public string Title
 		{
-			get { return _title; }
+			get => _title;
 			protected set
 			{
 				_title = value;
@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public RiskActions Action
 		{
-			get { return _action; }
+			get => _action;
 			set
 			{
 				_action = value;
@@ -113,8 +113,8 @@ namespace StockSharp.Algo.Risk
 		
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
-			add { _propertyChanged += value; }
-			remove { _propertyChanged -= value; }
+			add => _propertyChanged += value;
+			remove => _propertyChanged -= value;
 		}
 
 		private void NotifyChanged(string propertyName)
@@ -140,7 +140,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal PnL
 		{
-			get { return _pnL; }
+			get => _pnL;
 			set
 			{
 				_pnL = value;
@@ -210,7 +210,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Position
 		{
-			get { return _position; }
+			get => _position;
 			set
 			{
 				_position = value;
@@ -281,7 +281,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public TimeSpan Time
 		{
-			get { return _time; }
+			get => _time;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -409,7 +409,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Commission
 		{
-			get { return _commission; }
+			get => _commission;
 			set
 			{
 				_commission = value;
@@ -469,14 +469,14 @@ namespace StockSharp.Algo.Risk
 		private decimal _slippage;
 
 		/// <summary>
-		/// Sllippage size.
+		/// Slippage size.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str163Key)]
 		[DescriptionLoc(LocalizedStrings.Str871Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Slippage
 		{
-			get { return _slippage; }
+			get => _slippage;
 			set
 			{
 				_slippage = value;
@@ -546,7 +546,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Price
 		{
-			get { return _price; }
+			get => _price;
 			set
 			{
 				_price = value;
@@ -620,7 +620,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Volume
 		{
-			get { return _volume; }
+			get => _volume;
 			set
 			{
 				if (value < 0)
@@ -705,7 +705,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Count
 		{
-			get { return _count; }
+			get => _count;
 			set
 			{
 				if (value < 0)
@@ -727,7 +727,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public TimeSpan Interval
 		{
-			get { return _interval; }
+			get => _interval;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -850,7 +850,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Price
 		{
-			get { return _price; }
+			get => _price;
 			set
 			{
 				_price = value;
@@ -916,7 +916,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal Volume
 		{
-			get { return _volume; }
+			get => _volume;
 			set
 			{
 				if (value < 0)
@@ -993,7 +993,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Count
 		{
-			get { return _count; }
+			get => _count;
 			set
 			{
 				if (value < 0)
@@ -1014,7 +1014,7 @@ namespace StockSharp.Algo.Risk
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public TimeSpan Interval
 		{
-			get { return _interval; }
+			get => _interval;
 			set
 			{
 				if (value < TimeSpan.Zero)

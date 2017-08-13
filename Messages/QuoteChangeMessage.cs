@@ -52,7 +52,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public IEnumerable<QuoteChange> Bids
 		{
-			get { return _bids; }
+			get => _bids;
 			set
 			{
 				if (value == null)
@@ -73,7 +73,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public IEnumerable<QuoteChange> Asks
 		{
-			get { return _asks; }
+			get => _asks;
 			set
 			{
 				if (value == null)
@@ -102,7 +102,7 @@ namespace StockSharp.Messages
 		public bool IsSorted { get; set; }
 
 		/// <summary>
-		/// The quote change was build by level1.
+		/// The quote change was built by level1.
 		/// </summary>
 		[Browsable(false)]
 		public bool IsByLevel1 { get; set; }

@@ -5,7 +5,7 @@
       <para> <token>fix</token> allows you to create trading robots that use standard international protocols for access to electronic markets - <token>fix_external</token>/<token>fast_external</token>.
       The <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixTrader</codeEntityReference> should be used for trading algorithms creating for FIX protocol.
       </para>
-    </introduction>
+
     
     <para>
 		  Currently supported the following markets and brokers:
@@ -41,7 +41,7 @@
 	<para>
 		  <legacyItalic>A new markets can be supported as extensions.</legacyItalic>
     </para>
-    
+        </introduction>
     <relatedTopics>
     	<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43">Getting started</link>
     	<link xlink:href="55f27fed-449d-486d-b662-8ddde39ae852">Stop orders</link>

@@ -18,17 +18,14 @@
 		  <para>
 			  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Child strategies</link>
 		  </para>
-		  <para>
+		  <!--para>
 			  <link xlink:href="ad145f75-a2d4-4766-af60-79489b84846c">Export of order book</link>
-		  </para>
+		  </para-->
       </content>
     </prerequisites>
     
-    <!-- One or more procedure or section elements -->
 
 	<section>
-      <!--<title>Optional section</title>-->
-
       <content>
 		<para>
 		  To implement the quoting the <token>stocksharp</token> includes the <codeEntityReference>T:StockSharp.Algo.Strategies.Quoting.QuotingStrategy</codeEntityReference>
@@ -42,7 +39,7 @@
 			  registering its orders for the same price or a little better, depending on the
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceOffset</codeEntityReference> value.
 			  Additionally, the <codeEntityReference>T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy</codeEntityReference> includes the
-			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceType</codeEntityReference>, который контролирует
+			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceType</codeEntityReference>, 
 			  parameter, which controls the position of the order movement in spread:
 			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.MarketPriceTypes.Following</codeEntityReference> – the algorithm looks the best quote,
 			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.MarketPriceTypes.Opposite</codeEntityReference> – the best opposite quote and the
@@ -93,19 +90,15 @@
 		  <step>
 			  <content>
 				  <para>It is necessary to replace the code in the SmaStrategy class from:</para>
-<code language="C#">// регистрируем ее
+<code language="C#">
 base.RegisterOrder(order);</code>
 		<para>
 		  to:
 		</para>
-		<code language="C#">var strategy = new MarketQuotingStrategy(order, new Unit());
-base.ChildStrategies.Add(strategy);</code>
-		<!--para>
-		  После этого <codeEntityReference>T:StockSharp.Algo.Strategies.RealTimeStrategyManager</codeEntityReference> выполнит до конца метод SmaStrategy.OnProcess
-		  и уже после этого будет вызывать другой метод – <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.QuotingStrategy.OnProcess</codeEntityReference>.
-		  По завершению его работы (когда котируемая стратегия перейдет в статус <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessStates.Stopped</codeEntityReference>),
-		  <codeEntityReference>T:StockSharp.Algo.Strategies.RealTimeStrategyManager</codeEntityReference> возобновит работу с SmaStrategy.
-		</para-->
+<code language="C#">
+var strategy = new MarketQuotingStrategy(direction, volume);
+ChildStrategies.Add(strategy);
+</code>
 			  </content>
 		  </step>
       </steps>
@@ -120,58 +113,6 @@ base.ChildStrategies.Add(strategy);</code>
     </nextSteps>
     
     <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
     </relatedTopics>
     
   </developerWalkthroughDocument>

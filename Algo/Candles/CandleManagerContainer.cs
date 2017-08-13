@@ -160,7 +160,7 @@ namespace StockSharp.Algo.Candles
 		/// </remarks>
 		public TimeSpan CandlesKeepTime
 		{
-			get { return _candlesKeepTime; }
+			get => _candlesKeepTime;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -274,13 +274,13 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		/// <param name="from">The initial date from which the candles will be get.</param>
 		/// <param name="to">The final date by which the candles will be get.</param>
-		public void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		public void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
 			var info = _info.SafeAdd(series, key => new SeriesInfo(this));
-			info.Reset(from);
+			info.Reset(from ?? DateTimeOffset.MinValue);
 		}
 
 		private SeriesInfo GetInfo(CandleSeries series)

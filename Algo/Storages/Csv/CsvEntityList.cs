@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Storages.Csv
 	{
 		private readonly string _fileName;
 
-		private readonly CachedSynchronizedDictionary<object, T> _items = new CachedSynchronizedDictionary<object, T>();
+		private readonly Dictionary<object, T> _items = new Dictionary<object, T>();
 
 		/// <summary>
 		/// The CSV storage of trading objects.
@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 		#region IStorageEntityList<T>
 
-		private DelayAction.Group _delayActionGroup;
+		private DelayAction.IGroup<CsvFileWriter> _delayActionGroup;
 		private DelayAction _delayAction;
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public DelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				if (_delayAction == value)
@@ -70,19 +70,26 @@ namespace StockSharp.Algo.Storages.Csv
 
 				if (_delayAction != null)
 				{
-					_delayActionGroup = _delayAction.CreateGroup(() => new CsvFileWriter(new FileStream(_fileName, FileMode.Append), Registry.Encoding));
+					_delayActionGroup = _delayAction.CreateGroup(() =>
+					{
+						var stream = new TransactionFileStream(_fileName, FileMode.OpenOrCreate);
+						stream.Seek(0, SeekOrigin.End);
+						return new CsvFileWriter(stream, Registry.Encoding);
+					});
 				}
 			}
 		}
 
 		T IStorageEntityList<T>.ReadById(object id)
 		{
-			return _items.TryGetValue(NormalizedKey(id));
+			lock (SyncRoot)
+				return _items.TryGetValue(NormalizedKey(id));
 		}
 
 		IEnumerable<T> IStorageEntityList<T>.ReadLasts(int count)
 		{
-			return _items.CachedValues.Skip(Count - count).Take(count);
+			lock (SyncRoot)
+				return _items.Values.Skip(Count - count).Take(count).ToArray();
 		}
 
 		private object GetNormalizedKey(T entity)
@@ -104,14 +111,24 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Save object into storage.
 		/// </summary>
 		/// <param name="entity">Trade object.</param>
-		public void Save(T entity)
+		public virtual void Save(T entity)
 		{
-			var item = _items.TryGetValue(GetNormalizedKey(entity));
+			lock (SyncRoot)
+			{
+				var item = _items.TryGetValue(GetNormalizedKey(entity));
 
-			if (item == null)
-				Add(entity);
-			else if (IsChanged(entity))
-				Write();
+				if (item == null)
+				{
+					Add(entity);
+					return;
+				}
+				else if (IsChanged(entity))
+					UpdateCache(entity);
+				else
+					return;
+
+				WriteMany(_items.Values.ToArray());
+			}
 		}
 
 		#endregion
@@ -150,13 +167,31 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		public override bool Contains(T item)
+		{
+			lock (SyncRoot)
+				return _items.ContainsKey(GetNormalizedKey(item));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="item">Trade object.</param>
 		protected override void OnAdded(T item)
 		{
 			base.OnAdded(item);
 
-			if (_items.TryAdd(GetNormalizedKey(item), item))
-				Write(item);
+			lock (SyncRoot)
+			{
+				if (!_items.TryAdd(GetNormalizedKey(item), item))
+					return;
+
+				AddCache(item);
+
+				_delayActionGroup.Add((writer, i) => Write(writer, i), item);
+			}
 		}
 
 		/// <summary>
@@ -167,8 +202,13 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			base.OnRemoved(item);
 
-			_items.Remove(GetNormalizedKey(item));
-			Write();
+			lock (SyncRoot)
+			{
+				_items.Remove(GetNormalizedKey(item));
+				RemoveCache(item);
+
+				WriteMany(_items.Values.ToArray());
+			}
 		}
 
 		/// <summary>
@@ -178,29 +218,35 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			base.OnCleared();
 
-			_items.Clear();
-			Write();
-		}
-
-		private void Write()
-		{
-			_delayActionGroup.Add(() =>
+			lock (SyncRoot)
 			{
+				_items.Clear();
 				ClearCache();
 
-				using (var writer = new CsvFileWriter(new FileStream(_fileName, FileMode.Create), Registry.Encoding))
-				{
-					foreach (var item in _items.CachedValues)
-						Write(writer, item);
-				}
-			}, canBatch: false);
+				_delayActionGroup.Add(writer => writer.Writer.Truncate());
+			}
 		}
 
-		private void Write(T entity)
+		private void WriteMany(T[] values)
 		{
-			_delayActionGroup.Add(s =>
+			_delayActionGroup.Add((writer, state) =>
 			{
-				Write((CsvFileWriter)s, entity);
+				writer.Writer.Truncate();
+
+				foreach (var item in state)
+					Write(writer, item);
+			}, values, compareStates: (v1, v2) =>
+			{
+				if (v1 == null)
+					return v2 == null;
+
+				if (v2 == null)
+					return false;
+
+				if (v1.Length != v2.Length)
+					return false;
+
+				return v1.SequenceEqual(v2);
 			});
 		}
 
@@ -225,8 +271,12 @@ namespace StockSharp.Algo.Storages.Csv
 							var item = Read(reader);
 							var key = GetNormalizedKey(item);
 
-							_items.Add(key, item);
-							Add(item);
+							lock (SyncRoot)
+							{
+								InnerCollection.Add(item);
+								AddCache(item);
+								_items.Add(key, item);
+							}
 						}
 						catch (Exception ex)
 						{
@@ -238,12 +288,38 @@ namespace StockSharp.Algo.Storages.Csv
 					}
 				}
 			});
+
+			InnerCollection.ForEach(OnAdded);
 		}
 
 		/// <summary>
 		/// Clear cache.
 		/// </summary>
 		protected virtual void ClearCache()
+		{
+		}
+
+		/// <summary>
+		/// Add item to cache.
+		/// </summary>
+		/// <param name="item">New item.</param>
+		protected virtual void AddCache(T item)
+		{
+		}
+
+		/// <summary>
+		/// Update item in cache.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected virtual void UpdateCache(T item)
+		{
+		}
+
+		/// <summary>
+		/// Remove item from cache.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		protected virtual void RemoveCache(T item)
 		{
 		}
 	}

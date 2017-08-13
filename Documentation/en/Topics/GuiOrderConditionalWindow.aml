@@ -3,42 +3,42 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference> - окно для создания условной заявки.
+      	<codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference> - the window for creating a conditional order.
       </para>
       <para>
-       <legacyBold>Основные свойства</legacyBold>
+       <legacyBold>Main properties</legacyBold>
        </para>
       
 		<list class="bullet">
   			<listItem>
   				<para>
-  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.Portfolios</codeEntityReference> - список портфелей.
+  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.Portfolios</codeEntityReference> - the list of portfolios.
   				</para>
   			</listItem>
   			<listItem>
   				<para>
-  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.SecurityProvider</codeEntityReference> - поставщик информации об инструментах.
+  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.SecurityProvider</codeEntityReference> - provider of information about instruments.
   				</para>
   			</listItem>
   			<listItem>
   				<para>
-  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.MarketDataProvider</codeEntityReference> - поставщик рыночных данных.
+  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.MarketDataProvider</codeEntityReference> - provider of market data.
   				</para>
   			</listItem>
   			<listItem>
   			  	<para>
-  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.Adapter</codeEntityReference> - адаптер сообщений.
+  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.Adapter</codeEntityReference> - message adapter.
   				</para>
   			</listItem>
   			<listItem>
   			  	<para>
-  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.Order</codeEntityReference> - созданная заявка.
+  					<codeEntityReference>P:StockSharp.Xaml.OrderConditionalWindow.Order</codeEntityReference> - the created order.
   				</para>
   			</listItem>
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_OrderConditionalWindow" /></mediaLink>
@@ -53,24 +53,18 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		{
 			Security = SecurityPicker.SelectedSecurity,
 			Type = OrderTypes.Conditional,
-			ExpiryDate = DateTime.Today
 		},
 		SecurityProvider = MainWindow.Instance.Trader,
 		MarketDataProvider = MainWindow.Instance.Trader,
 		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-		Adapter = MainWindow.Instance.Trader.Adapter
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
 	};
 
 	if (newOrder.ShowModal(this))
 		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-}
-              		
+}	
 	  				]]>
              </code>
-      
-      
-      
-      
     </introduction>
   </developerConceptualDocument>
 </topic>

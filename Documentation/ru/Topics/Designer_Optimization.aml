@@ -5,7 +5,7 @@
 <para>Чтобы перейти в режим оптимизации стратегии необходимо 
 нажать на кнопку <legacyBold>Оптимизация</legacyBold> на вкладки <legacyBold>Эмуляция</legacyBold>.</para>
  <mediaLink>
-<image xlink:href="Designer_Optimization_00"/>
+<image placement="center" xlink:href="Designer_Optimization_00"/>
 </mediaLink>
 <para>В рабочей области откроется вкладка с названием Оптимизация + «Имя стратегии». 
 Вкладка <legacyBold>Оптимизация</legacyBold> разделена на три 
@@ -19,11 +19,11 @@
 таблицу, каждая строчка которой результат тестирования стратегии 
 с уникальными параметрами. Также в зоне <legacyBold>Результат оптимизации</legacyBold> 
 есть прогресс бар показывающий прогресс оптимизации, прошедшее время, 
-и расчетное время до конца оптимизации. </para></listItem>
+и расчетное время до конца оптимизации.</para></listItem>
   <listItem><para>Зона <legacyBold>Параметры для оптимизации</legacyBold> представляет из 
 себя две таблицы. Таблица сверху это перечень параметров стратегии, которые 
 можно оптимизировать. Таблица снизу настраивает диапазон оптимизации и шаг 
-оптимизации для параметра, выбранного в верхней таблице. </para></listItem>
+оптимизации для параметра, выбранного в верхней таблице.</para></listItem>
 </list>
 
 <para>Далее оптимизация будет рассмотрена на примере стратегии SMA. 
@@ -31,18 +31,18 @@
 кнопку <legacyBold>Оптимизация</legacyBold>, то параметров оптимизации 
 будет только один Volume. Для того чтобы добавить периоды скользящих 
 средний как параметры оптимизации необходимо в 
-кубике Индикаторе SMA установить флажок <legacyBold>Параметр</legacyBold>. </para>
+кубике Индикаторе SMA установить флажок <legacyBold>Параметр</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_Optimization_01"/>
+<image placement="center" xlink:href="Designer_Optimization_01"/>
 </mediaLink>
 <para>После установки флажка <legacyBold>Параметр</legacyBold> в необходимых блоках 
 для оптимизации, и нажав на кнопку <legacyBold>Оптимизация</legacyBold>, откроется 
-вкладка <legacyBold>Оптимизация SMA</legacyBold>. </para>
+вкладка <legacyBold>Оптимизация SMA</legacyBold>:</para>
  <mediaLink>
-<image xlink:href="Designer_Optimization_02"/>
+<image placement="center" xlink:href="Designer_Optimization_02"/>
 </mediaLink>
 <para>В примере взят один параметр оптимизации Длину короткой скользящей средней 
-Short SMA, от 10 до 20 с шагом 1. Всего получается 11 стратегий SMA с разными параметрами. </para>
+Short SMA, от 10 до 20 с шагом 1. Всего получается 11 стратегий SMA с разными параметрами.</para>
     </introduction>
     <relatedTopics>
 <link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />

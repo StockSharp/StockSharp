@@ -12,7 +12,7 @@
       <steps class="ordered">
         <step>
           <content>
-            <para>In the main window click the <legacyBold>Candles</legacyBold> button, the following window will open:</para>
+            <para>On the <legacyBold>Common</legacyBold> tab, click the <legacyBold>Candles</legacyBold> button, the following window will open:</para>
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_main" />
 	  		</mediaLink>
@@ -22,31 +22,46 @@
          <step>
           <content>
             <para>
-            	Next, select from the drop-down list the needed candle type (all <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">standard candles</link> are supported),
-            	parameter, select in <legacyBold>Build from:</legacyBold> from what the candles will be generated, select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> button.
-            	After that the candles generation will be performed on the basis of found data. For example, for the candles of the 
-            	<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> type the following will be generated:
+            	Further it is necessary:
             </para>
+            
+<list class="bullet">
+  <listItem><para>Select from the drop-down list the needed candle type (all 
+  <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">standard candles</link> are supported)</para></listItem>
+  <listItem><para>Select in the <legacyBold>Generate from</legacyBold>: field: from what the candles will be 
+  generated (it allows to generate candles from the best bid, ask, spread, trades or one-minute candles)</para></listItem>
+  <listItem><para>Select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline> button</para></listItem>
+</list>
+
+            	<para>After that the candles generation will be performed on the basis of found data. For example, for the candles of the TimeFrameCandle type the following will be generated:
+            	<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> type the following will be generated:</para>
+
             	
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_tf" />
 	  		</mediaLink>
 	  		
 	  		<para>
-	  			And for the candles of the <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> type will be generated:
+And for the candles of the <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> type will be generated:
 	  		</para>
 
 	  		<mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_volume" />
 	  		</mediaLink>
 	  		
+	  		
+			<alert class="note">
+  				<para>If in <legacyBold>Generate from:</legacyBold> choose <legacyBold>not to generate</legacyBold>, then the finished candles that 
+  				were downloaded through the source (for example, <link xlink:href="0166d686-9fb0-4e78-8578-f5b706ad6a07">Google</link>) will be searched.</para>
+			</alert>
 
           </content>
         </step>
         
         <step>
           <content>
-            <para>If it is necessary to view the generated candles graphically, then click the <mediaLinkInline><image xlink:href="hydra_candles"/></mediaLinkInline>
+            <para>If it is necessary to view the generated candles graphically, then click the 
+            <mediaLinkInline><image xlink:href="hydra_candles"/></mediaLinkInline>
             button and after that the chart will open:</para>
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_tf_chart" />
@@ -58,8 +73,11 @@
         </step>
         <step>
           <content>
-            <para>The indicators can be added to the chart. To do this, open the context menu by right-clicking on the chart panel, and select the <legacyBold>Indicator</legacyBold> item.
-            Furthermore, the indicator can be displayed on a separate panel. To do this, it is necessary to add a new panel using the <mediaLinkInline> <image xlink:href="hydra_candles_newarea"/> </mediaLinkInline>
+            <para>The indicators can be added to the chart. To do this, open 
+            the context menu by right-clicking on the chart panel, and select the 
+            <legacyBold>Indicator</legacyBold> item. Furthermore, the indicator can be displayed on a separate 
+            panel. To do this, it is necessary to add a new panel using the 
+            <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline> 
             button, and also select the required indicator from the context menu.</para>
             <mediaLink>
 		  		<image placement="center" xlink:href="hydra_candles_ind_chart" />

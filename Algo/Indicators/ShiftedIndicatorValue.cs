@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The shift of the indicator value.
 		/// </summary>
-		public int Shift { get; private set; }
+		public int Shift { get; }
 
 		/// <summary>
 		/// Does value support data type, required for the indicator.

@@ -599,7 +599,7 @@
         </member>
         <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.IsTimeOut">
             <summary>
-            Is the <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/> occured.
+            Is the <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/> occurred.
             </summary>
         </member>
         <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.RegisterInterval">
@@ -676,7 +676,7 @@
             <summary>
             Whether the quoting should be stopped because of new order registration error.
             </summary>
-            <param name="fail">Error detais.</param>
+            <param name="fail">Error details.</param>
             <returns>The <see langword="true" /> if the quoting should be stopped. Otherwise, <see langword="false" />.</returns>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.RegisterQuotingOrder(StockSharp.BusinessEntities.Order)">

@@ -60,7 +60,7 @@ namespace StockSharp.Community
 		byte SendEmail(Guid sessionId, string title, string body);
 
 		/// <summary>
-		/// To send an message.
+		/// To send a message.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="title">The message title.</param>
@@ -71,23 +71,43 @@ namespace StockSharp.Community
 		[OperationContract]
 		byte SendMessage(Guid sessionId, string title, string body, long[] attachments, bool isEnglish);
 
-		/// <summary>
-		/// To get the latest news.
-		/// </summary>
-		/// <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
-		/// <param name="fromId">The identifier from which you need to receive the news.</param>
-		/// <returns>Last news.</returns>
-		[OperationContract]
-		CommunityNews[] GetNews(Guid sessionId, long fromId);
+		///// <summary>
+		///// To get the latest news.
+		///// </summary>
+		///// <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
+		///// <param name="fromId">The identifier from which you need to receive the news.</param>
+		///// <returns>Last news.</returns>
+		//[OperationContract]
+		//CommunityNews[] GetNews(Guid sessionId, long fromId);
 
 		/// <summary>
 		/// To get the latest news.
 		/// </summary>
 		/// <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
-		/// <param name="isEnglish">Request news on english.</param>
+		/// <param name="isEnglish">Request news on English.</param>
 		/// <param name="fromId">The identifier from which you need to receive the news.</param>
 		/// <returns>Last news.</returns>
 		[OperationContract]
 		CommunityNews[] GetNews2(Guid sessionId, bool isEnglish, long fromId);
+
+		/// <summary>
+		/// Has feedback for specified product.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="product">Product.</param>
+		/// <returns>Check result.</returns>
+		[OperationContract]
+		bool HasFeedback(Guid sessionId, Products product);
+
+		/// <summary>
+		/// Send feedback for specified product.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="product">Product.</param>
+		/// <param name="rating">Rating.</param>
+		/// <param name="comment">Comment.</param>
+		/// <returns>The execution result code.</returns>
+		[OperationContract]
+		byte SendFeedback(Guid sessionId, Products product, int rating, string comment);
 	}
 }

@@ -1,4 +1,4 @@
 StockSharp Terminal Change log
 ========================
-###current
-* (feature) Available for download
+## v4.3.25.2:
+* (feature) Available for download.

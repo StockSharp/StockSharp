@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--<summary>
@@ -11,7 +11,7 @@
 			предоставляет механизм генерации отчетов. Отчет включает в себя такие вещи, как код инструмента
 			(<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Security</codeEntityReference>),
 			общее время работы (<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.TotalWorkingTime</codeEntityReference>),
-			проскальзование (<codeEntityReference>P:StockSharp.Algo.Connector.SlippageManager</codeEntityReference>),
+			проскальзывание (<codeEntityReference>P:StockSharp.Algo.Connector.SlippageManager</codeEntityReference>),
 			P&amp;L (<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.PnLManager</codeEntityReference>) и т.д. Также, генерация
 			отчетов включает детальную статистику по всем заявкам (<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Orders</codeEntityReference>)
 			и сделкам (<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.MyTrades</codeEntityReference>), которые были совершены в рамках
