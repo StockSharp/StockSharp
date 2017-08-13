@@ -387,6 +387,7 @@
       <summary>
         <see cref="T:DevExpress.Xpf.Editors.ComboBoxEdit" /> value converter.
             </summary>
+      <typeparam name="T">Convertible type.</typeparam>
     </member>
     <member name="T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter">
       <summary>

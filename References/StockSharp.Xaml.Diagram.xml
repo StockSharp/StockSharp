@@ -169,8 +169,7 @@
       <summary>
             This predicate is true when one can call <see cref="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Undo" />.
             </summary>
-      <returns>
-      </returns>
+      <returns>Check result.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Undo">
       <summary>
@@ -181,8 +180,7 @@
       <summary>
             This predicate is true when one can call <see cref="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Redo" />.
             </summary>
-      <returns>
-      </returns>
+      <returns>Check result.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Redo">
       <summary>
@@ -270,8 +268,7 @@
             Is composition contains element.
             </summary>
       <param name="element">Element.</param>
-      <returns>
-      </returns>
+      <returns>Check result.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.CompositionRegistry">
       <summary>
@@ -1637,16 +1634,14 @@
       <summary>
             Whether need to break on socket.
             </summary>
-      <returns>
-      </returns>
+      <returns>Check result.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.OnNeedBreak(System.Object)">
       <summary>
             Whether need to break on socket.
             </summary>
       <param name="value">Current value.</param>
-      <returns>
-      </returns>
+      <returns>Check result.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketBreakpoint.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -3205,6 +3200,7 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.IndicatorPainterAttribute" />.
             </summary>
+      <param name="painter">The renderer type for indicator extended drawing.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyPnLDiagramElement">
       <summary>

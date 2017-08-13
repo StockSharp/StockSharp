@@ -14358,3 +14358,4 @@ DocStr10025;To record a verbose message to the log;Записать деталь
 DocStr10027;Verbose message, debug message, information, warnings and errors;Детальное сообщение, отладочное, информационное, предупреждение и ошибки
 DocStr10028;Enable storage;Включить хранилище
 DocStr10029;Support filtering subscriptions (subscribe/unsubscribe for specified security);Поддерживает ли фильтрация подписки (подписка/отписка для указанного инструмента)
+DocStr10030;Convertible type;Конвертируемый тип

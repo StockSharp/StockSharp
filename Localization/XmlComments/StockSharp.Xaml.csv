@@ -86,6 +86,7 @@ M:StockSharp.Xaml.Code.CodeReferencesWindow.Save(Ecng.Serialization.SettingsStor
 M:StockSharp.Xaml.Code.CodeReferencesWindow.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Code.CodeReferencesWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1/summary;DocStr9842
+T:StockSharp.Xaml.Converters.ComboBoxEditValueConverter`1/typeparam/T;DocStr10030
 T:StockSharp.Xaml.Converters.ProcessStatesToImageConverter/summary;DocStr9307
 P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StartedImage/summary;DocStr9505
 P:StockSharp.Xaml.Converters.ProcessStatesToImageConverter.StoppingImage/summary;DocStr9505

@@ -131,6 +131,11 @@
 				<p>Торговые сущности для работы с опционами.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Algo.Import">
+			<summary>
+				<p>Классы для импорта данных из CSV формата.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Algo.Export">
 			<summary>
 				<p>Классы для экспорта данных в различные форматы.</p>
@@ -529,6 +534,11 @@
 		<member name="N:StockSharp.Xaml.PropertyGrid">
 			<summary>
 				<p>Графический компонент PropertyGridEx.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Code">
+			<summary>
+				<p>Графические компоненты для редактирования кода.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.SpbEx">
