@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Для просмотра загруженных данных необходимо выбрать 
-инструмент в списке <legacyBold>Активные</legacyBold>. На панели 
-справа отобразятся все имеющиеся данные по инструменту:</para>
+<para>To view the downloaded data, select the security in the 
+<legacyBold>Active</legacyBold> list. The right panel will display all data, 
+available for the security.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Viewing_the_downloaded_data_00"/>
 </mediaLink>

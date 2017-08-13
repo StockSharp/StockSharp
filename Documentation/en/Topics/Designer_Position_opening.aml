@@ -5,67 +5,75 @@
 <mediaLink>
 <image xlink:href="Designer_Position_opening_00"/>
 </mediaLink>
-<para>Кубик используется для открытия позиции по инструменту.</para>
+<para>The cube is used to open a position on the instrument.</para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого надо выставить заявку.</para></listItem>
-  <listItem><para><legacyBold>Направление</legacyBold> – направление заявки (покупка или продажа), является сигналом выставления заявки.</para></listItem>
-  <listItem><para><legacyBold>Цена</legacyBold> – числовое значение цены, если выставляется не рыночная заявка.</para></listItem>
-  <listItem><para><legacyBold>Объем</legacyBold> – числовое значение объема.</para></listItem>
-  <listItem><para><legacyBold>Портфель</legacyBold> – портфель, для которого надо выставить заявку.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> – the instrument for which 
+  you need to register an order.</para></listItem>
+  <listItem><para><legacyBold>Direction</legacyBold> – the direction of the order 
+  (purchase or sale), it is the signal of the order registering.</para></listItem>
+  <listItem><para><legacyBold>Price</legacyBold> – the numerical value of the 
+  price, if the not market order is registered.</para></listItem>
+  <listItem><para><legacyBold>Volume</legacyBold> – the numerical value of the 
+  volume.</para></listItem>
+  <listItem><para><legacyBold>Portfolio</legacyBold> – the portfolio for which 
+  you need to register an order.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, 
-которая может использоваться для получения сделок по ней с помощью элемента 
-<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью 
-кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+  <listItem><para><legacyBold>Order</legacyBold> – the order that can be used to 
+  obtain trades on it by using the <legacyBold>Trades</legacyBold> element on the 
+  order and displaying it on the chart using the <legacyBold>Chart panel</legacyBold> 
+  cube.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Рыночная</legacyBold> – признак рыночной заявки.</para></listItem>
-  <listItem><para><legacyBold>Код клиента</legacyBold> – код клиента присвоенный дрокером,
-  если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
-  <listItem><para><legacyBold>Брокер</legacyBold> – код брокерской фирмы,
-  если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
-  <listItem><para><legacyBold>Условная заявка</legacyBold> – добавить условную заявку.</para></listItem>
+  <listItem><para><legacyBold>Market</legacyBold> – the attribute of a market 
+  order.</para></listItem>
+  <listItem><para><legacyBold>Client code</legacyBold> – the client code assigned 
+  by the broker, if the value is not specified and the <legacyBold>Parameters</legacyBold> 
+  option is checked, then the value is taken from the strategy.</para></listItem>
+  <listItem><para><legacyBold>Broker</legacyBold> – the code of the brokerage firm, 
+  if the value is not specified and the <legacyBold>Parameters</legacyBold> option 
+  is checked, then the value is taken from the strategy.</para></listItem>
+  <listItem><para><legacyBold>Conditional order</legacyBold> – to add a conditional order.</para></listItem>
 </list>
   </definition>
 </definitionTable>
 
-<title>Настройка условной заявки</title>
-<para><legacyBold>Условная заявка</legacyBold> — заявка с дополнительными условиями, определяющими момент 
-постановки в торговую систему в зависимости от текущей рыночной ситуации.</para>
+<title>Conditional order settings</title>
+<para>Conditional order is the order with additional conditions that determine the 
+time of registration in the trading system depending on the current market situation.</para>
 <mediaLink>
 <image xlink:href="Designer_Conditional_Application"/>
 </mediaLink>
 <list class="bullet">
-<listItem><para><legacyBold>Подключение</legacyBold> - подключение куда будет выставляться заявка.</para></listItem>
-<listItem><para><legacyBold>Тип стоп-заявки</legacyBold> - тип стоп-заявки.</para></listItem>
-<listItem><para><legacyBold>Результат</legacyBold> - результат исполнения стоп-заявки.</para></listItem>
-<listItem><para><legacyBold>Идентификатор инструмента</legacyBold> - идентификатор инструмента для стоп-заявок с условием по другому инструменту.</para></listItem>
-<listItem><para><legacyBold>Условие стоп-цены</legacyBold> - условие стоп-цены. Используется для заявок типа «Стоп-цена по другой бумаге».</para></listItem>
-<listItem><para><legacyBold>Стоп цена</legacyBold> - стоп цена, которая задает условие срабатывания стоп-заявки.</para></listItem>
-<listItem><para><legacyBold>Стоп-лимит цена</legacyBold> - стоп-лимит цена. Аналогична Стоп-цене, но используется только при типе заявки «Тэйк-профит и стоп-лимит».</para></listItem>
-<listItem><para><legacyBold>Стоп-лимит по рыночной цене</legacyBold> - признак исполнения заявки «Стоп-лимит» по рыночной цене.</para></listItem>
-<listItem><para><legacyBold>Интервал проверки условий</legacyBold> - время проверки условий заявки только в течение заданного периода времени (если значение null, то не проверять). Используется для заявок типов «Тэйк-профит и стоп-лимит» и «Тэйк-профит и стоп-лимит по заявке».</para></listItem>
-<listItem><para><legacyBold>Идентификатор условной заявки по исполнению</legacyBold> - идентификатор условной заявки по исполнению.</para></listItem>
-<listItem><para><legacyBold>Направление условной заявки по исполнению</legacyBold> - направление условной заявки по исполнению.</para></listItem>
-<listItem><para><legacyBold>Активация при частичном исполнении</legacyBold> - частичное исполнение заявки учитывается. Заявка «по исполнению» будет активирована при частичном исполнении заявки-условия.</para></listItem>
-<listItem><para><legacyBold>Исполненный объем</legacyBold> - брать исполненный объем заявки в качестве количества выставляемой стоп-заявки. В качестве количества бумаг в заявке «по исполнению» принимается исполненный объем заявки-условия.</para></listItem>
-<listItem><para><legacyBold>Цена связанной заявки</legacyBold> - цена связанной лимитированной заявки.</para></listItem>
-<listItem><para><legacyBold>Снятие при частичном исполнении</legacyBold> - признак снятия стоп-заявки при частичном исполнении связанной лимитированной заявки.</para></listItem>
-<listItem><para><legacyBold>Отступ от максимума</legacyBold> - величина отступа от максимума (минимума) цены последней сделки.</para></listItem>
-<listItem><para><legacyBold>Защитный спред</legacyBold> - величина защитного спрэда.</para></listItem>
-<listItem><para><legacyBold>Тэйк-профит по рыночной цене</legacyBold> - признак исполнения заявки «Тэйк-профит» по рыночной цене.</para></listItem>
+<listItem><para><legacyBold>Connection</legacyBold> - the connection where the order will be registered.</para></listItem>
+<listItem><para><legacyBold>Stop-order type</legacyBold> - the stop-order type.</para></listItem>
+<listItem><para><legacyBold>Result</legacyBold> - the result of the stop order execution.</para></listItem>
+<listItem><para><legacyBold>Security ID</legacyBold> - the instrument ID for s stop-orders with a condition for another instrument.</para></listItem>
+<listItem><para><legacyBold>Stop price condition</legacyBold> - the stop-price condition. Used for orders such as "Stop-price for another security".</para></listItem>
+<listItem><para><legacyBold>Stop-price</legacyBold> - the stop-price that sets the condition for the stop-order to trigger.</para></listItem>
+<listItem><para><legacyBold>Stop-limit price</legacyBold> - the stop-limit price. It is similar to the stop-price, but it is used only for the order type "Take-profit and Stop-limit".</para></listItem>
+<listItem><para><legacyBold>Stop-limit at market price</legacyBold> - the attribute of execution of the "Stop-limit" order at the market price.</para></listItem>
+<listItem><para><legacyBold>Conditions checking interval</legacyBold> - time for order conditions checking only for a specified time period (if the value is null, then do not check). It is used for orders of the types "Take-profit and stop-limit" and "Take-profit and stop-limit on order".</para></listItem>
+<listItem><para><legacyBold>On execution conditional order ID</legacyBold> - the ID of the conditional order on execution.</para></listItem>
+<listItem><para><legacyBold>On filled conditional order direction</legacyBold> - the direction of the conditional order on execution.</para></listItem>
+<listItem><para><legacyBold>Activation in case of partial execution</legacyBold> - a partial execution of the order is taken into account. The "on execution" order will be activated when the order-condition is partially executed.</para></listItem>
+<listItem><para><legacyBold>Filled volume</legacyBold> - to take the executed volume of the order as the amount of the registered stop-order. As the number of securities in the "on execution" order the executed volume of the order-condition is accepted.</para></listItem>
+<listItem><para><legacyBold>Price of linked order</legacyBold> - the price of the linked limited order.</para></listItem>
+<listItem><para><legacyBold>Cancellation when partially filled</legacyBold> - the attribute of the stop-order cancellation in case of partial execution of the linked limited order.</para></listItem>
+<listItem><para><legacyBold>Offset from maximum</legacyBold> - the amount of an offset from the maximum (minimum) of the last trade price.</para></listItem>
+<listItem><para><legacyBold>Protection spread</legacyBold> - the amount of the protection spread.</para></listItem>
+<listItem><para><legacyBold>Take-profit at market price</legacyBold> - the attribute of execution of the "Take-profit" order at the market price.</para></listItem>
 </list>
     </introduction>
     <relatedTopics>

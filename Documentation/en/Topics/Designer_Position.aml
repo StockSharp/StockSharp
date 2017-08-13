@@ -5,31 +5,35 @@
 <mediaLink>
 <image xlink:href="Designer_Position_00"/>
 </mediaLink>
-<para>Элемент используется для получения информации по изменению позиции для 
-указанного инструмента и портфеля.</para>
+<para>The element is used to obtain information on the position change for the 
+specified instrument and portfolio.</para>
  <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо получить позицию.</para></listItem>
-  <listItem><para><legacyBold>Портфель</legacyBold> – портфель, для которого необходимо получить позицию.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> - the instrument for which 
+  you want to obtain a position.</para></listItem>
+  <listItem><para><legacyBold>Portfolio</legacyBold> - the portfolio for which 
+  you want to obtain a position.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Позиция</legacyBold> – числовое значение позиции 
- по инструменту или текущего количества доступных средств по счету, генерируется при их 
- изменении и после запуска стратегии.</para></listItem>
+  <listItem><para><legacyBold>Position</legacyBold> - the numeric value of the 
+  position on the instrument or the current amount of available funds on the 
+  account, it is generated when they are changed and after the strategy is 
+  started.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Деньги</legacyBold> – при установленном флаге на входе элемент принимает только портфель, на выход элемента 
- передается денежная позиция для выбранного портфеля.</para></listItem>
+  <listItem><para><legacyBold>Money</legacyBold> - when the flag on the input is 
+  set, the element only accepts the portfolio, the money position for the selected 
+  portfolio is passed to the output of the element.</para></listItem>
 </list>
   </definition>
 </definitionTable>

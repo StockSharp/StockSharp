@@ -5,30 +5,31 @@
 <mediaLink>
 <image xlink:href="Designer_Level_1_00"/>
 </mediaLink>
-<para>Кубик используется для получения <legacyBold>Level1</legacyBold> данных по инструменту.
+<para>The cube is used to get the <legacyBold>Level1</legacyBold> data by the 
+instrument.
 </para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо 
-получать <legacyBold>Level1</legacyBold> данные.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> - the instrument for which 
+  you need to get Level1 data.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Изменение</legacyBold> – <legacyBold>Level1</legacyBold> значения 
-отслеживаемого параметра.</para></listItem>
+  <listItem><para><legacyBold>Change</legacyBold> - <legacyBold>Level1</legacyBold> 
+  values of the monitored parameter.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Значение</legacyBold> – <legacyBold>Level1</legacyBold> параметр, 
-который необходимо отслеживать.</para></listItem>
+  <listItem><para><legacyBold>Value</legacyBold> – the <legacyBold>Level1</legacyBold> 
+  parameter to be monitored.</para></listItem>
 </list>
   </definition>
 </definitionTable>

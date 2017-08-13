@@ -5,29 +5,30 @@
 <mediaLink>
 <image xlink:href="Designer_Protect_positions_00"/>
 </mediaLink>
-<para>Кубик используется для автоматической защиты открываемых сделок с помощью 
-стоп-лосса и тейк-профита.
-</para>
+<para>The cube is used to automatically protect opened trades using stop loss 
+and take-profit.</para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Сделка</legacyBold> – сделка, которую необходимо защищать стоп-лоссом и тейк-профитом.</para></listItem>
+  <listItem><para><legacyBold>Trade</legacyBold> - the trade that must be protected 
+  with a stop-loss and take-profit.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – заявки, которые были выставлены одной из защитных стратегий.</para></listItem>
+  <listItem><para><legacyBold>Order</legacyBold> – orders that were registered 
+  by one of the protection strategies.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Тейк-профит</legacyBold> - значение тейк-профита.</para></listItem>
-  <listItem><para><legacyBold>Стоп-лосс</legacyBold> – значение стоп-лосса.</para></listItem>
+  <listItem><para><legacyBold>Take-profit</legacyBold> - the take-profit value.</para></listItem>
+  <listItem><para><legacyBold>Stop-loss</legacyBold> - the stop-loss value.</para></listItem>
 </list>
   </definition>
 </definitionTable>

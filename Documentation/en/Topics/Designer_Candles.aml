@@ -5,33 +5,34 @@
     <mediaLink>
 <image xlink:href="Designer_Candles_00"/>
 </mediaLink>
-<para>Кубик используется для построения свечей по заданному инструменту.
+<para>The cube is used to build candles for a specified instrument.
 </para>
 
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо строить свечи с заданными параметрами.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> – the instrument for which 
+  it is necessary to build candles with specified parameters.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Свечи</legacyBold> – построенные свечи.</para></listItem>
+  <listItem><para><legacyBold>Candles</legacyBold> - built candles.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Серия</legacyBold> – тип серии свечей и параметры 
-  для указанного типа;</para></listItem>
-  <listItem><para><legacyBold>Только сформированные</legacyBold> – передавать на 
-  выход только полностью сформированные свечи или любое изменение;</para></listItem>
-  <listItem><para><legacyBold>Профиль объема</legacyBold> – выполнять построение 
-  профиля рынка (для кластерных графиков).</para></listItem>
+  <listItem><para><legacyBold>Series</legacyBold> – the type of candle series 
+  and parameters for the specified type.</para></listItem>
+  <listItem><para><legacyBold>Only formed</legacyBold> - to pass to the output 
+  only fully formed candles or any change.</para></listItem>
+  <listItem><para><legacyBold>Volume profile</legacyBold> – to perform the building 
+  of the market profile (for cluster charts).</para></listItem>
 </list>
   </definition>
 </definitionTable>

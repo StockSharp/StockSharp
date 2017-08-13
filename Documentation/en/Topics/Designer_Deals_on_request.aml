@@ -5,25 +5,25 @@
 <mediaLink>
 <image xlink:href="Designer_Deals_on_request_00"/>
 </mediaLink>
-<para>Кубик используется для получения сделок по конкретной заявке.</para>
+<para>The cube is used to obtain trades for the particular order.</para>
 
 
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-<listItem><para><legacyBold>Заявка</legacyBold> – заявка, по которой нужно получить сделки. 
-Может быть получена из элемента <legacyBold>Открытие позиции</legacyBold>.</para></listItem>
+<listItem><para><legacyBold>Order</legacyBold> – the order for which you want to obtain trades. It can be 
+obtained from the <legacyBold>Open positions</legacyBold> element.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Сделки</legacyBold> – сделки, возникающие по переданной заявке. 
-  Могут использоваться как для отображения на графике с помощью элемента
-<legacyBold>Панель графика</legacyBold>, так и для защиты позиции с помощью 
-элемента <legacyBold>Защита позиции</legacyBold>.</para></listItem>
+  <listItem><para><legacyBold>Trades</legacyBold> - trades arising from the transferred order. They can be 
+  used both for displaying on the chart using the <legacyBold>Chart panel</legacyBold> 
+  element, and for position protection using the <legacyBold>Position protection</legacyBold> 
+  element.</para></listItem>
 </list>
   </definition>
 

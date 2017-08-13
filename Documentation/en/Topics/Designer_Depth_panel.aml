@@ -5,13 +5,15 @@
 <mediaLink>
 <image xlink:href="Designer_Glass_Panel"/>
 </mediaLink>
-<para>Кубик предназначен для отображения стакана в панели <link xlink:href="24d370d1-fd00-4914-83ac-574721299e93" /> 
+<para>The cube is designed to display an order book in the 
+<link xlink:href="24d370d1-fd00-4914-83ac-574721299e93" /> panel.
 </para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Стакан</legacyBold> – стакан, который надо отобразить.</para></listItem>
+  <listItem><para><legacyBold>Order book</legacyBold> - the order book to be 
+  displayed.</para></listItem>
 </list>
   </definition>
 </definitionTable>

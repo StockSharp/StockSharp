@@ -3,23 +3,29 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    
     <introduction>
-      <para>Один и тот же инструмент в разных торговых системах может называться по-разному.
-      В <legacyBold>Дизайнере</legacyBold> есть возможность сопоставить 
-      инструмент и подключения, через которые будет торговаться этот инструмент, 
-      и указать как он идентифицируется во внешней торговой системе. Это полезно, когда идёт торговля 
-      одним инструментом на разных торговых площадках или через разные подключения (или брокеров). Также 
-      это дает возможность получать данные из одного подключение, а сделки совершать 
-      через другое подключение.</para>
-      <para>Сопоставить инструменты и подключения можно, нажав кнопку 
-      <legacyBold>Инструменты и подключения</legacyBold> на панели все инструменты.</para>
+      <para>The same instrument in different trading systems can be called differently. 
+      In <legacyBold>Designer</legacyBold>, it is possible to match the instrument 
+      and the connections through which this instrument will be traded, and 
+      indicate how it is identified in the external trading system. This is useful 
+      when trading one instrument on different trading boards or through different
+      connections (or brokers). Also, it allows receiving data from one connection 
+      and making trades through another connection.</para>
+      <para>To match securities and connections click the 
+      <legacyBold>Securities and connections</legacyBold> in the All securities 
+      panel.</para>
       <mediaLink>
 <image xlink:href="Designer_Security_mapping_00"/>
 </mediaLink>
-<para>В появившемся окне, нажав на кнопку <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline>, добавится новая строчка.</para>
-<para>В столбце <legacyBold>Подключение</legacyBold> из выпадающего списка необходимо выбрать подключение. 
-В столбцах <legacyBold>Код инструмента</legacyBold> и <legacyBold>Код площадки</legacyBold> указать код инструмента и код площадки как они указаны в 
-<legacyBold>Дизайнере</legacyBold>. В столбцах <legacyBold>Код инструмента адаптере</legacyBold> и <legacyBold>Код площадки в адаптере</legacyBold> необходимо 
-указать код инструмента и код площадки как они указаны во внешней торговой системе.</para>
+<para>In the opened window click the 
+<mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline>
+button to add a new line.</para>
+<para>In the <legacyBold>Connection</legacyBold> column select a connection form 
+the drop-down list. In the <legacyBold>Security code</legacyBold> and 
+<legacyBold>Board code</legacyBold> columns specify the security and board codes, 
+as they are specified in the <legacyBold>Designer</legacyBold>. In the 
+<legacyBold>Adapter code</legacyBold> and <legacyBold>Adapter board</legacyBold> 
+columns specify the security and board codes, as they are specified in the 
+external trading system.</para>
 <mediaLink>
 <image xlink:href="Designer_Security_mapping_01"/>
 </mediaLink>

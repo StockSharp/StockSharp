@@ -2,27 +2,29 @@
 <topic id="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Стратегия в дизайнере представляет собой схему из набора элементов и связей между 
-ними, называемых соединениями. Каждое соединение идет от выходного параметра 
-кубика к входному параметру другого кубика. Обычно все линии соединений окрашены 
-в серый цвет, но при наведении на кубик к которому они относится линии окрашиваются 
-в черный цвет.</para>
+<para>The strategy in the designer is a schema of a set of elements and links 
+between them, called connections. Each connection goes from the output parameter 
+of one cube to the input parameter of another cube. Usually, all connection lines
+ are colored gray, but when you point to the cube to which they belong, the lines 
+ are painted black.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Line_00"/>
 </mediaLink>
-<para>Каждое соединение можно выделить, наведя на него и нажав левую кнопку мыши. 
-Выделенное соединение будет отмечена кружками на концах линии, взяв за которые 
-можно переадресовать линию. Если нажать кнопку Del на выделенной линии она удалиться.</para>
-<para>Соединять между собой можно параметры одинаковых цветов (одинаковых типов данных), 
-за исключением следующих типов параметров:</para>
+<para>Each connection can be highlighted by pointing over it and clicking the 
+left mouse button. The selected connection will be marked with circles at the 
+ends of the line, taking for which, you can redirect the line. If you press the 
+Del button on the selected line, it will be deleted.</para>
+<para>You can connect to each other the parameters of the same colors (the same 
+data types), except for the following types of parameters:</para>
 
 <list class="bullet">
-  <listItem><para>Параметр <legacyBold>черного</legacyBold> цвета может принимать любые данные. 
-  Наиболее часто такие параметры используются для передачи сигналов для каких-либо 
-  действий внутри элемента. Например, элемент <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> хранит некое значение и при 
-  получении сигнала передает его на выход.</para></listItem>
-  <listItem><para>Параметр <legacyBold>зеленого</legacyBold> цвета может принимать на вход различные 
-  сравниваемые типы данных. Например, числовые, значения индикатора, строки и т.д.</para></listItem>
+  <listItem><para>The <legacyBold>black</legacyBold> parameter can accept any data. Most often, these 
+  parameters are used to pass signals for any actions within the element. For 
+  example, the  <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> element 
+  stores some value and, when it receives a signal, it passes the value to the 
+  output.</para></listItem>
+  <listItem><para>The <legacyBold>green</legacyBold> parameter can accept different compared data types. 
+  For example, numeric, indicator values, strings, etc.</para></listItem>
 </list>
     </introduction>
     <relatedTopics>

@@ -5,23 +5,25 @@
 <mediaLink>
 <image xlink:href="Designer_Notice_00"/>
 </mediaLink>
-<para>Кубик используется для уведомления пользователя при возникновении 
-определенных сигналов.
+<para>The cube is used to notify the user when certain signals occur.
 </para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> – сигнал (флаг), который инициирует процесс оповещения.</para></listItem>
+  <listItem><para><legacyBold>Flag</legacyBold> - the signal (flag) that initiates 
+  the notification process.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Тип</legacyBold> – тип сообщения (всплывающее окно, e-mail, смс и т.д.). Типы оповещений описаны в пункте <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para></listItem>
-  <listItem><para><legacyBold>Заголовок</legacyBold> – заголовок сообщения.</para></listItem>
-  <listItem><para><legacyBold>Сообщение</legacyBold> – текст сообщения.</para></listItem>
+  <listItem><para><legacyBold>Type</legacyBold> - type of message (pop-up window, 
+  e-mail, sms, etc.). The types of notifications are described in the
+  <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" /> section.</para></listItem>
+  <listItem><para><legacyBold>Header</legacyBold> - the header of the message.</para></listItem>
+  <listItem><para><legacyBold>Message</legacyBold> - the text of the message.</para></listItem>
 </list>
   </definition>
 </definitionTable>

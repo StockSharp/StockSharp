@@ -3,29 +3,30 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <mediaLink><image xlink:href="Designer_Working_time_00"/></mediaLink>
-<para>Кубик используется для определения рабочего времени. Например, для определения, 
-когда идут торги по определенному инструменту.</para>
+<para>The cube is used to determine the working time. For example, to determine 
+when a particular instrument is trading.</para>
  
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> - инструмент, для которого необходимо определить
- активна ли торговая сессия.</para></listItem>
-  <listItem><para><legacyBold>Триггер</legacyBold> - сигнал, с помощью которого определяется момент, 
- когда необходимо выполнять проверку.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> - an instrument for which 
+  you need to determine whether a trading session is active.</para></listItem>
+  <listItem><para><legacyBold>Trigger</legacyBold> - is the signal used to 
+  determine when to check.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> - флаг, который определяет активна ли торговая сессия.</para></listItem>
+  <listItem><para><legacyBold>Flag</legacyBold> - a flag that determines whether 
+  a trading session is active.</para></listItem>
 </list>
   </definition>
 </definitionTable>
- <para>Кубик может использоваться для определения момента, когда торги 
- ведутся по нескольким инструментам с различных торговых площадок.</para>
+ <para>The cube can be used to determine the moment when trades are conducted 
+ on several instruments from various trading platforms.</para>
  <mediaLink><image xlink:href="Designer_Working_time_01"/></mediaLink>
     </introduction>
     <relatedTopics>

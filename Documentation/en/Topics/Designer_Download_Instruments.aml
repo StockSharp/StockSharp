@@ -1,21 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="d0a1bb26-7a29-4607-992c-4f539632c2eb" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>При нажатии на кнопку <legacyBold>Скачать инструмент</legacyBold> появится окно <legacyBold>Скачать инструмент</legacyBold>. 
-Для скачивания инструмента необходимо ввести код инструмента, тип инструмента, 
-выбрать источник данных и нажать кнопку <legacyBold>ОК</legacyBold>. <token>designer</token> начнет поиск 
-инструментов в источнике. Все найденные инструменты добавятся в список 
-инструментов панели <legacyBold>Все инструменты</legacyBold>. Если источником выбрать хранилище и в 
-хранилище уже есть скачанные инструменты, то <token>designer</token> найдет все имеющиеся 
-инструменты в хранилище. Это может быть полезно, когда история по инструменту 
-уже скачена и скопирована в папку хранилище.</para>
+<para>Clicking the <legacyBold>Download securities</legacyBold> button opens the 
+<legacyBold>Download securities</legacyBold> 
+window. To download securities, you have to enter their code, type, select data 
+source and click the <legacyBold>OK</legacyBold> button. 
+<token>designer</token> starts searching securities in the source. 
+All found securities are added to the securities list on the 
+<legacyBold>All securities</legacyBold> panel. 
+If a storage is selected as the source, and the storage already 
+contains downloaded securities, <token>designer</token> will find all securities 
+available in the storage. It may be useful, when the history on securities is 
+already downloaded and copied to the storage folder.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Download_the_tools_00"/>
 </mediaLink>
  
-<para>Если нажать на кнопку <legacyBold>Добавить подключение</legacyBold> появится 
-окно <link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" />.</para>
+<para>Clicking the <legacyBold>Add connection</legacyBold> button opens the 
+<link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" /> window.</para>
 
     </introduction>
     <relatedTopics>

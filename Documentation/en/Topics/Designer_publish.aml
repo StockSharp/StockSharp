@@ -4,23 +4,28 @@
 
     <introduction>
 
-      <para><token>designer</token> предоставляет возможность публикации, а также автоматической публикации графиков и таблиц. </para>
+      <para><token>designer</token> provides the ability to publish, as well as 
+      automatically publish charts and tables.</para>
       
-      <para>Для публикации необходимо нажать на кнопку <mediaLinkInline><image xlink:href="Designer_Share_link_ico"/></mediaLinkInline>. </para>
+      <para>To publish, click the 
+      <mediaLinkInline><image xlink:href="Designer_Share_link_ico"/></mediaLinkInline>
+      button. </para>
      
       <mediaLink>
 <image placement="center" xlink:href="Designer_Share_link"/>
 </mediaLink>
 
- <para>В первый раз необходимо будет заполнить логин и пароль, и подтвердить разрешение доступа приложению StockSharp:</para>
+ <para>For the first time, you will have to fill in the login and password and 
+ confirm access permission to the StockSharp application:</para>
  <mediaLink>
 <image placement="center" xlink:href="Designer_Share_link_Ya"/>
 </mediaLink>
  <mediaLink>
 <image placement="center" xlink:href="Designer_Share_link_Ya_02"/>
 </mediaLink>
- <para>Для автоматической публикации необходимо раскрыть меню кнопки <mediaLinkInline><image xlink:href="Designer_Share_link_ico"/></mediaLinkInline>, 
- установить флаг автопубликация и выбрать период:</para>
+ <para>For automatic publishing open the 
+ <mediaLinkInline><image xlink:href="Designer_Share_link_ico"/></mediaLinkInline>,
+ button and check the Auto-publishing checkbox:</para>
   <mediaLink>
 <image placement="center" xlink:href="Designer_Share_link_01"/>
 </mediaLink>
