@@ -27,7 +27,7 @@
 <para>2.	Для удобной работы стоит раскрыть и зафиксировать 
 панели <legacyBold>Палитра</legacyBold> и <legacyBold>Свойства</legacyBold> области <legacyBold>Схема</legacyBold>, 
 нажав кнопку <mediaLinkInline><image xlink:href="Designer_Algorithm_creation_of_cubes_13"/></mediaLinkInline>. 
-В результате получиться окно следующего вида.</para>
+В результате получится окно следующего вида.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_00"/>
 </mediaLink>
@@ -44,11 +44,11 @@
   <listItem><para>При наличии противоположной позиции в момент получения сигнала 
   на открытие позиции, переворачивать позицию.</para></listItem>
 </list>
-<para>4.	Для всех стратегий необходим инструмент и портфель, по которым будет совершаться 
-сделки. Необходимо добавить их из панели <legacyBold>Палитра</legacyBold> в <legacyBold>Панель Дизайнер</legacyBold>. 
-В примере кубик <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> с типом <legacyBold>Инструмент</legacyBold> называется Инструмент,
-кубик <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> с типом <legacyBold>Портфель</legacyBold> Портфель.
-Установить флажок <legacyBold>Параметры</legacyBold> кубиков Инструмент и Портфель. 
+<para>4.	Для всех стратегий необходим инструмент и портфель, по которым будут 
+совершаться сделки. Необходимо добавить их из панели <legacyBold>Палитра</legacyBold> в панель <legacyBold>Дизайнер</legacyBold>. 
+В примере кубик <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> с типом <legacyBold>Инструмент</legacyBold> называется Security,
+кубик <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> с типом <legacyBold>Портфель</legacyBold> называется Portfolio.
+Установить флажок <legacyBold>Параметры</legacyBold> кубиков Security и Portfolio. 
 При установленном флажке кубик значение будет брать из настроек стратегии. 
 Если флажок параметры не установить, необходимо вручную ввести значения инструмента 
 и портфеля. Если оставить поле <legacyBold>Значение</legacyBold> кубика <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> пустым и не установить 
@@ -67,8 +67,8 @@
 <image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_03"/>
 </mediaLink>
 <para>5.	После добавления инструмента и портфеля, следует добавить два кубика <link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" /> 
-выбрать тип SMA назвать первый Long SMA установить период 80 свечей, второй назвать 
-Short SMA установить период 10 свечей.</para>
+выбрать тип SMA, назвать первый Long SMA, установить период 80 свечей, второй 
+назвать Short SMA и установить период 10 свечей.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_04"/>
 </mediaLink>
@@ -80,7 +80,7 @@ Short SMA установить период 10 свечей.</para>
 </mediaLink>
 <para>7.	После добавления индикаторов следует добавить два кубика, определяющие пересечения 
 индикаторов. Это кубики <link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" /> из составных элементов. Первый кубик называется 
-Crossing Up. Он определяет пересечение снизу вверх. На верхний вход кубика подается 
+Crossing Up. Он определяет пересечение снизу-вверх. На верхний вход кубика подается 
 индикатор Short SMA, на нижний вход индикатор Long SMA. Оператор CurrComparison 
 устанавливается в значение больше, оператор PrevComparison устанавливается в значение 
 Меньше или равно. Второй кубик называется Crossing Down, он определяет пересечение сверху 

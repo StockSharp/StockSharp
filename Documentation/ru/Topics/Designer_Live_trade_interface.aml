@@ -2,12 +2,12 @@
 <topic id="0dec6014-51ee-4463-b102-aed24464833e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>После добавления стратегии в папку <legacyBold>Торговля</legacyBold>. 
-Выбрав двойным нажатием добавленную стратегию откроется вкладка с 
-названием «Торговля Имя стратегии». При переходе на которою в <legacyBold>Ленте</legacyBold> 
+<para>После добавления стратегии в папку <legacyBold>Торговля</legacyBold>, 
+выбрав двойным нажатием добавленную стратегию откроется вкладка с 
+названием «Торговля Имя стратегии». При переходе на которую в <legacyBold>Ленте</legacyBold> 
 автоматически откроется вкладка <legacyBold>Торговля</legacyBold>. На 
-вкладке <legacyBold>Торговля</legacyBold> можно указать инструмент и 
-портфель с которыми будет работать стратегия. Нажав 
+вкладке <legacyBold>Торговля</legacyBold> можно указать инструмент и портфель, 
+с которыми с которыми будет работать стратегия. Нажав 
 кнопку <legacyBold>Старт</legacyBold> - запустить стратегию Live торговлю, 
 нажав кнопку <legacyBold>Стоп</legacyBold> - остановить. 
 </para> 

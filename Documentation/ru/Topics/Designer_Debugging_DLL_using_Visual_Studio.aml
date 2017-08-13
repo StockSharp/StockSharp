@@ -2,7 +2,7 @@
 <topic id="9f19e3b0-bbed-444e-a049-ba107d501664" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>В Visual Studio существует механизм присоединение к выполняемым процессам 
+<para>В Visual Studio существует механизм присоединения к выполняемым процессам 
 с использованием отладчика Visual Studio. Наиболее подробно об 
 отладчике Visual Studio написано в 
 документации <token>MSDN_VS_Attach_process</token>. 

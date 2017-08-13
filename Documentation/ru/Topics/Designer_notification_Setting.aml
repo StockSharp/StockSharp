@@ -6,7 +6,7 @@
 
       <para>Дизайнер предоставляет возможность настроить уведомления. 
       Для открытия окна уведомления необходимо нажать на кнопку <mediaLinkInline><image xlink:href="Designer_Alert_Bell"/></mediaLinkInline> (<link xlink:href="0fc19f50-24cb-4f8b-bb22-728968686f8b" />, <link xlink:href="a06c5482-e2d0-413d-888f-3307c80f7b65" />). 
-      Появиться окно <legacyBold>Настройки уведомлений</legacyBold>.</para>
+      Появится окно <legacyBold>Настройки уведомлений</legacyBold>.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Notifications_Setting"/>
 </mediaLink>

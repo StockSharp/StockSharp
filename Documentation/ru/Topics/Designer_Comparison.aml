@@ -11,8 +11,8 @@
   <definedTerm>Входящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Сравненние</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
-  <listItem><para><legacyBold>Сравненние</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+  <listItem><para><legacyBold>Сравнение</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+  <listItem><para><legacyBold>Сравнение</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
 </list>
   </definition>
 
