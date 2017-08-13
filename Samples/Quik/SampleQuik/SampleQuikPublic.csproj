@@ -116,6 +116,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ChartWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -168,6 +172,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ChartWindow.xaml.cs">
+      <DependentUpon>ChartWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -243,6 +250,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
+      <Project>{C449D618-DEA4-41C3-BA86-9F827C7421DC}</Project>
+      <Name>Xaml.Charting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
       <Name>Xaml</Name>
