@@ -209,6 +209,9 @@
             Native identifier can be stored.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeFrames">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
             Initialize dialect.
@@ -557,6 +560,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsNativeIdentifiersPersistable">
       <summary>
             Native identifier can be stored.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames">
+      <summary>
+            Available time frames.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
@@ -6101,6 +6109,11 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsValid">
       <summary>
             The parameters validity check.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
+      <summary>
+            Available time frames.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">

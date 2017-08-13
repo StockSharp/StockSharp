@@ -15,21 +15,19 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.TimeFrames">
+      <summary>
+            Available time frames.
+            </summary>
+    </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
-      <summary>
-            Create FIX protocol dialect.
-            </summary>
-      <param name="dialect">The FIX dialect.</param>
-      <returns>The dialect.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixServer">
       <summary>
@@ -157,6 +155,11 @@
       <returns>
         <see langword="true" />, если транзакция не была ранее обработана и ее можно обработать, иначе <see langword="false" />.</returns>
     </member>
+    <member name="F:StockSharp.Quik.Lua.LuaFixServer.DataSources">
+      <summary>
+            Открытие источники данных.
+            </summary>
+    </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter">
       <summary>
             Адаптер сообщений для Quik LUA FIX.
@@ -169,17 +172,10 @@
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateOrderCondition">
-      <summary>
-            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
-            </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено <see langword="null" />.</returns>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)">
-      <summary>
-            Create FIX protocol dialect.
-            </summary>
-      <param name="dialect">The FIX dialect.</param>
-      <returns>The dialect.</returns>
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Quik.Lua.LuaRequest">
       <summary>
@@ -224,6 +220,11 @@
     <member name="P:StockSharp.Quik.Lua.LuaRequest.DataType">
       <summary>
             Тип маркет-данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaRequest.Arg">
+      <summary>
+            Дополнительный аргумент, ассоциированный с типом данных. Например, параметр свечи.
             </summary>
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaRequest.ToString">
