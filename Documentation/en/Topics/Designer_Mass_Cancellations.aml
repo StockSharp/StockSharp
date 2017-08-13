@@ -5,14 +5,17 @@
 <mediaLink>
 <image xlink:href="Designer_Mass_Cancellations_00"/>
 </mediaLink>
-<para>Кубик используется для отмены всех заявки по инструменту.</para>
+<para>The cube is used to cancel all orders by the instrument.</para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Портфель</legacyBold> – портфель, для которого надо отменить все заявки.</para></listItem>
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого надо отменить все заявки.</para></listItem>
-  <listItem><para><legacyBold>Направление</legacyBold> – направление отменяемых заявок (покупка или продажа), является сигналом отмены заявки.</para></listItem>
+  <listItem><para><legacyBold>Portfolio</legacyBold> - the portfolio for which 
+  you need to cancel all orders.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> - the instrument for which 
+  you need to cancel all orders.</para></listItem>
+  <listItem><para><legacyBold>Direction</legacyBold> – the direction of canceled 
+  orders (purchase or sale), it is a signal of order cancellation.</para></listItem>
 </list>
   </definition>
 

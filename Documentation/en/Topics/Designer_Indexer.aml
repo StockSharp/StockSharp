@@ -5,28 +5,30 @@
 <mediaLink>
 <image xlink:href="Designer_Indexer_00"/>
 </mediaLink>
-<para>Элемент используется для получения элемента из коллекции с указанным индексом.
+<para>The element is used to get an element from a collection with the specified index.
 </para>
 
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Любые данные</legacyBold> – коллекция элементов.</para></listItem>
+  <listItem><para><legacyBold>Any data</legacyBold> – the collection of elements.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Любые данные</legacyBold> – элемент из коллекции с указанным в параметрах индексом.</para></listItem>
+  <listItem><para><legacyBold>Any data</legacyBold> - the element from the 
+  collection with the index specified in the parameters.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Индекс</legacyBold> – индекс необходимого элемента</para></listItem>
+  <listItem><para><legacyBold>Index</legacyBold> - the index of the required 
+  element.</para></listItem>
 </list>
   </definition>
 </definitionTable>

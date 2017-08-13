@@ -34,8 +34,8 @@
 границам волатильности) и теоретическая цена (котирование объема будет проходить
  по заданным границам теоретической цены).</para></listItem>
   <listItem><para><legacyBold>Направление</legacyBold> – направление котирования может принимать значения Покупка и Продажа.</para></listItem>
-  <listItem><para><legacyBold>Минимальное</legacyBold> – минимальное значения волатильности или теоретической цены </para></listItem>
-  <listItem><para><legacyBold>Максимальное</legacyBold> – максимальное значения волатильности или теоретической цены</para></listItem>
+  <listItem><para><legacyBold>Минимальное</legacyBold> – минимальное значение волатильности или теоретической цены </para></listItem>
+  <listItem><para><legacyBold>Максимальное</legacyBold> – максимальное значение волатильности или теоретической цены</para></listItem>
 </list>
   </definition>
 </definitionTable>

@@ -5,19 +5,19 @@
 <mediaLink>
 <image xlink:href="Designer_Empty_glass_00"/>
 </mediaLink>
-<para>Кубик используется для получения разреженного стакана по заданному.</para>   
+<para>The cube is used to obtain a sparse order book by the specified one.</para>   
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Стакан</legacyBold> – стакан, который надо разредить.</para></listItem>
+  <listItem><para>Order book - the order book that needs to be sparsed.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Стакан</legacyBold> – разреженный стакан.</para></listItem>
+  <listItem><para>Order book - the sparse order book.</para></listItem>
 </list>
   </definition>
 

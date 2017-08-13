@@ -14,8 +14,9 @@
   <definition>
 <list class="bullet">
   <listItem><para><legacyBold>Любые данные</legacyBold> – значение выбранного типа, которое будет сохранено вместо значения по умолчанию.</para></listItem>
-  <listItem><para><legacyBold>Триггер</legacyBold> –  сигнал, с помощью которого определяется момент, когда необходимо передать хранящееся значений
-через выходной параметр.</para></listItem>
+  <listItem><para><legacyBold>Триггер</legacyBold> –  сигнал, с помощью которого 
+  определяется момент, когда необходимо передать хранящееся значение через
+  выходной параметр.</para></listItem>
 </list>
   </definition>
 

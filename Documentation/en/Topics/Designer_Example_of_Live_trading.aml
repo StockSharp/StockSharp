@@ -2,47 +2,56 @@
 <topic id="91644d63-00b3-416f-8677-ca57dfa8032e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Для запуска примера в <legacyBold>Live торговлю</legacyBold> понадобится:</para>
-<para>1.	Тестовый терминал <legacyBold>IB Trader Workstation (TWS) Demo</legacyBold> 
-от <link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" /> его можно получить на сайте производителя.</para>
-<para>2.	Настроить терминал <legacyBold>IB TWS Demo</legacyBold> для работы с <token>designer</token>. 
-Как настроить терминал IB TWS Demo можно посмотреть в пункте <link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" />.</para>
-<para>3.	Настроить подключение к <legacyBold>IB TWS Demo</legacyBold> в <token>designer</token> и подключиться.</para>
-<para>4.	Скачать историю для необходимого инструмента. 
-Для примера будет использоваться инструмент <legacyBold>AAPL@NASDAQ</legacyBold>. 
-В стратегии будут использоваться свечи с тайм-фреймом в 5 сек., и история не понадобится, 
-но для демонстрации возможности такой истории будет достаточно.</para> 
+<para>To run an example in <legacyBold>Live</legacyBold> you will need:</para>
+<para>1.	Testing terminal <legacyBold>IB Trader Workstation (TWS) Demo</legacyBold> from 
+<link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" />, you can get it on 
+the manufacturer's website.</para>
+
+<para>2.	Set the IB TWS Demo terminal for work with <token>designer</token>. 
+See the <legacyBold>IB TWS Setting demo</legacyBold> in the 
+<link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" /> section.</para>
+<para>3.	Set connection to the IB TWS Demo in <token>designer</token> and connect.</para>
+<para>4.	Download history for the required instrument. For example, the 
+<legacyBold>AAPL@NASDAQ</legacyBold> instrument will be used. The strategy will 
+use candles with a time frame of 5 seconds, and history will not be needed, but 
+such a history will be sufficient to demonstrate the possibility.</para> 
 <mediaLink>
 <image placement="center" xlink:href="Designer_Example_of_Live_trading_00"/>
 </mediaLink>
-<para>5.	Настроить и запустить стратегию:</para>
+<para>5.	Set and run the strategy.</para>
 
-<para>В примере со стратегией SMA будут использоваться следующие параметры:</para>
+<para>The following parameters will be used in the example with the SMA strategy.</para>
 
 
 <list class="bullet">
-  <listItem><para>Инструмент <legacyBold>AAPL@NASDAQ</legacyBold></para></listItem>
-  <listItem><para>Стандартное хранилище <legacyBold>\Documents\StockSharp\Designer\Storage</legacyBold></para></listItem>
-  <listItem><para>Формат хранилища <legacyBold>CSV</legacyBold></para></listItem>
-  <listItem><para>Тип данных которые будем брать из хранилища <legacyBold>Ticks</legacyBold></para></listItem>
-  <listItem><para>Свечи с тайм-фреймом 5 секунд</para></listItem>
-  <listItem><para>Объем 100</para></listItem>
-  <listItem><para>Дней истории 2</para></listItem>
+  <listItem><para><legacyBold>AAPL@NASDAQ</legacyBold> instrument</para></listItem>
+  <listItem><para>Standard storage <legacyBold>\Documents\StockSharp\Designer\Storage</legacyBold></para></listItem>
+  <listItem><para>Storage format - <legacyBold>CSV</legacyBold></para></listItem>
+  <listItem><para>Type of data, taken from the storage - <legacyBold>Ticks</legacyBold></para></listItem>
+  <listItem><para>Candles with time-frame of 5 s</para></listItem>
+  <listItem><para>Volume - 100</para></listItem>
+  <listItem><para>History days - 2</para></listItem>
 </list>
  <mediaLink>
 <image placement="center" xlink:href="Designer_Example_of_Live_trading_01"/>
 </mediaLink>
 
-<para>После установки всех необходимых параметров идет запуск Live торговлю стратегии, нажав кнопку
-<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>  Старт.</para>
-<para>После нажатия кнопки <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline> Старт на графике начнет отображаться вся
-загруженная история за 2 дня:</para> 
+<para>After setting up all the required parameters, start up the strategy 
+testing by clicking the 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>
+Start button.</para>
+<para>After clicking the 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline> 
+Start button, the chart will start displaying the entire downloaded history for 
+2 days:</para> 
 <mediaLink>
 <image placement="center" xlink:href="Designer_Example_of_Live_trading_02"/>
 </mediaLink>
-<para>Как прогрузится вся история из <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> и Таблицы обезличенных сделок из терминала, стратегия
-начнет торговлю.</para>
-<para>Ниже представлены график со сделками из <token>designer</token>.</para>
+<para>After downloading the entire history from the 
+<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> 
+and the Table of anonymous trades from the terminal, the strategy will start 
+trading.</para>
+<para>The chart below shows the trades from <token>designer</token>.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Example_of_Live_trading_03"/>
 </mediaLink>

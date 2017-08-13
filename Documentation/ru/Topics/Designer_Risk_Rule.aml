@@ -17,10 +17,10 @@
   <definedTerm>Список Риск-правил</definedTerm>
   <definition>
 <list class="bullet">
-<listItem><para><legacyBold>Заявка (объем) </legacyBold> - риск-правило, отслеживающее размер комиссии.</para></listItem>
-<listItem><para><legacyBold>Заявка(цена) </legacyBold> - риск-правило, отслеживающее частоту выставления заявок.</para></listItem>
-<listItem><para><legacyBold>Заявка (частота) </legacyBold> - риск-правило, отслеживающее цену заявки.</para></listItem>
-<listItem><para><legacyBold>Комиссия </legacyBold> - риск-правило, отслеживающее объем заявки.</para></listItem>
+<listItem><para><legacyBold>Заявка (объем) </legacyBold> - риск-правило, отслеживающее объем заявки.</para></listItem>
+<listItem><para><legacyBold>Заявка(цена) </legacyBold> - риск-правило, отслеживающее цену заявки.</para></listItem>
+<listItem><para><legacyBold>Заявка (частота) </legacyBold> - риск-правило, отслеживающее частоту выставления заявок.</para></listItem>
+<listItem><para><legacyBold>Комиссия </legacyBold> - риск-правило, отслеживающее размер комиссии.</para></listItem>
 <listItem><para><legacyBold>П/У</legacyBold> - риск-правило, отслеживающее прибыль-убыток. </para></listItem>
 <listItem><para><legacyBold>Позиция </legacyBold> - риск-правило, отслеживающее размер позиции. </para></listItem>
 <listItem><para><legacyBold>Позиция (время) </legacyBold> - риск-правило, отслеживающее время жизни позиции. </para></listItem>

@@ -5,38 +5,50 @@
 <mediaLink>
 <image placement="center" xlink:href="Designer_The_conditional_operator_00"/>
 </mediaLink>
-<para>Элемент условный оператор возвращает одно из двух значений в зависимости от равенства 
-двух входных параметров. Элемент содержит четыре входа, три из которых могут быть
- указаны в виде свойств, и один выход. In1 и In2 используются для сравнения, 
- OutEqual и OutNotEqual используются для задания значений, которые будут возвращаться 
- на выходе элемента в зависимости от равенства входных параметров. Значения для OutEqual, 
- OutNotEqual и In2 могут быть заданы в свойствах элемента, значение In1 обязательно должно 
- передаваться через входной параметр.</para>
+<para>The conditional statement element returns one of two values, depending on 
+the equality of the two input parameters. The element contains four inputs, three 
+of which can be specified as properties, and one output. In1 and In2 are used 
+for comparison, OutEqual and OutNotEqual are used to specify the values that 
+will be returned at the output of the element, depending on the equality of the 
+input parameters. Values for OutEqual, OutNotEqual and In2 can be specified in 
+the properties of the element, the value of In1 must necessarily be passed through 
+the input parameter.</para>
  
  <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>In1</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
-  <listItem><para><legacyBold>In2</legacyBold> –  значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
-  <listItem><para><legacyBold>OutEqual</legacyBold> – значение, которые будет возвращаться на выходе элемента в зависимости от равенства входных параметров.</para></listItem>
-  <listItem><para><legacyBold>OutNotEqual </legacyBold> – значение, которые будет возвращаться на выходе элемента в зависимости от равенства входных параметров.</para></listItem>
+  <listItem><para><legacyBold>In1</legacyBold> – values that can be compared 
+  (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
+  <listItem><para><legacyBold>In2</legacyBold> –  values that can be compared 
+  (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
+  <listItem><para><legacyBold>OutEqual</legacyBold> – the value that will be 
+  returned at the output of the element, depending on the equality of the input 
+  parameters.</para></listItem>
+  <listItem><para><legacyBold>OutNotEqual </legacyBold> – the value that will be 
+  returned at the output of the element, depending on the equality of the input
+  parameters.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Результат</legacyBold> – числовое значение</para></listItem>
+  <listItem><para><legacyBold>Result</legacyBold> - the numeric value.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>In2</legacyBold> –  значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
-  <listItem><para><legacyBold>OutEqual</legacyBold> – значение, которые будет возвращаться на выходе элемента в зависимости от равенства входных параметров.</para></listItem>
-  <listItem><para><legacyBold>OutNotEqual </legacyBold> – значение, которые будет возвращаться на выходе элемента в зависимости от равенства входных параметров.</para></listItem>
+  <listItem><para><legacyBold>In2</legacyBold> - values that can be compared 
+  (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
+  <listItem><para><legacyBold>OutEqual</legacyBold> - the value that will be 
+  returned at the output of the element, depending on the equality of the input 
+  parameters.</para></listItem>
+  <listItem><para><legacyBold>OutNotEqual</legacyBold> - the value that will be 
+  returned at the output of the element, depending on the equality of the input
+  parameters.</para></listItem>
 </list>
   </definition>
 </definitionTable>
@@ -45,15 +57,16 @@
  <mediaLink>
 <image placement="center" xlink:href="Designer_The_conditional_operator_01"/>
 </mediaLink>
-<para>Схема элемента состоит из простых элементов и основана на запоминании в элементе 
-<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> (VarIn2, VarOutEqual, VarOutNotEqual) значений, которые были переданы 
-на вход элемента, или использования значений по умолчанию, которые заданы с помощью
- свойств элемента. При поступлении нового значения на первом входе выполняется 
- сравнение (In1 == In2) нового значения со значением, которое было запомнено в 
- переменной для второго входа. Если значения совпадают, то подачей сигнала на 
- вход-триггер переменной VarOutEqual подается сигнал и соответствующее значение 
- передается на выход составного элемента. Аналогично выполняется передача сигнала 
- на элемент переменной VarOutNotEqual с помощью логического отрицания (Not).</para>
+<para>The element diagram consists of simple elements and is based on memorization in the 
+<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> element (VarIn2, 
+VarOutEqual, VarOutNotEqual) the values that were passed to the element input, 
+or using the default values that are set using the element's properties. When a
+ new value is received, the first input compares (In1 == In2) a new value with 
+ the value that was stored in the variable for the second input. If the values 
+ are the same, a signal is passed to the input-trigger of the VarOutEqual variable 
+ and the corresponding value is passed to the output of the composite element 
+ Similarly, the signal is passed to the variable element VarOutNotEqual using a 
+ logical negation (Not).</para>
     </introduction>
     <relatedTopics>
 <link xlink:href="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" />

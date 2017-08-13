@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para>Для получения объема, необходимого для переворота текущий позиции на 
-противоположную, может использоваться схема используемая в пример-стратегии SMA:</para>
+противоположную, может использоваться схема, используемая в пример-стратегии SMA:</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Determination_of_the_volume_position_00"/>
 </mediaLink>
@@ -12,7 +12,7 @@
 после чего будет передан в элемент <link xlink:href="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" />.</para>
 
 <para>Для кубика <link xlink:href="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" />
-свойство позиция так же не указано, но установлен флаг <legacyBold>Параметры</legacyBold> группы <legacyBold>Общее</legacyBold>, что означает, 
+свойство позиция также не указано, но установлен флаг <legacyBold>Параметры</legacyBold> группы <legacyBold>Общее</legacyBold>, что означает, 
 что позиция будет получена для портфеля, который указан в настройках стратегии.</para>
 
 <para>После передачи инструмента и изменении позиции, с помощью математической функции 

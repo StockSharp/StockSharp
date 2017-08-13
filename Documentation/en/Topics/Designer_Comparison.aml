@@ -5,38 +5,42 @@
 <mediaLink>
 <image xlink:href="Designer_Comparison_00"/>
 </mediaLink>
-<para>Элемент используется для сравнения двух поступающих на вход объектов.</para>
+<para>An element is used to compare two input objects.</para>
 
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Сравненние</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
-  <listItem><para><legacyBold>Сравненние</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+  <listItem><para><legacyBold>Comparison</legacyBold> – values that can be compared 
+  (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
+  <listItem><para><legacyBold>Comparison</legacyBold> – values that can be 
+  compared (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold>  – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
+  <listItem><para><legacyBold>•	Flag </legacyBold>  – the flag value (indicates 
+  the state and has two values: up (true) and down (false)).</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Левый</legacyBold> – параметр, значение которого 
-  будет использоваться в левой части сравнения.</para></listItem>
-  <listItem><para><legacyBold>Оператор</legacyBold> – условие, с помощью которого 
-  необходимо сравнить переданные значения.</para></listItem>
-  <listItem><para><legacyBold>Правый</legacyBold> – параметр, значение которого 
-  будет использоваться в правой части сравнения.</para></listItem>
+  <listItem><para><legacyBold>Left</legacyBold> – the parameter which value will 
+  be used on the left side of the comparison.</para></listItem>
+  <listItem><para><legacyBold>Operator</legacyBold> – the condition by which you 
+  need to compare the passed values.</para></listItem>
+  <listItem><para><legacyBold>Right</legacyBold> – the parameter which value 
+  will be used on the right side of the comparison.</para></listItem>
 </list>
   </definition>
 </definitionTable>
 
-<para>При смене оператора название кубика автоматически меняется на название оператора.</para>
+<para>When you change the operator, the cube name automatically changes to the 
+operator name.</para>
 
     </introduction>
     <relatedTopics>

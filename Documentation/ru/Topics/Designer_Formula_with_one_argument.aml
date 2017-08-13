@@ -13,7 +13,8 @@
   <definedTerm>Входящие сокеты</definedTerm>
   <definition>
 <list class="bullet">
-    <listItem><para><legacyBold>Значение</legacyBold> – значение, над которыми можно проводить математические операции (например, число или индикатор).</para></listItem>
+    <listItem><para><legacyBold>Значение</legacyBold> – значение, над которым 
+    можно проводить математические операции (например, число или индикатор).</para></listItem>
 </list>
   </definition>
 

@@ -29,7 +29,8 @@ using StockSharp.Algo;
 	public class NewStrategy : Strategy
 ]]></code>
 
-<para>Далее в примере идет объявление переменных. Для работы стратегии SMA необходимо две скользящие средние с разными периодами расчёта, 
+<para>Далее в примере идет объявление переменных. Для работы стратегии SMA необходимы 
+две скользящие средние средние с разными периодами расчёта, 
 длинная SMA и короткая SMA:</para>
 <code language="C#" title="C#"><![CDATA[
  private readonly SimpleMovingAverage _long;
@@ -199,7 +200,7 @@ protected override void OnStarted()
 ]]></code>
 
 <para>Переопределяется метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStopped</codeEntityReference>,
-чтобы престать получать новую информацию по инструменту:</para>
+чтобы перестать получать новую информацию по инструменту:</para>
 <code language="C#" title="C#"><![CDATA[
 protected override void OnStopped()
 {

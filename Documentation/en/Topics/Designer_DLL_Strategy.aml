@@ -5,15 +5,17 @@
 <mediaLink>
 <image xlink:href="Designer_DLL_Strategy_00"/>
 </mediaLink>
-<para>Кубик используется для импорта Dll библиотек со 
-стратегиями(<link xlink:href="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" />).</para>
+<para>The cube is used to import DLL libraries with strategies 
+(<link xlink:href="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" />).</para>
 
 <definitionTable>
-  <definedTerm>Параметры</definedTerm>
+  <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Сборка</legacyBold> – Dll библиотека, содержащая стратегию, которую необходимо добавить.</para></listItem>
-  <listItem><para><legacyBold>Имя типа стратегии</legacyBold> – имя типа стратегии, которую необходимо добавить.</para></listItem>
+  <listItem><para><legacyBold>Assembly</legacyBold> - Dll library containing the 
+  strategy you want to add.</para></listItem>
+  <listItem><para><legacyBold>Name of strategy type</legacyBold> - the name of 
+  the strategy type that you want to add.</para></listItem>
 
 </list>
   </definition>

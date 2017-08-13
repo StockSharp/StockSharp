@@ -5,19 +5,22 @@
 <mediaLink>
 <image xlink:href="Designer_Graph_options_positions_00"/>
 </mediaLink>
-<para>Кубик используется для отображения <legacyBold>Графика позиций опционов</legacyBold>.</para>
-<para>Для отображения <legacyBold>Графика позиций опционов</legacyBold> 
-необходимо добавить графический компонент <legacyBold>График позиций опционов</legacyBold>.</para> 
+<para>The cube is used to display the <legacyBold>Chart of options positions</legacyBold>.</para>
+<para>To display the <legacyBold>Chart of options positions</legacyBold>, you need 
+to add the <legacyBold>Chart of options positions</legacyBold> graphic component.</para> 
 
 
 
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, базовый актив.</para></listItem>
-  <listItem><para><legacyBold>Цена базового актива</legacyBold> – цена базового актива.</para></listItem>
-  <listItem><para><legacyBold>Опционы</legacyBold> – список опционов из кубика <legacyBold>Деривативы</legacyBold>.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> – the instrument, the basic 
+  asset.</para></listItem>
+  <listItem><para><legacyBold>Price of the underlying asset</legacyBold> - the 
+  price of the underlying asset.</para></listItem>
+  <listItem><para><legacyBold>Options</legacyBold> - the list of options from 
+  the <legacyBold>Derivatives</legacyBold> cube.</para></listItem>
 </list>
   </definition>
 </definitionTable>

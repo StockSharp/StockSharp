@@ -25,7 +25,7 @@
   что при расчете индекса помимо основной информации (Общий объем, Цена открытия, 
   Цена закрытия, Цена наивысшая, Цена наименьшая) будет вычисляться расширенная 
   информация (Суммарный оборот по сделкам, Объем открытия, Объем закрытия, 
-  Максимальный объем, Объем закрытия);</para></listItem>
+  Максимальный объем, Минимальный объем);</para></listItem>
   </list>
   </definition>
 </definitionTable>
@@ -53,7 +53,7 @@
   <listItem><para><legacyBold>sin(a)</legacyBold> - Возвращает синус указанного угла.</para></listItem>
   <listItem><para><legacyBold>sqrt (a)</legacyBold>- Возвращает квадратный корень из указанного числа.</para></listItem>
   <listItem><para><legacyBold>tan(a)</legacyBold> - Возвращает тангенс указанного угла.</para></listItem>
-  <listItem><para><legacyBold>truncat(a)</legacyBold> - Вычисляет целую часть заданного указанного числа.</para></listItem>
+  <listItem><para><legacyBold>truncat(a)</legacyBold> - Вычисляет целую часть указанного числа.</para></listItem>
 </list>
     </introduction>
     <relatedTopics>

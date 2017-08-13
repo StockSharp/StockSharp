@@ -22,7 +22,8 @@
 подключаться <mediaLinkInline><image xlink:href="Designer_The_connection_settings_05"/></mediaLinkInline>. 
 Эти значения устанавливаются кнопками <mediaLinkInline><image xlink:href="Designer_The_connection_settings_06"/></mediaLinkInline>  
 и <mediaLinkInline><image xlink:href="Designer_The_connection_settings_07"/></mediaLinkInline>.</para>
-<para>В столбцах <legacyBold>Маркет-данные</legacyBold> и <legacyBold>Транзакции</legacyBold> отображено поддерживает коннектор маркет-данные и работу с заявками.</para>
+<para>В столбцах <legacyBold>Маркет-данные</legacyBold> и <legacyBold>Транзакции</legacyBold> 
+отображено поддерживает ли коннектор маркет-данные и работу с заявками.</para>
 <para>4.	При установленном флажке <legacyBold>Авто-подключение</legacyBold> соединение автоматически 
 подключится при запуске <token>designer</token>.</para>
 <para>5.	В зоне №2 отображаются настройки выбранного коннектора. Нажав на 

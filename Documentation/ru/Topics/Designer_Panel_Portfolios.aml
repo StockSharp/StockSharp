@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para>Для работы с портфелями существует панель <legacyBold>Портфели</legacyBold>. 
-Открыть ее можно нажав на кнопку портфели вкладки <legacyBold>Общее</legacyBold>.</para>
+Открыть ее можно нажав на кнопку <legacyBold>Портфели</legacyBold> вкладки <legacyBold>Общее</legacyBold>.</para>
 <mediaLink><image xlink:href="Designer_Panel_A_Portfolios_00"/></mediaLink>
 <para>Панель <legacyBold>Портфели</legacyBold> представляет собой таблицу,
  в которой отображены основные данные по портфелю, и текущим позициям по этим портфелям.

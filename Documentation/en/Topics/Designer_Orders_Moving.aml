@@ -5,24 +5,25 @@
 <mediaLink>
 <image xlink:href="Designer_Moving_applications_00"/>
 </mediaLink>
-<para>Кубик используется для изменения заявки по инструменту.</para>
+<para>The cube is used to change the order by the instrument.</para>
     
     <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – заявка, которая будет изменена.</para></listItem>
-  <listItem><para><legacyBold>Цена</legacyBold> – числовое значение новой цены.</para></listItem>
-  <listItem><para><legacyBold>Объем</legacyBold> – числовое значение нового объема.</para></listItem>
+  <listItem><para><legacyBold>Order</legacyBold> - the order that will be changed.</para></listItem>
+  <listItem><para><legacyBold>Price</legacyBold> - the numerical value of the new price.</para></listItem>
+  <listItem><para><legacyBold>Volume</legacyBold> - the numerical value of the new volume.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – измененная заявка, которая может использоваться для получения сделок по ней 
- с помощью элемента <legacyBold>Сделки</legacyBold> по заявке и отображения на графике с 
- помощью кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+  <listItem><para><legacyBold>Order</legacyBold> - the modified order that can 
+  be used to obtain trades on it by using the <legacyBold>Trades</legacyBold> 
+  element on the order and displaying it on the chart using 
+  the <legacyBold>Chart panel</legacyBold> cube.</para></listItem>
 </list>
   </definition>
   

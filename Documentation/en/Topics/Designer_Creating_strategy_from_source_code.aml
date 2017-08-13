@@ -2,13 +2,15 @@
 <topic id="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Для создания стратегий из исходного кода необходимы навыки программирования на языке C#,
-а также знания библиотеки для профессиональной разработки торговых роботов на языке C# <token>stocksharpapi</token>.</para>
-<para>Создание стратегии из исходного кода будет рассмотрено на примере стратегии SMA - аналогичный пример-стратегии SMA,
- собранной из кубиков в пункте <link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" />.</para>
-<para>Первой строкой идет наименование namespace. Может быть любым сочетанием латинских 
-букв, по умолчанию StockSharp.Designer.Strategies</para>
-<para>Далее идет перечисление Dll библиотек, необходимых для работы кода кубика:</para>
+<para>To create strategies from the source code, you need programming skills in 
+C#, as well as knowledge of the library for the professional development of 
+trading algorithms in C# <token>stocksharpapi</token>.</para>
+<para>Creating a strategy from the source code will be discussed on the example 
+of the SMA strategy - a similar to SMA example-strategy, compiled from the cubes 
+in the <link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" /> section.</para>
+<para>The first line is the namespace name. It can be any combination of Latin 
+characters, by default StockSharp.Designer.Strategies.</para>
+<para>Next is the listing of the DLL libraries needed to run the cube code:</para>
 <code language="C#" title="C#"><![CDATA[
 sing System.Windows.Media;
 using System.Runtime.InteropServices;
@@ -21,43 +23,50 @@ using StockSharp.Messages;
 using StockSharp.Algo;
 ]]></code>
 
-<para>Dll библиотеки добавляются нажатием кнопки <legacyBold>Ссылки</legacyBold> вкладки <legacyBold>Исходный код</legacyBold>.</para>
+<para>Dll libraries are added by clicking the <legacyBold>References</legacyBold> 
+button in the <legacyBold>Source code</legacyBold> tab.</para>
 
-<para>Далее объявляется класс. Название класса может быть любым сочетанием латинских 
-букв. Класс кубика должен быть унаследован от класса <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>:</para>
+<para>Then the class is declared. The class name can be any combination of Latin 
+characters. The cube class must be inherited from the 
+<codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class:</para>
 <code language="C#" title="C#"><![CDATA[
 	public class NewStrategy : Strategy
 ]]></code>
 
-<para>Далее в примере идет объявление переменных. Для работы стратегии SMA необходимо две скользящие средние с разными периодами расчёта, 
-длинная SMA и короткая SMA:</para>
+<para>Next, there is a declaration of variables in the example. SMA strategy 
+requires two moving averages with different calculation periods, a long SMA and 
+a short SMA:</para>
 <code language="C#" title="C#"><![CDATA[
  private readonly SimpleMovingAverage _long;
  private readonly SimpleMovingAverage _short;
 ]]></code>
 
-<para>Объявляются параметры стратегии, в них будут храниться параметры индикаторов SMA:</para>
+<para>The strategy parameters are declared, the SMA indicators parameters will 
+be stored in them:</para>
 <code language="C#" title="C#"><![CDATA[
  private readonly StrategyParam<int> _longParam;
  private readonly StrategyParam<int> _shortParam;
 ]]></code>
 
-<para>Так же объявляются переменные, необходимые для отображения графических элементов. 
-Они не несут полезной нагрузки, и показаны в примере как демонстрация возможностей.
-Для отображения графических элементов лучше использовать стандартные кубики <token>designer</token>. Как это сделать показано 
-в пункте <link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" />:</para>
+<para>Variables necessary for displaying graphic elements are also declared. 
+They do not have a useful information and are shown in the example as a 
+demonstration of possibilities. To display graphic elements, it is better to 
+use <token>designer</token> standard cubes. How to do this is shown in the 
+<link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" /> section:</para>
 <code language="C#" title="C#"><![CDATA[
  private readonly List<MyTrade> _myTrades = new List<MyTrade>();
- private readonly ChartCandleElement _candlesElem;// Свечи
- private readonly ChartTradeElement _tradesElem;// Сделки
- private readonly ChartIndicatorElement _shortElem;// Индикатор
- private readonly ChartIndicatorElement _longElem; // Индикатор
- private readonly ChartArea _area = new ChartArea();// Панель графиков
+ private readonly ChartCandleElement _candlesElem;
+ private readonly ChartTradeElement _tradesElem;
+ private readonly ChartIndicatorElement _shortElem;
+ private readonly ChartIndicatorElement _longElem; 
+ private readonly ChartArea _area = new ChartArea();
 ]]></code>
 
-<para>Атрибут <codeEntityReference>T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute</codeEntityReference> необходим для обозначения
-входных и выходных параметров кубика. Если атрибутом обозначено событие, то значит это будет 
-выходной параметр, если метод — значит это входной параметр:</para>
+<para>The 
+<codeEntityReference>T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute</codeEntityReference> 
+attribute is required to indicate the input and output cube parameters. If the 
+attribute defines an event, it means it will be an output parameter, if the 
+method - it means the input parameter:</para>
 <code language="C#" title="C#"><![CDATA[
  [DiagramExternal]
  public event Action<Order> NewMyOrder;
@@ -68,8 +77,8 @@ using StockSharp.Algo;
  public void ProcessCandle(Candle candle)
 ]]></code>
 
-<para>После объявления переменных необходимо задать свойства кубика. Эти свойства 
-будут отображаться в панели <legacyBold>Свойства</legacyBold> на общей схеме:</para>
+<para>After declaring variables, you need to set the cube properties. These properties 
+will be displayed in the <legacyBold>Properties</legacyBold> panel in the common schema:</para>
  <mediaLink>
 <image placement="center" xlink:href="Designer_Creating_a_strategy_from_the_source_code_00"/>
 </mediaLink>
@@ -96,7 +105,7 @@ public int Short
 
 ]]></code>
 
-<para>Инициализация переменных происходит в конструкторе класса:</para>
+<para>Initialization of variables occurs in the class constructor:</para>
 <code language="C#" title="C#"><![CDATA[
 public NewStrategy()
 {
@@ -105,7 +114,7 @@ public NewStrategy()
 
     _long = new SimpleMovingAverage { Length = Long };
     _short = new SimpleMovingAverage { Length = Short };
-    //Инициализация графических элементов
+    
     _candlesElem = new ChartCandleElement { ShowAxisMarker = false };
     _tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
 
@@ -125,9 +134,12 @@ public NewStrategy()
 
 ]]></code>
 
-<para>У класса <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> есть методы, которые можно переопределить. 
-В примере переопределяется метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnReseted</codeEntityReference> для того, чтобы
-при переинициализации торгового алгоритма переинициализировались скользящие средние и графические элементы:</para>
+<para>The 
+<codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> 
+class has methods that you can override. In the example, the 
+<codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnReseted</codeEntityReference> 
+method is overridden in order to - when the trading algorithm is reinitialized, 
+moving averages and graphical elements are also reinitialized:</para>
 <code language="C#" title="C#"><![CDATA[
 protected override void OnReseted()
 {
@@ -155,19 +167,21 @@ protected override void OnReseted()
 
 ]]></code>
 
-<para>Переопределяется метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStarted</codeEntityReference> для того, чтобы: 1) при старте
-торгового алгоритма переинициализировались скользящие средние, 2) на график добавились все 
-графические элементы, 3) подписаться на появление новых сделок, 4) подписаться на 
-появление новых заявок или изменение старых, начать получать новую информацию 
-по инструменту.</para>
+<para>The 
+<codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStarted</codeEntityReference> 
+method is override in order to: 1) when the trading algorithm starts, the moving 
+averages are reinitialized, 2) all graphic elements are added to the chart, 
+3) subscribe to the event of new trades occurrence, 4) subscribe to the event 
+of new orders occurrence or change of old ones, start receiving new information 
+by the instrument.</para>
 <code language="C#" title="C#"><![CDATA[
 protected override void OnStarted()
 {
     this.AddInfoLog("OnStarted");
-    // переинициализация скользящих средних
+    
     _long.Reset();
     _short.Reset();
-    // добавление на график графических элементов
+   
     var chart = this.GetChart();
 
     if (!chart.Areas.Contains(_area))
@@ -179,18 +193,18 @@ protected override void OnStarted()
         chart.AddElement(_area, _shortElem);
         chart.AddElement(_area, _longElem);
     }
-    // подписка на появление новых сделок, необходимо для отображения сделок
+   
     this
     .WhenNewMyTrades()
     .Do(trades => _myTrades.AddRange(trades))
     .Apply(this);
-    // подписка на изменения заявок
+   
     this
     .WhenOrderRegistered()
     .Or(this.WhenOrderChanged())
     .Do(ord => NewMyOrder?.Invoke(ord))
     .Apply(this);
-    // начать получать новую информацию
+    
     Connector.RegisterSecurity(Security);
 
     base.OnStarted();
@@ -198,8 +212,9 @@ protected override void OnStarted()
 
 ]]></code>
 
-<para>Переопределяется метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStopped</codeEntityReference>,
-чтобы престать получать новую информацию по инструменту:</para>
+<para>The 
+<codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStopped</codeEntityReference>
+method is overridden to stop receiving new information by the instrument:</para>
 <code language="C#" title="C#"><![CDATA[
 protected override void OnStopped()
 {
@@ -210,16 +225,19 @@ protected override void OnStopped()
 
 ]]></code>
 
-<para>Строка <legacyBold>this.AddInfoLog("OnStopped");</legacyBold> выводит сообщение 
-"OnStopped" в окно <legacyBold>Логи</legacyBold>.</para>
-<para>В методе ProcessCandle(Candle candle) идет основной расчёт стратегии. Так как он 
-обозначен атрибутом <codeEntityReference>T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute</codeEntityReference>, значит это входной параметр 
-кубика, принимающий <legacyBold>Свечи</legacyBold>.</para>
+<para>The <legacyBold>this.AddInfoLog("OnStopped");</legacyBold> string displays 
+the message OnStopped in the <legacyBold>Logs</legacyBold> window.</para>
+<para>The main strategy calculation is performed in the 
+<legacyBold>ProcessCandle(Candle candle)</legacyBold> method. Since it is 
+designated by the 
+<codeEntityReference>T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute</codeEntityReference> 
+attribute, this means that it is the input cube parameter accepting 
+the <legacyBold>Candles</legacyBold>.</para>
 <code language="C#" title="C#"><![CDATA[
 [DiagramExternal]
 public void ProcessCandle(Candle candle)
 {
-    // Запущена или остановлена стратегия
+
     if (ProcessState == ProcessStates.Stopping)
     {
         CancelActiveOrders();
@@ -228,30 +246,30 @@ public void ProcessCandle(Candle candle)
 
     this.AddInfoLog(LocalizedStrings.Str3634Params.Put(candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security));
 
-    // Расчет скользящих средних
+
     var longValue = _long.Process(candle);
     var shortValue = _short.Process(candle);
 
     var isShortLessThenLong = _short.GetCurrentValue() < _long.GetCurrentValue();
 
-    // пересекла ли короткая SMA длинную SMA
+   
     if (_isShortLessThenLong != isShortLessThenLong)
     {
-        // определение направление для заявки
+     
         var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
 
-        // объёма для заявки
+       
         var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
 
-        // расчет цены для заявки
+      
         var price = candle.ClosePrice + ((direction == Sides.Buy ? Security.PriceStep : -Security.PriceStep) ?? 1);
-        //выставление заявки
+     
         RegisterOrder(this.CreateOrder(direction, price, volume));
 
         _isShortLessThenLong = isShortLessThenLong;
     }
 
-    //отрисовка графических элементов
+  
     var trade = _myTrades.FirstOrDefault();
     _myTrades.Clear();
 

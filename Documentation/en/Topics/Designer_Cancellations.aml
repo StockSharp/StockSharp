@@ -5,22 +5,22 @@
 <mediaLink>
 <image xlink:href="Designer_Cancellations_00"/>
 </mediaLink>
-<para>Кубик используется для отмены заявки по инструменту.</para>
+<para>The cube is used to cancel the order by the instrument.</para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – заявка, которую необходимо отменить.</para></listItem>
+  <listItem><para><legacyBold>Order</legacyBold> – the order that should be canceled.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – отмененная заявка, 
-которая может использоваться для получения сделок по ней с помощью элемента 
-<legacyBold>Сделки</legacyBold>, а так же отображения на графике с помощью 
-кубика <legacyBold>Панель графика</legacyBold>.</para></listItem>
+  <listItem><para><legacyBold>Order</legacyBold> – the canceled order, which can 
+  be used to obtain trades on it using the <legacyBold>Trades</legacyBold> element, 
+  as well as displaying it on the chart using the <legacyBold>Chart</legacyBold> 
+  panel cube.</para></listItem>
 </list>
   </definition>
 
