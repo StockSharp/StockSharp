@@ -30,6 +30,7 @@ namespace SampleQuik
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Quik.Lua;
 
 	public partial class SecuritiesWindow
 	{
@@ -40,17 +41,7 @@ namespace SampleQuik
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = new[]
-			{
-				TimeSpan.FromTicks(1),
-				TimeSpan.FromMinutes(1),
-				TimeSpan.FromMinutes(5),
-				//TimeSpan.FromMinutes(30),
-				TimeSpan.FromHours(1),
-				TimeSpan.FromDays(1),
-				TimeSpan.FromDays(7),
-				TimeSpan.FromDays(30)
-			};
+			CandlesPeriods.ItemsSource = LuaFixMarketDataMessageAdapter.TimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
 		}
 
