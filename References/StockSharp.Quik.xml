@@ -155,11 +155,6 @@
       <returns>
         <see langword="true" />, если транзакция не была ранее обработана и ее можно обработать, иначе <see langword="false" />.</returns>
     </member>
-    <member name="F:StockSharp.Quik.Lua.LuaFixServer.DataSources">
-      <summary>
-            Открытие источники данных.
-            </summary>
-    </member>
     <member name="T:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter">
       <summary>
             Адаптер сообщений для Quik LUA FIX.
