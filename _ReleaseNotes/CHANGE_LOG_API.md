@@ -4,6 +4,7 @@ StockSharp API Change log
 * (feature) QuikLua. Support candles.
 * (feature) SpbExTrader.IgnoreLimits.
 * (bug) Clipboard fix.
+* (feature) IPositionManager.SecurityId filter.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

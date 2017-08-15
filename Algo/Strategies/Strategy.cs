@@ -463,6 +463,8 @@ namespace StockSharp.Algo.Strategies
 				
 				RaiseParametersChanged(nameof(Security));
 				SecurityChanged?.Invoke();
+
+				PositionManager.SecurityId = value?.ToSecurityId();
 			}
 		}
 

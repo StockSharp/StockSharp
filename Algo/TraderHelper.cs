@@ -2258,6 +2258,12 @@ namespace StockSharp.Algo
 				set => throw new NotSupportedException();
 			}
 
+			SecurityId? IPositionManager.SecurityId
+			{
+				get => _position.Security.ToSecurityId();
+				set { throw new NotSupportedException(); }
+			}
+
 			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.NewPosition
 			{
 				add { }
