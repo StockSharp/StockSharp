@@ -45906,5 +45906,25 @@ namespace StockSharp.Localization
 		/// Verbose
 		/// </summary>
 		public static string Verbose => GetString(VerboseKey);
+
+		/// <summary>
+		/// Limits
+		/// </summary>
+		public const string LimitsKey = nameof(Limits);
+
+		/// <summary>
+		/// Limits
+		/// </summary>
+		public static string Limits => GetString(LimitsKey);
+
+		/// <summary>
+		/// Ignore limits.
+		/// </summary>
+		public const string IgnoreLimitsKey = nameof(IgnoreLimits);
+
+		/// <summary>
+		/// Ignore limits.
+		/// </summary>
+		public static string IgnoreLimits => GetString(IgnoreLimitsKey);
 	}
 }

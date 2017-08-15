@@ -1,5 +1,10 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) QuikLua. Support candles.
+* (feature) SpbExTrader.IgnoreLimits.
+* (bug) Clipboard fix.
+
 ## v4.3.26.2:
 * (feature) Position tracking storage.
 * (feature) MarketDepthControl. Show histogram for volumes.
