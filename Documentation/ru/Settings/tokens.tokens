@@ -345,8 +345,14 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>https://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="spbex"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+  <item id="spbex"><ddue:link xlink:href="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">SPB Exchange</ddue:link></item>
+  <item id="spbex_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>SPB Exchange</ddue:linkText>
     <ddue:linkUri>http://spbexchange.ru</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="quantfeed"><ddue:link xlink:href="003e9486-6ed9-4afc-a325-6b2cbc382794" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">QuantFEED</ddue:link></item>
+  <item id="quantfeed_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>QuantFEED</ddue:linkText>
+    <ddue:linkUri>https://www.quanthouse.com/market+data+feed</ddue:linkUri>
   </ddue:externalLink></item>
 </content>

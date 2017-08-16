@@ -185,6 +185,8 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\QuantFeedSample.aml" />
+    <None Include="Topics\SpbExSample.aml" />
     <None Include="Topics\HydraSettingsQuantFeed.aml" />
     <None Include="Topics\QuantFeed.aml" />
     <None Include="Topics\HydraTasksImport.aml" />
@@ -2776,6 +2778,18 @@
     <Image Include="Art\Designer_Security_mapping_01.png">
       <ImageId>Designer_Security_mapping_01</ImageId>
       <AlternateText>Designer Security mapping 01</AlternateText>
+    </Image>
+    <Image Include="Art\SpbExSample.png">
+      <ImageId>SpbExSample</ImageId>
+      <AlternateText>Пример SpbEx</AlternateText>
+    </Image>
+    <Image Include="Art\SpbExSecurities.png">
+      <ImageId>SpbExSecurities</ImageId>
+      <AlternateText>Инструменты Spb Ex</AlternateText>
+    </Image>
+    <Image Include="Art\QuantFeedSample.png">
+      <ImageId>QuantFeedSample</ImageId>
+      <AlternateText>Пример QuantFEED</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

@@ -169,6 +169,7 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\QuantFeedSample.aml" />
     <None Include="Topics\HydraSettingsQuantFeed.aml" />
     <None Include="Topics\QuantFeed.aml" />
     <None Include="Topics\HydraTasksImport.aml" />
@@ -2760,6 +2761,10 @@
     <Image Include="Art\Designer_Security_mapping_01.png">
       <ImageId>Designer_Security_mapping_01</ImageId>
       <AlternateText>Designer Security mapping 01</AlternateText>
+    </Image>
+    <Image Include="Art\QuantFeedSample.png">
+      <ImageId>QuantFeedSample</ImageId>
+      <AlternateText>QuantFEED Sample</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
