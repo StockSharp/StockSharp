@@ -14361,3 +14361,4 @@ DocStr10027;Verbose message, debug message, information, warnings and errors;Д�
 DocStr10028;Enable storage;Включить хранилище
 DocStr10029;Support filtering subscriptions (subscribe/unsubscribe for specified security);Поддерживает ли фильтрация подписки (подписка/отписка для указанного инструмента)
 DocStr10030;Convertible type;Конвертируемый тип
+DocStr10031;The security for which {0} will be calculated;Инструмент, для которого будет вычисляться значение {0}

@@ -3463,6 +3463,7 @@ T:StockSharp.Algo.Positions.PositionManager/summary;DocStr2062
 M:StockSharp.Algo.Positions.PositionManager.#ctor(System.Boolean)/summary;DocStr1
 M:StockSharp.Algo.Positions.PositionManager.#ctor(System.Boolean)/param/byOrders;DocStr2072
 P:StockSharp.Algo.Positions.PositionManager.ByOrders/summary;DocStr2072
+P:StockSharp.Algo.Positions.PositionManager.SecurityId/summary;DocStr10031
 P:StockSharp.Algo.Positions.PositionManager.Position/summary;DocStr1685
 P:StockSharp.Algo.Positions.PositionManager.Positions/summary;DocStr2069
 E:StockSharp.Algo.Positions.PositionManager.NewPosition/summary;DocStr2070
@@ -3473,6 +3474,7 @@ M:StockSharp.Algo.Positions.PositionManager.ProcessMessage(StockSharp.Messages.M
 M:StockSharp.Algo.Positions.PositionManager.ProcessMessage(StockSharp.Messages.Message)/returns;DocStr8509
 T:StockSharp.Algo.Positions.IPositionManager/summary;DocStr2063
 P:StockSharp.Algo.Positions.IPositionManager.Position/summary;DocStr1685
+P:StockSharp.Algo.Positions.IPositionManager.SecurityId/summary;DocStr10031
 P:StockSharp.Algo.Positions.IPositionManager.Positions/summary;DocStr2069
 E:StockSharp.Algo.Positions.IPositionManager.NewPosition/summary;DocStr2070
 E:StockSharp.Algo.Positions.IPositionManager.PositionChanged/summary;DocStr2071
