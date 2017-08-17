@@ -4625,6 +4625,10 @@ QuantFeed;QuantFEED;QuantFEED
 Verbose;Verbose;Подробно
 Limits;Limits;Лимиты
 IgnoreLimits;Ignore limits.;Игнорировать лимиты.
+StockSharpLLC;StockSharp LLC;ООО СтокШарп
+DesignerDesciption;S#.Designer is a free application for visual design and programming on C# algorithmic trading strategies.;S#.Designer бесплатная программа для создания стратегий в визуальном редакторе или на языке C#.
+HydraDescription;S#.Data is a free application for downloading and storing market data.;S#.Data бесплатная программа для скачивания и хранения маркет-данных.
+TerminalDescription;S#.Terminal is a free trading terminal.;S#.Terminal бесплатный торговый терминал.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
