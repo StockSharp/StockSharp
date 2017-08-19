@@ -30108,14 +30108,24 @@ namespace StockSharp.Localization
 		public static string Str3235 => GetString(Str3235Key);
 
 		/// <summary>
-		/// Panel for viewing Level2 data.
+		/// Panel for viewing Level1 data.
 		/// </summary>
-		public const string Str3236Key = nameof(Str3236);
+		public const string Level1PanelKey = nameof(Level1Panel);
+
+		/// <summary>
+		/// Panel for viewing Level1 data.
+		/// </summary>
+		public static string Level1Panel => GetString(Level1PanelKey);
 
 		/// <summary>
 		/// Panel for viewing Level2 data.
 		/// </summary>
-		public static string Str3236 => GetString(Str3236Key);
+		public const string Level2PanelKey = nameof(Level2Panel);
+
+		/// <summary>
+		/// Panel for viewing Level2 data.
+		/// </summary>
+		public static string Level2Panel => GetString(Level2PanelKey);
 
 		/// <summary>
 		/// Logs
@@ -45926,5 +45936,55 @@ namespace StockSharp.Localization
 		/// Ignore limits.
 		/// </summary>
 		public static string IgnoreLimits => GetString(IgnoreLimitsKey);
+
+		/// <summary>
+		/// Work area
+		/// </summary>
+		public const string WorkAreaKey = nameof(WorkArea);
+
+		/// <summary>
+		/// Work area
+		/// </summary>
+		public static string WorkArea => GetString(WorkAreaKey);
+
+		/// <summary>
+		/// Create a new work area
+		/// </summary>
+		public const string CreateWorkAreaKey = nameof(CreateWorkArea);
+
+		/// <summary>
+		/// Create a new work area
+		/// </summary>
+		public static string CreateWorkArea => GetString(CreateWorkAreaKey);
+
+		/// <summary>
+		/// Level2
+		/// </summary>
+		public const string Level2Key = nameof(Level2);
+
+		/// <summary>
+		/// Level2
+		/// </summary>
+		public static string Level2 => GetString(Level2Key);
+
+		/// <summary>
+		/// Buy/Sell
+		/// </summary>
+		public const string BuySellKey = nameof(BuySell);
+
+		/// <summary>
+		/// Buy/Sell
+		/// </summary>
+		public static string BuySell => GetString(BuySellKey);
+
+		/// <summary>
+		/// Panel for buy/sell operations.
+		/// </summary>
+		public const string BuySellPanelKey = nameof(BuySellPanel);
+
+		/// <summary>
+		/// Panel for buy/sell operations.
+		/// </summary>
+		public static string BuySellPanel => GetString(BuySellPanelKey);
 	}
 }

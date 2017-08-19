@@ -3016,7 +3016,8 @@ Str3231;Panel for debugging strategies on the basis of the designer.;Панел�
 Str3232;Debugging is only available to designer based strategies.;Отладка доступна только для стратегий на базе дизайнера.
 Str3234;Board editor;Редактор площадок
 Str3235;Panel for editing information about exchange boards.;Панель для редактирования информации и биржевых площадках.
-Str3236;Panel for viewing Level2 data.;Панель для просмотра данных по Level2.
+Level1Panel;Panel for viewing Level1 data.;Панель для просмотра данных по Level1.
+Level2Panel;Panel for viewing Level2 data.;Панель для просмотра данных по Level2.
 Str3237;Logs;Логи
 Str3238;Panel for viewing news data.;Панель для просмотра данных по новостям.
 Str3239;Positions (options);Позиции (опционы)
@@ -4629,6 +4630,11 @@ StockSharpLLC;StockSharp LLC;ООО СтокШарп
 DesignerDesciption;S#.Designer is a free application for visual design and programming on C# algorithmic trading strategies.;S#.Designer бесплатная программа для создания стратегий в визуальном редакторе или на языке C#.
 HydraDescription;S#.Data is a free application for downloading and storing market data.;S#.Data бесплатная программа для скачивания и хранения маркет-данных.
 TerminalDescription;S#.Terminal is a free trading terminal.;S#.Terminal бесплатный торговый терминал.
+WorkArea;Work area;Рабочее пространство
+CreateWorkArea;Create a new work area.;Создать рабочее пространство.
+Level2;Level2;Level2
+BuySell;Buy/Sell;Купить/Продать
+BuySellPanel;Panel for buy/sell operations.;Панель для операций купить/продать.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
