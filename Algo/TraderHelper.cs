@@ -4067,5 +4067,45 @@ namespace StockSharp.Algo
 
 			return board.Exchange == Exchange.Ux && board != ExchangeBoard.Ux;
 		}
+
+		/// <summary>
+		/// Identifier of <see cref="AllSecurity"/>.
+		/// </summary>
+		public const string AllSecurityId = "ALL@ALL";
+
+		/// <summary>
+		/// "All securities" instance.
+		/// </summary>
+		public static Security AllSecurity { get; } = new Security
+		{
+			Id = AllSecurityId,
+			Code = "ALL",
+			//Class = task.GetDisplayName(),
+			Name = LocalizedStrings.Str2835,
+			Board = ExchangeBoard.Associated,
+		};
+
+		/// <summary>
+		/// Find <see cref="AllSecurity"/> instance in the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <returns>Found instance.</returns>
+		public static Security GetAllSecurity(this ISecurityProvider provider)
+		{
+			return provider.LookupById(AllSecurityId);
+		}
+
+		/// <summary>
+		/// Check if the specified security is <see cref="AllSecurity"/>.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns><see langword="true"/>, if the specified security is <see cref="AllSecurity"/>, otherwise, <see langword="false"/>.</returns>
+		public static bool IsAllSecurity(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.Id.CompareIgnoreCase(AllSecurityId);
+		}
 	}
 }
