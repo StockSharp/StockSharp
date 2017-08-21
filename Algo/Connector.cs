@@ -1116,11 +1116,14 @@ namespace StockSharp.Algo
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
-		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
+		/// <param name="transactionId">Order cancellation transaction id.</param>
+		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null)
 		{
-			var transactionId = TransactionIdGenerator.GetNextId();
-			_entityCache.AddMassCancelationId(transactionId);
-			OnCancelOrders(transactionId, isStopOrder, portfolio, direction, board, security, securityType);
+			if (transactionId == null)
+				transactionId = TransactionIdGenerator.GetNextId();
+
+			_entityCache.AddMassCancelationId(transactionId.Value);
+			OnCancelOrders(transactionId.Value, isStopOrder, portfolio, direction, board, security, securityType);
 		}
 
 		/// <summary>
