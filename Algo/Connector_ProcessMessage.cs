@@ -1198,7 +1198,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				return;
 
-			RaiseLookupPortfoliosResult(message.Error, Portfolios.Where(pf => pf.Name.CompareIgnoreCase(criteria.PortfolioName)));
+			RaiseLookupPortfoliosResult(message.Error, Portfolios.Where(pf => criteria.PortfolioName.IsEmpty() || pf.Name.ContainsIgnoreCase(criteria.PortfolioName)));
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
