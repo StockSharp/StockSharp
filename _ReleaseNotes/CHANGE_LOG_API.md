@@ -9,6 +9,7 @@ StockSharp API Change log
 * (bug) OrderGrid.OrderCanceling. Fix signature.
 * (feature) BuySellPanel, BuySellGrid controls.
 * (bug) Alerts fixes.
+* (feature) EquityChart, OptionPositionChart, OptionSmileChart. Support IPersistable.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
