@@ -8,6 +8,7 @@ StockSharp API Change log
 * (feature) IPortfolioProvider.LookupByPortfolioName extension method.
 * (bug) OrderGrid.OrderCanceling. Fix signature.
 * (feature) BuySellPanel, BuySellGrid controls.
+* (bug) Alerts fixes.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
