@@ -270,7 +270,7 @@ namespace StockSharp.Algo.Strategies
 					strategy.Security = connector.LookupById(settings.GetValue<string>("security"));
 
 				if (connector != null && settings.Contains("portfolio"))
-					strategy.Portfolio = connector.Portfolios.FirstOrDefault(p => p.Name == settings.GetValue<string>("portfolio"));
+					strategy.Portfolio = connector.LookupByPortfolioName(settings.GetValue<string>("portfolio"));
 
 				var id = strategy.Id;
 

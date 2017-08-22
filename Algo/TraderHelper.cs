@@ -3237,6 +3237,23 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To get the portfolio by the code name.
+		/// </summary>
+		/// <param name="provider">The provider of information about portfolios.</param>
+		/// <param name="id">Portfolio code name.</param>
+		/// <returns>The got portfolio. If there is no portfolio by given criteria, <see langword="null" /> is returned.</returns>
+		public static Portfolio LookupByPortfolioName(this IPortfolioProvider provider, string id)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (id.IsEmpty())
+				throw new ArgumentNullException(nameof(id));
+
+			return provider.Portfolios.SingleOrDefault(s => s.Name.CompareIgnoreCase(id));
+		}
+
+		/// <summary>
 		/// To get the instrument by the system identifier.
 		/// </summary>
 		/// <param name="provider">The provider of information about instruments.</param>

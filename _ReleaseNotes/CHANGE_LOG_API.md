@@ -5,6 +5,7 @@ StockSharp API Change log
 * (feature) SpbExTrader.IgnoreLimits.
 * (bug) Clipboard fix.
 * (feature) IPositionManager.SecurityId filter.
+* (feature) IPortfolioProvider.LookupByPortfolioName extension method.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
