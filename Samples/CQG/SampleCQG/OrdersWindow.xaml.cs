@@ -15,13 +15,10 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleCQG
 {
-	using System.Collections.Generic;
 	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
@@ -37,9 +34,9 @@ namespace SampleCQG
 
 		private static IConnector Connector => MainWindow.Instance.Connector;
 
-		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
+		private void OrderGrid_OnOrderCanceling(Order order)
 		{
-			orders.ForEach(Connector.CancelOrder);
+			Connector.CancelOrder(order);
 		}
 
 		private void OrderGrid_OnOrderReRegistering(Order order)

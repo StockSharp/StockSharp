@@ -15,10 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleRithmic
 {
-	using System.Collections.Generic;
-
-	using MoreLinq;
-
 	using StockSharp.BusinessEntities;
 
 	public partial class StopOrdersWindow
@@ -28,9 +24,11 @@ namespace SampleRithmic
 			InitializeComponent();
 		}
 
-		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
+		private static IConnector Connector => MainWindow.Instance.Trader;
+
+		private void OrderGrid_OnOrderCanceling(Order order)
 		{
-			orders.ForEach(MainWindow.Instance.Trader.CancelOrder);
+			Connector.CancelOrder(order);
 		}
 	}
 }
