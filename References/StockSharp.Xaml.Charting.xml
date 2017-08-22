@@ -1413,11 +1413,6 @@
             ChartPanel
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Charting.ChartPanel.ShareCommand">
-      <summary>
-            Command for sharing chart image.
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.SecurityProvider">
       <summary>
             The provider of information about instruments.
@@ -1974,16 +1969,22 @@
             To remove gaps (weekends, holidays) on the chart. When the mode is enabled and multiple curves are used then joint scaling will be lost. Enabled by default.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles)">
+    <member name="P:StockSharp.Xaml.Charting.EquityCurveChart.Elements">
+      <summary>
+            Elements.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles,System.Guid)">
       <summary>
             To create new curve to draw the yield.
             </summary>
       <param name="title">The line title.</param>
       <param name="color">The line color.</param>
       <param name="style">The line drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.LineChartStyles.Line" />.</param>
+      <param name="id">Unique ID.</param>
       <returns>The collection of data that should be filled for the line drawing.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles)">
+    <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles,System.Guid)">
       <summary>
             To create new curve to draw the yield.
             </summary>
@@ -1991,18 +1992,31 @@
       <param name="color">The line color.</param>
       <param name="secondColor">The additional line color. It is used to draw <see cref="F:StockSharp.Xaml.Charting.LineChartStyles.Area" />.</param>
       <param name="style">The line drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.LineChartStyles.Line" />.</param>
+      <param name="id">Unique ID.</param>
       <returns>The collection of data that should be filled for the line drawing.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.RemoveCurve(System.Collections.Generic.ICollection{StockSharp.Xaml.Charting.LineData{System.DateTime}})">
       <summary>
             To remove the yield curve from the chart.
             </summary>
-      <param name="items">The collection of data obtained from the method <see cref="M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles)" />.</param>
+      <param name="items">The collection of data obtained from the method <see cref="M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles,System.Guid)" />.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.Clear">
       <summary>
             To remove yield curves from the chart.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.InitializeComponent">
       <summary>
@@ -2823,11 +2837,28 @@
             The smoothing of the line drawing. The default is enabled.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.LineElement.Style">
+      <summary>
+            The line drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.LineChartStyles.Line" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.LineElement.Clone">
       <summary>
             Create a copy of <see cref="T:StockSharp.Xaml.Charting.LineElement" />.
             </summary>
       <returns>Copy.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.LineElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.LineElement.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.Charting.OptionPositionChartParams">
       <summary>
@@ -2875,6 +2906,11 @@
     <member name="M:StockSharp.Xaml.Charting.OptionPositionChart.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.OptionPositionChart" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.ChartTheme">
+      <summary>
+            The name of the graphic theme.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.SecurityProvider">
@@ -2925,6 +2961,18 @@
       <param name="priceStep">Price step.</param>
       <param name="currentTime">The current time.</param>
       <param name="expiryDate">The expiration date.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.OptionPositionChart.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.OptionPositionChart.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.OptionPositionChart.InitializeComponent">
       <summary>
@@ -2978,6 +3026,18 @@
       <summary>
             To remove yield curves from the chart.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.InitializeComponent">
       <summary>
