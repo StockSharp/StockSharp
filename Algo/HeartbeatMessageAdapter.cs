@@ -149,6 +149,22 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_prevState = _none;
+
+					lock (_timeSync)
+						_currState = _none;
+
+					StopTimer();
+
+					_connectingAttemptCount = 0;
+					_connectionTimeOut = default(TimeSpan);
+					_canSendTime = false;
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					if (_isFirstTimeConnect)
