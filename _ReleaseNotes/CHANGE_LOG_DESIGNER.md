@@ -17,6 +17,24 @@ StockSharp Designer Change log
 * (bug) SpbEx fixes.
 * (feature) QuikLua. Index securities support (O H L C values).
 * (feature) QuantFEED.
+* (bug) Alerts fixes.
+* (feature) OrderLog panel.
+* (feature) EquityChart, OptionPositionChart, OptionSmileChart. Support IPersistable.
+* (bug) PortfolioGrid. Binding State fix.
+* (feature) Process mass order cancel result.
+* (feature) Sockets for order failed added.
+* (bug) Wrong date format fixes.
+* (bug) Copy/paste/load composition elements fixes.
+* (bug) Ternar operator scheme fixes.
+* (bug) News panel fixes.
+* (bug) Share chart button fixes.
+* (bug) Change candles style fixes.
+* (bug) Show positions fixes.
+* (bug) Suspend undomanager for live strategies fixes.
+* (feature) Autonaming added for indexer, part, hedge, level1 elements.
+* (bug) Reset chart fixes.
+* (bug) Open result strategies fixes.
+* (feature) Save BarManager and DXWindow settings.
 
 ## v4.3.25.2:
 * (feature) ServerCredentials. Save password for auto logon only.
