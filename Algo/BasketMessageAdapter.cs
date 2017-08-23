@@ -347,11 +347,12 @@ namespace StockSharp.Algo
 					else
 						ProcessReset(new ResetMessage());
 
-					_hearbeatAdapters.AddRange(GetSortedAdapters().Select(CreateWrappers).ToDictionary(a => a, a =>
+					_hearbeatAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
-						var hearbeatAdapter = new HeartbeatMessageAdapter(a);
+						var wrapper = CreateWrappers(a);
+						var hearbeatAdapter = new HeartbeatMessageAdapter(wrapper);
 						((IMessageAdapter)hearbeatAdapter).Parent = this;
-						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(a, m);
+						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(wrapper, m);
 						return hearbeatAdapter;
 					}));
 					
@@ -398,7 +399,7 @@ namespace StockSharp.Algo
 
 					if (message.Adapter != null)
 					{
-						var wrapper = _hearbeatAdapters.Values.FirstOrDefault(w => GetUnderlyingAdapter(w) == message.Adapter);
+						var wrapper = _hearbeatAdapters.TryGetValue(message.Adapter);
 
 						if (wrapper != null)
 							adapters = new IMessageAdapter[] {wrapper};
@@ -612,22 +613,22 @@ namespace StockSharp.Algo
 
 					case MessageTypes.Portfolio:
 						var pfMsg = (PortfolioMessage)message;
-						AdapterProvider.SetAdapter(pfMsg.PortfolioName, innerAdapter);
+						AdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 						break;
 
 					case MessageTypes.PortfolioChange:
 						var pfChangeMsg = (PortfolioChangeMessage)message;
-						AdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, innerAdapter);
+						AdapterProvider.SetAdapter(pfChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 						break;
 
 					//case MessageTypes.Position:
 					//	var posMsg = (PositionMessage)message;
-					//	AdapterProvider.SetAdapter(posMsg.PortfolioName, innerAdapter);
+					//	AdapterProvider.SetAdapter(posMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 					//	break;
 
 					case MessageTypes.PositionChange:
 						var posChangeMsg = (PositionChangeMessage)message;
-						AdapterProvider.SetAdapter(posChangeMsg.PortfolioName, innerAdapter);
+						AdapterProvider.SetAdapter(posChangeMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 						break;
 				}
 			}
@@ -649,7 +650,7 @@ namespace StockSharp.Algo
 				this.AddErrorLog(LocalizedStrings.Str625Params, underlyingAdapter.GetType().Name, message.Error);
 			else
 			{
-				var heartbeatAdapter = _hearbeatAdapters[innerAdapter];
+				var heartbeatAdapter = _hearbeatAdapters[underlyingAdapter];
 
 				foreach (var supportedMessage in innerAdapter.SupportedMessages)
 				{
