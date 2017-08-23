@@ -308,12 +308,12 @@
     </member>
     <member name="E:StockSharp.Xaml.BuySellGrid.PanelAdded">
       <summary>
-            New panel added event.
+            Panel added event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.BuySellGrid.PanelRemoved">
       <summary>
-            Panel added event.
+            Panel removed event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.BuySellGrid.ClearPanels">

@@ -10,6 +10,8 @@ StockSharp API Change log
 * (feature) BuySellPanel, BuySellGrid controls.
 * (bug) Alerts fixes.
 * (feature) EquityChart, OptionPositionChart, OptionSmileChart. Support IPersistable.
+* (bug) PortfolioGrid. Binding State fix.
+* (bug) BasketMessageAdapter. Reconnect fix.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

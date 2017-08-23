@@ -59,8 +59,8 @@ P:StockSharp.Xaml.BuySellGrid.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.BuySellGrid.Portfolios/summary;DocStr8362
 P:StockSharp.Xaml.BuySellGrid.MarketDataProvider/summary;DocStr973
 E:StockSharp.Xaml.BuySellGrid.OrderRegistering/summary;DocStr8161
-E:StockSharp.Xaml.BuySellGrid.PanelAdded/summary;DocStr10052
-E:StockSharp.Xaml.BuySellGrid.PanelRemoved/summary;DocStr10053
+E:StockSharp.Xaml.BuySellGrid.PanelAdded/summary;DocStr10053
+E:StockSharp.Xaml.BuySellGrid.PanelRemoved/summary;DocStr10052
 M:StockSharp.Xaml.BuySellGrid.ClearPanels/summary;DocStr10054
 M:StockSharp.Xaml.BuySellGrid.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.BuySellGrid.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3

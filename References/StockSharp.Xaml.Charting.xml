@@ -1261,6 +1261,12 @@
       <param name="appTheme">Devexpress theme.</param>
       <returns>Chart theme.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.UpdateTheme(StockSharp.Xaml.Charting.IThemeableChart)">
+      <summary>
+            Update theme for the specified chart.
+            </summary>
+      <param name="chart">Chart.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles">
       <summary>
             Indicator chart drawing styles.
@@ -2021,6 +2027,16 @@
     <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.InitializeComponent">
       <summary>
             InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.IThemeableChart">
+      <summary>
+            Base interface for all chart components.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IThemeableChart.ChartTheme">
+      <summary>
+            The name of the graphic theme.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Charting.LineChartStyles">

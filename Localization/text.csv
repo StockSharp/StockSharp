@@ -14399,3 +14399,5 @@ DocStr10055;Buy/sell operations panel;Панель операция купли/�
 DocStr10056;Closing {0} event;Событие закрытия {0}
 DocStr10057;Change selected object;Изменить выбранные объект
 DocStr10058;The selected order cancel event;Событие отмены выбранной заявки
+DocStr10059;Update theme for the specified chart;Обновить тему для указанного графика
+DocStr10060;Base interface for all chart components;Базовые интерфейс для всех графиков

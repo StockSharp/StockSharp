@@ -350,6 +350,8 @@ M:StockSharp.Xaml.Charting.ChartHelper.SetChart(StockSharp.Algo.Strategies.Strat
 M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/summary;DocStr9855
 M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/param/appTheme;DocStr9856
 M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/returns;DocStr9857
+M:StockSharp.Xaml.Charting.ChartHelper.UpdateTheme(StockSharp.Xaml.Charting.IThemeableChart)/summary;DocStr10059
+M:StockSharp.Xaml.Charting.ChartHelper.UpdateTheme(StockSharp.Xaml.Charting.IThemeableChart)/param/chart;Str3200
 T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles/summary;DocStr7790
 F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Line/summary;Line
 F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.NoGapLine/summary;Str1972
@@ -560,6 +562,8 @@ M:StockSharp.Xaml.Charting.EquityCurveChart.Load(Ecng.Serialization.SettingsStor
 M:StockSharp.Xaml.Charting.EquityCurveChart.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.EquityCurveChart.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.EquityCurveChart.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.Charting.IThemeableChart/summary;DocStr10060
+P:StockSharp.Xaml.Charting.IThemeableChart.ChartTheme/summary;DocStr7731
 T:StockSharp.Xaml.Charting.LineChartStyles/summary;DocStr7827
 F:StockSharp.Xaml.Charting.LineChartStyles.Area/summary;DocStr7828
 F:StockSharp.Xaml.Charting.LineChartStyles.Line/summary;DocStr7829
