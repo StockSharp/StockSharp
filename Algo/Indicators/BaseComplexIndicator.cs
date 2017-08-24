@@ -84,6 +84,9 @@ namespace StockSharp.Algo.Indicators
 			get { return InnerIndicators.All(i => i.IsFormed); }
 		}
 
+		/// <inheritdoc />
+		public override Type ResultType { get; } = typeof(ComplexIndicatorValue);
+
 		/// <summary>
 		/// To handle the input value.
 		/// </summary>

@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System;
+
 	using Ecng.Common;
 
 	/// <summary>
@@ -28,6 +30,9 @@ namespace StockSharp.Algo.Indicators
 		public FractalPart()
 		{
 		}
+
+		/// <inheritdoc />
+		public override Type ResultType { get; } = typeof(ShiftedIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

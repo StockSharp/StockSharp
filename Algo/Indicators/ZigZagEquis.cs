@@ -107,6 +107,9 @@ namespace StockSharp.Algo.Indicators
 			base.Reset();
 		}
 
+		/// <inheritdoc />
+		public override Type ResultType { get; } = typeof(ShiftedIndicatorValue);
+
 		/// <summary>
 		/// To handle the input value.
 		/// </summary>

@@ -12,6 +12,7 @@ StockSharp API Change log
 * (feature) EquityChart, OptionPositionChart, OptionSmileChart. Support IPersistable.
 * (bug) PortfolioGrid. Binding State fix.
 * (bug) BasketMessageAdapter. Reconnect fix.
+* (feature) IIndicator.ResultType.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

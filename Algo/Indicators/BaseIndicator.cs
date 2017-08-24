@@ -106,6 +106,11 @@ namespace StockSharp.Algo.Indicators
 		public IIndicatorContainer Container { get; } = new IndicatorContainer();
 
 		/// <summary>
+		/// Result values type.
+		/// </summary>
+		public virtual Type ResultType { get; } = typeof(DecimalIndicatorValue);
+
+		/// <summary>
 		/// The indicator change event (for example, a new value is added).
 		/// </summary>
 		public event Action<IIndicatorValue, IIndicatorValue> Changed;
