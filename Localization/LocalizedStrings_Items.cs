@@ -45986,5 +45986,15 @@ namespace StockSharp.Localization
 		/// Panel for buy/sell operations.
 		/// </summary>
 		public static string BuySellPanel => GetString(BuySellPanelKey);
+
+		/// <summary>
+		/// Select indicator.
+		/// </summary>
+		public const string SelectIndicatorKey = nameof(SelectIndicator);
+
+		/// <summary>
+		/// Select indicator.
+		/// </summary>
+		public static string SelectIndicator => GetString(SelectIndicatorKey);
 	}
 }
