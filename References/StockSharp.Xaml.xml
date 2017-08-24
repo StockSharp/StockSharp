@@ -226,6 +226,11 @@
             The path to the directory with securities extended info.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.BaseApplication.StorageDir">
+      <summary>
+            The path to the directory with market data.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.BaseApplication.ProxySettings">
       <summary>
             Proxy-server settings.
@@ -267,6 +272,141 @@
             To edit the proxy settings.
             </summary>
       <param name="owner">Parent window.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.BuySellGrid">
+      <summary>
+            Table control, containing set of <see cref="T:StockSharp.Xaml.BuySellPanel" />.
+            </summary>
+      <summary>
+            BuySellGrid
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellGrid.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.BuySellGrid" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellGrid.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellGrid.Portfolios">
+      <summary>
+            Available portfolios.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellGrid.MarketDataProvider">
+      <summary>
+            The market data provider.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.BuySellGrid.OrderRegistering">
+      <summary>
+            The order registration event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.BuySellGrid.PanelAdded">
+      <summary>
+            Panel added event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.BuySellGrid.PanelRemoved">
+      <summary>
+            Panel removed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellGrid.ClearPanels">
+      <summary>
+            Remove all <see cref="T:StockSharp.Xaml.BuySellPanel" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellGrid.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellGrid.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellGrid.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.BuySellPanel">
+      <summary>
+            Buy/sell operations panel.
+            </summary>
+      <summary>
+            BuySellPanel
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellPanel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.BuySellPanel" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellPanel.Security">
+      <summary>
+            Security.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellPanel.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellPanel.Portfolio">
+      <summary>
+            Portfolio.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellPanel.Volume">
+      <summary>
+            Volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellPanel.Portfolios">
+      <summary>
+            Available portfolios.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.BuySellPanel.MarketDataProvider">
+      <summary>
+            The market data provider.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.BuySellPanel.OrderRegistering">
+      <summary>
+            The order registration event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.BuySellPanel.Closed">
+      <summary>
+            Closing <see cref="T:StockSharp.Xaml.BuySellPanel" /> event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellPanel.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellPanel.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.BuySellPanel.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
     </member>
     <member name="T:StockSharp.Xaml.Code.CodeExtensions">
       <summary>
@@ -1089,6 +1229,11 @@
     <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.PropertyGridEx" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SetSelectedObject(System.Object)">
+      <summary>
+            Change selected object.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent">
@@ -1975,7 +2120,7 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PortfolioDataSource" />.
             </summary>
-      <param name="provider">The portfolio provider interface.</param>
+      <param name="provider">The provider of information about portfolios.</param>
     </member>
     <member name="M:StockSharp.Xaml.PortfolioDataSource.Dispose">
       <summary>
@@ -4243,7 +4388,7 @@
             </summary>
       <param name="order">Order to cancel.</param>
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes},System.Nullable{System.Int64})">
       <summary>
             Cancel orders by filter.
             </summary>
@@ -4254,6 +4399,7 @@
       <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
       <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
       <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+      <param name="transactionId">Order cancellation transaction id.</param>
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.ValuesChanged">
       <summary>
@@ -4697,6 +4843,11 @@
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.OrderGrid.OrderCanceling">
+      <summary>
+            The selected order cancel event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.OrderGrid.OrdersCanceling">
       <summary>
             The selected orders cancel event.
             </summary>

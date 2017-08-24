@@ -133,8 +133,8 @@
     <Compile Include="SecuritiesWindow.xaml.cs">
       <DependentUpon>SecuritiesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConditionOrdersWindow.xaml.cs">
-      <DependentUpon>ConditionOrdersWindow.xaml</DependentUpon>
+    <Compile Include="StopOrdersWindow.xaml.cs">
+      <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>
@@ -218,7 +218,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ConditionOrdersWindow.xaml">
+    <Page Include="StopOrdersWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -103,8 +103,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			Sma.LoadNotNull(settings, "Sma");
-			Ao.LoadNotNull(settings, "Ao");
+			Sma.LoadNotNull(settings, nameof(Sma));
+			Ao.LoadNotNull(settings, nameof(Ao));
 		}
 
 		/// <summary>
@@ -115,8 +115,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("Sma", Sma.Save());
-			settings.SetValue("Ao", Ao.Save());
+			settings.SetValue(nameof(Sma), Sma.Save());
+			settings.SetValue(nameof(Ao), Ao.Save());
 		}
 	}
 }

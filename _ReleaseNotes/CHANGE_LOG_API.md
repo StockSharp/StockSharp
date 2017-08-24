@@ -5,6 +5,13 @@ StockSharp API Change log
 * (feature) SpbExTrader.IgnoreLimits.
 * (bug) Clipboard fix.
 * (feature) IPositionManager.SecurityId filter.
+* (feature) IPortfolioProvider.LookupByPortfolioName extension method.
+* (bug) OrderGrid.OrderCanceling. Fix signature.
+* (feature) BuySellPanel, BuySellGrid controls.
+* (bug) Alerts fixes.
+* (feature) EquityChart, OptionPositionChart, OptionSmileChart. Support IPersistable.
+* (bug) PortfolioGrid. Binding State fix.
+* (bug) BasketMessageAdapter. Reconnect fix.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

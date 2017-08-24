@@ -165,6 +165,16 @@
       <param name="socket">Socket.</param>
       <param name="value">Value.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.SuspendUndoManager">
+      <summary>
+            Suspend undo/redo manager for <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Model" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.ResumeUndoManager">
+      <summary>
+            Resume undo/redo manager for <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Model" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.CanUndo">
       <summary>
             This predicate is true when one can call <see cref="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Undo" />.
@@ -247,6 +257,13 @@
             Update <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" /> for composition elements.
             </summary>
       <param name="id">New value for <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" />. Can be <see langword="null" />.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateSocketId(StockSharp.Xaml.Diagram.DiagramSocket,System.String)">
+      <summary>
+            Update socket identifier.
+            </summary>
+      <param name="socket">Diagram socket.</param>
+      <param name="newSocketId">New socket identifier.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
       <summary>
@@ -1436,6 +1453,11 @@
             Order.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.OrderFail">
+      <summary>
+            Order fail.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.MyTrade">
       <summary>
             Own trade.
@@ -1810,6 +1832,11 @@
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Order">
       <summary>
             Order.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.OrderFail">
+      <summary>
+            Order fail.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.MyTrade">

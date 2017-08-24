@@ -2,6 +2,8 @@ StockSharp Data (Hydra) Change log
 ========================
 ## current:
 * (feature) QuantFEED.
+* (feature) Quik lua. Candle history support.
+* (feature) RSS. Disabled security lookup.
 
 ## v4.3.26.1:
 * (feature) Finam. Ticks origin side as optional.

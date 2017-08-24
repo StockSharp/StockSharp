@@ -14374,3 +14374,32 @@ DocStr10028;Enable storage;Включить хранилище
 DocStr10029;Support filtering subscriptions (subscribe/unsubscribe for specified security);Поддерживает ли фильтрация подписки (подписка/отписка для указанного инструмента)
 DocStr10030;Convertible type;Конвертируемый тип
 DocStr10031;The security for which {0} will be calculated;Инструмент, для которого будет вычисляться значение {0}
+DocStr10032;Schema registerating event;Событие регистрации схемы
+DocStr10033;Schema unregistering event;Событие удаления схемы
+DocStr10034;Tracking field info;Информация об отслеживаемой поле
+DocStr10035;Tracking property;Отслеживаемое свойство
+DocStr10036;Extra info for {0};Расширенная информация для {0}
+DocStr10037;To get the portfolio by the code name;Получить портфель по коду
+DocStr10038;The provider of information about portfolios;Провайдер информации о портфелях
+DocStr10039;The got portfolio. If there is no portfolio by given criteria, {0} is returned;Полученный портфель. Если не найден ни один портфель, удовлетворяющий критерию, будет возвращено {0}
+DocStr10040;"""All securities"" instance";"""Все инструменты"" объект"
+DocStr10041;Find {0} instance in the specified provider;Найти объект {0} в указанном провайдере
+DocStr10042;Found instance;Найденные объекты
+DocStr10043;Check if the specified security is {0};Проверить если указанный инструмент является {0}
+DocStr10044;{0}, if the specified security is {1}, otherwise, {2};{0}, если указанный инструмент является {1}, иначе, {2}
+DocStr10045;Elements;Элементы
+DocStr10046;Suspend undo/redo manager for {0};Приостановить undo/redo менеджер для {0}
+DocStr10047;Resume undo/redo manager for {0};Возобновить undo/redo менеджер для {0}
+DocStr10048;Update socket identifier;Обновить идентификатор сокета
+DocStr10049;New socket identifier;Новый идентификатор сокета
+DocStr10050;The path to the directory with market data;Путь к директории с маркет-данными
+DocStr10051;Table control, containing set of {0};Таблица, содержащая множество {0}
+DocStr10052;Panel removed event;Событие удаления панели
+DocStr10053;Panel added event;Событие добавления панели
+DocStr10054;Remove all {0};Удалить все {0}
+DocStr10055;Buy/sell operations panel;Панель операция купли/продажи
+DocStr10056;Closing {0} event;Событие закрытия {0}
+DocStr10057;Change selected object;Изменить выбранные объект
+DocStr10058;The selected order cancel event;Событие отмены выбранной заявки
+DocStr10059;Update theme for the specified chart;Обновить тему для указанного графика
+DocStr10060;Base interface for all chart components;Базовые интерфейс для всех графиков

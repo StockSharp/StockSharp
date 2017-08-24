@@ -15,10 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleMultiConnection
 {
-	using System.Collections.Generic;
-
-	using MoreLinq;
-
 	using StockSharp.BusinessEntities;
 
 	public partial class OrdersWindow
@@ -28,9 +24,11 @@ namespace SampleMultiConnection
 			InitializeComponent();
 		}
 
-		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
+		private static IConnector Connector => MainWindow.Instance.Connector;
+
+		private void OrderGrid_OnOrderCanceling(Order order)
 		{
-			orders.ForEach(MainWindow.Instance.Connector.CancelOrder);
+			Connector.CancelOrder(order);
 		}
 	}
 }

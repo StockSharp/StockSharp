@@ -39,6 +39,8 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnReseted/summary;DocStr7896
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/summary;DocStr7882
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/socket;DocStr8883
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/value;Str3099
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.SuspendUndoManager/summary;DocStr10046
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.ResumeUndoManager/summary;DocStr10047
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.CanUndo/summary;DocStr9267
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.CanUndo/returns;DocStr8659
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Undo/summary;DocStr9268
@@ -74,6 +76,9 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.GetElements/summary;DocStr97
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.GetElements/returns;DocStr9767
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId(System.Nullable{System.Guid})/summary;DocStr9227
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId(System.Nullable{System.Guid})/param/id;DocStr9811
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateSocketId(StockSharp.Xaml.Diagram.DiagramSocket,System.String)/summary;DocStr10048
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateSocketId(StockSharp.Xaml.Diagram.DiagramSocket,System.String)/param/socket;DocStr9716
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateSocketId(StockSharp.Xaml.Diagram.DiagramSocket,System.String)/param/newSocketId;DocStr10049
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/returns;DocStr1116
@@ -429,6 +434,7 @@ P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Security/summary;DocStr2831
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Candles/summary;XamlStr631
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.MarketDepth/summary;MarketDepth
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Order/summary;Str504
+P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.OrderFail/summary;XamlStr182
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.MyTrade/summary;OwnTrade
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Trade/summary;Str506
 P:StockSharp.Xaml.Diagram.DiagramSocketUniqueKeys.Trades/summary;Str985
@@ -524,6 +530,7 @@ F:StockSharp.Xaml.Diagram.DiagramSocketType.Quote/summary;Str273
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Candle/summary;DocStr491
 F:StockSharp.Xaml.Diagram.DiagramSocketType.IndicatorValue/summary;IndicatorValue
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Order/summary;Str504
+F:StockSharp.Xaml.Diagram.DiagramSocketType.OrderFail/summary;XamlStr182
 F:StockSharp.Xaml.Diagram.DiagramSocketType.MyTrade/summary;OwnTrade
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Bool/summary;Flag
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Unit/summary;NumericValue

@@ -90,8 +90,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			Ema.LoadNotNull(settings, "Ema");
-			Roc.LoadNotNull(settings, "Roc");
+			Ema.LoadNotNull(settings, nameof(Ema));
+			Roc.LoadNotNull(settings, nameof(Roc));
 		}
 
 		/// <summary>
@@ -102,8 +102,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("Ema", Ema.Save());
-			settings.SetValue("Roc", Roc.Save());
+			settings.SetValue(nameof(Ema), Ema.Save());
+			settings.SetValue(nameof(Roc), Roc.Save());
 		}
 	}
 }

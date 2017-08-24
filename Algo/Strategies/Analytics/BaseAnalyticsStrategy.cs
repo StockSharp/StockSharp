@@ -127,7 +127,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 				{
 					try
 					{
-						OnAnalyze();
+						CultureInfo.InvariantCulture.DoInCulture(OnAnalyze);
 					}
 					catch (Exception ex)
 					{
@@ -136,7 +136,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 					}
 				})
 				.Name("{0} analyze thread.".Put(Name))
-				.Culture(CultureInfo.InvariantCulture)
 				.Launch();
 		}
 
