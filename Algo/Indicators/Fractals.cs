@@ -79,6 +79,9 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str736Key)]
+		[DescriptionLoc(LocalizedStrings.Str778Key, true)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Length
 		{
 			get => _length;

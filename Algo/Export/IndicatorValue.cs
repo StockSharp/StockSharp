@@ -31,7 +31,7 @@ namespace StockSharp.Algo.Export
 		public decimal? ValueAsDecimal => ValuesAsDecimal.First();
 
 		/// <summary>
-		/// Converted to <see cref="decimal"/> type value.
+		/// Converted to <see cref="decimal"/> type values.
 		/// </summary>
 		public IEnumerable<decimal?> ValuesAsDecimal
 		{
@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Export
 			}
 		}
 
-		private void FillValues(IIndicatorValue value, List<decimal?> values)
+		private static void FillValues(IIndicatorValue value, ICollection<decimal?> values)
 		{
 			if (value == null)
 				throw new ArgumentNullException(nameof(value));
