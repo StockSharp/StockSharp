@@ -45996,5 +45996,25 @@ namespace StockSharp.Localization
 		/// Select indicator.
 		/// </summary>
 		public static string SelectIndicator => GetString(SelectIndicatorKey);
+
+		/// <summary>
+		/// Wait all trades
+		/// </summary>
+		public const string WaitAllTradesKey = nameof(WaitAllTrades);
+
+		/// <summary>
+		/// Wait all trades
+		/// </summary>
+		public static string WaitAllTrades => GetString(WaitAllTradesKey);
+
+		/// <summary>
+		/// Process null values
+		/// </summary>
+		public const string ProcessNullValuesKey = nameof(ProcessNullValues);
+
+		/// <summary>
+		/// Process null values
+		/// </summary>
+		public static string ProcessNullValues => GetString(ProcessNullValuesKey);
 	}
 }
