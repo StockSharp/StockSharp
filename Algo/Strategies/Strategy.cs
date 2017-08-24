@@ -1026,7 +1026,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<bool> _waitAllTrades;
 
 		/// <summary>
-		/// Stop strategy only after getting all trades by registered trades.
+		/// Stop strategy only after getting all trades by registered orders.
 		/// </summary>
 		/// <remarks>
 		/// It is disabled by default.
