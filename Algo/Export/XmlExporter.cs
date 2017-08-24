@@ -230,7 +230,10 @@ namespace StockSharp.Algo.Export
 				writer.WriteStartElement("value");
 
 				writer.WriteAttribute("time", value.Time.ToString(_timeFormat));
-				writer.WriteAttribute("value", value.ValueAsDecimal);
+
+				var index = 1;
+				foreach (var indVal in value.ValuesAsDecimal)
+					writer.WriteAttribute($"value{index++}", indVal);
 
 				writer.WriteEndElement();
 			});

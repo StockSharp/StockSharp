@@ -387,9 +387,11 @@ namespace StockSharp.Algo.Export
 
 				foreach (var value in values)
 				{
-					worker
-						.SetCell(0, row, value.Time)
-						.SetCell(1, row, value.ValueAsDecimal);
+					worker.SetCell(0, row, value.Time);
+
+					var col = 1;
+					foreach (var indVal in value.ValuesAsDecimal)
+						worker.SetCell(col++, row, indVal);
 				
 					if (!Check(++row))
 						break;
