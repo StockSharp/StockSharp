@@ -740,6 +740,11 @@
             Show element sockets in higher order elements.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.ProcessNullValues">
+      <summary>
+            Process null values.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Icon">
       <summary>
             Icon.
@@ -1598,6 +1603,11 @@
             Is socket break active.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.AvailableTypes">
+      <summary>
+            Available input data types.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.Connected">
       <summary>
             The event of the socket connection with another one.
@@ -1611,6 +1621,11 @@
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.SocketIdChanged">
       <summary>
             The socket identifier changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" />.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.PropertyChanged">
@@ -3043,6 +3058,14 @@
       <summary>
             The protective level for the stop loss. The default level is 0, which means the disabled.
             </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.WaitAllTrades">
+      <summary>
+            Stop strategy only after getting all trades by registered orders.
+            </summary>
+      <remarks>
+            It is disabled by default.
+            </remarks>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.#ctor">
       <summary>

@@ -200,6 +200,7 @@ P:StockSharp.Xaml.Diagram.DiagramElement.Description/summary;DocStr7907
 P:StockSharp.Xaml.Diagram.DiagramElement.LogLevel/summary;DocStr1679
 P:StockSharp.Xaml.Diagram.DiagramElement.ShowParameters/summary;Str3054
 P:StockSharp.Xaml.Diagram.DiagramElement.ShowSockets/summary;ShowSockets
+P:StockSharp.Xaml.Diagram.DiagramElement.ProcessNullValues/summary;ProcessNullValues
 P:StockSharp.Xaml.Diagram.DiagramElement.Icon/summary;DocStr7908
 P:StockSharp.Xaml.Diagram.DiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.DiagramElement.Strategy/summary;DocStr7909
@@ -463,9 +464,11 @@ P:StockSharp.Xaml.Diagram.DiagramSocket.Value/summary;DocStr1409
 P:StockSharp.Xaml.Diagram.DiagramSocket.Parent/summary;DocStr8901
 P:StockSharp.Xaml.Diagram.DiagramSocket.IsBreak/summary;DocStr8902
 P:StockSharp.Xaml.Diagram.DiagramSocket.IsBreakActive/summary;DocStr8903
+P:StockSharp.Xaml.Diagram.DiagramSocket.AvailableTypes/summary;DocStr10062
 E:StockSharp.Xaml.Diagram.DiagramSocket.Connected/summary;DocStr8017
 E:StockSharp.Xaml.Diagram.DiagramSocket.Disconnected/summary;DocStr8018
 E:StockSharp.Xaml.Diagram.DiagramSocket.SocketIdChanged/summary;DocStr9768
+M:StockSharp.Xaml.Diagram.DiagramSocket.#ctor/summary;DocStr1
 E:StockSharp.Xaml.Diagram.DiagramSocket.PropertyChanged/summary;DocStr7975
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)/summary;DocStr7970
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)/param/propertyName;DocStr2622
@@ -791,6 +794,8 @@ P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TypeId/summary;
 P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.IconName/summary;DocStr9214
 P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TakeValue/summary;DocStr295
 P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.StopValue/summary;DocStr296
+P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.WaitAllTrades/summary;DocStr1702
+P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.WaitAllTrades/remarks;DocStr1703
 M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStop/summary;DocStr7894

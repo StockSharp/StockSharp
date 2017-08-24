@@ -14404,3 +14404,5 @@ DocStr10057;Change selected object;Изменить выбранные объе�
 DocStr10058;The selected order cancel event;Событие отмены выбранной заявки
 DocStr10059;Update theme for the specified chart;Обновить тему для указанного графика
 DocStr10060;Base interface for all chart components;Базовые интерфейс для всех графиков
+DocStr10061;Converted to {0} type values;Сконвертированные в тип {0} значения
+DocStr10062;Available input data types;Доступные типы входящих данных
