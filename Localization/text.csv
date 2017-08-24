@@ -4635,6 +4635,8 @@ CreateWorkArea;Create a new work area.;Создать рабочее прост�
 Level2;Level2;Level2
 BuySell;Buy/Sell;Купить/Продать
 BuySellPanel;Panel for buy/sell operations.;Панель для операций купить/продать.
+WaitAllTrades;Wait all trades;Ожидать сделки
+ProcessNullValues;Process null values;Обрабатывать null значения
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

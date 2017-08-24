@@ -45986,5 +45986,25 @@ namespace StockSharp.Localization
 		/// Panel for buy/sell operations.
 		/// </summary>
 		public static string BuySellPanel => GetString(BuySellPanelKey);
+
+		/// <summary>
+		/// Wait all trades
+		/// </summary>
+		public const string WaitAllTradesKey = nameof(WaitAllTrades);
+
+		/// <summary>
+		/// Wait all trades
+		/// </summary>
+		public static string WaitAllTrades => GetString(WaitAllTradesKey);
+
+		/// <summary>
+		/// Process null values
+		/// </summary>
+		public const string ProcessNullValuesKey = nameof(ProcessNullValues);
+
+		/// <summary>
+		/// Process null values
+		/// </summary>
+		public static string ProcessNullValues => GetString(ProcessNullValuesKey);
 	}
 }
