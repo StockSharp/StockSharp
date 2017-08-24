@@ -52,6 +52,7 @@ namespace StockSharp.Algo.Indicators
 		public bool UseTotalVolume { get; set; }
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public override Type ResultType { get; } = typeof(VolumeProfileIndicatorValue);
 
 		/// <summary>

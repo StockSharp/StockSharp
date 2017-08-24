@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Indicators
 {
 	using System;
+	using System.ComponentModel;
 
 	using Ecng.Common;
 
@@ -32,6 +33,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public override Type ResultType { get; } = typeof(ShiftedIndicatorValue);
 
 		/// <summary>

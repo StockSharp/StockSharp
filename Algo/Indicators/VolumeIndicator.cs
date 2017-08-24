@@ -36,6 +36,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <inheritdoc />
+		[Browsable(false)]
 		public override Type ResultType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
