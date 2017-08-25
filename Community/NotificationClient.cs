@@ -141,7 +141,10 @@ namespace StockSharp.Community
 		/// <summary>
 		/// News received.
 		/// </summary>
-		public event Action<CommunityNews> NewsReceived; 
+		public event Action<CommunityNews> NewsReceived;
+
+		private readonly SyncObject _syncObject = new SyncObject();
+		private bool _isProcessing;
 
 		/// <summary>
 		/// To subscribe for news.
@@ -150,6 +153,14 @@ namespace StockSharp.Community
 		{
 			_newsTimer = ThreadingHelper.Timer(() =>
 			{
+				lock (_syncObject)
+				{
+					if (_isProcessing)
+						return;
+
+					_isProcessing = true;
+				}
+
 				try
 				{
 					RequestNews();
@@ -157,6 +168,11 @@ namespace StockSharp.Community
 				catch (Exception ex)
 				{
 					ex.LogError();
+				}
+				finally
+				{
+					lock (_syncObject)
+						_isProcessing = false;
 				}
 			}).Interval(TimeSpan.Zero, TimeSpan.FromDays(1));
 		}
