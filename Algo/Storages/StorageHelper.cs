@@ -328,7 +328,8 @@ namespace StockSharp.Algo.Storages
 			var first = dates.First().ApplyTimeZone(TimeZoneInfo.Utc);
 			var last = dates.Last().EndOfDay().ApplyTimeZone(TimeZoneInfo.Utc);
 
-			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).StorageTruncate(storage.Serializer.TimePrecision), (to ?? last).StorageTruncate(storage.Serializer.TimePrecision)));
+			var timePrecision = storage.Serializer.TimePrecision;
+			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));
 		}
 
 		/// <summary>
