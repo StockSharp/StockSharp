@@ -17,6 +17,7 @@
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 
 	public partial class MainWindow
@@ -49,13 +50,13 @@
 			Board = ExchangeBoard.Forts
 		};
 
-		private readonly ThreadSafeObservableCollection<Portfolio> _portfolios = new ThreadSafeObservableCollection<Portfolio>(new ObservableCollectionEx<Portfolio>
+		private readonly PortfolioDataSource _portfolios = new PortfolioDataSource
 		{
 			new Portfolio
 			{
 				Name = "Test portfolio"
 			}
-		});
+		};
 
 		public MainWindow()
 		{

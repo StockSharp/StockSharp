@@ -2116,6 +2116,11 @@
             Data source for portfolio based controls.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.PortfolioDataSource.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PortfolioDataSource" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PortfolioDataSource" />.

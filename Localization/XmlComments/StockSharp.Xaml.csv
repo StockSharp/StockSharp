@@ -460,6 +460,7 @@ M:StockSharp.Xaml.OrderConditionalGrid.Save(Ecng.Serialization.SettingsStorage)/
 M:StockSharp.Xaml.OrderConditionalGrid.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.OrderConditionalGrid.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.PortfolioDataSource/summary;DocStr8922
+M:StockSharp.Xaml.PortfolioDataSource.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)/summary;DocStr1
 M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)/param/provider;DocStr10038
 M:StockSharp.Xaml.PortfolioDataSource.Dispose/summary;DocStr8826
