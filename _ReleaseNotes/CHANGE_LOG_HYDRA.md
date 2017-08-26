@@ -1,5 +1,12 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.3.26.4:
+* (bug) Index build fix.
+* (bug) Select drive window. Fix OK enable.
+* (bug) SecurityPickerButton. Fix content with special characters.
+* (bug) Indicator pane fixes.
+* (bug) Remove security fix.
+
 ## v4.3.26.3:
 * (feature) QuantFEED.
 * (feature) Quik lua. Candle history support.
