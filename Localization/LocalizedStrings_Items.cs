@@ -46016,5 +46016,15 @@ namespace StockSharp.Localization
 		/// Process null values
 		/// </summary>
 		public static string ProcessNullValues => GetString(ProcessNullValuesKey);
+
+		/// <summary>
+		/// {0} securities will be delete permanently.
+		/// </summary>
+		public const string DeleteNSecuritiesKey = nameof(DeleteNSecurities);
+
+		/// <summary>
+		/// {0} securities will be delete permanently.
+		/// </summary>
+		public static string DeleteNSecurities => GetString(DeleteNSecuritiesKey);
 	}
 }

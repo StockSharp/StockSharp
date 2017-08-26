@@ -4638,6 +4638,7 @@ BuySellPanel;Panel for buy/sell operations.;Панель для операций
 SelectIndicator;Select indicator.;Укажите индикатор.
 WaitAllTrades;Wait all trades;Ожидать сделки
 ProcessNullValues;Process null values;Обрабатывать null значения
+DeleteNSecurities;{0} securities will be delete permanently.;{0} инструментов будет удалено.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
