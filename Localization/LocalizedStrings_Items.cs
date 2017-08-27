@@ -2048,12 +2048,12 @@ namespace StockSharp.Localization
 		public static string Str170 => GetString(Str170Key);
 
 		/// <summary>
-		/// Connection was not broken in allowed time.
+		/// Connection was not disconnected in allowed time.
 		/// </summary>
 		public const string Str171Key = nameof(Str171);
 
 		/// <summary>
-		/// Connection was not broken in allowed time.
+		/// Connection was not disconnected in allowed time.
 		/// </summary>
 		public static string Str171 => GetString(Str171Key);
 
@@ -15308,12 +15308,12 @@ namespace StockSharp.Localization
 		public static string Str1610 => GetString(Str1610Key);
 
 		/// <summary>
-		/// Connection broken.
+		/// Connection dropped.
 		/// </summary>
 		public const string Str1611Key = nameof(Str1611);
 
 		/// <summary>
-		/// Connection broken.
+		/// Connection dropped.
 		/// </summary>
 		public static string Str1611 => GetString(Str1611Key);
 
@@ -15388,12 +15388,12 @@ namespace StockSharp.Localization
 		public static string Str1618 => GetString(Str1618Key);
 
 		/// <summary>
-		/// Connection was not broken from previous time.
+		/// Connection was not disconnected from previous time.
 		/// </summary>
 		public const string Str1619Key = nameof(Str1619);
 
 		/// <summary>
-		/// Connection was not broken from previous time.
+		/// Connection was not disconnected from previous time.
 		/// </summary>
 		public static string Str1619 => GetString(Str1619Key);
 
@@ -21228,12 +21228,12 @@ namespace StockSharp.Localization
 		public static string Str2253Params => GetString(Str2253ParamsKey);
 
 		/// <summary>
-		/// Connection with Alfa-Direct is broken
+		/// Connection with Alfa-Direct is disconnected
 		/// </summary>
 		public const string Str2254Key = nameof(Str2254);
 
 		/// <summary>
-		/// Connection with Alfa-Direct is broken
+		/// Connection with Alfa-Direct is disconnected
 		/// </summary>
 		public static string Str2254 => GetString(Str2254Key);
 
@@ -31278,12 +31278,12 @@ namespace StockSharp.Localization
 		public static string Str3365 => GetString(Str3365Key);
 
 		/// <summary>
-		/// broken
+		/// disconnected
 		/// </summary>
 		public const string Str3366Key = nameof(Str3366);
 
 		/// <summary>
-		/// broken
+		/// disconnected
 		/// </summary>
 		public static string Str3366 => GetString(Str3366Key);
 
@@ -46026,5 +46026,15 @@ namespace StockSharp.Localization
 		/// {0} securities will be delete permanently.
 		/// </summary>
 		public static string DeleteNSecurities => GetString(DeleteNSecuritiesKey);
+
+		/// <summary>
+		/// Security {0} is not composite.
+		/// </summary>
+		public const string NotCompositeSecurityKey = nameof(NotCompositeSecurity);
+
+		/// <summary>
+		/// Security {0} is not composite.
+		/// </summary>
+		public static string NotCompositeSecurity => GetString(NotCompositeSecurityKey);
 	}
 }

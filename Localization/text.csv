@@ -201,7 +201,7 @@ General;General;Основные
 Str168;Change server time.;Серверное время изменения.
 Str169Params;Current process bit-width is not compatible with adapter {0}. Recompile under {1}.;Текущая разрядность процесса не совместима с адаптером {0}. Необходимо перекомпилировать под {1}.
 Str170;Connection was not established in allowed time.;Подключение не было установлено в отведенный отрезок времени.
-Str171;Connection was not broken in allowed time.;Подключение не было разорвано в отведенный отрезок времени.
+Str171;Connection was not disconnected in allowed time.;Подключение не было разорвано в отведенный отрезок времени.
 Str172;Reconnection settings;Настройки переподключения
 Str173;Connection and export settings.;Настройки для подключения или экспорта.
 Str174;Connection;Подключение
@@ -1531,7 +1531,7 @@ Str1606Params;Unknown type of option {0}.;Неизвестный тип опци
 Str1608;Unknown market-data field.;Неизвестный поле маркет-данных.
 Str1609;Unknown FIX version.;Неизвестная версия FIX.
 Str1610;Session board is not specified.;Площадка у сессии не заполнена.
-Str1611;Connection broken.;Подключение разорвано.
+Str1611;Connection dropped.;Подключение разорвано.
 Str1612Params;Message {0} is too long.;Длина сообщения {0} слишком большая.
 Str1613;Binary;Бинарный
 Str1614Params;Quotations {0} request for {1} was not correctly handled by the FIX server. Error code {2}.;Запрос котировок {0} для {1} не был корректно обработано FIX сервером. Код ошибки {2}.
@@ -1539,7 +1539,7 @@ Str1615Params;Security for market-data with request ID {0} not found.;Инстр
 Str1616Params;Error receiving market-date. Code '{0}', text '{1}'.;Ошибка получение маркет-даты. Код '{0}', текст '{1}'.
 Str1617;Connector does not support text news receiving.;Коннектор не поддерживает получения текста новостей.
 Str1618;Unsupported type of market-data.;Неподдерживаемый тип маркет-данных.
-Str1619;Connection was not broken from previous time.;Подключение не было разорвано с предыдущего раза.
+Str1619;Connection was not disconnected from previous time.;Подключение не было разорвано с предыдущего раза.
 Str1620;Counter value is unacceptable.;Значение счетчика является недопустимым.
 Str1621Params;Session '{0}'. Received: '{1}';Сессия '{0}'. Получено: '{1}'
 Str1622Params;Message {0} is unacceptable.;Сообщение {0} является недопустимым.
@@ -2123,7 +2123,7 @@ News;News;Новости
 Str2251;Download news.;Скачивать новости.
 Str2252Params;Order {0} does not have an exchange ID.;Заявка {0} не имеет биржевого идентификатора.
 Str2253Params;Security {0} does not have an AlfaDirect ID.;Инструмент {0} не имеет идентификатора AlfaDirect.
-Str2254;Connection with Alfa-Direct is broken;Подключение с Альфа-Директ разорвано
+Str2254;Connection with Alfa-Direct is disconnected;Подключение с Альфа-Директ разорвано
 Str2255;Connection with Alfa-Direct established;Подключение с Альфа-Директ установлено
 Str2257Params;Non-empty line in the news table, which could not be parsed: {0};Непустая строка в таблице новостей, которую не удалось распарсить: {0}
 Str2258Params;Error registering order with transaction ID {0}. {1};Ошибка регистрации заявки с идентификатором транзакции {0}. {1}
@@ -3133,7 +3133,7 @@ Str3362Params;Work of module '{0}' ended in error.;Работа модуля '{0
 Str3363;Securities search ended with an error.;Поиск инструментов завершился с ошибкой.
 Str3364Params;Connection to ETrade {0};Подключение к ETrade {0}
 Str3365;established;установлено
-Str3366;broken;разорвано
+Str3366;disconnected;разорвано
 Str3369;Demo mode.;Демо режим.
 Str3370;Verification code;Код верификации
 Str3371;Verification code, received by user in browser, after confirming program's permission to work.;Код верификации, полученный пользователем в браузере после подтверждения разрешения на работу приложения.
@@ -4639,6 +4639,7 @@ SelectIndicator;Select indicator.;Укажите индикатор.
 WaitAllTrades;Wait all trades;Ожидать сделки
 ProcessNullValues;Process null values;Обрабатывать null значения
 DeleteNSecurities;{0} securities will be delete permanently.;{0} инструментов будет удалено.
+NotCompositeSecurity;Security {0} is not composite.;Инструмент {0} не является составным.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
