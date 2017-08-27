@@ -13,7 +13,9 @@ StockSharp API Change log
 * (bug) PortfolioGrid. Binding State fix.
 * (bug) BasketMessageAdapter. Reconnect fix.
 * (feature) IIndicator.ResultType.
-* (feature) ThreadSafeCol<Portfolio> -> PortfolioDataSource
+* (feature) ThreadSafeCol{Portfolio} -> PortfolioDataSource
+* (feature) DevExpress v17.1.5
+* (feature) Newtonsoft.Json. v10.0.3
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
