@@ -4,119 +4,6 @@
         <name>DevExpress.Xpf.Controls.v17.1</name>
     </assembly>
     <members>
-        <member name="T:DevExpress.Xpf.WindowsUI.NavigationPage">
-
-            <summary>
-                <para>A navigation container that implements the <see cref="T:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware"/> interface.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.NavigationPage.#ctor">
-            <summary>
-                <para>Initializes a new instance of the NavigationPage class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.NavigationPage.BottomAppBar">
-            <summary>
-                <para>Gets or sets the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/> displayed on the bottom of the NavigationPage.
-
-</para>
-            </summary>
-            <value>The <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/> displayed on the bottom of the NavigationPage.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationPage.BottomAppBarProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.NavigationPage.GetNavigationCacheMode(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets the navigation cache mode currently applied to the specific element within this NavigationPage.
-</para>
-            </summary>
-            <param name="obj">
-		A DependencyObject that is the element within this NavigationPage, whose cache mode is to be obtained.
-
-            </param>
-            <returns>A NavigationCacheMode enumerator value that is the cache mode currently applied to the specific element within this NavigationPage.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.NavigationPage.NavigationCacheMode(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets or sets the cache mode for specific elements within the NavigationPage.
-</para>
-            </summary>
-            <value>A NavigationCacheMode that is the cache mode for specific elements within the NavigationPage.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationPage.NavigationCacheModeProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.NavigationPage.OnApplyTemplate">
-            <summary>
-                <para>Called after the template is completely generated and attached to the visual tree.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.NavigationPage.SetNavigationCacheMode(System.Windows.DependencyObject,DevExpress.Xpf.WindowsUI.NavigationCacheMode)">
-            <summary>
-                <para>Sets the cache mode for the NavigationPage's content.
-</para>
-            </summary>
-            <param name="obj">
-		A DependencyObject that is the NavigationPage content element whose content cache mode is to be set.
-
-            </param>
-            <param name="value">
-		A NavigationCacheMode enumerator value that specifies the cache mode for the <i>obj</i> NavigationPage content.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.NavigationPage.TopAppBar">
-            <summary>
-                <para>Gets of sets the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/> disposed at the top of the NavigationPage.
-</para>
-            </summary>
-            <value>The <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/> disposed at the top of the NavigationPage.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationPage.TopAppBarProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Controls.PageType">
 
             <summary>
@@ -609,6 +496,121 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Controls.WizardService">
+
+            <summary>
+                <para>Allows you to use the <see cref="T:DevExpress.Xpf.Controls.Wizard"/> control in compliance with MVVM.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Controls.WizardService.#ctor">
+            <summary>
+                <para>Initializes a new instance of the WizardService class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Controls.WizardService.GoBack(System.Object)">
+            <summary>
+                <para>Navigates back to the previous wizard page. 
+</para>
+            </summary>
+            <param name="parameter">
+		An object that specifies the navigation parameter for the current navigation. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Controls.WizardService.GoForward(System.Object)">
+            <summary>
+                <para>Navigates forward to the next wizard page. 
+</para>
+            </summary>
+            <param name="parameter">
+		An object that specifies the navigation parameter for the current navigation.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Controls.WizardService.Navigate(System.String,System.Object,System.Object,System.Object)">
+            <summary>
+                <para>Performs navigation to the target View.
+</para>
+            </summary>
+            <param name="viewType">
+		A <b>System.String</b> value that specifies the name of the target View type. 
+
+            </param>
+            <param name="viewModel">
+		An object specifying the ViewModel of the target View. 
+
+            </param>
+            <param name="parameter">
+		A parameter for passing data to the target ViewModel. 
+
+            </param>
+            <param name="parentViewModel">
+		The parent ViewModel for building a parent-child view model relationship. 
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplate">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateProperty">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateSelector">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateSelectorProperty">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Controls.WizardService.Wizard">
+            <summary>
+                <para>Gets or sets the wizard that is used by the service. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Controls.Wizard"/> object.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Controls.WizardService.WizardProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Navigation.OfficeNavigationBar">
 
             <summary>
@@ -880,100 +882,296 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.WinUIDialogWindow">
+        <member name="T:DevExpress.Xpf.Navigation.TileBar">
 
             <summary>
-                <para>A Windows Modern-styled dialog window.
+                <para>A bar with tiles that support the dropdown functionality. 
+
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String)">
+        <member name="M:DevExpress.Xpf.Navigation.TileBar.#ctor">
             <summary>
-                <para>Initializes a new instance of the WinUIDialogWindow class with the specified title.
-</para>
-            </summary>
-            <param name="title">
-		A string value that specifies the dialog's title. This value is assigned to the <see cref="P:System.Windows.Window.Title"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String,System.Windows.MessageBoxButton,System.Nullable`1,System.Nullable`1)">
-            <summary>
-                <para>Initializes a new instance of the WinUIDialogWindow class with the specified settings.
-</para>
-            </summary>
-            <param name="title">
-		 
-            </param>
-            <param name="dialogButtons">
-		 
-            </param>
-            <param name="defaultButton">
-		 
-            </param>
-            <param name="cancelButton">
-		 
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String,System.Collections.Generic.IEnumerable`1)">
-            <summary>
-                <para>Initializes a new instance of the WinUIDialogWindow class with the specified settings.
-</para>
-            </summary>
-            <param name="title">
-		 
-            </param>
-            <param name="commands">
-		 
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor">
-            <summary>
-                <para>Initializes a new instance of the WinUIDialogWindow class with the default settings.
+                <para>Initializes a new instance of the TileBar class with the default settings.
 </para>
             </summary>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Activate">
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.AllowItemSelection">
             <summary>
-                <para> </para>
+                <para>Gets or sets whether items can be selected.
+</para>
+            </summary>
+            <value><b>true</b>, if items can be selected; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.AllowItemSelectionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Close">
+        <member name="M:DevExpress.Xpf.Navigation.TileBar.CloseFlyout">
             <summary>
-                <para> </para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Show">
-            <summary>
-                <para> </para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.TitleStyle">
-            <summary>
-                <para>This is a dependency property.
+                <para>Hides the currently displayed flyout.
 </para>
             </summary>
-            <value> </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.TitleStyleProperty">
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.DefaultGroupHeaderSpace">
+            <summary>
+                <para>The default value for the <see cref="P:DevExpress.Xpf.Navigation.TileBar.GroupHeaderSpacing"/> dependency property that specifies the distance between tiles and group headers. Value: <b>5</b>.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.FlyoutShowDirection">
+            <summary>
+                <para>Gets or sets the direction in which flyouts open. This a dependency property.
+</para>
+            </summary>
+            <value>A FlyoutShowDirection enumeration value that specifies the direction in which flyouts open.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.FlyoutShowDirectionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.FlyoutShowMode">
+            <summary>
+                <para>Gets or sets the mode that specifies how drop-down tile bars are displayed. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="FlyoutShowMode"/> enumeration value, such as <b>Adorner</b> or <b>Popup</b>, that specifies how drop-down tile bars are displayed. The default is <b>Adorner</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.FlyoutShowModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Navigation.TileBar.GetGroupHeader(System.Windows.DependencyObject)">
+            <summary>
+                <para>Returns the group header of the specified navigation element.
+</para>
+            </summary>
+            <param name="element">
+		A DependencyObject representing a navigation element whose group header should be returned.
+
+            </param>
+            <returns>An Object representing a group header assigned to the specified navigation element. <b>null</b> (<b>Nothing</b> in VB) if no group header is assigned.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.GroupHeader(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets or sets a group header associated with a specific object. This is an attached property. 
+</para>
+            </summary>
+            <value>An <b>Object</b> representing a group header associated with a specific object.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.GroupHeaderProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.GroupHeaderSpacing">
+            <summary>
+                <para>Gets or sets the distance between tiles and group headers. This is a dependency property.
+</para>
+            </summary>
+            <value>A Double value that specifies the distance between tiles and group headers.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.GroupHeaderSpacingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.GroupHeaderStyle">
+            <summary>
+                <para>Gets or sets the style applied to group headers.
+
+
+This is a dependency property. 
+</para>
+            </summary>
+            <value>A Style object providing corresponding style settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.GroupHeaderStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.GroupHeaderTemplate">
+            <summary>
+                <para>Gets or sets the DataTemplate used to render group headers.
+</para>
+            </summary>
+            <value>A DataTemplate object used to render group headers.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.GroupHeaderTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.ItemColorMode">
+            <summary>
+                <para>Gets or sets the mode that specifies how tiles are colored. This property is in effect if the TileBar is displayed in a flyout. 
+</para>
+            </summary>
+            <value>A <b>TileColorMode</b> enumeration value that specifies how tiles are colored. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.ItemColorModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.ItemSpacing">
+            <summary>
+                <para>Gets or sets the distance between tiles in the current TileBar. This is a dependency property.
+</para>
+            </summary>
+            <value>A Double value that specifies the distance, in pixels, between tiles within the current TileBar. The default is <b>10</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.ItemSpacingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.Orientation">
+            <summary>
+                <para>Gets or sets whether the TileBar is oriented horizontally or vertically.
+</para>
+            </summary>
+            <value>An Orientation enumeration value that specifies the orientation of the current TileBar. The default is <b>Horizontal</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.OrientationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Navigation.TileBar.SetGroupHeader(System.Windows.DependencyObject,System.Object)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Navigation.TileBar.GroupHeader"/> attached property for a specific object.
+</para>
+            </summary>
+            <param name="element">
+		A <b>DependencyObject</b> whose <see cref="P:DevExpress.Xpf.Navigation.TileBar.GroupHeader"/> attached property is to be set.
+
+            </param>
+            <param name="value">
+		A new value of the <see cref="P:DevExpress.Xpf.Navigation.TileBar.GroupHeader"/> attached property for the specified object.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.ShowGroupHeaders">
+            <summary>
+                <para>Gets or sets whether the group headers assigned to navigation elements are shown.
+</para>
+            </summary>
+            <value><b>true</b>, if the group headers are shown; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.ShowGroupHeadersProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileBar.ShowItemShadow">
+            <summary>
+                <para>Gets or sets whether tiles cast shadows. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, if tiles cast shadows; otherwise, <b>false</b>. The default is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileBar.ShowItemShadowProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -1165,15 +1363,18 @@
         </member>
         <member name="P:DevExpress.Xpf.Controls.WizardPage.PreviousPage">
             <summary>
-                <para> </para>
+                <para>Gets or sets the wizard page that will be activated when a user presses the Back button. This is a dependency property. 
+</para>
             </summary>
-            <value> </value>
+            <value>A Object object that is the wizard page that will be activated when a user presses the Back button. 
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.Controls.WizardPage.PreviousPageProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -1385,6 +1586,84 @@ This is a dependency property.
 
 
         </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.AppBarToggleButton">
+
+            <summary>
+                <para>Represents the toggle button in the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.AppBarToggleButton.#ctor">
+            <summary>
+                <para>Initializes a new instance of the AppBarToggleButton class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.WindowsUI.AppBarToggleButton.Checked">
+            <summary>
+                <para>Occurs when the AppBarToggleButton is checked.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBarToggleButton.GroupName">
+            <summary>
+                <para>Gets or sets the name of the group of mutually exclusive toggle buttons to which the current button belongs. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value specifying the name of the mutually exclusive toggle button group to which the current button belongs.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBarToggleButton.GroupNameProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBarToggleButton.IsChecked">
+            <summary>
+                <para>Gets or sets whether the AppBarToggleButton is checked.
+</para>
+            </summary>
+            <value><b>true</b>, if the AppBarToggleButton is checked; otherwise, <b>false</b>. Default value is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBarToggleButton.IsCheckedProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.AppBarToggleButton.OnApplyTemplate">
+            <summary>
+                <para>Called after the template is completely generated and attached to the visual tree.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.WindowsUI.AppBarToggleButton.Unchecked">
+            <summary>
+                <para>Occurs when the AppBarToggleButton is unchecked.
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.WindowsUI.AppBarSeparator">
 
             <summary>
@@ -1568,59 +1847,380 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions">
+        <member name="T:DevExpress.Xpf.WindowsUI.AppBar">
 
             <summary>
-                <para> </para>
+                <para>Represents the bar in the Windows 8 style.
+</para>
             </summary>
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.ClearNavigationCache">
+        <member name="M:DevExpress.Xpf.WindowsUI.AppBar.#ctor">
             <summary>
-                <para> </para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.ClearNavigationHistory">
-            <summary>
-                <para> </para>
+                <para>Initializes a new instance of the AppBar class.
+</para>
             </summary>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.NavigateToFirstElement">
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.Alignment">
             <summary>
-                <para> </para>
+                <para>Gets or sets the AppBar alignment, relative to the parent <b>FrameworkElement</b>. This is a dependency property.
+</para>
+            </summary>
+            <value>The AppBar alignment. The default value is <b>Bottom</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.AlignmentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.BackCommand">
+            <summary>
+                <para>Gets or sets a custom command invoked by the predefined <b>Back</b> button.
+</para>
+            </summary>
+            <value>A custom command invoked by the predefined <b>Back</b> button.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.BackCommandProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.WindowsUI.AppBar.Closed">
+            <summary>
+                <para>Occurs when the AppBar changes from visible to hidden.
+</para>
             </summary>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.None">
+        <member name="E:DevExpress.Xpf.WindowsUI.AppBar.Closing">
             <summary>
-                <para> </para>
+                <para>Occurs before the AppBar is closed.
+</para>
             </summary>
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.ItemSizeMode">
-
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.ExitCommand">
             <summary>
-                <para> </para>
+                <para>Gets or sets a custom command invoked by the predefined <b>Exit</b> button.
+</para>
             </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.ItemSizeMode.Auto">
-            <summary>
-                <para> </para>
-            </summary>
+            <value>A custom command invoked by the predefined Exit button.
+</value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.ItemSizeMode.Stretch">
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.ExitCommandProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.HideMode">
+            <summary>
+                <para>Gets or sets the dismissal mode that specifies whether, and if so how, the AppBar closes. This is a dependency property.
+
+</para>
+            </summary>
+            <value>An <see cref="AppBarHideMode"/> enumeration value that specifies whether, and if so how, the AppBar closes.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.HideModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsBackButtonEnabled">
+            <summary>
+                <para>Gets or sets whether the Back button is displayed within the AppBar.
+</para>
+            </summary>
+            <value><b>true</b>, if the Back button is displayed; otherwise, <b>false</b>. The default value is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsBackButtonEnabledProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsCompact">
+            <summary>
+                <para>Gets or sets whether buttons in the AppBar are displayed without labels and reduced spacing. This is a dependency property.
+
+</para>
+            </summary>
+            <value><b>true</b>, if buttons in the AppBar are displayed without labels and reduced spacing; otherwise, <b>false</b>. The default is <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsCompactProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsExitButtonEnabled">
+            <summary>
+                <para>Gets or sets whether the Exit button is displayed in the AppBar.
+</para>
+            </summary>
+            <value><b>true</b>, if the Exit button is displayed; otherwise, <b>false</b>. The default value is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsExitButtonEnabledProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsOpen">
+            <summary>
+                <para>Gets or sets whether the AppBar is visible.
+</para>
+            </summary>
+            <value><b>true</b>, if the AppBar is visible; otherwise, <b>false</b>. The default value is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsOpenProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsSticky">
+            <summary>
+                <para>Gets or sets whether the AppBar remains visible when an end-user interacts with the application. This property is obsolete. Use the <see cref="P:DevExpress.Xpf.WindowsUI.AppBar.HideMode"/> property instead.
+
+</para>
+            </summary>
+            <value><b>true</b>, if the AppBar remains visible when an end-user interacts with the application; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsStickyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.ItemSpacing">
+            <summary>
+                <para>Gets or set the distance between items in the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/>.
+</para>
+            </summary>
+            <value>The distance between items in the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/>, in pixels.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.ItemSpacingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.WindowsUI.AppBar.Opened">
+            <summary>
+                <para>Occurs when the AppBar changes from hidden to visible.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.WindowsUI.AppBar.Opening">
+            <summary>
+                <para>Occurs before the AppBar is opened.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Navigation.TileNavItem">
+
+            <summary>
+                <para>Represents a navigation element on the second level of the <see cref="T:DevExpress.Xpf.Navigation.TileNavPane"/> navigation hierarchy.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Navigation.TileNavItem.#ctor">
+            <summary>
+                <para>Initializes a new instance of the TileNavItem class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.HasItems">
+            <summary>
+                <para>Gets whether the <see cref="P:DevExpress.Xpf.Navigation.TileNavItem.Items"/> collection of the current TileNavItem is not empty.
+</para>
+            </summary>
+            <value><b>true</b>, if the <see cref="P:DevExpress.Xpf.Navigation.TileNavItem.Items"/> collection is not empty; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.HasItemsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.Items">
+            <summary>
+                <para>Provides access to the collection of sub-items that belong to the current TileNavItem. This is a dependency property.
+</para>
+            </summary>
+            <value>A <b>TileNavSubItemCollection</b> object representing a collection of <b>TileNavSubItem</b> objects.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.ItemsSource">
+            <summary>
+                <para>Gets or sets an object that provides information to generate and initialize sub-items for the current TileNavItem. This is a dependency property.
+</para>
+            </summary>
+            <value>An Object that provides information to generate and initialize sub-items for the current TileNavItem. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemsSourceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.ItemStyle">
+            <summary>
+                <para>Gets or sets the style applied to a child items of the current TileNavItem object. 
+
+
+This is a dependency property. 
+</para>
+            </summary>
+            <value>A Style object providing corresponding style settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.ItemTemplate">
+            <summary>
+                <para>Gets or sets the template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavItem.ItemsSource"/> collection.
+ This is a dependency property. 
+</para>
+            </summary>
+            <value>A DataTemplate object that specifies the corresponding template.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.ItemTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavItem.ItemsSource"/> collection.
+ This is a dependency property. 
+</para>
+            </summary>
+            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
 
 
         </member>
@@ -2419,11 +3019,46 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Journal.PushInForwardStack(System.Object)">
             <summary>
-                <para> </para>
+                <para>Places a required object into this journal's forward stack (the <see cref="P:DevExpress.Xpf.WindowsUI.Navigation.Journal.ForwardStack"/> collection).
+</para>
             </summary>
             <param name="obj">
-		 
+		An Object that should be placed into this journal's forward stack.
+
             </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.NavigationCacheMode">
+
+            <summary>
+                <para>Provides members that specify different navigation cache modes for WPF WindowsUI applications.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationCacheMode.Disabled">
+            <summary>
+                <para>Content caching disabled. A new instance of a View (screen) is created on each display.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationCacheMode.Enabled">
+            <summary>
+                <para>The content is cached until the frame's cache size is exceeded (see the <see cref="P:DevExpress.Xpf.WindowsUI.NavigationFrame.NavigationCacheMaxSize"/> property).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationCacheMode.Required">
+            <summary>
+                <para>The content is always cached and its cached instance is reused for each display. The frame's cache size is ignored.
+
+</para>
+            </summary>
 
 
         </member>
@@ -2666,304 +3301,6 @@ This is a dependency property.
 
         </member>
         <member name="F:DevExpress.Xpf.Navigation.TileNavCategory.ItemTemplateSelectorProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Navigation.TileBar">
-
-            <summary>
-                <para>A bar with tiles that support the dropdown functionality. 
-
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileBar.#ctor">
-            <summary>
-                <para>Initializes a new instance of the TileBar class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.AllowItemSelection">
-            <summary>
-                <para>Gets or sets whether items can be selected.
-</para>
-            </summary>
-            <value><b>true</b>, if items can be selected; otherwise, <b>false</b>.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.AllowItemSelectionProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileBar.CloseFlyout">
-            <summary>
-                <para>Hides the currently displayed flyout.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.DefaultGroupHeaderSpace">
-            <summary>
-                <para>The default value for the <see cref="P:DevExpress.Xpf.Navigation.TileBar.GroupHeaderSpacing"/> dependency property that specifies the distance between tiles and group headers. Value: <b>5</b>.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.FlyoutShowDirection">
-            <summary>
-                <para>Gets or sets the direction in which flyouts open. This a dependency property.
-</para>
-            </summary>
-            <value>A FlyoutShowDirection enumeration value that specifies the direction in which flyouts open.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.FlyoutShowDirectionProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.FlyoutShowMode">
-            <summary>
-                <para>Gets or sets the mode that specifies how drop-down tile bars are displayed. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="FlyoutShowMode"/> enumeration value, such as <b>Adorner</b> or <b>Popup</b>, that specifies how drop-down tile bars are displayed. The default is <b>Adorner</b>.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.FlyoutShowModeProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileBar.GetGroupHeader(System.Windows.DependencyObject)">
-            <summary>
-                <para>Returns the group header of the specified navigation element.
-</para>
-            </summary>
-            <param name="element">
-		A DependencyObject representing a navigation element whose group header should be returned.
-
-            </param>
-            <returns>An Object representing a group header assigned to the specified navigation element. <b>null</b> (<b>Nothing</b> in VB) if no group header is assigned.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.GroupHeader(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets or sets a group header associated with a specific object. This is an attached property. 
-</para>
-            </summary>
-            <value>An <b>Object</b> representing a group header associated with a specific object.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.GroupHeaderProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.GroupHeaderSpacing">
-            <summary>
-                <para>Gets or sets the distance between tiles and group headers. This is a dependency property.
-</para>
-            </summary>
-            <value>A Double value that specifies the distance between tiles and group headers.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.GroupHeaderSpacingProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.GroupHeaderStyle">
-            <summary>
-                <para>Gets or sets the style applied to group headers.
-
-
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A Style object providing corresponding style settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.GroupHeaderStyleProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.GroupHeaderTemplate">
-            <summary>
-                <para>Gets or sets the DataTemplate used to render group headers.
-</para>
-            </summary>
-            <value>A DataTemplate object used to render group headers.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.GroupHeaderTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.ItemColorMode">
-            <summary>
-                <para>Gets or sets the mode that specifies how tiles are colored. This property is in effect if the TileBar is displayed in a flyout. 
-</para>
-            </summary>
-            <value>A <b>TileColorMode</b> enumeration value that specifies how tiles are colored. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.ItemColorModeProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.ItemSpacing">
-            <summary>
-                <para>Gets or sets the distance between tiles in the current TileBar. This is a dependency property.
-</para>
-            </summary>
-            <value>A Double value that specifies the distance, in pixels, between tiles within the current TileBar. The default is <b>10</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.ItemSpacingProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.Orientation">
-            <summary>
-                <para>Gets or sets whether the TileBar is oriented horizontally or vertically.
-</para>
-            </summary>
-            <value>An Orientation enumeration value that specifies the orientation of the current TileBar. The default is <b>Horizontal</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.OrientationProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileBar.SetGroupHeader(System.Windows.DependencyObject,System.Object)">
-            <summary>
-                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Navigation.TileBar.GroupHeader"/> attached property for a specific object.
-</para>
-            </summary>
-            <param name="element">
-		A <b>DependencyObject</b> whose <see cref="P:DevExpress.Xpf.Navigation.TileBar.GroupHeader"/> attached property is to be set.
-
-            </param>
-            <param name="value">
-		A new value of the <see cref="P:DevExpress.Xpf.Navigation.TileBar.GroupHeader"/> attached property for the specified object.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.ShowGroupHeaders">
-            <summary>
-                <para>Gets or sets whether the group headers assigned to navigation elements are shown.
-</para>
-            </summary>
-            <value><b>true</b>, if the group headers are shown; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.ShowGroupHeadersProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileBar.ShowItemShadow">
-            <summary>
-                <para>Gets or sets whether tiles cast shadows. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b>, if tiles cast shadows; otherwise, <b>false</b>. The default is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileBar.ShowItemShadowProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -3662,7 +3999,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Controls.Wizard.AllowBackProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -3678,7 +4016,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Controls.Wizard.AllowCancelProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -3694,7 +4033,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Controls.Wizard.AllowFinishProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -3710,7 +4050,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Controls.Wizard.AllowNextProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -4170,7 +4511,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Controls.Wizard.ShowBackProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -4186,7 +4528,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Controls.Wizard.ShowCancelProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -4202,7 +4545,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Controls.Wizard.ShowFinishProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -4218,7 +4562,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Controls.Wizard.ShowNextProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -4726,33 +5071,35 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.NavigationButton">
+        <member name="T:DevExpress.Xpf.WindowsUI.NavigationPage">
 
             <summary>
-                <para>A button within WindowsUI application capable of navigating to a specific application screen.
+                <para>A navigation container that implements the <see cref="T:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware"/> interface.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.NavigationButton.#ctor">
+        <member name="M:DevExpress.Xpf.WindowsUI.NavigationPage.#ctor">
             <summary>
-                <para>Initializes a new instance of the NavigationButton class with the default settings.
+                <para>Initializes a new instance of the NavigationPage class with the default settings.
 </para>
             </summary>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.NavigationButton.NavigateTo">
+        <member name="P:DevExpress.Xpf.WindowsUI.NavigationPage.BottomAppBar">
             <summary>
-                <para>Gets or sets a view to which an end-user will navigate upon clicking the current NavigationButton.
+                <para>Gets or sets the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/> displayed on the bottom of the NavigationPage.
+
 </para>
             </summary>
-            <value>An Object to which an end-user will navigate upon clicking the current NavigationButton.
+            <value>The <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/> displayed on the bottom of the NavigationPage.
+
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationButton.NavigateToProperty">
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationPage.BottomAppBarProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -4761,266 +5108,31 @@ This is a dependency property.
 
 
         </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.NavigationButton.NavigationParameter">
+        <member name="M:DevExpress.Xpf.WindowsUI.NavigationPage.GetNavigationCacheMode(System.Windows.DependencyObject)">
             <summary>
-                <para>Gets or sets the specific parameter, passed when navigating through views.
+                <para>Gets the navigation cache mode currently applied to the specific element within this NavigationPage.
 </para>
             </summary>
-            <value>An Object that is the specific parameter, passed when navigating through views.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationButton.NavigationParameterProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.NavigationButton.NavigationTarget">
-            <summary>
-                <para>Gets or sets the frame that manages the navigation, invoked by the current NavigationButton.
-</para>
-            </summary>
-            <value>An Object that is the <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/>, which manages the navigation invoked by the current NavigationButton.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationButton.NavigationTargetProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.NavigationButton.OnNavigateToChanged(System.Object,System.Object)">
-            <summary>
-                <para>Modifies the navigation destination for the current NavigationButton.
-</para>
-            </summary>
-            <param name="oldValue">
-		An Object that is the previous NavigationButton's navigation destination.
+            <param name="obj">
+		A DependencyObject that is the element within this NavigationPage, whose cache mode is to be obtained.
 
             </param>
-            <param name="newValue">
-		An Object that is the new NavigationButton's navigation destination.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.NavigationButton.OnNavigationParameterChanged(System.Object,System.Object)">
-            <summary>
-                <para>Modifies the navigation parameter for this NavigationButton.
-</para>
-            </summary>
-            <param name="oldValue">
-		An Object that is the old navigation parameter.
-
-            </param>
-            <param name="newValue">
-		An Object that is the new navigation parameter.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.NavigationButton.OnNavigationTargetChanged(System.Object,System.Object)">
-            <summary>
-                <para>Changes the <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/> related to the current NavigationButton.
-
-</para>
-            </summary>
-            <param name="oldValue">
-		An Object that is the Frame, previously related to this NavigationButton.
-
-
-            </param>
-            <param name="newValue">
-		An Object that is the currently related to this NavigationButton Frame.
-
-
-            </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs">
-
-            <summary>
-                <para>Provides base properties for navigation events in Windows Modern UI applications.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.#ctor(System.Object,System.Object)">
-            <summary>
-                <para>Initializes a new instance of the NavigationBaseEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="source">
-		An Object that points to the navigation destination for the related navigation event.
-
-            </param>
-            <param name="parameter">
-		An Object that is the parameter passed to the related navigation event.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.Parameter">
-            <summary>
-                <para>Gets the parameter passed to the related navigation event.
-</para>
-            </summary>
-            <value>An Object that is the parameter passed to the related navigation event.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.Source">
-            <summary>
-                <para>Gets the navigation destination for the related navigation event.
-</para>
-            </summary>
-            <value>An Object that points to the navigation target for the related navigation event.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware">
-
-            <summary>
-                <para>An interface that provides methods for navigating within a WindowsUI application.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatedFrom(DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs)">
-            <summary>
-                <para>Called automatically after an application has successfully navigated from a View that implements the INavigationAware interface.
-</para>
-            </summary>
-            <param name="e">
-		A NavigationEventArgs object that contains event data.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatedTo(DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs)">
-            <summary>
-                <para>Called automatically when an end-user navigates to a View that implements the INavigationAware interface.
-</para>
-            </summary>
-            <param name="e">
-		A NavigationEventArgs object that contains event data.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatingFrom(DevExpress.Xpf.WindowsUI.Navigation.NavigatingEventArgs)">
-            <summary>
-                <para>Called automatically when an application attempts to navigate from a View that implements the INavigationAware interface.
-</para>
-            </summary>
-            <param name="e">
-		A NavigatingEventArgs object that contains event data.
-
-            </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.Navigation">
-
-            <summary>
-                <para>Provides members that support navigation within Windows Modern UI applications.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.#ctor">
-            <summary>
-                <para>Initializes a new instance of the Navigation class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.GetNavigateTo(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets a navigation destination for a specific element.
-</para>
-            </summary>
-            <param name="target">
-		A DependencyObject whose destination target is to be obtained.
-
-            </param>
-            <returns>An Object to which the target element navigates.
+            <returns>A NavigationCacheMode enumerator value that is the cache mode currently applied to the specific element within this NavigationPage.
 </returns>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.GetNavigationHandler(System.Windows.DependencyObject)">
+        <member name="P:DevExpress.Xpf.WindowsUI.NavigationPage.NavigationCacheMode(System.Windows.DependencyObject)">
             <summary>
-                <para>Gets a handler for navigation events of a specific object.
+                <para>Gets or sets the cache mode for specific elements within the NavigationPage.
 </para>
             </summary>
-            <param name="target">
-		A DependencyObject whose handler is to be obtained.
-
-            </param>
-            <returns>An INavigationHandler object that handles navigation events of a specific object.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.GetNavigationParameter(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets the navigation parameter for a specific element.
-</para>
-            </summary>
-            <param name="target">
-		An DependencyObject that is the element whose navigation parameter is to obtained.
-
-            </param>
-            <returns>An Object that is the navigation parameter for a specific element.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.GetNavigationTarget(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets a Navigation Frame assigned to a specific object.
-</para>
-            </summary>
-            <param name="target">
-		A DependencyObject whose Navigation Target is to be obtained.
-
-            </param>
-            <returns>A NavigationFrame assigned to the <i>target</i> object.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigateTo(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets or sets the navigation destination for the specific element.
-</para>
-            </summary>
-            <value>An Object that is the navigation destination for the specific element.
+            <value>A NavigationCacheMode that is the cache mode for specific elements within the NavigationPage.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigateToProperty">
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationPage.NavigationCacheModeProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -5029,368 +5141,46 @@ This is a dependency property.
 
 
         </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationHandler(System.Windows.DependencyObject)">
+        <member name="M:DevExpress.Xpf.WindowsUI.NavigationPage.OnApplyTemplate">
             <summary>
-                <para>Gets or sets the handler for navigation events which occur for the specific object.
+                <para>Called after the template is completely generated and attached to the visual tree.
 </para>
             </summary>
-            <value>An INavigationHandler object that is the handler for navigation events which occur for the specific object.
-</value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationHandlerProperty">
+        <member name="M:DevExpress.Xpf.WindowsUI.NavigationPage.SetNavigationCacheMode(System.Windows.DependencyObject,DevExpress.Xpf.WindowsUI.NavigationCacheMode)">
             <summary>
-                <para>Identifies the  dependency property.
+                <para>Sets the cache mode for the NavigationPage's content.
 </para>
             </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationParameter(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets or sets the specific parameter passed when navigating through Views.
-</para>
-            </summary>
-            <value>An Object that is the specific parameter passed when navigating through Views.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationParameterProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationTarget(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets or sets the <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/> that manages navigation invoked by the current element.
-</para>
-            </summary>
-            <value>The NavigationFrame that manages navigation invoked by the current element.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationTargetProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.SetNavigateTo(System.Windows.DependencyObject,System.Object)">
-            <summary>
-                <para>Sets the navigation destination for the specific object.
-</para>
-            </summary>
-            <param name="target">
-		A DependencyObject whose navigation destination is to be set.
+            <param name="obj">
+		A DependencyObject that is the NavigationPage content element whose content cache mode is to be set.
 
             </param>
             <param name="value">
-		An Object that is the navigation destination for the <i>target</i>.
+		A NavigationCacheMode enumerator value that specifies the cache mode for the <i>obj</i> NavigationPage content.
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.SetNavigationHandler(System.Windows.DependencyObject,DevExpress.Xpf.WindowsUI.Navigation.INavigationHandler)">
+        <member name="P:DevExpress.Xpf.WindowsUI.NavigationPage.TopAppBar">
             <summary>
-                <para>Sets a handler for navigation events of a specific object.
+                <para>Gets of sets the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/> disposed at the top of the NavigationPage.
 </para>
             </summary>
-            <param name="target">
-		A DependencyObject whose navigation event handler is to be set.
-
-
-            </param>
-            <param name="value">
-		An INavigationHandler object that handles navigation events for the <i>obj</i> object.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.SetNavigationParameter(System.Windows.DependencyObject,System.Object)">
-            <summary>
-                <para>Sets a navigation parameter for a specific element.
-</para>
-            </summary>
-            <param name="target">
-		A DependencyObject that is the element whose navigation parameter is to be set.
-
-            </param>
-            <param name="value">
-		An Object that is the navigation parameter for the <i>target</i> element, used in navigating within application Views.
-
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.SetNavigationTarget(System.Windows.DependencyObject,System.Object)">
-            <summary>
-                <para>Sets the Navigation Frame for a specific object.
-</para>
-            </summary>
-            <param name="target">
-		A DependencyObject whose Navigation Frame is to be set.
-
-            </param>
-            <param name="value">
-		An Object that is the Navigation Frame for a specific object.
-
-            </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.AppBar">
-
-            <summary>
-                <para>Represents the bar in the Windows 8 style.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.AppBar.#ctor">
-            <summary>
-                <para>Initializes a new instance of the AppBar class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.Alignment">
-            <summary>
-                <para>Gets or sets the AppBar alignment, relative to the parent <b>FrameworkElement</b>. This is a dependency property.
-</para>
-            </summary>
-            <value>The AppBar alignment. The default value is <b>Bottom</b>.
+            <value>The <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/> disposed at the top of the NavigationPage.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.AlignmentProperty">
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationPage.TopAppBarProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
             </summary>
             <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.BackCommand">
-            <summary>
-                <para>Gets or sets a custom command invoked by the predefined <b>Back</b> button.
-</para>
-            </summary>
-            <value>A custom command invoked by the predefined <b>Back</b> button.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.BackCommandProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="E:DevExpress.Xpf.WindowsUI.AppBar.Closed">
-            <summary>
-                <para>Occurs when the AppBar changes from visible to hidden.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="E:DevExpress.Xpf.WindowsUI.AppBar.Closing">
-            <summary>
-                <para>Occurs before the AppBar is closed.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.ExitCommand">
-            <summary>
-                <para>Gets or sets a custom command invoked by the predefined <b>Exit</b> button.
-</para>
-            </summary>
-            <value>A custom command invoked by the predefined Exit button.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.ExitCommandProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.HideMode">
-            <summary>
-                <para>Gets or sets the dismissal mode that specifies whether, and if so how, the AppBar closes. This is a dependency property.
-
-</para>
-            </summary>
-            <value>An <see cref="AppBarHideMode"/> enumeration value that specifies whether, and if so how, the AppBar closes.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.HideModeProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsBackButtonEnabled">
-            <summary>
-                <para>Gets or sets whether the Back button is displayed within the AppBar.
-</para>
-            </summary>
-            <value><b>true</b>, if the Back button is displayed; otherwise, <b>false</b>. The default value is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsBackButtonEnabledProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsCompact">
-            <summary>
-                <para>Gets or sets whether buttons in the AppBar are displayed without labels and reduced spacing. This is a dependency property.
-
-</para>
-            </summary>
-            <value><b>true</b>, if buttons in the AppBar are displayed without labels and reduced spacing; otherwise, <b>false</b>. The default is <b>false</b>.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsCompactProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsExitButtonEnabled">
-            <summary>
-                <para>Gets or sets whether the Exit button is displayed in the AppBar.
-</para>
-            </summary>
-            <value><b>true</b>, if the Exit button is displayed; otherwise, <b>false</b>. The default value is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsExitButtonEnabledProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsOpen">
-            <summary>
-                <para>Gets or sets whether the AppBar is visible.
-</para>
-            </summary>
-            <value><b>true</b>, if the AppBar is visible; otherwise, <b>false</b>. The default value is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsOpenProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.IsSticky">
-            <summary>
-                <para>Gets or sets whether the AppBar remains visible when an end-user interacts with the application. This property is obsolete. Use the <see cref="P:DevExpress.Xpf.WindowsUI.AppBar.HideMode"/> property instead.
-
-</para>
-            </summary>
-            <value><b>true</b>, if the AppBar remains visible when an end-user interacts with the application; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.IsStickyProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBar.ItemSpacing">
-            <summary>
-                <para>Gets or set the distance between items in the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/>.
-</para>
-            </summary>
-            <value>The distance between items in the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/>, in pixels.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBar.ItemSpacingProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="E:DevExpress.Xpf.WindowsUI.AppBar.Opened">
-            <summary>
-                <para>Occurs when the AppBar changes from hidden to visible.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="E:DevExpress.Xpf.WindowsUI.AppBar.Opening">
-            <summary>
-                <para>Occurs before the AppBar is opened.
-</para>
-            </summary>
 
 
         </member>
@@ -5614,17 +5404,20 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.WindowsUI.NavigationFrame.GoBack(System.Object)">
             <summary>
-                <para> </para>
+                <para>Navigates back the previously visited container and passes a parameter to it.
+</para>
             </summary>
             <param name="param">
-		 
+		An Object passed to the container as a parameter.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.WindowsUI.NavigationFrame.GoBack">
             <summary>
-                <para> </para>
+                <para>Navigates back to the previously visited container.
+</para>
             </summary>
 
 
@@ -5687,16 +5480,21 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.WindowsUI.NavigationFrame.Navigate(System.Object,System.Object,System.Boolean)">
             <summary>
-                <para> </para>
+                <para>Navigates to a specific container.
+</para>
             </summary>
             <param name="source">
-		 
+		An Object that is the container to navigate to.
+
             </param>
             <param name="param">
-		 
+		An Object passed to a container as a parameter.
+
             </param>
             <param name="saveToJournal">
-		 
+		<b>true</b>, to save information about this navigation to a <see cref="T:DevExpress.Xpf.WindowsUI.Navigation.Journal"/> associated with this NavigationFrame; otherwise, <b>false</b>.
+
+
             </param>
 
 
@@ -5787,19 +5585,21 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.WindowsUI.NavigationFrame.PrefetchedSources">
             <summary>
-                <para>This is a dependency property.
+                <para>Gets or sets a list of containers to which this NavigationFrame can navigate.
 </para>
             </summary>
-            <value> </value>
+            <value>An IEnumerable object that contains objects to which this NavigationFrame can navigate.
+</value>
 
 
         </member>
         <member name="P:DevExpress.Xpf.WindowsUI.NavigationFrame.PrefetchedSourcesOptions">
             <summary>
-                <para>This is a dependency property.
+                <para>Gets or sets actions that automatically execute after a frame <see cref="P:DevExpress.Xpf.WindowsUI.NavigationFrame.PrefetchedSources"/> property is set.
 </para>
             </summary>
-            <value> </value>
+            <value>A <see cref="PrefetchedSourcesOptions"/> object that specifies actions that automatically execute after a frame <see cref="P:DevExpress.Xpf.WindowsUI.NavigationFrame.PrefetchedSources"/> property is set.
+</value>
 
 
         </member>
@@ -5838,6 +5638,628 @@ This is a dependency property.
 </para>
             </summary>
             <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.NavigationButton">
+
+            <summary>
+                <para>A button within WindowsUI application capable of navigating to a specific application screen.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.NavigationButton.#ctor">
+            <summary>
+                <para>Initializes a new instance of the NavigationButton class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.NavigationButton.NavigateTo">
+            <summary>
+                <para>Gets or sets a view to which an end-user will navigate upon clicking the current NavigationButton.
+</para>
+            </summary>
+            <value>An Object to which an end-user will navigate upon clicking the current NavigationButton.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationButton.NavigateToProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.NavigationButton.NavigationParameter">
+            <summary>
+                <para>Gets or sets the specific parameter, passed when navigating through views.
+</para>
+            </summary>
+            <value>An Object that is the specific parameter, passed when navigating through views.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationButton.NavigationParameterProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.NavigationButton.NavigationTarget">
+            <summary>
+                <para>Gets or sets the frame that manages the navigation, invoked by the current NavigationButton.
+</para>
+            </summary>
+            <value>An Object that is the <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/>, which manages the navigation invoked by the current NavigationButton.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.NavigationButton.NavigationTargetProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.NavigationButton.OnNavigateToChanged(System.Object,System.Object)">
+            <summary>
+                <para>Modifies the navigation destination for the current NavigationButton.
+</para>
+            </summary>
+            <param name="oldValue">
+		An Object that is the previous NavigationButton's navigation destination.
+
+            </param>
+            <param name="newValue">
+		An Object that is the new NavigationButton's navigation destination.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.NavigationButton.OnNavigationParameterChanged(System.Object,System.Object)">
+            <summary>
+                <para>Modifies the navigation parameter for this NavigationButton.
+</para>
+            </summary>
+            <param name="oldValue">
+		An Object that is the old navigation parameter.
+
+            </param>
+            <param name="newValue">
+		An Object that is the new navigation parameter.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.NavigationButton.OnNavigationTargetChanged(System.Object,System.Object)">
+            <summary>
+                <para>Changes the <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/> related to the current NavigationButton.
+
+</para>
+            </summary>
+            <param name="oldValue">
+		An Object that is the Frame, previously related to this NavigationButton.
+
+
+            </param>
+            <param name="newValue">
+		An Object that is the currently related to this NavigationButton Frame.
+
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.FlipViewItem">
+
+            <summary>
+                <para>An item within a <see cref="T:DevExpress.Xpf.WindowsUI.FlipView"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.FlipViewItem.#ctor">
+            <summary>
+                <para>Initializes a new instance of the FlipViewItem class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatedFrom"/> and <see cref="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatedTo"/> events.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs.#ctor(System.Object,System.Object,System.Object)">
+            <summary>
+                <para>Initializes a new instance of the NavigationEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="source">
+		An Object that points to the navigation destination for the related navigation event.
+
+            </param>
+            <param name="content">
+		An Object that is the View to which the application navigates.
+
+            </param>
+            <param name="parameter">
+		An Object that is the parameter passed to the related navigation event.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs.Content">
+            <summary>
+                <para>The View to which the application navigates.
+</para>
+            </summary>
+            <value>An Object that is the View to which the application navigates.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.WinUIDialogWindow">
+
+            <summary>
+                <para>A Windows Modern-styled dialog window.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String)">
+            <summary>
+                <para>Initializes a new instance of the WinUIDialogWindow class with the specified title.
+</para>
+            </summary>
+            <param name="title">
+		A string value that specifies the dialog's title. This value is assigned to the <see cref="P:System.Windows.Window.Title"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String,System.Windows.MessageBoxButton,System.Nullable`1,System.Nullable`1)">
+            <summary>
+                <para>Initializes a new instance of the WinUIDialogWindow class with the specified settings.
+</para>
+            </summary>
+            <param name="title">
+		A <see cref="T:System.String"/> value that specifies  the WinUIDialogWindow's title.
+
+            </param>
+            <param name="dialogButtons">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIDialogWindow.
+
+            </param>
+            <param name="defaultButton">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which dialog button is default.
+
+            </param>
+            <param name="cancelButton">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which dialog button is cancel.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String,System.Collections.Generic.IEnumerable`1)">
+            <summary>
+                <para>Initializes a new instance of the WinUIDialogWindow class with the specified settings.
+</para>
+            </summary>
+            <param name="title">
+		A <b>System.String</b> value that specifies the dialog's title.
+
+            </param>
+            <param name="commands">
+		A list of <see cref="T:DevExpress.Mvvm.UICommand"/> objects that are used to generate dialog buttons. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor">
+            <summary>
+                <para>Initializes a new instance of the WinUIDialogWindow class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Activate">
+            <summary>
+                <para>Activates the current WinUIDialogWindow.
+</para>
+            </summary>
+            <returns><b>true</b>, if the dialog is activated; otherwise, <b>false</b>.
+
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Close">
+            <summary>
+                <para>Closes the opened dialog.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Show">
+            <summary>
+                <para>Opens a dialog.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.TitleStyle">
+            <summary>
+                <para>Gets or sets the dialog title style.This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Style"/> object that represents the style of the dialog title.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.TitleStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware">
+
+            <summary>
+                <para>An interface that provides methods for navigating within a WindowsUI application.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatedFrom(DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs)">
+            <summary>
+                <para>Called automatically after an application has successfully navigated from a View that implements the INavigationAware interface.
+</para>
+            </summary>
+            <param name="e">
+		A NavigationEventArgs object that contains event data.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatedTo(DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs)">
+            <summary>
+                <para>Called automatically when an end-user navigates to a View that implements the INavigationAware interface.
+</para>
+            </summary>
+            <param name="e">
+		A NavigationEventArgs object that contains event data.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatingFrom(DevExpress.Xpf.WindowsUI.Navigation.NavigatingEventArgs)">
+            <summary>
+                <para>Called automatically when an application attempts to navigate from a View that implements the INavigationAware interface.
+</para>
+            </summary>
+            <param name="e">
+		A NavigatingEventArgs object that contains event data.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.AnimationSelector">
+
+            <summary>
+                <para>Represents a base class for objects that provide a custom logic to select a frame animation.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.AnimationSelector.#ctor">
+            <summary>
+                <para>Initializes a new instance of the AnimationSelector class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.AnimationSelector.Select(DevExpress.Xpf.WindowsUI.FrameAnimation)">
+            <summary>
+                <para>Returns a storyboard used to render a frame animation based on the specified settings.
+</para>
+            </summary>
+            <param name="animation">
+		A <b>FrameAnimation</b> object that comprises the animation settings.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.Navigation">
+
+            <summary>
+                <para>Provides members that support navigation within Windows Modern UI applications.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.#ctor">
+            <summary>
+                <para>Initializes a new instance of the Navigation class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.GetNavigateTo(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets a navigation destination for a specific element.
+</para>
+            </summary>
+            <param name="target">
+		A DependencyObject whose destination target is to be obtained.
+
+            </param>
+            <returns>An Object to which the target element navigates.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.GetNavigationHandler(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets a handler for navigation events of a specific object.
+</para>
+            </summary>
+            <param name="target">
+		A DependencyObject whose handler is to be obtained.
+
+            </param>
+            <returns>An INavigationHandler object that handles navigation events of a specific object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.GetNavigationParameter(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets the navigation parameter for a specific element.
+</para>
+            </summary>
+            <param name="target">
+		An DependencyObject that is the element whose navigation parameter is to obtained.
+
+            </param>
+            <returns>An Object that is the navigation parameter for a specific element.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.GetNavigationTarget(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets a Navigation Frame assigned to a specific object.
+</para>
+            </summary>
+            <param name="target">
+		A DependencyObject whose Navigation Target is to be obtained.
+
+            </param>
+            <returns>A NavigationFrame assigned to the <i>target</i> object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigateTo(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets or sets the navigation destination for the specific element.
+</para>
+            </summary>
+            <value>An Object that is the navigation destination for the specific element.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigateToProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationHandler(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets or sets the handler for navigation events which occur for the specific object.
+</para>
+            </summary>
+            <value>An INavigationHandler object that is the handler for navigation events which occur for the specific object.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationHandlerProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationParameter(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets or sets the specific parameter passed when navigating through Views.
+</para>
+            </summary>
+            <value>An Object that is the specific parameter passed when navigating through Views.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationParameterProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationTarget(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets or sets the <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/> that manages navigation invoked by the current element.
+</para>
+            </summary>
+            <value>The NavigationFrame that manages navigation invoked by the current element.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.Navigation.Navigation.NavigationTargetProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.SetNavigateTo(System.Windows.DependencyObject,System.Object)">
+            <summary>
+                <para>Sets the navigation destination for the specific object.
+</para>
+            </summary>
+            <param name="target">
+		A DependencyObject whose navigation destination is to be set.
+
+            </param>
+            <param name="value">
+		An Object that is the navigation destination for the <i>target</i>.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.SetNavigationHandler(System.Windows.DependencyObject,DevExpress.Xpf.WindowsUI.Navigation.INavigationHandler)">
+            <summary>
+                <para>Sets a handler for navigation events of a specific object.
+</para>
+            </summary>
+            <param name="target">
+		A DependencyObject whose navigation event handler is to be set.
+
+
+            </param>
+            <param name="value">
+		An INavigationHandler object that handles navigation events for the <i>obj</i> object.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.SetNavigationParameter(System.Windows.DependencyObject,System.Object)">
+            <summary>
+                <para>Sets a navigation parameter for a specific element.
+</para>
+            </summary>
+            <param name="target">
+		A DependencyObject that is the element whose navigation parameter is to be set.
+
+            </param>
+            <param name="value">
+		An Object that is the navigation parameter for the <i>target</i> element, used in navigating within application Views.
+
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.Navigation.SetNavigationTarget(System.Windows.DependencyObject,System.Object)">
+            <summary>
+                <para>Sets the Navigation Frame for a specific object.
+</para>
+            </summary>
+            <param name="target">
+		A DependencyObject whose Navigation Frame is to be set.
+
+            </param>
+            <param name="value">
+		An Object that is the Navigation Frame for a specific object.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs">
+
+            <summary>
+                <para>Provides base properties for navigation events in Windows Modern UI applications.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.#ctor(System.Object,System.Object)">
+            <summary>
+                <para>Initializes a new instance of the NavigationBaseEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="source">
+		An Object that points to the navigation destination for the related navigation event.
+
+            </param>
+            <param name="parameter">
+		An Object that is the parameter passed to the related navigation event.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.Parameter">
+            <summary>
+                <para>Gets the parameter passed to the related navigation event.
+</para>
+            </summary>
+            <value>An Object that is the parameter passed to the related navigation event.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.Source">
+            <summary>
+                <para>Gets the navigation destination for the related navigation event.
+</para>
+            </summary>
+            <value>An Object that points to the navigation target for the related navigation event.
+</value>
 
 
         </member>
@@ -5938,44 +6360,6 @@ This is a dependency property.
 </para>
             </summary>
             <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatedFrom"/> and <see cref="M:DevExpress.Xpf.WindowsUI.Navigation.INavigationAware.NavigatedTo"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs.#ctor(System.Object,System.Object,System.Object)">
-            <summary>
-                <para>Initializes a new instance of the NavigationEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="source">
-		An Object that points to the navigation destination for the related navigation event.
-
-            </param>
-            <param name="content">
-		An Object that is the View to which the application navigates.
-
-            </param>
-            <param name="parameter">
-		An Object that is the parameter passed to the related navigation event.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs.Content">
-            <summary>
-                <para>The View to which the application navigates.
-</para>
-            </summary>
-            <value>An Object that is the View to which the application navigates.
-</value>
 
 
         </member>
@@ -6240,34 +6624,6 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.AnimationSelector">
-
-            <summary>
-                <para>Represents a base class for objects that provide a custom logic to select a frame animation.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.AnimationSelector.#ctor">
-            <summary>
-                <para>Initializes a new instance of the AnimationSelector class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.AnimationSelector.Select(DevExpress.Xpf.WindowsUI.FrameAnimation)">
-            <summary>
-                <para>Returns a storyboard used to render a frame animation based on the specified settings.
-</para>
-            </summary>
-            <param name="animation">
-		A <b>FrameAnimation</b> object that comprises the animation settings.
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.WindowsUI.Navigation.NavigationServiceBase">
 
             <summary>
@@ -6479,55 +6835,6 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.NavigationCacheMode">
-
-            <summary>
-                <para>Provides members that specify different navigation cache modes for WPF WindowsUI applications.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationCacheMode.Disabled">
-            <summary>
-                <para>Content caching disabled. A new instance of a View (screen) is created on each display.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationCacheMode.Enabled">
-            <summary>
-                <para>The content is cached until the frame's cache size is exceeded (see the <see cref="P:DevExpress.Xpf.WindowsUI.NavigationFrame.NavigationCacheMaxSize"/> property).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.NavigationCacheMode.Required">
-            <summary>
-                <para>The content is always cached and its cached instance is reused for each display. The frame's cache size is ignored.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.FlipViewItem">
-
-            <summary>
-                <para>An item within a <see cref="T:DevExpress.Xpf.WindowsUI.FlipView"/>.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.FlipViewItem.#ctor">
-            <summary>
-                <para>Initializes a new instance of the FlipViewItem class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.WindowsUI.MenuFlyoutSeparator">
 
             <summary>
@@ -6620,9 +6927,11 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.WindowsUI.FlipView.ItemSizeMode">
             <summary>
-                <para> </para>
+                <para>Specifies the mode according to which this FlipView sizes its child items.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="ItemSizeMode"/> object that specifies the sizing mode.
+</value>
 
 
         </member>
@@ -6727,6 +7036,30 @@ This is a dependency property.
 </para>
             </summary>
             <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Controls.BackwardNavigation">
+
+            <summary>
+                <para>Lists values that specify the backward navigation logic.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Controls.BackwardNavigation.Default">
+            <summary>
+                <para>An end-user will navigate to the previous visited page, when clicking the Back button.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Controls.BackwardNavigation.PageOrder">
+            <summary>
+                <para>An end-user will navigate to the previous page according the page order in the pages collection when clicking the Back button.
+</para>
+            </summary>
 
 
         </member>
@@ -7218,79 +7551,65 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.AppBarToggleButton">
+        <member name="T:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions">
 
             <summary>
-                <para>Represents the toggle button in the <see cref="T:DevExpress.Xpf.WindowsUI.AppBar"/>.
+                <para>Enumerates actions that automatically execute when a <see cref="T:DevExpress.Xpf.WindowsUI.NavigationFrame"/> receives a list of containers that this frame can navigate to by calling the <see cref="M:DevExpress.Xpf.WindowsUI.NavigationFrame.GoBack"/> and <see cref="M:DevExpress.Xpf.WindowsUI.NavigationFrame.GoForward"/> methods.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.AppBarToggleButton.#ctor">
+        <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.ClearNavigationCache">
             <summary>
-                <para>Initializes a new instance of the AppBarToggleButton class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="E:DevExpress.Xpf.WindowsUI.AppBarToggleButton.Checked">
-            <summary>
-                <para>Occurs when the AppBarToggleButton is checked.
+                <para>Clears navigation cache.
 </para>
             </summary>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBarToggleButton.GroupName">
+        <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.ClearNavigationHistory">
             <summary>
-                <para>Gets or sets the name of the group of mutually exclusive toggle buttons to which the current button belongs. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> value specifying the name of the mutually exclusive toggle button group to which the current button belongs.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBarToggleButton.GroupNameProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.AppBarToggleButton.IsChecked">
-            <summary>
-                <para>Gets or sets whether the AppBarToggleButton is checked.
-</para>
-            </summary>
-            <value><b>true</b>, if the AppBarToggleButton is checked; otherwise, <b>false</b>. Default value is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.AppBarToggleButton.IsCheckedProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.AppBarToggleButton.OnApplyTemplate">
-            <summary>
-                <para>Called after the template is completely generated and attached to the visual tree.
+                <para>Clears navigation history.
 </para>
             </summary>
 
 
         </member>
-        <member name="E:DevExpress.Xpf.WindowsUI.AppBarToggleButton.Unchecked">
+        <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.NavigateToFirstElement">
             <summary>
-                <para>Occurs when the AppBarToggleButton is unchecked.
+                <para>Navigates to the first container element.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.PrefetchedSourcesOptions.None">
+            <summary>
+                <para>No additional options.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.ItemSizeMode">
+
+            <summary>
+                <para> </para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.ItemSizeMode.Auto">
+            <summary>
+                <para>Items scale according to their original size.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.ItemSizeMode.Stretch">
+            <summary>
+                <para>Items stretch to fit the actual container size.
 </para>
             </summary>
 
@@ -7325,280 +7644,6 @@ This is a dependency property.
                 <para>If there is not enough space to display page headers, the container displays buttons that allow end-users to scroll through all available headers.
 </para>
             </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Controls.WizardService">
-
-            <summary>
-                <para>Allows you to use the <see cref="T:DevExpress.Xpf.Controls.Wizard"/> control in compliance with MVVM.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Controls.WizardService.#ctor">
-            <summary>
-                <para>Initializes a new instance of the WizardService class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Controls.WizardService.GoBack(System.Object)">
-            <summary>
-                <para>Navigates back to the previous wizard page. 
-</para>
-            </summary>
-            <param name="parameter">
-		An object that specifies the navigation parameter for the current navigation. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Controls.WizardService.GoForward(System.Object)">
-            <summary>
-                <para>Navigates forward to the next wizard page. 
-</para>
-            </summary>
-            <param name="parameter">
-		An object that specifies the navigation parameter for the current navigation.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Controls.WizardService.Navigate(System.String,System.Object,System.Object,System.Object)">
-            <summary>
-                <para>Performs navigation to the target View.
-</para>
-            </summary>
-            <param name="viewType">
-		A <b>System.String</b> value that specifies the name of the target View type. 
-
-            </param>
-            <param name="viewModel">
-		An object specifying the ViewModel of the target View. 
-
-            </param>
-            <param name="parameter">
-		A parameter for passing data to the target ViewModel. 
-
-            </param>
-            <param name="parentViewModel">
-		The parent ViewModel for building a parent-child view model relationship. 
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplate">
-            <summary>
-                <para> </para>
-            </summary>
-            <value> </value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateProperty">
-            <summary>
-                <para> </para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateSelector">
-            <summary>
-                <para> </para>
-            </summary>
-            <value> </value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateSelectorProperty">
-            <summary>
-                <para> </para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Controls.WizardService.Wizard">
-            <summary>
-                <para>Gets or sets the wizard that is used by the service. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Controls.Wizard"/> object.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Controls.WizardService.WizardProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Controls.BackwardNavigation">
-
-            <summary>
-                <para>Lists values that specify the backward navigation logic.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Controls.BackwardNavigation.Default">
-            <summary>
-                <para>An end-user will navigate to the previous visited page, when clicking the Back button.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Controls.BackwardNavigation.PageOrder">
-            <summary>
-                <para>An end-user will navigate to the previous page according the page order in the pages collection when clicking the Back button.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Navigation.TileNavItem">
-
-            <summary>
-                <para>Represents a navigation element on the second level of the <see cref="T:DevExpress.Xpf.Navigation.TileNavPane"/> navigation hierarchy.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileNavItem.#ctor">
-            <summary>
-                <para>Initializes a new instance of the TileNavItem class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.HasItems">
-            <summary>
-                <para>Gets whether the <see cref="P:DevExpress.Xpf.Navigation.TileNavItem.Items"/> collection of the current TileNavItem is not empty.
-</para>
-            </summary>
-            <value><b>true</b>, if the <see cref="P:DevExpress.Xpf.Navigation.TileNavItem.Items"/> collection is not empty; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.HasItemsProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.Items">
-            <summary>
-                <para>Provides access to the collection of sub-items that belong to the current TileNavItem. This is a dependency property.
-</para>
-            </summary>
-            <value>A <b>TileNavSubItemCollection</b> object representing a collection of <b>TileNavSubItem</b> objects.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemsProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.ItemsSource">
-            <summary>
-                <para>Gets or sets an object that provides information to generate and initialize sub-items for the current TileNavItem. This is a dependency property.
-</para>
-            </summary>
-            <value>An Object that provides information to generate and initialize sub-items for the current TileNavItem. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemsSourceProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.ItemStyle">
-            <summary>
-                <para>Gets or sets the style applied to a child items of the current TileNavItem object. 
-
-
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A Style object providing corresponding style settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemStyleProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.ItemTemplate">
-            <summary>
-                <para>Gets or sets the template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavItem.ItemsSource"/> collection.
- This is a dependency property. 
-</para>
-            </summary>
-            <value>A DataTemplate object that specifies the corresponding template.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavItem.ItemTemplateSelector">
-            <summary>
-                <para>Gets or sets an object that chooses a template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavItem.ItemsSource"/> collection.
- This is a dependency property. 
-</para>
-            </summary>
-            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavItem.ItemTemplateSelectorProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
 
 
         </member>

@@ -125,520 +125,6 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.DockControllerBase">
-
-            <summary>
-                <para>The base class for DockControllers that provide methods to perform docking operations on panels.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.#ctor(DevExpress.Xpf.Docking.DockLayoutManager)">
-            <summary>
-                <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Docking.DockController"/> class with the specified <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/>.
-</para>
-            </summary>
-            <param name="container">
-		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object, whose dock functionality will be controlled by the created DockController. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Activate(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Activates the specified item. 
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to be activated.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Activate(DevExpress.Xpf.Docking.BaseLayoutItem,System.Boolean)">
-            <summary>
-                <para>Activates the specified item.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> descendant to be activated. 
-
-            </param>
-            <param name="focus">
-		<b>true</b>, to move focus to the item; otherwise, <b>false</b>. 
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.DockControllerBase.ActiveItem">
-            <summary>
-                <para>Gets or sets the active item.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object which is the active item.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentGroup(DevExpress.Xpf.Layout.Core.DockType)">
-            <summary>
-                <para>Creates a <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>, and docks it to the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container (root group). 
-</para>
-            </summary>
-            <param name="type">
-		A <see cref="T:DevExpress.Xpf.Layout.Core.DockType"/> value that specifies the side of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container where the DocumentGroup is docked. 
-
-            </param>
-            <returns>The created  <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> object.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentPanel(DevExpress.Xpf.Docking.DocumentGroup)">
-            <summary>
-                <para>Adds a new <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to the specified <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>.
-</para>
-            </summary>
-            <param name="group">
-		A <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> object to which a new panel is added.
-
-            </param>
-            <returns>The created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentPanel(System.Windows.Point,System.Windows.Size)">
-            <summary>
-                <para>Adds an empty floating <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
-
-</para>
-            </summary>
-            <param name="floatLocation">
-		A <see cref="T:System.Windows.Point"/> object specifying the position of the left top corner of the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
-
-
-            </param>
-            <param name="floatSize">
-		A <see cref="T:System.Windows.Size"/> object specifying the height and width of the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
-
-
-            </param>
-            <returns>The created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentPanel(System.Windows.Point,System.Windows.Size,System.Uri)">
-            <summary>
-                <para>Adds a new floating <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> and loads the contents of a Window, Page or UserControl defined in the specified XAML into the <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
-
-</para>
-            </summary>
-            <param name="floatLocation">
-		A <see cref="T:System.Windows.Point"/> object specifying a position of the left top corner of the created DocumentPanel.
-
-
-            </param>
-            <param name="floatSize">
-		A <see cref="T:System.Windows.Size"/> object specifying the height and width of the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
-
-
-            </param>
-            <param name="uri">
-		A <see cref="T:System.Uri"/> object specifying the uniform resource identifier (URI) of the XAML that defines a Window, Page or UserControl to be loaded into the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>.
-
-            </param>
-            <returns>The created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentPanel(DevExpress.Xpf.Docking.DocumentGroup,System.Uri)">
-            <summary>
-                <para>Adds a new <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to the specified DocumentGroup and loads the contents of a Window, Page or UserControl defined in the specified XAML into the <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
-
-</para>
-            </summary>
-            <param name="group">
-		A <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> object to which a new <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is added. 
-
-            </param>
-            <param name="uri">
-		The uniform resource identifier (URI) of the XAML that defines a Window, Page or UserControl to be loaded into the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
-
-            </param>
-            <returns>The created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddItem(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Layout.Core.DockType)">
-            <summary>
-                <para>Adds a newly created item to the specified target item. This member supports the internal infrastructure, and is not intended to be used directly from your code. 
-
-</para>
-            </summary>
-            <param name="item">
-		A newly created item to be docked to another item. 
-
-            </param>
-            <param name="target">
-		An item to be docked to. 
-
-            </param>
-            <param name="type">
-		A DockType value that specifies the dock type. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddPanel(System.Windows.Point,System.Windows.Size)">
-            <summary>
-                <para>Creates a floating panel with the specified size and displays it at the specified location. 
-
-</para>
-            </summary>
-            <param name="floatLocation">
-		A Point structure that specifies the position at which the panel is displayed. The position is relative to the top left corner of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container (root group). 
-
-            </param>
-            <param name="floatSize">
-		A Size structure that specifies the created panel's size. 
-
-            </param>
-            <returns>The created <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> object. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddPanel(DevExpress.Xpf.Layout.Core.DockType)">
-            <summary>
-                <para>Creates a <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> and docks it at the specified side of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container (root group). 
-</para>
-            </summary>
-            <param name="type">
-		A DockType value that specifies the side of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container where the <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> is docked. 
-
-            </param>
-            <returns>The created <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> object. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Close(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Closes the specified item.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to be closed. 
-
-            </param>
-            <returns><b>true</b>, if the item is successfully closed; otherwise, <b>false</b>.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.CloseAllButThis(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Closes all items except the specified one within this item's container. 
-
-</para>
-            </summary>
-            <param name="item">
-		The only <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> element to remain opened within its parent container. 
-
-            </param>
-            <returns><b>true </b>, if all but the specified items were successfully closed; otherwise, <b>false</b>. 
-
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.DockControllerBase.Container">
-            <summary>
-                <para>Gets the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container whose dock functionality is controlled by the current DockController. 
-
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object. 
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.CreateCommand``1(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Creates the specified dock command for the specified item/pane. 
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> descendant with which the created command is associated.
-
-            </param>
-            <returns>The created command. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.CreateNewDocumentGroup(DevExpress.Xpf.Docking.DocumentPanel,System.Windows.Controls.Orientation)">
-            <summary>
-                <para>Creates a new <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> and moves the specified <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to it. 
-
-</para>
-            </summary>
-            <param name="document">
-		A <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to be added to the created group.
-
-            </param>
-            <param name="orientation">
-		A <see cref="T:System.Windows.Controls.Orientation"/> value that specifies whether the created <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> is positioned on the right or bottom of the DocumentPanel's previous group. 
-
-            </param>
-            <returns><b>true </b>, if a <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> has been created; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.CreateNewDocumentGroup(DevExpress.Xpf.Docking.LayoutPanel,System.Windows.Controls.Orientation)">
-            <summary>
-                <para>Creates a new <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> and moves the specified <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> to it. 
-
-</para>
-            </summary>
-            <param name="document">
-		A <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> to be added to the created group.
-
-            </param>
-            <param name="orientation">
-		A <see cref="T:System.Windows.Controls.Orientation"/> value that specifies whether the created <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> is positioned on the right or bottom of the DocumentPanel's previous group. 
-
-            </param>
-            <returns><b>true </b>, if a <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> has been created; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Dock(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Layout.Core.DockType)">
-            <summary>
-                <para>Docks the first item to the second item using the specified dock type.
-</para>
-            </summary>
-            <param name="item">
-		The item to be docked. 
-
-            </param>
-            <param name="target">
-		The item to which the first item is docked. 
-
-            </param>
-            <param name="type">
-		A DockType value that specifies how the first item is docked. 
-
-            </param>
-            <returns><b>true </b>, if the item has been successfully docked; otherwise, <b>false</b>.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Dock(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Docks the specified item. This method is in effect for newly created, floating, auto-hidden or closed(hidden) items.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to be docked. 
-
-            </param>
-            <returns><b>true </b>, if the item has been successfully docked; otherwise, <b>false</b>.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Float(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Makes the specified item floating. 
-
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that shall be made floating.
-
-
-            </param>
-            <returns>A <see cref="T:DevExpress.Xpf.Docking.FloatGroup"/> object that when created, displays the item in the floating state.
-
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Hide(DevExpress.Xpf.Docking.BaseLayoutItem,System.Windows.Controls.Dock)">
-            <summary>
-                <para>Enables the auto-hide functionality for the item/panel and hides it at the specified edge of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to which the auto-hide feature is applied. 
-
-            </param>
-            <param name="dock">
-		A <see cref="T:System.Windows.Controls.Dock"/> value that specifies the side of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container where the panel is hidden.
-
-            </param>
-            <returns><b>true</b>, if the auto-hide functionality has been enabled for the item/pane; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Hide(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.AutoHideGroup)">
-            <summary>
-                <para>Enables the auto-hide functionality for the item/panel and hides it within the specified <see cref="T:DevExpress.Xpf.Docking.AutoHideGroup"/> group. 
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to which the auto-hide feature is applied. 
-
-            </param>
-            <param name="target">
-		An <see cref="T:DevExpress.Xpf.Docking.AutoHideGroup"/> object where the panel is hidden. 
-
-            </param>
-            <returns><b>true</b>, if the auto-hide functionality has been enabled for the item/pane; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Hide(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Enables the auto-hide functionality for the item/panel and hides it at a corresponding edge of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to which the auto-hide feature is applied. 
-
-            </param>
-            <returns><b>true</b>, if the auto-hide functionality has been enabled for the item/pane; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Insert(DevExpress.Xpf.Docking.LayoutGroup,DevExpress.Xpf.Docking.BaseLayoutItem,System.Int32)">
-            <summary>
-                <para>Inserts the specified item into the specified group at a specific position. 
-
-</para>
-            </summary>
-            <param name="group">
-		A <see cref="T:DevExpress.Xpf.Docking.LayoutGroup"/> into which the specified item is inserted.
-
-            </param>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to be inserted into the group.
-
-            </param>
-            <param name="index">
-		An integer value that specifies the position among the group's children at which the item must be inserted. 
-
-            </param>
-            <returns><b>true </b>, if the item has been inserted into the group; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.MoveToDocumentGroup(DevExpress.Xpf.Docking.DocumentPanel,System.Boolean)">
-            <summary>
-                <para>Moves the specified <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to the previous or next <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>. 
-</para>
-            </summary>
-            <param name="document">
-		A <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object to be moved to another <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>.
-
-            </param>
-            <param name="next">
-		<b>true </b>to move the panel to the next <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>; <b>false </b>to move the panel to the previous <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>. 
-
-            </param>
-            <returns><b>true</b>, if the <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> has been moved to another <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.MoveToDocumentGroup(DevExpress.Xpf.Docking.LayoutPanel,System.Boolean)">
-            <summary>
-                <para>Moves the specified <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> to the previous or next <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>. 
-</para>
-            </summary>
-            <param name="document">
-		A <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> object to be moved to another <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>.
-
-            </param>
-            <param name="next">
-		<b>true</b> to move the panel to the next <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>; <b>false</b> to move the panel to the previous <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>. 
-
-            </param>
-            <returns><b>true </b>, if the <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> has been moved to another <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.RemoveItem(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Removes the specified item. This member supports the internal infrastructure, and is not intended to be used directly from your code. 
-
-</para>
-            </summary>
-            <param name="item">
-		An item to be removed. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.RemovePanel(DevExpress.Xpf.Docking.LayoutPanel)">
-            <summary>
-                <para>Removes any connection of the specified panel with the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/>.
-</para>
-            </summary>
-            <param name="panel">
-		The <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> object that is removed from the DockLayoutManager. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Rename(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Starts dock item renaming. 
-
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to be renamed. 
-
-            </param>
-            <returns><b>true </b>, if item renaming has been initiated; otherwise, <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Restore(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Restores a closed (hidden) panel at its previous dock position.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to be restored.
-
-            </param>
-            <returns>A Boolean value that indicates that the panel has been restored successfully. 
-</returns>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Docking.AutoHideType">
 
             <summary>
@@ -736,30 +222,6 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventHandler">
-
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomizationChanged"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs)">
-            <summary>
-                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomizationChanged"/> event.
-</para>
-            </summary>
-            <param name="sender">
-		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
-
-            </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs"/> object that represents data for the event.
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Docking.MDIStyle">
 
             <summary>
@@ -792,33 +254,140 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs">
+        <member name="T:DevExpress.Xpf.Docking.MDIState">
 
             <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomizationChanged"/> event.
+                <para>Enumerates available states for panels in a <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> in MDI mode.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs.#ctor(System.Boolean)">
+        <member name="F:DevExpress.Xpf.Docking.MDIState.Maximized">
             <summary>
-                <para>Initializes a new instance of the IsCustomizationChangedEventArgs class with the specified settings.
+                <para>A child MDI window is maximized.
 </para>
             </summary>
-            <param name="newValue">
-		A new value of the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomization"/> property.
-
-            </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs.Value">
+        <member name="F:DevExpress.Xpf.Docking.MDIState.Minimized">
             <summary>
-                <para>Gets the new value of the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomization"/> property.
+                <para>A child MDI window is minimized.
 </para>
             </summary>
-            <value>A Boolean value that specifies the new value of the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomization"/> property.
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.MDIState.Normal">
+            <summary>
+                <para>A child MDI window is in its normal state.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.ContentItem">
+
+            <summary>
+                <para>An abstract class for objects capable of displaying content.
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.ContentItem.Content">
+            <summary>
+                <para>Gets or sets the item's content. This is a dependency property.
+</para>
+            </summary>
+            <value>An object that specifies the item's content.
 </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.ContentItem.ContentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.ContentItem.ContentTemplate">
+            <summary>
+                <para>Gets or sets the template used to display the item's <see cref="P:DevExpress.Xpf.Docking.ContentItem.Content"/>. This is a dependency property.
+</para>
+            </summary>
+            <value>The corresponding data template. The default is a null reference (Nothing in Visual Basic). 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.ContentItem.ContentTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.ContentItem.ContentTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses the item's <see cref="P:DevExpress.Xpf.Docking.ContentItem.ContentTemplate"/> based on custom logic.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that chooses a template based on custom logic. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.ContentItem.ContentTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.ContentItem.FocusContentOnActivating">
+            <summary>
+                <para>Gets or sets whether the ContentItem's content should be focused on ContentItem activation.
+
+</para>
+            </summary>
+            <value><b>true</b>, if the ContentItem's content should be focused on ContentItem activation; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.ContentItem.FocusContentOnActivatingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.ContentItem.IsDataBound">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.ContentItem.IsDataBoundProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
 
 
         </member>
@@ -910,6 +479,70 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationStarting"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.DockOperation)">
+            <summary>
+                <para>Initializes a new instance of the DockOperationStartingEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> that raised the event.
+
+            </param>
+            <param name="dockOperation">
+		A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the current operation type.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.DockOperation)">
+            <summary>
+                <para>Initializes a new instance of the DockOperationStartingEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> that raised the event.
+
+            </param>
+            <param name="dockTarget">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to which an <i>item</i> is to be docked.
+
+            </param>
+            <param name="dockOperation">
+		A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the current operation type.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs.DockOperation">
+            <summary>
+                <para>Gets the type of an operation that is processed within the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationStarting"/> event.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the docking operation type.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs.DockTarget">
+            <summary>
+                <para>Gets a Dock Item to which the current Dock Item is to be docked.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to which the current Dock Item is to be docked.
+</value>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Docking.Base.DockOperationCompletedEventHandler">
 
             <summary>
@@ -934,27 +567,37 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.ShowingMenuEventHandler">
+        <member name="T:DevExpress.Xpf.Docking.Base.DockOperationCompletedEventArgs">
 
             <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.ShowingMenu"/> event.
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationCompleted"/> event.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.ShowingMenuEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.ShowingMenuEventArgs)">
+        <member name="M:DevExpress.Xpf.Docking.Base.DockOperationCompletedEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.DockOperation)">
             <summary>
-                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.ShowingMenu"/> event.
+                <para>Initializes a new instance of the DockOperationCompletedEventArgs class with the specified settings.
 </para>
             </summary>
-            <param name="sender">
-		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to which a dock operation was applied.
 
             </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.Docking.Base.ShowingMenuEventArgs"/> object that represents data for the event.
+            <param name="dockOperation">
+		A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the current operation type.
 
             </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.DockOperationCompletedEventArgs.DockOperation">
+            <summary>
+                <para>Gets the type of an operation that is processed within the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationCompleted"/> event.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the type of an operation that is processed within the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationCompleted"/> event.
+</value>
 
 
         </member>
@@ -1033,43 +676,313 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility">
+        <member name="T:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventHandler">
 
             <summary>
-                <para>Contains values that specify the visibility state of the Closed Panels bar, used to access closed panels.
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomizationChanged"/> event.
 </para>
             </summary>
 
         </member>
-        <member name="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Auto">
+        <member name="M:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs)">
             <summary>
-                <para>The Closed Panels bar is made visible if any closed panel exists. It's possible to hide and then restore the bar via a context menu.
+                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomizationChanged"/> event.
 </para>
             </summary>
+            <param name="sender">
+		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs"/> object that represents data for the event.
+
+            </param>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Default">
+        <member name="T:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs">
+
             <summary>
-                <para>The same as the <see cref="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Manual"/> option.
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomizationChanged"/> event.
 </para>
             </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs.#ctor(System.Boolean)">
+            <summary>
+                <para>Initializes a new instance of the IsCustomizationChangedEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="newValue">
+		A new value of the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomization"/> property.
+
+            </param>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Manual">
+        <member name="P:DevExpress.Xpf.Docking.Base.IsCustomizationChangedEventArgs.Value">
             <summary>
-                <para>The Closed Panels bar is visible if an end-user enabled it via a context menu.
+                <para>Gets the new value of the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomization"/> property.
 </para>
             </summary>
+            <value>A Boolean value that specifies the new value of the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.IsCustomization"/> property.
+</value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Never">
+        <member name="T:DevExpress.Xpf.Docking.Base.ShowingMenuEventHandler">
+
             <summary>
-                <para>The Closed Panels bar is always hidden and cannot be made visible via a context menu.
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.ShowingMenu"/> event.
 </para>
             </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.ShowingMenuEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.ShowingMenuEventArgs)">
+            <summary>
+                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.ShowingMenu"/> event.
+</para>
+            </summary>
+            <param name="sender">
+		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.Docking.Base.ShowingMenuEventArgs"/> object that represents data for the event.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.ShowingMenuEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.ShowingMenu"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.ShowingMenuEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutElementMenu)">
+            <summary>
+                <para>Initializes a new instance of the ShowingMenuEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="menu">
+		A BaseLayoutElementMenu object that represents the menu to be displayed.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventHandler">
+
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSizeChanged"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs)">
+            <summary>
+                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSizeChanged"/> event.
+</para>
+            </summary>
+            <param name="sender">
+		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs"/> object that represents data for the event.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSizeChanged"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,System.Boolean,System.Windows.GridLength,System.Windows.GridLength)">
+            <summary>
+                <para>Initializes a new instance of the LayoutItemSizeChangedEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the current item.
+
+            </param>
+            <param name="isWidth">
+		A Boolean value that specifies whether the item's width has been changed.
+
+            </param>
+            <param name="value">
+		A new value of the item's width/height.
+
+            </param>
+            <param name="prevValue">
+		The previous value of the item's width/height.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.HeightChanged">
+            <summary>
+                <para>Gets whether the item's height has been changed.
+</para>
+            </summary>
+            <value><b>true</b> if the item's height has been changed; <b>false</b> if the item's width has been changed.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.PrevValue">
+            <summary>
+                <para>Gets the previous value of the item's width/height.
+</para>
+            </summary>
+            <value>A GridLength value that specifies the item's previous width/height.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.Value">
+            <summary>
+                <para>Gets the current value of the item's width/height.
+</para>
+            </summary>
+            <value>A GridLength value that specifies the item's new width/height.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.WidthChanged">
+            <summary>
+                <para>Gets whether the item's width has been changed.
+</para>
+            </summary>
+            <value><b>true</b> if the item's width has been changed; <b>false</b> if the item's height has been changed.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventHandler">
+
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanging"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs)">
+            <summary>
+                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanging"/> event.
+</para>
+            </summary>
+            <param name="sender">
+		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs"/> object that represents data for the event.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanging"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,System.Boolean)">
+            <summary>
+                <para>Initializes a new instance of the LayoutItemSelectionChangingEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the current item.
+
+            </param>
+            <param name="selected">
+		A Boolean value that specifies whether the item is selected.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs.Selected">
+            <summary>
+                <para>Gets whether the item is selected.
+</para>
+            </summary>
+            <value><b>true</b> if the item is selected; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventHandler">
+
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanged"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs)">
+            <summary>
+                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanged"/> event.
+</para>
+            </summary>
+            <param name="sender">
+		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs"/> object that represents data for the event.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanged"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,System.Boolean)">
+            <summary>
+                <para>Initializes a new instance of the LayoutItemSelectionChangedEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the current item.
+
+            </param>
+            <param name="selected">
+		A Boolean value that specifies whether the item is selected.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs.Selected">
+            <summary>
+                <para>Gets whether the item is selected.
+</para>
+            </summary>
+            <value><b>true</b> if the item is selected; otherwise, <b>false</b>.
+</value>
 
 
         </member>
@@ -1139,6 +1052,54 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
 		A <see cref="T:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs"/> object that represents data for the event.
 
             </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemMoved"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Layout.Core.MoveType)">
+            <summary>
+                <para>Initializes a new instance of the LayoutItemMovedEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the currently processed item.
+
+            </param>
+            <param name="target">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the item next to which the current item is inserted.
+
+            </param>
+            <param name="type">
+		A MoveType value that specifies how the current item is moved.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs.Target">
+            <summary>
+                <para>Gets the item next to which the current item (<see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/>) is inserted.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that identifies the item next to which the current item (<see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/>) is inserted. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs.Type">
+            <summary>
+                <para>Gets how the current item is inserted next to the target item.
+</para>
+            </summary>
+            <value>A MoveType value that specifies how the current item is inserted next to the target item.
+</value>
 
 
         </member>
@@ -1753,7 +1714,7 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
         <member name="T:DevExpress.Xpf.Docking.CaptionAlignMode">
 
             <summary>
-                <para>Enumerates the options that specify how the controls, displayed with the help of <see cref="T:DevExpress.Xpf.Docking.LayoutControlItem"/>s, are aligned, and the corresponding labels are resized. 
+                <para>Enumerates the options that specify how the controls and their captions are aligned within the layout items.
 
 </para>
             </summary>
@@ -1769,7 +1730,7 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
         </member>
         <member name="F:DevExpress.Xpf.Docking.CaptionAlignMode.AutoSize">
             <summary>
-                <para>The auto-size feature is enabled. The captions of <see cref="T:DevExpress.Xpf.Docking.LayoutControlItem"/>s are automatically resized to the minimum width that allows the text to be displayed in its entirety. 
+                <para>The auto-size feature is enabled. The captions of <see cref="T:DevExpress.Xpf.Docking.LayoutControlItem"/>s are automatically resized to the minimum width that allows to display text without wrapping. 
 </para>
             </summary>
 
@@ -2236,26 +2197,6 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.ShowingMenuEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.ShowingMenu"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.ShowingMenuEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutElementMenu)">
-            <summary>
-                <para>Initializes a new instance of the ShowingMenuEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="menu">
-		A BaseLayoutElementMenu object that represents the menu to be displayed.
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Docking.DockingDocumentUIService">
 
             <summary>
@@ -2338,6 +2279,146 @@ This is a dependency property.
 </para>
             </summary>
             <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.FloatingMode">
+
+            <summary>
+                <para>Contains values that specify how floating panels can be dragged.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.FloatingMode.Desktop">
+            <summary>
+                <para>Floating panels are allowed to be dragged throughout the desktop.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.FloatingMode.Window">
+            <summary>
+                <para>Floating panels are allowed to be dragged only within the current window.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility">
+
+            <summary>
+                <para>Contains values that specify the visibility state of the Closed Panels bar, used to access closed panels.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Auto">
+            <summary>
+                <para>The Closed Panels bar is made visible if any closed panel exists. It's possible to hide and then restore the bar via a context menu.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Default">
+            <summary>
+                <para>The same as the <see cref="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Manual"/> option.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Manual">
+            <summary>
+                <para>The Closed Panels bar is visible if an end-user enabled it via a context menu.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.Base.ClosedPanelsBarVisibility.Never">
+            <summary>
+                <para>The Closed Panels bar is always hidden and cannot be made visible via a context menu.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.ItemEventArgs">
+
+            <summary>
+                <para>Provides data for the events used to process specific docking operations on items.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.ItemEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Initializes a new instance of the ItemEventArgs class with the specified item.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object being processed. This value is used to initialize the <see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item">
+            <summary>
+                <para>Gets the currently processed item.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object being currently processed.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs">
+
+            <summary>
+                <para>Provides data for the events that can be handled to prevent specific docking operations.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs.#ctor(System.Boolean,DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Initializes a new instance of the ItemCancelEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="cancel">
+		A Boolean value used to initialize the <see cref="P:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs.Cancel"/> property.
+
+            </param>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object being processed. This value is used to initialize the <see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Initializes a new instance of the ItemCancelEventArgs class with the specified item.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object being processed. This value is assigned to the <see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs.Cancel">
+            <summary>
+                <para>Gets or sets whether the current operation must be canceled.
+</para>
+            </summary>
+            <value><b>true</b> if the current operation must be canceled; otherwise, <b>false</b>.
+</value>
 
 
         </member>
@@ -2442,202 +2523,6 @@ This is a dependency property.
 </para>
             </summary>
             <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventHandler">
-
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSizeChanged"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs)">
-            <summary>
-                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSizeChanged"/> event.
-</para>
-            </summary>
-            <param name="sender">
-		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
-
-            </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs"/> object that represents data for the event.
-
-            </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSizeChanged"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,System.Boolean,System.Windows.GridLength,System.Windows.GridLength)">
-            <summary>
-                <para>Initializes a new instance of the LayoutItemSizeChangedEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the current item.
-
-            </param>
-            <param name="isWidth">
-		A Boolean value that specifies whether the item's width has been changed.
-
-            </param>
-            <param name="value">
-		A new value of the item's width/height.
-
-            </param>
-            <param name="prevValue">
-		The previous value of the item's width/height.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.HeightChanged">
-            <summary>
-                <para>Gets whether the item's height has been changed.
-</para>
-            </summary>
-            <value><b>true</b> if the item's height has been changed; <b>false</b> if the item's width has been changed.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.PrevValue">
-            <summary>
-                <para>Gets the previous value of the item's width/height.
-</para>
-            </summary>
-            <value>A GridLength value that specifies the item's previous width/height.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.Value">
-            <summary>
-                <para>Gets the current value of the item's width/height.
-</para>
-            </summary>
-            <value>A GridLength value that specifies the item's new width/height.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSizeChangedEventArgs.WidthChanged">
-            <summary>
-                <para>Gets whether the item's width has been changed.
-</para>
-            </summary>
-            <value><b>true</b> if the item's width has been changed; <b>false</b> if the item's height has been changed.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.FloatingMode">
-
-            <summary>
-                <para>Contains values that specify how floating panels can be dragged.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.FloatingMode.Desktop">
-            <summary>
-                <para>Floating panels are allowed to be dragged throughout the desktop.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.FloatingMode.Window">
-            <summary>
-                <para>Floating panels are allowed to be dragged only within the current window.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.ItemEventArgs">
-
-            <summary>
-                <para>Provides data for the events used to process specific docking operations on items.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.ItemEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Initializes a new instance of the ItemEventArgs class with the specified item.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object being processed. This value is used to initialize the <see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item">
-            <summary>
-                <para>Gets the currently processed item.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object being currently processed.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs">
-
-            <summary>
-                <para>Provides data for the events that can be handled to prevent specific docking operations.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs.#ctor(System.Boolean,DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Initializes a new instance of the ItemCancelEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="cancel">
-		A Boolean value used to initialize the <see cref="P:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs.Cancel"/> property.
-
-            </param>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object being processed. This value is used to initialize the <see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem)">
-            <summary>
-                <para>Initializes a new instance of the ItemCancelEventArgs class with the specified item.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object being processed. This value is assigned to the <see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.ItemCancelEventArgs.Cancel">
-            <summary>
-                <para>Gets or sets whether the current operation must be canceled.
-</para>
-            </summary>
-            <value><b>true</b> if the current operation must be canceled; otherwise, <b>false</b>.
-</value>
 
 
         </member>
@@ -4261,6 +4146,22 @@ This is a dependency property.
 
 
         </member>
+        <member name="P:DevExpress.Xpf.Docking.DockLayoutManager.CloseFloatWindowsOnManagerUnloading">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockLayoutManager.CloseFloatWindowsOnManagerUnloadingProperty">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="M:DevExpress.Xpf.Docking.DockLayoutManager.CloseMenu">
             <summary>
                 <para>Closes the active context menu.
@@ -4953,7 +4854,7 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Docking.DockLayoutManager.IsSynchronizedWithCurrentItem">
             <summary>
-                <para>Gets or sets if a DockLayoutManager is synchronized with the currently selected child item.
+                <para>Gets or sets whether the DockLayoutManager synchronizes its the currently selected child item with the current item in the System.ComponentModel.ICollectionView assigned to the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.ItemsSource"/>. This is a dependency property.
 </para>
             </summary>
             <value><b>true</b> if a DockLayoutManager is synchronized with the currently selected child item; otherwise, <b>false</b>.
@@ -5841,40 +5742,6 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanging"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,System.Boolean)">
-            <summary>
-                <para>Initializes a new instance of the LayoutItemSelectionChangingEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the current item.
-
-            </param>
-            <param name="selected">
-		A Boolean value that specifies whether the item is selected.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs.Selected">
-            <summary>
-                <para>Gets whether the item is selected.
-</para>
-            </summary>
-            <value><b>true</b> if the item is selected; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Docking.DockingStyle">
 
             <summary>
@@ -5896,30 +5763,6 @@ This is a dependency property.
                 <para>Emulates the docking capabilities found in Microsoft Visual Studio 2010 (including changing docking hints and restricting <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>s from being docked anywhere other than <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>s).
 </para>
             </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventHandler">
-
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanged"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs)">
-            <summary>
-                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanged"/> event.
-</para>
-            </summary>
-            <param name="sender">
-		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
-
-            </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs"/> object that represents data for the event.
-
-            </param>
 
 
         </member>
@@ -6342,64 +6185,6 @@ This is a dependency property.
             </param>
             <param name="value">
 		A Boolean value assigned to the <see cref="P:DevExpress.Xpf.Docking.RestoreLayoutOptions.RemoveOldPanels"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanged"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,System.Boolean)">
-            <summary>
-                <para>Initializes a new instance of the LayoutItemSelectionChangedEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the current item.
-
-            </param>
-            <param name="selected">
-		A Boolean value that specifies whether the item is selected.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangedEventArgs.Selected">
-            <summary>
-                <para>Gets whether the item is selected.
-</para>
-            </summary>
-            <value><b>true</b> if the item is selected; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventHandler">
-
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanging"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventHandler.Invoke(System.Object,DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs)">
-            <summary>
-                <para>Represents the method that will handle the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemSelectionChanging"/> event.
-</para>
-            </summary>
-            <param name="sender">
-		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object that fires this event.
-
-            </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.Docking.Base.LayoutItemSelectionChangingEventArgs"/> object that represents data for the event.
 
             </param>
 
@@ -10634,286 +10419,517 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.ContentItem">
+        <member name="T:DevExpress.Xpf.Docking.DockControllerBase">
 
             <summary>
-                <para>An abstract class for objects capable of displaying content.
+                <para>The base class for DockControllers that provide methods to perform docking operations on panels.
 </para>
             </summary>
 
         </member>
-        <member name="P:DevExpress.Xpf.Docking.ContentItem.Content">
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.#ctor(DevExpress.Xpf.Docking.DockLayoutManager)">
             <summary>
-                <para>Gets or sets the item's content. This is a dependency property.
+                <para>Initializes a new instance of the <see cref="T:DevExpress.Xpf.Docking.DockController"/> class with the specified <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/>.
 </para>
             </summary>
-            <value>An object that specifies the item's content.
-</value>
+            <param name="container">
+		A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object, whose dock functionality will be controlled by the created DockController. 
+
+            </param>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Docking.ContentItem.ContentProperty">
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Activate(DevExpress.Xpf.Docking.BaseLayoutItem)">
             <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.ContentItem.ContentTemplate">
-            <summary>
-                <para>Gets or sets the template used to display the item's <see cref="P:DevExpress.Xpf.Docking.ContentItem.Content"/>. This is a dependency property.
-</para>
-            </summary>
-            <value>The corresponding data template. The default is a null reference (Nothing in Visual Basic). 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.ContentItem.ContentTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.ContentItem.ContentTemplateSelector">
-            <summary>
-                <para>Gets or sets an object that chooses the item's <see cref="P:DevExpress.Xpf.Docking.ContentItem.ContentTemplate"/> based on custom logic.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that chooses a template based on custom logic. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.ContentItem.ContentTemplateSelectorProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.ContentItem.FocusContentOnActivating">
-            <summary>
-                <para>Gets or sets whether the ContentItem's content should be focused on ContentItem activation.
-
-</para>
-            </summary>
-            <value><b>true</b>, if the ContentItem's content should be focused on ContentItem activation; otherwise, <b>false</b>.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.ContentItem.FocusContentOnActivatingProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.ContentItem.IsDataBound">
-            <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.ContentItem.IsDataBoundProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationStarting"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.DockOperation)">
-            <summary>
-                <para>Initializes a new instance of the DockOperationStartingEventArgs class with the specified settings.
+                <para>Activates the specified item. 
 </para>
             </summary>
             <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> that raised the event.
-
-            </param>
-            <param name="dockOperation">
-		A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the current operation type.
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to be activated.
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.DockOperation)">
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Activate(DevExpress.Xpf.Docking.BaseLayoutItem,System.Boolean)">
             <summary>
-                <para>Initializes a new instance of the DockOperationStartingEventArgs class with the specified settings.
+                <para>Activates the specified item.
 </para>
             </summary>
             <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> that raised the event.
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> descendant to be activated. 
 
             </param>
-            <param name="dockTarget">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to which an <i>item</i> is to be docked.
-
-            </param>
-            <param name="dockOperation">
-		A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the current operation type.
+            <param name="focus">
+		<b>true</b>, to move focus to the item; otherwise, <b>false</b>. 
 
             </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs.DockOperation">
+        <member name="P:DevExpress.Xpf.Docking.DockControllerBase.ActiveItem">
             <summary>
-                <para>Gets the type of an operation that is processed within the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationStarting"/> event.
+                <para>Gets or sets the active item.
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the docking operation type.
+            <value>A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object which is the active item.
 </value>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.DockOperationStartingEventArgs.DockTarget">
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentGroup(DevExpress.Xpf.Layout.Core.DockType)">
             <summary>
-                <para>Gets a Dock Item to which the current Dock Item is to be docked.
+                <para>Creates a <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>, and docks it to the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container (root group). 
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to which the current Dock Item is to be docked.
-</value>
+            <param name="type">
+		A <see cref="T:DevExpress.Xpf.Layout.Core.DockType"/> value that specifies the side of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container where the DocumentGroup is docked. 
+
+            </param>
+            <returns>The created  <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> object.
+</returns>
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.DockOperationCompletedEventArgs">
-
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentPanel(DevExpress.Xpf.Docking.DocumentGroup)">
             <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationCompleted"/> event.
+                <para>Adds a new <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to the specified <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>.
 </para>
             </summary>
+            <param name="group">
+		A <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> object to which a new panel is added.
+
+            </param>
+            <returns>The created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object. 
+</returns>
+
 
         </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.DockOperationCompletedEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.DockOperation)">
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentPanel(System.Windows.Point,System.Windows.Size)">
             <summary>
-                <para>Initializes a new instance of the DockOperationCompletedEventArgs class with the specified settings.
+                <para>Adds an empty floating <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
+
+</para>
+            </summary>
+            <param name="floatLocation">
+		A <see cref="T:System.Windows.Point"/> object specifying the position of the left top corner of the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
+
+
+            </param>
+            <param name="floatSize">
+		A <see cref="T:System.Windows.Size"/> object specifying the height and width of the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
+
+
+            </param>
+            <returns>The created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentPanel(System.Windows.Point,System.Windows.Size,System.Uri)">
+            <summary>
+                <para>Adds a new floating <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> and loads the contents of a Window, Page or UserControl defined in the specified XAML into the <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
+
+</para>
+            </summary>
+            <param name="floatLocation">
+		A <see cref="T:System.Windows.Point"/> object specifying a position of the left top corner of the created DocumentPanel.
+
+
+            </param>
+            <param name="floatSize">
+		A <see cref="T:System.Windows.Size"/> object specifying the height and width of the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
+
+
+            </param>
+            <param name="uri">
+		A <see cref="T:System.Uri"/> object specifying the uniform resource identifier (URI) of the XAML that defines a Window, Page or UserControl to be loaded into the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>.
+
+            </param>
+            <returns>The created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddDocumentPanel(DevExpress.Xpf.Docking.DocumentGroup,System.Uri)">
+            <summary>
+                <para>Adds a new <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to the specified DocumentGroup and loads the contents of a Window, Page or UserControl defined in the specified XAML into the <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
+
+</para>
+            </summary>
+            <param name="group">
+		A <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> object to which a new <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is added. 
+
+            </param>
+            <param name="uri">
+		The uniform resource identifier (URI) of the XAML that defines a Window, Page or UserControl to be loaded into the created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/>. 
+
+            </param>
+            <returns>The created <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddItem(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Layout.Core.DockType)">
+            <summary>
+                <para>Adds a newly created item to the specified target item. This member supports the internal infrastructure, and is not intended to be used directly from your code. 
+
 </para>
             </summary>
             <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to which a dock operation was applied.
-
-            </param>
-            <param name="dockOperation">
-		A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the current operation type.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.DockOperationCompletedEventArgs.DockOperation">
-            <summary>
-                <para>Gets the type of an operation that is processed within the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationCompleted"/> event.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the type of an operation that is processed within the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationCompleted"/> event.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.MDIState">
-
-            <summary>
-                <para>Enumerates available states for panels in a <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> in MDI mode.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.MDIState.Maximized">
-            <summary>
-                <para>A child MDI window is maximized.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.MDIState.Minimized">
-            <summary>
-                <para>A child MDI window is minimized.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.MDIState.Normal">
-            <summary>
-                <para>A child MDI window is in its normal state.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.LayoutItemMoved"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs.#ctor(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Layout.Core.MoveType)">
-            <summary>
-                <para>Initializes a new instance of the LayoutItemMovedEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="item">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the currently processed item.
+		A newly created item to be docked to another item. 
 
             </param>
             <param name="target">
-		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that represents the item next to which the current item is inserted.
+		An item to be docked to. 
 
             </param>
             <param name="type">
-		A MoveType value that specifies how the current item is moved.
+		A DockType value that specifies the dock type. 
 
             </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs.Target">
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddPanel(System.Windows.Point,System.Windows.Size)">
             <summary>
-                <para>Gets the item next to which the current item (<see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/>) is inserted.
+                <para>Creates a floating panel with the specified size and displays it at the specified location. 
+
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that identifies the item next to which the current item (<see cref="P:DevExpress.Xpf.Docking.Base.ItemEventArgs.Item"/>) is inserted. 
+            <param name="floatLocation">
+		A Point structure that specifies the position at which the panel is displayed. The position is relative to the top left corner of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container (root group). 
+
+            </param>
+            <param name="floatSize">
+		A Size structure that specifies the created panel's size. 
+
+            </param>
+            <returns>The created <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> object. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.AddPanel(DevExpress.Xpf.Layout.Core.DockType)">
+            <summary>
+                <para>Creates a <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> and docks it at the specified side of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container (root group). 
+</para>
+            </summary>
+            <param name="type">
+		A DockType value that specifies the side of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container where the <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> is docked. 
+
+            </param>
+            <returns>The created <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> object. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Close(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Closes the specified item.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to be closed. 
+
+            </param>
+            <returns><b>true</b>, if the item is successfully closed; otherwise, <b>false</b>.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.CloseAllButThis(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Closes all items except the specified one within this item's container. 
+
+</para>
+            </summary>
+            <param name="item">
+		The only <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> element to remain opened within its parent container. 
+
+            </param>
+            <returns><b>true </b>, if all but the specified items were successfully closed; otherwise, <b>false</b>. 
+
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Docking.DockControllerBase.Container">
+            <summary>
+                <para>Gets the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container whose dock functionality is controlled by the current DockController. 
+
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> object. 
 </value>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Docking.Base.LayoutItemMovedEventArgs.Type">
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.CreateCommand``1(DevExpress.Xpf.Docking.BaseLayoutItem)">
             <summary>
-                <para>Gets how the current item is inserted next to the target item.
+                <para>Creates the specified dock command for the specified item/pane. 
 </para>
             </summary>
-            <value>A MoveType value that specifies how the current item is inserted next to the target item.
-</value>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> descendant with which the created command is associated.
+
+            </param>
+            <returns>The created command. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.CreateNewDocumentGroup(DevExpress.Xpf.Docking.DocumentPanel,System.Windows.Controls.Orientation)">
+            <summary>
+                <para>Creates a new <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> and moves the specified <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to it. 
+
+</para>
+            </summary>
+            <param name="document">
+		A <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to be added to the created group.
+
+            </param>
+            <param name="orientation">
+		A <see cref="T:System.Windows.Controls.Orientation"/> value that specifies whether the created <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> is positioned on the right or bottom of the DocumentPanel's previous group. 
+
+            </param>
+            <returns><b>true </b>, if a <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> has been created; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.CreateNewDocumentGroup(DevExpress.Xpf.Docking.LayoutPanel,System.Windows.Controls.Orientation)">
+            <summary>
+                <para>Creates a new <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> and moves the specified <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> to it. 
+
+</para>
+            </summary>
+            <param name="document">
+		A <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> to be added to the created group.
+
+            </param>
+            <param name="orientation">
+		A <see cref="T:System.Windows.Controls.Orientation"/> value that specifies whether the created <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> is positioned on the right or bottom of the DocumentPanel's previous group. 
+
+            </param>
+            <returns><b>true </b>, if a <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/> has been created; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Dock(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Layout.Core.DockType)">
+            <summary>
+                <para>Docks the first item to the second item using the specified dock type.
+</para>
+            </summary>
+            <param name="item">
+		The item to be docked. 
+
+            </param>
+            <param name="target">
+		The item to which the first item is docked. 
+
+            </param>
+            <param name="type">
+		A DockType value that specifies how the first item is docked. 
+
+            </param>
+            <returns><b>true </b>, if the item has been successfully docked; otherwise, <b>false</b>.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Dock(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Docks the specified item. This method is in effect for newly created, floating, auto-hidden or closed(hidden) items.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to be docked. 
+
+            </param>
+            <returns><b>true </b>, if the item has been successfully docked; otherwise, <b>false</b>.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Float(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Makes the specified item floating. 
+
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object that shall be made floating.
+
+
+            </param>
+            <returns>A <see cref="T:DevExpress.Xpf.Docking.FloatGroup"/> object that when created, displays the item in the floating state.
+
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Hide(DevExpress.Xpf.Docking.BaseLayoutItem,System.Windows.Controls.Dock)">
+            <summary>
+                <para>Enables the auto-hide functionality for the item/panel and hides it at the specified edge of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to which the auto-hide feature is applied. 
+
+            </param>
+            <param name="dock">
+		A <see cref="T:System.Windows.Controls.Dock"/> value that specifies the side of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container where the panel is hidden.
+
+            </param>
+            <returns><b>true</b>, if the auto-hide functionality has been enabled for the item/pane; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Hide(DevExpress.Xpf.Docking.BaseLayoutItem,DevExpress.Xpf.Docking.AutoHideGroup)">
+            <summary>
+                <para>Enables the auto-hide functionality for the item/panel and hides it within the specified <see cref="T:DevExpress.Xpf.Docking.AutoHideGroup"/> group. 
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to which the auto-hide feature is applied. 
+
+            </param>
+            <param name="target">
+		An <see cref="T:DevExpress.Xpf.Docking.AutoHideGroup"/> object where the panel is hidden. 
+
+            </param>
+            <returns><b>true</b>, if the auto-hide functionality has been enabled for the item/pane; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Hide(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Enables the auto-hide functionality for the item/panel and hides it at a corresponding edge of the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/> container.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to which the auto-hide feature is applied. 
+
+            </param>
+            <returns><b>true</b>, if the auto-hide functionality has been enabled for the item/pane; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Insert(DevExpress.Xpf.Docking.LayoutGroup,DevExpress.Xpf.Docking.BaseLayoutItem,System.Int32)">
+            <summary>
+                <para>Inserts the specified item into the specified group at a specific position. 
+
+</para>
+            </summary>
+            <param name="group">
+		A <see cref="T:DevExpress.Xpf.Docking.LayoutGroup"/> into which the specified item is inserted.
+
+            </param>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to be inserted into the group.
+
+            </param>
+            <param name="index">
+		An integer value that specifies the position among the group's children at which the item must be inserted. 
+
+            </param>
+            <returns><b>true </b>, if the item has been inserted into the group; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.MoveToDocumentGroup(DevExpress.Xpf.Docking.DocumentPanel,System.Boolean)">
+            <summary>
+                <para>Moves the specified <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> to the previous or next <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>. 
+</para>
+            </summary>
+            <param name="document">
+		A <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> object to be moved to another <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>.
+
+            </param>
+            <param name="next">
+		<b>true </b>to move the panel to the next <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>; <b>false </b>to move the panel to the previous <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>. 
+
+            </param>
+            <returns><b>true</b>, if the <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> has been moved to another <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.MoveToDocumentGroup(DevExpress.Xpf.Docking.LayoutPanel,System.Boolean)">
+            <summary>
+                <para>Moves the specified <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> to the previous or next <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>. 
+</para>
+            </summary>
+            <param name="document">
+		A <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> object to be moved to another <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>.
+
+            </param>
+            <param name="next">
+		<b>true</b> to move the panel to the next <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>; <b>false</b> to move the panel to the previous <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>. 
+
+            </param>
+            <returns><b>true </b>, if the <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> has been moved to another <see cref="T:DevExpress.Xpf.Docking.DocumentGroup"/>; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.RemoveItem(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Removes the specified item. This member supports the internal infrastructure, and is not intended to be used directly from your code. 
+
+</para>
+            </summary>
+            <param name="item">
+		An item to be removed. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.RemovePanel(DevExpress.Xpf.Docking.LayoutPanel)">
+            <summary>
+                <para>Removes any connection of the specified panel with the <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/>.
+</para>
+            </summary>
+            <param name="panel">
+		The <see cref="T:DevExpress.Xpf.Docking.LayoutPanel"/> object that is removed from the DockLayoutManager. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Rename(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Starts dock item renaming. 
+
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> to be renamed. 
+
+            </param>
+            <returns><b>true </b>, if item renaming has been initiated; otherwise, <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Docking.DockControllerBase.Restore(DevExpress.Xpf.Docking.BaseLayoutItem)">
+            <summary>
+                <para>Restores a closed (hidden) panel at its previous dock position.
+</para>
+            </summary>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> object to be restored.
+
+            </param>
+            <returns>A Boolean value that indicates that the panel has been restored successfully. 
+</returns>
 
 
         </member>

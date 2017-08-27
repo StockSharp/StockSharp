@@ -4,6 +4,114 @@
         <name>DevExpress.Xpf.Grid.v17.1.Core</name>
     </assembly>
     <members>
+        <member name="T:DevExpress.Xpf.Grid.IndicatorFormatConditionBase">
+
+            <summary>
+                <para>Serves as a base class for indicator-type conditional formats.
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimateTransition">
+            <summary>
+                <para>Gets or sets whether the transition between conditional formattings should be animated. This is a dependency property.
+
+</para>
+            </summary>
+            <value><b>true</b>, if the transition is animated; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimateTransitionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimationSettings">
+            <summary>
+                <para>Gets or sets the transition animation settings applied to the current conditional formatting. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="ConditionalFormattingAnimationSettings"/> object that contains conditional formatting animation settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimationSettingsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MaxValue">
+            <summary>
+                <para>Specifies the maximum column value to accept for conditional formatting. This is a dependency property.
+
+</para>
+            </summary>
+            <value>An object accepted as the maximum column value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MaxValueProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MinValue">
+            <summary>
+                <para>Specifies the minimum column value to accept for conditional formatting. This is a dependency property.
+
+</para>
+            </summary>
+            <value>An object accepted as the minimum column value.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MinValueProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.SelectiveExpression">
+            <summary>
+                <para>Gets or sets an expression that selects data records to which a conditional format is applied. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value that is the rule expression.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.SelectiveExpressionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.ExcelColumnFilterSettings">
 
             <summary>
@@ -208,46 +316,6 @@
         <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationMode.Selected">
             <summary>
                 <para>GridControl marks selected rows.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment">
-
-            <summary>
-                <para>Lists values that specify the alignment of scrollbar annotation marks.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Center">
-            <summary>
-                <para>Specifies that the scrollbar annotation marks are aligned to the center of the scrollbar. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Full">
-            <summary>
-                <para>Specifies that the scrollbar annotation marks are stretched horizontally to fill the scrollbar. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Left">
-            <summary>
-                <para>Specifies that the scrollbar annotation marks are aligned to the left of the scrollbar. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Right">
-            <summary>
-                <para>Specifies that the scrollbar annotation marks are aligned to the right of the scrollbar. 
 </para>
             </summary>
 
@@ -2059,17 +2127,166 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.ColorScaleFormat">
+        <member name="T:DevExpress.Xpf.Grid.DataBarFormatCondition">
 
             <summary>
-                <para>Represents the color scale format.
+                <para>A Data Bars conditional format.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.ColorScaleFormat.#ctor">
+        <member name="M:DevExpress.Xpf.Grid.DataBarFormatCondition.#ctor">
             <summary>
-                <para>Initializes a new instance of the ColorScaleFormat class with the default settings.
+                <para>Initializes a new instance of the DataBarFormatCondition class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.DataBarFormatCondition.Format">
+            <summary>
+                <para>Gets or sets the formatting settings applied to cells (or corresponding rows) whose values take part in conditional formatting. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Core.ConditionalFormatting.DataBarFormat"/> object that provides formatting settings. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.DataBarFormatCondition.FormatProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.DataBarFormatCondition.FormatPropertyForBinding">
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.FixedStyle">
+
+            <summary>
+                <para>Lists values that specify a column/band's behavior when a view is horizontally scrolled.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FixedStyle.Left">
+            <summary>
+                <para>A column/band is anchored to the vew's left edge.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FixedStyle.None">
+            <summary>
+                <para>A column/band takes part in horizontal scrolling.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FixedStyle.Right">
+            <summary>
+                <para>A column/band is anchored to the view's right edge.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.GridMenuType">
+
+            <summary>
+                <para>Lists values that specify the context menu type.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.Band">
+            <summary>
+                <para><para>Corresponds to a menu invoked for a band.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.Column">
+            <summary>
+                <para><para>Corresponds to a menu invoked for a column header.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.FixedTotalSummary">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the Fixed Summary Panel.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.FixRowControl">
+            <summary>
+                <para>Corresponds to a menu invoked for a fix row button. <br />
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupFooterSummary">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the Group Footer's summary.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupPanel">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the group panel.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupRow">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the group row.</para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.RowCell">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the <b>Row Cell</b>.</para>
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.TotalSummary">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the Summary Panel.</para>
+<para></para>
 </para>
             </summary>
 
@@ -2078,7 +2295,7 @@
         <member name="T:DevExpress.Xpf.Grid.UniqueDuplicateRuleFormatCondition">
 
             <summary>
-                <para>Represents the unique/duplicate format condition. 
+                <para>A Unique-Duplicate conditional format. 
 </para>
             </summary>
 
@@ -2112,10 +2329,10 @@
         </member>
         <member name="P:DevExpress.Xpf.Grid.UniqueDuplicateRuleFormatCondition.SelectiveExpression">
             <summary>
-                <para>Gets or sets an expression that selects data records to which the Unique/Duplicate format condition is applied.
+                <para>Gets or sets an expression that selects data records to which the Unique/Duplicate conditional format is applied.
 </para>
             </summary>
-            <value>A <see cref="T:System.String"/> that specifies an expression that selects data records to which the Unique/Duplicate format condition is applied.
+            <value>A <see cref="T:System.String"/> that specifies an expression that selects data records to which the Unique/Duplicate conditional format is applied.
 </value>
 
 
@@ -5047,22 +5264,28 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.MoveColumnTo(DevExpress.Xpf.Grid.ColumnBase,System.Int32,DevExpress.Xpf.Grid.HeaderPresenterType,DevExpress.Xpf.Grid.HeaderPresenterType,DevExpress.Xpf.Grid.MergeGroupPosition)">
             <summary>
-                <para> </para>
+                <para>Moves the specified column to the specified position.
+</para>
             </summary>
             <param name="source">
-		 
+		A <see cref="T:DevExpress.Xpf.Grid.ColumnBase"/> object that represents the source column.
+
             </param>
             <param name="newVisibleIndex">
-		 
+		An integer value that specifies the column's new position among the columns displayed within the destination area.
+
             </param>
             <param name="moveFrom">
-		 
+		A <see cref="T:DevExpress.Xpf.Grid.HeaderPresenterType"/> enumeration value that specifies the grid's area (the header panel, group panel or column chooser) in which the source column is currently displayed.
+
             </param>
             <param name="moveTo">
-		 
+		A <see cref="T:DevExpress.Xpf.Grid.HeaderPresenterType"/> enumeration value that specifies the grid's area (the header panel, group panel or column chooser) to which the source column is moved.
+
             </param>
             <param name="mergeGroupPosition">
-		 
+		A <see cref="T:DevExpress.Xpf.Grid.MergeGroupPosition"/> enumeration value that specifies to which column the current column should be merged.
+
             </param>
 
 
@@ -6910,6 +7133,170 @@ This is a dependency property.
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.ColorScaleFormatCondition">
+
+            <summary>
+                <para>A Color Scales conditional format. 
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ColorScaleFormatCondition.#ctor">
+            <summary>
+                <para>Initializes a new instance of the ColorScaleFormatCondition class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ColorScaleFormatCondition.Format">
+            <summary>
+                <para>Gets or sets the formatting settings applied to cells (or corresponding rows) whose values take part in conditional formatting. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Core.ConditionalFormatting.ColorScaleFormat"/> object that provides formatting settings. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ColorScaleFormatCondition.FormatProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ColorScaleFormatCondition.FormatPropertyForBinding">
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo">
+
+            <summary>
+                <para>Contains information about the layout and appearance of a particular type of scrollbar annotation marks.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.#ctor">
+            <summary>
+                <para>Initializes a new instance of the ScrollBarAnnotationInfo class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.#ctor(System.Windows.Media.Brush,DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment,System.Double,System.Double)">
+            <summary>
+                <para>Initializes a new instance of the ScrollBarAnnotationInfo class with the specified settings.
+</para>
+            </summary>
+            <param name="brush">
+		A brush used to paint scrollbar annotation marks.
+
+            </param>
+            <param name="alignment">
+		The alignment of annotation marks within the scrollbar.
+
+            </param>
+            <param name="minHeight">
+		The minimum height of annotation marks.
+
+            </param>
+            <param name="width">
+		The width of scrollbar annotation marks.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.Alignment">
+            <summary>
+                <para>Gets or sets the horizontal alignment of the scrollbar annotation marks within the scrollbar. This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="ScrollBarAnnotationAlignment"/> enumeration value that specifies the horizontal alignment of the scrollbar annotation marks within the scrollbar.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.AlignmentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.Brush">
+            <summary>
+                <para>Gets or sets the brush used to paint scrollbar annotation marks. This is a dependency property.
+</para>
+            </summary>
+            <value>A brush used to paint scrollbar annotation marks.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.BrushProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.MinHeight">
+            <summary>
+                <para>Gets or sets the minimum height of the scrollbar annotation marks. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="Double"/> value that specifies the minimum height of the scrollbar annotation marks.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.MinHeightProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.Width">
+            <summary>
+                <para>Gets or sets the width for the scrollbar annotation marks. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="Double"/> object, that is the width of the scrollbar annotation marks.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.WidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.GridSummaryData">
 
             <summary>
@@ -7014,6 +7401,66 @@ This is a dependency property.
 </para>
             </summary>
             <value>A command that implements the <see cref="T:System.Windows.Input.ICommand"/>.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.CustomRowAppearance"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.CustomRowAppearance"/> events.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs.#ctor(System.Windows.DependencyProperty,System.Object,System.Object)">
+            <summary>
+                <para>Initializes a new instance of the CustomRowAppearanceEventArgs class with the specified event arguments.
+</para>
+            </summary>
+            <param name="property">
+		A dependency property whose value is changed by the conditional formatting mechanism.
+
+            </param>
+            <param name="originalValue">
+		A <see cref="T:System.Object"/> object.
+
+            </param>
+            <param name="conditionalValue">
+		A <see cref="T:System.Object"/> object.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs.#ctor(DevExpress.Xpf.Core.ConditionalFormatting.CustomAppearanceEventArgs)">
+            <summary>
+                <para>Initializes a new instance of the CustomRowAppearanceEventArgs class.
+</para>
+            </summary>
+            <param name="args">
+		A <see cref="T:DevExpress.Xpf.Core.ConditionalFormatting.CustomAppearanceEventArgs"/> object whose properties are used to initialize a newly created object.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs.RowHandle">
+            <summary>
+                <para>Gets a handle of a row for which an event has been raised.
+</para>
+            </summary>
+            <value>An integer value representing the row handle.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs.RowSelectionState">
+            <summary>
+                <para>Gets whether the processed row is selected.
+</para>
+            </summary>
+            <value><b>true</b> if the row is selected; otherwise, <b>false</b>.
 </value>
 
 
@@ -9108,85 +9555,87 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs">
+        <member name="T:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs">
 
             <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.CustomRowAppearance"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.CustomRowAppearance"/> events.
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.CustomCellAppearance"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.CustomCellAppearance"/> events.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs.#ctor(System.Windows.DependencyProperty,System.Object,System.Object)">
+        <member name="M:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.#ctor(System.Windows.DependencyProperty,System.Object,System.Object)">
             <summary>
-                <para>Initializes a new instance of the CustomRowAppearanceEventArgs class with the specified event arguments.
+                <para>Initializes a new instance of the CustomCellAppearanceEventArgs class with the specified event arguments.
 </para>
             </summary>
             <param name="property">
-		A dependency property whose value is changed by the conditional formatting mechanism.
+		A DependencyProperty whose value is changed by the conditional formatting mechanism. 
 
             </param>
             <param name="originalValue">
-		A <see cref="T:System.Object"/> object.
+		The original value of the property.
 
             </param>
             <param name="conditionalValue">
-		A <see cref="T:System.Object"/> object.
+		A value of the property calculated by the conditional formatting mechanism.
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs.#ctor(DevExpress.Xpf.Core.ConditionalFormatting.CustomAppearanceEventArgs)">
+        <member name="M:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.#ctor(DevExpress.Xpf.Core.ConditionalFormatting.CustomAppearanceEventArgs)">
             <summary>
-                <para>Initializes a new instance of the CustomRowAppearanceEventArgs class.
+                <para>Initializes a new instance of the CustomCellAppearanceEventArgs class with the specified event arguments.
 </para>
             </summary>
             <param name="args">
-		A <see cref="T:DevExpress.Xpf.Core.ConditionalFormatting.CustomAppearanceEventArgs"/> object whose properties are used to initialize a newly created object.
+		A CustomAppearanceEventArgs object whose properties are used to initialize a newly created object. 
 
             </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs.RowHandle">
+        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.CellSelectionState">
             <summary>
-                <para>Gets a handle of a row for which an event has been raised.
+                <para>Gets a cell's selection state.
 </para>
             </summary>
-            <value>An integer value representing the row handle.
+            <value>A cell's selection state.
 </value>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomRowAppearanceEventArgs.RowSelectionState">
+        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.Column">
             <summary>
-                <para>Gets whether the processed row is selected.
+                <para>Gets a column that contains the corresponding cell.
 </para>
             </summary>
-            <value><b>true</b> if the row is selected; otherwise, <b>false</b>.
+            <value>A column that contains the corresponding cell.
 </value>
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.ColumnFilterPopupMode">
+        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.IsEditorVisible">
+            <summary>
+                <para>Gets whether an editor is visible for corresponding cell.
+</para>
+            </summary>
+            <value><b>true</b>, if an editor is visible; otherwise, <b>false</b>. 
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.DataBarFormat">
 
             <summary>
-                <para>Lists values that specify the display mode of the filter dropdown for all columns within the view.
+                <para>Represents the data bar format.
 </para>
             </summary>
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.ColumnFilterPopupMode.Default">
+        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.DataBarFormat.#ctor">
             <summary>
-                <para>Filter dropdowns of date-time columns are represented by the calendar, filter dropdowns of all other columns are represented by regular lists.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ColumnFilterPopupMode.Excel">
-            <summary>
-                <para>Displays an Excel style filter dropdown.
+                <para>Initializes a new instance of the DataBarFormat class with the default settings.
 </para>
             </summary>
 
@@ -9473,51 +9922,6 @@ This is a dependency property.
                 <para>Copying the grid data to the clipboard is blocked.
 </para>
             </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.DataBarFormatCondition">
-
-            <summary>
-                <para>Represents the data bar format condition.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.DataBarFormatCondition.#ctor">
-            <summary>
-                <para>Initializes a new instance of the DataBarFormatCondition class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.DataBarFormatCondition.Format">
-            <summary>
-                <para>Gets or sets the formatting settings applied to cells (or corresponding rows) whose values take part in conditional formatting. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Core.ConditionalFormatting.DataBarFormat"/> object that provides formatting settings. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.DataBarFormatCondition.FormatProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.DataBarFormatCondition.FormatPropertyForBinding">
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-            <value> 
-</value>
 
 
         </member>
@@ -10323,6 +10727,62 @@ This is a dependency property.
                 <para>Allows selection of multiple rows.
 </para>
             </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.ScrollBarCustomRowAnnotation"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.ScrollBarCustomRowAnnotation"/> events.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs.#ctor(System.Int32,System.Object)">
+            <summary>
+                <para>Initializes a new instance of the ScrollBarCustomRowAnnotationEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="rowHandle">
+		A row handle.
+
+            </param>
+            <param name="row">
+		An object from the data source to which the processed row is bound.
+
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs.Row">
+            <summary>
+                <para>Returns a data source object that corresponds to a data row for which an event has been raised. 
+</para>
+            </summary>
+            <value>An object that corresponds to the processed row. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs.RowHandle">
+            <summary>
+                <para>Gets the handle of a row, for which an event has been raised.
+
+</para>
+            </summary>
+            <value>An integer value representing the row handle.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs.ScrollBarAnnotationInfo">
+            <summary>
+                <para>Gets or sets the information about the layout and appearance of custom scrollbar annotation marks. 
+</para>
+            </summary>
+            <value>A <see cref="ScrollBarAnnotationInfo"/> object that contains layout and appearance information.
+</value>
 
 
         </member>
@@ -11175,90 +11635,42 @@ Indicates the New Item Row.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.ShowSearchPanelMode">
+        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.ColorScaleFormat">
 
             <summary>
-                <para>Lists values that specify when the Search Panel is displayed. 
+                <para>Represents the color scale format.
 </para>
             </summary>
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowSearchPanelMode.Always">
+        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.ColorScaleFormat.#ctor">
             <summary>
-                <para>The Search Panel is always visible, it cannot be hidden by an end-user. The close button is hidden.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowSearchPanelMode.Default">
-            <summary>
-                <para><para>Activates the default behavior.</para>
-<para><b>CTRL</b>+<b>F</b> - Invokes the Search Panel. Ensure that no cell editor is opened before invoking the Find Panel. Otherwise, the shortcut will be intercepted by the in-place editor.</para>
-<para>The <b>Close</b> button (if displayed) hides the Search Panel.</para>
-<para><b>ESC</b> - Clears the search box. If the search box is empty, pressing ESC closes the Search Panel.</para>
+                <para>Initializes a new instance of the ColorScaleFormat class with the default settings.
 </para>
             </summary>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowSearchPanelMode.Never">
-            <summary>
-                <para>The Search Panel is hidden and cannot be shown by the end-user.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ColorScaleFormatCondition">
+        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.IconSetFormat">
 
             <summary>
-                <para>Represents the color scale format condition.
+                <para>Represents the icon set format.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.ColorScaleFormatCondition.#ctor">
+        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.IconSetFormat.#ctor">
             <summary>
-                <para>Initializes a new instance of the ColorScaleFormatCondition class with the default settings.
+                <para>Initializes a new instance of the IconSetFormat class with the default settings.
 </para>
             </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ColorScaleFormatCondition.Format">
-            <summary>
-                <para>Gets or sets the formatting settings applied to cells (or corresponding rows) whose values take part in conditional formatting. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Core.ConditionalFormatting.ColorScaleFormat"/> object that provides formatting settings. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ColorScaleFormatCondition.FormatProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ColorScaleFormatCondition.FormatPropertyForBinding">
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-            <value> 
-</value>
 
 
         </member>
         <member name="T:DevExpress.Xpf.Grid.IconSetFormatCondition">
 
             <summary>
-                <para>Represents the icon set format condition.
+                <para>An Icon Sets conditional format.
 </para>
             </summary>
 
@@ -11303,7 +11715,7 @@ Indicates the New Item Row.
         <member name="T:DevExpress.Xpf.Grid.TopBottomRuleFormatCondition">
 
             <summary>
-                <para>Represents the top/bottom format condition.
+                <para>Represents the Top-Bottom and Average conditional formats.
 </para>
             </summary>
 
@@ -11802,22 +12214,6 @@ Indicates the New Item Row.
 		 
 
             </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.DataBarFormat">
-
-            <summary>
-                <para>Represents the data bar format.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.DataBarFormat.#ctor">
-            <summary>
-                <para>Initializes a new instance of the DataBarFormat class with the default settings.
-</para>
-            </summary>
 
 
         </member>
@@ -15147,6 +15543,34 @@ the values in this column.</para>
 
 
         </member>
+        <member name="F:DevExpress.Xpf.Grid.GridControlStringId.ExcelColumnFilterPopupSearchScopeAll">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridControlStringId.ExcelColumnFilterPopupSearchScopeDay">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridControlStringId.ExcelColumnFilterPopupSearchScopeMonth">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridControlStringId.ExcelColumnFilterPopupSearchScopeYear">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
         <member name="F:DevExpress.Xpf.Grid.GridControlStringId.ExcelColumnFilterPopupSelectDate">
             <summary>
                 <para><para>Represents the null text of the date edit that allows to edit filter conditions in <b>Filter Rules</b> tab in the Excel-style filter dropdown.</para>
@@ -16458,7 +16882,7 @@ the values in this column.</para>
         <member name="T:DevExpress.Xpf.Grid.ExpressionConditionBase">
 
             <summary>
-                <para>Serves as a base for classes that represent expression-based format conditions. 
+                <para>Serves as a base class for expression  based conditional formats.
 </para>
             </summary>
 
@@ -16466,9 +16890,11 @@ the values in this column.</para>
         <member name="P:DevExpress.Xpf.Grid.ExpressionConditionBase.AnimateTransition">
             <summary>
                 <para>Gets or sets whether the transition between conditional formattings should be animated. This is a dependency property.
+
 </para>
             </summary>
-            <value><b>true</b> if transition is animated; otherwise, <b>false</b>.
+            <value><b>true</b>, if the transition is animated; otherwise, <b>false</b>.
+
 </value>
 
 
@@ -16608,6 +17034,440 @@ the values in this column.</para>
                 <para>Corresponds to the first row within a row level.
 </para>
             </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.RowDataBase">
+
+            <summary>
+                <para>Serves as a base for classes that contain information about rows and cards.
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowDataBase.DetailLevel">
+            <summary>
+                <para>Gets the nesting level of a View.
+</para>
+            </summary>
+            <value>An integer value that specifies the nesting level of a View.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowDataBase.IndicatorState">
+            <summary>
+                <para>Gets or sets the row indicator's state. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.IndicatorState"/> enumeration value that specifies the row indicator state.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowDataBase.IsMasterRowExpanded">
+            <summary>
+                <para>Gets whether the master row is expanded. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the master row is expanded; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowDataBase.LineLevel">
+            <summary>
+                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowDataBase.RowsContainer">
+            <summary>
+                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowDataBase.View">
+            <summary>
+                <para>Gets the owner view.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.DataViewBase"/> descendant that is the owner view.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.RowData">
+
+            <summary>
+                <para>Contains information about a data row.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.RowData.#ctor(DevExpress.Xpf.Grid.Native.DataTreeBuilder,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+                <para>Initializes a new instance of the RowData class.
+</para>
+            </summary>
+            <param name="treeBuilder">
+		 
+
+            </param>
+            <param name="updateOnlyData">
+		 
+
+            </param>
+            <param name="updateSelectionState">
+		 
+
+            </param>
+            <param name="updateError">
+		 
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.AlternateRow">
+            <summary>
+                <para>Gets whether the row uses the alternate background.
+
+</para>
+            </summary>
+            <value><b>true</b>, if the row uses the alternate background; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.CollapseBottomLine">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. 
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.ControllerVisibleIndex">
+            <summary>
+                <para>Gets the row's visible position within a View.
+</para>
+            </summary>
+            <value>An integer value that specifies the row's visible position within a View.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.CurrentRowData(System.Windows.DependencyObject)">
+            <summary>
+                <para>This member supports the internal infrastructure and is not intended to be used directly from your code. This is a dependency property.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowData.CurrentRowDataProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.DataContext">
+            <summary>
+                <para>Gets or sets the row's data context.
+</para>
+            </summary>
+            <value>An object that represents the row's data context.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.EvenRow">
+            <summary>
+                <para>Gets whether the row's visible index is even.
+</para>
+            </summary>
+            <value><b>true</b> if the row's visible index is even; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.FixedRowPosition">
+            <summary>
+                <para>Gets or sets the row's fix position.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.FixedRowPosition"/> enumeration value that is the fixed row's position.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.RowData.GetCurrentRowData(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets the value of the <see cref="P:DevExpress.Xpf.Grid.RowData.CurrentRowData"/> attached property for a specified <see cref="T:System.Windows.DependencyObject"/>.
+</para>
+            </summary>
+            <param name="element">
+		The element from which the property value is read.
+
+            </param>
+            <returns>The <see cref="P:DevExpress.Xpf.Grid.RowData.RowData"/> property value for the element. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.RowData.GetRowData(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets the value of the <see cref="P:DevExpress.Xpf.Grid.RowData.RowData"/> attached property for a specified <see cref="T:System.Windows.DependencyObject"/>.
+</para>
+            </summary>
+            <param name="element">
+		The element from which the property value is read.
+
+            </param>
+            <returns>The <see cref="P:DevExpress.Xpf.Grid.RowData.RowData"/> property value for the element. 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.IsEditFormVisible">
+            <summary>
+                <para>Gets whether the row's inline or popup edit form is visible for the row.
+</para>
+            </summary>
+            <value><b>true</b>, if the edit form is visible; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.IsExpanding">
+            <summary>
+                <para>Gets whether a group row is being expanded.
+</para>
+            </summary>
+            <value><b>true</b> the group row is being expanded; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.IsFocused">
+            <summary>
+                <para>Gets whether the row is focused.
+</para>
+            </summary>
+            <value><b>true</b> if the row is focused; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.IsLastFixedRow">
+            <summary>
+                <para>Gets whether the associated row is the last fixed row at the top or at the bottom of the <see cref="T:DevExpress.Xpf.Grid.TableView"/>.
+</para>
+            </summary>
+            <value><b>true</b>, if the row is the last fixed row at the top or at the bottom of the control; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.IsReady">
+            <summary>
+                <para>Gets whether the row's data has been loaded or not.
+</para>
+            </summary>
+            <value><b>true</b> if the row's data has been loaded; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.IsRowExpanded">
+            <summary>
+                <para>Gets whether a group row is expanded.
+</para>
+            </summary>
+            <value><b>true</b> if the group row is expanded; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.IsRowVisible">
+            <summary>
+                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.IsSelected">
+            <summary>
+                <para>Gets whether the row is selected.
+</para>
+            </summary>
+            <value><b>true</b> if the row is selected; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.Level">
+            <summary>
+                <para>Gets the row's grouping level.
+</para>
+            </summary>
+            <value>An integer value that specifies the row's grouping level.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.NextRowLevel">
+            <summary>
+                <para>Gets the next row's nesting level.
+</para>
+            </summary>
+            <value>An integer value that specifies the next row's nesting level.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.Row">
+            <summary>
+                <para> Gets a row object that corresponds to the row.
+</para>
+            </summary>
+            <value>An object in a data source that corresponds to the current row.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.RowData(System.Windows.DependencyObject)">
+            <summary>
+                <para>Provides access to a RowData's properties. This is a dependency property.
+</para>
+            </summary>
+            <value>A RowData object.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowData.RowDataProperty">
+            <summary>
+                <para>Identifies the  attached property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.RowHandle">
+            <summary>
+                <para>Gets the row's handle.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Data.RowHandle"/> object that represents the row's handle.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.RowPosition">
+            <summary>
+                <para>Gets the row's position within a View.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.RowPosition"/> enumeration value that specifies the row's position within a View.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.RowState">
+            <summary>
+                <para>Gets  an object that stores a row's state.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DependencyObject"/> representing the row state.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.SelectionState">
+            <summary>
+                <para>Gets a value that indicates the row's selection state.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.SelectionState"/> enumeration value that specifies the row's selection state.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.RowData.SetCurrentRowData(System.Windows.DependencyObject,DevExpress.Xpf.Grid.RowData)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Grid.RowData.CurrentRowData"/> attached property to a specified <see cref="T:System.Windows.DependencyObject"/>.
+</para>
+            </summary>
+            <param name="element">
+		The element to which the attached property is written.
+
+            </param>
+            <param name="value">
+		The required <see cref="T:DevExpress.Xpf.Grid.RowData"/> value.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.RowData.SetRowData(System.Windows.DependencyObject,DevExpress.Xpf.Grid.RowData)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Grid.RowData.RowData"/> attached property to a specified <see cref="T:System.Windows.DependencyObject"/>.
+
+
+</para>
+            </summary>
+            <param name="element">
+		The element to which the attached property is written.
+
+            </param>
+            <param name="value">
+		The required <see cref="T:DevExpress.Xpf.Grid.RowData"/> value. 
+
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.ShowBottomLine">
+            <summary>
+                <para>Indicates whether the row's bottom line is visible.
+</para>
+            </summary>
+            <value><b>true</b> if the row's bottom line is visible; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowData.ShowRowBreak">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
 
 
         </member>
@@ -17098,109 +17958,38 @@ This class supports the internal infrastructure and is not intended to be used d
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.IndicatorFormatConditionBase">
+        <member name="T:DevExpress.Xpf.Grid.ShowSearchPanelMode">
 
             <summary>
-                <para>Serves as a base for classes that represent indicator-type format conditions. 
+                <para>Lists values that specify when the Search Panel is displayed. 
 </para>
             </summary>
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimateTransition">
+        <member name="F:DevExpress.Xpf.Grid.ShowSearchPanelMode.Always">
             <summary>
-                <para>Gets or sets whether the transition between conditional formattings should be animated. This is a dependency property.
+                <para>The Search Panel is always visible, it cannot be hidden by an end-user. The close button is hidden.
 </para>
             </summary>
-            <value><b>true</b> if transition is animated; otherwise, <b>false</b>.
-</value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimateTransitionProperty">
+        <member name="F:DevExpress.Xpf.Grid.ShowSearchPanelMode.Default">
             <summary>
-                <para>Identifies the  dependency property.
+                <para><para>Activates the default behavior.</para>
+<para><b>CTRL</b>+<b>F</b> - Invokes the Search Panel. Ensure that no cell editor is opened before invoking the Find Panel. Otherwise, the shortcut will be intercepted by the in-place editor.</para>
+<para>The <b>Close</b> button (if displayed) hides the Search Panel.</para>
+<para><b>ESC</b> - Clears the search box. If the search box is empty, pressing ESC closes the Search Panel.</para>
 </para>
             </summary>
-            <returns> </returns>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimationSettings">
+        <member name="F:DevExpress.Xpf.Grid.ShowSearchPanelMode.Never">
             <summary>
-                <para>Gets or sets the animation settings applied to the current conditional formatting. This is a dependency property.
+                <para>The Search Panel is hidden and cannot be shown by the end-user.
 </para>
             </summary>
-            <value>A <see cref="ConditionalFormattingAnimationSettings"/> object that contains conditional formatting animation settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimationSettingsProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MaxValue">
-            <summary>
-                <para>Specifies the maximum column value to accept for conditional formatting. This is a dependency property.
-
-</para>
-            </summary>
-            <value>An object accepted as the maximum column value.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MaxValueProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MinValue">
-            <summary>
-                <para>Specifies the minimum column value to accept for conditional formatting. This is a dependency property.
-
-</para>
-            </summary>
-            <value>An object accepted as the minimum column value.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MinValueProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.SelectiveExpression">
-            <summary>
-                <para>Specifies a custom rule for applying conditional formatting. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> value that is the rule expression.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.SelectiveExpressionProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
 
 
         </member>
@@ -17232,41 +18021,6 @@ This class supports the internal infrastructure and is not intended to be used d
         <member name="F:DevExpress.Xpf.Grid.GridSummaryItemAlignment.Right">
             <summary>
                 <para>A summary is displayed within the Fixed Summary Panel and aligned to the right.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.FixedRowPosition">
-
-            <summary>
-                <para>Lists the values that specify the position of the fixed row within the grid.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedRowPosition.Bottom">
-            <summary>
-                <para>The row is fixed at the bottom of the grid.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedRowPosition.None">
-            <summary>
-                <para>The row is not fixed.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedRowPosition.Top">
-            <summary>
-                <para>The row is fixed at the top of the grid.
-
 </para>
             </summary>
 
@@ -17524,64 +18278,6 @@ This class supports the internal infrastructure and is not intended to be used d
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.ShowFilterPanelMode">
-
-            <summary>
-                <para>Lists values that specify when a View displays the Filter Panel.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.Default">
-            <summary>
-                <para>The filter panel is shown when data is filtered. Otherwise, the filter panel is hidden.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.Never">
-            <summary>
-                <para>The filter panel is hidden.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.ShowAlways">
-            <summary>
-                <para>The filter panel is always shown at the bottom of the view.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ScrollingMode">
-
-            <summary>
-                <para>Lists values that specify how many rows are displayed onscreen when a View is scrolled to the bottom.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollingMode.Normal">
-            <summary>
-                <para><para>Only one row (the last row) is displayed when a view is scrolled to the bottom.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollingMode.Smart">
-            <summary>
-                <para><para>When a view is scrolled to the bottom, it displays as many rows as can completely fit into its content area.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.GridViewNavigationStyle">
 
             <summary>
@@ -17609,94 +18305,6 @@ This class supports the internal infrastructure and is not intended to be used d
         <member name="F:DevExpress.Xpf.Grid.GridViewNavigationStyle.Row">
             <summary>
                 <para>A View displays only the focused row. The focused cell is not displayed. Data editing is not allowed.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.GridMenuType">
-
-            <summary>
-                <para>Lists values that specify the context menu type.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.Band">
-            <summary>
-                <para><para>Corresponds to a menu invoked for a band.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.Column">
-            <summary>
-                <para><para>Corresponds to a menu invoked for a column header.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.FixedTotalSummary">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the Fixed Summary Panel.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.FixRowControl">
-            <summary>
-                <para>Corresponds to a menu invoked for a fix row button. <br />
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupFooterSummary">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the Group Footer's summary.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupPanel">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the group panel.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupRow">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the group row.</para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.RowCell">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the <b>Row Cell</b>.</para>
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.TotalSummary">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the Summary Panel.</para>
-<para></para>
 </para>
             </summary>
 
@@ -17769,6 +18377,37 @@ This class supports the internal infrastructure and is not intended to be used d
         <member name="F:DevExpress.Xpf.Grid.ColumnFilterMode.Value">
             <summary>
                 <para>Cell values are filtered by their values.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.MergeGroupPosition">
+
+            <summary>
+                <para> </para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.MergeGroupPosition.Left">
+            <summary>
+                <para>The current column is merged with the column on its left side.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.MergeGroupPosition.None">
+            <summary>
+                <para>The current column is not merged with any other columns.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.MergeGroupPosition.Right">
+            <summary>
+                <para>The current column is merged with the column on its right side.
 </para>
             </summary>
 
@@ -17916,48 +18555,6 @@ This class supports the internal infrastructure and is not intended to be used d
 </para>
             </summary>
             <value>An array of row handles that correspond to data rows.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.EditFormShowingEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.EditFormShowing"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.EditFormShowing"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.EditFormShowingEventArgs.#ctor(System.Int32)">
-            <summary>
-                <para>Creates a new instance of the EditFormShowingEventArgs class with default settings.
-</para>
-            </summary>
-            <param name="rowHandle">
-		The handle of the row that raised the event.
-
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.EditFormShowingEventArgs.Allow">
-            <summary>
-                <para>Gets or sets a value that indicates whether to show the edit form.
-</para>
-            </summary>
-            <value><b>true</b>, to display the edit form for the row that has raised the event; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.EditFormShowingEventArgs.RowHandle">
-            <summary>
-                <para>Gets the handle of the row that raised the event.
-
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Data.RowHandle"/> object that specifies the grid row.
 </value>
 
 
@@ -18357,49 +18954,259 @@ This class supports the internal infrastructure and is not intended to be used d
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.RowDetailsVisibilityMode">
+        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance">
 
             <summary>
-                <para>Lists values that specify when <see cref="T:DevExpress.Xpf.Grid.GridControl"/> row details are displayed.
+                <para>Contains properties that provide access to the appearance settings of particular scrollbar annotation marks.
+
 </para>
             </summary>
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.RowDetailsVisibilityMode.Collapsed">
+        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.#ctor">
             <summary>
-                <para>The row details are not displayed for any rows.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowDetailsVisibilityMode.Visible">
-            <summary>
-                <para>The row details are displayed for all rows.
+                <para>Initializes a new instance of the ScrollBarAnnotationsAppearance class.
 </para>
             </summary>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.RowDetailsVisibilityMode.VisibleWhenFocused">
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.FocusedRow">
             <summary>
-                <para>The row details are displayed only for selected rows.
+                <para>Gets or sets appearance settings for scrollbar annotation marks that correspond to focused row. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.FocusedRowProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.InvalidCells">
+            <summary>
+                <para>Gets or sets appearance settings for scrollbar annotation marks that correspond to invalid cells. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.InvalidCellsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.InvalidRows">
+            <summary>
+                <para>Gets or sets appearance settings for scrollbar annotation marks that correspond to invalid rows. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.InvalidRowsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.SearchResult">
+            <summary>
+                <para>Gets or sets appearance settings for scrollbar annotation marks that correspond to search results. This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.SearchResultProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.Selected">
+            <summary>
+                <para>Gets or sets the appearance settings for scrollbar annotation marks that correspond to selected rows. This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.SelectedProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ScrollingMode">
+
+            <summary>
+                <para>Lists values that specify how many rows are displayed onscreen when a View is scrolled to the bottom.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollingMode.Normal">
+            <summary>
+                <para><para>Only one row (the last row) is displayed when a view is scrolled to the bottom.</para>
+<para></para>
 </para>
             </summary>
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.Format">
+        <member name="F:DevExpress.Xpf.Grid.ScrollingMode.Smart">
+            <summary>
+                <para><para>When a view is scrolled to the bottom, it displays as many rows as can completely fit into its content area.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.FixedRowPosition">
 
             <summary>
-                <para>Contains settings that are used to format <see cref="T:DevExpress.Xpf.Grid.GridControl"/> cells.
+                <para>Lists the values that specify the position of the fixed row within the grid.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.Format.#ctor">
+        <member name="F:DevExpress.Xpf.Grid.FixedRowPosition.Bottom">
             <summary>
-                <para>Initializes a new instance of the Format class with default settings.
+                <para>The row is fixed at the bottom of the grid.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FixedRowPosition.None">
+            <summary>
+                <para>The row is not fixed.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FixedRowPosition.Top">
+            <summary>
+                <para>The row is fixed at the top of the grid.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ErrorsWatchMode">
+
+            <summary>
+                <para>Lists values that specify the errors watch mode.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.All">
+            <summary>
+                <para>Grid View detects invalid rows and cells.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.Cells">
+            <summary>
+                <para>Grid View detects invalid cells.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.Default">
+            <summary>
+                <para>The error watch mode is disabled by default for the master grid view; for the detail grid view, the error watch mode depends on the error watch mode for the master view.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.None">
+            <summary>
+                <para>Grid View does not detect errors during the initial data load.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.Rows">
+            <summary>
+                <para>Grid View detects invalid rows.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ShowFilterPanelMode">
+
+            <summary>
+                <para>Lists values that specify when a View displays the Filter Panel.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.Default">
+            <summary>
+                <para>The filter panel is shown when data is filtered. Otherwise, the filter panel is hidden.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.Never">
+            <summary>
+                <para>The filter panel is hidden.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.ShowAlways">
+            <summary>
+                <para>The filter panel is always shown at the bottom of the view.
 </para>
             </summary>
 
@@ -18777,10 +19584,84 @@ This class supports the internal infrastructure and is not intended to be used d
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo">
+
+            <summary>
+                <para>Contains information about scrollbar annotation.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo.#ctor(System.Int32,DevExpress.Xpf.Grid.ScrollBarAnnotationInfo)">
+            <summary>
+                <para>Initializes a new instance of the ScrollBarAnnotationRowInfo class with the specified settings.
+</para>
+            </summary>
+            <param name="rowIndex">
+		The row index.
+
+            </param>
+            <param name="info">
+		The appearance and layout information of scrollbar annotation marks.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo.CompareTo(DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo)">
+            <summary>
+                <para>Compares the current instance with a specified object and indicates whether the current instance precedes, follows, or appears at the same position in the sort order as the specified object.
+</para>
+            </summary>
+            <param name="other">
+		An object to compare with the current instance.
+
+            </param>
+            <returns>An integer value that specifies whether the current instance precedes, follows, or appears at the same position in the sort order as the specified object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo.RowIndex">
+            <summary>
+                <para>Gets the index of a row to which the current ScrollBarAnnotationRowInfo instance corresponds.
+</para>
+            </summary>
+            <value>An integer value that is a row index.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo.ScrollAnnotationInfo">
+            <summary>
+                <para>Gets the layout and appearance information of the corresponding scrollbar annotation mark.
+</para>
+            </summary>
+            <value>A <see cref="ScrollBarAnnotationInfo"/> object that is a layout and appearance information of the corresponding scrollbar annotation mark.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.Format">
+
+            <summary>
+                <para>Contains settings that are used to format <see cref="T:DevExpress.Xpf.Grid.GridControl"/> cells.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.Format.#ctor">
+            <summary>
+                <para>Initializes a new instance of the Format class with default settings.
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.FormatConditionCollection">
 
             <summary>
-                <para>Represents a collection of format conditions.
+                <para>Represents a collection of conditional formats.
 </para>
             </summary>
 
@@ -18821,7 +19702,7 @@ This class supports the internal infrastructure and is not intended to be used d
         <member name="T:DevExpress.Xpf.Grid.FormatConditionBase">
 
             <summary>
-                <para>Serves as a base for classes that represent format conditions.
+                <para>Serves as a base class for conditional formats.
 </para>
             </summary>
 
@@ -18836,10 +19717,10 @@ This class supports the internal infrastructure and is not intended to be used d
         </member>
         <member name="P:DevExpress.Xpf.Grid.FormatConditionBase.ApplyToRow">
             <summary>
-                <para>Specifies whether to apply formatting settings to the entire row. This is a dependency property.
+                <para>Specifies whether to apply a conditional format to the entire row. This is a dependency property.
 </para>
             </summary>
-            <value><b>true</b>, to apply formatting settings to the entire row; otherwise, <b>false</b>.
+            <value><b>true</b>, to apply a conditional format to the entire row; otherwise, <b>false</b>.
 </value>
 
 
@@ -18855,10 +19736,10 @@ This class supports the internal infrastructure and is not intended to be used d
         </member>
         <member name="P:DevExpress.Xpf.Grid.FormatConditionBase.Expression">
             <summary>
-                <para>Gets or sets the expression used to apply the corresponding conditional formatting rule. This is a dependency property.
+                <para>Gets or sets the expression used to apply a conditional format. This is a dependency property.
 </para>
             </summary>
-            <value>A <see cref="T:System.String"/> value that specifies the expression used to apply the conditional formatting rule.
+            <value>A <see cref="T:System.String"/> value that specifies the expression used to apply the conditional format.
 </value>
 
 
@@ -18874,10 +19755,10 @@ This class supports the internal infrastructure and is not intended to be used d
         </member>
         <member name="P:DevExpress.Xpf.Grid.FormatConditionBase.FieldName">
             <summary>
-                <para>Gets or sets the data source field name of the column for which to apply the format condition. This is a dependency property.
+                <para>Gets or sets the data source field name of the column to which to apply the conditional format. This is a dependency property.
 </para>
             </summary>
-            <value>A <see cref="T:System.String"/> value that is the data source field name of the column for which to apply the format condition.
+            <value>A <see cref="T:System.String"/> value that is the data source field name of the column to which to apply the conditional format.
 </value>
 
 
@@ -18994,7 +19875,7 @@ This class supports the internal infrastructure and is not intended to be used d
         </member>
         <member name="P:DevExpress.Xpf.Grid.FormatConditionBase.PredefinedFormatName">
             <summary>
-                <para>Gets or sets the name of the predefined format to be applied to the column. This is a dependency property.
+                <para>Gets or sets the name of the predefined format to be applied to the cells. This is a dependency property.
 </para>
             </summary>
             <value>A <see cref="T:System.String"/> value that is the predefined format name.
@@ -19024,7 +19905,7 @@ This class supports the internal infrastructure and is not intended to be used d
         <member name="T:DevExpress.Xpf.Grid.FormatCondition">
 
             <summary>
-                <para>Represents format conditions.
+                <para>A value based conditional format.
 </para>
             </summary>
 
@@ -19091,6 +19972,38 @@ This class supports the internal infrastructure and is not intended to be used d
 </para>
             </summary>
             <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.RowDetailsVisibilityMode">
+
+            <summary>
+                <para>Lists values that specify when <see cref="T:DevExpress.Xpf.Grid.GridControl"/> row details are displayed.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowDetailsVisibilityMode.Collapsed">
+            <summary>
+                <para>The row details are not displayed for any rows.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowDetailsVisibilityMode.Visible">
+            <summary>
+                <para>The row details are displayed for all rows.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowDetailsVisibilityMode.VisibleWhenFocused">
+            <summary>
+                <para>The row details are displayed only for selected rows.
+</para>
+            </summary>
 
 
         </member>
@@ -19365,70 +20278,36 @@ If all values in the date-time column are set to null, all check boxes are visib
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.RowDataBase">
+        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationsCreatingEventArgs">
 
             <summary>
-                <para>Serves as a base for classes that contain information about rows and cards.
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.ScrollBarAnnotationsCreating"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.ScrollBarAnnotationsCreating"/> events.
 </para>
             </summary>
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.RowDataBase.DetailLevel">
+        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationsCreatingEventArgs.#ctor(System.Windows.RoutedEvent,System.Object)">
             <summary>
-                <para>Gets the nesting level of a View.
+                <para>Initializes a new instance of the ScrollBarAnnotationsCreatingEventArgs class with the specified routed event and source.
 </para>
             </summary>
-            <value>An integer value that specifies the nesting level of a View.
-</value>
+            <param name="routedEvent">
+		The routed event.
+
+            </param>
+            <param name="source">
+		An object that raised the event.
+
+            </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.RowDataBase.IndicatorState">
+        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsCreatingEventArgs.CustomScrollBarAnnotations">
             <summary>
-                <para>Gets or sets the row indicator's state. This is a dependency property.
+                <para>Gets or sets a set of objects that correspond to predefined scrollbar annotations.
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.IndicatorState"/> enumeration value that specifies the row indicator state.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowDataBase.IsMasterRowExpanded">
-            <summary>
-                <para>Gets whether the master row is expanded. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b> if the master row is expanded; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowDataBase.LineLevel">
-            <summary>
-                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowDataBase.RowsContainer">
-            <summary>
-                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowDataBase.View">
-            <summary>
-                <para>Gets the owner view.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.DataViewBase"/> descendant that is the owner view.
+            <value>A list of <see cref="T:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo"/> objects that correspond to predefined scrollbar annotations.
 </value>
 
 
@@ -19465,833 +20344,43 @@ If all values in the date-time column are set to null, all check boxes are visib
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo">
+        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment">
 
             <summary>
-                <para>Contains information about scrollbar annotation.
+                <para>Lists values that specify the alignment of scrollbar annotation marks.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo.#ctor(System.Int32,DevExpress.Xpf.Grid.ScrollBarAnnotationInfo)">
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Center">
             <summary>
-                <para>Initializes a new instance of the ScrollBarAnnotationRowInfo class with the specified settings.
+                <para>Specifies that the scrollbar annotation marks are aligned to the center of the scrollbar. 
 </para>
             </summary>
-            <param name="rowIndex">
-		The row index.
 
-            </param>
-            <param name="info">
-		The appearance and layout information of scrollbar annotation marks.
 
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo.CompareTo(DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo)">
-            <summary>
-                <para>Compares the current instance with a specified object and indicates whether the current instance precedes, follows, or appears at the same position in the sort order as the specified object.
-</para>
-            </summary>
-            <param name="other">
-		An object to compare with the current instance.
-
-            </param>
-            <returns>An integer value that specifies whether the current instance precedes, follows, or appears at the same position in the sort order as the specified object.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo.RowIndex">
-            <summary>
-                <para>Gets the index of a row to which the current ScrollBarAnnotationRowInfo instance corresponds.
-</para>
-            </summary>
-            <value>An integer value that is a row index.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo.ScrollAnnotationInfo">
-            <summary>
-                <para>Gets the layout and appearance information of the corresponding scrollbar annotation mark.
-</para>
-            </summary>
-            <value>A <see cref="ScrollBarAnnotationInfo"/> object that is a layout and appearance information of the corresponding scrollbar annotation mark.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationsCreatingEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.ScrollBarAnnotationsCreating"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.ScrollBarAnnotationsCreating"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationsCreatingEventArgs.#ctor(System.Windows.RoutedEvent,System.Object)">
-            <summary>
-                <para>Initializes a new instance of the ScrollBarAnnotationsCreatingEventArgs class with the specified routed event and source.
-</para>
-            </summary>
-            <param name="routedEvent">
-		The routed event.
-
-            </param>
-            <param name="source">
-		An object that raised the event.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsCreatingEventArgs.CustomScrollBarAnnotations">
-            <summary>
-                <para>Gets or sets a set of objects that correspond to predefined scrollbar annotations.
-</para>
-            </summary>
-            <value>A list of <see cref="T:DevExpress.Xpf.Grid.ScrollBarAnnotationRowInfo"/> objects that correspond to predefined scrollbar annotations.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.ScrollBarCustomRowAnnotation"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.ScrollBarCustomRowAnnotation"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs.#ctor(System.Int32,System.Object)">
-            <summary>
-                <para>Initializes a new instance of the ScrollBarCustomRowAnnotationEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="rowHandle">
-		A row handle.
-
-            </param>
-            <param name="row">
-		An object from the data source to which the processed row is bound.
-
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs.Row">
-            <summary>
-                <para>Returns a data source object that corresponds to a data row for which an event has been raised. 
-</para>
-            </summary>
-            <value>An object that corresponds to the processed row. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs.RowHandle">
-            <summary>
-                <para>Gets the handle of a row, for which an event has been raised.
-
-</para>
-            </summary>
-            <value>An integer value representing the row handle.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarCustomRowAnnotationEventArgs.ScrollBarAnnotationInfo">
-            <summary>
-                <para>Gets or sets the information about the layout and appearance of custom scrollbar annotation marks. 
-</para>
-            </summary>
-            <value>A <see cref="ScrollBarAnnotationInfo"/> object that contains layout and appearance information.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance">
-
-            <summary>
-                <para>Contains properties that provide access to the appearance settings of particular scrollbar annotation marks.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.#ctor">
-            <summary>
-                <para>Initializes a new instance of the ScrollBarAnnotationsAppearance class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.FocusedRow">
-            <summary>
-                <para>Gets or sets appearance settings for scrollbar annotation marks that correspond to focused row. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.FocusedRowProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.InvalidCells">
-            <summary>
-                <para>Gets or sets appearance settings for scrollbar annotation marks that correspond to invalid cells. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.InvalidCellsProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.InvalidRows">
-            <summary>
-                <para>Gets or sets appearance settings for scrollbar annotation marks that correspond to invalid rows. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.InvalidRowsProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.SearchResult">
-            <summary>
-                <para>Gets or sets appearance settings for scrollbar annotation marks that correspond to search results. This is a dependency property.
-
-</para>
-            </summary>
-            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.SearchResultProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.Selected">
-            <summary>
-                <para>Gets or sets the appearance settings for scrollbar annotation marks that correspond to selected rows. This is a dependency property.
-
-</para>
-            </summary>
-            <value>A <see cref="ScrollBarAnnotationInfo"/> object that stores appearance settings for annotation marks.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationsAppearance.SelectedProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo">
-
-            <summary>
-                <para>Contains information about the layout and appearance of a particular type of scrollbar annotation marks.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.#ctor">
-            <summary>
-                <para>Initializes a new instance of the ScrollBarAnnotationInfo class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.#ctor(System.Windows.Media.Brush,DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment,System.Double,System.Double)">
-            <summary>
-                <para>Initializes a new instance of the ScrollBarAnnotationInfo class with the specified settings.
-</para>
-            </summary>
-            <param name="brush">
-		A brush used to paint scrollbar annotation marks.
-
-            </param>
-            <param name="alignment">
-		The alignment of annotation marks within the scrollbar.
-
-            </param>
-            <param name="minHeight">
-		The minimum height of annotation marks.
-
-            </param>
-            <param name="width">
-		The width of scrollbar annotation marks.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.Alignment">
-            <summary>
-                <para>Gets or sets the horizontal alignment of the scrollbar annotation marks within the scrollbar. This is a dependency property.
-
-</para>
-            </summary>
-            <value>A <see cref="ScrollBarAnnotationAlignment"/> enumeration value that specifies the horizontal alignment of the scrollbar annotation marks within the scrollbar.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.AlignmentProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.Brush">
-            <summary>
-                <para>Gets or sets the brush used to paint scrollbar annotation marks. This is a dependency property.
-</para>
-            </summary>
-            <value>A brush used to paint scrollbar annotation marks.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.BrushProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.MinHeight">
-            <summary>
-                <para>Gets or sets the minimum height of the scrollbar annotation marks. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="Double"/> value that specifies the minimum height of the scrollbar annotation marks.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.MinHeightProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.Width">
-            <summary>
-                <para>Gets or sets the width for the scrollbar annotation marks. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="Double"/> object, that is the width of the scrollbar annotation marks.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationInfo.WidthProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.FixedStyle">
-
-            <summary>
-                <para>Lists values that specify a column/band's behavior when a view is horizontally scrolled.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedStyle.Left">
-            <summary>
-                <para>A column/band is anchored to the vew's left edge.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedStyle.None">
-            <summary>
-                <para>A column/band takes part in horizontal scrolling.
-</para>
-            </summary>
-
-
         </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedStyle.Right">
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Full">
             <summary>
-                <para>A column/band is anchored to the view's right edge.
+                <para>Specifies that the scrollbar annotation marks are stretched horizontally to fill the scrollbar. 
 </para>
             </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ErrorsWatchMode">
-
-            <summary>
-                <para>Lists values that specify the errors watch mode.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.All">
-            <summary>
-                <para>Grid View detects invalid rows and cells.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.Cells">
-            <summary>
-                <para>Grid View detects invalid cells.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.Default">
-            <summary>
-                <para>The error watch mode is disabled by default for the master grid view; for the detail grid view, the error watch mode depends on the error watch mode for the master view.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.None">
-            <summary>
-                <para>Grid View does not detect errors during the initial data load.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.Rows">
-            <summary>
-                <para>Grid View detects invalid rows.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.RowData">
-
-            <summary>
-                <para>Contains information about a data row.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.RowData.#ctor(DevExpress.Xpf.Grid.Native.DataTreeBuilder,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-                <para>Initializes a new instance of the RowData class.
-</para>
-            </summary>
-            <param name="treeBuilder">
-		 
-
-            </param>
-            <param name="updateOnlyData">
-		 
-
-            </param>
-            <param name="updateSelectionState">
-		 
-
-            </param>
-            <param name="updateError">
-		 
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.AlternateRow">
-            <summary>
-                <para>Gets whether the row uses the alternate background.
-
-</para>
-            </summary>
-            <value><b>true</b>, if the row uses the alternate background; otherwise, <b>false</b>.
-
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.CollapseBottomLine">
-            <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. 
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.ControllerVisibleIndex">
-            <summary>
-                <para>Gets the row's visible position within a View.
-</para>
-            </summary>
-            <value>An integer value that specifies the row's visible position within a View.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.CurrentRowData(System.Windows.DependencyObject)">
-            <summary>
-                <para>This member supports the internal infrastructure and is not intended to be used directly from your code. This is a dependency property.
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowData.CurrentRowDataProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.DataContext">
-            <summary>
-                <para>Gets or sets the row's data context.
-</para>
-            </summary>
-            <value>An object that represents the row's data context.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.EvenRow">
-            <summary>
-                <para>Gets whether the row's visible index is even.
-</para>
-            </summary>
-            <value><b>true</b> if the row's visible index is even; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.FixedRowPosition">
-            <summary>
-                <para>Gets or sets the row's fix position.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.FixedRowPosition"/> enumeration value that is the fixed row's position.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.RowData.GetCurrentRowData(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets the value of the <see cref="P:DevExpress.Xpf.Grid.RowData.CurrentRowData"/> attached property for a specified <see cref="T:System.Windows.DependencyObject"/>.
-</para>
-            </summary>
-            <param name="element">
-		The element from which the property value is read.
-
-            </param>
-            <returns>The <see cref="P:DevExpress.Xpf.Grid.RowData.RowData"/> property value for the element. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.RowData.GetRowData(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets the value of the <see cref="P:DevExpress.Xpf.Grid.RowData.RowData"/> attached property for a specified <see cref="T:System.Windows.DependencyObject"/>.
-</para>
-            </summary>
-            <param name="element">
-		The element from which the property value is read.
-
-            </param>
-            <returns>The <see cref="P:DevExpress.Xpf.Grid.RowData.RowData"/> property value for the element. 
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.IsEditFormVisible">
-            <summary>
-                <para>Gets whether the row's inline or popup edit form is visible for the row.
-</para>
-            </summary>
-            <value><b>true</b>, if the edit form is visible; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.IsExpanding">
-            <summary>
-                <para>Gets whether a group row is being expanded.
-</para>
-            </summary>
-            <value><b>true</b> the group row is being expanded; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.IsFocused">
-            <summary>
-                <para>Gets whether the row is focused.
-</para>
-            </summary>
-            <value><b>true</b> if the row is focused; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.IsLastFixedRow">
-            <summary>
-                <para>Gets whether the associated row is the last fixed row at the top or at the bottom of the <see cref="T:DevExpress.Xpf.Grid.TableView"/>.
-</para>
-            </summary>
-            <value><b>true</b>, if the row is the last fixed row at the top or at the bottom of the control; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.IsReady">
-            <summary>
-                <para>Gets whether the row's data has been loaded or not.
-</para>
-            </summary>
-            <value><b>true</b> if the row's data has been loaded; otherwise, <b>false</b>.
-
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.IsRowExpanded">
-            <summary>
-                <para>Gets whether a group row is expanded.
-</para>
-            </summary>
-            <value><b>true</b> if the group row is expanded; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.IsRowVisible">
-            <summary>
-                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.IsSelected">
-            <summary>
-                <para>Gets whether the row is selected.
-</para>
-            </summary>
-            <value><b>true</b> if the row is selected; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.Level">
-            <summary>
-                <para>Gets the row's grouping level.
-</para>
-            </summary>
-            <value>An integer value that specifies the row's grouping level.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.NextRowLevel">
-            <summary>
-                <para>Gets the next row's nesting level.
-</para>
-            </summary>
-            <value>An integer value that specifies the next row's nesting level.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.Row">
-            <summary>
-                <para> Gets a row object that corresponds to the row.
-</para>
-            </summary>
-            <value>An object in a data source that corresponds to the current row.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.RowData(System.Windows.DependencyObject)">
-            <summary>
-                <para>Provides access to a RowData's properties. This is a dependency property.
-</para>
-            </summary>
-            <value>A RowData object.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowData.RowDataProperty">
-            <summary>
-                <para>Identifies the  attached property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.RowHandle">
-            <summary>
-                <para>Gets the row's handle.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Data.RowHandle"/> object that represents the row's handle.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.RowPosition">
-            <summary>
-                <para>Gets the row's position within a View.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.RowPosition"/> enumeration value that specifies the row's position within a View.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.RowState">
-            <summary>
-                <para>Gets  an object that stores a row's state.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.DependencyObject"/> representing the row state.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.SelectionState">
-            <summary>
-                <para>Gets a value that indicates the row's selection state.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.SelectionState"/> enumeration value that specifies the row's selection state.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.RowData.SetCurrentRowData(System.Windows.DependencyObject,DevExpress.Xpf.Grid.RowData)">
-            <summary>
-                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Grid.RowData.CurrentRowData"/> attached property to a specified <see cref="T:System.Windows.DependencyObject"/>.
-</para>
-            </summary>
-            <param name="element">
-		The element to which the attached property is written.
-
-            </param>
-            <param name="value">
-		The required <see cref="T:DevExpress.Xpf.Grid.RowData"/> value.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.RowData.SetRowData(System.Windows.DependencyObject,DevExpress.Xpf.Grid.RowData)">
-            <summary>
-                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Grid.RowData.RowData"/> attached property to a specified <see cref="T:System.Windows.DependencyObject"/>.
-
-
-</para>
-            </summary>
-            <param name="element">
-		The element to which the attached property is written.
-
-            </param>
-            <param name="value">
-		The required <see cref="T:DevExpress.Xpf.Grid.RowData"/> value. 
-
-
-            </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.ShowBottomLine">
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Left">
             <summary>
-                <para>Indicates whether the row's bottom line is visible.
+                <para>Specifies that the scrollbar annotation marks are aligned to the left of the scrollbar. 
 </para>
             </summary>
-            <value><b>true</b> if the row's bottom line is visible; otherwise, <b>false</b>.
-</value>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.RowData.ShowRowBreak">
+        <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Right">
             <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+                <para>Specifies that the scrollbar annotation marks are aligned to the right of the scrollbar. 
 </para>
             </summary>
-            <value> 
-</value>
 
 
         </member>
@@ -20327,19 +20416,234 @@ If all values in the date-time column are set to null, all check boxes are visib
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.IconSetFormat">
+        <member name="T:DevExpress.Xpf.Grid.ColumnFilterPopupMode">
 
             <summary>
-                <para>Represents the icon set format.
+                <para>Lists values that specify the display mode of the filter dropdown for all columns within the view.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.IconSetFormat.#ctor">
+        <member name="F:DevExpress.Xpf.Grid.ColumnFilterPopupMode.Default">
             <summary>
-                <para>Initializes a new instance of the IconSetFormat class with the default settings.
+                <para>Filter dropdowns of date-time columns are represented by the calendar, filter dropdowns of all other columns are represented by regular lists.
 </para>
             </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ColumnFilterPopupMode.Excel">
+            <summary>
+                <para>Displays an Excel style filter dropdown.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.MergedGroupingMode">
+
+            <summary>
+                <para>Lists values that specify merged grouping modes.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.MergedGroupingMode.Always">
+            <summary>
+                <para>Grid always merges groups when end-users drag column headers into the group panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.MergedGroupingMode.CtrlKeyPressed">
+            <summary>
+                <para>End-users should hold the Ctrl key pressed when dragging column headers into the group panel to merge groups.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.CustomDataUpdateFormatConditionEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.CustomDataUpdateFormatCondition"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.CustomDataUpdateFormatCondition"/> events.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomDataUpdateFormatConditionEventArgs.#ctor">
+            <summary>
+                <para>Initializes a new instance of the CustomDataUpdateFormatConditionEventArgs class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomDataUpdateFormatConditionEventArgs.Allow">
+            <summary>
+                <para>Gets or sets whether the formatting should be applied to a processed cell (row).
+</para>
+            </summary>
+            <value><b>true</b>, to allow the formatting; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomDataUpdateFormatConditionEventArgs.Condition">
+            <summary>
+                <para>Gets the currently processed format condition.
+</para>
+            </summary>
+            <value>A <see cref="FormatConditionBase"/> object that represents the currently processed format condition.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomDataUpdateFormatConditionEventArgs.NewValue">
+            <summary>
+                <para>Gets the new cell value.
+
+</para>
+            </summary>
+            <value>A <see cref="T:System.Object"/> representing the new value.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomDataUpdateFormatConditionEventArgs.OldValue">
+            <summary>
+                <para>Gets the previous cell value.
+
+</para>
+            </summary>
+            <value>A <see cref="T:System.Object"/> representing the previous value.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.DataUpdateFormatCondition">
+
+            <summary>
+                <para>A Data Update conditional format.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.DataUpdateFormatCondition.#ctor">
+            <summary>
+                <para>Initializes a new instance of the DataUpdateFormatCondition class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.DataUpdateFormatCondition.AnimationSettings">
+            <summary>
+                <para>Gets or sets the animation settings of data update formatting. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="DataUpdateAnimationSettings"/> object that contains animation settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.DataUpdateFormatCondition.AnimationSettingsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.DataUpdateFormatCondition.Format">
+            <summary>
+                <para>Gets or sets the formatting settings applied to cells (or corresponding rows) whose values take part in conditional formatting. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Core.ConditionalFormatting.Format"/> object that provides formatting settings. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.DataUpdateFormatCondition.FormatProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.DataUpdateFormatCondition.FormatPropertyForBinding">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. 
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.DataUpdateFormatCondition.Rule">
+            <summary>
+                <para>Gets or sets a rule that determines whether the data update formatting should be applied. This is a dependency property.
+</para>
+            </summary>
+            <value>One of the <see cref="DataUpdateRule"/> enumeration values.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.DataUpdateFormatCondition.RuleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.EditFormShowingEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.EditFormShowing"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.EditFormShowing"/> events.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.EditFormShowingEventArgs.#ctor(System.Int32)">
+            <summary>
+                <para>Creates a new instance of the EditFormShowingEventArgs class with default settings.
+</para>
+            </summary>
+            <param name="rowHandle">
+		The handle of the row that raised the event.
+
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.EditFormShowingEventArgs.Allow">
+            <summary>
+                <para>Gets or sets a value that indicates whether to show the edit form.
+</para>
+            </summary>
+            <value><b>true</b>, to display the edit form for the row that has raised the event; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.EditFormShowingEventArgs.RowHandle">
+            <summary>
+                <para>Gets the handle of the row that raised the event.
+
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Data.RowHandle"/> object that specifies the grid row.
+</value>
 
 
         </member>
@@ -21128,6 +21432,34 @@ If all values in the date-time column are set to null, all check boxes are visib
                 <para><para>Represents the null text of the search box in <b>Filter Values</b> tab in the Excel-style filter dropdown for date values when the search is performed against year values.</para>
 <b>Return Value</b>: Search Year
 </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridControlRuntimeStringId.ExcelColumnFilterPopupSearchScopeAll">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridControlRuntimeStringId.ExcelColumnFilterPopupSearchScopeDay">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridControlRuntimeStringId.ExcelColumnFilterPopupSearchScopeMonth">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridControlRuntimeStringId.ExcelColumnFilterPopupSearchScopeYear">
+            <summary>
+                <para> </para>
             </summary>
 
 

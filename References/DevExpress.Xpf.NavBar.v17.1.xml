@@ -4,80 +4,33 @@
         <name>DevExpress.Xpf.NavBar.v17.1</name>
     </assembly>
     <members>
-        <member name="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangingEventArgs">
+        <member name="T:DevExpress.Xpf.NavBar.ElementAddingEventArgs">
 
             <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.NavBar.ExplorerBarView.GroupExpandedChanging"/> event.
+                <para>Provides data for events which concern adding an item or group.
+
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangingEventArgs.#ctor(DevExpress.Xpf.NavBar.NavBarGroup,System.Boolean)">
+        <member name="M:DevExpress.Xpf.NavBar.ElementAddingEventArgs.#ctor(System.Object)">
             <summary>
-                <para>Initializes a new instance of the NavBarGroupExpandedChangingEventArgs class with the specified settings.
+                <para>Initializes a new instance of the ElementAddingEventArgs class with the specified setting.
 </para>
             </summary>
-            <param name="group">
-		A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroup"/> object representing the group related to the generated event.
-
-            </param>
-            <param name="isExpanded">
-		<b>true</b> if the related group is expanded; otherwise, <b>false</b>.
+            <param name="sourceObject">
+		The data item object that supplies data for a NavBar element (an item or group) related to the event.
 
             </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangingEventArgs.Cancel">
+        <member name="P:DevExpress.Xpf.NavBar.ElementAddingEventArgs.SourceObject">
             <summary>
-                <para>Gets or sets a value indicating whether the operation which raised an event should be canceled. 
+                <para>Gets the data item to which the event related element (a group or item) is bound. 
 </para>
             </summary>
-            <value><b>true</b> if the operation raising the event should be canceled; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.NavBar.ExplorerBarView.GroupExpandedChanged"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs.#ctor(DevExpress.Xpf.NavBar.NavBarGroup,System.Boolean)">
-            <summary>
-                <para>Initializes a new instance of the NavBarGroupExpandedChangedEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="group">
-		A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroup"/> object representing the group related to the generated event.
-
-            </param>
-            <param name="isExpanded">
-		<b>true</b> if the related group is expanded; otherwise, <b>false</b>.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs.Group">
-            <summary>
-                <para>Gets a group object related to the event.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroup"/> object, manipulations on which forced the event to be raised.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs.IsExpanded">
-            <summary>
-                <para>Gets a value indicating whether the processed group is expanded.
-</para>
-            </summary>
-            <value><b>true</b> if the group is expanded, otherwise <b>false</b>.
+            <value>The data item object that supplies data for an added NavBar element (group or item). 
 </value>
 
 
@@ -1930,6 +1883,108 @@ This is an attached property.
 		A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangingEventArgs"/> object that contains event data.
 
             </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangingEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.NavBar.ExplorerBarView.GroupExpandedChanging"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangingEventArgs.#ctor(DevExpress.Xpf.NavBar.NavBarGroup,System.Boolean)">
+            <summary>
+                <para>Initializes a new instance of the NavBarGroupExpandedChangingEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="group">
+		A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroup"/> object representing the group related to the generated event.
+
+            </param>
+            <param name="isExpanded">
+		<b>true</b> if the related group is expanded; otherwise, <b>false</b>.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangingEventArgs.Cancel">
+            <summary>
+                <para>Gets or sets a value indicating whether the operation which raised an event should be canceled. 
+</para>
+            </summary>
+            <value><b>true</b> if the operation raising the event should be canceled; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventHandler">
+
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.NavBar.ExplorerBarView.GroupExpandedChanged"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventHandler.Invoke(System.Object,DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs)">
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.NavBar.ExplorerBarView.GroupExpandedChanged"/> event.
+</para>
+            </summary>
+            <param name="sender">
+		The event source. Identifies the view (<see cref="T:DevExpress.Xpf.NavBar.ExplorerBarView"/>) that raised the event. 
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs"/> object that contains event data.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.NavBar.ExplorerBarView.GroupExpandedChanged"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs.#ctor(DevExpress.Xpf.NavBar.NavBarGroup,System.Boolean)">
+            <summary>
+                <para>Initializes a new instance of the NavBarGroupExpandedChangedEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="group">
+		A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroup"/> object representing the group related to the generated event.
+
+            </param>
+            <param name="isExpanded">
+		<b>true</b> if the related group is expanded; otherwise, <b>false</b>.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs.Group">
+            <summary>
+                <para>Gets a group object related to the event.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroup"/> object, manipulations on which forced the event to be raised.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs.IsExpanded">
+            <summary>
+                <para>Gets a value indicating whether the processed group is expanded.
+</para>
+            </summary>
+            <value><b>true</b> if the group is expanded, otherwise <b>false</b>.
+</value>
 
 
         </member>
@@ -5876,37 +5931,6 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.NavBar.ElementAddingEventArgs">
-
-            <summary>
-                <para>Provides data for events which concern adding an item or group.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.NavBar.ElementAddingEventArgs.#ctor(System.Object)">
-            <summary>
-                <para>Initializes a new instance of the ElementAddingEventArgs class with the specified setting.
-</para>
-            </summary>
-            <param name="sourceObject">
-		The data item object that supplies data for a NavBar element (an item or group) related to the event.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.NavBar.ElementAddingEventArgs.SourceObject">
-            <summary>
-                <para>Gets the data item to which the event related element (a group or item) is bound. 
-</para>
-            </summary>
-            <value>The data item object that supplies data for an added NavBar element (group or item). 
-</value>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.NavBar.NavBarControl">
 
             <summary>
@@ -6228,30 +6252,6 @@ This is a dependency property.
 </para>
             </summary>
             <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventHandler">
-
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.NavBar.ExplorerBarView.GroupExpandedChanged"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventHandler.Invoke(System.Object,DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs)">
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.NavBar.ExplorerBarView.GroupExpandedChanged"/> event.
-</para>
-            </summary>
-            <param name="sender">
-		The event source. Identifies the view (<see cref="T:DevExpress.Xpf.NavBar.ExplorerBarView"/>) that raised the event. 
-
-            </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.NavBar.NavBarGroupExpandedChangedEventArgs"/> object that contains event data.
-
-            </param>
 
 
         </member>
