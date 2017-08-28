@@ -533,6 +533,11 @@ namespace StockSharp.Algo
 			}
 		}
 
+		/// <summary>
+		/// Send lookup messages on connect. By default is <see langword="true"/>.
+		/// </summary>
+		public bool LookupMessagesOnConnect { get; set; } = true;
+
 		private Tuple<IMessageAdapter, IMessageAdapter, IMessageAdapter> GetAdapter(Type type)
 		{
 			var adapter = _inAdapter;
@@ -1057,18 +1062,21 @@ namespace StockSharp.Algo
 
 			RaiseConnectedEx(adapter);
 
-			if (adapter.PortfolioLookupRequired)
-				SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-
-			if (adapter.OrderStatusRequired)
+			if (LookupMessagesOnConnect)
 			{
-				var transactionId = TransactionIdGenerator.GetNextId();
-				_entityCache.AddOrderStatusTransactionId(transactionId);
-				SendInMessage(new OrderStatusMessage { TransactionId = transactionId });
-			}
+				if (adapter.PortfolioLookupRequired)
+					SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
-			if (adapter.SecurityLookupRequired)
-				SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+				if (adapter.OrderStatusRequired)
+				{
+					var transactionId = TransactionIdGenerator.GetNextId();
+					_entityCache.AddOrderStatusTransactionId(transactionId);
+					SendInMessage(new OrderStatusMessage { TransactionId = transactionId });
+				}
+
+				if (adapter.SecurityLookupRequired)
+					SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });	
+			}
 
 			if (!isRestored)
 				return;
