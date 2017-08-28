@@ -4124,5 +4124,45 @@ namespace StockSharp.Algo
 
 			return security.Id.CompareIgnoreCase(AllSecurityId);
 		}
+
+		/// <summary>
+		/// To check the correctness of the entered identifier.
+		/// </summary>
+		/// <returns>An error message text, or <see langword="null" /> if no error.</returns>
+		public static string ValidateId(ref string id)
+		{
+			// 
+			// can be fixed via TraderHelper.SecurityIdToFolderName
+			//
+			//var invalidChars = Path.GetInvalidFileNameChars().Where(id.Contains).ToArray();
+			//if (invalidChars.Any())
+			//{
+			//	return LocalizedStrings.Str1549Params
+			//		.Put(id, invalidChars.Select(c => c.To<string>()).Join(", "));
+			//}
+
+			var firstIndex = id.IndexOf('@');
+
+			if (firstIndex == -1)
+			{
+				id += "@ALL";
+				//return LocalizedStrings.Str2926;
+			}
+
+			var lastIndex = id.LastIndexOf('@');
+
+			//if (firstIndex != id.LastIndexOf('@'))
+			//	return LocalizedStrings.Str1550;
+
+			if (firstIndex != lastIndex)
+				return null;
+
+			if (firstIndex == 0)
+				return LocalizedStrings.Str2923;
+			else if (firstIndex == (id.Length - 1))
+				return LocalizedStrings.Str2926;
+
+			return null;
+		}
 	}
 }
