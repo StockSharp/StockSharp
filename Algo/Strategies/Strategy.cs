@@ -179,9 +179,7 @@ namespace StockSharp.Algo.Strategies
 
 			public void TryRemoveStoppedRule(IMarketRule rule)
 			{
-				var child = rule.Token as Strategy;
-
-				if (child != null)
+				if (rule.Token is Strategy child)
 					_childStrategyRules.Remove(child);
 			}
 		}
@@ -478,6 +476,7 @@ namespace StockSharp.Algo.Strategies
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 99)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public decimal? Slippage { get; private set; }
 
 		/// <summary>
@@ -513,6 +512,7 @@ namespace StockSharp.Algo.Strategies
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 100)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public decimal PnL => PnLManager.PnL;
 
 		/// <summary>
@@ -530,10 +530,11 @@ namespace StockSharp.Algo.Strategies
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 101)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public decimal? Commission { get; private set; }
 
 		/// <summary>
-		/// <see cref="Strategy.Commission"/> change event.
+		/// <see cref="Commission"/> change event.
 		/// </summary>
 		public event Action CommissionChanged;
 
@@ -587,6 +588,7 @@ namespace StockSharp.Algo.Strategies
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 102)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public TimeSpan? Latency { get; private set; }
 
 		/// <summary>
@@ -971,6 +973,7 @@ namespace StockSharp.Algo.Strategies
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 105)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public DateTimeOffset StartedTime
 		{
 			get => _startedTime;

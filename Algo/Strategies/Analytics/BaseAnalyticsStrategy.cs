@@ -18,12 +18,12 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System;
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
-	using System.Globalization;
 
 	using Ecng.Xaml.Charting.Visuals;
 	using Ecng.Common;
 
 	using StockSharp.Algo.Storages;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
 
@@ -70,7 +70,15 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// Market-data storage.
 		/// </summary>
 		[Browsable(false)]
-		public IStorageRegistry StorateRegistry { get; private set; }
+		public IStorageRegistry StorateRegistry { get; set; }
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public override Portfolio Portfolio
+		{
+			get => base.Portfolio;
+			set => base.Portfolio = value;
+		}
 
 		/// <summary>
 		/// Initialize <see cref="BaseAnalyticsStrategy"/>.
@@ -114,29 +122,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// </summary>
 		protected override void OnStarted()
 		{
-			var storateRegistry = new StorageRegistry();
-
-			var drive = Environment.GetValue<IMarketDataDrive>("Drive");
-			if (drive != null)
-				storateRegistry.DefaultDrive = drive;
-
-			StorateRegistry = storateRegistry;
-
-			ThreadingHelper
-				.Thread(() =>
-				{
-					try
-					{
-						CultureInfo.InvariantCulture.DoInCulture(OnAnalyze);
-					}
-					catch (Exception ex)
-					{
-						this.AddErrorLog(ex);
-						ex.LogError();
-					}
-				})
-				.Name("{0} analyze thread.".Put(Name))
-				.Launch();
+			OnAnalyze();
 		}
 
 		/// <summary>
