@@ -2791,6 +2791,10 @@
       <ImageId>QuantFeedSample</ImageId>
       <AlternateText>Пример QuantFEED</AlternateText>
     </Image>
+    <Image Include="Art\SpbExNewOrder.png">
+      <ImageId>SpbExNewOrder</ImageId>
+      <AlternateText>Ввод заявки Spb Ex</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

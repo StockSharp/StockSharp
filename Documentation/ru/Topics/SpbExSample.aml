@@ -191,8 +191,10 @@ private void QuotesClick(object sender, RoutedEventArgs e)
 
 					<step>
 						<content>
-							<para>Для регистрации заявок предусмотрена кнопка <legacyBold>Новая заявка</legacyBold>. 
-							Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
+							<para>Для регистрации заявок предусмотрена кнопка <legacyBold>Новая заявка</legacyBold>.
+							В качестве названия счета необходимо выбирать тот, который начинается с числа:</para>
+							<mediaLink><image placement="center" xlink:href="SpbExNewOrder"/></mediaLink>
+							<para>Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
             				<code language="C#">
             				<![CDATA[
 private void NewOrderClick(object sender, RoutedEventArgs e)
