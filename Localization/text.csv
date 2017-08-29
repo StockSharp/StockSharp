@@ -14408,3 +14408,12 @@ DocStr10059;Update theme for the specified chart;Обновить тему дл�
 DocStr10060;Base interface for all chart components;Базовые интерфейс для всех графиков
 DocStr10061;Converted to {0} type values;Сконвертированные в тип {0} значения
 DocStr10062;Available input data types;Доступные типы входящих данных
+DocStr10063;Send lookup messages on connect. By default is {0};Отправлять сообщения с запросом поиска при подключении. По-умолчанию равно {0}
+DocStr10064;The graphical component to display the heatmap;Графический компонент с тепловой картой
+DocStr10065;Show color map;Показать палитру
+DocStr10066;Draw chart values;Отрисовать значения на графике
+DocStr10067;Titles on X axis;Заголовки на оси X
+DocStr10068;Titles on Y axis;Заголовки на оси Y
+DocStr10069;Clear chart;Очистить график
+DocStr10070;Panels;Панели
+DocStr10071;{0} changed event;Событие изменения {0}

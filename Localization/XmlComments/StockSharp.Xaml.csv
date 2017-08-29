@@ -61,6 +61,7 @@ P:StockSharp.Xaml.BuySellGrid.MarketDataProvider/summary;DocStr973
 E:StockSharp.Xaml.BuySellGrid.OrderRegistering/summary;DocStr8161
 E:StockSharp.Xaml.BuySellGrid.PanelAdded/summary;DocStr10053
 E:StockSharp.Xaml.BuySellGrid.PanelRemoved/summary;DocStr10052
+P:StockSharp.Xaml.BuySellGrid.Panels/summary;DocStr10070
 M:StockSharp.Xaml.BuySellGrid.ClearPanels/summary;DocStr10054
 M:StockSharp.Xaml.BuySellGrid.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.BuySellGrid.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
@@ -77,6 +78,7 @@ P:StockSharp.Xaml.BuySellPanel.Portfolios/summary;DocStr8362
 P:StockSharp.Xaml.BuySellPanel.MarketDataProvider/summary;DocStr973
 E:StockSharp.Xaml.BuySellPanel.OrderRegistering/summary;DocStr8161
 E:StockSharp.Xaml.BuySellPanel.Closed/summary;DocStr10056
+E:StockSharp.Xaml.BuySellPanel.SecurityChanged/summary;DocStr10071
 M:StockSharp.Xaml.BuySellPanel.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.BuySellPanel.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.BuySellPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -755,8 +757,6 @@ P:StockSharp.Xaml.SecurityGrid.MarketDataProvider/summary;DocStr973
 M:StockSharp.Xaml.SecurityGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityIdTextBox/summary;DocStr8295
 M:StockSharp.Xaml.SecurityIdTextBox.#ctor/summary;DocStr1
-M:StockSharp.Xaml.SecurityIdTextBox.ValidateId/summary;DocStr8296
-M:StockSharp.Xaml.SecurityIdTextBox.ValidateId/returns;DocStr8297
 M:StockSharp.Xaml.SecurityIdTextBox.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityLookupPanel/summary;DocStr8302
 F:StockSharp.Xaml.SecurityLookupPanel.SearchSecurityCommand/summary;DocStr29

@@ -3773,6 +3773,7 @@ P:StockSharp.Algo.Connector.SupportFilteredMarketDepth/summary;DocStr9304
 P:StockSharp.Algo.Connector.SupportAssociatedSecurity/summary;DocStr9304
 P:StockSharp.Algo.Connector.SupportLevel1DepthBuilder/summary;DocStr9304
 P:StockSharp.Algo.Connector.SupportCandleBuilder/summary;DocStr9304
+P:StockSharp.Algo.Connector.LookupMessagesOnConnect/summary;DocStr10063
 P:StockSharp.Algo.Connector.TransactionAdapter/summary;DocStr865
 P:StockSharp.Algo.Connector.MarketDataAdapter/summary;DocStr866
 P:StockSharp.Algo.Connector.StorageAdapter/summary;DocStr8545
@@ -5085,6 +5086,7 @@ T:StockSharp.Algo.Strategies.Analytics.BaseAnalyticsStrategy/summary;DocStr1640
 P:StockSharp.Algo.Strategies.Analytics.BaseAnalyticsStrategy.From/summary;Str2282
 P:StockSharp.Algo.Strategies.Analytics.BaseAnalyticsStrategy.To/summary;Str418
 P:StockSharp.Algo.Strategies.Analytics.BaseAnalyticsStrategy.StorateRegistry/summary;DocStr168
+P:StockSharp.Algo.Strategies.Analytics.BaseAnalyticsStrategy.Portfolio/inheritdoc;DocStr8459
 M:StockSharp.Algo.Strategies.Analytics.BaseAnalyticsStrategy.#ctor/summary;DocStr93
 M:StockSharp.Algo.Strategies.Analytics.BaseAnalyticsStrategy.ProcessCancelActiveOrders/summary;DocStr1674
 P:StockSharp.Algo.Strategies.Analytics.BaseAnalyticsStrategy.CurrentTime/summary;DocStr910
@@ -7133,6 +7135,8 @@ M:StockSharp.Algo.TraderHelper.GetAllSecurity(StockSharp.BusinessEntities.ISecur
 M:StockSharp.Algo.TraderHelper.IsAllSecurity(StockSharp.BusinessEntities.Security)/summary;DocStr10043
 M:StockSharp.Algo.TraderHelper.IsAllSecurity(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
 M:StockSharp.Algo.TraderHelper.IsAllSecurity(StockSharp.BusinessEntities.Security)/returns;DocStr10044
+M:StockSharp.Algo.TraderHelper.ValidateId(System.String@)/summary;DocStr8296
+M:StockSharp.Algo.TraderHelper.ValidateId(System.String@)/returns;DocStr8297
 T:StockSharp.Algo.UserPermissions/summary;DocStr163
 F:StockSharp.Algo.UserPermissions.Save/summary;DocStr164
 F:StockSharp.Algo.UserPermissions.Load/summary;DocStr165

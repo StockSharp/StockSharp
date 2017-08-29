@@ -316,6 +316,11 @@
             Panel removed event.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.BuySellGrid.Panels">
+      <summary>
+            Panels.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.BuySellGrid.ClearPanels">
       <summary>
             Remove all <see cref="T:StockSharp.Xaml.BuySellPanel" />.
@@ -389,6 +394,11 @@
     <member name="E:StockSharp.Xaml.BuySellPanel.Closed">
       <summary>
             Closing <see cref="T:StockSharp.Xaml.BuySellPanel" /> event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.BuySellPanel.SecurityChanged">
+      <summary>
+        <see cref="P:StockSharp.Xaml.BuySellPanel.Security" /> changed event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.BuySellPanel.Load(Ecng.Serialization.SettingsStorage)">
@@ -3525,12 +3535,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityIdTextBox" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityIdTextBox.ValidateId">
-      <summary>
-            To check the correctness of the entered identifier.
-            </summary>
-      <returns>An error message text, or <see langword="null" /> if no error.</returns>
     </member>
     <member name="M:StockSharp.Xaml.SecurityIdTextBox.InitializeComponent">
       <summary>
