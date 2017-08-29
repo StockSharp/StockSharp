@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			var chart = Chart;
 			var grid = Grid;
 
-			var chartSeries = new XyzDataSeries<DateTime, double, double>();
+			var chartSeries = new XyzDataSeries<DateTime, double, double> { AcceptsUnsortedData = true };
 			ThreadSafeObservableCollection<GridRow> gridSeries = null;
 
 			chart.GuiSync(() =>

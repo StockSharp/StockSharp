@@ -16,6 +16,8 @@ StockSharp API Change log
 * (feature) ThreadSafeCol{Portfolio} -> PortfolioDataSource
 * (feature) DevExpress v17.1.5
 * (feature) Newtonsoft.Json. v10.0.3
+* (feature) Strategy. Browsable=false for modified values.
+* (bug) Analytic strategies fixes.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
