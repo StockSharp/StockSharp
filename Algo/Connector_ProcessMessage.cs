@@ -403,6 +403,9 @@ namespace StockSharp.Algo
 					if (SupportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
+					if (SupportSubscriptionTracking)
+						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
+
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
 
@@ -442,6 +445,28 @@ namespace StockSharp.Algo
 					DisableAdapter<OfflineMessageAdapter>();
 
 				_supportOffline = value;
+			}
+		}
+
+		private bool _supportSubscriptionTracking;
+
+		/// <summary>
+		/// Use <see cref="SubscriptionMessageAdapter"/>.
+		/// </summary>
+		public bool SupportSubscriptionTracking
+		{
+			get => _supportSubscriptionTracking;
+			set
+			{
+				if (_supportSubscriptionTracking == value)
+					return;
+
+				if (value)
+					EnableAdapter(a => new SubscriptionMessageAdapter(a) { OwnInnerAdaper = true }, typeof(OfflineMessageAdapter), false);
+				else
+					DisableAdapter<SubscriptionMessageAdapter>();
+
+				_supportSubscriptionTracking = value;
 			}
 		}
 
@@ -581,9 +606,7 @@ namespace StockSharp.Algo
 			{
 				if (after)
 				{
-					var nextWrapper = tuple.Item3 as IMessageAdapterWrapper;
-
-					if (nextWrapper != null)
+					if (tuple.Item3 is IMessageAdapterWrapper nextWrapper)
 						nextWrapper.InnerAdapter = create(adapter);
 					else
 						AddAdapter(create);
@@ -867,9 +890,7 @@ namespace StockSharp.Algo
 
 			var error = mdMsg.Error;
 
-			MarketDataMessage originalMsg;
-
-			var security = _subscriptionManager.ProcessResponse(mdMsg.OriginalTransactionId, out originalMsg);
+			var security = _subscriptionManager.ProcessResponse(mdMsg.OriginalTransactionId, out var originalMsg);
 
 			if (security == null)
 			{
@@ -921,9 +942,7 @@ namespace StockSharp.Algo
 
 			if (security == null)
 			{
-				var secProvider = EntityFactory as ISecurityProvider;
-
-				if (secProvider != null)
+				if (EntityFactory is ISecurityProvider secProvider)
 					security = secProvider.LookupById(stockSharpId);
 			}
 
@@ -1616,8 +1635,7 @@ namespace StockSharp.Algo
 		{
 			if (message.OrderState != OrderStates.Failed)
 			{
-				Tuple<Portfolio, bool, bool> pfInfo;
-				var tuples = _entityCache.ProcessOrderMessage(o, security, message, transactionId, out pfInfo);
+				var tuples = _entityCache.ProcessOrderMessage(o, security, message, transactionId, out var pfInfo);
 
 				if (tuples == null)
 				{
@@ -1814,8 +1832,7 @@ namespace StockSharp.Algo
 						break;
 					}
 
-					long transactionId;
-					var order = _entityCache.GetOrder(message, out transactionId);
+					var order = _entityCache.GetOrder(message, out var transactionId);
 
 					if (order == null)
 					{

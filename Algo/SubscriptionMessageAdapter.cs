@@ -91,9 +91,8 @@ namespace StockSharp.Algo
 						foreach (var m in messages)
 						{
 							var msg = m.Clone();
-							var mdMsg = msg as MarketDataMessage;
 
-							if (mdMsg != null)
+							if (msg is MarketDataMessage mdMsg)
 							{
 								mdMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
 								mdMsg.IsSubscribe = false;
@@ -217,9 +216,7 @@ namespace StockSharp.Algo
 					msg.IsBack = true;
 					msg.Adapter = this;
 
-					var mdMsg = msg as MarketDataMessage;
-
-					if (mdMsg != null)
+					if (msg is MarketDataMessage mdMsg)
 					{
 						mdMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
 					}

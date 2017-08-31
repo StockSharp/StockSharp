@@ -99,8 +99,10 @@ namespace StockSharp.Algo
 		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="initManagers">Initialize managers.</param>
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
-		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, bool initManagers = true, bool supportOffline = false)
-			: this(false, true, initManagers, supportOffline)
+		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, bool initManagers = true,
+			bool supportOffline = false, bool supportSubscriptionTracking = false)
+			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking)
 		{
 			InitializeStorage(entityRegistry, storageRegistry);
 		}
@@ -112,11 +114,14 @@ namespace StockSharp.Algo
 		/// <param name="initChannels">Initialize channels.</param>
 		/// <param name="initManagers">Initialize managers.</param>
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
-		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true, bool supportOffline = false)
+		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
+		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true,
+			bool supportOffline = false, bool supportSubscriptionTracking = false)
 		{
 			_entityCache.ExchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
 			_supportOffline = supportOffline;
+			_supportSubscriptionTracking = supportSubscriptionTracking;
 			ReConnectionSettings = new ReConnectionSettings();
 
 			_subscriptionManager = new SubscriptionManager(this);
