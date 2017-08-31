@@ -1,8 +1,10 @@
 ﻿namespace StockSharp.Algo
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -13,7 +15,9 @@
 	public class OfflineMessageAdapter : MessageAdapterWrapper
 	{
 		private bool _connected;
-		private readonly SynchronizedList<Message> _pendingMessages = new SynchronizedList<Message>();
+		private readonly SyncObject _syncObject = new SyncObject();
+		private readonly List<Message> _pendingMessages = new List<Message>();
+		private readonly PairSet<long, MarketDataMessage> _subscriptions = new PairSet<long, MarketDataMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OfflineMessageAdapter"/>.
@@ -67,7 +71,12 @@
 				case MessageTypes.Reset:
 				{
 					_connected = false;
-					_pendingMessages.Clear();
+
+					lock (_syncObject)
+					{
+						_pendingMessages.Clear();
+						_subscriptions.Clear();
+					}
 
 					base.SendInMessage(message);
 					break;
@@ -82,14 +91,53 @@
 
 					break;
 				}
+				case MessageTypes.MarketData:
+				{
+					if (!_connected)
+					{
+						var mdMsg = (MarketDataMessage)message;
+
+						lock (_syncObject)
+						{
+							if (mdMsg.IsSubscribe)
+							{
+								var clone = (MarketDataMessage)mdMsg.Clone();
+
+								if (mdMsg.TransactionId != 0)
+									_subscriptions.Add(mdMsg.TransactionId, clone);
+
+								StoreMessage(clone);
+							}
+							else
+							{
+								if (mdMsg.OriginalTransactionId != 0)
+								{
+									var originMsg = _subscriptions.TryGetValue(mdMsg.OriginalTransactionId);
+
+									if (originMsg != null)
+									{
+										_subscriptions.Remove(mdMsg.OriginalTransactionId);
+										_pendingMessages.Remove(originMsg);
+										return;
+									}
+								}
+								
+								StoreMessage(message.Clone());
+							}
+						}
+
+						return;
+					}
+
+					break;
+				}
 				default:
 				{
 					if (!_connected)
 					{
-						if (_maxMessageCount > 0 && _pendingMessages.Count == _maxMessageCount)
-							throw new InvalidOperationException(LocalizedStrings.MaxMessageCountExceed);
+						lock (_syncObject)
+							StoreMessage(message.Clone());
 
-						_pendingMessages.Add(message.Clone());
 						return;
 					}
 
@@ -98,6 +146,17 @@
 			}
 
 			base.SendInMessage(message);
+		}
+
+		private void StoreMessage(Message message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (_maxMessageCount > 0 && _pendingMessages.Count == _maxMessageCount)
+				throw new InvalidOperationException(LocalizedStrings.MaxMessageCountExceed);
+
+			_pendingMessages.Add(message);
 		}
 
 		/// <summary>
@@ -120,7 +179,18 @@
 
 			if (message.Type == MessageTypes.Connect && _connected)
 			{
-				var msgs = _pendingMessages.SyncGet(c => c.CopyAndClear());
+				Message[] msgs;
+
+				lock (_syncObject)
+				{
+					msgs = _pendingMessages.CopyAndClear();
+
+					foreach (var msg in msgs)
+					{
+						if (msg is MarketDataMessage mdMsg)
+							_subscriptions.RemoveByValue(mdMsg);
+					}
+				}
 
 				foreach (var msg in msgs)
 				{
