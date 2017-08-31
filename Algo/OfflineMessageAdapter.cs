@@ -18,7 +18,8 @@
 		private readonly SyncObject _syncObject = new SyncObject();
 		private readonly List<Message> _pendingMessages = new List<Message>();
 		private readonly PairSet<long, PortfolioMessage> _pfSubscriptions = new PairSet<long, PortfolioMessage>();
-		private readonly PairSet<long, MarketDataMessage> _subscriptions = new PairSet<long, MarketDataMessage>();
+		private readonly PairSet<long, MarketDataMessage> _mdSubscriptions = new PairSet<long, MarketDataMessage>();
+		private readonly PairSet<long, OrderRegisterMessage> _sentOrders = new PairSet<long, OrderRegisterMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OfflineMessageAdapter"/>.
@@ -76,7 +77,7 @@
 						_connected = false;
 
 						_pendingMessages.Clear();
-						_subscriptions.Clear();
+						_mdSubscriptions.Clear();
 						_pfSubscriptions.Clear();
 					}
 
@@ -96,6 +97,40 @@
 
 					break;
 				}
+				case MessageTypes.OrderRegister:
+				{
+					lock (_syncObject)
+					{
+						if (!_connected)
+						{
+							var orderMsg = (OrderRegisterMessage)message.Clone();
+
+							_sentOrders.Add(orderMsg.TransactionId, orderMsg);
+							StoreMessage(orderMsg);
+
+							return;
+						}
+					}
+
+					break;
+				}
+				case MessageTypes.OrderCancel:
+				{
+					lock (_syncObject)
+					{
+						if (!_connected)
+						{
+							var orderMsg = (OrderCancelMessage)message.Clone();
+
+							if (_sentOrders.Remove(orderMsg.OrderTransactionId))
+								_pendingMessages.Remove(orderMsg);
+
+							return;
+						}
+					}
+
+					break;
+				}
 				case MessageTypes.Portfolio:
 				{
 					lock (_syncObject)
@@ -105,7 +140,7 @@
 							var pfMsg = (PortfolioMessage)message;
 							ProcessSubscriptionMessage(pfMsg, pfMsg.IsSubscribe, pfMsg.TransactionId, pfMsg.OriginalTransactionId, _pfSubscriptions);
 							return;
-						}	
+						}
 					}
 
 					break;
@@ -117,9 +152,9 @@
 						if (!_connected)
 						{
 							var mdMsg = (MarketDataMessage)message;
-							ProcessSubscriptionMessage(mdMsg, mdMsg.IsSubscribe, mdMsg.TransactionId, mdMsg.OriginalTransactionId, _subscriptions);
+							ProcessSubscriptionMessage(mdMsg, mdMsg.IsSubscribe, mdMsg.TransactionId, mdMsg.OriginalTransactionId, _mdSubscriptions);
 							return;
-						}	
+						}
 					}
 
 					break;
@@ -215,9 +250,11 @@
 					foreach (var msg in msgs)
 					{
 						if (msg is MarketDataMessage mdMsg)
-							_subscriptions.RemoveByValue(mdMsg);
+							_mdSubscriptions.RemoveByValue(mdMsg);
 						else if (msg is PortfolioMessage pfMsg)
 							_pfSubscriptions.RemoveByValue(pfMsg);
+						else if (msg is OrderRegisterMessage orderMsg)
+							_sentOrders.RemoveByValue(orderMsg);
 					}
 				}
 			}

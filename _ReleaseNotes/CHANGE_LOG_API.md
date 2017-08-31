@@ -23,6 +23,7 @@ StockSharp API Change log
 * (feature) SubscriptionMessageAdapter. Set PortfolioMessage.OriginalTransactionId if empty.
 * (feature) Security. Initialize Id, Name, Code, Class as null (prev was empty string).
 * (feature) MessageAdapter. Init ServerTime (if not set) for position messages.
+* (feature) OfflineMessageAdapter. Cancel previously sent orders.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
