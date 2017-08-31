@@ -17,6 +17,7 @@
 		private bool _connected;
 		private readonly SyncObject _syncObject = new SyncObject();
 		private readonly List<Message> _pendingMessages = new List<Message>();
+		private readonly PairSet<long, PortfolioMessage> _pfSubscriptions = new PairSet<long, PortfolioMessage>();
 		private readonly PairSet<long, MarketDataMessage> _subscriptions = new PairSet<long, MarketDataMessage>();
 
 		/// <summary>
@@ -76,6 +77,7 @@
 					{
 						_pendingMessages.Clear();
 						_subscriptions.Clear();
+						_pfSubscriptions.Clear();
 					}
 
 					base.SendInMessage(message);
@@ -91,41 +93,23 @@
 
 					break;
 				}
+				case MessageTypes.Portfolio:
+				{
+					if (!_connected)
+					{
+						var pfMsg = (PortfolioMessage)message;
+						ProcessSubscriptionMessage(pfMsg, pfMsg.IsSubscribe, pfMsg.TransactionId, pfMsg.OriginalTransactionId, _pfSubscriptions);
+						return;
+					}
+
+					break;
+				}
 				case MessageTypes.MarketData:
 				{
 					if (!_connected)
 					{
 						var mdMsg = (MarketDataMessage)message;
-
-						lock (_syncObject)
-						{
-							if (mdMsg.IsSubscribe)
-							{
-								var clone = (MarketDataMessage)mdMsg.Clone();
-
-								if (mdMsg.TransactionId != 0)
-									_subscriptions.Add(mdMsg.TransactionId, clone);
-
-								StoreMessage(clone);
-							}
-							else
-							{
-								if (mdMsg.OriginalTransactionId != 0)
-								{
-									var originMsg = _subscriptions.TryGetValue(mdMsg.OriginalTransactionId);
-
-									if (originMsg != null)
-									{
-										_subscriptions.Remove(mdMsg.OriginalTransactionId);
-										_pendingMessages.Remove(originMsg);
-										return;
-									}
-								}
-								
-								StoreMessage(message.Clone());
-							}
-						}
-
+						ProcessSubscriptionMessage(mdMsg, mdMsg.IsSubscribe, mdMsg.TransactionId, mdMsg.OriginalTransactionId, _subscriptions);
 						return;
 					}
 
@@ -146,6 +130,39 @@
 			}
 
 			base.SendInMessage(message);
+		}
+
+		private void ProcessSubscriptionMessage<TMessage>(TMessage message, bool isSubscribe, long transactionId, long originalTransactionId, PairSet<long, TMessage> subscriptions)
+			where TMessage : Message
+		{
+			lock (_syncObject)
+			{
+				if (isSubscribe)
+				{
+					var clone = (TMessage)message.Clone();
+
+					if (transactionId != 0)
+						subscriptions.Add(transactionId, clone);
+
+					StoreMessage(clone);
+				}
+				else
+				{
+					if (originalTransactionId != 0)
+					{
+						var originMsg = subscriptions.TryGetValue(originalTransactionId);
+
+						if (originMsg != null)
+						{
+							subscriptions.Remove(originalTransactionId);
+							_pendingMessages.Remove(originMsg);
+							return;
+						}
+					}
+								
+					StoreMessage(message.Clone());
+				}
+			}
 		}
 
 		private void StoreMessage(Message message)
@@ -189,6 +206,8 @@
 					{
 						if (msg is MarketDataMessage mdMsg)
 							_subscriptions.RemoveByValue(mdMsg);
+						else if (msg is PortfolioMessage pfMsg)
+							_pfSubscriptions.RemoveByValue(pfMsg);
 					}
 				}
 

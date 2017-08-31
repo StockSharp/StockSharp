@@ -19,6 +19,8 @@ StockSharp API Change log
 * (feature) Strategy. Browsable=false for modified values.
 * (bug) Analytic strategies fixes.
 * (feature) Heatmap chart.
+* (feature) OfflineMessageAdapter. Remove subscription while disconnected state.
+* (feature) SubscriptionMessageAdapter. Set PortfolioMessage.OriginalTransactionId if empty.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
