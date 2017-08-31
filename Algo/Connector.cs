@@ -561,8 +561,8 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			var boardCode = criteria.Board != null ? criteria.Board.Code : string.Empty;
-			var securityCode = criteria.Code ?? string.Empty;
+			var boardCode = criteria.Board?.Code;
+			var securityCode = criteria.Code;
 
 			if (!criteria.Id.IsEmpty())
 			{

@@ -46,7 +46,7 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
-		private string _id = string.Empty;
+		private string _id;
 
 		/// <summary>
 		/// Security ID.
@@ -73,7 +73,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private string _code = string.Empty;
+		private string _code;
 
 		/// <summary>
 		/// Security code.
@@ -152,7 +152,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private string _name = string.Empty;
+		private string _name;
 
 		/// <summary>
 		/// Security name.
@@ -177,7 +177,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private string _shortName = string.Empty;
+		private string _shortName;
 
 		/// <summary>
 		/// Short security name.
@@ -252,7 +252,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private string _class = string.Empty;
+		private string _class;
 
 		/// <summary>
 		/// Security class.
@@ -932,7 +932,7 @@ namespace StockSharp.BusinessEntities
 		//	}
 		//}
 
-		private string _underlyingSecurityId = string.Empty;
+		private string _underlyingSecurityId;
 
 		/// <summary>
 		/// Underlying asset on which the current security is built.
