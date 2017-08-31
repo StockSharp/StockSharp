@@ -104,6 +104,7 @@ namespace SampleSpbEx
 				{
 					// create connector
 					Trader = new SpbExTrader();
+					//Trader.LogLevel = LogLevels.Debug;
 
 					_logManager.Sources.Add(Trader);
 
@@ -111,7 +112,7 @@ namespace SampleSpbEx
 					{
 						// update gui labes
 						ChangeConnectStatus(true);
-						MessageBox.Show(this, LocalizedStrings.Str2958);
+						//MessageBox.Show(this, LocalizedStrings.Str2958);
 					});
 
 					// subscribe on connection successfully event
@@ -130,13 +131,13 @@ namespace SampleSpbEx
 						// update gui labes
 						ChangeConnectStatus(false);
 
-						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);	
+						//MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);	
 					});
 
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 					// subscribe on error event
-					Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+					//Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
