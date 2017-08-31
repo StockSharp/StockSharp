@@ -71,8 +71,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 					var result = command.ExecuteScalar();
 					if (result != null)
 					{
-						var value = result as string;
-						if (value != null)
+						if (result is string value)
 						{
 							if (!value.IsEmpty())
 								return;
@@ -189,8 +188,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 			if (type == typeof(string))
 			{
-				var srest = restriction as StringRestriction;
-				if (srest != null)
+				if (restriction is StringRestriction srest)
 				{
 					if (srest.IsFixedSize)
 						return $"nchar({srest.MaxLength})";

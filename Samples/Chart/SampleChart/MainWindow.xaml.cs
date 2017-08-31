@@ -131,9 +131,8 @@ namespace SampleChart
 
 		private void Chart_OnUnSubscribeElement(IChartElement element)
 		{
-			var indElem = element as ChartIndicatorElement;
 
-			if (indElem != null)
+			if (element is ChartIndicatorElement indElem)
 				_indicators.Remove(indElem);
 		}
 

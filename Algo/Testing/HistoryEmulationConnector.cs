@@ -449,9 +449,7 @@ namespace StockSharp.Algo.Testing
 
 						if (adapter == TransactionAdapter)
 						{
-							var candleMsg = message as CandleMessage;
-
-							if (candleMsg != null)
+							if (message is CandleMessage candleMsg)
 							{
 								//if (!UseExternalCandleSource)
 								//	break;

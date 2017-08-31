@@ -311,8 +311,7 @@ namespace XMLCommToHTM
 			if (!asExtention)
 				return showType ? m.Type.Type.Name + "." + m.ShortSignature : m.ShortSignature;
 
-			var meth = m as MethodDom;
-			if (meth != null && meth.IsExtention)
+			if (m is MethodDom meth && meth.IsExtention)
 				return meth.GetShortSignature(true);
 			else
 				return m.ShortSignature;

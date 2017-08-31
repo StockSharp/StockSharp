@@ -178,9 +178,7 @@ namespace StockSharp.Algo.Import
 		{
 			if (Type == typeof(decimal))
 			{
-				var str = value as string;
-
-				if (str != null)
+				if (value is string str)
 				{
 					str = str.Replace(',', '.').RemoveSpaces().ReplaceWhiteSpaces().Trim();
 
@@ -192,9 +190,7 @@ namespace StockSharp.Algo.Import
 			}
 			else if (Type == typeof(DateTimeOffset))
 			{
-				var str = value as string;
-
-				if (str != null)
+				if (value is string str)
 				{
 					if (_dateParser == null)
 						_dateParser = new FastDateTimeParser(Format);
@@ -206,7 +202,7 @@ namespace StockSharp.Algo.Import
 						var tz = Scope<TimeZoneInfo>.Current?.Value;
 
 						if (tz != null)
-							dto = dto.UtcDateTime.ApplyTimeZone(tz);	
+							dto = dto.UtcDateTime.ApplyTimeZone(tz);
 					}
 
 					value = dto;
@@ -214,9 +210,7 @@ namespace StockSharp.Algo.Import
 			}
 			else if (Type == typeof(TimeSpan))
 			{
-				var str = value as string;
-
-				if (str != null)
+				if (value is string str)
 				{
 					if (_timeParser == null)
 						_timeParser = new FastTimeSpanParser(Format);

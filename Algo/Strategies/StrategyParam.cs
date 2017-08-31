@@ -118,8 +118,7 @@ namespace StockSharp.Algo.Strategies
 				if (EqualityComparer<T>.Default.Equals(_value, value))
 					return;
 
-				var propChange = _value as INotifyPropertyChanged;
-				if (propChange != null)
+				if (_value is INotifyPropertyChanged propChange)
 					propChange.PropertyChanged -= OnValueInnerStateChanged;
 
 				_value = value;

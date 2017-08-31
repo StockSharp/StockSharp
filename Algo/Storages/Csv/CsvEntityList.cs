@@ -99,9 +99,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private static object NormalizedKey(object key)
 		{
-			var str = key as string;
-
-			if (str != null)
+			if (key is string str)
 				return str.ToLowerInvariant();
 
 			return key;

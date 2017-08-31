@@ -121,9 +121,7 @@ namespace StockSharp.Algo
 				if (portfolio == null)
 					throw new ArgumentNullException(nameof(portfolio));
 
-				var basketPortfolio = portfolio as BasketPortfolio;
-
-				if (basketPortfolio != null)
+				if (portfolio is BasketPortfolio basketPortfolio)
 					basketPortfolio.InnerPortfolios.ForEach(_connector.RegisterPortfolio);
 				else
 				{
@@ -137,9 +135,7 @@ namespace StockSharp.Algo
 				if (portfolio == null)
 					throw new ArgumentNullException(nameof(portfolio));
 
-				var basketPortfolio = portfolio as BasketPortfolio;
-
-				if (basketPortfolio != null)
+				if (portfolio is BasketPortfolio basketPortfolio)
 					basketPortfolio.InnerPortfolios.ForEach(_connector.UnRegisterPortfolio);
 				else
 				{

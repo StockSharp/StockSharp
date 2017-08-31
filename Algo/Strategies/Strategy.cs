@@ -1187,9 +1187,7 @@ namespace StockSharp.Algo.Strategies
 
 			foreach (var parameter in Parameters)
 			{
-				var unit = parameter.Value as Unit;
-
-				if (unit != null && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
+				if (parameter.Value is Unit unit && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
 					unit.SetSecurity(Security);
 			}
 
@@ -2124,8 +2122,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			Position changedPosition = null;
 
-			var basketPortfolio = Portfolio as BasketPortfolio;
-			if (basketPortfolio != null)
+			if (Portfolio is BasketPortfolio basketPortfolio)
 			{
 				var innerPfs = basketPortfolio.InnerPortfolios;
 

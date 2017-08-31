@@ -169,14 +169,10 @@ namespace StockSharp.Algo.Import
 
 					if (secMsg == null)
 					{
-						var execMsg = instance as ExecutionMessage;
-
-						if (execMsg != null)
+						if (instance is ExecutionMessage execMsg)
 							execMsg.ExecutionType = (ExecutionTypes)DataType.Arg;
 
-						var candleMsg = instance as CandleMessage;
-
-						if (candleMsg != null)
+						if (instance is CandleMessage candleMsg)
 							candleMsg.State = CandleStates.Finished;
 					}
 					else if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
