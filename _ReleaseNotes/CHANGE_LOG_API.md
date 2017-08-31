@@ -21,6 +21,8 @@ StockSharp API Change log
 * (feature) Heatmap chart.
 * (feature) OfflineMessageAdapter. Remove subscription while disconnected state.
 * (feature) SubscriptionMessageAdapter. Set PortfolioMessage.OriginalTransactionId if empty.
+* (feature) Security. Initialize Id, Name, Code, Class as null (prev was empty string).
+* (feature) MessageAdapter. Init ServerTime (if not set) for position messages.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

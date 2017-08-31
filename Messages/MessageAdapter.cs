@@ -462,6 +462,11 @@ namespace StockSharp.Messages
 		{
 			if (message.LocalTime.IsDefault())
 				message.LocalTime = CurrentTime;
+
+			if (message is BaseChangeMessage<PositionChangeTypes> posMsg && posMsg.ServerTime.IsDefault())
+			{
+				posMsg.ServerTime = CurrentTime;
+			}
 		}
 
 		/// <summary>
