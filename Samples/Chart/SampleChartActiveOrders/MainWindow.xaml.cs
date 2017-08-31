@@ -423,8 +423,6 @@
 
 		private ChartActiveOrderInfo GetOrderInfo(Order order, ChartActiveOrderInfo initFrom = null)
 		{
-			bool isNew;
-
 			var oi = _chartOrderInfos.SafeAdd(order, o =>
 			{
 				var info = new ChartActiveOrderInfo();
@@ -436,7 +434,7 @@
 				}
 
 				return info;
-			}, out isNew);
+			}, out var isNew);
 
 			if (isNew)
 			{
@@ -450,9 +448,7 @@
 
 		private bool RemoveOrder(Order o)
 		{
-			ChartActiveOrderInfo oi;
-
-			if (!_chartOrderInfos.TryGetValue(o, out oi))
+			if (!_chartOrderInfos.TryGetValue(o, out var oi))
 				return false;
 
 			_activeOrdersElement.Orders.Remove(oi);

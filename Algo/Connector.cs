@@ -662,8 +662,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			bool isNew;
-			var position = _entityCache.TryAddPosition(portfolio, security, clientCode, depoName, limitType, description, out isNew);
+			var position = _entityCache.TryAddPosition(portfolio, security, clientCode, depoName, limitType, description, out bool isNew);
 
 			if (isNew)
 				RaiseNewPosition(position);
@@ -1242,13 +1241,11 @@ namespace StockSharp.Algo
 			if (changeSecurity == null)
 				throw new ArgumentNullException(nameof(changeSecurity));
 
-			bool isNew;
-
 			var security = _entityCache.TryAddSecurity(id, idStr =>
 			{
 				var idInfo = SecurityIdGenerator.Split(idStr);
 				return Tuple.Create(idInfo.SecurityCode, _entityCache.ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode)));
-			}, out isNew);
+			}, out bool isNew);
 
 			var isChanged = changeSecurity(security);
 

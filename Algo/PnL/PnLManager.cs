@@ -102,9 +102,7 @@ namespace StockSharp.Algo.PnL
 						{
 							var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
 
-							PnLInfo info;
-
-							if (manager.ProcessMyTrade(trade, out info))
+							if (manager.ProcessMyTrade(trade, out var info))
 								_realizedPnL += info.PnL;
 
 							return info;

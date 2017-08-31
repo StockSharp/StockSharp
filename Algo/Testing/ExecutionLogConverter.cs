@@ -126,13 +126,10 @@ namespace StockSharp.Algo.Testing
 
 		private IEnumerable<ExecutionMessage> ProcessQuoteChange(DateTimeOffset time, DateTimeOffset serverTime, QuoteChange[] newBids, QuoteChange[] newAsks)
 		{
-			decimal bestBidPrice;
-			decimal bestAskPrice;
-
 			var diff = new List<ExecutionMessage>();
 
-			GetDiff(diff, time, serverTime, _bids, newBids, Sides.Buy, out bestBidPrice);
-			GetDiff(diff, time, serverTime, _asks, newAsks, Sides.Sell, out bestAskPrice);
+			GetDiff(diff, time, serverTime, _bids, newBids, Sides.Buy, out var bestBidPrice);
+			GetDiff(diff, time, serverTime, _asks, newAsks, Sides.Sell, out var bestAskPrice);
 
 			var spreadPrice = bestAskPrice == 0
 				? bestBidPrice

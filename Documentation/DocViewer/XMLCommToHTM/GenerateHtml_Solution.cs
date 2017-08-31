@@ -24,9 +24,8 @@ namespace XMLCommToHTM
 	{
 		static string Generate(SolutionDom sln)
 		{
-			XElement body;
-			var doc = GetDoc(out body);
-			
+			var doc = GetDoc(out var body);
+
 			body.Add(x("h1", sln.Name));
 
 			XElement tbody;

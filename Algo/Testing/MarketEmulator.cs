@@ -1381,8 +1381,7 @@ namespace StockSharp.Algo.Testing
 			{
 				var time = tradeMsg.ServerTime;
 
-				PnLInfo info;
-				PnLManager.ProcessMyTrade(tradeMsg, out info);
+				PnLManager.ProcessMyTrade(tradeMsg, out var info);
 				tradeMsg.Commission = _parent._commissionManager.Process(tradeMsg);
 
 				var position = tradeMsg.GetPosition(false);
@@ -1778,8 +1777,7 @@ namespace StockSharp.Algo.Testing
 
 		private PortfolioEmulator GetPortfolioInfo(string portfolioName)
 		{
-			bool isNew;
-			return _portfolios.SafeAdd(portfolioName, key => new PortfolioEmulator(this, key), out isNew);
+			return _portfolios.SafeAdd(portfolioName, key => new PortfolioEmulator(this, key), out var isNew);
 		}
 
 		private void UpdateLevel1Info(Level1ChangeMessage level1Msg, ICollection<Message> retVal, bool addToResult)

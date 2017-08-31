@@ -26,9 +26,7 @@ namespace StockSharp.Messages
 		/// <returns></returns>
 		public bool TryDequeue(out Message message, bool exitOnClose = true, bool block = true)
 		{
-			KeyValuePair<long, Message> pair;
-
-			if (TryDequeue(out pair, exitOnClose, block))
+			if (TryDequeue(out KeyValuePair<long, Message> pair, exitOnClose, block))
 			{
 				message = pair.Value;
 				return true;

@@ -909,8 +909,6 @@ namespace StockSharp.Algo
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
-			bool isNew;
-
 			var portfolio = _portfolios.SafeAdd(name, key =>
 			{
 				var p = EntityFactory.CreatePortfolio(key);
@@ -922,7 +920,7 @@ namespace StockSharp.Algo
 					p.ExtensionInfo = new Dictionary<string, object>();
 
 				return p;
-			}, out isNew);
+			}, out bool isNew);
 
 			var isChanged = false;
 			if (changePortfolio != null)

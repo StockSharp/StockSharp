@@ -33,8 +33,7 @@ namespace XMLCommToHTM
 	{
 		static string GeneratePartialType(TypePartialData partialType)
 		{
-			XElement body;
-			var doc = GetDoc(out body);
+			var doc = GetDoc(out var body);
 			body.Add(Section(
 				partialType.Type.SimpleName + Names[Strings.SuffixDelimeter] + Names[partialType.SectionType.ToString()]),
 				BuildMembers(partialType.SectionType, partialType.Type)
@@ -44,9 +43,8 @@ namespace XMLCommToHTM
 
 		static string Generate(TypeDom type)
 		{
-			XElement body;
-			var doc = GetDoc(out body);
-			
+			var doc = GetDoc(out var body);
+
 			body.Add(
 				x("h1", type.GetDisplayName(false) + Names[Strings.SuffixDelimeter] + Names[type.TypeKind.ToString()]),
 				x("p", XMLUtils.GetTagInnerXml(type.DocInfo, "summary", Navigation, true)),

@@ -27,8 +27,7 @@ namespace XMLCommToHTM
 	{
 		static string Generate(MemberDom member)
 		{
-			XElement body;
-			var doc = GetDoc(out body);
+			var doc = GetDoc(out var body);
 			body.Add(
 				x("h1", member.Type.SimpleName + GetMemberName(member) + Names[Strings.SuffixDelimeter] + 
 					Names[GetMethodKindName(member)]+ " ", member.GetParametersLongSignature()),
@@ -78,8 +77,7 @@ namespace XMLCommToHTM
 		static string Generate(IGrouping<string, MethodDom> group)
 		{
 			var first = group.First();
-			XElement body;
-			var doc = GetDoc(out body);
+			var doc = GetDoc(out var body);
 			body.Add(
 				x("h1", first.Type.SimpleName + GetMemberName(first) + Names[Strings.SuffixDelimeter] +
 					Names[GetMethodKindName(first)] + " " ),

@@ -61,8 +61,7 @@ namespace SampleBarChart
 				return;
 			}
 
-			bool isSuccess;
-			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandleMessage), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
+			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandleMessage), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out bool isSuccess);
 
 			Chart.Reset(new[] { _candlesElem });
 

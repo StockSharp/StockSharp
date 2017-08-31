@@ -91,8 +91,7 @@ namespace XMLCommToHTM.DOM
 
 				foreach (var ns in ret.Namespaces)
 				{
-					NamespaceComments c;
-					if (comm.TryGetValue(ns.Name, out c))
+					if (comm.TryGetValue(ns.Name, out var c))
 						ns.DocInfo = c.Comments;
 				}
 			}

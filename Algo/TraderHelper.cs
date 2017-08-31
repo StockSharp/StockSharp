@@ -411,8 +411,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
 		{
-			WorkingTimePeriod period;
-            return board.ToMessage().IsTradeTime(time, out period);
+			return board.ToMessage().IsTradeTime(time, out var period);
 		}
 
 		/// <summary>
@@ -435,8 +434,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
-			WorkingTimePeriod period;
-			return board.IsTradeTime(time, out period);
+			return board.IsTradeTime(time, out WorkingTimePeriod period);
 		}
 
 		/// <summary>
@@ -803,8 +801,7 @@ namespace StockSharp.Algo
 				if (null == quote)
 					continue;
 
-				decimal vol;
-				if (!changedVolume.TryGetValue(price, out vol))
+				if (!changedVolume.TryGetValue(price, out var vol))
 					vol = quote.Volume;
 
 				vol -= trade.SafeGetVolume();
@@ -827,8 +824,7 @@ namespace StockSharp.Algo
 
 					if (price == minTradePrice)
 					{
-						decimal vol;
-						if (changedVolume.TryGetValue(price, out vol))
+						if (changedVolume.TryGetValue(price, out var vol))
 						{
 							if (vol <= 0)
 								continue;
@@ -866,8 +862,7 @@ namespace StockSharp.Algo
 
 					if (price == maxTradePrice)
 					{
-						decimal vol;
-						if (changedVolume.TryGetValue(price, out vol))
+						if (changedVolume.TryGetValue(price, out decimal vol))
 						{
 							if (vol <= 0)
 								continue;

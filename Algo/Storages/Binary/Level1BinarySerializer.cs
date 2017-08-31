@@ -431,9 +431,7 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			if (metaInfo.Version < MarketDataVersions.Version45)
 			{
-				int fieldCode;
-
-				if (!_oldMap.TryGetValue(field, out fieldCode))
+				if (!_oldMap.TryGetValue(field, out var fieldCode))
 					throw new ArgumentException(LocalizedStrings.Str917Params.Put(field));
 
 				return fieldCode;
@@ -446,9 +444,7 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			if (metaInfo.Version < MarketDataVersions.Version45)
 			{
-				Level1Fields field;
-
-				if (!_oldMap.TryGetKey(fieldCode, out field))
+				if (!_oldMap.TryGetKey(fieldCode, out var field))
 					throw new ArgumentException(LocalizedStrings.Str918Params.Put(fieldCode));
 
 				return field;

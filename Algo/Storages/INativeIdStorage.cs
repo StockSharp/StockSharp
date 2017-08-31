@@ -189,9 +189,7 @@ namespace StockSharp.Algo.Storages
 				if (nativeIds == null)
 					return null;
 
-				SecurityId securityId;
-
-				if (!nativeIds.TryGetKey(nativeId, out securityId))
+				if (!nativeIds.TryGetKey(nativeId, out var securityId))
 					return null;
 
 				return securityId;
