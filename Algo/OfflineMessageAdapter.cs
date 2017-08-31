@@ -71,10 +71,10 @@
 			{
 				case MessageTypes.Reset:
 				{
-					_connected = false;
-
 					lock (_syncObject)
 					{
+						_connected = false;
+
 						_pendingMessages.Clear();
 						_subscriptions.Clear();
 						_pfSubscriptions.Clear();
@@ -88,41 +88,51 @@
 					break;
 				case MessageTypes.Time:
 				{
-					if (!_connected)
-						return;
+					lock (_syncObject)
+					{
+						if (!_connected)
+							return;
+					}
 
 					break;
 				}
 				case MessageTypes.Portfolio:
 				{
-					if (!_connected)
+					lock (_syncObject)
 					{
-						var pfMsg = (PortfolioMessage)message;
-						ProcessSubscriptionMessage(pfMsg, pfMsg.IsSubscribe, pfMsg.TransactionId, pfMsg.OriginalTransactionId, _pfSubscriptions);
-						return;
+						if (!_connected)
+						{
+							var pfMsg = (PortfolioMessage)message;
+							ProcessSubscriptionMessage(pfMsg, pfMsg.IsSubscribe, pfMsg.TransactionId, pfMsg.OriginalTransactionId, _pfSubscriptions);
+							return;
+						}	
 					}
 
 					break;
 				}
 				case MessageTypes.MarketData:
 				{
-					if (!_connected)
+					lock (_syncObject)
 					{
-						var mdMsg = (MarketDataMessage)message;
-						ProcessSubscriptionMessage(mdMsg, mdMsg.IsSubscribe, mdMsg.TransactionId, mdMsg.OriginalTransactionId, _subscriptions);
-						return;
+						if (!_connected)
+						{
+							var mdMsg = (MarketDataMessage)message;
+							ProcessSubscriptionMessage(mdMsg, mdMsg.IsSubscribe, mdMsg.TransactionId, mdMsg.OriginalTransactionId, _subscriptions);
+							return;
+						}	
 					}
 
 					break;
 				}
 				default:
 				{
-					if (!_connected)
+					lock (_syncObject)
 					{
-						lock (_syncObject)
+						if (!_connected)
+						{
 							StoreMessage(message.Clone());
-
-						return;
+							return;
+						}
 					}
 
 					break;
@@ -135,33 +145,30 @@
 		private void ProcessSubscriptionMessage<TMessage>(TMessage message, bool isSubscribe, long transactionId, long originalTransactionId, PairSet<long, TMessage> subscriptions)
 			where TMessage : Message
 		{
-			lock (_syncObject)
+			if (isSubscribe)
 			{
-				if (isSubscribe)
-				{
-					var clone = (TMessage)message.Clone();
+				var clone = (TMessage)message.Clone();
 
-					if (transactionId != 0)
-						subscriptions.Add(transactionId, clone);
+				if (transactionId != 0)
+					subscriptions.Add(transactionId, clone);
 
-					StoreMessage(clone);
-				}
-				else
+				StoreMessage(clone);
+			}
+			else
+			{
+				if (originalTransactionId != 0)
 				{
-					if (originalTransactionId != 0)
+					var originMsg = subscriptions.TryGetValue(originalTransactionId);
+
+					if (originMsg != null)
 					{
-						var originMsg = subscriptions.TryGetValue(originalTransactionId);
-
-						if (originMsg != null)
-						{
-							subscriptions.Remove(originalTransactionId);
-							_pendingMessages.Remove(originMsg);
-							return;
-						}
+						subscriptions.Remove(originalTransactionId);
+						_pendingMessages.Remove(originMsg);
+						return;
 					}
-								
-					StoreMessage(message.Clone());
 				}
+								
+				StoreMessage(message.Clone());
 			}
 		}
 
@@ -182,24 +189,27 @@
 		/// <param name="message">The message.</param>
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			ConnectMessage connectMessage = null;
+
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
 				{
-					var connectMsg = (ConnectMessage)message;
-					_connected = connectMsg.Error == null;
+					connectMessage = (ConnectMessage)message;
 					break;
 				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
 
-			if (message.Type == MessageTypes.Connect && _connected)
-			{
-				Message[] msgs;
+			Message[] msgs = null;
 
+			if (connectMessage != null && connectMessage.Error == null)
+			{
 				lock (_syncObject)
 				{
+					_connected = true;
+
 					msgs = _pendingMessages.CopyAndClear();
 
 					foreach (var msg in msgs)
@@ -210,7 +220,10 @@
 							_pfSubscriptions.RemoveByValue(pfMsg);
 					}
 				}
+			}
 
+			if (msgs != null)
+			{
 				foreach (var msg in msgs)
 				{
 					msg.IsBack = true;
