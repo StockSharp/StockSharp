@@ -119,45 +119,8 @@ namespace StockSharp.Algo
 					break;
 
 				case MessageTypes.Portfolio:
-				{
-					var pfMsg = (PortfolioMessage)message;
-					var sendIn = false;
-
-					lock (_sync)
-					{
-						var pair = _pfSubscribers.TryGetValue(pfMsg.PortfolioName) ?? RefTuple.Create((PortfolioMessage)pfMsg.Clone(), 0);
-						var subscribersCount = pair.Second;
-
-						if (pfMsg.IsSubscribe)
-						{
-							subscribersCount++;
-							sendIn = subscribersCount == 1;
-						}
-						else
-						{
-							if (subscribersCount > 0)
-							{
-								subscribersCount--;
-								sendIn = subscribersCount == 0;
-							}
-							//else
-							//	sendOutMsg = NonExist(message);
-						}
-
-						if (subscribersCount > 0)
-						{
-							pair.Second = subscribersCount;
-							_pfSubscribers[pfMsg.PortfolioName] = pair;
-						}
-						else
-							_pfSubscribers.Remove(pfMsg.PortfolioName);
-					}
-					
-					if (sendIn)
-						base.SendInMessage(message);
-
+					ProcessInPortfolioMessage((PortfolioMessage)message);
 					break;
-				}
 
 				default:
 					base.SendInMessage(message);
@@ -415,6 +378,52 @@ namespace StockSharp.Algo
 				OriginalTransactionId = message.TransactionId,
 				Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist),
 			};
+		}
+
+		private void ProcessInPortfolioMessage(PortfolioMessage message)
+		{
+			var sendIn = false;
+			var pfName = message.PortfolioName;
+			
+			RefPair<PortfolioMessage, int> pair;
+
+			lock (_sync)
+			{
+				pair = _pfSubscribers.TryGetValue(pfName) ?? RefTuple.Create((PortfolioMessage)message.Clone(), 0);
+				var subscribersCount = pair.Second;
+
+				if (message.IsSubscribe)
+				{
+					subscribersCount++;
+					sendIn = subscribersCount == 1;
+				}
+				else
+				{
+					if (subscribersCount > 0)
+					{
+						subscribersCount--;
+						sendIn = subscribersCount == 0;
+					}
+					//else
+					//	sendOutMsg = NonExist(message);
+				}
+
+				if (subscribersCount > 0)
+				{
+					pair.Second = subscribersCount;
+					_pfSubscribers[pfName] = pair;
+				}
+				else
+					_pfSubscribers.Remove(pfName);
+			}
+
+			if (sendIn)
+			{
+				if (!message.IsSubscribe && message.OriginalTransactionId == 0)
+					message.OriginalTransactionId = pair.First.TransactionId;
+
+				base.SendInMessage(message);
+			}
 		}
 
 		/// <summary>
