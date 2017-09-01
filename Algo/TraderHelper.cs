@@ -4159,5 +4159,50 @@ namespace StockSharp.Algo
 
 			return null;
 		}
+
+		/// <summary>
+		/// Convert <see cref="Level1Fields"/> to <see cref="Type"/> value.
+		/// </summary>
+		/// <param name="field"><see cref="Level1Fields"/> value.</param>
+		/// <returns><see cref="Type"/> value.</returns>
+		public static Type ToType(this Level1Fields field)
+		{
+			switch (field)
+			{
+				case Level1Fields.LastTrade:
+				case Level1Fields.BestBid:
+				case Level1Fields.BestAsk:
+				case Level1Fields.ExtensionInfo:
+					return null;
+
+				case Level1Fields.AsksCount:
+				case Level1Fields.BidsCount:
+				case Level1Fields.TradesCount:
+				case Level1Fields.Decimals:
+					return typeof(int);
+
+				case Level1Fields.LastTradeId:
+					return typeof(long);
+
+				case Level1Fields.BestAskTime:
+				case Level1Fields.BestBidTime:
+				case Level1Fields.LastTradeTime:
+				case Level1Fields.BuyBackDate:
+					return typeof(DateTime);
+
+				case Level1Fields.LastTradeUpDown:
+				case Level1Fields.IsSystem:
+					return typeof(bool);
+
+				case Level1Fields.State:
+					return typeof(SecurityStates);
+
+				case Level1Fields.LastTradeOrigin:
+					return typeof(Sides);
+
+				default:
+					return typeof(decimal);
+			}
+		}
 	}
 }

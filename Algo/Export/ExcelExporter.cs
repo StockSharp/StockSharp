@@ -309,27 +309,10 @@ namespace StockSharp.Algo.Export
 
 		private static void ApplyCellStyle(ExcelWorker worker, Level1Fields field, int column)
 		{
-			switch (field)
-			{
-				case Level1Fields.LastTrade:
-				case Level1Fields.BestAsk:
-				case Level1Fields.BestBid:
-					break;
-				case Level1Fields.LastTradeId:
-				case Level1Fields.BidsCount:
-				case Level1Fields.AsksCount:
-				case Level1Fields.TradesCount:
-					worker.SetStyle(column, typeof(long));
-					break;
-				case Level1Fields.LastTradeTime:
-				case Level1Fields.BestAskTime:
-				case Level1Fields.BestBidTime:
-					worker.SetStyle(column, typeof(DateTimeOffset));
-					break;
-				default:
-					worker.SetStyle(column, typeof(decimal));
-					break;
-			}
+			var type = field.ToType();
+
+			if (type != null && !type.IsEnum)
+				worker.SetStyle(column, type);
 		}
 
 		/// <inheritdoc />
