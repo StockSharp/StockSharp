@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// The analytic strategy, calculating distribution of the biggest volume by hours.
@@ -114,58 +115,65 @@ namespace StockSharp.Algo.Strategies.Analytics
 			// get available dates for the specified period
 			var dates = storage.GetDates(From, To).ToArray();
 
-			var rows = new Dictionary<TimeSpan, GridRow>();
-
-			foreach (var loadDate in dates)
+			if (dates.Length == 0)
 			{
-				// check if stopped
-				if (ProcessState != ProcessStates.Started)
-					break;
+				this.AddWarningLog(LocalizedStrings.Str2913);
+			}
+			else
+			{
+				var rows = new Dictionary<TimeSpan, GridRow>();
 
-				// load candles
-				var candles = storage.Load(loadDate);
-
-				// groupping candles by open time
-				var groupedCandles = candles.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)));
-
-				foreach (var group in groupedCandles.OrderBy(g => g.Key))
+				foreach (var loadDate in dates)
 				{
 					// check if stopped
 					if (ProcessState != ProcessStates.Started)
 						break;
 
-					var time = group.Key;
+					// load candles
+					var candles = storage.Load(loadDate);
 
-					// calc total volume for the specified time frame
-					var sumVol = group.Sum(c => c.TotalVolume);
+					// groupping candles by open time
+					var groupedCandles = candles.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)));
 
-					var row = rows.TryGetValue(time);
-					if (row == null)
+					foreach (var group in groupedCandles.OrderBy(g => g.Key))
 					{
-						// new volume level
-						rows.Add(time, row = new GridRow { Time = time, Volume = sumVol });
+						// check if stopped
+						if (ProcessState != ProcessStates.Started)
+							break;
 
-						// draw on chart
-						chartSeries.Append(DateTime.Today + time, (double)sumVol, (double)sumVol / 1000);
+						var time = group.Key;
 
-						// draw on table
-						gridSeries.Add(row);
+						// calc total volume for the specified time frame
+						var sumVol = group.Sum(c => c.TotalVolume);
+
+						var row = rows.TryGetValue(time);
+						if (row == null)
+						{
+							// new volume level
+							rows.Add(time, row = new GridRow { Time = time, Volume = sumVol });
+
+							// draw on chart
+							chartSeries.Append(DateTime.Today + time, (double)sumVol, (double)sumVol / 1000);
+
+							// draw on table
+							gridSeries.Add(row);
+						}
+						else
+						{
+							// update existing volume level
+							row.Volume += sumVol;
+
+							// update chart
+							chartSeries.Update(DateTime.Today + time, (double)row.Volume, (double)row.Volume / 1000);
+						}
 					}
-					else
-					{
-						// update existing volume level
-						row.Volume += sumVol;
-
-						// update chart
-						chartSeries.Update(DateTime.Today + time, (double)row.Volume, (double)row.Volume / 1000);
-					}
-				}
 				
-				chart.GuiAsync(() =>
-				{
-					// scale chart
-					chart.ZoomExtents();
-				});
+					chart.GuiAsync(() =>
+					{
+						// scale chart
+						chart.ZoomExtents();
+					});
+				}
 			}
 
 			// notify the script stopped

@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// The analytic strategy, calculating distribution of the volume by price levels.
@@ -112,58 +113,65 @@ namespace StockSharp.Algo.Strategies.Analytics
 			// get available dates for the specified period
 			var dates = storage.GetDates(From, To).ToArray();
 
-			var rows = new Dictionary<decimal, GridRow>();
-
-			foreach (var loadDate in dates)
+			if (dates.Length == 0)
 			{
-				// check if stopped
-				if (ProcessState != ProcessStates.Started)
-					break;
+				this.AddWarningLog(LocalizedStrings.Str2913);
+			}
+			else
+			{
+				var rows = new Dictionary<decimal, GridRow>();
 
-				// load candles
-				var candles = storage.Load(loadDate);
-
-				// groupping candles by candle's middle price
-				var groupedCandles = candles.GroupBy(c => c.LowPrice + c.GetLength() / 2);
-
-				foreach (var group in groupedCandles.OrderBy(g => g.Key))
+				foreach (var loadDate in dates)
 				{
 					// check if stopped
 					if (ProcessState != ProcessStates.Started)
 						break;
 
-					var price = group.Key;
+					// load candles
+					var candles = storage.Load(loadDate);
 
-					// calc total volume for the specified time frame
-					var sumVol = group.Sum(c => c.TotalVolume);
+					// groupping candles by candle's middle price
+					var groupedCandles = candles.GroupBy(c => c.LowPrice + c.GetLength() / 2);
 
-					var row = rows.TryGetValue(price);
-					if (row == null)
+					foreach (var group in groupedCandles.OrderBy(g => g.Key))
 					{
-						// new price level
-						rows.Add(price, row = new GridRow { Price = price, Volume = sumVol });
+						// check if stopped
+						if (ProcessState != ProcessStates.Started)
+							break;
 
-						// draw on chart
-						chartSeries.Append((double)price, (double)sumVol);
+						var price = group.Key;
 
-						// draw on table
-						gridSeries.Add(row);
+						// calc total volume for the specified time frame
+						var sumVol = group.Sum(c => c.TotalVolume);
+
+						var row = rows.TryGetValue(price);
+						if (row == null)
+						{
+							// new price level
+							rows.Add(price, row = new GridRow { Price = price, Volume = sumVol });
+
+							// draw on chart
+							chartSeries.Append((double)price, (double)sumVol);
+
+							// draw on table
+							gridSeries.Add(row);
+						}
+						else
+						{
+							// update existing price level
+							row.Volume += sumVol;
+
+							// update chart
+							chartSeries.Update((double)price, (double)row.Volume);
+						}
 					}
-					else
+
+					chart.GuiAsync(() =>
 					{
-						// update existing price level
-						row.Volume += sumVol;
-
-						// update chart
-						chartSeries.Update((double)price, (double)row.Volume);
-					}
+						// scale chart
+						chart.ZoomExtents();
+					});
 				}
-
-				chart.GuiAsync(() =>
-				{
-					// scale chart
-					chart.ZoomExtents();
-				});
 			}
 
 			// notify the script stopped
