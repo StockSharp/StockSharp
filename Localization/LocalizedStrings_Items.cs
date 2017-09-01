@@ -46036,5 +46036,15 @@ namespace StockSharp.Localization
 		/// Security {0} is not composite.
 		/// </summary>
 		public static string NotCompositeSecurity => GetString(NotCompositeSecurityKey);
+
+		/// <summary>
+		/// Heatmap
+		/// </summary>
+		public const string HeatmapKey = nameof(Heatmap);
+
+		/// <summary>
+		/// Heatmap
+		/// </summary>
+		public static string Heatmap => GetString(HeatmapKey);
 	}
 }
