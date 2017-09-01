@@ -77,6 +77,9 @@ namespace StockSharp.Algo.Storages.Binary
 			HistoricalVolatilityMonth = new RefPair<decimal, decimal>();
 			AveragePrice = new RefPair<decimal, decimal>();
 			Turnover = new RefPair<decimal, decimal>();
+			IssueSize = new RefPair<decimal, decimal>();
+			Duration = new RefPair<decimal, decimal>();
+			BuyBackPrice = new RefPair<decimal, decimal>();
 		}
 
 		public RefPair<decimal, decimal> Price { get; private set; }
@@ -123,6 +126,9 @@ namespace StockSharp.Algo.Storages.Binary
 		public RefPair<decimal, decimal> HistoricalVolatilityMonth { get; private set; }
 		public RefPair<decimal, decimal> AveragePrice { get; private set; }
 		public RefPair<decimal, decimal> Turnover { get; private set; }
+		public RefPair<decimal, decimal> IssueSize { get; private set; }
+		public RefPair<decimal, decimal> Duration { get; private set; }
+		public RefPair<decimal, decimal> BuyBackPrice { get; private set; }
 
 		public DateTime FirstFieldTime { get; set; }
 		public DateTime LastFieldTime { get; set; }
@@ -222,6 +228,13 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			Write(stream, Turnover);
+
+			if (Version < MarketDataVersions.Version57)
+				return;
+
+			Write(stream, IssueSize);
+			Write(stream, Duration);
+			Write(stream, BuyBackPrice);
 		}
 
 		public override void Read(Stream stream)
@@ -319,6 +332,13 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			Turnover = ReadInfo(stream);
+
+			if (Version < MarketDataVersions.Version57)
+				return;
+
+			IssueSize = ReadInfo(stream);
+			Duration = ReadInfo(stream);
+			BuyBackPrice = ReadInfo(stream);
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -353,35 +373,38 @@ namespace StockSharp.Algo.Storages.Binary
 			Yield = Clone(src.Yield);
 			FirstFieldTime = src.FirstFieldTime;
 			LastFieldTime = src.LastFieldTime;
-			VWAP = src.VWAP;
-			PriceEarnings = src.PriceEarnings;
-			ForwardPriceEarnings = src.ForwardPriceEarnings;
-			PriceEarningsGrowth = src.PriceEarningsGrowth;
-			PriceSales = src.PriceSales;
-			PriceBook = src.PriceBook;
-			PriceCash = src.PriceCash;
-			PriceFreeCash = src.PriceFreeCash;
-			Payout = src.Payout;
-			SharesOutstanding = src.SharesOutstanding;
-			SharesFloat = src.SharesFloat;
-			FloatShort = src.FloatShort;
-			ShortRatio = src.ShortRatio;
-			ReturnOnAssets = src.ReturnOnAssets;
-			ReturnOnEquity = src.ReturnOnEquity;
-			ReturnOnInvestment = src.ReturnOnInvestment;
-			CurrentRatio = src.CurrentRatio;
-			QuickRatio = src.QuickRatio;
-			LongTermDebtEquity = src.LongTermDebtEquity;
-			TotalDebtEquity = src.TotalDebtEquity;
-			GrossMargin = src.GrossMargin;
-			OperatingMargin = src.OperatingMargin;
-			ProfitMargin = src.ProfitMargin;
-			Beta = src.Beta;
-			AverageTrueRange = src.AverageTrueRange;
-			HistoricalVolatilityWeek = src.HistoricalVolatilityWeek;
-			HistoricalVolatilityMonth = src.HistoricalVolatilityMonth;
-			AveragePrice = src.AveragePrice;
-			Turnover = src.Turnover;
+			VWAP = Clone(src.VWAP);
+			PriceEarnings = Clone(src.PriceEarnings);
+			ForwardPriceEarnings = Clone(src.ForwardPriceEarnings);
+			PriceEarningsGrowth = Clone(src.PriceEarningsGrowth);
+			PriceSales = Clone(src.PriceSales);
+			PriceBook = Clone(src.PriceBook);
+			PriceCash = Clone(src.PriceCash);
+			PriceFreeCash = Clone(src.PriceFreeCash);
+			Payout = Clone(src.Payout);
+			SharesOutstanding = Clone(src.SharesOutstanding);
+			SharesFloat = Clone(src.SharesFloat);
+			FloatShort = Clone(src.FloatShort);
+			ShortRatio = Clone(src.ShortRatio);
+			ReturnOnAssets = Clone(src.ReturnOnAssets);
+			ReturnOnEquity = Clone(src.ReturnOnEquity);
+			ReturnOnInvestment = Clone(src.ReturnOnInvestment);
+			CurrentRatio = Clone(src.CurrentRatio);
+			QuickRatio = Clone(src.QuickRatio);
+			LongTermDebtEquity = Clone(src.LongTermDebtEquity);
+			TotalDebtEquity = Clone(src.TotalDebtEquity);
+			GrossMargin = Clone(src.GrossMargin);
+			OperatingMargin = Clone(src.OperatingMargin);
+			ProfitMargin = Clone(src.ProfitMargin);
+			Beta = Clone(src.Beta);
+			AverageTrueRange = Clone(src.AverageTrueRange);
+			HistoricalVolatilityWeek = Clone(src.HistoricalVolatilityWeek);
+			HistoricalVolatilityMonth = Clone(src.HistoricalVolatilityMonth);
+			AveragePrice = Clone(src.AveragePrice);
+			Turnover = Clone(src.Turnover);
+			IssueSize = Clone(src.IssueSize);
+			Duration = Clone(src.Duration);
+			BuyBackPrice = Clone(src.BuyBackPrice);
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
@@ -423,7 +446,7 @@ namespace StockSharp.Algo.Storages.Binary
 		};
 
 		public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 50, MarketDataVersions.Version56, exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version57, exchangeInfoProvider)
 		{
 		}
 
@@ -862,6 +885,26 @@ namespace StockSharp.Algo.Storages.Binary
 							SerializeChange(writer, metaInfo.Turnover, (decimal)change.Value);
 							break;
 						}
+						case Level1Fields.IssueSize:
+						{
+							SerializeChange(writer, metaInfo.IssueSize, (decimal)change.Value);
+							break;
+						}
+						case Level1Fields.Duration:
+						{
+							SerializeChange(writer, metaInfo.Duration, (decimal)change.Value);
+							break;
+						}
+						//case Level1Fields.BuyBackDate:
+						//{
+						//	SerializeChange(writer, metaInfo.BuyBackDate, (decimal)change.Value);
+						//	break;
+						//}
+						case Level1Fields.BuyBackPrice:
+						{
+							SerializeChange(writer, metaInfo.BuyBackPrice, (decimal)change.Value);
+							break;
+						}
 						default:
 							throw new ArgumentOutOfRangeException(nameof(messages), change.Key, LocalizedStrings.Str922);
 					}
@@ -1273,6 +1316,26 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.Turnover:
 					{
 						l1Msg.Add(field, DeserializeChange(reader, metaInfo.Turnover));
+						break;
+					}
+					case Level1Fields.IssueSize:
+					{
+						l1Msg.Add(field, DeserializeChange(reader, metaInfo.IssueSize));
+						break;
+					}
+					case Level1Fields.Duration:
+					{
+						l1Msg.Add(field, DeserializeChange(reader, metaInfo.Duration));
+						break;
+					}
+					//case Level1Fields.BuyBackDate:
+					//{
+					//	l1Msg.Add(field, DeserializeChange(reader, metaInfo.BuyBackDate));
+					//	break;
+					//}
+					case Level1Fields.BuyBackPrice:
+					{
+						l1Msg.Add(field, DeserializeChange(reader, metaInfo.BuyBackPrice));
 						break;
 					}
 					default:
