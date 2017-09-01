@@ -4188,7 +4188,7 @@ namespace StockSharp.Algo
 				case Level1Fields.BestBidTime:
 				case Level1Fields.LastTradeTime:
 				case Level1Fields.BuyBackDate:
-					return typeof(DateTime);
+					return typeof(DateTimeOffset);
 
 				case Level1Fields.LastTradeUpDown:
 				case Level1Fields.IsSystem:

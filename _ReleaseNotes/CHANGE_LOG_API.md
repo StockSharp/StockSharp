@@ -26,6 +26,7 @@ StockSharp API Change log
 * (feature) OfflineMessageAdapter. Cancel previously sent orders.
 * (feature) Level1 storage. Support IssueSize, Duration, BuyBackPrice. http://stocksharp.ru/posts/m/40757/
 * (feature) Level1Field.ToType extension method.
+* (bug) Level1CsvSerializer fix.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
