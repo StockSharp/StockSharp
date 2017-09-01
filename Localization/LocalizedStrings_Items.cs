@@ -46036,5 +46036,15 @@ namespace StockSharp.Localization
 		/// Security {0} is not composite.
 		/// </summary>
 		public static string NotCompositeSecurity => GetString(NotCompositeSecurityKey);
+
+		/// <summary>
+		/// Cut the price for the order
+		/// </summary>
+		public const string ShrinkPriceKey = nameof(ShrinkPrice);
+
+		/// <summary>
+		/// Cut the price for the order
+		/// </summary>
+		public static string ShrinkPrice => GetString(ShrinkPriceKey);
 	}
 }
