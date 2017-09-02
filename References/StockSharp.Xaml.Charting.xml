@@ -4,6 +4,62 @@
     <name>StockSharp.Xaml.Charting</name>
   </assembly>
   <members>
+    <member name="T:StockSharp.Xaml.Charting.BubbleChart">
+      <summary>
+            The graphical component to display bubble chart.
+            </summary>
+      <summary>
+            BubbleChart
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.BubbleChart.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.BubbleChart" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.BubbleChart.ChartTheme">
+      <summary>
+            The name of the graphic theme.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.BubbleChart.Append(System.DateTime,System.Decimal,System.Decimal)">
+      <summary>
+            Append new values.
+            </summary>
+      <param name="x">X value.</param>
+      <param name="y">Y value.</param>
+      <param name="z">Z value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.BubbleChart.Update(System.DateTime,System.Decimal,System.Decimal)">
+      <summary>
+            Update values.
+            </summary>
+      <param name="x">X value.</param>
+      <param name="y">Y value.</param>
+      <param name="z">Z value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.BubbleChart.Clear">
+      <summary>
+            Clear chart.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.BubbleChart.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.BubbleChart.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.BubbleChart.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.Chart">
       <summary>
             The graphic component of the candles charts display.
@@ -2083,6 +2139,60 @@
       <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.HeatmapChart.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.HistogramChart">
+      <summary>
+            The graphical component to display histogram.
+            </summary>
+      <summary>
+            HistogramChart
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.HistogramChart.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.HistogramChart" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.HistogramChart.ChartTheme">
+      <summary>
+            The name of the graphic theme.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.HistogramChart.Append(System.Decimal,System.Decimal)">
+      <summary>
+            Append new values.
+            </summary>
+      <param name="x">X value.</param>
+      <param name="y">Y value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.HistogramChart.Update(System.Decimal,System.Decimal)">
+      <summary>
+            Update values.
+            </summary>
+      <param name="x">X value.</param>
+      <param name="y">Y value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.HistogramChart.Clear">
+      <summary>
+            Clear chart.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.HistogramChart.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.HistogramChart.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.HistogramChart.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>

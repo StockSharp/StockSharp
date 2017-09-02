@@ -46056,5 +46056,25 @@ namespace StockSharp.Localization
 		/// Heatmap
 		/// </summary>
 		public static string Heatmap => GetString(HeatmapKey);
+
+		/// <summary>
+		/// Saving
+		/// </summary>
+		public const string SavingKey = nameof(Saving);
+
+		/// <summary>
+		/// Saving
+		/// </summary>
+		public static string Saving => GetString(SavingKey);
+
+		/// <summary>
+		/// Result type
+		/// </summary>
+		public const string ResultTypeKey = nameof(ResultType);
+
+		/// <summary>
+		/// Result type
+		/// </summary>
+		public static string ResultType => GetString(ResultTypeKey);
 	}
 }

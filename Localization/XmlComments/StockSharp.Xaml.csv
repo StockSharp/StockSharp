@@ -79,6 +79,7 @@ P:StockSharp.Xaml.BuySellPanel.MarketDataProvider/summary;DocStr973
 E:StockSharp.Xaml.BuySellPanel.OrderRegistering/summary;DocStr8161
 E:StockSharp.Xaml.BuySellPanel.Closed/summary;DocStr10056
 E:StockSharp.Xaml.BuySellPanel.SecurityChanged/summary;DocStr10071
+E:StockSharp.Xaml.BuySellPanel.PortfolioChanged/summary;DocStr10071
 M:StockSharp.Xaml.BuySellPanel.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.BuySellPanel.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.BuySellPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -234,6 +235,12 @@ M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.AssignToEditCore(DevExp
 M:StockSharp.Xaml.PropertyGrid.ExtendedInfoStorageEditor.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PropertyGrid.RiskRulesEditor/summary;DocStr8144
 M:StockSharp.Xaml.PropertyGrid.RiskRulesEditor.#ctor/summary;DocStr9444
+T:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow/summary;DocStr10092
+P:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow.SecurityProvider/summary;DocStr972
+P:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow.SelectedSecurities/summary;DocStr10093
+T:StockSharp.Xaml.PropertyGrid.SecuritiesEditor/summary;DocStr10094
+M:StockSharp.Xaml.PropertyGrid.SecuritiesEditor.#ctor/summary;DocStr1
+F:StockSharp.Xaml.PropertyGrid.SecuritiesEditor.ServiceName/summary;DocStr10095
 T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor/summary;DocStr8144
 F:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProviderProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor.ExchangeInfoProvider/summary;DocStr8914

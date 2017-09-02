@@ -463,5 +463,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string TurnoverDot => AppendDot(Turnover);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string ResultTypeDot => AppendDot(ResultType);
 	}
 }

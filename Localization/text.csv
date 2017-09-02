@@ -4642,6 +4642,8 @@ DeleteNSecurities;{0} securities will be delete permanently.;{0} инструм�
 NotCompositeSecurity;Security {0} is not composite.;Инструмент {0} не является составным.
 ShrinkPrice;Cut the price for the order;Обрезать цену для заявки
 Heatmap;Heatmap;Тепловая карта
+Saving;Saving data;Сохранение данных
+ResultType;Result type;Тип результата
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14419,3 +14421,27 @@ DocStr10068;Titles on Y axis;Заголовки на оси Y
 DocStr10069;Clear chart;Очистить график
 DocStr10070;Panels;Панели
 DocStr10071;{0} changed event;Событие изменения {0}
+DocStr10072;Types of result;Типы результата
+DocStr10073;Bubble chart;Пузырьковый график
+DocStr10074;Result panel;Панель результатов
+DocStr10075;The interface for work with a chart;Интерфейс для работы с графиком
+DocStr10076;Append new values;Добавить новые значения
+DocStr10077;X value;X значение
+DocStr10078;Y value;Y значение
+DocStr10079;Z value;Z значение
+DocStr10080;Update values;Обновить значения
+DocStr10081;The interface for work with result panel;Интерфейс для работы с панелью результатов
+DocStr10082;Delete all controls;Удалить все компоненты
+DocStr10083;Create table to show analytics result;Создать таблицу для показа результата
+DocStr10084;Create bubble chart to show analytics result;Создать пузырьковый график для показа результата
+DocStr10085;Create histogram chart to show analytics result;Создать гистограмму для показа результата
+DocStr10086;Histogram chart;Гистограмма
+DocStr10087;Create heatmap to show analytics result;Создать тепловую карту для показа результата
+DocStr10088;The graphical component to display bubble chart;Компонент для показа пузырькового графика
+DocStr10089;The graphical component to display histogram;Компонент для показа гистограммы
+DocStr10090;Allow converting to numeric for input values;Позволить приведение к числу входящих значений
+DocStr10091;Shrink order price;Обрезать цену заявки
+DocStr10092;The interface for a window to select multiples securities;Интерфейс окна для выбора множества инструментов
+DocStr10093;Selected securities;Выбранные инструменты
+DocStr10094;Editor to select multiples securities;Редактор для выбора множества инструментов
+DocStr10095;Service name;Название сервиса

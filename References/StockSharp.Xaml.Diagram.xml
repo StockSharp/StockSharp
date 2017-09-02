@@ -824,7 +824,7 @@
       <param name="key">The unique key.</param>
       <returns>Diagram socket.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32,System.String)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32,System.String,System.Boolean)">
       <summary>
             To add an incoming connection.
             </summary>
@@ -835,6 +835,7 @@
       <param name="process">The action is called at the processing of the new incoming value for socket.</param>
       <param name="index">Index in sockets list.</param>
       <param name="socketId">The connection identifier.</param>
+      <param name="allowConvertToNumeric">Allow converting to numeric for input values.</param>
       <returns>Connection.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)">
@@ -2804,6 +2805,11 @@
             Icon resource name.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.ShrinkPrice">
+      <summary>
+            Shrink order price.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement" />.
@@ -2842,6 +2848,11 @@
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.BrokerCode">
       <summary>
             Broker firm code.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.ShrinkPrice">
+      <summary>
+            Shrink order price.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.#ctor">
