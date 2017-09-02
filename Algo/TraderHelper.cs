@@ -4121,6 +4121,19 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Check if the specified identifier is <see cref="AllSecurity"/>.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns><see langword="true"/>, if the specified identifier is <see cref="AllSecurity"/>, otherwise, <see langword="false"/>.</returns>
+		public static bool IsAllSecurity(this SecurityId securityId)
+		{
+			//if (security == null)
+			//	throw new ArgumentNullException(nameof(security));
+
+			return securityId.SecurityCode.CompareIgnoreCase("ALL") && securityId.BoardCode.CompareIgnoreCase("ALL");
+		}
+
+		/// <summary>
 		/// To check the correctness of the entered identifier.
 		/// </summary>
 		/// <returns>An error message text, or <see langword="null" /> if no error.</returns>
