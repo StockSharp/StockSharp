@@ -19,13 +19,42 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 
-	using Ecng.Xaml.Charting.Visuals;
 	using Ecng.Common;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+
+	/// <summary>
+	/// Types of result.
+	/// </summary>
+	public enum AnalyticsResultTypes
+	{
+		/// <summary>
+		/// Table.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.Str3280Key)]
+		Grid,
+
+		/// <summary>
+		/// Bubble chart.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.Str1977Key)]
+		Bubble,
+
+		/// <summary>
+		/// Histogram.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.Str1976Key)]
+		Histogram,
+
+		/// <summary>
+		/// Heatmap.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.HeatmapKey)]
+		Heatmap,
+	}
 
 	/// <summary>
 	/// The base analytic strategy.
@@ -66,6 +95,23 @@ namespace StockSharp.Algo.Strategies.Analytics
 			set => _to.Value = value;
 		}
 
+		private readonly StrategyParam<AnalyticsResultTypes> _resultType;
+
+		/// <summary>
+		/// Result type.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1738Key,
+			Description = LocalizedStrings.ResultTypeKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.AnalyticsKey,
+			Order = 1)]
+		public AnalyticsResultTypes ResultType
+		{
+			get => _resultType.Value;
+			set => _resultType.Value = value;
+		}
+
 		/// <summary>
 		/// Market-data storage.
 		/// </summary>
@@ -87,6 +133,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		{
 			_from = this.Param<DateTime>(nameof(From));
 			_to = this.Param(nameof(To), DateTime.MaxValue);
+			_resultType = this.Param(nameof(ResultType), AnalyticsResultTypes.Bubble);
 		}
 
 		/// <summary>
@@ -102,15 +149,9 @@ namespace StockSharp.Algo.Strategies.Analytics
 		public override DateTimeOffset CurrentTime => TimeHelper.NowWithOffset;
 
 		/// <summary>
-		/// Chart.
+		/// Result panel.
 		/// </summary>
-		[CLSCompliant(false)]
-		protected UltrachartSurface Chart => Environment.GetValue<UltrachartSurface>(nameof(Chart));
-
-		/// <summary>
-		/// Table.
-		/// </summary>
-		protected IAnalyticsGrid Grid => Environment.GetValue<IAnalyticsGrid>(nameof(Grid));
+		protected IAnalyticsPanel Panel => Environment.GetValue<IAnalyticsPanel>(nameof(Panel));
 
 		/// <summary>
 		/// Data format.

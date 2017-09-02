@@ -76,9 +76,6 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Xaml.Charting">
-      <HintPath>..\References\Ecng.Xaml.Charting.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Xaml.DevExp">
       <HintPath>..\References\Ecng.Xaml.DevExp.dll</HintPath>
     </Reference>
@@ -384,7 +381,9 @@
     <Compile Include="Storages\StorageRegistry.cs" />
     <Compile Include="Strategies\Analytics\BaseAnalyticsStrategy.cs" />
     <Compile Include="Strategies\Analytics\DailyHighestVolumeStrategy.cs" />
+    <Compile Include="Strategies\Analytics\IAnalyticsChart.cs" />
     <Compile Include="Strategies\Analytics\IAnalyticsGrid.cs" />
+    <Compile Include="Strategies\Analytics\IAnalyticsPanel.cs" />
     <Compile Include="Strategies\Analytics\PriceVolumeDistributionStrategy.cs" />
     <Compile Include="Strategies\BasketStrategy.cs" />
     <Compile Include="Strategies\IStrategyChildStrategyList.cs" />

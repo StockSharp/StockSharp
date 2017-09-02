@@ -27,6 +27,7 @@ StockSharp API Change log
 * (feature) Level1 storage. Support IssueSize, Duration, BuyBackPrice, BuyBackDate. http://stocksharp.ru/posts/m/40757/
 * (feature) Level1Field.ToType extension method.
 * (bug) Level1CsvSerializer fix.
+* (feature) Analytics. Reduced UI logic.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

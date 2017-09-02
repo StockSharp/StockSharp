@@ -5,13 +5,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
-	using System.Windows.Media;
 
-	using Ecng.Xaml.Charting;
-	using Ecng.Xaml.Charting.Model.DataSeries;
-	using Ecng.Xaml.Charting.Numerics;
-	using Ecng.Xaml.Charting.Visuals.Axes;
-	using Ecng.Xaml.Charting.Visuals.RenderableSeries;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
@@ -74,40 +68,41 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// </summary>
 		protected override void OnAnalyze()
 		{
-			var chart = Chart;
-			var grid = Grid;
+			// clear prev values
+			Panel.ClearControls();
 
-			var chartSeries = new XyzDataSeries<DateTime, double, double> { AcceptsUnsortedData = true };
 			ThreadSafeObservableCollection<GridRow> gridSeries = null;
+			IAnalyticsChart chart = null;
 
-			chart.GuiSync(() =>
+			switch (ResultType)
 			{
-				// clear prev values
-				chart.RenderableSeries.Clear();
-				grid.ClearColumns();
-
-				chart.RenderableSeries.Add(new FastBubbleRenderableSeries
+				case AnalyticsResultTypes.Grid:
 				{
-					ResamplingMode = ResamplingMode.Auto,
-					BubbleColor = Colors.Chocolate,
-					ZScaleFactor = 0.1,
-					AutoZRange = true,
-					DataSeries = chartSeries
-				});
+					var grid = Panel.CreateGrid(LocalizedStrings.Str3200);
 
-				chart.XAxis = new DateTimeAxis { GrowBy = new DoubleRange(0.0, 0.1) };
-				chart.YAxis = new NumericAxis { GrowBy = new DoubleRange(0.1, 0.1) };
+					grid.AddColumn(nameof(GridRow.Time), LocalizedStrings.Time).Width = 150;
+					var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
+					volumeColumn.Width = 100;
 
-				grid.AddColumn(nameof(GridRow.Time), LocalizedStrings.Time).Width = 150;
-				var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
-				volumeColumn.Width = 100;
+					var gridSource = new ObservableCollectionEx<GridRow>();
+					grid.ItemsSource = gridSource;
+					gridSeries = new ThreadSafeObservableCollection<GridRow>(gridSource);
 
-				var gridSource = new ObservableCollectionEx<GridRow>();
-				grid.ItemsSource = gridSource;
-				gridSeries = new ThreadSafeObservableCollection<GridRow>(gridSource);
-
-				grid.SetSort(volumeColumn, ListSortDirection.Descending);
-			});
+					grid.SetSort(volumeColumn, ListSortDirection.Descending);
+					break;
+				}
+				case AnalyticsResultTypes.Bubble:
+					chart = Panel.CreateBubbleChart(LocalizedStrings.Str3280);
+					break;
+				case AnalyticsResultTypes.Heatmap:
+					chart = Panel.CreateHeatmap(LocalizedStrings.Str3280);
+					break;
+				case AnalyticsResultTypes.Histogram:
+					chart = Panel.CreateHistogramChart(LocalizedStrings.Str3280);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 
 			// get candle storage
 			var storage = StorateRegistry.GetCandleStorage(typeof(TimeFrameCandle), Security, TimeFrame, format: StorageFormat);
@@ -153,10 +148,10 @@ namespace StockSharp.Algo.Strategies.Analytics
 							rows.Add(time, row = new GridRow { Time = time, Volume = sumVol });
 
 							// draw on chart
-							chartSeries.Append(DateTime.Today + time, (double)sumVol, (double)sumVol / 1000);
+							chart?.Append(DateTime.Today + time, sumVol, sumVol / 1000);
 
 							// draw on table
-							gridSeries.Add(row);
+							gridSeries?.Add(row);
 						}
 						else
 						{
@@ -164,15 +159,12 @@ namespace StockSharp.Algo.Strategies.Analytics
 							row.Volume += sumVol;
 
 							// update chart
-							chartSeries.Update(DateTime.Today + time, (double)row.Volume, (double)row.Volume / 1000);
+							chart?.Update(DateTime.Today + time, row.Volume, row.Volume / 1000);
 						}
 					}
 				
-					chart.GuiAsync(() =>
-					{
-						// scale chart
-						chart.ZoomExtents();
-					});
+					//// scale chart
+					//chart?.ZoomExtents();
 				}
 			}
 
