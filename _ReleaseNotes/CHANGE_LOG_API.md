@@ -18,7 +18,7 @@ StockSharp API Change log
 * (feature) Newtonsoft.Json. v10.0.3
 * (feature) Strategy. Browsable=false for modified values.
 * (bug) Analytic strategies fixes.
-* (feature) Heatmap chart.
+* (feature) Heatmap, Bubble, Histogram charts.
 * (feature) OfflineMessageAdapter. Remove subscription while disconnected state.
 * (feature) SubscriptionMessageAdapter. Set PortfolioMessage.OriginalTransactionId if empty.
 * (feature) Security. Initialize Id, Name, Code, Class as null (prev was empty string).
@@ -28,6 +28,7 @@ StockSharp API Change log
 * (feature) Level1Field.ToType extension method.
 * (bug) Level1CsvSerializer fix.
 * (feature) Analytics. Reduced UI logic.
+* (feature) Chart controls. Track current DevExp theme.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

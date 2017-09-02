@@ -401,6 +401,11 @@
         <see cref="P:StockSharp.Xaml.BuySellPanel.Security" /> changed event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.BuySellPanel.PortfolioChanged">
+      <summary>
+        <see cref="P:StockSharp.Xaml.BuySellPanel.Portfolio" /> changed event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.BuySellPanel.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
@@ -1027,6 +1032,36 @@
     <member name="M:StockSharp.Xaml.PropertyGrid.RiskRulesEditor.#ctor">
       <summary>
             Create <see cref="T:StockSharp.Xaml.PropertyGrid.CommissionRulesEditor" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow">
+      <summary>
+            The interface for a window to select multiples securities.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.ISecuritiesSelectWindow.SelectedSecurities">
+      <summary>
+            Selected securities.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.SecuritiesEditor">
+      <summary>
+            Editor to select multiples securities.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.SecuritiesEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.SecuritiesEditor" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.SecuritiesEditor.ServiceName">
+      <summary>
+            Service name.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor">

@@ -109,7 +109,6 @@ namespace SampleChart
 				return;
 
 			ApplicationThemeHelper.ApplicationThemeName = theme;
-			Chart.UpdateTheme();
 		}
 
 		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator)
