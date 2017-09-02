@@ -5412,6 +5412,14 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.FromMarketData">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ToMarketData">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixBase">
       <summary>
             Data reader/writer base class.

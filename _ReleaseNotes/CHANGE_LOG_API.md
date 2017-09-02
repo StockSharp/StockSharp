@@ -29,6 +29,8 @@ StockSharp API Change log
 * (bug) Level1CsvSerializer fix.
 * (feature) Analytics. Reduced UI logic.
 * (feature) Chart controls. Track current DevExp theme.
+* (feature) FIX server. Accept date bounds for market data requests.
+* (bug) FIX server. Fix async sending.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
