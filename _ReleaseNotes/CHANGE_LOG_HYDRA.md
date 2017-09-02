@@ -1,5 +1,17 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.3.27:
+* (bug) QuikLua. Candles fix.
+* (feature) Analytics refactoring.
+* (bug) Build from composites fix.
+* (feature) Add saving wait into securities downloading.
+* (bug) FixServer. Fix processing real time subscriptions.
+* (bug) Export task upper date bound fix.
+* (feature) Save/load ribbon state.
+* (feature) QuikLua. Ignore case for security lookup.
+* (feature) Level1 storage. Support IssueSize, Duration, BuyBackPrice, BuyBackDate. http://stocksharp.ru/posts/m/40757/
+* (bug) Level1CsvSerializer fix.
+
 ## v4.3.26.4:
 * (bug) Index build fix.
 * (bug) Select drive window. Fix OK enable.

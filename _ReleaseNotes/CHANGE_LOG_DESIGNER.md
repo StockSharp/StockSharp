@@ -1,6 +1,6 @@
 StockSharp Designer Change log
 ========================
-## current:
+## v4.3.27:
 * (feature) Breakpoints. Extended conditions.
 * (feature) CSV storage. Performance boost.
 * (bug) Fix symbol mapping http://stocksharp.ru/forum/8433/problema-podklyucheniya-k-quik-lua-v-designer-versii-43252/
@@ -35,6 +35,7 @@ StockSharp Designer Change log
 * (bug) Reset chart fixes.
 * (bug) Open result strategies fixes.
 * (feature) Save BarManager and DXWindow settings.
+* (feature) Shrink prices for order elements.
 
 ## v4.3.25.2:
 * (feature) ServerCredentials. Save password for auto logon only.
