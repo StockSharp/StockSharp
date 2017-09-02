@@ -24,7 +24,7 @@ StockSharp API Change log
 * (feature) Security. Initialize Id, Name, Code, Class as null (prev was empty string).
 * (feature) MessageAdapter. Init ServerTime (if not set) for position messages.
 * (feature) OfflineMessageAdapter. Cancel previously sent orders.
-* (feature) Level1 storage. Support IssueSize, Duration, BuyBackPrice. http://stocksharp.ru/posts/m/40757/
+* (feature) Level1 storage. Support IssueSize, Duration, BuyBackPrice, BuyBackDate. http://stocksharp.ru/posts/m/40757/
 * (feature) Level1Field.ToType extension method.
 * (bug) Level1CsvSerializer fix.
 

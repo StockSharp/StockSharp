@@ -133,6 +133,12 @@ namespace StockSharp.Algo.Storages.Binary
 		public DateTime FirstFieldTime { get; set; }
 		public DateTime LastFieldTime { get; set; }
 
+		public TimeSpan FirstBuyBackDateOffset { get; set; }
+		public TimeSpan LastBuyBackDateOffset { get; set; }
+
+		public DateTime FirstBuyBackDateTime { get; set; }
+		public DateTime LastBuyBackDateTime { get; set; }
+
 		public override void Write(Stream stream)
 		{
 			base.Write(stream);
@@ -235,6 +241,12 @@ namespace StockSharp.Algo.Storages.Binary
 			Write(stream, IssueSize);
 			Write(stream, Duration);
 			Write(stream, BuyBackPrice);
+
+			stream.Write(FirstBuyBackDateTime);
+			stream.Write(LastBuyBackDateTime);
+
+			stream.Write(FirstBuyBackDateOffset);
+			stream.Write(LastBuyBackDateOffset);
 		}
 
 		public override void Read(Stream stream)
@@ -273,8 +285,8 @@ namespace StockSharp.Algo.Storages.Binary
 			AccruedCouponIncome = ReadInfo(stream);
 			Yield = ReadInfo(stream);
 
-			FirstFieldTime = stream.Read<DateTime>();
-			LastFieldTime = stream.Read<DateTime>();
+			FirstFieldTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
+			LastFieldTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
 
 			if (Version < MarketDataVersions.Version47)
 				return;
@@ -339,6 +351,12 @@ namespace StockSharp.Algo.Storages.Binary
 			IssueSize = ReadInfo(stream);
 			Duration = ReadInfo(stream);
 			BuyBackPrice = ReadInfo(stream);
+
+			FirstBuyBackDateTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
+			LastBuyBackDateTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
+
+			FirstBuyBackDateOffset = stream.Read<TimeSpan>();
+			LastBuyBackDateOffset = stream.Read<TimeSpan>();
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -405,6 +423,10 @@ namespace StockSharp.Algo.Storages.Binary
 			IssueSize = Clone(src.IssueSize);
 			Duration = Clone(src.Duration);
 			BuyBackPrice = Clone(src.BuyBackPrice);
+			FirstBuyBackDateTime = src.FirstBuyBackDateTime;
+			LastBuyBackDateTime = src.LastBuyBackDateTime;
+			FirstBuyBackDateOffset = src.FirstBuyBackDateOffset;
+			LastBuyBackDateOffset = src.LastBuyBackDateOffset;
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
@@ -895,11 +917,23 @@ namespace StockSharp.Algo.Storages.Binary
 							SerializeChange(writer, metaInfo.Duration, (decimal)change.Value);
 							break;
 						}
-						//case Level1Fields.BuyBackDate:
-						//{
-						//	SerializeChange(writer, metaInfo.BuyBackDate, (decimal)change.Value);
-						//	break;
-						//}
+						case Level1Fields.BuyBackDate:
+						{
+							var timeValue = (DateTimeOffset)change.Value;
+
+							if (metaInfo.FirstBuyBackDateTime.IsDefault())
+							{
+								if (!isTickPrecision)
+									timeValue = timeValue.StorageBinaryOldTruncate();
+
+								metaInfo.FirstBuyBackDateTime = metaInfo.LastBuyBackDateTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+							}
+
+							var lastOffset = metaInfo.LastBuyBackDateOffset;
+							metaInfo.LastBuyBackDateTime = writer.WriteTime(timeValue, metaInfo.LastBuyBackDateTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+							metaInfo.LastBuyBackDateOffset = lastOffset;
+							break;
+						}
 						case Level1Fields.BuyBackPrice:
 						{
 							SerializeChange(writer, metaInfo.BuyBackPrice, (decimal)change.Value);
@@ -965,17 +999,18 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.LowPrice:
 					case Level1Fields.ClosePrice:
 					case Level1Fields.MinPrice:
+					case Level1Fields.MaxPrice:
 					{
 						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo);
 						l1Msg.Add(field, metaInfo.Price.First);
 						break;
 					}
-					case Level1Fields.MaxPrice:
-					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo);
-						l1Msg.Add(field, metaInfo.Price.First == metaInfo.PriceStep ? int.MaxValue : metaInfo.Price.First);
-						break;
-					}
+					//case Level1Fields.MaxPrice:
+					//{
+					//	metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo);
+					//	l1Msg.Add(field, metaInfo.Price.First == metaInfo.PriceStep ? int.MaxValue : metaInfo.Price.First);
+					//	break;
+					//}
 					case Level1Fields.BidsVolume:
 					case Level1Fields.AsksVolume:
 					case Level1Fields.OpenInterest:
@@ -1328,11 +1363,15 @@ namespace StockSharp.Algo.Storages.Binary
 						l1Msg.Add(field, DeserializeChange(reader, metaInfo.Duration));
 						break;
 					}
-					//case Level1Fields.BuyBackDate:
-					//{
-					//	l1Msg.Add(field, DeserializeChange(reader, metaInfo.BuyBackDate));
-					//	break;
-					//}
+					case Level1Fields.BuyBackDate:
+					{
+						var prevTime = metaInfo.FirstBuyBackDateTime;
+						var lastOffset = metaInfo.FirstBuyBackDateOffset;
+						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset));
+						metaInfo.FirstBuyBackDateTime = prevTime;
+						metaInfo.FirstBuyBackDateOffset = lastOffset;
+						break;
+					}
 					case Level1Fields.BuyBackPrice:
 					{
 						l1Msg.Add(field, DeserializeChange(reader, metaInfo.BuyBackPrice));
