@@ -14445,3 +14445,5 @@ DocStr10092;The interface for a window to select multiples securities;Интер
 DocStr10093;Selected securities;Выбранные инструменты
 DocStr10094;Editor to select multiples securities;Редактор для выбора множества инструментов
 DocStr10095;Service name;Название сервиса
+DocStr10096;Check if the specified identifier is {0};Проверить, является ли переданный идентификатор {0}
+DocStr10097;{0}, if the specified identifier is {1}, otherwise, {2};{0}, если переданный идентификатор является {1}, иначе, {2}
