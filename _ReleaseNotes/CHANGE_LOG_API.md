@@ -31,6 +31,7 @@ StockSharp API Change log
 * (feature) Chart controls. Track current DevExp theme.
 * (feature) FIX server. Accept date bounds for market data requests.
 * (bug) FIX server. Fix async sending.
+* (feature) QuikLua. Support official prices. http://stocksharp.ru/forum/8534/nelikvidnye-instrumenty---kak-luchshe-organizovat-rabotu-s-nimi/
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
