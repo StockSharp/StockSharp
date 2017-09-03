@@ -233,7 +233,7 @@ namespace StockSharp.Algo.Storages
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
 				var prevId = (long?)metaInfo.LastId;
-				var prevTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
+				var prevTime = metaInfo.LastTime;
 
 				if (prevId == 0)
 					prevId = null;
