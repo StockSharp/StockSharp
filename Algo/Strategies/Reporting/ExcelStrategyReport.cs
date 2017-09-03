@@ -190,7 +190,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					worker.SetCell(0, rowIndex, LocalizedStrings.Str1340);
 					rowIndex++;
 
-					foreach (var strategyParam in strategy.Parameters.SyncGet(c => c.ToArray()))
+					foreach (var strategyParam in strategy.Parameters.CachedValues)
 					{
 						var value = strategyParam.Value;
 

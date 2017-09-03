@@ -632,13 +632,11 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		private readonly SynchronizedSet<IStrategyParam> _parameters = new SynchronizedSet<IStrategyParam>();
-
 		/// <summary>
 		/// Strategy parameters.
 		/// </summary>
 		[Browsable(false)]
-		public ISynchronizedCollection<IStrategyParam> Parameters => _parameters;
+		public CachedSynchronizedDictionary<string, IStrategyParam> Parameters { get; } = new CachedSynchronizedDictionary<string, IStrategyParam>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// <see cref="Parameters"/> change event.
@@ -1185,7 +1183,7 @@ namespace StockSharp.Algo.Strategies
 			if (Portfolio == null)
 				throw new InvalidOperationException(LocalizedStrings.Str1381);
 
-			foreach (var parameter in Parameters)
+			foreach (var parameter in Parameters.CachedValues)
 			{
 				if (parameter.Value is Unit unit && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
 					unit.SetSecurity(Security);
@@ -2318,12 +2316,12 @@ namespace StockSharp.Algo.Strategies
 			if (parameters == null)
 				return;
 
-			var dict = Parameters.SyncGet(c => c.ToDictionary(p => p.Name, p => p, StringComparer.InvariantCultureIgnoreCase));
+			//var dict = Parameters.SyncGet(c => c.ToDictionary(p => p.Name, p => p, StringComparer.InvariantCultureIgnoreCase));
 
 			// в настройках могут быть дополнительные параметры, которые будут добавлены позже
 			foreach (var s in parameters)
 			{
-				var param = dict.TryGetValue(s.GetValue<string>("Name"));
+				var param = Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Name)));
 
 				param?.Load(s);
 			}
@@ -2345,7 +2343,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(Parameters), Parameters.SyncGet(c => c.Select(p => p.Save()).ToArray()));
+			storage.SetValue(nameof(Parameters), Parameters.CachedValues.Select(p => p.Save()).ToArray());
 
 			storage.SetValue(nameof(PnLManager), PnLManager.Save());
 			storage.SetValue(nameof(RiskManager), RiskManager.Save());

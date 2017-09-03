@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 						new XElement("security", strategy.Security != null ? strategy.Security.Id : string.Empty),
 						new XElement("portfolio", strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty),
 						new XElement("parameters",
-							strategy.Parameters.SyncGet(c => c.ToArray()).Select(p =>
+							strategy.Parameters.CachedValues.Select(p =>
 								new XElement("parameter",
 									new XElement("name", p.Name),
 									new XElement("value", p.Value is TimeSpan ? Format((TimeSpan)p.Value) : p.Value)
