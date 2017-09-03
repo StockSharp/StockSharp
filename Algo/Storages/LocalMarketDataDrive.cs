@@ -426,13 +426,13 @@ namespace StockSharp.Algo.Storages
 
 		private static readonly SynchronizedPairSet<DataType, string> _fileNames = new SynchronizedPairSet<DataType, string>
 		{
-			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick), "trades" },
-			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog), "orderLog" },
-			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction), "transactions" },
-			{ DataType.Create(typeof(QuoteChangeMessage), null), "quotes" },
-			{ DataType.Create(typeof(Level1ChangeMessage), null), "security" },
-			{ DataType.Create(typeof(PositionChangeMessage), null), "position" },
-			{ DataType.Create(typeof(NewsMessage), null), "news" },
+			{ DataType.Ticks, "trades" },
+			{ DataType.OrderLog, "orderLog" },
+			{ DataType.Transactions, "transactions" },
+			{ DataType.MarketDepth, "quotes" },
+			{ DataType.Level1, "security" },
+			{ DataType.PositionChanges, "position" },
+			{ DataType.News, "news" },
 		};
 
 		/// <summary>

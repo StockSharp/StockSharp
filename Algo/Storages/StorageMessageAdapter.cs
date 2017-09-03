@@ -608,22 +608,22 @@ namespace StockSharp.Algo.Storages
 			switch (msg.DataType)
 			{
 				case MarketDataTypes.Level1:
-					return DataType.Create(typeof(Level1ChangeMessage), null);
+					return DataType.Level1;
 
 				case MarketDataTypes.MarketDepth:
-					return DataType.Create(typeof(QuoteChangeMessage), null);
+					return DataType.MarketDepth;
 
 				case MarketDataTypes.Trades:
-					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick);
+					return DataType.Ticks;
 
 				case MarketDataTypes.OrderLog:
-					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+					return DataType.OrderLog;
 
 				case MarketDataTypes.News:
-					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+					return DataType.News;
 
 				case MarketDataTypes.CandleTimeFrame:
-					return DataType.Create(typeof(TimeFrameCandleMessage), msg.Arg);
+					return DataType.TimeFrame((TimeSpan)msg.Arg);
 
 				case MarketDataTypes.CandleTick:
 					return DataType.Create(typeof(TickCandleMessage), msg.Arg);
