@@ -92,6 +92,10 @@ namespace StockSharp.Algo.Storages.Csv
 
 			foreach (var field in _level1Fields)
 			{
+				// backward compatibility
+				if (reader.ColumnCurr == reader.ColumnCount)
+					break;
+
 				switch (field)
 				{
 					case Level1Fields.BestAskTime:
