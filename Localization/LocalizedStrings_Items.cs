@@ -46066,5 +46066,25 @@ namespace StockSharp.Localization
 		/// Result type
 		/// </summary>
 		public static string ResultType => GetString(ResultTypeKey);
+
+		/// <summary>
+		/// Portfolio '{0}' already exist.
+		/// </summary>
+		public const string PortfolioAlreadyExistKey = nameof(PortfolioAlreadyExist);
+
+		/// <summary>
+		/// Portfolio '{0}' already exist.
+		/// </summary>
+		public static string PortfolioAlreadyExist => GetString(PortfolioAlreadyExistKey);
+
+		/// <summary>
+		/// Position '{0}' already exist.
+		/// </summary>
+		public const string PositionAlreadyExistKey = nameof(PositionAlreadyExist);
+
+		/// <summary>
+		/// Position '{0}' already exist.
+		/// </summary>
+		public static string PositionAlreadyExist => GetString(PositionAlreadyExistKey);
 	}
 }

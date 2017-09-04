@@ -4600,7 +4600,7 @@ SettingsFile;Settings file;Файл с настройками
 AdapterBoard;Adapter board code;Код площадки в адаптере
 ConnectionNotSpecifiedParams;Connection not specified for {0};Подключение не указано для {0}
 SecurityOrBoardCodeNotSpecifiedParams;Security or board code not specified for {0};Код инструмента или площадки не указан для {0}
-SecurityOrBoardCodeDuplicatedParams;Security or board code are duplicated for {0};Код инструмента или площадк повторяется для {0}
+SecurityOrBoardCodeDuplicatedParams;Security or board code are duplicated for {0};Код инструмента или площадки повторяется для {0}
 Bytes;Bytes;Байты
 Project;Project;Проект
 Later;Later;Позднее
@@ -4644,6 +4644,8 @@ ShrinkPrice;Cut the price for the order;Обрезать цену для зая�
 Heatmap;Heatmap;Тепловая карта
 Saving;Saving data;Сохранение данных
 ResultType;Result type;Тип результата
+PortfolioAlreadyExist;Portfolio '{0}' already exist.;Портфель '{0}' уже существует.
+PositionAlreadyExist;Position '{0}' already exist.;Позиция '{0}' уже существует.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
