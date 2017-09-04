@@ -1448,6 +1448,7 @@ M:StockSharp.Fix.Native.IFixWriter.WriteBytes(System.Byte[],System.Int32,System.
 M:StockSharp.Fix.Native.IFixWriter.ClearState/summary;DocStr9626
 T:StockSharp.Fix.Native.MDEntry/summary;DocStr3283
 P:StockSharp.Fix.Native.MDEntry.Type/summary;DocStr3284
+P:StockSharp.Fix.Native.MDEntry.Time/summary;Time
 P:StockSharp.Fix.Native.MDEntry.Price/summary;Price
 P:StockSharp.Fix.Native.MDEntry.Size/summary;DocStr3526
 P:StockSharp.Fix.Native.MDEntry.Action/summary;DocStr3285

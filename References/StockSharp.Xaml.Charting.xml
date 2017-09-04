@@ -1323,6 +1323,13 @@
             </summary>
       <param name="chart">Chart.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartHelper.IsVolumeProfileChart(StockSharp.Xaml.Charting.ChartCandleDrawStyles)">
+      <summary>
+            Check the specified style is volume profile based.
+            </summary>
+      <param name="style">Style.</param>
+      <returns>Check result.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles">
       <summary>
             Indicator chart drawing styles.

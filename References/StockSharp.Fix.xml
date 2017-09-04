@@ -5607,6 +5607,11 @@
             Data type. Available types <see cref="T:StockSharp.Fix.Native.MDEntryType" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.Time">
+      <summary>
+            Time.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Native.MDEntry.Price">
       <summary>
             Price.
