@@ -14447,3 +14447,5 @@ DocStr10094;Editor to select multiples securities;Редактор для выб
 DocStr10095;Service name;Название сервиса
 DocStr10096;Check if the specified identifier is {0};Проверить, является ли переданный идентификатор {0}
 DocStr10097;{0}, if the specified identifier is {1}, otherwise, {2};{0}, если переданный идентификатор является {1}, иначе, {2}
+DocStr10098;Create data type info for {0};Создать информацию о данных для {0}
+DocStr10099;Check the specified style is volume profile based;Проверить, что указанный стиль основан на профиле объема

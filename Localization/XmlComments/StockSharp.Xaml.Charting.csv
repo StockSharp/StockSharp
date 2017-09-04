@@ -369,6 +369,9 @@ M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/param/appThem
 M:StockSharp.Xaml.Charting.ChartHelper.ToChartTheme(System.String)/returns;DocStr9857
 M:StockSharp.Xaml.Charting.ChartHelper.UpdateTheme(StockSharp.Xaml.Charting.IThemeableChart)/summary;DocStr10059
 M:StockSharp.Xaml.Charting.ChartHelper.UpdateTheme(StockSharp.Xaml.Charting.IThemeableChart)/param/chart;Str3200
+M:StockSharp.Xaml.Charting.ChartHelper.IsVolumeProfileChart(StockSharp.Xaml.Charting.ChartCandleDrawStyles)/summary;DocStr10099
+M:StockSharp.Xaml.Charting.ChartHelper.IsVolumeProfileChart(StockSharp.Xaml.Charting.ChartCandleDrawStyles)/param/style;Str1946
+M:StockSharp.Xaml.Charting.ChartHelper.IsVolumeProfileChart(StockSharp.Xaml.Charting.ChartCandleDrawStyles)/returns;DocStr8659
 T:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles/summary;DocStr7790
 F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Line/summary;Line
 F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.NoGapLine/summary;Str1972

@@ -929,6 +929,17 @@ M:StockSharp.Algo.DataType.Create(System.Type,System.Object)/summary;DocStr1
 M:StockSharp.Algo.DataType.Create(System.Type,System.Object)/param/messageType;DocStr9
 M:StockSharp.Algo.DataType.Create(System.Type,System.Object)/param/arg;DocStr8491
 M:StockSharp.Algo.DataType.Create(System.Type,System.Object)/returns;DocStr8490
+P:StockSharp.Algo.DataType.Level1/summary;DocStr8571
+P:StockSharp.Algo.DataType.MarketDepth/summary;MarketDepth
+P:StockSharp.Algo.DataType.PositionChanges/summary;DocStr9919
+P:StockSharp.Algo.DataType.News/summary;News
+P:StockSharp.Algo.DataType.Securities/summary;Securities
+P:StockSharp.Algo.DataType.Ticks/summary;Ticks
+P:StockSharp.Algo.DataType.OrderLog/summary;DocStr4035
+P:StockSharp.Algo.DataType.Transactions/summary;Transactions
+M:StockSharp.Algo.DataType.TimeFrame(System.TimeSpan)/summary;DocStr10098
+M:StockSharp.Algo.DataType.TimeFrame(System.TimeSpan)/param/tf;DocStr548
+M:StockSharp.Algo.DataType.TimeFrame(System.TimeSpan)/returns;DocStr8490
 P:StockSharp.Algo.DataType.MessageType/summary;DocStr9
 P:StockSharp.Algo.DataType.Arg/summary;DocStr8491
 M:StockSharp.Algo.DataType.OnEquals(StockSharp.Algo.DataType)/summary;DocStr2634

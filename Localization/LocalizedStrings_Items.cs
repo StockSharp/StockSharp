@@ -30728,16 +30728,6 @@ namespace StockSharp.Localization
 		public static string Str3301Params => GetString(Str3301ParamsKey);
 
 		/// <summary>
-		/// Bitcoins
-		/// </summary>
-		public const string BitcoinsKey = nameof(Bitcoins);
-
-		/// <summary>
-		/// Bitcoins
-		/// </summary>
-		public static string Bitcoins => GetString(BitcoinsKey);
-
-		/// <summary>
 		/// Key
 		/// </summary>
 		public const string Str3304Key = nameof(Str3304);
