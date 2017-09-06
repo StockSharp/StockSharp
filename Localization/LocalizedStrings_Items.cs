@@ -46086,5 +46086,25 @@ namespace StockSharp.Localization
 		/// Position '{0}' already exist.
 		/// </summary>
 		public static string PositionAlreadyExist => GetString(PositionAlreadyExistKey);
+
+		/// <summary>
+		/// Bids above
+		/// </summary>
+		public const string BidsOnTopKey = nameof(BidsOnTop);
+
+		/// <summary>
+		/// Bids above
+		/// </summary>
+		public static string BidsOnTop => GetString(BidsOnTopKey);
+
+		/// <summary>
+		/// Whether to show the bids above. The default is off.
+		/// </summary>
+		public const string BidsOnTopDescKey = nameof(BidsOnTopDesc);
+
+		/// <summary>
+		/// Whether to show the bids above. The default is off.
+		/// </summary>
+		public static string BidsOnTopDesc => GetString(BidsOnTopDescKey);
 	}
 }

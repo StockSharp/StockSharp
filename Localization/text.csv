@@ -4646,6 +4646,8 @@ Saving;Saving data;Сохранение данных
 ResultType;Result type;Тип результата
 PortfolioAlreadyExist;Portfolio '{0}' already exist.;Портфель '{0}' уже существует.
 PositionAlreadyExist;Position '{0}' already exist.;Позиция '{0}' уже существует.
+BidsOnTop;Bids above;Покупки сверху
+BidsOnTopDesc;Whether to show the bids above. The default is off.;Показывать ли биды сверху. По умолчанию выключено.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12749,7 +12751,6 @@ DocStr8250;To get the column type by cell;Получить тип колонки
 DocStr8251;Cell;Ячейка
 DocStr8252;The column type;Тип колонки
 DocStr8253;The maximum depth of order book display. The default value is {0};Максимальная глубина отображения стакана. По умолчанию равно {0}
-DocStr8254;Whether to show the bids above. The default is off;Показывать ли биды сверху. По умолчанию выключено
 DocStr8255;The selected quote;Выбранная котировка
 DocStr8256;"The price format. The default value is ""0.00""";"Формат цены. По умолчанию равен ""0.00"""
 DocStr8257;"The amount format. The default value is ""0""";"Формат объема. По умолчанию равен ""0"""
