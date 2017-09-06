@@ -51,6 +51,20 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				if (message.Adapter == this)
+				{
+					message.Adapter = null;
+					message.IsBack = false;
+				}
+				else
+				{
+					base.SendInMessage(message);
+					return;
+				}
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
