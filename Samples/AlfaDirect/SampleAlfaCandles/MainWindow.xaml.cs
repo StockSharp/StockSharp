@@ -74,8 +74,6 @@ namespace SampleAlfaCandles
 
 			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
-			_trader.NewPortfolio += _trader.RegisterPortfolio;
-
 			_trader.Connected += () =>
 			{
 				this.GuiAsync(() => ConnectBtn.IsEnabled = false);

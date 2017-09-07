@@ -34,6 +34,7 @@ StockSharp API Change log
 * (feature) QuikLua. Support official prices. http://stocksharp.ru/forum/8534/nelikvidnye-instrumenty---kak-luchshe-organizovat-rabotu-s-nimi/
 * (feature) QuikLua. Ignore case for security lookup.
 * (feature) Strategy.Parameters. From Set to Dictionary.
+* (feature) Connector.AutoPortfoliosSubscribe.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

@@ -112,15 +112,15 @@ namespace SampleMultiConnection
 			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-			Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-			Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+			Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+			Connector.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 
-			Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-			Connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-			Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+			Connector.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 			
-			Connector.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-			Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+			Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 			// subscribe on error of order registration event
 			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;

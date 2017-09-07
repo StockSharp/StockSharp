@@ -126,12 +126,7 @@ namespace SampleStrategies
 
 			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
-			Connector.NewPortfolio += portfolio =>
-			{
-				_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-				Connector.RegisterPortfolio(portfolio);
-			};
-
+			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 			Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 			// set market data provider

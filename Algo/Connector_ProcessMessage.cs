@@ -563,6 +563,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool LookupMessagesOnConnect { get; set; } = true;
 
+		/// <summary>
+		/// Send lookup messages on connect. By default is <see langword="true"/>.
+		/// </summary>
+		public bool AutoPortfoliosSubscribe { get; set; } = true;
+
 		private Tuple<IMessageAdapter, IMessageAdapter, IMessageAdapter> GetAdapter(Type type)
 		{
 			var adapter = _inAdapter;
@@ -1098,7 +1103,30 @@ namespace StockSharp.Algo
 			}
 
 			if (!isRestored)
+			{
+				if (AutoPortfoliosSubscribe)
+				{
+					var portfolioNames = Adapter
+						.AdapterProvider
+						.PortfolioAdapters
+						.Where(p => p.Value == adapter)
+						.Select(p => p.Key)
+						.ToArray();
+
+					foreach (var portfolioName in portfolioNames)
+					{
+						SendInMessage(new PortfolioMessage
+						{
+							PortfolioName = portfolioName,
+							TransactionId = TransactionIdGenerator.GetNextId(),
+							IsSubscribe = true,
+							Adapter = adapter,
+						});
+					}
+				}
+
 				return;
+			}
 
 			var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
 
@@ -1275,6 +1303,22 @@ namespace StockSharp.Algo
 			{
 				this.AddInfoLog(LocalizedStrings.Str1105Params, portfolio.Name);
 				RaiseNewPortfolio(portfolio);
+
+				if (AutoPortfoliosSubscribe)
+				{
+					var adapter = Adapter.AdapterProvider.GetAdapter(portfolio.Name);
+
+					if (adapter != null && Adapter.InnerAdapters[adapter] != -1)
+					{
+						SendInMessage(new PortfolioMessage
+						{
+							PortfolioName = portfolio.Name,
+							TransactionId = TransactionIdGenerator.GetNextId(),
+							IsSubscribe = true,
+							Adapter = adapter,
+						});
+					}
+				}
 			}
 			else if (isChanged)
 				RaisePortfolioChanged(portfolio);

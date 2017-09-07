@@ -122,9 +122,8 @@ namespace SampleQuantFeed
 					// subscribe on error event
 					Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-					
-					Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
+					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+					Trader.NewNews += _newsWindow.NewsPanel.NewsGrid.News.Add;
 
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
