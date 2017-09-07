@@ -124,11 +124,13 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// The initial date from which you need to get data.
 		/// </summary>
+		[Nullable]
 		public DateTimeOffset? From { get; set; }
 
 		/// <summary>
 		/// The final date by which you need to get data.
 		/// </summary>
+		[Nullable]
 		public DateTimeOffset? To { get; set; }
 
 		/// <summary>
