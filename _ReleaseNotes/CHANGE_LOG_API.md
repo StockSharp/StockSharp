@@ -36,6 +36,7 @@ StockSharp API Change log
 * (feature) Strategy.Parameters. From Set to Dictionary.
 * (feature) Connector.AutoPortfoliosSubscribe.
 * (feature) MarketDepthControl.IsBidsOnTop is dependency property.
+* (feature) MathDiagramElement.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

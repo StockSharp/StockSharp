@@ -14452,3 +14452,9 @@ DocStr10096;Check if the specified identifier is {0};Проверить, явл�
 DocStr10097;{0}, if the specified identifier is {1}, otherwise, {2};{0}, если переданный идентификатор является {1}, иначе, {2}
 DocStr10098;Create data type info for {0};Создать информацию о данных для {0}
 DocStr10099;Check the specified style is volume profile based;Проверить, что указанный стиль основан на профиле объема
+DocStr10100;Use security ids as variables;Использовать идентификаторы инструментов как переменные
+DocStr10101;Support portfolio subscriptions;Поддерживается ли подписки по портфелям
+DocStr10102;Occurs when a property value changes;Вызывается при изменении значения свойства
+DocStr10103;The chart area creation event;Событие создания области графика
+DocStr10104;Function;Функция
+DocStr10105;Expression;Выражение

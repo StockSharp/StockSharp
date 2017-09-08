@@ -2750,12 +2750,47 @@
             Icon resource name.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.Function">
+      <summary>
+            Function.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.MathDiagramElement">
+      <summary>
+            Formula with two arguments element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.Expression">
+      <summary>
+            Expression.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.MathDiagramElement.OnStart">
       <summary>
             The method is called at the start of the diagram element algorithm.
             </summary>

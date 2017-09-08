@@ -23,10 +23,11 @@ M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)/summary;Doc
 M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)/param/expression;DocStr1107
 M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)/returns;DocStr8482
 P:StockSharp.Algo.Expressions.ExpressionHelper.Functions/summary;AvailableFunctions
-M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)/summary;DocStr8479
-M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)/param/service;DocStr9821
-M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)/param/expression;DocStr8480
-M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)/returns;DocStr8476
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String,System.Boolean)/summary;DocStr8479
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String,System.Boolean)/param/service;DocStr9821
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String,System.Boolean)/param/expression;DocStr8480
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String,System.Boolean)/param/useSecurityIds;DocStr10100
+M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String,System.Boolean)/returns;DocStr8476
 T:StockSharp.Algo.Expressions.ExpressionIndexSecurity/summary;DocStr1111
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.#ctor/summary;DocStr1
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Formula/summary;DocStr8476
