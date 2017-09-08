@@ -305,7 +305,7 @@
 
 			oi.IsFrozen = true;
 
-			Action regAction = () =>
+			void RegAction()
 			{
 				if (NeedToFail)
 				{
@@ -319,12 +319,12 @@
 					oi.UpdateOrderState(order);
 					Log($"Order registered: {order}");
 				}
-			};
+			}
 
 			if (NeedToDelay)
-				DelayedAction(regAction, _delay, "register");
+				DelayedAction(RegAction, _delay, "register");
 			else
-				regAction();
+				RegAction();
 		}
 
 		private void Chart_OnMoveOrder(Order oldOrder, decimal newPrice)
@@ -363,7 +363,7 @@
 
 			oiOld.IsFrozen = oiNew.IsFrozen = true;
 
-			Action moveAction = () =>
+			void MoveAction()
 			{
 				if (NeedToFail)
 				{
@@ -382,12 +382,12 @@
 					oiNew.UpdateOrderState(newOrder);
 					Log($"Order moved to new: {newOrder}");
 				}
-			};
+			}
 
 			if(NeedToDelay)
-				DelayedAction(moveAction, _delay, "move");
+				DelayedAction(MoveAction, _delay, "move");
 			else
-				moveAction();
+				MoveAction();
 		}
 
 		private void Chart_OnCancelOrder(Order order)
@@ -401,7 +401,7 @@
 
 			oi.IsFrozen = true;
 
-			Action cancelAction = () =>
+			void CancelAction()
 			{
 				if (NeedToFail)
 				{
@@ -413,12 +413,12 @@
 					order.State = OrderStates.Done;
 					oi.UpdateOrderState(order);
 				}
-			};
+			}
 
 			if (NeedToDelay)
-				DelayedAction(cancelAction, _delay, "cancel");
+				DelayedAction(CancelAction, _delay, "cancel");
 			else
-				cancelAction();
+				CancelAction();
 		}
 
 		private ChartActiveOrderInfo GetOrderInfo(Order order, ChartActiveOrderInfo initFrom = null)

@@ -40,8 +40,8 @@ namespace SampleETrade
 
 		public bool IsConnected
 		{
-			get { return (bool)GetValue(IsConnectedProperty); }
-			set { SetValue(IsConnectedProperty, value); }
+			get => (bool)GetValue(IsConnectedProperty);
+			set => SetValue(IsConnectedProperty, value);
 		}
 
 		public ETradeTrader Trader { get; private set; }
@@ -75,7 +75,7 @@ namespace SampleETrade
 			_portfoliosWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 
-			var guilistener = new GuiLogListener(_logControl);
+			var guilistener = new GuiLogListener(LogControl);
 			guilistener.Filters.Add(msg => msg.Level > LogLevels.Debug);
 			_logManager.Listeners.Add(guilistener);
 

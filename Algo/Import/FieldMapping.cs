@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Import
 			Name = storage.GetValue<string>(nameof(Name));
 			IsExtended = storage.GetValue<bool>(nameof(IsExtended));
 			//Number = storage.GetValue<int>(nameof(Number));
-			Values.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => PersistableHelper.Load<FieldMappingValue>(s)));
+			Values.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>()));
 			DefaultValue = storage.GetValue<string>(nameof(DefaultValue));
 			Format = storage.GetValue<string>(nameof(Format));
 			IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);

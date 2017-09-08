@@ -42,8 +42,8 @@ namespace SampleCQG
 
 		public bool IsConnected
 		{
-			get { return (bool)GetValue(IsConnectedProperty); }
-			set { SetValue(IsConnectedProperty, value); }
+			get => (bool)GetValue(IsConnectedProperty);
+			set => SetValue(IsConnectedProperty, value);
 		}
 
 		public Connector Connector { get; private set; }

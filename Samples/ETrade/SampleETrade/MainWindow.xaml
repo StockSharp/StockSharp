@@ -40,7 +40,7 @@
                     <CheckBox Content="Sandbox" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=Sandbox, Mode=TwoWay}"
                               Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"
                               IsEnabled="{Binding IsConnected, Converter={StaticResource invbool}}"/>
-                    <Button x:Name="ConnectBtn" Background="LightPink" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Margin="30,3"/>
+                    <Button x:Name="ConnectBtn" Background="LightPink" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" Margin="30,3"/>
                 </Grid>
             </StackPanel>
 
@@ -70,6 +70,6 @@
 				</Grid>
             </StackPanel>
         </Grid>
-        <xaml:LogControl DockPanel.Dock="Top" AutoResize="True" AutoScroll="True" x:Name="_logControl" TimeFormat="HH:mm:ss.fff"/>
+        <xaml:LogControl DockPanel.Dock="Top" AutoResize="True" AutoScroll="True" x:Name="LogControl" TimeFormat="HH:mm:ss.fff"/>
     </DockPanel>
 </Window>

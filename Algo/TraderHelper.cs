@@ -411,7 +411,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
 		{
-			return board.ToMessage().IsTradeTime(time, out var period);
+			return board.ToMessage().IsTradeTime(time, out var _);
 		}
 
 		/// <summary>
@@ -434,7 +434,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
-			return board.IsTradeTime(time, out WorkingTimePeriod period);
+			return board.IsTradeTime(time, out var _);
 		}
 
 		/// <summary>
@@ -614,7 +614,7 @@ namespace StockSharp.Algo
 			var asks = depth.Asks.Sparse(priceStep);
 
 			var pair = depth.BestPair;
-			var spreadQuotes = pair?.Sparse(priceStep).ToArray() ?? Enumerable.Empty<Quote>();
+			var spreadQuotes = pair?.Sparse(priceStep).ToArray() ?? ArrayHelper.Empty<Quote>();
 
 			return new MarketDepth(depth.Security).Update(
 				bids.Concat(spreadQuotes.Where(q => q.OrderDirection == Sides.Buy)),
@@ -809,7 +809,8 @@ namespace StockSharp.Algo
 			}
 
 			var bids = new Quote[depth.Bids.Length];
-			Action a1 = () =>
+
+			void B1()
 			{
 				var i = 0;
 				var count = 0;
@@ -842,12 +843,13 @@ namespace StockSharp.Algo
 
 				Array.Copy(depth.Bids, i, bids, count, depth.Bids.Length - i);
 				Array.Resize(ref bids, count + (depth.Bids.Length - i));
-			};
+			}
 
-			a1();
+			B1();
 
 			var asks = new Quote[depth.Asks.Length];
-			Action a2 = () =>
+
+			void A1()
 			{
 				var i = 0;
 				var count = 0;
@@ -880,9 +882,9 @@ namespace StockSharp.Algo
 
 				Array.Copy(depth.Asks, i, asks, count, depth.Asks.Length - i);
 				Array.Resize(ref asks, count + (depth.Asks.Length - i));
-			};
+			}
 
-			a2();
+			A1();
 
 			depth.Update(bids, asks, depth.LastChangeTime);
 		}
@@ -1847,7 +1849,7 @@ namespace StockSharp.Algo
 				if (secType != null && s.SecurityType != secType)
 					return false;
 
-				var secTypes = criteria.SecurityTypes;
+				var secTypes = criteria.SecurityTypes?.ToArray();
 
 				if (secTypes != null && !secTypes.IsEmpty())
 				{
@@ -2256,7 +2258,7 @@ namespace StockSharp.Algo
 			SecurityId? IPositionManager.SecurityId
 			{
 				get => _position.Security.ToSecurityId();
-				set { throw new NotSupportedException(); }
+				set => throw new NotSupportedException();
 			}
 
 			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.NewPosition
@@ -3394,7 +3396,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var fields = provider.GetLevel1Fields(security);
+			var fields = provider.GetLevel1Fields(security).ToArray();
 
 			if (fields.IsEmpty())
 				return null;

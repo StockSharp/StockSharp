@@ -26,7 +26,6 @@ namespace StockSharp.Quik.Verifier
 	using Ecng.Xaml;
 
 	using StockSharp.Quik;
-
 	using StockSharp.Localization;
 
 	public partial class MainWindow
@@ -66,8 +65,8 @@ namespace StockSharp.Quik.Verifier
 
 		public QuikTerminal SelectedTerminal
 		{
-			get { return (QuikTerminal)QuikTerminals.SelectedItem; }
-			set { QuikTerminals.SelectedItem = value; }
+			get => (QuikTerminal)QuikTerminals.SelectedItem;
+			set => QuikTerminals.SelectedItem = value;
 		}
 
 		private void RefreshTerminalsClick(object sender, RoutedEventArgs e)

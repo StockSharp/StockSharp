@@ -19,7 +19,7 @@
 				<ColumnDefinition Width="280" />
 			</Grid.ColumnDefinitions>
 
-            <charting:Chart x:Name="_chart" Grid.Column="0" />
+            <charting:Chart x:Name="Chart" Grid.Column="0" />
 			
 			<Grid Grid.Column="1">
 				<Grid.ColumnDefinitions>
@@ -96,10 +96,10 @@
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
-			<sx:MyTradeGrid x:Name="_trades" Grid.Column="0" />
-			<sx:OrderGrid x:Name="_orders" Grid.Column="1" SelectedOrderChanged="OrdersOrderSelected" />
+			<sx:MyTradeGrid x:Name="TradesGrid" Grid.Column="0" />
+			<sx:OrderGrid x:Name="OrdersGrid" Grid.Row="0" Grid.Column="1" SelectedOrderChanged="OrdersOrderSelected" />
             
-            <sx:LogControl x:Name="LogControl" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <sx:LogControl x:Name="LogControl" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" />
 		</Grid>
     </Grid>
 </Window>

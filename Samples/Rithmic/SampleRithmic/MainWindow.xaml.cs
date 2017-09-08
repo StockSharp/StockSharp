@@ -40,8 +40,8 @@ namespace SampleRithmic
 
 		public bool IsConnected
 		{
-			get { return (bool)GetValue(IsConnectedProperty); }
-			set { SetValue(IsConnectedProperty, value); }
+			get => (bool)GetValue(IsConnectedProperty);
+			set => SetValue(IsConnectedProperty, value);
 		}
 
 		public RithmicTrader Trader { get; private set; }

@@ -45,7 +45,7 @@
 				<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
                 <xaml:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
 
-                <Grid Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2">
+                <Grid Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="130" />
 						<ColumnDefinition Width="*" />

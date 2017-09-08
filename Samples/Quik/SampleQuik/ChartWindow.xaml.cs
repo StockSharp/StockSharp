@@ -56,7 +56,7 @@ namespace SampleQuik
 			area.Elements.Add(_candleElem);
 
 			_trader.CandleSeriesProcessing += ProcessNewCandle;
-			_trader.SubscribeCandles(_candleSeries, @from, to);
+			_trader.SubscribeCandles(_candleSeries, from, to);
 
 			Title = candleSeries.ToString();
 		}

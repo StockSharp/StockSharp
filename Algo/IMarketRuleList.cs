@@ -150,7 +150,7 @@ namespace StockSharp.Algo
 			{
 				var set = _rulesByToken.TryGetValue(token);
 
-				return set == null ? Enumerable.Empty<IMarketRule>() : set.ToArray();
+				return set?.ToArray() ?? Enumerable.Empty<IMarketRule>();
 			}
 		}
 

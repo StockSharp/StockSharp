@@ -638,8 +638,7 @@ namespace StockSharp.Algo
 
 		private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
 		{
-			var wrapper = adapter as IMessageAdapterWrapper;
-			return wrapper != null ? GetUnderlyingAdapter(wrapper.InnerAdapter) : adapter;
+			return adapter is IMessageAdapterWrapper wrapper ? GetUnderlyingAdapter(wrapper.InnerAdapter) : adapter;
 		}
 
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)

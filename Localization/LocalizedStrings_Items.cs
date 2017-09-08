@@ -43515,7 +43515,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// E-mail address
 		/// </summary>
-		public static string EmailAddress => GetString(EmailAddress);
+		public static string EmailAddress => GetString(EmailAddressKey);
 
 		/// <summary>
 		/// Phone

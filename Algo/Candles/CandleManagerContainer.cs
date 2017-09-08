@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Candles
 				throw new ArgumentOutOfRangeException(nameof(candleIndex));
 
 			var info = GetInfo(series);
-			return info != null ? info.GetCandle(candleIndex) : null;
+			return info?.GetCandle(candleIndex);
 		}
 
 		/// <summary>
@@ -265,7 +265,7 @@ namespace StockSharp.Algo.Candles
 		public int GetCandleCount(CandleSeries series)
 		{
 			var info = GetInfo(series);
-			return info == null ? 0 : info.CandleCount;
+			return info?.CandleCount ?? 0;
 		}
 
 		/// <summary>

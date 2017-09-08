@@ -58,7 +58,7 @@ namespace SampleIQFeed
 			{
 				try
 				{
-					var ticks = MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out bool isSuccess);
+					var ticks = MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out var _);
 
 					this.GuiAsync(() =>
 					{

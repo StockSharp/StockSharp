@@ -234,24 +234,23 @@ namespace XMLCommToHTM
 			));
 		}
 
-		static IEnumerable<XElement> GetMemberIcons(MemberDom member)
+		private static IEnumerable<XElement> GetMemberIcons(MemberDom member)
 		{
 			MemberIconsEnum? memberType = null;
-			string memberName="";
+			var memberName = "";
 			if (member is ConstructorDom)
 			{
 				memberType = member.IsPublic ? MemberIconsEnum.MethodPub : MemberIconsEnum.MethodProt;
 				memberName = "Method";
 			}
-			if (member is MethodDom)
+			if (member is MethodDom method)
 			{
-				var meth = (MethodDom) member;
-				if (meth.IsOperator)
+				if (method.IsOperator)
 				{
 					memberType = member.IsPublic ? MemberIconsEnum.OperatorPub : MemberIconsEnum.OperatorProt;
 					memberName = "Operator";
 				}
-				else if (meth.IsExtention)
+				else if (method.IsExtention)
 				{
 					if (!member.IsPublic)
 						throw new InvalidOperationException();
