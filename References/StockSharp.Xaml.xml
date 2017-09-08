@@ -3061,6 +3061,11 @@
             Show single <see cref="F:StockSharp.Xaml.MarketDepthColumns.Volume" /> column. The default value is <see langword="false" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.IsBidsOnTopProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.MarketDepthControl.IsBidsOnTop" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.IsBidsOnTop">
       <summary>
             Whether to show the bids above. The default is off.

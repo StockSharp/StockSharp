@@ -660,7 +660,8 @@ F:StockSharp.Xaml.MarketDepthControl.ShowBoardColumnProperty/summary;DocStr29
 P:StockSharp.Xaml.MarketDepthControl.ShowBoardColumn/summary;ShowBoardColumn
 F:StockSharp.Xaml.MarketDepthControl.ShowSingleVolumeColumnProperty/summary;DocStr29
 P:StockSharp.Xaml.MarketDepthControl.ShowSingleVolumeColumn/summary;DocStr9928
-P:StockSharp.Xaml.MarketDepthControl.IsBidsOnTop/summary;DocStr8254
+F:StockSharp.Xaml.MarketDepthControl.IsBidsOnTopProperty/summary;DocStr29
+P:StockSharp.Xaml.MarketDepthControl.IsBidsOnTop/summary;BidsOnTopDesc
 P:StockSharp.Xaml.MarketDepthControl.SelectedQuote/summary;DocStr8255
 P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat/summary;DocStr8256
 P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat/summary;DocStr8257

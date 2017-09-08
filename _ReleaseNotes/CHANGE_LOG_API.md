@@ -35,6 +35,7 @@ StockSharp API Change log
 * (feature) QuikLua. Ignore case for security lookup.
 * (feature) Strategy.Parameters. From Set to Dictionary.
 * (feature) Connector.AutoPortfoliosSubscribe.
+* (feature) MarketDepthControl.IsBidsOnTop is dependency property.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
