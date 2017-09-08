@@ -96,9 +96,8 @@ namespace XMLCommToHTM
 
 		static string GetMethodKindName(MemberDom m)
 		{
-			if (m is MethodDom)
+			if (m is MethodDom meth)
 			{
-				var meth = m as MethodDom;
 				if (meth.IsOperator)
 					return Strings.Operator;
 				else
