@@ -1397,6 +1397,21 @@
             Безусловный перевод.
             </summary>
     </member>
+    <member name="F:StockSharp.Micex.Native.TransferTypes.A">
+      <summary>
+            Вывести остаток.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TransferTypes.R">
+      <summary>
+            Запрос остатка без вывода.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TransferTypes.L">
+      <summary>
+            Вывести остаток за исключением указанного.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.TrdAccTypes">
       <summary>
             Тип торгового счета.
@@ -1500,6 +1515,11 @@
     <member name="F:StockSharp.Micex.Native.USTradeTypes.L">
       <summary>
             Возврат выплат.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.USTradeTypes.F">
+      <summary>
+            Перевод денег/бумаг.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Urgencys">
@@ -1727,6 +1747,11 @@
             Средства Т+.
             </summary>
     </member>
+    <member name="F:StockSharp.Micex.Native.PosnGroups.A">
+      <summary>
+            Позиции для учета переданных профилей.
+            </summary>
+    </member>
     <member name="F:StockSharp.Micex.Native.PosnGroups.L">
       <summary>
             Позиции по лимитам.
@@ -1874,22 +1899,77 @@
     </member>
     <member name="T:StockSharp.Micex.Native.TradeStatuses">
       <summary>
-            Статус.
+            Состояние сделки.
             </summary>
     </member>
     <member name="F:StockSharp.Micex.Native.TradeStatuses.M">
       <summary>
-            Сделка заключена.
+            Исполнена.
             </summary>
     </member>
     <member name="F:StockSharp.Micex.Native.TradeStatuses.U">
       <summary>
-            Сделка не проверена.
+            Не исполнена.
             </summary>
     </member>
     <member name="F:StockSharp.Micex.Native.TradeStatuses.C">
       <summary>
-            Сделка отменена.
+            Отменена системой.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TradeStatuses.P">
+      <summary>
+            Включена в отчет.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.RMCheckFlagses">
+      <summary>
+            Флаги проверки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.RMCheckFlagses.U">
+      <summary>
+            Без проверки ЕЛ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.RMCheckFlagses.C">
+      <summary>
+            Без проверок.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.UAccessListTypes">
+      <summary>
+            Тип списка доступа.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.UAccessListTypes.W">
+      <summary>
+            Белый список.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.UAccessListTypes.B">
+      <summary>
+            Черный список.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.UserLimitStatuses">
+      <summary>
+            Состояние пользовательского ограничения.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.UserLimitStatuses.A">
+      <summary>
+            Активно.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.UserLimitStatuses.S">
+      <summary>
+            Приостановлено.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.UserLimitStatuses.D">
+      <summary>
+            Удалено.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.EntryTypes">
@@ -2055,6 +2135,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Assets.Assettype">
       <summary>
             Тип актива.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Assets.Facevalue">
+      <summary>
+            Номинальная стоимость одной ценной бумаги, в валюте инструмента.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Assets.Prevrc">
@@ -3214,6 +3299,31 @@
             Количество заявок на продажу в очереди Торговой системы.
             </summary>
     </member>
+    <member name="T:StockSharp.Micex.Native.Tables.Trantypes">
+      <summary>
+            Типы переводов.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.Trantypes.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.Trantypes" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trantypes.Trantype">
+      <summary>
+            Тип перевода.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trantypes.Description">
+      <summary>
+            Описание типа перевода.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trantypes.Latdescription">
+      <summary>
+            Описание типа перевода на английском языке.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.Tables.Trdtimegroups">
       <summary>
             Группы событий.
@@ -3240,6 +3350,351 @@
     <member name="P:StockSharp.Micex.Native.Tables.Trdtimegroups.Latname">
       <summary>
             Наименование группы торговых событий на английском языке.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.UBoardBlackList">
+      <summary>
+            Чёрный список режимов торгов.
+            </summary>
+      <remarks>
+            Cписок недоступных режимов торгов.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.UBoardBlackList.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.UBoardBlackList" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UBoardBlackList.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UBoardBlackList.Secboard">
+      <summary>
+            Идентификатор режима торгов для финансового инструмента.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.UBoardWhiteList">
+      <summary>
+            Белый список режимов торгов.
+            </summary>
+      <remarks>
+            Список доступных режимов торгов.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.UBoardWhiteList.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.UBoardWhiteList" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UBoardWhiteList.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UBoardWhiteList.Secboard">
+      <summary>
+            Идентификатор режима торгов для финансового инструмента.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.UHoldLimits">
+      <summary>
+            Ограничения нетто-позиции по бумагам.
+            </summary>
+      <remarks>
+            Список пользовательских ограничений по нетто-позициям по ценным бумагам.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.UHoldLimits.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.UHoldLimits" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UHoldLimits.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UHoldLimits.Trdaccid">
+      <summary>
+            Номер торгового счета.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UHoldLimits.Seccode">
+      <summary>
+            Идентификатор финансового инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UHoldLimits.Plannedlimitup">
+      <summary>
+            Верхнее ограничение плановой позиции по финансовому инструменту (длинная позиция).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UHoldLimits.Plannedlimitdown">
+      <summary>
+            Нижнее ограничение плановой позиции по финансовому инструменту (короткая позиция).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UHoldLimits.Plannedbuy">
+      <summary>
+            Текущая плановая позиция по финансовому инструменту на покупку (длинная позиция).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UHoldLimits.Plannedsell">
+      <summary>
+            Текущая плановая позиция по финансовому инструменту на продажу (короткая позиция).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UHoldLimits.Userlimitstatus">
+      <summary>
+            Состояние пользовательского ограничения.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.UOrderLimits">
+      <summary>
+            Ограничения по заявкам.
+            </summary>
+      <remarks>
+            Ограничения пользователя по заявкам.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.UOrderLimits.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.UOrderLimits" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Seccode">
+      <summary>
+            Идентификатор финансового инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Priceboundup">
+      <summary>
+            Величина допустимого отклонения цены в заявке вверх (в процентах от текущей цены).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Pricebounddown">
+      <summary>
+            Величина допустимого отклонения цены в заявке вниз (в процентах от текущей цены).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Maxqty">
+      <summary>
+            Максимальное количество ценных бумаг в заявке.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Maxorderval">
+      <summary>
+            Максимальный объем заявки, выраженный в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Maxmktqty">
+      <summary>
+            Максимальное количество ценных бумаг в рыночной заявке.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Maxmktorderval">
+      <summary>
+            Максимальный объем рыночной заявки, выраженный в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Maxordvaltoday">
+      <summary>
+            Максимальная сумма заявок за торговый день, выраженная в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Curordvaltoday">
+      <summary>
+            Текущая сумма заявок за торговый день, выраженная в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UOrderLimits.Userlimitstatus">
+      <summary>
+            Состояние пользовательского ограничения.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.UPosnLimits">
+      <summary>
+            Ограничения нетто-позиции по деньгам.
+            </summary>
+      <remarks>
+            Список пользовательских ограничений по нетто-позициям в деньгах.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.UPosnLimits.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.UPosnLimits" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UPosnLimits.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UPosnLimits.Trdaccid">
+      <summary>
+            Номер торгового счета.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UPosnLimits.Plannedlimitup">
+      <summary>
+            Максимальная позиция в деньгах (рубли) в заявках на покупку.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UPosnLimits.Plannedlimitdown">
+      <summary>
+            Максимальная позиция в деньгах (рубли) в заявках на продажу.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UPosnLimits.Plannedbuy">
+      <summary>
+            Текущая плановая позиция в заявках на покупку, выраженная в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UPosnLimits.Plannedsell">
+      <summary>
+            Текущая плановая позиция в заявках на продажу, выраженная в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UPosnLimits.Userlimitstatus">
+      <summary>
+            Состояние пользовательского ограничения.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.USecBlackList">
+      <summary>
+            Чёрный список инструментов.
+            </summary>
+      <remarks>
+            Список недоступных инструментов.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.USecBlackList.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.USecBlackList" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecBlackList.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecBlackList.Secboard">
+      <summary>
+            Идентификатор режима торгов для финансового инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecBlackList.Seccode">
+      <summary>
+            Идентификатор финансового инструмента.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.USecuniqBlackList">
+      <summary>
+            Чёрный список инструментов (по кодам ЦБ).
+            </summary>
+      <remarks>
+            Список недоступных инструментов (по кодам ценных бумаг).
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.USecuniqBlackList.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.USecuniqBlackList" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecuniqBlackList.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecuniqBlackList.Seccode">
+      <summary>
+            Идентификатор финансового инструмента.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.USecuniqWhiteList">
+      <summary>
+            Белый список инструментов (по кодам ЦБ).
+            </summary>
+      <remarks>
+            Список доступных инструментов (по кодам ценных бумаг).
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.USecuniqWhiteList.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.USecuniqWhiteList" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecuniqWhiteList.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecuniqWhiteList.Seccode">
+      <summary>
+            Идентификатор финансового инструмента.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.USecWhiteList">
+      <summary>
+            Белый список инструментов.
+            </summary>
+      <remarks>
+            Список доступных инструментов.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.USecWhiteList.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.USecWhiteList" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecWhiteList.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecWhiteList.Secboard">
+      <summary>
+            Идентификатор режима торгов для финансового инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.USecWhiteList.Seccode">
+      <summary>
+            Идентификатор финансового инструмента.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.UserClient">
+      <summary>
+            Привязка пользователей к кодам клиентов.
+            </summary>
+      <remarks>
+            Привязка пользователей к кодам клиентов.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.UserClient.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.UserClient" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UserClient.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UserClient.Clientcode">
+      <summary>
+            Код клиента, присвоенный брокером.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.UserClient.Userlimitstatus">
+      <summary>
+            Состояние пользовательского ограничения.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.AccountBalance">
@@ -3625,6 +4080,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Gcpoolid">
       <summary>
             Идентификатор пула.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Unifiedpool">
+      <summary>
+            Единый пул.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Earlysettle">
@@ -6749,6 +7209,11 @@
             Информация о переводе.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Sectransfers.Trantype">
+      <summary>
+            Тип перевода.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.Native.Tables.Sectransfers.Settlecode">
       <summary>
             Код расчетов по сделке.
@@ -7640,6 +8105,16 @@
             Информация о переводе.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trades.Status">
+      <summary>
+            Статус сделки.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trades.Trantype">
+      <summary>
+            Тип перевода.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.Native.Tables.Trades.Settleliabilityflag">
       <summary>
             Отметка о том, что сделка является сделкой урегулирования обязательств между УК и УТ.
@@ -7904,7 +8379,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Users.CodmodeDc">
       <summary>
-            Индикатор работы в COD-режиме (Сancel on Drop-Copy Disconnect).
+            Индикатор работы в COD-режиме (Cancel on Drop-Copy Disconnect).
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Users.Masteruserflag">
@@ -7915,6 +8390,31 @@
     <member name="P:StockSharp.Micex.Native.Tables.Users.Extipclient">
       <summary>
             Внешний адрес.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Restrictionon">
+      <summary>
+            Проверка ограничениий установленных для пользователя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Secuniqaccesstype">
+      <summary>
+            Тип списка доступа по кодам инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Boardaccesstype">
+      <summary>
+            Тип списка доступа по режимам торгов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Secaccesstype">
+      <summary>
+            Тип списка доступа по инструментам на режимах торгов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Tratelimit">
+      <summary>
+            Ограничение на количество транзакций в специфицированном временном интервале.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.UserTrdacc">
@@ -8393,6 +8893,198 @@
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.ComplexCashtransfer.Name">
+      <summary>
+            Название транзакции.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Transactions.SetUHoldLimit">
+      <summary>
+            Ограничения по инструментам.
+            </summary>
+      <remarks>
+            Установка пользовательских ограничений по позиции в ценных бумагах.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Transactions.SetUHoldLimit.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Transactions.SetUHoldLimit" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUHoldLimit.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUHoldLimit.Trdaccid">
+      <summary>
+            Номер торгового счета.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUHoldLimit.Seccode">
+      <summary>
+            Идентификатор финансового инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUHoldLimit.Plannedlimitup">
+      <summary>
+            Верхнее ограничение плановой позиции по финансовому инструменту.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUHoldLimit.Plannedlimitdown">
+      <summary>
+            Нижнее ограничение плановой позиции по финансовому инструменту.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUHoldLimit.Userlimitstatus">
+      <summary>
+            Состояние пользовательского ограничения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUHoldLimit.Name">
+      <summary>
+            Название транзакции.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Transactions.SetULimitParams">
+      <summary>
+            Базовые пользовательские ограничения.
+            </summary>
+      <remarks>
+            Установка или изменение базовых пользовательских ограничений.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Transactions.SetULimitParams.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Transactions.SetULimitParams" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetULimitParams.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetULimitParams.Tratelimit">
+      <summary>
+            Ограничение на количество транзакций в специфицированном временном интервале.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetULimitParams.Restrictionon">
+      <summary>
+            Включить или выключить контроль лимитов установленных для пользователя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetULimitParams.Name">
+      <summary>
+            Название транзакции.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Transactions.SetUOrderLimit">
+      <summary>
+            Ограничения по заявкам.
+            </summary>
+      <remarks>
+            Установка пользовательских ограничений по заявкам.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Transactions.SetUOrderLimit.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Transactions.SetUOrderLimit" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Seccode">
+      <summary>
+            Идентификатор финансового инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Priceboundup">
+      <summary>
+            Величина допустимого отклонения цены в заявке вверх (в процентах от текущей цены).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Pricebounddown">
+      <summary>
+            Величина допустимого отклонения цены в заявке вниз (в процентах от текущей цены).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Maxqty">
+      <summary>
+            Максимальное количество ценных бумаг в заявке.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Maxorderval">
+      <summary>
+            Максимальный объем заявки, выраженный в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Maxmktqty">
+      <summary>
+            Максимальное количество ценных бумаг в рыночной заявке.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Maxmktorderval">
+      <summary>
+            Максимальный объем рыночной заявки, выраженный в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Maxordvaltoday">
+      <summary>
+            Максимальная сумма заявок за торговый день, выраженная в валюте расчетов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Userlimitstatus">
+      <summary>
+            Состояние пользовательского ограничения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUOrderLimit.Name">
+      <summary>
+            Название транзакции.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Transactions.SetUPosnLimit">
+      <summary>
+            Ограничения по нетто-позиции.
+            </summary>
+      <remarks>
+            Установка пользовательских ограничений по нетто-позициям в деньгах.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Transactions.SetUPosnLimit.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Transactions.SetUPosnLimit" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUPosnLimit.Userid">
+      <summary>
+            Участник.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUPosnLimit.Trdaccid">
+      <summary>
+            Номер торгового счета.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUPosnLimit.Plannedlimitup">
+      <summary>
+            Максимальная позиция в деньгах (рубли) на покупку.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUPosnLimit.Plannedlimitdown">
+      <summary>
+            Максимальная позиция в деньгах (рубли) на покупку.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUPosnLimit.Userlimitstatus">
+      <summary>
+            Состояние пользовательского ограничения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetUPosnLimit.Name">
       <summary>
             Название транзакции.
             </summary>
@@ -9035,7 +9727,7 @@
             Ввод отчета на исполнение без подтверждения.
             </summary>
       <remarks>
-            Применяется для: - ввода отчета на исполнение компенсационного взноса; - ввода отчета на исполнение отложенных обязательств и требований.  Для исполнения сделки требуется ввод одной заявки исполнения. Сделка совершается в момент подачи этой заявки. При постановке заявок исполнения осуществляется контроль позиций по деньгам и бумагам. Заявка исполнения направляется в адрес только конкретного партнера. В заявке исполнения отражаются нетто-сумма и нетто-количество сделок, включенных в заявку.
+            Применяется для: - ввода отчета на исполнение компенсационного взноса; - ввода отчета на исполнение отложенных обязательств и требований. Для исполнения сделки требуется ввод одной заявки исполнения. Сделка совершается в момент подачи этой заявки. При постановке заявок исполнения осуществляется контроль позиций по деньгам и бумагам. Заявка исполнения направляется в адрес только конкретного партнера. В заявке исполнения отражаются нетто-сумма и нетто-количество сделок, включенных в заявку.
             </remarks>
     </member>
     <member name="M:StockSharp.Micex.Native.Transactions.ComplexReport.#ctor">
@@ -10222,14 +10914,14 @@
             Объем, выраженный в лотах.
             </summary>
     </member>
-    <member name="P:StockSharp.Micex.Native.Transactions.Transfer.Cpaccount">
-      <summary>
-            Номер торгового счета контрагента.
-            </summary>
-    </member>
     <member name="P:StockSharp.Micex.Native.Transactions.Transfer.Brokerref">
       <summary>
             Дополнительная справочная информация (заполняется трейдером) - как правило: &lt;код клиента&gt;/&lt;номер поручения&gt;.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.Transfer.Cpaccount">
+      <summary>
+            Номер торгового счета контрагента.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.Transfer.Cpbrokerref">
@@ -12174,6 +12866,235 @@
       <param name="tableHandle">Идентификатор таблицы.</param>
       <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
     </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenTrantypesTable">
+      <summary>
+            Открыть таблицу 'Типы переводов'.
+            </summary>
+      <returns>Указатель на таблицу 'Типы переводов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadTrantypesTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Типы переводов.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Типы переводов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddTrantypesTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.Trantypes}})">
+      <summary>
+            Добавить таблицу 'Типы переводов' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUserClientTable">
+      <summary>
+            Открыть таблицу 'Привязка пользователей к кодам клиентов'.
+            </summary>
+      <returns>Указатель на таблицу 'Привязка пользователей к кодам клиентов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUserClientTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Привязка пользователей к кодам клиентов.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Привязка пользователей к кодам клиентов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUserClientTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.UserClient}})">
+      <summary>
+            Добавить таблицу 'Привязка пользователей к кодам клиентов' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUBoardBlackListTable(System.String)">
+      <summary>
+            Открыть таблицу 'Чёрный список режимов торгов'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Чёрный список режимов торгов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUBoardBlackListTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Чёрный список режимов торгов.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Чёрный список режимов торгов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUBoardBlackListTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.UBoardBlackList}})">
+      <summary>
+            Добавить таблицу 'Чёрный список режимов торгов' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUBoardWhiteListTable(System.String)">
+      <summary>
+            Открыть таблицу 'Белый список режимов торгов'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Белый список режимов торгов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUBoardWhiteListTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Белый список режимов торгов.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Белый список режимов торгов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUBoardWhiteListTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.UBoardWhiteList}})">
+      <summary>
+            Добавить таблицу 'Белый список режимов торгов' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUHoldLimitsTable(System.String)">
+      <summary>
+            Открыть таблицу 'Ограничения нетто-позиции по бумагам'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Ограничения нетто-позиции по бумагам'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUHoldLimitsTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Ограничения нетто-позиции по бумагам.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Ограничения нетто-позиции по бумагам'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUHoldLimitsTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.UHoldLimits}})">
+      <summary>
+            Добавить таблицу 'Ограничения нетто-позиции по бумагам' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUOrderLimitsTable(System.String)">
+      <summary>
+            Открыть таблицу 'Ограничения по заявкам'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Ограничения по заявкам'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUOrderLimitsTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Ограничения по заявкам.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Ограничения по заявкам'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUOrderLimitsTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.UOrderLimits}})">
+      <summary>
+            Добавить таблицу 'Ограничения по заявкам' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUPosnLimitsTable(System.String)">
+      <summary>
+            Открыть таблицу 'Ограничения нетто-позиции по деньгам'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Ограничения нетто-позиции по деньгам'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUPosnLimitsTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Ограничения нетто-позиции по деньгам.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Ограничения нетто-позиции по деньгам'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUPosnLimitsTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.UPosnLimits}})">
+      <summary>
+            Добавить таблицу 'Ограничения нетто-позиции по деньгам' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUSecuniqBlackListTable(System.String)">
+      <summary>
+            Открыть таблицу 'Чёрный список инструментов (по кодам ЦБ)'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Чёрный список инструментов (по кодам ЦБ)'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUSecuniqBlackListTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Чёрный список инструментов (по кодам ЦБ).
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Чёрный список инструментов (по кодам ЦБ)'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUSecuniqBlackListTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.USecuniqBlackList}})">
+      <summary>
+            Добавить таблицу 'Чёрный список инструментов (по кодам ЦБ)' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUSecuniqWhiteListTable(System.String)">
+      <summary>
+            Открыть таблицу 'Белый список инструментов (по кодам ЦБ)'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Белый список инструментов (по кодам ЦБ)'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUSecuniqWhiteListTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Белый список инструментов (по кодам ЦБ).
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Белый список инструментов (по кодам ЦБ)'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUSecuniqWhiteListTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.USecuniqWhiteList}})">
+      <summary>
+            Добавить таблицу 'Белый список инструментов (по кодам ЦБ)' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUSecBlackListTable(System.String)">
+      <summary>
+            Открыть таблицу 'Чёрный список инструментов'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Чёрный список инструментов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUSecBlackListTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Чёрный список инструментов.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Чёрный список инструментов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUSecBlackListTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.USecBlackList}})">
+      <summary>
+            Добавить таблицу 'Чёрный список инструментов' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenUSecWhiteListTable(System.String)">
+      <summary>
+            Открыть таблицу 'Белый список инструментов'.
+            </summary>
+      <param name="userid">Участник.</param>
+      <returns>Указатель на таблицу 'Белый список инструментов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadUSecWhiteListTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Белый список инструментов.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Белый список инструментов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddUSecWhiteListTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.USecWhiteList}})">
+      <summary>
+            Добавить таблицу 'Белый список инструментов' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.OpenCurrTable">
       <summary>
             Открыть таблицу 'Справочник валют'.
@@ -12696,6 +13617,11 @@
     <member name="F:StockSharp.Micex.MicexInterfaces.Stock27">
       <summary>
             Брокерский фондовый интерфейс IFCBroker_27.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.MicexInterfaces.Stock28">
+      <summary>
+            Брокерский фондовый интерфейс IFCBroker_28.
             </summary>
     </member>
     <member name="F:StockSharp.Micex.MicexInterfaces.Currency21">

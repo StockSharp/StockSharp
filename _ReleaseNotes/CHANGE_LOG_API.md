@@ -38,6 +38,7 @@ StockSharp API Change log
 * (feature) MarketDepthControl.IsBidsOnTop is dependency property.
 * (feature) MathDiagramElement.
 * (feature) Chart. Save/Load refactoring.
+* (feature) Micex. Stock28 interface.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
