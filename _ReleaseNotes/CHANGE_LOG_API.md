@@ -39,6 +39,7 @@ StockSharp API Change log
 * (feature) MathDiagramElement.
 * (feature) Chart. Save/Load refactoring.
 * (feature) Micex. Stock28 interface.
+* (feature) Plaza. 5.3.1 support.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
