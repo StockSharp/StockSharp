@@ -93,6 +93,11 @@
             Chart range/scroll interval. Default is 200ms.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
       <summary>
             To add an area to the chart.
@@ -108,6 +113,11 @@
     <member name="M:StockSharp.Xaml.Charting.Chart.ClearAreas">
       <summary>
             To remove all areas from the chart.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.Elements">
+      <summary>
+            Chart elements.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)">
@@ -241,6 +251,11 @@
             The list of available indicators types.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.AreaAdded">
+      <summary>
+            The chart area creation event.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Charting.Chart.AddCandles">
       <summary>
             The chart element creation event.
@@ -281,6 +296,31 @@
             Cancel order event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.SubscribeCandleElement">
+      <summary>
+            The event of the subscription to getting data for the element.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.SubscribeIndicatorElement">
+      <summary>
+            The event of the subscription to getting data for the element.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.SubscribeOrderElement">
+      <summary>
+            The event of the subscription to getting data for the element.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.SubscribeTradeElement">
+      <summary>
+            The event of the subscription to getting data for the element.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.UnSubscribeElement">
+      <summary>
+            The event of the unsubscribe from getting data for the element.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})">
       <summary>
             To reset the chart elements values drawn previously.
@@ -304,6 +344,11 @@
             Save settings.
             </summary>
       <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.Chart.ReSubscribeElements">
+      <summary>
+            To re-subscribe to getting data for all elements.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.InitializeComponent">
       <summary>

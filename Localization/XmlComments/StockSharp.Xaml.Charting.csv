@@ -21,11 +21,13 @@ P:StockSharp.Xaml.Charting.Chart.Areas/summary;DocStr7716
 P:StockSharp.Xaml.Charting.Chart.IsAutoScroll/summary;DocStr7728
 P:StockSharp.Xaml.Charting.Chart.IsAutoRange/summary;DocStr7718
 P:StockSharp.Xaml.Charting.Chart.AutoRangeInterval/summary;DocStr8854
+P:StockSharp.Xaml.Charting.Chart.SecurityProvider/summary;DocStr972
 M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7706
 M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)/param/area;Str1903
 M:StockSharp.Xaml.Charting.Chart.RemoveArea(StockSharp.Xaml.Charting.ChartArea)/summary;DocStr7707
 M:StockSharp.Xaml.Charting.Chart.RemoveArea(StockSharp.Xaml.Charting.ChartArea)/param/area;Str1903
 M:StockSharp.Xaml.Charting.Chart.ClearAreas/summary;DocStr7708
+P:StockSharp.Xaml.Charting.Chart.Elements/summary;DocStr7715
 M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)/summary;DocStr7709
 M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)/param/area;Str1903
 M:StockSharp.Xaml.Charting.Chart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)/param/element;DocStr7710
@@ -69,6 +71,7 @@ P:StockSharp.Xaml.Charting.Chart.AnnotationType/summary;DocStr7738
 P:StockSharp.Xaml.Charting.Chart.OrderCreationMode/summary;DocStr7739
 P:StockSharp.Xaml.Charting.Chart.TimeZone/summary;DocStr8855
 P:StockSharp.Xaml.Charting.Chart.IndicatorTypes/summary;DocStr7740
+E:StockSharp.Xaml.Charting.Chart.AreaAdded/summary;DocStr10103
 E:StockSharp.Xaml.Charting.Chart.AddCandles/summary;DocStr7741
 E:StockSharp.Xaml.Charting.Chart.AddIndicator/summary;DocStr7741
 E:StockSharp.Xaml.Charting.Chart.AddOrders/summary;DocStr7741
@@ -77,6 +80,11 @@ E:StockSharp.Xaml.Charting.Chart.RemoveElement/summary;DocStr7742
 E:StockSharp.Xaml.Charting.Chart.CreateOrder/summary;DocStr7743
 E:StockSharp.Xaml.Charting.Chart.MoveOrder/summary;DocStr8942
 E:StockSharp.Xaml.Charting.Chart.CancelOrder/summary;DocStr8943
+E:StockSharp.Xaml.Charting.Chart.SubscribeCandleElement/summary;DocStr7813
+E:StockSharp.Xaml.Charting.Chart.SubscribeIndicatorElement/summary;DocStr7813
+E:StockSharp.Xaml.Charting.Chart.SubscribeOrderElement/summary;DocStr7813
+E:StockSharp.Xaml.Charting.Chart.SubscribeTradeElement/summary;DocStr7813
+E:StockSharp.Xaml.Charting.Chart.UnSubscribeElement/summary;DocStr7814
 M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})/summary;DocStr7714
 M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})/param/elements;DocStr7715
 M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)/summary;DocStr486
@@ -85,6 +93,7 @@ M:StockSharp.Xaml.Charting.Chart.Load(Ecng.Serialization.SettingsStorage)/summar
 M:StockSharp.Xaml.Charting.Chart.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.Chart.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.Chart.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.Charting.Chart.ReSubscribeElements/summary;DocStr7810
 M:StockSharp.Xaml.Charting.Chart.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.ChartActiveOrderInfo/summary;DocStr8944
 E:StockSharp.Xaml.Charting.ChartActiveOrderInfo.OrderStateChanged/summary;DocStr8945
