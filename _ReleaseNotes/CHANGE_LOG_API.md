@@ -43,6 +43,7 @@ StockSharp API Change log
 * (bug) BasketMessageAdapter. Fix disconnect for broken connection.
 * (bug) TraderHelper.CancelOrders. Fix canceling failed orders.
 * (feature) IConnector. SendInMessage, SendOutMessage.
+* (feature) Strategy. Start/Stop processing from connector's thread.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
