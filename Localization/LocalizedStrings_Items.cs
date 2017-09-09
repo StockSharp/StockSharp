@@ -15458,12 +15458,12 @@ namespace StockSharp.Localization
 		public static string Str1626 => GetString(Str1626Key);
 
 		/// <summary>
-		/// Message {0} of type {1} was not correctly processed by FIX server. Reason ({2}) {3}.
+		/// Message {0} of type {1} was not correctly processed by FIX server. Reason ({2}) {3} (field {4}).
 		/// </summary>
 		public const string Str1627ParamsKey = nameof(Str1627Params);
 
 		/// <summary>
-		/// Message {0} of type {1} was not correctly processed by FIX server. Reason ({2}) {3}.
+		/// Message {0} of type {1} was not correctly processed by FIX server. Reason ({2}) {3} (field {4}).
 		/// </summary>
 		public static string Str1627Params => GetString(Str1627ParamsKey);
 
@@ -46106,5 +46106,15 @@ namespace StockSharp.Localization
 		/// Whether to show the bids above. The default is off.
 		/// </summary>
 		public static string BidsOnTopDesc => GetString(BidsOnTopDescKey);
+
+		/// <summary>
+		/// Math formula. For example: (sin(x)+log(y)) / z
+		/// </summary>
+		public const string MathFormulaDescKey = nameof(MathFormulaDesc);
+
+		/// <summary>
+		/// Math formula. For example: (sin(x)+log(y)) / z
+		/// </summary>
+		public static string MathFormulaDesc => GetString(MathFormulaDescKey);
 	}
 }
