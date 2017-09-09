@@ -40,6 +40,7 @@ StockSharp API Change log
 * (feature) Chart. Save/Load refactoring.
 * (feature) Micex. Stock28 interface.
 * (feature) Plaza. 5.3.1 support.
+* (bug) BasketMessageAdapter. Fix disconnect for broken connection.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
