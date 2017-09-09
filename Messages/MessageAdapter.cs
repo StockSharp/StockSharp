@@ -270,12 +270,17 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Default value for <see cref="AssociatedBoardCode"/>.
+		/// </summary>
+		public const string DefaultAssociatedBoardCode = "ALL";
+
+		/// <summary>
 		/// Associated board code. The default is ALL.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
 		[DescriptionLoc(LocalizedStrings.Str199Key)]
-		public string AssociatedBoardCode { get; set; } = "ALL";
+		public string AssociatedBoardCode { get; set; } = DefaultAssociatedBoardCode;
 
 		/// <summary>
 		/// Outgoing message event.

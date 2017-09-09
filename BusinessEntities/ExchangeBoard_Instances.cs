@@ -32,7 +32,7 @@ namespace StockSharp.BusinessEntities
 
 			Associated = new ExchangeBoard
 			{
-				Code = "ALL",
+				Code = MessageAdapter.DefaultAssociatedBoardCode,
 				Exchange = Exchange.Test,
 			};
 

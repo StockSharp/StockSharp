@@ -244,7 +244,7 @@ namespace SampleSterling
 				SecurityId = new SecurityId
 				{
 					SecurityCode = "AAPL",
-					BoardCode = "All",
+					BoardCode = MessageAdapter.DefaultAssociatedBoardCode,
 				},
 				Name = "AAPL",
 				SecurityType = SecurityTypes.Stock,
@@ -266,7 +266,7 @@ namespace SampleSterling
 				SecurityId = new SecurityId
 				{
 					SecurityCode = "IBM",
-					BoardCode = "All",
+					BoardCode = MessageAdapter.DefaultAssociatedBoardCode,
 				},
 				Name = "IBM",
 				SecurityType = SecurityTypes.Stock,
