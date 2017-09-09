@@ -376,8 +376,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 		private static void SerializeChange(BitArrayWriter writer, RefPair<decimal, decimal> info, decimal price)
 		{
-			if (price == 0)
-				throw new ArgumentOutOfRangeException(nameof(price));
+			//if (price == 0)
+			//	throw new ArgumentOutOfRangeException(nameof(price));
 
 			if (info.First == 0)
 				info.First = info.Second = price;

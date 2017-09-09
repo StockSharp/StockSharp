@@ -44,6 +44,7 @@ StockSharp API Change log
 * (bug) TraderHelper.CancelOrders. Fix canceling failed orders.
 * (feature) IConnector. SendInMessage, SendOutMessage.
 * (feature) Strategy. Start/Stop processing from connector's thread.
+* (bug) PositionBinarySerializer fix.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
