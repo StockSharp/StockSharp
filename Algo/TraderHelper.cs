@@ -1487,7 +1487,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(orders));
 
 			orders = orders
-				.Where(order => order.State != OrderStates.Done)
+				.Where(order => order.State != OrderStates.Done && order.State != OrderStates.Failed)
 				.Where(order => isStopOrder == null || (order.Type == OrderTypes.Conditional) == isStopOrder.Value)
 				.Where(order => portfolio == null || (order.Portfolio == portfolio))
 				.Where(order => direction == null || order.Direction == direction.Value)

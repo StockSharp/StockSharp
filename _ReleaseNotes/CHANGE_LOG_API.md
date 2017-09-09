@@ -41,6 +41,7 @@ StockSharp API Change log
 * (feature) Micex. Stock28 interface.
 * (feature) Plaza. 5.3.1 support.
 * (bug) BasketMessageAdapter. Fix disconnect for broken connection.
+* (bug) TraderHelper.CancelOrders. Fix canceling failed orders.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
