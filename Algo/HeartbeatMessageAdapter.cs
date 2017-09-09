@@ -408,7 +408,7 @@ namespace StockSharp.Algo
 
 		private bool IsTradeTime()
 		{
-			return _reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out var period);
+			return _reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out var _);
 		}
 
 		/// <summary>

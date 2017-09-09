@@ -81,7 +81,7 @@ namespace StockSharp.Algo
 									_isMarketTimeHandled = false;
 								}
 
-								_marketTimeMessage.LocalTime = TimeHelper.Now;
+								_marketTimeMessage.LocalTime = TimeHelper.NowWithOffset;
 								RaiseNewOutMessage(_marketTimeMessage);
 							}
 							catch (Exception ex)
