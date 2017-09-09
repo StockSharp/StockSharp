@@ -108,6 +108,8 @@ namespace StockSharp.Messages
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
 
 			StorageName = GetType().Namespace.Remove(nameof(StockSharp)).Remove(".");
+
+			Platform = GetType().GetAttribute<TargetPlatformAttribute>()?.Platform ?? Platforms.AnyCPU;
 		}
 
 		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
@@ -217,10 +219,10 @@ namespace StockSharp.Messages
 		protected virtual bool IsSupportNativePortfolioLookup => false;
 
 		/// <summary>
-		/// Bit process, which can run the adapter. By default is <see cref="Platforms.AnyCPU"/>.
+		/// Bit process, which can run the adapter.
 		/// </summary>
 		[Browsable(false)]
-		public Platforms Platform { get; protected set; }
+		public Platforms Platform { get; }
 
 		/// <inheritdoc />
 		[Browsable(false)]
