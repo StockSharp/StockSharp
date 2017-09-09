@@ -613,5 +613,17 @@ namespace StockSharp.BusinessEntities
 		/// Unsubscribe from news.
 		/// </summary>
 		void UnRegisterNews();
+
+		/// <summary>
+		/// Send outgoing message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendOutMessage(Message message);
+
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendInMessage(Message message);
 	}
 }
