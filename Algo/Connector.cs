@@ -508,6 +508,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnConnect()
 		{
+			if (TimeChange)
+				CreateTimer();
+
 			SendInMessage(new ConnectMessage());
 		}
 
@@ -1194,7 +1197,11 @@ namespace StockSharp.Algo
 
 		private void ProcessTimeInterval(Message message)
 		{
-			_timeAdapter?.HandleTimeMessage(message);
+			if (message == _marketTimeMessage)
+			{
+				lock (_marketTimerSync)
+					_isMarketTimeHandled = true;	
+			}
 
 			// output messages from adapters goes non ordered
 			if (_currentTime > message.LocalTime)
@@ -1372,6 +1379,8 @@ namespace StockSharp.Algo
 
 			SendInMessage(new ResetMessage());
 
+			CloseTimer();
+
 			_cleared?.Invoke();
 		}
 
@@ -1405,6 +1414,8 @@ namespace StockSharp.Algo
 			//	MarketDataAdapter = null;
 
 			SendInMessage(_disposeMessage);
+
+			CloseTimer();
 		}
 
 		/// <summary>
