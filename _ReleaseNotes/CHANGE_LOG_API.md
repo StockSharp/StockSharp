@@ -51,6 +51,7 @@ StockSharp API Change log
 * (feature) FIX connector. TransactTime for OrderCancelReject
 * (feature) FIX connector. Handle order register errors.
 * (bug) FIX connector. SpectraFixDialect cancel orders fix.
+* (feature) IIndicator.InputType
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

@@ -67,6 +67,9 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
+		/// <inheritdoc />
+		public override Type InputType { get; } = typeof(CandleIndicatorValue);
+
 		/// <summary>
 		/// To handle the input value.
 		/// </summary>

@@ -46,6 +46,11 @@ namespace StockSharp.Algo.Indicators
 		IIndicatorContainer Container { get; }
 
 		/// <summary>
+		/// Input values type.
+		/// </summary>
+		Type InputType { get; }
+
+		/// <summary>
 		/// Result values type.
 		/// </summary>
 		Type ResultType { get; }

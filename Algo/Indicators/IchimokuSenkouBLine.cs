@@ -65,6 +65,9 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public IchimokuLine Kijun { get; }
 
+		/// <inheritdoc />
+		public override Type InputType { get; } = typeof(CandleIndicatorValue);
+
 		/// <summary>
 		/// To handle the input value.
 		/// </summary>

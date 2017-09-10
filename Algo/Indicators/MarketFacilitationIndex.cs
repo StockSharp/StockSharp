@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System;
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
@@ -36,6 +37,9 @@ namespace StockSharp.Algo.Indicators
 		public MarketFacilitationIndex()
 		{
 		}
+
+		/// <inheritdoc />
+		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

@@ -55,6 +55,9 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public override Type ResultType { get; } = typeof(VolumeProfileIndicatorValue);
 
+		/// <inheritdoc />
+		public override Type InputType { get; } = typeof(CandleIndicatorValue);
+
 		/// <summary>
 		/// To handle the input value.
 		/// </summary>

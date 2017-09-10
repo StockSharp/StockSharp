@@ -81,6 +81,9 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal AccelerationMax { get; set; }
 
+		/// <inheritdoc />
+		public override Type InputType { get; } = typeof(CandleIndicatorValue);
+
 		/// <summary>
 		/// To handle the input value.
 		/// </summary>

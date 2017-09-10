@@ -38,6 +38,9 @@ namespace StockSharp.Algo.Indicators
 			Length = 20;
 		}
 
+		/// <inheritdoc />
+		public override Type InputType { get; } = typeof(PairIndicatorValue<decimal>);
+
 		/// <summary>
 		/// To handle the input value.
 		/// </summary>

@@ -109,6 +109,12 @@ namespace StockSharp.Algo.Indicators
 		/// Result values type.
 		/// </summary>
 		[Browsable(false)]
+		public virtual Type InputType { get; } = typeof(DecimalIndicatorValue);
+
+		/// <summary>
+		/// Result values type.
+		/// </summary>
+		[Browsable(false)]
 		public virtual Type ResultType { get; } = typeof(DecimalIndicatorValue);
 
 		/// <summary>

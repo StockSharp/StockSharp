@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System;
 	using System.ComponentModel;
 
 	using Ecng.Serialization;
@@ -64,6 +65,9 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public override bool IsFormed => Roc.IsFormed;
 
+		/// <inheritdoc />
+		public override Type InputType { get; } = typeof(CandleIndicatorValue);
+
 		/// <summary>
 		/// To handle the input value.
 		/// </summary>
@@ -79,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 				return Roc.Process(emaValue);
 			}
 
-			return input;				
+			return input;
 		}
 
 		/// <summary>
