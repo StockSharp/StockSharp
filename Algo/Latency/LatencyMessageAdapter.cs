@@ -58,6 +58,12 @@ namespace StockSharp.Algo.Latency
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
+
 			if (message.LocalTime.IsDefault())
 				message.LocalTime = InnerAdapter.CurrentTime;
 

@@ -56,6 +56,12 @@ namespace StockSharp.Algo.Commissions
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
+
 			CommissionManager.Process(message);
 			base.SendInMessage(message);
 		}

@@ -60,8 +60,14 @@ namespace StockSharp.Algo.Risk
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
+
 			ProcessRisk(message);
-			InnerAdapter.SendInMessage(message);
+			base.SendInMessage(message);
 		}
 
 		/// <summary>

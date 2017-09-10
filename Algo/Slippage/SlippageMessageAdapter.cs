@@ -56,8 +56,14 @@ namespace StockSharp.Algo.Slippage
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
+
 			SlippageManager.ProcessMessage(message);
-			InnerAdapter.SendInMessage(message);
+			base.SendInMessage(message);
 		}
 
 		/// <summary>

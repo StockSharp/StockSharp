@@ -56,8 +56,13 @@ namespace StockSharp.Algo.PnL
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
-			PnLManager.ProcessMessage(message);
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
 
+			PnLManager.ProcessMessage(message);
 			base.SendInMessage(message);
 		}
 
