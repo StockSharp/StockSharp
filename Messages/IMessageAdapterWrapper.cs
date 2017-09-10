@@ -159,7 +159,8 @@ namespace StockSharp.Messages
 			set => InnerAdapter.LogLevel = value;
 		}
 
-		DateTimeOffset ILogSource.CurrentTime => InnerAdapter.CurrentTime;
+		/// <inheritdoc />
+		public DateTimeOffset CurrentTime => InnerAdapter.CurrentTime;
 
 		bool ILogSource.IsRoot => InnerAdapter.IsRoot;
 
@@ -174,9 +175,11 @@ namespace StockSharp.Messages
 			InnerAdapter.AddLog(message);
 		}
 
-		ReConnectionSettings IMessageAdapter.ReConnectionSettings => InnerAdapter.ReConnectionSettings;
+		/// <inheritdoc />
+		public ReConnectionSettings ReConnectionSettings => InnerAdapter.ReConnectionSettings;
 
-		IdGenerator IMessageAdapter.TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
+		/// <inheritdoc />
+		public IdGenerator TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
 
 		MessageTypes[] IMessageAdapter.SupportedMessages
 		{
@@ -188,7 +191,8 @@ namespace StockSharp.Messages
 
 		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo => InnerAdapter.SecurityClassInfo;
 
-		TimeSpan IMessageAdapter.HeartbeatInterval
+		/// <inheritdoc />
+		public TimeSpan HeartbeatInterval
 		{
 			get => InnerAdapter.HeartbeatInterval;
 			set => InnerAdapter.HeartbeatInterval = value;
@@ -200,23 +204,31 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
-		string IMessageAdapter.StorageName => InnerAdapter.StorageName;
+		/// <inheritdoc />
+		public string StorageName => InnerAdapter.StorageName;
 
-		bool IMessageAdapter.IsNativeIdentifiersPersistable => InnerAdapter.IsNativeIdentifiersPersistable;
+		/// <inheritdoc />
+		public bool IsNativeIdentifiersPersistable => InnerAdapter.IsNativeIdentifiersPersistable;
 
-		bool IMessageAdapter.IsNativeIdentifiers => InnerAdapter.IsNativeIdentifiers;
+		/// <inheritdoc />
+		public bool IsNativeIdentifiers => InnerAdapter.IsNativeIdentifiers;
 
-		bool IMessageAdapter.IsFullCandlesOnly => InnerAdapter.IsFullCandlesOnly;
+		/// <inheritdoc />
+		public bool IsFullCandlesOnly => InnerAdapter.IsFullCandlesOnly;
 
-		bool IMessageAdapter.IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
+		/// <inheritdoc />
+		public bool IsSupportSubscriptions => InnerAdapter.IsSupportSubscriptions;
 
-		bool IMessageAdapter.IsSupportSubscriptionBySecurity => InnerAdapter.IsSupportSubscriptionBySecurity;
+		/// <inheritdoc />
+		public bool IsSupportSubscriptionBySecurity => InnerAdapter.IsSupportSubscriptionBySecurity;
 
-		bool IMessageAdapter.IsSupportSubscriptionByPortfolio => InnerAdapter.IsSupportSubscriptionByPortfolio;
+		/// <inheritdoc />
+		public bool IsSupportSubscriptionByPortfolio => InnerAdapter.IsSupportSubscriptionByPortfolio;
 
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
-		string IMessageAdapter.AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
+		/// <inheritdoc />
+		public string AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
 
 		Tuple<string, Type>[] IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 

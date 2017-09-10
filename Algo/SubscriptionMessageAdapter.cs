@@ -108,14 +108,14 @@ namespace StockSharp.Algo
 
 							if (msg is MarketDataMessage mdMsg)
 							{
-								mdMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+								mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
 								mdMsg.IsSubscribe = false;
 							}
 							else
 							{
 								var pfMsg = (PortfolioMessage)msg;
 
-								pfMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+								pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
 								pfMsg.IsSubscribe = false;
 							}
 
@@ -195,12 +195,12 @@ namespace StockSharp.Algo
 
 					if (msg is MarketDataMessage mdMsg)
 					{
-						mdMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+						mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
 					}
 					else
 					{
 						var pfMsg = (PortfolioMessage)msg;
-						pfMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+						pfMsg.TransactionId = TransactionIdGenerator.GetNextId();
 					}
 
 					base.OnInnerAdapterNewOutMessage(msg);
@@ -213,7 +213,7 @@ namespace StockSharp.Algo
 			var sendIn = false;
 			MarketDataMessage sendOutMsg = null;
 			RefPair<MarketDataMessage, int> pair;
-			var secIdKey = InnerAdapter.IsSupportSubscriptionBySecurity ? message.SecurityId : default(SecurityId);
+			var secIdKey = IsSupportSubscriptionBySecurity ? message.SecurityId : default(SecurityId);
 
 			lock (_sync)
 			{

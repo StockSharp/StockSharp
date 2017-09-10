@@ -329,7 +329,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				var pair = _seriesInfosByDates.Peek();
 
-				while (pair.Key <= InnerAdapter.CurrentTime)
+				while (pair.Key <= CurrentTime)
 				{
 					_seriesInfosByDates.Dequeue();
 
@@ -452,7 +452,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void Subscribe(SeriesInfo info, bool isBack)
 		{
-			info.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+			info.TransactionId = TransactionIdGenerator.GetNextId();
 			info.DataType = GetCurrentDataType(info);
 
 			var msg = (MarketDataMessage)info.MarketDataMessage.Clone();

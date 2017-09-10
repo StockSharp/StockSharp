@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Latency
 			}
 
 			if (message.LocalTime.IsDefault())
-				message.LocalTime = InnerAdapter.CurrentTime;
+				message.LocalTime = CurrentTime;
 
 			LatencyManager.ProcessMessage(message);
 

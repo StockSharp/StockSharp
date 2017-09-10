@@ -71,7 +71,7 @@
 			{
 				case MessageTypes.Connect:
 				{
-					var nativeIds = Storage.Get(InnerAdapter.StorageName);
+					var nativeIds = Storage.Get(StorageName);
 
 					lock (_syncRoot)
 					{
@@ -123,9 +123,9 @@
 					{
 						if (nativeSecurityId != null)
 						{
-							var storageName = InnerAdapter.StorageName;
+							var storageName = StorageName;
 
-							if (!Storage.TryAdd(storageName, securityId, nativeSecurityId, InnerAdapter.IsNativeIdentifiersPersistable))
+							if (!Storage.TryAdd(storageName, securityId, nativeSecurityId, IsNativeIdentifiersPersistable))
 							{
 								var prevId = Storage.TryGetByNativeId(storageName, nativeSecurityId);
 
@@ -523,7 +523,7 @@
 
 		private void OnStorageNewIdentifierAdded(string storageName, SecurityId securityId, object nativeId)
 		{
-			if (!InnerAdapter.StorageName.CompareIgnoreCase(storageName))
+			if (!StorageName.CompareIgnoreCase(storageName))
 				return;
 
 			bool added;

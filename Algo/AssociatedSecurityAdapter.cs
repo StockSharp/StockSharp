@@ -106,7 +106,7 @@ namespace StockSharp.Algo
 					//	return;
 
 					var builder = _quoteChangeDepthBuilders
-						.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, InnerAdapter.AssociatedBoardCode));
+						.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
 
 					quoteMsg = builder.Process(quoteMsg);
 
@@ -144,7 +144,7 @@ namespace StockSharp.Algo
 
 		private bool IsAssociated(string boardCode)
 		{
-			return /*boardCode.IsEmpty() || */boardCode.CompareIgnoreCase(InnerAdapter.AssociatedBoardCode);
+			return /*boardCode.IsEmpty() || */boardCode.CompareIgnoreCase(AssociatedBoardCode);
 		}
 
 		private SecurityId CreateAssociatedId(SecurityId securityId)
@@ -152,7 +152,7 @@ namespace StockSharp.Algo
 			return new SecurityId
 			{
 				SecurityCode = securityId.SecurityCode,
-				BoardCode = InnerAdapter.AssociatedBoardCode,
+				BoardCode = AssociatedBoardCode,
 				SecurityType = securityId.SecurityType,
 				Bloomberg = securityId.Bloomberg,
 				Cusip = securityId.Cusip,
