@@ -1018,7 +1018,7 @@ namespace StockSharp.Algo
 
 			if (!isRestored)
 			{
-				if (AutoPortfoliosSubscribe)
+				if (AutoPortfoliosSubscribe && adapter.IsSupportSubscriptionByPortfolio)
 				{
 					var portfolioNames = Adapter
 						.AdapterProvider
@@ -1222,7 +1222,7 @@ namespace StockSharp.Algo
 				{
 					var adapter = Adapter.AdapterProvider.GetAdapter(portfolio.Name);
 
-					if (adapter != null && Adapter.InnerAdapters[adapter] != -1)
+					if (adapter?.IsSupportSubscriptionByPortfolio == true && Adapter.InnerAdapters[adapter] != -1)
 					{
 						SendInMessage(new PortfolioMessage
 						{
