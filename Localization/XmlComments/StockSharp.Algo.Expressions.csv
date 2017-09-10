@@ -9,9 +9,10 @@ P:StockSharp.Algo.Expressions.ExpressionFormula.Expression/summary;DocStr8477
 P:StockSharp.Algo.Expressions.ExpressionFormula.Error/summary;DocStr8478
 P:StockSharp.Algo.Expressions.ExpressionFormula.SecurityIds/summary;DocStr142
 P:StockSharp.Algo.Expressions.ExpressionFormula.Functions/summary;AvailableFunctions
-M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String)/summary;DocStr8479
-M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String)/param/expression;DocStr8480
-M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String)/returns;DocStr8476
+M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String,System.Boolean)/summary;DocStr8479
+M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String,System.Boolean)/param/expression;DocStr8480
+M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String,System.Boolean)/param/useSecurityIds;DocStr10100
+M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String,System.Boolean)/returns;DocStr8476
 T:StockSharp.Algo.Expressions.ExpressionHelper/summary;DocStr2939
 M:StockSharp.Algo.Expressions.ExpressionHelper.GetSecurityIds(System.String)/summary;DocStr1109
 M:StockSharp.Algo.Expressions.ExpressionHelper.GetSecurityIds(System.String)/param/expression;DocStr1110

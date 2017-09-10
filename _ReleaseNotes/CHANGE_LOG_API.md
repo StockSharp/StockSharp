@@ -46,6 +46,7 @@ StockSharp API Change log
 * (feature) Strategy. Start/Stop processing from connector's thread.
 * (bug) PositionBinarySerializer fix.
 * (feature) SmartCOM. Removed V2 support.
+* (bug) Expression fix http://stocksharp.ru/forum/8586/skleennye-fyuchersy-s-finama/
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
