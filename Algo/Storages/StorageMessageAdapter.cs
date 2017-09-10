@@ -597,8 +597,7 @@ namespace StockSharp.Algo.Storages
 
 		private void RaiseStorageMessage(Message message)
 		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = InnerAdapter.CurrentTime;
+			message.TryInitLocalTime(this);
 
 			RaiseNewOutMessage(message);
 		}

@@ -471,8 +471,7 @@ namespace StockSharp.Messages
 		/// <param name="message">Message.</param>
 		private void InitMessageLocalTime(Message message)
 		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = CurrentTime;
+			message.TryInitLocalTime(this);
 
 			if (message is BaseChangeMessage<PositionChangeTypes> posMsg && posMsg.ServerTime.IsDefault())
 			{

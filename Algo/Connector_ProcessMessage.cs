@@ -623,6 +623,8 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		public void SendInMessage(Message message)
 		{
+			message.TryInitLocalTime(this);
+
 			if (!InMessageChannel.IsOpened)
 				InMessageChannel.Open();
 
@@ -635,8 +637,7 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		public void SendOutMessage(Message message)
 		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = CurrentTime;
+			message.TryInitLocalTime(this);
 
 			if (!OutMessageChannel.IsOpened)
 				OutMessageChannel.Open();

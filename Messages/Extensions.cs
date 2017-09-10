@@ -28,6 +28,7 @@ namespace StockSharp.Messages
 	using MoreLinq;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Extension class.
@@ -514,5 +515,22 @@ namespace StockSharp.Messages
 		/// <param name="type"><see cref="PositionChangeTypes"/> value.</param>
 		/// <returns>Result.</returns>
 		public static bool IsObsolete(this PositionChangeTypes type) => type.GetAttributeOfType<ObsoleteAttribute>() != null;
+
+		/// <summary>
+		/// Try to initialize <see cref="Message.LocalTime"/> by <see cref="ILogSource.CurrentTime"/>.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="source">Source.</param>
+		public static void TryInitLocalTime(this Message message, ILogSource source)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (source == null)
+				throw new ArgumentNullException(nameof(source));
+
+			if (message.LocalTime.IsDefault())
+				message.LocalTime = source.CurrentTime;
+		}
 	}
 }
