@@ -700,6 +700,7 @@ P:StockSharp.Messages.MessageAdapter.ReConnectionSettings/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.TransactionIdGenerator/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.LookupTimeOut/summary;DocStr4336
 P:StockSharp.Messages.MessageAdapter.LookupTimeOut/remarks;DocStr4337
+F:StockSharp.Messages.MessageAdapter.DefaultAssociatedBoardCode/summary;DocStr9884
 P:StockSharp.Messages.MessageAdapter.AssociatedBoardCode/summary;DocStr4338
 E:StockSharp.Messages.MessageAdapter.NewOutMessage/summary;DocStr4339
 M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr3113

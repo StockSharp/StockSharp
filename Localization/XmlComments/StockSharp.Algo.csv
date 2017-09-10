@@ -5338,8 +5338,8 @@ E:StockSharp.Algo.Strategies.Strategy.Reseted/summary;DocStr1725
 M:StockSharp.Algo.Strategies.Strategy.RaiseReseted/summary;DocStr466
 M:StockSharp.Algo.Strategies.Strategy.Reset/summary;DocStr1656
 M:StockSharp.Algo.Strategies.Strategy.OnReseted/summary;DocStr1657
-M:StockSharp.Algo.Strategies.Strategy.SuspendRules/summary;DocStr1365
-M:StockSharp.Algo.Strategies.Strategy.ResumeRules/summary;DocStr1366
+M:StockSharp.Algo.Strategies.Strategy.StockSharp#Algo#IMarketRuleContainer#SuspendRules/summary;DocStr1365
+M:StockSharp.Algo.Strategies.Strategy.StockSharp#Algo#IMarketRuleContainer#ResumeRules/summary;DocStr1366
 P:StockSharp.Algo.Strategies.Strategy.UnrealizedPnLInterval/summary;DocStr1726
 M:StockSharp.Algo.Strategies.Strategy.OnPositionChanged(StockSharp.BusinessEntities.Position)/summary;DocStr9498
 M:StockSharp.Algo.Strategies.Strategy.OnPositionChanged(StockSharp.BusinessEntities.Position)/param/position;DocStr9499

@@ -434,6 +434,10 @@ M:StockSharp.BusinessEntities.IConnector.UnRegisterPortfolio(StockSharp.Business
 M:StockSharp.BusinessEntities.IConnector.UnRegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/param/portfolio;DocStr792
 M:StockSharp.BusinessEntities.IConnector.RegisterNews/summary;DocStr797
 M:StockSharp.BusinessEntities.IConnector.UnRegisterNews/summary;DocStr798
+M:StockSharp.BusinessEntities.IConnector.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr755
+M:StockSharp.BusinessEntities.IConnector.SendOutMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.BusinessEntities.IConnector.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
+M:StockSharp.BusinessEntities.IConnector.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 T:StockSharp.BusinessEntities.IMarketDataProvider/summary;DocStr2826
 E:StockSharp.BusinessEntities.IMarketDataProvider.ValuesChanged/summary;DocStr898
 M:StockSharp.BusinessEntities.IMarketDataProvider.GetMarketDepth(StockSharp.BusinessEntities.Security)/summary;DocStr816

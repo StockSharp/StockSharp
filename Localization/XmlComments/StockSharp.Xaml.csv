@@ -952,6 +952,8 @@ M:StockSharp.Xaml.GuiConnector`1.UnRegisterPortfolio(StockSharp.BusinessEntities
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterPortfolio(StockSharp.BusinessEntities.Portfolio)/param/portfolio;DocStr792
 M:StockSharp.Xaml.GuiConnector`1.RegisterNews/summary;DocStr797
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterNews/summary;DocStr798
+M:StockSharp.Xaml.GuiConnector`1.SendOutMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.RequestNewsStory(StockSharp.BusinessEntities.News)/summary;DocStr799
 M:StockSharp.Xaml.GuiConnector`1.RequestNewsStory(StockSharp.BusinessEntities.News)/param/news;News
 M:StockSharp.Xaml.GuiConnector`1.RegisterOrderLog(StockSharp.BusinessEntities.Security)/summary;DocStr793
