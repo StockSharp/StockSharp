@@ -532,5 +532,23 @@ namespace StockSharp.Messages
 			if (message.LocalTime.IsDefault())
 				message.LocalTime = source.CurrentTime;
 		}
+
+		/// <summary>
+		/// Validate <see cref="MarketDataMessage.From"/> and <see cref="MarketDataMessage.To"/> values.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Message.</returns>
+		public static MarketDataMessage ValidateBounds(this MarketDataMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (message.From != null && message.To != null)
+			{
+				if (message.From.Value > message.To.Value)
+					throw new ArgumentOutOfRangeException(nameof(message), message.To, LocalizedStrings.Str1014.Put(message.From));		}
+
+			return message;
+		}
 	}
 }

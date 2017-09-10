@@ -1735,7 +1735,7 @@ namespace StockSharp.Algo
 				//ExtensionInfo = extensionInfo
 			};
 
-			mdMsg.FillSecurityInfo(series.Security);
+			mdMsg.ValidateBounds().FillSecurityInfo(series.Security);
 
 			return mdMsg;
 		}

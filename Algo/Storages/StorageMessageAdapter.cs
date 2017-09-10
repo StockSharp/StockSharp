@@ -291,7 +291,7 @@ namespace StockSharp.Algo.Storages
 					var clone = (MarketDataMessage)msg.Clone();
 					clone.From = lastTime;
 
-					base.SendInMessage(clone);	
+					base.SendInMessage(clone.ValidateBounds());	
 				}
 				else
 					base.SendInMessage(msg);

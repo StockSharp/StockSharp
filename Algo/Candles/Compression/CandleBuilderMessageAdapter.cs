@@ -467,6 +467,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 			_seriesInfosByTransactions.Add(info.TransactionId, info);
 
+			msg.ValidateBounds();
+
 			if (isBack)
 			{
 				msg.IsBack = true;
