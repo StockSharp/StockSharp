@@ -45,6 +45,7 @@ StockSharp API Change log
 * (feature) IConnector. SendInMessage, SendOutMessage.
 * (feature) Strategy. Start/Stop processing from connector's thread.
 * (bug) PositionBinarySerializer fix.
+* (feature) SmartCOM. Removed V2 support.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

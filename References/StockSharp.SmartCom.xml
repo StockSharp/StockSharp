@@ -391,11 +391,6 @@
             Версии SmartCOM API.
             </summary>
     </member>
-    <member name="F:StockSharp.SmartCom.Native.SmartComVersions.V2">
-      <summary>
-            Вторая версия.
-            </summary>
-    </member>
     <member name="F:StockSharp.SmartCom.Native.SmartComVersions.V3">
       <summary>
             Третья версия.
@@ -1023,85 +1018,6 @@
     <member name="M:StockSharp.SmartCom.Native.SmartComWrapper`1.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
       <inheritdoc />
     </member>
-    <member name="T:StockSharp.SmartCom.Native.SmartCom2Wrapper">
-      <summary>
-            Обертка над SmartCOM 2.X API.
-            </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.SmartCom.Native.SmartCom2Wrapper" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.SmartCom.Native.SmartCom2Wrapper.IsSupportCancelAllOrders">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.SmartCom.Native.SmartCom2Wrapper.Version">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.OnConnect(System.String,System.Int16,System.String,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.OnDisconnect">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.LookupSecurities">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.LookupPortfolios">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.RegisterOrder(System.String,System.String,StockSharp.SmartCom.Native.SmartOrderAction,StockSharp.SmartCom.Native.SmartOrderType,StockSharp.SmartCom.Native.SmartOrderValidity,System.Double,System.Int32,System.Double,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.ReRegisterOrder(System.String,System.String,System.Double,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.CancelOrder(System.String,System.String,System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.CancelAllOrders">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.SubscribeSecurity(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.UnSubscribeSecurity(System.String)">
-      <summary>
-            Остановить получение новой информации.
-            </summary>
-      <param name="securityId">Идентификатор инструмента, по которому необходимо остановить получение новой информации.</param>
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.SubscribeMarketDepth(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.UnSubscribeMarketDepth(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.SubscribeTrades(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.UnSubscribeTrades(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.SubscribePortfolio(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.UnSubscribePortfolio(System.String)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.RequestHistoryTrades(System.String,System.DateTime,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.RequestHistoryBars(System.String,StockSharp.SmartCom.SmartComTimeFrames,System.DateTime,System.Int32)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.SubscribeEvents">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.SmartCom.Native.SmartCom2Wrapper.UnSubscribeEvents">
-      <inheritdoc />
-    </member>
     <member name="T:StockSharp.SmartCom.SmartComService">
       <summary>
             Вспомогательный класс управления сервисом SmartCOM 2.
@@ -1431,11 +1347,6 @@
             Временной отступ для нового запроса получение новой свечи. По-умолчанию равен 5 секундам.
             </summary>
       <remarks>Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</remarks>
-    </member>
-    <member name="P:StockSharp.SmartCom.SmartTrader.RestartService">
-      <summary>
-            Перезапускать службу SmartCOM при подключении.
-            </summary>
     </member>
     <member name="P:StockSharp.SmartCom.SmartTrader.RestartServiceTimeOut">
       <summary>
