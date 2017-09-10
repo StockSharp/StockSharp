@@ -12,14 +12,16 @@ P:StockSharp.Fix.Dialects.BaseFastDialect.IsOpened/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Open/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Close/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
-E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage/inheritdoc;DocStr8459
+E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage/summary;DocStr2237
 P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSubscriptionBySecurity/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.LoadSettingsFromFile(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/summary;DocStr466
 M:StockSharp.Fix.Dialects.BaseFastDialect.SendOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
-M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
-M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
+M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Fix.Dialects.BaseFixDialect/summary;DocStr8742
 M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/summary;DocStr93
 M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/param/encoding;Encoding
@@ -45,9 +47,11 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.OrderLookup/summary;DocStr8751
 P:StockSharp.Fix.Dialects.BaseFixDialect.OrderCancelVolumeRequired/summary;DocStr8752
 P:StockSharp.Fix.Dialects.BaseFixDialect.StorageName/summary;DocStr9382
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsNativeIdentifiers/summary;DocStr9381
+P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSubscriptionByPortfolio/summary;DocStr10101
 P:StockSharp.Fix.Dialects.BaseFixDialect.SecurityExtendedFields/summary;DocStr9383
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
 P:StockSharp.Fix.Dialects.BaseFixDialect.TimeFrames/inheritdoc;DocStr8459
+P:StockSharp.Fix.Dialects.BaseFixDialect.NewOrderSingleErrorsAsReject/summary;DocStr10106
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/summary;DocStr9453
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/writer;DocStr8757
 M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/reader;DocStr3327
@@ -163,6 +167,7 @@ P:StockSharp.Fix.Dialects.IFixDialect.StorageName/summary;DocStr9382
 P:StockSharp.Fix.Dialects.IFixDialect.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Fix.Dialects.IFixDialect.SecurityExtendedFields/summary;DocStr9383
 P:StockSharp.Fix.Dialects.IFixDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
+P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSubscriptionByPortfolio/summary;DocStr10101
 P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames/summary;DocStr2531
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/summary;DocStr9453
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/param/writer;DocStr8757
@@ -206,7 +211,7 @@ P:StockSharp.Fix.FastMessageAdapter.Dialect/summary;DocStr9958
 P:StockSharp.Fix.FastMessageAdapter.DialectSettings/summary;FastSettings
 M:StockSharp.Fix.FastMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.Fix.FastMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
-E:StockSharp.Fix.FastMessageAdapter.PropertyChanged/inheritdoc;DocStr8459
+E:StockSharp.Fix.FastMessageAdapter.PropertyChanged/summary;DocStr10102
 T:StockSharp.Fix.ExtendedMessageTypes/summary;DocStr9866
 F:StockSharp.Fix.ExtendedMessageTypes.SeqReset/summary;DocStr608
 F:StockSharp.Fix.ExtendedMessageTypes.ResendRequest/summary;DocStr608
@@ -1179,6 +1184,7 @@ F:StockSharp.Fix.Native.ExecutionReport.Commission/summary;XamlStr249
 F:StockSharp.Fix.Native.ExecutionReport.Text/summary;DocStr8802
 F:StockSharp.Fix.Native.ExecutionReport.ExecId/summary;DocStr8803
 F:StockSharp.Fix.Native.ExecutionReport.OrdStatusReqId/summary;DocStr9461
+F:StockSharp.Fix.Native.ExecutionReport.LastLiquidityInd/summary;DocStr10107
 T:StockSharp.Fix.Native.FastPMap/summary;DocStr8938
 M:StockSharp.Fix.Native.FastPMap.#ctor/summary;DocStr1
 M:StockSharp.Fix.Native.FastPMap.Reset/summary;Str3282
@@ -1383,6 +1389,7 @@ F:StockSharp.Fix.Native.FixTags.TrdRegTimestampType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NextExpectedMsgSeqNum/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.OrdStatusReqID/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TrdType/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.LastLiquidityInd/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.NoInstrAttrib/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.InstrAttribType/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.InstrAttribValue/summary;DocStr8459
@@ -1562,6 +1569,7 @@ P:StockSharp.Fix.FixMessageAdapter.PortfolioLookupRequired/summary;DocStr450
 P:StockSharp.Fix.FixMessageAdapter.OrderCancelVolumeRequired/summary;DocStr8752
 P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiersPersistable/summary;DocStr9388
+P:StockSharp.Fix.FixMessageAdapter.IsSupportSubscriptionByPortfolio/summary;DocStr10101
 P:StockSharp.Fix.FixMessageAdapter.StorageName/summary;DocStr9382
 P:StockSharp.Fix.FixMessageAdapter.SecurityExtendedFields/summary;DocStr9383
 M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46

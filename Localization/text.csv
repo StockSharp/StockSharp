@@ -14459,3 +14459,5 @@ DocStr10102;Occurs when a property value changes;Вызывается при и�
 DocStr10103;The chart area creation event;Событие создания области графика
 DocStr10104;Function;Функция
 DocStr10105;Expression;Выражение
+DocStr10106;Reply errors for messages of type {0} transfers via {1};Ошибки в качестве ответа на сообщения типа {0} передаются через {1}
+DocStr10107;Indicator to identify whether this fill was a result of a liquidity provider providing or liquidity taker taking the liquidity. Valid values: 1 = Added Liquidity 2 = Removed Liquidity 3 = Liquidity Routed Out;Индикатор, показывающий, является ли сведение заявки результатом добавления ликвидности или убирание ликвидности через маркет-тейкера. Доступные значения: 1 = Добавление ликвидности 2 = Удаление ликвидности 3 = Вывод ликвидности

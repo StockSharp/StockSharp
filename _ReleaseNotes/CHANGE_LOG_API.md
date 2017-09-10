@@ -47,6 +47,10 @@ StockSharp API Change log
 * (bug) PositionBinarySerializer fix.
 * (feature) SmartCOM. Removed V2 support.
 * (bug) Expression fix http://stocksharp.ru/forum/8586/skleennye-fyuchersy-s-finama/
+* (feature) FIX connector. ExecutionReport.LastLiquidityInd
+* (feature) FIX connector. TransactTime for OrderCancelReject
+* (feature) FIX connector. Handle order register errors.
+* (bug) FIX connector. SpectraFixDialect cancel orders fix.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

@@ -63,7 +63,9 @@
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Fix.Dialects.BaseFastDialect.NewOutMessage">
-      <inheritdoc />
+      <summary>
+            New message event.
+            </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportSubscriptionBySecurity">
       <inheritdoc />
@@ -81,10 +83,16 @@
       <param name="message">The message.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorage)">
-      <inheritdoc />
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)">
-      <inheritdoc />
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Fix.Dialects.BaseFixDialect">
       <summary>
@@ -199,6 +207,11 @@
             Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSubscriptionByPortfolio">
+      <summary>
+            Support portfolio subscriptions.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SecurityExtendedFields">
       <summary>
             Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
@@ -211,6 +224,11 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeFrames">
       <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.NewOrderSingleErrorsAsReject">
+      <summary>
+            Error for messages of type <see cref="F:StockSharp.Fix.Native.FixMessages.NewOrderSingle" /> transfers in <see cref="F:StockSharp.Fix.Native.FixMessages.Reject" />.
+            </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
@@ -562,6 +580,11 @@
             Native identifier can be stored.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSubscriptionByPortfolio">
+      <summary>
+            Support portfolio subscriptions.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames">
       <summary>
             Available time frames.
@@ -707,7 +730,7 @@
       <inheritdoc />
     </member>
     <member name="E:StockSharp.Fix.FastMessageAdapter.PropertyChanged">
-      <inheritdoc />
+      <summary>Occurs when a property value changes.</summary>
     </member>
     <member name="T:StockSharp.Fix.ExtendedMessageTypes">
       <summary>
@@ -4522,6 +4545,15 @@
             Required if responding to and if provided on the <see cref="F:StockSharp.Fix.Native.FixMessages.OrderStatusRequest" /> message.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.LastLiquidityInd">
+      <summary>
+            Indicator to identify whether this fill was a result of a liquidity provider providing or liquidity taker taking the liquidity.
+            Valid values:
+            1 = Added Liquidity
+            2 = Removed Liquidity
+            3 = Liquidity Routed Out
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FastPMap">
       <summary>
             FAST Presence Map.
@@ -5364,6 +5396,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LastLiquidityInd">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.NoInstrAttrib">
       <summary>
       </summary>
@@ -6039,6 +6075,11 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiersPersistable">
       <summary>
             Native identifier can be stored.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportSubscriptionByPortfolio">
+      <summary>
+            Support portfolio subscriptions.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.StorageName">
