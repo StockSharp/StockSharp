@@ -669,9 +669,7 @@ namespace StockSharp.BusinessEntities
 
 						if (UseAggregatedQuotes)
 						{
-							var aggQuote = existedQuote as AggregatedQuote;
-
-							if (aggQuote == null)
+							if (!(existedQuote is AggregatedQuote aggQuote))
 							{
 								aggQuote = new AggregatedQuote
 								{

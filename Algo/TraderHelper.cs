@@ -1354,9 +1354,7 @@ namespace StockSharp.Algo
 
 				emulator.NewOutMessage += msg =>
 				{
-					var execMsg = msg as ExecutionMessage;
-
-					if (execMsg == null)
+					if (!(msg is ExecutionMessage execMsg))
 						return;
 
 					if (execMsg.Error != null)
@@ -1510,12 +1508,10 @@ namespace StockSharp.Algo
 		{
 			return basketSecurity.GetInnerSecurities(securityProvider).Any(innerSecurity =>
 			{
-				var basket = innerSecurity as BasketSecurity;
-
-				if (basket == null)
-					return innerSecurity == security;
-
-				return basket.Contains(securityProvider, security);
+				if (innerSecurity is BasketSecurity basket)
+					return basket.Contains(securityProvider, security);
+				
+				return innerSecurity == security;
 			});
 		}
 

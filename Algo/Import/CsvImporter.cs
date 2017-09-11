@@ -73,9 +73,7 @@
 
 				foreach (var instance in Parse(fileName, isCancelled))
 				{
-					var secMsg = instance as SecurityMessage;
-
-					if (secMsg == null)
+					if (!(instance is SecurityMessage secMsg))
 					{
 						buffer.Add(instance);
 

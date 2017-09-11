@@ -165,9 +165,7 @@ namespace StockSharp.Algo.Import
 						}
 					}
 
-					var secMsg = instance as SecurityMessage;
-
-					if (secMsg == null)
+					if (!(instance is SecurityMessage secMsg))
 					{
 						if (instance is ExecutionMessage execMsg)
 							execMsg.ExecutionType = (ExecutionTypes)DataType.Arg;

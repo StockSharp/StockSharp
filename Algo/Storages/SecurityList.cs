@@ -59,9 +59,7 @@ namespace StockSharp.Algo.Storages
 		{
 			_registry = registry;
 
-			var database = Storage as Database;
-
-			if (database == null)
+			if (!(Storage is Database database))
 				return;
 
 			var readAllByCodeAndType = database.CommandType == CommandType.StoredProcedure

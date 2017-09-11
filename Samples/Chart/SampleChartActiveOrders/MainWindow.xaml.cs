@@ -248,8 +248,7 @@
 
 		private void Fill_Click(object sender, RoutedEventArgs e)
 		{
-			var order = _ordersListBox.SelectedItem as Order;
-			if (order == null)
+			if (!(_ordersListBox.SelectedItem is Order order))
 				return;
 
 			if (IsInFinalState(order))
@@ -272,8 +271,7 @@
 
 		private void Remove_Click(object sender, RoutedEventArgs e)
 		{
-			var order = _ordersListBox.SelectedItem as Order;
-			if (order == null)
+			if (!(_ordersListBox.SelectedItem is Order order))
 				return;
 
 			Log($"Remove order: {order}");

@@ -77,9 +77,9 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 								return;
 						}
 
-						if (result is int)
+						if (result is int i)
 						{
-							if ((int)result != 0)
+							if (i != 0)
 								return;
 						}
 
@@ -206,8 +206,9 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 			if (type == typeof(decimal))
 			{
-				var drest = restriction as DecimalRestriction;
-				return drest != null ? $"decimal({drest.Precision},{drest.Scale})": "decimal";
+				return restriction is DecimalRestriction drest
+					? $"decimal({drest.Precision},{drest.Scale})"
+					: "decimal";
 			}
 
 			if (type == typeof(Enum))

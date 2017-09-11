@@ -926,9 +926,7 @@ namespace StockSharp.Algo.Strategies
 			if (rule == null)
 				throw new ArgumentNullException(nameof(rule));
 
-			var strategy = rule.Container as Strategy;
-
-			if (strategy == null)
+			if (!(rule.Container is Strategy strategy))
 				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule.Name), nameof(rule));
 
 			return strategy;
