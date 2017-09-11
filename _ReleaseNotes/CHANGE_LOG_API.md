@@ -52,6 +52,9 @@ StockSharp API Change log
 * (feature) FIX connector. Handle order register errors.
 * (bug) FIX connector. SpectraFixDialect cancel orders fix.
 * (feature) IIndicator.InputType
+* (bug) FIX server. Fix depths subscription for ALL security.
+* (feature) FIX connector. Candle state support.
+* (feature) FXCM. Masked as x64 bit only.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

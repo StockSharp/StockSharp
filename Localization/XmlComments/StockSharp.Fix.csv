@@ -1404,6 +1404,7 @@ F:StockSharp.Fix.Native.FixTags.ExtendedOrderStatus/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ExtendedTradeStatus/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.FromMarketData/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ToMarketData/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.CandleState/summary;DocStr8459
 T:StockSharp.Fix.Native.FixBase/summary;DocStr3186
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr93
 M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr1295
@@ -1474,6 +1475,7 @@ P:StockSharp.Fix.Native.MDEntry.LowPrice/summary;XamlStr831
 P:StockSharp.Fix.Native.MDEntry.LowSize/summary;LowVolume
 P:StockSharp.Fix.Native.MDEntry.ClosePrice/summary;ClosingPrice
 P:StockSharp.Fix.Native.MDEntry.CloseSize/summary;CloseVolume
+P:StockSharp.Fix.Native.MDEntry.CandleState/summary;CandleState
 T:StockSharp.Fix.Native.TextFixReader/summary;DocStr3331
 M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr1
 M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr3198
