@@ -2303,12 +2303,14 @@ T:StockSharp.Algo.Indicators.Correlation/summary;Correlation
 T:StockSharp.Algo.Indicators.Correlation/remarks;DocStr8462
 M:StockSharp.Algo.Indicators.Correlation.#ctor/summary;DocStr1
 M:StockSharp.Algo.Indicators.Correlation.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.Correlation.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.Correlation.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.Correlation.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.Correlation.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
 T:StockSharp.Algo.Indicators.Covariance/summary;Covariance
 T:StockSharp.Algo.Indicators.Covariance/remarks;DocStr8463
 M:StockSharp.Algo.Indicators.Covariance.#ctor/summary;DocStr1
+P:StockSharp.Algo.Indicators.Covariance.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.Covariance.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.Covariance.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.Covariance.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2318,6 +2320,7 @@ M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor(System.Int32)/summary;DocStr1
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.#ctor(System.Int32)/param/length;Str778
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.MoneyFlowIndex.IsFormed/summary;DocStr1126
+P:StockSharp.Algo.Indicators.MoneyFlowIndex.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2330,6 +2333,7 @@ M:StockSharp.Algo.Indicators.VolumeProfileIndicator.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.VolumeProfileIndicator.Step/summary;DocStr1141
 P:StockSharp.Algo.Indicators.VolumeProfileIndicator.UseTotalVolume/summary;DocStr1142
 P:StockSharp.Algo.Indicators.VolumeProfileIndicator.ResultType/inheritdoc;DocStr8459
+P:StockSharp.Algo.Indicators.VolumeProfileIndicator.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.VolumeProfileIndicator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.VolumeProfileIndicator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.VolumeProfileIndicator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2357,6 +2361,7 @@ M:StockSharp.Algo.Indicators.ChaikinVolatility.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.ChaikinVolatility.Ema/summary;Str731
 P:StockSharp.Algo.Indicators.ChaikinVolatility.Roc/summary;Str732
 P:StockSharp.Algo.Indicators.ChaikinVolatility.IsFormed/summary;DocStr1126
+P:StockSharp.Algo.Indicators.ChaikinVolatility.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.ChaikinVolatility.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.ChaikinVolatility.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.ChaikinVolatility.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2411,6 +2416,7 @@ M:StockSharp.Algo.Indicators.MeanDeviation.OnProcess(StockSharp.Algo.Indicators.
 M:StockSharp.Algo.Indicators.MeanDeviation.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
 T:StockSharp.Algo.Indicators.MedianPrice/summary;Str843
 M:StockSharp.Algo.Indicators.MedianPrice.#ctor/summary;DocStr1
+P:StockSharp.Algo.Indicators.MedianPrice.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.MedianPrice.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.MedianPrice.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.MedianPrice.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2419,6 +2425,7 @@ T:StockSharp.Algo.Indicators.QStick/remarks;DocStr1166
 M:StockSharp.Algo.Indicators.QStick.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.QStick.IsFormed/summary;DocStr1126
 M:StockSharp.Algo.Indicators.QStick.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.QStick.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.QStick.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.QStick.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.QStick.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2462,6 +2469,7 @@ T:StockSharp.Algo.Indicators.VerticalHorizontalFilter/remarks;DocStr1171
 M:StockSharp.Algo.Indicators.VerticalHorizontalFilter.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.VerticalHorizontalFilter.IsFormed/summary;DocStr1126
 M:StockSharp.Algo.Indicators.VerticalHorizontalFilter.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.VerticalHorizontalFilter.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.VerticalHorizontalFilter.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.VerticalHorizontalFilter.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.VerticalHorizontalFilter.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2475,6 +2483,7 @@ M:StockSharp.Algo.Indicators.Vidya.OnProcess(StockSharp.Algo.Indicators.IIndicat
 T:StockSharp.Algo.Indicators.VolumeIndicator/summary;Str756
 M:StockSharp.Algo.Indicators.VolumeIndicator.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.VolumeIndicator.ResultType/inheritdoc;DocStr8459
+P:StockSharp.Algo.Indicators.VolumeIndicator.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.VolumeIndicator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.VolumeIndicator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.VolumeIndicator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2513,6 +2522,7 @@ T:StockSharp.Algo.Indicators.CommodityChannelIndex/summary;Str760
 M:StockSharp.Algo.Indicators.CommodityChannelIndex.#ctor/summary;DocStr1
 M:StockSharp.Algo.Indicators.CommodityChannelIndex.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.CommodityChannelIndex.IsFormed/summary;DocStr1126
+P:StockSharp.Algo.Indicators.CommodityChannelIndex.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.CommodityChannelIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.CommodityChannelIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.CommodityChannelIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2533,6 +2543,7 @@ T:StockSharp.Algo.Indicators.DiPart/summary;DocStr1178
 M:StockSharp.Algo.Indicators.DiPart.#ctor/summary;DocStr93
 M:StockSharp.Algo.Indicators.DiPart.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.DiPart.IsFormed/summary;DocStr1126
+P:StockSharp.Algo.Indicators.DiPart.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.DiPart.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.DiPart.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.DiPart.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2571,6 +2582,7 @@ P:StockSharp.Algo.Indicators.Ichimoku.SenkouB/summary;Str767
 P:StockSharp.Algo.Indicators.Ichimoku.Chinkou/summary;Str768
 T:StockSharp.Algo.Indicators.IchimokuChinkouLine/summary;Str768
 M:StockSharp.Algo.Indicators.IchimokuChinkouLine.#ctor/summary;DocStr1
+P:StockSharp.Algo.Indicators.IchimokuChinkouLine.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.IchimokuChinkouLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.IchimokuChinkouLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.IchimokuChinkouLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2578,6 +2590,7 @@ T:StockSharp.Algo.Indicators.IchimokuLine/summary;DocStr1186
 M:StockSharp.Algo.Indicators.IchimokuLine.#ctor/summary;DocStr1
 M:StockSharp.Algo.Indicators.IchimokuLine.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.IchimokuLine.IsFormed/summary;DocStr1126
+P:StockSharp.Algo.Indicators.IchimokuLine.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.IchimokuLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.IchimokuLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.IchimokuLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2597,6 +2610,7 @@ M:StockSharp.Algo.Indicators.IchimokuSenkouBLine.#ctor(StockSharp.Algo.Indicator
 M:StockSharp.Algo.Indicators.IchimokuSenkouBLine.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.IchimokuSenkouBLine.IsFormed/summary;DocStr1126
 P:StockSharp.Algo.Indicators.IchimokuSenkouBLine.Kijun/summary;Str765
+P:StockSharp.Algo.Indicators.IchimokuSenkouBLine.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.IchimokuSenkouBLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.IchimokuSenkouBLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.IchimokuSenkouBLine.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2629,6 +2643,7 @@ P:StockSharp.Algo.Indicators.RelativeVigorIndex.Signal/summary;Str773
 T:StockSharp.Algo.Indicators.RelativeVigorIndexAverage/summary;DocStr1188
 M:StockSharp.Algo.Indicators.RelativeVigorIndexAverage.#ctor/summary;DocStr1
 M:StockSharp.Algo.Indicators.RelativeVigorIndexAverage.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.RelativeVigorIndexAverage.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.RelativeVigorIndexAverage.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.RelativeVigorIndexAverage.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.RelativeVigorIndexAverage.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2642,6 +2657,7 @@ T:StockSharp.Algo.Indicators.StochasticK/summary;Str774
 M:StockSharp.Algo.Indicators.StochasticK.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.StochasticK.IsFormed/summary;DocStr1176
 M:StockSharp.Algo.Indicators.StochasticK.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.StochasticK.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.StochasticK.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.StochasticK.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.StochasticK.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2652,6 +2668,7 @@ M:StockSharp.Algo.Indicators.TrueRange.GetPriceMovements(StockSharp.Algo.Candles
 M:StockSharp.Algo.Indicators.TrueRange.GetPriceMovements(StockSharp.Algo.Candles.Candle,StockSharp.Algo.Candles.Candle)/param/currentCandle;DocStr496
 M:StockSharp.Algo.Indicators.TrueRange.GetPriceMovements(StockSharp.Algo.Candles.Candle,StockSharp.Algo.Candles.Candle)/param/prevCandle;DocStr1180
 M:StockSharp.Algo.Indicators.TrueRange.GetPriceMovements(StockSharp.Algo.Candles.Candle,StockSharp.Algo.Candles.Candle)/returns;DocStr1191
+P:StockSharp.Algo.Indicators.TrueRange.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.TrueRange.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.TrueRange.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.TrueRange.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2659,6 +2676,7 @@ T:StockSharp.Algo.Indicators.UltimateOscillator/summary;Str776
 T:StockSharp.Algo.Indicators.UltimateOscillator/remarks;DocStr1192
 M:StockSharp.Algo.Indicators.UltimateOscillator.#ctor/summary;DocStr1218
 P:StockSharp.Algo.Indicators.UltimateOscillator.IsFormed/summary;DocStr1126
+P:StockSharp.Algo.Indicators.UltimateOscillator.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.UltimateOscillator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.UltimateOscillator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.UltimateOscillator.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2802,6 +2820,7 @@ T:StockSharp.Algo.Indicators.OptimalTracking/summary;DocStr1209
 T:StockSharp.Algo.Indicators.OptimalTracking/remarks;DocStr1210
 M:StockSharp.Algo.Indicators.OptimalTracking.#ctor/summary;DocStr1
 M:StockSharp.Algo.Indicators.OptimalTracking.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.OptimalTracking.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.OptimalTracking.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.OptimalTracking.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.OptimalTracking.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2811,6 +2830,7 @@ M:StockSharp.Algo.Indicators.ParabolicSar.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.ParabolicSar.Acceleration/summary;Str811
 P:StockSharp.Algo.Indicators.ParabolicSar.AccelerationStep/summary;Str813
 P:StockSharp.Algo.Indicators.ParabolicSar.AccelerationMax/summary;Str815
+P:StockSharp.Algo.Indicators.ParabolicSar.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.ParabolicSar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.ParabolicSar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.ParabolicSar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2827,6 +2847,7 @@ T:StockSharp.Algo.Indicators.PeakBar/summary;Str817
 T:StockSharp.Algo.Indicators.PeakBar/remarks;DocStr1219
 M:StockSharp.Algo.Indicators.PeakBar.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.PeakBar.ReversalAmount/summary;Str784
+P:StockSharp.Algo.Indicators.PeakBar.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.PeakBar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.PeakBar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.PeakBar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2881,6 +2902,7 @@ T:StockSharp.Algo.Indicators.TroughBar/summary;Str822
 T:StockSharp.Algo.Indicators.TroughBar/remarks;DocStr1222
 M:StockSharp.Algo.Indicators.TroughBar.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.TroughBar.ReversalAmount/summary;Str784
+P:StockSharp.Algo.Indicators.TroughBar.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.TroughBar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.TroughBar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.TroughBar.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2893,6 +2915,7 @@ T:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage/remarks;DocStr1223
 M:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage.#ctor/summary;DocStr1218
 M:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage.IsFormed/summary;DocStr1126
+P:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.VolumeWeightedMovingAverage.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2919,6 +2942,7 @@ P:StockSharp.Algo.Indicators.ZigZag.CurrentValueFunc/summary;DocStr1227
 P:StockSharp.Algo.Indicators.ZigZag.CurrentValue/summary;DocStr1217
 P:StockSharp.Algo.Indicators.ZigZag.LastValueShift/summary;DocStr1228
 M:StockSharp.Algo.Indicators.ZigZag.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.ZigZag.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.ZigZag.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.ZigZag.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.ZigZag.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -2935,6 +2959,7 @@ P:StockSharp.Algo.Indicators.ZigZagEquis.ByPrice/summary;DocStr1216
 P:StockSharp.Algo.Indicators.ZigZagEquis.CurrentValue/summary;DocStr1217
 M:StockSharp.Algo.Indicators.ZigZagEquis.Reset/summary;DocStr1125
 P:StockSharp.Algo.Indicators.ZigZagEquis.ResultType/inheritdoc;DocStr8459
+P:StockSharp.Algo.Indicators.ZigZagEquis.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.ZigZagEquis.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.ZigZagEquis.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.ZigZagEquis.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -3016,6 +3041,7 @@ P:StockSharp.Algo.Indicators.Fractals.IsFormed/summary;DocStr1126
 P:StockSharp.Algo.Indicators.Fractals.Up/summary;Str846
 P:StockSharp.Algo.Indicators.Fractals.Down/summary;Str848
 M:StockSharp.Algo.Indicators.Fractals.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.Fractals.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.Fractals.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.Fractals.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.Fractals.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -3049,6 +3075,7 @@ M:StockSharp.Algo.Indicators.GatorOscillator.OnProcess(StockSharp.Algo.Indicator
 T:StockSharp.Algo.Indicators.MarketFacilitationIndex/summary;Str853
 T:StockSharp.Algo.Indicators.MarketFacilitationIndex/remarks;DocStr1238
 M:StockSharp.Algo.Indicators.MarketFacilitationIndex.#ctor/summary;DocStr1
+P:StockSharp.Algo.Indicators.MarketFacilitationIndex.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.MarketFacilitationIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.MarketFacilitationIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.MarketFacilitationIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -3057,6 +3084,7 @@ T:StockSharp.Algo.Indicators.WilliamsR/remarks;DocStr1239
 M:StockSharp.Algo.Indicators.WilliamsR.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.WilliamsR.IsFormed/summary;DocStr1126
 M:StockSharp.Algo.Indicators.WilliamsR.Reset/summary;DocStr1125
+P:StockSharp.Algo.Indicators.WilliamsR.InputType/inheritdoc;DocStr8459
 M:StockSharp.Algo.Indicators.WilliamsR.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.WilliamsR.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.WilliamsR.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
@@ -3089,6 +3117,7 @@ M:StockSharp.Algo.Indicators.BaseIndicator.Load(Ecng.Serialization.SettingsStora
 M:StockSharp.Algo.Indicators.BaseIndicator.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 P:StockSharp.Algo.Indicators.BaseIndicator.IsFormed/summary;DocStr1126
 P:StockSharp.Algo.Indicators.BaseIndicator.Container/summary;DocStr1127
+P:StockSharp.Algo.Indicators.BaseIndicator.InputType/summary;DocStr9805
 P:StockSharp.Algo.Indicators.BaseIndicator.ResultType/summary;DocStr9805
 E:StockSharp.Algo.Indicators.BaseIndicator.Changed/summary;DocStr1128
 E:StockSharp.Algo.Indicators.BaseIndicator.Reseted/summary;DocStr1129
@@ -3112,6 +3141,7 @@ P:StockSharp.Algo.Indicators.IIndicator.Id/summary;Str1917
 P:StockSharp.Algo.Indicators.IIndicator.Name/summary;Str908
 P:StockSharp.Algo.Indicators.IIndicator.IsFormed/summary;DocStr1126
 P:StockSharp.Algo.Indicators.IIndicator.Container/summary;DocStr1127
+P:StockSharp.Algo.Indicators.IIndicator.InputType/summary;DocStr10108
 P:StockSharp.Algo.Indicators.IIndicator.ResultType/summary;DocStr9805
 E:StockSharp.Algo.Indicators.IIndicator.Changed/summary;DocStr1128
 E:StockSharp.Algo.Indicators.IIndicator.Reseted/summary;DocStr1129
@@ -7178,6 +7208,7 @@ M:StockSharp.Algo.TraderHelper.IsUxStock(StockSharp.BusinessEntities.ExchangeBoa
 M:StockSharp.Algo.TraderHelper.IsUxStock(StockSharp.BusinessEntities.ExchangeBoard)/returns;DocStr8659
 F:StockSharp.Algo.TraderHelper.AllSecurityId/summary;DocStr9072
 P:StockSharp.Algo.TraderHelper.AllSecurity/summary;DocStr10040
+F:StockSharp.Algo.TraderHelper.NewsSecurity/summary;DocStr10109
 M:StockSharp.Algo.TraderHelper.GetAllSecurity(StockSharp.BusinessEntities.ISecurityProvider)/summary;DocStr10041
 M:StockSharp.Algo.TraderHelper.GetAllSecurity(StockSharp.BusinessEntities.ISecurityProvider)/param/provider;DocStr972
 M:StockSharp.Algo.TraderHelper.GetAllSecurity(StockSharp.BusinessEntities.ISecurityProvider)/returns;DocStr10042

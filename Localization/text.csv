@@ -14462,3 +14462,7 @@ DocStr10104;Function;Функция
 DocStr10105;Expression;Выражение
 DocStr10106;Reply errors for messages of type {0} transfers via {1};Ошибки в качестве ответа на сообщения типа {0} передаются через {1}
 DocStr10107;Indicator to identify whether this fill was a result of a liquidity provider providing or liquidity taker taking the liquidity. Valid values: 1 = Added Liquidity 2 = Removed Liquidity 3 = Liquidity Routed Out;Индикатор, показывающий, является ли сведение заявки результатом добавления ликвидности или убирание ликвидности через маркет-тейкера. Доступные значения: 1 = Добавление ликвидности 2 = Удаление ликвидности 3 = Вывод ликвидности
+DocStr10108;Input values type;Тип входящих данных
+DocStr10109;"""News"" security instance";"Объект инструмента ""Новости"""
+DocStr10110;Try to initialize {0} by {1};Инициализировать {0} {1}
+DocStr10111;Validate {0} and {1} values;Проверить значения {0} и {1}
