@@ -4649,6 +4649,7 @@ PositionAlreadyExist;Position '{0}' already exist.;Позиция '{0}' уже �
 BidsOnTop;Bids above;Покупки сверху
 BidsOnTopDesc;Whether to show the bids above. The default is off.;Показывать ли биды сверху. По умолчанию выключено.
 MathFormulaDesc;Math formula. For example: (sin(x)+log(y)) / z;Мат формула. Например: (sin(x)+log(y)) / z
+NMore;+{0} more;+{0} больше
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
