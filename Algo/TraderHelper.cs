@@ -4100,6 +4100,11 @@ namespace StockSharp.Algo
 		};
 
 		/// <summary>
+		/// "News" security instance.
+		/// </summary>
+		public static readonly Security NewsSecurity = new Security { Id = "NEWS@NEWS" };
+
+		/// <summary>
 		/// Find <see cref="AllSecurity"/> instance in the specified provider.
 		/// </summary>
 		/// <param name="provider">The provider of information about instruments.</param>

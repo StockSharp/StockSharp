@@ -966,12 +966,10 @@ namespace StockSharp.Algo.Storages
 			return (IMarketDataStorage<News>)GetNewsMessageStorage(drive, format);
 		}
 
-		private static readonly Security _newsSecurity = new Security { Id = "NEWS@NEWS" };
-
 		/// <inheritdoc />
 		public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return _newsStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(_newsSecurity.ToSecurityId(), typeof(NewsMessage), null, format), key =>
+			return _newsStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(TraderHelper.NewsSecurity.ToSecurityId(), typeof(NewsMessage), null, format), key =>
 			{
 				IMarketDataSerializer<NewsMessage> serializer;
 
@@ -987,7 +985,7 @@ namespace StockSharp.Algo.Storages
 						throw new ArgumentOutOfRangeException(nameof(format));
 				}
 
-				return new NewsStorage(this, _newsSecurity, serializer, key);
+				return new NewsStorage(this, TraderHelper.NewsSecurity, serializer, key);
 			});
 		}
 
