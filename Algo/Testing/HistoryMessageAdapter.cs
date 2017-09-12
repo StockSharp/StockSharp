@@ -146,6 +146,11 @@ namespace StockSharp.Algo.Testing
 
 			StartDate = DateTimeOffset.MinValue;
 			StopDate = DateTimeOffset.MaxValue;
+
+			this.AddMarketDataSupport();
+			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
+			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>
@@ -161,11 +166,6 @@ namespace StockSharp.Algo.Testing
 				.LookupAll()
 				.Select(s => s.Board)
 				.Distinct();
-
-			this.AddMarketDataSupport();
-			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
-			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
-			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>

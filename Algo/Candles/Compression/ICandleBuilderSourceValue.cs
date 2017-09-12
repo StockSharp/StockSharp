@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+	using Ecng.Collections;
 
 	/// <summary>
 	/// The interface that describes data of the <see cref="ICandleBuilder"/> source.
@@ -294,6 +295,127 @@ namespace StockSharp.Algo.Candles.Compression
 		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
 
 		DateTimeOffset ICandleBuilderSourceValue.Time => QuoteChange.ServerTime;
+
+		decimal ICandleBuilderSourceValue.Price => _price;
+
+		decimal? ICandleBuilderSourceValue.Volume => _volume;
+
+		Sides? ICandleBuilderSourceValue.OrderDirection => null;
+	}
+
+	/// <summary>
+	/// Types of candle level1 based data.
+	/// </summary>
+	public enum Level1CandleSourceTypes
+	{
+		/// <summary>
+		/// Best bid.
+		/// </summary>
+		BestBid,
+
+		/// <summary>
+		/// Best ask.
+		/// </summary>
+		BestAsk,
+
+		/// <summary>
+		/// Spread middle.
+		/// </summary>
+		Middle,
+
+		/// <summary>
+		/// Last trade price.
+		/// </summary>
+		LastTrade,
+	}
+
+	/// <summary>
+	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="QuoteChangeMessage"/>.
+	/// </summary>
+	[DebuggerDisplay("{" + nameof(QuoteChange) + "}")]
+	public class Level1ChangeCandleBuilderSourceValue : ICandleBuilderSourceValue
+	{
+		private readonly decimal _price;
+		private readonly decimal? _volume;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Level1ChangeCandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="message">Messages containing changes.</param>
+		/// <param name="type">Types of candle level1 based data.</param>
+		public Level1ChangeCandleBuilderSourceValue(Level1ChangeMessage message, Level1CandleSourceTypes type)
+		{
+			Level1Change = message;
+			Type = type;
+
+			_volume = null;
+
+			switch (Type)
+			{
+				case Level1CandleSourceTypes.BestBid:
+				{
+					var bid = GetValue(message, Level1Fields.BestBidPrice);
+
+					if (bid != null)
+						_price = bid.Value;
+
+					break;
+				}
+
+				case Level1CandleSourceTypes.BestAsk:
+				{
+					var ask = GetValue(message, Level1Fields.BestAskPrice);
+
+					if (ask != null)
+						_price = ask.Value;
+
+					break;
+				}
+
+				case Level1CandleSourceTypes.Middle:
+				{
+					var bid = GetValue(message, Level1Fields.BestBidPrice);
+					var ask = GetValue(message, Level1Fields.BestAskPrice);
+
+					if (bid != null && ask != null)
+						_price = (ask.Value + bid.Value) / 2;
+
+					break;
+				}
+
+				case Level1CandleSourceTypes.LastTrade:
+				{
+					var lastPrice = GetValue(message, Level1Fields.LastTradePrice);
+
+					if (lastPrice != null)
+						_price = lastPrice.Value;
+
+					break;
+				}
+
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		private decimal? GetValue(Level1ChangeMessage message, Level1Fields field)
+		{
+			return (decimal?)message.Changes.TryGetValue(field);
+		}
+
+		/// <summary>
+		/// Messages containing quotes.
+		/// </summary>
+		public Level1ChangeMessage Level1Change { get; }
+
+		/// <summary>
+		/// Types of candle level1 based data.
+		/// </summary>
+		public Level1CandleSourceTypes Type { get; }
+
+		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
+
+		DateTimeOffset ICandleBuilderSourceValue.Time => Level1Change.ServerTime;
 
 		decimal ICandleBuilderSourceValue.Price => _price;
 
