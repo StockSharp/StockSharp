@@ -46116,5 +46116,15 @@ namespace StockSharp.Localization
 		/// Math formula. For example: (sin(x)+log(y)) / z
 		/// </summary>
 		public static string MathFormulaDesc => GetString(MathFormulaDescKey);
+
+		/// <summary>
+		/// +{0} more
+		/// </summary>
+		public const string NMoreKey = nameof(NMore);
+
+		/// <summary>
+		/// +{0} more
+		/// </summary>
+		public static string NMore => GetString(NMoreKey);
 	}
 }

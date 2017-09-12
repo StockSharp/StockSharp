@@ -876,9 +876,7 @@ namespace StockSharp.Algo
 
 			private bool CheckTrades(Security security, Trade trade)
 			{
-				var basket = security as BasketSecurity;
-
-				return basket != null
+				return security is BasketSecurity basket
 					? basket.Contains(SecurityProvider, trade.Security) && _condition(trade.Security)
 					: trade.Security == security && _condition(trade.Security);
 			}

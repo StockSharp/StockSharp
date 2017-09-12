@@ -267,8 +267,8 @@ namespace StockSharp.Algo.Storages
 
 			var boardCodes = new HashSet<string>();
 
-			var boardList = _entityRegistry.ExchangeBoards as ExchangeBoardList;
-			boardCodes.AddRange(boardList != null ? boardList.GetIds() : _entityRegistry.ExchangeBoards.Select(b => b.Code));
+			boardCodes.AddRange(_entityRegistry.ExchangeBoards is ExchangeBoardList boardList
+				? boardList.GetIds() : _entityRegistry.ExchangeBoards.Select(b => b.Code));
 
 			var boards = Boards.Where(b => !boardCodes.Contains(b.Code)).ToArray();
 

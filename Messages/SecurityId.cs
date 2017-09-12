@@ -196,8 +196,7 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		public override bool Equals(object other)
 		{
-			var secId = other as SecurityId?;
-			return secId != null && Equals(secId.Value);
+			return other is SecurityId secId && Equals(secId);
 		}
 
 		/// <summary>

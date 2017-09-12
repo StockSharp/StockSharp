@@ -227,7 +227,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.NewOrderSingleErrorsAsReject">
       <summary>
-            Error for messages of type <see cref="F:StockSharp.Fix.Native.FixMessages.NewOrderSingle" /> transfers in <see cref="F:StockSharp.Fix.Native.FixMessages.Reject" />.
+            Reply errors for messages of type <see cref="F:StockSharp.Fix.Native.FixMessages.NewOrderSingle" /> transfers via <see cref="F:StockSharp.Fix.Native.FixMessages.Reject" />.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
@@ -5456,6 +5456,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.CandleState">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixBase">
       <summary>
             Data reader/writer base class.
@@ -5736,6 +5740,11 @@
     <member name="P:StockSharp.Fix.Native.MDEntry.CloseSize">
       <summary>
             Volume at close.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.CandleState">
+      <summary>
+            Candle state.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.TextFixReader">
