@@ -318,7 +318,10 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(storage));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
+			{
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
+			}
 
 			var dates = storage.Dates.ToArray();
 
@@ -327,6 +330,9 @@ namespace StockSharp.Algo.Storages
 
 			var first = dates.First().ApplyTimeZone(TimeZoneInfo.Utc);
 			var last = dates.Last().EndOfDay().ApplyTimeZone(TimeZoneInfo.Utc);
+
+			if (from > last)
+				return null;
 
 			var timePrecision = storage.Serializer.TimePrecision;
 			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));

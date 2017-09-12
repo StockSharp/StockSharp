@@ -55,6 +55,7 @@ StockSharp API Change log
 * (bug) FIX server. Fix depths subscription for ALL security.
 * (feature) FIX connector. Candle state support.
 * (feature) FXCM. Masked as x64 bit only.
+* (bug) Storage. Fix data bounds validation.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

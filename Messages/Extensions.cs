@@ -546,7 +546,8 @@ namespace StockSharp.Messages
 			if (message.From != null && message.To != null)
 			{
 				if (message.From.Value > message.To.Value)
-					throw new ArgumentOutOfRangeException(nameof(message), message.To, LocalizedStrings.Str1014.Put(message.From));		}
+					throw new ArgumentOutOfRangeException(nameof(message), message.To, LocalizedStrings.Str1014.Put(message.From));
+			}
 
 			return message;
 		}
