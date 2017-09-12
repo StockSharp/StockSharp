@@ -56,6 +56,8 @@ StockSharp API Change log
 * (feature) FIX connector. Candle state support.
 * (feature) FXCM. Masked as x64 bit only.
 * (bug) Storage. Fix data bounds validation.
+* (feature) CandleBuilder. Build from level1.
+* (feature) FIX connector. ASTS. Microseconds.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
