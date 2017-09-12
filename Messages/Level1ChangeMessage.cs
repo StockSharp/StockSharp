@@ -626,6 +626,13 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.TurnoverKey)]
 		Turnover,
+
+		/// <summary>
+		/// The middle of spread.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.SpreadKey)]
+		SpreadMiddle,
 	}
 
 	/// <summary>

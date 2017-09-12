@@ -9,7 +9,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -245,7 +244,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 					var l1Msg = (Level1ChangeMessage)message;
 					
-					ProcessValue(l1Msg.SecurityId, 0, MarketDataTypes.Level1, () => new Level1ChangeCandleBuilderSourceValue(l1Msg, Level1CandleSourceTypes.Middle));
+					ProcessValue(l1Msg.SecurityId, 0, MarketDataTypes.Level1, () => new Level1ChangeCandleBuilderSourceValue(l1Msg, Level1Fields.SpreadMiddle));
 					break;
 				}
 

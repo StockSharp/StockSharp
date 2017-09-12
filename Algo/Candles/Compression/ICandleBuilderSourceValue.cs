@@ -18,9 +18,10 @@ namespace StockSharp.Algo.Candles.Compression
 	using System;
 	using System.Diagnostics;
 
+	using Ecng.Collections;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using Ecng.Collections;
 
 	/// <summary>
 	/// The interface that describes data of the <see cref="ICandleBuilder"/> source.
@@ -304,33 +305,7 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Types of candle level1 based data.
-	/// </summary>
-	public enum Level1CandleSourceTypes
-	{
-		/// <summary>
-		/// Best bid.
-		/// </summary>
-		BestBid,
-
-		/// <summary>
-		/// Best ask.
-		/// </summary>
-		BestAsk,
-
-		/// <summary>
-		/// Spread middle.
-		/// </summary>
-		Middle,
-
-		/// <summary>
-		/// Last trade price.
-		/// </summary>
-		LastTrade,
-	}
-
-	/// <summary>
-	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="QuoteChangeMessage"/>.
+	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="Level1ChangeMessage"/>.
 	/// </summary>
 	[DebuggerDisplay("{" + nameof(QuoteChange) + "}")]
 	public class Level1ChangeCandleBuilderSourceValue : ICandleBuilderSourceValue
@@ -341,38 +316,32 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1ChangeCandleBuilderSourceValue"/>.
 		/// </summary>
-		/// <param name="message">Messages containing changes.</param>
-		/// <param name="type">Types of candle level1 based data.</param>
-		public Level1ChangeCandleBuilderSourceValue(Level1ChangeMessage message, Level1CandleSourceTypes type)
+		/// <param name="message">The message containing the level1 market data.</param>
+		/// <param name="field">Level one market-data field, which is used as an candle value.</param>
+		public Level1ChangeCandleBuilderSourceValue(Level1ChangeMessage message, Level1Fields field)
 		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
 			Level1Change = message;
-			Type = type;
+			Field = field;
 
 			_volume = null;
 
-			switch (Type)
+			switch (field)
 			{
-				case Level1CandleSourceTypes.BestBid:
+				case Level1Fields.BestBidPrice:
+				case Level1Fields.BestAskPrice:
 				{
-					var bid = GetValue(message, Level1Fields.BestBidPrice);
+					var price = GetValue(message, field);
 
-					if (bid != null)
-						_price = bid.Value;
+					if (price != null)
+						_price = price.Value;
 
 					break;
 				}
 
-				case Level1CandleSourceTypes.BestAsk:
-				{
-					var ask = GetValue(message, Level1Fields.BestAskPrice);
-
-					if (ask != null)
-						_price = ask.Value;
-
-					break;
-				}
-
-				case Level1CandleSourceTypes.Middle:
+				case Level1Fields.SpreadMiddle:
 				{
 					var bid = GetValue(message, Level1Fields.BestBidPrice);
 					var ask = GetValue(message, Level1Fields.BestAskPrice);
@@ -383,22 +352,12 @@ namespace StockSharp.Algo.Candles.Compression
 					break;
 				}
 
-				case Level1CandleSourceTypes.LastTrade:
-				{
-					var lastPrice = GetValue(message, Level1Fields.LastTradePrice);
-
-					if (lastPrice != null)
-						_price = lastPrice.Value;
-
-					break;
-				}
-
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
 
-		private decimal? GetValue(Level1ChangeMessage message, Level1Fields field)
+		private static decimal? GetValue(Level1ChangeMessage message, Level1Fields field)
 		{
 			return (decimal?)message.Changes.TryGetValue(field);
 		}
@@ -409,9 +368,9 @@ namespace StockSharp.Algo.Candles.Compression
 		public Level1ChangeMessage Level1Change { get; }
 
 		/// <summary>
-		/// Types of candle level1 based data.
+		/// Level one market-data field, which is used as an candle value.
 		/// </summary>
-		public Level1CandleSourceTypes Type { get; }
+		public Level1Fields Field { get; }
 
 		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
 
