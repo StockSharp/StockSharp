@@ -70,6 +70,8 @@ namespace StockSharp.Algo.Candles.Compression
 			public ExchangeBoard Board { get; set; }
 
 			public CandleMessage CurrentCandleMessage { get; set; }
+
+			public MarketDataTypes[] SupportedMarketDataTypes { get; set; } = ArrayHelper.Empty<MarketDataTypes>();
 		}
 
 		private readonly Dictionary<SecurityId, List<SeriesInfo>> _seriesInfos = new Dictionary<SecurityId, List<SeriesInfo>>();
@@ -80,34 +82,34 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private readonly CandleBuildersList _candleBuilders;
 
-		private MarketDataTypes _buildCandlesFrom;
+		//private MarketDataTypes _buildCandlesFrom;
 
-		/// <summary>
-		/// Build candles from.
-		/// </summary>
-		public MarketDataTypes BuildCandlesFrom
-		{
-			get => _buildCandlesFrom;
-			set
-			{
-				switch (value)
-				{
-					//case MarketDataTypes.Level1:
-					case MarketDataTypes.MarketDepth:
-					case MarketDataTypes.Trades:
-						_buildCandlesFrom = value;
-						break;
+		///// <summary>
+		///// Build candles from.
+		///// </summary>
+		//public MarketDataTypes BuildCandlesFrom
+		//{
+		//	get => _buildCandlesFrom;
+		//	set
+		//	{
+		//		switch (value)
+		//		{
+		//			//case MarketDataTypes.Level1:
+		//			case MarketDataTypes.MarketDepth:
+		//			case MarketDataTypes.Trades:
+		//				_buildCandlesFrom = value;
+		//				break;
 
-					default:
-						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str721);
-				}
-			}
-		}
+		//			default:
+		//				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str721);
+		//		}
+		//	}
+		//}
 
-		/// <summary>
-		/// Type of candle depth based data.
-		/// </summary>
-		public DepthCandleSourceTypes DepthCandleSourceType { get; set; }
+		///// <summary>
+		///// Type of candle depth based data.
+		///// </summary>
+		//public DepthCandleSourceTypes DepthCandleSourceType { get; set; }
 
 		/// <summary>
 		/// Candles builders.
@@ -127,8 +129,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 			_exchangeInfoProvider = exchangeInfoProvider;
 
-			BuildCandlesFrom = MarketDataTypes.Trades;
-			DepthCandleSourceType = DepthCandleSourceTypes.Middle;
+			//BuildCandlesFrom = MarketDataTypes.Trades;
+			//DepthCandleSourceType = DepthCandleSourceTypes.Middle;
 
 			_candleBuilders = new CandleBuildersList
 			{
@@ -218,9 +220,6 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					base.OnInnerAdapterNewOutMessage(message);
 					
-					if (!CheckCanBuildCandlesFrom(MarketDataTypes.Trades))
-						break;
-
 					var execMsg = (ExecutionMessage)message;
 
 					if (execMsg.ExecutionType != ExecutionTypes.Tick)
@@ -234,23 +233,21 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					base.OnInnerAdapterNewOutMessage(message);
 
-					if (!CheckCanBuildCandlesFrom(MarketDataTypes.MarketDepth))
-						break;
-
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					ProcessValue(quoteMsg.SecurityId, 0, MarketDataTypes.MarketDepth, () => new QuoteCandleBuilderSourceValue(quoteMsg, DepthCandleSourceType));
+					ProcessValue(quoteMsg.SecurityId, 0, MarketDataTypes.MarketDepth, () => new QuoteCandleBuilderSourceValue(quoteMsg, DepthCandleSourceTypes.Middle));
 					break;
 				}
 
-				//case MessageTypes.Level1Change:
-				//{
-				//	if (!CheckCanBuildCandlesFrom(MarketDataTypes.Level1))
-				//		break;
+				case MessageTypes.Level1Change:
+				{
+					base.OnInnerAdapterNewOutMessage(message);
 
-				//	var l1Msg = (Level1ChangeMessage)message;
-				//	break;
-				//}
+					var l1Msg = (Level1ChangeMessage)message;
+					
+					ProcessValue(l1Msg.SecurityId, 0, MarketDataTypes.Level1, () => new Level1ChangeCandleBuilderSourceValue(l1Msg, Level1CandleSourceTypes.Middle));
+					break;
+				}
 
 				case MessageTypes.CandleTimeFrame:
 				case MessageTypes.CandlePnF:
@@ -354,6 +351,8 @@ namespace StockSharp.Algo.Candles.Compression
                 return;
 			}
 
+			SetAvailableMarketDataType(info, mdMsg);
+
 			if (!mdMsg.IsNotSupported && mdMsg.Error == null)
 			{
 				info.IsHistory = mdMsg.IsHistory;
@@ -414,6 +413,8 @@ namespace StockSharp.Algo.Candles.Compression
 				return;
 			}
 
+			SetAvailableMarketDataType(info, message);
+
 			_seriesInfosByTransactions.Remove(message.OriginalTransactionId);
 
 			switch (info.DataType)
@@ -443,11 +444,6 @@ namespace StockSharp.Algo.Candles.Compression
 					break;
 				}
 			}
-		}
-
-		private bool CheckCanBuildCandlesFrom(MarketDataTypes marketDataType)
-		{
-			return BuildCandlesFrom == marketDataType;
 		}
 
 		private void Subscribe(SeriesInfo info, bool isBack)
@@ -505,17 +501,34 @@ namespace StockSharp.Algo.Candles.Compression
 			switch (info.MarketDataMessage.BuildCandlesMode)
 			{
 				case BuildCandlesModes.LoadAndBuild:
-					return info.DataType == null ? info.MarketDataMessage.DataType : BuildCandlesFrom;
+					return info.DataType == null ? info.MarketDataMessage.DataType : GetAvailableMarketDataType(info);
 
 				case BuildCandlesModes.Load:
 					return info.MarketDataMessage.DataType;
 
 				case BuildCandlesModes.Build:
-					return BuildCandlesFrom;
+					return GetAvailableMarketDataType(info);
 
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
+
+		private MarketDataTypes GetAvailableMarketDataType(SeriesInfo info)
+		{
+			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.Trades))
+				return MarketDataTypes.Trades;
+
+			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.MarketDepth))
+				return MarketDataTypes.MarketDepth;
+
+			return MarketDataTypes.Level1;
+		}
+
+		private void SetAvailableMarketDataType(SeriesInfo info, Message msg)
+		{
+			if (info.SupportedMarketDataTypes == null || info.SupportedMarketDataTypes.IsEmpty())
+				info.SupportedMarketDataTypes = msg.Adapter.SupportedMarketDataTypes;
 		}
 
 		private void SendNotSupported(SeriesInfo info)

@@ -317,6 +317,8 @@ namespace StockSharp.Messages
 		{
 			adapter.AddSupportedMessage(MessageTypes.MarketData);
 			adapter.AddSupportedMessage(MessageTypes.SecurityLookup);
+
+			adapter.AddSupportedAllMarketDataTypes();
 		}
 
 		/// <summary>
@@ -327,6 +329,8 @@ namespace StockSharp.Messages
 		{
 			adapter.RemoveSupportedMessage(MessageTypes.MarketData);
 			adapter.RemoveSupportedMessage(MessageTypes.SecurityLookup);
+
+			adapter.RemoveSupportedAllMarketDataTypes();
 		}
 
 		/// <summary>
@@ -367,6 +371,79 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(adapter));
 
 			return adapter.SupportedMessages.Contains(type);
+		}
+
+		/// <summary>
+		/// Add the market-data type info <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Market-data type.</param>
+		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Concat(type).ToArray();
+		}
+
+		/// <summary>
+		/// Remove the market-data type from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Market-data type.</param>
+		public static void RemoveSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Except(new[] { type }).ToArray();
+		}
+
+		/// <summary>
+		/// Determines whether the specified market-data type is supported by the adapter.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
+		public static bool IsMarketDataTypeSupported(this IMessageAdapter adapter, MarketDataTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.SupportedMarketDataTypes.Contains(type);
+		}
+
+		/// <summary>
+		/// Add the all market-datas type info <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		public static void AddSupportedAllMarketDataTypes(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.OrderLog);
+			adapter.AddSupportedMarketDataType(MarketDataTypes.Trades);
+			adapter.AddSupportedMarketDataType(MarketDataTypes.MarketDepth);
+			adapter.AddSupportedMarketDataType(MarketDataTypes.Level1);
+			adapter.AddSupportedMarketDataType(MarketDataTypes.CandleTimeFrame);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleTick);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleVolume);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleRange);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandlePnF);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleRenko);
+		}
+
+		/// <summary>
+		/// Remove the all market-data types from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		public static void RemoveSupportedAllMarketDataTypes(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedMarketDataTypes = new MarketDataTypes[0];
 		}
 
 		/// <summary>

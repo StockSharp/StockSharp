@@ -132,6 +132,26 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private MarketDataTypes[] _supportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual MarketDataTypes[] SupportedMarketDataTypes
+		{
+			get => _supportedMarketDataTypes;
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				var duplicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
+				if (duplicate != null)
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+
+				_supportedMarketDataTypes = value;
+			}
+		}
+
 		/// <inheritdoc />
 		[Browsable(false)]
 		public virtual bool IsValid => true;

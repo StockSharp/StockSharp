@@ -55,6 +55,11 @@ namespace StockSharp.Messages
 		MessageTypes[] SupportedMessages { get; set; }
 
 		/// <summary>
+		/// Supported by adapter market-data types.
+		/// </summary>
+		MarketDataTypes[] SupportedMarketDataTypes { get; set; }
+
+		/// <summary>
 		/// The parameters validity check.
 		/// </summary>
 		bool IsValid { get; }
