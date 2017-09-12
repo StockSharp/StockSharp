@@ -269,7 +269,7 @@ T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor/summary;DocStr8144
 E:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsChanged/summary;DocStr9074
 M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.#ctor/summary;DocStr1
 F:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsProperty/summary;DocStr29
-P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings/summary;DocStr8272
+P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings/summary;Str1942
 M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PropertyGrid.PropertyGridEx/summary;DocStr8274
 F:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SecurityProviderProperty/summary;DocStr29

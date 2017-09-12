@@ -1218,7 +1218,7 @@
     </member>
     <member name="P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings">
       <summary>
-            Settings. The default setting is equal to 1 minute candles.
+            Candles settings.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.InitializeComponent">
@@ -4378,6 +4378,12 @@
       <summary>
             Unsubscribe from news.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.SendOutMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.SendInMessage(StockSharp.Messages.Message)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RequestNewsStory(StockSharp.BusinessEntities.News)">
       <summary>
