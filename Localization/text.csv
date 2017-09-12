@@ -14466,3 +14466,11 @@ DocStr10108;Input values type;Тип входящих данных
 DocStr10109;"""News"" security instance";"Объект инструмента ""Новости"""
 DocStr10110;Try to initialize {0} by {1};Инициализировать {0} {1}
 DocStr10111;Validate {0} and {1} values;Проверить значения {0} и {1}
+DocStr10114;Add market data type into {0};Добавить тип маркет данных в {0}
+DocStr10116;Remove market data type from {0};Удалить тип маркет данных из {0}
+DocStr10117;Determines whether the specified market-data type is supported by the adapter;Определить поддерживается ли указанный тип маркет данных адаптером
+DocStr10118;Add all market data types into {0};Добавить все типы маркет данных в {0}
+DocStr10119;Remove all market data types from {0};Удалить все типы маркет данных из {0}
+DocStr10120;Supported by adapter market data types;Поддерживаемые адаптером типы маркет данных
+DocStr10121;Level one market-data field, which is used as an candle value;Поле маркет-данных первого уровня, которое используется как значение свечи
+DocStr10122;The middle of spread;Середина спреда.

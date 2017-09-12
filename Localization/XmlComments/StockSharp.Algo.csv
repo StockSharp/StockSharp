@@ -33,8 +33,6 @@ M:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Stop(StockSharp.Algo
 M:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Stop(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
 M:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Dispose/summary;DocStr7
 T:StockSharp.Algo.Candles.Compression.CandleBuilderMessageAdapter/summary;DocStr9649
-P:StockSharp.Algo.Candles.Compression.CandleBuilderMessageAdapter.BuildCandlesFrom/summary;DocStr9650
-P:StockSharp.Algo.Candles.Compression.CandleBuilderMessageAdapter.DepthCandleSourceType/summary;DocStr9515
 P:StockSharp.Algo.Candles.Compression.CandleBuilderMessageAdapter.Builders/summary;DocStr9651
 M:StockSharp.Algo.Candles.Compression.CandleBuilderMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExchangeInfoProvider)/summary;DocStr1
 M:StockSharp.Algo.Candles.Compression.CandleBuilderMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter,StockSharp.Algo.Storages.IExchangeInfoProvider)/param/innerAdapter;DocStr9208
@@ -201,6 +199,12 @@ M:StockSharp.Algo.Candles.Compression.QuoteCandleBuilderSourceValue.#ctor(StockS
 M:StockSharp.Algo.Candles.Compression.QuoteCandleBuilderSourceValue.#ctor(StockSharp.Messages.QuoteChangeMessage,StockSharp.Algo.Candles.Compression.DepthCandleSourceTypes)/param/type;DocStr9515
 P:StockSharp.Algo.Candles.Compression.QuoteCandleBuilderSourceValue.QuoteChange/summary;DocStr4444
 P:StockSharp.Algo.Candles.Compression.QuoteCandleBuilderSourceValue.Type/summary;DocStr9515
+T:StockSharp.Algo.Candles.Compression.Level1ChangeCandleBuilderSourceValue/summary;DocStr661
+M:StockSharp.Algo.Candles.Compression.Level1ChangeCandleBuilderSourceValue.#ctor(StockSharp.Messages.Level1ChangeMessage,StockSharp.Messages.Level1Fields)/summary;DocStr1
+M:StockSharp.Algo.Candles.Compression.Level1ChangeCandleBuilderSourceValue.#ctor(StockSharp.Messages.Level1ChangeMessage,StockSharp.Messages.Level1Fields)/param/message;DocStr4470
+M:StockSharp.Algo.Candles.Compression.Level1ChangeCandleBuilderSourceValue.#ctor(StockSharp.Messages.Level1ChangeMessage,StockSharp.Messages.Level1Fields)/param/field;DocStr10121
+P:StockSharp.Algo.Candles.Compression.Level1ChangeCandleBuilderSourceValue.Level1Change/summary;DocStr4444
+P:StockSharp.Algo.Candles.Compression.Level1ChangeCandleBuilderSourceValue.Field/summary;DocStr10121
 T:StockSharp.Algo.Candles.Compression.ICandleBuilderSource/summary;DocStr469
 T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceList/summary;DocStr504
 T:StockSharp.Algo.Candles.Compression.StorageCandleBuilderSource`1/summary;DocStr687

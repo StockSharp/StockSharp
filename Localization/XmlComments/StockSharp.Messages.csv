@@ -463,6 +463,20 @@ M:StockSharp.Messages.Extensions.IsMessageSupported(StockSharp.Messages.IMessage
 M:StockSharp.Messages.Extensions.IsMessageSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)/param/adapter;DocStr929
 M:StockSharp.Messages.Extensions.IsMessageSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)/param/type;DocStr9
 M:StockSharp.Messages.Extensions.IsMessageSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)/returns;DocStr8834
+M:StockSharp.Messages.Extensions.AddSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/summary;DocStr10114
+M:StockSharp.Messages.Extensions.AddSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/adapter;DocStr929
+M:StockSharp.Messages.Extensions.AddSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/type;DocStr774
+M:StockSharp.Messages.Extensions.RemoveSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/summary;DocStr10116
+M:StockSharp.Messages.Extensions.RemoveSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/adapter;DocStr929
+M:StockSharp.Messages.Extensions.RemoveSupportedMarketDataType(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/type;DocStr774
+M:StockSharp.Messages.Extensions.IsMarketDataTypeSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/summary;DocStr10117
+M:StockSharp.Messages.Extensions.IsMarketDataTypeSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/adapter;DocStr929
+M:StockSharp.Messages.Extensions.IsMarketDataTypeSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/param/type;DocStr9
+M:StockSharp.Messages.Extensions.IsMarketDataTypeSupported(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MarketDataTypes)/returns;DocStr8834
+M:StockSharp.Messages.Extensions.AddSupportedAllMarketDataTypes(StockSharp.Messages.IMessageAdapter)/summary;DocStr10118
+M:StockSharp.Messages.Extensions.AddSupportedAllMarketDataTypes(StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr929
+M:StockSharp.Messages.Extensions.RemoveSupportedAllMarketDataTypes(StockSharp.Messages.IMessageAdapter)/summary;DocStr10119
+M:StockSharp.Messages.Extensions.RemoveSupportedAllMarketDataTypes(StockSharp.Messages.IMessageAdapter)/param/adapter;DocStr929
 M:StockSharp.Messages.Extensions.IsCandleMessage(System.Type)/summary;DocStr8835
 M:StockSharp.Messages.Extensions.IsCandleMessage(System.Type)/param/messageType;DocStr8836
 M:StockSharp.Messages.Extensions.IsCandleMessage(System.Type)/returns;DocStr8837
@@ -527,6 +541,7 @@ F:StockSharp.Messages.OrderCancelVolumeRequireTypes.Volume/summary;DocStr9225
 T:StockSharp.Messages.IMessageAdapter/summary;DocStr4074
 P:StockSharp.Messages.IMessageAdapter.TransactionIdGenerator/summary;DocStr3311
 P:StockSharp.Messages.IMessageAdapter.SupportedMessages/summary;DocStr449
+P:StockSharp.Messages.IMessageAdapter.SupportedMarketDataTypes/summary;DocStr10120
 P:StockSharp.Messages.IMessageAdapter.IsValid/summary;DocStr53
 P:StockSharp.Messages.IMessageAdapter.SecurityClassInfo/summary;DocStr2499
 P:StockSharp.Messages.IMessageAdapter.ReConnectionSettings/summary;DocStr4079
@@ -695,6 +710,7 @@ T:StockSharp.Messages.MessageAdapter/summary;DocStr4330
 M:StockSharp.Messages.MessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr93
 M:StockSharp.Messages.MessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Messages.MessageAdapter.SupportedMessages/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsValid/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SecurityClassInfo/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.HeartbeatInterval/summary;DocStr4334
@@ -1128,6 +1144,7 @@ F:StockSharp.Messages.Level1Fields.IssueSize/summary;IssueSize
 F:StockSharp.Messages.Level1Fields.BuyBackDate/summary;BuyBackDate
 F:StockSharp.Messages.Level1Fields.BuyBackPrice/summary;BuyBackPrice
 F:StockSharp.Messages.Level1Fields.Turnover/summary;Turnover
+F:StockSharp.Messages.Level1Fields.SpreadMiddle/summary;DocStr10122
 T:StockSharp.Messages.Level1ChangeMessage/summary;DocStr4470
 P:StockSharp.Messages.Level1ChangeMessage.SecurityId/summary;SecurityId
 M:StockSharp.Messages.Level1ChangeMessage.#ctor/summary;DocStr1

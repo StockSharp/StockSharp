@@ -374,10 +374,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Add the market-data type info <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+		/// Add market data type into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		/// <param name="type">Market-data type.</param>
+		/// <param name="type">Market data type.</param>
 		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
 		{
 			if (adapter == null)
@@ -387,10 +387,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove the market-data type from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Remove market data type from <see cref="IMessageAdapter.SupportedMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
-		/// <param name="type">Market-data type.</param>
+		/// <param name="type">Market data type.</param>
 		public static void RemoveSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
 		{
 			if (adapter == null)
@@ -414,7 +414,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Add the all market-datas type info <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+		/// Add all market data types into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void AddSupportedAllMarketDataTypes(this IMessageAdapter adapter)
@@ -435,7 +435,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Remove the all market-data types from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Remove all market data types from <see cref="IMessageAdapter.SupportedMessages"/>.
 		/// </summary>
 		/// <param name="adapter">Adapter.</param>
 		public static void RemoveSupportedAllMarketDataTypes(this IMessageAdapter adapter)
@@ -443,7 +443,7 @@ namespace StockSharp.Messages
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
 
-			adapter.SupportedMarketDataTypes = new MarketDataTypes[0];
+			adapter.SupportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
 		}
 
 		/// <summary>
@@ -492,6 +492,9 @@ namespace StockSharp.Messages
 		/// <returns><see cref="ErrorMessage"/> instance.</returns>
 		public static ErrorMessage ToErrorMessage(this string description)
 		{
+			if (description.IsEmpty())
+				throw new ArgumentNullException(nameof(description));
+
 			return new InvalidOperationException(description).ToErrorMessage();
 		}
 
