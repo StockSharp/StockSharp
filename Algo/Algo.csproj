@@ -168,8 +168,6 @@
     <Compile Include="Candles\ICandleSourceList.cs" />
     <Compile Include="Candles\Compression\ICandleBuilderSource.cs" />
     <Compile Include="Candles\Compression\ICandleBuilderSourceList.cs" />
-    <Compile Include="Candles\Compression\StorageCandleBuilderSource.cs" />
-    <Compile Include="Candles\Compression\RawConvertableCandleBuilderSource.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
