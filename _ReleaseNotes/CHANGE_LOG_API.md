@@ -61,6 +61,8 @@ StockSharp API Change log
 * (feature) Level1 binary storage. Support unknown types.
 * (feature) ICandleBuilderSourceValue -> ICandleBuilderValueTransform.
 * (feature) Algo.Candles.Compression. Removed sources.
+* (bug) AlfaDirect. Security lookup fixes.
+* (feature) SecurityStorage. Load empty strings as null.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

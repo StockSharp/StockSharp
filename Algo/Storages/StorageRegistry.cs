@@ -1029,7 +1029,18 @@ namespace StockSharp.Algo.Storages
 
 						for (var i = 0; i < proxySet.Length; i++)
 						{
-							proxySet[i].SetValue(security, cells[i].To(proxySet[i].ReturnType));
+							var proxy = proxySet[i];
+							var cell = cells[i];
+
+							if (cell.Length == 0)
+								cell = null;
+
+							var value = (object)cell;
+
+							if (proxy.ReturnType != typeof(string))
+								value = value.To(proxy.ReturnType);
+
+							proxy.SetValue(security, value);
 						}
 
 						var id = security.Id.ToSecurityId();
