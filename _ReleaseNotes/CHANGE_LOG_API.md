@@ -60,6 +60,7 @@ StockSharp API Change log
 * (feature) FIX connector. ASTS. Microseconds.
 * (feature) Level1 binary storage. Support unknown types.
 * (feature) ICandleBuilderSourceValue -> ICandleBuilderValueTransform.
+* (feature) Algo.Candles.Compression. Removed sources.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

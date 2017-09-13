@@ -26,7 +26,6 @@ namespace StockSharp.Algo.Candles
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -284,27 +283,27 @@ namespace StockSharp.Algo.Candles
 			{
 				new StorageCandleSource(),
 
-				new BuilderCandleSource<TimeFrameCandleBuilder>(),
-				new BuilderCandleSource<TickCandleBuilder>(),
-				new BuilderCandleSource<VolumeCandleBuilder>(),
-				new BuilderCandleSource<RangeCandleBuilder>(),
-				new BuilderCandleSource<RenkoCandleBuilder>(),
-				new BuilderCandleSource<PnFCandleBuilder>(),
+				//new BuilderCandleSource<TimeFrameCandleBuilder>(),
+				//new BuilderCandleSource<TickCandleBuilder>(),
+				//new BuilderCandleSource<VolumeCandleBuilder>(),
+				//new BuilderCandleSource<RangeCandleBuilder>(),
+				//new BuilderCandleSource<RenkoCandleBuilder>(),
+				//new BuilderCandleSource<PnFCandleBuilder>(),
 			};
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CandleManager"/>.
-		/// </summary>
-		/// <param name="source">The data source for <see cref="IBuilderCandleSource"/>.</param>
-		public CandleManager(ICandleBuilderSource source)
-			: this()
-		{
-			if (source == null)
-				throw new ArgumentNullException(nameof(source));
+		///// <summary>
+		///// Initializes a new instance of the <see cref="CandleManager"/>.
+		///// </summary>
+		///// <param name="source">The data source for <see cref="IBuilderCandleSource"/>.</param>
+		//public CandleManager(ICandleBuilderSource source)
+		//	: this()
+		//{
+		//	if (source == null)
+		//		throw new ArgumentNullException(nameof(source));
 
-			Sources.OfType<IBuilderCandleSource>().ForEach(b => b.Sources.Add(source));
-		}
+		//	Sources.OfType<IBuilderCandleSource>().ForEach(b => b.Sources.Add(source));
+		//}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleManager"/>.
