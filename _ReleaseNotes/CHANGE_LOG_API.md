@@ -58,6 +58,7 @@ StockSharp API Change log
 * (bug) Storage. Fix data bounds validation.
 * (feature) CandleBuilder. Build from level1.
 * (feature) FIX connector. ASTS. Microseconds.
+* (feature) Level1 binary storage. Support unknown types.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

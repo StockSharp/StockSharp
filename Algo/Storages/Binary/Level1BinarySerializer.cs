@@ -139,6 +139,8 @@ namespace StockSharp.Algo.Storages.Binary
 		public DateTime FirstBuyBackDateTime { get; set; }
 		public DateTime LastBuyBackDateTime { get; set; }
 
+		public Level1Fields MaxKnownType { get; set; }
+
 		public override void Write(Stream stream)
 		{
 			base.Write(stream);
@@ -247,6 +249,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			stream.Write(FirstBuyBackDateOffset);
 			stream.Write(LastBuyBackDateOffset);
+
+			if (Version < MarketDataVersions.Version58)
+				return;
+
+			stream.Write((int)MaxKnownType);
 		}
 
 		public override void Read(Stream stream)
@@ -357,6 +364,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			FirstBuyBackDateOffset = stream.Read<TimeSpan>();
 			LastBuyBackDateOffset = stream.Read<TimeSpan>();
+
+			if (Version < MarketDataVersions.Version58)
+				return;
+
+			MaxKnownType = (Level1Fields)stream.Read<int>();
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -427,6 +439,7 @@ namespace StockSharp.Algo.Storages.Binary
 			LastBuyBackDateTime = src.LastBuyBackDateTime;
 			FirstBuyBackDateOffset = src.FirstBuyBackDateOffset;
 			LastBuyBackDateOffset = src.LastBuyBackDateOffset;
+			MaxKnownType = src.MaxKnownType;
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
@@ -468,7 +481,7 @@ namespace StockSharp.Algo.Storages.Binary
 		};
 
 		public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 50, MarketDataVersions.Version57, exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version58, exchangeInfoProvider)
 		{
 		}
 
@@ -505,6 +518,7 @@ namespace StockSharp.Algo.Storages.Binary
 				var msg = messages.First();
 
 				metaInfo.ServerOffset = msg.ServerTime.Offset;
+				metaInfo.MaxKnownType = Level1Fields.Turnover;
 			}
 
 			writer.WriteInt(messages.Count());
@@ -513,6 +527,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version53;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
+			var unkTypes = metaInfo.Version >= MarketDataVersions.Version58;
 
 			foreach (var message in messages)
 			{
@@ -549,9 +564,42 @@ namespace StockSharp.Algo.Storages.Binary
 						metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset, false, false, ref offset);
 					}
 
-					writer.WriteInt(MapTo(metaInfo, change.Key));
+					var field = change.Key;
+					var value = change.Value;
 
-					switch (change.Key)
+					writer.WriteInt(MapTo(metaInfo, field));
+
+					if (unkTypes)
+					{
+						var isKnown = (int)field <= (int)metaInfo.MaxKnownType;
+						writer.Write(isKnown);
+
+						if (!isKnown)
+						{
+							switch (value)
+							{
+								case decimal d:
+									writer.WriteInt(0);
+									writer.WriteDecimal(d, 0);
+									break;
+								case long l:
+									writer.WriteInt(1);
+									writer.WriteLong(l);
+									break;
+								case int i:
+									writer.WriteInt(2);
+									writer.WriteInt(i);
+									break;
+								default:
+									writer.WriteInt(10);
+									break;
+							}
+
+							continue;
+						}
+					}
+
+					switch (field)
 					{
 						case Level1Fields.OpenPrice:
 						case Level1Fields.HighPrice:
@@ -559,65 +607,65 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.ClosePrice:
 						case Level1Fields.MinPrice:
 						{
-							SerializePrice(writer, metaInfo, (decimal)change.Value);
+							SerializePrice(writer, metaInfo, (decimal)value);
 							break;
 						}
 						case Level1Fields.MaxPrice:
 						{
-							var value = (decimal)change.Value;
-							SerializePrice(writer, metaInfo, value == int.MaxValue ? metaInfo.PriceStep : value);
+							var price = (decimal)value;
+							SerializePrice(writer, metaInfo, price == int.MaxValue ? metaInfo.PriceStep : price);
 							break;
 						}
 						case Level1Fields.BidsVolume:
 						case Level1Fields.AsksVolume:
 						case Level1Fields.OpenInterest:
 						{
-							writer.WriteVolume((decimal)change.Value, metaInfo, SecurityId);
+							writer.WriteVolume((decimal)value, metaInfo, SecurityId);
 							break;
 						}
 						case Level1Fields.ImpliedVolatility:
 						{
-							SerializeChange(writer, metaInfo.ImpliedVolatility, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.ImpliedVolatility, (decimal)value);
 							break;
 						}
 						case Level1Fields.HistoricalVolatility:
 						{
-							SerializeChange(writer, metaInfo.HistoricalVolatility, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.HistoricalVolatility, (decimal)value);
 							break;
 						}
 						case Level1Fields.TheorPrice:
 						{
-							SerializeChange(writer, metaInfo.TheorPrice, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.TheorPrice, (decimal)value);
 							break;
 						}
 						case Level1Fields.Delta:
 						{
-							SerializeChange(writer, metaInfo.Delta, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Delta, (decimal)value);
 							break;
 						}
 						case Level1Fields.Gamma:
 						{
-							SerializeChange(writer, metaInfo.Gamma, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Gamma, (decimal)value);
 							break;
 						}
 						case Level1Fields.Vega:
 						{
-							SerializeChange(writer, metaInfo.Vega, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Vega, (decimal)value);
 							break;
 						}
 						case Level1Fields.Theta:
 						{
-							SerializeChange(writer, metaInfo.Theta, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Theta, (decimal)value);
 							break;
 						}
 						case Level1Fields.MarginBuy:
 						{
-							SerializeChange(writer, metaInfo.MarginBuy, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.MarginBuy, (decimal)value);
 							break;
 						}
 						case Level1Fields.MarginSell:
 						{
-							SerializeChange(writer, metaInfo.MarginSell, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.MarginSell, (decimal)value);
 							break;
 						}
 						case Level1Fields.PriceStep:
@@ -628,22 +676,22 @@ namespace StockSharp.Algo.Storages.Binary
 						}
 						case Level1Fields.Decimals:
 						{
-							writer.WriteInt((int)change.Value);
+							writer.WriteInt((int)value);
 							break;
 						}
 						case Level1Fields.Multiplier:
 						{
-							writer.WriteVolume((decimal)change.Value, metaInfo, SecurityId);
+							writer.WriteVolume((decimal)value, metaInfo, SecurityId);
 							break;
 						}
 						case Level1Fields.StepPrice:
 						{
-							SerializeChange(writer, metaInfo.StepPrice, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.StepPrice, (decimal)value);
 							break;
 						}
 						case Level1Fields.LastTrade:
 						{
-							var trade = (Trade)change.Value;
+							var trade = (Trade)value;
 
 							SerializePrice(writer, metaInfo, trade.Price);
 							writer.WriteVolume(trade.Volume, metaInfo, SecurityId);
@@ -654,7 +702,7 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.BestBid:
 						case Level1Fields.BestAsk:
 						{
-							var quote = (Quote)change.Value;
+							var quote = (Quote)value;
 
 							SerializePrice(writer, metaInfo, quote.Price);
 							writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
@@ -663,7 +711,7 @@ namespace StockSharp.Algo.Storages.Binary
 						}
 						case Level1Fields.State:
 						{
-							writer.WriteInt((int)(SecurityStates)change.Value);
+							writer.WriteInt((int)(SecurityStates)value);
 							break;
 						}
 						case Level1Fields.BestBidPrice:
@@ -673,15 +721,15 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.HighBidPrice:
 						case Level1Fields.LowAskPrice:
 						{
-							SerializePrice(writer, metaInfo, (decimal)change.Value);
+							SerializePrice(writer, metaInfo, (decimal)value);
 							break;
 						}
 						case Level1Fields.AveragePrice:
 						{
 							if (metaInfo.Version < MarketDataVersions.Version51)
-								SerializePrice(writer, metaInfo, (decimal)change.Value);
+								SerializePrice(writer, metaInfo, (decimal)value);
 							else
-								SerializeChange(writer, metaInfo.AveragePrice, (decimal)change.Value);
+								SerializeChange(writer, metaInfo.AveragePrice, (decimal)value);
 
 							break;
 						}
@@ -690,39 +738,39 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.BestBidVolume:
 						case Level1Fields.BestAskVolume:
 						{
-							writer.WriteVolume((decimal)change.Value, metaInfo, SecurityId);
+							writer.WriteVolume((decimal)value, metaInfo, SecurityId);
 							break;
 						}
 						case Level1Fields.Change:
 						{
-							SerializeChange(writer, metaInfo.Change, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Change, (decimal)value);
 							break;
 						}
 						case Level1Fields.Rho:
 						{
-							SerializeChange(writer, metaInfo.Rho, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Rho, (decimal)value);
 							break;
 						}
 						case Level1Fields.AccruedCouponIncome:
 						{
-							SerializeChange(writer, metaInfo.AccruedCouponIncome, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.AccruedCouponIncome, (decimal)value);
 							break;
 						}
 						case Level1Fields.Yield:
 						{
-							SerializeChange(writer, metaInfo.Yield, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Yield, (decimal)value);
 							break;
 						}
 						case Level1Fields.VWAP:
 						{
-							SerializeChange(writer, metaInfo.VWAP, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.VWAP, (decimal)value);
 							break;
 						}
 						case Level1Fields.LastTradeTime:
 						case Level1Fields.BestBidTime:
 						case Level1Fields.BestAskTime:
 						{
-							var timeValue = (DateTimeOffset)change.Value;
+							var timeValue = (DateTimeOffset)value;
 
 							if (metaInfo.FirstFieldTime.IsDefault())
 							{
@@ -741,185 +789,185 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.AsksCount:
 						{
 							if (metaInfo.Version < MarketDataVersions.Version46)
-								SerializePrice(writer, metaInfo, (int)change.Value);
+								SerializePrice(writer, metaInfo, (int)value);
 							else
-								writer.WriteInt((int)change.Value);
+								writer.WriteInt((int)value);
 
 							break;
 						}
 						case Level1Fields.TradesCount:
 						{
-							writer.WriteInt((int)change.Value);
+							writer.WriteInt((int)value);
 							break;
 						}
 						case Level1Fields.LastTradeId:
 						{
-							writer.WriteLong((long)change.Value);
+							writer.WriteLong((long)value);
 							break;
 						}
 						case Level1Fields.LastTradeUpDown:
 						{
-							writer.Write((bool)change.Value);
+							writer.Write((bool)value);
 							break;
 						}
 						case Level1Fields.LastTradeOrigin:
 						{
-							writer.WriteSide((Sides?)change.Value);
+							writer.WriteSide((Sides?)value);
 							break;
 						}
 						case Level1Fields.PriceEarnings:
 						{
-							SerializeChange(writer, metaInfo.PriceEarnings, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.PriceEarnings, (decimal)value);
 							break;
 						}
 						case Level1Fields.ForwardPriceEarnings:
 						{
-							SerializeChange(writer, metaInfo.ForwardPriceEarnings, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.ForwardPriceEarnings, (decimal)value);
 							break;
 						}
 						case Level1Fields.PriceEarningsGrowth:
 						{
-							SerializeChange(writer, metaInfo.PriceEarningsGrowth, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.PriceEarningsGrowth, (decimal)value);
 							break;
 						}
 						case Level1Fields.PriceSales:
 						{
-							SerializeChange(writer, metaInfo.PriceSales, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.PriceSales, (decimal)value);
 							break;
 						}
 						case Level1Fields.PriceBook:
 						{
-							SerializeChange(writer, metaInfo.PriceBook, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.PriceBook, (decimal)value);
 							break;
 						}
 						case Level1Fields.PriceCash:
 						{
-							SerializeChange(writer, metaInfo.PriceCash, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.PriceCash, (decimal)value);
 							break;
 						}
 						case Level1Fields.PriceFreeCash:
 						{
-							SerializeChange(writer, metaInfo.PriceFreeCash, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.PriceFreeCash, (decimal)value);
 							break;
 						}
 						case Level1Fields.Payout:
 						{
-							SerializeChange(writer, metaInfo.Payout, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Payout, (decimal)value);
 							break;
 						}
 						case Level1Fields.SharesOutstanding:
 						{
-							SerializeChange(writer, metaInfo.SharesOutstanding, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.SharesOutstanding, (decimal)value);
 							break;
 						}
 						case Level1Fields.SharesFloat:
 						{
-							SerializeChange(writer, metaInfo.SharesFloat, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.SharesFloat, (decimal)value);
 							break;
 						}
 						case Level1Fields.FloatShort:
 						{
-							SerializeChange(writer, metaInfo.FloatShort, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.FloatShort, (decimal)value);
 							break;
 						}
 						case Level1Fields.ShortRatio:
 						{
-							SerializeChange(writer, metaInfo.ShortRatio, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.ShortRatio, (decimal)value);
 							break;
 						}
 						case Level1Fields.ReturnOnAssets:
 						{
-							SerializeChange(writer, metaInfo.ReturnOnAssets, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.ReturnOnAssets, (decimal)value);
 							break;
 						}
 						case Level1Fields.ReturnOnEquity:
 						{
-							SerializeChange(writer, metaInfo.ReturnOnEquity, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.ReturnOnEquity, (decimal)value);
 							break;
 						}
 						case Level1Fields.ReturnOnInvestment:
 						{
-							SerializeChange(writer, metaInfo.ReturnOnInvestment, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.ReturnOnInvestment, (decimal)value);
 							break;
 						}
 						case Level1Fields.CurrentRatio:
 						{
-							SerializeChange(writer, metaInfo.CurrentRatio, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.CurrentRatio, (decimal)value);
 							break;
 						}
 						case Level1Fields.QuickRatio:
 						{
-							SerializeChange(writer, metaInfo.QuickRatio, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.QuickRatio, (decimal)value);
 							break;
 						}
 						case Level1Fields.LongTermDebtEquity:
 						{
-							SerializeChange(writer, metaInfo.LongTermDebtEquity, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.LongTermDebtEquity, (decimal)value);
 							break;
 						}
 						case Level1Fields.TotalDebtEquity:
 						{
-							SerializeChange(writer, metaInfo.TotalDebtEquity, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.TotalDebtEquity, (decimal)value);
 							break;
 						}
 						case Level1Fields.GrossMargin:
 						{
-							SerializeChange(writer, metaInfo.GrossMargin, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.GrossMargin, (decimal)value);
 							break;
 						}
 						case Level1Fields.OperatingMargin:
 						{
-							SerializeChange(writer, metaInfo.OperatingMargin, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.OperatingMargin, (decimal)value);
 							break;
 						}
 						case Level1Fields.ProfitMargin:
 						{
-							SerializeChange(writer, metaInfo.ProfitMargin, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.ProfitMargin, (decimal)value);
 							break;
 						}
 						case Level1Fields.Beta:
 						{
-							SerializeChange(writer, metaInfo.Beta, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Beta, (decimal)value);
 							break;
 						}
 						case Level1Fields.AverageTrueRange:
 						{
-							SerializeChange(writer, metaInfo.AverageTrueRange, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.AverageTrueRange, (decimal)value);
 							break;
 						}
 						case Level1Fields.HistoricalVolatilityWeek:
 						{
-							SerializeChange(writer, metaInfo.HistoricalVolatilityWeek, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.HistoricalVolatilityWeek, (decimal)value);
 							break;
 						}
 						case Level1Fields.HistoricalVolatilityMonth:
 						{
-							SerializeChange(writer, metaInfo.HistoricalVolatilityMonth, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.HistoricalVolatilityMonth, (decimal)value);
 							break;
 						}
 						case Level1Fields.IsSystem:
 						{
-							writer.Write((bool)change.Value);
+							writer.Write((bool)value);
 							break;
 						}
 						case Level1Fields.Turnover:
 						{
-							SerializeChange(writer, metaInfo.Turnover, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Turnover, (decimal)value);
 							break;
 						}
 						case Level1Fields.IssueSize:
 						{
-							SerializeChange(writer, metaInfo.IssueSize, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.IssueSize, (decimal)value);
 							break;
 						}
 						case Level1Fields.Duration:
 						{
-							SerializeChange(writer, metaInfo.Duration, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.Duration, (decimal)value);
 							break;
 						}
 						case Level1Fields.BuyBackDate:
 						{
-							var timeValue = (DateTimeOffset)change.Value;
+							var timeValue = (DateTimeOffset)value;
 
 							if (metaInfo.FirstBuyBackDateTime.IsDefault())
 							{
@@ -936,7 +984,7 @@ namespace StockSharp.Algo.Storages.Binary
 						}
 						case Level1Fields.BuyBackPrice:
 						{
-							SerializeChange(writer, metaInfo.BuyBackPrice, (decimal)change.Value);
+							SerializeChange(writer, metaInfo.BuyBackPrice, (decimal)value);
 							break;
 						}
 						default:
@@ -954,6 +1002,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version53;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
+			var unkTypes = metaInfo.Version >= MarketDataVersions.Version58;
 
 			var l1Msg = new Level1ChangeMessage { SecurityId = SecurityId };
 
@@ -991,6 +1040,36 @@ namespace StockSharp.Algo.Storages.Binary
 			for (var i = 0; i < changeCount; i++)
 			{
 				var field = MapFrom(metaInfo, reader.ReadInt());
+
+				if (unkTypes)
+				{
+					if (!reader.Read())
+					{
+						var unkType = reader.ReadInt();
+						switch (unkType)
+						{
+							case 0:
+								l1Msg.Add(field, reader.ReadDecimal(0));
+								break;
+
+							case 1:
+								l1Msg.Add(field, reader.ReadLong());
+								break;
+
+							case 2:
+								l1Msg.Add(field, reader.ReadInt());
+								break;
+
+							case 10:
+								break;
+
+							default:
+								throw new ArgumentOutOfRangeException(nameof(unkType), unkType, LocalizedStrings.Str1291);
+						}
+
+						continue;
+					}
+				}
 
 				switch (field)
 				{
