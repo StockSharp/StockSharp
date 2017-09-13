@@ -74,6 +74,14 @@ namespace StockSharp.Algo.Candles.Compression
 			public MarketDataTypes[] SupportedMarketDataTypes { get; set; } = ArrayHelper.Empty<MarketDataTypes>();
 		}
 
+		private class DummyCandleBuilderValueTransform : BaseCandleBuilderValueTransform
+		{
+			public DummyCandleBuilderValueTransform(MarketDataTypes buildFrom)
+				: base(buildFrom)
+			{
+			}
+		}
+
 		private readonly Dictionary<SecurityId, List<SeriesInfo>> _seriesInfos = new Dictionary<SecurityId, List<SeriesInfo>>();
 		private readonly Dictionary<long, SeriesInfo> _seriesInfosByTransactions = new Dictionary<long, SeriesInfo>();
 		private readonly OrderedPriorityQueue<DateTimeOffset, SeriesInfo> _seriesInfosByDates = new OrderedPriorityQueue<DateTimeOffset, SeriesInfo>();
@@ -537,6 +545,14 @@ namespace StockSharp.Algo.Candles.Compression
 
 					return t;
 				}
+
+				case MarketDataTypes.CandleTimeFrame:
+				case MarketDataTypes.CandleTick:
+				case MarketDataTypes.CandleVolume:
+				case MarketDataTypes.CandleRange:
+				case MarketDataTypes.CandlePnF:
+				case MarketDataTypes.CandleRenko:
+					return new DummyCandleBuilderValueTransform(dataType);
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
