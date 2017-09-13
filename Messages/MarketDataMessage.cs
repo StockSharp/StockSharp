@@ -121,6 +121,27 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
+	/// Types of candle depth based data.
+	/// </summary>
+	public enum DepthCandleSourceTypes
+	{
+		/// <summary>
+		/// Best bid.
+		/// </summary>
+		BestBid,
+
+		/// <summary>
+		/// Best ask.
+		/// </summary>
+		BestAsk,
+
+		/// <summary>
+		/// Spread middle.
+		/// </summary>
+		Middle,
+	}
+
+	/// <summary>
 	/// Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
 	/// </summary>
 	[DataContract]
@@ -216,6 +237,23 @@ namespace StockSharp.Messages
 		public BuildCandlesModes BuildCandlesMode { get; set; }
 
 		/// <summary>
+		/// Which market-data type is used as an candle source value.
+		/// </summary>
+		[DataMember]
+		public MarketDataTypes? BuildCandlesFrom { get; set; }
+
+		/// <summary>
+		/// Type of candle depth based data.
+		/// </summary>
+		public DepthCandleSourceTypes? DepthCandleSourceType { get; set; }
+
+		/// <summary>
+		/// Level one market-data field, which is used as an candle value.
+		/// </summary>
+		[DataMember]
+		public Level1Fields? Level1CandleSourceField { get; set; }
+
+		/// <summary>
 		/// Contains history market data.
 		/// </summary>
 		[DataMember]
@@ -264,6 +302,9 @@ namespace StockSharp.Messages
 				LocalTime = LocalTime,
 				IsNotSupported = IsNotSupported,
 				BuildCandlesMode = BuildCandlesMode,
+				BuildCandlesFrom = BuildCandlesFrom,
+				DepthCandleSourceType = DepthCandleSourceType,
+				Level1CandleSourceField = Level1CandleSourceField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
 				IsHistory = IsHistory,
 			};

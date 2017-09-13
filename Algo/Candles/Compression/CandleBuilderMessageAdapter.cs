@@ -224,7 +224,8 @@ namespace StockSharp.Algo.Candles.Compression
 					if (execMsg.ExecutionType != ExecutionTypes.Tick)
 						break;
 
-					ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, MarketDataTypes.Trades, () => new TickCandleBuilderSourceValue(execMsg));
+					ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, execMsg, 
+						(info, msg) => ProcessValue(info, new TickCandleBuilderSourceValue(msg)));
 					break;
 				}
 
@@ -234,7 +235,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					ProcessValue(quoteMsg.SecurityId, 0, MarketDataTypes.MarketDepth, () => new QuoteCandleBuilderSourceValue(quoteMsg, DepthCandleSourceTypes.Middle));
+					ProcessValue(quoteMsg.SecurityId, 0, quoteMsg, 
+						(info, msg) => ProcessValue(info, new QuoteCandleBuilderSourceValue(msg, info.MarketDataMessage.DepthCandleSourceType ?? DepthCandleSourceTypes.Middle)));
 					break;
 				}
 
@@ -244,7 +246,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 					var l1Msg = (Level1ChangeMessage)message;
 					
-					ProcessValue(l1Msg.SecurityId, 0, MarketDataTypes.Level1, () => new Level1ChangeCandleBuilderSourceValue(l1Msg, Level1Fields.SpreadMiddle));
+					ProcessValue(l1Msg.SecurityId, 0, l1Msg, 
+						(info, msg) => ProcessValue(info, new Level1ChangeCandleBuilderSourceValue(msg, info.MarketDataMessage.Level1CandleSourceField ?? Level1Fields.SpreadMiddle)));
 					break;
 				}
 
@@ -515,13 +518,19 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private MarketDataTypes GetAvailableMarketDataType(SeriesInfo info)
 		{
+			if (info.MarketDataMessage.BuildCandlesFrom != null)
+				return info.MarketDataMessage.BuildCandlesFrom.Value;
+
 			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.Trades))
 				return MarketDataTypes.Trades;
 
 			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.MarketDepth))
 				return MarketDataTypes.MarketDepth;
 
-			return MarketDataTypes.Level1;
+			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.Level1))
+				return MarketDataTypes.Level1;
+
+			return MarketDataTypes.Trades;
 		}
 
 		private void SetAvailableMarketDataType(SeriesInfo info, Message msg)
@@ -620,44 +629,44 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		private void ProcessValue(SecurityId securityId, long transactionId, MarketDataTypes dataType, Func<ICandleBuilderSourceValue> getValue)
+		private void ProcessValue<T>(SecurityId securityId, long transactionId, T msg, Action<SeriesInfo, T> process)
 		{
 			var infos = _seriesInfos.TryGetValue(securityId);
 
 			if (infos == null)
 				return;
 
-			ICandleBuilderSourceValue value = null;
-
 			foreach (var info in infos)
 			{
-				if (info.DataType != dataType)
+				if (info.DataType != MarketDataTypes.Trades)
 					continue;
 
 				if (info.TransactionId != transactionId && (transactionId != 0 || info.IsHistory))
 					continue;
 
-				if (value == null)
-					value = getValue();
+				process(info, msg);
+			}
+		}
 
-				if (!CheckTime(info, value))
-					continue;
+		private void ProcessValue(SeriesInfo info, ICandleBuilderSourceValue value)
+		{
+			if (!CheckTime(info, value))
+				return;
 
-				var mdMsg = info.MarketDataMessage;
-				var builder = _candleBuilders.Get(mdMsg.DataType);
+			var mdMsg = info.MarketDataMessage;
+			var builder = _candleBuilders.Get(mdMsg.DataType);
 
-				if (builder == null)
-					throw new InvalidOperationException($"Builder for {mdMsg.DataType} not found.");
+			if (builder == null)
+				throw new InvalidOperationException($"Builder for {mdMsg.DataType} not found.");
 
-				info.LastTime = value.Time;
+			info.LastTime = value.Time;
 
-				var result = builder.Process(mdMsg, info.CurrentCandleMessage, value);
+			var result = builder.Process(mdMsg, info.CurrentCandleMessage, value);
 
-				foreach (var candleMessage in result)
-				{
-					info.CurrentCandleMessage = candleMessage;
-					SendCandle(info, candleMessage);
-				}
+			foreach (var candleMessage in result)
+			{
+				info.CurrentCandleMessage = candleMessage;
+				SendCandle(info, candleMessage);
 			}
 		}
 

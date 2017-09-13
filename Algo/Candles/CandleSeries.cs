@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -139,6 +140,21 @@ namespace StockSharp.Algo.Candles
 		public BuildCandlesModes BuildCandlesMode { get; set; }
 
 		/// <summary>
+		/// Which market-data type is used as an candle source value.
+		/// </summary>
+		public MarketDataTypes? BuildCandlesFrom { get; set; }
+
+		/// <summary>
+		/// Type of candle depth based data.
+		/// </summary>
+		public DepthCandleSourceTypes? DepthCandleSourceType { get; set; }
+
+		/// <summary>
+		/// Level one market-data field, which is used as an candle value.
+		/// </summary>
+		public Level1Fields? Level1CandleSourceField { get; set; }
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>
@@ -168,6 +184,11 @@ namespace StockSharp.Algo.Candles
 			To = storage.GetValue(nameof(To), To);
 			WorkingTime = storage.GetValue(nameof(WorkingTime), WorkingTime);
 			IsCalcVolumeProfile = storage.GetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
+
+			BuildCandlesMode = storage.GetValue(nameof(BuildCandlesMode), BuildCandlesMode);
+			BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
+			DepthCandleSourceType = storage.GetValue(nameof(DepthCandleSourceType), DepthCandleSourceType);
+			Level1CandleSourceField = storage.GetValue(nameof(Level1CandleSourceField), Level1CandleSourceField);
 		}
 
 		/// <summary>
@@ -192,6 +213,11 @@ namespace StockSharp.Algo.Candles
 				storage.SetValue(nameof(WorkingTime), WorkingTime);
 
 			storage.SetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
+
+			storage.SetValue(nameof(BuildCandlesMode), BuildCandlesMode);
+			storage.SetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
+			storage.SetValue(nameof(DepthCandleSourceType), DepthCandleSourceType);
+			storage.SetValue(nameof(Level1CandleSourceField), Level1CandleSourceField);
 		}
 	}
 }

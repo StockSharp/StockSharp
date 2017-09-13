@@ -120,27 +120,6 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Types of candle depth based data.
-	/// </summary>
-	public enum DepthCandleSourceTypes
-	{
-		/// <summary>
-		/// Best bid.
-		/// </summary>
-		BestBid,
-
-		/// <summary>
-		/// Best ask.
-		/// </summary>
-		BestAsk,
-
-		/// <summary>
-		/// Spread middle.
-		/// </summary>
-		Middle,
-	}
-
-	/// <summary>
 	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="MarketDepth"/>.
 	/// </summary>
 	[DebuggerDisplay("{" + nameof(Depth) + "}")]
