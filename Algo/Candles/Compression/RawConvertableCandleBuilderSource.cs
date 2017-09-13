@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Candles.Compression
 	using Ecng.ComponentModel;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	///// <summary>
 	///// The base data source for <see cref="ICandleBuilder"/> which convert data from the <typeparamref name="TSourceValue" /> type to the <see cref="ICandleBuilderSourceValue"/>.

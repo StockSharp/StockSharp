@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (execMsg.ExecutionType != ExecutionTypes.Tick)
 						break;
 
-					ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, execMsg, 
+					ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, MarketDataTypes.Trades, execMsg, 
 						(info, msg) => ProcessValue(info, new TickCandleBuilderSourceValue(msg)));
 					break;
 				}
@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					ProcessValue(quoteMsg.SecurityId, 0, quoteMsg, 
+					ProcessValue(quoteMsg.SecurityId, 0, MarketDataTypes.MarketDepth, quoteMsg, 
 						(info, msg) => ProcessValue(info, new QuoteCandleBuilderSourceValue(msg, info.MarketDataMessage.DepthCandleSourceType ?? DepthCandleSourceTypes.Middle)));
 					break;
 				}
@@ -246,7 +246,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 					var l1Msg = (Level1ChangeMessage)message;
 					
-					ProcessValue(l1Msg.SecurityId, 0, l1Msg, 
+					ProcessValue(l1Msg.SecurityId, 0, MarketDataTypes.Level1, l1Msg, 
 						(info, msg) => ProcessValue(info, new Level1ChangeCandleBuilderSourceValue(msg, info.MarketDataMessage.Level1CandleSourceField ?? Level1Fields.SpreadMiddle)));
 					break;
 				}
@@ -629,7 +629,7 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		private void ProcessValue<T>(SecurityId securityId, long transactionId, T msg, Action<SeriesInfo, T> process)
+		private void ProcessValue<T>(SecurityId securityId, long transactionId, MarketDataTypes dataType, T msg, Action<SeriesInfo, T> process)
 		{
 			var infos = _seriesInfos.TryGetValue(securityId);
 
@@ -638,7 +638,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			foreach (var info in infos)
 			{
-				if (info.DataType != MarketDataTypes.Trades)
+				if (info.DataType != dataType)
 					continue;
 
 				if (info.TransactionId != transactionId && (transactionId != 0 || info.IsHistory))
@@ -650,6 +650,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void ProcessValue(SeriesInfo info, ICandleBuilderSourceValue value)
 		{
+			if (value.IsEmpty)
+				return;
+
 			if (!CheckTime(info, value))
 				return;
 

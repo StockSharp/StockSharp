@@ -34,6 +34,11 @@ namespace StockSharp.Algo.Candles.Compression
 		//SecurityId SecurityId { get; }
 
 		/// <summary>
+		/// Is empty value.
+		/// </summary>
+		bool IsEmpty { get; }
+
+		/// <summary>
 		/// The time of new data occurrence.
 		/// </summary>
 		DateTimeOffset Time { get; }
@@ -76,6 +81,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 		//SecurityId ICandleBuilderSourceValue.SecurityId => Trade.Security.ToSecurityId();
 
+		bool ICandleBuilderSourceValue.IsEmpty => false;
+
 		DateTimeOffset ICandleBuilderSourceValue.Time => Trade.Time;
 
 		decimal ICandleBuilderSourceValue.Price => Trade.Price;
@@ -110,6 +117,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 		//SecurityId ICandleBuilderSourceValue.SecurityId => Tick.SecurityId;
 
+		bool ICandleBuilderSourceValue.IsEmpty => Tick.TradePrice == null;
+
 		DateTimeOffset ICandleBuilderSourceValue.Time => Tick.ServerTime;
 
 		decimal ICandleBuilderSourceValue.Price => Tick.TradePrice ?? 0;
@@ -125,7 +134,7 @@ namespace StockSharp.Algo.Candles.Compression
 	[DebuggerDisplay("{" + nameof(Depth) + "}")]
 	public class DepthCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
-		private readonly decimal _price;
+		private readonly decimal? _price;
 		private readonly decimal? _volume;
 
 		/// <summary>
@@ -184,11 +193,13 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		public DepthCandleSourceTypes Type { get; }
 
+		bool ICandleBuilderSourceValue.IsEmpty => _price == null;
+
 		//SecurityId ICandleBuilderSourceValue.SecurityId => Depth.Security.ToSecurityId();
 
 		DateTimeOffset ICandleBuilderSourceValue.Time => Depth.LastChangeTime;
 
-		decimal ICandleBuilderSourceValue.Price => _price;
+		decimal ICandleBuilderSourceValue.Price => _price ?? 0;
 
 		decimal? ICandleBuilderSourceValue.Volume => _volume;
 
@@ -201,7 +212,7 @@ namespace StockSharp.Algo.Candles.Compression
 	[DebuggerDisplay("{" + nameof(QuoteChange) + "}")]
 	public class QuoteCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
-		private readonly decimal _price;
+		private readonly decimal? _price;
 		private readonly decimal? _volume;
 
 		/// <summary>
@@ -274,9 +285,11 @@ namespace StockSharp.Algo.Candles.Compression
 
 		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
 
+		bool ICandleBuilderSourceValue.IsEmpty => _price == null;
+
 		DateTimeOffset ICandleBuilderSourceValue.Time => QuoteChange.ServerTime;
 
-		decimal ICandleBuilderSourceValue.Price => _price;
+		decimal ICandleBuilderSourceValue.Price => _price ?? 0;
 
 		decimal? ICandleBuilderSourceValue.Volume => _volume;
 
@@ -289,7 +302,7 @@ namespace StockSharp.Algo.Candles.Compression
 	[DebuggerDisplay("{" + nameof(QuoteChange) + "}")]
 	public class Level1ChangeCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
-		private readonly decimal _price;
+		private readonly decimal? _price;
 		private readonly decimal? _volume;
 
 		/// <summary>
@@ -353,9 +366,11 @@ namespace StockSharp.Algo.Candles.Compression
 
 		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
 
+		bool ICandleBuilderSourceValue.IsEmpty => _price == null;
+
 		DateTimeOffset ICandleBuilderSourceValue.Time => Level1Change.ServerTime;
 
-		decimal ICandleBuilderSourceValue.Price => _price;
+		decimal ICandleBuilderSourceValue.Price => _price ?? 0;
 
 		decimal? ICandleBuilderSourceValue.Volume => _volume;
 

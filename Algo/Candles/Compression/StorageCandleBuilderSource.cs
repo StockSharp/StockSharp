@@ -30,6 +30,7 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The base data source for <see cref="ICandleBuilder"/>, which receives data from the external storage.
