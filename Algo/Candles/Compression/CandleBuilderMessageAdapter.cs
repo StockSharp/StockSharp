@@ -82,35 +82,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private readonly CandleBuildersList _candleBuilders;
 
-		//private MarketDataTypes _buildCandlesFrom;
-
-		///// <summary>
-		///// Build candles from.
-		///// </summary>
-		//public MarketDataTypes BuildCandlesFrom
-		//{
-		//	get => _buildCandlesFrom;
-		//	set
-		//	{
-		//		switch (value)
-		//		{
-		//			//case MarketDataTypes.Level1:
-		//			case MarketDataTypes.MarketDepth:
-		//			case MarketDataTypes.Trades:
-		//				_buildCandlesFrom = value;
-		//				break;
-
-		//			default:
-		//				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str721);
-		//		}
-		//	}
-		//}
-
-		///// <summary>
-		///// Type of candle depth based data.
-		///// </summary>
-		//public DepthCandleSourceTypes DepthCandleSourceType { get; set; }
-
 		/// <summary>
 		/// Candles builders.
 		/// </summary>
@@ -128,9 +99,6 @@ namespace StockSharp.Algo.Candles.Compression
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			_exchangeInfoProvider = exchangeInfoProvider;
-
-			//BuildCandlesFrom = MarketDataTypes.Trades;
-			//DepthCandleSourceType = DepthCandleSourceTypes.Middle;
 
 			_candleBuilders = new CandleBuildersList
 			{
@@ -498,40 +466,42 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private static ICandleBuilderValueTransform GetCurrentDataType(SeriesInfo info)
 		{
+			var dataType = info.MarketDataMessage.DataType;
+
 			switch (info.MarketDataMessage.BuildCandlesMode)
 			{
 				case BuildCandlesModes.LoadAndBuild:
-					return info.Transform == null ? CreateTransform(info.MarketDataMessage.DataType) : GetAvailableMarketDataType(info);
+					return info.Transform == null ? CreateTransform(dataType, null) : CreateTransform(info);
 
 				case BuildCandlesModes.Load:
-					return CreateTransform(info.MarketDataMessage.DataType);
+					return CreateTransform(dataType, null);
 
 				case BuildCandlesModes.Build:
-					return GetAvailableMarketDataType(info);
+					return CreateTransform(info);
 
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
 
-		private static ICandleBuilderValueTransform GetAvailableMarketDataType(SeriesInfo info)
+		private static ICandleBuilderValueTransform CreateTransform(SeriesInfo info)
 		{
 			if (info.MarketDataMessage.BuildCandlesFrom != null)
-				return CreateTransform(info.MarketDataMessage.BuildCandlesFrom.Value);
+				return CreateTransform(info.MarketDataMessage.BuildCandlesFrom.Value, info.MarketDataMessage.BuildCandlesField);
 
 			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.Trades))
-				return CreateTransform(MarketDataTypes.Trades);
+				return CreateTransform(MarketDataTypes.Trades, null);
 
 			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.MarketDepth))
-				return CreateTransform(MarketDataTypes.MarketDepth);
+				return CreateTransform(MarketDataTypes.MarketDepth, null);
 
 			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.Level1))
-				return CreateTransform(MarketDataTypes.Level1);
+				return CreateTransform(MarketDataTypes.Level1, null);
 
-			return CreateTransform(MarketDataTypes.Trades);
+			return CreateTransform(MarketDataTypes.Trades, null);
 		}
 
-		private static ICandleBuilderValueTransform CreateTransform(MarketDataTypes dataType)
+		private static ICandleBuilderValueTransform CreateTransform(MarketDataTypes dataType, Level1Fields? field)
 		{
 			switch (dataType)
 			{
@@ -539,10 +509,24 @@ namespace StockSharp.Algo.Candles.Compression
 					return new TickCandleBuilderValueTransform();
 
 				case MarketDataTypes.MarketDepth:
-					return new QuoteCandleBuilderValueTransform();
+				{
+					var t = new QuoteCandleBuilderValueTransform();
+
+					if (field != null)
+						t.Type = field.Value;
+
+					return t;
+				}
 
 				case MarketDataTypes.Level1:
-					return new Level1CandleBuilderValueTransform();
+				{
+					var t = new Level1CandleBuilderValueTransform();
+
+					if (field != null)
+						t.Type = field.Value;
+
+					return t;
+				}
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);

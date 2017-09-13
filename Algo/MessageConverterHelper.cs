@@ -1732,8 +1732,7 @@ namespace StockSharp.Algo
 				Count = count,
 				BuildCandlesMode = series.BuildCandlesMode,
 				BuildCandlesFrom = series.BuildCandlesFrom,
-				DepthCandleSourceType = series.DepthCandleSourceType,
-				Level1CandleSourceField = series.Level1CandleSourceField,
+				BuildCandlesField = series.BuildCandlesField,
 				IsCalcVolumeProfile = series.IsCalcVolumeProfile,
 				//ExtensionInfo = extensionInfo
 			};

@@ -222,15 +222,10 @@ namespace StockSharp.Messages
 		public MarketDataTypes? BuildCandlesFrom { get; set; }
 
 		/// <summary>
-		/// Type of candle depth based data.
-		/// </summary>
-		public Level1Fields? DepthCandleSourceType { get; set; }
-
-		/// <summary>
-		/// Level one market-data field, which is used as an candle value.
+		/// Extra info for the <see cref="BuildCandlesFrom"/>.
 		/// </summary>
 		[DataMember]
-		public Level1Fields? Level1CandleSourceField { get; set; }
+		public Level1Fields? BuildCandlesField { get; set; }
 
 		/// <summary>
 		/// Contains history market data.
@@ -282,8 +277,7 @@ namespace StockSharp.Messages
 				IsNotSupported = IsNotSupported,
 				BuildCandlesMode = BuildCandlesMode,
 				BuildCandlesFrom = BuildCandlesFrom,
-				DepthCandleSourceType = DepthCandleSourceType,
-				Level1CandleSourceField = Level1CandleSourceField,
+				BuildCandlesField = BuildCandlesField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
 				IsHistory = IsHistory,
 			};

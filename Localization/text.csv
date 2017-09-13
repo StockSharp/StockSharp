@@ -14472,5 +14472,5 @@ DocStr10117;Determines whether the specified market-data type is supported by th
 DocStr10118;Add all market data types into {0};Добавить все типы маркет данных в {0}
 DocStr10119;Remove all market data types from {0};Удалить все типы маркет данных из {0}
 DocStr10120;Supported by adapter market data types;Поддерживаемые адаптером типы маркет данных
-DocStr10121;Level one market-data field, which is used as an candle value;Поле маркет-данных первого уровня, которое используется как значение свечи
+DocStr10121;Level one market-data field, which is used as a candle value;Поле маркет-данных первого уровня, которое используется как значение свечи
 DocStr10122;The middle of spread;Середина спреда.

@@ -144,14 +144,9 @@ namespace StockSharp.Algo.Candles
 		public MarketDataTypes? BuildCandlesFrom { get; set; }
 
 		/// <summary>
-		/// Type of candle depth based data.
+		/// Extra info for the <see cref="BuildCandlesFrom"/>.
 		/// </summary>
-		public Level1Fields? DepthCandleSourceType { get; set; }
-
-		/// <summary>
-		/// Level one market-data field, which is used as an candle value.
-		/// </summary>
-		public Level1Fields? Level1CandleSourceField { get; set; }
+		public Level1Fields? BuildCandlesField { get; set; }
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -182,12 +177,12 @@ namespace StockSharp.Algo.Candles
 			From = storage.GetValue(nameof(From), From);
 			To = storage.GetValue(nameof(To), To);
 			WorkingTime = storage.GetValue(nameof(WorkingTime), WorkingTime);
+
 			IsCalcVolumeProfile = storage.GetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
 
 			BuildCandlesMode = storage.GetValue(nameof(BuildCandlesMode), BuildCandlesMode);
 			BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
-			DepthCandleSourceType = storage.GetValue(nameof(DepthCandleSourceType), DepthCandleSourceType);
-			Level1CandleSourceField = storage.GetValue(nameof(Level1CandleSourceField), Level1CandleSourceField);
+			BuildCandlesField = storage.GetValue(nameof(BuildCandlesField), BuildCandlesField);
 		}
 
 		/// <summary>
@@ -215,8 +210,7 @@ namespace StockSharp.Algo.Candles
 
 			storage.SetValue(nameof(BuildCandlesMode), BuildCandlesMode);
 			storage.SetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
-			storage.SetValue(nameof(DepthCandleSourceType), DepthCandleSourceType);
-			storage.SetValue(nameof(Level1CandleSourceField), Level1CandleSourceField);
+			storage.SetValue(nameof(BuildCandlesField), BuildCandlesField);
 		}
 	}
 }

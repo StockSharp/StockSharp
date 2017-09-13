@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Type of candle depth based data.
+		/// Type of candle based data.
 		/// </summary>
 		public Level1Fields Type { get; set; } = Level1Fields.SpreadMiddle;
 
@@ -213,7 +213,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Type of candle depth based data.
+		/// Type of candle based data.
 		/// </summary>
 		public Level1Fields Type { get; set; } = Level1Fields.LastTradePrice;
 
