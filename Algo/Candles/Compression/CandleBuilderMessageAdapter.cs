@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Candles.Compression
 					
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType != ExecutionTypes.Tick)
+					if (execMsg.ExecutionType != ExecutionTypes.Tick && execMsg.ExecutionType != ExecutionTypes.OrderLog)
 						break;
 
 					ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, execMsg);
@@ -344,6 +344,7 @@ namespace StockSharp.Algo.Candles.Compression
 				case MarketDataTypes.Level1:
 				case MarketDataTypes.MarketDepth:
 				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
 				{
 					SendNotSupported(info);
 					break;
@@ -398,6 +399,7 @@ namespace StockSharp.Algo.Candles.Compression
 				case MarketDataTypes.Level1:
 				case MarketDataTypes.MarketDepth:
 				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
 				{
 					SendMarketDataFinished(info);
 					break;
