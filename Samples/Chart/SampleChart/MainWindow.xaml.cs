@@ -33,7 +33,6 @@ namespace SampleChart
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
@@ -365,7 +364,7 @@ namespace SampleChart
 
 			_candle.TotalVolume += tick.TradeVolume.Value;
 
-			_volumeProfile.Update(new TickCandleBuilderSourceValue(tick));
+			_volumeProfile.Update(tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide);
 
 			lock (_updatedCandles.SyncRoot)
 				_updatedCandles[_candle.OpenTime] = _candle;

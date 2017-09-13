@@ -272,22 +272,24 @@ namespace StockSharp.Algo.Candles
 		{
 			private sealed class CandleMessageEnumerator : SimpleEnumerator<CandleMessage>
 			{
-				private IEnumerator<ICandleBuilderSourceValue> _valuesEnumerator;
+				private IEnumerator<Message> _messagesEnumerator;
 				private readonly List<CandleMessage> _finishedCandles = new List<CandleMessage>();
 				private readonly ICandleBuilder _candleBuilder;
 				private readonly MarketDataMessage _mdMsg;
 				private readonly bool _onlyFormed;
-				private readonly IEnumerable<ICandleBuilderSourceValue> _values;
+				private readonly ICandleBuilderValueTransform _transform;
+				private readonly IEnumerable<Message> _messages;
 				private CandleMessage _lastActiveCandle;
 				private CandleMessage _lastCandle;
 
-				public CandleMessageEnumerator(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<ICandleBuilderSourceValue> values)
+				public CandleMessageEnumerator(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<Message> messages, ICandleBuilderValueTransform transform)
 				{
 					_mdMsg = mdMsg;
 					_onlyFormed = onlyFormed;
-					_values = values;
+					_transform = transform;
+					_messages = messages;
 
-					_valuesEnumerator = _values.GetEnumerator();
+					_messagesEnumerator = _messages.GetEnumerator();
 
 					switch (mdMsg.DataType)
 					{
@@ -319,7 +321,7 @@ namespace StockSharp.Algo.Candles
 					base.Reset();
 
 					_finishedCandles.Clear();
-					_valuesEnumerator = _values.GetEnumerator();
+					_messagesEnumerator = _messages.GetEnumerator();
 					_lastActiveCandle = null;
 					_lastCandle = null;
 					//_candleBuilder.Reset();
@@ -331,7 +333,7 @@ namespace StockSharp.Algo.Candles
 					_lastActiveCandle = null;
 					_lastCandle = null;
 
-					_valuesEnumerator.Dispose();
+					_messagesEnumerator.Dispose();
 					_candleBuilder.Dispose();
 
 					base.DisposeManaged();
@@ -341,12 +343,15 @@ namespace StockSharp.Algo.Candles
 				{
 					while (_finishedCandles.Count == 0)
 					{
-						if (!_valuesEnumerator.MoveNext())
+						if (!_messagesEnumerator.MoveNext())
 							break;
+
+						if (!_transform.Process(_messagesEnumerator.Current))
+							continue;
 
 						_lastActiveCandle = null;
 
-						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _valuesEnumerator.Current))
+						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _transform))
 						{
 							_lastCandle = candleMessage;
 
@@ -383,7 +388,7 @@ namespace StockSharp.Algo.Candles
 			}
 
 			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<ExecutionMessage> ticks)
-				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, ticks.Select(t => new TickCandleBuilderSourceValue(t))))
+				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, ticks, new TickCandleBuilderValueTransform()))
 			{
 				if (mdMsg == null)
 					throw new ArgumentNullException(nameof(mdMsg));
@@ -393,7 +398,7 @@ namespace StockSharp.Algo.Candles
 			}
 
 			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<QuoteChangeMessage> depths, Level1Fields type)
-				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, depths.Select(d => new QuoteCandleBuilderSourceValue(d, type))))
+				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, depths, new QuoteCandleBuilderValueTransform { Type = type }))
 			{
 				if (mdMsg == null)
 					throw new ArgumentNullException(nameof(mdMsg));

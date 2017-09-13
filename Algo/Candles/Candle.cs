@@ -412,12 +412,13 @@ namespace StockSharp.Algo.Candles
 		}
 
 		// for performance reason
-		internal void Update(ICandleBuilderSourceValue value)
+		internal void Update(ICandleBuilderValueTransform value)
 		{
 			ThrowIfFinished();
 
 			var price = value.Price;
 			var time = value.Time;
+			var volume = value.Volume;
 
 			if (price < _lowPrice)
 			{
@@ -433,18 +434,18 @@ namespace StockSharp.Algo.Candles
 
 			_closePrice = price;
 
-			if (value.Volume != null)
+			if (volume != null)
 			{
-				var volume = value.Volume.Value;
+				var vv = volume.Value;
 
-				_totalPrice += price * volume;
+				_totalPrice += price * vv;
 
-				_lowVolume = (_lowVolume ?? 0m).Min(volume);
-				_highVolume = (_highVolume ?? 0m).Max(volume);
+				_lowVolume = (_lowVolume ?? 0m).Min(vv);
+				_highVolume = (_highVolume ?? 0m).Max(vv);
 				_closeVolume = volume;
-				_totalVolume += volume;
+				_totalVolume += vv;
 
-				var dir = value.OrderDirection;
+				var dir = value.Side;
 				if (dir != null)
 					_relativeVolume = (_relativeVolume ?? 0) + (dir.Value == Sides.Buy ? volume : -volume);
 			}
