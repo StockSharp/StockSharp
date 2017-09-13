@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -147,7 +146,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Type of candle depth based data.
 		/// </summary>
-		public DepthCandleSourceTypes? DepthCandleSourceType { get; set; }
+		public Level1Fields? DepthCandleSourceType { get; set; }
 
 		/// <summary>
 		/// Level one market-data field, which is used as an candle value.

@@ -121,27 +121,6 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Types of candle depth based data.
-	/// </summary>
-	public enum DepthCandleSourceTypes
-	{
-		/// <summary>
-		/// Best bid.
-		/// </summary>
-		BestBid,
-
-		/// <summary>
-		/// Best ask.
-		/// </summary>
-		BestAsk,
-
-		/// <summary>
-		/// Spread middle.
-		/// </summary>
-		Middle,
-	}
-
-	/// <summary>
 	/// Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
 	/// </summary>
 	[DataContract]
@@ -245,7 +224,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Type of candle depth based data.
 		/// </summary>
-		public DepthCandleSourceTypes? DepthCandleSourceType { get; set; }
+		public Level1Fields? DepthCandleSourceType { get; set; }
 
 		/// <summary>
 		/// Level one market-data field, which is used as an candle value.

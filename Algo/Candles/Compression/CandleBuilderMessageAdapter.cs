@@ -236,7 +236,7 @@ namespace StockSharp.Algo.Candles.Compression
 					var quoteMsg = (QuoteChangeMessage)message;
 
 					ProcessValue(quoteMsg.SecurityId, 0, MarketDataTypes.MarketDepth, quoteMsg, 
-						(info, msg) => ProcessValue(info, new QuoteCandleBuilderSourceValue(msg, info.MarketDataMessage.DepthCandleSourceType ?? DepthCandleSourceTypes.Middle)));
+						(info, msg) => ProcessValue(info, new QuoteCandleBuilderSourceValue(msg, info.MarketDataMessage.DepthCandleSourceType ?? Level1Fields.SpreadMiddle)));
 					break;
 				}
 

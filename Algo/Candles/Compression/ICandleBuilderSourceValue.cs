@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="depth">Market depth.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		public DepthCandleBuilderSourceValue(MarketDepth depth, DepthCandleSourceTypes type)
+		public DepthCandleBuilderSourceValue(MarketDepth depth, Level1Fields type)
 		{
 			Depth = depth;
 			Type = type;
@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				switch (Type)
 				{
-					case DepthCandleSourceTypes.BestBid:
+					case Level1Fields.BestBidPrice:
 						var bid = pair.Bid;
 
 						if (bid != null)
@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Candles.Compression
 						}
 
 						break;
-					case DepthCandleSourceTypes.BestAsk:
+					case Level1Fields.BestAskPrice:
 						var ask = pair.Ask;
 
 						if (ask != null)
@@ -173,8 +173,8 @@ namespace StockSharp.Algo.Candles.Compression
 						}
 
 						break;
-					case DepthCandleSourceTypes.Middle:
-						_price = pair.MiddlePrice ?? 0;
+					case Level1Fields.SpreadMiddle:
+						_price = pair.MiddlePrice;
 						//_volume = pair.Bid.Volume;
 						break;
 					default:
@@ -191,7 +191,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Type of candle depth based data.
 		/// </summary>
-		public DepthCandleSourceTypes Type { get; }
+		public Level1Fields Type { get; }
 
 		bool ICandleBuilderSourceValue.IsEmpty => _price == null;
 
@@ -220,14 +220,14 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="message">Messages containing quotes.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		public QuoteCandleBuilderSourceValue(QuoteChangeMessage message, DepthCandleSourceTypes type)
+		public QuoteCandleBuilderSourceValue(QuoteChangeMessage message, Level1Fields type)
 		{
 			QuoteChange = message;
 			Type = type;
 
 			switch (Type)
 			{
-				case DepthCandleSourceTypes.BestBid:
+				case Level1Fields.BestBidPrice:
 				{
 					var bid = message.GetBestBid();
 
@@ -240,7 +240,7 @@ namespace StockSharp.Algo.Candles.Compression
 					break;
 				}
 
-				case DepthCandleSourceTypes.BestAsk:
+				case Level1Fields.BestAskPrice:
 				{
 					var ask = message.GetBestAsk();
 
@@ -254,7 +254,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 
-				case DepthCandleSourceTypes.Middle:
+				case Level1Fields.SpreadMiddle:
 				{
 					var bid = message.GetBestBid();
 					var ask = message.GetBestAsk();
@@ -281,7 +281,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Type of candle depth based data.
 		/// </summary>
-		public DepthCandleSourceTypes Type { get; }
+		public Level1Fields Type { get; }
 
 		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
 

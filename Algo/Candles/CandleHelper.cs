@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Candles
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -27,7 +26,6 @@ namespace StockSharp.Algo.Candles
 
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -394,7 +392,7 @@ namespace StockSharp.Algo.Candles
 					throw new ArgumentNullException(nameof(ticks));
 			}
 
-			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<QuoteChangeMessage> depths, DepthCandleSourceTypes type)
+			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<QuoteChangeMessage> depths, Level1Fields type)
 				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, depths.Select(d => new QuoteCandleBuilderSourceValue(d, type))))
 			{
 				if (mdMsg == null)
@@ -459,7 +457,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="type">Type of candle depth based data.</param>
 		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series, DepthCandleSourceTypes type = DepthCandleSourceTypes.Middle, bool onlyFormed = true)
+		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true)
 		{
 			return depths
 				.ToMessages<MarketDepth, QuoteChangeMessage>()
@@ -475,7 +473,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="type">Type of candle depth based data.</param>
 		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, DepthCandleSourceTypes type = DepthCandleSourceTypes.Middle, bool onlyFormed = true)
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true)
 		{
 			return new CandleMessageEnumerable(series.ToMarketDataMessage(true), onlyFormed, depths, type);
 		}

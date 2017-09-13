@@ -245,7 +245,7 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class DepthRawConvertableCandleBuilderSource : RawConvertableCandleBuilderSource<MarketDepth>
 	{
-		private readonly DepthCandleSourceTypes _type;
+		private readonly Level1Fields _type;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DepthRawConvertableCandleBuilderSource"/>.
@@ -255,7 +255,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="to">The last time value.</param>
 		/// <param name="values">Ready data collection.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		public DepthRawConvertableCandleBuilderSource(Security security, DateTimeOffset from, DateTimeOffset to, IEnumerable<MarketDepth> values, DepthCandleSourceTypes type)
+		public DepthRawConvertableCandleBuilderSource(Security security, DateTimeOffset from, DateTimeOffset to, IEnumerable<MarketDepth> values, Level1Fields type)
 			: base(security, from, to, values)
 		{
 			_type = type;
