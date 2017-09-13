@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
@@ -26,6 +25,8 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("Volume")]
 	[DescriptionLoc(LocalizedStrings.Str756Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[IndicatorOut(typeof(CandleIndicatorValue))]
 	public class VolumeIndicator : BaseIndicator
 	{
 		/// <summary>
@@ -34,13 +35,6 @@ namespace StockSharp.Algo.Indicators
 		public VolumeIndicator()
 		{
 		}
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public override Type ResultType { get; } = typeof(CandleIndicatorValue);
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

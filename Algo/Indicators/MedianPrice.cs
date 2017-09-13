@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
@@ -26,6 +25,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("MedianPrice")]
 	[DescriptionLoc(LocalizedStrings.Str745Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class MedianPrice : BaseIndicator
 	{
 		/// <summary>
@@ -34,9 +34,6 @@ namespace StockSharp.Algo.Indicators
 		public MedianPrice()
 		{
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

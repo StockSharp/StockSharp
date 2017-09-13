@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
@@ -26,6 +25,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("CCI")]
 	[DescriptionLoc(LocalizedStrings.Str760Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class CommodityChannelIndex : LengthIndicator<decimal>
 	{
 		private readonly MeanDeviation _mean = new MeanDeviation();
@@ -51,9 +51,6 @@ namespace StockSharp.Algo.Indicators
 		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed => _mean.IsFormed;
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

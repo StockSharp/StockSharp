@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("OptimalTracking")]
 	[Description("Optimal Tracking Filter published by John Ehlers")]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public sealed class OptimalTracking : LengthIndicator<decimal>
 	{
 		//Fields
@@ -71,9 +72,6 @@ namespace StockSharp.Algo.Indicators
 			_lambda = 0;
 			_alpha = 0;
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

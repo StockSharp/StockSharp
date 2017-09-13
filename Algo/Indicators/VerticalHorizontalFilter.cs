@@ -29,6 +29,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("VHF")]
 	[DescriptionLoc(LocalizedStrings.Str754Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	{
 		// Текущее значение минимума
@@ -65,9 +66,6 @@ namespace StockSharp.Algo.Indicators
 			_previousClosePrice = null;
 			base.Reset();
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

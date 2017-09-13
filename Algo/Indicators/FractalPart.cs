@@ -15,14 +15,12 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
-	using System.ComponentModel;
-
 	using Ecng.Common;
 
 	/// <summary>
 	/// Part <see cref="Fractals"/>.
 	/// </summary>
+	[IndicatorOut(typeof(ShiftedIndicatorValue))]
 	public class FractalPart : BaseIndicator
 	{
 		/// <summary>
@@ -31,10 +29,6 @@ namespace StockSharp.Algo.Indicators
 		public FractalPart()
 		{
 		}
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public override Type ResultType { get; } = typeof(ShiftedIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

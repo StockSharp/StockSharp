@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("COR")]
 	[DescriptionLoc(LocalizedStrings.CorrelationKey, true)]
+	[IndicatorIn(typeof(PairIndicatorValue<decimal>))]
 	public class Correlation : Covariance
 	{
 		private readonly StandardDeviation _source;
@@ -57,9 +58,6 @@ namespace StockSharp.Algo.Indicators
 			if (_other != null)
 				_other.Length = Length;
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(PairIndicatorValue<decimal>);
 
 		/// <summary>
 		/// To handle the input value.

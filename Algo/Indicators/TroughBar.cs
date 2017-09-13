@@ -32,6 +32,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("TroughBar")]
 	[DescriptionLoc(LocalizedStrings.Str822Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class TroughBar : BaseIndicator
 	{
 		private decimal _currentMinimum = decimal.MaxValue;
@@ -66,9 +67,6 @@ namespace StockSharp.Algo.Indicators
 				Reset();
 			}
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

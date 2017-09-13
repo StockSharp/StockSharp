@@ -33,6 +33,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("Fractals")]
 	[DescriptionLoc(LocalizedStrings.Str844Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class Fractals : BaseComplexIndicator
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();
@@ -124,9 +125,6 @@ namespace StockSharp.Algo.Indicators
 			_buffer.Clear();
 			base.Reset();
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

@@ -34,6 +34,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("ZigZag")]
 	[DescriptionLoc(LocalizedStrings.Str826Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class ZigZag : BaseIndicator
 	{
 		private readonly IList<Candle> _buffer = new List<Candle>();
@@ -186,9 +187,6 @@ namespace StockSharp.Algo.Indicators
 			LastValueShift = 0;
 			base.Reset();
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

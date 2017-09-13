@@ -27,6 +27,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// Senkou (B) line.
 	/// </summary>
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class IchimokuSenkouBLine : LengthIndicator<decimal>
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();
@@ -64,9 +65,6 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Browsable(false)]
 		public IchimokuLine Kijun { get; }
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

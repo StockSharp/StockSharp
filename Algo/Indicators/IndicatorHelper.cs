@@ -153,5 +153,25 @@ namespace StockSharp.Algo.Indicators
 
 			return input == null ? default(T) : input.GetValue<T>();
 		}
+
+		/// <summary>
+		/// Get value type for specified indicator.
+		/// </summary>
+		/// <param name="indicatorType">Indicator type.</param>
+		/// <param name="isInput">Is input.</param>
+		/// <returns>Value type.</returns>
+		public static Type GetValueType(this Type indicatorType, bool isInput)
+		{
+			if (indicatorType == null)
+				throw new ArgumentNullException(nameof(indicatorType));
+
+			if (!typeof(IIndicator).IsAssignableFrom(indicatorType))
+				throw new ArgumentException(nameof(indicatorType));
+
+			return (isInput
+					? (IndicatorValueAttribute)indicatorType.GetAttribute<IndicatorInAttribute>()
+					: indicatorType.GetAttribute<IndicatorOutAttribute>()
+				)?.Type ?? typeof(DecimalIndicatorValue);
+		}
 	}
 }

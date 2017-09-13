@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
@@ -29,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("UltimateOsc")]
 	[DescriptionLoc(LocalizedStrings.Str776Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class UltimateOscillator : BaseIndicator
 	{
 		private const decimal _stoProcentov = 100m;
@@ -71,9 +71,6 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsFormed => _period7BpSum.IsFormed && _period14BpSum.IsFormed &&
 		                                 _period28BpSum.IsFormed && _period7TrSum.IsFormed &&
 		                                 _period14TrSum.IsFormed && _period28TrSum.IsFormed;
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

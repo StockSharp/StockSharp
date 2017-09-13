@@ -15,8 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using System;
-
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
@@ -25,6 +23,7 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// http://www2.wealth-lab.com/WL5Wiki/QStick.ashx.
 	/// </remarks>
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class QStick : LengthIndicator<IIndicatorValue>
 	{
 		private readonly SimpleMovingAverage _sma;
@@ -51,9 +50,6 @@ namespace StockSharp.Algo.Indicators
 			_sma.Length = Length;
 			base.Reset();
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

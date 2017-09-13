@@ -33,6 +33,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("Parabolic SAR")]
 	[DescriptionLoc(LocalizedStrings.Str809Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class ParabolicSar : BaseIndicator
 	{
 		private decimal _prevValue;
@@ -80,9 +81,6 @@ namespace StockSharp.Algo.Indicators
 		[DescriptionLoc(LocalizedStrings.Str815Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public decimal AccelerationMax { get; set; }
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

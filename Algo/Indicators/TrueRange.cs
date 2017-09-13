@@ -27,6 +27,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("TR")]
 	[DescriptionLoc(LocalizedStrings.Str775Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class TrueRange : BaseIndicator
 	{
 		private Candle _prevCandle;
@@ -62,9 +63,6 @@ namespace StockSharp.Algo.Indicators
 				Math.Abs(prevCandle.ClosePrice - currentCandle.LowPrice)
 			};
 		}
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.

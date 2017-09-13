@@ -29,6 +29,8 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("VolumeProfile")]
 	[DescriptionLoc(LocalizedStrings.VolumeProfileKey, true)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[IndicatorOut(typeof(VolumeProfileIndicatorValue))]
 	public class VolumeProfileIndicator : BaseIndicator
 	{
 		private readonly Dictionary<decimal, decimal> _levels = new Dictionary<decimal, decimal>();
@@ -50,13 +52,6 @@ namespace StockSharp.Algo.Indicators
 		/// To use aggregate volume in calculations (when candles do not contain VolumeProfile).
 		/// </summary>
 		public bool UseTotalVolume { get; set; }
-
-		/// <inheritdoc />
-		[Browsable(false)]
-		public override Type ResultType { get; } = typeof(VolumeProfileIndicatorValue);
-
-		/// <inheritdoc />
-		public override Type InputType { get; } = typeof(CandleIndicatorValue);
 
 		/// <summary>
 		/// To handle the input value.
