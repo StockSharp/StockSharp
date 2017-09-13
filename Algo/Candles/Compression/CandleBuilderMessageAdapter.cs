@@ -528,6 +528,16 @@ namespace StockSharp.Algo.Candles.Compression
 					return t;
 				}
 
+				case MarketDataTypes.OrderLog:
+				{
+					var t = new OrderLogCandleBuilderValueTransform();
+
+					if (field != null)
+						t.Type = field.Value;
+
+					return t;
+				}
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
 			}

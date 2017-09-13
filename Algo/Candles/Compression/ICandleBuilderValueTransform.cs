@@ -4,6 +4,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using Ecng.Collections;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -201,7 +202,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				default:
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);
 			}
 		}
 	}
@@ -283,7 +284,55 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 				default:
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);
+			}
+		}
+	}
+
+	/// <summary>
+	/// The order log based data source transformation for <see cref="ICandleBuilder"/>.
+	/// </summary>
+	public class OrderLogCandleBuilderValueTransform : BaseCandleBuilderValueTransform
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OrderLogCandleBuilderValueTransform"/>.
+		/// </summary>
+		public OrderLogCandleBuilderValueTransform()
+			: base(MarketDataTypes.OrderLog)
+		{
+		}
+
+		/// <summary>
+		/// Type of candle based data.
+		/// </summary>
+		public Level1Fields Type { get; set; } = Level1Fields.LastTradePrice;
+
+		/// <inheritdoc />
+		public override bool Process(Message message)
+		{
+			if (!(message is ExecutionMessage ol) || ol.ExecutionType != ExecutionTypes.OrderLog)
+				return base.Process(message);
+
+			switch (Type)
+			{
+				case Level1Fields.PriceBook:
+				{
+					Update(ol.ServerTime, ol.OrderPrice, ol.OrderVolume, ol.Side);
+					return true;
+				}
+				case Level1Fields.LastTradePrice:
+				{
+					var price = ol.TradePrice;
+
+					if (price == null)
+						return false;
+
+					Update(ol.ServerTime, price.Value, ol.TradeVolume, ol.OriginSide);
+					return true;
+				}
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(Type), Type, LocalizedStrings.Str1219);	
 			}
 		}
 	}
