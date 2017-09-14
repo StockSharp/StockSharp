@@ -679,40 +679,32 @@ namespace StockSharp.Algo.Candles.Compression
 
 			foreach (var info in infos)
 			{
-				if (!info.Transform.Process(message))
+				var transform = info.Transform;
+
+				if (transform?.Process(message) != true)
 					continue;
 
 				if (info.TransactionId != transactionId && (transactionId != 0 || info.IsHistory))
 					continue;
 
-				ProcessValue(info);
-			}
-		}
+				if (!CheckTime(info, transform.Time))
+					continue;
 
-		private void ProcessValue(SeriesInfo info)
-		{
-			//if (value.IsEmpty)
-			//	return;
+				var mdMsg = info.MarketDataMessage;
+				var builder = _candleBuilders.Get(mdMsg.DataType);
 
-			var transform = info.Transform;
+				if (builder == null)
+					throw new InvalidOperationException($"Builder for {mdMsg.DataType} not found.");
 
-			if (!CheckTime(info, transform.Time))
-				return;
+				info.LastTime = transform.Time;
 
-			var mdMsg = info.MarketDataMessage;
-			var builder = _candleBuilders.Get(mdMsg.DataType);
+				var result = builder.Process(mdMsg, info.CurrentCandleMessage, transform);
 
-			if (builder == null)
-				throw new InvalidOperationException($"Builder for {mdMsg.DataType} not found.");
-
-			info.LastTime = transform.Time;
-
-			var result = builder.Process(mdMsg, info.CurrentCandleMessage, transform);
-
-			foreach (var candleMessage in result)
-			{
-				info.CurrentCandleMessage = candleMessage;
-				SendCandle(info, candleMessage);
+				foreach (var candleMessage in result)
+				{
+					info.CurrentCandleMessage = candleMessage;
+					SendCandle(info, candleMessage);
+				}
 			}
 		}
 
