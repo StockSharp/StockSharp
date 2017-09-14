@@ -258,7 +258,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 				case Level1Fields.LastTradePrice:
 				{
-					var price = (decimal?)l1.Changes.TryGetValue(Type);
+					var price = l1.GetLastTradePrice();
 
 					if (price == null)
 						return false;
@@ -272,10 +272,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				case Level1Fields.SpreadMiddle:
 				{
-					var bid = (decimal?)l1.Changes.TryGetValue(Level1Fields.BestBidPrice);
-					var ask = (decimal?)l1.Changes.TryGetValue(Level1Fields.BestAskPrice);
-
-					var price = bid.GetSpreadMiddle(ask);
+					var price = l1.GetSpreadMiddle();
 					if (price == null)
 						return false;
 

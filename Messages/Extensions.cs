@@ -123,6 +123,22 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Get middle of spread.
 		/// </summary>
+		/// <param name="message">Market depth.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal? GetSpreadMiddle(this Level1ChangeMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var bestBid = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
+			var bestAsk = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
+
+			return bestBid.GetSpreadMiddle(bestAsk);
+		}
+
+		/// <summary>
+		/// Get middle of spread.
+		/// </summary>
 		/// <param name="bestBidPrice">Best bid price.</param>
 		/// <param name="bestAskPrice">Best ask price.</param>
 		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
@@ -135,6 +151,19 @@ namespace StockSharp.Messages
 				return (bestAskPrice + bestBidPrice).Value / 2;
 
 			return bestAskPrice ?? bestBidPrice.Value;
+		}
+
+		/// <summary>
+		/// Get last tick trade price.
+		/// </summary>
+		/// <param name="message">Market depth.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal? GetLastTradePrice(this Level1ChangeMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return (decimal?)message.Changes.TryGetValue(Level1Fields.LastTradePrice);
 		}
 
 		/// <summary>
