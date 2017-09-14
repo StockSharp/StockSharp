@@ -43,6 +43,11 @@ namespace StockSharp.Algo.Candles.Compression
 		/// Side.
 		/// </summary>
 		Sides? Side { get; }
+
+		/// <summary>
+		/// Open interest.
+		/// </summary>
+		decimal? OpenInterest { get; }
 	}
 
 	/// <summary>
@@ -84,12 +89,14 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="price">Price.</param>
 		/// <param name="volume">Volume.</param>
 		/// <param name="side">Side.</param>
-		protected void Update(DateTimeOffset time, decimal price, decimal? volume, Sides? side)
+		/// <param name="openInterest">Open interest.</param>
+		protected void Update(DateTimeOffset time, decimal price, decimal? volume, Sides? side, decimal? openInterest)
 		{
 			_time = time;
 			_price = price;
 			_volume = volume;
 			_side = side;
+			_openInterest = openInterest;
 		}
 
 		private DateTimeOffset _time;
@@ -107,6 +114,10 @@ namespace StockSharp.Algo.Candles.Compression
 		private Sides? _side;
 
 		Sides? ICandleBuilderValueTransform.Side => _side;
+
+		private decimal? _openInterest;
+
+		decimal? ICandleBuilderValueTransform.OpenInterest => _openInterest;
 	}
 
 	/// <summary>
@@ -128,7 +139,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!(message is ExecutionMessage tick) || tick.ExecutionType != ExecutionTypes.Tick)
 				return base.Process(message);
 
-			Update(tick.ServerTime, tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide);
+			Update(tick.ServerTime, tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide, tick.OpenInterest);
 
 			return true;
 		}
@@ -167,7 +178,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (quote == null)
 						return false;
 
-					Update(md.ServerTime, quote.Price, quote.Volume, quote.Side);
+					Update(md.ServerTime, quote.Price, quote.Volume, quote.Side, null);
 					return true;
 				}
 
@@ -178,7 +189,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (quote == null)
 						return false;
 
-					Update(md.ServerTime, quote.Price, quote.Volume, quote.Side);
+					Update(md.ServerTime, quote.Price, quote.Volume, quote.Side, null);
 					return true;
 				}
 
@@ -197,7 +208,7 @@ namespace StockSharp.Algo.Candles.Compression
 					else
 						price = ask?.Price ?? bid.Price;
 
-					Update(md.ServerTime, price, null, null);
+					Update(md.ServerTime, price, null, null, null);
 					return true;
 				}
 
@@ -240,7 +251,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(l1.ServerTime, price.Value, (decimal?)l1.Changes.TryGetValue(Level1Fields.BestBidVolume), Sides.Buy);
+					Update(l1.ServerTime, price.Value, (decimal?)l1.Changes.TryGetValue(Level1Fields.BestBidVolume), Sides.Buy, null);
 					return true;
 				}
 				case Level1Fields.BestAskPrice:
@@ -250,7 +261,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(l1.ServerTime, price.Value, (decimal?)l1.Changes.TryGetValue(Level1Fields.BestAskVolume), Sides.Sell);
+					Update(l1.ServerTime, price.Value, (decimal?)l1.Changes.TryGetValue(Level1Fields.BestAskVolume), Sides.Sell, null);
 					return true;
 				}
 				case Level1Fields.LastTradePrice:
@@ -260,7 +271,10 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(l1.ServerTime, price.Value, (decimal?)l1.Changes.TryGetValue(Level1Fields.LastTradeVolume), (Sides?)l1.Changes.TryGetValue(Level1Fields.LastTradeOrigin));
+					Update(l1.ServerTime, price.Value,
+						(decimal?)l1.Changes.TryGetValue(Level1Fields.LastTradeVolume),
+						(Sides?)l1.Changes.TryGetValue(Level1Fields.LastTradeOrigin),
+						(decimal?)l1.Changes.TryGetValue(Level1Fields.OpenInterest));
 					return true;
 				}
 
@@ -279,7 +293,7 @@ namespace StockSharp.Algo.Candles.Compression
 					else
 						price = ask ?? bid.Value;
 
-					Update(l1.ServerTime, price, null, null);
+					Update(l1.ServerTime, price, null, null, null);
 					return true;
 				}
 
@@ -317,7 +331,7 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				case Level1Fields.PriceBook:
 				{
-					Update(ol.ServerTime, ol.OrderPrice, ol.OrderVolume, ol.Side);
+					Update(ol.ServerTime, ol.OrderPrice, ol.OrderVolume, ol.Side, ol.OpenInterest);
 					return true;
 				}
 				case Level1Fields.LastTradePrice:
@@ -327,7 +341,7 @@ namespace StockSharp.Algo.Candles.Compression
 					if (price == null)
 						return false;
 
-					Update(ol.ServerTime, price.Value, ol.TradeVolume, ol.OriginSide);
+					Update(ol.ServerTime, price.Value, ol.TradeVolume, ol.OriginSide, ol.OpenInterest);
 					return true;
 				}
 

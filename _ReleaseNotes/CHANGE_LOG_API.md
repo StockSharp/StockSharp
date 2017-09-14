@@ -63,6 +63,7 @@ StockSharp API Change log
 * (feature) Algo.Candles.Compression. Removed sources.
 * (bug) AlfaDirect. Security lookup fixes.
 * (feature) SecurityStorage. Load empty strings as null.
+* (feature) CandleBuilder. Support OI.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
