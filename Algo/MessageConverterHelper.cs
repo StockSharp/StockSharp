@@ -331,14 +331,19 @@ namespace StockSharp.Algo
 			if (fail == null)
 				throw new ArgumentNullException(nameof(fail));
 
+			var order = fail.Order;
+
+			if (order == null)
+				throw new InvalidOperationException();
+
 			return new ExecutionMessage
 			{
-				OrderId = fail.Order.Id,
-				OrderStringId = fail.Order.StringId,
-				TransactionId = fail.Order.TransactionId,
+				OrderId = order.Id,
+				OrderStringId = order.StringId,
+				TransactionId = order.TransactionId,
 				OriginalTransactionId = originalTransactionId,
-				SecurityId = fail.Order.Security.ToSecurityId(),
-				PortfolioName = fail.Order.Portfolio.Name,
+				SecurityId = order.Security?.ToSecurityId() ?? default(SecurityId),
+				PortfolioName = order.Portfolio?.Name,
 				Error = fail.Error,
 				ExecutionType = ExecutionTypes.Transaction,
 				HasOrderInfo = true,
