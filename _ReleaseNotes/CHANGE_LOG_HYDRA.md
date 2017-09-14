@@ -1,5 +1,25 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.3.27.1:
+* (feature) Multiple securities support for data panes.
+* (bug) FIX server. Fix depths subscription for ALL security.
+* (feature) FIX connector. Candle state support.
+* (feature) QuikLua. Send candle states.
+* (bug) Fix security remove.
+* (feature) Auto fix corrupted data.
+* (bug) Level1 panel fix (default visible columns).
+* (bug) News quick open pane fix.
+* (feature) FXCM. Masked as x64 bit only.
+* (bug) Expression fix http://stocksharp.ru/forum/8586/skleennye-fyuchersy-s-finama/
+* (feature) Plaza. 5.3.1 support.
+* (feature) Micex. Stock28 interface.
+* (bug) Position binary storage fix.
+* (feature) SmartCOM. Removed V2 support.
+* (bug) Option desk minor fixes.
+* (bug) Empty date bounds loading fix.
+* (bug) AlfaDirect. Security lookup fixes.
+* (feature) Support paired indicators.
+
 ## v4.3.27:
 * (bug) QuikLua. Candles fix.
 * (feature) Analytics refactoring.
