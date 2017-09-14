@@ -377,7 +377,7 @@ namespace StockSharp.Messages
 			adapter.AddSupportedMessage(MessageTypes.MarketData);
 			adapter.AddSupportedMessage(MessageTypes.SecurityLookup);
 
-			adapter.AddSupportedAllMarketDataTypes();
+			//adapter.AddSupportedAllMarketDataTypes();
 		}
 
 		/// <summary>

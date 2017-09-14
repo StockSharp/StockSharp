@@ -151,6 +151,13 @@ namespace StockSharp.Algo.Testing
 			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
 			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
 			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
+
+			this.AddSupportedMarketDataType(MarketDataTypes.Trades);
+			this.AddSupportedMarketDataType(MarketDataTypes.MarketDepth);
+			this.AddSupportedMarketDataType(MarketDataTypes.Level1);
+			this.AddSupportedMarketDataType(MarketDataTypes.CandleTimeFrame);
+			this.AddSupportedMarketDataType(MarketDataTypes.News);
+			this.AddSupportedMarketDataType(MarketDataTypes.OrderLog);
 		}
 
 		/// <summary>
