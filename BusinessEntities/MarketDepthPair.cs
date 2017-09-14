@@ -43,10 +43,10 @@ namespace StockSharp.BusinessEntities
 				throw new ArgumentNullException(nameof(security));
 
 			if (bid != null && bid.OrderDirection != Sides.Buy)
-				throw new ArgumentException(LocalizedStrings.Str492);
+				throw new ArgumentException(LocalizedStrings.Str492, nameof(bid));
 
 			if (ask != null && ask.OrderDirection != Sides.Sell)
-				throw new ArgumentException(LocalizedStrings.Str493);
+				throw new ArgumentException(LocalizedStrings.Str493, nameof(ask));
 
 			Security = security;
 			Bid = bid;
@@ -89,11 +89,11 @@ namespace StockSharp.BusinessEntities
 		public decimal? SpreadVolume => _isFull ? (Ask.Volume - Bid.Volume).Abs() : (decimal?)null;
 
 		/// <summary>
-		/// The middle of spread. Is <see langword="null" />, if one of the quotes is empty.
+		/// The middle of spread. Is <see langword="null" />, if quotes are empty.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.SpreadKey)]
 		[DescriptionLoc(LocalizedStrings.SpreadMiddleKey, true)]
-		public decimal? MiddlePrice => _isFull ? (Bid.Price + SpreadPrice / 2) : null;
+		public decimal? MiddlePrice => (Bid?.Price).GetSpreadMiddle(Ask?.Price);
 
 		/// <summary>
 		/// Quotes pair has <see cref="Bid"/> and <see cref="Ask"/>.

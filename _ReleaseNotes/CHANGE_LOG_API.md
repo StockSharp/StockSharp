@@ -65,6 +65,7 @@ StockSharp API Change log
 * (feature) SecurityStorage. Load empty strings as null.
 * (feature) CandleBuilder. Support OI.
 * (feature) Connector.UpdateSecurityByDefinition.
+* (feature) QuoteChangeMessage.GetSpreadMiddle extension.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

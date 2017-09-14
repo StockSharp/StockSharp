@@ -195,20 +195,12 @@ namespace StockSharp.Algo.Candles.Compression
 
 				case Level1Fields.SpreadMiddle:
 				{
-					var bid = md.GetBestBid();
-					var ask = md.GetBestAsk();
+					var price = md.GetSpreadMiddle();
 
-					if (bid == null && ask == null)
+					if (price == null)
 						return false;
 
-					decimal price;
-
-					if (bid != null && ask != null)
-						price = (ask.Price + bid.Price) / 2;
-					else
-						price = ask?.Price ?? bid.Price;
-
-					Update(md.ServerTime, price, null, null, null);
+					Update(md.ServerTime, price.Value, null, null, null);
 					return true;
 				}
 
@@ -283,17 +275,11 @@ namespace StockSharp.Algo.Candles.Compression
 					var bid = (decimal?)l1.Changes.TryGetValue(Level1Fields.BestBidPrice);
 					var ask = (decimal?)l1.Changes.TryGetValue(Level1Fields.BestAskPrice);
 
-					if (bid == null && ask == null)
+					var price = bid.GetSpreadMiddle(ask);
+					if (price == null)
 						return false;
 
-					decimal price;
-
-					if (bid != null && ask != null)
-						price = (ask.Value + bid.Value) / 2;
-					else
-						price = ask ?? bid.Value;
-
-					Update(l1.ServerTime, price, null, null, null);
+					Update(l1.ServerTime, price.Value, null, null, null);
 					return true;
 				}
 

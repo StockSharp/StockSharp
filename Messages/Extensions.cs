@@ -108,6 +108,36 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Get middle of spread.
+		/// </summary>
+		/// <param name="message">Market depth.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal? GetSpreadMiddle(this QuoteChangeMessage message)
+		{
+			var bestBid = message.GetBestBid();
+			var bestAsk = message.GetBestAsk();
+
+			return (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price);
+		}
+
+		/// <summary>
+		/// Get middle of spread.
+		/// </summary>
+		/// <param name="bestBidPrice">Best bid price.</param>
+		/// <param name="bestAskPrice">Best ask price.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal? GetSpreadMiddle(this decimal? bestBidPrice, decimal? bestAskPrice)
+		{
+			if (bestBidPrice == null && bestAskPrice == null)
+				return null;
+
+			if (bestBidPrice != null && bestAskPrice != null)
+				return (bestAskPrice + bestBidPrice).Value / 2;
+
+			return bestAskPrice ?? bestBidPrice.Value;
+		}
+
+		/// <summary>
 		/// Cast <see cref="OrderMessage"/> to the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		/// <param name="message"><see cref="OrderMessage"/>.</param>
