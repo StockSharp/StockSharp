@@ -2989,6 +2989,16 @@
             The renderer type for indicator extended drawing.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorType.InputValue">
+      <summary>
+            Input values type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorType.OutputValue">
+      <summary>
+            Result values type.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorType.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.IndicatorType" />.

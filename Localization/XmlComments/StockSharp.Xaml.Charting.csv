@@ -854,6 +854,8 @@ P:StockSharp.Xaml.Charting.IndicatorType.Name/summary;Str908
 P:StockSharp.Xaml.Charting.IndicatorType.Description/summary;DocStr7854
 P:StockSharp.Xaml.Charting.IndicatorType.Indicator/summary;IndicatorType
 P:StockSharp.Xaml.Charting.IndicatorType.Painter/summary;DocStr7851
+P:StockSharp.Xaml.Charting.IndicatorType.InputValue/summary;DocStr10108
+P:StockSharp.Xaml.Charting.IndicatorType.OutputValue/summary;DocStr9805
 M:StockSharp.Xaml.Charting.IndicatorType.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Charting.IndicatorType.#ctor(System.Type,System.Type)/summary;DocStr1
 M:StockSharp.Xaml.Charting.IndicatorType.#ctor(System.Type,System.Type)/param/indicator;IndicatorType

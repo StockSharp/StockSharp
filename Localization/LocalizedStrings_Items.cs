@@ -46126,5 +46126,35 @@ namespace StockSharp.Localization
 		/// +{0} more
 		/// </summary>
 		public static string NMore => GetString(NMoreKey);
+
+		/// <summary>
+		/// Update securities
+		/// </summary>
+		public const string UpdateSecuritiesKey = nameof(UpdateSecurities);
+
+		/// <summary>
+		/// Update securities
+		/// </summary>
+		public static string UpdateSecurities => GetString(UpdateSecuritiesKey);
+
+		/// <summary>
+		/// Update securities when connected.
+		/// </summary>
+		public const string UpdateSecuritiesOnConnectKey = nameof(UpdateSecuritiesOnConnect);
+
+		/// <summary>
+		/// Update securities when connected.
+		/// </summary>
+		public static string UpdateSecuritiesOnConnect => GetString(UpdateSecuritiesOnConnectKey);
+
+		/// <summary>
+		/// Need {0} securities.
+		/// </summary>
+		public const string NeedNSecuritiesKey = nameof(NeedNSecurities);
+
+		/// <summary>
+		/// Need {0} securities.
+		/// </summary>
+		public static string NeedNSecurities => GetString(NeedNSecuritiesKey);
 	}
 }

@@ -1182,6 +1182,8 @@ P:StockSharp.Messages.MarketDataMessage.MaxDepth/summary;DocStr4479
 P:StockSharp.Messages.MarketDataMessage.NewsId/summary;DocStr4480
 P:StockSharp.Messages.MarketDataMessage.IsCalcVolumeProfile/summary;DocStr2053
 P:StockSharp.Messages.MarketDataMessage.BuildCandlesMode/summary;DocStr9659
+P:StockSharp.Messages.MarketDataMessage.BuildCandlesFrom/summary;DocStr10124
+P:StockSharp.Messages.MarketDataMessage.BuildCandlesField/summary;DocStr10135
 P:StockSharp.Messages.MarketDataMessage.IsHistory/summary;DocStr9664
 F:StockSharp.Messages.MarketDataMessage.DefaultMaxDepth/summary;DocStr4474
 M:StockSharp.Messages.MarketDataMessage.#ctor/summary;DocStr1

@@ -4650,6 +4650,9 @@ BidsOnTop;Bids above;Покупки сверху
 BidsOnTopDesc;Whether to show the bids above. The default is off.;Показывать ли биды сверху. По умолчанию выключено.
 MathFormulaDesc;Math formula. For example: (sin(x)+log(y)) / z;Мат формула. Например: (sin(x)+log(y)) / z
 NMore;+{0} more;+{0} больше
+UpdateSecurities;Update securities;Обновлять инструменты
+UpdateSecuritiesOnConnect;Update securities when connected.;Обновлять инструменты при подключении.
+NeedNSecurities;Need {0} securities.;Необходимо {0} инструмента.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14474,3 +14477,22 @@ DocStr10119;Remove all market data types from {0};Удалить все типы
 DocStr10120;Supported by adapter market data types;Поддерживаемые адаптером типы маркет данных
 DocStr10121;Level one market-data field, which is used as a candle value;Поле маркет-данных первого уровня, которое используется как значение свечи
 DocStr10122;The middle of spread;Середина спреда.
+DocStr10123;The interface that describes data transformation of the {0} source;The interface that describes data transformation of the {0} source
+DocStr10124;Which market-data type is used as an candle source value;Which market-data type is used as an candle source value
+DocStr10125;Process message to update current state;Process message to update current state
+DocStr10126;{0}, if the message was processed, otherwise, {1};{0}, if the message was processed, otherwise, {1}
+DocStr10127;The base data source transformation for {0};The base data source transformation for {0}
+DocStr10128;Update latest values;Update latest values
+DocStr10129;The tick based data source transformation for {0};The tick based data source transformation for {0}
+DocStr10130;The order book based data source transformation for {0};The order book based data source transformation for {0}
+DocStr10131;Type of candle based data;Type of candle based data
+DocStr10132;The level1 based data source transformation for {0};The level1 based data source transformation for {0}
+DocStr10133;The order log based data source transformation for {0};The order log based data source transformation for {0}
+DocStr10134;The data source transformation;The data source transformation
+DocStr10135;Extra info for the {0};Extra info for the {0}
+DocStr10136;Attribute, applied to indicator, to provide information about type of values {0};Атрибут, применяемый к индикатору для предоставления типа данных {0}
+DocStr10137;Is input;Входящее
+DocStr10138;Attribute, applied to indicator, to provide information about type of input values {0};Атрибут, применяемый к индикатору для предоставления типа входящих данных {0}
+DocStr10139;Values type;Тип данных
+DocStr10140;Attribute, applied to indicator, to provide information about type of output values {0};Атрибут, применяемый к индикатору для предоставления типа исходящих данных {0}
+DocStr10141;Get value type for specified indicator;Получить тип данных для указанного индикатора
