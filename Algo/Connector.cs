@@ -126,7 +126,7 @@ namespace StockSharp.Algo
 
 			_subscriptionManager = new SubscriptionManager(this);
 
-			UpdateSecurityLastQuotes = UpdateSecurityByLevel1 = true;
+			UpdateSecurityLastQuotes = UpdateSecurityByLevel1 = UpdateSecurityByDefinition = true;
 
 			CreateDepthFromLevel1 = true;
 			SupportFilteredMarketDepth = true;
@@ -405,6 +405,11 @@ namespace StockSharp.Algo
 		/// To update <see cref="Security"/> fields when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 		/// </summary>
 		public bool UpdateSecurityByLevel1 { get; set; }
+
+		/// <summary>
+		/// To update <see cref="Security"/> fields when the <see cref="SecurityMessage"/> message appears. By default is enabled.
+		/// </summary>
+		public bool UpdateSecurityByDefinition { get; set; }
 
 		/// <summary>
 		/// To update the order book for the instrument when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
@@ -1252,7 +1257,7 @@ namespace StockSharp.Algo
 			{
 				var idInfo = SecurityIdGenerator.Split(idStr);
 				return Tuple.Create(idInfo.SecurityCode, _entityCache.ExchangeInfoProvider.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode)));
-			}, out bool isNew);
+			}, out var isNew);
 
 			var isChanged = changeSecurity(security);
 
@@ -1431,6 +1436,7 @@ namespace StockSharp.Algo
 			OrdersKeepCount = storage.GetValue(nameof(OrdersKeepCount), OrdersKeepCount);
 			UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), true);
 			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), true);
+			UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), true);
 			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
 			if (storage.ContainsKey(nameof(LatencyManager)))
@@ -1478,6 +1484,7 @@ namespace StockSharp.Algo
 			storage.SetValue(nameof(OrdersKeepCount), OrdersKeepCount);
 			storage.SetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
 			storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
+			storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 
 			if (LatencyManager != null)

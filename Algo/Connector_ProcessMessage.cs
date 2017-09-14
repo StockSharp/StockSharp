@@ -1106,6 +1106,9 @@ namespace StockSharp.Algo
 
 			var security = GetSecurity(secId, s =>
 			{
+				if (!UpdateSecurityByDefinition)
+					return false;
+
 				s.ApplyChanges(message, _entityCache.ExchangeInfoProvider);
 				return true;
 			});

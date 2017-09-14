@@ -64,6 +64,7 @@ StockSharp API Change log
 * (bug) AlfaDirect. Security lookup fixes.
 * (feature) SecurityStorage. Load empty strings as null.
 * (feature) CandleBuilder. Support OI.
+* (feature) Connector.UpdateSecurityByDefinition.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
