@@ -71,7 +71,19 @@ namespace StockSharp.Algo.Candles.Compression
 
 			public CandleMessage CurrentCandleMessage { get; set; }
 
-			public MarketDataTypes[] SupportedMarketDataTypes { get; set; } = ArrayHelper.Empty<MarketDataTypes>();
+			private MarketDataTypes[] _supportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
+
+			public MarketDataTypes[] SupportedMarketDataTypes
+			{
+				get => _supportedMarketDataTypes;
+				set
+				{
+					if (value == null)
+						throw new ArgumentNullException(nameof(value));
+
+					_supportedMarketDataTypes = value;
+				}
+			}
 		}
 
 		private class DummyCandleBuilderValueTransform : BaseCandleBuilderValueTransform
@@ -563,7 +575,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private static void SetAvailableMarketDataType(SeriesInfo info, Message msg)
 		{
-			if (info.SupportedMarketDataTypes == null || info.SupportedMarketDataTypes.IsEmpty())
+			if (info.SupportedMarketDataTypes.IsEmpty() && msg.Adapter != null)
 				info.SupportedMarketDataTypes = msg.Adapter.SupportedMarketDataTypes;
 		}
 
