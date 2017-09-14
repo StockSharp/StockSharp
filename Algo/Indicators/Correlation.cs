@@ -73,7 +73,12 @@ namespace StockSharp.Algo.Indicators
 			var sourceDev = _source.Process(value.Item1);
 			var otherDev = _other.Process(value.Item2);
 
-			return new DecimalIndicatorValue(this, cov.GetValue<decimal>() / (sourceDev.GetValue<decimal>() * otherDev.GetValue<decimal>()));
+			var v = sourceDev.GetValue<decimal>() * otherDev.GetValue<decimal>();
+
+			if (v != 0)
+				v = cov.GetValue<decimal>() / v;
+
+			return new DecimalIndicatorValue(this, v);
 		}
 	}
 }
