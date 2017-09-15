@@ -280,7 +280,7 @@
 
 		private long _transId;
 
-		private void Chart_OnRegisterOrder(Order orderDraft)
+		private void Chart_OnRegisterOrder(ChartArea area, Order orderDraft)
 		{
 			if (NeedToConfirm && !Confirm("Register order?"))
 				return;

@@ -156,7 +156,7 @@ namespace SampleStrategies
 
 		public void ProcessOrder(Order order)
 		{
-			_quotesWindows.TryGetValue(order.Security)?.DepthCtrl.ProcessOrder(order);
+			_quotesWindows.TryGetValue(order.Security)?.DepthCtrl.ProcessOrder(order, order.Balance, order.State);
 		}
 	}
 }

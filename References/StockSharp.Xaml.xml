@@ -3122,11 +3122,13 @@
             </summary>
       <param name="security">Security.</param>
     </member>
-    <member name="M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order)">
+    <member name="M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order,System.Decimal,StockSharp.Messages.OrderStates)">
       <summary>
             To handle an order.
             </summary>
       <param name="order">Order.</param>
+      <param name="balance">Order contracts remainder.</param>
+      <param name="state">Order state.</param>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)">
       <summary>

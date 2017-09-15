@@ -29,6 +29,9 @@
             Native identifier can be stored.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend">
       <summary>
             Enable suspend mode (enqueue non ordered messages).
@@ -223,6 +226,9 @@
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.TimeFrames">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedMarketDataTypes">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.NewOrderSingleErrorsAsReject">
@@ -458,6 +464,11 @@
             Support filtering subscriptions (subscribe/unsubscribe for specified security).
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.SupportedMarketDataTypes">
+      <summary>
+            Supported by adapter market data types.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
       <summary>
             Test dump files.
@@ -590,6 +601,11 @@
             Available time frames.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.SupportedMarketDataTypes">
+      <summary>
+            Supported by adapter market data types.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
             Initialize dialect.
@@ -701,6 +717,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportSubscriptionBySecurity">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FastMessageAdapter.SupportedMarketDataTypes">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -6100,6 +6119,9 @@
       <summary>
             Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
             </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.SupportedMarketDataTypes">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
