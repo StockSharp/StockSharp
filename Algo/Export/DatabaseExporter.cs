@@ -24,11 +24,10 @@ namespace StockSharp.Algo.Export
 	using MoreLinq;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Export.Database;
 	using StockSharp.Algo.Export.Database.DbProviders;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// The export into database.
@@ -108,7 +107,7 @@ namespace StockSharp.Algo.Export
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			// TODO
-			Do(messages, () => new CandleTable(Security, typeof(TimeFrameCandle), Arg));
+			Do(messages, () => new CandleTable(Security));
 		}
 
 		/// <inheritdoc />
