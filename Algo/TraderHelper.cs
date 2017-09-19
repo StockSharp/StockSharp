@@ -4220,5 +4220,79 @@ namespace StockSharp.Algo
 					return typeof(decimal);
 			}
 		}
+
+		/// <summary>
+		/// Convert <see cref="QuoteChangeMessage"/> to <see cref="Level1ChangeMessage"/>.
+		/// </summary>
+		/// <param name="message"><see cref="QuoteChangeMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this QuoteChangeMessage message)
+		{
+			var bestBid = message.GetBestBid();
+			var bestAsk = message.GetBestAsk();
+
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.ServerTime,
+			};
+
+			if (bestBid != null)
+			{
+				level1.Add(Level1Fields.BestBidPrice, bestBid.Price);
+				level1.Add(Level1Fields.BestBidVolume, bestBid.Volume);
+			}
+
+			if (bestAsk != null)
+			{
+				level1.Add(Level1Fields.BestAskPrice, bestAsk.Price);
+				level1.Add(Level1Fields.BestAskVolume, bestAsk.Volume);
+			}
+
+			return level1;
+		}
+
+		/// <summary>
+		/// Convert <see cref="CandleMessage"/> to <see cref="Level1ChangeMessage"/>.
+		/// </summary>
+		/// <param name="message"><see cref="CandleMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this CandleMessage message)
+		{
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.OpenTime,
+			}
+			.Add(Level1Fields.OpenPrice, message.OpenPrice)
+			.Add(Level1Fields.HighPrice, message.HighPrice)
+			.Add(Level1Fields.LowPrice, message.LowPrice)
+			.Add(Level1Fields.ClosePrice, message.ClosePrice)
+			.Add(Level1Fields.Volume, message.TotalVolume)
+			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest);
+
+			return level1;
+		}
+
+		/// <summary>
+		/// Convert <see cref="ExecutionMessage"/> to <see cref="Level1ChangeMessage"/>.
+		/// </summary>
+		/// <param name="message"><see cref="ExecutionMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this ExecutionMessage message)
+		{
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.ServerTime,
+			}
+			.TryAdd(Level1Fields.LastTradeId, message.TradeId)
+			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice)
+			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume)
+			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest)
+			.TryAdd(Level1Fields.LastTradeOrigin, message.OriginSide);
+
+			return level1;
+		}
 	}
 }
