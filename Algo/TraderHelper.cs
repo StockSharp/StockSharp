@@ -2819,6 +2819,9 @@ namespace StockSharp.Algo
 		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, object value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
 			message.Changes[type] = value;
 			return message;
 		}
@@ -2971,7 +2974,7 @@ namespace StockSharp.Algo
 			where TMessage : BaseChangeMessage<TChange>
 		{
 			if (value == null || value == 0)
-				return null;
+				return message;
 
 			return message.Add(type, value.Value);
 		}
@@ -3007,7 +3010,7 @@ namespace StockSharp.Algo
 			where TMessage : BaseChangeMessage<TChange>
 		{
 			if (value == null || value == 0)
-				return null;
+				return message;
 
 			return message.Add(type, value.Value);
 		}
