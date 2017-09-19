@@ -40,7 +40,7 @@ namespace StockSharp.Messages
 		OpenPrice,
 
 		/// <summary>
-		/// Greatest price.
+		/// Highest price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str287Key)]

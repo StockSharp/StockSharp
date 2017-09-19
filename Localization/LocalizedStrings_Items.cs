@@ -3138,12 +3138,12 @@ namespace StockSharp.Localization
 		public static string Str285 => GetString(Str285Key);
 
 		/// <summary>
-		/// Greatest price
+		/// Highest price
 		/// </summary>
 		public const string Str287Key = nameof(Str287);
 
 		/// <summary>
-		/// Greatest price
+		/// Highest price
 		/// </summary>
 		public static string Str287 => GetString(Str287Key);
 
