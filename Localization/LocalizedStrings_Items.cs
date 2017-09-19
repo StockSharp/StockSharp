@@ -46156,5 +46156,25 @@ namespace StockSharp.Localization
 		/// Need {0} securities.
 		/// </summary>
 		public static string NeedNSecurities => GetString(NeedNSecuritiesKey);
+
+		/// <summary>
+		/// Closing price (chart)
+		/// </summary>
+		public const string ClosingPriceChartKey = nameof(ClosingPriceChart);
+
+		/// <summary>
+		/// Closing price (chart)
+		/// </summary>
+		public static string ClosingPriceChart => GetString(ClosingPriceChartKey);
+
+		/// <summary>
+		/// P&amp;L (chart)
+		/// </summary>
+		public const string PnLChartKey = nameof(PnLChart);
+
+		/// <summary>
+		/// P&amp;L (chart)
+		/// </summary>
+		public static string PnLChart => GetString(PnLChartKey);
 	}
 }
