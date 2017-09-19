@@ -648,7 +648,8 @@ namespace StockSharp.Algo
 
 		private void RaiseMarketDataSubscriptionSucceeded(Security security, MarketDataMessage message)
 		{
-			var msg = LocalizedStrings.Str690Params.Put(security.Id, message.DataType);
+			var msg = LocalizedStrings.Str690Params.Put(security.Id,
+				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
 
 			if (message.From != null && message.To != null)
 				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
