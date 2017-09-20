@@ -26,5 +26,21 @@ namespace StockSharp.Messages
 			: base(MessageTypes.MarketDataFinished)
 		{
 		}
+
+		/// <summary>
+		/// Create a copy of <see cref="MarketDataFinishedMessage"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override Message Clone()
+		{
+			var msg = new MarketDataFinishedMessage
+			{
+				LocalTime = LocalTime,
+				OriginalTransactionId = OriginalTransactionId,
+				IsHistory = IsHistory,
+			};
+
+			return msg;
+		}
 	}
 }
