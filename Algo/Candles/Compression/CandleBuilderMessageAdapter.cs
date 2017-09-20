@@ -606,6 +606,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void SendCandle(SeriesInfo info, CandleMessage candleMsg)
 		{
+			if (info.LastTime > candleMsg.OpenTime)
+				return;
+
 			info.LastTime = candleMsg.OpenTime;
 
 			var clone = (CandleMessage)candleMsg.Clone();
@@ -733,6 +736,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private static bool CheckTime(SeriesInfo info, DateTimeOffset time)
 		{
+			if (info.LastTime > time)
+				return false;
+
 			var res = info.Board.IsTradeTime(time, out var period);
 			info.CurrentPeriod = Tuple.Create(time, period);
 
