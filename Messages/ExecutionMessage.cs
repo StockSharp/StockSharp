@@ -19,7 +19,6 @@ namespace StockSharp.Messages
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -541,7 +540,7 @@ namespace StockSharp.Messages
 			{
 				Balance = Balance,
 				Comment = Comment,
-				Condition = Condition.CloneNullable(),
+				Condition = Condition?.Clone(),
 				ClientCode = ClientCode,
 				BrokerCode = BrokerCode,
 				Currency = Currency,

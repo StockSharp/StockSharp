@@ -18,7 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -153,8 +152,8 @@ namespace StockSharp.Messages
 				OrderType = OrderType,
 				PortfolioName = PortfolioName,
 				Price = Price,
-				RepoInfo = RepoInfo.CloneNullable(),
-				RpsInfo = RpsInfo.CloneNullable(),
+				RepoInfo = RepoInfo?.Clone(),
+				RpsInfo = RpsInfo?.Clone(),
 				SecurityId = SecurityId,
 				//SecurityType = SecurityType,
 				Side = Side,
