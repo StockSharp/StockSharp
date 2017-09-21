@@ -4655,6 +4655,7 @@ UpdateSecuritiesOnConnect;Update securities when connected.;Обновлять �
 NeedNSecurities;Need {0} securities.;Необходимо {0} инструмента.
 ClosingPriceChart;Closing price (chart);Цена закрытия (график)
 PnLChart;P&L (chart);P&L (график)
+ExpirationDays;Expiry (days);Экспирация (дней)
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

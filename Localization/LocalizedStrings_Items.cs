@@ -46176,5 +46176,15 @@ namespace StockSharp.Localization
 		/// P&amp;L (chart)
 		/// </summary>
 		public static string PnLChart => GetString(PnLChartKey);
+
+		/// <summary>
+		/// Expiry (days)
+		/// </summary>
+		public const string ExpirationDaysKey = nameof(ExpirationDays);
+
+		/// <summary>
+		/// Expiry (days)
+		/// </summary>
+		public static string ExpirationDays => GetString(ExpirationDaysKey);
 	}
 }
