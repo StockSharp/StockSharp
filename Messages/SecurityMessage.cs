@@ -228,7 +228,8 @@ namespace StockSharp.Messages
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
-		public void CopyTo(SecurityMessage destination)
+		/// <param name="copyOriginalTransactionId">Copy <see cref="SecurityMessage.OriginalTransactionId"/>.</param>
+		public void CopyTo(SecurityMessage destination, bool copyOriginalTransactionId = true)
 		{
 			if (destination == null)
 				throw new ArgumentNullException(nameof(destination));
@@ -238,7 +239,6 @@ namespace StockSharp.Messages
 			destination.ShortName = ShortName;
 			destination.Currency = Currency;
 			destination.ExpiryDate = ExpiryDate;
-			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.OptionType = OptionType;
 			destination.PriceStep = PriceStep;
 			destination.Decimals = Decimals;
@@ -252,6 +252,9 @@ namespace StockSharp.Messages
 			destination.Class = Class;
 			destination.BinaryOptionType = BinaryOptionType;
 			destination.LocalTime = LocalTime;
+
+			if (copyOriginalTransactionId)
+				destination.OriginalTransactionId = OriginalTransactionId;
 		}
 
 		/// <summary>

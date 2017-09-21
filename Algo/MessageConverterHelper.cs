@@ -454,7 +454,7 @@ namespace StockSharp.Algo
 				IsMarketMaker = order.IsMarketMaker,
 			};
 
-			order.Security.ToMessage(securityId).CopyTo(msg);
+			order.Security.ToMessage(securityId).CopyTo(msg, false);
 
 			return msg;
 		}
@@ -487,7 +487,7 @@ namespace StockSharp.Algo
 				Side = order.Direction
 			};
 
-			order.Security.ToMessage(securityId).CopyTo(msg);
+			order.Security.ToMessage(securityId).CopyTo(msg, false);
 
 			return msg;
 		}
@@ -536,7 +536,7 @@ namespace StockSharp.Algo
 				Currency = newOrder.Currency,
 			};
 
-			oldOrder.Security.ToMessage(securityId).CopyTo(msg);
+			oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
 
 			return msg;
 		}
@@ -560,7 +560,7 @@ namespace StockSharp.Algo
 				Message2 = oldOrder2.CreateReplaceMessage(newOrder2, security2)
 			};
 
-			oldOrder1.Security.ToMessage(security1).CopyTo(msg);
+			oldOrder1.Security.ToMessage(security1).CopyTo(msg, false);
 
 			return msg;
 		}
@@ -1569,7 +1569,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			security.ToMessage(security.ToSecurityId()).CopyTo(message);
+			security.ToMessage(security.ToSecurityId()).CopyTo(message, false);
 			return message;
 		}
 
@@ -1591,7 +1591,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			security.ToMessage(connector.GetSecurityId(security)).CopyTo(message);
+			security.ToMessage(connector.GetSecurityId(security)).CopyTo(message, false);
 			return message;
 		}
 

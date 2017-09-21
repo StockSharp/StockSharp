@@ -67,6 +67,7 @@ StockSharp API Change log
 * (feature) Connector.UpdateSecurityByDefinition.
 * (feature) QuoteChangeMessage.GetSpreadMiddle extension.
 * (feature) Level1ChangeMessage.GetSpreadMiddle extension.
+* (bug) Copy security info fix.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.
