@@ -193,8 +193,6 @@ namespace StockSharp.Messages
 			set => InnerAdapter.SupportedMarketDataTypes = value;
 		}
 
-		bool IMessageAdapter.IsValid => InnerAdapter.IsValid;
-
 		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo => InnerAdapter.SecurityClassInfo;
 
 		/// <inheritdoc />

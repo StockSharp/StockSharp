@@ -60,11 +60,6 @@ namespace StockSharp.Messages
 		MarketDataTypes[] SupportedMarketDataTypes { get; set; }
 
 		/// <summary>
-		/// The parameters validity check.
-		/// </summary>
-		bool IsValid { get; }
-
-		/// <summary>
 		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
 		/// </summary>
 		IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }

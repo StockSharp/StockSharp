@@ -154,10 +154,6 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsValid => true;
-
-		/// <inheritdoc />
-		[Browsable(false)]
 		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;

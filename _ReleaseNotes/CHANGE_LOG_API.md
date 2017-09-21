@@ -68,6 +68,7 @@ StockSharp API Change log
 * (feature) QuoteChangeMessage.GetSpreadMiddle extension.
 * (feature) Level1ChangeMessage.GetSpreadMiddle extension.
 * (bug) Copy security info fix.
+* (feature) IMessageAdapter.IsValid removed.
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

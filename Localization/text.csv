@@ -3115,7 +3115,6 @@ Str3340Params;Unknown order direction {0}.;Неизвестное направл
 Str3341;Wrong category value.;Неправильное значение категории.
 Str3343;Wrong price.;Неправильная цена.
 Str3344;Wrong volume.;Неправильный объем.
-Str3345;Consumer key/secret is not set.;Не заданы consumer key/secret.
 Str3346Params;Error receiving request token: server reply '{0}'.;Ошибка получения request token: ответ сервера '{0}'.
 Str3347Params;Error receiving access token: server reply '{0}'.;Ошибка получения access token: ответ сервера '{0}'.
 Str3348;GetAccessToken: token and/or secret not received.;GetAccessToken: token и/или secret не получены.
@@ -3423,8 +3422,8 @@ Str3685;Type of protocol that uses proxy.;Тип протокола, котор�
 Str3686;Login (if proxy demands authorization).;Логин (если прокси требует авторизацию).
 Str3687;Password (if proxy requires authorization).;Пароль (если прокси требует авторизацию).
 Str3688;Proxy server address.;Адрес Proxy сервера.
-Str3689;Consumer key not specified.;Не указан consumer key.
-Str3690;Consumer secret not specified.;Не указан consumer secret.
+Str3689;Key not specified.;Не указан ключ.
+Str3690;Secret not specified.;Не указан секрет.
 Str3691Params;Token deserialization error: {0};Ошибка десериализации токена: {0}
 Str3692;Access server ID.;Идентификатор сервера доступа.
 Str3693; quotes; котировки

@@ -31088,16 +31088,6 @@ namespace StockSharp.Localization
 		public static string Str3344 => GetString(Str3344Key);
 
 		/// <summary>
-		/// Consumer key/secret is not set.
-		/// </summary>
-		public const string Str3345Key = nameof(Str3345);
-
-		/// <summary>
-		/// Consumer key/secret is not set.
-		/// </summary>
-		public static string Str3345 => GetString(Str3345Key);
-
-		/// <summary>
 		/// Error receiving request token: server reply '{0}'.
 		/// </summary>
 		public const string Str3346ParamsKey = nameof(Str3346Params);
@@ -34158,22 +34148,22 @@ namespace StockSharp.Localization
 		public static string Str3688 => GetString(Str3688Key);
 
 		/// <summary>
-		/// Consumer key not specified.
+		/// Key not specified.
 		/// </summary>
 		public const string Str3689Key = nameof(Str3689);
 
 		/// <summary>
-		/// Consumer key not specified.
+		/// Key not specified.
 		/// </summary>
 		public static string Str3689 => GetString(Str3689Key);
 
 		/// <summary>
-		/// Consumer secret not specified.
+		/// Secret not specified.
 		/// </summary>
 		public const string Str3690Key = nameof(Str3690);
 
 		/// <summary>
-		/// Consumer secret not specified.
+		/// Secret not specified.
 		/// </summary>
 		public static string Str3690 => GetString(Str3690Key);
 
