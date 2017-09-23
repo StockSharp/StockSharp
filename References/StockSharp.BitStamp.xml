@@ -21,6 +21,9 @@
     <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativePortfolioLookup">
       <inheritdoc />
     </member>
+    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.CreateOrderCondition">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>
@@ -37,11 +40,6 @@
     <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.ClientId">
       <summary>
             Client ID.
-            </summary>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
             </summary>
     </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
@@ -61,6 +59,21 @@
             Returns a string that represents the current object.
             </summary>
       <returns>A string that represents the current object.</returns>
+    </member>
+    <member name="T:StockSharp.BitStamp.BitStampOrderCondition">
+      <summary>
+        <see cref="N:StockSharp.BitStamp" /> order condition.
+            </summary>
+    </member>
+    <member name="M:StockSharp.BitStamp.BitStampOrderCondition.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitStamp.BitStampOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.BitStamp.BitStampOrderCondition.StopPrice">
+      <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
     </member>
     <member name="T:StockSharp.BitStamp.BitStampTrader">
       <summary>
