@@ -1102,11 +1102,6 @@
             Настройки конфигурации серверной части SmartCOM.
             </summary>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
-            </summary>
-    </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Сохранить настройки.
