@@ -46176,5 +46176,35 @@ namespace StockSharp.Localization
 		/// Expiry (days)
 		/// </summary>
 		public static string ExpirationDays => GetString(ExpirationDaysKey);
+
+		/// <summary>
+		/// Set up task '{0}' now?
+		/// </summary>
+		public const string SetupTaskNowKey = nameof(SetupTaskNow);
+
+		/// <summary>
+		/// Set up task '{0}' now?
+		/// </summary>
+		public static string SetupTaskNow => GetString(SetupTaskNowKey);
+
+		/// <summary>
+		/// Enable task '{0}' now (the task will go into the active mode)?
+		/// </summary>
+		public const string EnableTaskNowKey = nameof(EnableTaskNow);
+
+		/// <summary>
+		/// Enable task '{0}' now (the task will go into the active mode)?
+		/// </summary>
+		public static string EnableTaskNow => GetString(EnableTaskNowKey);
+
+		/// <summary>
+		/// At the moment, no instruments are specified for task '{0}'. Add them now (or download if they are not yet exist)?
+		/// </summary>
+		public const string AddSecuritiesNowKey = nameof(AddSecuritiesNow);
+
+		/// <summary>
+		/// At the moment, no instruments are specified for task '{0}'. Add them now (or download if they are not yet exist)?
+		/// </summary>
+		public static string AddSecuritiesNow => GetString(AddSecuritiesNowKey);
 	}
 }
