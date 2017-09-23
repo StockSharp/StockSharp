@@ -215,34 +215,34 @@
             Financial reports types.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Overview">
+    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.CompanyOverview">
       <summary>
-            Overview.
+            Company overview.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Statements">
+    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialStatements">
       <summary>
-            Statements.
+            Financial statements.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Summary">
+    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialSummary">
       <summary>
-            Summary.
+            Financial summary.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Ratio">
+    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialRatio">
       <summary>
-            Ratio.
+            Financial ratios.
             </summary>
     </member>
     <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Estimates">
       <summary>
-            Estimates.
+            Analyst estimates.
             </summary>
     </member>
     <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Calendar">
       <summary>
-            Chart.
+            Company calendar from Wall Street Horizons.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.GenericFieldTypes">
@@ -2465,11 +2465,6 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month">
       <summary>
             Monthly time frame.
-            </summary>
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Year">
-      <summary>
-            Annual time frame.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.SoftDollarTier">
