@@ -188,11 +188,6 @@
             Интервал оповещения сервера об активности. Используется в режиме Cancel On Disconnect.
             </summary>
     </member>
-    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
-            </summary>
-    </member>
     <member name="M:StockSharp.Micex.MicexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Сохранить настройки.

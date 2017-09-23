@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.3.27.2:
 * (feature) QuikLua. Support candles.
 * (feature) SpbExTrader.IgnoreLimits.
 * (bug) Clipboard fix.
@@ -69,6 +69,19 @@ StockSharp API Change log
 * (feature) Level1ChangeMessage.GetSpreadMiddle extension.
 * (bug) Copy security info fix.
 * (feature) IMessageAdapter.IsValid removed.
+* (feature) SecurityGrid. Close price mini chart column.
+* (feature) StrategiesDashboard. P&L mini chart column.
+* (feature) StrategiesStatisticsPanel. P&L mini chart column.
+* (feature) BitStamp. V2 protocol.
+* (feature) SecurityGrid. Days till expiry column.
+* (bug) SecurityGrid. ExpiryDate, Strike columns sorting fix.
+* (feature) Interactive Brokers. v9.73.04
+* (bug) Interactive Brokers. Fix historical market data request.
+* (feature) Transaq. Initial init candle periods.
+* (bug) SmartCom. Price step fixes.
+* (feature) BTCE. Domain update.
+* (bug) Oanda. Fill ExecMsg.TradePrice
+* (feature) MarketDepthControl. Process order with specified state and balance (in async mode).
 
 ## v4.3.26.2:
 * (feature) Position tracking storage.

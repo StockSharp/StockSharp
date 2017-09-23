@@ -57,11 +57,6 @@
             Candle downloading sleep interval.
             </summary>
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
-            </summary>
-    </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames">
       <summary>
             Available time frames.

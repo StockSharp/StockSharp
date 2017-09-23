@@ -6191,11 +6191,6 @@
             The timeout of sending data. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
       <summary>
             Available time frames.

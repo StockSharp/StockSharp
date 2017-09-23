@@ -88,11 +88,6 @@
             Information about the time zone where the exchange is located.
             </summary>
         </member>
-        <member name="P:StockSharp.ITCH.ItchMessageAdapter.IsValid">
-            <summary>
-            The parameters validity check.
-            </summary>
-        </member>
         <member name="M:StockSharp.ITCH.ItchMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.

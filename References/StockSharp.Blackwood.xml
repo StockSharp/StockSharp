@@ -164,11 +164,6 @@
             Override dll file from resources. Turned on by default.
             </summary>
     </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
-            </summary>
-    </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames">
       <summary>
             Available time frames.

@@ -109,11 +109,6 @@
             Verification code, received by user in browser, after confirming program's permission to work.
             </summary>
     </member>
-    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
-            </summary>
-    </member>
     <member name="M:StockSharp.ETrade.ETradeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.

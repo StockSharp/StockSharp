@@ -31,11 +31,6 @@
             Dates format. Required to be filled if RSS stream format is different from ddd, dd MMM yyyy HH:mm:ss zzzz.
             </summary>
         </member>
-        <member name="P:StockSharp.Rss.RssMarketDataMessageAdapter.IsValid">
-            <summary>
-            The parameters validity check.
-            </summary>
-        </member>
         <member name="M:StockSharp.Rss.RssMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
             <summary>
             Load settings.

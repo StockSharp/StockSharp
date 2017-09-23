@@ -141,6 +141,12 @@
             </summary>
       <returns>Пользовательский запрос.</returns>
     </member>
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.AddRequest(StockSharp.Quik.Lua.LuaRequest)">
+      <summary>
+            Добавить пользовательский запрос.
+            </summary>
+      <param name="request">Пользовательский запрос.</param>
+    </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetNextTransactionId">
       <summary>
             Получить номер транзакции для ручной заявки. Начинается с 1.
@@ -2440,11 +2446,6 @@
             Значение по умолчанию <see langword="false" />.
             </remarks>
     </member>
-    <member name="P:StockSharp.Quik.QuikDdeAdapter.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
-            </summary>
-    </member>
     <member name="P:StockSharp.Quik.QuikDdeAdapter.Tables">
       <summary>
             Таблицы, для которых будет запущен экспорт данных.
@@ -3300,11 +3301,6 @@
     <member name="P:StockSharp.Quik.QuikTrans2QuikAdapter.SingleSlash">
       <summary>
             https://forum.quik.ru/forum10/topic1218/
-            </summary>
-    </member>
-    <member name="P:StockSharp.Quik.QuikTrans2QuikAdapter.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
             </summary>
     </member>
     <member name="M:StockSharp.Quik.QuikTrans2QuikAdapter.CreateOrderCondition">

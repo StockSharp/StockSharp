@@ -84,11 +84,6 @@
             Protocol version.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
-            </summary>
-    </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1ColumnRegistry">
       <summary>
             The list of all available <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />.

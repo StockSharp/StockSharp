@@ -53,11 +53,6 @@
             7-ми символьный код клиента.
             </summary>
     </member>
-    <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
-            </summary>
-    </member>
     <member name="M:StockSharp.Twime.TwimeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Сохранить настройки.

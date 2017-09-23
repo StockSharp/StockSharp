@@ -122,11 +122,6 @@
             Logger address.
             </summary>
         </member>
-        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsValid">
-            <summary>
-            The parameters validity check.
-            </summary>
-        </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames">
             <summary>
             Available time frames.

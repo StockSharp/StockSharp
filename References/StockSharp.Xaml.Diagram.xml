@@ -1134,6 +1134,12 @@
             To ignore when saving.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.IDiagramElementParam.SetValueWithIgnoreOnSave(System.Object)">
+      <summary>
+            Set value and ignore it on save settings.
+            </summary>
+      <param name="value">Value.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramElementParam`1">
       <summary>
             The diagram element parameter.
@@ -1204,6 +1210,9 @@
       <summary>
             To ignore when saving.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.SetValueWithIgnoreOnSave(System.Object)">
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.NotifyOnChanged">
       <summary>
