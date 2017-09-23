@@ -445,9 +445,14 @@ namespace StockSharp.Algo.Candles.Compression
 			msg.TransactionId = info.TransactionId;
 			msg.From = info.LastTime;
 
-			if (msg.DataType != info.Transform.BuildFrom)
+			var buildFrom = info.Transform.BuildFrom;
+
+			if (msg.DataType != buildFrom)
 			{
-				msg.DataType = info.Transform.BuildFrom;
+				if (buildFrom.IsCandleDataType())
+					throw new InvalidOperationException(buildFrom.ToString());
+
+				msg.DataType = buildFrom;
 				msg.Arg = null;
 			}
 
