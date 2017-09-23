@@ -39,11 +39,6 @@
             Domain address.
             </summary>
         </member>
-        <member name="P:StockSharp.Btce.BtceMessageAdapter.IsValid">
-            <summary>
-            The parameters validity check.
-            </summary>
-        </member>
         <member name="M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
