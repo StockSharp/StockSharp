@@ -1495,6 +1495,11 @@
       <summary>
       </summary>
     </member>
+    <member name="P:StockSharp.Xaml.StrategiesDashboardItem.PnLValues">
+      <summary>
+            P&amp;L values.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.StrategiesDashboardItem.ProcessState">
       <summary>
       </summary>
@@ -5445,6 +5450,11 @@
     <member name="P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowSecurity">
       <summary>
             To show the Security column.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowPnLChart">
+      <summary>
+            To show the P&amp;L chart column.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.StrategiesStatisticsPanel.SelectedStrategy">
