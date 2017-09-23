@@ -127,11 +127,6 @@
             Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
             </summary>
     </member>
-    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
-            </summary>
-    </member>
     <member name="P:StockSharp.Transaq.TransaqMessageAdapter.ConnectorVersion">
       <summary>
             Версия коннектора.
