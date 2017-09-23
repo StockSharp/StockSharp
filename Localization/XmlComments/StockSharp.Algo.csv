@@ -7084,6 +7084,15 @@ M:StockSharp.Algo.TraderHelper.ValidateId(System.String@)/returns;DocStr8297
 M:StockSharp.Algo.TraderHelper.ToType(StockSharp.Messages.Level1Fields)/summary;DocStr8644
 M:StockSharp.Algo.TraderHelper.ToType(StockSharp.Messages.Level1Fields)/param/field;DocStr65
 M:StockSharp.Algo.TraderHelper.ToType(StockSharp.Messages.Level1Fields)/returns;DocStr65
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.QuoteChangeMessage)/summary;DocStr8644
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.QuoteChangeMessage)/param/message;DocStr8766
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.QuoteChangeMessage)/returns;DocStr8766
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.CandleMessage)/summary;DocStr8644
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.CandleMessage)/param/message;DocStr8766
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.CandleMessage)/returns;DocStr8766
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.ExecutionMessage)/summary;DocStr8644
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.ExecutionMessage)/param/message;DocStr8766
+M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.ExecutionMessage)/returns;DocStr8766
 T:StockSharp.Algo.UserPermissions/summary;DocStr163
 F:StockSharp.Algo.UserPermissions.Save/summary;DocStr164
 F:StockSharp.Algo.UserPermissions.Load/summary;DocStr165

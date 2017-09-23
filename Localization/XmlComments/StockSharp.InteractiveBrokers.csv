@@ -45,12 +45,12 @@ M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Save(Ecng.Seria
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ToString/returns;DocStr50
 T:StockSharp.InteractiveBrokers.FundamentalReports/summary;DocStr3353
-F:StockSharp.InteractiveBrokers.FundamentalReports.Overview/summary;DocStr3354
-F:StockSharp.InteractiveBrokers.FundamentalReports.Statements/summary;DocStr3355
-F:StockSharp.InteractiveBrokers.FundamentalReports.Summary/summary;DocStr3356
-F:StockSharp.InteractiveBrokers.FundamentalReports.Ratio/summary;DocStr3357
-F:StockSharp.InteractiveBrokers.FundamentalReports.Estimates/summary;DocStr3358
-F:StockSharp.InteractiveBrokers.FundamentalReports.Calendar/summary;Str3200
+F:StockSharp.InteractiveBrokers.FundamentalReports.CompanyOverview/summary;DocStr10146
+F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialStatements/summary;DocStr10147
+F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialSummary/summary;DocStr10148
+F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialRatio/summary;DocStr10149
+F:StockSharp.InteractiveBrokers.FundamentalReports.Estimates/summary;DocStr10150
+F:StockSharp.InteractiveBrokers.FundamentalReports.Calendar/summary;DocStr10151
 T:StockSharp.InteractiveBrokers.GenericFieldTypes/summary;Str2522
 F:StockSharp.InteractiveBrokers.GenericFieldTypes.OptionVolume/summary;DocStr3359
 F:StockSharp.InteractiveBrokers.GenericFieldTypes.OptionOpenInterest/summary;DocStr3360
@@ -563,7 +563,6 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour/summary;DocStr
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Day/summary;DocStr75
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Week/summary;DocStr76
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month/summary;DocStr77
-P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Year/summary;DocStr78
 T:StockSharp.InteractiveBrokers.SoftDollarTier/summary;DocStr9580
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Name/summary;Name2
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Value/summary;Str3099

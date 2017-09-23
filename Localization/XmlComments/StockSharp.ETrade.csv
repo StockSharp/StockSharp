@@ -27,7 +27,6 @@ P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerSecret/summary;DocStr3146
 P:StockSharp.ETrade.ETradeMessageAdapter.Sandbox/summary;Str3369
 P:StockSharp.ETrade.ETradeMessageAdapter.AccessToken/summary;DocStr3136
 P:StockSharp.ETrade.ETradeMessageAdapter.VerificationCode/summary;Str3371
-P:StockSharp.ETrade.ETradeMessageAdapter.IsValid/summary;DocStr53
 M:StockSharp.ETrade.ETradeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.ETrade.ETradeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.ETrade.ETradeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

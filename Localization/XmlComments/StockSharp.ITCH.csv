@@ -18,7 +18,6 @@ P:StockSharp.ITCH.ItchMessageAdapter.SecurityDelayLoad/summary;DocStr8816
 P:StockSharp.ITCH.ItchMessageAdapter.OnlyActiveSecurities/summary;DocStr3794
 P:StockSharp.ITCH.ItchMessageAdapter.GroupId/summary;GroupId
 P:StockSharp.ITCH.ItchMessageAdapter.TimeZone/summary;Str68
-P:StockSharp.ITCH.ItchMessageAdapter.IsValid/summary;DocStr53
 M:StockSharp.ITCH.ItchMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.ITCH.ItchMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.ITCH.ItchMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

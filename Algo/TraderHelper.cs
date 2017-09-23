@@ -4225,7 +4225,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Convert <see cref="QuoteChangeMessage"/> to <see cref="Level1ChangeMessage"/>.
+		/// Convert <see cref="QuoteChangeMessage"/> to <see cref="Level1ChangeMessage"/> value.
 		/// </summary>
 		/// <param name="message"><see cref="QuoteChangeMessage"/> instance.</param>
 		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
@@ -4256,7 +4256,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Convert <see cref="CandleMessage"/> to <see cref="Level1ChangeMessage"/>.
+		/// Convert <see cref="CandleMessage"/> to <see cref="Level1ChangeMessage"/> value.
 		/// </summary>
 		/// <param name="message"><see cref="CandleMessage"/> instance.</param>
 		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
@@ -4278,7 +4278,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Convert <see cref="ExecutionMessage"/> to <see cref="Level1ChangeMessage"/>.
+		/// Convert <see cref="ExecutionMessage"/> to <see cref="Level1ChangeMessage"/> value.
 		/// </summary>
 		/// <param name="message"><see cref="ExecutionMessage"/> instance.</param>
 		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>

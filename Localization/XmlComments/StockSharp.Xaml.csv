@@ -330,6 +330,7 @@ M:StockSharp.Xaml.StrategiesDashboardItem.#ctor(System.String,StockSharp.Algo.St
 P:StockSharp.Xaml.StrategiesDashboardItem.OrdersCount/summary;DocStr8459
 P:StockSharp.Xaml.StrategiesDashboardItem.TradesCount/summary;DocStr8459
 P:StockSharp.Xaml.StrategiesDashboardItem.PnLChange/summary;DocStr8459
+P:StockSharp.Xaml.StrategiesDashboardItem.PnLValues/summary;DocStr10154
 P:StockSharp.Xaml.StrategiesDashboardItem.ProcessState/summary;DocStr8459
 T:StockSharp.Xaml.QuestionWindow/summary;DocStr9455
 F:StockSharp.Xaml.QuestionWindow.OkCommand/summary;DocStr8459
@@ -1213,6 +1214,7 @@ P:StockSharp.Xaml.StrategiesStatisticsPanel.ExcludeParameters/summary;DocStr8418
 P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowProgress/summary;DocStr8419
 P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowStrategyName/summary;DocStr8420
 P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowSecurity/summary;DocStr9773
+P:StockSharp.Xaml.StrategiesStatisticsPanel.ShowPnLChart/summary;DocStr10155
 P:StockSharp.Xaml.StrategiesStatisticsPanel.SelectedStrategy/summary;DocStr8421
 P:StockSharp.Xaml.StrategiesStatisticsPanel.SelectedStrategies/summary;DocStr8422
 E:StockSharp.Xaml.StrategiesStatisticsPanel.StrategyDoubleClick/summary;DocStr8423

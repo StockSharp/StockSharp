@@ -33,7 +33,6 @@ P:StockSharp.Blackwood.BlackwoodMessageAdapter.HistoricalDataAddress/summary;Str
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.ExecutionAddress/summary;Str3331
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.LogPath/summary;Str3333
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.OverrideDll/summary;OverrideDll
-P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsValid/summary;DocStr53
 P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames/summary;DocStr2531
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3

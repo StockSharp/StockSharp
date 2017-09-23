@@ -228,7 +228,7 @@ namespace StockSharp.Messages
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
 		/// <param name="destination">The object, to which copied information.</param>
-		/// <param name="copyOriginalTransactionId">Copy <see cref="SecurityMessage.OriginalTransactionId"/>.</param>
+		/// <param name="copyOriginalTransactionId">Copy <see cref="OriginalTransactionId"/>.</param>
 		public void CopyTo(SecurityMessage destination, bool copyOriginalTransactionId = true)
 		{
 			if (destination == null)

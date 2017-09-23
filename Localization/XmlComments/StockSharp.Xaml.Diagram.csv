@@ -330,6 +330,8 @@ P:StockSharp.Xaml.Diagram.IDiagramElementParam.Value/summary;DocStr1861
 P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsDefault/summary;DocStr7919
 P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsParam/summary;DocStr7922
 P:StockSharp.Xaml.Diagram.IDiagramElementParam.IgnoreOnSave/summary;DocStr7923
+M:StockSharp.Xaml.Diagram.IDiagramElementParam.SetValueWithIgnoreOnSave(System.Object)/summary;DocStr10153
+M:StockSharp.Xaml.Diagram.IDiagramElementParam.SetValueWithIgnoreOnSave(System.Object)/param/value;Str3099
 T:StockSharp.Xaml.Diagram.DiagramElementParam`1/summary;DocStr7917
 T:StockSharp.Xaml.Diagram.DiagramElementParam`1/typeparam/T;DocStr1145
 E:StockSharp.Xaml.Diagram.DiagramElementParam`1.ValueChanging/summary;DocStr7971
@@ -345,6 +347,7 @@ P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Value/summary;DocStr1861
 P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IsDefault/summary;DocStr7919
 P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IsParam/summary;DocStr7922
 P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IgnoreOnSave/summary;DocStr7923
+M:StockSharp.Xaml.Diagram.DiagramElementParam`1.SetValueWithIgnoreOnSave(System.Object)/inheritdoc;DocStr8459
 P:StockSharp.Xaml.Diagram.DiagramElementParam`1.NotifyOnChanged/summary;DocStr9290
 P:StockSharp.Xaml.Diagram.DiagramElementParam`1.SaveHandler/summary;DocStr7973
 P:StockSharp.Xaml.Diagram.DiagramElementParam`1.LoadHandler/summary;DocStr7974

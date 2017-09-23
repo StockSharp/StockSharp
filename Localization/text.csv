@@ -14503,3 +14503,13 @@ DocStr10140;Attribute, applied to indicator, to provide information about type o
 DocStr10141;Get value type for specified indicator;Получить тип данных для указанного индикатора
 DocStr10143;Get middle of spread;Получить середину спреда
 DocStr10144;Get last tick trade price;Получить цену последней тиковой сделки
+DocStr10146;Company overview;Описание компании
+DocStr10147;Financial statements;Финансовые отчеты
+DocStr10148;Financial summary;Сводные финансовые показатели
+DocStr10149;Financial ratios;Финансовые коэффициенты
+DocStr10150;Analyst estimates;Оценки аналитиков
+DocStr10151;Company calendar from Wall Street Horizons;Календарь компании с Wall Street Horizons
+DocStr10152;Copy {0};Копировать {0}
+DocStr10153;Set value and ignore it on save settings;Устрановить значения и проигнориорвать сохранение
+DocStr10154;P&L values;P&L значения
+DocStr10155;To show the P&L chart column;Показать колонку с графиком P&L
