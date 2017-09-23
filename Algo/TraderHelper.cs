@@ -4142,6 +4142,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To check the correctness of the entered identifier.
 		/// </summary>
+		/// <param name="id">Security ID.</param>
 		/// <returns>An error message text, or <see langword="null" /> if no error.</returns>
 		public static string ValidateId(ref string id)
 		{
