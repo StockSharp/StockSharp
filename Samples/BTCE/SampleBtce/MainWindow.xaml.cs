@@ -87,12 +87,12 @@ namespace SampleBtce
 			{
 				if (Key.Text.IsEmpty())
 				{
-					MessageBox.Show(this, LocalizedStrings.Str2974);
+					MessageBox.Show(this, LocalizedStrings.Str3689);
 					return;
 				}
 				else if (Secret.Password.IsEmpty())
 				{
-					MessageBox.Show(this, LocalizedStrings.Str2975);
+					MessageBox.Show(this, LocalizedStrings.Str3690);
 					return;
 				}
 
