@@ -110,8 +110,7 @@ public class TickCandleMessage : CandleMessage
 должен возвратить или новую свечу (если новые данные привели к формированию свечи), или обновить переданную (если данных пока недостаточно для создания новой свечи).
 Если метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderValueTransform)</codeEntityReference> 
 возвращает новую свечу, то <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference> 
-вызывает его еще раз, передав в метод то же самое значение 
-<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Compression.BuilderCandleSource`1.Sources</codeEntityReference>. 
+вызывает его еще раз, передав в метод то же самое значение <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderValueTransform</codeEntityReference>. 
 Метод будет вызываться до тех пор, пока <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Messages.MarketDataMessage,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderValueTransform)</codeEntityReference> 
 не вернет переданную свечу. Это сделано для тех случаев, когда по одному входящему значению 
 <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderValueTransform</codeEntityReference>

@@ -74,7 +74,6 @@ Trader.RegisterNews();
  	  	</listItem>
 		<listItem>
  	  		<para>Поиск инструментов:</para>
- 	  		<mediaLink><image placement="center" xlink:href="QuantFeedFindSecurity"/></mediaLink>
  	  		<code language="C#">
 private void FindClick(object sender, RoutedEventArgs e)
 {
