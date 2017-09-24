@@ -46206,5 +46206,15 @@ namespace StockSharp.Localization
 		/// At the moment, no instruments are specified for task '{0}'. Add them now (or download if they are not yet exist)?
 		/// </summary>
 		public static string AddSecuritiesNow => GetString(AddSecuritiesNowKey);
+
+		/// <summary>
+		/// Open account
+		/// </summary>
+		public const string OpenAccountKey = nameof(OpenAccount);
+
+		/// <summary>
+		/// Open account
+		/// </summary>
+		public static string OpenAccount => GetString(OpenAccountKey);
 	}
 }
