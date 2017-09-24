@@ -1,5 +1,21 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.3.27.2:
+* (feature) More tooltips.
+* (feature) Connector validation settings.
+* (bug) QuikLua. Candle downloading fix.
+* (bug) SecurityGrid. ExpiryDate, Strike columns sorting fix.
+* (feature) BitStamp. V2 protocol.
+* (bug) Interactive Brokers. Fix historical market data request.
+* (bug) SmartCom. Price step fixes.
+* (feature) BTCE. Domain update.
+* (bug) Hydra. Positions pane open fix.
+* (bug) Indicators pane. Fix Level1 indicator use.
+* (bug) Fix single security selection.
+* (bug) Big interval task fix.
+* (bug) Convert task fixes.
+* (bug) Alor candles fix.
+
 ## v4.3.27.1:
 * (feature) Multiple securities support for data panes.
 * (bug) FIX server. Fix depths subscription for ALL security.
