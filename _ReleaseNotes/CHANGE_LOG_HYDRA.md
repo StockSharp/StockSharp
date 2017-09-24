@@ -9,7 +9,7 @@ StockSharp Data (Hydra) Change log
 * (bug) Interactive Brokers. Fix historical market data request.
 * (bug) SmartCom. Price step fixes.
 * (feature) BTCE. Domain update.
-* (bug) Hydra. Positions pane open fix.
+* (bug) Positions pane open fix.
 * (bug) Indicators pane. Fix Level1 indicator use.
 * (bug) Fix single security selection.
 * (bug) Big interval task fix.
