@@ -1778,19 +1778,21 @@ namespace StockSharp.Algo
 			{
 				case ExecutionTypes.Transaction:
 				{
-					if (_entityCache.IsMassCancelation(message.OriginalTransactionId))
+					var originId = message.OriginalTransactionId;
+
+					if (_entityCache.IsMassCancelation(originId))
 					{
 						if (message.Error == null)
-							RaiseMassOrderCanceled(message.OriginalTransactionId);
+							RaiseMassOrderCanceled(originId);
 						else
-							RaiseMassOrderCancelFailed(message.OriginalTransactionId, message.Error);
+							RaiseMassOrderCancelFailed(originId, message.Error);
 
 						break;
 					}
 
-					if (message.Error != null && _entityCache.IsOrderStatusRequest(message.OriginalTransactionId))
+					if (message.Error != null && _entityCache.IsOrderStatusRequest(originId))
 					{
-						RaiseOrderStatusFailed(message.OriginalTransactionId, message.Error);
+						RaiseOrderStatusFailed(originId, message.Error);
 						break;
 					}
 
@@ -1799,6 +1801,10 @@ namespace StockSharp.Algo
 					if (order == null)
 					{
 						var security = LookupSecurity(message.SecurityId);
+
+						if (transactionId == 0 && _entityCache.IsOrderStatusRequest(originId))
+							transactionId = TransactionIdGenerator.GetNextId();
+
 						ProcessTransactionMessage(null, security, message, transactionId);
 					}
 					else
