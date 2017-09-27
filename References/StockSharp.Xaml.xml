@@ -703,6 +703,96 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.GridControl.PriceChartEditor">
+      <summary>
+            Price chart editor.
+            </summary>
+      <summary>
+            PriceChartEditor
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.GridControl.PriceChartEditor.SecurityProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.PriceChartEditor.Security" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.PriceChartEditor.Security">
+      <summary>
+            Security.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.GridControl.PriceChartEditor.Level1FieldProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.PriceChartEditor.Level1Field" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.PriceChartEditor.Level1Field">
+      <summary>
+            Level1 field.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.PriceChartEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.GridControl.IPriceChartDataProvider">
+      <summary>
+            Price chart data provider interface.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.IPriceChartDataProvider.Subscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
+      <summary>
+            Subscribe for changes.
+            </summary>
+      <param name="security">Security.</param>
+      <param name="field">Level1 field.</param>
+      <returns>Price items collection.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.IPriceChartDataProvider.UnSubscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
+      <summary>
+            Unsubscribe from changes.
+            </summary>
+      <param name="security">Security.</param>
+      <param name="field">Level1 field.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.GridControl.PriceChartDataProvider">
+      <summary>
+            Price chart data provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.PriceChartDataProvider.RefreshPeriod">
+      <summary>
+            Refresh chart data period.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.PriceChartDataProvider.MaxCount">
+      <summary>
+            Maximum number of items in chart.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.#ctor(StockSharp.BusinessEntities.IMarketDataProvider)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.PriceChartDataProvider" />.
+            </summary>
+      <param name="provider">The market data provider.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.DisposeManaged">
+      <summary>
+            Release resources.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.Subscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.UnSubscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
+      <inheritdoc />
+    </member>
     <member name="T:StockSharp.Xaml.GridControl.SearchBox">
       <summary>
             The search box for grid control column chooser.
@@ -1485,15 +1575,18 @@
     </member>
     <member name="P:StockSharp.Xaml.StrategiesDashboardItem.OrdersCount">
       <summary>
-      </summary>
+            Total number of orders.
+            </summary>
     </member>
     <member name="P:StockSharp.Xaml.StrategiesDashboardItem.TradesCount">
       <summary>
-      </summary>
+            Total number of trades.
+            </summary>
     </member>
     <member name="P:StockSharp.Xaml.StrategiesDashboardItem.PnLChange">
       <summary>
-      </summary>
+            P&amp;L change.
+            </summary>
     </member>
     <member name="P:StockSharp.Xaml.StrategiesDashboardItem.PnLValues">
       <summary>
@@ -1502,7 +1595,8 @@
     </member>
     <member name="P:StockSharp.Xaml.StrategiesDashboardItem.ProcessState">
       <summary>
-      </summary>
+            The operation state.
+            </summary>
     </member>
     <member name="T:StockSharp.Xaml.QuestionWindow">
       <summary>
