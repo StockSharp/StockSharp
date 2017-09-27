@@ -7080,6 +7080,7 @@ M:StockSharp.Algo.TraderHelper.IsAllSecurity(StockSharp.Messages.SecurityId)/sum
 M:StockSharp.Algo.TraderHelper.IsAllSecurity(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Algo.TraderHelper.IsAllSecurity(StockSharp.Messages.SecurityId)/returns;DocStr10097
 M:StockSharp.Algo.TraderHelper.ValidateId(System.String@)/summary;DocStr8296
+M:StockSharp.Algo.TraderHelper.ValidateId(System.String@)/param/id;SecurityId
 M:StockSharp.Algo.TraderHelper.ValidateId(System.String@)/returns;DocStr8297
 M:StockSharp.Algo.TraderHelper.ToType(StockSharp.Messages.Level1Fields)/summary;DocStr8644
 M:StockSharp.Algo.TraderHelper.ToType(StockSharp.Messages.Level1Fields)/param/field;DocStr65

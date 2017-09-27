@@ -14514,3 +14514,13 @@ DocStr10152;Copy {0};Копировать {0}
 DocStr10153;Set value and ignore it on save settings;Устрановить значения и проигнориорвать сохранение
 DocStr10154;P&L values;P&L значения
 DocStr10155;To show the P&L chart column;Показать колонку с графиком P&L
+DocStr10156;Security identifier value;Security identifier value
+DocStr10157;Identifies class or source of the {0} value. Required if {1} is specified;Identifies class or source of the {0} value. Required if {1} is specified
+DocStr10158;Price chart editor;Мини график цены
+DocStr10159;Price chart data provider interface;Интерфейс поставщика данных для графика
+DocStr10160;Subscribe for changes;Подписаться на изменения
+DocStr10161;Price items collection;Коллекция цен
+DocStr10162;Unsubscribe from changes;Отписаться от изменений
+DocStr10163;Price chart data provider;Поставщик данных для графика
+DocStr10164;Refresh chart data period;Период обновления графика
+DocStr10165;Maximum number of items in chart;Максимальное значение элементов на графике
