@@ -1,5 +1,11 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
+* (feature) LMAX, Oanda, IB. Uses MarketDataMessage.BuildCandlesField.
+* (bug) BitStamp. Market data fix.
+* (bug) FIX protocol. Exante market-data fix.
+
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.
 * (feature) SpbExTrader.IgnoreLimits.

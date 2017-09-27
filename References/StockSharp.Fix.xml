@@ -346,7 +346,16 @@
       <returns>
         <see langword="true" />, if the messages was read successfully, otherwise, <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,Ecng.Common.AllocationArray{StockSharp.Messages.Message},System.Action{StockSharp.Messages.ExecutionMessage})">
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,Ecng.Common.AllocationArray{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage)">
+      <summary>
+            Process <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.
+            </summary>
+      <param name="report">
+        <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.</param>
+      <param name="messages">The allocation array.</param>
+      <param name="message">The message contains information about the execution.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.ProcessExecutionReport(StockSharp.Fix.Native.ExecutionReport,Ecng.Common.AllocationArray{StockSharp.Messages.Message},System.Action{StockSharp.Fix.Native.ExecutionReport,Ecng.Common.AllocationArray{StockSharp.Messages.Message},StockSharp.Messages.ExecutionMessage})">
       <summary>
             Process <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.
             </summary>
@@ -354,8 +363,6 @@
         <see cref="T:StockSharp.Fix.Native.ExecutionReport" /> instance.</param>
       <param name="messages">The allocation array.</param>
       <param name="processExecMsg">Post handle an <see cref="T:StockSharp.Messages.ExecutionMessage" /> instance.</param>
-      <returns>
-        <see langword="true" />, if the messages was read successfully, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="T:StockSharp.Fix.Dialects.DefaultFastDialect">
       <summary>
@@ -4467,6 +4474,16 @@
     <member name="F:StockSharp.Fix.Native.ExecutionReport.SecurityExchange">
       <summary>
             Market used to help identify a security.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.SecurityId">
+      <summary>
+            Security identifier value.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.SecurityIdSource">
+      <summary>
+            Identifies class or source of the <see cref="F:StockSharp.Fix.Native.ExecutionReport.SecurityId" /> value. Required if <see cref="F:StockSharp.Fix.Native.ExecutionReport.SecurityId" /> is specified.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.TradingSessionId">
