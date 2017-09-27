@@ -1597,9 +1597,9 @@ namespace StockSharp.Algo
 		{
 			if (message.OrderState != OrderStates.Failed)
 			{
-				var tuples = _entityCache.ProcessOrderMessage(o, security, message, transactionId, out var pfInfo);
+				var changes = _entityCache.ProcessOrderMessage(o, security, message, transactionId, out var pfInfo);
 
-				if (tuples == null)
+				if (changes == null)
 				{
 					this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
 					return;
@@ -1608,11 +1608,9 @@ namespace StockSharp.Algo
 				if (pfInfo != null)
 					ProcessPortfolio(pfInfo);
 
-				foreach (var tuple in tuples)
+				foreach (var change in changes)
 				{
-					var order = tuple.Item1;
-					var isNew = tuple.Item2;
-					var isChanged = tuple.Item3;
+					var order = change.Order;
 
 					//if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
 					//{
@@ -1624,7 +1622,7 @@ namespace StockSharp.Algo
 					//		order.DerivedOrder = derivedOrder;
 					//}
 
-					if (isNew)
+					if (change.IsNew)
 					{
 						this.AddOrderInfoLog(order, "New order");
 
@@ -1633,7 +1631,7 @@ namespace StockSharp.Algo
 						else
 							RaiseNewOrder(order);
 					}
-					else if (isChanged)
+					else if (change.IsChanged)
 					{
 						this.AddOrderInfoLog(order, "Order changed");
 

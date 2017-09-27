@@ -35,6 +35,26 @@ namespace StockSharp.Algo
 	{
 		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
 
+		public class OrderChangeInfo
+		{
+			public static OrderChangeInfo Create(Order order, bool isNew, bool isChanged)
+			{
+				if (order == null)
+					throw new ArgumentNullException(nameof(order));
+
+				return new OrderChangeInfo
+				{
+					Order = order,
+					IsNew = isNew,
+					IsChanged = isChanged,
+				};
+			}
+
+			public Order Order { get; private set; }
+			public bool IsNew { get; private set; }
+			public bool IsChanged { get; private set; }
+		}
+
 		private sealed class OrderInfo
 		{
 			private bool _raiseNewOrder;
@@ -50,16 +70,16 @@ namespace StockSharp.Algo
 
 			public Order Order { get; }
 
-			public Tuple<Order, bool, bool> ApplyChanges(ExecutionMessage message, bool isCancel)
+			public OrderChangeInfo ApplyChanges(ExecutionMessage message, bool isCancel)
 			{
 				var order = Order;
 
-				Tuple<Order, bool, bool> retVal;
+				OrderChangeInfo retVal;
 
 				if (order.State == OrderStates.Done)
 				{
 					// данные о заявке могут приходить из маркет-дата и транзакционного адаптеров
-					retVal = Tuple.Create(order, _raiseNewOrder, false);
+					retVal = OrderChangeInfo.Create(order, _raiseNewOrder, false);
 					_raiseNewOrder = false;
 					return retVal;
 					//throw new InvalidOperationException("Изменение заявки в состоянии Done невозможно.");
@@ -131,7 +151,7 @@ namespace StockSharp.Algo
 
 				message.CopyExtensionInfo(order);
 
-				retVal = Tuple.Create(order, _raiseNewOrder, true);
+				retVal = OrderChangeInfo.Create(order, _raiseNewOrder, true);
 				_raiseNewOrder = false;
 				return retVal;
 			}
@@ -418,7 +438,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public IEnumerable<Tuple<Order, bool, bool>> ProcessOrderMessage(Order order, Security security, ExecutionMessage message, long transactionId, out Tuple<Portfolio, bool, bool> pfInfo)
+		public IEnumerable<OrderChangeInfo> ProcessOrderMessage(Order order, Security security, ExecutionMessage message, long transactionId, out Tuple<Portfolio, bool, bool> pfInfo)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -481,7 +501,7 @@ namespace StockSharp.Algo
 						return new[] { i };
 					}
 
-					var retVal = new List<Tuple<Order, bool, bool>>();
+					var retVal = new List<OrderChangeInfo>();
 					var orderState = message.OrderState;
 
 					if (orderState != null && cancellationOrder.State != OrderStates.Done && orderState != OrderStates.None && orderState != OrderStates.Pending)
@@ -491,7 +511,7 @@ namespace StockSharp.Algo
 						if (message.Latency != null)
 							cancellationOrder.LatencyCancellation = message.Latency.Value;
 
-						retVal.Add(Tuple.Create(cancellationOrder, false, true));
+						retVal.Add(OrderChangeInfo.Create(cancellationOrder, false, true));
 					}
 
 					var isCancelOrder = (message.OrderId != null && message.OrderId == cancellationOrder.Id)
@@ -555,7 +575,7 @@ namespace StockSharp.Algo
 					return new[] { orderInfo };
 				}
 				else
-					return Enumerable.Empty<Tuple<Order, bool, bool>>();
+					return Enumerable.Empty<OrderChangeInfo>();
 			}
 		}
 
