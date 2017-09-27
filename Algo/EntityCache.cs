@@ -467,14 +467,14 @@ namespace StockSharp.Algo
 				var registerKey = CreateOrderKey(message.OrderType, transactionId, false);
 
 				var cancelledInfo = orders.TryGetValue(cancelKey);
-				var registetedInfo = orders.TryGetValue(registerKey);
+				var registeredInfo = orders.TryGetValue(registerKey);
 
 				// проверяем не отмененная ли заявка пришла
 				if (cancelledInfo != null) // && (cancelledOrder.Id == orderId || (!cancelledOrder.StringId.IsEmpty() && cancelledOrder.StringId.CompareIgnoreCase(orderStringId))))
 				{
 					var cancellationOrder = cancelledInfo.Order;
 
-					if (registetedInfo == null)
+					if (registeredInfo == null)
 					{
 						var i = cancelledInfo.ApplyChanges(message, true);
 						UpdateOrderIds(cancellationOrder, securityData);
@@ -498,11 +498,11 @@ namespace StockSharp.Algo
 						|| (message.OrderStringId != null && message.OrderStringId == cancellationOrder.StringId)
 						|| (message.OrderBoardId != null && message.OrderBoardId == cancellationOrder.BoardId);
 
-					var regOrder = registetedInfo.Order;
+					var regOrder = registeredInfo.Order;
 
 					if (!isCancelOrder)
 					{
-						var replacedInfo = registetedInfo.ApplyChanges(message, false);
+						var replacedInfo = registeredInfo.ApplyChanges(message, false);
 						UpdateOrderIds(regOrder, securityData);
 						retVal.Add(replacedInfo);
 					}
@@ -510,7 +510,7 @@ namespace StockSharp.Algo
 					return retVal;
 				}
 
-				if (registetedInfo == null)
+				if (registeredInfo == null)
 				{
 					var o = EntityFactory.CreateOrder(security, message.OrderType, registerKey.Item1);
 
@@ -543,15 +543,15 @@ namespace StockSharp.Algo
 					AddOrder(o);
 					_allOrdersByTransactionId.Add(Tuple.Create(transactionId, false), o);
 
-					registetedInfo = new OrderInfo(o);
-					orders.Add(registerKey, registetedInfo);
+					registeredInfo = new OrderInfo(o);
+					orders.Add(registerKey, registeredInfo);
 				}
 
-				var orderInfo = registetedInfo.ApplyChanges(message, false);
+				var orderInfo = registeredInfo.ApplyChanges(message, false);
 
 				if (orderInfo != null)
 				{
-					UpdateOrderIds(registetedInfo.Order, securityData);
+					UpdateOrderIds(registeredInfo.Order, securityData);
 					return new[] { orderInfo };
 				}
 				else
