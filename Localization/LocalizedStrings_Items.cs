@@ -46236,5 +46236,35 @@ namespace StockSharp.Localization
 		/// Target ID not set.
 		/// </summary>
 		public static string TargetIdNotSet => GetString(TargetIdNotSetKey);
+
+		/// <summary>
+		/// The database is corrupted and can not continue. Do you want to reset all settings?
+		/// </summary>
+		public const string DatabaseCorruptedResetConfigKey = nameof(DatabaseCorruptedResetConfig);
+
+		/// <summary>
+		/// The database is corrupted and can not continue. Do you want to reset all settings?
+		/// </summary>
+		public static string DatabaseCorruptedResetConfig => GetString(DatabaseCorruptedResetConfigKey);
+
+		/// <summary>
+		/// Insufficient memory to download all instruments. The option turned off.
+		/// </summary>
+		public const string InsufficientMemoryKey = nameof(InsufficientMemory);
+
+		/// <summary>
+		/// Insufficient memory to download all instruments. The option turned off.
+		/// </summary>
+		public static string InsufficientMemory => GetString(InsufficientMemoryKey);
+
+		/// <summary>
+		/// Cancelling
+		/// </summary>
+		public const string CancellingKey = nameof(Cancelling);
+
+		/// <summary>
+		/// Cancelling
+		/// </summary>
+		public static string Cancelling => GetString(CancellingKey);
 	}
 }
