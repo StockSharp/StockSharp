@@ -196,6 +196,15 @@ namespace StockSharp.Community
 			return data;
 		}
 
+		/// <summary>
+		/// To get a upload size limit.
+		/// </summary>
+		/// <returns>Upload size limit.</returns>
+		public int GetUploadLimit()
+		{
+			return Invoke(f => f.GetUploadLimit(AuthenticationClient.Instance.SessionId));
+		}
+
 		private static void ValidateError(byte errorCode)
 		{
 			((ErrorCodes)errorCode).ThrowIfError();
