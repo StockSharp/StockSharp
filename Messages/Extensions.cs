@@ -652,8 +652,27 @@ namespace StockSharp.Messages
 		/// Is the specified <see cref="PositionChangeTypes"/> was marked by <see cref="ObsoleteAttribute"/>.
 		/// </summary>
 		/// <param name="type"><see cref="PositionChangeTypes"/> value.</param>
-		/// <returns>Result.</returns>
+		/// <returns><see langword="true" />, if obsolete, otherwise, not obsolete.</returns>
 		public static bool IsObsolete(this PositionChangeTypes type) => type.GetAttributeOfType<ObsoleteAttribute>() != null;
+
+		/// <summary>
+		/// Is the specified <see cref="Level1Fields"/> was obsolete.
+		/// </summary>
+		/// <param name="field"><see cref="Level1Fields"/> value.</param>
+		/// <returns><see langword="true" />, if obsolete, otherwise, not obsolete.</returns>
+		public static bool IsObsolete(this Level1Fields field)
+		{
+			switch (field)
+			{
+				case Level1Fields.LastTrade:
+				case Level1Fields.BestBid:
+				case Level1Fields.BestAsk:
+				case Level1Fields.ExtensionInfo:
+					return true;
+			}
+
+			return false;
+		}
 
 		/// <summary>
 		/// Try to initialize <see cref="Message.LocalTime"/> by <see cref="ILogSource.CurrentTime"/>.

@@ -4189,12 +4189,6 @@ namespace StockSharp.Algo
 		{
 			switch (field)
 			{
-				case Level1Fields.LastTrade:
-				case Level1Fields.BestBid:
-				case Level1Fields.BestAsk:
-				case Level1Fields.ExtensionInfo:
-					return null;
-
 				case Level1Fields.AsksCount:
 				case Level1Fields.BidsCount:
 				case Level1Fields.TradesCount:
@@ -4221,7 +4215,7 @@ namespace StockSharp.Algo
 					return typeof(Sides);
 
 				default:
-					return typeof(decimal);
+					return field.IsObsolete() ? null : typeof(decimal);
 			}
 		}
 

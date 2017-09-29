@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Storages.Csv
 	/// </summary>
 	public class Level1CsvSerializer : CsvMarketDataSerializer<Level1ChangeMessage>
 	{
-		private static readonly Level1Fields[] _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => l1 != Level1Fields.ExtensionInfo && l1 != Level1Fields.BestAsk && l1 != Level1Fields.BestBid && l1 != Level1Fields.LastTrade).OrderBy(l1 => (int)l1).ToArray();
+		private static readonly Level1Fields[] _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => !l1.IsObsolete()).OrderBy(l1 => (int)l1).ToArray();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1CsvSerializer"/>.
