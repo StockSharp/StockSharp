@@ -4659,6 +4659,8 @@ SetupTaskNow;Set up task '{0}' now?;Настроить задачу '{0}' сей
 EnableTaskNow;Enable task '{0}' now (the task will go into the active mode)?;Включить задачу '{0}' сейчас (задача перейдет в активный состояние)?
 AddSecuritiesNow;At the moment, no instruments are specified for task '{0}'. Add them now (or download if they are not yet exist)?;В данный момент для задачи '{0}' не указан ни один инструмент. Добавить их сейчас (или скачать, если они остутствуют)?
 OpenAccount;Open account;Открыть счет
+SenderIdNotSet;Sender ID not set.;Идентификатор отправителя не установлен.
+TargetIdNotSet;Target ID not set.;Идентификатор получателя не установлен.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

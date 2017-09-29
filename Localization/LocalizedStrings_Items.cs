@@ -46216,5 +46216,25 @@ namespace StockSharp.Localization
 		/// Open account
 		/// </summary>
 		public static string OpenAccount => GetString(OpenAccountKey);
+
+		/// <summary>
+		/// Sender ID not set.
+		/// </summary>
+		public const string SenderIdNotSetKey = nameof(SenderIdNotSet);
+
+		/// <summary>
+		/// Sender ID not set.
+		/// </summary>
+		public static string SenderIdNotSet => GetString(SenderIdNotSetKey);
+
+		/// <summary>
+		/// Target ID not set.
+		/// </summary>
+		public const string TargetIdNotSetKey = nameof(TargetIdNotSet);
+
+		/// <summary>
+		/// Target ID not set.
+		/// </summary>
+		public static string TargetIdNotSet => GetString(TargetIdNotSetKey);
 	}
 }
