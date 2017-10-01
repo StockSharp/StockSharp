@@ -5,6 +5,7 @@ StockSharp API Change log
 * (feature) LMAX, Oanda, IB. Uses MarketDataMessage.BuildCandlesField.
 * (bug) BitStamp. Market data fix.
 * (bug) FIX protocol. Exante market-data fix.
+* (feature) Binary storage. Support non adjust prices for order book and level1.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.

@@ -54,6 +54,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WriteOffsets(stream);
+
+			if (Version < MarketDataVersions.Version54)
+				return;
+
+			WritePriceStep(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -75,13 +80,18 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadOffsets(stream);
+
+			if (Version < MarketDataVersions.Version54)
+				return;
+
+			ReadPriceStep(stream);
 		}
 	}
 
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version53, exchangeInfoProvider)
+			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version54, exchangeInfoProvider)
 		{
 		}
 
@@ -104,6 +114,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
+			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
 
 			foreach (var m in messages)
 			{
@@ -139,8 +150,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 				prevQuoteMsg = quoteMsg;
 
-				SerializeQuotes(writer, delta.Bids, metaInfo/*, isFull*/);
-				SerializeQuotes(writer, delta.Asks, metaInfo/*, isFull*/);
+				SerializeQuotes(writer, delta.Bids, metaInfo/*, isFull*/, nonAdjustPrice);
+				SerializeQuotes(writer, delta.Asks, metaInfo/*, isFull*/, nonAdjustPrice);
 
 				metaInfo.LastPrice = GetDepthPrice(quoteMsg);
 
@@ -186,6 +197,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
+			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -196,8 +208,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isFull = reader.Read();
 			var prevDepth = enumerator.Previous;
 
-			var bids = DeserializeQuotes(reader, metaInfo, Sides.Buy);
-			var asks = DeserializeQuotes(reader, metaInfo, Sides.Sell);
+			var bids = DeserializeQuotes(reader, metaInfo, Sides.Buy, nonAdjustPrice);
+			var asks = DeserializeQuotes(reader, metaInfo, Sides.Sell, nonAdjustPrice);
 
 			var diff = new QuoteChangeMessage
 			{
@@ -256,7 +268,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return quoteMsg;
 		}
 
-		private void SerializeQuotes(BitArrayWriter writer, IEnumerable<QuoteChange> quotes, QuoteMetaInfo metaInfo/*, bool isFull*/)
+		private void SerializeQuotes(BitArrayWriter writer, IEnumerable<QuoteChange> quotes, QuoteMetaInfo metaInfo/*, bool isFull*/, bool nonAdjustPrice)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(nameof(writer));
@@ -282,14 +294,14 @@ namespace StockSharp.Algo.Storages.Binary
 				if (quote.Volume < 0/* || (isFull && quote.Volume == 0)*/)
 					throw new ArgumentOutOfRangeException(nameof(quotes), quote.Volume, LocalizedStrings.Str936);
 
-				writer.WritePrice(quote.Price, prevPrice, metaInfo, SecurityId);
+				writer.WritePrice(quote.Price, prevPrice, metaInfo, SecurityId, false, nonAdjustPrice);
 				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
 
 				prevPrice = quote.Price;
 			}
 		}
 
-		private static IEnumerable<QuoteChange> DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, Sides side)
+		private static IEnumerable<QuoteChange> DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, Sides side, bool nonAdjustPrice)
 		{
 			if (reader == null)
 				throw new ArgumentNullException(nameof(reader));
@@ -308,7 +320,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			for (var i = 0; i < deltaCount; i++)
 			{
-				metaInfo.FirstPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo);
+				metaInfo.FirstPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo, false, nonAdjustPrice);
 
 				var volume = reader.ReadVolume(metaInfo);
 

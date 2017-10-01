@@ -254,6 +254,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			stream.Write((int)MaxKnownType);
+
+			if (Version < MarketDataVersions.Version59)
+				return;
+
+			WritePriceStep(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -369,6 +374,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			MaxKnownType = (Level1Fields)stream.Read<int>();
+
+			if (Version < MarketDataVersions.Version59)
+				return;
+
+			ReadPriceStep(stream);
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -483,7 +493,7 @@ namespace StockSharp.Algo.Storages.Binary
 		};
 
 		public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 50, MarketDataVersions.Version58, exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version59, exchangeInfoProvider)
 		{
 		}
 
@@ -530,6 +540,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 			var unkTypes = metaInfo.Version >= MarketDataVersions.Version58;
+			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version59;
 
 			foreach (var message in messages)
 			{
@@ -609,13 +620,13 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.ClosePrice:
 						case Level1Fields.MinPrice:
 						{
-							SerializePrice(writer, metaInfo, (decimal)value);
+							SerializePrice(writer, metaInfo, (decimal)value, nonAdjustPrice);
 							break;
 						}
 						case Level1Fields.MaxPrice:
 						{
 							var price = (decimal)value;
-							SerializePrice(writer, metaInfo, price == int.MaxValue ? metaInfo.PriceStep : price);
+							SerializePrice(writer, metaInfo, price == int.MaxValue ? metaInfo.PriceStep : price, nonAdjustPrice);
 							break;
 						}
 						case Level1Fields.BidsVolume:
@@ -695,7 +706,7 @@ namespace StockSharp.Algo.Storages.Binary
 						{
 							var trade = (Trade)value;
 
-							SerializePrice(writer, metaInfo, trade.Price);
+							SerializePrice(writer, metaInfo, trade.Price, nonAdjustPrice);
 							writer.WriteVolume(trade.Volume, metaInfo, SecurityId);
 							writer.WriteSide(trade.OrderDirection);
 
@@ -706,7 +717,7 @@ namespace StockSharp.Algo.Storages.Binary
 						{
 							var quote = (Quote)value;
 
-							SerializePrice(writer, metaInfo, quote.Price);
+							SerializePrice(writer, metaInfo, quote.Price, nonAdjustPrice);
 							writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
 
 							break;
@@ -723,13 +734,13 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.HighBidPrice:
 						case Level1Fields.LowAskPrice:
 						{
-							SerializePrice(writer, metaInfo, (decimal)value);
+							SerializePrice(writer, metaInfo, (decimal)value, nonAdjustPrice);
 							break;
 						}
 						case Level1Fields.AveragePrice:
 						{
 							if (metaInfo.Version < MarketDataVersions.Version51)
-								SerializePrice(writer, metaInfo, (decimal)value);
+								SerializePrice(writer, metaInfo, (decimal)value, false);
 							else
 								SerializeChange(writer, metaInfo.AveragePrice, (decimal)value);
 
@@ -791,7 +802,7 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.AsksCount:
 						{
 							if (metaInfo.Version < MarketDataVersions.Version46)
-								SerializePrice(writer, metaInfo, (int)value);
+								SerializePrice(writer, metaInfo, (int)value, false);
 							else
 								writer.WriteInt((int)value);
 
@@ -1005,6 +1016,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 			var unkTypes = metaInfo.Version >= MarketDataVersions.Version58;
+			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version59;
 
 			var l1Msg = new Level1ChangeMessage { SecurityId = SecurityId };
 
@@ -1082,7 +1094,7 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.MinPrice:
 					case Level1Fields.MaxPrice:
 					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo);
+						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice);
 						l1Msg.Add(field, metaInfo.Price.First);
 						break;
 					}
@@ -1171,7 +1183,7 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 					case Level1Fields.LastTrade:
 					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo);
+						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice);
 
 						l1Msg.Add(Level1Fields.LastTradePrice, metaInfo.Price.First);
 						l1Msg.Add(Level1Fields.LastTradeVolume, reader.ReadVolume(metaInfo));
@@ -1186,7 +1198,7 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 					case Level1Fields.BestBid:
 					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo);
+						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice);
 
 						l1Msg.Add(Level1Fields.BestBidPrice, metaInfo.Price.First);
 						l1Msg.Add(Level1Fields.BestBidVolume, reader.ReadVolume(metaInfo));
@@ -1194,7 +1206,7 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 					case Level1Fields.BestAsk:
 					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo);
+						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice);
 
 						l1Msg.Add(Level1Fields.BestAskPrice, metaInfo.Price.First);
 						l1Msg.Add(Level1Fields.BestAskVolume, reader.ReadVolume(metaInfo));
@@ -1212,7 +1224,7 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.HighBidPrice:
 					case Level1Fields.LowAskPrice:
 					{
-						l1Msg.Add(field, metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo));
+						l1Msg.Add(field, metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice));
 						break;
 					}
 					case Level1Fields.AveragePrice:
@@ -1466,7 +1478,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return l1Msg;
 		}
 
-		private void SerializePrice(BitArrayWriter writer, Level1MetaInfo metaInfo, decimal price)
+		private void SerializePrice(BitArrayWriter writer, Level1MetaInfo metaInfo, decimal price, bool nonAdjustPrice)
 		{
 			// execution ticks (like option execution) may be a zero cost
 			// ticks for spreads may be a zero cost or less than zero
@@ -1478,7 +1490,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (pair.First == 0)
 				pair.First = pair.Second = price;
 
-			writer.WritePrice(price, pair.Second, metaInfo, SecurityId);
+			writer.WritePrice(price, pair.Second, metaInfo, SecurityId, false, nonAdjustPrice);
 			pair.Second = price;
 		}
 
