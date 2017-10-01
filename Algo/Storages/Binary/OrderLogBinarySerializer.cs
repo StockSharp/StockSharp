@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class OrderLogMetaInfo : BinaryMetaInfo<OrderLogMetaInfo>
+	class OrderLogMetaInfo : BinaryMetaInfo
 	{
 		public OrderLogMetaInfo(DateTime date)
 			: base(date)
@@ -147,26 +147,25 @@ namespace StockSharp.Algo.Storages.Binary
 			ReadOffsets(stream);
 		}
 
-		public override void CopyFrom(OrderLogMetaInfo src)
+		public override void CopyFrom(BinaryMetaInfo src)
 		{
 			base.CopyFrom(src);
 
-			FirstOrderId = src.FirstOrderId;
-			FirstTradeId = src.FirstTradeId;
-			LastOrderId = src.LastOrderId;
-			LastTradeId = src.LastTradeId;
+			var olInfo = (OrderLogMetaInfo)src;
 
-			FirstPrice = src.FirstPrice;
-			LastPrice = src.LastPrice;
+			FirstOrderId = olInfo.FirstOrderId;
+			FirstTradeId = olInfo.FirstTradeId;
+			LastOrderId = olInfo.LastOrderId;
+			LastTradeId = olInfo.LastTradeId;
 
-			FirstTransactionId = src.FirstTransactionId;
-			LastTransactionId = src.LastTransactionId;
+			FirstTransactionId = olInfo.FirstTransactionId;
+			LastTransactionId = olInfo.LastTransactionId;
 
-			FirstOrderPrice = src.FirstOrderPrice;
-			LastOrderPrice = src.LastOrderPrice;
+			FirstOrderPrice = olInfo.FirstOrderPrice;
+			LastOrderPrice = olInfo.LastOrderPrice;
 
 			Portfolios.Clear();
-			Portfolios.AddRange(src.Portfolios);
+			Portfolios.AddRange(olInfo.Portfolios);
 		}
 	}
 

@@ -58,8 +58,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public static readonly Version Version61 = new Version(6, 1);
 	}
 
-	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo
-		where TMetaInfo : BinaryMetaInfo<TMetaInfo>
+	abstract class BinaryMetaInfo : MetaInfo
 	{
 		protected BinaryMetaInfo(DateTime date)
 			: base(date)
@@ -273,7 +272,7 @@ namespace StockSharp.Algo.Storages.Binary
 		//	return copy;
 		//}
 
-		public virtual void CopyFrom(TMetaInfo src)
+		public virtual void CopyFrom(BinaryMetaInfo src)
 		{
 			Version = src.Version;
 			Count = src.Count;
@@ -298,11 +297,13 @@ namespace StockSharp.Algo.Storages.Binary
 			LastItemLocalTime = src.LastItemLocalTime;
 			FirstItemLocalOffset = src.FirstItemLocalOffset;
 			LastItemLocalOffset = src.LastItemLocalOffset;
+			FirstPrice = src.FirstPrice;
+			LastPrice = src.LastPrice;
 		}
 	}
 
 	abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSerializer<TData>
-		where TMetaInfo : BinaryMetaInfo<TMetaInfo>
+		where TMetaInfo : BinaryMetaInfo
 	{
 		public class MarketDataEnumerator : SimpleEnumerator<TData>
 		{

@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class TickMetaInfo : BinaryMetaInfo<TickMetaInfo>
+	class TickMetaInfo : BinaryMetaInfo
 	{
 		public TickMetaInfo(DateTime date)
 			: base(date)
@@ -90,14 +90,14 @@ namespace StockSharp.Algo.Storages.Binary
 			ReadOffsets(stream);
 		}
 
-		public override void CopyFrom(TickMetaInfo src)
+		public override void CopyFrom(BinaryMetaInfo src)
 		{
 			base.CopyFrom(src);
 
-			FirstId = src.FirstId;
-			PrevId = src.PrevId;
-			FirstPrice = src.FirstPrice;
-			LastPrice = src.LastPrice;
+			var tickInfo = (TickMetaInfo)src;
+
+			FirstId = tickInfo.FirstId;
+			PrevId = tickInfo.PrevId;
 		}
 	}
 

@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class CandleMetaInfo : BinaryMetaInfo<CandleMetaInfo>
+	class CandleMetaInfo : BinaryMetaInfo
 	{
 		public CandleMetaInfo(DateTime date)
 			: base(date)
@@ -82,14 +82,6 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadFractionalPrice(stream);
-		}
-
-		public override void CopyFrom(CandleMetaInfo src)
-		{
-			base.CopyFrom(src);
-
-			FirstPrice = src.FirstPrice;
-			LastPrice = src.LastPrice;
 		}
 	}
 

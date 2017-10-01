@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class TransactionSerializerMetaInfo : BinaryMetaInfo<TransactionSerializerMetaInfo>
+	class TransactionSerializerMetaInfo : BinaryMetaInfo
 	{
 		public TransactionSerializerMetaInfo(DateTime date)
 			: base(date)
@@ -191,52 +191,52 @@ namespace StockSharp.Algo.Storages.Binary
 			ReadItemLocalOffset(stream, MarketDataVersions.Version59);
 		}
 
-		public override void CopyFrom(TransactionSerializerMetaInfo src)
+		public override void CopyFrom(BinaryMetaInfo src)
 		{
 			base.CopyFrom(src);
 
-			FirstOrderId = src.FirstOrderId;
-			LastOrderId = src.LastOrderId;
-			FirstTradeId = src.FirstTradeId;
-			LastTradeId = src.LastTradeId;
-			FirstTransactionId = src.FirstTransactionId;
-			LastTransactionId = src.LastTransactionId;
-			FirstOriginalTransactionId = src.FirstOriginalTransactionId;
-			LastOriginalTransactionId = src.LastOriginalTransactionId;
-			FirstPrice = src.FirstPrice;
-			LastPrice = src.LastPrice;
-			FirstCommission = src.FirstCommission;
-			LastCommission = src.LastCommission;
-			FirstPnL = src.FirstPnL;
-			LastPnL = src.LastPnL;
-			FirstPosition = src.FirstPosition;
-			LastPosition = src.LastPosition;
-			FirstSlippage = src.FirstSlippage;
-			LastSlippage = src.LastSlippage;
+			var tsInfo = (TransactionSerializerMetaInfo)src;
+
+			FirstOrderId = tsInfo.FirstOrderId;
+			LastOrderId = tsInfo.LastOrderId;
+			FirstTradeId = tsInfo.FirstTradeId;
+			LastTradeId = tsInfo.LastTradeId;
+			FirstTransactionId = tsInfo.FirstTransactionId;
+			LastTransactionId = tsInfo.LastTransactionId;
+			FirstOriginalTransactionId = tsInfo.FirstOriginalTransactionId;
+			LastOriginalTransactionId = tsInfo.LastOriginalTransactionId;
+			FirstCommission = tsInfo.FirstCommission;
+			LastCommission = tsInfo.LastCommission;
+			FirstPnL = tsInfo.FirstPnL;
+			LastPnL = tsInfo.LastPnL;
+			FirstPosition = tsInfo.FirstPosition;
+			LastPosition = tsInfo.LastPosition;
+			FirstSlippage = tsInfo.FirstSlippage;
+			LastSlippage = tsInfo.LastSlippage;
 
 			Portfolios.Clear();
-			Portfolios.AddRange(src.Portfolios);
+			Portfolios.AddRange(tsInfo.Portfolios);
 
 			ClientCodes.Clear();
-			ClientCodes.AddRange(src.ClientCodes);
+			ClientCodes.AddRange(tsInfo.ClientCodes);
 
 			BrokerCodes.Clear();
-			BrokerCodes.AddRange(src.BrokerCodes);
+			BrokerCodes.AddRange(tsInfo.BrokerCodes);
 
 			DepoNames.Clear();
-			DepoNames.AddRange(src.DepoNames);
+			DepoNames.AddRange(tsInfo.DepoNames);
 
 			UserOrderIds.Clear();
-			UserOrderIds.AddRange(src.UserOrderIds);
+			UserOrderIds.AddRange(tsInfo.UserOrderIds);
 
 			Comments.Clear();
-			Comments.AddRange(src.Comments);
+			Comments.AddRange(tsInfo.Comments);
 
 			SystemComments.Clear();
-			SystemComments.AddRange(src.SystemComments);
+			SystemComments.AddRange(tsInfo.SystemComments);
 
 			Errors.Clear();
-			Errors.AddRange(src.Errors);
+			Errors.AddRange(tsInfo.Errors);
 		}
 	}
 

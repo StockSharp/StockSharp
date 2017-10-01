@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
-	class NewsMetaInfo : BinaryMetaInfo<NewsMetaInfo>
+	class NewsMetaInfo : BinaryMetaInfo
 	{
 		public NewsMetaInfo(DateTime date)
 			: base(date)

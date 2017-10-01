@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class Level1MetaInfo : BinaryMetaInfo<Level1MetaInfo>
+	class Level1MetaInfo : BinaryMetaInfo
 	{
 		public Level1MetaInfo(DateTime date)
 			: base(date)
@@ -382,64 +382,66 @@ namespace StockSharp.Algo.Storages.Binary
 			return RefTuple.Create(stream.Read<decimal>(), stream.Read<decimal>());
 		}
 
-		public override void CopyFrom(Level1MetaInfo src)
+		public override void CopyFrom(BinaryMetaInfo src)
 		{
 			base.CopyFrom(src);
 
-			Price = Clone(src.Price);
-			ImpliedVolatility = Clone(src.ImpliedVolatility);
-			TheorPrice = Clone(src.TheorPrice);
-			StepPrice = Clone(src.StepPrice);
-			HistoricalVolatility = Clone(src.HistoricalVolatility);
-			Delta = Clone(src.Delta);
-			Gamma = Clone(src.Gamma);
-			Vega = Clone(src.Vega);
-			Theta = Clone(src.Theta);
-			MarginBuy = Clone(src.MarginBuy);
-			MarginSell = Clone(src.MarginSell);
-			Change = Clone(src.Change);
-			Rho = Clone(src.Rho);
-			AccruedCouponIncome = Clone(src.AccruedCouponIncome);
-			Yield = Clone(src.Yield);
-			FirstFieldTime = src.FirstFieldTime;
-			LastFieldTime = src.LastFieldTime;
-			VWAP = Clone(src.VWAP);
-			PriceEarnings = Clone(src.PriceEarnings);
-			ForwardPriceEarnings = Clone(src.ForwardPriceEarnings);
-			PriceEarningsGrowth = Clone(src.PriceEarningsGrowth);
-			PriceSales = Clone(src.PriceSales);
-			PriceBook = Clone(src.PriceBook);
-			PriceCash = Clone(src.PriceCash);
-			PriceFreeCash = Clone(src.PriceFreeCash);
-			Payout = Clone(src.Payout);
-			SharesOutstanding = Clone(src.SharesOutstanding);
-			SharesFloat = Clone(src.SharesFloat);
-			FloatShort = Clone(src.FloatShort);
-			ShortRatio = Clone(src.ShortRatio);
-			ReturnOnAssets = Clone(src.ReturnOnAssets);
-			ReturnOnEquity = Clone(src.ReturnOnEquity);
-			ReturnOnInvestment = Clone(src.ReturnOnInvestment);
-			CurrentRatio = Clone(src.CurrentRatio);
-			QuickRatio = Clone(src.QuickRatio);
-			LongTermDebtEquity = Clone(src.LongTermDebtEquity);
-			TotalDebtEquity = Clone(src.TotalDebtEquity);
-			GrossMargin = Clone(src.GrossMargin);
-			OperatingMargin = Clone(src.OperatingMargin);
-			ProfitMargin = Clone(src.ProfitMargin);
-			Beta = Clone(src.Beta);
-			AverageTrueRange = Clone(src.AverageTrueRange);
-			HistoricalVolatilityWeek = Clone(src.HistoricalVolatilityWeek);
-			HistoricalVolatilityMonth = Clone(src.HistoricalVolatilityMonth);
-			AveragePrice = Clone(src.AveragePrice);
-			Turnover = Clone(src.Turnover);
-			IssueSize = Clone(src.IssueSize);
-			Duration = Clone(src.Duration);
-			BuyBackPrice = Clone(src.BuyBackPrice);
-			FirstBuyBackDateTime = src.FirstBuyBackDateTime;
-			LastBuyBackDateTime = src.LastBuyBackDateTime;
-			FirstBuyBackDateOffset = src.FirstBuyBackDateOffset;
-			LastBuyBackDateOffset = src.LastBuyBackDateOffset;
-			MaxKnownType = src.MaxKnownType;
+			var l1Info = (Level1MetaInfo)src;
+
+			Price = Clone(l1Info.Price);
+			ImpliedVolatility = Clone(l1Info.ImpliedVolatility);
+			TheorPrice = Clone(l1Info.TheorPrice);
+			StepPrice = Clone(l1Info.StepPrice);
+			HistoricalVolatility = Clone(l1Info.HistoricalVolatility);
+			Delta = Clone(l1Info.Delta);
+			Gamma = Clone(l1Info.Gamma);
+			Vega = Clone(l1Info.Vega);
+			Theta = Clone(l1Info.Theta);
+			MarginBuy = Clone(l1Info.MarginBuy);
+			MarginSell = Clone(l1Info.MarginSell);
+			Change = Clone(l1Info.Change);
+			Rho = Clone(l1Info.Rho);
+			AccruedCouponIncome = Clone(l1Info.AccruedCouponIncome);
+			Yield = Clone(l1Info.Yield);
+			FirstFieldTime = l1Info.FirstFieldTime;
+			LastFieldTime = l1Info.LastFieldTime;
+			VWAP = Clone(l1Info.VWAP);
+			PriceEarnings = Clone(l1Info.PriceEarnings);
+			ForwardPriceEarnings = Clone(l1Info.ForwardPriceEarnings);
+			PriceEarningsGrowth = Clone(l1Info.PriceEarningsGrowth);
+			PriceSales = Clone(l1Info.PriceSales);
+			PriceBook = Clone(l1Info.PriceBook);
+			PriceCash = Clone(l1Info.PriceCash);
+			PriceFreeCash = Clone(l1Info.PriceFreeCash);
+			Payout = Clone(l1Info.Payout);
+			SharesOutstanding = Clone(l1Info.SharesOutstanding);
+			SharesFloat = Clone(l1Info.SharesFloat);
+			FloatShort = Clone(l1Info.FloatShort);
+			ShortRatio = Clone(l1Info.ShortRatio);
+			ReturnOnAssets = Clone(l1Info.ReturnOnAssets);
+			ReturnOnEquity = Clone(l1Info.ReturnOnEquity);
+			ReturnOnInvestment = Clone(l1Info.ReturnOnInvestment);
+			CurrentRatio = Clone(l1Info.CurrentRatio);
+			QuickRatio = Clone(l1Info.QuickRatio);
+			LongTermDebtEquity = Clone(l1Info.LongTermDebtEquity);
+			TotalDebtEquity = Clone(l1Info.TotalDebtEquity);
+			GrossMargin = Clone(l1Info.GrossMargin);
+			OperatingMargin = Clone(l1Info.OperatingMargin);
+			ProfitMargin = Clone(l1Info.ProfitMargin);
+			Beta = Clone(l1Info.Beta);
+			AverageTrueRange = Clone(l1Info.AverageTrueRange);
+			HistoricalVolatilityWeek = Clone(l1Info.HistoricalVolatilityWeek);
+			HistoricalVolatilityMonth = Clone(l1Info.HistoricalVolatilityMonth);
+			AveragePrice = Clone(l1Info.AveragePrice);
+			Turnover = Clone(l1Info.Turnover);
+			IssueSize = Clone(l1Info.IssueSize);
+			Duration = Clone(l1Info.Duration);
+			BuyBackPrice = Clone(l1Info.BuyBackPrice);
+			FirstBuyBackDateTime = l1Info.FirstBuyBackDateTime;
+			LastBuyBackDateTime = l1Info.LastBuyBackDateTime;
+			FirstBuyBackDateOffset = l1Info.FirstBuyBackDateOffset;
+			LastBuyBackDateOffset = l1Info.LastBuyBackDateOffset;
+			MaxKnownType = l1Info.MaxKnownType;
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)

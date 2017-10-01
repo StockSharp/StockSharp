@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return prevPrice + diff;
 		}
 
-		public static void WritePrice(this BitArrayWriter writer, decimal price, decimal prevPrice, MetaInfo info, SecurityId securityId, bool useLong = false)
+		public static void WritePrice(this BitArrayWriter writer, decimal price, decimal prevPrice, BinaryMetaInfo info, SecurityId securityId, bool useLong = false)
 		{
 			var priceStep = info.PriceStep;
 
@@ -89,8 +89,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static void WritePriceEx<T>(this BitArrayWriter writer, decimal price, BinaryMetaInfo<T> info, SecurityId securityId)
-			where T : BinaryMetaInfo<T>
+		public static void WritePriceEx(this BitArrayWriter writer, decimal price, BinaryMetaInfo info, SecurityId securityId)
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
@@ -120,14 +119,13 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static decimal ReadPrice(this BitArrayReader reader, decimal prevPrice, MetaInfo info, bool useLong = false)
+		public static decimal ReadPrice(this BitArrayReader reader, decimal prevPrice, BinaryMetaInfo info, bool useLong = false)
 		{
 			var count = useLong ? reader.ReadLong() : reader.ReadInt();
 			return prevPrice + count * info.PriceStep;
 		}
 
-		public static decimal ReadPriceEx<T>(this BitArrayReader reader, BinaryMetaInfo<T> info)
-			where T : BinaryMetaInfo<T>
+		public static decimal ReadPriceEx(this BitArrayReader reader, BinaryMetaInfo info)
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
@@ -334,8 +332,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return (isUtc ? new DateTime(time + offset.Ticks) : prevTime).ApplyTimeZone(offset);
 		}
 
-		public static void WriteVolume<T>(this BitArrayWriter writer, decimal volume, BinaryMetaInfo<T> info, SecurityId securityId)
-			where T : BinaryMetaInfo<T>
+		public static void WriteVolume(this BitArrayWriter writer, decimal volume, BinaryMetaInfo info, SecurityId securityId)
 		{
 			if (info.Version < MarketDataVersions.Version44)
 			{
@@ -371,8 +368,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static decimal ReadVolume<T>(this BitArrayReader reader, BinaryMetaInfo<T> info)
-			where T : BinaryMetaInfo<T>
+		public static decimal ReadVolume(this BitArrayReader reader, BinaryMetaInfo info)
 		{
 			if (info.Version < MarketDataVersions.Version44)
 			{
@@ -419,8 +415,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return Encoding.UTF8.GetString(reader.ReadArray(len).To<BitArray>().To<byte[]>());
 		}
 
-		public static TimeSpan GetTimeZone<TMetaInfo>(this BinaryMetaInfo<TMetaInfo> metaInfo, bool isUtc, SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			where TMetaInfo : BinaryMetaInfo<TMetaInfo>
+		public static TimeSpan GetTimeZone(this BinaryMetaInfo metaInfo, bool isUtc, SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (isUtc)
 				return metaInfo.ServerOffset;

@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class QuoteMetaInfo : BinaryMetaInfo<QuoteMetaInfo>
+	class QuoteMetaInfo : BinaryMetaInfo
 	{
 		public QuoteMetaInfo(DateTime date)
 			: base(date)
@@ -75,14 +75,6 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadOffsets(stream);
-		}
-
-		public override void CopyFrom(QuoteMetaInfo src)
-		{
-			base.CopyFrom(src);
-
-			FirstPrice = src.FirstPrice;
-			LastPrice = src.LastPrice;
 		}
 	}
 
