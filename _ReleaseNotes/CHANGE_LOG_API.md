@@ -10,6 +10,7 @@ StockSharp API Change log
 * (bug) FIX connector. Order book gathering fix.
 * (bug) FIX connector. Check input values while logon.
 * (bug) QuikLua. Fix CurrentValue for money positions http://stocksharp.ru/posts/m/41082/
+* (feature) IQFeed. Security file parsing into separate thread.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.
