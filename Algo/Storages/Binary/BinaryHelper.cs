@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return prevPrice + diff;
 		}
 
-		public static void WritePrice(this BitArrayWriter writer, decimal price, decimal prevPrice, BinaryMetaInfo info, SecurityId securityId, bool useLong = false, bool nonAdjustPrice = false)
+		public static void WritePrice(this BitArrayWriter writer, decimal price, ref decimal prevPrice, BinaryMetaInfo info, SecurityId securityId, bool useLong = false, bool nonAdjustPrice = false)
 		{
 			var priceStep = info.PriceStep;
 
@@ -138,6 +138,8 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WriteLong(stepCount);
 				else
 					writer.WriteInt((int)stepCount);
+
+				prevPrice = price;
 			}
 			catch (OverflowException ex)
 			{
@@ -149,7 +151,8 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
-				writer.WritePrice(price, info.LastPrice, info, securityId);
+				var prevPrice = info.LastPrice;
+				writer.WritePrice(price, ref prevPrice, info, securityId);
 				info.LastPrice = price;
 			}
 			else
@@ -162,7 +165,8 @@ namespace StockSharp.Algo.Storages.Binary
 					if (info.FirstPrice == 0)
 						info.FirstPrice = info.LastPrice = price;
 
-					writer.WritePrice(price, info.LastPrice, info, securityId);
+					var prevPrice = info.LastPrice;
+					writer.WritePrice(price, ref prevPrice, info, securityId);
 					info.LastPrice = price;
 				}
 				else
@@ -181,11 +185,11 @@ namespace StockSharp.Algo.Storages.Binary
 			return prevPrice + count * priceStep;
 		}
 
-		public static decimal ReadPrice(this BitArrayReader reader, decimal prevPrice, BinaryMetaInfo info, bool useLong = false, bool nonAdjustPrice = false)
+		public static decimal ReadPrice(this BitArrayReader reader, ref decimal prevPrice, BinaryMetaInfo info, bool useLong = false, bool nonAdjustPrice = false)
 		{
 			if (!nonAdjustPrice || reader.Read())
 			{
-				return ReadPrice(reader, prevPrice, info.PriceStep, useLong);
+				return prevPrice = ReadPrice(reader, prevPrice, info.PriceStep, useLong);
 			}
 			else
 			{
@@ -200,13 +204,15 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
-				return info.FirstPrice = reader.ReadPrice(info.FirstPrice, info);
+				var prevPrice = info.FirstPrice;
+				return info.FirstPrice = reader.ReadPrice(ref prevPrice, info);
 			}
 			else
 			{
 				if (reader.Read())
 				{
-					return info.FirstPrice = reader.ReadPrice(info.FirstPrice, info);
+					var prevPrice = info.FirstPrice;
+					return info.FirstPrice = reader.ReadPrice(ref prevPrice, info);
 				}
 				else
 				{

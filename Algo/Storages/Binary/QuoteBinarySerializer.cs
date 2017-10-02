@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public QuoteMetaInfo(DateTime date)
 			: base(date)
 		{
-			FirstPrice = -1;
+			//FirstPrice = -1;
 		}
 
 		public override void Write(Stream stream)
@@ -101,7 +101,15 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				var firstDepth = messages.FirstOrDefault(d => !d.Bids.IsEmpty() || !d.Asks.IsEmpty());
 
-				metaInfo.LastPrice = metaInfo.FirstPrice = firstDepth != null ? GetDepthPrice(firstDepth) : 0;
+				//var price = firstDepth != null ? GetDepthPrice(firstDepth) : 0;
+
+				//if (price != 0)
+				//{
+				//	if ((price % metaInfo.PriceStep) == 0)
+				//		metaInfo.LastPrice = metaInfo.FirstPrice = price;
+				//	else
+				//		metaInfo.LastFractionalPrice = metaInfo.FirstFractionalPrice = price;
+				//}
 
 				metaInfo.ServerOffset = (firstDepth ?? messages.First()).ServerTime.Offset;
 			}
@@ -153,7 +161,7 @@ namespace StockSharp.Algo.Storages.Binary
 				SerializeQuotes(writer, delta.Bids, metaInfo/*, isFull*/, nonAdjustPrice);
 				SerializeQuotes(writer, delta.Asks, metaInfo/*, isFull*/, nonAdjustPrice);
 
-				metaInfo.LastPrice = GetDepthPrice(quoteMsg);
+				//metaInfo.LastPrice = GetDepthPrice(quoteMsg);
 
 				if (metaInfo.Version < MarketDataVersions.Version40)
 					continue;
@@ -232,7 +240,7 @@ namespace StockSharp.Algo.Storages.Binary
 			//if (depth.BestBid != null && depth.BestAsk != null && depth.BestBid.Price >= depth.BestAsk.Price)
 			//	throw new InvalidOperationException("Лучший бид {0} больше или равен лучшему офферу {1}.".Put(depth.BestBid.Price, depth.BestAsk.Price));
 
-			metaInfo.FirstPrice = GetDepthPrice(quoteMsg);
+			//metaInfo.FirstPrice = GetDepthPrice(quoteMsg);
 
 			if (metaInfo.Version < MarketDataVersions.Version40)
 				return quoteMsg;
@@ -279,8 +287,6 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo == null)
 				throw new ArgumentNullException(nameof(metaInfo));
 
-			var prevPrice = metaInfo.LastPrice;
-
 			writer.WriteInt(quotes.Count());
 
 			foreach (var quote in quotes)
@@ -294,10 +300,11 @@ namespace StockSharp.Algo.Storages.Binary
 				if (quote.Volume < 0/* || (isFull && quote.Volume == 0)*/)
 					throw new ArgumentOutOfRangeException(nameof(quotes), quote.Volume, LocalizedStrings.Str936);
 
-				writer.WritePrice(quote.Price, prevPrice, metaInfo, SecurityId, false, nonAdjustPrice);
-				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
+				var pricePrice = metaInfo.LastPrice;
+				writer.WritePrice(quote.Price, ref pricePrice, metaInfo, SecurityId, false, nonAdjustPrice);
+				metaInfo.LastPrice = pricePrice;
 
-				prevPrice = quote.Price;
+				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
 			}
 		}
 
@@ -316,26 +323,24 @@ namespace StockSharp.Algo.Storages.Binary
 			if (deltaCount == 0)
 				return list;
 
-			var prevPrice = metaInfo.FirstPrice;
-
 			for (var i = 0; i < deltaCount; i++)
 			{
-				metaInfo.FirstPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo, false, nonAdjustPrice);
+				var prevPrice = metaInfo.FirstPrice;
+				var price = reader.ReadPrice(ref prevPrice, metaInfo, false, nonAdjustPrice);
+				metaInfo.FirstPrice = prevPrice;
 
 				var volume = reader.ReadVolume(metaInfo);
 
-				list.Add(new QuoteChange(side, metaInfo.FirstPrice, volume));
+				list.Add(new QuoteChange(side, price, volume));
 			}
-
-			metaInfo.FirstPrice = prevPrice;
 
 			return list;
 		}
 
-		private static decimal GetDepthPrice(QuoteChangeMessage message)
-		{
-			var quote = message.GetBestBid() ?? message.GetBestAsk();
-			return quote == null ? 0 : quote.Price;
-		}
+		//private static decimal GetDepthPrice(QuoteChangeMessage message)
+		//{
+		//	var quote = message.GetBestBid() ?? message.GetBestAsk();
+		//	return quote == null ? 0 : quote.Price;
+		//}
 	}
 }

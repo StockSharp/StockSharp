@@ -1094,8 +1094,9 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.MinPrice:
 					case Level1Fields.MaxPrice:
 					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice);
-						l1Msg.Add(field, metaInfo.Price.First);
+						var prevPrice = metaInfo.Price.First;
+						l1Msg.Add(field, reader.ReadPrice(ref prevPrice, metaInfo, false, nonAdjustPrice));
+						metaInfo.Price.First = prevPrice;
 						break;
 					}
 					//case Level1Fields.MaxPrice:
@@ -1183,9 +1184,11 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 					case Level1Fields.LastTrade:
 					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice);
+						var prevPrice = metaInfo.Price.First;
+						var price = reader.ReadPrice(ref prevPrice, metaInfo, false, nonAdjustPrice);
+						metaInfo.Price.First = prevPrice;
 
-						l1Msg.Add(Level1Fields.LastTradePrice, metaInfo.Price.First);
+						l1Msg.Add(Level1Fields.LastTradePrice, price);
 						l1Msg.Add(Level1Fields.LastTradeVolume, reader.ReadVolume(metaInfo));
 						l1Msg.Add(Level1Fields.LastTradeTime, metaInfo.FirstTime.ApplyTimeZone(metaInfo.ServerOffset));
 
@@ -1198,17 +1201,21 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 					case Level1Fields.BestBid:
 					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice);
+						var prevPrice = metaInfo.Price.First;
+						var price = reader.ReadPrice(ref prevPrice, metaInfo, false, nonAdjustPrice);
+						metaInfo.Price.First = prevPrice;
 
-						l1Msg.Add(Level1Fields.BestBidPrice, metaInfo.Price.First);
+						l1Msg.Add(Level1Fields.BestBidPrice, price);
 						l1Msg.Add(Level1Fields.BestBidVolume, reader.ReadVolume(metaInfo));
 						break;
 					}
 					case Level1Fields.BestAsk:
 					{
-						metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice);
+						var prevPrice = metaInfo.Price.First;
+						var price = reader.ReadPrice(ref prevPrice, metaInfo, false, nonAdjustPrice);
+						metaInfo.Price.First = prevPrice;
 
-						l1Msg.Add(Level1Fields.BestAskPrice, metaInfo.Price.First);
+						l1Msg.Add(Level1Fields.BestAskPrice, price);
 						l1Msg.Add(Level1Fields.BestAskVolume, reader.ReadVolume(metaInfo));
 						break;
 					}
@@ -1224,13 +1231,19 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.HighBidPrice:
 					case Level1Fields.LowAskPrice:
 					{
-						l1Msg.Add(field, metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo, false, nonAdjustPrice));
+						var prevPrice = metaInfo.Price.First;
+						l1Msg.Add(field, reader.ReadPrice(ref prevPrice, metaInfo, false, nonAdjustPrice));
+						metaInfo.Price.First = prevPrice;
 						break;
 					}
 					case Level1Fields.AveragePrice:
 					{
 						if (metaInfo.Version < MarketDataVersions.Version51)
-							l1Msg.Add(field, metaInfo.Price.First = reader.ReadPrice(metaInfo.Price.First, metaInfo));
+						{
+							var prevPrice = metaInfo.Price.First;
+							l1Msg.Add(field, reader.ReadPrice(ref prevPrice, metaInfo));
+							metaInfo.Price.First = prevPrice;
+						}
 						else
 							l1Msg.Add(field, DeserializeChange(reader, metaInfo.AveragePrice));
 
@@ -1490,8 +1503,9 @@ namespace StockSharp.Algo.Storages.Binary
 			if (pair.First == 0)
 				pair.First = pair.Second = price;
 
-			writer.WritePrice(price, pair.Second, metaInfo, SecurityId, false, nonAdjustPrice);
-			pair.Second = price;
+			var prevPrice = pair.Second;
+			writer.WritePrice(price, ref prevPrice, metaInfo, SecurityId, false, nonAdjustPrice);
+			pair.Second = prevPrice;
 		}
 
 		private static void SerializeChange(BitArrayWriter writer, RefPair<decimal, decimal> info, decimal price)

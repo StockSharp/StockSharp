@@ -139,12 +139,18 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (metaInfo.Version < MarketDataVersions.Version56)
 				{
-					writer.WritePrice(candle.LowPrice, metaInfo.LastPrice, metaInfo, SecurityId);
-					metaInfo.LastPrice = candle.LowPrice;
+					var prevPrice = metaInfo.LastPrice;
+					writer.WritePrice(candle.LowPrice, ref prevPrice, metaInfo, SecurityId);
+					metaInfo.LastPrice = prevPrice;
 
-					writer.WritePrice(candle.OpenPrice, metaInfo.LastPrice, metaInfo, SecurityId);
-					writer.WritePrice(candle.ClosePrice, metaInfo.LastPrice, metaInfo, SecurityId);
-					writer.WritePrice(candle.HighPrice, metaInfo.LastPrice, metaInfo, SecurityId);
+					prevPrice = metaInfo.LastPrice;
+					writer.WritePrice(candle.OpenPrice, ref prevPrice, metaInfo, SecurityId);
+
+					prevPrice = metaInfo.LastPrice;
+					writer.WritePrice(candle.ClosePrice, ref prevPrice, metaInfo, SecurityId);
+
+					prevPrice = metaInfo.LastPrice;
+					writer.WritePrice(candle.HighPrice, ref prevPrice, metaInfo, SecurityId);
 				}
 				else
 				{
@@ -349,7 +355,11 @@ namespace StockSharp.Algo.Storages.Binary
 				foreach (var level in priceLevels)
 				{
 					if (metaInfo.Version < MarketDataVersions.Version56)
-						writer.WritePrice(level.Price, metaInfo.LastPrice, metaInfo, SecurityId);
+					{
+						var prevPrice = metaInfo.LastPrice;
+						writer.WritePrice(level.Price, ref prevPrice, metaInfo, SecurityId);
+						metaInfo.LastPrice = prevPrice;
+					}
 					else
 						writer.WritePriceEx(level.Price, metaInfo, SecurityId);
 
@@ -418,12 +428,18 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (metaInfo.Version < MarketDataVersions.Version56)
 			{
-				candle.LowPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo);
-				metaInfo.FirstPrice = candle.LowPrice;
+				var prevPrice = metaInfo.FirstPrice;
+				candle.LowPrice = reader.ReadPrice(ref prevPrice, metaInfo);
+				metaInfo.FirstPrice = prevPrice;
 
-				candle.OpenPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo);
-				candle.ClosePrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo);
-				candle.HighPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo);
+				prevPrice = metaInfo.FirstPrice;
+				candle.OpenPrice = reader.ReadPrice(ref prevPrice, metaInfo);
+
+				prevPrice = metaInfo.FirstPrice;
+				candle.ClosePrice = reader.ReadPrice(ref prevPrice, metaInfo);
+
+				prevPrice = metaInfo.FirstPrice;
+				candle.HighPrice = reader.ReadPrice(ref prevPrice, metaInfo);
 			}
 			else
 			{
@@ -526,10 +542,12 @@ namespace StockSharp.Algo.Storages.Binary
 
 				for (var i = 0; i < priceLevels.Length; i++)
 				{
+					var prevPrice = metaInfo.FirstPrice;
+
 					var priceLevel = new CandlePriceLevel
 					{
 						Price = metaInfo.Version < MarketDataVersions.Version56
-								? reader.ReadPrice(metaInfo.FirstPrice, metaInfo)
+								? reader.ReadPrice(ref prevPrice, metaInfo)
 								: reader.ReadPriceEx(metaInfo),
 						BuyCount = reader.ReadInt(),
 						SellCount = reader.ReadInt(),
