@@ -6,6 +6,9 @@ StockSharp API Change log
 * (bug) BitStamp. Market data fix.
 * (bug) FIX protocol. Exante market-data fix.
 * (feature) Binary storage. Support non adjust prices for order book and level1.
+* (bug) FIX connector. Position average price receive fix.
+* (bug) FIX connector. Order book gathering fix.
+* (bug) FIX connector. Check input values while logon.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.
