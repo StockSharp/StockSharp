@@ -13,6 +13,7 @@ StockSharp API Change log
 * (feature) IQFeed. Security file parsing into separate thread.
 * (bug) Alerts fixes.
 * (bug) BTCE. Fix security price step.
+* (bug) SecurityCreateWindow fix.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.
