@@ -99,6 +99,8 @@ M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Bool
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/param/progress;DocStr9091
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/param/cancel;DocStr9780
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/returns;DocStr9090
+M:StockSharp.Community.FileClient.GetUploadLimit/summary;DocStr10166
+M:StockSharp.Community.FileClient.GetUploadLimit/returns;DocStr10167
 T:StockSharp.Community.IAuthenticationService/summary;DocStr2997
 M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/summary;DocStr2963
 M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/param/email;Email
@@ -154,6 +156,9 @@ M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/summary;Doc
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/param/sessionId;DocStr138
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/param/id;DocStr9031
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/returns;DocStr3021
+M:StockSharp.Community.IFileService.GetUploadLimit(System.Guid)/summary;DocStr10166
+M:StockSharp.Community.IFileService.GetUploadLimit(System.Guid)/param/sessionId;DocStr138
+M:StockSharp.Community.IFileService.GetUploadLimit(System.Guid)/returns;DocStr10167
 T:StockSharp.Community.INotificationService/summary;DocStr3014
 M:StockSharp.Community.INotificationService.GetSmsCount(System.Guid)/summary;DocStr3015
 M:StockSharp.Community.INotificationService.GetSmsCount(System.Guid)/param/sessionId;DocStr138

@@ -14529,3 +14529,7 @@ DocStr10162;Unsubscribe from changes;Отписаться от изменени�
 DocStr10163;Price chart data provider;Поставщик данных для графика
 DocStr10164;Refresh chart data period;Период обновления графика
 DocStr10165;Maximum number of items in chart;Максимальное значение элементов на графике
+DocStr10166;To get a upload size limit;Получить лимит на загрузку
+DocStr10167;Upload size limit;Лимит на загрузку
+DocStr10169;{0}, if obsolete, otherwise, not obsolete;{0} если устаревшее, иначе, не устаревшее
+DocStr10170;Is the specified {0} was obsolete;Если указанное значение {0} было устаревшим

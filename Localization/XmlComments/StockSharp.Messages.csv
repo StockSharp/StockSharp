@@ -520,7 +520,10 @@ M:StockSharp.Messages.Extensions.Convert(StockSharp.Messages.CurrencyTypes,Stock
 M:StockSharp.Messages.Extensions.Convert(StockSharp.Messages.CurrencyTypes,StockSharp.Messages.CurrencyTypes,System.DateTime)/returns;DocStr2325
 M:StockSharp.Messages.Extensions.IsObsolete(StockSharp.Messages.PositionChangeTypes)/summary;DocStr9923
 M:StockSharp.Messages.Extensions.IsObsolete(StockSharp.Messages.PositionChangeTypes)/param/type;DocStr65
-M:StockSharp.Messages.Extensions.IsObsolete(StockSharp.Messages.PositionChangeTypes)/returns;Str1738
+M:StockSharp.Messages.Extensions.IsObsolete(StockSharp.Messages.PositionChangeTypes)/returns;DocStr10169
+M:StockSharp.Messages.Extensions.IsObsolete(StockSharp.Messages.Level1Fields)/summary;DocStr10170
+M:StockSharp.Messages.Extensions.IsObsolete(StockSharp.Messages.Level1Fields)/param/field;DocStr65
+M:StockSharp.Messages.Extensions.IsObsolete(StockSharp.Messages.Level1Fields)/returns;DocStr10169
 M:StockSharp.Messages.Extensions.TryInitLocalTime(StockSharp.Messages.Message,StockSharp.Logging.ILogSource)/summary;DocStr10110
 M:StockSharp.Messages.Extensions.TryInitLocalTime(StockSharp.Messages.Message,StockSharp.Logging.ILogSource)/param/message;Str3166
 M:StockSharp.Messages.Extensions.TryInitLocalTime(StockSharp.Messages.Message,StockSharp.Logging.ILogSource)/param/source;Str213
