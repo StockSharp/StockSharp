@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetCandles())
 					{
-						GetStorage(pair.Key.Item1, pair.Key.Item2, pair.Key.Item3).Save(pair.Value);
+						GetStorage(pair.Key.Item1, pair.Key.Item2, pair.Key.Item3).Save(pair.Value.Where(c => c.State != CandleStates.Active));
 					}
 
 					foreach (var pair in GetPositionChanges())

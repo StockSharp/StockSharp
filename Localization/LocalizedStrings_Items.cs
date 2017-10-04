@@ -46266,5 +46266,15 @@ namespace StockSharp.Localization
 		/// Cancelling
 		/// </summary>
 		public static string Cancelling => GetString(CancellingKey);
+
+		/// <summary>
+		/// Candle {0} has active state and cannot be stored.
+		/// </summary>
+		public const string CandleActiveNotSupportKey = nameof(CandleActiveNotSupport);
+
+		/// <summary>
+		/// Candle {0} has active state and cannot be stored.
+		/// </summary>
+		public static string CandleActiveNotSupport => GetString(CandleActiveNotSupportKey);
 	}
 }

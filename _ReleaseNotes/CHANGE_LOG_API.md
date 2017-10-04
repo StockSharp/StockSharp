@@ -14,6 +14,7 @@ StockSharp API Change log
 * (bug) Alerts fixes.
 * (bug) BTCE. Fix security price step.
 * (bug) SecurityCreateWindow fix.
+* (feature) Storage. Turned off saving active candles.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.

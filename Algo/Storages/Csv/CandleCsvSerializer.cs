@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Storages.Csv
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -187,6 +188,9 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		protected override void Write(CsvFileWriter writer, TCandleMessage data, IMarketDataMetaInfo metaInfo)
 		{
+			if (data.State == CandleStates.Active)
+				throw new ArgumentException(LocalizedStrings.CandleActiveNotSupport.Put(data), nameof(data));
+
 			writer.WriteRow(new[]
 			{
 				data.OpenTime.WriteTimeMls(),

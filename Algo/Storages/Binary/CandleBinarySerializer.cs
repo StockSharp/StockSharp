@@ -125,6 +125,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 			foreach (var candle in candles)
 			{
+				if (candle.State == CandleStates.Active)
+					throw new ArgumentException(LocalizedStrings.CandleActiveNotSupport.Put(candle), nameof(candle));
+
 				writer.WriteVolume(candle.TotalVolume, metaInfo, SecurityId);
 
 				if (metaInfo.Version < MarketDataVersions.Version52)
