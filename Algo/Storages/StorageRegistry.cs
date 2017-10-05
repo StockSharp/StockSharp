@@ -337,6 +337,9 @@ namespace StockSharp.Algo.Storages
 
 				foreach (var msg in data)
 				{
+					if (msg.State == CandleStates.Active)
+						continue;
+
 					var time = GetTruncatedTime(msg);
 
 					if (time <= lastTime)
