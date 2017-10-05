@@ -16,6 +16,7 @@ StockSharp API Change log
 * (bug) SecurityCreateWindow fix.
 * (feature) Storage. Turned off saving active candles.
 * (bug) Storage. Fix filter first data.
+* (bug) SecurityGrid. Removed obsolete bindings and fix sorting.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.
