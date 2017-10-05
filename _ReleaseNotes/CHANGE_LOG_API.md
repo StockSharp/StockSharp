@@ -21,6 +21,7 @@ StockSharp API Change log
 * (bug) IQFeed. Connection error handling fix.
 * (feature) InteractiveBrokers. Support historical ticks.
 * (feature) ChartAnnotation.
+* (bug) QuikLua. Fix candle states http://stocksharp.ru/posts/m/41144/
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.
