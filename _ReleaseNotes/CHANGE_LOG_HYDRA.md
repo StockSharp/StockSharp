@@ -1,5 +1,32 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.3.28:
+* (bug) BitStamp. Market data fix.
+* (bug) FIX protocol. Exante market-data fix.
+* (feature) Binary storage. Support non adjust prices for order book and level1.
+* (bug) FIX connector. Position average price receive fix.
+* (bug) FIX connector. Order book gathering fix.
+* (bug) FIX connector. Check input values while logon.
+* (bug) QuikLua. Fix CurrentValue for money positions http://stocksharp.ru/posts/m/41082/
+* (feature) IQFeed. Security file parsing into separate thread.
+* (bug) BTCE. Fix security price step.
+* (bug) Security create window fix.
+* (feature) Storage. Turned off saving active candles.
+* (bug) Storage. Fix filter first data.
+* (bug) BTCE. Fix market-data only mode.
+* (bug) IQFeed. Connection error handling fix.
+* (feature) InteractiveBrokers. Support historical ticks.
+* (bug) QuikLua. Fix candle states http://stocksharp.ru/posts/m/41144/
+* (feature) Changed default drive. http://stocksharp.ru/posts/m/41138/
+* (bug) Indicator pane fix.
+* (feature) Save/Load main window state.
+* (bug) Fix long time security downloading.
+* (feature) IQFeed. Check memory size for security downloading.
+* (feature) Reset settings option if database corrupted.
+* (bug) Order log pane fix.
+* (feature) IQFeed. SecurityLookupSupportTypes.SupportAll option for downloading instruments from site.
+* (feature) Uses predefined SQLite dll (x64 version).
+
 ## v4.3.27.2:
 * (feature) More tooltips.
 * (feature) Connector validation settings.
