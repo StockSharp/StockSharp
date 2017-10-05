@@ -17,6 +17,7 @@ StockSharp API Change log
 * (feature) Storage. Turned off saving active candles.
 * (bug) Storage. Fix filter first data.
 * (bug) SecurityGrid. Removed obsolete bindings and fix sorting.
+* (bug) BTCE. Fix market-data only mode.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.

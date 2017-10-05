@@ -7,6 +7,7 @@ M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message
 P:StockSharp.Btce.BtceMessageAdapter.Key/summary;Str3304
 P:StockSharp.Btce.BtceMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Btce.BtceMessageAdapter.Domain/summary;Str3486
+F:StockSharp.Btce.BtceMessageAdapter.DefaultDomain/summary;DocStr9884
 M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Btce.BtceMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

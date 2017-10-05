@@ -39,6 +39,11 @@
             Domain address.
             </summary>
         </member>
+        <member name="F:StockSharp.Btce.BtceMessageAdapter.DefaultDomain">
+            <summary>
+            Default value for <see cref="P:StockSharp.Btce.BtceMessageAdapter.Domain"/>.
+            </summary>
+        </member>
         <member name="M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
