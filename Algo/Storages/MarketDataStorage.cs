@@ -171,7 +171,12 @@ namespace StockSharp.Algo.Storages
 							metaInfo = Serializer.CreateMetaInfo(date);
 						}
 
-						count += Save(stream, metaInfo, newItems, false);
+						var diff = Save(stream, metaInfo, newItems, false);
+
+						if (diff == 0)
+							continue;
+
+						count += diff;
 
 						if (!(stream is MemoryStream))
 							continue;

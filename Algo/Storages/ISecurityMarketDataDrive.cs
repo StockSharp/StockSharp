@@ -375,7 +375,7 @@ namespace StockSharp.Algo.Storages
 
 				foreach (var msg in data)
 				{
-					if (msg.TransactionId <= prevTransId)
+					if (msg.TransactionId != 0 && msg.TransactionId <= prevTransId)
 						continue;
 
 					prevTransId = msg.TransactionId;

@@ -300,7 +300,7 @@ namespace StockSharp.Algo.Storages
 
 				foreach (var msg in data)
 				{
-					if (msg.TransactionId <= prevTransId)
+					if (msg.TransactionId != 0 && msg.TransactionId <= prevTransId)
 						continue;
 
 					prevTransId = msg.TransactionId;
@@ -333,14 +333,14 @@ namespace StockSharp.Algo.Storages
 
 			protected override IEnumerable<TCandleMessage> FilterNewData(IEnumerable<TCandleMessage> data, IMarketDataMetaInfo metaInfo)
 			{
-				var lastTime = metaInfo.LastTime;
+				var lastTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
 
 				foreach (var msg in data)
 				{
 					if (msg.State == CandleStates.Active)
 						continue;
 
-					var time = GetTruncatedTime(msg);
+					var time = GetTruncatedTime(msg).ApplyTimeZone(TimeZoneInfo.Utc);
 
 					if ((msg is TimeFrameCandleMessage && msg.OpenTime <= lastTime) || time < lastTime)
 						continue;
