@@ -342,7 +342,7 @@ namespace StockSharp.Algo.Storages
 
 					var time = GetTruncatedTime(msg).ApplyTimeZone(TimeZoneInfo.Utc);
 
-					if ((msg is TimeFrameCandleMessage && msg.OpenTime <= lastTime) || time < lastTime)
+					if ((msg is TimeFrameCandleMessage && time <= lastTime) || time < lastTime)
 						continue;
 
 					lastTime = time;
