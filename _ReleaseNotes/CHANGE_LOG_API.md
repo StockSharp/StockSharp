@@ -20,6 +20,7 @@ StockSharp API Change log
 * (bug) BTCE. Fix market-data only mode.
 * (bug) IQFeed. Connection error handling fix.
 * (feature) InteractiveBrokers. Support historical ticks.
+* (feature) ChartAnnotation.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.

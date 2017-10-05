@@ -80,6 +80,8 @@ E:StockSharp.Xaml.Charting.Chart.RemoveElement/summary;DocStr7742
 E:StockSharp.Xaml.Charting.Chart.CreateOrder/summary;DocStr7743
 E:StockSharp.Xaml.Charting.Chart.MoveOrder/summary;DocStr8942
 E:StockSharp.Xaml.Charting.Chart.CancelOrder/summary;DocStr8943
+E:StockSharp.Xaml.Charting.Chart.AnnotationCreated/summary;DocStr10171
+E:StockSharp.Xaml.Charting.Chart.AnnotationDeleted/summary;DocStr10172
 E:StockSharp.Xaml.Charting.Chart.SubscribeCandleElement/summary;DocStr7813
 E:StockSharp.Xaml.Charting.Chart.SubscribeIndicatorElement/summary;DocStr7813
 E:StockSharp.Xaml.Charting.Chart.SubscribeOrderElement/summary;DocStr7813
@@ -144,6 +146,9 @@ F:StockSharp.Xaml.Charting.ChartAnnotationTypes.TextAnnotation/summary;Str217
 F:StockSharp.Xaml.Charting.ChartAnnotationTypes.BoxAnnotation/summary;Area
 F:StockSharp.Xaml.Charting.ChartAnnotationTypes.HorizontalLineAnnotation/summary;Str1901
 F:StockSharp.Xaml.Charting.ChartAnnotationTypes.VerticalLineAnnotation/summary;Str1902
+T:StockSharp.Xaml.Charting.ChartAnnotation/summary;DocStr10173
+P:StockSharp.Xaml.Charting.ChartAnnotation.Type/summary;DocStr10174
+M:StockSharp.Xaml.Charting.ChartAnnotation.Clone/inheritdoc;DocStr8459
 T:StockSharp.Xaml.Charting.ChartArea/summary;Str1903
 F:StockSharp.Xaml.Charting.ChartArea.XAxisId/summary;DocStr7754
 F:StockSharp.Xaml.Charting.ChartArea.YAxisId/summary;DocStr7755
@@ -423,6 +428,8 @@ E:StockSharp.Xaml.Charting.ChartPanel.SettingsChanged/summary;DocStr7811
 E:StockSharp.Xaml.Charting.ChartPanel.RegisterOrder/summary;DocStr7812
 E:StockSharp.Xaml.Charting.ChartPanel.MoveOrder/summary;DocStr8982
 E:StockSharp.Xaml.Charting.ChartPanel.CancelOrder/summary;DocStr8983
+E:StockSharp.Xaml.Charting.ChartPanel.AnnotationCreated/summary;DocStr10171
+E:StockSharp.Xaml.Charting.ChartPanel.AnnotationDeleted/summary;DocStr10172
 E:StockSharp.Xaml.Charting.ChartPanel.SubscribeCandleElement/summary;DocStr7813
 E:StockSharp.Xaml.Charting.ChartPanel.SubscribeIndicatorElement/summary;DocStr7813
 E:StockSharp.Xaml.Charting.ChartPanel.SubscribeOrderElement/summary;DocStr7813

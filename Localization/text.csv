@@ -14534,3 +14534,7 @@ DocStr10166;To get a upload size limit;Получить лимит на загр
 DocStr10167;Upload size limit;Лимит на загрузку
 DocStr10169;{0}, if obsolete, otherwise, not obsolete;{0} если устаревшее, иначе, не устаревшее
 DocStr10170;Is the specified {0} was obsolete;Если указанное значение {0} было устаревшим
+DocStr10171;Annotation created event;Событие создания аннотации
+DocStr10172;Annotation deleted event;Событие удаления аннотации
+DocStr10173;Annotation;Аннотация
+DocStr10174;Annotation type;Тип аннотации

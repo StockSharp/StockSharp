@@ -296,6 +296,16 @@
             Cancel order event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.AnnotationCreated">
+      <summary>
+            Annotation created event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.AnnotationDeleted">
+      <summary>
+            Annotation deleted event.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Charting.Chart.SubscribeCandleElement">
       <summary>
             The event of the subscription to getting data for the element.
@@ -567,6 +577,19 @@
       <summary>
             Vertical line.
             </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.ChartAnnotation">
+      <summary>
+            Annotation.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartAnnotation.Type">
+      <summary>
+            Annotation type.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartAnnotation.Clone">
+      <inheritdoc />
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartArea">
       <summary>
@@ -1570,6 +1593,16 @@
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.CancelOrder">
       <summary>
             The event of the order cancelation from the chart.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.ChartPanel.AnnotationCreated">
+      <summary>
+            Annotation created event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.ChartPanel.AnnotationDeleted">
+      <summary>
+            Annotation deleted event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.SubscribeCandleElement">
