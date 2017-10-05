@@ -205,6 +205,11 @@ namespace StockSharp.Algo.Storages
 
 			if (metaInfo.Count == 0)
 			{
+				data = FilterNewData(data, metaInfo).ToArray();
+
+				if (data.IsEmpty())
+					return 0;
+
 				var time = GetTruncatedTime(data[0]);
 
 				var priceStep = Security.PriceStep;
@@ -252,7 +257,17 @@ namespace StockSharp.Algo.Storages
 		protected virtual IEnumerable<TData> FilterNewData(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
 			var lastTime = metaInfo.LastTime;
-			return data.Where(i => GetTruncatedTime(i) >= lastTime);
+
+			foreach (var item in data)
+			{
+				var time = GetTruncatedTime(item);
+
+				if (time < lastTime)
+					continue;
+
+				lastTime = time;
+				yield return item;
+			}
 		}
 
 		int IMarketDataStorage.Save(IEnumerable data)

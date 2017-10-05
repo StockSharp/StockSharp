@@ -232,28 +232,30 @@ namespace StockSharp.Algo.Storages
 
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
-				var prevId = (long?)metaInfo.LastId;
-				var prevTime = metaInfo.LastTime;
+				var prevId = (long?)metaInfo.LastId ?? 0;
+				var prevTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
 
-				if (prevId == 0)
-					prevId = null;
-
-				return data.Where(t =>
+				foreach (var msg in data)
 				{
-					if (t.ServerTime > prevTime)
+					if (msg.ServerTime > prevTime)
 					{
-						return true;
+						prevId = msg.TradeId ?? 0;
+						prevTime = msg.ServerTime;
+
+						yield return msg;
 					}
-					else if (t.ServerTime == prevTime)
+					else if (msg.ServerTime == prevTime)
 					{
-						if (prevId != null && t.TradeId != null)
-							return t.TradeId != prevId; // если разные сделки имеют одинаковое время
-						else
-							return true;
+						// если разные сделки имеют одинаковое время
+						if (prevId != 0 && msg.TradeId != null && msg.TradeId != prevId)
+						{
+							prevId = msg.TradeId ?? 0;
+							prevTime = msg.ServerTime;
+
+							yield return msg;
+						}
 					}
-					else
-						return false;
-				});
+				}
 			}
 
 			public override DateTimeOffset GetTime(Trade data)
@@ -294,8 +296,16 @@ namespace StockSharp.Algo.Storages
 
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
-				var prevTransId = (long)metaInfo.LastId;
-				return prevTransId == 0 ? data : data.Where(i => i.TransactionId > prevTransId);
+				var prevTransId = (long?)metaInfo.LastId ?? 0;
+
+				foreach (var msg in data)
+				{
+					if (msg.TransactionId <= prevTransId)
+						continue;
+
+					prevTransId = msg.TransactionId;
+					yield return msg;
+				}
 			}
 
 			public override DateTimeOffset GetTime(OrderLogItem data)
@@ -324,7 +334,17 @@ namespace StockSharp.Algo.Storages
 			protected override IEnumerable<TCandleMessage> FilterNewData(IEnumerable<TCandleMessage> data, IMarketDataMetaInfo metaInfo)
 			{
 				var lastTime = metaInfo.LastTime;
-				return data.Where(i => GetTruncatedTime(i) > lastTime);
+
+				foreach (var msg in data)
+				{
+					var time = GetTruncatedTime(msg);
+
+					if (time <= lastTime)
+						continue;
+
+					lastTime = time;
+					yield return msg;
+				}
 			}
 
 			IEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)

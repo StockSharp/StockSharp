@@ -307,18 +307,30 @@ namespace StockSharp.Algo.Storages
 
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
-				var prevId = (long)metaInfo.LastId;
+				var prevId = (long?)metaInfo.LastId ?? 0;
 				var prevTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
 
-				return data.Where(t =>
+				foreach (var msg in data)
 				{
-					if (t.ServerTime > prevTime)
-						return true;
-					else if (t.ServerTime == prevTime)
-						return t.TradeId != prevId; // если разные сделки имеют одинаковое время
-					else
-						return false;
-				});
+					if (msg.ServerTime > prevTime)
+					{
+						prevId = msg.TradeId ?? 0;
+						prevTime = msg.ServerTime;
+
+						yield return msg;
+					}
+					else if (msg.ServerTime == prevTime)
+					{
+						// если разные сделки имеют одинаковое время
+						if (prevId != 0 && msg.TradeId != null && msg.TradeId != prevId)
+						{
+							prevId = msg.TradeId ?? 0;
+							prevTime = msg.ServerTime;
+
+							yield return msg;
+						}
+					}
+				}
 			}
 
 			public override DateTimeOffset GetTime(Trade data)
@@ -359,8 +371,16 @@ namespace StockSharp.Algo.Storages
 
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
-				var prevTransId = (long)metaInfo.LastId;
-				return data.Where(i => i.TransactionId > prevTransId);
+				var prevTransId = (long?)metaInfo.LastId ?? 0;
+
+				foreach (var msg in data)
+				{
+					if (msg.TransactionId <= prevTransId)
+						continue;
+
+					prevTransId = msg.TransactionId;
+					yield return msg;
+				}
 			}
 
 			public override DateTimeOffset GetTime(OrderLogItem data)
