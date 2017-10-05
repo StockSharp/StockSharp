@@ -19,6 +19,7 @@ StockSharp API Change log
 * (bug) SecurityGrid. Removed obsolete bindings and fix sorting.
 * (bug) BTCE. Fix market-data only mode.
 * (bug) IQFeed. Connection error handling fix.
+* (feature) InteractiveBrokers. Support historical ticks.
 
 ## v4.3.27.2:
 * (feature) QuikLua. Support candles.
