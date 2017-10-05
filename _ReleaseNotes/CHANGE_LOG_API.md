@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
 * (feature) LMAX, Oanda, IB. Uses MarketDataMessage.BuildCandlesField.
 * (bug) BitStamp. Market data fix.
