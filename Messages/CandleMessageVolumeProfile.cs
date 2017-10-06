@@ -21,6 +21,8 @@ namespace StockSharp.Messages
 
 	using Ecng.Collections;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// Volume profile.
 	/// </summary>
@@ -74,7 +76,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < 0 || value > 100)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_volumePercent = value;
 			}

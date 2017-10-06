@@ -805,7 +805,7 @@ namespace StockSharp.Algo.Strategies
 					stateStr = LocalizedStrings.Str1373;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(state));
+					throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219);
 			}
 
 			this.AddInfoLog(LocalizedStrings.Str1374Params, stateStr, ChildStrategies.Count, Parent != null ? ParentStrategy.ChildStrategies.Count : -1, Position);

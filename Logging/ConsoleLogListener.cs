@@ -64,7 +64,7 @@ namespace StockSharp.Logging
 					color = ConsoleHelper.Error;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(message));
+					throw new ArgumentOutOfRangeException(nameof(message), message.Level, LocalizedStrings.Str1219);
 			}
 
 			var newLine = "{0} | {1, -15} | {2}".Put(message.Time.ToString(TimeFormat), message.Source.Name, message.Message);

@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Storages
 					throw new ArgumentNullException(nameof(getTime));
 
 				if (from > to)
-					throw new ArgumentOutOfRangeException(nameof(from));
+					throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
 
 				//_storage = storage;
 				//_from = from;

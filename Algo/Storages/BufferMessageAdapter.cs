@@ -392,7 +392,7 @@ namespace StockSharp.Algo.Storages
 							buffer = _orderLogBuffer;
 							break;
 						default:
-							throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(execType));
+							throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1695Params.Put(execType));
 					}
 
 					if (CanStore<ExecutionMessage>(secId, execType))

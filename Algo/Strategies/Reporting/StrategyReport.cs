@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 				case OrderStates.Failed:
 					return LocalizedStrings.Str152;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(state));
+					throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219);
 			}
 		}
 
@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 				case null:
 					return string.Empty;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(type));
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 			}
 		}
 	}
