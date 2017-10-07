@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
 
@@ -273,13 +274,11 @@ namespace StockSharp.Algo.Storages
 			{
 				if (Enabled)
 				{
-					var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
-					var to = msg.To ?? DateTimeOffset.Now;
 					var transactionId = msg.TransactionId;
 
 					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
-					var lastTime = LoadMessages(msg, from, to, transactionId);
+					var lastTime = LoadMessages(msg, msg.From, msg.To, transactionId);
 
 					RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
@@ -306,9 +305,9 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private DateTimeOffset LoadMessages(MarketDataMessage msg, DateTimeOffset from, DateTimeOffset to, long transactionId)
+		private DateTimeOffset? LoadMessages(MarketDataMessage msg, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
 		{
-			DateTimeOffset lastTime;
+			DateTimeOffset? lastTime;
 
 			switch (msg.DataType)
 			{
@@ -323,7 +322,7 @@ namespace StockSharp.Algo.Storages
 				case MarketDataTypes.Trades:
 					lastTime = !UseCandlesInsteadTrades 
 						? LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, m => SetTransactionId(m, transactionId)) 
-						: LoadMessages(msg.SecurityId, ExecutionTypes.Tick, from, to, transactionId);
+						: LoadTickMessages(msg.SecurityId, from, to, transactionId);
 					break;
 
 				case MarketDataTypes.OrderLog:
@@ -365,11 +364,43 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private DateTimeOffset LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset from, DateTimeOffset to, Func<TMessage, DateTimeOffset> func) 
+		private DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, Func<TMessage, DateTimeOffset> func) 
 			where TMessage : Message
 		{
-			var messages = storage.Load(from.Date, to.Date.EndOfDay());
-			var lastTime = from;
+			var last = storage.Dates.LastOr();
+
+			if (last == null)
+				return null;
+
+			if (from == null)
+			{
+				var days = DaysLoad;
+
+				if (typeof(TMessage) == typeof(TimeFrameCandleMessage))
+				{
+					var tf = (TimeSpan)storage.Arg;
+
+					if (tf.Ticks > 1)
+					{
+						if (tf.TotalMinutes < 15)
+							days = TimeSpan.FromTicks(tf.Ticks * 10000);
+						else if (tf.TotalHours < 2)
+							days = TimeSpan.FromTicks(tf.Ticks * 1000);
+						else if (tf.TotalDays < 2)
+							days = TimeSpan.FromTicks(tf.Ticks * 100);
+						else
+							days = TimeSpan.FromTicks(tf.Ticks * 50);	
+					}
+				}
+
+				from = (to ?? last.Value) - days;
+			}
+
+			if (to == null)
+				to = last.Value;
+
+			var messages = storage.Load(from.Value.Date, to.Value.Date.EndOfDay());
+			var lastTime = from.Value;
 
 			foreach (var message in messages)
 			{
@@ -382,20 +413,32 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private DateTimeOffset LoadMessages(SecurityId securityId, object arg, DateTimeOffset from, DateTimeOffset to, long transactionId)
+		private DateTimeOffset? LoadTickMessages(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
 		{
-			var tickStorage = GetStorage<ExecutionMessage>(securityId, arg);
-			var tickDates = tickStorage.GetDates(from.Date, to.Date.EndOfDay()).ToArray();
+			var tickStorage = GetStorage<ExecutionMessage>(securityId, ExecutionTypes.Tick);
+
+			var last = tickStorage.Dates.LastOr();
+
+			if (last == null)
+				return null;
+
+			if (from == null)
+				from = (to ?? last.Value) - DaysLoad;
+
+			if (to == null)
+				to = last.Value;
+
+			var tickDates = tickStorage.GetDates(from.Value.Date, to.Value.Date.EndOfDay()).ToArray();
 
 			var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
 
-			var ticksLastDate = tickStorage.GetToDate() ?? from.Date;
-			var candlesLastDate = candleStorage.GetToDate() ?? from.Date;
+			var ticksLastDate = tickStorage.GetToDate() ?? from.Value.Date;
+			var candlesLastDate = candleStorage.GetToDate() ?? from.Value.Date;
 
-			var toDate = ticksLastDate.Max(candlesLastDate).Min(to.Date);
+			var toDate = ticksLastDate.Max(candlesLastDate).Min(to.Value.Date);
 			var lastTime = from;
 
-			for (var date = from.Date; date <= toDate; date = date.AddDays(1))
+			for (var date = from.Value.Date; date <= toDate; date = date.AddDays(1))
 			{
 				var messages = tickDates.Contains(date)
 					? tickStorage.Load(date) 
