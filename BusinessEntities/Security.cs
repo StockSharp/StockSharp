@@ -300,7 +300,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_priceStep = value;
 				Notify(nameof(PriceStep));
@@ -330,7 +330,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_volumeStep = value;
 				Notify(nameof(VolumeStep));
@@ -359,7 +359,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_multiplier = value;
 				Notify(nameof(Multiplier));
@@ -389,7 +389,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_decimals = value;
 				Notify(nameof(Decimals));
@@ -1005,7 +1005,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_strike = value;
 				Notify(nameof(Strike));

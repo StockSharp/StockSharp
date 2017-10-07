@@ -727,7 +727,7 @@ namespace StockSharp.Algo.Storages
 					case ExecutionTypes.OrderLog:
 						return GetTransactionStorage((IMarketDataSerializer<ExecutionMessage>)serializer);
 					default:
-						throw new ArgumentOutOfRangeException(nameof(arg));
+						throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.Str1219);
 				}
 			}
 			else if (dataType == typeof(Level1ChangeMessage))

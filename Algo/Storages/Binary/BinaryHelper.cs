@@ -285,7 +285,7 @@ namespace StockSharp.Algo.Storages.Binary
 						if (timeDiff.Days > 0)
 						{
 							if (!bigRange)
-								throw new ArgumentOutOfRangeException(LocalizedStrings.BigRangeError.Put(prevTime, dto));
+								throw new ArgumentOutOfRangeException(nameof(dto), LocalizedStrings.BigRangeError.Put(prevTime, dto));
 
 							writer.Write(true);
 							writer.WriteInt(timeDiff.Days);

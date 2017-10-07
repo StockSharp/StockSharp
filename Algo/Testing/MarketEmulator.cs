@@ -706,7 +706,7 @@ namespace StockSharp.Algo.Testing
 					case Sides.Sell:
 						return _asks;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(side));
+						throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.Str1219);
 				}
 				//return _quotes.SafeAdd(side, key => new SortedDictionary<decimal, List<ExecutionMessage>>(side == Sides.Buy ? new BackwardComparer<decimal>() : null));
 			}

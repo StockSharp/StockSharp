@@ -82,7 +82,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_leverage = value;
 				NotifyChanged(nameof(Leverage));

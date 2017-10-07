@@ -750,7 +750,7 @@ namespace StockSharp.Algo.Storages
 						serializer = new MarketDepthCsvSerializer(key.Item1);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(format));
+						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 				}
 
 				return new MarketDepthStorage(this, security, key.Item2, serializer);
@@ -793,7 +793,7 @@ namespace StockSharp.Algo.Storages
 						serializer = new Level1CsvSerializer(key.Item1);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(format));
+						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 				}
 
 				return new Level1Storage(security, key.Item2, serializer);
@@ -824,7 +824,7 @@ namespace StockSharp.Algo.Storages
 						serializer = new PositionCsvSerializer(key.Item1);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(format));
+						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 				}
 
 				return new PositionStorage(security, key.Item2, serializer);
@@ -861,7 +861,7 @@ namespace StockSharp.Algo.Storages
 						serializer = typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg, null);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(format));
+						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 				}
 
 				return typeof(CandleStorage<,>).Make(candleMessageType, candleMessageType.ToCandleType()).CreateInstance<IMarketDataStorage<CandleMessage>>(security, arg, key.Item2, serializer);
@@ -896,7 +896,7 @@ namespace StockSharp.Algo.Storages
 								serializer = new TickCsvSerializer(key.Item1);
 								break;
 							default:
-								throw new ArgumentOutOfRangeException(nameof(format));
+								throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 						}
 
 						return new TradeStorage(this, security, mdDrive, serializer);
@@ -914,7 +914,7 @@ namespace StockSharp.Algo.Storages
 								serializer = new TransactionCsvSerializer(secId);
 								break;
 							default:
-								throw new ArgumentOutOfRangeException(nameof(format));
+								throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 						}
 
 						return new TransactionStorage(security, mdDrive, serializer);
@@ -932,13 +932,13 @@ namespace StockSharp.Algo.Storages
 								serializer = new OrderLogCsvSerializer(secId);
 								break;
 							default:
-								throw new ArgumentOutOfRangeException(nameof(format));
+								throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 						}
 
 						return new OrderLogStorage(this, security, mdDrive, serializer);
 					}
 					default:
-						throw new ArgumentOutOfRangeException(nameof(type));
+						throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1219);
 				}
 			});
 		}
@@ -1005,7 +1005,7 @@ namespace StockSharp.Algo.Storages
 						serializer = new NewsCsvSerializer();
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(format));
+						throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 				}
 
 				return new NewsStorage(this, TraderHelper.NewsSecurity, serializer, key);

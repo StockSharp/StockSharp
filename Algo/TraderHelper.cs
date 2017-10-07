@@ -291,7 +291,7 @@ namespace StockSharp.Algo
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException(nameof(priceType));
+					throw new ArgumentOutOfRangeException(nameof(priceType), priceType, LocalizedStrings.Str1219);
 			}
 
 			return currentPrice == null
@@ -2088,7 +2088,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<DateTimeOffset> GetExpiryDates(this DateTime from, DateTime to)
 		{
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(from));
+				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
 
 			for (var year = from.Year; year <= to.Year; year++)
 			{
@@ -2136,7 +2136,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(baseCode));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(from));
+				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
 
 			if (getSecurity == null)
 				throw new ArgumentNullException(nameof(getSecurity));
@@ -3528,7 +3528,7 @@ namespace StockSharp.Algo
 				case null:
 					return "XXXXXX";
 				default:
-					throw new ArgumentOutOfRangeException(nameof(security));
+					throw new ArgumentOutOfRangeException(nameof(security), security.SecurityType, LocalizedStrings.Str1219);
 			}
 		}
 

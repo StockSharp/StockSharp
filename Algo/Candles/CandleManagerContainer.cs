@@ -221,7 +221,7 @@ namespace StockSharp.Algo.Candles
 		public Candle GetCandle(CandleSeries series, int candleIndex)
 		{
 			if (candleIndex < 0)
-				throw new ArgumentOutOfRangeException(nameof(candleIndex));
+				throw new ArgumentOutOfRangeException(nameof(candleIndex), candleIndex, LocalizedStrings.Str1219);
 
 			var info = GetInfo(series);
 			return info?.GetCandle(candleIndex);
@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Candles
 		public IEnumerable<Candle> GetCandles(CandleSeries series, int candleCount)
 		{
 			if (candleCount <= 0)
-				throw new ArgumentOutOfRangeException(nameof(candleCount));
+				throw new ArgumentOutOfRangeException(nameof(candleCount), candleCount, LocalizedStrings.Str1219);
 
 			return GetCandles(series)
 							.OrderByDescending(c => c.OpenTime)

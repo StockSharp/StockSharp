@@ -289,7 +289,7 @@ namespace StockSharp.Algo.Testing
 						throwError = (_state != EmulationStates.Suspending);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(value));
+						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 				}
 
 				if (throwError)

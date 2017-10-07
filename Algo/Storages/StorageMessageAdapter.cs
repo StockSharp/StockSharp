@@ -160,7 +160,7 @@ namespace StockSharp.Algo.Storages
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_daysLoad = value;
 			}
