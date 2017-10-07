@@ -395,7 +395,7 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				if (!info.MarketDataMessage.IsHistory)
 					return;
-
+				
 				RemoveSeriesInfo(info);
 				RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = info.MarketDataMessage.TransactionId, IsHistory = true });
 
@@ -611,8 +611,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void SendCandle(SeriesInfo info, CandleMessage candleMsg)
 		{
-			if (info.LastTime > candleMsg.OpenTime)
-				return;
+			//if (info.LastTime > candleMsg.OpenTime)
+			//	return;
 
 			info.LastTime = candleMsg.OpenTime;
 
