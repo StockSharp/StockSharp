@@ -396,10 +396,10 @@ namespace StockSharp.Algo.Candles.Compression
 				if (!info.MarketDataMessage.IsHistory)
 					return;
 				
-				RemoveSeriesInfo(info);
-				RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = info.MarketDataMessage.TransactionId, IsHistory = true });
+				//RemoveSeriesInfo(info);
+				//RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = info.MarketDataMessage.TransactionId, IsHistory = true });
 
-				return;
+				//return;
 			}
 
 			SetAvailableMarketDataType(info, message);
