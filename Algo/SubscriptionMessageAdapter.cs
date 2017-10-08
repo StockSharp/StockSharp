@@ -15,11 +15,31 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	{
+		private sealed class SubscriptionInfo
+		{
+			public MarketDataMessage Message { get; }
+
+			public IList<MarketDataMessage> Subscriptions { get; }
+
+			public int Subscribers { get; set; }
+
+			public bool AlreadySubscribed { get; set; }
+
+			public SubscriptionInfo(MarketDataMessage message)
+			{
+				if (message == null)
+					throw new ArgumentNullException(nameof(message));
+
+				Message = message;
+				Subscriptions = new List<MarketDataMessage>();
+			}
+		}
+
 		private readonly SyncObject _sync = new SyncObject();
 
-		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?>, RefPair<MarketDataMessage, int>> _subscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?>, RefPair<MarketDataMessage, int>>();
-		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object>, RefPair<MarketDataMessage, int>> _candleSubscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object>, RefPair<MarketDataMessage, int>>();
-		private readonly Dictionary<string, RefPair<MarketDataMessage, int>> _newsSubscribers = new Dictionary<string, RefPair<MarketDataMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?>, SubscriptionInfo> _subscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?>, SubscriptionInfo>();
+		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object>, SubscriptionInfo> _candleSubscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object>, SubscriptionInfo>();
+		private readonly Dictionary<string, SubscriptionInfo> _newsSubscribers = new Dictionary<string, SubscriptionInfo>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<string, RefPair<PortfolioMessage, int>> _pfSubscribers = new Dictionary<string, RefPair<PortfolioMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
 		//private readonly Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>> _pendingMessages = new Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>>();
 
@@ -88,13 +108,13 @@ namespace StockSharp.Algo
 						lock (_sync)
 						{
 							if (_newsSubscribers.Count > 0)
-								messages.AddRange(_newsSubscribers.Values.Select(p => p.First));
+								messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
 
 							if (_subscribers.Count > 0)
-								messages.AddRange(_subscribers.Values.Select(p => p.First));
+								messages.AddRange(_subscribers.Values.Select(p => p.Message));
 
 							if (_candleSubscribers.Count > 0)
-								messages.AddRange(_candleSubscribers.Values.Select(p => p.First));
+								messages.AddRange(_candleSubscribers.Values.Select(p => p.Message));
 
 							if (_pfSubscribers.Count > 0)
 								messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
@@ -162,9 +182,9 @@ namespace StockSharp.Algo
 
 						lock (_sync)
 						{
-							messages.AddRange(_subscribers.Values.Select(p => p.First));
-							messages.AddRange(_newsSubscribers.Values.Select(p => p.First));
-							messages.AddRange(_candleSubscribers.Values.Select(p => p.First));
+							messages.AddRange(_subscribers.Values.Select(p => p.Message));
+							messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
+							messages.AddRange(_candleSubscribers.Values.Select(p => p.Message));
 							messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
 
 							ClearSubscribers();
@@ -176,10 +196,10 @@ namespace StockSharp.Algo
 
 					break;
 				}
-				// TODO
-				//case MessageTypes.MarketData:
-				//	ProcessOutMarketDataMessage((MarketDataMessage)message);
-				//	break;
+
+				case MessageTypes.MarketData:
+					ProcessOutMarketDataMessage((MarketDataMessage)message);
+					break;
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
@@ -212,7 +232,7 @@ namespace StockSharp.Algo
 		{
 			var sendIn = false;
 			MarketDataMessage sendOutMsg = null;
-			RefPair<MarketDataMessage, int> pair;
+			SubscriptionInfo info;
 			var secIdKey = IsSupportSubscriptionBySecurity ? message.SecurityId : default(SecurityId);
 
 			lock (_sync)
@@ -223,48 +243,8 @@ namespace StockSharp.Algo
 				{
 					case MarketDataTypes.News:
 					{
-						var subscriber = message.NewsId ?? string.Empty;
-
-						pair = _newsSubscribers.TryGetValue(subscriber) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
-						var subscribersCount = pair.Second;
-
-						if (isSubscribe)
-						{
-							subscribersCount++;
-							sendIn = subscribersCount == 1;
-						}
-						else
-						{
-							if (subscribersCount > 0)
-							{
-								subscribersCount--;
-								sendIn = subscribersCount == 0;
-							}
-							else
-								sendOutMsg = NonExist(message);
-						}
-
-						if (sendOutMsg == null)
-						{
-							if (!sendIn)
-							{
-								sendOutMsg = new MarketDataMessage
-								{
-									DataType = message.DataType,
-									IsSubscribe = isSubscribe,
-									OriginalTransactionId = message.TransactionId,
-								};
-							}
-
-							if (subscribersCount > 0)
-							{
-								pair.Second = subscribersCount;
-								_newsSubscribers[subscriber] = pair;
-							}
-							else
-								_newsSubscribers.Remove(subscriber);
-						}
-
+						var key = message.NewsId ?? string.Empty;
+						info = ProcessSubscription(_newsSubscribers, key, message, isSubscribe, ref sendIn, ref sendOutMsg);
 						break;
 					}
 					case MarketDataTypes.CandleTimeFrame:
@@ -275,96 +255,13 @@ namespace StockSharp.Algo
 					case MarketDataTypes.CandleVolume:
 					{
 						var key = Tuple.Create(message.DataType, secIdKey, message.Arg);
-
-						pair = _candleSubscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
-						var subscribersCount = pair.Second;
-
-						if (isSubscribe)
-						{
-							subscribersCount++;
-							sendIn = subscribersCount == 1;
-						}
-						else
-						{
-							if (subscribersCount > 0)
-							{
-								subscribersCount--;
-								sendIn = subscribersCount == 0;
-							}
-							else
-								sendOutMsg = NonExist(message);
-						}
-
-						if (sendOutMsg == null)
-						{
-							if (!sendIn)
-							{
-								sendOutMsg = new MarketDataMessage
-								{
-									DataType = message.DataType,
-									IsSubscribe = isSubscribe,
-									SecurityId = message.SecurityId,
-									Arg = message.Arg,
-									OriginalTransactionId = message.TransactionId,
-								};
-							}
-
-							if (subscribersCount > 0)
-							{
-								pair.Second = subscribersCount;
-								_candleSubscribers[key] = pair;
-							}
-							else
-								_candleSubscribers.Remove(key);
-						}
-
+						info = ProcessSubscription(_candleSubscribers, key, message, isSubscribe, ref sendIn, ref sendOutMsg);
 						break;
 					}
 					default:
 					{
 						var key = message.CreateKey(secIdKey);
-
-						pair = _subscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
-						var subscribersCount = pair.Second;
-
-						if (isSubscribe)
-						{
-							subscribersCount++;
-							sendIn = subscribersCount == 1;
-						}
-						else
-						{
-							if (subscribersCount > 0)
-							{
-								subscribersCount--;
-								sendIn = subscribersCount == 0;
-							}
-							else
-								sendOutMsg = NonExist(message);
-						}
-
-						if (sendOutMsg == null)
-						{
-							if (!sendIn)
-							{
-								sendOutMsg = new MarketDataMessage
-								{
-									DataType = message.DataType,
-									IsSubscribe = isSubscribe,
-									SecurityId = message.SecurityId,
-									OriginalTransactionId = message.TransactionId,
-								};
-							}
-
-							if (subscribersCount > 0)
-							{
-								pair.Second = subscribersCount;
-								_subscribers[key] = pair;
-							}
-							else
-								_subscribers.Remove(key);
-						}
-
+						info = ProcessSubscription(_subscribers, key, message, isSubscribe, ref sendIn, ref sendOutMsg);
 						break;
 					}
 				}
@@ -373,13 +270,123 @@ namespace StockSharp.Algo
 			if (sendIn)
 			{
 				if (!message.IsSubscribe && message.OriginalTransactionId == 0)
-					message.OriginalTransactionId = pair.First.TransactionId;
+					message.OriginalTransactionId = info.Message.TransactionId;
 
 				base.SendInMessage(message);
 			}
 
 			if (sendOutMsg != null)
 				RaiseNewOutMessage(sendOutMsg);
+		}
+
+		private void ProcessOutMarketDataMessage(MarketDataMessage message)
+		{
+			var secIdKey = IsSupportSubscriptionBySecurity ? message.SecurityId : default(SecurityId);
+
+			lock (_sync)
+			{
+				switch (message.DataType)
+				{
+					case MarketDataTypes.News:
+					{
+						var key = message.NewsId ?? string.Empty;
+						ProcessSubscriptionResult(_newsSubscribers, key, message);
+						break;
+					}
+					case MarketDataTypes.CandleTimeFrame:
+					case MarketDataTypes.CandleRange:
+					case MarketDataTypes.CandlePnF:
+					case MarketDataTypes.CandleRenko:
+					case MarketDataTypes.CandleTick:
+					case MarketDataTypes.CandleVolume:
+					{
+						var key = Tuple.Create(message.DataType, secIdKey, message.Arg);
+						ProcessSubscriptionResult(_candleSubscribers, key, message);
+						break;
+					}
+					default:
+					{
+						var key = message.CreateKey(secIdKey);
+						ProcessSubscriptionResult(_subscribers, key, message);
+						break;
+					}
+				}
+			}
+		}
+
+		private void ProcessSubscriptionResult<T>(Dictionary<T, SubscriptionInfo> subscriptions, T key, MarketDataMessage message)
+		{
+			var isSubscribe = message.IsSubscribe;
+			var removeInfo = !isSubscribe || message.Error != null;
+			var info = subscriptions.TryGetValue(key);
+
+			if (info == null)
+				return;
+
+			info.AlreadySubscribed = isSubscribe && message.Error == null;
+
+			foreach (var marketDataMessage in info.Subscriptions)
+			{
+				var reply = (MarketDataMessage)marketDataMessage.Clone();
+				reply.OriginalTransactionId = marketDataMessage.TransactionId;
+				reply.TransactionId = message.TransactionId;
+				reply.Error = message.Error;
+
+				base.OnInnerAdapterNewOutMessage(reply);
+			}
+
+			if (removeInfo)
+				subscriptions.Remove(key);
+		}
+
+		private static SubscriptionInfo ProcessSubscription<T>(Dictionary<T, SubscriptionInfo> subscriptions, T key, MarketDataMessage message, bool isSubscribe, ref bool sendIn, ref MarketDataMessage sendOutMsg)
+		{
+			var info = subscriptions.TryGetValue(key) ?? new SubscriptionInfo((MarketDataMessage)message.Clone());
+			var subscribersCount = info.Subscribers;
+
+			if (isSubscribe)
+			{
+				subscribersCount++;
+				sendIn = subscribersCount == 1;
+			}
+			else
+			{
+				if (subscribersCount > 0)
+				{
+					subscribersCount--;
+					sendIn = subscribersCount == 0;
+				}
+				else
+					sendOutMsg = NonExist(message);
+			}
+
+			if (sendOutMsg != null)
+				return info;
+
+			if (info.Message != message)
+				info.Subscriptions.Add(message);
+
+			if (!sendIn && info.AlreadySubscribed)
+			{
+				sendOutMsg = new MarketDataMessage
+				{
+					DataType = message.DataType,
+					IsSubscribe = isSubscribe,
+					SecurityId = message.SecurityId,
+					Arg = message.Arg,
+					OriginalTransactionId = message.TransactionId,
+				};
+			}
+
+			if (subscribersCount > 0)
+			{
+				info.Subscribers = subscribersCount;
+				subscriptions[key] = info;
+			}
+			else
+				subscriptions.Remove(key);
+
+			return info;
 		}
 
 		private static MarketDataMessage NonExist(MarketDataMessage message)
