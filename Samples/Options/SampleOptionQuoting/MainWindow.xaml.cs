@@ -213,6 +213,12 @@ namespace SampleOptionQuoting
 				Id = "RIM4@FORTS"
 			};
 
+			asset.LastTrade = new Trade
+			{
+				Security = asset,
+				Price = 130000,
+			};
+
 			var dummyProvider = new DummyProvider(new[] {asset});
 
 			PosChart.AssetPosition = new Position
@@ -265,29 +271,29 @@ namespace SampleOptionQuoting
 			_model.MarketDataProvider = dummyProvider;
 			_model.UnderlyingAsset = asset;
 
-			_model.Add(CreateStrike(05000, 10, 60, OptionTypes.Call, expiryDate, asset, 100));
-			_model.Add(CreateStrike(10000, 10, 53, OptionTypes.Call, expiryDate, asset, 343));
-			_model.Add(CreateStrike(15000, 10, 47, OptionTypes.Call, expiryDate, asset, 3454));
-			_model.Add(CreateStrike(20000, 78, 42, OptionTypes.Call, expiryDate, asset, null));
-			_model.Add(CreateStrike(25000, 32, 35, OptionTypes.Call, expiryDate, asset, 100));
-			_model.Add(CreateStrike(30000, 3245, 32, OptionTypes.Call, expiryDate, asset, 55));
-			_model.Add(CreateStrike(35000, 3454, 37, OptionTypes.Call, expiryDate, asset, 456));
-			_model.Add(CreateStrike(40000, 34, 45, OptionTypes.Call, expiryDate, asset, 4));
-			_model.Add(CreateStrike(45000, 3566, 51, OptionTypes.Call, expiryDate, asset, 67));
-			_model.Add(CreateStrike(50000, 454, 57, OptionTypes.Call, expiryDate, asset, null));
-			_model.Add(CreateStrike(55000, 10, 59, OptionTypes.Call, expiryDate, asset, 334));
+			_model.Add(CreateStrike(105000, 10, 60, OptionTypes.Call, expiryDate, asset, 100));
+			_model.Add(CreateStrike(110000, 10, 53, OptionTypes.Call, expiryDate, asset, 343));
+			_model.Add(CreateStrike(115000, 10, 47, OptionTypes.Call, expiryDate, asset, 3454));
+			_model.Add(CreateStrike(120000, 78, 42, OptionTypes.Call, expiryDate, asset, null));
+			_model.Add(CreateStrike(125000, 32, 35, OptionTypes.Call, expiryDate, asset, 100));
+			_model.Add(CreateStrike(130000, 3245, 32, OptionTypes.Call, expiryDate, asset, 55));
+			_model.Add(CreateStrike(135000, 3454, 37, OptionTypes.Call, expiryDate, asset, 456));
+			_model.Add(CreateStrike(140000, 34, 45, OptionTypes.Call, expiryDate, asset, 4));
+			_model.Add(CreateStrike(145000, 3566, 51, OptionTypes.Call, expiryDate, asset, 67));
+			_model.Add(CreateStrike(150000, 454, 57, OptionTypes.Call, expiryDate, asset, null));
+			_model.Add(CreateStrike(155000, 10, 59, OptionTypes.Call, expiryDate, asset, 334));
 
-			_model.Add(CreateStrike(05000, 10, 50, OptionTypes.Put, expiryDate, asset, 100));
-			_model.Add(CreateStrike(10000, 10, 47, OptionTypes.Put, expiryDate, asset, 343));
-			_model.Add(CreateStrike(15000, 6788, 42, OptionTypes.Put, expiryDate, asset, 3454));
-			_model.Add(CreateStrike(20000, 10, 37, OptionTypes.Put, expiryDate, asset, null));
-			_model.Add(CreateStrike(25000, 567, 32, OptionTypes.Put, expiryDate, asset, 100));
-			_model.Add(CreateStrike(30000, 4577, 30, OptionTypes.Put, expiryDate, asset, 55));
-			_model.Add(CreateStrike(35000, 67835, 32, OptionTypes.Put, expiryDate, asset, 456));
-			_model.Add(CreateStrike(40000, 13245, 35, OptionTypes.Put, expiryDate, asset, 4));
-			_model.Add(CreateStrike(45000, 10, 37, OptionTypes.Put, expiryDate, asset, 67));
-			_model.Add(CreateStrike(50000, 454, 39, OptionTypes.Put, expiryDate, asset, null));
-			_model.Add(CreateStrike(55000, 10, 41, OptionTypes.Put, expiryDate, asset, 334));
+			_model.Add(CreateStrike(105000, 10, 50, OptionTypes.Put, expiryDate, asset, 100));
+			_model.Add(CreateStrike(110000, 10, 47, OptionTypes.Put, expiryDate, asset, 343));
+			_model.Add(CreateStrike(115000, 6788, 42, OptionTypes.Put, expiryDate, asset, 3454));
+			_model.Add(CreateStrike(120000, 10, 37, OptionTypes.Put, expiryDate, asset, null));
+			_model.Add(CreateStrike(125000, 567, 32, OptionTypes.Put, expiryDate, asset, 100));
+			_model.Add(CreateStrike(130000, 4577, 30, OptionTypes.Put, expiryDate, asset, 55));
+			_model.Add(CreateStrike(135000, 67835, 32, OptionTypes.Put, expiryDate, asset, 456));
+			_model.Add(CreateStrike(140000, 13245, 35, OptionTypes.Put, expiryDate, asset, 4));
+			_model.Add(CreateStrike(145000, 10, 37, OptionTypes.Put, expiryDate, asset, 67));
+			_model.Add(CreateStrike(150000, 454, 39, OptionTypes.Put, expiryDate, asset, null));
+			_model.Add(CreateStrike(155000, 10, 41, OptionTypes.Put, expiryDate, asset, 334));
 
 			//
 			// draw test data on the smile chart
