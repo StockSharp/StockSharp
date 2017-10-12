@@ -1370,6 +1370,69 @@
       <param name="value">Value.</param>
       <returns>The diagram element parameter.</returns>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.PaletteTreeItem">
+      <summary>
+            Palette element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.PaletteTreeItem.Id">
+      <summary>
+            Identifier.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.PaletteTreeItem.ParentId">
+      <summary>
+            Parent id.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.PaletteTreeItem.Name">
+      <summary>
+            Name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.PaletteTreeItem.Element">
+      <summary>
+            The diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.PaletteTreeItem.IsExpanded">
+      <summary>
+            Is row expanded.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.PaletteTreeItem.ParentChanged">
+      <summary>
+            The parent element changed event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.PaletteTreeItem.Changed">
+      <summary>
+            The tree item settings changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.PaletteTreeItem.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.PaletteTreeItem.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.PaletteTreeItem.PropertyChanged">
+      <summary>
+            The connection properties value change event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.PaletteTreeItem.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>A string that represents the current object.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramPaletteControl">
       <summary>
             The graphical component to display available <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
@@ -1378,7 +1441,15 @@
             DiagramPaletteControl
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElements">
+    <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.AddCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.RemoveCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.Items">
       <summary>
             Available elements.
             </summary>
@@ -1386,11 +1457,6 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElement">
       <summary>
             The selected element in the Toolbox.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteSelectionChanged">
-      <summary>
-            The event of the diagram element selection in the Toolbox.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElementDoubleClicked">
