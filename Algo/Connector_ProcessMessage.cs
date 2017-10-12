@@ -841,7 +841,8 @@ namespace StockSharp.Algo
 				_removed?.Invoke(new[] { removedSecurity });
 		}
 
-		private Security LookupSecurity(SecurityId securityId)
+		/// <inheritdoc />
+		public Security LookupSecurity(SecurityId securityId)
 		{
 			var securityCode = securityId.SecurityCode;
 			var boardCode = securityId.BoardCode;
@@ -1199,9 +1200,19 @@ namespace StockSharp.Algo
 		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
 		/// </summary>
 		/// <param name="name">Portfolio name.</param>
+		/// <returns>Portfolio.</returns>
+		public Portfolio GetPortfolio(string name)
+		{
+			return GetPortfolio(name, null);
+		}
+
+		/// <summary>
+		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// </summary>
+		/// <param name="name">Portfolio name.</param>
 		/// <param name="changePortfolio">Portfolio handler.</param>
 		/// <returns>Portfolio.</returns>
-		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio = null)
+		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio)
 		{
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));

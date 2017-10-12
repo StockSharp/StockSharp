@@ -462,6 +462,20 @@ namespace StockSharp.BusinessEntities
 		void LookupPortfolios(Portfolio criteria);
 
 		/// <summary>
+		/// Lookup security by identified.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Security.</returns>
+		Security LookupSecurity(SecurityId securityId);
+
+		/// <summary>
+		/// To get the portfolio by the name. If the portfolio is not registered, it will be created.
+		/// </summary>
+		/// <param name="name">Portfolio name.</param>
+		/// <returns>Portfolio.</returns>
+		Portfolio GetPortfolio(string name);
+
+		/// <summary>
 		/// To get the position by portfolio and instrument.
 		/// </summary>
 		/// <param name="portfolio">The portfolio on which the position should be found.</param>

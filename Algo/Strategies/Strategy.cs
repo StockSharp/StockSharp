@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Strategies
 	/// <summary>
 	/// The base class for all trade strategies.
 	/// </summary>
-	public class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer, ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider
+	public class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer, ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider, IPositionProvider
 	{
 		private class StrategyChangeStateMessage : Message
 		{
@@ -553,8 +553,42 @@ namespace StockSharp.Algo.Strategies
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
+				if (_positionManager != null)
+				{
+					_positionManager.NewPosition -= PositionManager_OnNewPosition;
+					_positionManager.PositionChanged -= PositionManager_OnPositionChanged;
+				}
+
 				_positionManager = value;
+
+				_positionManager.NewPosition += PositionManager_OnNewPosition;
+				_positionManager.PositionChanged += PositionManager_OnPositionChanged;
 			}
+		}
+
+		private readonly Dictionary<Tuple<Security, Portfolio>, Position> _positions = new Dictionary<Tuple<Security, Portfolio>, Position>();
+
+		private Position ProcessPositionInfo(Tuple<SecurityId, string> key, decimal value)
+		{
+			var security = SafeGetConnector().LookupSecurity(key.Item1);
+			var pf = SafeGetConnector().GetPortfolio(key.Item2);
+			var position = _positions.SafeAdd(Tuple.Create(security, pf), k => new Position
+			{
+				Security = security,
+				Portfolio = pf,
+			});
+			position.CurrentValue = value;
+			return position;
+		}
+
+		private void PositionManager_OnNewPosition(Tuple<SecurityId, string> key, decimal value)
+		{
+			_newPosition?.Invoke(ProcessPositionInfo(key, value));
+		}
+
+		private void PositionManager_OnPositionChanged(Tuple<SecurityId, string> key, decimal value)
+		{
+			_positionChanged?.Invoke(ProcessPositionInfo(key, value));
 		}
 
 		/// <summary>
@@ -572,6 +606,24 @@ namespace StockSharp.Algo.Strategies
 				PositionManager.Position = value;
 				RaisePositionChanged();
 			}
+		}
+
+		IEnumerable<Position> IPositionProvider.Positions => _positions.Values.ToArray();
+
+		private event Action<Position> _newPosition;
+
+		event Action<Position> IPositionProvider.NewPosition
+		{
+			add => _newPosition += value;
+			remove => _newPosition -= value;
+		}
+
+		private event Action<Position> _positionChanged;
+
+		event Action<Position> IPositionProvider.PositionChanged
+		{
+			add => _positionChanged += value;
+			remove => _positionChanged -= value;
 		}
 
 		/// <summary>
@@ -1718,6 +1770,8 @@ namespace StockSharp.Algo.Strategies
 
 			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default(DateTimeOffset);
 			_idStr = null;
+
+			_positions.Clear();
 
 			OnReseted();
 
