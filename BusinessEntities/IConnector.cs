@@ -27,7 +27,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The main interface providing the connection to the trading systems.
 	/// </summary>
-	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider
+	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider, IPositionProvider
 	{
 		/// <summary>
 		/// Own trade received.
@@ -169,30 +169,30 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> NewPortfolios;
 
-		/// <summary>
-		/// Portfolio changed.
-		/// </summary>
-		event Action<Portfolio> PortfolioChanged;
+		///// <summary>
+		///// Portfolio changed.
+		///// </summary>
+		//event Action<Portfolio> PortfolioChanged;
 
 		/// <summary>
 		/// Portfolios changed.
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
-		/// <summary>
-		/// Position received.
-		/// </summary>
-		event Action<Position> NewPosition;
+		///// <summary>
+		///// Position received.
+		///// </summary>
+		//event Action<Position> NewPosition;
 
 		/// <summary>
 		/// Positions received.
 		/// </summary>
 		event Action<IEnumerable<Position>> NewPositions;
 
-		/// <summary>
-		/// Position changed.
-		/// </summary>
-		event Action<Position> PositionChanged;
+		///// <summary>
+		///// Position changed.
+		///// </summary>
+		//event Action<Position> PositionChanged;
 
 		/// <summary>
 		/// Positions changed.
@@ -371,10 +371,10 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		IEnumerable<MyTrade> MyTrades { get; }
 
-		/// <summary>
-		/// Get all positions.
-		/// </summary>
-		IEnumerable<Position> Positions { get; }
+		///// <summary>
+		///// Get all positions.
+		///// </summary>
+		//IEnumerable<Position> Positions { get; }
 
 		/// <summary>
 		/// All news.

@@ -1,5 +1,9 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) IPositionProvider interface added.
+* (feature) IPortfolioProvider.PortfolioChanged event added.
+
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
 * (feature) LMAX, Oanda, IB. Uses MarketDataMessage.BuildCandlesField.
