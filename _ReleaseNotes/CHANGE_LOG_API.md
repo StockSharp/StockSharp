@@ -4,6 +4,7 @@ StockSharp API Change log
 * (feature) IPositionProvider interface added.
 * (feature) IPortfolioProvider.PortfolioChanged event added.
 * (feature) Strategy. Implemented IPositionProvider interface.
+* (feature) Unit. Evaluation with nullable parts return null (was ArgNullExcp).
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
