@@ -942,6 +942,8 @@ M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Secur
 M:StockSharp.Xaml.GuiConnector`1.GetSecurityId(StockSharp.BusinessEntities.Security)/returns;SecurityId
 M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/summary;DocStr810
 M:StockSharp.Xaml.GuiConnector`1.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/param/criteria;DocStr811
+M:StockSharp.Xaml.GuiConnector`1.LookupSecurity(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
+M:StockSharp.Xaml.GuiConnector`1.GetPortfolio(System.String)/inheritdoc;DocStr8459
 M:StockSharp.Xaml.GuiConnector`1.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/summary;DocStr812
 M:StockSharp.Xaml.GuiConnector`1.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/portfolio;DocStr813
 M:StockSharp.Xaml.GuiConnector`1.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/security;DocStr814

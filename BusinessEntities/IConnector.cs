@@ -462,7 +462,7 @@ namespace StockSharp.BusinessEntities
 		void LookupPortfolios(Portfolio criteria);
 
 		/// <summary>
-		/// Lookup security by identified.
+		/// Lookup security by identifier.
 		/// </summary>
 		/// <param name="securityId">Security ID.</param>
 		/// <returns>Security.</returns>

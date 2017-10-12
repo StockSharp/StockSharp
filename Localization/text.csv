@@ -14539,3 +14539,13 @@ DocStr10171;Annotation created event;Событие создания аннот�
 DocStr10172;Annotation deleted event;Событие удаления аннотации
 DocStr10173;Annotation;Аннотация
 DocStr10174;Annotation type;Тип аннотации
+DocStr10175;The position provider;Провайдер позиций
+DocStr10176;Lookup security by identifier;Найти инструмент по идентификатору
+DocStr10177;To get the portfolio by the name. If the portfolio is not registered, it will be created;Получить портфель по имени. Если портфель не зарегистрирован, он будет создан
+DocStr10178;The position provider interface;Интерфейс провайдера позиций
+DocStr10179;New position received;Получена новая позиция
+DocStr10180;Palette element;Элемент палитры
+DocStr10182;Parent id;Родительский идентификатор
+DocStr10184;Is row expanded;Раскрыта ли строка
+DocStr10185;The parent element changed event;Событие изменения родительского элемента
+DocStr10186;The tree item settings changed event;Событие изменения свойств элемента дерева
