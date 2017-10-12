@@ -4384,6 +4384,12 @@
             </summary>
       <param name="criteria">The portfolio which fields will be used as a filter.</param>
     </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.LookupSecurity(StockSharp.Messages.SecurityId)">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.GuiConnector`1.GetPortfolio(System.String)">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)">
       <summary>
             To get the position by portfolio and instrument.

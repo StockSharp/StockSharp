@@ -6,6 +6,8 @@ StockSharp API Change log
 * (feature) Strategy. Implemented IPositionProvider interface.
 * (feature) Unit. Evaluation with nullable parts return null (was ArgNullExcp).
 * (feature) BasketBlackScholes. Uses IPositionProvider.
+* (feature) OptionPositionChart. Uses IPositionProvider.
+* (bug) OptionDesk fixes.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
