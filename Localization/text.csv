@@ -4665,6 +4665,7 @@ DatabaseCorruptedResetConfig;The database is corrupted and can not continue. Do 
 InsufficientMemory;Insufficient memory to download all instruments. The option turned off.;Недостаточно памяти для загрузки всех инструментов. Опция отключена.
 Cancelling;Cancelling;Отмена
 CandleActiveNotSupport;Candle {0} has active state and cannot be stored.;Свеча {0} имеет активное состояние и не может быть записана в хранилище.
+NNOptions;{0} options;{0} опционов
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

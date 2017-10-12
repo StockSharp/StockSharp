@@ -46276,5 +46276,15 @@ namespace StockSharp.Localization
 		/// Candle {0} has active state and cannot be stored.
 		/// </summary>
 		public static string CandleActiveNotSupport => GetString(CandleActiveNotSupportKey);
+
+		/// <summary>
+		/// {0} options
+		/// </summary>
+		public const string NNOptionsKey = nameof(NNOptions);
+
+		/// <summary>
+		/// {0} options
+		/// </summary>
+		public static string NNOptions => GetString(NNOptionsKey);
 	}
 }
