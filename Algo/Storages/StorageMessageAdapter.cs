@@ -392,6 +392,8 @@ namespace StockSharp.Algo.Storages
 							days = TimeSpan.FromTicks(tf.Ticks * 50);	
 					}
 				}
+				else if (typeof(TMessage) == typeof(QuoteChangeMessage) || typeof(TMessage) == typeof(Level1ChangeMessage))
+					days = TimeSpan.Zero;
 
 				from = (to ?? last.Value) - days;
 			}
