@@ -3202,19 +3202,24 @@
             The market data provider.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.ChartParam">
+    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.PositionProvider">
       <summary>
-            The parameter type in the chart. The default is <see cref="F:StockSharp.Xaml.Charting.OptionPositionChartParams.Premium" />.
+            The position provider.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.Positions">
+    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.UnderlyingAsset">
+      <summary>
+            Underlying asset.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.Options">
       <summary>
             Option positions.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.AssetPosition">
+    <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.ChartParam">
       <summary>
-            The position by the underlying asset.
+            The parameter type in the chart. The default is <see cref="F:StockSharp.Xaml.Charting.OptionPositionChartParams.Premium" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.OptionPositionChart.ShowSeparated">
@@ -3232,12 +3237,11 @@
             Whether to use the model <see cref="T:StockSharp.Algo.Derivatives.Black" />. By default, the model is not used.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Decimal,System.Decimal,System.DateTimeOffset,System.DateTimeOffset)">
+    <member name="M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.DateTimeOffset,System.DateTimeOffset)">
       <summary>
             To redraw the chart.
             </summary>
       <param name="assetPrice">The current price of the underlying asset.</param>
-      <param name="priceStep">Price step.</param>
       <param name="currentTime">The current time.</param>
       <param name="expiryDate">The expiration date.</param>
     </member>
@@ -3276,16 +3280,22 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.OptionVolatilitySmileChart" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.CreateSmile(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles)">
+    <member name="P:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.Elements">
+      <summary>
+            Elements.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.CreateSmile(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles,System.Guid)">
       <summary>
             To create new smile.
             </summary>
       <param name="title">The line title.</param>
       <param name="color">The line color.</param>
       <param name="style">The line drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.LineChartStyles.Line" />.</param>
+      <param name="id">Unique ID.</param>
       <returns>The collection of data that should be filled for the line drawing.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.CreateSmile(System.String,System.Windows.Media.Color,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles)">
+    <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.CreateSmile(System.String,System.Windows.Media.Color,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles,System.Guid)">
       <summary>
             To create new smile.
             </summary>
@@ -3293,13 +3303,14 @@
       <param name="color">The line color.</param>
       <param name="secondColor">The additional line color. It is used to draw <see cref="F:StockSharp.Xaml.Charting.LineChartStyles.Area" />.</param>
       <param name="style">The line drawing style. The default is <see cref="F:StockSharp.Xaml.Charting.LineChartStyles.Line" />.</param>
+      <param name="id">Unique ID.</param>
       <returns>The collection of data that should be filled for the line drawing.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.RemoveSmile(System.Collections.Generic.ICollection{StockSharp.Xaml.Charting.LineData{System.Double}})">
       <summary>
             To remove the yield curve from the chart.
             </summary>
-      <param name="items">The collection of data obtained from the method <see cref="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.CreateSmile(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles)" />.</param>
+      <param name="items">The collection of data obtained from the method <see cref="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.CreateSmile(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.LineChartStyles,System.Guid)" />.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.OptionVolatilitySmileChart.Clear">
       <summary>
