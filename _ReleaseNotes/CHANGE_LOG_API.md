@@ -13,6 +13,7 @@ StockSharp API Change log
 * (bug) FIX server. Security expiration date fix http://stocksharp.ru/forum/8703/data-ehkspiratsii-optsionov-na-forts/
 * (bug) IQFeed. Level1 fix.
 * (bug) Oanda. Fix large candle's range request.
+* (bug) Alerts fixes.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
