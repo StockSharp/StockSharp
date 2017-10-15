@@ -14549,3 +14549,4 @@ DocStr10182;Parent id;Родительский идентификатор
 DocStr10184;Is row expanded;Раскрыта ли строка
 DocStr10185;The parent element changed event;Событие изменения родительского элемента
 DocStr10186;The tree item settings changed event;Событие изменения свойств элемента дерева
+DocStr10187;Date of issue;Дата выпуска
