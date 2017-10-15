@@ -11,6 +11,7 @@ StockSharp API Change log
 * (feature) StorageMessageAdapter. Load only curr day for order book and level1 (in case From is null).
 * (bug) Finam history. Fix security lookup. http://stocksharp.ru/posts/m/41218/
 * (bug) FIX server. Security expiration date fix http://stocksharp.ru/forum/8703/data-ehkspiratsii-optsionov-na-forts/
+* (bug) IQFeed. Level1 fix.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
