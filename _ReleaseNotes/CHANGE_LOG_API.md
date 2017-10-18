@@ -14,6 +14,7 @@ StockSharp API Change log
 * (bug) IQFeed. Level1 fix.
 * (bug) Oanda. Fix large candle's range request.
 * (bug) Alerts fixes.
+* (bug) InteractiveBrokers. Market data fixes.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

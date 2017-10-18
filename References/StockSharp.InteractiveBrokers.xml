@@ -154,7 +154,7 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.MarketDataType">
       <summary>
-            Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
+            Whether to use <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.RealTime" /> data or <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.Frozen" /> on the broker server. By default, the <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.RealTime" /> data is used.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ServerLogLevel">
