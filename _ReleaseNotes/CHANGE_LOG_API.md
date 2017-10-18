@@ -15,6 +15,7 @@ StockSharp API Change log
 * (bug) Oanda. Fix large candle's range request.
 * (bug) Alerts fixes.
 * (bug) InteractiveBrokers. Market data fixes.
+* (bug) CandleMessage.State init fix.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
