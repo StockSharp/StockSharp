@@ -1,5 +1,19 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.0:
+* (bug) OptionDesk fixes.
+* (bug) Finam history. Fix security lookup. http://stocksharp.ru/posts/m/41218/
+* (bug) FIX server. Security expiration date fix http://stocksharp.ru/forum/8703/data-ehkspiratsii-optsionov-na-forts/
+* (bug) IQFeed. Level1 fix.
+* (bug) Oanda. Fix large candle's range request.
+* (bug) InteractiveBrokers. Market data fixes.
+* (bug) CandleMessage.State init fix.
+* (bug) Fix DepthPane with big interval set.
+* (bug) Position changes track fix.
+* (bug) MFD. Lookup fixes.
+* (bug) TrayIcon fixes.
+* (bug) Fix loading TaskPane for non exist task.
+
 ## v4.3.28:
 * (bug) BitStamp. Market data fix.
 * (bug) FIX protocol. Exante market-data fix.
