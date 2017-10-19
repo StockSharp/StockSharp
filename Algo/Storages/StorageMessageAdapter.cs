@@ -32,6 +32,28 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
+	/// Storage modes.
+	/// </summary>
+	[Flags]
+	public enum StorageModes
+	{
+		/// <summary>
+		/// None.
+		/// </summary>
+		None = 1,
+
+		/// <summary>
+		/// Incremental.
+		/// </summary>
+		Incremental = None << 1,
+
+		/// <summary>
+		/// Snapshot.
+		/// </summary>
+		Snapshot = Incremental << 1,
+	}
+
+	/// <summary>
 	/// Storage based message adapter.
 	/// </summary>
 	public class StorageMessageAdapter : BufferMessageAdapter
@@ -86,17 +108,44 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetTransactions())
 					{
-						GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
+						if (Mode.Contains(StorageModes.Incremental))
+							GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
+						
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					foreach (var pair in GetOrderBooks())
 					{
-						GetStorage(pair.Key, typeof(QuoteChangeMessage), null).Save(pair.Value);
+						if (Mode.Contains(StorageModes.Incremental))
+							GetStorage<QuoteChangeMessage>(pair.Key, null).Save(pair.Value);
+						
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(QuoteChangeMessage), null);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					foreach (var pair in GetLevel1())
 					{
-						GetStorage(pair.Key, typeof(Level1ChangeMessage), null).Save(pair.Value);
+						if (Mode.Contains(StorageModes.Incremental))
+							GetStorage<Level1ChangeMessage>(pair.Key, null).Save(pair.Value);
+						
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(Level1ChangeMessage), null);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					foreach (var pair in GetCandles())
@@ -106,7 +155,16 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetPositionChanges())
 					{
-						GetStorage(pair.Key, typeof(PositionChangeMessage), null).Save(pair.Value);
+						if (Mode.Contains(StorageModes.Incremental))
+							GetStorage<PositionChangeMessage>(pair.Key, null).Save(pair.Value);
+						
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(PositionChangeMessage), null);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					var news = GetNews().ToArray();
@@ -177,6 +235,26 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public TimeSpan CandlesTimeFrame { get; set; }
 
+		private StorageModes _mode = StorageModes.Incremental;
+
+		/// <summary>
+		/// Storage mode. By default is <see cref="StorageModes.Incremental"/>.
+		/// </summary>
+		public StorageModes Mode
+		{
+			get => _mode;
+			set
+			{
+				_mode = value;
+				Enabled = value != StorageModes.None;
+			}
+		}
+
+		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)
+		{
+			return _storageRegistry.GetSnapshotStorage(messageType, arg, Drive, Format);
+		}
+
 		private IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
 			where TMessage : Message
         {
@@ -236,12 +314,29 @@ namespace StockSharp.Algo.Storages
 			var from = (DateTimeOffset)(today - DaysLoad);
 			var to = DateTimeOffset.Now;
 
-			foreach (var secId in requiredSecurities)
-			{
-				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
-					.Load(from, to)
-					.ForEach(RaiseStorageMessage);
-			}
+			//if (Mode.Contains(StorageModes.Snapshot))
+			//{
+			//	var storage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+
+			//	foreach (var secId in requiredSecurities)
+			//	{
+			//		var snapshot = storage.Get(secId);
+
+			//		if (snapshot != null)
+			//			RaiseStorageMessage(snapshot);
+			//	}
+			//}
+			//else if (Mode.Contains(StorageModes.Incremental))
+			//{
+				// TODO
+
+				foreach (var secId in requiredSecurities)
+				{
+					GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
+						.Load(from, to)
+						.ForEach(RaiseStorageMessage);
+				}	
+			//}
 		}
 
 		/// <summary>
@@ -307,16 +402,40 @@ namespace StockSharp.Algo.Storages
 
 		private DateTimeOffset? LoadMessages(MarketDataMessage msg, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
 		{
-			DateTimeOffset? lastTime;
+			DateTimeOffset? lastTime = null;
 
 			switch (msg.DataType)
 			{
 				case MarketDataTypes.Level1:
-					lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, null);
+					if (Mode.Contains(StorageModes.Snapshot))
+					{
+						var level1Msg = (Level1ChangeMessage)GetSnapshotStorage(typeof(Level1ChangeMessage), null).Get(msg.SecurityId);
+
+						if (level1Msg != null)
+						{
+							lastTime = level1Msg.ServerTime;
+							RaiseStorageMessage(level1Msg);
+						}
+					}
+					else if (Mode.Contains(StorageModes.Incremental))
+						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, null);
+					
 					break;
 
 				case MarketDataTypes.MarketDepth:
-					lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, null);
+					if (Mode.Contains(StorageModes.Snapshot))
+					{
+						var quotesMsg = (QuoteChangeMessage)GetSnapshotStorage(typeof(QuoteChangeMessage), null).Get(msg.SecurityId);
+
+						if (quotesMsg != null)
+						{
+							lastTime = quotesMsg.ServerTime;
+							RaiseStorageMessage(quotesMsg);
+						}
+					}
+					else if (Mode.Contains(StorageModes.Incremental))
+						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, null);
+					
 					break;
 
 				case MarketDataTypes.Trades:

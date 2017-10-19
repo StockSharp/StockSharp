@@ -130,6 +130,10 @@
     <Compile Include="Import\FieldMappingValue.cs" />
     <Compile Include="Indicators\IndicatorValueAttribute.cs" />
     <Compile Include="IRemoteAuthorization.cs" />
+    <Compile Include="Storages\Binary\Snapshot\PositionBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\Binary\Snapshot\TransactionBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\ISnapshotSerializer.cs" />
     <Compile Include="Storages\ISecurityMappingStorage.cs" />
     <Compile Include="SecurityMappingMessageAdapter.cs" />
     <Compile Include="Storages\Binary\PositionBinarySerializer.cs" />
@@ -333,12 +337,15 @@
     <Compile Include="Storages\InMemoryMarketDataStorage.cs" />
     <Compile Include="Storages\ISecurityMarketDataDrive.cs" />
     <Compile Include="Storages\ISecurityStorage.cs" />
+    <Compile Include="Storages\Binary\Snapshot\Level1BinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\ISnapshotStorage.cs" />
     <Compile Include="Storages\IStoragePositionList.cs" />
     <Compile Include="Storages\IStorageSecurityList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
     <Compile Include="Storages\NewsList.cs" />
+    <Compile Include="Storages\SnapshotStorage.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\Binary\TransactionBinarySerializer.cs" />
     <Compile Include="Storages\Binary\NewsBinarySerializer.cs" />

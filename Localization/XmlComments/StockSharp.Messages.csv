@@ -530,6 +530,15 @@ M:StockSharp.Messages.Extensions.TryInitLocalTime(StockSharp.Messages.Message,St
 M:StockSharp.Messages.Extensions.ValidateBounds(StockSharp.Messages.MarketDataMessage)/summary;DocStr10111
 M:StockSharp.Messages.Extensions.ValidateBounds(StockSharp.Messages.MarketDataMessage)/param/message;Str3166
 M:StockSharp.Messages.Extensions.ValidateBounds(StockSharp.Messages.MarketDataMessage)/returns;Str3166
+M:StockSharp.Messages.Extensions.IsLastTradeField(StockSharp.Messages.Level1Fields)/summary;DocStr10214
+M:StockSharp.Messages.Extensions.IsLastTradeField(StockSharp.Messages.Level1Fields)/param/field;Str748
+M:StockSharp.Messages.Extensions.IsLastTradeField(StockSharp.Messages.Level1Fields)/returns;DocStr8659
+M:StockSharp.Messages.Extensions.IsBestBidField(StockSharp.Messages.Level1Fields)/summary;DocStr10215
+M:StockSharp.Messages.Extensions.IsBestBidField(StockSharp.Messages.Level1Fields)/param/field;Str748
+M:StockSharp.Messages.Extensions.IsBestBidField(StockSharp.Messages.Level1Fields)/returns;DocStr8659
+M:StockSharp.Messages.Extensions.IsBestAskField(StockSharp.Messages.Level1Fields)/summary;DocStr10216
+M:StockSharp.Messages.Extensions.IsBestAskField(StockSharp.Messages.Level1Fields)/param/field;Str748
+M:StockSharp.Messages.Extensions.IsBestAskField(StockSharp.Messages.Level1Fields)/returns;DocStr8659
 T:StockSharp.Messages.IDailyInfoSoap/summary;DocStr2073
 M:StockSharp.Messages.IDailyInfoSoap.GetCursOnDate(System.DateTime)/summary;DocStr2074
 M:StockSharp.Messages.IDailyInfoSoap.GetCursOnDate(System.DateTime)/param/date;DocStr2075

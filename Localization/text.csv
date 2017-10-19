@@ -14561,3 +14561,20 @@ DocStr10195;Storage modes;Режимы хранилищ
 DocStr10196;Full;Полное
 DocStr10197;Full and snapshot;Полное и снэпшот
 DocStr10198;Storage mode. By default is {0};Режим хранилища. По-умолчанию равно {0}
+DocStr10199;Implementation of {0} in binary format for {1};Реализация {0} в бинарном формате для {1}
+DocStr10200;The interface for serialize snapshots;Интерфейс сериализации снэпшотов
+DocStr10201;Version of data format;Версия формата данных
+DocStr10202;Get snapshot size in bytes;Получить размер снэпшота в байтах
+DocStr10203;Snapshot size in bytes;Размер снэпшота в байтах
+DocStr10204;Serialize the specified message to byte array;Преобразовать указанное сообщение в массив байтов
+DocStr10205;Byte array;Массив байтов
+DocStr10206;Deserialize message from byte array;Преобразовать сообщение из массива байтов
+DocStr10207;Get security identifier for the specified message;Получить идентификатор инструментам для указанного сообщения
+DocStr10208;Update the specified message by new changes;Обновить указанное сообщение новыми изменениями
+DocStr10209;Implementation of {0};Реализация {0}
+DocStr10210;Serializer;Преобразователь
+DocStr10211;To get the snapshot storage;Получить хранилище снэпшотов
+DocStr10212;The snapshot storage;Хранилище снэпшотов
+DocStr10214;Is the specified {0} is related to last trade;Относится ли к последней сделке указанное {0}
+DocStr10215;Is the specified {0} is related to best bid;Относится ли к лучшему биду указанное {0}
+DocStr10216;Is the specified {0} is related to best ask;Относится ли к лучшему оферу указанное {0}

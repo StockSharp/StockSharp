@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Storages
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages.Binary;
+	using StockSharp.Algo.Storages.Binary.Snapshot;
 	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -558,7 +559,8 @@ namespace StockSharp.Algo.Storages
 		private readonly SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>> _executionStorages = new SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>>();
 		private readonly SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>> _newsStorages = new SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>>();
 		private readonly SynchronizedDictionary<IMarketDataDrive, ISecurityStorage> _securityStorages = new SynchronizedDictionary<IMarketDataDrive, ISecurityStorage>();
-
+		private readonly SynchronizedDictionary<Tuple<DataType, IMarketDataDrive>, ISnapshotStorage> _snapshotStorages = new SynchronizedDictionary<Tuple<DataType, IMarketDataDrive>, ISnapshotStorage>();
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageRegistry"/>.
 		/// </summary>
@@ -611,6 +613,39 @@ namespace StockSharp.Algo.Storages
 
 				_exchangeInfoProvider = value;
 			}
+		}
+
+		/// <inheritdoc />
+		public ISnapshotStorage GetSnapshotStorage(Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			return _snapshotStorages.SafeAdd(Tuple.Create(DataType.Create(dataType, arg), drive ?? DefaultDrive), key =>
+			{
+				ISnapshotStorage storage;
+
+				if (dataType == typeof(Level1ChangeMessage))
+					storage = new SnapshotStorage<Level1ChangeMessage>(key.Item2.Path, new Level1BinarySnapshotSerializer());
+				else if (dataType == typeof(QuoteChangeMessage))
+					storage = new SnapshotStorage<QuoteChangeMessage>(key.Item2.Path, new QuotesBinarySnapshotSerializer());
+				else if (dataType == typeof(PositionChangeMessage))
+					storage = new SnapshotStorage<PositionChangeMessage>(key.Item2.Path, new PositionBinarySnapshotSerializer());
+				else if (dataType == typeof(ExecutionMessage))
+				{
+					switch ((ExecutionTypes)arg)
+					{
+						case ExecutionTypes.Transaction:
+							storage = new SnapshotStorage<ExecutionMessage>(key.Item2.Path, new TransactionBinarySnapshotSerializer());
+							break;
+						default:
+							throw new ArgumentOutOfRangeException(nameof(arg), arg, LocalizedStrings.Str1219);
+					}
+				}
+				else
+					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1018);
+
+				storage.Init();
+
+				return storage;
+			});
 		}
 
 		/// <inheritdoc />

@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Storages
 			return CanStore(securityId, typeof(TMessage), arg);
 		}
 
-		private bool CanStore(SecurityId securityId, Type messageType, object arg = null)
+		private bool CanStore(SecurityId securityId, Type messageType, object arg)
 		{
 			if (!Enabled)
 				return false;

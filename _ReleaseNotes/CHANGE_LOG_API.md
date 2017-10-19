@@ -17,6 +17,7 @@ StockSharp API Change log
 * (bug) InteractiveBrokers. Market data fixes.
 * (bug) CandleMessage.State init fix.
 * (bug) MarketDepthControl. Binding fixes.
+* (feature) Snapshot storage.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
