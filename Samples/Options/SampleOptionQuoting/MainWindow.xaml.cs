@@ -491,7 +491,7 @@ namespace SampleOptionQuoting
 			var trade = asset.LastTrade;
 
 			if (trade != null)
-				PosChart.Refresh(trade.Price, TimeHelper.NowWithOffset, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
+				PosChart.Refresh(trade.Price);
 		}
 
 		private void RefreshSmile(DateTimeOffset? time = null)

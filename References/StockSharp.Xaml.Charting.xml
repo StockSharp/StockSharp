@@ -3237,7 +3237,7 @@
             Whether to use the model <see cref="T:StockSharp.Algo.Derivatives.Black" />. By default, the model is not used.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.DateTimeOffset,System.DateTimeOffset)">
+    <member name="M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})">
       <summary>
             To redraw the chart.
             </summary>

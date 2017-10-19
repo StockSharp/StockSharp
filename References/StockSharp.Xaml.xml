@@ -668,6 +668,13 @@
       <param name="obj">Control.</param>
       <param name="settings">Settings.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)">
+      <summary>
+            Try to open the specified link.
+            </summary>
+      <param name="url">Link.</param>
+      <param name="owner">UI thread owner.</param>
+    </member>
     <member name="T:StockSharp.Xaml.FileProgressWindow">
       <summary>
             File uploading/downloading progress bar window.

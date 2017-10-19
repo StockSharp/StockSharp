@@ -14579,3 +14579,4 @@ DocStr10212;The snapshot storage;Хранилище снэпшотов
 DocStr10214;Is the specified {0} is related to last trade;Относится ли к последней сделке указанное {0}
 DocStr10215;Is the specified {0} is related to best bid;Относится ли к лучшему биду указанное {0}
 DocStr10216;Is the specified {0} is related to best ask;Относится ли к лучшему оферу указанное {0}
+DocStr10217;Try to open the specified link;Попытаться открыть указанную ссылку

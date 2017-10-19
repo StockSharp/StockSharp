@@ -150,6 +150,9 @@ M:StockSharp.Xaml.Extensions.SaveDevExpressControl(System.Windows.DependencyObje
 M:StockSharp.Xaml.Extensions.LoadDevExpressControl(System.Windows.DependencyObject,System.String)/summary;DocStr9969
 M:StockSharp.Xaml.Extensions.LoadDevExpressControl(System.Windows.DependencyObject,System.String)/param/obj;DocStr9968
 M:StockSharp.Xaml.Extensions.LoadDevExpressControl(System.Windows.DependencyObject,System.String)/param/settings;Settings
+M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)/summary;DocStr10217
+M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)/param/url;Str221
+M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)/param/owner;DocStr8719
 T:StockSharp.Xaml.FileProgressWindow/summary;DocStr9782
 M:StockSharp.Xaml.FileProgressWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.FileProgressWindow.File/summary;DocStr9032

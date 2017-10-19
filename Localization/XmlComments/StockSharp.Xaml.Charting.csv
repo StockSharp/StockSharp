@@ -912,10 +912,10 @@ P:StockSharp.Xaml.Charting.OptionPositionChart.ChartParam/summary;DocStr7862
 P:StockSharp.Xaml.Charting.OptionPositionChart.ShowSeparated/summary;DocStr7864
 P:StockSharp.Xaml.Charting.OptionPositionChart.ShowExpiration/summary;DocStr7865
 P:StockSharp.Xaml.Charting.OptionPositionChart.UseBlackModel/summary;DocStr7866
-M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr7860
-M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.DateTimeOffset,System.DateTimeOffset)/param/assetPrice;DocStr7861
-M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.DateTimeOffset,System.DateTimeOffset)/param/currentTime;DocStr955
-M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.DateTimeOffset,System.DateTimeOffset)/param/expiryDate;DocStr1018
+M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/summary;DocStr7860
+M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/assetPrice;DocStr7861
+M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/currentTime;DocStr955
+M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})/param/expiryDate;DocStr1018
 M:StockSharp.Xaml.Charting.OptionPositionChart.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.OptionPositionChart.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.OptionPositionChart.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
