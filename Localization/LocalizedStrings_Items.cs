@@ -46286,5 +46286,15 @@ namespace StockSharp.Localization
 		/// {0} options
 		/// </summary>
 		public static string NNOptions => GetString(NNOptionsKey);
+
+		/// <summary>
+		/// Cannot open link '{0}'. Please try it manually (was copied to clipboard).
+		/// </summary>
+		public const string CannotOpenLinkKey = nameof(CannotOpenLink);
+
+		/// <summary>
+		/// Cannot open link '{0}'. Please try it manually (was copied to clipboard).
+		/// </summary>
+		public static string CannotOpenLink => GetString(CannotOpenLinkKey);
 	}
 }
