@@ -709,5 +709,31 @@ namespace StockSharp.Messages
 
 			return message;
 		}
+
+		/// <summary>
+		/// Is the specified <see cref="Level1Fields"/> is related to last trade.
+		/// </summary>
+		/// <param name="field">Field.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLastTradeField(this Level1Fields field) =>
+			field == Level1Fields.LastTradeId || field == Level1Fields.LastTradeTime ||
+			field == Level1Fields.LastTradeOrigin || field == Level1Fields.LastTradePrice ||
+			field == Level1Fields.LastTradeUpDown || field == Level1Fields.LastTradeVolume;
+
+		/// <summary>
+		/// Is the specified <see cref="Level1Fields"/> is related to best bid.
+		/// </summary>
+		/// <param name="field">Field.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBestBidField(this Level1Fields field) =>
+			field == Level1Fields.BestBidPrice || field == Level1Fields.BestBidTime || field == Level1Fields.BestBidVolume;
+		
+		/// <summary>
+		/// Is the specified <see cref="Level1Fields"/> is related to best ask.
+		/// </summary>
+		/// <param name="field">Field.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBestAskField(this Level1Fields field) =>
+			field == Level1Fields.BestAskPrice || field == Level1Fields.BestAskTime || field == Level1Fields.BestAskVolume;
 	}
 }

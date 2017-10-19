@@ -1187,10 +1187,57 @@ namespace StockSharp.Algo
 
 			var values = GetSecurityValues(security);
 
+			var lastTradeFound = false;
+			var bestBidFound = false;
+			var bestAskFound = false;
+
 			lock (values.SyncRoot)
 			{
 				foreach (var change in message.Changes)
-					values[(int)change.Key] = change.Value;	
+				{
+					var field = change.Key;
+
+					if (!lastTradeFound)
+					{
+						if (field.IsLastTradeField())
+						{
+							values[(int)Level1Fields.LastTradeUpDown] = null;
+							values[(int)Level1Fields.LastTradeTime] = null;
+							values[(int)Level1Fields.LastTradeId] = null;
+							values[(int)Level1Fields.LastTradeOrigin] = null;
+							values[(int)Level1Fields.LastTradePrice] = null;
+							values[(int)Level1Fields.LastTradeVolume] = null;
+
+							lastTradeFound = true;
+						}
+					}
+
+					if (!bestBidFound)
+					{
+						if (field.IsBestBidField())
+						{
+							values[(int)Level1Fields.BestBidPrice] = null;
+							values[(int)Level1Fields.BestBidTime] = null;
+							values[(int)Level1Fields.BestBidVolume] = null;
+
+							bestBidFound = true;
+						}
+					}
+
+					if (!bestAskFound)
+					{
+						if (field.IsBestAskField())
+						{
+							values[(int)Level1Fields.BestAskPrice] = null;
+							values[(int)Level1Fields.BestAskTime] = null;
+							values[(int)Level1Fields.BestAskVolume] = null;
+
+							bestAskFound = true;
+						}
+					}
+
+					values[(int)field] = change.Value;
+				}	
 			}
 
 			RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
