@@ -630,6 +630,7 @@ P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ImpliedVolatilityBestBid/summa
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ImpliedVolatilityBestAsk/summary;DocStr9489
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ImpliedVolatilityLastTrade/summary;DocStr9490
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.HistoricalVolatility/summary;Str1532
+P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.DaysToExpire/summary;DocStr10218
 M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString/summary;DocStr49
 M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString/returns;DocStr50
 M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToLevel1/summary;DocStr9540

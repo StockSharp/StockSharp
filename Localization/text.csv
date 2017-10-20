@@ -14580,3 +14580,4 @@ DocStr10214;Is the specified {0} is related to last trade;Относится л�
 DocStr10215;Is the specified {0} is related to best bid;Относится ли к лучшему биду указанное {0}
 DocStr10216;Is the specified {0} is related to best ask;Относится ли к лучшему оферу указанное {0}
 DocStr10217;Try to open the specified link;Попытаться открыть указанную ссылку
+DocStr10218;Days before expiration;Дней до экспирации
