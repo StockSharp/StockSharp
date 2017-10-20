@@ -285,8 +285,6 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					case Level1Fields.SpreadMiddle:
 						snapshot.SpreadMiddle = (decimal)change.Value;
 						break;
-					default:
-						throw new ArgumentOutOfRangeException();
 				}
 			}
 
