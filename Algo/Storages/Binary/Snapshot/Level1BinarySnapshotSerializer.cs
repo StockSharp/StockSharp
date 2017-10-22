@@ -21,8 +21,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
 			public string SecurityId;
 
-			public long ServerTime;
-			public long LocalTime;
+			public long LastChangeServerTime;
+			public long LastChangeLocalTime;
 
 			public long LastTradeTime;
 			public decimal LastTradePrice;
@@ -107,9 +107,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			//public decimal QuickRatio;
 		}
 
-		private readonly Version _version = new Version(1, 0);
-
-		Version ISnapshotSerializer<Level1ChangeMessage>.Version => _version;
+		Version ISnapshotSerializer<Level1ChangeMessage>.Version { get; } = new Version(1, 0);
 
 		string ISnapshotSerializer<Level1ChangeMessage>.FileName => "level1_snapshot.bin";
 
@@ -126,8 +124,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			var snapshot = new Level1Snapshot
 			{
 				SecurityId = message.SecurityId.ToStringId(),
-				ServerTime = message.ServerTime.To<long>(),
-				LocalTime = message.LocalTime.To<long>(),
+				LastChangeServerTime = message.ServerTime.To<long>(),
+				LastChangeLocalTime = message.LocalTime.To<long>(),
 
 				LastTradeUpDown = -1,
 				LastTradeOrigin = -1,
@@ -306,8 +304,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				var level1Msg = new Level1ChangeMessage
 				{
 					SecurityId = snapshot.SecurityId.ToSecurityId(),
-					ServerTime = snapshot.ServerTime.To<DateTimeOffset>(),
-					LocalTime = snapshot.LocalTime.To<DateTimeOffset>(),
+					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
+					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 				};
 
 				level1Msg

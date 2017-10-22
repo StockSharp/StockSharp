@@ -30,8 +30,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
 			public string SecurityId;
 
-			public long ServerTime;
-			public long LocalTime;
+			public long LastChangeServerTime;
+			public long LastChangeLocalTime;
 
 			public int BidCount;
 			public int AskCount;
@@ -39,9 +39,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		private const int _rowsOffset = 224;
 
-		private readonly Version _version = new Version(1, 0);
-
-		Version ISnapshotSerializer<QuoteChangeMessage>.Version => _version;
+		Version ISnapshotSerializer<QuoteChangeMessage>.Version { get; } = new Version(1, 0);
 
 		int ISnapshotSerializer<QuoteChangeMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
@@ -59,8 +57,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			{
 				SecurityId = message.SecurityId.ToStringId(),
 				
-				ServerTime = message.ServerTime.To<long>(),
-				LocalTime = message.LocalTime.To<long>(),
+				LastChangeServerTime = message.ServerTime.To<long>(),
+				LastChangeLocalTime = message.LocalTime.To<long>(),
 			};
 
 			var bids = message.Bids.ToArray();
@@ -110,8 +108,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				var quotesMsg = new QuoteChangeMessage
 				{
 					SecurityId = snapshot.SecurityId.ToSecurityId(),
-					ServerTime = snapshot.ServerTime.To<DateTimeOffset>(),
-					LocalTime = snapshot.LocalTime.To<DateTimeOffset>(),
+					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
+					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
 					Bids = bids,
 					Asks = asks,
 					IsSorted = true,

@@ -24,15 +24,82 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
 			public string Portfolio;
 
-			public long ServerTime;
-			public long LocalTime;
+			public long LastChangeServerTime;
+			public long LastChangeLocalTime;
 
+			public decimal OrderPrice;
+			public long OrderId;
+			public long OrderUserId;
+			public decimal OrderVolume;
+			public byte OrderType;
+			public byte OrderSide;
+			public byte OrderTif;
+
+			[MarshalAs(UnmanagedType.I1)]
+			public bool IsSystem;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string OrderStringId;
+
+			public long TradeId;
+			public decimal TradePrice;
+			public decimal TradeVolume;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string BrokerCode;
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string ClientCode;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string Comment;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string SystemComment;
+
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 200)]
+			public string Error;
+
+			public short Currency;
 			
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string DepoName;
+
+			public long ExpiryDate;
+			
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string PortfolioName;
+
+			public bool? IsMarketMaker;
+			public byte Side;
+			
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string OrderBoardId;
+
+			public decimal? VisibleVolume;
+			public sbyte OrderState;
+			public long OrderStatus;
+			public decimal Balance;
+			
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string UserOrderId;
+
+			public sbyte OriginSide;
+			public int Latency;
+			public decimal PnL;
+			public decimal Position;
+			public decimal Slippage;
+			public decimal Commission;
+			public int TradeStatus;
+			
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
+			public string TradeStringId;
+
+			public decimal OpenInterest;
+			public long OriginalTransactionId;
+			public long TransactionId;
 		}
 
-		private readonly Version _version = new Version(1, 0);
-
-		Version ISnapshotSerializer<ExecutionMessage>.Version => _version;
+		Version ISnapshotSerializer<ExecutionMessage>.Version { get; } = new Version(1, 0);
 
 		int ISnapshotSerializer<ExecutionMessage>.GetSnapshotSize(Version version) => _snapshotSize;
 
@@ -50,11 +117,46 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			{
 				SecurityId = message.SecurityId.ToStringId(),
 				Portfolio = message.PortfolioName,
-				ServerTime = message.ServerTime.To<long>(),
-				LocalTime = message.LocalTime.To<long>(),
-			};
+				LastChangeServerTime = message.ServerTime.To<long>(),
+				LastChangeLocalTime = message.LocalTime.To<long>(),
 
-			
+				BrokerCode = message.BrokerCode,
+				ClientCode = message.ClientCode,
+				Comment = message.Comment,
+				SystemComment = message.SystemComment,
+				Currency = message.Currency == null ? (short)-1 : (short)message.Currency.Value,
+				// TODO
+				//Condition = message.Condition,
+				DepoName = message.DepoName,
+				Error = message.Error?.Message,
+				ExpiryDate = message.ExpiryDate?.To<long>() ?? 0,
+				PortfolioName = message.PortfolioName,
+				IsMarketMaker = message.IsMarketMaker,
+				Side = (byte)message.Side,
+				OrderStringId = message.OrderStringId,
+				OrderBoardId = message.OrderBoardId,
+				OrderPrice = message.OrderPrice,
+				OrderVolume = message.OrderVolume ?? 0,
+				VisibleVolume = message.VisibleVolume,
+				OrderState = message.OrderState == null ? (sbyte)-1 : (sbyte)message.OrderState.Value,
+				OrderStatus = message.OrderStatus ?? 0,
+				Balance = message.Balance ?? 0,
+				UserOrderId = message.UserOrderId,
+				OriginSide = message.OriginSide == null ? (sbyte)-1 : (sbyte)message.OriginSide.Value,
+				Latency = (int)(message.Latency?.Ticks ?? 0),
+				PnL = message.PnL ?? 0,
+				Position = message.Position ?? 0,
+				Slippage = message.Slippage ?? 0,
+				Commission = message.Commission ?? 0,
+				TradePrice = message.TradePrice ?? 0,
+				TradeVolume = message.TradeVolume ?? 0,
+				TradeStatus = message.TradeStatus ?? 0,
+				TradeId = message.TradeId ?? 0,
+				TradeStringId = message.TradeStringId,
+				OpenInterest = message.OpenInterest ?? 0,
+				OriginalTransactionId = message.OriginalTransactionId,
+				TransactionId = message.TransactionId,
+			};
 
 			var ptr = snapshot.StructToPtr();
 			Marshal.Copy(ptr, buffer, 0, _snapshotSize);
@@ -75,8 +177,45 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				{
 					SecurityId = snapshot.SecurityId.ToSecurityId(),
 					PortfolioName = snapshot.Portfolio,
-					ServerTime = snapshot.ServerTime.To<DateTimeOffset>(),
-					LocalTime = snapshot.LocalTime.To<DateTimeOffset>(),
+					ServerTime = snapshot.LastChangeServerTime.To<DateTimeOffset>(),
+					LocalTime = snapshot.LastChangeLocalTime.To<DateTimeOffset>(),
+
+					BrokerCode = snapshot.BrokerCode,
+					ClientCode = snapshot.ClientCode,
+
+					Comment = snapshot.Comment,
+					SystemComment = snapshot.SystemComment,
+
+					Currency = snapshot.Currency == -1 ? (CurrencyTypes?)null : (CurrencyTypes)snapshot.Currency,
+					DepoName = snapshot.DepoName,
+					Error = snapshot.Error.IsEmpty() ? null : new InvalidOperationException(snapshot.Error),
+
+					ExpiryDate = snapshot.ExpiryDate == 0 ? (DateTimeOffset?)null : snapshot.ExpiryDate.To<DateTimeOffset>(),
+					IsMarketMaker = snapshot.IsMarketMaker,
+					Side = (Sides)snapshot.Side,
+					OrderStringId = snapshot.OrderStringId,
+					OrderBoardId = snapshot.OrderBoardId,
+					OrderPrice = snapshot.OrderPrice,
+					OrderVolume = snapshot.OrderVolume,
+					VisibleVolume = snapshot.VisibleVolume,
+					OrderState = snapshot.OrderState == -1 ? (OrderStates?)null : (OrderStates)snapshot.OrderState,
+					OrderStatus = snapshot.OrderStatus,
+					Balance = snapshot.Balance,
+					UserOrderId = snapshot.UserOrderId,
+					OriginSide = snapshot.OriginSide == -1 ? (Sides?)null : (Sides)snapshot.OriginSide,
+					Latency = snapshot.Latency == 0 ? (TimeSpan?)null : TimeSpan.FromTicks(snapshot.Latency),
+					PnL = snapshot.PnL,
+					Position = snapshot.Position,
+					Slippage = snapshot.Slippage,
+					Commission = snapshot.Commission,
+					TradePrice = snapshot.TradePrice,
+					TradeVolume = snapshot.TradeVolume,
+					TradeStatus = snapshot.TradeStatus,
+					TradeId = snapshot.TradeId,
+					TradeStringId = snapshot.TradeStringId,
+					OpenInterest = snapshot.OpenInterest,
+					OriginalTransactionId = snapshot.OriginalTransactionId,
+					TransactionId = snapshot.TransactionId,
 				};
 
 				return execMsg;
@@ -90,7 +229,110 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 		void ISnapshotSerializer<ExecutionMessage>.Update(ExecutionMessage message, ExecutionMessage changes)
 		{
-			
+			if (!changes.BrokerCode.IsEmpty())
+				message.BrokerCode = changes.BrokerCode;
+
+			if (!changes.ClientCode.IsEmpty())
+				message.ClientCode = changes.ClientCode;
+
+			if (!changes.Comment.IsEmpty())
+				message.Comment = changes.Comment;
+
+			if (!changes.SystemComment.IsEmpty())
+				message.SystemComment = changes.SystemComment;
+
+			if (changes.Currency != null)
+				message.Currency = changes.Currency;
+
+			if (changes.Condition != null)
+				message.Condition = changes.Condition.Clone();
+
+			if (!changes.DepoName.IsEmpty())
+				message.DepoName = changes.DepoName;
+
+			if (changes.Error != null)
+				message.Error = changes.Error;
+
+			if (changes.ExpiryDate != null)
+				message.ExpiryDate = changes.ExpiryDate;
+
+			if (!changes.PortfolioName.IsEmpty())
+				message.PortfolioName = changes.PortfolioName;
+
+			if (changes.IsMarketMaker != null)
+				message.IsMarketMaker = changes.IsMarketMaker;
+
+			if (changes.HasOrderInfo)
+				message.Side = changes.Side;
+
+			if (!changes.OrderBoardId.IsEmpty())
+				message.OrderBoardId = changes.OrderBoardId;
+
+			if (!changes.OrderStringId.IsEmpty())
+				message.OrderStringId = changes.OrderStringId;
+
+			if (changes.OrderPrice != 0)
+				message.OrderPrice = changes.OrderPrice;
+
+			if (changes.OrderVolume != null)
+				message.OrderVolume = changes.OrderVolume;
+
+			if (changes.VisibleVolume != null)
+				message.VisibleVolume = changes.VisibleVolume;
+
+			if (changes.OrderState != null)
+				message.OrderState = changes.OrderState;
+
+			if (changes.OrderStatus != null)
+				message.OrderStatus = changes.OrderStatus;
+
+			if (changes.Balance != null)
+				message.Balance = changes.Balance;
+
+			if (!changes.UserOrderId.IsEmpty())
+				message.UserOrderId = changes.UserOrderId;
+
+			if (changes.OriginSide != null)
+				message.OriginSide = changes.OriginSide;
+
+			if (changes.Latency != null)
+				message.Latency = changes.Latency;
+
+			if (changes.PnL != null)
+				message.PnL = changes.PnL;
+
+			if (changes.Position != null)
+				message.Position = changes.Position;
+
+			if (changes.Slippage != null)
+				message.Slippage = changes.Slippage;
+
+			if (changes.Commission != null)
+				message.Commission = changes.Commission;
+
+			if (changes.TradePrice != null)
+				message.TradePrice = changes.TradePrice;
+
+			if (changes.TradeVolume != null)
+				message.TradeVolume = changes.TradeVolume;
+
+			if (changes.TradeStatus != null)
+				message.TradeStatus = changes.TradeStatus;
+
+			if (changes.TradeId != null)
+				message.TradeId = changes.TradeId;
+
+			if (!changes.TradeStringId.IsEmpty())
+				message.TradeStringId = changes.TradeStringId;
+
+			if (changes.OpenInterest != null)
+				message.OpenInterest = changes.OpenInterest;
+
+			if (changes.OriginalTransactionId != 0)
+				message.OriginalTransactionId = changes.OriginalTransactionId;
+
+			if (changes.TransactionId != 0)
+				message.TransactionId = changes.TransactionId;
 
 			message.LocalTime = changes.LocalTime;
 			message.ServerTime = changes.ServerTime;
