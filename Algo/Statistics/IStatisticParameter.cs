@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Statistics
 
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
+	using Ecng.Common;
 
 	/// <summary>
 	/// The interface, describing statistic parameter.
@@ -86,7 +87,7 @@ namespace StockSharp.Algo.Statistics
 		protected BaseStatisticParameter()
 		{
 			var type = GetType();
-			_name = type.Name.Replace("Parameter", string.Empty);
+			_name = type.Name.Remove("Parameter");
 
 			DisplayName = type.GetDisplayName(GetReadableName(_name));
 			Description = type.GetDescription(DisplayName);
@@ -100,14 +101,14 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		public string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (_name == value)
 					return;
 
 				_name = value;
-				this.Notify("Name");
+				this.Notify(nameof(Name));
 			}
 		}
 
@@ -133,7 +134,7 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		public virtual TValue Value
 		{
-			get { return _value; }
+			get => _value;
 			protected set
 			{
 				if (_value.CompareTo(value) == 0)
@@ -186,7 +187,7 @@ namespace StockSharp.Algo.Statistics
 		private void RaiseValueChanged()
 		{
 			ValueChanged?.Invoke();
-			this.Notify("Value");
+			this.Notify(nameof(Value));
 		}
 
 		/// <summary>
@@ -195,7 +196,7 @@ namespace StockSharp.Algo.Statistics
 		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			Value = storage.GetValue("Value", default(TValue));
+			Value = storage.GetValue(nameof(Value), default(TValue));
 		}
 	
 		/// <summary>
@@ -204,7 +205,7 @@ namespace StockSharp.Algo.Statistics
 		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Value", Value);
+			storage.SetValue(nameof(Value), Value);
 		}
 	}
 }

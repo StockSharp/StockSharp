@@ -1,105 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="febbcf31-63d1-449d-847e-92fd8424f926" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
 
     <introduction>
 		<para>
-			Стратегии, написанные с помощью <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>, можно тестировать
-			в трех режимах:
+			Strategies written by using <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> can be tested in three modes:
 		</para>
 		<list class="ordered">
 			<listItem>
-				Тестирование <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/>. На таких данных можно проводить как анализ рынка для поиска
-				закономерностей, так и оптимизацию параметров стратегии.
+				<link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/> testing. With this kind of data both a market analysis to find patterns and the strategy
+				parameters optimization may be carried out.
 			</listItem>
 			<listItem>
-				Тестирование <link xlink:href="ab42038e-836b-4c00-9332-0b2db2cbd948"/>. Удобное средство для первоначального тестирования стратегии для
-				выявления ошибочных мест в алгоритмах. Или для автоматических тестов, запускаемых по расписанию.
+				<link xlink:href="ab42038e-836b-4c00-9332-0b2db2cbd948"/> testing. A convenient tool for initial strategy testing to identify errors in the algorithms.
+				Or for automated tests that run on a schedule.
 			</listItem>
 			<listItem>
-				Тестирование <link xlink:href="d27245ae-abfd-4d6b-b8c4-d1a24a45116f"/>, поступающих из реального подключения к торговой системе
-				(например, из <token>quik</token>), но без реальной регистрации заявок (исполнение эмулируется на основе поступающих стаканов).
+				<link xlink:href="d27245ae-abfd-4d6b-b8c4-d1a24a45116f"/> testing based on data received from a real connection to the trading system (for example,
+				from <token>openecry</token>), but without the actual orders registration (execution is emulated based on incoming order books).
 			</listItem>
 		</list>
 		<para>
-			При использовании всех трех режимов максимальный упор делается на то, чтобы код стратегии, написанной с помощью <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>,
-			не изменялся при переключении с реальной торговли на тестирование и обратно. Это достигается за счет реализации основного интерфейса
-			<codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>, олицетворяющий собой шлюз к торговой системе. В разделе
-			<link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7">Архитектура StockSharp</link> уже показано, каким образом используется данный интерфейс. В
-			качестве торговой системы в режиме тестирования будет выступать не реальная торговая система, а эмуляция (зависит от выбранного режима). Поэтому
-			код стратегии никогда об этом не узнает - торгует ли он для с реальной биржей или это происходит на эмуляции.
+			When using all three modes the maximum emphasis is focused on the fact that the strategy code, written by using <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
+			is not changed when switching from real trading to testing and back. This is achieved through the implementation of the
+			<codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> main interface, which is a gateway to the trading system. How the
+			interface is used – this has been shown already in the <link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7">StockSharp Architecture</link> section.
+			In testing mode not real trading system, but the emulation will act as the trading system (depending on the selected mode). Therefore, the strategy code
+			will never know about it - whether it is trading with a real exchange, or it is the emulation.
 		</para>
 		<para>
-			Основным требованием к коду стратегий является то, что он не должен содержать специфичные для шлюза операции. Например, если речь идет о <token>quik</token>,
-			то в коде стратегии не должно быть методов работы с	<token>dde</token> данными. Или, если работа идет через <token>smartcom</token>, то не должно быть обращение
-			к историческим данным (<link xlink:href="9d3b0442-0633-4ba5-97e1-22829adcd025"/>).
+			The basic requirement for the strategies code is that it should not contain gateway specific operations. For example, if we are talking about the
+			<token>openecry</token> the strategy code should not have methods to work with <link xlink:href="a1e2b191-995c-4b03-9858-8fe9d2ae1fa1"/>.
 		</para>
     </introduction>
 
-    <!--<section>
-      <title>A topic section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
-
     <relatedTopics>
-      <!-- Supported Link Types
     
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-        
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
     </relatedTopics>
 
   </developerConceptualDocument>

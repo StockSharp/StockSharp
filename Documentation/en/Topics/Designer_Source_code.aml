@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Source_code_00"/>
+</mediaLink>
+<para>The cube is used to add cubes created from the source code
+(<link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" />). 
+ </para>
+<definitionTable>
+  <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Name of strategy type</legacyBold> - the name of 
+  the strategy type that you want to add.</para></listItem>
+
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="6971235a-c9e5-4606-a266-5df4a3b9da94" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

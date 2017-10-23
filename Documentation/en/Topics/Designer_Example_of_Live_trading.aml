@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="91644d63-00b3-416f-8677-ca57dfa8032e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To run an example in <legacyBold>Live</legacyBold> you will need:</para>
+<para>1.	Testing terminal <legacyBold>IB Trader Workstation (TWS) Demo</legacyBold> from 
+<link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" />, you can get it on 
+the manufacturer's website.</para>
+
+<para>2.	Set the IB TWS Demo terminal for work with <token>designer</token>. 
+See the <legacyBold>IB TWS Setting demo</legacyBold> in the 
+<link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" /> section.</para>
+<para>3.	Set connection to the IB TWS Demo in <token>designer</token> and connect.</para>
+<para>4.	Download history for the required instrument. For example, the 
+<legacyBold>AAPL@NASDAQ</legacyBold> instrument will be used. The strategy will 
+use candles with a time frame of 5 seconds, and history will not be needed, but 
+such a history will be sufficient to demonstrate the possibility.</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_00"/>
+</mediaLink>
+<para>5.	Set and run the strategy.</para>
+
+<para>The following parameters will be used in the example with the SMA strategy.</para>
+
+
+<list class="bullet">
+  <listItem><para><legacyBold>AAPL@NASDAQ</legacyBold> instrument</para></listItem>
+  <listItem><para>Standard storage <legacyBold>\Documents\StockSharp\Designer\Storage</legacyBold></para></listItem>
+  <listItem><para>Storage format - <legacyBold>CSV</legacyBold></para></listItem>
+  <listItem><para>Type of data, taken from the storage - <legacyBold>Ticks</legacyBold></para></listItem>
+  <listItem><para>Candles with time-frame of 5 s</para></listItem>
+  <listItem><para>Volume - 100</para></listItem>
+  <listItem><para>History days - 2</para></listItem>
+</list>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_01"/>
+</mediaLink>
+
+<para>After setting up all the required parameters, start up the strategy 
+testing by clicking the 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>
+Start button.</para>
+<para>After clicking the 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline> 
+Start button, the chart will start displaying the entire downloaded history for 
+2 days:</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_02"/>
+</mediaLink>
+<para>After downloading the entire history from the 
+<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> 
+and the Table of anonymous trades from the terminal, the strategy will start 
+trading.</para>
+<para>The chart below shows the trades from <token>designer</token>.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_03"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

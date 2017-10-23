@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4a0cd565-b871-4be3-91a2-423eadb1540f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Graph_options_positions_00"/>
+</mediaLink>
+<para>Кубик используется для отображения <legacyBold>Графика позиций опционов</legacyBold>.</para>
+<para>Для отображения <legacyBold>Графика позиций опционов</legacyBold> 
+необходимо добавить графический компонент <legacyBold>График позиций опционов</legacyBold>.</para> 
+
+
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, базовый актив.</para></listItem>
+  <listItem><para><legacyBold>Цена базового актива</legacyBold> – цена базового актива.</para></listItem>
+  <listItem><para><legacyBold>Опционы</legacyBold> – список опционов из кубика <legacyBold>Деривативы</legacyBold>.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+<mediaLink>
+<image xlink:href="Designer_Graph_options_positions_01"/>
+</mediaLink>
+<mediaLink>
+<image xlink:href="Designer_Graph_options_positions_02"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="8642146a-2f86-475a-b447-e9106195717e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

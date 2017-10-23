@@ -31,154 +31,316 @@ namespace SampleIB
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class SecuritiesWindow
 	{
 		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
-		private readonly SynchronizedDictionary<CandleSeries, CandlesWindow> _сandles = new SynchronizedDictionary<CandleSeries, CandlesWindow>();
-		private readonly SynchronizedSet<Security> _reportSecurities = new SynchronizedSet<Security>();
+		private readonly SynchronizedDictionary<CandleSeries, CandlesWindow> _historyCandles = new SynchronizedDictionary<CandleSeries, CandlesWindow>();
+		private readonly SynchronizedDictionary<CandleSeries, CandlesWindow> _realTimeCandles = new SynchronizedDictionary<CandleSeries, CandlesWindow>();
+		private readonly Dictionary<Security, long[]> _reportSecurities = new Dictionary<Security, long[]>();
+		private readonly Dictionary<Security, long> _optionSecurities = new Dictionary<Security, long>();
+		private bool _mdInitialized;
+		private bool _optionsInitialized;
+		private bool _histogramInitialized;
 
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = IBTimeFrames.AllTimeFrames;
-			CandlesPeriods.SelectedItem = IBTimeFrames.Hour;
+			CandlesPeriods.ItemsSource = InteractiveBrokersTimeFrames.AllTimeFrames;
+			CandlesPeriods.SelectedItem = InteractiveBrokersTimeFrames.Hour;
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			if (Trader != null)
+			{
+				if (_mdInitialized)
+					Trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
+
+				if (_optionsInitialized)
+					Trader.NewOptionParameters -= TraderOnNewOptionParameters;
+
+				if (_histogramInitialized)
+					Trader.NewHistogramData -= TraderOnNewHistogramData;
+
+				_reportSecurities.SelectMany(p => p.Value).ForEach(Trader.UnSubscribeFundamentalReport);
+				_optionSecurities.ForEach(p => Trader.UnSubscribeOptionCalc(p.Value));
+
+				_reportSecurities.Clear();
+				_optionSecurities.Clear();
+			}
+
+			base.OnClosed(e);
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{
 			var newOrder = new OrderWindow
 			{
-				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+				Order = new Order { Security = SelectedSecurity },
+				SecurityProvider = Trader,
+				MarketDataProvider = Trader,
+				Portfolios = new PortfolioDataSource(Trader),
 			};
 
 			if (newOrder.ShowModal(this))
-				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+				Trader.RegisterOrder(newOrder.Order);
 		}
 
-		private Security SelectedSecurity
-		{
-			get { return SecurityPicker.SelectedSecurity; }
-		}
+		private Security SelectedSecurity => SecurityPicker.SelectedSecurity;
 
-		private static IBTrader Trader
-		{
-			get { return MainWindow.Instance.Trader; }
-		}
+		private static InteractiveBrokersTrader Trader => MainWindow.Instance.Trader;
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Level1.IsEnabled = Reports.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = HistoryCandles.IsEnabled = RealTimeCandles.IsEnabled = security != null;
+			Histogram.IsEnabled = Options.IsEnabled = Level1.IsEnabled = Reports.IsEnabled = NewOrder.IsEnabled
+				= Depth.IsEnabled = HistoryCandles.IsEnabled = RealTimeCandles.IsEnabled = security != null;
 
 			if (security == null)
 				return;
 
+			Options.IsEnabled = security.Type == SecurityTypes.Future || security.Type == SecurityTypes.Option;
+
 			Level1.IsChecked = Trader.RegisteredSecurities.Contains(SelectedSecurity);
-			Reports.IsChecked = _reportSecurities.Contains(SelectedSecurity);
-			RealTimeCandles.IsChecked = _сandles.Keys.Any(s => s.Security == SelectedSecurity);
+			Reports.IsChecked = _reportSecurities.ContainsKey(SelectedSecurity);
+			Options.IsChecked = _optionSecurities.ContainsKey(SelectedSecurity);
+			RealTimeCandles.IsChecked = _realTimeCandles.Keys.Any(s => s.Security == SelectedSecurity);
 			Depth.IsChecked = _quotesWindows.ContainsKey(SelectedSecurity);
 		}
 
 		private void Level1Click(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
 			var trader = Trader;
 
-			if (trader.RegisteredSecurities.Contains(security))
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				trader.UnRegisterSecurity(security);
-				trader.UnRegisterTrades(security);
-			}
-			else
-			{
-				trader.RegisterSecurity(security);
-				trader.RegisterTrades(security);
+				if (trader.RegisteredSecurities.Contains(security))
+				{
+					trader.UnRegisterSecurity(security);
+					//trader.UnRegisterTrades(security);
+				}
+				else
+				{
+					trader.RegisterSecurity(security);
+					//trader.RegisterTrades(security);
+				}
 			}
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)
 		{
-			if (Depth.IsChecked == true)
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create order book window
-				var wnd = new QuotesWindow { Title = SelectedSecurity.Id + " " + LocalizedStrings.MarketDepth };
-				_quotesWindows.Add(SelectedSecurity, wnd);
+				var wnd = _quotesWindows.TryGetValue(security);
 
-				// subscribe on order book flow
-				Trader.RegisterMarketDepth(SelectedSecurity);
+				if (wnd == null)
+				{
+					// create order book window
+					wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					_quotesWindows.Add(security, wnd);
 
-				wnd.Show();
+					// subscribe on order book flow
+					Trader.RegisterMarketDepth(security);
+
+					wnd.Show();
+					wnd.DepthCtrl.UpdateDepth(Trader.GetMarketDepth(security));
+				}
+				else
+				{
+					Trader.UnRegisterMarketDepth(security);
+
+					_quotesWindows.Remove(security);
+
+					wnd.Close();
+				}
+
+				if (!_mdInitialized)
+				{
+					Trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_mdInitialized = true;
+				}
 			}
-			else
-			{
-				Trader.UnRegisterMarketDepth(SelectedSecurity);
+		}
 
-				var wnd = _quotesWindows[SelectedSecurity];
-				_quotesWindows.Remove(SelectedSecurity);
-				wnd.Close();
-			}
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
+		{
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
+
+			wnd?.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			new FindSecurityWindow().ShowModal(this);
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL", Type = SecurityTypes.Stock } };
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			Trader.LookupSecurities(wnd.Criteria);
 		}
 
-		public void AddCandles(CandleSeries series, IEnumerable<Candle> candles)
+		public void AddCandle(CandleSeries series, Candle candle)
 		{
-			var wnd = _сandles.TryGetValue(series);
-			if (wnd != null)
-				candles.ForEach(wnd.ProcessCandles);
+			var wnd = _realTimeCandles.TryGetValue(series) ?? _historyCandles.TryGetValue(series);
+
+			wnd?.ProcessCandles(candle);
 		}
 
 		private void HistoryCandlesClick(object sender, RoutedEventArgs e)
 		{
-			var series = new CandleSeries
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				CandleType = typeof(TimeFrameCandle),
-				Security = SelectedSecurity,
-				Arg = CandlesPeriods.SelectedItem,
-			};
+				var series = new CandleSeries
+				{
+					CandleType = typeof(TimeFrameCandle),
+					Security = security,
+					Arg = CandlesPeriods.SelectedItem,
+				};
 
-			var wnd = new CandlesWindow { Title = series.ToString() };
-			_сandles.Add(series, wnd);
-			Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromTicks(((TimeSpan)series.Arg).Ticks * 30)), DateTime.Now);
-			wnd.Show();
+				var wnd = new CandlesWindow
+				{
+					Title = series.ToString()
+				};
+				_historyCandles.Add(series, wnd);
+				Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromTicks(((TimeSpan)series.Arg).Ticks * 30)), DateTime.Now);
+				wnd.Show();
+			}
 		}
 
 		private void RealTimeCandlesClick(object sender, RoutedEventArgs e)
 		{
-			var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, IBTimeFrames.Second5);
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, InteractiveBrokersTimeFrames.Second5);
 
-			if (RealTimeCandles.IsChecked == true)
-			{
-				var wnd = new CandlesWindow { Title = SelectedSecurity.Id + LocalizedStrings.Str2973 };
-				_сandles.Add(series, wnd);
-				Trader.SubscribeCandles(series, DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
-				wnd.Show();
-			}
-			else
-			{
-				Trader.UnSubscribeCandles(series);
-				_сandles.GetAndRemove(series).Close();
+				if (_realTimeCandles.Keys.Any(s => s.Security == security))
+				{
+					Trader.UnSubscribeCandles(series);
+					_realTimeCandles.GetAndRemove(series).Close();
+
+					RealTimeCandles.IsChecked = false;
+				}
+				else
+				{
+					var wnd = new CandlesWindow
+					{
+						Title = security.Id + LocalizedStrings.Str2973
+					};
+					_realTimeCandles.Add(series, wnd);
+					Trader.SubscribeCandles(series);
+					wnd.Show();
+
+					RealTimeCandles.IsChecked = true;
+				}
 			}
 		}
 
 		private void ReportsClick(object sender, RoutedEventArgs e)
 		{
-			var security = SelectedSecurity;
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var ids = _reportSecurities.TryGetValue(security);
 
-			var isSubscribe = _reportSecurities.TryAdd(security);
+				if (ids == null)
+				{
+					ids = Enumerator.GetValues<FundamentalReports>()
+						.Select(report => Trader.SubscribeFundamentalReport(security, report))
+						.ToArray();
 
-			if (!isSubscribe)
-				_reportSecurities.Remove(security);
+					_reportSecurities.Add(security, ids);
+					Reports.IsChecked = true;
+				}
+				else
+				{
+					_reportSecurities.Remove(security);
 
-			foreach (var report in Enumerator.GetValues<FundamentalReports>())
-				Trader.SubscribeFundamentalReport(security, report, isSubscribe);
+					ids.ForEach(Trader.UnSubscribeFundamentalReport);
+
+					Reports.IsChecked = false;
+				}
+			}
+		}
+
+		private void OptionsClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				if (security.Type == SecurityTypes.Option)
+				{
+					var id = _optionSecurities.TryGetValue2(security);
+
+					if (id == null)
+					{
+						var wnd = new OptionWindow();
+
+						if (!wnd.ShowModal(this))
+							return;
+
+						id = Trader.SubscribeOptionCalc(security, wnd.Volatility, wnd.OptionPrice, wnd.AssetPrice);
+						_optionSecurities.Add(security, id.Value);
+						Options.IsChecked = true;
+					}
+					else
+					{
+						Trader.UnSubscribeOptionCalc(id.Value);
+						_optionSecurities.Remove(security);
+						Options.IsChecked = false;
+					}
+				}
+				else
+				{
+					if (!_optionsInitialized)
+					{
+						Trader.NewOptionParameters += TraderOnNewOptionParameters;
+						_optionsInitialized = true;
+					}
+
+					Trader.RequestOptionParameters(security);
+				}
+			}
+		}
+
+		private void TraderOnNewOptionParameters(string tradingClass, decimal? multiplier, IEnumerable<DateTimeOffset> expirations, IEnumerable<decimal> strikes)
+		{
+			this.GuiAsync(() =>
+			{
+				new MessageBoxBuilder()
+					.Caption($"Options = {tradingClass}")
+					.Text($@"Expirations: {expirations.Select(e => e.Date.ToString()).Join(", ")}
+Strikes: {strikes.Select(s => s.ToString()).Join(", ")}")
+					.Owner(this)
+					.Show();
+			});
+		}
+
+		private void HistogramClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				if (!_histogramInitialized)
+				{
+					Trader.NewHistogramData += TraderOnNewHistogramData;
+					_histogramInitialized = true;
+				}
+
+				Trader.SubscribeHistogram(security, DateTime.Today.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+			}
+		}
+
+		private void TraderOnNewHistogramData(long requestId, IEnumerable<Tuple<decimal, long>> data)
+		{
+
 		}
 	}
 }

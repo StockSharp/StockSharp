@@ -39,6 +39,15 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
+		/// Client code assigned by the broker.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// Text position description.
 		/// </summary>
 		[DataMember]
@@ -93,7 +102,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() +  $",Sec={SecurityId},P={PortfolioName}";
+			return base.ToString() +  $",Sec={SecurityId},P={PortfolioName},CL={ClientCode}";
 		}
 
 		/// <summary>

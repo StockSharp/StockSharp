@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("MFI")]
 	[DescriptionLoc(LocalizedStrings.Str853Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class MarketFacilitationIndex : BaseIndicator
 	{
 		/// <summary>

@@ -12,22 +12,39 @@
            a specific number of sub-topics when creating the outline.  Specify
            http://www.mathworks.com  -->
       <!-- <autoOutline /> -->
+      <mediaLink><image placement="center" xlink:href="matlab_stocksharp"/></mediaLink>
       <para>
-		  <token>matlab</token> предоставляет возможность использовать в своих скриптах <token>dotnet</token> классы, в том числе и <token>stocksharp</token>.
+		  <token>matlab</token> создан для трейдеров, которые пишут торговые алгоритмы внутри среды <externalLink>
+			<linkText>MatLab MathWorks</linkText>
+			<linkAlternateText>MathWorks</linkAlternateText>
+			<linkUri>http://www.mathworks.com</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>.
 	  </para>
 		<para>
-			Интеграция между <token>matlab</token> и <token>stocksharp</token> позволяет создавать торговых роботов (или аналитические
-			программы, оперирующие данными напрямую с торговых площадок) в единой среде языка M.
+			Интеграционный коннектор <token>matlab</token> позволяет подключаться ко всем брокерам и биржам, что <token>stocksharp</token> (более 30 типов подключений,
+			все мировые площадки и финансовые рынки). MatLab скрипты смогут в реальном времени получать данные от торговых площадок и отправлять в них торговые приказы.
+		</para>
+		<para>
+			Детальные настройки, скрипты и документация доступна клиентам, купившим <token>matlab</token>.
+		</para>
+		<para>
+			<externalLink>
+				<linkText>Купить</linkText>
+				<linkAlternateText>Купить S#.MatLab</linkAlternateText>
+				<linkUri>http://stocksharp.ru/products/pricing/#matlab</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>
 		</para>
     </introduction>
-     <prerequisites>
+     <!--<prerequisites>
 		 <content>
 			 <para>
 				 <link xlink:href="5c13da7b-b6e4-4fd4-958a-66c93c58b941">Настройка Quik</link>
 			 </para>
 		 </content>
 	 </prerequisites> 
-    <!-- One or more procedure or section with procedure -->
+
     <procedure>
       <title>Связь MatLab и Quik</title>
       <steps class="ordered">
@@ -59,7 +76,7 @@ addlistener(trader, 'OrdersChanged', @ordersChanged);
 addlistener(trader, 'NewMyTrades', @newMyTrades);
 addlistener(trader, 'NewPositions', @newPositions);
 addlistener(trader, 'PositionsChanged', @positionsChanged);
-addlistener(trader, 'ProcessDataError', @processError);
+addlistener(trader, 'Error', @processError);
 addlistener(trader, 'ConnectionError', @processError);
 			  </code>
           </content>
@@ -183,7 +200,7 @@ RegisterOrder(trader.RealTrader, order);
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
 
-    </relatedTopics>  
+    </relatedTopics>-->  
     
     
     

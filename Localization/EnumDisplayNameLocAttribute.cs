@@ -22,7 +22,7 @@ namespace StockSharp.Localization
 	/// <summary>
 	/// Specifies the display name for an enum.
 	/// </summary>
-	[AttributeUsageAttribute(AttributeTargets.Field)]
+	[AttributeUsage(AttributeTargets.Field)]
 	public class EnumDisplayNameLocAttribute : EnumDisplayNameAttribute
 	{
 		/// <summary>

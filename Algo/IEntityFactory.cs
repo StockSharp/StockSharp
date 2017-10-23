@@ -296,7 +296,7 @@ namespace StockSharp.Algo
 			return entity;
 		}
 
-		TEntity IStorage.GetBy<TEntity>(SerializationItemCollection @by)
+		TEntity IStorage.GetBy<TEntity>(SerializationItemCollection by)
 		{
 			throw new NotSupportedException();
 		}
@@ -334,7 +334,7 @@ namespace StockSharp.Algo
 			throw new NotSupportedException();
 		}
 
-		BatchContext IStorage.BeginBatch()
+		IBatchContext IStorage.BeginBatch()
 		{
 			throw new NotSupportedException();
 		}
@@ -351,20 +351,20 @@ namespace StockSharp.Algo
 
 		event Action<object> IStorage.Added
 		{
-			add { throw new NotSupportedException(); }
-			remove { throw new NotSupportedException(); }
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
 		}
 
 		event Action<object> IStorage.Updated
 		{
-			add { throw new NotSupportedException(); }
-			remove { throw new NotSupportedException(); }
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
 		}
 
 		event Action<object> IStorage.Removed
 		{
-			add { throw new NotSupportedException(); }
-			remove { throw new NotSupportedException(); }
+			add => throw new NotSupportedException();
+			remove => throw new NotSupportedException();
 		}
 	}
 }

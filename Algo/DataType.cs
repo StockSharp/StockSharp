@@ -18,11 +18,14 @@ namespace StockSharp.Algo
 	using System;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
+
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Data type info.
 	/// </summary>
-	public class DataType : Equatable<DataType>
+	public class DataType : Equatable<DataType>, IPersistable
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataType"/>.
@@ -39,15 +42,96 @@ namespace StockSharp.Algo
 			};
 		}
 
+		private bool _immutable;
+
+		private DataType Immutable()
+		{
+			_immutable = true;
+			return this;
+		}
+
+		/// <summary>
+		/// Level1.
+		/// </summary>
+		public static DataType Level1 { get; } = Create(typeof(Level1ChangeMessage), null).Immutable();
+
+		/// <summary>
+		/// Market depth.
+		/// </summary>
+		public static DataType MarketDepth { get; } = Create(typeof(QuoteChangeMessage), null).Immutable();
+
+		/// <summary>
+		/// Position changes.
+		/// </summary>
+		public static DataType PositionChanges { get; } = Create(typeof(PositionChangeMessage), null).Immutable();
+
+		/// <summary>
+		/// News.
+		/// </summary>
+		public static DataType News { get; } = Create(typeof(NewsMessage), null).Immutable();
+
+		/// <summary>
+		/// Securities.
+		/// </summary>
+		public static DataType Securities { get; } = Create(typeof(SecurityMessage), null).Immutable();
+
+		/// <summary>
+		/// Ticks.
+		/// </summary>
+		public static DataType Ticks { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Tick).Immutable();
+
+		/// <summary>
+		/// Order log.
+		/// </summary>
+		public static DataType OrderLog { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog).Immutable();
+
+		/// <summary>
+		/// Transactions.
+		/// </summary>
+		public static DataType Transactions { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Transaction).Immutable();
+
+		/// <summary>
+		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
+		/// </summary>
+		/// <param name="tf">Candle arg.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType TimeFrame(TimeSpan tf) => Create(typeof(TimeFrameCandleMessage), tf).Immutable();
+
+		private Type _messageType;
+
 		/// <summary>
 		/// Message type.
 		/// </summary>
-		public Type MessageType { get; set; }
+		public Type MessageType
+		{
+			get => _messageType;
+			set
+			{
+				if (_immutable)
+					throw new InvalidOperationException();
+
+				_messageType = value;
+				ReInitHashCode();
+			}
+		}
+
+		private object _arg;
 
 		/// <summary>
 		/// The additional argument, associated with data. For example, candle argument.
 		/// </summary>
-		public object Arg { get; set; }
+		public object Arg
+		{
+			get => _arg;
+			set
+			{
+				if (_immutable)
+					throw new InvalidOperationException();
+
+				_arg = value;
+				ReInitHashCode();
+			}
+		}
 
 		/// <summary>
 		/// Compare <see cref="DataType"/> on the equivalence.
@@ -59,6 +143,16 @@ namespace StockSharp.Algo
 			return MessageType == other.MessageType && (Arg?.Equals(other.Arg) ?? other.Arg == null);
 		}
 
+		private int _hashCode;
+
+		private void ReInitHashCode()
+		{
+			var h1 = MessageType?.GetHashCode() ?? 0;
+			var h2 = Arg?.GetHashCode() ?? 0;
+
+			_hashCode = ((h1 << 5) + h1) ^ h2;
+		}
+
 		/// <summary>
 		/// Serves as a hash function for a particular type. 
 		/// </summary>
@@ -67,10 +161,7 @@ namespace StockSharp.Algo
 		/// </returns>
 		public override int GetHashCode()
 		{
-			var h1 = MessageType?.GetHashCode() ?? 0;
-			var h2 = Arg?.GetHashCode() ?? 0;
-
-			return (((h1 << 5) + h1) ^ h2);
+			return _hashCode;
 		}
 
 		/// <summary>
@@ -95,6 +186,34 @@ namespace StockSharp.Algo
 		public override string ToString()
 		{
 			return "({0}, {1})".Put(MessageType, Arg);
+		}
+
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Load(SettingsStorage storage)
+		{
+			MessageType = storage.GetValue<Type>(nameof(MessageType));
+
+			if (MessageType == typeof(ExecutionMessage))
+				Arg = storage.GetValue<ExecutionTypes?>(nameof(Arg));
+			else if (MessageType.IsCandleMessage())
+				Arg = storage.GetValue(nameof(Arg), Arg);
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(MessageType), MessageType.GetTypeName(false));
+
+			if (MessageType == typeof(ExecutionMessage))
+				storage.SetValue(nameof(Arg), (ExecutionTypes?)Arg);
+			else
+				storage.SetValue(nameof(Arg), Arg);
 		}
 	}
 }

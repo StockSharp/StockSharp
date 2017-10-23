@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleRithmic
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
@@ -24,11 +23,14 @@ namespace SampleRithmic
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Rithmic;
 
 	public partial class SecuritiesWindow
 	{
@@ -39,18 +41,19 @@ namespace SampleRithmic
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = new[]
-			{
-				TimeSpan.FromTicks(1),
-				TimeSpan.FromMinutes(1),
-				TimeSpan.FromMinutes(5),
-				//TimeSpan.FromMinutes(30),
-				TimeSpan.FromHours(1),
-				TimeSpan.FromDays(1),
-				TimeSpan.FromDays(7),
-				TimeSpan.FromDays(30)
-			};
+			CandlesPeriods.ItemsSource = RithmicMessageAdapter.TimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			base.OnClosed(e);
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -95,15 +98,23 @@ namespace SampleRithmic
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			new FindSecurityWindow().ShowModal(this);
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
 		}
 
 		private void CandlesClick(object sender, RoutedEventArgs e)
 		{
-			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
-			var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
 
-			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now).Show();
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
+			}
 		}
 
 		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -120,56 +131,63 @@ namespace SampleRithmic
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				trader.RegisterMarketDepth(security);
+				var window = _quotesWindows.SafeAdd(security, s =>
+				{
+					// subscribe on order book flow
+					trader.RegisterMarketDepth(security);
 
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+				{
+					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
 			var trader = MainWindow.Instance.Trader;
 
-			if (trader.RegisteredSecurities.Contains(security))
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				trader.UnRegisterSecurity(security);
-				trader.UnRegisterTrades(security);
-			}
-			else
-			{
-				trader.RegisterSecurity(security);
-				trader.RegisterTrades(security);
+				if (trader.RegisteredSecurities.Contains(security))
+				{
+					trader.UnRegisterSecurity(security);
+					trader.UnRegisterTrades(security);
+				}
+				else
+				{
+					trader.RegisterSecurity(security);
+					trader.RegisterTrades(security);
+				}
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 	}
 }

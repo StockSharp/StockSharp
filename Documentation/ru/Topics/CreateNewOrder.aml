@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+	<introduction>
+	  <para>
+			 Для создания новой заявки необходимо создать объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
+		который содержит информацию о заявке и зарегистрировать его на бирже. 		
+		В дальнейшем, если требуется работа с заявкой (например, отменить ее или изменить),
+		то необходимо использовать именно этот объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
+		Для регистрации заявок на бирже предусмотрен 
+		метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> который 
+		отправляет заявку на сервер.</para>
+
+		<para>В примере ниже показано создание заявки и регистрация ее на бирже:</para>
+		      <code language="C#"><![CDATA[
+	var order = new Order
+    {
+        // устанавливается тип заявки, в данном примере лимитный
+        Type = OrderTypes.Limit,
+        // устанавливается портфель для исполнения заявки
+        Portfolio = Portfolio.SelectedPortfolio,
+        // устанавливается объём заявки
+        Volume = Volume.Text.To<decimal>(),
+        // устанавливается цена заявки
+        Price = Price.Text.To<decimal>(),
+        // устанавливается инструмент
+        Security = Security,
+        // устанавливается направление заявки, в данном примере покупка
+        Direction = Sides.Buy,
+    };
+	//Метод RegisterOrder отправляет заявку на сервер
+    Trader.RegisterOrder(order);
+    
+]]></code>
+	</introduction>
+
+
+
+
+    <relatedTopics>
+      
+		<link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Снятие заявок</link>
+    </relatedTopics>
+    
+  </developerHowToDocument>
+</topic>

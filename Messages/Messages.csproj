@@ -32,43 +32,48 @@
     <DocumentationFile>bin\Release\StockSharp.Messages.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Mvvm.v17.1">
+      <HintPath>..\References\DevExpress.Mvvm.v17.1.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\References\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\References\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\References\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Interop">
-      <HintPath>..\References\Ecng\Ecng.Interop.dll</HintPath>
+      <HintPath>..\References\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Net">
+      <HintPath>..\References\Ecng.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Reflection">
-      <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
+      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization.FieldFactories">
-      <HintPath>..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
+      <HintPath>..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\References\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
-      <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
+      <HintPath>..\References\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">
@@ -87,11 +92,15 @@
     <Compile Include="DisconnectMessage.cs" />
     <Compile Include="ExecutionMessage.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IDailyInfoSoap.cs" />
+    <Compile Include="MarketDataFinishedMessage.cs" />
     <Compile Include="IExtendableEntity.cs" />
     <Compile Include="IMessageAdapter.cs" />
+    <Compile Include="IMessageAdapterProvider.cs" />
     <Compile Include="IMessageAdapterWrapper.cs" />
     <Compile Include="InMemoryMessageChannel.cs" />
     <Compile Include="IOrderLogMarketDepthBuilder.cs" />
+    <Compile Include="MessagePriorityQueue.cs" />
     <Compile Include="ReConnectionSettings.cs" />
     <Compile Include="ResetMessage.cs" />
     <Compile Include="TargetPlatformAttribute.cs" />
@@ -120,7 +129,6 @@
     <Compile Include="PortfolioLookupResultMessage.cs" />
     <Compile Include="PortfolioMessage.cs" />
     <Compile Include="PositionChangeMessage.cs" />
-    <Compile Include="PositionMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuoteChange.cs" />
     <Compile Include="QuoteChangeMessage.cs" />
@@ -140,6 +148,7 @@
     <Compile Include="TimeMessage.cs" />
     <Compile Include="TPlusLimits.cs" />
     <Compile Include="Unit.cs" />
+    <Compile Include="CandleMessageVolumeProfile.cs" />
     <Compile Include="WorkingTime.cs" />
     <Compile Include="WorkingTimePeriod.cs" />
   </ItemGroup>

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b85d4d51-2824-44e5-aad1-0bde76d409ae" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Quoting_00"/>
+</mediaLink>
+<para>Кубик используется для котирования опционов согласно заданным параметрам.</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Опционы</legacyBold> – список опционов из кубика <legacyBold>Деривативы</legacyBold>.</para></listItem>
+  <listItem><para><legacyBold>Объем</legacyBold> – объём котирования.</para></listItem>
+
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, 
+которая может использоваться для получения сделок по ней с помощью элемента 
+<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью 
+кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Котирование</legacyBold> – по какому параметру будет проводиться котирование, может 
+принимать значения волатильность (котирование объема будет проходить по заданным 
+границам волатильности) и теоретическая цена (котирование объема будет проходить
+ по заданным границам теоретической цены).</para></listItem>
+  <listItem><para><legacyBold>Направление</legacyBold> – направление котирования может принимать значения Покупка и Продажа.</para></listItem>
+  <listItem><para><legacyBold>Минимальное</legacyBold> – минимальное значение волатильности или теоретической цены </para></listItem>
+  <listItem><para><legacyBold>Максимальное</legacyBold> – максимальное значение волатильности или теоретической цены</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="7f308694-a0c5-4c1a-8aa7-4f7b2b129f0c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

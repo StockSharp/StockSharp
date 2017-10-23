@@ -2,16 +2,20 @@
 <topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Вы можете загрузить готовый скрипт при помощи кнопки <mediaLinkInline>
-<image xlink:href="hydra_analitics_folder"/></mediaLinkInline> или создать его в редакторе <token>hydra</token>. Скрипт должен быть классом, унаследованным от класса <legacyItalic>BaseAnalyticsStrategy</legacyItalic>. Готовый скрипт необходимо откомпилировать при помощи кнопки <mediaLinkInline>
-<image xlink:href="hydra_analitics_compile"/></mediaLinkInline>. Результат компиляции отображается в окне <legacyBold>Список ошибок</legacyBold>. Для подключения нужных библиотек используется кнопка <mediaLinkInline>
+      <para>После нажатия на кнопку <legacyBold>Аналитика</legacyBold> появится окно с выбором готового скрипта 
+      или пустого шаблона для редактирования его в редакторе <token>hydra</token>.
+Скрипт должен быть классом, унаследованным от класса <legacyItalic>BaseAnalyticsStrategy</legacyItalic>. 
+Для запуска аналитики необходимо нажать кнопку <legacyBold>Старт</legacyBold> <mediaLinkInline>
+<image xlink:href="hydra_analitics_compile"/></mediaLinkInline>. Результат компиляции отображается в 
+окне <legacyBold>Список ошибок</legacyBold>. Для подключения нужных библиотек используется кнопка <legacyBold>Ссылки</legacyBold> <mediaLinkInline>
 <image xlink:href="hydra_analitics_references"/></mediaLinkInline>.</para>
       <mediaLink>
-        <image placement="left" xlink:href="hydra_analitics_main" />
+        <image placement="center" xlink:href="hydra_analitics_main" />
       </mediaLink>
       
      <alert class="note">
-  		<para>В стандартную поставку <token>hydra</token> входят два готовых скрипта: "анализ объема с разбивкой по часам" и "анализ объема с разбивкой по цене".</para>
+  		<para>В стандартную поставку <token>hydra</token> входят два готовых скрипта: 
+  		"Объем внутри дня" и "Профиль объема".</para>
 	 </alert>
 
       

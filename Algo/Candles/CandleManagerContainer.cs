@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Candles
 			private readonly CandleManagerContainer _container;
 			private const int _candlesCapacity = 10000;
 
-			private readonly SynchronizedDictionary<DateTimeOffset, SynchronizedSet<Candle>> _byTime = new SynchronizedDictionary<DateTimeOffset, SynchronizedSet<Candle>>(_candlesCapacity);
+			private readonly SynchronizedDictionary<long, SynchronizedSet<Candle>> _byTime = new SynchronizedDictionary<long, SynchronizedSet<Candle>>(_candlesCapacity);
 			private readonly SynchronizedLinkedList<Candle> _allCandles = new SynchronizedLinkedList<Candle>();
 
 			private long _firstCandleTime;
@@ -79,13 +79,15 @@ namespace StockSharp.Algo.Candles
 				if (candle == null)
 					throw new ArgumentNullException(nameof(candle));
 
-				if (!_byTime.SafeAdd(candle.OpenTime).TryAdd(candle))
+				var ticks = candle.OpenTime.UtcTicks;
+
+				if (!_byTime.SafeAdd(ticks).TryAdd(candle))
 					return false;
 
 				_allCandles.AddLast(candle);
 				_candleStat.Add(candle);
 
-				_lastCandleTime = candle.OpenTime.UtcTicks;
+				_lastCandleTime = ticks;
 
 				RecycleCandles();
 
@@ -116,12 +118,12 @@ namespace StockSharp.Algo.Candles
 					}
 				});
 
-				_byTime.SyncGet(d => d.RemoveWhere(p => p.Key.UtcTicks < _firstCandleTime));
+				_byTime.SyncGet(d => d.RemoveWhere(p => p.Key < _firstCandleTime));
 			}
 
 			public IEnumerable<Candle> GetCandles(DateTimeOffset time)
 			{
-				var candles = _byTime.TryGetValue(time);
+				var candles = _byTime.TryGetValue(time.UtcTicks);
 
 				return candles != null ? candles.SyncGet(c => c.ToArray()) : Enumerable.Empty<Candle>();
 			}
@@ -158,7 +160,7 @@ namespace StockSharp.Algo.Candles
 		/// </remarks>
 		public TimeSpan CandlesKeepTime
 		{
-			get { return _candlesKeepTime; }
+			get => _candlesKeepTime;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -219,10 +221,10 @@ namespace StockSharp.Algo.Candles
 		public Candle GetCandle(CandleSeries series, int candleIndex)
 		{
 			if (candleIndex < 0)
-				throw new ArgumentOutOfRangeException(nameof(candleIndex));
+				throw new ArgumentOutOfRangeException(nameof(candleIndex), candleIndex, LocalizedStrings.Str1219);
 
 			var info = GetInfo(series);
-			return info != null ? info.GetCandle(candleIndex) : null;
+			return info?.GetCandle(candleIndex);
 		}
 
 		/// <summary>
@@ -247,7 +249,7 @@ namespace StockSharp.Algo.Candles
 		public IEnumerable<Candle> GetCandles(CandleSeries series, int candleCount)
 		{
 			if (candleCount <= 0)
-				throw new ArgumentOutOfRangeException(nameof(candleCount));
+				throw new ArgumentOutOfRangeException(nameof(candleCount), candleCount, LocalizedStrings.Str1219);
 
 			return GetCandles(series)
 							.OrderByDescending(c => c.OpenTime)
@@ -263,7 +265,7 @@ namespace StockSharp.Algo.Candles
 		public int GetCandleCount(CandleSeries series)
 		{
 			var info = GetInfo(series);
-			return info == null ? 0 : info.CandleCount;
+			return info?.CandleCount ?? 0;
 		}
 
 		/// <summary>
@@ -272,13 +274,13 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		/// <param name="from">The initial date from which the candles will be get.</param>
 		/// <param name="to">The final date by which the candles will be get.</param>
-		public void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		public void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
 			var info = _info.SafeAdd(series, key => new SeriesInfo(this));
-			info.Reset(from);
+			info.Reset(from ?? DateTimeOffset.MinValue);
 		}
 
 		private SeriesInfo GetInfo(CandleSeries series)

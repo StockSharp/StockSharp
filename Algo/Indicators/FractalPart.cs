@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// Part <see cref="Fractals"/>.
 	/// </summary>
+	[IndicatorOut(typeof(ShiftedIndicatorValue))]
 	public class FractalPart : BaseIndicator
 	{
 		/// <summary>

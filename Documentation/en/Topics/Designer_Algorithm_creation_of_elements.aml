@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To create schemas of strategies and composite elements, and to test the 
+obtained strategies on historical data, you can use an example of the strategy 
+of moving average (SMA). It allows you to go through a complete cycle from 
+creating a strategy to its testing and debugging. The strategy of moving average 
+(SMA) can be found in the <legacyBold>Strategies</legacyBold> folder of 
+the <legacyBold>Schemas</legacyBold> panel.</para>
+
+<para>1. Creating a new strategy from the cubes as described 
+in <link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" />. To add a new 
+strategy by click the <legacyBold>Add</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> button 
+in the <legacyBold>Common</legacyBold> tab and selecting <legacyBold>Strategy</legacyBold>. 
+Or by right-click the <legacyBold>Strategy</legacyBold> folder in 
+the <legacyBold>Schemas</legacyBold> panel, and to click 
+the <legacyBold>Add</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> 
+button in the drop-down menu.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_00"/>
+</mediaLink>
+
+<para>After clicking the <legacyBold>Add</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> 
+button in the <legacyBold>Strategy</legacyBold> folder of 
+the <legacyBold>Schemas</legacyBold> panel, a new strategy will appear.  
+In the workspace, a new tab with a strategy appears, when you switch to it, the 
+<legacyBold>Emulation</legacyBold> tab will automatically open in the ribbon. In 
+the <legacyBold>Emulation</legacyBold> tab, you 
+can change the name of the strategy and give it a brief description.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_01"/>
+</mediaLink>
+<para>2. For convenient work it is necessary to open and fix 
+the <legacyBold>Palette</legacyBold> and <legacyBold>Properties</legacyBold> 
+panels of the <legacyBold>Schemas</legacyBold> area by clicking 
+the <mediaLinkInline><image xlink:href="Designer_Algorithm_creation_of_cubes_13"/></mediaLinkInline>
+button. The result is a window of the following type.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_00"/>
+</mediaLink>
+<para>3.	The essence of the strategy of moving average (SMA) is as follows:</para>
+
+<list class="bullet">
+  <listItem><para>There are two moving averages with different calculation 
+  periods, a long SMA and a short SMA. In the example, 
+  the <link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" /> cube of the 
+  long SMA is called Long SMA with a period of 80 candles, a short SMA is called 
+  Short SMA with a period of 10 candles.</para></listItem>
+  <listItem><para>When a short moving average crosses a long one bottom-up, 
+  open a long position.</para></listItem>
+  <listItem><para>When a short moving average crosses a long one top-down, 
+  open a short position.</para></listItem>
+  <listItem><para>If there is an opposite position at the moment of receiving 
+  a signal to open a position, turn around the position.</para></listItem>
+</list>
+<para>4.	For all strategies, you need an instrument and a portfolio, which 
+will be used for trades. You should add them from the <legacyBold>Palette</legacyBold> 
+panel to the <legacyBold>Designer</legacyBold> panel. In the example, 
+the <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> cube with the 
+<legacyBold>Instrument</legacyBold> type is called the Instrument, 
+the  <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> cube with the 
+<legacyBold>Portfolio</legacyBold> type is called the Portfolio. 
+Set the <legacyBold>Parameters</legacyBold> check box 
+of Instrument and Portfolio cubes. When the check box is selected, 
+the cube will take value from the strategy settings. If you do not 
+select the check box, you should manually enter the instrument and 
+portfolio values. If you leave the Value field of 
+the <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> cube empty and 
+do not set check box of parameters, the strategy during testing will give an 
+error out about the unset value of 
+the <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> cube.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_01"/>
+</mediaLink>
+<para>If you need to use several instruments or portfolios in the strategy, 
+then for each cube you should uncheck the <legacyBold>Parameters</legacyBold> 
+box and set the value of the instrument or portfolio.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_02"/>
+</mediaLink>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_03"/>
+</mediaLink>
+<para>5.	After adding the instrument and portfolio, you should add two 
+<link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" /> 
+cubes, select the SMA type, name the first Long SMA, set the period of 80 candles, 
+name the second Short SMA, set the period of 10 candles.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_04"/>
+</mediaLink>
+<para>6.	For the indicators to work, it is necessary to pass to them a series 
+of candles. To do this, you need to create the 
+<link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" /> cube. In the example, 
+only formed candles with a timeframe of 5 minutes are used.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_05"/>
+</mediaLink>
+<para>7.	After adding the indicators, you need to add two cubes that define 
+the intersections of the indicators. These are the 
+<link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" /> cubes from the composite 
+elements. The first cube is called Crossing Up. It defines the intersection from 
+bottom to top. The Short SMA indicator is passed to the upper input of the cube, 
+and the Long SMA indicator to the lower input. The CurrComparison operator is set 
+to a value larger, the PrevComparison operator is set to less than or equal to. 
+The second cube is called Crossing Down, it defines the intersection from top to 
+bottom. The Short SMA indicator is passed to the upper input of the cube, and 
+the Long SMA indicator to the lower input. The CurrComparison operator is set to 
+a value less, the PrevComparison operator is set to greater than or equal to.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_06"/>
+</mediaLink>
+<para>8.	It is worth adding the 
+<link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" /> for a visual display 
+of candles, indicators and trades. We will add to the 
+<link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" /> the elements of the 
+display, candles, two indicators and trades.</para>
+    <mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_07"/>
+</mediaLink>
+ <para>9.	As a source of trades for display on the chart the 
+ <legacyBold>Trades</legacyBold> cube of
+ the strategy is used. The example is called Strategy trades.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_08"/>
+</mediaLink>   
+    <para>10.	To open a position, add two 
+    <link xlink:href="33d15f2c-5d73-4c95-8e67-2612d34f14a2" />
+    cubes. The first cube is for the purchase by a market order. The following 
+    are passed to the input of this cube: the <legacyBold>Instrument</legacyBold>, 
+    the signal for opening
+    a position from the Crossing Up intersection cube, the 
+    <legacyBold>Portfolio</legacyBold> and the
+    volume of the order. The second cube is for sale by a market order. The 
+    following are passed to the input of this cube: 
+    the <legacyBold>Instrument</legacyBold>, the signal
+    for opening a position from the Crossing Down intersection cube, 
+    the <legacyBold>Portfolio</legacyBold> and the volume of the order.</para>
+    <mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_09"/>
+</mediaLink>
+    <para>11.	By connecting the above elements with lines 
+    (<link xlink:href="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" />), a schema is 
+    obtained without taking into account the current position of the strategy. 
+    In such condition, it will gain an excessive amount of lots.</para>
+    <mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_10"/>
+</mediaLink>
+<para>To control the position, you need to add the 
+<link xlink:href="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" />, 
+cube to the input of which <legacyBold>Instrument</legacyBold> and 
+<legacyBold>Portfolio</legacyBold> are passed.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_11"/>
+</mediaLink>
+<para>To process the current position, you can use the ready-made schema 
+described in the <link xlink:href="486b67a3-790c-48c6-87bf-045e058f2a96" /> section. 
+This schema determines the actual value of the required volume for the registering 
+in the order. And if it is necessary to reverse the position, it will give twice 
+the value of the portfolio.</para>
+<para>12.	As a result, the completed strategy looks like:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Algorithm_creation_of_cubes_12"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="cab51564-727a-483e-8cf1-d179ebcb2944" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

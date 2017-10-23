@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0fc19f50-24cb-4f8b-bb22-728968686f8b" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To work with portfolios there is the <legacyBold>Portfolios</legacyBold> panel. 
+You can open it by clicking the Portfolios button in the <legacyBold>Common</legacyBold> tab.</para>
+<mediaLink><image xlink:href="Designer_Panel_A_Portfolios_00"/></mediaLink>
+<para>The <legacyBold>Portfolios</legacyBold> panel is a table that shows the basic data on the portfolio, 
+and the current positions for these portfolios. By double-clicking on the portfolio 
+or position, the <legacyBold>Creating portfolio</legacyBold> window or the <legacyBold>Creating position</legacyBold> window appears 
+in which you can edit the selected portfolio or position. To create a new portfolio 
+or a new position, you should click the  <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> button 
+and select the appropriate item in the drop-down menu.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Panel_A_Portfolios_01"/>
+</mediaLink>
+
+<para>When you click the <mediaLinkInline><image xlink:href="Designer_Alert_Bell"/></mediaLinkInline> button, 
+the  <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" /> window opens.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="317b6393-19eb-424b-84ea-ccf70b0c9c18" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Crossing_00"/>
+</mediaLink>
+<para>Элемент используется для отслеживания положения двух значений относительно друг друга. 
+Например, определения момента пересечения двух линий (момент, когда предыдущее значение 
+первой линии было меньше второй, а текущее значение первой линии больше второй), 
+или пересечения значения определенного уровня.</para>
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Сравнение</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+  <listItem><para><legacyBold>Сравнение</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Флаг</legacyBold>  – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Оператор (Comparison)</legacyBold> – текущее значение.</para></listItem>
+  <listItem><para><legacyBold>Оператор (PrevComparison)</legacyBold> – предыдущее значение.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+
+<mediaLink>
+<image xlink:href="Designer_Crossing_01"/>
+</mediaLink>
+<para>Схема составного элемента состоит из элементов простого типа и основана на 
+запоминании текущих значений (Prev In 1 и Prev In 2) и сравнении пар, текущих 
+(CurrComparison) и предыдущих (PrevComparison) значений между собой. Т.к. каждое 
+из входных значений используется в двух элементах схемы, на входе составного 
+элемента поставлены элементы <link xlink:href="b596ee27-a887-4814-9ad7-56cd62cec38f" /> (In 1, In 2), которые позволяют один 
+вход разделить на два элемента и передать входное значение в элементы <link xlink:href="08ebe03d-a446-4738-98fb-44cff38ddfda" /> 
+и <link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" />. При поступлении нового значения на входе выполняется сравнение 
+текущих значений и передача нового значения в элемент <link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" />, 
+откуда на выходе передается предыдущее значение для текущего входа, после 
+чего выполняется сравнение предыдущих значений, и если оба условия выполняются, 
+что проверяется с помощью элемента Логическое условие (And), то на выход составного 
+элемента передается значение поднятого флага, которое может использоваться как триггер 
+для выполнения дальнейших действий.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

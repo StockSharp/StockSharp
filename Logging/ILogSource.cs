@@ -17,6 +17,7 @@ namespace StockSharp.Logging
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -90,12 +91,15 @@ namespace StockSharp.Logging
 		/// Source name (to distinguish in log files).
 		/// </summary>
 		[ReadOnly(true)]
-		[CategoryLoc(LocalizedStrings.LoggingKey)]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str7Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str7Key,
+			GroupName = LocalizedStrings.LoggingKey,
+			Order = 0)]
 		public virtual string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (value.IsEmpty())
@@ -113,7 +117,7 @@ namespace StockSharp.Logging
 		[Browsable(false)]
 		public ILogSource Parent
 		{
-			get { return _parent; }
+			get => _parent;
 			set
 			{
 				if (value == _parent)
@@ -122,6 +126,9 @@ namespace StockSharp.Logging
 				if (value != null && _parent != null)
 					throw new ArgumentException(LocalizedStrings.Str8Params.Put(this, _parent), nameof(value));
 
+				if (value == this)
+					throw new ArgumentException(LocalizedStrings.CyclicDependency.Put(this), nameof(value));
+
 				_parent = value;
 			}
 		}
@@ -129,9 +136,12 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// The logging level. The default is set to <see cref="LogLevels.Inherit"/>.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.LoggingKey)]
-		[DisplayNameLoc(LocalizedStrings.Str9Key)]
-		[DescriptionLoc(LocalizedStrings.Str9Key, true)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str9Key,
+			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.LoggingKey,
+			Order = 1)]
 		public virtual LogLevels LogLevel { get; set; } = LogLevels.Inherit;
 
 		/// <summary>
@@ -153,8 +163,8 @@ namespace StockSharp.Logging
 		/// </summary>
 		public event Action<LogMessage> Log
 		{
-			add { _log += value; }
-			remove { _log -= value; }
+			add => _log += value;
+			remove => _log -= value;
 		}
 
 		/// <summary>
@@ -168,9 +178,6 @@ namespace StockSharp.Logging
 
 			if (message.Level < message.Source.LogLevel)
 				return;
-
-			//if (_log == null && Parent.IsNull())
-			//	throw new InvalidOperationException("Родитель не подписан на дочерний лог.");
 
 			_log?.Invoke(message);
 

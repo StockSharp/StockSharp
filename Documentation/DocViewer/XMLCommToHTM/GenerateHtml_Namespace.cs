@@ -27,8 +27,7 @@ namespace XMLCommToHTM
 	{
 		static string Generate(NamespaceDom ns)
 		{
-			XElement body;
-			var doc = GetDoc(out body);
+			var doc = GetDoc(out var body);
 			body.Add(
 				x("h1", ns.Name + Names[Strings.SuffixDelimeter] + Names[Strings.Namespace])
 				);
@@ -40,7 +39,7 @@ namespace XMLCommToHTM
 			{
 				body.Add(BuildNsSection(
 					kind, 
-					ns.Types.Where(_=>_.TypeKind==kind).ToArray()
+					ns.Types.OrderBy(t => t.SimpleName).Where(_=>_.TypeKind==kind).ToArray()
 				));
 			}
 			return doc.ToString();

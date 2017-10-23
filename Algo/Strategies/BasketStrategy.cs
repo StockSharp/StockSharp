@@ -18,8 +18,6 @@ namespace StockSharp.Algo.Strategies
 	using System;
 	using System.Linq;
 
-	using Ecng.Collections;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -66,7 +64,7 @@ namespace StockSharp.Algo.Strategies
 		public BasketStrategyFinishModes FinishMode { get; }
 
 		/// <summary>
-		/// First stopped subsidiary strategy. The property is filled at <see cref="BasketStrategy.FinishMode"/> equals to <see cref="BasketStrategyFinishModes.First"/>.
+		/// First stopped subsidiary strategy. The property is filled at <see cref="FinishMode"/> equals to <see cref="BasketStrategyFinishModes.First"/>.
 		/// </summary>
 		public Strategy FirstFinishStrategy { get; private set; }
 
@@ -97,7 +95,7 @@ namespace StockSharp.Algo.Strategies
 					}
 					else
 					{
-						if (ChildStrategies.SyncGet(c => c.All(child => child.ProcessState != ProcessStates.Started)))
+						if (ChildStrategies.All(child => child.ProcessState != ProcessStates.Started))
 							Stop();
 					}
 				})

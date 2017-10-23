@@ -50,8 +50,7 @@ namespace XMLCommToHTM.DOM.Internal.DOC
 				var member = MemberDoc.ParseMember(node);
 				if (member != null)
 				{
-					TypeDoc type;
-					if (types.TryGetValue(member.Name.FullClassName, out type))
+					if (types.TryGetValue(member.Name.FullClassName, out var type))
 					{
 						type.Members.Add(member);
 					}
@@ -92,16 +91,15 @@ namespace XMLCommToHTM.DOM.Internal.DOC
 					continue;
 
 				string name = type.FullName.Replace('+', '.'); //Для nested классов type.FullName дает Class1+Class2, а по XML Class1.Class2  - невозможно отличить nested класс от namespace
-				TypeDoc docT;
-				if (docTypes.TryGetValue(name, out docT))
+				if (docTypes.TryGetValue(name, out var docT))
 				{
-					if(docT.ReflectionType!=null)
+					if (docT.ReflectionType != null)
 						throw new Exception("multiple types on single node");
 					docT.ReflectionType = type;
 				}
 				else if (findOptions.UndocumentedClasses)
 				{
-					docT = new TypeDoc { FullName = name , ReflectionType = type};
+					docT = new TypeDoc { FullName = name, ReflectionType = type };
 
 					if (!docT.FullName.Contains("XamlGeneratedNamespace"))
 						docTypes.Add(docT.FullName, docT);

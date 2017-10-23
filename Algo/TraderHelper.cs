@@ -18,17 +18,13 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Linq;
-	using System.ServiceModel;
 
-	using Ecng.Net;
 	using Ecng.Common;
 	using Ecng.Collections;
 
 	using MoreLinq;
 
-	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Positions;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
@@ -36,8 +32,6 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-
-	using Wintellect.PowerCollections;
 
 	/// <summary>
 	/// Price rounding rules.
@@ -61,75 +55,9 @@ namespace StockSharp.Algo
 	}
 
 	/// <summary>
-	/// The supplier of information on instruments, getting data from the collection.
-	/// </summary>
-	public class CollectionSecurityProvider : SynchronizedList<Security>, ISecurityProvider
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
-		/// </summary>
-		public CollectionSecurityProvider()
-			: this(Enumerable.Empty<Security>())
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
-		/// </summary>
-		/// <param name="securities">The instruments collection.</param>
-		public CollectionSecurityProvider(IEnumerable<Security> securities)
-		{
-			if (securities == null)
-				throw new ArgumentNullException(nameof(securities));
-
-			AddRange(securities);
-
-			AddedRange += s => _added?.Invoke(s);
-			RemovedRange += s => _removed?.Invoke(s);
-		}
-
-		private Action<IEnumerable<Security>> _added;
-
-		event Action<IEnumerable<Security>> ISecurityProvider.Added
-		{
-			add { _added += value; }
-			remove { _added -= value; }
-		}
-
-		private Action<IEnumerable<Security>> _removed;
-
-		event Action<IEnumerable<Security>> ISecurityProvider.Removed
-		{
-			add { _removed += value; }
-			remove { _removed -= value; }
-		}
-
-		void IDisposable.Dispose()
-		{
-		}
-
-		/// <summary>
-		/// Lookup securities by criteria <paramref name="criteria" />.
-		/// </summary>
-		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
-		/// <returns>Found instruments.</returns>
-		public IEnumerable<Security> Lookup(Security criteria)
-		{
-			//var provider = Securities as ISecurityProvider;
-			//return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
-			return this.Filter(criteria);
-		}
-
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return null;
-		}
-	}
-
-	/// <summary>
 	/// The auxiliary class for provision of various algorithmic functionalities.
 	/// </summary>
-	public static class TraderHelper
+	public static partial class TraderHelper
 	{
 		private static readonly bool[][] _stateChangePossibilities;
 
@@ -172,7 +100,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Chech the possibility order's state change.
+		/// Check the possibility order's state change.
 		/// </summary>
 		/// <param name="prev">Previous order's state.</param>
 		/// <param name="curr">Current order's state.</param>
@@ -180,7 +108,7 @@ namespace StockSharp.Algo
 		public static OrderStates CheckModification(this OrderStates prev, OrderStates curr)
 		{
 			if (!_stateChangePossibilities[(int)prev][(int)curr])
-				throw new ArgumentException("message");
+				throw new InvalidOperationException($"{prev} -> {curr}");
 
 			return curr;
 		}
@@ -203,11 +131,12 @@ namespace StockSharp.Algo
 			if (orders == null)
 				throw new ArgumentNullException(nameof(orders));
 
-			var dict = new MultiDictionary<Tuple<Sides, decimal>, Order>(false);
+			var dict = new Dictionary<Tuple<Sides, decimal>, HashSet<Order>>();
 
 			foreach (var order in ownOrders)
 			{
-				dict.Add(Tuple.Create(order.Direction, order.Price), order);
+				if (!dict.SafeAdd(Tuple.Create(order.Direction, order.Price)).Add(order))
+					throw new InvalidOperationException(LocalizedStrings.Str415Params.Put(order));
 			}
 
 			var retVal = new List<Quote>(quotes.Select(q => q.Clone()));
@@ -232,31 +161,31 @@ namespace StockSharp.Algo
 			return retVal;
 		}
 
-		/// <summary>
-		/// To get market price for the instrument by maximal and minimal possible prices.
-		/// </summary>
-		/// <param name="security">The instrument used for the market price calculation.</param>
-		/// <param name="provider">The market data provider.</param>
-		/// <param name="side">Order side.</param>
-		/// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
-		public static decimal? GetMarketPrice(this Security security, IMarketDataProvider provider, Sides side)
-		{
-			var board = security.CheckExchangeBoard();
+		///// <summary>
+		///// To get market price for the instrument by maximal and minimal possible prices.
+		///// </summary>
+		///// <param name="security">The instrument used for the market price calculation.</param>
+		///// <param name="provider">The market data provider.</param>
+		///// <param name="side">Order side.</param>
+		///// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
+		//public static decimal? GetMarketPrice(this Security security, IMarketDataProvider provider, Sides side)
+		//{
+		//	var board = security.CheckExchangeBoard();
 
-			if (board.IsSupportMarketOrders)
-				throw new ArgumentException(LocalizedStrings.Str1210Params.Put(board.Code), nameof(security));
+		//	if (board.IsSupportMarketOrders)
+		//		throw new ArgumentException(LocalizedStrings.Str1210Params.Put(board.Code), nameof(security));
 
-			var minPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MinPrice);
-			var maxPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MaxPrice);
+		//	var minPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MinPrice);
+		//	var maxPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MaxPrice);
 
-			if (side == Sides.Buy && maxPrice != null)
-				return maxPrice.Value;
-			else if (side == Sides.Sell && minPrice != null)
-				return minPrice.Value;
-			else
-				return null;
-				//throw new ArgumentException("У инструмента {0} отсутствует информация о планках.".Put(security), "security");
-		}
+		//	if (side == Sides.Buy && maxPrice != null)
+		//		return maxPrice.Value;
+		//	else if (side == Sides.Sell && minPrice != null)
+		//		return minPrice.Value;
+		//	else
+		//		return null;
+		//		//throw new ArgumentException("У инструмента {0} отсутствует информация о планках.".Put(security), "security");
+		//}
 
 		/// <summary>
 		/// To calculate the current price by the instrument depending on the order direction.
@@ -362,7 +291,7 @@ namespace StockSharp.Algo
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException(nameof(priceType));
+					throw new ArgumentOutOfRangeException(nameof(priceType), priceType, LocalizedStrings.Str1219);
 			}
 
 			return currentPrice == null
@@ -426,190 +355,39 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the position on My trade.
+		/// To get the position on own trade.
 		/// </summary>
-		/// <param name="trade">My trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
+		/// <param name="trade">Own trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
-		public static decimal GetPosition(this MyTrade trade)
+		public static decimal? GetPosition(this MyTrade trade)
 		{
 			if (trade == null)
 				throw new ArgumentNullException(nameof(trade));
 
-			return trade.Order.Direction == Sides.Buy ? trade.Trade.Volume : -trade.Trade.Volume;
+			return trade.ToMessage().GetPosition(false);
 		}
 
 		/// <summary>
-		/// To get the position on My trade.
+		/// To get the position on own trade.
 		/// </summary>
-		/// <param name="message">My trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
+		/// <param name="message">Own trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
+		/// <param name="byOrder">To check implemented volume by order balance (<see cref="ExecutionMessage.Balance"/>) or by received trades. The default is checked by the order.</param>
 		/// <returns>Position.</returns>
-		public static decimal GetPosition(this ExecutionMessage message)
+		public static decimal? GetPosition(this ExecutionMessage message, bool byOrder)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (message.Side == Sides.Buy ? message.TradeVolume : -message.TradeVolume) ?? 0;
-		}
+			var sign = message.Side == Sides.Buy ? 1 : -1;
 
-		/// <summary>
-		/// To get the position by the order.
-		/// </summary>
-		/// <param name="order">The order, used for the position calculation. At buy the position is taken with positive sign, at sell - with negative.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
-		/// <returns>Position.</returns>
-		public static decimal GetPosition(this Order order, IConnector connector)
-		{
-			var volume = order.GetMatchedVolume(connector);
+			decimal? position;
 
-			return order.Direction == Sides.Buy ? volume : -volume;
-		}
+			if (byOrder)
+				position = message.OrderVolume - message.Balance;
+			else
+				position = message.TradeVolume;
 
-		/// <summary>
-		/// To get the position by the portfolio.
-		/// </summary>
-		/// <param name="portfolio">The portfolio, for which the position needs to be got.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
-		/// <returns>The position by the portfolio.</returns>
-		public static decimal GetPosition(this Portfolio portfolio, IConnector connector)
-		{
-			if (portfolio == null)
-				throw new ArgumentNullException(nameof(portfolio));
-
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			return connector.Positions.Filter(portfolio).Sum(p => p.CurrentValue);
-		}
-
-		/// <summary>
-		/// To get the position by My trades.
-		/// </summary>
-		/// <param name="trades">My trades, used for the position calculation using the <see cref="GetPosition(StockSharp.BusinessEntities.MyTrade)"/> method.</param>
-		/// <returns>Position.</returns>
-		public static decimal GetPosition(this IEnumerable<MyTrade> trades)
-		{
-			return trades.Sum(t => t.GetPosition());
-		}
-
-		/// <summary>
-		/// To get the trade volume, collatable with the position size.
-		/// </summary>
-		/// <param name="position">The position by the instrument.</param>
-		/// <returns>Order volume.</returns>
-		public static decimal GetOrderVolume(this Position position)
-		{
-			if (position == null)
-				throw new ArgumentNullException(nameof(position));
-
-			return (position.CurrentValue / position.Security.VolumeStep ?? 1m).Abs();
-		}
-
-		/// <summary>
-		/// To group orders by instrument and portfolio.
-		/// </summary>
-		/// <param name="orders">Initial orders.</param>
-		/// <returns>Grouped orders.</returns>
-		/// <remarks>
-		/// Recommended to use to reduce trade costs.
-		/// </remarks>
-		public static IEnumerable<Order> Join(this IEnumerable<Order> orders)
-		{
-			if (orders == null)
-				throw new ArgumentNullException(nameof(orders));
-
-			return orders.GroupBy(o => Tuple.Create(o.Security, o.Portfolio)).Select(g =>
-			{
-				Order firstOrder = null;
-
-				foreach (var order in g)
-				{
-					if (firstOrder == null)
-					{
-						firstOrder = order;
-					}
-					else
-					{
-						var sameDir = firstOrder.Direction == order.Direction;
-
-						firstOrder.Volume += (sameDir ? 1 : -1) * order.Volume;
-
-						if (firstOrder.Volume < 0)
-						{
-							firstOrder.Direction = firstOrder.Direction.Invert();
-							firstOrder.Volume = firstOrder.Volume.Abs();
-						}
-
-						firstOrder.Price = sameDir ? firstOrder.Price.GetMiddle(order.Price) : order.Price;
-					}
-				}
-
-				if (firstOrder == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1211);
-
-				if (firstOrder.Volume == 0)
-					return null;
-
-				firstOrder.ShrinkPrice();
-				return firstOrder;
-			})
-			.Where(o => o != null);
-		}
-
-		/// <summary>
-		/// To calculate profit-loss based on trades.
-		/// </summary>
-		/// <param name="trades">Trades, for which the profit-loss shall be calculated.</param>
-		/// <returns>Profit-loss.</returns>
-		public static decimal GetPnL(this IEnumerable<MyTrade> trades)
-		{
-			return trades.Select(t => t.ToMessage()).GetPnL();
-		}
-
-		/// <summary>
-		/// To calculate profit-loss based on trades.
-		/// </summary>
-		/// <param name="trades">Trades, for which the profit-loss shall be calculated.</param>
-		/// <returns>Profit-loss.</returns>
-		public static decimal GetPnL(this IEnumerable<ExecutionMessage> trades)
-		{
-			return trades.GroupBy(t => t.SecurityId).Sum(g =>
-			{
-				var queue = new PnLQueue(g.Key);
-
-				g.OrderBy(t => t.ServerTime).ForEach(t => queue.Process(t));
-
-				return queue.RealizedPnL + queue.UnrealizedPnL;
-			});
-		}
-
-		/// <summary>
-		/// To calculate profit-loss for trade.
-		/// </summary>
-		/// <param name="trade">The trade for which the profit-loss shall be calculated.</param>
-		/// <param name="currentPrice">The current price of the instrument.</param>
-		/// <returns>Profit-loss.</returns>
-		public static decimal GetPnL(this MyTrade trade, decimal currentPrice)
-		{
-			if (trade == null)
-				throw new ArgumentNullException(nameof(trade));
-
-			return trade.ToMessage().GetPnL(currentPrice);
-		}
-
-		/// <summary>
-		/// To calculate profit-loss for trade.
-		/// </summary>
-		/// <param name="trade">The trade for which the profit-loss shall be calculated.</param>
-		/// <param name="currentPrice">The current price of the instrument.</param>
-		/// <returns>Profit-loss.</returns>
-		public static decimal GetPnL(this ExecutionMessage trade, decimal currentPrice)
-		{
-			return GetPnL(trade.GetTradePrice(), trade.SafeGetVolume(), trade.Side, currentPrice);
-		}
-
-		internal static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)
-		{
-			return (price - marketPrice) * volume * (side == Sides.Sell ? 1 : -1);
+			return position * sign;
 		}
 
 		/// <summary>
@@ -617,28 +395,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolio">The portfolio, for which the profit-loss shall be calculated.</param>
 		/// <returns>Profit-loss.</returns>
-		public static decimal GetPnL(this Portfolio portfolio)
+		public static decimal? GetPnL(this Portfolio portfolio)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
 
 			return portfolio.CurrentValue - portfolio.BeginValue;
-		}
-
-		/// <summary>
-		/// To calculate the position cost.
-		/// </summary>
-		/// <param name="position">Position.</param>
-		/// <param name="currentPrice">The current price of the instrument.</param>
-		/// <returns>Position price.</returns>
-		public static decimal GetPrice(this Position position, decimal currentPrice)
-		{
-			if (position == null)
-				throw new ArgumentNullException(nameof(position));
-
-			var security = position.Security;
-
-			return currentPrice * position.CurrentValue * security.StepPrice / security.PriceStep ?? 1;
 		}
 
 		/// <summary>
@@ -649,7 +411,19 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
 		{
-			return board.ToMessage().IsTradeTime(time);
+			return board.ToMessage().IsTradeTime(time, out var _);
+		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="period">Current working time period.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time, out WorkingTimePeriod period)
+		{
+			return board.ToMessage().IsTradeTime(time, out period);
 		}
 
 		/// <summary>
@@ -660,20 +434,47 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
+			return board.IsTradeTime(time, out var _);
+		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="period">Current working time period.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time, out WorkingTimePeriod period)
+		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
 
 			var exchangeTime = time.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
-			var isWorkingDay = board.IsTradeDate(time);
+			return workingTime.IsTradeTime(exchangeTime, out period);
+		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="workingTime">Board working hours.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="period">Current working time period.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this WorkingTime workingTime, DateTime time, out WorkingTimePeriod period)
+		{
+			var isWorkingDay = workingTime.IsTradeDate(time);
 
 			if (!isWorkingDay)
+			{
+				period = null;
 				return false;
+			}
 
-			var period = workingTime.GetPeriod(exchangeTime);
+			period = workingTime.GetPeriod(time);
 
-			var tod = exchangeTime.TimeOfDay;
+			var tod = time.TimeOfDay;
 			return period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
 		}
 
@@ -704,19 +505,49 @@ namespace StockSharp.Algo
 			var exchangeTime = date.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
-			var period = workingTime.GetPeriod(exchangeTime);
+			return workingTime.IsTradeDate(exchangeTime, checkHolidays);
+		}
 
-			if ((period == null || period.Times.Length == 0) && workingTime.SpecialWorkingDays.Length == 0 && workingTime.SpecialHolidays.Length == 0)
+		/// <summary>
+		/// To check, whether date is traded.
+		/// </summary>
+		/// <param name="workingTime">Board working hours.</param>
+		/// <param name="date">The passed date to be checked.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
+		public static bool IsTradeDate(this WorkingTime workingTime, DateTime date, bool checkHolidays = false)
+		{
+			var period = workingTime.GetPeriod(date);
+
+			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Count == 0 && workingTime.SpecialHolidays.Count == 0)
 				return true;
 
 			bool isWorkingDay;
 
-			if (checkHolidays && (exchangeTime.DayOfWeek == DayOfWeek.Saturday || exchangeTime.DayOfWeek == DayOfWeek.Sunday))
-				isWorkingDay = workingTime.SpecialWorkingDays.Contains(exchangeTime.Date);
+			if (checkHolidays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday))
+				isWorkingDay = workingTime.SpecialWorkingDays.Contains(date.Date);
 			else
-				isWorkingDay = !workingTime.SpecialHolidays.Contains(exchangeTime.Date);
+				isWorkingDay = !workingTime.SpecialHolidays.Contains(date.Date);
 
 			return isWorkingDay;
+		}
+
+		/// <summary>
+		/// Get last trade date.
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="date">The date from which to start checking.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns>Last trade date.</returns>
+		public static DateTimeOffset LastTradeDay(this BoardMessage board, DateTimeOffset date, bool checkHolidays = true)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			while (!board.IsTradeDate(date, checkHolidays))
+				date = date.AddDays(-1);
+
+			return date;
 		}
 
 		/// <summary>
@@ -749,71 +580,12 @@ namespace StockSharp.Algo
 			};
 		}
 
-		private static readonly ChannelFactory<IDailyInfoSoap> _dailyInfoFactory = new ChannelFactory<IDailyInfoSoap>(new BasicHttpBinding(), new EndpointAddress("http://www.cbr.ru/dailyinfowebserv/dailyinfo.asmx"));
-		private static readonly Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>> _rateInfo = new Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>>();
-
 		/// <summary>
-		/// To convert one currency to another.
+		/// To create from regular order book a sparse on, with minimal price step of <see cref="Security.PriceStep"/>.
 		/// </summary>
-		/// <param name="currencyFrom">The currency to be converted.</param>
-		/// <param name="currencyTypeTo">The code of the target currency.</param>
-		/// <returns>Converted currency.</returns>
-		public static Currency Convert(this Currency currencyFrom, CurrencyTypes currencyTypeTo)
-		{
-			if (currencyFrom == null)
-				throw new ArgumentNullException(nameof(currencyFrom));
-
-			return new Currency { Type = currencyTypeTo, Value = currencyFrom.Value * currencyFrom.Type.Convert(currencyTypeTo) };
-		}
-
-		/// <summary>
-		/// To get the conversion rate for converting one currency to another.
-		/// </summary>
-		/// <param name="from">The code of currency to be converted.</param>
-		/// <param name="to">The code of the target currency.</param>
-		/// <returns>The rate.</returns>
-		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to)
-		{
-			return from.Convert(to, DateTime.Today);
-		}
-
-		/// <summary>
-		/// To get the conversion rate for the specified date.
-		/// </summary>
-		/// <param name="from">The code of currency to be converted.</param>
-		/// <param name="to">The code of the target currency.</param>
-		/// <param name="date">The rate date.</param>
-		/// <returns>The rate.</returns>
-		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to, DateTime date)
-		{
-			if (from == to)
-				return 1;
-
-			var info = _rateInfo.SafeAdd(date, key =>
-			{
-				var i = _dailyInfoFactory.Invoke(c => c.GetCursOnDate(key));
-				return i.Tables[0].Rows.Cast<DataRow>().ToDictionary(r => r[4].To<CurrencyTypes>(), r => r[2].To<decimal>());
-			});
-
-			if (from != CurrencyTypes.RUB && !info.ContainsKey(from))
-				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(from), nameof(@from));
-
-			if (to != CurrencyTypes.RUB && !info.ContainsKey(to))
-				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(to), nameof(to));
-
-			if (from == CurrencyTypes.RUB)
-				return 1 / info[to];
-			else if (to == CurrencyTypes.RUB)
-				return info[from];
-			else
-				return info[from] / info[to];
-		}
-
-		/// <summary>
-		/// To create from regular order book a sparse on, with minimal price step of <see cref="Security.PriceStep"/>. <remarks>
-		///             В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		///             </remarks>.
-		/// </summary>
+		/// <remarks>
+		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
 		/// <param name="depth">The regular order book.</param>
 		/// <returns>The sparse order book.</returns>
 		public static MarketDepth Sparse(this MarketDepth depth)
@@ -825,10 +597,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To create from regular order book a sparse one. <remarks>
-		///             В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		///             </remarks>.
+		/// To create from regular order book a sparse one.
 		/// </summary>
+		/// <remarks>
+		/// In sparsed book shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
 		/// <param name="depth">The regular order book.</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse order book.</returns>
@@ -841,7 +614,7 @@ namespace StockSharp.Algo
 			var asks = depth.Asks.Sparse(priceStep);
 
 			var pair = depth.BestPair;
-			var spreadQuotes = pair == null ? Enumerable.Empty<Quote>() : pair.Sparse(priceStep).ToArray();
+			var spreadQuotes = pair?.Sparse(priceStep).ToArray() ?? ArrayHelper.Empty<Quote>();
 
 			return new MarketDepth(depth.Security).Update(
 				bids.Concat(spreadQuotes.Where(q => q.OrderDirection == Sides.Buy)),
@@ -850,10 +623,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair. <remarks>
-		///             В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		///             </remarks>.
+		/// To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair.
 		/// </summary>
+		/// <remarks>
+		/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
 		/// <param name="pair">The pair of regular quotes.</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
@@ -905,10 +679,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To create the sparse collection of quotes from regular quotes. <remarks>
-		///             В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		///             </remarks>.
+		/// To create the sparse collection of quotes from regular quotes.
 		/// </summary>
+		/// <remarks>
+		/// In sparsed collection shown quotes with no active orders. The volume of these quotes is 0.
+		/// </remarks>
 		/// <param name="quotes">Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers).</param>
 		/// <param name="priceStep">Minimum price step.</param>
 		/// <returns>The sparse collection of quotes.</returns>
@@ -1026,8 +801,7 @@ namespace StockSharp.Algo
 				if (null == quote)
 					continue;
 
-				decimal vol;
-				if (!changedVolume.TryGetValue(price, out vol))
+				if (!changedVolume.TryGetValue(price, out var vol))
 					vol = quote.Volume;
 
 				vol -= trade.SafeGetVolume();
@@ -1035,7 +809,8 @@ namespace StockSharp.Algo
 			}
 
 			var bids = new Quote[depth.Bids.Length];
-			Action a1 = () =>
+
+			void B1()
 			{
 				var i = 0;
 				var count = 0;
@@ -1050,8 +825,7 @@ namespace StockSharp.Algo
 
 					if (price == minTradePrice)
 					{
-						decimal vol;
-						if (changedVolume.TryGetValue(price, out vol))
+						if (changedVolume.TryGetValue(price, out var vol))
 						{
 							if (vol <= 0)
 								continue;
@@ -1069,12 +843,13 @@ namespace StockSharp.Algo
 
 				Array.Copy(depth.Bids, i, bids, count, depth.Bids.Length - i);
 				Array.Resize(ref bids, count + (depth.Bids.Length - i));
-			};
+			}
 
-			a1();
+			B1();
 
 			var asks = new Quote[depth.Asks.Length];
-			Action a2 = () =>
+
+			void A1()
 			{
 				var i = 0;
 				var count = 0;
@@ -1089,8 +864,7 @@ namespace StockSharp.Algo
 
 					if (price == maxTradePrice)
 					{
-						decimal vol;
-						if (changedVolume.TryGetValue(price, out vol))
+						if (changedVolume.TryGetValue(price, out decimal vol))
 						{
 							if (vol <= 0)
 								continue;
@@ -1108,9 +882,9 @@ namespace StockSharp.Algo
 
 				Array.Copy(depth.Asks, i, asks, count, depth.Asks.Length - i);
 				Array.Resize(ref asks, count + (depth.Asks.Length - i));
-			};
+			}
 
-			a2();
+			A1();
 
 			depth.Update(bids, asks, depth.LastChangeTime);
 		}
@@ -1176,7 +950,7 @@ namespace StockSharp.Algo
 		public static QuoteChangeMessage GetDelta(this QuoteChangeMessage from, QuoteChangeMessage to)
 		{
 			if (from == null)
-				throw new ArgumentNullException(nameof(@from));
+				throw new ArgumentNullException(nameof(from));
 
 			if (to == null)
 				throw new ArgumentNullException(nameof(to));
@@ -1201,8 +975,26 @@ namespace StockSharp.Algo
 		/// <returns>Changes.</returns>
 		public static IEnumerable<QuoteChange> GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side)
 		{
-			var mapTo = to.ToDictionary(q => q.Price);
-			var mapFrom = from.ToDictionary(q => q.Price);
+			if (from == null)
+				throw new ArgumentNullException(nameof(from));
+
+			if (to == null)
+				throw new ArgumentNullException(nameof(to));
+
+			var mapFrom = new Dictionary<decimal, QuoteChange>();
+			var mapTo = new Dictionary<decimal, QuoteChange>();
+
+			foreach (var change in from)
+			{
+				if (!mapFrom.TryAdd(change.Price, change))
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(from));
+			}
+
+			foreach (var change in to)
+			{
+				if (!mapTo.TryAdd(change.Price, change))
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(change.Price), nameof(to));
+			}
 
 			foreach (var pair in mapFrom)
 			{
@@ -1219,7 +1011,7 @@ namespace StockSharp.Algo
 				else
 				{
 					var empty = quoteFrom.Clone();
-					empty.Volume = 0;				// была а теперь нет
+					empty.Volume = 0;				// была, а теперь нет
 					mapTo[price] = empty;
 				}
 			}
@@ -1239,7 +1031,7 @@ namespace StockSharp.Algo
 		public static QuoteChangeMessage AddDelta(this QuoteChangeMessage from, QuoteChangeMessage delta)
 		{
 			if (from == null)
-				throw new ArgumentNullException(nameof(@from));
+				throw new ArgumentNullException(nameof(from));
 
 			if (delta == null)
 				throw new ArgumentNullException(nameof(delta));
@@ -1455,7 +1247,7 @@ namespace StockSharp.Algo
 		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <param name="byOrder">To check implemented volume by order balance (<see cref="Order.Balance"/>) or by received trades. The default is checked by the order.</param>
 		/// <returns>The implemented part of volume.</returns>
-		public static decimal GetMatchedVolume(this Order order, IConnector connector, bool byOrder = true)
+		public static decimal GetMatchedVolume(this Order order, IConnector connector, bool byOrder)
 		{
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
@@ -1464,13 +1256,15 @@ namespace StockSharp.Algo
 			{
 				//throw new ArgumentException("Стоп-заявки не могут иметь реализованный объем.", "order");
 
-				order = order.DerivedOrder;
+				throw new ArgumentException(nameof(order));
 
-				if (order == null)
-					return 0;
+				//order = order.DerivedOrder;
+
+				//if (order == null)
+				//	return 0;
 			}
 
-			return order.Volume - (byOrder ? order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume));
+			return byOrder ? order.Volume - order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume);
 		}
 
 		/// <summary>
@@ -1560,9 +1354,7 @@ namespace StockSharp.Algo
 
 				emulator.NewOutMessage += msg =>
 				{
-					var execMsg = msg as ExecutionMessage;
-
-					if (execMsg == null)
+					if (!(msg is ExecutionMessage execMsg))
 						return;
 
 					if (execMsg.Error != null)
@@ -1579,7 +1371,7 @@ namespace StockSharp.Algo
 				};
 
 				var depthMsg = depth.ToMessage();
-				var regMsg = order.CreateRegisterMessage(order.Security.ToSecurityId());
+				var regMsg = order.CreateRegisterMessage();
 				var pfMsg = testPf.ToChangeMessage();
 
 				pfMsg.ServerTime = depthMsg.ServerTime = order.LastChangeTime;
@@ -1654,7 +1446,7 @@ namespace StockSharp.Algo
 			if (position == null)
 				throw new ArgumentNullException(nameof(position));
 
-			return position.CurrentValue.GetDirection();
+			return position.CurrentValue?.GetDirection();
 		}
 
 		/// <summary>
@@ -1683,7 +1475,8 @@ namespace StockSharp.Algo
 		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
+		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
@@ -1691,25 +1484,60 @@ namespace StockSharp.Algo
 			if (orders == null)
 				throw new ArgumentNullException(nameof(orders));
 
-			foreach (var order in orders.Where(o => o.State != OrderStates.Done).ToArray())
+			orders = orders
+				.Where(order => order.State != OrderStates.Done && order.State != OrderStates.Failed)
+				.Where(order => isStopOrder == null || (order.Type == OrderTypes.Conditional) == isStopOrder.Value)
+				.Where(order => portfolio == null || (order.Portfolio == portfolio))
+				.Where(order => direction == null || order.Direction == direction.Value)
+				.Where(order => board == null || order.Security.Board == board)
+				.Where(order => security == null || order.Security == security)
+				.Where(order => securityType == null || order.Security.Type == securityType.Value)
+				;
+
+			orders.ForEach(connector.CancelOrder);
+		}
+
+		/// <summary>
+		/// To check whether specified instrument is used now.
+		/// </summary>
+		/// <param name="basketSecurity">Instruments basket.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="security">The instrument that should be checked.</param>
+		/// <returns><see langword="true" />, if specified instrument is used now, otherwise <see langword="false" />.</returns>
+		public static bool Contains(this BasketSecurity basketSecurity, ISecurityProvider securityProvider, Security security)
+		{
+			return basketSecurity.GetInnerSecurities(securityProvider).Any(innerSecurity =>
 			{
-				if (isStopOrder == null || (order.Type == OrderTypes.Conditional) == isStopOrder)
-				{
-					if (portfolio == null || (order.Portfolio == portfolio))
-					{
-						if (direction == null || order.Direction == direction)
-						{
-							if (board == null || order.Security.Board == board)
-							{
-								if (security == null || order.Security == security)
-								{
-									connector.CancelOrder(order);
-								}
-							}
-						}
-					}
-				}
-			}
+				if (innerSecurity is BasketSecurity basket)
+					return basket.Contains(securityProvider, security);
+				
+				return innerSecurity == security;
+			});
+		}
+
+		/// <summary>
+		/// Find inner security instances.
+		/// </summary>
+		/// <param name="security">Instruments basket.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <returns>Instruments, from which this basket is created.</returns>
+		public static IEnumerable<Security> GetInnerSecurities(this BasketSecurity security, ISecurityProvider securityProvider)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (securityProvider == null)
+				throw new ArgumentNullException(nameof(securityProvider));
+
+			return security.InnerSecurityIds.Select(id =>
+			{
+				var innerSec = securityProvider.LookupById(id);
+
+				if (innerSec == null)
+					throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id));
+
+				return innerSec;
+			}).ToArray();
 		}
 
 		/// <summary>
@@ -1727,7 +1555,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket?.InnerSecurities.SelectMany(s => Filter(orders, s)) ?? orders.Where(o => o.Security == security);
+			return basket?.InnerSecurityIds.SelectMany(id => orders.Where(o => o.Security.ToSecurityId() == id)) ?? orders.Where(o => o.Security == security);
 		}
 
 		/// <summary>
@@ -1748,7 +1576,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To ilter orders for the given condition.
+		/// To filter orders for the given condition.
 		/// </summary>
 		/// <param name="orders">All orders, in which the required shall be searched for.</param>
 		/// <param name="state">Order state.</param>
@@ -1790,7 +1618,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket?.InnerSecurities.SelectMany(s => Filter(trades, s)) ?? trades.Where(t => t.Security == security);
+			return basket?.InnerSecurityIds.SelectMany(id => trades.Where(o => o.Security.ToSecurityId() == id)) ?? trades.Where(t => t.Security == security);
 		}
 
 		/// <summary>
@@ -1823,7 +1651,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket?.InnerSecurities.SelectMany(s => Filter(positions, s)) ?? positions.Where(p => p.Security == security);
+			return basket?.InnerSecurityIds.SelectMany(id => positions.Where(o => o.Security.ToSecurityId() == id)) ?? positions.Where(p => p.Security == security);
 		}
 
 		/// <summary>
@@ -1858,7 +1686,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket == null ? myTrades.Where(t => t.Order.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(myTrades, s));
+			return basket?.InnerSecurityIds.SelectMany(id => myTrades.Where(t => t.Order.Security.ToSecurityId() == id)) ?? myTrades.Where(t => t.Order.Security == security);
 		}
 
 		/// <summary>
@@ -1900,8 +1728,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">Securities.</param>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Instruments filtered.</returns>
-		public static IEnumerable<Security> FilterSecurities(this Connector connector, SecurityLookupMessage criteria)
+		public static IEnumerable<Security> FilterSecurities(this Connector connector, SecurityLookupMessage criteria, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
@@ -1909,7 +1738,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
 
-			var security = connector.GetSecurityCriteria(criteria);
+			var security = connector.GetSecurityCriteria(criteria, exchangeInfoProvider);
 
 			return connector.Securities.Filter(security);
 		}
@@ -1919,14 +1748,18 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 		/// <returns>Search criterion.</returns>
-		public static Security GetSecurityCriteria(this Connector connector, SecurityLookupMessage criteria)
+		public static Security GetSecurityCriteria(this Connector connector, SecurityLookupMessage criteria, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
 			if (criteria == null)
 				throw new ArgumentNullException(nameof(criteria));
+
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			var stocksharpId = criteria.SecurityId.SecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
 				                   ? string.Empty
@@ -1938,9 +1771,10 @@ namespace StockSharp.Algo
 				Name = criteria.Name,
 				Code = criteria.SecurityId.SecurityCode,
 				Type = criteria.SecurityType,
+				CfiCode = criteria.CfiCode,
 				ExpiryDate = criteria.ExpiryDate,
 				ExternalId = criteria.SecurityId.ToExternalId(),
-				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(criteria.SecurityId.BoardCode),
+				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : exchangeInfoProvider.GetOrCreateBoard(criteria.SecurityId.BoardCode),
 				ShortName = criteria.ShortName,
 				Decimals = criteria.Decimals,
 				PriceStep = criteria.PriceStep,
@@ -1951,7 +1785,7 @@ namespace StockSharp.Algo
 				BinaryOptionType = criteria.BinaryOptionType,
 				Currency = criteria.Currency,
 				SettlementDate = criteria.SettlementDate,
-				UnderlyingSecurityId = (criteria.UnderlyingSecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty())
+				UnderlyingSecurityId = criteria.UnderlyingSecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
 					? null
 					: connector.SecurityIdGenerator.GenerateId(criteria.UnderlyingSecurityCode, criteria.SecurityId.BoardCode),
 			};
@@ -1974,6 +1808,117 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(board));
 
 			return securities.Where(s => s.Board == board);
+		}
+
+		/// <summary>
+		/// To filter instruments by the given criteria.
+		/// </summary>
+		/// <param name="securities">Securities.</param>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Instruments filtered.</returns>
+		public static IEnumerable<SecurityMessage> Filter(this IEnumerable<SecurityMessage> securities, SecurityLookupMessage criteria)
+		{
+			if (securities == null)
+				throw new ArgumentNullException(nameof(securities));
+
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria.IsLookupAll())
+				return securities.ToArray();
+
+			//if (!criteria.SecurityId.IsDefault())
+			//	return securities.Where(s => s.Id == criteria.Id).ToArray();
+
+			var secId = criteria.SecurityId;
+
+			return securities.Where(s =>
+			{
+				if (!secId.SecurityCode.IsEmpty() && !s.SecurityId.SecurityCode.ContainsIgnoreCase(secId.SecurityCode))
+					return false;
+
+				if (!secId.BoardCode.IsEmpty() && !s.SecurityId.BoardCode.CompareIgnoreCase(secId.BoardCode))
+					return false;
+
+				var secType = criteria.SecurityType;
+
+				if (secType != null && s.SecurityType != secType)
+					return false;
+
+				var secTypes = criteria.SecurityTypes?.ToArray();
+
+				if (secTypes != null && !secTypes.IsEmpty())
+				{
+					if (s.SecurityType == null)
+						return false;
+
+					if (!secTypes.Contains(s.SecurityType.Value))
+						return false;
+				}
+
+				var underSecCode = criteria.UnderlyingSecurityCode;
+
+				if (!underSecCode.IsEmpty() && s.UnderlyingSecurityCode != underSecCode)
+					return false;
+
+				if (criteria.Strike != null && s.Strike != criteria.Strike)
+					return false;
+
+				if (criteria.OptionType != null && s.OptionType != criteria.OptionType)
+					return false;
+
+				if (criteria.Currency != null && s.Currency != criteria.Currency)
+					return false;
+
+				if (!criteria.Class.IsEmptyOrWhiteSpace() && !s.Class.ContainsIgnoreCase(criteria.Class))
+					return false;
+
+				if (!criteria.Name.IsEmptyOrWhiteSpace() && !s.Name.ContainsIgnoreCase(criteria.Name))
+					return false;
+
+				if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !s.ShortName.ContainsIgnoreCase(criteria.ShortName))
+					return false;
+
+				if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !s.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
+					return false;
+
+				if (!secId.Bloomberg.IsEmptyOrWhiteSpace() && !s.SecurityId.Bloomberg.ContainsIgnoreCase(secId.Bloomberg))
+					return false;
+
+				if (!secId.Cusip.IsEmptyOrWhiteSpace() && !s.SecurityId.Cusip.ContainsIgnoreCase(secId.Cusip))
+					return false;
+
+				if (!secId.IQFeed.IsEmptyOrWhiteSpace() && !s.SecurityId.IQFeed.ContainsIgnoreCase(secId.IQFeed))
+					return false;
+
+				if (!secId.Isin.IsEmptyOrWhiteSpace() && !s.SecurityId.Isin.ContainsIgnoreCase(secId.Isin))
+					return false;
+
+				if (!secId.Ric.IsEmptyOrWhiteSpace() && !s.SecurityId.Ric.ContainsIgnoreCase(secId.Ric))
+					return false;
+
+				if (!secId.Sedol.IsEmptyOrWhiteSpace() && !s.SecurityId.Sedol.ContainsIgnoreCase(secId.Sedol))
+					return false;
+
+				if (criteria.ExpiryDate != null && s.ExpiryDate != null && s.ExpiryDate != criteria.ExpiryDate)
+					return false;
+
+				if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
+				{
+					if (s.ExtensionInfo == null)
+						return false;
+
+					foreach (var pair in criteria.ExtensionInfo)
+					{
+						var value = s.ExtensionInfo.TryGetValue(pair.Key);
+
+						if (!pair.Value.Equals(value))
+							return false;
+					}
+				}
+
+				return true;
+			}).ToArray();
 		}
 
 		/// <summary>
@@ -2032,6 +1977,9 @@ namespace StockSharp.Algo
 					return false;
 
 				if (!criteria.ShortName.IsEmptyOrWhiteSpace() && !s.ShortName.ContainsIgnoreCase(criteria.ShortName))
+					return false;
+
+				if (!criteria.CfiCode.IsEmptyOrWhiteSpace() && !s.CfiCode.ContainsIgnoreCase(criteria.CfiCode))
 					return false;
 
 				if (!criteria.ExternalId.Bloomberg.IsEmptyOrWhiteSpace() && !s.ExternalId.Bloomberg.ContainsIgnoreCase(criteria.ExternalId.Bloomberg))
@@ -2100,75 +2048,35 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the T+N date.
+		/// To get date of day T +/- of N trading days.
 		/// </summary>
 		/// <param name="board">Board info.</param>
-		/// <param name="date">The start T date.</param>
-		/// <param name="n">The N size.</param>
-		/// <returns>The end T+N date.</returns>
-		public static DateTimeOffset GetTPlusNDate(this ExchangeBoard board, DateTimeOffset date, int n)
+		/// <param name="date">The start T date, to which are added or subtracted N trading days.</param>
+		/// <param name="n">The N size. The number of trading days for the addition or subtraction.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns>The end T +/- N date.</returns>
+		public static DateTimeOffset AddOrSubtractTradingDays(this ExchangeBoard board, DateTimeOffset date, int n, bool checkHolidays = true)
 		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
 
-			date = date.Date.ApplyTimeZone(date.Offset);
-
-			while (n > 0)
+			while (n != 0)
 			{
-				if (board.IsTradeDate(date))
-					n--;
-
-				date = date.AddDays(1);
+				//if need to Add
+				if (n > 0)
+				{
+					date = date.AddDays(1);
+					if (board.IsTradeDate(date, checkHolidays)) n--;
+				}
+				//if need to Subtract
+				if (n < 0)
+				{
+					date = date.AddDays(-1);
+					if (board.IsTradeDate(date, checkHolidays)) n++;
+				}
 			}
 
 			return date;
-		}
-
-		/// <summary>
-		/// To calculate delay based on difference between the server and local time.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <param name="serverTime">Server time.</param>
-		/// <param name="localTime">Local time.</param>
-		/// <returns>Latency.</returns>
-		public static TimeSpan GetLatency(this Security security, DateTimeOffset serverTime, DateTimeOffset localTime)
-		{
-			return localTime - serverTime;
-		}
-
-		/// <summary>
-		/// To calculate delay based on difference between the server and local time.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="serverTime">Server time.</param>
-		/// <param name="localTime">Local time.</param>
-		/// <returns>Latency.</returns>
-		public static TimeSpan GetLatency(this SecurityId securityId, DateTimeOffset serverTime, DateTimeOffset localTime)
-		{
-			var board = ExchangeBoard.GetBoard(securityId.BoardCode);
-
-			if (board == null)
-				throw new ArgumentException(LocalizedStrings.Str1217Params.Put(securityId.BoardCode), nameof(securityId));
-
-			return localTime - serverTime;
-		}
-
-		/// <summary>
-		/// To get the size of clear funds in the portfolio.
-		/// </summary>
-		/// <param name="portfolio">Portfolio.</param>
-		/// <param name="useLeverage">Whether to use shoulder size for calculation.</param>
-		/// <returns>The size of clear funds.</returns>
-		public static decimal GetFreeMoney(this Portfolio portfolio, bool useLeverage = false)
-		{
-			if (portfolio == null)
-				throw new ArgumentNullException(nameof(portfolio));
-
-			var freeMoney = portfolio.Board == ExchangeBoard.Forts
-				? portfolio.BeginValue - portfolio.CurrentValue + portfolio.VariationMargin
-				: portfolio.CurrentValue;
-
-			return useLeverage ? freeMoney * portfolio.Leverage : freeMoney;
 		}
 
 		/// <summary>
@@ -2180,7 +2088,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<DateTimeOffset> GetExpiryDates(this DateTime from, DateTime to)
 		{
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(@from));
+				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
 
 			for (var year = from.Year; year <= to.Year; year++)
 			{
@@ -2214,21 +2122,21 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get real expirating instruments for base part of the code.
+		/// To get real expiration instruments for base part of the code.
 		/// </summary>
 		/// <param name="baseCode">The base part of the instrument code.</param>
 		/// <param name="from">The start of the expiration range.</param>
 		/// <param name="to">The end of the expiration range.</param>
 		/// <param name="getSecurity">The function to get instrument by the code.</param>
 		/// <param name="throwIfNotExists">To generate exception, if some of instruments are not available.</param>
-		/// <returns>Expirating instruments.</returns>
+		/// <returns>Expiration instruments.</returns>
 		public static IEnumerable<Security> GetFortsJumps(this string baseCode, DateTime from, DateTime to, Func<string, Security> getSecurity, bool throwIfNotExists = true)
 		{
 			if (baseCode.IsEmpty())
 				throw new ArgumentNullException(nameof(baseCode));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(@from));
+				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
 
 			if (getSecurity == null)
 				throw new ArgumentNullException(nameof(getSecurity));
@@ -2279,7 +2187,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get real expirating instruments for the continuous instrument.
+		/// To get real expiration instruments for the continuous instrument.
 		/// </summary>
 		/// <param name="continuousSecurity">Continuous security.</param>
 		/// <param name="provider">The provider of information about instruments.</param>
@@ -2287,7 +2195,7 @@ namespace StockSharp.Algo
 		/// <param name="from">The start of the expiration range.</param>
 		/// <param name="to">The end of the expiration range.</param>
 		/// <param name="throwIfNotExists">To generate exception, if some of instruments for passed <paramref name="continuousSecurity" /> are not available.</param>
-		/// <returns>Expirating instruments.</returns>
+		/// <returns>Expiration instruments.</returns>
 		public static IEnumerable<Security> GetFortsJumps(this ContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists = true)
 		{
 			if (continuousSecurity == null)
@@ -2296,7 +2204,7 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException(nameof(provider));
 
-			return baseCode.GetFortsJumps(from, to, code => provider.LookupByCode(code).FirstOrDefault(), throwIfNotExists);
+			return baseCode.GetFortsJumps(from, to, code => provider.LookupByCode(code).FirstOrDefault(s => s.Code.CompareIgnoreCase(code)), throwIfNotExists);
 		}
 
 		/// <summary>
@@ -2313,69 +2221,13 @@ namespace StockSharp.Algo
 
 			foreach (var security in securities)
 			{
-				if (security.ExpiryDate == null)
+				var expDate = security.ExpiryDate;
+
+				if (expDate == null)
 					throw new InvalidOperationException(LocalizedStrings.Str698Params.Put(security.Id));
 
-				continuousSecurity.ExpirationJumps.Add(security, (DateTimeOffset)security.ExpiryDate);
+				continuousSecurity.ExpirationJumps.Add(security.ToSecurityId(), expDate.Value);
 			}
-		}
-
-		private sealed class CashPosition : Position, IDisposable
-		{
-			private readonly Portfolio _portfolio;
-			private readonly IConnector _connector;
-
-			public CashPosition(Portfolio portfolio, IConnector connector)
-			{
-				if (portfolio == null)
-					throw new ArgumentNullException(nameof(portfolio));
-
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				_portfolio = portfolio;
-				_connector = connector;
-
-				Portfolio = _portfolio;
-				Security = new Security
-				{
-					Id = _portfolio.Name,
-					Name = _portfolio.Name,
-				};
-
-				UpdatePosition();
-
-				_connector.PortfoliosChanged += TraderOnPortfoliosChanged;
-			}
-
-			private void UpdatePosition()
-			{
-				BeginValue = _portfolio.BeginValue;
-				CurrentValue = _portfolio.CurrentValue;
-				BlockedValue = _portfolio.Commission;
-			}
-
-			private void TraderOnPortfoliosChanged(IEnumerable<Portfolio> portfolios)
-			{
-				if (portfolios.Contains(_portfolio))
-					UpdatePosition();
-			}
-
-			void IDisposable.Dispose()
-			{
-				_connector.PortfoliosChanged -= TraderOnPortfoliosChanged;
-			}
-		}
-
-		/// <summary>
-		/// To convert portfolio into the monetary position.
-		/// </summary>
-		/// <param name="portfolio">Portfolio with trading account.</param>
-		/// <param name="connector">The connection of interaction with trading system.</param>
-		/// <returns>Money position.</returns>
-		public static Position ToCashPosition(this Portfolio portfolio, IConnector connector)
-		{
-			return new CashPosition(portfolio, connector);
 		}
 
 		private sealed class NativePositionManager : IPositionManager
@@ -2395,17 +2247,23 @@ namespace StockSharp.Algo
 			/// </summary>
 			decimal IPositionManager.Position
 			{
-				get { return _position.CurrentValue; }
-				set { throw new NotSupportedException(); }
+				get => _position.CurrentValue ?? 0;
+				set => throw new NotSupportedException();
 			}
 
-			event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.NewPosition
+			SecurityId? IPositionManager.SecurityId
+			{
+				get => _position.Security.ToSecurityId();
+				set => throw new NotSupportedException();
+			}
+
+			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.NewPosition
 			{
 				add { }
 				remove { }
 			}
 
-			event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.PositionChanged
+			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.PositionChanged
 			{
 				add { }
 				remove { }
@@ -2413,14 +2271,8 @@ namespace StockSharp.Algo
 
 			IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.Positions
 			{
-				get
-				{
-					throw new NotSupportedException();
-				}
-				set
-				{
-					throw new NotSupportedException();
-				}
+				get => throw new NotSupportedException();
+				set => throw new NotSupportedException();
 			}
 
 			void IPositionManager.Reset()
@@ -2485,85 +2337,13 @@ namespace StockSharp.Algo
 			receiver.AddLog(new LogMessage(receiver, receiver.CurrentTime, type, () => "{0}: {1} {2}".Put(operation, orderDescription, additionalInfo)));
 		}
 
-		private sealed class LookupSecurityUpdate : Disposable
-		{
-			private readonly IConnector _connector;
-			private TimeSpan _timeOut;
-			private readonly SyncObject _syncRoot = new SyncObject();
-
-			private readonly SynchronizedList<Security> _securities;
-
-			public LookupSecurityUpdate(IConnector connector, Security criteria, TimeSpan timeOut)
-			{
-				if (connector == null)
-					throw new ArgumentNullException(nameof(connector));
-
-				if (criteria == null)
-					throw new ArgumentNullException(nameof(criteria));
-				
-				_securities = new SynchronizedList<Security>();
-
-				_connector = connector;
-				_timeOut = timeOut;
-
-				_connector.LookupSecuritiesResult += OnLookupSecuritiesResult;
-				_connector.LookupSecurities(criteria);
-			}
-
-			public IEnumerable<Security> Wait()
-			{
-				while (true)
-				{
-					if (!_syncRoot.Wait(_timeOut))
-						break;
-				}
-
-				return _securities;
-			}
-
-			private void OnLookupSecuritiesResult(IEnumerable<Security> securities)
-			{
-				_securities.AddRange(securities);
-
-				_timeOut = securities.Any()
-					           ? TimeSpan.FromSeconds(10)
-					           : TimeSpan.Zero;
-
-				_syncRoot.Pulse();
-			}
-
-			protected override void DisposeManaged()
-			{
-				_connector.LookupSecuritiesResult -= OnLookupSecuritiesResult;
-			}
-		}
-
-		/// <summary>
-		/// To perform blocking search of instruments, corresponding to the criteria filter.
-		/// </summary>
-		/// <param name="connector">The connection of interaction with trading system.</param>
-		/// <param name="criteria">Instruments search criteria.</param>
-		/// <returns>Found instruments.</returns>
-		public static IEnumerable<Security> SyncLookupSecurities(this IConnector connector, Security criteria)
-		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			if (criteria == null)
-				throw new ArgumentNullException(nameof(criteria));
-
-			using (var lsu = new LookupSecurityUpdate(connector, criteria, TimeSpan.FromSeconds(180)))
-			{
-				return lsu.Wait();
-			}
-		}
-
 		/// <summary>
 		/// Apply changes to the portfolio object.
 		/// </summary>
 		/// <param name="portfolio">Portfolio.</param>
 		/// <param name="message">Portfolio change message.</param>
-		public static void ApplyChanges(this Portfolio portfolio, PortfolioChangeMessage message)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public static void ApplyChanges(this Portfolio portfolio, PortfolioChangeMessage message, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -2571,8 +2351,11 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
 			if (!message.BoardCode.IsEmpty())
-				portfolio.Board = ExchangeBoard.GetOrCreateBoard(message.BoardCode);
+				portfolio.Board = exchangeInfoProvider.GetOrCreateBoard(message.BoardCode);
 
 			foreach (var change in message.Changes)
 			{
@@ -2640,10 +2423,10 @@ namespace StockSharp.Algo
 					case PositionChangeTypes.AveragePrice:
 						position.AveragePrice = (decimal)change.Value;
 						break;
-					case PositionChangeTypes.ExtensionInfo:
-						var pair = change.Value.To<KeyValuePair<object, object>>();
-						position.ExtensionInfo[pair.Key] = pair.Value;
-						break;
+					//case PositionChangeTypes.ExtensionInfo:
+					//	var pair = change.Value.To<KeyValuePair<string, object>>();
+					//	position.ExtensionInfo[pair.Key] = pair.Value;
+					//	break;
 					case PositionChangeTypes.RealizedPnL:
 						position.RealizedPnL = (decimal)change.Value;
 						break;
@@ -2656,8 +2439,11 @@ namespace StockSharp.Algo
 					case PositionChangeTypes.VariationMargin:
 						position.VariationMargin = (decimal)change.Value;
 						break;
-					case PositionChangeTypes.DepoName:
-						position.ExtensionInfo[change.Key] = change.Value;
+					//case PositionChangeTypes.DepoName:
+					//	position.ExtensionInfo[nameof(PositionChangeTypes.DepoName)] = change.Value;
+					//	break;
+					case PositionChangeTypes.Currency:
+						position.Currency = (CurrencyTypes)change.Value;
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
@@ -2675,7 +2461,7 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		/// <param name="changes">Changes.</param>
 		/// <param name="serverTime">Change server time.</param>
-		/// <param name="localTime">Local time label when a message was received/created.</param>
+		/// <param name="localTime">Local timestamp when a message was received/created.</param>
 		public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			if (security == null)
@@ -2873,6 +2659,9 @@ namespace StockSharp.Algo
 						case Level1Fields.Volume:
 							security.Volume = (decimal)value;
 							break;
+						case Level1Fields.Turnover:
+							security.Turnover = (decimal)value;
+							break;
 						//default:
 						//	throw new ArgumentOutOfRangeException();
 					}
@@ -2924,7 +2713,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="message">Meta info.</param>
-		public static void ApplyChanges(this Security security, SecurityMessage message)
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		public static void ApplyChanges(this Security security, SecurityMessage message, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -2932,13 +2722,16 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
 			if (!message.SecurityId.SecurityCode.IsEmpty())
 				security.Code = message.SecurityId.SecurityCode;
 
 			if (message.Currency != null)
 				security.Currency = message.Currency;
 
-			security.Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
+			security.Board = exchangeInfoProvider.GetOrCreateBoard(message.SecurityId.BoardCode);
 
 			if (message.ExpiryDate != null)
 				security.ExpiryDate = message.ExpiryDate;
@@ -2989,6 +2782,22 @@ namespace StockSharp.Algo
 			if (message.SecurityType != null)
 				security.Type = message.SecurityType.Value;
 
+			if (!message.CfiCode.IsEmpty())
+			{
+				security.CfiCode = message.CfiCode;
+
+				if (security.Type == null)
+					security.Type = security.CfiCode.Iso10962ToSecurityType();
+
+				if (security.Type == SecurityTypes.Option && security.OptionType == null)
+				{
+					security.OptionType = security.CfiCode.Iso10962ToOptionType();
+
+					//if (security.CfiCode.Length > 2)
+					//	security.BinaryOptionType = security.CfiCode.Substring(2);
+				}
+			}
+
 			if (!message.UnderlyingSecurityCode.IsEmpty())
 				security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode;
 
@@ -3010,6 +2819,9 @@ namespace StockSharp.Algo
 		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, object value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
 			message.Changes[type] = value;
 			return message;
 		}
@@ -3057,6 +2869,42 @@ namespace StockSharp.Algo
 			where TMessage : BaseChangeMessage<TChange>
 		{
 			return message.Add(type, (object)value);
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, SecurityStates? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value);
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, Sides? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value);
 		}
 
 		/// <summary>
@@ -3126,7 +2974,7 @@ namespace StockSharp.Algo
 			where TMessage : BaseChangeMessage<TChange>
 		{
 			if (value == null || value == 0)
-				return null;
+				return message;
 
 			return message.Add(type, value.Value);
 		}
@@ -3150,6 +2998,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To add a change to the collection, if value is other than 0 and <see langword="null" />.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, long? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null || value == 0)
+				return message;
+
+			return message.Add(type, value.Value);
+		}
+
+		/// <summary>
 		/// To convert the currency type into the name in the MICEX format.
 		/// </summary>
 		/// <param name="type">Currency type.</param>
@@ -3166,11 +3032,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To �onvert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
+		/// To convert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
 		/// </summary>
 		/// <param name="name">The currency name in the MICEX format.</param>
+		/// <param name="errorHandler">Error handler.</param>
 		/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
-		public static CurrencyTypes? FromMicexCurrencyName(this string name)
+		public static CurrencyTypes? FromMicexCurrencyName(this string name, Action<Exception> errorHandler = null)
 		{
 			if (name.IsEmpty())
 				return null;
@@ -3180,8 +3047,23 @@ namespace StockSharp.Algo
 				case "SUR":
 				case "RUR":
 					return CurrencyTypes.RUB;
+				case "PLD":
+				case "PLT":
+				case "GLD":
+				case "SLV":
+					return null;
 				default:
-					return name.To<CurrencyTypes>();
+				{
+					try
+					{
+						return name.To<CurrencyTypes>();
+					}
+					catch (Exception ex)
+					{
+						errorHandler?.Invoke(ex);
+						return null;
+					}
+				}
 			}
 		}
 
@@ -3204,7 +3086,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="securityClassInfo">Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.</param>
 		/// <param name="secClass">Security class.</param>
-		/// <returns>The instrument description. If the class is not found, than <see langword="null" /> value is returned as instrument type.</returns>
+		/// <returns>The instrument description. If the class is not found, then <see langword="null" /> value is returned as instrument type.</returns>
 		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
 		{
 			var pair = securityClassInfo.TryGetValue(secClass);
@@ -3251,11 +3133,17 @@ namespace StockSharp.Algo
 		/// </summary>
 		public const string SecurityColonSeparator = "##COLON##";
 
+		/// <summary>
+		/// The delimiter, replacing '|' in the path for instruments with id like AA-CA|SPB@SPBEX. Is equal to '##VBAR##'.
+		/// </summary>
+		public const string SecurityVerticalBarSeparator = "##VBAR##";
+
 		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new CachedSynchronizedDictionary<string, string>
 		{
 			{ "/", SecurityPairSeparator },
 			{ "*", SecurityStarSeparator },
-			{ ":", SecurityColonSeparator }
+			{ ":", SecurityColonSeparator },
+			{ "|", SecurityVerticalBarSeparator },
 		};
 
 		// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
@@ -3313,7 +3201,18 @@ namespace StockSharp.Algo
 		/// <returns>Directory name.</returns>
 		public static string CandleArgToFolderName(object arg)
 		{
-			return arg?.ToString().Replace(":", "-") ?? string.Empty;
+			return arg?.ToString().Replace(':', '-') ?? string.Empty;
+		}
+
+		/// <summary>
+		/// To get the instrument by the identifier.
+		/// </summary>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="id">Security ID.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+		public static Security LookupById(this ISecurityProvider provider, SecurityId id)
+		{
+			return provider.LookupById(id.ToStringId());
 		}
 
 		/// <summary>
@@ -3331,6 +3230,47 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(id));
 
 			return provider.Lookup(new Security { Id = id }).SingleOrDefault();
+		}
+
+		/// <summary>
+		/// To get the portfolio by the code name.
+		/// </summary>
+		/// <param name="provider">The provider of information about portfolios.</param>
+		/// <param name="id">Portfolio code name.</param>
+		/// <returns>The got portfolio. If there is no portfolio by given criteria, <see langword="null" /> is returned.</returns>
+		public static Portfolio LookupByPortfolioName(this IPortfolioProvider provider, string id)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (id.IsEmpty())
+				throw new ArgumentNullException(nameof(id));
+
+			return provider.Portfolios.SingleOrDefault(s => s.Name.CompareIgnoreCase(id));
+		}
+
+		/// <summary>
+		/// To get the instrument by the system identifier.
+		/// </summary>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="nativeIdStorage">Security native identifier storage.</param>
+		/// <param name="storageName">Storage name.</param>
+		/// <param name="nativeId">Native (internal) trading system security id.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+		public static Security LookupByNativeId(this ISecurityProvider provider, INativeIdStorage nativeIdStorage, string storageName, object nativeId)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (nativeIdStorage == null)
+				throw new ArgumentNullException(nameof(nativeIdStorage));
+
+			if (nativeId == null)
+				throw new ArgumentNullException(nameof(nativeId));
+
+			var secId = nativeIdStorage.TryGetByNativeId(storageName, nativeId);
+
+			return secId == null ? null : provider.LookupById(secId.Value);
 		}
 
 		/// <summary>
@@ -3356,6 +3296,11 @@ namespace StockSharp.Algo
 		public static readonly Security LookupAllCriteria = new Security { Code = "*" };
 
 		/// <summary>
+		/// Lookup all securities predefined criteria.
+		/// </summary>
+		public static readonly SecurityLookupMessage LookupAllCriteriaMessage = new SecurityLookupMessage { SecurityId = new SecurityId { SecurityCode = "*" } };
+
+		/// <summary>
 		/// Determine the <paramref name="criteria"/> contains lookup all filter.
 		/// </summary>
 		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
@@ -3372,6 +3317,24 @@ namespace StockSharp.Algo
 				criteria.Id.IsEmpty() &&
 				criteria.Code == "*" &&
 				criteria.Type == null;
+		}
+
+		/// <summary>
+		/// Determine the <paramref name="criteria"/> contains lookup all filter.
+		/// </summary>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLookupAll(this SecurityLookupMessage criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			if (criteria == LookupAllCriteriaMessage)
+				return true;
+
+			return
+				criteria.SecurityId.SecurityCode == "*" &&
+				criteria.SecurityType == null;
 		}
 
 		/// <summary>
@@ -3432,7 +3395,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var fields = provider.GetLevel1Fields(security);
+			var fields = provider.GetLevel1Fields(security).ToArray();
 
 			if (fields.IsEmpty())
 				return null;
@@ -3485,20 +3448,20 @@ namespace StockSharp.Algo
 		private const double _maxValue = (double)decimal.MaxValue;
 
 		/// <summary>
-		/// To convert <see cref="Double"/> into <see cref="Decimal"/>. If the initial value is <see cref="double.NaN"/> or <see cref="double.IsInfinity"/>, <see langword="null" /> is returned.
+		/// To convert <see cref="double"/> into <see cref="decimal"/>. If the initial value is <see cref="double.NaN"/> or <see cref="double.IsInfinity"/>, <see langword="null" /> is returned.
 		/// </summary>
-		/// <param name="value"><see cref="Double"/> value.</param>
-		/// <returns><see cref="Decimal"/> value.</returns>
+		/// <param name="value"><see cref="double"/> value.</param>
+		/// <returns><see cref="decimal"/> value.</returns>
 		public static decimal? ToDecimal(this double value)
 		{
 			return value.IsInfinity() || value.IsNaN() || value < _minValue || value > _maxValue ? (decimal?)null : (decimal)value;
 		}
 
 		/// <summary>
-		/// To convert <see cref="Single"/> into <see cref="Decimal"/>. If the initial value is <see cref="float.NaN"/> or <see cref="float.IsInfinity"/>, <see langword="null" /> is returned.
+		/// To convert <see cref="float"/> into <see cref="decimal"/>. If the initial value is <see cref="float.NaN"/> or <see cref="float.IsInfinity"/>, <see langword="null" /> is returned.
 		/// </summary>
-		/// <param name="value"><see cref="Single"/> value.</param>
-		/// <returns><see cref="Decimal"/> value.</returns>
+		/// <param name="value"><see cref="float"/> value.</param>
+		/// <returns><see cref="decimal"/> value.</returns>
 		public static decimal? ToDecimal(this float value)
 		{
 			return value.IsInfinity() || value.IsNaN() || value < _minValue || value > _maxValue ? (decimal?)null : (decimal)value;
@@ -3565,7 +3528,7 @@ namespace StockSharp.Algo
 				case null:
 					return "XXXXXX";
 				default:
-					throw new ArgumentOutOfRangeException(nameof(security));
+					throw new ArgumentOutOfRangeException(nameof(security), security.SecurityType, LocalizedStrings.Str1219);
 			}
 		}
 
@@ -3580,7 +3543,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(cfi));
 
 			if (cfi.Length != 6)
-				throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
 
 			switch (cfi[0])
 			{
@@ -3674,7 +3638,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(cfi));
 
 			if (cfi[0] != 'O')
-				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
 
 			if (cfi.Length < 2)
 				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1605Params.Put(cfi));
@@ -3685,6 +3650,7 @@ namespace StockSharp.Algo
 					return OptionTypes.Call;
 				case 'P':
 					return OptionTypes.Put;
+				case 'X':
 				case ' ':
 					return null;
 				default:
@@ -3775,7 +3741,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
-					Reset();
+					Current = null;
 					_level1Enumerator.Dispose();
 				}
 			}
@@ -3916,7 +3882,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
-					Reset();
+					Current = null;
 					_level1Enumerator.Dispose();
 				}
 			}
@@ -3968,15 +3934,15 @@ namespace StockSharp.Algo
 			return date.DateTime == DateTime.Today;
 		}
 
-		/// <summary>
-		/// To check the specified date is GTC.
-		/// </summary>
-		/// <param name="date">The specified date.</param>
-		/// <returns><see langword="true"/> if the specified date is GTC, otherwise, <see langword="false"/>.</returns>
-		public static bool IsGtc(this DateTimeOffset date)
-		{
-			return date == DateTimeOffset.MaxValue;
-		}
+		///// <summary>
+		///// To check the specified date is GTC.
+		///// </summary>
+		///// <param name="date">The specified date.</param>
+		///// <returns><see langword="true"/> if the specified date is GTC, otherwise, <see langword="false"/>.</returns>
+		//public static bool IsGtc(this DateTimeOffset date)
+		//{
+		//	return date == DateTimeOffset.MaxValue;
+		//}
 
 		/// <summary>
 		/// Extract <see cref="TimeInForce"/> from bits flag.
@@ -3985,11 +3951,11 @@ namespace StockSharp.Algo
 		/// <returns><see cref="TimeInForce"/>.</returns>
 		public static TimeInForce? GetPlazaTimeInForce(this long status)
 		{
-			if (status.HasBits(0x01))
+			if (status.HasBits(0x1))
 				return TimeInForce.PutInQueue;
-			else if (status.HasBits(0x02))
+			else if (status.HasBits(0x2))
 				return TimeInForce.CancelBalance;
-			else if (status.HasBits(0x00080000))
+			else if (status.HasBits(0x80000))
 				return TimeInForce.MatchOrCancel;
 
 			return null;
@@ -4000,9 +3966,331 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="status">Bits flag.</param>
 		/// <returns><see langword="true"/> if an order is system, otherwise, <see langword="false"/>.</returns>
-		public static bool IsSystem(this long status)
+		public static bool IsPlazaSystem(this long status)
 		{
-			return !status.HasBits(0x04);
+			return !status.HasBits(0x4);
+		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to readable string.
+		/// </summary>
+		/// <param name="dt"><see cref="DataType"/> instance.</param>
+		/// <returns>Readable string.</returns>
+		public static string ToReadableString(this DataType dt)
+		{
+			if (dt == null)
+				throw new ArgumentNullException(nameof(dt));
+
+			var tf = (TimeSpan)dt.Arg;
+
+			var str = string.Empty;
+
+			if (tf.Days > 0)
+				str += LocalizedStrings.Str2918Params.Put(tf.Days);
+
+			if (tf.Hours > 0)
+				str = (str + " " + LocalizedStrings.Str2919Params.Put(tf.Hours)).Trim();
+
+			if (tf.Minutes > 0)
+				str = (str + " " + LocalizedStrings.Str2920Params.Put(tf.Minutes)).Trim();
+
+			if (tf.Seconds > 0)
+				str = (str + " " + LocalizedStrings.Seconds.Put(tf.Seconds)).Trim();
+
+			if (str.IsEmpty())
+				str = LocalizedStrings.Ticks;
+
+			return str;
+		}
+
+		/// <summary>
+		/// To get a board by its code. If board with the passed name does not exist, then it will be created.
+		/// </summary>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		/// <param name="code">Board code.</param>
+		/// <param name="createBoard">The handler creating a board, if it is not found. If the value is <see langword="null" />, then the board is created by default initialization.</param>
+		/// <returns>Exchange board.</returns>
+		public static ExchangeBoard GetOrCreateBoard(this IExchangeInfoProvider exchangeInfoProvider, string code, Func<string, ExchangeBoard> createBoard = null)
+		{
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
+			if (code.IsEmpty())
+				throw new ArgumentNullException(nameof(code));
+
+			//if (code.CompareIgnoreCase("RTS"))
+			//	return ExchangeBoard.Forts;
+
+			var board = exchangeInfoProvider.GetExchangeBoard(code);
+
+			if (board != null)
+				return board;
+
+			if (createBoard == null)
+			{
+				var exchange = exchangeInfoProvider.GetExchange(code);
+
+				if (exchange == null)
+				{
+					exchange = new Exchange { Name = code };
+					exchangeInfoProvider.Save(exchange);
+				}
+
+				board = new ExchangeBoard
+				{
+					Code = code,
+					Exchange = exchange
+				};
+			}
+			else
+			{
+				board = createBoard(code);
+
+				if (exchangeInfoProvider.GetExchange(board.Exchange.Name) == null)
+					exchangeInfoProvider.Save(board.Exchange);
+			}
+
+			exchangeInfoProvider.Save(board);
+
+			return board;
+		}
+
+		/// <summary>
+		/// Is MICEX board.
+		/// </summary>
+		/// <param name="board">Board to check.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsMicex(this ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			return board.Exchange == Exchange.Moex && board != ExchangeBoard.Forts;
+		}
+
+		/// <summary>
+		/// Is the UX exchange stock market board.
+		/// </summary>
+		/// <param name="board">Board to check.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsUxStock(this ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			return board.Exchange == Exchange.Ux && board != ExchangeBoard.Ux;
+		}
+
+		/// <summary>
+		/// Identifier of <see cref="AllSecurity"/>.
+		/// </summary>
+		public const string AllSecurityId = "ALL@ALL";
+
+		/// <summary>
+		/// "All securities" instance.
+		/// </summary>
+		public static Security AllSecurity { get; } = new Security
+		{
+			Id = AllSecurityId,
+			Code = MessageAdapter.DefaultAssociatedBoardCode,
+			//Class = task.GetDisplayName(),
+			Name = LocalizedStrings.Str2835,
+			Board = ExchangeBoard.Associated,
+		};
+
+		/// <summary>
+		/// "News" security instance.
+		/// </summary>
+		public static readonly Security NewsSecurity = new Security { Id = "NEWS@NEWS" };
+
+		/// <summary>
+		/// Find <see cref="AllSecurity"/> instance in the specified provider.
+		/// </summary>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <returns>Found instance.</returns>
+		public static Security GetAllSecurity(this ISecurityProvider provider)
+		{
+			return provider.LookupById(AllSecurityId);
+		}
+
+		/// <summary>
+		/// Check if the specified security is <see cref="AllSecurity"/>.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns><see langword="true"/>, if the specified security is <see cref="AllSecurity"/>, otherwise, <see langword="false"/>.</returns>
+		public static bool IsAllSecurity(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.Id.CompareIgnoreCase(AllSecurityId);
+		}
+
+		/// <summary>
+		/// Check if the specified identifier is <see cref="AllSecurity"/>.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns><see langword="true"/>, if the specified identifier is <see cref="AllSecurity"/>, otherwise, <see langword="false"/>.</returns>
+		public static bool IsAllSecurity(this SecurityId securityId)
+		{
+			//if (security == null)
+			//	throw new ArgumentNullException(nameof(security));
+
+			return securityId.SecurityCode.CompareIgnoreCase(MessageAdapter.DefaultAssociatedBoardCode) && securityId.BoardCode.CompareIgnoreCase(MessageAdapter.DefaultAssociatedBoardCode);
+		}
+
+		/// <summary>
+		/// To check the correctness of the entered identifier.
+		/// </summary>
+		/// <param name="id">Security ID.</param>
+		/// <returns>An error message text, or <see langword="null" /> if no error.</returns>
+		public static string ValidateId(ref string id)
+		{
+			// 
+			// can be fixed via TraderHelper.SecurityIdToFolderName
+			//
+			//var invalidChars = Path.GetInvalidFileNameChars().Where(id.Contains).ToArray();
+			//if (invalidChars.Any())
+			//{
+			//	return LocalizedStrings.Str1549Params
+			//		.Put(id, invalidChars.Select(c => c.To<string>()).Join(", "));
+			//}
+
+			var firstIndex = id.IndexOf('@');
+
+			if (firstIndex == -1)
+			{
+				id += "@ALL";
+				//return LocalizedStrings.Str2926;
+			}
+
+			var lastIndex = id.LastIndexOf('@');
+
+			//if (firstIndex != id.LastIndexOf('@'))
+			//	return LocalizedStrings.Str1550;
+
+			if (firstIndex != lastIndex)
+				return null;
+
+			if (firstIndex == 0)
+				return LocalizedStrings.Str2923;
+			else if (firstIndex == (id.Length - 1))
+				return LocalizedStrings.Str2926;
+
+			return null;
+		}
+
+		/// <summary>
+		/// Convert <see cref="Level1Fields"/> to <see cref="Type"/> value.
+		/// </summary>
+		/// <param name="field"><see cref="Level1Fields"/> value.</param>
+		/// <returns><see cref="Type"/> value.</returns>
+		public static Type ToType(this Level1Fields field)
+		{
+			switch (field)
+			{
+				case Level1Fields.AsksCount:
+				case Level1Fields.BidsCount:
+				case Level1Fields.TradesCount:
+				case Level1Fields.Decimals:
+					return typeof(int);
+
+				case Level1Fields.LastTradeId:
+					return typeof(long);
+
+				case Level1Fields.BestAskTime:
+				case Level1Fields.BestBidTime:
+				case Level1Fields.LastTradeTime:
+				case Level1Fields.BuyBackDate:
+					return typeof(DateTimeOffset);
+
+				case Level1Fields.LastTradeUpDown:
+				case Level1Fields.IsSystem:
+					return typeof(bool);
+
+				case Level1Fields.State:
+					return typeof(SecurityStates);
+
+				case Level1Fields.LastTradeOrigin:
+					return typeof(Sides);
+
+				default:
+					return field.IsObsolete() ? null : typeof(decimal);
+			}
+		}
+
+		/// <summary>
+		/// Convert <see cref="QuoteChangeMessage"/> to <see cref="Level1ChangeMessage"/> value.
+		/// </summary>
+		/// <param name="message"><see cref="QuoteChangeMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this QuoteChangeMessage message)
+		{
+			var bestBid = message.GetBestBid();
+			var bestAsk = message.GetBestAsk();
+
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.ServerTime,
+			};
+
+			if (bestBid != null)
+			{
+				level1.Add(Level1Fields.BestBidPrice, bestBid.Price);
+				level1.Add(Level1Fields.BestBidVolume, bestBid.Volume);
+			}
+
+			if (bestAsk != null)
+			{
+				level1.Add(Level1Fields.BestAskPrice, bestAsk.Price);
+				level1.Add(Level1Fields.BestAskVolume, bestAsk.Volume);
+			}
+
+			return level1;
+		}
+
+		/// <summary>
+		/// Convert <see cref="CandleMessage"/> to <see cref="Level1ChangeMessage"/> value.
+		/// </summary>
+		/// <param name="message"><see cref="CandleMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this CandleMessage message)
+		{
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.OpenTime,
+			}
+			.Add(Level1Fields.OpenPrice, message.OpenPrice)
+			.Add(Level1Fields.HighPrice, message.HighPrice)
+			.Add(Level1Fields.LowPrice, message.LowPrice)
+			.Add(Level1Fields.ClosePrice, message.ClosePrice)
+			.Add(Level1Fields.Volume, message.TotalVolume)
+			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest);
+
+			return level1;
+		}
+
+		/// <summary>
+		/// Convert <see cref="ExecutionMessage"/> to <see cref="Level1ChangeMessage"/> value.
+		/// </summary>
+		/// <param name="message"><see cref="ExecutionMessage"/> instance.</param>
+		/// <returns><see cref="Level1ChangeMessage"/> instance.</returns>
+		public static Level1ChangeMessage ToLevel1(this ExecutionMessage message)
+		{
+			var level1 = new Level1ChangeMessage
+			{
+				SecurityId = message.SecurityId,
+				ServerTime = message.ServerTime,
+			}
+			.TryAdd(Level1Fields.LastTradeId, message.TradeId)
+			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice)
+			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume)
+			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest)
+			.TryAdd(Level1Fields.LastTradeOrigin, message.OriginSide);
+
+			return level1;
 		}
 	}
 }

@@ -18,6 +18,9 @@ namespace SampleIQFeed
 	using System;
 	using System.Windows;
 
+	using Ecng.Common;
+	using Ecng.Xaml;
+
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -48,10 +51,33 @@ namespace SampleIQFeed
 			}
 
 			var date = ((DateTime)DatePicker.Value).Date;
-			bool isSuccess;
 
-			L1Grid.Messages.Clear();
-			L1Grid.Messages.AddRange(MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out isSuccess));
+			BusyIndicator.IsBusy = true;
+
+			ThreadingHelper.Thread(() =>
+			{
+				try
+				{
+					var ticks = MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out var _);
+
+					this.GuiAsync(() =>
+					{
+						BusyIndicator.IsBusy = false;
+
+						L1Grid.Messages.Clear();
+						L1Grid.Messages.AddRange(ticks);
+					});
+				}
+				catch (Exception ex)
+				{
+					this.GuiAsync(() =>
+					{
+						BusyIndicator.IsBusy = false;
+
+						new MessageBoxBuilder().Text(ex.Message).Owner(this).Show();
+					});
+				}
+			}).Launch();
 		}
 	}
 }

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0dec6014-51ee-4463-b102-aed24464833e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>After adding a strategy to the <legacyBold>Trade</legacyBold> folder. 
+Double-click the added strategy to open the Trade Strategy name tab. Switching 
+to this tab will automatically open the <legacyBold>Trade</legacyBold> tab in 
+the <legacyBold>Ribbon</legacyBold>. On the <legacyBold>Trade</legacyBold> tab, 
+you can specify instrument and portfolio, with which the strategy will work. 
+Clicking the <legacyBold>Start</legacyBold> button starts the strategy Live 
+trade, clicking the <legacyBold>Stop</legacyBold> button - stops it.
+</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Interface_Live_trade_00"/>
+</mediaLink>
+<para>The strategy tab contains Designer for strategy schemas and composite 
+elements, similar to the one, described in the 
+<link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" /> section. But in the 
+case of Live trade you cannot move, add or remove cubes and connections. Also, 
+the tab contains the <link xlink:href="319208d0-d543-47aa-8008-3891079198d4" /> 
+panel, by default this panel is minimized and attached to the right side of the 
+tab.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("UltimateOsc")]
 	[DescriptionLoc(LocalizedStrings.Str776Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class UltimateOscillator : BaseIndicator
 	{
 		private const decimal _stoProcentov = 100m;

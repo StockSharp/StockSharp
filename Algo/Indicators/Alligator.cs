@@ -19,16 +19,14 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Alligator.
 	/// </summary>
 	/// <remarks>
 	/// http://ta.mql4.com/indicators/bills/alligator.
 	/// </remarks>
-	[DisplayName("Alligator")]
-	[DescriptionLoc(LocalizedStrings.Str837Key)]
+	[DisplayNameLoc(LocalizedStrings.Str837Key)]
+	[DescriptionLoc(LocalizedStrings.Str837Key, true)]
 	public class Alligator : BaseComplexIndicator
 	{
 		/// <summary>
@@ -56,29 +54,29 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Jaw.
 		/// </summary>
-		[ExpandableObject]
-		[DisplayName("Jaw")]
-		[DescriptionLoc(LocalizedStrings.Str838Key)]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		[DisplayNameLoc(LocalizedStrings.Str838Key)]
+		[DescriptionLoc(LocalizedStrings.Str838Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public AlligatorLine Jaw { get; }
 
 		/// <summary>
 		/// Teeth.
 		/// </summary>
-		[ExpandableObject]
-		[DisplayName("Teeth")]
-		[DescriptionLoc(LocalizedStrings.Str839Key)]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		[DisplayNameLoc(LocalizedStrings.Str839Key)]
+		[DescriptionLoc(LocalizedStrings.Str839Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public AlligatorLine Teeth { get; private set; }
+		public AlligatorLine Teeth { get; }
 
 		/// <summary>
 		/// Lips.
 		/// </summary>
-		[ExpandableObject]
-		[DisplayName("Lips")]
-		[DescriptionLoc(LocalizedStrings.Str840Key)]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		[DisplayNameLoc(LocalizedStrings.Str840Key)]
+		[DescriptionLoc(LocalizedStrings.Str840Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public AlligatorLine Lips { get; private set; }
+		public AlligatorLine Lips { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.

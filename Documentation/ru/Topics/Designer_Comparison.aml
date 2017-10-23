@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="08ebe03d-a446-4738-98fb-44cff38ddfda" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Comparison_00"/>
+</mediaLink>
+<para>Элемент используется для сравнения двух поступающих на вход объектов.</para>
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Сравнение</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+  <listItem><para><legacyBold>Сравнение</legacyBold> – значения, которые допускают сравнение (например, числовое значение, строка, значение индикатора и т.д.).</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Флаг</legacyBold>  – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Левый</legacyBold> – параметр, значение которого 
+  будет использоваться в левой части сравнения.</para></listItem>
+  <listItem><para><legacyBold>Оператор</legacyBold> – условие, с помощью которого 
+  необходимо сравнить переданные значения.</para></listItem>
+  <listItem><para><legacyBold>Правый</legacyBold> – параметр, значение которого 
+  будет использоваться в правой части сравнения.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+<para>При смене оператора название кубика автоматически меняется на название оператора.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

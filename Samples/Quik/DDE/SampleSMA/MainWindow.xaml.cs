@@ -23,7 +23,6 @@ namespace SampleSMA
 	using System.Globalization;
 	using System.IO;
 	using System.Windows;
-	using System.Windows.Controls;
 	using System.Windows.Media;
 
 	using MoreLinq;
@@ -71,7 +70,7 @@ namespace SampleSMA
 			Path.Text = QuikTerminal.GetDefaultPath();
 		}
 
-		private void OrdersOrderSelected(object sender, SelectionChangedEventArgs e)
+		private void OrdersOrderSelected()
 		{
 			CancelOrders.IsEnabled = !Orders.SelectedOrders.IsEmpty();
 		}
@@ -116,30 +115,29 @@ namespace SampleSMA
 					{
 						_candleManager = new CandleManager(_trader);
 
-						_trader.NewSecurities += securities =>
+						_trader.NewSecurity += security =>
 						{
+							if (!security.Code.CompareIgnoreCase("LKOH"))
+								return;
+
 							// находим нужную бумагу
-							var lkoh = securities.FirstOrDefault(s => s.Code == "LKOH");
+							var lkoh = security;
 
-							if (lkoh != null)
+							_lkoh = lkoh;
+
+							this.GuiAsync(() =>
 							{
-								_lkoh = lkoh;
-
-								this.GuiAsync(() =>
-								{
-									Start.IsEnabled = true;
-								});
-							}
+								Start.IsEnabled = true;
+							});
 						};
 
-						_trader.NewMyTrades += trades =>
+						_trader.NewMyTrade += trade =>
 						{
 							if (_strategy != null)
 							{
 								// найти те сделки, которые совершила стратегия скользящей средней
-								trades = trades.Where(t => _strategy.Orders.Any(o => o == t.Order));
-
-								Trades.Trades.AddRange(trades);
+								if (_strategy.Orders.Contains(trade.Order))
+									Trades.Trades.Add(trade);
 							}
 						};
 
@@ -300,12 +298,15 @@ namespace SampleSMA
 			var longValue = candle.State == CandleStates.Finished ? _strategy.LongSma.Process(candle) : null;
 			var shortValue = candle.State == CandleStates.Finished ? _strategy.ShortSma.Process(candle) : null;
 
-			Chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
-			{
-				{ _candlesElem, candle },
-				{ _longMaElem, longValue },
-				{ _shortMaElem, shortValue },
-			});
+			var chartData = new ChartDrawData();
+
+			chartData
+				.Group(candle.OpenTime)
+					.Add(_candlesElem, candle)
+					.Add(_longMaElem, longValue)
+					.Add(_shortMaElem, shortValue);
+
+			Chart.Draw(chartData);
 		}
 
 		private void ReportClick(object sender, RoutedEventArgs e)

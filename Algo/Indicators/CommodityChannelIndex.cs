@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("CCI")]
 	[DescriptionLoc(LocalizedStrings.Str760Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class CommodityChannelIndex : LengthIndicator<decimal>
 	{
 		private readonly MeanDeviation _mean = new MeanDeviation();

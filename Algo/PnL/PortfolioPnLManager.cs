@@ -19,7 +19,10 @@ namespace StockSharp.Algo.PnL
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
+
+	using MoreLinq;
 
 	using StockSharp.Messages;
 
@@ -36,12 +39,12 @@ namespace StockSharp.Algo.PnL
 			PortfolioName = portfolioName;
 		}
 
-		public string PortfolioName { get; private set; }
+		public string PortfolioName { get; }
 
 		/// <summary>
 		/// Total profit-loss.
 		/// </summary>
-		public decimal PnL => RealizedPnL + UnrealizedPnL;
+		public decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
 
 		private decimal _realizedPnL;
 
@@ -51,7 +54,7 @@ namespace StockSharp.Algo.PnL
 		public virtual decimal RealizedPnL => _realizedPnL;
 
 		/// <summary>
-		/// To zero <see cref="PortfolioPnLManager.PnL"/>.
+		/// To zero <see cref="PnL"/>.
 		/// </summary>
 		public void Reset()
 		{
@@ -59,7 +62,7 @@ namespace StockSharp.Algo.PnL
 			_securityPnLs.Clear();
 		}
 
-		public decimal UnrealizedPnL
+		public decimal? UnrealizedPnL
 		{
 			get { return _securityPnLs.CachedValues.Sum(q => q.UnrealizedPnL); }
 		}
@@ -127,6 +130,32 @@ namespace StockSharp.Algo.PnL
 
 					var queue = _securityPnLs.TryGetValue(quoteMsg.SecurityId);
 					queue?.ProcessQuotes(quoteMsg);
+
+					break;
+				}
+
+				case MessageTypes.PortfolioChange:
+				{
+					var pfMsg = (PortfolioChangeMessage)message;
+
+					var leverage = pfMsg.Changes.TryGetValue(PositionChangeTypes.Leverage).To<decimal?>();
+					if (leverage != null)
+					{
+						_securityPnLs.CachedValues.ForEach(q => q.Leverage = leverage.Value);
+					}
+
+					break;
+				}
+
+				case MessageTypes.PositionChange:
+				{
+					var posMsg = (PositionChangeMessage)message;
+
+					var leverage = posMsg.Changes.TryGetValue(PositionChangeTypes.Leverage).To<decimal?>();
+					if (leverage != null)
+					{
+						_securityPnLs.SafeAdd(posMsg.SecurityId, security => new PnLQueue(security)).Leverage = leverage.Value;
+					}
 
 					break;
 				}

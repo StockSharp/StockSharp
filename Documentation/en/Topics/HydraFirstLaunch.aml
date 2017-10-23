@@ -3,87 +3,83 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 		<para>
-			При первом запуске будет показано следующее окно:
+			At first start you will see the following window:
 		</para>
 		<mediaLink>
-			<image placement="left" xlink:href="hydra_main_first" />
+			<image placement="center" xlink:href="hydra_Quick_start_00"/>
 		</mediaLink>
-
+<para>You must select the startup mode and click OK button.</para>
 		<steps class="ordered">
 			<step>
 				<content>
 				<para>
-					Сначала добавляем источники данных. Для из главного меню приложения нужно выбрать <legacyBold>Файл => Добавить источники...</legacyBold> 
-					или нажать кнопку <legacyBold>Источники</legacyBold>.
+Then the window for selecting data sources appears. You can also open this window in the <legacyBold>Common</legacyBold> tab, where you need to select <legacyBold>Add => Sources</legacyBold>.
 				</para>
 					<mediaLink>
 						  <image placement="left" xlink:href="hydra_source_add" />
 					</mediaLink>
 				<para>
-					В открывшемся окне отметьте нужные источники. Можно воспользоваться фильтрами по региону, электронной площадке, типу данных, платности, реал-тайм или нет.
-					По завершении выбора нажмите кнопку <legacyBold>OK</legacyBold>. После этого источники будут добавлены на левую панель главного окна приложения. 
+In the window select the required sources. You can use filters by the region, the electronic board, the data type, the free or paid, real-time or not. When the choice is finished click <legacyBold>OK</legacyBold> button. After that, the sources will be added to the left panel of the main application window.
 				</para>
 				</content>
 			</step>
 			<step>
 				<content>
 				<para>
-					Вы можете создать несколько экземпляров одного источника. Например, несколько экземляров Finam, которые будут созранять скаченные данные в
-					разные папки. Это делается, как и при первичном добавлении, из меню <legacyBold>Файл => Добавить источник</legacyBold> или при помощи кнопки <legacyBold>Добавить источник</legacyBold>. 
-					Ненужные источники можно удалить при помощи кнопки	<mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline>.
+					2.	You can create multiple instances of one source. For example, several instances of Finam, which will save the downloaded data to different folders. This can be done as well as during the initial addition, from the <legacyBold>Common tab</legacyBold>, selecting <legacyBold>Add => Sources</legacyBold>. Unnecessary sources can be removed by clicking the <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline> button.
 				</para>
 				</content>
 			</step>
 			<step>
 				<content>
-					<para>Следующий шаг - настройка источника. Для этого нажимаем кнопку <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline>. 
-					Подробно настройка описана в разделе <link xlink:href="f005431b-3a1b-49c2-a389-f1d4e9756f45">Настройка источников</link>.</para>
+					<para>The next step is the source setting up. To do this, click the <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline> button. 
+					For more details see the <link xlink:href="f005431b-3a1b-49c2-a389-f1d4e9756f45">Sources setting up</link> section.</para>
 				</content>
 			</step>
 		  	<step>
 				<content>
-					  <para>Чтобы источник после нажатия кнопки <legacyBold>Старт</legacyBold> стал скачивать данные, его нужно влючить. Для этого следует выбрать значок
-					  источника на левой панели и использовать кнопку <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> для включения или выключения.
-					  Эту операцию можно выполнить до, или после добавления инструментов для скачивания, что описано ниже.</para>
+					  <para>In order to the source begins to download data after clicking the <legacyBold>Start</legacyBold> button, it must be turned on. To do this,
+					  select the source icon in the left panel and use the <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> button to turn
+					  on or off. This operation can be performed before or after the adding of instruments for downloading, which is described below.</para>
 				</content>
 			</step>
 			<step>
 				<content>
-					<para>Далее необходимо добавить инструменты. Для этого выполняем двойной щелчок по значку источника. Откроется окно, показанное на следующем рисунке.</para>
+					<para>Then, it is necessary to add instruments. To do this, double-click on the source icon. The window shown in the following figure opens.</para>
 					<mediaLink>
 						  <image placement="left" xlink:href="hydra_source_first" />
 					</mediaLink>					  
-					<para>Затем нажимаем на кнопку <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>. Подробно добавление инструментов описано в разделе
-					<link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Список инструментов</link>.</para>
+					<para>Then click the <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline> button. For more details see the
+					<link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Instrument list</link> section.</para>
 				</content>
 			</step>
 			<step>
 				<content>
-					<para>В нижней части окна источника расположена панель с кнопками для работы с инструментами. 
-					С выбранным инструментом можно выполнить следующие операции:</para>
+					<para>The panel with buttons to work with the instruments is located at the bottom of the source window. You can do the following steps with the
+					selected instrument:</para>
 					<list class="bullet">
   						<listItem>
-  							<para>Отредактировать при помощи кнопки <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline>.</para>
+  							<para>To edit with the <mediaLinkInline><image xlink:href="hydra_edit"/></mediaLinkInline> button.</para>
   						</listItem>
   						<listItem>
-  							<para>Удалить при помощи кнопки <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline>.</para>
+  							<para>To delete with the <mediaLinkInline><image xlink:href="hydra_delete"/></mediaLinkInline> button.</para>
   						</listItem>
   						<listItem>
-  							<para>Настроить объем получаемой информации при помощи кнопок: <legacyBold>Сделки</legacyBold>, <legacyBold>Стаканы</legacyBold>, 
-  							<legacyBold>Свечи</legacyBold>, <legacyBold>Лог заявок</legacyBold>, <legacyBold>Level 1</legacyBold>, <legacyBold>Свои транзакции</legacyBold>.</para>
+  							<para>To set up the volume of downloaded information with buttons: <legacyBold>Ticks</legacyBold>, <legacyBold>Order books</legacyBold>, 
+  							<legacyBold>Candles</legacyBold>, <legacyBold>Order log</legacyBold>, <legacyBold>Level 1</legacyBold>, <legacyBold>Own transactions</legacyBold>.</para>
   						</listItem>
 					</list>
 					<alert class="note">
-  						<para>Обратите внимание. Для получения информации по стаканам, логу заявок, level 1, своим транзакциям необходимо подключение к коннектору в реальном времени.</para>
+  						<para>Please, note. For the getting information on the order books, orders log, level 1, own transactions, the connector must be connected in real time.</para>
 					</alert>
 				</content>
 			</step>
 			<step>
 				<content>
 					<para>
-						Когда все настройки будут применены и инструменты выбраны, то на главном окне можно нажать кнопку <legacyBold>Старт</legacyBold>. Это
-						запустит активные источники и они начнут качать данные. Процесс работы можно наблюдать в специальном окне, отрыв его через меню 
-						<legacyBold>Логи => Графический мониторинг</legacyBold>. Кроме того логи сохраняются в файлах в локальной директории.
+When all the settings are applied and the instruments are selected, on the <legacyBold>Common</legacyBold> tab, you can click the <legacyBold>Start</legacyBold> button. 
+This will launch active sources and they will start to download the data. The work process can be observed in the 
+special <legacyBold>Logs</legacyBold> tab, which is fixed at the bottom of the program. Also, logs are stored in files in the local directory.
 					</para>
 					<mediaLink>
 						  <image placement="left" xlink:href="hydra_main_start" />

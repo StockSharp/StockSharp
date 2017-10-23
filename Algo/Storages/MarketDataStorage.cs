@@ -47,6 +47,7 @@ namespace StockSharp.Algo.Storages
 		private readonly Func<TData, SecurityId> _getSecurityId;
 		private readonly Func<TData, TId> _getId;
 		private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = new SynchronizedDictionary<DateTime, SyncObject>();
+		private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = new SynchronizedDictionary<DateTime, IMarketDataMetaInfo>();
 
 		protected MarketDataStorage(Security security, object arg, Func<TData, DateTimeOffset> getTime, Func<TData, SecurityId> getSecurity, Func<TData, TId> getId, IMarketDataSerializer<TData> serializer, IMarketDataStorageDrive drive)
 			: this(security.ToSecurityId(), arg, getTime, getSecurity, getId, serializer, drive)
@@ -111,9 +112,9 @@ namespace StockSharp.Algo.Storages
 
 		public IMarketDataStorageDrive Drive { get; }
 
-		private DateTime GetTruncatedTime(TData data)
+		protected DateTime GetTruncatedTime(TData data)
 		{
-			return _getTime(data).Truncate().UtcDateTime;
+			return _getTime(data).StorageTruncate(Serializer.TimePrecision).UtcDateTime;
 		}
 
 		private SyncObject GetSync(DateTime time)
@@ -126,6 +127,11 @@ namespace StockSharp.Algo.Storages
 			return Drive.LoadStream(date);
 		}
 
+		private bool SecurityIdEqual(SecurityId securityId)
+		{
+			return securityId.SecurityCode.CompareIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.BoardCode);
+		}
+
 		public int Save(IEnumerable<TData> data)
 		{
 			if (data == null)
@@ -135,10 +141,10 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var group in data.GroupBy(d =>
 			{
-				var security = _getSecurityId(d);
+				var securityId = _getSecurityId(d);
 
-				if (!security.IsDefault() && (security.SecurityCode != SecurityId.SecurityCode || security.BoardCode != SecurityId.BoardCode))
-					throw new ArgumentException(LocalizedStrings.Str1026Params.Put(typeof(TData).Name, security, SecurityId));
+				if (!securityId.IsDefault() && !SecurityIdEqual(securityId))
+					throw new ArgumentException(LocalizedStrings.Str1026Params.Put(typeof(TData).Name, securityId, SecurityId));
 
 				var time = _getTime(d);
 
@@ -165,7 +171,12 @@ namespace StockSharp.Algo.Storages
 							metaInfo = Serializer.CreateMetaInfo(date);
 						}
 
-						count += Save(stream, metaInfo, newItems, false);
+						var diff = Save(stream, metaInfo, newItems, false);
+
+						if (diff == 0)
+							continue;
+
+						count += diff;
 
 						if (!(stream is MemoryStream))
 							continue;
@@ -199,10 +210,18 @@ namespace StockSharp.Algo.Storages
 
 			if (metaInfo.Count == 0)
 			{
+				data = FilterNewData(data, metaInfo).ToArray();
+
+				if (data.IsEmpty())
+					return 0;
+
 				var time = GetTruncatedTime(data[0]);
 
-				metaInfo.PriceStep = Security.PriceStep ?? 0.01m;
-				metaInfo.VolumeStep = Security.VolumeStep ?? 1m;
+				var priceStep = Security.PriceStep;
+				var volumeStep = Security.VolumeStep;
+
+				metaInfo.PriceStep = priceStep == null || priceStep == 0 ? 0.01m : priceStep.Value;
+				metaInfo.VolumeStep = volumeStep == null || volumeStep == 0 ? 1m : volumeStep.Value;
 				metaInfo.LastTime = time;
 				metaInfo.FirstTime = time;
 			}
@@ -229,7 +248,7 @@ namespace StockSharp.Algo.Storages
 			stream.Position = 0;
 			metaInfo.Write(stream);
 
-			if (isOverride)
+			if (isOverride || metaInfo.IsOverride)
 				stream.SetLength(stream.Position);
 			else
 				stream.Position = stream.Length;
@@ -243,7 +262,17 @@ namespace StockSharp.Algo.Storages
 		protected virtual IEnumerable<TData> FilterNewData(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
 			var lastTime = metaInfo.LastTime;
-			return data.Where(i => GetTruncatedTime(i) >= lastTime);
+
+			foreach (var item in data)
+			{
+				var time = GetTruncatedTime(item);
+
+				if (time < lastTime)
+					continue;
+
+				lastTime = time;
+				yield return item;
+			}
 		}
 
 		int IMarketDataStorage.Save(IEnumerable data)
@@ -337,6 +366,8 @@ namespace StockSharp.Algo.Storages
 
 		public IEnumerable<TData> Load(DateTime date)
 		{
+			date = date.Date;
+
 			lock (GetSync(date))
 			{
 				var stream = LoadStream(date);
@@ -362,6 +393,8 @@ namespace StockSharp.Algo.Storages
 
 		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
 		{
+			date = date.Date;
+
 			lock (GetSync(date))
 			{
 				using (var stream = LoadStream(date))
@@ -374,14 +407,30 @@ namespace StockSharp.Algo.Storages
 			if (stream == Stream.Null)
 				return null;
 
-			var metaInfo = Serializer.CreateMetaInfo(date);
-			metaInfo.Read(stream);
+			IMarketDataMetaInfo metaInfo;
+
+			if (Serializer.Format == StorageFormats.Csv)
+			{
+				metaInfo = _dateMetaInfos.SafeAdd(date, d =>
+				{
+					var info = Serializer.CreateMetaInfo(date);
+					info.Read(stream);
+					return info;
+				});
+			}
+			else
+			{
+				metaInfo = Serializer.CreateMetaInfo(date);
+				metaInfo.Read(stream);
+			}
 
 			return metaInfo;
 		}
 
 		void IMarketDataStorage.Delete(DateTime date)
 		{
+			date = date.Date;
+
 			lock (GetSync(date))
 				Drive.Delete(date);
 		}

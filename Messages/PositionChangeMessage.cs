@@ -101,6 +101,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
+		[Obsolete]
 		ExtensionInfo,
 
 		/// <summary>
@@ -129,6 +130,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str264Key)]
+		[Obsolete]
 		DepoName,
 
 		/// <summary>
@@ -166,6 +168,15 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
+		/// Client code assigned by the broker.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// The depositary where the physical security.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str264Key)]
@@ -192,6 +203,12 @@ namespace StockSharp.Messages
 		public string Description { get; set; }
 
 		/// <summary>
+		/// ID of the original message <see cref="PortfolioMessage.TransactionId"/> for which this message is a response.
+		/// </summary>
+		[DataMember]
+		public long OriginalTransactionId { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		public PositionChangeMessage()
@@ -214,6 +231,8 @@ namespace StockSharp.Messages
 				ServerTime = ServerTime,
 				LimitType = LimitType,
 				Description = Description,
+				OriginalTransactionId = OriginalTransactionId,
+				ClientCode = ClientCode,
 			};
 
 			msg.Changes.AddRange(Changes);
@@ -228,7 +247,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},P={PortfolioName},Changes={Changes.Select(c => c.ToString()).Join(",")}";
+			return base.ToString() + $",Sec={SecurityId},P={PortfolioName},CL={ClientCode},Changes={Changes.Select(c => c.ToString()).Join(",")}";
 		}
 	}
 }

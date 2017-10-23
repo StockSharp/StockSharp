@@ -18,6 +18,79 @@ namespace StockSharp.Community
 	using System;
 	using System.Runtime.Serialization;
 
+	using StockSharp.Localization;
+
+	/// <summary>
+	/// Strategy content types.
+	/// </summary>
+	[DataContract]
+	public enum StrategyContentTypes
+	{
+		/// <summary>
+		/// Source code (if the strategy is distributed in source code).
+		/// </summary>
+		[EnumMember]
+		SourceCode,
+
+		/// <summary>
+		/// The compiled build (if the strategy is distributed as a finished build).
+		/// </summary>
+		[EnumMember]
+		CompiledAssembly,
+
+		/// <summary>
+		/// Schema in visual designer (if the strategy is distributed as a schema).
+		/// </summary>
+		[EnumMember]
+		Schema,
+
+		/// <summary>
+		/// Encrypted version of <see cref="Schema"/>.
+		/// </summary>
+		[EnumMember]
+		EncryptedSchema,
+
+		/// <summary>
+		/// The compiled executable (.exe) application.
+		/// </summary>
+		[EnumMember]
+		StandaloneApp,
+
+		/// <summary>
+		/// Indicator.
+		/// </summary>
+		[EnumMember]
+		Indicator,
+	}
+
+	/// <summary>
+	/// Strategy price types.
+	/// </summary>
+	[DataContract]
+	public enum StrategyPriceTypes
+	{
+		/// <summary>
+		/// Lifetime.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.LifetimeKey)]
+		Lifetime,
+
+		/// <summary>
+		/// Per month.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.PerMonthKey)]
+		PerMonth,
+
+		/// <summary>
+		/// Annual.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.AnnualKey)]
+		Annual
+	}
+
 	/// <summary>
 	/// The strategy data.
 	/// </summary>
@@ -49,10 +122,34 @@ namespace StockSharp.Community
 		public string Description { get; set; }
 
 		/// <summary>
+		/// Strategy tags.
+		/// </summary>
+		[DataMember]
+		public string Tags { get; set; }
+
+		///// <summary>
+		///// Name (ru).
+		///// </summary>
+		//[DataMember]
+		//public string RuName { get; set; }
+
+		///// <summary>
+		///// Strategy description (ru).
+		///// </summary>
+		//[DataMember]
+		//public string RuDescription { get; set; }
+
+		/// <summary>
 		/// The identifier of a topic in the forum where the strategy is discussed.
 		/// </summary>
 		[DataMember]
-		public int TopicId { get; set; }
+		public int DescriptionId { get; set; }
+
+		/// <summary>
+		/// Type of <see cref="Price"/>.
+		/// </summary>
+		[DataMember]
+		public StrategyPriceTypes PriceType { get; set; }
 
 		/// <summary>
 		/// The purchase price.
@@ -60,22 +157,76 @@ namespace StockSharp.Community
 		[DataMember]
 		public decimal Price { get; set; }
 
-		/// <summary>
-		/// Source code (if the strategy is distributed in source code).
-		/// </summary>
-		[DataMember]
-		public string SourceCode { get; set; }
+		///// <summary>
+		///// Is the <see cref="Price"/> in USD.
+		///// </summary>
+		//[DataMember]
+		//public bool IsUsd { get; set; }
 
 		/// <summary>
-		/// The compiled build (if the strategy is distributed as a finished build).
+		/// Type of <see cref="Content"/>.
 		/// </summary>
 		[DataMember]
-		public byte[] CompiledAssembly { get; set; }
+		public StrategyContentTypes ContentType { get; set; }
+
+		///// <summary>
+		///// Content name (file name etc.).
+		///// </summary>
+		//[DataMember]
+		//public string ContentName { get; set; }
+
+		/// <summary>
+		/// Content.
+		/// </summary>
+		[DataMember]
+		public long Content { get; set; }
 
 		/// <summary>
 		/// The author identifier.
 		/// </summary>
 		[DataMember]
 		public long Author { get; set; }
+
+		/// <summary>
+		/// The picture identifier.
+		/// </summary>
+		[DataMember]
+		public long? Picture { get; set; }
+
+		/// <summary>
+		/// The content revision.
+		/// </summary>
+		[DataMember]
+		public int Revision { get; set; }
+
+		/// <summary>
+		/// User ID.
+		/// </summary>
+		[DataMember]
+		public string UserId { get; set; }
+
+		/// <summary>
+		/// Only visible to author.
+		/// </summary>
+		[DataMember]
+		public bool IsPrivate { get; set; }
+
+		/// <summary>
+		/// Is colocation available for the strategy.
+		/// </summary>
+		[DataMember]
+		public bool IsColocation { get; set; }
+
+		/// <summary>
+		/// Promo price.
+		/// </summary>
+		[DataMember]
+		public decimal? PromoPrice { get; set; }
+
+		/// <summary>
+		/// Promo end date.
+		/// </summary>
+		[DataMember]
+		public DateTime? PromoEnd { get; set; }
 	}
 }

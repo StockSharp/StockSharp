@@ -51,7 +51,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Initialize <see cref="BaseChangeMessage{T}"/>.
 		/// </summary>
-		/// <param name="type">Data type.</param>
+		/// <param name="type">Message type.</param>
 		protected BaseChangeMessage(MessageTypes type)
 			: base(type)
 		{

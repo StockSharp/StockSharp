@@ -40,69 +40,58 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime">
-      <HintPath>..\References\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.Core">
-      <HintPath>..\References\Amazon\AWSSDK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.Glacier">
-      <HintPath>..\References\Amazon\AWSSDK.Glacier.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.S3">
-      <HintPath>..\References\Amazon\AWSSDK.S3.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\References\Ecng.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b10e79ed0227b515, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\References\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\References\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Configuration">
-      <HintPath>..\References\Ecng\Ecng.Configuration.dll</HintPath>
+      <HintPath>..\References\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data">
-      <HintPath>..\References\Ecng\Ecng.Data.dll</HintPath>
+      <HintPath>..\References\Ecng.Data.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Interop">
-      <HintPath>..\References\Ecng\Ecng.Interop.dll</HintPath>
+      <HintPath>..\References\Ecng.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Net">
-      <HintPath>..\References\Ecng\Ecng.Net.dll</HintPath>
+      <HintPath>..\References\Ecng.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Reflection">
-      <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
+      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Security">
+      <HintPath>..\References\Ecng.Security.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization.FieldFactories">
-      <HintPath>..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
+      <HintPath>..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Xaml.Charting">
-      <HintPath>..\References\Ecng\Ecng.Xaml.Charting.dll</HintPath>
+    <Reference Include="Ecng.Xaml.DevExp">
+      <HintPath>..\References\Ecng.Xaml.DevExp.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\References\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="MoreLinq">
-      <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
-    </Reference>
-    <Reference Include="NCalc">
-      <HintPath>..\References\NCalc.dll</HintPath>
+      <HintPath>..\References\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -114,70 +103,85 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AssociatedSecurityAdapter.cs" />
+    <Compile Include="BasketSecurity.cs" />
+    <Compile Include="Candles\Compression\CandleBuilderMessageAdapter.cs" />
+    <Compile Include="Candles\Compression\CandleHolderMessageAdapter.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilderValueTransform.cs" />
+    <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="DataType.cs" />
     <Compile Include="Export\Database\CandleTable.cs" />
+    <Compile Include="Export\Database\IndicatorValueTable.cs" />
+    <Compile Include="Export\Database\PositionChangeTable.cs" />
     <Compile Include="Export\Database\SecurityTable.cs" />
+    <Compile Include="Export\IndicatorValue.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
+    <Compile Include="FilteredMarketDepthAdapter.cs" />
+    <Compile Include="Import\CsvImporter.cs" />
+    <Compile Include="Import\CsvParser.cs" />
+    <Compile Include="Import\FieldMapping.cs" />
+    <Compile Include="Import\FieldMappingRegistry.cs" />
+    <Compile Include="Import\FieldMappingValue.cs" />
+    <Compile Include="Indicators\IndicatorValueAttribute.cs" />
+    <Compile Include="IRemoteAuthorization.cs" />
+    <Compile Include="Storages\Binary\Snapshot\PositionBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\Binary\Snapshot\TransactionBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\ISnapshotSerializer.cs" />
+    <Compile Include="Storages\ISecurityMappingStorage.cs" />
+    <Compile Include="SecurityMappingMessageAdapter.cs" />
+    <Compile Include="Storages\Binary\PositionBinarySerializer.cs" />
+    <Compile Include="Storages\Csv\PositionCsvSerializer.cs" />
+    <Compile Include="Storages\IExchangeInfoProvider.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
     <Compile Include="Indicators\MoneyFlowIndex.cs" />
+    <Compile Include="ExtendedInfoStorageMessageAdapter.cs" />
+    <Compile Include="Level1DepthBuilderAdapter.cs" />
+    <Compile Include="Storages\Csv\CsvEntityList.cs" />
+    <Compile Include="Storages\IExtendedInfoStorage.cs" />
+    <Compile Include="Storages\INativeIdStorage.cs" />
+    <Compile Include="OfflineMessageAdapter.cs" />
     <Compile Include="PnL\PnLMessageAdapter.cs" />
     <Compile Include="Positions\PositionMessageAdapter.cs" />
     <Compile Include="Risk\RiskMessageAdapter.cs" />
+    <Compile Include="SecurityNativeIdMessageAdapter.cs" />
+    <Compile Include="SecurityRemoveMessage.cs" />
     <Compile Include="SecurityTrie.cs" />
     <Compile Include="Slippage\SlippageMessageAdapter.cs" />
-    <Compile Include="Storages\Backup\AmazonExtensions.cs" />
-    <Compile Include="Storages\Backup\AmazonGlacierService.cs" />
-    <Compile Include="Storages\Backup\AmazonS3Service.cs" />
-    <Compile Include="Storages\Backup\BackupEntry.cs" />
-    <Compile Include="Storages\Backup\IBackupService.cs" />
     <Compile Include="BasketMessageAdapter.cs" />
     <Compile Include="BasketPortfolio.cs" />
     <Compile Include="BasketPosition.cs" />
     <Compile Include="Candles\BaseCandleSource.cs" />
     <Compile Include="Candles\CandleSourceEnumerator.cs" />
-    <Compile Include="Candles\Compression\BaseCandleBuilderSource.cs" />
     <Compile Include="Candles\Compression\CandleBuilder.cs" />
     <Compile Include="Candles\CandleManagerContainer.cs" />
     <Compile Include="Candles\CandleHelper.cs" />
     <Compile Include="Candles\Candle.cs" />
     <Compile Include="Candles\Compression\ICandleBuilder.cs" />
-    <Compile Include="Candles\Compression\ICandleBuilderSourceValue.cs" />
-    <Compile Include="Candles\Compression\RealTimeCandleBuilderSource.cs" />
     <Compile Include="Candles\ICandleManagerContainer.cs" />
     <Compile Include="Candles\ICandleManager.cs" />
-    <Compile Include="Candles\ICandleManagerSource.cs" />
-    <Compile Include="Candles\ICandleManagerSourceList.cs" />
-    <Compile Include="Candles\Compression\ICandleBuilderContainer.cs" />
-    <Compile Include="Candles\Compression\ICandleBuilderSource.cs" />
-    <Compile Include="Candles\Compression\ICandleBuilderSourceList.cs" />
-    <Compile Include="Candles\Compression\StorageCandleBuilderSource.cs" />
-    <Compile Include="Candles\Compression\CandleBuilderContainer.cs" />
-    <Compile Include="Candles\Compression\ConvertableCandleBuilderSource.cs" />
+    <Compile Include="Candles\ICandleSourceList.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
-    <Compile Include="Candles\IndexSeriesBuilder.cs" />
+    <Compile Include="Candles\IndexCandleBuilder.cs" />
     <Compile Include="Candles\IStorageCandleSource.cs" />
     <Compile Include="Candles\StorageCandleSource.cs" />
     <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
-    <Compile Include="Candles\Compression\VolumeProfile.cs" />
     <Compile Include="Commissions\CommissionManager.cs" />
     <Compile Include="Commissions\CommissionRule.cs" />
     <Compile Include="Commissions\ICommissionManager.cs" />
     <Compile Include="Commissions\ICommissionRule.cs" />
     <Compile Include="Connector_ProcessMessage.cs" />
     <Compile Include="Connector_Raise.cs" />
-    <Compile Include="HeartbeatAdapter.cs" />
+    <Compile Include="HeartbeatMessageAdapter.cs" />
     <Compile Include="Connector_Subscription.cs" />
     <Compile Include="ContinuousSecurity.cs" />
     <Compile Include="Derivatives\BasketBlackScholes.cs" />
@@ -204,8 +208,6 @@
     <Compile Include="Export\ExcelExporter.cs" />
     <Compile Include="Export\TextExporter.cs" />
     <Compile Include="Export\XmlExporter.cs" />
-    <Compile Include="ExpressionHelper.cs" />
-    <Compile Include="ExpressionIndexSecurity.cs" />
     <Compile Include="Indicators\StochasticOscillator.cs" />
     <Compile Include="Indicators\VolumeProfileIndicator.cs" />
     <Compile Include="Indicators\ChaikinVolatility.cs" />
@@ -302,14 +304,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AuthorizationModes.cs" />
-    <Compile Include="Storages\AllSecurityMarketDataStorage.cs" />
-    <Compile Include="Storages\Backup\Xaml\AmazonRegionComboBox.cs" />
-    <Compile Include="Storages\Backup\Xaml\AmazonRegionEditor.cs" />
     <Compile Include="Storages\Binary\BinaryMarketDataSerializer.cs" />
     <Compile Include="Storages\BufferMessageAdapter.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />
     <Compile Include="Storages\CachedBasketMarketDataStorage.cs" />
+    <Compile Include="Storages\Csv\CsvEntityRegistry.cs" />
     <Compile Include="Storages\Csv\CandleCsvSerializer.cs" />
+    <Compile Include="Storages\Csv\CsvHelper.cs" />
     <Compile Include="Storages\Csv\CsvMarketDataSerializer.cs" />
     <Compile Include="Storages\Csv\Level1CsvSerializer.cs" />
     <Compile Include="Storages\Csv\NewsCsvSerializer.cs" />
@@ -317,7 +318,6 @@
     <Compile Include="Storages\Csv\QuoteCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TickCsvSerializer.cs" />
     <Compile Include="Storages\Csv\TransactionCsvSerializer.cs" />
-    <Compile Include="Storages\ExchangeInfoProvider.cs" />
     <Compile Include="Storages\ExchangeList.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="IMarketRuleContainer.cs" />
@@ -337,13 +337,15 @@
     <Compile Include="Storages\InMemoryMarketDataStorage.cs" />
     <Compile Include="Storages\ISecurityMarketDataDrive.cs" />
     <Compile Include="Storages\ISecurityStorage.cs" />
+    <Compile Include="Storages\Binary\Snapshot\Level1BinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\ISnapshotStorage.cs" />
     <Compile Include="Storages\IStoragePositionList.cs" />
     <Compile Include="Storages\IStorageSecurityList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
-    <Compile Include="Storages\NativeIdSecurityStorage.cs" />
     <Compile Include="Storages\NewsList.cs" />
+    <Compile Include="Storages\SnapshotStorage.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\Binary\TransactionBinarySerializer.cs" />
     <Compile Include="Storages\Binary\NewsBinarySerializer.cs" />
@@ -381,6 +383,9 @@
     <Compile Include="Storages\StorageRegistry.cs" />
     <Compile Include="Strategies\Analytics\BaseAnalyticsStrategy.cs" />
     <Compile Include="Strategies\Analytics\DailyHighestVolumeStrategy.cs" />
+    <Compile Include="Strategies\Analytics\IAnalyticsChart.cs" />
+    <Compile Include="Strategies\Analytics\IAnalyticsGrid.cs" />
+    <Compile Include="Strategies\Analytics\IAnalyticsPanel.cs" />
     <Compile Include="Strategies\Analytics\PriceVolumeDistributionStrategy.cs" />
     <Compile Include="Strategies\BasketStrategy.cs" />
     <Compile Include="Strategies\IStrategyChildStrategyList.cs" />
@@ -392,10 +397,12 @@
     <Compile Include="Strategies\StrategyHelper.cs" />
     <Compile Include="Strategies\StrategyNameGenerator.cs" />
     <Compile Include="Strategies\StrategyParam.cs" />
+    <Compile Include="Strategies\StrategyParamHelper.cs" />
     <Compile Include="Strategies\Testing\BatchEmulation.cs" />
     <Compile Include="Strategies\Testing\EmulationMarketModes.cs" />
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />
     <Compile Include="Strategies\TimeFrameStrategy.cs" />
+    <Compile Include="SubscriptionMessageAdapter.cs" />
     <Compile Include="Testing\CommissionRuleMessage.cs" />
     <Compile Include="Testing\HistorySourceMessage.cs" />
     <Compile Include="TimeQuoteChange.cs" />
@@ -412,7 +419,6 @@
     <Compile Include="Latency\LatencyManager.cs" />
     <Compile Include="PnL\PnLManager.cs" />
     <Compile Include="Positions\PositionManager.cs" />
-    <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="PnL\IPnLManager.cs" />
     <Compile Include="Positions\IPositionManager.cs" />
     <Compile Include="Slippage\SlippageManager.cs" />
@@ -447,6 +453,8 @@
     <Compile Include="Testing\RealTimeEmulationTrader.cs" />
     <Compile Include="Testing\TradeGenerator.cs" />
     <Compile Include="TraderHelper.cs" />
+    <Compile Include="TraderHelper_Obsolete.cs" />
+    <Compile Include="UserPermissions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

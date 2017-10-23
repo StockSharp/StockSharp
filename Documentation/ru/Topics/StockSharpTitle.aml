@@ -1,97 +1,136 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" revisionNumber="1">
-  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>
-      	<mediaLinkInline><image xlink:href="StockSharp_logo"/></mediaLinkInline> <legacyBold>StockSharp</legacyBold>  (<token>stocksharp</token>)
-      	- комплекс бесплатных программных продуктов, включающий весь необходимый арсенал для автоматизации биржевой торговли.
-      </para>
-      <para>
-      	Позволяет выполнять профессиональную разработку программ, как для механической (роботы) и "ручной" торговли, так и для биржевого анализа
-      	и тестирования торговых систем.
-      </para>
-      <para>
-      	Подключения к большинству популярных торговых платформ: <link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636">Quik</link>, 
-      	<link xlink:href="a010f9bd-15bb-4858-a067-590101087dff">Transaq</link>, <link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc">SmartCOM</link>,
-      	<link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391">AlfaDirect</link>, <link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza 2 (CGate)</link>,
-      	<link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex Bridge</link>,
-      	<link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98">LMAX</link>, <link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522">Rithmic</link>,
-      	<link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9">Fusion/Blackwood</link>,
-     	<link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46">Interactive Brokers</link>, <link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981">OpenECry</link>,
-     	<link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9">Sterling</link>, <link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc">IQFeed</link>, 
-     	<link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e">E*Trade</link>, <link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58">BTCE</link>, 
-     	<link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb">BitStamp</link>, <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
-     	<link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, <token>itch</token> дают возможность использовать <token>stocksharp</token> на всех международных и российских
-      	торговых площадках.
-      </para>
-      <para>
-       Вы можете работать с <token>stocksharp</token> у любого брокера или <externalLink>
-		<linkText> брокера-партнера (преимущества)</linkText>
-			<linkAlternateText>Брокеры-партнеры</linkAlternateText>
-				<linkUri>http://stocksharp.com/broker/</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>.
-      </para>
-     <para>Разработка <token>stocksharp</token> осуществляется компанией
-      	<externalLink>
-			<linkText>StockSharp LTD</linkText>
-			<linkAlternateText>Торговые роботы StockSharp.</linkAlternateText>
-			<linkUri>http://stocksharp.com/</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
- 	  в рамках проекта Open-Source Software (см. <link xlink:href="536b1c81-5336-4dc0-ab29-8bef70a162ba">Исходные коды</link>). 
- 	  </para>
- 	  <para>
- 	  Большинство продуктов <token>stocksharp</token> предоставляется <legacyBold>бесплатно</legacyBold>, а некоторые продукты с расширенными возможностями - на платной основе (см. <link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">Лицензирование StockSharp</link>.).
- 	  </para>
- 	  <para>
- 	  Установить <token>stocksharp</token> можно с веб-сервиса <token>github</token> или из Visual Studio при помощи NuGet. Как это сделать смотрите в разделе <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.
-	</para>
-	<para>
-	   <legacyUnderline><legacyBold>Продукты <token>stocksharp</token></legacyBold></legacyUnderline>
-	</para>
-	
-	<list class="bullet">
-  		<listItem>
-  			<link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22">S#.Api</link> - библиотека для профессиональной разработки торговых роботов на языке C#.
-  		</listItem>
-  		<listItem>
-  			<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">S#.Data</link> - программа для автоматической загрузки исторических и реал-тайм маркет-данных.
-  		</listItem>
-  		<listItem>
-  			<token>designer</token> - визуальный дизайнер торговых стратегий.
-  		</listItem>
-  		<listItem>
-  			<link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0">S#.MatLab</link> - интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.
-  		</listItem>
-  		<!--<listItem>
-  			<link xlink:href="b65b25d8-871b-4d37-bfd4-c85e02996f99">S#.WealthLab</link> - интеграция WealthLab с торговыми системами.
-  		</listItem>-->
-  		<listItem>
-  			<externalLink>
-				<linkText>S#.Shell</linkText>
-				<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
-				<linkUri>http://stocksharp.com/products/shell/</linkUri>
-				<linkTarget>_blank</linkTarget>
-			</externalLink>
- 			- готовый каркас для торговых стратегий.
-  		</listItem>
-  		<listItem>
-  			<externalLink>
-				<linkText>ЛЧИ</linkText>
-				<linkAlternateText>Графики конкурса ЛЧИ</linkAlternateText>
-				<linkUri>http://stocksharp.com/products/lci/</linkUri>
-				<linkTarget>_blank</linkTarget>
-			</externalLink>
- 			- графики конкурса ЛЧИ со сделками участников.
-  		</listItem>
-	</list>
-	
-	
+ <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <introduction>
+ <para>
+<externalLink>
+<linkText>StockSharp (кратко S#)</linkText>
+<linkUri>http://stocksharp.ru/products/</linkUri>
+</externalLink>
+ - <legacyBold>бесплатные</legacyBold> программы для торговли на всех площадках 
+мира (российские, американские, азиатские, акции, фьючерсы, опционы, биткоины, 
+форекс и т.д.). Вы сможете торговать в ручном режиме или с помощью торговых 
+роботов (обычные или HFT).
+ </para>
+ <para>
+Доступные подключения: <link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636">Quik</link>, 
+<link xlink:href="a010f9bd-15bb-4858-a067-590101087dff">Transaq</link>, <link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc">SmartCOM</link>,
+<link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391">AlfaDirect</link>, <link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza 2 (CGate)</link>,
+<link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex Bridge</link>,
+<link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98">LMAX</link>, <link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522">Rithmic</link>,
+<link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9">Fusion/Blackwood</link>,
+<link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46">Interactive Brokers</link>, <link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981">OpenECry</link>,
+<link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9">Sterling</link>, <link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc">IQFeed</link>, 
+<link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e">E*Trade</link>, <link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58">BTCE</link>, 
+<link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb">BitStamp</link>, <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
+<link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, <link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link>,
+<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link>, <link xlink:href="92073cd8-8e10-498e-8de9-47d3f77d278a">FXCM</link>
+ </para>
+ <para>
+ Вы можете работать с <token>stocksharp</token> у любого брокера или 
+<externalLink>
+<linkText>брокер-партнер</linkText>
+<linkUri>http://stocksharp.ru/broker/</linkUri>
+</externalLink>
+<externalLink>
+<linkText>(преимущества).</linkText>
+<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
+</externalLink>
+ </para>
+ <title>S#.Designer</title>
+ <mediaLink>
+<image placement="center" xlink:href="StockSharpTitle_0"/>
+</mediaLink>
+ <para>
+<link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> - универсальная программа для создания торговых роботов и стратегий:
+</para>
+<list class="bullet">
+  <listItem><para>Графический визуальный дизайнер (создание стратегий мышкой).</para></listItem>
+  <listItem><para>Написание стратегий на <token>csharp</token>.</para></listItem>
+  <listItem><para>Простое создание собственных индикаторов.</para></listItem>
+  <listItem><para>Подключения к множеству терминалов и брокерам.</para></listItem>
+  <listItem><para>Все мировые площадки.</para></listItem>
+</list>
+ <para>
+ <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4">Подробнее...</link>
+ </para>
 
-    </introduction>
-        <relatedTopics>
-     	<link xlink:href="a594740e-58f1-4148-afe7-d41abc4d486b">Справочные материалы</link>
-     </relatedTopics>
-  </developerConceptualDocument>
+
+ <title>S#.Data</title>
+ <mediaLink>
+<image placement="center" xlink:href="StockSharpTitle_1"/>
+</mediaLink>
+ <para>
+<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> - программа для автоматического скачивания исторических и реал-тайм маркет-данных:
+</para>
+<list class="bullet">
+  <listItem><para>Поддерживает массу источников: (
+<link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636">Quik</link>, 
+<link xlink:href="a010f9bd-15bb-4858-a067-590101087dff">Transaq</link>, <link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc">SmartCOM</link>,
+<link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391">AlfaDirect</link>, <link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza 2 (CGate)</link>,
+<link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX/FAST</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex Bridge</link>,
+<link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98">LMAX</link>, <link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522">Rithmic</link>,
+<link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9">Fusion/Blackwood</link>,
+<link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46">Interactive Brokers</link>, <link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981">OpenECry</link>,
+<link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9">Sterling</link>, <link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc">IQFeed</link>, 
+<link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e">E*Trade</link>, <link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58">BTCE</link>, 
+<link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb">BitStamp</link>, <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
+<link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, <link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link>,
+<link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a">BarChart</link>, <link xlink:href="92073cd8-8e10-498e-8de9-47d3f77d278a">FXCM</link>
+  и многое другое).</para></listItem>
+  <listItem><para>Высокая степенью сжатия (2 байта на сделку, 7 байтов на стакан).</para></listItem>
+  <listItem><para>Любые типа данных (свечи, тики, стаканы, ордер-лог, опционы, новости и другое).</para></listItem>
+  <listItem><para>Программный доступ через API.</para></listItem>
+  <listItem><para>Экспорт в csv, excel, xml или базу данных.</para></listItem>
+  <listItem><para>Импорт данных из csv.</para></listItem>
+  <listItem><para>Задачи по расписанию.</para></listItem>
+  <listItem><para>Авто-синхронизация через Интернет между несколькими запущенными программами S#.Data.</para></listItem>
+</list>
+ <para>
+ <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">Подробнее...</link>
+ </para>
+ 
+ 
+  <title>S#.API</title>
+ <para>
+<link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - библиотека для 
+профессиональной разработки торговых роботов на языке C#. Для тех, кто программирует 
+в Visual Studio, и является профессиональным программистом в области алготрейдинга.
+</para>
+<title>Все наши продукты:</title>
+<list class="bullet">
+  <listItem><para><link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" /> - универсальная программа для создания торговых роботов и стратегий.</para></listItem>
+  <listItem><para><link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> - программа для скачивания маркет-данных.</para></listItem>
+  <listItem><para><link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - библиотека для написания торговых роботов на языке <token>csharp</token> в Visual Studio.</para></listItem>
+  <listItem><para> <externalLink>
+<linkText>S#.Terminal</linkText>
+<linkUri>http://stocksharp.ru/products/terminal/</linkUri>
+</externalLink>
+ - торговый терминал.</para></listItem>
+  <listItem><para><link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" /> - интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.</para></listItem>
+  <listItem><para><externalLink>
+<linkText>ЛЧИ Viewer</linkText>
+<linkUri>http://stocksharp.ru/products/lci/</linkUri>
+</externalLink>
+ - графики конкурса ЛЧИ со сделками участников.</para></listItem>
+</list>
+ <!--<para>
+ Презентации наших продуктов в виде <externalLink>
+<linkText> pdft</linkText>
+<linkUri>http://stocksharp.ru/file/102474/stocksharp_pdf/</linkUri>
+</externalLink>
+ и <externalLink>
+<linkText>PowerPoint</linkText>
+<linkUri>http://stocksharp.ru/file/102474/stocksharp_pdf/</linkUri>
+</externalLink>
+ </para>-->
+ <para> 
+<legacyUnderline><legacyItalic><legacyBold><token>download</token></legacyBold></legacyItalic></legacyUnderline>
+</para>
+
+ </introduction>
+ <relatedTopics>
+<link xlink:href="a594740e-58f1-4148-afe7-d41abc4d486b">Справочные материалы</link>
+ </relatedTopics>
+ </developerConceptualDocument>
 </topic>

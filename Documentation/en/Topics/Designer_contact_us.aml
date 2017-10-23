@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="07223530-00cf-45ac-8aa7-d1e0550a89ce" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>On the <legacyBold>Quick access panel</legacyBold>, located by default at 
+the top of the <token>designer</token> window, there is an <legacyBold>Help</legacyBold>
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_09"/></mediaLinkInline>
+button. Clicking the 
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_09"/></mediaLinkInline> 
+button enables opening the Help window on work with <legacyBold>S#.Designer</legacyBold>, 
+information on the program, send your questions and suggestions.</para>
+<para>Selection of Help opens the <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />
+ help page in the browser.</para>
+<para>Selection of <legacyBold>About</legacyBold> allows viewing information 
+about the program, current version, availability of updates.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_About"/>
+</mediaLink>
+
+<para>Selection of <legacyBold>Contact us</legacyBold> opens the feedback window 
+for entering questions and suggestions.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_contact_us_1"/>
+</mediaLink>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

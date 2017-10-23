@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -19,7 +19,6 @@ Trader = new ETradeTrader(IsSandbox, IsSandbox ? GetSandboxSecurities() : null)
 	ConsumerKey = ConsumerKey,
 	ConsumerSecret = secret,
 	LogLevel = LogLevels.Debug,
-	DumpRestData = true
 };
 							]]>
 							</code>
@@ -38,34 +37,37 @@ Trader.Connected += () => this.GuiAsync(() =>OnConnectionChanged(true));
 Trader.ConnectionError += error => this.GuiAsync(() =>
 {
 	OnConnectionChanged(Trader.IsConnected);
-	MessageBox.Show(this, error.ToString(), "Ошибкасоединения");
+	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
 });
 
 Trader.Disconnected += () =>this.GuiAsync(() => OnConnectionChanged(false));
 
-Trader.ProcessDataError += error =>this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибкаобработкиданных"));
+Trader.Error += error =>this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
-Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
-Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
-Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
-Trader.NewPortfolios += portfolios => this.GuiAsync(() =>
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
+
+Trader.NewPortfolio += portfolio =>
 {
-	// регистрирует портфели на обновление данных
-	portfolios.ForEach(Trader.RegisterPortfolio);
+	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 
-	_portfoliosWindow.Portfolios.AddRange(portfolios);
-});
-Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
+	// регистрирует портфели на обновление данных
+	Trader.RegisterPortfolio(portfolio);
+};
+
+Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 // подписываемся на событие о неудачной регистрации заявок
-Trader.OrdersRegisterFailed += OrdersFailed;
+Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 // подписываемся на событие о неудачном снятии заявок
-Trader.OrdersCancelFailed += OrdersFailed;
+Trader.OrderCancelFailed += OrderFailed;
 
 // подписываемся на событие о неудачной регистрации стоп-заявок
-Trader.StopOrdersRegisterFailed += OrdersFailed;
+Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 // подписываемся на событие о неудачном снятии стоп-заявок
-Trader.StopOrdersCancelFailed += OrdersFailed;
+Trader.StopOrderCancelFailed += OrderFailed;
 							]]>
 							</code>						
 						</content>
@@ -101,11 +103,11 @@ Trader.Connect();
 							<para>После подключения можно ожидать срабатывания событий:</para>
 							<list class="bullet">
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через 
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecurityChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через 
 									<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
 								</listItem>
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfolioChanged</codeEntityReference> – 
 									изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
 								</listItem>
 							</list>							
@@ -120,17 +122,16 @@ Trader.Connect();
             				
             				<code language="C#">
             				<![CDATA[
-void SearchTextPreviewKeyUp(object sender, KeyEventArgs e)
+private void FindClick(object sender, RoutedEventArgs e)
 {
-	if (e.Key != Key.Enter)
+	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+
+	if (!wnd.ShowModal(this))
 		return;
 
-	var text = SearchText.Text.Trim();
-
-	if (text.IsEmpty())
-		return;
-	MainWindow.Instance.Trader.LookupSecurities(new Security { Name = text });
+	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
 }
+
 							]]>
 							</code>
 						</content>
@@ -142,12 +143,12 @@ void SearchTextPreviewKeyUp(object sender, KeyEventArgs e)
 							<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-Trader.NewPortfolios += portfolios =>
+Trader.NewPortfolio += portfolio =>
 {
-	// регистрирует портфели на обновление данных
-	portfolios.ForEach(Trader.RegisterPortfolio);
+	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 
-	_portfoliosWindow.Portfolios.AddRange(portfolios);
+	// регистрирует портфели на обновление данных
+	Trader.RegisterPortfolio(portfolio);
 };
 							]]>
 							</code>						
@@ -161,20 +162,18 @@ Trader.NewPortfolios += portfolios =>
 							отправляет заявку на сервер:</para>
             				<code language="C#">
             				<![CDATA[
-private void SendClick(object sender, RoutedEventArgs e)
+private void NewOrderClick(object sender, RoutedEventArgs e)
 {
-	var order = new Order
+	var newOrder = new OrderWindow
 	{
-		Type = IsMarket.IsChecked == true ? OrderTypes.Market :OrderTypes.Limit,
-		Portfolio = Portfolio.SelectedPortfolio,
-		Volume = Volume.Text.To<decimal>(),
-		Price = Price.Text.To<decimal>(),
-		Security = Security,
-		Direction = IsBuy.IsChecked == true ? OrderDirections.Buy :OrderDirections.Sell,
+		Order = new Order { Security = SecurityPicker.SelectedSecurity },
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
 	};
 
-	MainWindow.Instance.Trader.RegisterOrder(order);
-	DialogResult = true;
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 }
 							]]>
 							</code>						

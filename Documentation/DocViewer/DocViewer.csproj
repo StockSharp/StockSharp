@@ -48,19 +48,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\References\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\References\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Reflection">
-      <HintPath>..\..\References\Ecng\Ecng.Reflection.dll</HintPath>
+      <HintPath>..\..\References\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -96,7 +96,6 @@
     <Compile Include="XMLCommToHTM\DOM\Internal\ParseUtils.cs" />
     <Compile Include="XMLCommToHTM\DOM\Internal\PopulateExtentionMethods.cs" />
     <Compile Include="XMLCommToHTM\DOM\Internal\TypeUtils.cs" />
-    <Compile Include="XMLCommToHTM\DOM\Internal\TypeUtilsOld.cs" />
     <Compile Include="XMLCommToHTM\DOM\MemberDom.cs" />
     <Compile Include="XMLCommToHTM\DOM\MethodDom.cs" />
     <Compile Include="XMLCommToHTM\DOM\NamespaceDom.cs" />
@@ -167,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\References\stocksharp.ico">
-      <Link>stocksharp.ico</Link>
+      <Link>Properties\stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

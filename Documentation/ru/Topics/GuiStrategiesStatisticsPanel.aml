@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.StrategiesStatisticsPanel</codeEntityReference> - таблица для отображения параметров и статистики работы стратегий. В основе данного компонента лежит <link xlink:href="88a40124-43a6-4be9-b04b-a245000fca70">универсальная таблица</link>.
+      	<codeEntityReference>T:StockSharp.Xaml.StrategiesStatisticsPanel</codeEntityReference> - таблица для отображения параметров и статистики работы стратегий.
       </para>
       <para>
        <legacyBold>Основные свойства и методы</legacyBold>
@@ -29,7 +29,7 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Testing/SampleHistoryTestingParallel</legacyItalic>.
+Ниже показан внеший вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Testing/SampleHistoryTestingParallel</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_StrategiesStatisticsPanel" /></mediaLink>

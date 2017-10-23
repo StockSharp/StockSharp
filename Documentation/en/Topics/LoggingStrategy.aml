@@ -2,56 +2,30 @@
 <topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
     -->
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
       <para>
-		Класс <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> реализует интерфейс <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>.
-		Поэтому стратегии можно передавать в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>,
-		и все ее сообщения будут автоматически попадать в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>.
-		
-		
-		
-		<!--можно использовать метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.AddLog(StockSharp.Algo.Strategies.ErrorStates,System.String,System.Object[])</codeEntityReference>.
-		Передавая в него отладочную информацию или данные о ведении роботом торговли, <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
-		автоматически перебрасывает их через событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.Log</codeEntityReference>.
-		Это сделано для того, чтобы внешний код (например, главное окно робота, где осуществляется запуск и остановка стратегий) мог
-		обработать полученную информацию. Например, отобразить ее на экран пользователю.
-		
-		Для логирования сообщений предоставляет вспомогательный класс <codeEntityReference>T:StockSharp.Logging.StrategyLogManager</codeEntityReference>.
-		При добавлении стратегии в коллекцию <codeEntityReference qualifyHint="true">P:StockSharp.Logging.StrategyLogManager.Strategies</codeEntityReference>
-		<codeEntityReference>T:StockSharp.Logging.StrategyLogManager</codeEntityReference> автоматически подписывается на событие
-		<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.Log</codeEntityReference>. После этого весь вывод сообщений
-		будет переадресовываться в коллекцию <codeEntityReference qualifyHint="true">P:StockSharp.Logging.StrategyLogManager.Listeners</codeEntityReference>.
-		По-умолчанию данная коллекция пустая. Чтобы сообщения из стратегий начали попадать, к примеру, в файл, нужно добавить соответствующий
-		<codeEntityReference>T:StockSharp.Logging.StrategyLogListener</codeEntityReference>.-->
+		The <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class implements the <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>
+		interface. Therefore, the strategies can be passed to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>,
+		and all of its messages will automatically get to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>.
 	</para>
     </introduction>
     
     <prerequisites>
 		<content>
 			<para>
-				<link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Торговые стратегии</link>
+				<link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Trading strategies</link>
 			</para>
 		</content>
 	</prerequisites>
-    <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
-    <!-- One or more procedure or section with procedure -->
     <procedure>
-			<title>Логирование в тестовый файл</title>
+			<title>Logging in to test file</title>
 
 			<steps class="ordered">
 				<step>
 					<content>
 						<para>
-							В самом начале необходимо создать менеджер логирования:
+							First, you need to create the special manager:
 						</para>
 						<code language="C#">var logManager = new LogManager();</code>
 					</content>
@@ -59,7 +33,7 @@
 				<step>
 					<content>
 						<para>
-							Затем необходимо создать файловый логгер, передав в него имя файла, и добавить его в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>:
+							Then you need to create a file logger, passing to it the name of the file and to add it to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>:
 						</para>
 						<code language="C#">var fileListener = new FileLogListener("{0}_{1:00}_{2:00}.txt".Put(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
 logManager.Listeners.Add(fileListener);</code>
@@ -68,7 +42,7 @@ logManager.Listeners.Add(fileListener);</code>
 				<step>
 					<content>
 						<para>
-							Для логирования сообщений необходимо добавить стратегию в
+							For logging messages, you need to add a strategy to the
 							<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>:
 						</para>
 						<code language="C#">logManager.Sources.Add(lkohSmaStrategy);</code>
@@ -77,7 +51,7 @@ logManager.Listeners.Add(fileListener);</code>
 				<step>
 					<content>
 						<para>
-							После добавления стратегии в менеджер логирования все ее сообщения будут записаться в файл.
+							After adding strategy to the logging manager all of its messages will be recorded to file.
 						</para>
 					</content>
 				</step>
@@ -85,13 +59,13 @@ logManager.Listeners.Add(fileListener);</code>
 		</procedure>
 
 		<procedure>
-			<title>Проигрывание звука</title>
+			<title>Sound playback</title>
 
 			<steps class="ordered">
 				<step>
 					<content>
 						<para>
-							Создание логгера и передача в него имени звукового файла:
+							Creating a logger and passing the name of the sound file in it:
 						</para>
 						<code language="C#">var soundListener = new SoundLogListener("error.mp3");
 						
@@ -102,7 +76,7 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 				<step>
 					<content>
 						<para>
-							Установка фильтра на проигрывание звука только при сообщениях типа
+							Setting the filter in the sound playback only when the type of messages is
 							<codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>:
 						</para>
 						<code language="C#">soundListener.Filters.Add(msg => msg.Level == LogLevels.Error);</code>
@@ -112,13 +86,13 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 		</procedure>
 
 		<procedure>
-			<title>Отсылка Email</title>
+			<title>Email sending</title>
 
 			<steps class="ordered">
 				<step>
 					<content>
 						<para>
-							Создание логгера и передача в него параметров отсылаемых писем:
+							The logger creating and passing to it sent letters parameters:
 						</para>
 						<code language="C#">var emailListener = new EmailLogListener("from@stocksharp.com", "to@stocksharp.com");
 
@@ -129,9 +103,9 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 				<step>
 					<content>
 						<para>
-							Установка фильтра на отсылку сообщений типов 
+							Setting the filter on the sending of messages of 
 							<codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>
-							и <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Warning</codeEntityReference>:
+							and <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Warning</codeEntityReference> types:
 						</para>
 						<code language="C#">emailListener.Filters.Add(msg => msg.Level == LogLevels.Error);
 emailListener.Filters.Add(msg => msg.Level == LogLevels.Warning);</code>
@@ -140,51 +114,16 @@ emailListener.Filters.Add(msg => msg.Level == LogLevels.Warning);</code>
 			</steps>
 		</procedure>
 
-	<!--	<procedure>
-			<title>Передача Sms через Google Calendar</title>
-
-			<steps class="ordered">
-				<step>
-					<content>
-						<para>
-							Перед использованием <codeEntityReference>T:StockSharp.Logging.SmsLogListener</codeEntityReference>
-							необходимо настроить Google Calendar, указав в нем номер телефона, и выключив уведомление через SMS. Подробнее,
-							<token>calendar</token>.
-						</para>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>
-							Создание логгера и передача в него логина и пароля от Google сервисов:
-						</para>
-						<code language="C#">var smsListener = new SmsLogListener("имя@gmail.com", "пароль");
-
-logManager.Listeners.Add(smsListener);
-logManager.Sources.Add(lkohSmaStrategy);</code>
-					</content>
-				</step>
-				<step>
-					<content>
-						<para>
-							Установка фильтра на отсылку сообщений типа <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>:
-						</para>
-						<code language="C#">smsListener.Filters.Add(msg => msg.Level == LogLevels.Error);</code>
-					</content>
-				</step>
-			</steps>
-		</procedure> -->
-
 		<procedure>
-			<title>Логирование в LogWindow</title>
+			<title>Logging in to the LogWindow</title>
 
 			<steps class="ordered">
 				<step>
 					<content>
 						<para>
-							Создание логгер <codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference>:
+							The <codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference> logger creating:
 						</para>
-						<code language="C#">// каждая стратегия будет иметь свое собственное окно
+						<code language="C#">// each strategy will have they own windows
 var guiListener = new GuiLogListener();
 
 logManager.Listeners.Add(guiListener);
@@ -194,7 +133,7 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 				<step>
 					<content>
 						<para>
-							Вот как выглядит окно логов при работе стратегии котирования заявок (<link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483"/>):
+							Here is the log window when orders quoting strategy working (<link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483"/>):
 						</para>
 						<mediaLink>
 							<image placement="center" xlink:href="strategylogging" />
@@ -203,43 +142,11 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 				</step>
 			</steps>
 		</procedure>
-    <!-- Optional next steps info
-    <nextSteps>
-      <content><para>Next steps info goes here</para></content>
-    </nextSteps>
-    -->
-    <relatedTopics>
-      <!-- One or more of the following:
-           - A local link
-           - An external link
-           - A code entity reference
-
-      <link xlink:href="Other Topic's ID">Link text</link>
-      <externalLink>
-          <linkText>Link text</linkText>
-          <linkAlternateText>Optional alternate link text</linkAlternateText>
-          <linkUri>URI</linkUri>
-      </externalLink>
-      <codeEntityReference>API member ID</codeEntityReference>
-
-      Examples:
-
-      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
-
-      <externalLink>
-          <linkText>SHFB on CodePlex</linkText>
-          <linkAlternateText>Go to CodePlex</linkAlternateText>
-          <linkUri>http://shfb.codeplex.com</linkUri>
-      </externalLink>
-
-      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-      -->
+    
+     <relatedTopics>
+       <link xlink:href="4cd2b7f9-fe8d-404a-bec6-227783410beb">Visual logging components</link>
     </relatedTopics>
+    
+   
   </developerWalkthroughDocument>
 </topic>

@@ -3,14 +3,14 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		Title="{x:Static loc:LocalizedStrings.XamlStr562}" Height="520" Width="834"
-		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+		xmlns:sx="http://schemas.stocksharp.com/xaml"
 		xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
         xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml">
 
 	<Window.Resources>
-		<ex:BoolToVisibilityConverter x:Key="Converter" FalseVisibilityValue="Hidden" />
+		<ex:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseVisibilityValue="Hidden" />
 	</Window.Resources>
 
 	<Grid>
@@ -45,7 +45,7 @@
 				<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
                 <xaml:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
 
-                <Grid Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2">
+                <Grid Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="130" />
 						<ColumnDefinition Width="*" />
@@ -98,8 +98,12 @@
 					<CheckBox Content="{x:Static loc:LocalizedStrings.FinamCandles}" Grid.Row="9" Grid.Column="0" Name="FinamCandlesCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.YahooCandles}" Grid.Row="10" Grid.Column="0" Name="YahooCandlesCheckBox" Click="CheckBoxClick" />
 
-					<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Grid.Row="11" Grid.Column="0" Click="StartBtnClick" IsEnabled="False"/>
-                    <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Grid.Row="11" Grid.Column="1" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+                    <StackPanel Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Width="100" Click="StartBtnClick" IsEnabled="False"/>
+                        <Button x:Name="PauseBtn" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
+                        <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+                    </StackPanel>
+					
 					<CheckBox x:Name="GenDepthsCheckBox" Content="{x:Static loc:LocalizedStrings.XamlStr97}" Grid.Row="12" Grid.Column="0" Click="CheckBoxClick" />
 					<CheckBox x:Name="ShowDepth" Content="{x:Static loc:LocalizedStrings.XamlStr85}" Grid.Row="13" Grid.Column="0" IsChecked="True" />
 					
@@ -114,59 +118,152 @@
 			</Grid>
 
 			<Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="*"/>
-					</Grid.ColumnDefinitions>
-
-					<TabControl x:Name="TabControl" Width="250" Visibility="Collapsed">
-						<TabItem Header="{x:Static loc:LocalizedStrings.Ticks}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=TicksCheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="TicksParameterGrid" />
-						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr757}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=TicksAndDepthsCheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="TicksAndDepthsParameterGrid" />
-						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.MarketDepths}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=DepthsCheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="DepthsParameterGrid" />
-						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=CandlesCheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="CandlesParameterGrid" />
-						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr635}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=CandlesAndDepthsCheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="CandlesAndDepthsParameterGrid" />
-						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=OrderLogCheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="OrderLogParameterGrid" />
-						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.Level1}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=Level1CheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="Level1ParameterGrid" />
-						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.FinamCandles}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=FinamCandlesCheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="FinamCandlesParameterGrid" />
-						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.YahooCandles}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=YahooCandlesCheckBox, Path=IsChecked}">
-							<sx:StatisticParameterGrid x:Name="YahooCandlesParameterGrid" />
-						</TabItem>
-					</TabControl>
-					<Grid Grid.Column="1">
-						<Grid.RowDefinitions>
-							<RowDefinition Height="*"/>
-							<RowDefinition Height="5"/>
-							<RowDefinition Height="100"/>
-						</Grid.RowDefinitions>
+				<TabControl x:Name="TabControl" Visibility="Collapsed">
+					<TabItem Header="{x:Static loc:LocalizedStrings.Ticks}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=TicksCheckBox, Path=IsChecked}">
 						<TabControl>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
-								<charting:ChartPanel x:Name="Chart" ShowOverview="False" />
+								<charting:ChartPanel x:Name="TicksChart" ShowOverview="False" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
-								<charting:EquityCurveChart x:Name="Curve" />
+								<charting:EquityCurveChart x:Name="TicksEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="TicksParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="TicksPosition" />
 							</TabItem>
 						</TabControl>
-						<GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch"/>
-						<charting:EquityCurveChart Grid.Row="2" x:Name="PositionCurve" />
-					</Grid>
-				</Grid>
+					</TabItem>
+					<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr757}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=TicksAndDepthsCheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="TicksAndDepthsChart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="TicksAndDepthsEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="TicksAndDepthsParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="TicksAndDepthsPosition" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
+					<TabItem Header="{x:Static loc:LocalizedStrings.MarketDepths}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=DepthsCheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="DepthsChart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="DepthsEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="DepthsParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="DepthsPosition" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
+					<TabItem Header="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=CandlesCheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="CandlesChart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="CandlesEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="CandlesParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="CandlesPosition" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
+					<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr635}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=CandlesAndDepthsCheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="CandlesAndDepthsChart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="CandlesAndDepthsEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="CandlesAndDepthsParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="CandlesAndDepthsPosition" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
+					<TabItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=OrderLogCheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="OrderLogChart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="OrderLogEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="OrderLogParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="OrderLogPosition" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
+					<TabItem Header="{x:Static loc:LocalizedStrings.Level1}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=Level1CheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="Level1Chart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="Level1Equity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="Level1ParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="Level1Position" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
+					<TabItem Header="{x:Static loc:LocalizedStrings.FinamCandles}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=FinamCandlesCheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="FinamCandlesChart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="FinamCandlesEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="FinamCandlesParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="FinamCandlesPosition" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
+					<TabItem Header="{x:Static loc:LocalizedStrings.YahooCandles}" Visibility="{Binding Converter={StaticResource BoolToVisibilityConverter}, ElementName=YahooCandlesCheckBox, Path=IsChecked}">
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
+								<charting:ChartPanel x:Name="YahooCandlesChart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
+								<charting:EquityCurveChart x:Name="YahooCandlesEquity" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str436}">
+								<sx:StatisticParameterGrid x:Name="YahooCandlesParameterGrid" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str862}">
+								<charting:EquityCurveChart x:Name="YahooCandlesPosition" />
+							</TabItem>
+						</TabControl>
+					</TabItem>
+				</TabControl>
 			</Grid>
 		</Grid>
 

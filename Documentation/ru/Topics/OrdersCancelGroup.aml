@@ -8,7 +8,7 @@
     <introduction>
       <para>
 		  Для снятия сразу нескольких заявок можно использовать метод
-		  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)</codeEntityReference>,
+		  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes},System.Nullable{System.Int64})</codeEntityReference>,
 		  который по маске переданных параметров снимает активные заявки.
 	  </para>
     </introduction>
@@ -36,7 +36,7 @@
 		  <para>
 			  Снять все стоп-заявки на покупку:
 		  </para>
-		  <code language="C#">trader.CancelOrders(true, null, OrderDirections.Buy, null, null);</code>
+		  <code language="C#">trader.CancelOrders(true, null, Sides.Buy, null, null);</code>
       </content>
     </section>
     

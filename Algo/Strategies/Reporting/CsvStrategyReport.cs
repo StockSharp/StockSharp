@@ -24,7 +24,6 @@ namespace StockSharp.Algo.Strategies.Reporting
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Strategies;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -70,7 +69,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 						strategy.Name, strategy.Security != null ? strategy.Security.Id : string.Empty, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty,
 						strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
 
-					var parameters = strategy.Parameters.SyncGet(c => c.ToArray());
+					var parameters = strategy.Parameters.CachedValues;
 					WriteValues(writer, LocalizedStrings.Str1322);
 					WriteValues(writer, parameters.Select(p => (object)p.Name).ToArray());
 					WriteValues(writer, parameters.Select(p => p.Value is TimeSpan ? Format((TimeSpan)p.Value) : p.Value).ToArray());

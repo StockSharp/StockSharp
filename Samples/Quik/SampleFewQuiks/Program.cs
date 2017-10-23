@@ -16,8 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleFewQuiks
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using System.Net;
 	using System.Threading;
 
@@ -33,7 +31,7 @@ namespace SampleFewQuiks
 		private static volatile Portfolio _portfolio2;
 
 		private static volatile Security _lkoh;
-		private static volatile Security _riz0;
+		private static volatile Security _ri;
 
 		static void Main()
 		{
@@ -59,43 +57,43 @@ namespace SampleFewQuiks
 				
 					var portfoliosWait = new ManualResetEvent(false);
 
-					Action<IEnumerable<Portfolio>> newPortfolios = portfolios =>
+					void NewPortfolio(Portfolio portfolio)
 					{
-						if (_portfolio1 == null)
-							_portfolio1 = portfolios.FirstOrDefault(p => p.Name == account1);
+						if (_portfolio1 == null && portfolio.Name == account1)
+							_portfolio1 = portfolio;
 
-						if (_portfolio2 == null)
-							_portfolio2 = portfolios.FirstOrDefault(p => p.Name == account2);
+						if (_portfolio2 == null && portfolio.Name == account2)
+							_portfolio2 = portfolio;
 
 						// если оба инструмента появились
 						if (_portfolio1 != null && _portfolio2 != null)
 							portfoliosWait.Set();
-					};
+					}
 
 					// подписываемся на события новых портфелей
-					quikTrader1.NewPortfolios += newPortfolios;
-					quikTrader2.NewPortfolios += newPortfolios;
+					quikTrader1.NewPortfolio += NewPortfolio;
+					quikTrader2.NewPortfolio += NewPortfolio;
 
 
 					var securitiesWait = new ManualResetEvent(false);
 
 					// подписываемся на события новых инструментов
-					quikTrader1.NewSecurities += securities =>
+					quikTrader1.NewSecurity += security =>
 					{
-						if (_lkoh == null)
-							_lkoh = securities.FirstOrDefault(s => s.Code == "LKOH");
+						if (_lkoh == null && security.Code == "LKOH")
+							_lkoh = security;
 
 						// если оба инструмента появились
-						if (_lkoh != null && _riz0 != null)
+						if (_lkoh != null && _ri != null)
 							securitiesWait.Set();
 					};
-					quikTrader2.NewSecurities += securities =>
+					quikTrader2.NewSecurity += security =>
 					{
-						if (_riz0 == null)
-							_riz0 = securities.FirstOrDefault(s => s.Code == "RIZ0");
+						if (_ri == null && security.Code == "RIZ7")
+							_ri = security;
 
 						// если оба инструмента появились
-						if (_lkoh != null && _riz0 != null)
+						if (_lkoh != null && _ri != null)
 							securitiesWait.Set();
 					};
 
@@ -121,7 +119,7 @@ namespace SampleFewQuiks
 					securitiesWait.WaitOne();
 
 					Console.WriteLine(LocalizedStrings.Str2996);
-					if (_lkoh.BestBid == null || _riz0.BestBid == null)
+					if (_lkoh.BestBid == null || _ri.BestBid == null)
 						throw new Exception(LocalizedStrings.Str2990);
 
 					quikTrader1.RegisterOrder(new Order
@@ -137,8 +135,8 @@ namespace SampleFewQuiks
 					{
 						Portfolio = _portfolio2,
 						Volume = 1,
-						Security = _riz0,
-						Price = _riz0.BestBid.Price
+						Security = _ri,
+						Price = _ri.BestBid.Price
 					});
 					Console.WriteLine(LocalizedStrings.Str2998);
 				}

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Source_code_00"/>
+</mediaLink>
+<para>Кубик используется для добавления кубиков, созданных из исходного кода(<link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" />). 
+ </para>
+<definitionTable>
+  <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Имя типа стратегии</legacyBold> – имя типа стратегии, которую необходимо добавить.</para></listItem>
+
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="6971235a-c9e5-4606-a266-5df4a3b9da94" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

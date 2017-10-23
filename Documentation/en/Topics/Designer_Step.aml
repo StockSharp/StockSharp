@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f1929c45-e092-4b11-a31e-9d153e075429" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To track step-by-step execution, the breakpoint shall be placed on the 
+cube from which you want to start step-by-step execution. After stopping on the 
+required cube, click the 
+<mediaLinkInline><image xlink:href="Designer_Debug_03"/></mediaLinkInline> 
+<legacyBold>Next element</legacyBold> button,
+<token>designer</token> will consistently move from cube to cube, showing the 
+strategy step-by-step execution. If it is necessary to enter the <legacyBold>Composite element</legacyBold>, 
+then at the moment when a step-by-step step is on the <legacyBold>Composite element</legacyBold>,
+ click the 
+<mediaLinkInline><image xlink:href="Designer_Debug_04"/></mediaLinkInline> 
+<legacyBold>Step in</legacyBold> button. And the next step of the step-by-step execution will be inside the 
+<legacyBold>Composite element</legacyBold>. To exit the Composite element, click the 
+<mediaLinkInline><image xlink:href="Designer_Debug_05"/></mediaLinkInline> 
+<legacyBold>Step out</legacyBold> button.
+</para>	
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b162bfe7-9e25-4f36-92b0-00872dca443f" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

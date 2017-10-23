@@ -91,9 +91,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast <see cref="Decimal"/> object to the type <see cref="Currency"/>.
+		/// Cast <see cref="decimal"/> object to the type <see cref="Currency"/>.
 		/// </summary>
-		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Object <see cref="Currency"/>.</returns>
 		public static implicit operator Currency(decimal value)
 		{
@@ -101,10 +101,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast object from <see cref="Currency"/> to <see cref="Decimal"/>.
+		/// Cast object from <see cref="Currency"/> to <see cref="decimal"/>.
 		/// </summary>
 		/// <param name="unit">Object <see cref="Currency"/>.</param>
-		/// <returns><see cref="Decimal"/> value.</returns>
+		/// <returns><see cref="decimal"/> value.</returns>
 		public static explicit operator decimal(Currency unit)
 		{
 			if (unit == null)
@@ -191,7 +191,7 @@ namespace StockSharp.Messages
 	public static class CurrencyHelper
 	{
 		/// <summary>
-		/// Cast <see cref="Decimal"/> to <see cref="Currency"/>.
+		/// Cast <see cref="decimal"/> to <see cref="Currency"/>.
 		/// </summary>
 		/// <param name="value">Currency value.</param>
 		/// <param name="type">Currency type.</param>

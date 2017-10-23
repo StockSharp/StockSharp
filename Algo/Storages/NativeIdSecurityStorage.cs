@@ -30,22 +30,22 @@ namespace StockSharp.Algo.Storages
 	/// <typeparam name="TNativeId">Native id type.</typeparam>
 	public abstract class NativeIdSecurityStorage<TNativeId> : Disposable, ISecurityStorage
 	{
-		private readonly IEntityRegistry _entityRegistry;
+		private readonly IStorageSecurityList _storageSecurityList;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NativeIdSecurityStorage{T}"/>.
 		/// </summary>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="storageSecurityList">The storage of securities.</param>
 		/// <param name="comparer"><typeparamref name="TNativeId"/> comparer.</param>
-		protected NativeIdSecurityStorage(IEntityRegistry entityRegistry, IEqualityComparer<TNativeId> comparer)
+		protected NativeIdSecurityStorage(IStorageSecurityList storageSecurityList, IEqualityComparer<TNativeId> comparer)
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
+			if (storageSecurityList == null)
+				throw new ArgumentNullException(nameof(storageSecurityList));
 
-			_entityRegistry = entityRegistry;
+			_storageSecurityList = storageSecurityList;
 			_cacheByNativeId = new SynchronizedDictionary<TNativeId, Security>(comparer);
 
-			TryAddToCache(entityRegistry.Securities);
+			TryAddToCache(storageSecurityList);
 		}
 
 		private readonly SynchronizedDictionary<TNativeId, Security> _cacheByNativeId;
@@ -56,11 +56,6 @@ namespace StockSharp.Algo.Storages
 		public IEnumerable<Security> Securities => _cacheByNativeId.Values;
 
 		int ISecurityProvider.Count => _cacheByNativeId.Count;
-
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return _cacheByNativeId.SyncGet(d => d.FirstOrDefault(p => p.Value == security).Key);
-		}
 
 		/// <summary>
 		/// Get native id.
@@ -76,7 +71,7 @@ namespace StockSharp.Algo.Storages
 				: CreateNativeId(criteria);
 
 			if (nativeId.IsDefault())
-				return _entityRegistry.Securities.Lookup(criteria);
+				return _storageSecurityList.Lookup(criteria);
 
 			var security = _cacheByNativeId.TryGetValue(nativeId);
 			return security == null ? Enumerable.Empty<Security>() : new[] { security };
@@ -94,7 +89,7 @@ namespace StockSharp.Algo.Storages
 				var nativeId = security.ExtensionInfo == null ? default(TNativeId) : CreateNativeId(security);
 
 				if (nativeId == null)
-					return;
+					continue;
 
 				bool isNew;
 				_cacheByNativeId.SafeAdd(nativeId, key => security, out isNew);
@@ -125,13 +120,13 @@ namespace StockSharp.Algo.Storages
 
 		void ISecurityStorage.Save(Security security)
 		{
-			_entityRegistry.Securities.Save(security);
+			_storageSecurityList.Save(security);
 			TryAddToCache(new[] { security });
 		}
 
 		IEnumerable<string> ISecurityStorage.GetSecurityIds()
 		{
-			return _entityRegistry.Securities.GetSecurityIds();
+			return _storageSecurityList.GetSecurityIds();
 		}
 
 		void ISecurityStorage.Delete(Security security)

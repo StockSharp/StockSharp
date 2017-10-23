@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="bb34a4ed-f260-4f08-88db-163d852fb384" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Formula_with_one_argument_00"/>
+</mediaLink>
+<para>Кубик используется для вычисления математической формулы с одним аргументом.
+</para>
+
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+    <listItem><para><legacyBold>Значение</legacyBold> – значение, над которым 
+    можно проводить математические операции (например, число или индикатор).</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Результат</legacyBold> – вычисленное значение математической формулы.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Формула</legacyBold> - предопределенный набор математических формул.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="ca2aa367-6e65-4912-aa7e-8f8d66272bc1" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ca2aa367-6e65-4912-aa7e-8f8d66272bc1" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Formula_with_two_arguments_00"/>
+</mediaLink>
+<para>The cube is used to calculate a mathematical formula with two arguments.
+</para>
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+    <listItem><para><legacyBold>Value</legacyBold> - the value with which you 
+    can perform mathematical operations (for example, a number or an indicator).</para></listItem>
+    <listItem><para><legacyBold>Value</legacyBold> - the value with which you 
+    can perform mathematical operations (for example, a number or an indicator).</para></listItem>
+</list>
+
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Result</legacyBold> - the calculated value of the 
+  mathematical formula.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Formula</legacyBold> - the predefined set of 
+  mathematical formulas.</para></listItem>
+</list>
+  </definition>
+</definitionTable>  
+    </introduction>
+    <relatedTopics>
+<link xlink:href="181e2f26-86dd-4c4b-b737-a24664ef9486" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

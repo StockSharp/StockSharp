@@ -1,0 +1,26 @@
+﻿<Window x:Class="SampleStrategies.StrategiesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        Title="{x:Static loc:LocalizedStrings.Str1355}" Height="300" Width="700">
+	<Grid Margin="5">
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<xaml:StrategiesDashboard x:Name="Dashboard" Grid.Row="0"
+								  CanExecuteStart="Dashboard_OnCanExecuteStart"
+								  CanExecuteStop="Dashboard_OnCanExecuteStop"
+								  ExecuteStart="Dashboard_OnExecuteStart"
+								  ExecuteStop="Dashboard_OnExecuteStop"/>
+
+		<StackPanel Grid.Row="2" Orientation="Horizontal">
+			<Button x:Name="Quoting" Width="100" Click="QuotingClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Str3229}" />...</TextBlock>
+			</Button>
+		</StackPanel>
+	</Grid>
+</Window>

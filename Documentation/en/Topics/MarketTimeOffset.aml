@@ -3,87 +3,75 @@
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-    <para>Для работы со временем в <token>stocksharp</token> используется структура <externalLink>
+    <para>To work with time in <token>stocksharp</token>, the <externalLink>
 		<linkText>DateTimeOffset</linkText>
-		<linkAlternateText>Структура DateTimeOffset</linkAlternateText>
-		<linkUri>https://msdn.microsoft.com/ru-ru/library/system.datetimeoffset(v=vs.110).aspx</linkUri>
+		<linkAlternateText>structure DateTimeOffset</linkAlternateText>
+		<linkUri>https://msdn.microsoft.com/library/system.datetimeoffset.aspx</linkUri>
 		<linkTarget>_blank</linkTarget>
-	</externalLink>. Эта структура хранит информацию о 
-	времени в формате UTC (англ. Coordinated Universal Time - <externalLink>
-	<linkText>Всемирное координированное время</linkText>
+	</externalLink> structure is used. This structure stores time information in the UTC (<externalLink>
+	<linkText>Coordinated Universal Time</linkText>
 		<linkAlternateText>Optional alternate text</linkAlternateText>
-		<linkUri>https://ru.wikipedia.org/wiki/%D0%92%D1%81%D0%B5%D0%BC%D0%B8%D1%80%D0%BD%D0%BE%D0%B5_%D0%BA%D0%BE%D0%BE%D1%80%D0%B4%D0%B8%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5_%D0%B2%D1%80%D0%B5%D0%BC%D1%8F</linkUri>
+		<linkUri>https://en.wikipedia.org/wiki/Coordinated_Universal_Time</linkUri>
 		<linkTarget>_blank</linkTarget>
-	</externalLink>), а также смещение локального времени относительно UTC. Таким образом, всегда можно определить локальное время и смещение (часовой пояс) источника данных при помощи 
-	свойств <externalLink>
+	</externalLink>)format, as well as local time offset related to the UTC. Thus, it is always possible to determine local time and offset (time zone) of the source
+	using the <externalLink>
 	<linkText>DateTimeOffset.DateTime</linkText>
 	<linkAlternateText>DateTimeOffset.DateTime</linkAlternateText>
-	<linkUri>https://msdn.microsoft.com/ru-ru/library/system.datetimeoffset.datetime(v=vs.110).aspx</linkUri>
+	<linkUri>https://msdn.microsoft.com/library/system.datetimeoffset.datetime.aspx</linkUri>
 	<linkTarget>_blank</linkTarget>
 	</externalLink>
- 	(или <externalLink>
+ 	(or <externalLink>
 	<linkText>DateTimeOffset.LocatDateTime</linkText>
 	<linkAlternateText>DateTimeOffset.LocatDateTime</linkAlternateText>
-	<linkUri>https://msdn.microsoft.com/ru-ru/library/system.datetimeoffset.localdatetime(v=vs.110).aspx</linkUri>
+	<linkUri>https://msdn.microsoft.com/library/system.datetimeoffset.localdatetime.aspx</linkUri>
 	<linkTarget>_blank</linkTarget>
 	</externalLink>
-	) и <externalLink>
+	) and <externalLink>
 	<linkText>DateTimeOffset.Offset</linkText>
 	<linkAlternateText>DateTimeOffset.Offset</linkAlternateText>
-	<linkUri>https://msdn.microsoft.com/ru-ru/library/system.datetimeoffset.offset(v=vs.110).aspx</linkUri>
+	<linkUri>https://msdn.microsoft.com/library/system.datetimeoffset.offset.aspx</linkUri>
 	<linkTarget>_blank</linkTarget>
-	</externalLink>
- соответственно.
+	</externalLink> features, correspondingly.
 	
 	
 	
 	</para>
-      <para>Для определения биржевого времени в <token>stocksharp</token> есть метод
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.TraderHelper.GetMarketTime(StockSharp.BusinessEntities.IConnector,StockSharp.BusinessEntities.Security)</codeEntityReference>.
-		Чтобы данный метод возвращал точное время, необходимо синхронизировать локальное время компьютера с атомными часами через вызов метода
-		<legacyBold>TimeHelper.SyncMarketTime</legacyBold>. Разница во времени будет записана в <legacyBold>TimeHelper.NowOffset</legacyBold>.
-		После этого в <legacyBold>TimeHelper.Now</legacyBold> будет хранится синхронизированное локальное время с учетом <legacyBold>TimeHelper.NowOffset</legacyBold>. Класс <legacyBold>TimeHelper</legacyBold> находится
-		в пространстве имен <legacyBold>Ecng.Common</legacyBold>.
+        <para>To determine the stock exchange time in the <token>stocksharp</token>, standard <token>csharp</token> methods can be used:
+        <codeEntityReference qualifyHint="true">P:System.DateTime.Now</codeEntityReference> or
+		<codeEntityReference qualifyHint="true">P:System.DateTimeOffset.Now</codeEntityReference>.
+		For these methods to return the exact time, it is necessary to synchronize the PC local time with atomic clock by calling the 
+		<codeEntityReference qualifyHint="true">M:Ecng.Common.TimeHelper.SyncMarketTime(System.Int32)</codeEntityReference>. 
+		method. Time offset will be recorded in the 
+		<codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.NowOffset</codeEntityReference>. 
+		After that, the <codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.Now</codeEntityReference> will store the synchronized local time,
+		taking into consideration the <codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.NowOffset</codeEntityReference>.
+		The <legacyBold>TimeHelper</legacyBold> class is located in the <legacyBold>Ecng.Common</legacyBold> namespace.
 	  </para>
     </introduction>
 
     <procedure>
-      <title>Пример получения скорректированного времени</title>
+      <title>Example of getting the corrected time</title>
 
       <steps class="bullet">
         <step>
           <content>
 			  <code language="C#">
-					var trader = new SmartTrader(login, password);
+					var trader = new OpeneCryTrader(login, password);
 					
-					// выводим текущее локальное время
+					// printing the current local time
 					Console.WriteLine(TimeHelper.Now);
 					
-					// синхронизируем локальное время с атомными часами
+					// doing a sync with internet clocks
 					TimeHelper.SyncMarketTime(10000);
 					
-					// выводим синхронизированное текущее локальное время
+					// printing the current local time again
 					Console.WriteLine(TimeHelper.Now);
 					
-					// выводим текущее время московской биржи
-					Console.WriteLine(trader.GetMarketTime(security));
 			  </code>
           </content>
         </step>
       </steps>
     </procedure>
-    
-     <relatedTopics>
-     	<externalLink>
-			<linkText>Временные метки хранилища</linkText>
-			<linkAlternateText>Временные метки хранилища</linkAlternateText>
-			<linkUri>http://stocksharp.com/forum/yaf_postst5416_Vriemiennyie-mietki-khranilishcha.aspx</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
-     </relatedTopics>
-     
-    
-    
     
   </developerWalkthroughDocument>
 </topic>

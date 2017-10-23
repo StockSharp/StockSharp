@@ -3,21 +3,28 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> может предоставлять исторические данные за предыдущие торговые сессии.
-      	Такие данные поставляются в виде тиков и свечек <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> с тайм-фреймами менее одного дня и кратными одной секунде,
-      	а также дневным, недельным (7 дней) и месячным (31 день).  Исторические данные, в зависимости от типа, можно получить за следующие периоды времени:
+      	<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> can provide historical data for the previous trading session. These data are
+      	available in the form of the <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> with time frames of less than one day
+      	and multiple of one second, as well as daily, weekly (7 days) and monthly (31 days). Specific limitations can be found <externalLink>
+        <linkText>here</linkText>
+        <linkAlternateText>Frequently Asked Questions</linkAlternateText>
+        <linkUri>http://www.iqfeed.net/stocksharp/index.cfm?displayaction=support&amp;section=main</linkUri>
+      </externalLink>.
+      	Depending on the type historical data may be get for the following periods:
       </para>
       <list class="ordered">
-  	  	<listItem>Тики – 8 дней.</listItem>
-  	  	<listItem>Минутные данные – 120 дней.</listItem>
-  	  	<listItem>Дневные данные – 10 лет.</listItem>
-  	  	<listItem>Недельные данные – 250 недель.</listItem>
-  	  	<listItem>Месячные данные – 250 месяцев.</listItem>
+  	  	<listItem>Ticks – up to 180 days.</listItem>
+  	  	<listItem>Minute data – 8-10 years.</listItem>
+  	  	<listItem>Day data – 10+ years.</listItem>
+  	  	<listItem>Week data – 15+ years.</listItem>
+  	  	<listItem>Month data – 15+ years.</listItem>
 	  </list>
-	  <para>Для получения исторических сделок необходимо воспользоваться методом 
-	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean@)</codeEntityReference>.</para>
-	  <para>Для получения исторических свечек необходимо воспользоваться методом 
-	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>.</para>
+	  <para>For historical trades getting it is necessary to use the 
+	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)</codeEntityReference> method.</para>
+	  <para>For historical candles getting the <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>
+	  method should be used.</para>
     </introduction>
   </developerConceptualDocument>
+
+ 
 </topic>

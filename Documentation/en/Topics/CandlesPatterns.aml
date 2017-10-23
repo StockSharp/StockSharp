@@ -3,66 +3,53 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
 	<introduction>
-		<para>Через класс <codeEntityReference>T:StockSharp.Algo.Candles.CandleHelper</codeEntityReference> можно произвести распознавание паттернов свечек по следующия методам:</para>
+		<para>It is possible to make candles pattern recognition through the <codeEntityReference>T:StockSharp.Algo.Candles.CandleHelper</codeEntityReference>
+		class by the following methods:</para>
 		  
 		<list class="bullet">
 			<listItem>
 				<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.IsWhiteOrBlack(StockSharp.Algo.Candles.Candle)</codeEntityReference> -
-				Является ли свечка белой или черной.
+				Is it white or black candle.
 			</listItem>
 			  
 			<listItem>
 				<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.IsMarubozu(StockSharp.Algo.Candles.Candle)</codeEntityReference> -
-				Является ли свечка бестеневой.
+				Is it a shadowless candle.
 			</listItem>
 			  
 			<listItem>
 				<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.IsSpinningTop(StockSharp.Algo.Candles.Candle)</codeEntityReference> -
-				Является ли свечка нейтральной по сделкам.
+				Is it a neutral candle by trades.
 			</listItem>
 			
 			<listItem>
 				<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.IsHammer(StockSharp.Algo.Candles.Candle)</codeEntityReference> -
-				Является ли свечка молотом.
+				Is it a hammer candle.
 			</listItem>
 			  
 			<listItem>
 				<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.IsDragonflyOrGravestone(StockSharp.Algo.Candles.Candle)</codeEntityReference> -
-				Является ли свечка стрекозой или надгробьем.
+				Is it a dragonfly or gravestone candle.
 			</listItem>
 			  
 			<listItem>
 				<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.IsBullishOrBearish(StockSharp.Algo.Candles.Candle)</codeEntityReference> -
-				Является ли свечка бычьей или медвежьей.
+				Is it a bull or bear candle.
 			</listItem>
 		</list>
 	</introduction>
     
     <section>
-		<title>Общие методы работы со свечками</title>
+		<title>Common methods of work with candles</title>
 
 		<content>
-			<para><codeEntityReference>T:StockSharp.Algo.Candles.CandleHelper</codeEntityReference> также предоставляет различные алгоритмы для свечек, упрощающие
-			написание кода:</para>
+			<para><codeEntityReference>T:StockSharp.Algo.Candles.CandleHelper</codeEntityReference> also provides a variety of algorithms for candles to simplify writing of code:</para>
 		  
 			<list class="bullet">
-				<listItem>
-					<para>Получение времени свечки (время ее создания) через метод 
-					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetCandleTime(System.TimeSpan,System.DateTime)</codeEntityReference>:</para>
-					
-					<code language="C#">
-					<![CDATA[
-
-var candleTimeFrame = TimeSpan.FromMinutes(10.5);
-
-Console.WriteLine(candleTimeFrame.GetCandleTime(_trader));
-					]]>
-					</code>
-				</listItem>
 
 				<listItem>
-					<para>Получение временных рамок свечки через метод <codeEntityReference>Overload:StockSharp.Algo.Candles.CandleHelper.GetCandleBounds</codeEntityReference>.
-					Например, необходимо точно узнать, когда закончится текущая 10.5-минутная свечка:</para>
+					<para>The candle time range getting through the <codeEntityReference>Overload:StockSharp.Algo.Candles.CandleHelper.GetCandleBounds</codeEntityReference> method.
+					For example, you want to find out exactly when the current 10.5-minute candle ends:</para>
 				
 					<code language="C#">
 					<![CDATA[
@@ -74,15 +61,15 @@ Console.WriteLine(candleTimeFrame.GetCandleBounds(DateTime.Now).Max);
 				</listItem>
 			  
 				<listItem>
-					<para>Получить длину свечки, ее тела, ее теней через методы
+					<para>To get the candle length, its body, its shadows through
 					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetLength(StockSharp.Algo.Candles.Candle)</codeEntityReference>,
 					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetBody(StockSharp.Algo.Candles.Candle)</codeEntityReference>,
-					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetTopShadow(StockSharp.Algo.Candles.Candle)</codeEntityReference> и
+					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetTopShadow(StockSharp.Algo.Candles.Candle)</codeEntityReference> and
 					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetBottomShadow(StockSharp.Algo.Candles.Candle)</codeEntityReference>:</para>
 				  
 					<code language="C#">
 					<![CDATA[
-// любая свечка
+// sample candle
 var candle = ...
 
 Console.WriteLine(candle.GetCandleLength());

@@ -1,0 +1,465 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.Blackwood</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.Blackwood.BlackwoodAddresses">
+      <summary>
+            Blackwood address list.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodAddresses.WetBush">
+      <summary>
+            WedBush brokerage server address.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodAddresses.ExecutionPort">
+      <summary>
+            Transaction server default port.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodAddresses.MarketDataPort">
+      <summary>
+            Realtime data server default port.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodAddresses.HistoricalDataPort">
+      <summary>
+            Historical data server default port.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.BlackwoodImbalance">
+      <summary>
+            Imbalance volume <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" /> orders, which have not been filled.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.Time">
+      <summary>
+            Creation time.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.ImbalanceVolume">
+      <summary>
+            The size of the imbalance volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.TotalVolume">
+      <summary>
+            Total volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.PairedVolume">
+      <summary>
+            Pair volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.ReferencePrice">
+      <summary>
+            Price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.InitTime">
+      <summary>
+            Time.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.InitImbalanceVolume">
+      <summary>
+            The initial imbalance volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.RegImbalance">
+      <summary>
+            Registration imbalance.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.InitRegImbalanceVolume">
+      <summary>
+            The initial volume imbalance at registration.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.CurrInitImbalanceVolume">
+      <summary>
+            The current volume imbalance at registration.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.ClearingPrice">
+      <summary>
+            Price at last clearing.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodImbalance.ClosingOnlyClearingPrice">
+      <summary>
+            The closing price of the previous trading session.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.BlackwoodMessageAdapter">
+      <summary>
+            The messages adapter for Blackwood (Fusion) DMA.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.BlackwoodMessageAdapter" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition">
+      <summary>
+            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
+            </summary>
+      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired">
+      <summary>
+        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Send message.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.IsConnectionAlive">
+      <summary>
+            Check the connection is alive. Uses only for connected states.
+            </summary>
+      <returns>
+        <see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.MarketDataAddress">
+      <summary>
+            Market data server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.HistoricalDataAddress">
+      <summary>
+            History data server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.ExecutionAddress">
+      <summary>
+            Server address of transactions execution.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.LogPath">
+      <summary>
+            Path to directory, where BWOrders.log file will be created.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.OverrideDll">
+      <summary>
+            Override dll file from resources. Turned on by default.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames">
+      <summary>
+            Available time frames.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>A string that represents the current object.</returns>
+    </member>
+    <member name="T:StockSharp.Blackwood.BlackwoodOrderConditionTypes">
+      <summary>
+            Condition types for <see cref="T:StockSharp.Blackwood.BlackwoodOrderCondition" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.StopMarket">
+      <summary>
+            Activate a stop order by market price <see cref="F:StockSharp.Messages.OrderTypes.Market" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.StopLimit">
+      <summary>
+            Activate a stop order by limit price <see cref="F:StockSharp.Messages.OrderTypes.Limit" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketOrBetter">
+      <summary>
+            Activate a stop order by market price or better.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose">
+      <summary>
+            Activate a stop order by market closing price.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketOpen">
+      <summary>
+            Activate a stop order by market opening price.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitOpen">
+      <summary>
+            Activate a stop order by limit opening price.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketNyse">
+      <summary>
+            Activate a stop order by market price on <see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Nyse" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitNyse">
+      <summary>
+            Activate a stop order by limit price on <see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Nyse" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitClose">
+      <summary>
+            Activate a stop order by limit closing price.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.Pegged">
+      <summary>
+            Pegged.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.ReversePegged">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.DirectPlus">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MidPegged">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MktPegged">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartStart">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.Shave">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.Half">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.HuntMarket">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.HuntLimit">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.GfiMarket">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.GfiLimit">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.ShortDowntick">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.NewHuntMarket">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.NewHuntLimit">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartStop">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.CustomStart">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartBid">
+      <summary>
+            Bid (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> board).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartAsk">
+      <summary>
+            Ask (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> board).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartLast">
+      <summary>
+            Last (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> board).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartMiddle">
+      <summary>
+            Spread (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> board).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartFixed">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartCancel">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartDispersion">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.CustomOrderStop">
+      <summary>
+      </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.BlackwoodOrderCondition">
+      <summary>
+        <see cref="N:StockSharp.Blackwood" /> order condition.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodOrderCondition.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.BlackwoodOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodOrderCondition.StopPrice">
+      <summary>
+            Order stop-price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodOrderCondition.Type">
+      <summary>
+            Stop-order type.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Blackwood.BlackwoodTrader">
+      <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the Blackwood (Fusion) DMA.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.BlackwoodTrader" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodTrader.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodTrader.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodTrader.ExecutionAddress">
+      <summary>
+            Server address of transactions execution.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodTrader.MarketDataAddress">
+      <summary>
+            Market data server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodTrader.HistoricalDataAddress">
+      <summary>
+            History data server address.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodTrader.LogPath">
+      <summary>
+            Path to directory, where BWOrders.log file will be created.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodTrader.OverrideDll">
+      <summary>
+            Override dll file from resources. Turned on by default.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock">
+      <summary>
+            Event imbalance in prices, when a bid price of one board more than or equal to ask price on another board.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCrossLock">
+      <summary>
+            Subscribe to the event imbalance prices of bids and asks. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance">
+      <summary>
+            Event receiving of imbalance for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeImbalance">
+      <summary>
+            Subscribe to the new imbalance event for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication">
+      <summary>
+            Event receiving of a new signal in the pre-market.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestPreMarketIndications">
+      <summary>
+            Request information about prices in the pre-market. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeHighLow(System.Boolean)">
+      <summary>
+            Subscribe to the event getting the maximum and minimum values of an instruments. The data will transfer through event <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" />.
+            </summary>
+      <param name="isSubscribe">
+        <see langword="true" />, if you want to subscribe to data, otherwise, <see langword="false" />.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeMarketSorter">
+      <summary>
+            Subscribe to receive information about the best and worst instruments per session.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestNewsStory(StockSharp.BusinessEntities.News)">
+      <summary>
+            Request news <see cref="P:StockSharp.BusinessEntities.News.Story" /> body. After receiving the event <see cref="E:StockSharp.Algo.Connector.NewsChanged" /> will be triggered.
+            </summary>
+      <param name="news">News.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message)">
+      <summary>
+            Process message.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
+  </members>
+</doc>

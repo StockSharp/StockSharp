@@ -35,7 +35,7 @@ private readonly object _syncToken = new object();
 
 order
 	.WhenRegistered()
-	.Do(() => this.AddInfoLog("Заявка успешно зарегестрирована"))
+	.Do(() => this.AddInfoLog("Заявка успешно зарегистрирована"))
 	.Once()
 	.Sync(_syncToken)
 	.Apply(this);
@@ -65,23 +65,20 @@ order
 			
 							<code language="C#">
 							<![CDATA[
-MarketRuleHelper.SuspendRules(() =>	
+MarketRuleHelper.SuspendRules(() =>
 {
-	order
-		.WhenRegistered()
-		.Do(() => trader.AddInfoLog("Заявка успешно зарегестрирована"))
-		.Once()
-		.Apply(this);
-	
-	order
-		.WhenCancelled()
-		.Do(() => trader.AddInfoLog("Заявка успешно отменена"))
-		.Once()
-		.Apply(this);
-});
+    order
+        .WhenRegistered(Connector)
+        .Do(() => Connector.AddInfoLog("Заявка успешно зарегистрирована"))
+        .Once()
+        .Apply(this);
 
-// регистрация заявки
-trader.RegisterOrder(order);
+    order
+        .WhenCanceled(Connector)
+        .Do(() => Connector.AddInfoLog("Заявка успешно отменена"))
+        .Once()
+        .Apply(this);
+});
 							]]>
 							</code>				
 						</content>
@@ -97,24 +94,20 @@ class FirstStrategy : Strategy
 {
 	...
 	
-    protected override void OnStarting()
-    {
-		this.SuspendRules(() =>
-		{
-			_series
-				.WhenCandlesFinished()
-				.Do(FinishCandle)
-				.Apply(this);
+       this.SuspendRules(() =>
+       {
+           _candleManager
+               .WhenCandlesFinished(_series)
+               .Do(FinishCandle)
+               .Apply(this);
 
-			Security
-				.WhenNewTrades()
-				.Do(NewTrade)
-				.Apply(this);
-		});
-
-        base.OnStarting();
-    }
-    
+           Security
+               .WhenNewTrade(Connector)
+               .Do(NewTrade)
+               .Apply(this);
+       });
+   }
+  
     ...
 }
 							]]>

@@ -15,12 +15,13 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleSterling
 {
+	using System;
 	using System.Windows;
-	using System.Collections.Generic;
-	using System.Linq;
 	
 	using Ecng.Collections;
 	using Ecng.Xaml;
+
+	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -33,14 +34,28 @@ namespace SampleSterling
 		private readonly SynchronizedDictionary<Security, TradesWindow> _tradesWindows = new SynchronizedDictionary<Security, TradesWindow>();
 		private bool _initialized;
 
-		public Security SelectedSecurity
-		{
-			get { return SecurityPicker.SelectedSecurity; }
-		}
+		//public Security SelectedSecurity => SecurityPicker.SelectedSecurity;
 
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			_tradesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
+			base.OnClosed(e);
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -83,29 +98,40 @@ namespace SampleSterling
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			new FindSecurityWindow().ShowModal(this);
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
 		}
 
 		private void TradesClick(object sender, RoutedEventArgs e)
 		{
 			TryInitialize();
 
-			var window = _tradesWindows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create tick trades window
-				var wnd = new TradesWindow { Title = security.Code + " сделки" };
+				var window = _tradesWindows.SafeAdd(security, s =>
+				{
+					// create tick trades window
+					var wnd = new TradesWindow
+					{
+						Title = security.Code + " " + LocalizedStrings.Ticks
+					};
 
-				// subscribe on tick trades flow
-				MainWindow.Instance.Trader.RegisterTrades(security);
+					// subscribe on tick trades flow
+					MainWindow.Instance.Trader.RegisterTrades(security);
 
-				wnd.MakeHideable();
-				return wnd;
-			});
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
+			}
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)
@@ -114,21 +140,30 @@ namespace SampleSterling
 
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				trader.RegisterMarketDepth(security);
+				var window = _quotesWindows.SafeAdd(security, s =>
+				{
+					// subscribe on order book flow
+					trader.RegisterMarketDepth(security);
 
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+				{
+					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
+			}
 		}
 
 		private void TryInitialize()
@@ -139,33 +174,25 @@ namespace SampleSterling
 
 				var trader = MainWindow.Instance.Trader;
 
-				trader.NewTrades += TraderOnNewTrades;
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
-
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
+				trader.NewTrade += TraderOnNewTrade;
+				trader.MarketDepthChanged += TraderOnMarketDepthChanged;
 			}
 		}
 
-		private void TraderOnNewTrades(IEnumerable<Trade> trades)
+		private void TraderOnNewTrade(Trade trade)
 		{
-			foreach (var group in trades.GroupBy(t => t.Security))
-			{
-				var wnd = _tradesWindows.TryGetValue(group.Key);
+			var wnd = _tradesWindows.TryGetValue(trade.Security);
 
-				if (wnd != null)
-					wnd.TradeGrid.Trades.AddRange(group);
-			}
+			if (wnd != null)
+				wnd.TradeGrid.Trades.Add(trade);
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 	}
 }

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Any necessary information on security (for example, country, city, 
+      website etc.) may be extended info.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_ExtensionInfo_securities"/>
+</mediaLink>
+      <para>For more information about the extended information, see the 
+      <link xlink:href="b7f2c08a-2920-42a4-9887-eb0441c246cb" /> documentation on 
+      <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />.</para>
+    </introduction>
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

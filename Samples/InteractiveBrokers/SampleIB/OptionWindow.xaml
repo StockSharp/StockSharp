@@ -1,0 +1,21 @@
+﻿<Window x:Class="SampleIB.OptionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:propertyGrid="http://schemas.stocksharp.com/xaml"
+        mc:Ignorable="d"
+        Title="OptionWindow" Height="300" Width="300">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		
+		<propertyGrid:PropertyGridEx x:Name="PropGrid"/>
+		
+		<Button IsDefault="True" xaml:XamlHelper.DialogResult="True" Grid.Row="2">OK</Button>
+    </Grid>
+</Window>

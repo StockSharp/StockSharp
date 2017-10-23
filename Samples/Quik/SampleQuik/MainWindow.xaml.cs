@@ -21,8 +21,6 @@ namespace SampleQuik
 	using System.Security;
 	using System.Windows;
 
-	using MoreLinq;
-
 	using Ecng.Common;
 	using Ecng.Xaml;
 
@@ -40,7 +38,7 @@ namespace SampleQuik
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-		private readonly StopOrderWindow _stopOrderWindow = new StopOrderWindow();
+		private readonly StopOrderWindow _stopOrdersWindow = new StopOrderWindow();
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -55,7 +53,7 @@ namespace SampleQuik
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
-			_stopOrderWindow.MakeHideable();
+			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
@@ -70,13 +68,13 @@ namespace SampleQuik
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			_stopOrderWindow.DeleteHideable();
+			_stopOrdersWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
-			_stopOrderWindow.Close();
+			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
 			_portfoliosWindow.Close();
 
@@ -162,20 +160,23 @@ namespace SampleQuik
 					//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 					// подписываемся на ошибку подписки маркет-данных
-					Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.OrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-					Trader.OrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-					Trader.StopOrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-					Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+					Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+					Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981));
+					Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981));
+					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
+
+					Trader.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 					// устанавливаем поставщик маркет-данных
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
@@ -226,7 +227,7 @@ namespace SampleQuik
 
 		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
 		{
-			ShowOrHide(_stopOrderWindow);
+			ShowOrHide(_stopOrdersWindow);
 		}
 
 		private static void ShowOrHide(Window window)

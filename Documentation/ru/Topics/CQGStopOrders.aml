@@ -6,7 +6,7 @@
 		но с указанием типа заявки <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference>:</para>   
         <code language="C#">
         <![CDATA[
-void NewStopOrderClick(object sender, RoutedEventArgs e)
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
 	var newOrder = new OrderConditionalWindow
 	{
@@ -15,18 +15,21 @@ void NewStopOrderClick(object sender, RoutedEventArgs e)
 			Security = SecurityPicker.SelectedSecurity,
 			Type = OrderTypes.Conditional,
 		},
-		Connector = MainWindow.Instance.Trader,
+		SecurityProvider = Connector,
+		MarketDataProvider = Connector,
+		Portfolios = new PortfolioDataSource(Connector),
+		Adapter = Connector.TransactionAdapter
 	};
 
 	if (newOrder.ShowModal(this))
-		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+		Connector.RegisterOrder(newOrder.Order);
 }
 		]]>
 		</code>
 		
 		<para>Далее будет открыт диалог <legacyBold>Регистрация условной заявки</legacyBold>, где нужно указать тип и параметры такой заявки.</para>
 		<para>За кулисами в коде <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference> создаются и настраиваются условия при помощи класса
-		<codeEntityReference>T:StockSharp.CQG.CQGOrderCondition</codeEntityReference>.</para>
+		<codeEntityReference>T:StockSharp.Cqg.Com.CqgComOrderCondition</codeEntityReference>.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

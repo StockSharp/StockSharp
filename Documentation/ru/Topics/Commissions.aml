@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="a2f51940-0932-432e-8255-433610cfd457" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -32,7 +32,7 @@ private CommissionManager _commissionManager = new CommissionManager();
 						
 						<code language="C#">
 						<![CDATA[
- CommissionRule commissionRule = new CommissionRule {Type = CommissionTypes.PerTradeVolume, Value = new Unit(1m)};
+ CommissionRule commissionRule =  new CommissionPerTradeRule {  Value = new Unit(1m) };
 						]]>
 						</code>
 					</content>
@@ -55,7 +55,7 @@ _commissionManager.Rules.Add(commissionRule);;
 	<summary>
 		<para>Подсчет комиссии можно вести как по сделкам, так и по заявкам. Для подсчета комиссии по сделке вызывается метод 
 		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.Process(StockSharp.Messages.Message)</codeEntityReference>,
-		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Message</codeEntityReference> - cообщение, содержащее информацию о заявке или собственной сделке.</para>
+		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Message</codeEntityReference> - сообщение, содержащее информацию о заявке или собственной сделке.</para>
 		<!-- <para>Для подсчета комиссии по заявке вызывается метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.ProcessOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Order</codeEntityReference>.</para>-->
 		<para>Суммарное значение комиссии можно узнать через <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Commissions.CommissionManager.Commission</codeEntityReference>.</para>

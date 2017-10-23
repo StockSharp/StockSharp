@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="fc12caf6-a6cc-4ca3-a535-b67ae60e5a92" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Подход построения схем в <token>designer</token> основанный на генерации и последующей 
+обработке событий. При построении стратегии неизвестно, когда произойдет событие 
+изменения рыночных данных, но при этом можно подписаться на это событие и обработать
+ его соответствующим образом.</para>
+<para>Каждый кубик <token>designer</token>, имеющий выходной параметр, является генератором событий.
+ А кубики, имеющие входной параметр, могут подписаться на событие, генерируемое 
+ выходящим параметром. Подписание на событие есть ничто иное как создание линии 
+ соединений между двумя кубиками.</para>
+<para>Например, кубик <link xlink:href="181e2f26-86dd-4c4b-b737-a24664ef9486" /> генерирует событие изменения стакана. При этом заранее не 
+известно, когда произойдет изменение. Создав линию соединения между кубиком <link xlink:href="181e2f26-86dd-4c4b-b737-a24664ef9486" /> 
+и кубиком <link xlink:href="d12b6321-af41-40f1-a8c6-87ea59d1b51c" />, происходит подписание на изменение стакана для дальнейшей 
+обработки кубиком <link xlink:href="d12b6321-af41-40f1-a8c6-87ea59d1b51c" /> и т.д..:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Event_model_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

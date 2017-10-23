@@ -16,12 +16,10 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleSmartSMA
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Windows;
-	using System.Windows.Controls;
 	using System.Windows.Media;
 
 	using MoreLinq;
@@ -65,12 +63,12 @@ namespace SampleSmartSMA
 			_logManager.Listeners.Add(new GuiLogListener(LogControl));
 
 			_area = new ChartArea();
-			_chart.Areas.Add(_area);
+			Chart.Areas.Add(_area);
 		}
 
-		private void OrdersOrderSelected(object sender, SelectionChangedEventArgs e)
+		private void OrdersOrderSelected()
 		{
-			CancelOrders.IsEnabled = !_orders.SelectedOrders.IsEmpty();
+			CancelOrders.IsEnabled = !OrdersGrid.SelectedOrders.IsEmpty();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -115,18 +113,20 @@ namespace SampleSmartSMA
 
 						_candleManager = new CandleManager(_trader);
 
-						_trader.NewCandles += (series, candles) => _historyCandles.SyncDo(col =>
+						_trader.CandleSeriesProcessing += (series, candle) => _historyCandles.SyncDo(col =>
 						{
-							_historyCandles.AddRange(candles.Cast<TimeFrameCandle>());
+							_historyCandles.Add((TimeFrameCandle)candle);
 
-							foreach (var candle in candles)
-								ProcessCandle(candle);
+							ProcessCandle(candle);
 						});
 
-						_trader.NewSecurities += securities =>
+						_trader.NewSecurity += security =>
 						{
+							if (security.Code != "LKOH")
+								return;
+
 							// находим нужную бумагу
-							var lkoh = securities.FirstOrDefault(s => s.Code == "LKOH");
+							var lkoh = security;
 
 							if (lkoh != null)
 							{
@@ -139,14 +139,13 @@ namespace SampleSmartSMA
 							}
 						};
 
-						_trader.NewMyTrades += trades =>
+						_trader.NewMyTrade += trade =>
 						{
 							if (_strategy != null)
 							{
 								// найти те сделки, которые совершила стратегия скользящей средней
-								trades = trades.Where(t => _strategy.Orders.Any(o => o == t.Order));
-
-								_trades.Trades.AddRange(trades);
+								if (_strategy.Orders.Contains(trade.Order))
+									TradesGrid.Trades.Add(trade);
 							}
 						};
 
@@ -181,8 +180,8 @@ namespace SampleSmartSMA
 					//_trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 					// подписываемся на ошибку подписки маркет-данных
-					_trader.MarketDataSubscriptionFailed += (security, type, error) =>
-						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+					_trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 				}
 
 				_trader.Login = Login.Text;
@@ -199,15 +198,6 @@ namespace SampleSmartSMA
 				_trader.Disconnect();
 			}
 		}
-
-		//private void OrdersFailed(IEnumerable<OrderFail> fails)
-		//{
-		//	this.GuiAsync(() =>
-		//	{
-		//		foreach (var fail in fails)
-		//			MessageBox.Show(this, fail.Error.ToString(), "Ошибка регистрации заявки");
-		//	});
-		//}
 
 		private void ChangeConnectStatus(bool isConnected)
 		{
@@ -236,7 +226,7 @@ namespace SampleSmartSMA
 
 		private void CancelOrdersClick(object sender, RoutedEventArgs e)
 		{
-			_orders.SelectedOrders.ForEach(_trader.CancelOrder);
+			OrdersGrid.SelectedOrders.ForEach(_trader.CancelOrder);
 		}
 
 		private void StartClick(object sender, RoutedEventArgs e)
@@ -316,12 +306,15 @@ namespace SampleSmartSMA
 			var longValue = candle.State == CandleStates.Finished ? _strategy.LongSma.Process(candle) : null;
 			var shortValue = candle.State == CandleStates.Finished ? _strategy.ShortSma.Process(candle) : null;
 
-			_chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
-			{
-				{ _candlesElem, candle },
-				{ _longMaElem, longValue },
-				{ _shortMaElem, shortValue },
-			});
+			var chartData = new ChartDrawData();
+
+			chartData
+				.Group(candle.OpenTime)
+					.Add(_candlesElem, candle)
+					.Add(_longMaElem, longValue)
+					.Add(_shortMaElem, shortValue);
+
+			Chart.Draw(chartData);
 		}
 
 		private void ReportClick(object sender, RoutedEventArgs e)

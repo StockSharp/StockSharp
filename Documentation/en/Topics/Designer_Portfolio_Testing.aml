@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1db75098-3878-4843-9c0d-75bd9dd47a48" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+
+      <para>The <token>designer</token> features ability to test one strategy on 
+      various securities at the same time. To do that, click the 
+      <link xlink:href="b162bfe7-9e25-4f36-92b0-00872dca443f" /> button.</para>
+      
+       <mediaLink>
+<image placement="center" xlink:href="Designer_Portfolio_testing"/>
+</mediaLink>
+<para>In optimization parameters set the <legacyBold>Security</legacyBold> 
+parameter, select from the list the securities for which you want to perform 
+testing. Set the testing period and he market-data storage in the 
+<legacyBold>Ribbon</legacyBold>. After clicking the <legacyBold>Start</legacyBold> 
+button, the testing will start on all securities simultaneously.</para>
+    </introduction>
+
+    
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d12b6321-af41-40f1-a8c6-87ea59d1b51c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Converter_00"/>
+</mediaLink>
+<para>The cube is used to convert complex objects into simple data types. For 
+example, it allows to get the value of the price step for the instrument.
+</para>
+
+
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Any data</legacyBold> - the certain type of complex 
+  objects that are received.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Any data</legacyBold> - the value of the selected 
+  property for the received object.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Data type</legacyBold> - the type of data to be 
+  input. The type of the input parameter depends on the selected value.</para></listItem>
+  <listItem><para><legacyBold>Property</legacyBold> – the tree of selected type 
+  properties, which can be obtained at the output of the cube. The set of available 
+  properties depends on the selected data type and appears only after selecting 
+  the required data type.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="ee6c9d13-def9-4be2-a480-34c93037a53b" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

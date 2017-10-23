@@ -81,75 +81,73 @@ waitHandle.WaitOne();</code>
 				  <para>Далее, необходимо подписаться на события появления информации по инструментам (так программа получит сведения по бумаге Лукойл),
 				  и портфелям (для выставления заявок). А также на событие появления Моих Сделок (сигнал пользователю о том, что произошла сделка по его
 				  заявке):</para>
-				  <code language="C#"><![CDATA[trader.NewPortfolios += portfolios =>
+				  <code language="C#"><![CDATA[
+trader.NewPortfolio += portfolio =>
 {
-	if (_portfolio == null)
+	if (_portfolio == null && portfolio.Name == account)
 	{
 		// находим нужный портфель и присваиваем его переменной _portfolio
-		_portfolio = portfolios.FirstOrDefault(p => p.Name == account);
+		_portfolio = portfolio;
 
-		if (_portfolio != null)
-		{
-			Console.WriteLine("Портфель {0} появился.", account);
+		Console.WriteLine(LocalizedStrings.Str2171Params, account);
 
-			// если инструмент и стакан уже появились,
-			// то извещаем об этом основной поток для выставления заявки
-			if (_lkoh != null && _depth != null)
-				waitHandle.Set();
-		}
+		// если инструмент и стакан уже появились,
+		// то извещаем об этом основной поток для выставления заявки
+		if (_lkoh != null && _depth != null)
+			waitHandle.Set();
 	}
 };
 
+
 // подписываемся на событие появление инструментов
-trader.NewSecurities += securities =>
+trader.NewSecurity += security =>
 {
 	if (_lkoh == null)
 	{
+		if (!security.Code.CompareIgnoreCase(secCode))
+			return;
+
 		// находим Лукойл и присваиваем ее переменной lkoh
-		_lkoh = securities.FirstOrDefault(sec => sec.Code == secCode);
+		_lkoh = security;
 
 		if (_lkoh != null)
 		{
-			Console.WriteLine("Инструмент Лукойл появился.");
-			
+			Console.WriteLine(LocalizedStrings.Str2987);
+
 			// запускаем экспорт стакана
 			trader.RegisterMarketDepth(_lkoh);
 
-			if (_portfolio != null)
+			if (_portfolio != null && _depth != null)
 				waitHandle.Set();
 		}
 	}
 };
 
+
 // подписываемся на событие появления моих новых сделок
-trader.NewMyTrades += myTrades =>
+trader.NewMyTrade += myTrade =>
 {
-	foreach (var myTrade in myTrades)
-	{
-		var trade = myTrade.Trade;
-		Console.WriteLine("Сделка {0} по цене {1} по бумаге {2} по объему {3} в {4}.", trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
-	}
+	var trade = myTrade.Trade;
+	Console.WriteLine(LocalizedStrings.Str2173Params, trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
 };
 
 // подписываемся на событие обновления стакана
-trader.MarketDepthsChanged += depths =>
+trader.MarketDepthChanged += depth =>
 {
-	if (_depth == null && _lkoh != null)
+	if (_depth == null && _lkoh != null && depth.Security == _lkoh)
 	{
-		_depth = depths.FirstOrDefault(d => d.Security == _lkoh);
+		_depth = depth;
 
-		if (_depth != null)
-		{
-			Console.WriteLine("Стакан Лукойла появился.");
+		Console.WriteLine(LocalizedStrings.Str2988);
 
-			// если портфель уже появился, то извещаем об этом основной поток для выставления заявки
-			if (_portfolio != null)
-				waitHandle.Set();
-		}
+		// если портфель и инструмент уже появился, то извещаем об этом основной поток для выставления заявки
+		if (_portfolio != null && _lkoh != null)
+			waitHandle.Set();
 	}
-};]]></code>
+};
+]]></code>
 				<para>
-					В обработчике <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference> запускается
+					В обработчике <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference> запускается
 					экспорт стакана для того, чтобы начали обновляться такие поля как
 					<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestBid</codeEntityReference>,
 					<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestAsk</codeEntityReference> и
@@ -164,14 +162,14 @@ trader.MarketDepthsChanged += depths =>
 				</alert>
 				 <para>
 					  Когда данные начнут приходить в <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>, то будут вызываться
-					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> и т.д. Для тех данных,
+					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
+					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
-					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>.
+					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>.
 				  </para>
 				  <para>
 					  Независимо от того, созданы ли данные программно, например, заявки, или же пользователь сам вручную зарегистрировал заявку, для новых
-					  данных в таблице Заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference>.
+					  данных в таблице Заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference>.
 					  Это очень удобно в случае, когда пользователь отменяет выставленную заявку, и программа продолжает работать с актуальными данными.
 				  </para>
 				
@@ -180,44 +178,47 @@ trader.MarketDepthsChanged += depths =>
 		  <step>
 			  <content>
 				  <para>Торговый алгоритм робота:</para>
-				  <code language="C#"><![CDATA[// 0.1% от изменения цены
+				  <code language="C#"><![CDATA[
+// 0.1% от изменения цены
 const decimal delta = 0.001m;
 
 // запоминаем первоначальное значение середины спреда
-var firstMid = lkoh.BestPair.SpreadPrice / 2;
-if (_lkoh.BestBid == null)
-	throw new Exception("Нет лучшего бида для котировки.");
+var firstMid = _lkoh.BestPair.SpreadPrice / 2;
+if (_lkoh.BestBid == null || firstMid == null)
+	throw new Exception(LocalizedStrings.Str2990);
 
-Console.WriteLine("Первоначальное значение середины спреда {0:0.##}", _lkoh.BestBid.Price + firstMid);
+Console.WriteLine(LocalizedStrings.Str2991Params, _lkoh.BestBid.Price + firstMid);
 
 while (true)
 {
 	var mid = _lkoh.BestPair.SpreadPrice / 2;
 
 	// если спред вышел за пределы нашего диапазона
-	if	(
-			((firstMid + firstMid * delta) <= mid) ||
-			((firstMid - firstMid * delta) >= mid)
+	if (mid != null &&
+			((firstMid + firstMid * delta) <= mid ||
+			(firstMid - firstMid * delta) >= mid)
 		)
 	{
 		var order = new Order
 		{
 			Portfolio = _portfolio,
-			Price = _lkoh.ShrinkPrice(lkoh.BestBid + mid),
+			Price = _lkoh.ShrinkPrice(_lkoh.BestBid.Price + mid.Value),
 			Security = _lkoh,
 			Volume = 1,
-			Direction = OrderDirections.Buy,
+			Direction = Sides.Buy,
 		};
 		trader.RegisterOrder(order);
-		Console.WriteLine("Заявка {0} зарегистрирована", order.Id);
+		Console.WriteLine(LocalizedStrings.Str1157Params, order.Id);
 		break;
 	}
 	else
-		Console.WriteLine("Текущее значение середины спреда {0:0.##}", _lkoh.BestBid.Price + mid);
+		Console.WriteLine(LocalizedStrings.Str2176Params, _lkoh.BestBid.Price + mid);
 
 	// ждем 1 секунду
 	Thread.Sleep(1000);
-}]]></code>
+}
+
+]]></code>
 			  </content>
 		  </step>
 		  
@@ -226,7 +227,7 @@ while (true)
 				  <para>Завершение работы алгоритма:</para>
 				  <code language="C#">
 						// останавливаем подключение
-						trader.Disconnect();;</code>
+						trader.Disconnect();</code>
 			  </content>
 		  </step>
       </steps>

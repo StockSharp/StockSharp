@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b740e98d-7bcf-406e-aad4-75432ab3009e" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+	<introduction>
+	  <para>
+To create a new order, you should create an 
+<codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
+object that contains information about the order and register it on the exchange. 
+Further, if you want to work with the order (for example, to cancel it or change it), then this 
+<codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
+object should be used. To register orders on the exchange, the 
+<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> 
+method is provided which sends the order to the server.</para>
+
+<para>The example below shows the creation of an order and its registration on the exchange:</para>
+<code language="C#"><![CDATA[
+	var order = new Order
+    {
+        Type = OrderTypes.Limit,
+        Portfolio = Portfolio.SelectedPortfolio,
+        Volume = Volume.Text.To<decimal>(),
+        Price = Price.Text.To<decimal>(),
+        Security = Security,
+        Direction = Sides.Buy,
+    };
+    Trader.RegisterOrder(order);
+    
+]]></code>
+	</introduction>
+
+    <relatedTopics>
+      
+		<link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e"/>
+    </relatedTopics>
+    
+  </developerHowToDocument>
+</topic>

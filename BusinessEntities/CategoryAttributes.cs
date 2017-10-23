@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System.ComponentModel;
+
 	using StockSharp.Localization;
 
 	class MainCategoryAttribute : CategoryAttribute
@@ -38,13 +39,13 @@ namespace StockSharp.BusinessEntities
 		}
 	}
 
-	class DerivativesCategoryAttribute : CategoryAttribute
-	{
-		public const string NameKey = LocalizedStrings.Str437Key;
+	//class DerivativesCategoryAttribute : CategoryAttribute
+	//{
+	//	public const string NameKey = LocalizedStrings.Str437Key;
 
-		public DerivativesCategoryAttribute()
-			: base(LocalizedStrings.Str437)
-		{
-		}
-	}
+	//	public DerivativesCategoryAttribute()
+	//		: base(LocalizedStrings.Str437)
+	//	{
+	//	}
+	//}
 }

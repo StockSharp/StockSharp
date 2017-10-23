@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_conditional_operator_00"/>
+</mediaLink>
+<para>The conditional statement element returns one of two values, depending on 
+the equality of the two input parameters. The element contains four inputs, three 
+of which can be specified as properties, and one output. In1 and In2 are used 
+for comparison, OutEqual and OutNotEqual are used to specify the values that 
+will be returned at the output of the element, depending on the equality of the 
+input parameters. Values for OutEqual, OutNotEqual and In2 can be specified in 
+the properties of the element, the value of In1 must necessarily be passed through 
+the input parameter.</para>
+ 
+ <definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>In1</legacyBold> – values that can be compared 
+  (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
+  <listItem><para><legacyBold>In2</legacyBold> –  values that can be compared 
+  (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
+  <listItem><para><legacyBold>OutEqual</legacyBold> – the value that will be 
+  returned at the output of the element, depending on the equality of the input 
+  parameters.</para></listItem>
+  <listItem><para><legacyBold>OutNotEqual </legacyBold> – the value that will be 
+  returned at the output of the element, depending on the equality of the input
+  parameters.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Result</legacyBold> - the numeric value.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>In2</legacyBold> - values that can be compared 
+  (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
+  <listItem><para><legacyBold>OutEqual</legacyBold> - the value that will be 
+  returned at the output of the element, depending on the equality of the input 
+  parameters.</para></listItem>
+  <listItem><para><legacyBold>OutNotEqual</legacyBold> - the value that will be 
+  returned at the output of the element, depending on the equality of the input
+  parameters.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+ 
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_conditional_operator_01"/>
+</mediaLink>
+<para>The element diagram consists of simple elements and is based on memorization in the 
+<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> element (VarIn2, 
+VarOutEqual, VarOutNotEqual) the values that were passed to the element input, 
+or using the default values that are set using the element's properties. When a
+ new value is received, the first input compares (In1 == In2) a new value with 
+ the value that was stored in the variable for the second input. If the values 
+ are the same, a signal is passed to the input-trigger of the VarOutEqual variable 
+ and the corresponding value is passed to the output of the composite element 
+ Similarly, the signal is passed to the variable element VarOutNotEqual using a 
+ logical negation (Not).</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="5cc82796-a8cc-4dd8-9cdc-3cb68b890042" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

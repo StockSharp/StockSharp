@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleMultiConnection
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Windows;
@@ -28,6 +27,7 @@ namespace SampleMultiConnection
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Configuration;
@@ -47,6 +47,7 @@ namespace SampleMultiConnection
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
 
 		private const string _settingsFile = "connection.xml";
+		private const string _defaultDataPath = "Data";
 
 		public MainWindow()
 		{
@@ -65,18 +66,28 @@ namespace SampleMultiConnection
 			var logManager = new LogManager();
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
 
-			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
-			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
+			var path = _defaultDataPath.ToFullPath();
 
-			SerializationContext.DelayAction = entityRegistry.DelayAction = new DelayAction(entityRegistry.Storage, ex => ex.LogError());
+			HistoryPath.Folder = path;
+
+			var entityRegistry = new CsvEntityRegistry(path);
+			var storageRegistry = new StorageRegistry
+			{
+				DefaultDrive = new LocalMarketDataDrive(path)
+			};
+
+			ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
+			ConfigManager.RegisterService<IStorageRegistry>(storageRegistry);
+			// ecng.serialization invoke in several places IStorage obj
+			ConfigManager.RegisterService(entityRegistry.Storage);
 
 			Connector = new Connector(entityRegistry, storageRegistry);
 			logManager.Sources.Add(Connector);
 
-			InitConnector();
+			InitConnector(entityRegistry);
 		}
 
-		private void InitConnector()
+		private void InitConnector(CsvEntityRegistry entityRegistry)
 		{
 			// subscribe on connection successfully event
 			Connector.Connected += () =>
@@ -98,26 +109,28 @@ namespace SampleMultiConnection
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// subscribe on error of market data subscription event
-			Connector.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+			Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-			Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-			Connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
+			Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+			Connector.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 
-			Connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-			Connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-			Connector.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+			Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+			Connector.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+			Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 			
-			Connector.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-			Connector.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+			Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+			Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 			// subscribe on error of order registration event
-			Connector.OrdersRegisterFailed += OrdersFailed;
-			Connector.StopOrdersRegisterFailed += OrdersFailed;
-
+			Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 			// subscribe on error of order cancelling event
-			Connector.OrdersCancelFailed += OrdersFailed;
-			Connector.StopOrdersCancelFailed += OrdersFailed;
+			Connector.OrderCancelFailed += OrderFailed;
+
+			// subscribe on error of stop-order registration event
+			Connector.OrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+			// subscribe on error of stop-order cancelling event
+			Connector.StopOrderCancelFailed += OrderFailed;
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
@@ -134,11 +147,19 @@ namespace SampleMultiConnection
 			if (Connector.StorageAdapter == null)
 				return;
 
-			if (!File.Exists("StockSharp.db"))
-				File.WriteAllBytes("StockSharp.db", Properties.Resources.StockSharp);
+			try
+			{
+				entityRegistry.Init();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(this, ex.ToString());
+			}
 
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
 			Connector.StorageAdapter.Load();
+
+			ConfigManager.RegisterService<IExchangeInfoProvider>(new StorageExchangeInfoProvider(entityRegistry));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -159,7 +180,7 @@ namespace SampleMultiConnection
 
 			Connector.Dispose();
 
-			ConfigManager.GetService<IEntityRegistry>().DelayAction.WaitFlush();
+			ConfigManager.GetService<IEntityRegistry>().DelayAction.DefaultGroup.WaitFlush(true);
 
 			base.OnClosing(e);
 		}
@@ -168,9 +189,8 @@ namespace SampleMultiConnection
 
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
-			Connector.Configure(this);
-
-			new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+			if (Connector.Configure(this))
+				new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
@@ -185,12 +205,11 @@ namespace SampleMultiConnection
 			}
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 
@@ -239,6 +258,15 @@ namespace SampleMultiConnection
 				window.Hide();
 			else
 				window.Show();
+		}
+
+		private void HistoryPath_OnFolderChanged(string path)
+		{
+			if (Connector == null)
+				return;
+
+			Connector.StorageAdapter.Drive = new LocalMarketDataDrive(path.ToFullPath());
+			Connector.StorageAdapter.Load();
 		}
 	}
 }

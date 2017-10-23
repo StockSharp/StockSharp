@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <summary>
@@ -9,7 +9,7 @@
     <introduction>
       <para>В <token>dotnet</token> существует специальная технология для построения графического интерфейса – <token>wpf</token> (до этого была
 	  технология <token>winforms</token>, которая значительно уступает по графическим возможностям). В этой технологии для создания графических элементов 
-	  используется специальный декларативынй язык <externalLink>
+	  используется специальный декларативный язык <externalLink>
 		<linkText>XAML</linkText>
 		<linkAlternateText>eXtensible Application Markup Language</linkAlternateText>
 		<linkUri>https://msdn.microsoft.com/ru-ru/library/hh700354.aspx</linkUri>
@@ -18,7 +18,7 @@
 	  <para>Основное ограничение визуального API под Windows состоит в том, что нельзя обращаться из другого потока к элементам окна. Это связанно с ограничениями архитектуры Windows (подробнее описано здесь
 	  <token>messagepump</token>). Реализации шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> в целях повышения
 	  производительности работают в многопоточном режиме. Поэтому, подписываясь на событие, например, 
-	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
+	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
 	  нельзя напрямую выводить полученные данные в окно пользователя. Для этого нужно провести операцию синхронизации при помощи специального объекта
 	  <externalLink>
 		<linkText>Dispatcher</linkText>
@@ -30,23 +30,17 @@
 	  <code language="C#">
 // обязательно нужно вызвать метод BeginInvoke,
 // и уже в его обработчике можно обратиться к элементу окна 'Security' (это выпадающий список)
-_trader.NewSecurities += securities => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
+_trader.NewSecurity += security => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
 	  <para>
 		<token>stocksharp</token> уже содержит специальные методы, которые скрывают использование Dispatcher и упрощают написание кода:
 	  </para>
 	  <code language="C#">// обязательно нужно вызвать метод GuiSync, прежде чем обратиться к элементу окна 'Security' (это выпадающий список)
-_trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
+_trader.NewSecurity += security => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
 
 <section address="optionalAddress">
   <title>Графические компоненты S#</title>
   <content>
-    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, а так же бесплатная библиотека для Wpf
-    <externalLink>
-	<linkText>Xceed.Wpf.Toolkit</linkText>
-<linkAlternateText>Optional alternate text</linkAlternateText>
-<linkUri>http://wpftoolkit.codeplex.com/</linkUri>
-<linkTarget>_blank</linkTarget>
-</externalLink>. Собственные графические компоненты размещены в пространствах имен 
+    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, которые размещены в пространствах имен 
 <codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>
 и <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference>. Некоторые специфические компоненты находятся в пространствах имен коннекторов,
  как например, комбинированный список <codeEntityReference qualifyHint="false">T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox</codeEntityReference> для выбора адреса сервера
@@ -65,7 +59,7 @@ _trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSou
 
 
 <para>
-	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соотвествующих пространств имен и использовать эти
+	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соответствующих пространств имен и использовать эти
 	 псевдонимы в коде XAML. Как это сделать показано в следующем примере:
 </para>
 	  <code language="XAML">

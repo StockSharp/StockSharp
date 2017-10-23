@@ -72,11 +72,11 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription(nameof(ExecutionMessage.DerivedOrderId))
-			{
-				DbType = typeof(string),
-				ValueRestriction = new StringRestriction(32)
-			};
+			//yield return new ColumnDescription(nameof(ExecutionMessage.DerivedOrderId))
+			//{
+			//	DbType = typeof(string),
+			//	ValueRestriction = new StringRestriction(32)
+			//};
 			yield return new ColumnDescription(nameof(ExecutionMessage.OrderPrice)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.OrderVolume)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.VisibleVolume)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.OriginalTransactionId), value.OriginalTransactionId },
 				{ nameof(ExecutionMessage.ExpiryDate), value.ExpiryDate },
 				{ nameof(ExecutionMessage.OrderId), value.OrderId == null ? value.OrderStringId : value.OrderId.To<string>() },
-				{ nameof(ExecutionMessage.DerivedOrderId), value.DerivedOrderId == null ? value.DerivedOrderStringId : value.DerivedOrderId.To<string>() },
+				//{ nameof(ExecutionMessage.DerivedOrderId), value.DerivedOrderId == null ? value.DerivedOrderStringId : value.DerivedOrderId.To<string>() },
 				{ nameof(ExecutionMessage.OrderPrice), value.OrderPrice },
 				{ nameof(ExecutionMessage.OrderVolume), value.OrderVolume },
 				{ nameof(ExecutionMessage.VisibleVolume), value.VisibleVolume },

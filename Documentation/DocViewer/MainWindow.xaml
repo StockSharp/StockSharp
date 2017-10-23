@@ -14,9 +14,9 @@
 		</Grid.RowDefinitions>
 
 		<TreeView x:Name="Toc" SelectedItemChanged="Toc_OnSelectedItemChanged" />
-		<WebBrowser x:Name="ItemContent" Grid.Column="1" Navigating="ItemContent_Navigating"/>
+		<WebBrowser x:Name="ItemContent" Grid.Row="0" Grid.Column="1" Navigating="ItemContent_Navigating"/>
 
-		<StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+		<StackPanel Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Orientation="Horizontal">
 			<Button x:Name="Browse" Content="..." Width="45" Click="Browse_Click"/>
 		</StackPanel>
 	</Grid>

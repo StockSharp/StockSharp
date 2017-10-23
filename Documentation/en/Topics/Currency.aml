@@ -6,9 +6,9 @@
     </summary>-->
 
     <introduction>
-      <para>Для работы с мультивалютными алгоритмами необходимо использовать <codeEntityReference>T:StockSharp.Messages.Currency</codeEntityReference>.
-	  <token>stocksharp</token> предоставляет механизм перевода валют из одной в другую. В примере SampleCurrency, который находится в дистрибутиве,
-	  представлен калькулятор перевода любых валют.</para>
+      <para>To work with multi-currency algorithms, it is necessary to use the <codeEntityReference>T:StockSharp.Messages.Currency</codeEntityReference>.
+	  The <token>stocksharp</token> provides mechanism for currency conversion from one to another. In the SampleCurrency example in the distribution kit, calculator for
+	  conversion of any currencies is presented.</para>
     </introduction>
 
     <!--<prerequisites>
@@ -20,22 +20,22 @@
     <!-- One or more procedure or section elements -->
 
     <procedure>
-      <title>Пример конвертации валюты</title>
+      <title>Currency conversion example</title>
 
       <steps class="ordered">
         <step>
           <content>
             <para>
-				Ниже представлен кусок кода из SampleCurrency, который переводит из одной валюты в другую:
+				Below see the partial code from SampleCurrency, converting from one currency to another:
 			</para>
-				<code language="C#"><![CDATA[// создаем объект валюты Currency по введенным пользователям данным
+				<code language="C#"><![CDATA[
 var currency = new Currency
 {
 	Type = (CurrencyTypes)this.SourceCurrencyType.GetSelectedValue<CurrencyTypes>(),
 	Value = this.Amount.Text.To<decimal>(),
 };
 
-// переводим в другую валюту и отображаем сконвертированное значение
+// doing the conversation
 this.Result.Content = currency.Convert((CurrencyTypes)this.TargetCurrencyType.GetSelectedValue<CurrencyTypes>()).Value;]]></code>
 			
           </content>
@@ -43,25 +43,25 @@ this.Result.Content = currency.Convert((CurrencyTypes)this.TargetCurrencyType.Ge
 		  <step>
 			  <content>
 				  <para>
-					  Если нужно узнать курс перевода, необходимо написать следующее:
+					  The following shall be written to find out the conversion rate:
 				  </para>
-				  <code language="C#">// курс перевода Евро в Доллары США
+				  <code language="C#">// Euro into USD
 var rate = CurrencyTypes.EUR.Convert(CurrencyTypes.USD);</code>
 			  </content>
 		  </step>
 		  <step>
 			  <content>
 				  <para>
-					  Дополнительно, <token>stocksharp</token> предоставляет возможность узнать курс перевода в истории:
+					  Additionally, the <token>stocksharp</token> provides ability to find out the conversion rate history:
 				  </para>
-				  <code language="C#">// курс перевода Евро в Доллары США на вчерашний день
+				  <code language="C#">// Euro into USD (prev day)
 var rate = CurrencyTypes.EUR.Convert(CurrencyTypes.USD, DateTime.Today - TimeSpan.FromDays(1));</code>
 			  </content>
 		  </step>
 		  <step>
 			  <content>
 				  <para>
-					  Пример конвертации валюты выглядит так:
+					  Here is an example of currency conversion:
 				  </para>
 				  <mediaLink>
 					  <image placement="center" xlink:href="samplecurrency" />

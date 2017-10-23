@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="62959b32-c500-4e91-95eb-88c17fdf4f4d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The <legacyBold>Statistics</legacyBold> component is a table grouped by categories: Orders, P/L, 
+Trade positions. Statistics helps to assess the correctness and performance of 
+the strategy. For instance, for the SMA strategy example, there cannot be more 
+than 1 position. Statistics helps to evaluate by other qualitative parameters. 
+For example, the maximum drawdown, the Sharpe coefficient, etc.</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Statistics_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="667ad9ff-6afe-48e2-9c53-1850d0533a77" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

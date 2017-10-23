@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8f13421b-0ad7-47a7-80ea-b347df00f173" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To register a purchase order at the current best price for the instrument, 
+the following schema can be used:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Get_the_best_rates_for_the_tool_00"/>
+</mediaLink>
+<para>For the <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" />  cube, 
+the <legacyBold>Instrument</legacyBold> data type is selected. If the instrument 
+is not specified, but the <legacyBold>Parameters</legacyBold> flag of the 
+<legacyBold>Common</legacyBold> property group is set, then it will be taken 
+from the strategy and passed to the 
+<link xlink:href="181e2f26-86dd-4c4b-b737-a24664ef9486" /> cube. The 
+<link xlink:href="181e2f26-86dd-4c4b-b737-a24664ef9486" /> cube, after receiving 
+the current instrument from the variable, passes the order book changes by the 
+selected instrument through the output parameter. When receiving order book 
+changes, the <link xlink:href="d12b6321-af41-40f1-a8c6-87ea59d1b51c" /> cube 
+chooses the current value of the best purchase price from them.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="486b67a3-790c-48c6-87bf-045e058f2a96" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

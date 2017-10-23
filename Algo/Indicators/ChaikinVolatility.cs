@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Chaikin volatility.
 	/// </summary>
@@ -32,6 +30,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("Chaikin's Volatility")]
 	[DescriptionLoc(LocalizedStrings.Str730Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class ChaikinVolatility : BaseIndicator
 	{
 		/// <summary>
@@ -46,7 +45,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Moving Average.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("MA")]
 		[DescriptionLoc(LocalizedStrings.Str731Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -55,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Rate of change.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("ROC")]
 		[DescriptionLoc(LocalizedStrings.Str732Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -81,7 +80,7 @@ namespace StockSharp.Algo.Indicators
 				return Roc.Process(emaValue);
 			}
 
-			return input;				
+			return input;
 		}
 
 		/// <summary>
@@ -92,8 +91,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			Ema.LoadNotNull(settings, "Ema");
-			Roc.LoadNotNull(settings, "Roc");
+			Ema.LoadNotNull(settings, nameof(Ema));
+			Roc.LoadNotNull(settings, nameof(Roc));
 		}
 
 		/// <summary>
@@ -104,8 +103,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("Ema", Ema.Save());
-			settings.SetValue("Roc", Roc.Save());
+			settings.SetValue(nameof(Ema), Ema.Save());
+			settings.SetValue(nameof(Roc), Roc.Save());
 		}
 	}
 }

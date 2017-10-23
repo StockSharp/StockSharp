@@ -18,7 +18,6 @@ namespace SampleRandomEmulation
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.Linq;
 	using System.Windows;
 	using System.Windows.Media;
 
@@ -41,7 +40,7 @@ namespace SampleRandomEmulation
 	{
 		private SmaStrategy _strategy;
 
-		private readonly ICollection<EquityData> _curveItems;
+		private readonly ICollection<LineData<DateTime>> _curveItems;
 		private HistoryEmulationConnector _connector;
 
 		private readonly LogManager _logManager = new LogManager();
@@ -133,9 +132,9 @@ namespace SampleRandomEmulation
 				Connector = _connector,
 			};
 
-			_connector.NewSecurities += securities =>
+			_connector.NewSecurity += s =>
 			{
-				if (securities.All(s => s != security))
+				if (s != security)
 					return;
 
 				// fill level1 values

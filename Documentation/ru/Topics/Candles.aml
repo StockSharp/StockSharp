@@ -1,24 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para><token>stocksharp</token> поддерживает 6 видов свечек:</para>
+		<para><token>stocksharp</token> поддерживает следующие виды:</para>
 	  
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> - свечка на основе временного отрезка, таймфрема.
+				<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> - свеча на основе временного отрезка, таймфрейма.
 				Можно задавать как популярные отрезки (минутки, часовики, дневные), так и кастомизированные. Например, 21 секунда, 4.5 минуты и т.д.
 			</listItem>
 			
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference> - свечка ценового разброса. Новая свечка создается,
+				<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference> - свеча ценового разброса. Новая свеча создается,
 				когда появляется сделка с ценой, выходящей за допустимые пределы. Допустимый предел формируется каждый раз на основе цены первой сделки.
 			</listItem>
 		  
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> - свечка формируется до тех пор, пока суммарно по сделкам
-				не будет превышен объем. Если новая сделка превышает допустимый объем, то она попадает уже в новую свечку.
+				<codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> - свеча формируется до тех пор, пока суммарно по сделкам
+				не будет превышен объем. Если новая сделка превышает допустимый объем, то она попадает уже в новую свечу.
 			</listItem>
 		  
 			<listItem>
@@ -27,15 +27,15 @@
 			</listItem>
 		  
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.PnFCandle</codeEntityReference> - cвечка пункто-цифрового графика (график крестики-нолики).
+				<codeEntityReference>T:StockSharp.Algo.Candles.PnFCandle</codeEntityReference> - свеча пункто-цифрового графика (график крестики-нолики).
 			</listItem>
 		  
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.RenkoCandle</codeEntityReference> - Рэнко свечка.
+				<codeEntityReference>T:StockSharp.Algo.Candles.RenkoCandle</codeEntityReference> - Рэнко свеча.
 			</listItem>
 		</list>
 	  
-		<para>Как работать со свечками, показано в примере SampleCandle, который расположен в папке <legacyItalic>Samples/Quik/SampleCandles</legacyItalic>.</para>
+		<para>Как работать со свечами, показано в примере SampleCandle, который расположен в папке <legacyItalic>Samples/Quik/SampleCandles</legacyItalic>.</para>
 		<para>На следующих рисунках представлены графики <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> и 
 		<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference>:</para>
 		
@@ -50,9 +50,9 @@
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>В самом начале необходимо создать менеджер свечек <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>,
-					будет формировать свечки:</para>
+					<para>В самом начале необходимо создать менеджер свечей <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
+					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>,
+					будет формировать свечи:</para>
 			
 					<code language="C#">
 					<![CDATA[
@@ -66,11 +66,11 @@ _candleManager = new CandleManager(_trader);
 					</code>
 					
 					<alert class="note">
-						<para>Если для получения тиковых сделок вместо шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> используется источник с другим механизмом, то необходимо реализовать интерфейс
-						<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.ICandleManagerSource</codeEntityReference>, и передать реализацию в 
-						<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>.</para>
+						<para>Если для получения свечей вместо шлюза <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> используется источник с другим механизмом,
+						то необходимо реализовать интерфейс <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.IExternalCandleSource</codeEntityReference>,
+						и передать реализацию в <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
 						
-						<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса</para>
+						<!--<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса:</para>
 						
 						<list class="bullet">
   							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder</codeEntityReference></para></listItem>
@@ -82,8 +82,8 @@ _candleManager = new CandleManager(_trader);
   							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.StorageCandleSource</codeEntityReference></para></listItem>
 						</list>
 						
-						<para>Которые стандартно идут в качестве <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>
-						при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
+						<para>Вышеописанные реализации стандартно идут в качестве <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>
+						при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>-->
 
 					</alert>
 				</content>
@@ -108,15 +108,15 @@ private void DrawCandle(CandleSeries series, Candle candle)
 					</code>
 					
 					<alert class="note">
-						Для отображения свечек используется графический компонент <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
+						Для отображения свечей используется графический компонент <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
 					</alert>
 				</content>
 			</step>
 		
 			<step>
 				<content>
-					<para>Необходимо объявить, какие именно свечки требуются для робота и запустить получение данных через 
-					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:</para>
+					<para>Необходимо объявить, какие именно свечи требуются для робота и запустить получение данных через 
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})</codeEntityReference>:</para>
 
 					<code language="C#">
 					<![CDATA[
@@ -151,18 +151,18 @@ _candleManager.Start(series);
 	</procedure>
     
     <procedure>
-    	<title>Работа со свечками</title>
+    	<title>Работа со свечами</title>
 		<steps class="bullet">
 			<step>
 				<content>    		
-					<para>Если требуется получать уже сформированные свечки по определенным параметрам, нужно вызывать специальные методы, например, для
+					<para>Если требуется получать уже сформированные свечи по определенным параметрам, нужно вызывать специальные методы, например, для
 					<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>,
 					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,Ecng.ComponentModel.Range{System.DateTimeOffset})</codeEntityReference>,
 					или для  <codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference>,
 					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset)</codeEntityReference>:</para>
 					<code language="C#">
 					<![CDATA[
-// получить 100 свечек-пятиминуток для Лукойла
+// получить 100 свечей-пятиминуток для Лукойла
 private Security _lkoh;
 private readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
 private _series;
@@ -181,11 +181,11 @@ var candles = _series.GetCandles(100);
 			
 			<step>
 				<content>  			
-					<para>Если необходимо обратиться к прошедшим свечкам по номеру (например, получить 5-ую с конца), то можно использовать метод
+					<para>Если необходимо обратиться к прошедшим свечам по номеру (например, получить 5-ую с конца), то можно использовать метод
 					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandle``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.Int32)</codeEntityReference>:</para>
 					<code language="C#">
 					<![CDATA[
-// получить 5-ую свечку с конца (нумерация идет от 0, 0 - текущая свечка)
+// получить 5-ую свечу с конца (нумерация идет от 0, 0 - текущая свеча)
 private Security _lkoh;
 private readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
 private _series;
@@ -209,7 +209,7 @@ var prev5Candle = _series.GetCandle<TimeFrameCandle>(5);
 		<content>
 			<para><link xlink:href="287125e1-7c7e-4be3-a8ce-5018538e613f">График</link></para>
 			<para><link xlink:href="ccc96909-8623-4f56-b3ee-fdc5070b3fde">Паттерны</link></para>
-			<para><link xlink:href="99da6499-9ac1-4e7e-bcaf-a0c832dce4de">Собственный тип свечек</link></para>
+			<para><link xlink:href="99da6499-9ac1-4e7e-bcaf-a0c832dce4de">Собственный тип свечей</link></para>
 		</content>
 	</nextSteps>
 	

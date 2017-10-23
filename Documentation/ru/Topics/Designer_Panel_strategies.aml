@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="24d370d1-fd00-4914-83ac-57472eb99e93" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>При нажатии на вкладке <legacyBold>Общая</legacyBold> на 
+кнопку <legacyBold>Торговля</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_strategies_00"/></mediaLinkInline>  
+откроется панель <legacyBold>Торговля</legacyBold>.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Panel_strategies_01"/>
+</mediaLink>
+<para>Панель <legacyBold>Торговля</legacyBold> представляет из себя таблицу, 
+на которой отображены все стратегии, добавленные в <legacyBold>Live торговлю</legacyBold>. 
+На панели <legacyBold>Торговля</legacyBold> можно посмотреть текущее состояние стратегии, 
+а также запустить или остановить стратегию кнопками <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>, <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline>.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Panel_strategies_02"/>
+</mediaLink>
+
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="91644d63-00b3-416f-8677-ca57dfa8032e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

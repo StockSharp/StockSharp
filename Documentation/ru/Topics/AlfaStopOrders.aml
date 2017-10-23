@@ -29,29 +29,27 @@
 			<para>Исходный код примера доступ в дистрибутиве в папке <legacyItalic>Samples/AlfaDirect/SampleAlfa</legacyItalic>.</para>
 		</alert>
 		
-		<code language="C#"><![CDATA[var order = new Order
+		<code language="C#"><![CDATA[
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
-	Type = OrderTypes.Conditional, // условный ордер
-	Portfolio = _portfolio, // портфель
-	Security = _security, // инструмент
-	Price = Decimal.Parse(textBoxBuyStopPrice.Text), // стоп-цена
-	Volume = 1, // количество
-	Direction = OrderDirections.Buy, // покупка
-	StopCondition = new AlfaLimitOrderCondition // стоп-условие
+	var newOrder = new OrderConditionalWindow
 	{
-		Slippage = Double.Parse(textBoxBuyStopSlippage.Text),
-		TakeProfit = Double.Parse(textBoxBuyStopTakeProfit.Text)
-	}
-};
+		Order = new Order
+		{
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
+	};
 
-try
-{
-	_trader.RegisterOrder(order); // Зарегистрировать ордер
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 }
-catch (Exception ex)
-{
-	this.AddErrorLog("Failed to register order: " + ex.Message);
-}]]></code>
+
+]]></code>
 		<para>
 			Существует несколько типов условий:
 		</para>

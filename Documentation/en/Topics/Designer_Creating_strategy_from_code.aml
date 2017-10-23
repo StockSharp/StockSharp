@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="20a8932b-09cb-4f13-bade-770a68ac96fd" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Creating strategies from code is for experienced programmers who prefer 
+to work with the code. Strategies written in <legacyBold>C#</legacyBold> work
+much faster than strategies 
+written in a visual designer. Also, such strategies are not limited in the 
+capabilities at creation, and it is possible to write any algorithm, unlike 
+cubes. The process of the strategy creating runs directly 
+in <token>designer</token> or the development environment in 
+<legacyBold>C#</legacyBold> (the most popular of the development environments 
+is <legacyBold>Microsoft Visual Studio</legacyBold>), using the library for 
+professional development of trading algorithms in <legacyBold>C#</legacyBold> 
+and  <token>stocksharpapi</token>.</para>
+    </introduction>
+    <relatedTopics>
+
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Storages.Csv
 	/// </summary>
 	public class Level1CsvSerializer : CsvMarketDataSerializer<Level1ChangeMessage>
 	{
-		private static readonly Level1Fields[] _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => l1 != Level1Fields.ExtensionInfo && l1 != Level1Fields.BestAsk && l1 != Level1Fields.BestBid && l1 != Level1Fields.LastTrade).OrderBy(l1 => (int)l1).ToArray();
+		private static readonly Level1Fields[] _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => !l1.IsObsolete()).OrderBy(l1 => (int)l1).ToArray();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1CsvSerializer"/>.
@@ -47,11 +47,12 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(CsvFileWriter writer, Level1ChangeMessage data)
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		protected override void Write(CsvFileWriter writer, Level1ChangeMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			var row = new List<string>();
 
-			row.AddRange(new[] { data.ServerTime.UtcDateTime.ToString(TimeFormat), data.ServerTime.ToString("zzz") });
+			row.AddRange(new[] { data.ServerTime.WriteTimeMls(), data.ServerTime.ToString("zzz") });
 
 			foreach (var field in _level1Fields)
 			{
@@ -60,8 +61,9 @@ namespace StockSharp.Algo.Storages.Csv
 					case Level1Fields.BestAskTime:
 					case Level1Fields.BestBidTime:
 					case Level1Fields.LastTradeTime:
+					case Level1Fields.BuyBackDate:
 						var date = (DateTimeOffset?)data.Changes.TryGetValue(field);
-						row.AddRange(new[] { date?.UtcDateTime.ToString(DateFormat), date?.UtcDateTime.ToString(TimeFormat), date?.ToString("zzz") });
+						row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
 						break;
 					default:
 						row.Add(data.Changes.TryGetValue(field)?.ToString());
@@ -70,34 +72,41 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 
 			writer.WriteRow(row);
+
+			metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		}
 
 		/// <summary>
 		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected override Level1ChangeMessage Read(FastCsvReader reader, DateTime date)
+		protected override Level1ChangeMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			var level1 = new Level1ChangeMessage
 			{
 				SecurityId = SecurityId,
-				ServerTime = ReadTime(reader, date),
+				ServerTime = reader.ReadTime(metaInfo.Date),
 			};
 
 			foreach (var field in _level1Fields)
 			{
+				// backward compatibility
+				if (reader.ColumnCurr == reader.ColumnCount)
+					break;
+
 				switch (field)
 				{
 					case Level1Fields.BestAskTime:
 					case Level1Fields.BestBidTime:
 					case Level1Fields.LastTradeTime:
+					case Level1Fields.BuyBackDate:
 						var dtStr = reader.ReadString();
 
 						if (dtStr != null)
 						{
-							level1.Changes.Add(field, (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty))));
+							level1.Changes.Add(field, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
 						}
 						else
 						{
@@ -109,16 +118,17 @@ namespace StockSharp.Algo.Storages.Csv
 						var id = reader.ReadNullableLong();
 
 						if (id != null)
-							level1.Changes.Add(field, id);
+							level1.Changes.Add(field, id.Value);
 
 						break;
 					case Level1Fields.AsksCount:
 					case Level1Fields.BidsCount:
 					case Level1Fields.TradesCount:
-						var count = reader.ReadNullableLong();
+					case Level1Fields.Decimals:
+						var count = reader.ReadNullableInt();
 
 						if (count != null)
-							level1.Changes.Add(field, count);
+							level1.Changes.Add(field, count.Value);
 
 						break;
 					case Level1Fields.LastTradeUpDown:
@@ -126,14 +136,28 @@ namespace StockSharp.Algo.Storages.Csv
 						var flag = reader.ReadNullableBool();
 
 						if (flag != null)
-							level1.Changes.Add(field, flag);
+							level1.Changes.Add(field, flag.Value);
+
+						break;
+					case Level1Fields.State:
+						var state = reader.ReadNullableEnum<SecurityStates>();
+
+						if (state != null)
+							level1.Changes.Add(field, state.Value);
+
+						break;
+					case Level1Fields.LastTradeOrigin:
+						var side = reader.ReadNullableEnum<Sides>();
+
+						if (side != null)
+							level1.Changes.Add(field, side.Value);
 
 						break;
 					default:
 						var value = reader.ReadNullableDecimal();
 
 						if (value != null)
-							level1.Changes.Add(field, value);
+							level1.Changes.Add(field, value.Value);
 
 						break;
 				}

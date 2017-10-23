@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="22a4dc42-dc36-41cc-a849-32aa2a8194fe" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>You can create your own cube in <token>designer</token> by clicking the 
+right mouse button on the <legacyBold>Source code</legacyBold> folder in 
+the <legacyBold>Schemas</legacyBold> panel. In the menu that appears, select 
+<legacyBold>Add</legacyBold> in case of creating a new strategy 
+or <legacyBold>Import</legacyBold> in case of 
+importing an already completed strategy.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_00"/>
+</mediaLink>
+<para>Also in <token>designer</token>, you can create your own cube in the 
+<legacyBold>Common</legacyBold> tab by clicking the <legacyBold>Add</legacyBold> 
+button, and choose <legacyBold>Source code</legacyBold> in the appeared menu:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_01"/>
+</mediaLink>
+<para>After the cube is created, a new cube will appear in the 
+<legacyBold>Source code</legacyBold> folder of the <legacyBold>Schemas</legacyBold> 
+panel, clicking on it with a double click, a tab with the name of the cube will 
+appear in the workspace, and the <legacyBold>Source code</legacyBold> tab will 
+automatically open in the ribbon. In the <legacyBold>Source code</legacyBold> 
+tab, you can change the name of the cube, write a description to the cube, undo 
+the last action, return the undone action, and add the Dll library by clicking 
+the <legacyBold>References</legacyBold> button.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_02"/>
+</mediaLink>
+<para>The tab of the new cube in the workspace consists of 
+<legacyBold>Source code</legacyBold> and <legacyBold>Error list</legacyBold> 
+panels. The <legacyBold>Source code</legacyBold> panel contains the cube source 
+code. Each line of the source code is numbered, to the right of the numbering, 
+the lines in which the changes were made are marked in color. The 
+<legacyBold>Error list</legacyBold> panel is a table with a list of errors in 
+the code, if you double-click the error line, the cursor in the Source code 
+panel will automatically set to the error point. When a new error in the code 
+occurs, the 
+<mediaLinkInline><image xlink:href="Designer_The_creation_of_the_cube_containing_the_source_code_03"/></mediaLinkInline> 
+icon appears in the lower-right corner of the <legacyBold>Error list</legacyBold> 
+panel. When you create a new Source code cube in the 
+<legacyBold>Source code</legacyBold> panel, the C# code of the SMA strategy will 
+be the same as the standard SMA strategy compiled from the cubes in the 
+<link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" /> section.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

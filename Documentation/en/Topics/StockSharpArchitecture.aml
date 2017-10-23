@@ -3,55 +3,34 @@
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	  <introduction>
 		<para>
-			  <token>stocksharpapi</token> - бесплатная библиотека для начинающих и профессионалов в области алготрейдинга. <token>stocksharpapi</token> 
-			  ориентирована на программирование на языке <token>csharp</token>.
+			  <token>stocksharpapi</token> - a free library for beginners and professionals in the field of algorithmic trading. <token>stocksharpapi</token> 
+			  is focused on <token>csharp</token> language programming.
 	    </para>
 	    
 	    <list class="ordered">
 			<listItem>
-				Быстро (несколько часов) и надежно перейти с одного подключения на другое (например, с <token>quik</token> на <token>smartcom</token>).
+				Quickly (a few hours) and reliably to move from one connection to another (for example, from <token>IB</token> to <token>OpenECry</token>).
 			</listItem>
 			<listItem>
-				При выходе новой версии шлюза к брокеру нет необходимости переписывать торгового робота. <token>stocksharpapi</token> регулярно обновляется - см. <externalLink>
-				<linkText>историю релизов</linkText>
-				<linkAlternateText>Историю релизов S#</linkAlternateText>
+				There is no need to rewrite the trading algorithm after the release of a new version of the gateway to the broker.
+				<token>stocksharpapi</token> updated regularly - see <externalLink>
+				<linkText>Releases History</linkText>
+				<linkAlternateText>Releases History</linkAlternateText>
 				<linkUri>https://github.com/stocksharp/stocksharp/blob/master/_ReleaseNotes/CHANGE_LOG_API.md</linkUri>
 				<linkTarget>_blank</linkTarget>
 				</externalLink>.
 			</listItem>
 			<listItem>
-				Код алгоритма имеет единый формат (HFT или позиционная торговля).
+				Algorithm code has a unified format (HFT or position trading).
 			</listItem>
 			<listItem>
-				Большое сообщество объединяет разных алготрейдеров, независимо от площадки, брокера или типа подключения.
+				Big community unites different algorithmic traders, regardless of board, broker or connection type.
 			</listItem>
 			<listItem>
-				Увеличение клиентов для разработчиков торговых стратегий.
+				The increase of customers for trading strategies developers.
 			</listItem>
 		</list>
-	    
-		<!--><list class="ordered">
-			<listItem>
-				Можно мигрировать с одной платформы на другую при техническом превосходстве одной из них (например, с <token>quik</token> на <token>smartcom</token>).
-				Особенно важен данный пункт, когда предполагается автоматизация достаточно большого количество процессов торговли.
-			</listItem>
-			<listItem>
-				При выходе новой функциональности нет необходимости переписывать код под новую версию. <token>stocksharp</token> следит за
-				нововведениями, и даст возможность использовать новую "фичу" привычным для <token>stocksharp</token> образом.
-			</listItem>
-			<listItem>
-				Проще найти ответ на технический вопрос, так как <token>stocksharp</token> покрывает сразу несколько торговых терминалов. Есть
-				возможность сравнить в единой среде какой терминал лучше подходит для задачи.
-			</listItem>
-			<listItem>
-				Если торговые программы разрабатываются для использования другими пользователями (например, на продажу), платформонезависимость
-				увеличивает количество клиентов за счет работы сразу на нескольких терминалах.
-			</listItem>
-			<listItem>
-				Проще поддерживать программу, так как используется одна общая торговая функциональность.
-			</listItem>
-		</list>-->
-		
+	
 		
 		  <para>
 			  <mediaLink>
@@ -59,76 +38,76 @@
 			  </mediaLink>
 		  </para>
 				
-		  <para><legacyUnderline>Библиотека разделена на следующие основные блоки:</legacyUnderline></para>
+		  <para><legacyUnderline>The library is divided into the following main components:</legacyUnderline></para>
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference>N:StockSharp.BusinessEntities</codeEntityReference> - объединяет основные торговые объекты (инструмент, заявка, сделка и
-				т.д.). Также здесь находится описание интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>.
+				<codeEntityReference>N:StockSharp.BusinessEntities</codeEntityReference> - basic trading objects (instrument, order, trade, etc.),
+				including the interface <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> description.
 			</listItem>
 			
 			<listItem>
-			<codeEntityReference>N:StockSharp.Algo</codeEntityReference> - объединяет большое количество блоков, непосредственно связанных c написанием торговых стратегий
-				(подробнее, <link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Торговые стратегии</link>). Здесь находятся некоторые вспомогательные стратегии, например,
-				котирования заявок по нескольким схемам (подробнее, <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">котирование</link>).
-				Также здесь расположена базовая реализация интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> - класс 
-				<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. 
+			<codeEntityReference>N:StockSharp.Algo</codeEntityReference> - combines a large number of modules that are directly related to trading strategies writing
+				(for more details see <link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Trading strategies</link>). There are some auxiliary strategies,
+				such as market making  under several schemes (for more details see <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Quoting</link>) in this component.
+				Also there is the base implementation of <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> interface -
+				Connector class in this component. 
 				<list class="bullet">
 				  		<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Strategies</codeEntityReference> - базовые классы для создания стратегии.</para>
+  							<para><codeEntityReference>N:StockSharp.Algo.Strategies</codeEntityReference> - the base classes for creating strategies.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Candles</codeEntityReference> - здесь собран весь необходимый функционал для работы со свечками и распознавания
-						графических паттернов (подробнее, <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>).</para>
+  							<para><codeEntityReference>N:StockSharp.Algo.Candles</codeEntityReference> - here is all the necessary functionality to work with candles and graphic patterns recognition collected
+  							(for more details see <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Candles</link>).</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Indicators</codeEntityReference> - содержит базовые классы и интерфейсы для создания технических индикаторов,
-  							а также готовые индикаторы. См. <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">Индикаторы</link>.</para>
+  							<para><codeEntityReference>N:StockSharp.Algo.Indicators</codeEntityReference> - contains the base classes and interfaces for creating technical indicators, as well as built-in indicators.
+  							See <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">Indicators</link>.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Derivatives</codeEntityReference> - классы для работы с опционами.
-  							См. <link xlink:href="b85270c7-ee7f-4dbc-a0a3-aac466b75f98">Опционы</link>.</para>
+  							<para><codeEntityReference>N:StockSharp.Algo.Derivatives</codeEntityReference> - classes for work with options.
+  							See <link xlink:href="b85270c7-ee7f-4dbc-a0a3-aac466b75f98">Options</link>.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Testing</codeEntityReference> - классы для различных видов тестирования стратегий: на исторических и случайных данных,
-  							на реальных рыночных данных, а также для оптимизации. См. <link xlink:href="febbcf31-63d1-449d-847e-92fd8424f926">Тестирование</link>.</para>
+  							<para><codeEntityReference>N:StockSharp.Algo.Testing</codeEntityReference> - classes for different types of strategies testing: on random and historical data,
+  							on actual market data and also for optimization. See <link xlink:href="febbcf31-63d1-449d-847e-92fd8424f926">Testing</link>.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Storages</codeEntityReference> - классы для работы с хранилищем биржевых данных. 
-  							См. <link xlink:href="7a8a9518-6270-4cfe-a829-fa6c40e5fabd">Хранение данных</link>.</para>
+  							<para><codeEntityReference>N:StockSharp.Algo.Storages</codeEntityReference> - classes for working with data storage.
+  							See <link xlink:href="7a8a9518-6270-4cfe-a829-fa6c40e5fabd">Market-Data storage</link>.</para>
   						</listItem>
   						<listItem>
-  							<para><legacyBold>Другие блоки</legacyBold> - различные дополнительные блоки, связанные с разработкой стратегий: комиссии, проскальзывания, прибыль-убыток,
-  							управление рисками, статистика, ряд вспомогательных алгоритмов	(очистка стакана от своих заявок, вычисление рыночной цены, округление цены до шага цены по инструменту и т.д.) и т.п,
-  							которые упрощают создание торговых роботов.</para>
+  							<para><legacyBold>Other modules</legacyBold> - various additional modules associated with strategies development: commissions, slippages, profit-loss,
+  							risk management, statistics, a number of auxiliary algorithms (order book cleaning from own orders, the calculation of the market price, rounding prices
+  							to the instrument tick price, etc.) and so on, that simplify the creation of trading algorithms.</para>
   						</listItem>
 				</list>
 				
 			</listItem>
 			<listItem>
 				<codeEntityReference qualifyHint="false">N:StockSharp.Messages</codeEntityReference> - 
-				классы сообщений, основные перечисления, режимы работы биржи, класс <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Unit</codeEntityReference> и др.
+				message classes, main enumerations,  exchanges hours of operation, the Unit <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Unit</codeEntityReference> class, etc.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">N:StockSharp.Xaml</codeEntityReference> - графические компоненты для отображения табличной информации (заявки, сделки, Level1 и др.), 
-				поиска инструментов, портфелей, отображения стакана, доски опционов, мониторинга работы стратегий, логирования (и другие), в том числе:
+				<codeEntityReference qualifyHint="false">N:StockSharp.Xaml</codeEntityReference> - graphical components for tabular information display (orders, trades, Level1, etc.),
+				instruments search, portfolios, order book display, options board, strategies performance monitoring, logging (and others), including:
 				<list class="bullet">
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Xaml.Charting</codeEntityReference> - средства для построения различных графиков: cвечки, индикаторы, доходность и др.</para>
+  							<para><codeEntityReference>N:StockSharp.Xaml.Charting</codeEntityReference> - tools for creating various diagrams: candles, indicators, profitability, etc.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Xaml.Diagram</codeEntityReference> - графические элементы для визуального создания стратегий.</para>
+  							<para><codeEntityReference>N:StockSharp.Xaml.Diagram</codeEntityReference> - graphical elements for strategies visual creation.</para>
   						</listItem>
 				</list>
 			</listItem>
 			
 			<listItem>
-				<codeEntityReference qualifyHint="false">N:StockSharp.Logging</codeEntityReference> - специальный инструментарий для работы с отладочной информацией. Предлагаются различные способы
-				вывода отладочных сообщений: в окно отладки, в файл, в окно графического компонета, а также в системы оповещения (email, звуковой сигнал) в случае возникновения проблем у робота.
+				<codeEntityReference qualifyHint="false">N:StockSharp.Logging</codeEntityReference> - special tools to work with debug information. There are different
+				ways to output debug messages: to the debug window, to a file, to the graphical component, send via email or sound beep in case of problems in the algorithm.
 			</listItem>
 		
 			<listItem>
-				<legacyBold>Блоки коннекторов</legacyBold> - содержат реализацию коннекторов к одноименным торговым системам (например, <codeEntityReference>N:StockSharp.Quik</codeEntityReference> содержит реализацию коннектора
-				к <token>quik</token>).
+				<legacyBold>Connectors modules</legacyBold> - include the connectors implementation to the trading systems with the same names
+				(for example, <codeEntityReference>N:StockSharp.InteractiveBrokers</codeEntityReference> contains the connector implementation to <token>ib</token>).
 			</listItem>
 			
 		</list>

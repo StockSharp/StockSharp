@@ -95,6 +95,32 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
+	/// Build candles modes.
+	/// </summary>
+	[DataContract]
+	[Serializable]
+	public enum BuildCandlesModes
+	{
+		/// <summary>
+		/// Request built candles and build the missing candles from trades, depths etc.
+		/// </summary>
+		[EnumMember]
+		LoadAndBuild,
+
+		/// <summary>
+		/// Request only built candles.
+		/// </summary>
+		[EnumMember]
+		Load,
+
+		/// <summary>
+		/// Build from trades, depths etc.
+		/// </summary>
+		[EnumMember]
+		Build
+	}
+
+	/// <summary>
 	/// Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
 	/// </summary>
 	[DataContract]
@@ -178,6 +204,36 @@ namespace StockSharp.Messages
 		public string NewsId { get; set; }
 
 		/// <summary>
+		/// To perform the calculation <see cref="CandleMessage.PriceLevels"/>. By default, it is disabled.
+		/// </summary>
+		[DataMember]
+		public bool IsCalcVolumeProfile { get; set; }
+
+		/// <summary>
+		/// Build candles mode.
+		/// </summary>
+		[DataMember]
+		public BuildCandlesModes BuildCandlesMode { get; set; }
+
+		/// <summary>
+		/// Which market-data type is used as an candle source value.
+		/// </summary>
+		[DataMember]
+		public MarketDataTypes? BuildCandlesFrom { get; set; }
+
+		/// <summary>
+		/// Extra info for the <see cref="BuildCandlesFrom"/>.
+		/// </summary>
+		[DataMember]
+		public Level1Fields? BuildCandlesField { get; set; }
+
+		/// <summary>
+		/// Contains history market data.
+		/// </summary>
+		[DataMember]
+		public bool IsHistory { get; set; }
+
+		/// <summary>
 		/// The default depth of order book.
 		/// </summary>
 		public const int DefaultMaxDepth = 50;
@@ -218,7 +274,12 @@ namespace StockSharp.Messages
 				MaxDepth = MaxDepth,
 				NewsId = NewsId,
 				LocalTime = LocalTime,
-				IsNotSupported = IsNotSupported
+				IsNotSupported = IsNotSupported,
+				BuildCandlesMode = BuildCandlesMode,
+				BuildCandlesFrom = BuildCandlesFrom,
+				BuildCandlesField = BuildCandlesField,
+				IsCalcVolumeProfile = IsCalcVolumeProfile,
+				IsHistory = IsHistory,
 			};
 
 			CopyTo(clone);
@@ -232,7 +293,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},Types={DataType},IsSubscribe={IsSubscribe},TransId={TransactionId},OrigId={OriginalTransactionId}";
+			return base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId}";
 		}
 	}
 }

@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
-	class NewsMetaInfo : BinaryMetaInfo<NewsMetaInfo>
+	class NewsMetaInfo : BinaryMetaInfo
 	{
 		public NewsMetaInfo(DateTime date)
 			: base(date)
@@ -67,8 +67,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 	class NewsBinarySerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
 	{
-		public NewsBinarySerializer()
-			: base(default(SecurityId), 200, MarketDataVersions.Version46)
+		public NewsBinarySerializer(IExchangeInfoProvider exchangeInfoProvider)
+			: base(default(SecurityId), 200, MarketDataVersions.Version47, exchangeInfoProvider)
 		{
 		}
 
@@ -79,7 +79,8 @@ namespace StockSharp.Algo.Storages.Binary
 			writer.WriteInt(messages.Count());
 
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version46;
-			
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version47;
+
 			foreach (var news in messages)
 			{
 				if (isMetaEmpty)
@@ -139,7 +140,7 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 
 				var lastOffset = metaInfo.LastServerOffset;
-				metaInfo.LastTime = writer.WriteTime(news.ServerTime, metaInfo.LastTime, LocalizedStrings.News, true, true, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+				metaInfo.LastTime = writer.WriteTime(news.ServerTime, metaInfo.LastTime, LocalizedStrings.News, true, true, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 			}
 		}
@@ -161,10 +162,11 @@ namespace StockSharp.Algo.Storages.Binary
 			};
 
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version46;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version47;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			message.ServerTime = reader.ReadTime(ref prevTime, true, true, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+			message.ServerTime = reader.ReadTime(ref prevTime, true, true, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 

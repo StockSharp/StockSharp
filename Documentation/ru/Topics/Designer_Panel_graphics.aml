@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Panel_graphics_00"/>
+</mediaLink>
+<para>Кубик предназначен для отображения данных на графике в панели <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />. 
+Каждый элемент соответствует одной области на графике и содержит набор свойств, 
+с помощью которых можно определить набор осей на графике, 
+набор графических элементов и параметры их отображения. 
+Добавление любого графического элемента происходит нажатием на 
+кнопку <mediaLinkInline><image xlink:href="Designer_Panel_graphics_01"/></mediaLinkInline>  
+удаление нажатием на кнопку <mediaLinkInline><image xlink:href="Designer_Panel_graphics_02"/></mediaLinkInline>. 
+При добавлении графического элемента (серия свечей, индикатор, сделки и др.) 
+в настройках, у кубика создается специальный входной параметр, 
+через который данные для отображения будут передаваться в этот кубик,
+ и в следствии чего будут отображаться на панели <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />. 
+ При нажатии на кнопку <mediaLinkInline><image xlink:href="Designer_Panel_graphics_03"/></mediaLinkInline>
+ будут открываться дочерние графические элементы или их настройки.</para>
+ <mediaLink><image xlink:href="Designer_Panel_graphics_04"/></mediaLink>
+ <para>На панели <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" /> отображается все полученные данные в 
+ кубики <legacyBold>Панель графика</legacyBold>. Для разных серий свечей 
+ стоит заводить разные кубики <legacyBold>Панель графика</legacyBold>. При этом 
+ графики будут располагаться друг над другом, но на каждом будут 
+ отображены только соответствующие ему графические элементы 
+ (серия свечей, индикатор, сделки и др.). В примере видно, что на верхнем 
+ графике отображены свечи, 2 индикатора, и сделки, что соответствует 4 входным 
+ параметрам верхнего кубика. На нижнем отображены только свечи. 
+ Более подробно о панели <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" /> можно узнать в пункте <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="992fd698-345f-4bc0-8420-b8a57c0619b4" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

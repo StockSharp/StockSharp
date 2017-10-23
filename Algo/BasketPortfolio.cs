@@ -60,17 +60,28 @@ namespace StockSharp.Algo
 
 					_innerPositions = innerPositions;
 
-					var beginValue = 0m;
-					var currentValue = 0m;
-					var blockedValue = 0m;
+					decimal? beginValue = null;
+					decimal? currentValue = null;
+					decimal? blockedValue = null;
 
 					foreach (var position in _innerPositions)
 					{
 						var mult = portfolio.Weights[position.Portfolio];
 
-						beginValue += mult * position.BeginValue;
-						currentValue += mult * position.CurrentValue;
-						blockedValue += mult * position.BlockedValue;
+						if (beginValue == null)
+							beginValue = mult * position.BeginValue;
+						else
+							beginValue += mult * position.BeginValue;
+
+						if (currentValue == null)
+							currentValue = mult * position.CurrentValue;
+						else
+							currentValue += mult * position.CurrentValue;
+
+						if (blockedValue == null)
+							blockedValue = mult * position.BlockedValue;
+						else
+							blockedValue += mult * position.BlockedValue;
 					}
 
 					BeginValue = beginValue;

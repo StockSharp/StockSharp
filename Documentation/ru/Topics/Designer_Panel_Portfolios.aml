@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0fc19f50-24cb-4f8b-bb22-728968686f8b" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для работы с портфелями существует панель <legacyBold>Портфели</legacyBold>. 
+Открыть ее можно нажав на кнопку <legacyBold>Портфели</legacyBold> вкладки <legacyBold>Общее</legacyBold>.</para>
+<mediaLink><image xlink:href="Designer_Panel_A_Portfolios_00"/></mediaLink>
+<para>Панель <legacyBold>Портфели</legacyBold> представляет собой таблицу,
+ в которой отображены основные данные по портфелю, и текущим позициям по этим портфелям.
+ Нажав двойным щелчком на портфеле или позицию появится окно <legacyBold>Создание портфеля</legacyBold>
+ или окно <legacyBold>Создание позиции</legacyBold>, в котором можно отредактировать 
+ выбранный портфель или позицию. Для создания нового портфеля или новой позиции 
+ необходимо нажать на кнопку <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>, и в выпавшем
+ меню выбрать соответствующий пункт.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Panel_A_Portfolios_01"/>
+</mediaLink>
+
+<para>При нажатии кнопки <mediaLinkInline><image xlink:href="Designer_Alert_Bell"/></mediaLinkInline> откроется окно <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" /></para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

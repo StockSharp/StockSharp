@@ -17,15 +17,13 @@ namespace StockSharp.Algo.Strategies.Testing
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Testing;
 	using StockSharp.Logging;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -43,11 +41,11 @@ namespace StockSharp.Algo.Strategies.Testing
 		[Browsable(false)]
 		public DateTime StartTime
 		{
-			get { return _startTime; }
+			get => _startTime;
 			set
 			{
 				_startTime = value;
-				NotifyPropertyChanged("StartTime");
+				NotifyPropertyChanged(nameof(StartTime));
 			}
 		}
 
@@ -59,35 +57,37 @@ namespace StockSharp.Algo.Strategies.Testing
 		[Browsable(false)]
 		public DateTime StopTime
 		{
-			get { return _stopTime; }
+			get => _stopTime;
 			set
 			{
 				_stopTime = value;
-				NotifyPropertyChanged("StopTime");
+				NotifyPropertyChanged(nameof(StopTime));
 			}
 		}
 
-		#region Эмуляция
+		#region Emulation
 
 		private TimeSpan _marketTimeChangedInterval;
 
 		/// <summary>
 		/// Time change interval.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(1)]
-		[DisplayNameLoc(LocalizedStrings.Str175Key)]
-		[DescriptionLoc(LocalizedStrings.Str1409Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str175Key,
+			Description = LocalizedStrings.Str1409Key,
+			GroupName = LocalizedStrings.Str1174Key,
+			Order = 100)]
 		public TimeSpan MarketTimeChangedInterval
 		{
-			get { return _marketTimeChangedInterval; }
+			get => _marketTimeChangedInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException();
 
 				_marketTimeChangedInterval = value;
-				NotifyPropertyChanged("MarketTimeChangedInterval");
+				NotifyPropertyChanged(nameof(MarketTimeChangedInterval));
 			}
 		}
 
@@ -96,21 +96,23 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Unrealized profit recalculation interval.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(1)]
-		[DisplayNameLoc(LocalizedStrings.Str1410Key)]
-		[DescriptionLoc(LocalizedStrings.Str1411Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1410Key,
+			Description = LocalizedStrings.Str1411Key,
+			GroupName = LocalizedStrings.Str1174Key,
+			Order = 101)]
 		[DefaultValue(typeof(TimeSpan), "00:01:00")]
 		public TimeSpan? UnrealizedPnLInterval
 		{
-			get { return _unrealizedPnLInterval; }
+			get => _unrealizedPnLInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException();
 
 				_unrealizedPnLInterval = value;
-				NotifyPropertyChanged("UnrealizedPnLInterval");
+				NotifyPropertyChanged(nameof(UnrealizedPnLInterval));
 			}
 		}
 
@@ -119,17 +121,19 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// What trades to use.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(25)]
-		[DisplayNameLoc(LocalizedStrings.Str985Key)]
-		[DescriptionLoc(LocalizedStrings.Str1413Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str985Key,
+			Description = LocalizedStrings.Str1413Key,
+			GroupName = LocalizedStrings.Str1174Key,
+			Order = 102)]
 		public EmulationMarketDataModes TradeDataMode
 		{
-			get { return _tradeDataMode; }
+			get => _tradeDataMode;
 			set
 			{
 				_tradeDataMode = value;
-				NotifyPropertyChanged("TradeMode");
+				NotifyPropertyChanged(nameof(TradeDataMode));
 			}
 		}
 
@@ -138,17 +142,19 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// What market depths to use.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(30)]
-		[DisplayNameLoc(LocalizedStrings.MarketDepthsKey)]
-		[DescriptionLoc(LocalizedStrings.Str1415Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MarketDepthsKey,
+			Description = LocalizedStrings.Str1415Key,
+			GroupName = LocalizedStrings.Str1174Key,
+			Order = 103)]
 		public EmulationMarketDataModes DepthDataMode
 		{
-			get { return _depthDataMode; }
+			get => _depthDataMode;
 			set
 			{
 				_depthDataMode = value;
-				NotifyPropertyChanged("DepthMode");
+				NotifyPropertyChanged(nameof(DepthDataMode));
 			}
 		}
 
@@ -157,17 +163,19 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Use orders log.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(40)]
-		[DisplayNameLoc(LocalizedStrings.OrderLogKey)]
-		[DescriptionLoc(LocalizedStrings.Str1417Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OrderLogKey,
+			Description = LocalizedStrings.Str1417Key,
+			GroupName = LocalizedStrings.Str1174Key,
+			Order = 104)]
 		public EmulationMarketDataModes OrderLogDataMode
 		{
-			get { return _orderLogDataMode; }
+			get => _orderLogDataMode;
 			set
 			{
 				_orderLogDataMode = value;
-				NotifyPropertyChanged("OrderLogMode");
+				NotifyPropertyChanged(nameof(OrderLogDataMode));
 			}
 		}
 
@@ -176,23 +184,25 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Number of simultaneously tested strategies.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(50)]
-		[DisplayNameLoc(LocalizedStrings.Str1418Key)]
-		[DescriptionLoc(LocalizedStrings.Str1419Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1418Key,
+			Description = LocalizedStrings.Str1419Key,
+			GroupName = LocalizedStrings.Str1174Key,
+			Order = 104)]
 		public int BatchSize
 		{
-			get { return _batchSize; }
+			get => _batchSize;
 			set
 			{
 				_batchSize = value;
-				NotifyPropertyChanged("BatchSize");
+				NotifyPropertyChanged(nameof(BatchSize));
 			}
 		}
 
 		#endregion
 
-		#region Отладка
+		#region Debug
 
 		private LogLevels _logLevel;
 
@@ -200,16 +210,19 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// Logging level.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str12Key)]
-		[PropertyOrder(1)]
-		[DisplayNameLoc(LocalizedStrings.Str9Key)]
-		[DescriptionLoc(LocalizedStrings.Str9Key, true)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str9Key,
+			Description = LocalizedStrings.Str9Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str12Key,
+			Order = 200)]
 		public LogLevels LogLevel
 		{
-			get { return _logLevel; }
+			get => _logLevel;
 			set
 			{
 				_logLevel = value;
-				NotifyPropertyChanged("LogLevel");
+				NotifyPropertyChanged(nameof(LogLevel));
 			}
 		}
 
@@ -232,15 +245,15 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			base.Save(storage);
 
-			storage.SetValue("StartTime", StartTime);
-			storage.SetValue("StopTime", StopTime);
-			storage.SetValue("OrderLogMode", OrderLogDataMode.To<string>());
-			storage.SetValue("DepthMode", DepthDataMode.To<string>());
-			storage.SetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
-			storage.SetValue("UnrealizedPnLInterval", UnrealizedPnLInterval);
-			storage.SetValue("LogLevel", LogLevel.To<string>());
-			storage.SetValue("TradeMode", TradeDataMode.To<string>());
-			storage.SetValue("BatchSize", BatchSize);
+			storage.SetValue(nameof(StartTime), StartTime);
+			storage.SetValue(nameof(StopTime), StopTime);
+			storage.SetValue(nameof(OrderLogDataMode), OrderLogDataMode.To<string>());
+			storage.SetValue(nameof(DepthDataMode), DepthDataMode.To<string>());
+			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
+			storage.SetValue(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval);
+			storage.SetValue(nameof(LogLevel), LogLevel.To<string>());
+			storage.SetValue(nameof(TradeDataMode), TradeDataMode.To<string>());
+			storage.SetValue(nameof(BatchSize), BatchSize);
 		}
 
 		/// <summary>
@@ -251,15 +264,15 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			base.Load(storage);
 
-			StartTime = storage.GetValue("StartTime", StartTime);
-			StopTime = storage.GetValue("StopTime", StopTime);
-			OrderLogDataMode = storage.GetValue("OrderLogMode", OrderLogDataMode);
-			DepthDataMode = storage.GetValue("DepthMode", DepthDataMode);
-			MarketTimeChangedInterval = storage.GetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
-			UnrealizedPnLInterval = storage.GetValue("UnrealizedPnLInterval", UnrealizedPnLInterval);
-			LogLevel = storage.GetValue("LogLevel", LogLevel);
-			TradeDataMode = storage.GetValue("TradeMode", TradeDataMode);
-			BatchSize = storage.GetValue("BatchSize", BatchSize);
+			StartTime = storage.GetValue(nameof(StartTime), StartTime);
+			StopTime = storage.GetValue(nameof(StopTime), StopTime);
+			OrderLogDataMode = storage.GetValue(nameof(OrderLogDataMode), OrderLogDataMode);
+			DepthDataMode = storage.GetValue(nameof(DepthDataMode), DepthDataMode);
+			MarketTimeChangedInterval = storage.GetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
+			UnrealizedPnLInterval = storage.GetValue(nameof(UnrealizedPnLInterval), UnrealizedPnLInterval);
+			LogLevel = storage.GetValue(nameof(LogLevel), LogLevel);
+			TradeDataMode = storage.GetValue(nameof(TradeDataMode), TradeDataMode);
+			BatchSize = storage.GetValue(nameof(BatchSize), BatchSize);
 		}
 	}
 }

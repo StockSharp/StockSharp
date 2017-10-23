@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="055fe44c-6ca5-4b41-a62d-16b319f6d3de" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+<para>During testing or trade there is a need to fully control the process. 
+For complete control and analysis, <token>designer</token> provides graphical 
+components that you can add by selecting them in the <legacyBold>Components</legacyBold> 
+group of the <legacyBold>Ribbon</legacyBold>:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Components" />
+</mediaLink>
+
+
+<list class="bullet">
+  <listItem><para><link xlink:href="0fc19f50-24cb-4f8b-bb22-728968686f8b" /> - is a table that shows the basic data on the portfolio, and the current positions for these portfolios.</para></listItem>
+  <listItem><para><link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" /> - is a chart of candles or indicators, that contains all the <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />, cubes that are in the strategy.</para></listItem>
+  <listItem><para><link xlink:href="24d370d1-fd00-4914-83ac-574721299e93" /> - is a chart of the Profit/Loss (not realized), Profit/Loss (realized) and commission.</para></listItem>
+  <listItem><para><link xlink:href="697bcab0-932a-4bba-a1fd-4285d4b45930" /> - is a table with trades, that displays complete information about all trades of the strategy.</para></listItem>
+  <listItem><para><link xlink:href="f17f9b12-4676-4815-83f3-9cbc3e1e87fc" /> - is a table with orders, that displays complete information about all orders of the strategy.</para></listItem>
+
+  <listItem><para><link xlink:href="acc5951e-e627-453b-896e-d53f1687e3fb" /> - is a table with conditional orders, that displays complete information about all conditional orders of the strategy.</para></listItem>
+  <listItem><para><link xlink:href="1ea96e9e-7018-41b9-891f-f47617cce648" /> - is a table of positions for strategy instruments.</para></listItem>
+  <listItem><para><link xlink:href="62959b32-c500-4e91-95eb-88c17fdf4f4d" /> - is a table, grouped by categories: Orders, P/L, Trade positions.</para></listItem>
+  <listItem><para><link xlink:href="a06c5482-e2d0-413d-888f-3307c80f7b65" /> - is a table with trades, that displays complete information about all trades for the selected instruments.</para></listItem>
+  <listItem><para><link xlink:href="1ea96e9e-7018-41b9-891f-f47617cce648" /> chart - is a chart of the Position.</para></listItem>
+  <listItem><para>Properties  - is the <link xlink:href="31a208d0-d543-47aa-8008-389c07e1e8d4" /> table or the <link xlink:href="319208d0-d543-47aa-8008-3891079198d4" /> table.</para></listItem>
+  <listItem><para>Diagram  - is the <link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />.</para></listItem>
+  <listItem><para><link xlink:href="4a0cd565-b871-4be3-91a2-423eadb1540f" /> - is a chart of options positions.</para></listItem>
+  <listItem><para><link xlink:href="bba01d56-3a8c-4016-af1f-d23f067dd693" /> - is an options table.</para></listItem>
+  <listItem><para><link xlink:href="3efed911-8876-40b8-8203-b9b48b1c599c" /> - is a table of limit orders for purchase and sale.</para></listItem>
+
+</list>
+
+    </introduction>
+
+    <relatedTopics>
+    
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

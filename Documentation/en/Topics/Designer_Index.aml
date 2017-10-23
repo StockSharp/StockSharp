@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="9aa0288d-e086-4da8-bd76-98cf52cb17a7" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Index_00"/>
+</mediaLink>
+<para>The cube is used to create your own index.
+</para>
+<definitionTable>
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Security</legacyBold> - the calculated index, represented as an <legacyBold>Security</legacyBold>.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Index</legacyBold> - the mathematical formula of a 
+  combination of several instruments (for example, (AAPL@NASDAQ+10)*(abs(20/GOOG@NYSE)).</para></listItem>
+  <listItem><para><legacyBold>Ignore errors</legacyBold> - the set flag indicates 
+  that errors will be ignored when calculating the index.</para></listItem>
+  <listItem><para><legacyBold>Calculate extended information</legacyBold> - the 
+  set flag indicates that in calculating the index, in addition to the basic 
+  information (Total volume, Opening price, Closing price, Highest price, Lowest 
+  price), the extended information (Total trade turnover, Opening volume, Closing 
+  volume, Maximum volume , Minimum volume) will be calculated.</para></listItem>
+  </list>
+  </definition>
+</definitionTable>
+
+
+
+
+<para>Together with the standard mathematical operators, you can use the 
+following functions:</para>
+<list class="bullet">
+<listItem><para><legacyBold>abs(a)</legacyBold> - returns the absolute value of a number.</para></listItem>
+<listItem><para><legacyBold>acos(a)</legacyBold> - returns the angle which cosine is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>asin(a)</legacyBold> - returns the angle which sine is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>atan(a)</legacyBold> - returns the angle which tangent is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>ceiling(a)</legacyBold> - returns the smallest integer that is greater than or equal to a specified number.</para></listItem>
+<listItem><para><legacyBold>cos(a)</legacyBold> - returns the cosine of the specified angle.</para></listItem>
+<listItem><para><legacyBold>exp(a)</legacyBold> - returns the value of <legacyBold>e</legacyBold> raised to the specified power.</para></listItem>
+<listItem><para><legacyBold>floor(a)</legacyBold> - returns the largest integer that is less than or equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>log(a)</legacyBold> - returns the natural logarithm (with base <legacyBold>e</legacyBold>) of the specified number.</para></listItem>
+<listItem><para><legacyBold>log10(a)</legacyBold> - returns the logarithm with base 10 of the specified number.</para></listItem>
+<listItem><para><legacyBold>max(a, b)</legacyBold> - returns the larger of two decimal numbers.</para></listItem>
+<listItem><para><legacyBold>min(a, b)</legacyBold> - returns the smaller of two decimal numbers.</para></listItem>
+<listItem><para><legacyBold>pow(a, b)</legacyBold> - returns the specified number raised to the specified power.</para></listItem>
+<listItem><para><legacyBold>sign(a)</legacyBold> - returns an integer indicating the sign of the specified number.</para></listItem>
+<listItem><para><legacyBold>sin(a)</legacyBold> - returns the sine of the specified angle.</para></listItem>
+<listItem><para><legacyBold>sqrt(a)</legacyBold> - returns the square root of the specified number.</para></listItem>
+<listItem><para><legacyBold>tan(a)</legacyBold> - returns the tangent of the specified angle.</para></listItem>
+<listItem><para><legacyBold>truncat(a)</legacyBold> - calculates the integer part of the specified number.</para></listItem>
+</list>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

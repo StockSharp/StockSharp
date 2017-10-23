@@ -59,9 +59,10 @@ namespace StockSharp.BusinessEntities
 		/// <remarks>
 		/// The default value is 100. If the exceeded the maximum depth the event <see cref="MarketDepth.QuoteOutOfDepth"/> will triggered.
 		/// </remarks>
+		[DisplayNameLoc(LocalizedStrings.MaxDepthOfBookKey)]
 		public int MaxDepth
 		{
-			get { return _maxDepth; }
+			get => _maxDepth;
 			set
 			{
 				if (value < 1)
@@ -126,16 +127,11 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str281Key)]
+		[DescriptionLoc(LocalizedStrings.Str282Key)]
 		public Quote[] Bids 
 		{
-			get
-			{
-				return _bids;
-				//lock (_syncRoot)
-				//{
-				//    return _bidsCache ?? (_bidsCache = _bids.Select(q => q.Clone()).ToArray());
-				//}
-			}
+			get => _bids;
 			private set
 			{
 				if (value == null)
@@ -152,16 +148,11 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str283Key)]
+		[DescriptionLoc(LocalizedStrings.Str284Key)]
 		public Quote[] Asks 
 		{ 
-			get
-			{
-				return _asks;
-				//lock (_syncRoot)
-				//{
-				//    return _asksCache ?? (_asksCache = _asks.Select(q => q.Clone()).ToArray());
-				//}
-			}
+			get => _asks;
 			private set
 			{
 				if (value == null)
@@ -175,26 +166,31 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Trading security currency.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
 		/// The best bid. If the order book does not contain bids, will be returned <see langword="null" />.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str291Key)]
 		public Quote BestBid { get; private set; }
 
 		/// <summary>
 		/// The best ask. If the order book does not contain asks, will be returned <see langword="null" />.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str292Key)]
 		public Quote BestAsk { get; private set; }
 
 		/// <summary>
 		/// The best pair. If the order book is empty, will be returned <see langword="null" />.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.BestPairKey)]
 		public MarketDepthPair BestPair => GetPair(0);
 
 		/// <summary>
 		/// To get the total price size by bids.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalBidsPriceKey)]
 		public decimal TotalBidsPrice
 		{
 			get
@@ -207,6 +203,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To get the total price size by offers.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalAsksPriceKey)]
 		public decimal TotalAsksPrice
 		{
 			get
@@ -219,6 +216,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get bids total volume.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalBidsVolumeKey)]
 		public decimal TotalBidsVolume
 		{
 			get
@@ -231,6 +229,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get asks total volume.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalAsksVolumeKey)]
 		public decimal TotalAsksVolume
 		{
 			get
@@ -243,6 +242,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Get total volume.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalVolumeKey)]
 		public decimal TotalVolume
 		{
 			get
@@ -255,6 +255,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To get the total price size.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
 		public decimal TotalPrice
 		{
 			get
@@ -267,6 +268,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Total quotes count (bids + asks).
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TotalQuotesCountKey)]
 		public int Count
 		{
 			get
@@ -281,9 +283,10 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Depth of book.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str1197Key)]
 		public int Depth
 		{
-			get { return _depth; }
+			get => _depth;
 			private set
 			{
 				if (_depth == value)
@@ -527,16 +530,16 @@ namespace StockSharp.BusinessEntities
 				asks = asks.OrderBy(q => q.Price);
 			}
 
-			bids = bids.ToArray();
-			asks = asks.ToArray();
+			var bidsArr = bids.ToArray();
+			var asksArr = asks.ToArray();
 
 			if (AutoVerify)
 			{
-				if (!Verify(bids, asks))
+				if (!Verify(bidsArr, asksArr))
 					throw new ArgumentException(LocalizedStrings.Str485);
 			}
 
-			Truncate((Quote[])bids, (Quote[])asks, lastChangeTime);
+			Truncate(bidsArr, asksArr, lastChangeTime);
 			return this;
 		}
 
@@ -554,11 +557,8 @@ namespace StockSharp.BusinessEntities
 
 			if (evt != null)
 			{
-				if (outOfRangeBids != null)
-					outOfRangeBids.ForEach(evt);
-
-				if (outOfRangeAsks != null)
-					outOfRangeAsks.ForEach(evt);
+				outOfRangeBids?.ForEach(evt);
+				outOfRangeAsks?.ForEach(evt);
 			}
 		}
 
@@ -595,8 +595,7 @@ namespace StockSharp.BusinessEntities
 
 			UpdateDepthAndTime(lastChangeTime, false);
 
-			if (null != QuotesChanged)
-				QuotesChanged();
+			QuotesChanged?.Invoke();
 			//RaiseQuotesChanged();
 		}
 
@@ -670,9 +669,7 @@ namespace StockSharp.BusinessEntities
 
 						if (UseAggregatedQuotes)
 						{
-							var aggQuote = existedQuote as AggregatedQuote;
-
-							if (aggQuote == null)
+							if (!(existedQuote is AggregatedQuote aggQuote))
 							{
 								aggQuote = new AggregatedQuote
 								{
@@ -844,9 +841,7 @@ namespace StockSharp.BusinessEntities
 
 					if (UseAggregatedQuotes)
 					{
-						var aggQuote = quote as AggregatedQuote;
-
-						if (aggQuote != null)
+						if (quote is AggregatedQuote aggQuote)
 						{
 							while (volume > 0)
 							{
@@ -1074,7 +1069,7 @@ namespace StockSharp.BusinessEntities
 				return Verify(_bids, _asks);
 		}
 
-		private bool Verify(IEnumerable<Quote> bids, IEnumerable<Quote> asks)
+		private bool Verify(Quote[] bids, Quote[] asks)
 		{
 			var bestBid = bids.FirstOrDefault();
 			var bestAsk = asks.FirstOrDefault();
@@ -1089,7 +1084,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private bool Verify(IEnumerable<Quote> quotes, bool isBids)
+		private bool Verify(Quote[] quotes, bool isBids)
 		{
 			if (quotes.IsEmpty())
 				return true;

@@ -41,9 +41,11 @@ namespace StockSharp.Configuration
 	using StockSharp.BitStamp;
 	using StockSharp.Blackwood;
 	using StockSharp.Btce;
-	using StockSharp.CQG;
+	using StockSharp.Cqg.Continuum;
+	using StockSharp.Cqg.Com;
 	using StockSharp.ETrade;
 	using StockSharp.Fix;
+	using StockSharp.Fxcm;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.IQFeed;
 	using StockSharp.ITCH;
@@ -53,11 +55,13 @@ namespace StockSharp.Configuration
 	using StockSharp.Oanda;
 	using StockSharp.OpenECry;
 	using StockSharp.Plaza;
+	using StockSharp.QuantHouse;
 	using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Rithmic;
 	using StockSharp.Rss;
 	using StockSharp.SmartCom;
+	using StockSharp.SpbEx;
 	using StockSharp.Sterling;
 	using StockSharp.Transaq;
 	using StockSharp.Twime;
@@ -70,23 +74,28 @@ namespace StockSharp.Configuration
 	/// </summary>
 	public static class Extensions
 	{
-		private static readonly ConnectorInfo[] _customConnections = ArrayHelper.Empty<ConnectorInfo>();
+		private static readonly Type[] _customAdapters = ArrayHelper.Empty<Type>();
 		private static readonly IndicatorType[] _customIndicators = ArrayHelper.Empty<IndicatorType>();
 		private static readonly Type[] _customCandles = ArrayHelper.Empty<Type>();
 		private static readonly Type[] _customDiagramElements = ArrayHelper.Empty<Type>();
 
 		static Extensions()
 		{
-			var section = ConfigManager.InnerConfig.Sections.OfType<StockSharpSection>().FirstOrDefault();
+			var section = RootSection;
 
 			if (section == null)
 				return;
 
-			_customConnections = SafeAdd<ConnectionElement, ConnectorInfo>(section.CustomConnections, elem => new ConnectorInfo(elem.Type.To<Type>()));
+			_customAdapters = SafeAdd<ConnectionElement, Type>(section.CustomConnections, elem => elem.Type.To<Type>());
 			_customIndicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
 			_customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
 			_customDiagramElements = SafeAdd<DiagramElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
 		}
+
+		/// <summary>
+		/// Instance of the root section <see cref="StockSharpSection"/>.
+		/// </summary>
+		public static StockSharpSection RootSection => ConfigManager.InnerConfig.Sections.OfType<StockSharpSection>().FirstOrDefault();
 
 		private static T2[] SafeAdd<T1, T2>(IEnumerable from, Func<T1, T2> func)
 		{
@@ -130,8 +139,49 @@ namespace StockSharp.Configuration
 		public static bool Configure(this BasketMessageAdapter adapter, Window owner)
 		{
 			var autoConnect = false;
-			return adapter.Configure(owner, ref autoConnect);
+			SettingsStorage settings = null;
+			return adapter.Configure(owner, ref autoConnect, ref settings);
 		}
+
+		private static readonly Lazy<Type[]> _adapters = new Lazy<Type[]>(() => new[]
+		{
+			typeof(AlfaDirectMessageAdapter),
+			typeof(BarChartMessageAdapter),
+			typeof(BitStampMessageAdapter),
+			typeof(BlackwoodMessageAdapter),
+			typeof(BtceMessageAdapter),
+			typeof(CqgComMessageAdapter),
+			typeof(CqgContinuumMessageAdapter),
+			typeof(ETradeMessageAdapter),
+			typeof(FixMessageAdapter),
+			typeof(FastMessageAdapter),
+			typeof(InteractiveBrokersMessageAdapter),
+			typeof(IQFeedMarketDataMessageAdapter),
+			typeof(ItchMessageAdapter),
+			typeof(LmaxMessageAdapter),
+			typeof(MicexMessageAdapter),
+			typeof(OandaMessageAdapter),
+			typeof(OpenECryMessageAdapter),
+			typeof(PlazaMessageAdapter),
+			typeof(LuaFixTransactionMessageAdapter),
+			typeof(LuaFixMarketDataMessageAdapter),
+			typeof(QuikTrans2QuikAdapter),
+			typeof(QuikDdeAdapter),
+			typeof(RithmicMessageAdapter),
+			typeof(RssMarketDataMessageAdapter),
+			typeof(SmartComMessageAdapter),
+			typeof(SterlingMessageAdapter),
+			typeof(TransaqMessageAdapter),
+			typeof(TwimeMessageAdapter),
+			typeof(SpbExMessageAdapter),
+			typeof(FxcmMessageAdapter),
+			typeof(QuantFeedMessageAdapter),
+		});
+
+		/// <summary>
+		/// All avaliable adapters.
+		/// </summary>
+		public static IEnumerable<Type> Adapters => _customAdapters.Concat(_adapters.Value);
 
 		/// <summary>
 		/// Configure connection using <see cref="ConnectorWindow"/>.
@@ -139,8 +189,9 @@ namespace StockSharp.Configuration
 		/// <param name="adapter">The connection.</param>
 		/// <param name="owner">UI thread owner.</param>
 		/// <param name="autoConnect">Auto connect.</param>
+		/// <param name="windowSettings"><see cref="ConnectorWindow"/> settings.</param>
 		/// <returns><see langword="true"/> if the specified connection was configured, otherwise, <see langword="false"/>.</returns>
-		public static bool Configure(this BasketMessageAdapter adapter, Window owner, ref bool autoConnect)
+		public static bool Configure(this BasketMessageAdapter adapter, Window owner, ref bool autoConnect, ref SettingsStorage windowSettings)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException(nameof(adapter));
@@ -150,43 +201,26 @@ namespace StockSharp.Configuration
 
 			var wnd = new ConnectorWindow();
 
-			wnd.ConnectorsInfo.AddRange(_customConnections);
+			if (windowSettings != null)
+				wnd.Load(windowSettings);
 
-			AddConnectorInfo(wnd, typeof(AlfaDirectMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BarChartMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BitStampMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BlackwoodMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BtceMessageAdapter));
-			AddConnectorInfo(wnd, typeof(CQGMessageAdapter));
-			AddConnectorInfo(wnd, typeof(ETradeMessageAdapter));
-			AddConnectorInfo(wnd, typeof(FixMessageAdapter));
-			AddConnectorInfo(wnd, typeof(InteractiveBrokersMessageAdapter));
-			AddConnectorInfo(wnd, typeof(IQFeedMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(ItchMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LmaxMessageAdapter));
-			AddConnectorInfo(wnd, typeof(MicexMessageAdapter));
-			AddConnectorInfo(wnd, typeof(OandaMessageAdapter));
-			AddConnectorInfo(wnd, typeof(OpenECryMessageAdapter));
-			AddConnectorInfo(wnd, typeof(PlazaMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LuaFixTransactionMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LuaFixMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(QuikTrans2QuikAdapter));
-			AddConnectorInfo(wnd, typeof(QuikDdeAdapter));
-			AddConnectorInfo(wnd, typeof(RithmicMessageAdapter));
-			AddConnectorInfo(wnd, typeof(RssMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(SmartComMessageAdapter));
-			AddConnectorInfo(wnd, typeof(SterlingMessageAdapter));
-			AddConnectorInfo(wnd, typeof(TransaqMessageAdapter));
-			AddConnectorInfo(wnd, typeof(TwimeMessageAdapter));
+			foreach (var a in Adapters)
+			{
+				AddConnectorInfo(wnd, a);
+			}
 
 			wnd.Adapter = (BasketMessageAdapter)adapter.Clone();
 			wnd.AutoConnect = autoConnect;
 
 			if (!wnd.ShowModal(owner))
+			{
+				windowSettings = wnd.Save();
 				return false;
+			}
 
 			adapter.Load(wnd.Adapter.Save());
 			autoConnect = wnd.AutoConnect;
+			windowSettings = wnd.Save();
 
 			return true;
 		}
@@ -218,9 +252,10 @@ namespace StockSharp.Configuration
 
 				_indicatorTypes = typeof(IIndicator).Assembly
 					.GetTypes()
-					.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t))
+					.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t) && t.GetConstructor(Type.EmptyTypes) != null)
 					.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t.Name + "Painter")))
 					.Concat(_customIndicators)
+					.OrderBy(t => t.Name)
 					.ToArray();
 			}
 
@@ -257,6 +292,7 @@ namespace StockSharp.Configuration
 						t != typeof(Xaml.Diagram.CompositionDiagramElement) &&
 						t != typeof(Xaml.Diagram.ExportDiagramElement))
 					.Concat(_customDiagramElements)
+					.OrderBy(t => t.Name)
 					.ToArray();
 			}
 
@@ -324,7 +360,7 @@ namespace StockSharp.Configuration
 			if (dbFile == null)
 				return null;
 
-			dbFile = dbFile.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+			dbFile = dbFile.ToFullPathIfNeed();
 
 			conStr["Data Source"] = dbFile;
 			database.ConnectionString = conStr.ToString();
@@ -347,30 +383,6 @@ namespace StockSharp.Configuration
 			var walQuery = Query.Execute("PRAGMA journal_mode=WAL;");
 			var walCmd = database.GetCommand(walQuery, null, new FieldList(), new FieldList(), false);
 			database.Execute(walCmd, new SerializationItemCollection(), false);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="storage"></param>
-		/// <param name="name"></param>
-		/// <param name="load"></param>
-		public static void TryLoadSettings<T>(this SettingsStorage storage, string name, Action<T> load)
-		{
-			try
-			{
-				var settings = storage.GetValue<T>(name);
-
-				if (settings == null)
-					return;
-
-				load(settings);
-			}
-			catch (Exception excp)
-			{
-				ConfigManager.GetService<LogManager>().Application.AddErrorLog(excp);
-			}
 		}
 	}
 }

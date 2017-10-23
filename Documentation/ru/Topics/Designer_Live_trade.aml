@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para><token>designer</token> позволяет запускать созданные стратегии в реальную торговлю 
+через подключение к терминалам Российского рынка (
+<link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" />, 
+<link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" /> и 
+др.) мировых площадок (через брокеров 
+<link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981" />,
+ <link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" />,
+ <link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e" /> и других), или 
+ прямого подключения к бирже 
+ (<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" />, 
+ <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" />).
+</para>    </introduction>
+<relatedTopics>
+<link xlink:href="628d619b-ef20-4496-9bd1-d854d4a853e4" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

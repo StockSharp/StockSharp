@@ -22,21 +22,19 @@ namespace StockSharp.Algo.Testing
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Storages;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The emulational connection. It uses historic data and/or occasionally generated.
+	/// The emulation connection. It uses historical data and/or occasionally generated.
 	/// </summary>
-	public class HistoryEmulationConnector : BaseEmulationConnector, IExternalCandleSource
+	public class HistoryEmulationConnector : BaseEmulationConnector//, IExternalCandleSource
 	{
 		private class EmulationEntityFactory : EntityFactory
 		{
@@ -75,30 +73,7 @@ namespace StockSharp.Algo.Testing
 
 		private sealed class HistoryEmulationMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
 		{
-			private class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTimeOffset, Message>, OrderedPriorityQueue<DateTimeOffset, Message>>
-			{
-				public BlockingPriorityQueue()
-					: base(new OrderedPriorityQueue<DateTimeOffset, Message>())
-				{
-				}
-
-				protected override void OnEnqueue(KeyValuePair<DateTimeOffset, Message> item, bool force)
-				{
-					InnerCollection.Enqueue(item.Key, item.Value);
-				}
-
-				protected override KeyValuePair<DateTimeOffset, Message> OnDequeue()
-				{
-					return InnerCollection.Dequeue();
-				}
-
-				protected override KeyValuePair<DateTimeOffset, Message> OnPeek()
-				{
-					return InnerCollection.Peek();
-				}
-			}
-
-			private readonly BlockingPriorityQueue _messageQueue = new BlockingPriorityQueue();
+			private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
 
 			private readonly HistoryMessageAdapter _historyMessageAdapter;
 			private readonly Action<Exception> _errorHandler;
@@ -133,16 +108,13 @@ namespace StockSharp.Algo.Testing
 							try
 							{
 								var sended = _historyMessageAdapter.SendOutMessage();
+								var block = !sended;
 
-								KeyValuePair<DateTimeOffset, Message> pair;
-
-								if (!_messageQueue.TryDequeue(out pair, true, !sended))
+								while (_messageQueue.TryDequeue(out var message, true, block))
 								{
-									if (!sended)
-										break;
+									NewOutMessage?.Invoke(message);
+									block = false;
 								}
-								else
-									NewOutMessage?.Invoke(pair.Value);
 							}
 							catch (Exception ex)
 							{
@@ -164,7 +136,7 @@ namespace StockSharp.Algo.Testing
 				if (!IsOpened)
 					Open();
 
-				_messageQueue.Enqueue(new KeyValuePair<DateTimeOffset, Message>(message.LocalTime, message));
+				_messageQueue.Enqueue(message);
 			}
 
 			void IDisposable.Dispose()
@@ -178,9 +150,9 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
+		//private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _historySourceSubscriptions = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CandleSeries> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CandleSeries>();
+		//private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CachedSynchronizedSet<CandleSeries>> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CachedSynchronizedSet<CandleSeries>>();
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
@@ -255,20 +227,20 @@ namespace StockSharp.Algo.Testing
 		public HistoryMessageAdapter HistoryMessageAdapter { get; }
 
 		/// <summary>
-		/// The maximal size of the message queue, up to which history data are red. By default, it is equal to 1000.
+		/// The maximal size of the message queue, up to which history data are read. By default, it is equal to <see cref="Testing.HistoryMessageAdapter.DefaultMaxMessageCount"/>.
 		/// </summary>
 		public int MaxMessageCount
 		{
-			get { return HistoryMessageAdapter.MaxMessageCount; }
-			set { HistoryMessageAdapter.MaxMessageCount = value; }
+			get => HistoryMessageAdapter.MaxMessageCount;
+			set => HistoryMessageAdapter.MaxMessageCount = value;
 		}
 
-		private readonly Dictionary<Portfolio, decimal> _initialMoney;
+		private readonly Dictionary<Portfolio, decimal?> _initialMoney;
 
 		/// <summary>
 		/// The initial size of monetary funds on accounts.
 		/// </summary>
-		public IDictionary<Portfolio, decimal> InitialMoney => _initialMoney;
+		public IDictionary<Portfolio, decimal?> InitialMoney => _initialMoney;
 
 		/// <summary>
 		/// The number of loaded messages.
@@ -287,7 +259,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public EmulationStates State
 		{
-			get { return _state; }
+			get => _state;
 			private set
 			{
 				if (_state == value)
@@ -302,7 +274,7 @@ namespace StockSharp.Algo.Testing
 						break;
 					case EmulationStates.Stopping:
 						throwError = (_state != EmulationStates.Started && _state != EmulationStates.Suspended
-							&& State == EmulationStates.Starting);  // при ошибках при запуске эмуляции состояние может быть Starting
+							&& State != EmulationStates.Starting);  // при ошибках при запуске эмуляции состояние может быть Starting
 						break;
 					case EmulationStates.Starting:
 						throwError = (_state != EmulationStates.Stopped && _state != EmulationStates.Suspended);
@@ -317,7 +289,7 @@ namespace StockSharp.Algo.Testing
 						throwError = (_state != EmulationStates.Suspending);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(value));
+						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 				}
 
 				if (throwError)
@@ -346,10 +318,10 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public bool IsFinished { get; private set; }
 
-		/// <summary>
-		/// To enable the possibility to give out candles directly into <see cref="ICandleManager"/>. It accelerates operation, but candle change events will not be available. By default it is disabled.
-		/// </summary>
-		public bool UseExternalCandleSource { get; set; }
+		///// <summary>
+		///// To enable the possibility to give out candles directly into <see cref="ICandleManager"/>. It accelerates operation, but candle change events will not be available. By default it is disabled.
+		///// </summary>
+		//public bool UseExternalCandleSource { get; set; }
 
 		/// <summary>
 		/// Clear cache.
@@ -357,6 +329,11 @@ namespace StockSharp.Algo.Testing
 		public override void ClearCache()
 		{
 			base.ClearCache();
+
+			//_series.Clear();
+			_historySourceSubscriptions.Clear();
+			//_subscribedCandles.Clear();
+
 			IsFinished = false;
 		}
 
@@ -370,7 +347,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		protected override void OnDisconnect()
 		{
-			SendEmulationState(EmulationStates.Stopping);
+			if (State != EmulationStates.Stopped && State != EmulationStates.Stopping)
+				SendEmulationState(EmulationStates.Stopping);
 		}
 
 		/// <summary>
@@ -434,7 +412,6 @@ namespace StockSharp.Algo.Testing
 
 							// все данных пришли без ошибок или в процессе чтения произошла ошибка - начинаем остановку
 							SendEmulationState(EmulationStates.Stopping);
-							SendEmulationState(EmulationStates.Stopped);
 						}
 
 						if (State == EmulationStates.Stopping)
@@ -466,30 +443,33 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.CandleVolume:
 					case MessageTypes.Execution:
 					{
-						if (message.Adapter == MarketDataAdapter)
-							TransactionAdapter.SendInMessage(message);
-						else if (message.Adapter == TransactionAdapter)
+						var adapter = message.Adapter; //.GetInnerAdapter();
+
+						if (adapter == TransactionAdapter)
 						{
-							var candleMsg = message as CandleMessage;
-
-							if (candleMsg != null)
+							if (message is CandleMessage candleMsg)
 							{
-								if (!UseExternalCandleSource)
-									break;
+								//if (!UseExternalCandleSource)
+								//	break;
 
-								var series = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
+								//var seriesList = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
 
-								if (series != null)
-								{
-									_newCandles?.Invoke(series, new[] { candleMsg.ToCandle(series) });
+								//if (seriesList == null)
+								//	break;
 
-									if (candleMsg.IsFinished)
-										_stopped?.Invoke(series);
-								}
+								//foreach (var series in seriesList.Cache)
+								//{
+								//	_newCandles?.Invoke(series, new[] {candleMsg.ToCandle(series)});
+
+								//	if (candleMsg.IsFinished)
+								//		_stopped?.Invoke(series);
+								//}
 
 								break;
 							}
 						}
+						else if (adapter == MarketDataAdapter)
+							TransactionAdapter.SendInMessage(message);
 
 						base.OnProcessMessage(message);
 						break;
@@ -508,7 +488,7 @@ namespace StockSharp.Algo.Testing
 			catch (Exception ex)
 			{
 				SendOutError(ex);
-				SendEmulationState(EmulationStates.Stopping);
+				Disconnect();
 			}
 		}
 
@@ -522,6 +502,16 @@ namespace StockSharp.Algo.Testing
 			{
 				case EmulationStates.Stopping:
 				{
+					SendEmulationState(EmulationStates.Stopped);
+					break;
+				}
+
+				case EmulationStates.Stopped:
+				{
+					// change ConnectionState to Disconnecting
+					if (ConnectionState != ConnectionStates.Disconnecting)
+						Disconnect();
+
 					SendInMessage(new DisconnectMessage());
 					break;
 				}
@@ -609,23 +599,23 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Зарегистрировать исторические данные.
+		/// Register historical data.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="dataType">Тип данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
-		/// <param name="getMessages">Функция получения исторических данных.</param>
+		/// <param name="security">Instrument.</param>
+		/// <param name="dataType">Data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType"/> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="getMessages">Historical data source.</param>
 		public void RegisterHistorySource(Security security, MarketDataTypes dataType, object arg, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
 		{
 			SendInHistorySourceMessage(security, dataType, arg, getMessages);
 		}
-		
+
 		/// <summary>
-		/// Удалить регистрацию, ранее осуществленную через <see cref="RegisterHistorySource"/>.
+		/// Unregister the subscription, previously made by <see cref="RegisterHistorySource"/>.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="dataType">Тип данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
+		/// <param name="security">Instrument.</param>
+		/// <param name="dataType">Data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType"/> type. For example, <see cref="CandleMessage.Arg"/>.</param>
 		public void UnRegisterHistorySource(Security security, MarketDataTypes dataType, object arg)
 		{
 			SendInHistorySourceMessage(security, dataType, arg, null);
@@ -656,97 +646,101 @@ namespace StockSharp.Algo.Testing
 			});
 		}
 
-		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
-		{
-			if (!UseExternalCandleSource)
-				yield break;
+		#region IExternalCandleSource
 
-			var securityId = series.Security.ToSecurityId();
-			var messageType = series.CandleType.ToCandleMessageType();
-			var dataType = messageType.ToCandleMarketDataType();
+		//IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
+		//{
+		//	if (!UseExternalCandleSource)
+		//		yield break;
 
-			if (_historySourceSubscriptions.ContainsKey(Tuple.Create(securityId, dataType, series.Arg)))
-			{
-				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
-				yield break;
-			}
+		//	var securityId = series.Security.ToSecurityId();
+		//	var messageType = series.CandleType.ToCandleMessageType();
+		//	var dataType = messageType.ToCandleMarketDataType();
 
-			var types = HistoryMessageAdapter.Drive.GetAvailableDataTypes(securityId, HistoryMessageAdapter.StorageFormat);
+		//	if (_historySourceSubscriptions.ContainsKey(Tuple.Create(securityId, dataType, series.Arg)))
+		//	{
+		//		yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
+		//		yield break;
+		//	}
 
-			foreach (var tuple in types)
-			{
-				if (tuple.MessageType != messageType || !tuple.Arg.Equals(series.Arg))
-					continue;
+		//	var types = HistoryMessageAdapter.Drive.GetAvailableDataTypes(securityId, HistoryMessageAdapter.StorageFormat);
 
-				var dates = HistoryMessageAdapter.StorageRegistry.GetCandleMessageStorage(tuple.MessageType, series.Security, series.Arg, HistoryMessageAdapter.Drive, HistoryMessageAdapter.StorageFormat).Dates.ToArray();
+		//	foreach (var tuple in types)
+		//	{
+		//		if (tuple.MessageType != messageType || !tuple.Arg.Equals(series.Arg))
+		//			continue;
 
-				if (dates.Any())
-					yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));
+		//		var dates = HistoryMessageAdapter.StorageRegistry.GetCandleMessageStorage(tuple.MessageType, series.Security, series.Arg, HistoryMessageAdapter.Drive, HistoryMessageAdapter.StorageFormat).Dates.ToArray();
 
-				break;
-			}
-		}
+		//		if (dates.Any())
+		//			yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));
 
-		private Action<CandleSeries, IEnumerable<Candle>> _newCandles;
+		//		break;
+		//	}
+		//}
 
-		event Action<CandleSeries, IEnumerable<Candle>> IExternalCandleSource.NewCandles
-		{
-			add { _newCandles += value; }
-			remove { _newCandles -= value; }
-		}
+		//private Action<CandleSeries, IEnumerable<Candle>> _newCandles;
 
-		private Action<CandleSeries> _stopped;
+		//event Action<CandleSeries, IEnumerable<Candle>> IExternalCandleSource.NewCandles
+		//{
+		//	add { _newCandles += value; }
+		//	remove { _newCandles -= value; }
+		//}
 
-		event Action<CandleSeries> IExternalCandleSource.Stopped
-		{
-			add { _stopped += value; }
-			remove { _stopped -= value; }
-		}
+		//private Action<CandleSeries> _stopped;
 
-		void IExternalCandleSource.SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
-		{
-			var securityId = GetSecurityId(series.Security);
-			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
-			var key = Tuple.Create(securityId, dataType, series.Arg);
+		//event Action<CandleSeries> IExternalCandleSource.Stopped
+		//{
+		//	add { _stopped += value; }
+		//	remove { _stopped -= value; }
+		//}
 
-			if (!_historySourceSubscriptions.ContainsKey(key))
-			{
-				if (_subscribedCandles.ChangeSubscribers(key, true) != 1)
-					return;
+		//void IExternalCandleSource.SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		//{
+		//	var securityId = GetSecurityId(series.Security);
+		//	var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+		//	var key = Tuple.Create(securityId, dataType, series.Arg);
 
-				MarketDataAdapter.SendInMessage(new MarketDataMessage
-				{
-					//SecurityId = securityId,
-					DataType = dataType,
-					Arg = series.Arg,
-					IsSubscribe = true,
-				}.FillSecurityInfo(this, series.Security));
-			}
+		//	_series.SafeAdd(key).Add(series);
 
-			_series.Add(key, series);
-		}
+		//	if (!_historySourceSubscriptions.ContainsKey(key))
+		//	{
+		//		if (_subscribedCandles.ChangeSubscribers(key, true) != 1)
+		//			return;
 
-		void IExternalCandleSource.UnSubscribeCandles(CandleSeries series)
-		{
-			var securityId = GetSecurityId(series.Security);
-			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
-			var key = Tuple.Create(securityId, dataType, series.Arg);
+		//		MarketDataAdapter.SendInMessage(new MarketDataMessage
+		//		{
+		//			//SecurityId = securityId,
+		//			DataType = dataType,
+		//			Arg = series.Arg,
+		//			IsSubscribe = true,
+		//		}.FillSecurityInfo(this, series.Security));
+		//	}
+		//}
 
-			if (!_historySourceSubscriptions.ContainsKey(key))
-			{
-				if (_subscribedCandles.ChangeSubscribers(key, false) != 0)
-					return;
+		//void IExternalCandleSource.UnSubscribeCandles(CandleSeries series)
+		//{
+		//	var securityId = GetSecurityId(series.Security);
+		//	var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+		//	var key = Tuple.Create(securityId, dataType, series.Arg);
 
-				MarketDataAdapter.SendInMessage(new MarketDataMessage
-				{
-					//SecurityId = securityId,
-					DataType = MarketDataTypes.CandleTimeFrame,
-					Arg = series.Arg,
-					IsSubscribe = false,
-				}.FillSecurityInfo(this, series.Security));
-			}
+		//	_series.SafeAdd(key).Remove(series);
 
-			_series.Remove(key);
-		}
+		//	if (!_historySourceSubscriptions.ContainsKey(key))
+		//	{
+		//		if (_subscribedCandles.ChangeSubscribers(key, false) != 0)
+		//			return;
+
+		//		MarketDataAdapter.SendInMessage(new MarketDataMessage
+		//		{
+		//			//SecurityId = securityId,
+		//			DataType = MarketDataTypes.CandleTimeFrame,
+		//			Arg = series.Arg,
+		//			IsSubscribe = false,
+		//		}.FillSecurityInfo(this, series.Security));
+		//	}
+		//}
+
+		#endregion
 	}
 }

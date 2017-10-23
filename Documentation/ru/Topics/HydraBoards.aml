@@ -2,10 +2,10 @@
 <topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Пункт главного меню приложения <legacyBold>Дополнительно => Площадки</legacyBold>.</para>
+      <para>Вкладка <legacyBold>Общее</legacyBold> кнопка <legacyBold>Площадки</legacyBold>.</para>
       <para>Здесь можно просмотреть основную информацию о торговых площадках, а также настроить часовой пояс и расписание их работы.</para>
       <mediaLink>
-       		<image placement="left" xlink:href="hydra_boards" />
+       		<image placement="center" xlink:href="hydra_boards" />
 	  </mediaLink>
     </introduction>
     

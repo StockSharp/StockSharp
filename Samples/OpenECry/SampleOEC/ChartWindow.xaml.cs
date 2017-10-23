@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleOEC
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows.Media;
 	
@@ -26,11 +25,11 @@ namespace SampleOEC
 
 	partial class ChartWindow
 	{
-		private readonly OECTrader _trader;
+		private readonly OpenECryTrader _trader;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 
-		public ChartWindow(CandleSeries candleSeries, DateTime from, DateTime to)
+		public ChartWindow(CandleSeries candleSeries)
 		{
 			InitializeComponent();
 
@@ -40,14 +39,14 @@ namespace SampleOEC
 			_candleSeries = candleSeries;
 			_trader = MainWindow.Instance.Trader;
 
-			Chart.ChartTheme = "ExpressionDark";
+			Chart.ChartTheme = ChartThemes.ExpressionDark;
 
 			var area = new ChartArea();
 			Chart.Areas.Add(area);
 
 			_candleElem = new ChartCandleElement
 			{
-				Antialiasing = false, 
+				AntiAliasing = false, 
 				UpFillColor = Colors.White,
 				UpBorderColor = Colors.Black,
 				DownFillColor = Colors.Black,
@@ -56,24 +55,24 @@ namespace SampleOEC
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewCandles += ProcessNewCandles;
-			_trader.SubscribeCandles(_candleSeries, from, to);
+			var tf = (TimeSpan)candleSeries.Arg;
+
+			_trader.CandleSeriesProcessing += ProcessNewCandles;
+			_trader.SubscribeCandles(_candleSeries, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)));
 		}
 
-		private void ProcessNewCandles(CandleSeries series, IEnumerable<Candle> candles)
+		private void ProcessNewCandles(CandleSeries series, Candle candle)
 		{
 			if (series != _candleSeries)
 				return;
 
-			foreach (var timeFrameCandle in candles)
-			{
-				Chart.Draw(_candleElem, timeFrameCandle);
-			}
+			Chart.Draw(_candleElem, candle);
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewCandles -= ProcessNewCandles;
+			_trader.UnSubscribeCandles(_candleSeries);
+			_trader.CandleSeriesProcessing -= ProcessNewCandles;
 			base.OnClosing(e);
 		}
 	}

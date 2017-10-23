@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для обновления на новую версию необходимо закрыть все запущенные версии 
+<token>designer</token>. После чего запустить <legacyBold>Designer.Update.exe</legacyBold> в папке расположения  
+<token>designer</token>, и нажать кнопку <legacyBold>Обновить</legacyBold>.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Installation_02"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="840e49ea-f9e1-4704-8324-098b002f78f9" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

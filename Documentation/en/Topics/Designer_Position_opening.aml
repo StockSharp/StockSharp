@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="33d15f2c-5d73-4c95-8e67-2612d34f14a2" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Position_opening_00"/>
+</mediaLink>
+<para>The cube is used to open a position on the instrument.</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Instrument</legacyBold> – the instrument for which 
+  you need to register an order.</para></listItem>
+  <listItem><para><legacyBold>Direction</legacyBold> – the direction of the order 
+  (purchase or sale), it is the signal of the order registering.</para></listItem>
+  <listItem><para><legacyBold>Price</legacyBold> – the numerical value of the 
+  price, if the not market order is registered.</para></listItem>
+  <listItem><para><legacyBold>Volume</legacyBold> – the numerical value of the 
+  volume.</para></listItem>
+  <listItem><para><legacyBold>Portfolio</legacyBold> – the portfolio for which 
+  you need to register an order.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Order</legacyBold> – the order that can be used to 
+  obtain trades on it by using the <legacyBold>Trades</legacyBold> element on the 
+  order and displaying it on the chart using the <legacyBold>Chart panel</legacyBold> 
+  cube.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Market</legacyBold> – the attribute of a market 
+  order.</para></listItem>
+  <listItem><para><legacyBold>Client code</legacyBold> – the client code assigned 
+  by the broker, if the value is not specified and the <legacyBold>Parameters</legacyBold> 
+  option is checked, then the value is taken from the strategy.</para></listItem>
+  <listItem><para><legacyBold>Broker</legacyBold> – the code of the brokerage firm, 
+  if the value is not specified and the <legacyBold>Parameters</legacyBold> option 
+  is checked, then the value is taken from the strategy.</para></listItem>
+  <listItem><para><legacyBold>Conditional order</legacyBold> – to add a conditional order.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+<title>Conditional order settings</title>
+<para>Conditional order is the order with additional conditions that determine the 
+time of registration in the trading system depending on the current market situation.</para>
+<mediaLink>
+<image xlink:href="Designer_Conditional_Application"/>
+</mediaLink>
+<list class="bullet">
+<listItem><para><legacyBold>Connection</legacyBold> - the connection where the order will be registered.</para></listItem>
+<listItem><para><legacyBold>Stop-order type</legacyBold> - the stop-order type.</para></listItem>
+<listItem><para><legacyBold>Result</legacyBold> - the result of the stop order execution.</para></listItem>
+<listItem><para><legacyBold>Security ID</legacyBold> - the instrument ID for s stop-orders with a condition for another instrument.</para></listItem>
+<listItem><para><legacyBold>Stop price condition</legacyBold> - the stop-price condition. Used for orders such as "Stop-price for another security".</para></listItem>
+<listItem><para><legacyBold>Stop-price</legacyBold> - the stop-price that sets the condition for the stop-order to trigger.</para></listItem>
+<listItem><para><legacyBold>Stop-limit price</legacyBold> - the stop-limit price. It is similar to the stop-price, but it is used only for the order type "Take-profit and Stop-limit".</para></listItem>
+<listItem><para><legacyBold>Stop-limit at market price</legacyBold> - the attribute of execution of the "Stop-limit" order at the market price.</para></listItem>
+<listItem><para><legacyBold>Conditions checking interval</legacyBold> - time for order conditions checking only for a specified time period (if the value is null, then do not check). It is used for orders of the types "Take-profit and stop-limit" and "Take-profit and stop-limit on order".</para></listItem>
+<listItem><para><legacyBold>On execution conditional order ID</legacyBold> - the ID of the conditional order on execution.</para></listItem>
+<listItem><para><legacyBold>On filled conditional order direction</legacyBold> - the direction of the conditional order on execution.</para></listItem>
+<listItem><para><legacyBold>Activation in case of partial execution</legacyBold> - a partial execution of the order is taken into account. The "on execution" order will be activated when the order-condition is partially executed.</para></listItem>
+<listItem><para><legacyBold>Filled volume</legacyBold> - to take the executed volume of the order as the amount of the registered stop-order. As the number of securities in the "on execution" order the executed volume of the order-condition is accepted.</para></listItem>
+<listItem><para><legacyBold>Price of linked order</legacyBold> - the price of the linked limited order.</para></listItem>
+<listItem><para><legacyBold>Cancellation when partially filled</legacyBold> - the attribute of the stop-order cancellation in case of partial execution of the linked limited order.</para></listItem>
+<listItem><para><legacyBold>Offset from maximum</legacyBold> - the amount of an offset from the maximum (minimum) of the last trade price.</para></listItem>
+<listItem><para><legacyBold>Protection spread</legacyBold> - the amount of the protection spread.</para></listItem>
+<listItem><para><legacyBold>Take-profit at market price</legacyBold> - the attribute of execution of the "Take-profit" order at the market price.</para></listItem>
+</list>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="538b6ea4-bf0f-4833-9fb6-a3b1f0a59039" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

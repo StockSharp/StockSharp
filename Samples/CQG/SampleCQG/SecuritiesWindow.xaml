@@ -3,7 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
-    Title="{x:Static loc:LocalizedStrings.Securities}" Height="415" Width="1081">
+    Title="{x:Static loc:LocalizedStrings.Securities}"
+	Loaded="SecuritiesWindow_OnLoaded"
+	Height="415" Width="1081">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
@@ -12,20 +14,34 @@
 
 		<xaml:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
 
-		<Grid Grid.Row="1" HorizontalAlignment="Right">
+		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
-			<Button x:Name="NewOrder" Grid.Column="2" Width="100" IsEnabled="False" Click="NewOrderClick">
+			<Button x:Name="Find" Width="100" Click="FindClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
+			</Button>
+
+			<Button x:Name="Quotes" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
+			<Button x:Name="Depth" Grid.Column="3" Width="100" IsEnabled="False" Click="DepthClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
+			</Button>
+			<Button x:Name="NewOrder" Grid.Column="4" Width="100" IsEnabled="False" Click="NewOrderClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
 			</Button>
-			<Button x:Name="NewStopOrder" Grid.Column="3" Width="120" IsEnabled="False" Click="NewStopOrderClick">
+			<Button x:Name="NewStopOrder" Grid.Column="5" Width="120" IsEnabled="False" Click="NewStopOrderClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
 			</Button>
+			<Button x:Name="Candles" Grid.Column="6" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
+			<ComboBox x:Name="CandlesPeriods" Grid.Column="7" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
 		</Grid>
     </Grid>
 </Window>

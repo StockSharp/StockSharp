@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Testing
 		public CommissionRule Rule { get; set; }
 
 		/// <summary>
-		/// The portfolio name. If it is given, than <see cref="CommissionRuleMessage.Rule"/> is applied to specific portfolio.
+		/// The portfolio name. If it is given, then <see cref="Rule"/> is applied to specific portfolio.
 		/// </summary>
 		public string PortfolioName { get; set; }
 	}

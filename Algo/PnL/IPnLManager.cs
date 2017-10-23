@@ -37,10 +37,10 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// The value of unrealized profit-loss.
 		/// </summary>
-		decimal UnrealizedPnL { get; }
+		decimal? UnrealizedPnL { get; }
 
 		/// <summary>
-		/// To zero <see cref="IPnLManager.PnL"/>.
+		/// To zero <see cref="PnL"/>.
 		/// </summary>
 		void Reset();
 

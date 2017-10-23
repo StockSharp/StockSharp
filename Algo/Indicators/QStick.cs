@@ -23,6 +23,7 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// http://www2.wealth-lab.com/WL5Wiki/QStick.ashx.
 	/// </remarks>
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class QStick : LengthIndicator<IIndicatorValue>
 	{
 		private readonly SimpleMovingAverage _sma;

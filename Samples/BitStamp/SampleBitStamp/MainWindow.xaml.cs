@@ -16,14 +16,11 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleBitStamp
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.BitStamp;
 	using StockSharp.BusinessEntities;
@@ -95,13 +92,13 @@ namespace SampleBitStamp
 				
 				if (Key.Text.IsEmpty())
 				{
-					MessageBox.Show(this, LocalizedStrings.Str2974);
+					MessageBox.Show(this, LocalizedStrings.Str3689);
 					return;
 				}
 				
 				if (Secret.Password.IsEmpty())
 				{
-					MessageBox.Show(this, LocalizedStrings.Str2975);
+					MessageBox.Show(this, LocalizedStrings.Str3690);
 					return;
 				}
 
@@ -144,32 +141,24 @@ namespace SampleBitStamp
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// subscribe on error of market data subscription event
-					Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
+					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 					
-					Trader.NewPortfolios += portfolios =>
-					{
-						// subscribe on portfolio updates
-						portfolios.ForEach(Trader.RegisterPortfolio);
-
-						_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-					};
-					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 					// subscribe on error of order registration event
-					Trader.OrdersRegisterFailed += OrdersFailed;
+					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of order cancelling event
-					Trader.OrdersCancelFailed += OrdersFailed;
+					Trader.OrderCancelFailed += OrderFailed;
 
-					// subscribe on error of stop-order registration event
-					Trader.StopOrdersRegisterFailed += OrdersFailed;
-					// subscribe on error of stop-order cancelling event
-					Trader.StopOrdersCancelFailed += OrdersFailed;
+					Trader.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
@@ -194,12 +183,11 @@ namespace SampleBitStamp
 			}
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

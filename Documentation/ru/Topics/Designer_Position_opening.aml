@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="33d15f2c-5d73-4c95-8e67-2612d34f14a2" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Position_opening_00"/>
+</mediaLink>
+<para>Кубик используется для открытия позиции по инструменту.</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого надо выставить заявку.</para></listItem>
+  <listItem><para><legacyBold>Направление</legacyBold> – направление заявки (покупка или продажа), является сигналом выставления заявки.</para></listItem>
+  <listItem><para><legacyBold>Цена</legacyBold> – числовое значение цены, если выставляется не рыночная заявка.</para></listItem>
+  <listItem><para><legacyBold>Объем</legacyBold> – числовое значение объема.</para></listItem>
+  <listItem><para><legacyBold>Портфель</legacyBold> – портфель, для которого надо выставить заявку.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, 
+которая может использоваться для получения сделок по ней с помощью элемента 
+<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью 
+кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Рыночная</legacyBold> – признак рыночной заявки.</para></listItem>
+  <listItem><para><legacyBold>Код клиента</legacyBold> – код клиента присвоенный дрокером,
+  если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
+  <listItem><para><legacyBold>Брокер</legacyBold> – код брокерской фирмы,
+  если значение не указано и установлен флажок <legacyBold>Параметры</legacyBold>, то берется значение из стратегии.</para></listItem>
+  <listItem><para><legacyBold>Условная заявка</legacyBold> – добавить условную заявку.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+<title>Настройка условной заявки</title>
+<para><legacyBold>Условная заявка</legacyBold> — заявка с дополнительными условиями, определяющими момент 
+постановки в торговую систему в зависимости от текущей рыночной ситуации.</para>
+<mediaLink>
+<image xlink:href="Designer_Conditional_Application"/>
+</mediaLink>
+<list class="bullet">
+<listItem><para><legacyBold>Подключение</legacyBold> - подключение куда будет выставляться заявка.</para></listItem>
+<listItem><para><legacyBold>Тип стоп-заявки</legacyBold> - тип стоп-заявки.</para></listItem>
+<listItem><para><legacyBold>Результат</legacyBold> - результат исполнения стоп-заявки.</para></listItem>
+<listItem><para><legacyBold>Идентификатор инструмента</legacyBold> - идентификатор инструмента для стоп-заявок с условием по другому инструменту.</para></listItem>
+<listItem><para><legacyBold>Условие стоп-цены</legacyBold> - условие стоп-цены. Используется для заявок типа «Стоп-цена по другой бумаге».</para></listItem>
+<listItem><para><legacyBold>Стоп цена</legacyBold> - стоп цена, которая задает условие срабатывания стоп-заявки.</para></listItem>
+<listItem><para><legacyBold>Стоп-лимит цена</legacyBold> - стоп-лимит цена. Аналогична Стоп-цене, но используется только при типе заявки «Тэйк-профит и стоп-лимит».</para></listItem>
+<listItem><para><legacyBold>Стоп-лимит по рыночной цене</legacyBold> - признак исполнения заявки «Стоп-лимит» по рыночной цене.</para></listItem>
+<listItem><para><legacyBold>Интервал проверки условий</legacyBold> - время проверки условий заявки только в течение заданного периода времени (если значение null, то не проверять). Используется для заявок типов «Тэйк-профит и стоп-лимит» и «Тэйк-профит и стоп-лимит по заявке».</para></listItem>
+<listItem><para><legacyBold>Идентификатор условной заявки по исполнению</legacyBold> - идентификатор условной заявки по исполнению.</para></listItem>
+<listItem><para><legacyBold>Направление условной заявки по исполнению</legacyBold> - направление условной заявки по исполнению.</para></listItem>
+<listItem><para><legacyBold>Активация при частичном исполнении</legacyBold> - частичное исполнение заявки учитывается. Заявка «по исполнению» будет активирована при частичном исполнении заявки-условия.</para></listItem>
+<listItem><para><legacyBold>Исполненный объем</legacyBold> - брать исполненный объем заявки в качестве количества выставляемой стоп-заявки. В качестве количества бумаг в заявке «по исполнению» принимается исполненный объем заявки-условия.</para></listItem>
+<listItem><para><legacyBold>Цена связанной заявки</legacyBold> - цена связанной лимитированной заявки.</para></listItem>
+<listItem><para><legacyBold>Снятие при частичном исполнении</legacyBold> - признак снятия стоп-заявки при частичном исполнении связанной лимитированной заявки.</para></listItem>
+<listItem><para><legacyBold>Отступ от максимума</legacyBold> - величина отступа от максимума (минимума) цены последней сделки.</para></listItem>
+<listItem><para><legacyBold>Защитный спред</legacyBold> - величина защитного спрэда.</para></listItem>
+<listItem><para><legacyBold>Тэйк-профит по рыночной цене</legacyBold> - признак исполнения заявки «Тэйк-профит» по рыночной цене.</para></listItem>
+</list>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="538b6ea4-bf0f-4833-9fb6-a3b1f0a59039" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

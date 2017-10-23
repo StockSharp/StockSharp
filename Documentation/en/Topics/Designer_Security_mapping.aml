@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   
+    <introduction>
+      <para>The same instrument in different trading systems can be called differently. 
+      In <legacyBold>Designer</legacyBold>, it is possible to match the instrument 
+      and the connections through which this instrument will be traded, and 
+      indicate how it is identified in the external trading system. This is useful 
+      when trading one instrument on different trading boards or through different
+      connections (or brokers). Also, it allows receiving data from one connection 
+      and making trades through another connection.</para>
+      <para>To match securities and connections click the 
+      <legacyBold>Securities and connections</legacyBold> in the All securities 
+      panel.</para>
+      <mediaLink>
+<image xlink:href="Designer_Security_mapping_00"/>
+</mediaLink>
+<para>In the opened window click the 
+<mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline>
+button to add a new line.</para>
+<para>In the <legacyBold>Connection</legacyBold> column select a connection form 
+the drop-down list. In the <legacyBold>Security code</legacyBold> and 
+<legacyBold>Board code</legacyBold> columns specify the security and board codes, 
+as they are specified in the <legacyBold>Designer</legacyBold>. In the 
+<legacyBold>Adapter code</legacyBold> and <legacyBold>Adapter board</legacyBold> 
+columns specify the security and board codes, as they are specified in the 
+external trading system.</para>
+<mediaLink>
+<image xlink:href="Designer_Security_mapping_01"/>
+</mediaLink>
+
+    </introduction>
+   
+    <relatedTopics>
+     
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

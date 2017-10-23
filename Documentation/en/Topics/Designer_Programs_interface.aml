@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c74991fa-bad6-4196-98c0-8952e2a57b3e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The <token>designer</token> interface consists of:</para>
+
+<list class="ordered">
+  <listItem><para><link xlink:href="45ae6713-c28b-457d-be6b-19016f54507e" /> - by 
+  default is located at the top of the <token>designer</token> window and is designed 
+  for quick access to the most frequently used functions.</para></listItem>
+  
+  <listItem><para><link xlink:href="2f00e9bc-8ea7-4679-9688-b02c3424f03a" /> - 
+  is located along the top of the application window.</para></listItem>
+  
+  <listItem><para><link xlink:href="71792b34-7013-4e7d-a486-400ec92e2410" /> - 
+  is a windowed interface with locking of panels.</para></listItem>
+</list>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="45ae6713-c28b-457d-be6b-19016f54507e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

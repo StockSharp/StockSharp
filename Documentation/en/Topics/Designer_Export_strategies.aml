@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="559d140c-5b71-4582-a65e-ca3cad7a66e8" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>There are following ways to export a strategy:</para>
+
+<list class="bullet">
+  <listItem><para>Right-click the strategy on the <legacyBold>Schema</legacyBold> 
+  panel. Select <legacyBold>Export</legacyBold> in the appearing menu.</para></listItem>
+  <listItem><para>On the <legacyBold>Common</legacyBold> tab click the 
+  <legacyBold>Export</legacyBold> button:</para></listItem>
+</list>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Export_strategies_00"/>
+</mediaLink>
+
+<para>Clicking the <legacyBold>Export</legacyBold> button opens the 
+<legacyBold>Export scheme</legacyBold> window, where you should specify the 
+file name for exporting the strategy:</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Export_strategies_01"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="66413582-a15e-414a-a413-8d77fe00f0e0" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

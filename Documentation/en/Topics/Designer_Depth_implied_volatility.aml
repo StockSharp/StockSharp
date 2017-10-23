@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1e0038a5-d74f-4898-ad8d-e2fa8750f40a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Glass_implied_volatility_00"/>
+</mediaLink>
+<para>The cube is used to calculate an order book of implied volatility.</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Order book</legacyBold> – the order book.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Order book</legacyBold> - the values of the order 
+  book of implied volatility.</para></listItem>
+</list>
+  </definition>
+
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="bba01d56-3a8c-4016-af1f-d23f067dd693" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

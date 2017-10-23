@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="664a3969-2b3c-4688-a3c9-8034e38cddfd" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>For the instance, the SMA strategy example will be considered.</para>
+<para>To run the test on the history, you shall select a strategy, the scheme of 
+which will be tested on the history. The strategy is selected on the 
+<token>SchemeDis</token> panel in the strategy folder, by double clicking on 
+the strategy of interest.</para>
+<para>Prior to testing, it is necessary to load market data (instruments, 
+candles, tic trades and/or order books)/ The way to do that is described in the 
+<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> section.</para>
+<para>When switching to the tab with a strategy, the <legacyBold>Emulation</legacyBold> 
+tab automatically opens in the <legacyBold>Ribbon</legacyBold>. 
+It is necessary to set the testing period on this tab. In 
+the market-data field specify the required storage 
+(<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />), in the instrument 
+field specify the required instrument.</para>
+<para>The following parameters will be used in the example with the SMA strategy.</para>
+
+<list class="ordered">
+  <listItem><para>AAPL@NASDAQ instrument</para></listItem>
+  <listItem><para>Standard storage \Documents\StockSharp\Designer\Storage</para></listItem>
+  <listItem><para>Storage format - CSV</para></listItem>
+  <listItem><para>Type of data, taken from the storage - Ticks</para></listItem>
+  <listItem><para>Order book - generated</para></listItem>
+  <listItem><para>Order book depth - 5</para></listItem>
+  <listItem><para>Spread size - 2</para></listItem>
+  <listItem><para>Candles with time-frame of 30 s</para></listItem>
+  <listItem><para>Volume - 100</para></listItem>
+</list>
+ 
+ <para>It is required to set the selected parameters up:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_00"/>
+</mediaLink>
+<mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_01"/>
+</mediaLink>
+<para>After setting up all the required parameters, start up the strategy 
+testing by clicking the 
+<mediaLinkInline><image xlink:href="Designer_Interface_Backtesting_01"/></mediaLinkInline> button.</para>
+<para>During or after the testing you can view chart and tables with the testing 
+information.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_02"/>
+</mediaLink>
+<para>The graph shows that the trades take place at the intersection of moving 
+averages, as planned by the strategy. It can also be seen that orders are 
+satisfied within several trades. It happens because of generated order book use,
+ which increases the testing reality. The fact that orders are satisfied within 
+ several trades can be seen from the Trades tables, Statistics, and the Positions 
+ chart.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_03"/>
+</mediaLink>
+ 
+<para>It can be seen on the <legacyBold>Positions chart</legacyBold>, that the 
+strategy has decreased 
+the volume operated. This happened because the generated order book has a depth 
+of 5 and as a result, the entire order book depth was insufficient to satisfy 
+the order of 200 lots. And since the strategy only reverses the position, every 
+time the depth of the order book is not sufficient satisfy the order, the operated 
+was reduced.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_04"/>
+</mediaLink>
+<para>The <legacyBold>P/L</legacyBold> chart indicates that the strategy is 
+unprofitable with such parameters.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

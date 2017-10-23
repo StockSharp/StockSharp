@@ -3,20 +3,19 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>Для учета комиссий в торговом роботе используется менеджер расчета комиссии 
-		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>.</para>
+		<para>The <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>
+		manager is used to calculate commissions in the trading algorithm.</para>
 		
-		<para>Тарифный план создается с помощью добавления соответствующих правил 
-		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionRule</codeEntityReference>,
-		на основе которых в дальнейшем и будет вестись расчет комиссий.</para>
+		<para>The tariff plan is created by adding the relevant <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionRule</codeEntityReference>
+		rules, based on which commissions will be calculated further.</para>
 	</introduction>
 
 	<procedure>
-		<title>Создание CommissionManager</title>
+		<title>The CommissionManager creating</title>
 			<steps class="ordered">
 				<step>
 					<content>
-						<para>Создать <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>:</para>
+						<para>To create the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>:</para>
 						
 						<code language="C#">
 						<![CDATA[
@@ -28,7 +27,7 @@ private CommissionManager _commissionManager = new CommissionManager();
 				
 				<step>
 					<content>
-						<para>Далее, необходимо создать правило:</para>
+						<para>Then, you must create the rule:</para>
 						
 						<code language="C#">
 						<![CDATA[
@@ -40,7 +39,7 @@ private CommissionManager _commissionManager = new CommissionManager();
 				
 				<step>
 					<content>
-						<para>И добавить его в <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>:</para>
+						<para>And add it to the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>:</para>
 						
 						<code language="C#">
 						<![CDATA[
@@ -53,12 +52,11 @@ _commissionManager.Rules.Add(commissionRule);;
 	</procedure>
 	
 	<summary>
-		<para>Подсчет комиссии можно вести как по сделкам, так и по заявкам. Для подсчета комиссии по сделке вызывается метод 
-		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.ProcessExecution(StockSharp.Messages.ExecutionMessage)</codeEntityReference>,
-		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.Messages.ExecutionMessage</codeEntityReference> - cообщение, содержащее информацию о заявке или собственной сделке.</para>
-		<!-- <para>Для подсчета комиссии по заявке вызывается метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.ProcessOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
-		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Order</codeEntityReference>.</para>-->
-		<para>Суммарное значение комиссии можно узнать через <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Commissions.CommissionManager.Commission</codeEntityReference>.</para>
+		<para>The commission can be calculated both by the trades and by orders. To calculate the commission by the trade the 
+		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.Process(StockSharp.Messages.Message)</codeEntityReference>
+		method is called, in which as a parameter the <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Message</codeEntityReference> is passed
+		(<codeEntityReference qualifyHint="false">T:StockSharp.Messages.ExecutionMessage</codeEntityReference> or <codeEntityReference qualifyHint="false">T:StockSharp.Messages.OrderRegisterMessage</codeEntityReference>).</para>
+		<para>The total value of the commission can be found through the <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Commissions.CommissionManager.Commission</codeEntityReference>.</para>
 	</summary>
     
     

@@ -184,13 +184,13 @@ this.Trader.SecuritiesTable.Columns.Insert(4, DdeSecurityColumns.Volatility);</c
 			  <step>
 				<content>
 				  <para>
-					После этого, через события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
+					После этого, через события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>
 					  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> будут приходить 
 					  объекты <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>, содержащие расширенную информацию. Чтобы
 					  ее получить в коде, необходимо воспользоваться свойством <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExtensionInfo</codeEntityReference>:
 					</para>
 					<code language="C#">
-Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.Securities.AddRange(securities));
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 					</code>
 					<alert class="note">
 						<para>
@@ -216,33 +216,37 @@ Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.Secu
 		  
 		  <step>
 			<content>
-			  <para>Для стакана данные по собственным объемам будут содержаться в <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Quote.ExtensionInfo</codeEntityReference>,
-				  которые в примере для удобства копируются в структуру SampleQuote:</para>
-				<code language="C#"><![CDATA[public class SampleQuote
+			  <para>Получения стакана:</para>
+				<code language="C#"><![CDATA[
+private void DepthClick(object sender, RoutedEventArgs e)
 {
-	public SampleQuote(Quote quote)
+	var trader = MainWindow.Instance.Trader;
+
+	var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
 	{
-		if (quote == null)
-			throw new ArgumentNullException("quote");
+		// начинаем получать котировки стакана
+		trader.RegisterMarketDepth(security);
 
-		this.Price = quote.Price;
+		// создаем окно со стаканом
+		var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
+		wnd.MakeHideable();
+		return wnd;
+	});
 
-		if (quote.OrderDirection == OrderDirections.Buy)
-		{
-			this.Bid = quote.Volume.ToString();
-			
-			// копируем информацию о собственном объеме на покупку
-			this.OwnVolume = (decimal)quote.ExtensionInfo[DdeQuoteColumns.OwnBidVolume];
-		}
-		else
-		{
-			this.Ask = quote.Volume.ToString();
-			
-			// копируем информацию о собственном объеме на продажу
-			this.OwnVolume = (decimal)quote.ExtensionInfo[DdeQuoteColumns.OwnAskVolume];
-		}
+	if (window.Visibility == Visibility.Visible)
+		window.Hide();
+	else
+		window.Show();
+
+	if (!_initialized)
+	{
+		TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
+		trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+		_initialized = true;
 	}
-}]]></code>
+}
+
+]]></code>
 			</content>
 		  </step>
 			

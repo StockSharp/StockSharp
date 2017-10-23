@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5789f207-56f6-4ee3-8040-44913ba1f2c9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The following directories are important for work with the <token>designer</token>:</para>
+<para>1.	The directory, where the <token>designer</token>, was installed, from 
+this folder you can launch <token>designer</token> by running the <legacyBold>Designer.exe</legacyBold> file. 
+Or update S#.Designer, by running the <legacyBold>Designer.Update.exe</legacyBold> file. Deleting this 
+directory will delete S#.Designer, however, the S#.Designer settings will not 
+be deleted.</para>
+<para>2.	The <token>designer</token> settings directory is located in the 
+folders of user's documents …\StockSharp\Designer\ (for example, 
+c:\Users\User\Documents\StockSharp\Designer\). Deleting this directory 
+will cause all S#.Designer settings to be reset to the default, <legacyBold>all created 
+strategies and downloaded instruments and other information stored in the settings 
+directory will be DESTROYED.</legacyBold></para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Directory_and_edit_the_data_manually_00"/>
+</mediaLink>
+<para>This directory contains the following folders and files:</para>
+
+<list class="bullet">
+  <listItem><para>The <legacyBold>Compositions</legacyBold> folder, containing 
+  in the form of XML files all cubes, contained in the Composite elements folder 
+  on the <token>SchemeDis</token> panel. Deleting files from this directory will 
+  delete the <legacyBold>Composite element</legacyBold> from the 
+  <legacyBold>Composite elements</legacyBold> folder on the Schemas panel. You 
+  should not manually edit the files in this directory, this can lead to a 
+  malfunction of the corresponding <legacyBold>Composite elements</legacyBold> cube.</para></listItem>
+
+  <listItem><para>The <legacyBold>LiveStrategies</legacyBold> folder, containing 
+  in the form of XML files all cubes, contained in the <legacyBold>Trading</legacyBold> 
+  folder on the <token>SchemeDis</token> panel. Deleting files from this directory 
+  will delete strategy from the Trading folder on the Schemas panel. You should 
+  not manually edit the files in this directory, this can lead to a malfunction 
+  of the corresponding strategy.</para></listItem>
+
+  <listItem><para>The <legacyBold>Logs</legacyBold> folder, containing all <token>designer</token> logs, 
+  which simplifies the S#.Designer troubleshooting.</para></listItem>
+
+  <listItem><para>The <legacyBold>SourceCode</legacyBold> folder, 
+  containing in the form of XML
+  files all cubes, contained in the SourceCode folder on the 
+  <token>SchemeDis</token> panel.
+  Deleting files from this directory will delete the <legacyBold>SourceCode</legacyBold> 
+  cube from the <legacyBold>SourceCode</legacyBold> folder on the 
+  <legacyBold>Schemas</legacyBold> panel.
+  You should not manually edit the files in this directory, this can lead to a 
+  malfunction of the corresponding <legacyBold>SourceCode</legacyBold> cube.</para></listItem>
+
+  <listItem><para>The <legacyBold>Strategies</legacyBold> folder, containing in 
+  the form of XML files all cubes, contained in the Strategies folder on 
+  the <token>SchemeDis</token> panel. Deleting files from this directory will 
+  delete strategy from the <legacyBold>Strategies</legacyBold> folder on the 
+  Schemas panel. You should not manually edit the files in this directory, this 
+  can lead to a malfunction of the corresponding strategy. If you manually add a 
+  strategy file to this folder and reboot S#.Designer, the strategy will appear 
+  in the <legacyBold>Strategies</legacyBold> folder on the <legacyBold>Schemas</legacyBold> panel.</para></listItem>
+
+  <listItem><para>The <legacyBold>Storage</legacyBold> folder - market data, 
+  downloaded by <token>designer</token>into the corresponding 
+  <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />. The folder is 
+  created at the Market data storage creation. By default, the path is specified 
+  to this folder. Deleting this folder will delete all the downloaded market data 
+  from the corresponding storage. If the storage contains CSV format files, then 
+  they can be edited with a standard notepad or MS Excel. The BIN files cannot
+  be edited manually.</para></listItem>
+
+  <listItem><para>The <legacyBold>exchange.csv and exchangeboard.csv</legacyBold> 
+  files contain the list of <legacyBold>Stock Exchanges</legacyBold>, list of 
+  instrument codes and trading modes. These files can be edited with standard 
+  notepad or MS Excel.</para></listItem>
+
+  <listItem><para>The <legacyBold>security.csv</legacyBold> file contains all 
+  received and created
+  securities by all sources. Deleting this file will delete all securities 
+  in <token>designer</token>. Adding new instruments is described in 
+  <link xlink:href="d0a1bb26-7a29-4607-992c-4f539632c2eb" />,
+<link xlink:href="2ee93171-34db-4f23-a5d3-30ff5c81dda3" /> sections. This file 
+can be edited with standard notepad or MS Excel.</para></listItem>
+
+  <listItem><para>The <legacyBold>portfolio.csv and position.csv</legacyBold> files 
+  contain all received and created portfolios and current position on them. D
+  eleting this file will delete all corresponding data in <token>designer</token>. 
+  If information on portfolios is received by S#.Designer at each connection, 
+  information on the positions can be lost irrevocably. These files can be 
+  edited with standard notepad or MS Excel.</para></listItem>
+
+  <listItem><para>The <legacyBold>settings.xml</legacyBold> file contains current 
+  settings. This file is created by <token>designer</token> when settings were 
+  changes or when at closing the program. Deleting this file will reset current 
+  settings to the default values. You should not manually edit this file, this 
+  can lead to a malfunction of <token>designer</token>.</para></listItem>
+</list>
+
+<para>If it is necessary to edit individual files or reset the S#.Designer 
+settings, it will be useful to backup both individual files and the entire directory.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="e8f4b412-f51f-4f50-858f-142dea0c5c7e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

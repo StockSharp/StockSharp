@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="57dc2e39-baa6-4c67-83a9-13278370a877" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+
+<para>On the <legacyBold>Quick access panel</legacyBold>, located by default at the top 
+of the <token>designer</token> window, there is a <legacyBold>Settings</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline>
+button. Clicking the 
+<mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline>
+button allows changing the program launch mode, interface language or totally 
+reset the <token>designer</token> settings.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Start_mode_00"/>
+</mediaLink>
+<para>When the <legacyBold>Launch mode</legacyBold> is selected, the window, allowing changing the 
+interface language, is opened. The launch mode has options of 32-bit and 
+64-bit, at the launch mode selection the available functionality will be 
+highlighted by the 
+<mediaLinkInline><image xlink:href="Designer_Start_mode_01"/></mediaLinkInline> 
+icon, for example, in 64-bit mode some connections (highlighted in the window) 
+may not be available.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Start_mode_02"/>
+</mediaLink>
+<para>If the <legacyBold>Remember choice</legacyBold> is selected, the 
+subsequent <token>designer</token> launches will feature the preset settings.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="7c04efc6-036c-4c25-855f-f086ee4c266d" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

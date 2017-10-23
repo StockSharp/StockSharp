@@ -33,7 +33,7 @@ namespace StockSharp.Messages
 	public abstract class Message : Cloneable<Message>, IExtendableEntity
 	{
 		/// <summary>
-		/// Local time label when a message was received/created.
+		/// Local timestamp when a message was received/created.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str203Key)]
 		[DescriptionLoc(LocalizedStrings.Str204Key)]
@@ -50,7 +50,7 @@ namespace StockSharp.Messages
 		public MessageTypes Type => _type;
 
 		[field: NonSerialized]
-		private IDictionary<object, object> _extensionInfo;
+		private IDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended information.
@@ -63,10 +63,10 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
-			set { _extensionInfo = value; }
+			get => _extensionInfo;
+			set => _extensionInfo = value;
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			throw new NotSupportedException();
+			throw new NotSupportedException(LocalizedStrings.Str17 + " " + GetType().FullName);
 		}
 	}
 }

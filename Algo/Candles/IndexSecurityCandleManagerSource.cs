@@ -28,21 +28,21 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
-	class IndexSecurityCandleManagerSource : Disposable, ICandleManagerSource
+	class IndexSecurityCandleManagerSource : Disposable, ICandleSource<Candle>
 	{
 		private sealed class IndexSeriesInfo : Disposable
 		{
 			private readonly ICandleManager _candleManager;
-			private readonly IEnumerable<CandleSeries> _innerSeries;
-			private readonly DateTimeOffset _from;
-			private readonly DateTimeOffset _to;
-			//private readonly Action<Candle> _processing;
-			//private readonly Action _stopped;
+			private readonly ISet<CandleSeries> _innerSeries;
+			private readonly DateTimeOffset? _from;
+			private readonly DateTimeOffset? _to;
+			private readonly Action<Candle> _processing;
+			private readonly Action _stopped;
 			//private int _startedSeriesCount;
-			//private readonly object _lock = new object();
+			private readonly object _lock = new object();
 			private readonly IndexCandleBuilder _builder;
 
-			public IndexSeriesInfo(ICandleManager candleManager, IEnumerable<CandleSeries> innerSeries, DateTimeOffset from, DateTimeOffset to, IndexSecurity security, Action<Candle> processing, Action stopped)
+			public IndexSeriesInfo(ICandleManager candleManager, Type candleType, IEnumerable<CandleSeries> innerSeries, DateTimeOffset? from, DateTimeOffset? to, IndexSecurity security, Action<Candle> processing, Action stopped)
 			{
 				if (candleManager == null)
 					throw new ArgumentNullException(nameof(candleManager));
@@ -60,13 +60,16 @@ namespace StockSharp.Algo.Candles
 					throw new ArgumentNullException(nameof(stopped));
 
 				_candleManager = candleManager;
-				_innerSeries = innerSeries;
+				_innerSeries = innerSeries.ToHashSet();
 				_from = from;
 				_to = to;
-				//_processing = processing;
-				//_stopped = stopped;
+				_processing = processing;
+				_stopped = stopped;
 
-				_builder = new IndexCandleBuilder(security);
+				candleManager.Processing += OnInnerSourceProcessCandle;
+				candleManager.Stopped += OnInnerSourceStopped;
+
+				_builder = new IndexCandleBuilder(security, candleType);
 
 				//_innerSeries.ForEach(s =>
 				//{
@@ -80,55 +83,87 @@ namespace StockSharp.Algo.Candles
 			public void Start()
 			{
 				_builder.Reset();
-				_innerSeries.ForEach(s => _candleManager.Start(s, _from, _to));
+
+				CandleSeries[] series;
+
+				lock (_lock)
+					series = _innerSeries.ToArray();
+
+				series.ForEach(s => _candleManager.Start(s, _from, _to));
 			}
 
-			//private void OnInnerSourceProcessCandle(Candle candle)
-			//{
-			//	if (candle.State != CandleStates.Finished)
-			//		return;
+			private void OnInnerSourceProcessCandle(CandleSeries series, Candle candle)
+			{
+				if (candle.State != CandleStates.Finished)
+					return;
 
-			//	_builder.ProcessCandle(candle).ForEach(_processing);
-			//}
+				lock (_lock)
+				{
+					if (!_innerSeries.Contains(series))
+						return;
+				}
 
-			//private void OnInnerSourceStopped()
-			//{
-			//	lock (_lock)
-			//	{
-			//		if (--_startedSeriesCount > 0)
-			//			return;
-			//	}
+				_builder.ProcessCandle(candle).ForEach(_processing);
+			}
 
-			//	// отписываемся только после обработки остановки всех серий
-			//	_innerSeries.ForEach(s => s.Stopped -= OnInnerSourceStopped);
+			private void OnInnerSourceStopped(CandleSeries series)
+			{
+				lock (_lock)
+				{
+					if (!_innerSeries.Remove(series))
+						return;
 
-			//	_stopped();
-			//}
+					if (_innerSeries.Count > 0)
+						return;
+				}
 
-			//protected override void DisposeManaged()
-			//{
-			//	base.DisposeManaged();
+				_candleManager.Processing -= OnInnerSourceProcessCandle;
+				_candleManager.Stopped -= OnInnerSourceStopped;
 
-			//	_innerSeries.ForEach(s =>
-			//	{
-			//		s.Dispose();
-			//		s.ProcessCandle -= OnInnerSourceProcessCandle;
-			//	});
-			//}
+				//// отписываемся только после обработки остановки всех серий
+				//_innerSeries.ForEach(s => s.Stopped -= OnInnerSourceStopped);
+
+				_stopped();
+			}
+
+			protected override void DisposeManaged()
+			{
+				base.DisposeManaged();
+
+				CandleSeries[] series;
+
+				lock (_lock)
+					series = _innerSeries.ToArray();
+
+				series.ForEach(_candleManager.Stop);
+
+				//_innerSeries.ForEach(s =>
+				//{
+				//	s.Dispose();
+				//	s.ProcessCandle -= OnInnerSourceProcessCandle;
+				//});
+			}
 		}
 
-		private readonly DateTimeOffset _from;
-		private readonly DateTimeOffset _to;
+		private readonly ISecurityProvider _securityProvider;
+		private readonly DateTimeOffset? _from;
+		private readonly DateTimeOffset? _to;
 		private readonly SynchronizedDictionary<CandleSeries, IndexSeriesInfo> _info = new SynchronizedDictionary<CandleSeries, IndexSeriesInfo>();
+		private readonly ICandleManager _candleManager;
 
-		public IndexSecurityCandleManagerSource(ICandleManager candleManager, DateTimeOffset from, DateTimeOffset to)
+		public IndexSecurityCandleManagerSource(ICandleManager candleManager, ISecurityProvider securityProvider, DateTimeOffset? from, DateTimeOffset? to)
 		{
+			if (candleManager == null)
+				throw new ArgumentNullException(nameof(candleManager));
+
+			if (securityProvider == null)
+				throw new ArgumentNullException(nameof(securityProvider));
+
+			_securityProvider = securityProvider;
 			_from = from;
 			_to = to;
-			CandleManager = candleManager;
+			_candleManager = candleManager;
 		}
-
-		public ICandleManager CandleManager { get; set; }
 
 		public int SpeedPriority => 2;
 
@@ -143,24 +178,26 @@ namespace StockSharp.Algo.Candles
 
 			if (series.Security is IndexSecurity)
 			{
-				yield return new Range<DateTimeOffset>(_from, _to);
+				yield return new Range<DateTimeOffset>(_from ?? DateTimeOffset.MinValue, _to ?? DateTimeOffset.MaxValue);
 			}
 		}
 
-		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
 			var indexSecurity = (IndexSecurity)series.Security;
 
-			var basketInfo = new IndexSeriesInfo(CandleManager,
+			var basketInfo = new IndexSeriesInfo(_candleManager,
+				series.CandleType,
 				indexSecurity
-					.InnerSecurities
-					.Select(sec => new CandleSeries(series.CandleType, sec, CloneArg(series.Arg, sec))
+					.GetInnerSecurities(_securityProvider)
+					.Select(sec => new CandleSeries(series.CandleType, sec, IndexCandleBuilder.CloneArg(series.Arg, sec))
 					{
 						WorkingTime = series.WorkingTime.Clone(),
-					}).ToArray(),
+					})
+					.ToArray(),
 				from, to, indexSecurity,
 				c =>
 				{
@@ -170,7 +207,7 @@ namespace StockSharp.Algo.Candles
 					//	c.Source = this;
 					//}
 
-					CandleManager.Container.AddCandle(series, c);
+					_candleManager.Container.AddCandle(series, c);
 					Processing?.Invoke(series, c);
 				},
 				() => Stopped?.Invoke(series));
@@ -195,18 +232,18 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private static object CloneArg(object arg, Security security)
-		{
-			if (arg == null)
-				throw new ArgumentNullException(nameof(arg));
+		//private static object CloneArg(object arg, Security security)
+		//{
+		//	if (arg == null)
+		//		throw new ArgumentNullException(nameof(arg));
 
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
+		//	if (security == null)
+		//		throw new ArgumentNullException(nameof(security));
 
-			var clone = arg;
-			clone.DoIf<object, ICloneable>(c => clone = c.Clone());
-			clone.DoIf<object, Unit>(u => u.SetSecurity(security));
-			return clone;
-		}
+		//	var clone = arg;
+		//	clone.DoIf<object, ICloneable>(c => clone = c.Clone());
+		//	clone.DoIf<object, Unit>(u => u.SetSecurity(security));
+		//	return clone;
+		//}
 	}
 }

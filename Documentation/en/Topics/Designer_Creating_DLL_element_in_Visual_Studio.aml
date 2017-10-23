@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To write code in Visual Studio, you should create a project in Visual Studio:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_00"/>
+</mediaLink>
+
+
+
+ <para>It is necessary to install <token>stocksharpapi</token> 
+ in the created project. There are two ways to install <token>stocksharpapi</token>: 
+ Installing from the <token>stocksharpgithub</token>  repository of the GitHub 
+ web service and installing from Visual Studio using the Nuget service. The 
+ installation of <token>stocksharpapi</token> is described in the 
+ <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8" /> section.
+</para>
+
+<para>From now forward, the process of a strategy creating is the same as 
+described in the <link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" /> 
+section. After creating the strategy, you need to compile the project by clicking 
+<legacyBold>Build Solution</legacyBold> in the <legacyBold>Build</legacyBold> tab.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_01"/>
+</mediaLink>
+<para>The project is build by default in a folder …\bin\Debug\ .</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_02"/>
+</mediaLink>
+<para>To add Dll to the common schema, you should put the 
+<link xlink:href="6971235a-c9e5-4606-a266-5df4a3b9da94" /> cube, and 
+specify Dll build in the <legacyBold>Build</legacyBold> field in the property 
+panel. After that it will be possible to select a cube by name in the 
+<legacyBold>Strategy</legacyBold> type name field:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_03"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="9f19e3b0-bbed-444e-a049-ba107d501664" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

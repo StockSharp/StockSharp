@@ -1,8 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>Раздел в разработке</para>
+<introduction>
+
+<para><legacyBold>S#.Designer</legacyBold> - программа, позволяющая создавать торговые стратегии, тестировать их на 
+истории и управлять стратегиями при реальной торговле. S#.Designer предлагает следующие виды создания стратегий:
+</para>
+
+<list class="ordered">
+  <listItem><para> <link xlink:href="6974891d-4c8d-46e1-bdeb-fc7391bc0625" />, не требует навыков программирования. Процесс создания стратегии проходит с
+ помощью комбинирования кубиков и соединений(линий). При этом наглядно представляется весь процесс работы.</para></listItem>
+  <listItem><para> <link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" />, для опытных программистов, предпочитающих работу с кодом.
+ Стратегии, написанные на <legacyBold>C#</legacyBold>, работают значительно быстрее стратегий, 
+ написанных в визуальном дизайнере. Также, такие стратегии не ограничены 
+ в возможностях при создании, и можно описать любой алгоритм, в отличие от кубиков. 
+ Процесс создания стратегии проходит напрямую в <legacyBold>S#.Designer</legacyBold> или среде разработки 
+ на языке <legacyBold>C#</legacyBold> (наиболее популярной из сред разработок является <legacyBold>Microsoft Visual Studio</legacyBold>), 
+ используя библиотеку для профессиональной разработки торговых роботов на языке <legacyBold>C#</legacyBold> и <token>stocksharpapi</token>.</para>
+</listItem>
+</list>
+<mediaLink>
+<image placement="center" xlink:href="StockSharpTitle_0"/>
+</mediaLink>
     </introduction>
+<relatedTopics>
+<link xlink:href="840e49ea-f9e1-4704-8324-098b002f78f9" />
+</relatedTopics>
   </developerConceptualDocument>
 </topic>

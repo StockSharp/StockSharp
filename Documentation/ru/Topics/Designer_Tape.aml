@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2f00e9bc-8ea7-4679-9688-b02c3424f03a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Главный элемент пользовательского интерфейса <token>designer</token> представляет собой <legacyBold>Ленту</legacyBold>, 
+которая идет вдоль верхней части окна приложения. С помощью ленты можно быстро находить 
+необходимые команды. Команды упорядочены в логические группы, собранные на вкладках. 
+Для перехода к нужной вкладке достаточно щелкнуть по ее названию (имени). 
+Каждая вкладка связана с видом выполняемого действия.</para>
+<para>1.	Вкладка <legacyBold>Общие</legacyBold>, которая открывается по умолчанию после запуска, 
+содержит элементы, которые могут понадобиться на начальном этапе работы. 
+С вкладки <legacyBold>Общие</legacyBold> можно открыть <link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" />, <link xlink:href="d416a6d9-0a42-40c0-8f9f-0c1df29f5cda" />, 
+<link xlink:href="0fc19f50-24cb-4f8b-bb22-728968686f8b" />, <link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" />, 
+<link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" />, <link xlink:href="24d370d1-fd00-4914-83ac-57472eb99e93" />, 
+<link xlink:href="b162bfe7-9e25-4f36-92b0-00872dca443f" />. 
+А также на вкладке <legacyBold>Общие</legacyBold> можно выбрать Тему внешнего оформления <token>designer</token>.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Tape_00"/>
+</mediaLink>
+<para>2.	Вкладка <legacyBold>Эмуляция</legacyBold>, автоматически открывается при выборе стратегии на панели <token>SchemeDis</token>.
+ На вкладке <legacyBold>Эмуляция</legacyBold> расположены основные элементы по созданию 
+ стратегии, отладке, тестированию стратегий.(<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, 
+ <link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />)</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Tape_01"/>
+</mediaLink>
+<para>3.	Вкладка <legacyBold>Торговля</legacyBold> предназначена непосредственно для реальной торговли. 
+Подробно о настройках подключения написано в пункте <link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" />. 
+О реальной торговле с помощью <token>designer</token> описано в пункте <link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" />.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Tape_02"/>
+</mediaLink>
+ <para>4.	Вкладка <legacyBold>Галерея стратегий</legacyBold>. <token>designer</token> дает возможность не только
+ создавать стратегии, но и публиковать их. А также скачивать уже готовые стратегии,
+ опубликованные другими пользователями. Подробно о <legacyBold>Галерее стратегий</legacyBold> описано 
+ в пункте <link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" />.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Tape_03"/>
+</mediaLink>
+ <para>5.	Вкладка <legacyBold>Исходный код</legacyBold>, автоматически открывается 
+ при выборе содержимого папки <legacyBold>Исходный код</legacyBold> на панели <token>SchemeDis</token>. 
+ Подробно о создании стратегий из кода описано в пункте <link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" />.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Tape_04"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="71792b34-7013-4e7d-a486-400ec92e2410" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

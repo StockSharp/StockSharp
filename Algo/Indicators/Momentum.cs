@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Indicators
 	/// Momentum.
 	/// </summary>
 	/// <remarks>
-	/// Momentum Simple = C - C-n Where C- closing price of previous period. Where �-n � closing price N periods ago.
+	/// Momentum Simple = C - C-n Where C- closing price of previous period. Where C-n - closing price N periods ago.
 	/// </remarks>
 	[DisplayName("Momentum")]
 	[DescriptionLoc(LocalizedStrings.Str769Key)]

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d99a1e55-2438-4e34-8ee5-ed7b15727e75" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+
+      <para>For team work, it's convenient to use the built-in <legacyBold>Chat</legacyBold>, 
+      which is a popular <legacyBold>Telegram</legacyBold> messenger in the Web interface.</para>
+      <para>Using the <token>designer</token> chat on the basis of the 
+      <legacyBold>Telegram</legacyBold> messenger has the following advantages:</para>
+
+<list class="bullet">
+  <listItem><para>Protection against unauthorized reading is provided through 
+  the use of the MTProto communication protocol.</para></listItem>
+  <listItem><para>Secret chats provide end-to-end encryption, the history of 
+  which is not stored on any server, providing anonymity of correspondence.</para></listItem>
+    <listItem><para>Availability of a timer for messages self-destruction.</para></listItem>
+  <listItem><para>Instant delivery of messages and files.</para></listItem>
+    <listItem><para>Ability to transfer files of any format with the size up 
+    to 1.5 Gb.</para></listItem>
+  <listItem><para>The Telegram messenger works on IPhone, Android, WindowsPhone. 
+  There are online and desktop versions. There is an ability of synchronization 
+  between devices.</para></listItem>
+    <listItem><para>Creation of large chats - up to 5000 members.</para></listItem>
+</list>
+<para>When you first open the <legacyBold>Chat</legacyBold>, an authorization 
+page appears, where you need to enter your phone number and wait for the SMS 
+with the activation code. After authorization, you get a full-featured 
+<legacyBold>Telegram</legacyBold> messenger directly in the 
+<token>designer</token>.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Chat"/>
+</mediaLink>
+<para>After registration, the window will look like this:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Chat_00"/>
+</mediaLink>
+    </introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

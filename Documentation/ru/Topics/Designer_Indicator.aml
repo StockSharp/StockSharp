@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b5a47771-4584-403b-b812-61f8bf0e9ac5" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Indicator_00"/>
+</mediaLink>
+<para>Кубик используется для вычисления значений индикаторов.</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> – определенный тип данных, на базе которого должен 
+вычисляться выбранный индикатор (в зависимости от индикатора это может быть числовое значение, свеча и т.д.).</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Индикатор</legacyBold>  – вычисленное значение 
+индикатора, которое может использоваться для вывода на панель графика или 
+дальнейших вычислений.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Тип индикатора</legacyBold> - параметр который используется для выбора нужного
+ индикатора, и нескольких дополнительных параметров, которые соответствуют выбранному 
+ типу индикатора. Набор этих параметров меняется при изменении выбранного типа индикатора.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+<mediaLink>
+<image xlink:href="Designer_Indicator_01"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="50685c1a-72e3-443d-9b0d-6c71055cc56c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

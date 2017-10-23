@@ -36,12 +36,19 @@ namespace StockSharp.Algo.Storages
 	public class SecurityList : BaseStorageEntityList<Security>, IStorageSecurityList
 	{
 		private readonly IEntityRegistry _registry;
+
 		private readonly DatabaseCommand _readAllByCodeAndType;
 		private readonly DatabaseCommand _readAllByCodeAndTypeAndExpiryDate;
 		private readonly DatabaseCommand _readAllByType;
 		private readonly DatabaseCommand _readAllByBoardAndType;
 		private readonly DatabaseCommand _readAllByTypeAndExpiryDate;
 		private readonly DatabaseCommand _readSecurityIds;
+
+		private const string _code = nameof(Security.Code);
+		private const string _type = nameof(Security.Type);
+		private const string _expiryDate = nameof(Security.ExpiryDate);
+		private const string _board = nameof(Security.Board);
+		private const string _id = nameof(Security.Id);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityList"/>.
@@ -52,9 +59,7 @@ namespace StockSharp.Algo.Storages
 		{
 			_registry = registry;
 
-			var database = Storage as Database;
-
-			if (database == null)
+			if (!(Storage is Database database))
 				return;
 
 			var readAllByCodeAndType = database.CommandType == CommandType.StoredProcedure
@@ -63,15 +68,15 @@ namespace StockSharp.Algo.Storages
 					.Select(Schema)
 					.From(Schema)
 					.Where()
-						.Like(Schema.Fields["Code"])
+						.Like(Schema.Fields[_code])
 						.And()
 						.OpenBracket()
-							.IsParamNull(Schema.Fields["Type"])
+							.IsParamNull(Schema.Fields[_type])
 							.Or()
-							.Equals(Schema.Fields["Type"])
+							.Equals(Schema.Fields[_type])
 						.CloseBracket();
 
-			_readAllByCodeAndType = database.GetCommand(readAllByCodeAndType, Schema, new FieldList(Schema.Fields["Code"], Schema.Fields["Type"]), new FieldList());
+			_readAllByCodeAndType = database.GetCommand(readAllByCodeAndType, Schema, new FieldList(Schema.Fields[_code], Schema.Fields[_type]), new FieldList());
 
 			var readAllByCodeAndTypeAndExpiryDate = database.CommandType == CommandType.StoredProcedure
 				? Query.Execute(Schema, SqlCommandTypes.ReadAll, string.Empty, "CodeAndTypeAndExpiryDate")
@@ -79,21 +84,21 @@ namespace StockSharp.Algo.Storages
 					.Select(Schema)
 					.From(Schema)
 					.Where()
-						.Like(Schema.Fields["Code"])
+						.Like(Schema.Fields[_code])
 						.And()
 						.OpenBracket()
-							.IsParamNull(Schema.Fields["Type"])
+							.IsParamNull(Schema.Fields[_type])
 							.Or()
-							.Equals(Schema.Fields["Type"])
+							.Equals(Schema.Fields[_type])
 						.CloseBracket()
 						.And()
 						.OpenBracket()
-							.IsNull(Schema.Fields["ExpiryDate"])
+							.IsNull(Schema.Fields[_expiryDate])
 							.Or()
-							.Equals(Schema.Fields["ExpiryDate"])
+							.Equals(Schema.Fields[_expiryDate])
 						.CloseBracket();
 
-			_readAllByCodeAndTypeAndExpiryDate = database.GetCommand(readAllByCodeAndTypeAndExpiryDate, Schema, new FieldList(Schema.Fields["Code"], Schema.Fields["Type"], Schema.Fields["ExpiryDate"]), new FieldList());
+			_readAllByCodeAndTypeAndExpiryDate = database.GetCommand(readAllByCodeAndTypeAndExpiryDate, Schema, new FieldList(Schema.Fields[_code], Schema.Fields[_type], Schema.Fields[_expiryDate]), new FieldList());
 
 			if (database.CommandType == CommandType.Text)
 			{
@@ -106,57 +111,65 @@ namespace StockSharp.Algo.Storages
 					.Select(Schema)
 					.From(Schema)
 					.Where()
-						.Equals(Schema.Fields["Board"])
+						.Equals(Schema.Fields[_board])
 						.And()
 						.OpenBracket()
-							.IsParamNull(Schema.Fields["Type"])
+							.IsParamNull(Schema.Fields[_type])
 							.Or()
-							.Equals(Schema.Fields["Type"])
+							.Equals(Schema.Fields[_type])
 						.CloseBracket();
 
-				_readAllByBoardAndType = database.GetCommand(readAllByBoardAndType, Schema, new FieldList(Schema.Fields["Board"], Schema.Fields["Type"]), new FieldList());
+				_readAllByBoardAndType = database.GetCommand(readAllByBoardAndType, Schema, new FieldList(Schema.Fields[_board], Schema.Fields[_type]), new FieldList());
 
 				var readAllByTypeAndExpiryDate = Query
 					.Select(Schema)
 					.From(Schema)
 					.Where()
-						.Equals(Schema.Fields["Type"])
+						.Equals(Schema.Fields[_type])
 						.And()
 						.OpenBracket()
-							.IsNull(Schema.Fields["ExpiryDate"])
+							.IsNull(Schema.Fields[_expiryDate])
 							.Or()
-							.Equals(Schema.Fields["ExpiryDate"])
+							.Equals(Schema.Fields[_expiryDate])
 						.CloseBracket();
 
-				_readAllByTypeAndExpiryDate = database.GetCommand(readAllByTypeAndExpiryDate, Schema, new FieldList(Schema.Fields["Type"], Schema.Fields["ExpiryDate"]), new FieldList());
+				_readAllByTypeAndExpiryDate = database.GetCommand(readAllByTypeAndExpiryDate, Schema, new FieldList(Schema.Fields[_type], Schema.Fields[_expiryDate]), new FieldList());
 
 				var readAllByType = Query
 					.Select(Schema)
 					.From(Schema)
 					.Where()
-					.Equals(Schema.Fields["Type"]);
+					.Equals(Schema.Fields[_type]);
 
-				_readAllByType = database.GetCommand(readAllByType, Schema, new FieldList(Schema.Fields["Type"]), new FieldList());
+				_readAllByType = database.GetCommand(readAllByType, Schema, new FieldList(Schema.Fields[_type]), new FieldList());
+
+				RemoveQuery = Query
+					.Delete()
+					.From(Schema)
+					.Where()
+					.Equals(Schema.Fields[_id]);
 			}
 
 			((ICollectionEx<Security>)this).AddedRange += s => _added?.Invoke(s);
 			((ICollectionEx<Security>)this).RemovedRange += s => _removed?.Invoke(s);
 		}
 
+		DelayAction IStorageEntityList<Security>.DelayAction => DelayAction;
+
 		private Action<IEnumerable<Security>> _added;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { _added += value; }
-			remove { _added -= value; }
+			add => _added += value;
+			remove => _added -= value;
 		}
 
 		private Action<IEnumerable<Security>> _removed;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { _removed += value; }
-			remove { _removed -= value; }
+			add => _removed += value;
+			remove => _removed -= value;
 		}
 
 		/// <summary>
@@ -197,17 +210,12 @@ namespace StockSharp.Algo.Storages
 			return this.Filter(criteria);
 		}
 
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return null;
-		}
-
 		private IEnumerable<Security> ReadAllByCodeAndType(Security criteria)
 		{
 			var fields = new[]
 			{
-				new SerializationItem(Schema.Fields["Code"], "%" + criteria.Code + "%"),
-				new SerializationItem(Schema.Fields["Type"], criteria.Type)
+				new SerializationItem(Schema.Fields[_code], "%" + criteria.Code + "%"),
+				new SerializationItem(Schema.Fields[_type], criteria.Type)
 			};
 
 			return Database.ReadAll<Security>(_readAllByCodeAndType, new SerializationItemCollection(fields));
@@ -220,9 +228,9 @@ namespace StockSharp.Algo.Storages
 
 			var fields = new[]
 			{
-				new SerializationItem(Schema.Fields["Code"], "%" + criteria.Code + "%"),
-				new SerializationItem(Schema.Fields["Type"], criteria.Type),
-				new SerializationItem(Schema.Fields["ExpiryDate"], criteria.ExpiryDate.Value)
+				new SerializationItem(Schema.Fields[_code], "%" + criteria.Code + "%"),
+				new SerializationItem(Schema.Fields[_type], criteria.Type),
+				new SerializationItem(Schema.Fields[_expiryDate], criteria.ExpiryDate.Value)
 			};
 
 			return Database.ReadAll<Security>(_readAllByCodeAndTypeAndExpiryDate, new SerializationItemCollection(fields));
@@ -232,8 +240,8 @@ namespace StockSharp.Algo.Storages
 		{
 			var fields = new[]
 			{
-				new SerializationItem(Schema.Fields["Board"], criteria.Board.Code),
-				new SerializationItem(Schema.Fields["Type"], criteria.Type)
+				new SerializationItem(Schema.Fields[_board], criteria.Board.Code),
+				new SerializationItem(Schema.Fields[_type], criteria.Type)
 			};
 
 			return Database.ReadAll<Security>(_readAllByCodeAndType, new SerializationItemCollection(fields));
@@ -246,8 +254,8 @@ namespace StockSharp.Algo.Storages
 
 			var fields = new[]
 			{
-				new SerializationItem(Schema.Fields["Type"], criteria.Type),
-				new SerializationItem(Schema.Fields["ExpiryDate"], criteria.ExpiryDate.Value)
+				new SerializationItem(Schema.Fields[_type], criteria.Type),
+				new SerializationItem(Schema.Fields[_expiryDate], criteria.ExpiryDate.Value)
 			};
 
 			return Database.ReadAll<Security>(_readAllByTypeAndExpiryDate, new SerializationItemCollection(fields));
@@ -257,7 +265,7 @@ namespace StockSharp.Algo.Storages
 		{
 			var fields = new[]
 			{
-				new SerializationItem(Schema.Fields["Type"], criteria.Type)
+				new SerializationItem(Schema.Fields[_type], criteria.Type)
 			};
 
 			return Database.ReadAll<Security>(_readAllByType, new SerializationItemCollection(fields));

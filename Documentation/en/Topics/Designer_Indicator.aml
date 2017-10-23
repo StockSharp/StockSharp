@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b5a47771-4584-403b-b812-61f8bf0e9ac5" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Indicator_00"/>
+</mediaLink>
+<para>The cube is used to calculate the indicator values.</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Any data</legacyBold> – the specific data type on 
+  the basis of which the selected indicator should be calculated (depending on 
+  the indicator this can be a numerical value, a candle, etc.).</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Indicator</legacyBold>  – the calculated indicator 
+  value that can be used to display on the chart panel or for further calculations.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Indicator type</legacyBold> - the parameter used 
+  to select the required indicator, and several additional parameters that 
+  correspond to the selected indicator type. The set of these parameters changes 
+  when the selected indicator type is changed.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+<mediaLink>
+<image xlink:href="Designer_Indicator_01"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="50685c1a-72e3-443d-9b0d-6c71055cc56c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

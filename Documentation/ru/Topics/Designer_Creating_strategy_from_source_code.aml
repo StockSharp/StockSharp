@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для создания стратегий из исходного кода необходимы навыки программирования на языке C#,
+а также знания библиотеки для профессиональной разработки торговых роботов на языке C# <token>stocksharpapi</token>.</para>
+<para>Создание стратегии из исходного кода будет рассмотрено на примере стратегии SMA - аналогичный пример-стратегии SMA,
+ собранной из кубиков в пункте <link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" />.</para>
+<para>Первой строкой идет наименование namespace. Может быть любым сочетанием латинских 
+букв, по умолчанию StockSharp.Designer.Strategies</para>
+<para>Далее идет перечисление Dll библиотек, необходимых для работы кода кубика:</para>
+<code language="C#" title="C#"><![CDATA[
+sing System.Windows.Media;
+using System.Runtime.InteropServices;
+
+using Ecng.Common;
+using Ecng.ComponentModel;
+using Ecng.Collections;
+
+using StockSharp.Messages;
+using StockSharp.Algo;
+]]></code>
+
+<para>Dll библиотеки добавляются нажатием кнопки <legacyBold>Ссылки</legacyBold> вкладки <legacyBold>Исходный код</legacyBold>.</para>
+
+<para>Далее объявляется класс. Название класса может быть любым сочетанием латинских 
+букв. Класс кубика должен быть унаследован от класса <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>:</para>
+<code language="C#" title="C#"><![CDATA[
+	public class NewStrategy : Strategy
+]]></code>
+
+<para>Далее в примере идет объявление переменных. Для работы стратегии SMA необходимы 
+две скользящие средние средние с разными периодами расчёта, 
+длинная SMA и короткая SMA:</para>
+<code language="C#" title="C#"><![CDATA[
+ private readonly SimpleMovingAverage _long;
+ private readonly SimpleMovingAverage _short;
+]]></code>
+
+<para>Объявляются параметры стратегии, в них будут храниться параметры индикаторов SMA:</para>
+<code language="C#" title="C#"><![CDATA[
+ private readonly StrategyParam<int> _longParam;
+ private readonly StrategyParam<int> _shortParam;
+]]></code>
+
+<para>Так же объявляются переменные, необходимые для отображения графических элементов. 
+Они не несут полезной нагрузки, и показаны в примере как демонстрация возможностей.
+Для отображения графических элементов лучше использовать стандартные кубики <token>designer</token>. Как это сделать показано 
+в пункте <link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" />:</para>
+<code language="C#" title="C#"><![CDATA[
+ private readonly List<MyTrade> _myTrades = new List<MyTrade>();
+ private readonly ChartCandleElement _candlesElem;// Свечи
+ private readonly ChartTradeElement _tradesElem;// Сделки
+ private readonly ChartIndicatorElement _shortElem;// Индикатор
+ private readonly ChartIndicatorElement _longElem; // Индикатор
+ private readonly ChartArea _area = new ChartArea();// Панель графиков
+]]></code>
+
+<para>Атрибут <codeEntityReference>T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute</codeEntityReference> необходим для обозначения
+входных и выходных параметров кубика. Если атрибутом обозначено событие, то значит это будет 
+выходной параметр, если метод — значит это входной параметр:</para>
+<code language="C#" title="C#"><![CDATA[
+ [DiagramExternal]
+ public event Action<Order> NewMyOrder;
+]]></code>
+
+<code language="C#" title="C#"><![CDATA[
+ [DiagramExternal]
+ public void ProcessCandle(Candle candle)
+]]></code>
+
+<para>После объявления переменных необходимо задать свойства кубика. Эти свойства 
+будут отображаться в панели <legacyBold>Свойства</legacyBold> на общей схеме:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_strategy_from_the_source_code_00"/>
+</mediaLink>
+<code language="C#" title="C#"><![CDATA[
+public int Long
+{
+    get { return _longParam.Value; }
+    set
+    {
+        _longParam.Value = value;
+        _long.Length = value;
+    }
+}
+
+public int Short
+{
+    get { return _shortParam.Value; }
+    set
+    {
+        _shortParam.Value = value;
+        _short.Length = value;
+    }
+}
+
+]]></code>
+
+<para>Инициализация переменных происходит в конструкторе класса:</para>
+<code language="C#" title="C#"><![CDATA[
+public NewStrategy()
+{
+    _longParam = new StrategyParam<int>(this, nameof(Long), 80);
+    _shortParam = new StrategyParam<int>(this, nameof(Short), 20);
+
+    _long = new SimpleMovingAverage { Length = Long };
+    _short = new SimpleMovingAverage { Length = Short };
+    //Инициализация графических элементов
+    _candlesElem = new ChartCandleElement { ShowAxisMarker = false };
+    _tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
+
+    _shortElem = new ChartIndicatorElement
+    {
+        Color = Colors.Coral,
+        ShowAxisMarker = false,
+        FullTitle = _short.ToString()
+    };
+
+    _longElem = new ChartIndicatorElement
+    {
+        ShowAxisMarker = false,
+        FullTitle = _long.ToString()
+    };
+}
+
+]]></code>
+
+<para>У класса <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> есть методы, которые можно переопределить. 
+В примере переопределяется метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnReseted</codeEntityReference> для того, чтобы
+при переинициализации торгового алгоритма переинициализировались скользящие средние и графические элементы:</para>
+<code language="C#" title="C#"><![CDATA[
+protected override void OnReseted()
+{
+    this.AddInfoLog("OnReseted");
+
+    _long.Reset();
+    _short.Reset();
+
+    var chart = this.GetChart();
+
+    if (chart != null)
+    {
+        foreach (var element in _area.Elements.ToArray())
+        {
+            if (_area.Elements.Contains(element))
+                chart.RemoveElement(_area, element);
+        }
+
+        if (chart.Areas.Contains(_area))
+            chart.RemoveArea(_area);
+    }
+
+    base.OnReseted();
+}
+
+]]></code>
+
+<para>Переопределяется метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStarted</codeEntityReference> для того, чтобы: 1) при старте
+торгового алгоритма переинициализировались скользящие средние, 2) на график добавились все 
+графические элементы, 3) подписаться на появление новых сделок, 4) подписаться на 
+появление новых заявок или изменение старых, начать получать новую информацию 
+по инструменту.</para>
+<code language="C#" title="C#"><![CDATA[
+protected override void OnStarted()
+{
+    this.AddInfoLog("OnStarted");
+    // переинициализация скользящих средних
+    _long.Reset();
+    _short.Reset();
+    // добавление на график графических элементов
+    var chart = this.GetChart();
+
+    if (!chart.Areas.Contains(_area))
+    {
+        chart.AddArea(_area);
+
+        chart.AddElement(_area, _candlesElem);
+        chart.AddElement(_area, _tradesElem);
+        chart.AddElement(_area, _shortElem);
+        chart.AddElement(_area, _longElem);
+    }
+    // подписка на появление новых сделок, необходимо для отображения сделок
+    this
+    .WhenNewMyTrades()
+    .Do(trades => _myTrades.AddRange(trades))
+    .Apply(this);
+    // подписка на изменения заявок
+    this
+    .WhenOrderRegistered()
+    .Or(this.WhenOrderChanged())
+    .Do(ord => NewMyOrder?.Invoke(ord))
+    .Apply(this);
+    // начать получать новую информацию
+    Connector.RegisterSecurity(Security);
+
+    base.OnStarted();
+}
+
+]]></code>
+
+<para>Переопределяется метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStopped</codeEntityReference>,
+чтобы перестать получать новую информацию по инструменту:</para>
+<code language="C#" title="C#"><![CDATA[
+protected override void OnStopped()
+{
+    this.AddInfoLog("OnStopped");
+    Connector.UnRegisterSecurity(Security);
+    base.OnStopped();
+}
+
+]]></code>
+
+<para>Строка <legacyBold>this.AddInfoLog("OnStopped");</legacyBold> выводит сообщение 
+"OnStopped" в окно <legacyBold>Логи</legacyBold>.</para>
+<para>В методе ProcessCandle(Candle candle) идет основной расчёт стратегии. Так как он 
+обозначен атрибутом <codeEntityReference>T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute</codeEntityReference>, значит это входной параметр 
+кубика, принимающий <legacyBold>Свечи</legacyBold>.</para>
+<code language="C#" title="C#"><![CDATA[
+[DiagramExternal]
+public void ProcessCandle(Candle candle)
+{
+    // Запущена или остановлена стратегия
+    if (ProcessState == ProcessStates.Stopping)
+    {
+        CancelActiveOrders();
+        return;
+    }
+
+    this.AddInfoLog(LocalizedStrings.Str3634Params.Put(candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security));
+
+    // Расчет скользящих средних
+    var longValue = _long.Process(candle);
+    var shortValue = _short.Process(candle);
+
+    var isShortLessThenLong = _short.GetCurrentValue() < _long.GetCurrentValue();
+
+    // пересекла ли короткая SMA длинную SMA
+    if (_isShortLessThenLong != isShortLessThenLong)
+    {
+        // определение направление для заявки
+        var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+
+        // объёма для заявки
+        var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+
+        // расчет цены для заявки
+        var price = candle.ClosePrice + ((direction == Sides.Buy ? Security.PriceStep : -Security.PriceStep) ?? 1);
+        //выставление заявки
+        RegisterOrder(this.CreateOrder(direction, price, volume));
+
+        _isShortLessThenLong = isShortLessThenLong;
+    }
+
+    //отрисовка графических элементов
+    var trade = _myTrades.FirstOrDefault();
+    _myTrades.Clear();
+
+    var data = new ChartDrawData();
+
+    data
+      .Group(candle.OpenTime)
+        .Add(_candlesElem, candle)
+        .Add(_shortElem, shortValue)
+        .Add(_longElem, longValue)
+        .Add(_tradesElem, trade);
+
+    this.GetChart().Draw(data);
+}
+
+]]></code>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="77322bb8-139a-40e8-b871-8a13ddc96b13" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

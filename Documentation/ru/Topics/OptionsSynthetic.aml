@@ -21,10 +21,10 @@
 		<code language="C#"><![CDATA[// получить стакан опциона
 var depth = trader.GetMarketDepth(option);
 
-// получить теоритические сделки на покупку 100 контрактов
-var trades = depth.GetTheoreticalTrades(OrderDirections.Buy, 100);
+// получить теоретические сделки на покупку 100 контрактов
+var trades = depth.GetTheoreticalTrades(Sides.Buy, 100);
 
-// расчитать реализованный объем
+// рассчитать реализованный объем
 var matchedVolume = trades.Sum(t => t.Trade.Volume);
 
 // регистрируем заявку по основному опциону
@@ -32,7 +32,7 @@ trader.RegisterOrder(new Order
 {
 	Security = option,
 	Volume = matchedVolume,
-	Direction = OrderDirections.Buy,
+	Direction = Sides.Buy,
 	// максимальная цена, чтобы реализовать требуемый объем
 	Price = trades.Max(t => t.Trade.Price),
 });

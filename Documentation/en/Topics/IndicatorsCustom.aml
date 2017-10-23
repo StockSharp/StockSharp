@@ -13,72 +13,70 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       <para>
-      	Для того, чтобы создать свой собственный индикатор, необходимо реализовать интерфейс <codeEntityReference>T:StockSharp.Algo.Indicators.IIndicator</codeEntityReference>.
-      	В качестве примера можно взять исходные коды других индикаторов, которые находятся в репозитории <token>stocksharpgithub</token>. Вот как выглядит код
-      	реализации индикатора простой скользящей средней <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference>:
+      	To create your own indicator, you must implement the <codeEntityReference>T:StockSharp.Algo.Indicators.IIndicator</codeEntityReference> interface.
+      	As an example you can take the source code of other indicators that are in the <token>stocksharpgithub</token> repository.
+      	Here is the code for the simple moving average indicator implementation <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference>:
       </para>
       <code language="C#"><![CDATA[/// <summary>
-/// Простая скользящая средняя.
-/// </summary>
-[DisplayName("SMA")]
-[Description("Простая скользящая средняя.")]
-public class SimpleMovingAverage : LengthIndicator<decimal>
-{
-	/// <summary>
-	/// Создать <see cref="SimpleMovingAverage"/>.
-	/// </summary>
+/// <summary> 
+/// Simple moving average. 
+/// </summary> 
+[DisplayName("SMA")] 
+[DescriptionLoc(LocalizedStrings.Str818Key)] 
+public class SimpleMovingAverage : LengthIndicator<decimal> 
+{ 
+	/// <summary> 
+	/// Initializes a new instance of the <see cref="SimpleMovingAverage"/>. 
+	/// </summary> 
 	public SimpleMovingAverage()
-		: base(typeof(decimal))
-	{
-	}
-
-	/// <summary>
-	/// Обработать входное значение.
-	/// </summary>
-	/// <param name="input">Входное значение.</param>
-	/// <returns>Результирующее значение.</returns>
-	public override decimal OnProcess(IIndicatorValue input)
-	{
-		var lastValue = LastValue;
-		var newValue = input.GetValue<decimal>();
-
-		// добавляем новое начало
-		lastValue += newValue / Length;
-
-		// если буффер стал достаточно большим (стал больше длины)
-		if (IsFormed)
-		{
-			// удаляем хвостовое значение
-			lastValue -= Buffer[0] / Length;
-			Buffer.RemoveAt(0);
-		}
-
-		Buffer.Add(newValue);
-		return lastValue;
-	}
-}]]></code>
+	{ 
+		Length = 32; 
+	} 
+	/// <summary> 
+	/// To handle the input value. 
+	/// </summary> 
+	/// <param name="input">The input value.</param> 
+	/// <returns>The resulting value.</returns> 
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{ 
+		var newValue = input.GetValue<decimal>(); 
+        
+		if (input.IsFinal) 
+		{ 
+			Buffer.Add(newValue); 
+            
+			if (Buffer.Count > Length) 
+				Buffer.RemoveAt(0); 
+		} 
+        
+		if (input.IsFinal) 
+			return new DecimalIndicatorValue(this, Buffer.Sum() / Length); 
+        
+		return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length); 
+	} 
+} 
+]]></code>
 		<para>
-			<codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> наследуется от класса
-			<codeEntityReference>T:StockSharp.Algo.Indicators.LengthIndicator`1</codeEntityReference>, от которого необходимо наследовать все индикаторы,
-			имеющие в качестве параметра длину периода.
+			<codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> inherits from the
+			<codeEntityReference>T:StockSharp.Algo.Indicators.LengthIndicator`1</codeEntityReference> class, from which it is necessary to inherit all of the indicators,
+			having as parameter the length of the period.
 		</para>
 		<para>
-			Некоторые индикаторы являются составными, и используют в своих рассчетах другие индикаторы. Поэтому индикаторы можно переиспользовать друг
-			из друга, как показано в качестве примера реализация индикатора волатильности Чайкина <codeEntityReference>T:StockSharp.Algo.Indicators.ChaikinVolatility</codeEntityReference>:
+			Some indicators are composite and use other indicators in their calculations. Therefore, you can reuse the indicators from each other, as shown as an
+			example of realization of the Chaikin Volatility indicator <codeEntityReference>T:StockSharp.Algo.Indicators.ChaikinVolatility</codeEntityReference>:
 		</para>
 		<code language="C#"><![CDATA[/// <summary>
-/// Волатильность Чайкина.
+/// Chaikin volatility.
 /// </summary>
 /// <remarks>
-/// http://www2.wealth-lab.com/WL5Wiki/Volatility.ashx
-/// http://www.incrediblecharts.com/indicators/chaikin_volatility.php
+/// http://www2.wealth-lab.com/WL5Wiki/Volatility.ashx http://www.incrediblecharts.com/indicators/chaikin_volatility.php.
 /// </remarks>
-[DisplayName("Волатильность")]
-[Description("Волатильность Чайкина.")]
-public class ChaikinVolatility : BaseIndicator<IIndicatorValue>
+[DisplayName("Chaikin's Volatility")]
+[DescriptionLoc(LocalizedStrings.Str730Key)]
+public class ChaikinVolatility : BaseIndicator
 {
 	/// <summary>
-	/// Создать <see cref="ChaikinVolatility"/>.
+	/// Initializes a new instance of the <see cref="ChaikinVolatility"/>.
 	/// </summary>
 	public ChaikinVolatility()
 	{
@@ -87,116 +85,161 @@ public class ChaikinVolatility : BaseIndicator<IIndicatorValue>
 	}
 
 	/// <summary>
-	/// Скользящая средняя.
+	/// Moving Average.
 	/// </summary>
-	[ExpandableObject]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	[DisplayName("MA")]
-	[Description("Скользящая средняя.")]
-	[Category("Основное")]
-	public ExponentialMovingAverage Ema { get; private set; }
+	[DescriptionLoc(LocalizedStrings.Str731Key)]
+	[CategoryLoc(LocalizedStrings.GeneralKey)]
+	public ExponentialMovingAverage Ema { get; }
 
 	/// <summary>
-	/// Скорость изменения.
+	/// Rate of change.
 	/// </summary>
-	[ExpandableObject]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	[DisplayName("ROC")]
-	[Description("Скорость изменения.")]
-	[Category("Основное")]
-	public RateOfChange Roc { get; private set; }
+	[DescriptionLoc(LocalizedStrings.Str732Key)]
+	[CategoryLoc(LocalizedStrings.GeneralKey)]
+	public RateOfChange Roc { get; }
 
 	/// <summary>
-	/// Сформирован ли индикатор.
+	/// Whether the indicator is set.
 	/// </summary>
-	public override bool IsFormed
-	{
-		get { return Roc.IsFormed; }
-	}
+	public override bool IsFormed => Roc.IsFormed;
 
 	/// <summary>
-	/// Обработать входное значение.
+	/// To handle the input value.
 	/// </summary>
-	/// <param name="input">Входное значение.</param>
-	/// <returns>Результирующее значение.</returns>
-	public override IIndicatorValue OnProcess(IIndicatorValue input)
+	/// <param name="input">The input value.</param>
+	/// <returns>The resulting value.</returns>
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.GetValue<Candle>();
-		return Roc.Process(Ema.Process(input.SetValue(candle.HighPrice - candle.LowPrice)));
+		var emaValue = Ema.Process(input.SetValue(this, candle.HighPrice - candle.LowPrice));
+
+		if (Ema.IsFormed)
+		{
+			return Roc.Process(emaValue);
+		}
+
+		return input;				
+	}
+
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="settings">Settings storage.</param>
+	public override void Load(SettingsStorage settings)
+	{
+		base.Load(settings);
+
+		Ema.LoadNotNull(settings, "Ema");
+		Roc.LoadNotNull(settings, "Roc");
+	}
+
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="settings">Settings storage.</param>
+	public override void Save(SettingsStorage settings)
+	{
+		base.Save(settings);
+
+		settings.SetValue("Ema", Ema.Save());
+		settings.SetValue("Roc", Roc.Save());
 	}
 }]]></code>
 		<para>
-			Последний вид индикаторов - это те, которые не просто состоят из других индикаторов, но так же графически отображаются несколькими состояниями
-			одновременно (несколькими линиями). Например, <codeEntityReference>T:StockSharp.Algo.Indicators.AverageDirectionalIndex</codeEntityReference>:
+			The last types of indicators are those that do not just consist of other indicators, but also graphically displayed in several states at the same time
+			(with a few lines). For example, <codeEntityReference>T:StockSharp.Algo.Indicators.AverageDirectionalIndex</codeEntityReference>:
 		</para>
 		<code language="C#"><![CDATA[/// <summary>
-/// Индекс среднего направления движения Welles Wilder.
+/// Welles Wilder Average Directional Index.
 /// </summary>
-[DisplayName("ADX")]
-[Description("Индекс среднего направления движения Welles Wilder.")]
-public class AverageDirectionalIndex : BaseComplexIndicator
-{
-	/// <summary>
-	/// Создать <see cref="AverageDirectionalIndex"/>.
-	/// </summary>
+[DisplayName("ADX")] 
+[DescriptionLoc(LocalizedStrings.Str757Key)] 
+public class AverageDirectionalIndex : BaseComplexIndicator 
+{ 
+	/// <summary> 
+	/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>. 
+	/// </summary> 
 	public AverageDirectionalIndex()
-		: this(new DirectionalIndex { Length = 14 }, new WilderMovingAverage { Length = 14 })
-	{
-	}
+		: this(new DirectionalIndex { Length = 14 }, new WilderMovingAverage { Length = 14 }) 
+	{ 	} 
 
-	/// <summary>
-	/// Создать <see cref="AverageDirectionalIndex"/>.
-	/// </summary>
-	/// <param name="dx">Индекса направленного движения Welles Wilder.</param>
-	/// <param name="movingAverage">Скользящая средняя.</param>
+	/// <summary> 
+	/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>. 
+	/// </summary> 
+	/// <param name="dx">Welles Wilder Directional Movement Index.</param> 
+	/// <param name="movingAverage">Moving Average.</param> 
 	public AverageDirectionalIndex(DirectionalIndex dx, LengthIndicator<decimal> movingAverage)
-	{
-		if (dx == null)
-			throw new ArgumentNullException("dx");
-
-		if (movingAverage == null)
-			throw new ArgumentNullException("movingAverage");
-
-		InnerIndicators.Add(Dx = dx);
-		InnerIndicators.Add(MovingAverage = movingAverage);
-		Mode = ComplexIndicatorModes.Sequence;
-	}
-
-	/// <summary>
-	/// Индекса направленного движения Welles Wilder.
-	/// </summary>
-	[Browsable(false)]
-	public DirectionalIndex Dx { get; private set; }
-
-	/// <summary>
-	/// Скользящая средняя.
-	/// </summary>
-	[Browsable(false)]
-	public LengthIndicator<decimal> MovingAverage { get; private set; }
-
-	/// <summary>
-	/// Длина периода.
-	/// </summary>
-	[DisplayName("Период")]
-	[Description("Период индикатора.")]
-	[Category("Основные")]
+	{ 
+		if (dx == null) throw new ArgumentNullException(nameof(dx)); 
+        
+		if (movingAverage == null) 	throw new ArgumentNullException(nameof(movingAverage)); 
+        
+		InnerIndicators.Add(Dx = dx); 
+		InnerIndicators.Add(MovingAverage = movingAverage); 
+		Mode = ComplexIndicatorModes.Sequence; 
+	} 
+    
+	/// <summary> 
+	/// Welles Wilder Directional Movement Index. 
+	/// </summary> 
+	[Browsable(false)] 
+	public DirectionalIndex Dx { get; } 
+    
+	/// <summary> 
+	/// Moving Average. 
+	/// </summary> 
+	[Browsable(false)] 
+	public LengthIndicator<decimal> MovingAverage { get; } 
+    
+	/// <summary> 
+	/// Period length. 
+	/// </summary> 
+	[DisplayNameLoc(LocalizedStrings.Str736Key)] 
+	[DescriptionLoc(LocalizedStrings.Str737Key)] 
+	[CategoryLoc(LocalizedStrings.GeneralKey)] 
 	public virtual int Length
-	{
-		get { return MovingAverage.Length; }
-		set
-		{
-			MovingAverage.Length = Dx.Length = value;
-			Reset();
-		}
-	}
+	{ 
+		get { return MovingAverage.Length; } 
+		set 
+		{ 
+			MovingAverage.Length = Dx.Length = value; 
+			Reset(); 
+		} 
+	} 
+
+	/// <summary> 
+	/// Load settings. 
+	/// </summary> 
+	/// <param name="settings">Settings storage.</param> 
+	public override void Load(SettingsStorage settings)
+	{ 
+		base.Load(settings); 
+		Length = settings.GetValue<int>(nameof(Length)); 
+	} 
+
+	/// <summary> 
+	/// Save settings. 
+	/// </summary> 
+	/// <param name="settings">Settings storage.</param> 
+	public override void Save(SettingsStorage settings)
+	{ 
+		base.Save(settings); 
+		settings.SetValue(nameof(Length), Length); 
+	} 
 }]]></code>
 		<para>
-			Такие индикаторы должны наследоваться от класса <codeEntityReference>T:StockSharp.Algo.Indicators.BaseComplexIndicator</codeEntityReference>,
-			и передавать в <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseComplexIndicator.InnerIndicators</codeEntityReference>
-			составные части индикатора. <codeEntityReference>T:StockSharp.Algo.Indicators.BaseComplexIndicator</codeEntityReference> будет обрабатывать
-			данные части один за другим. Если <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseComplexIndicator.Mode</codeEntityReference>
-			установлено в <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Indicators.ComplexIndicatorModes.Sequence</codeEntityReference>,
-			то результирующее значение первого индикатора будет передано в качестве входного значения второму, и так далее до конца. Если же установлено
-			значение <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Indicators.ComplexIndicatorModes.Parallel</codeEntityReference>, то результаты
-			вложенных индикаторов игнорируются.
+			Such indicators should be inherited from the <codeEntityReference>T:StockSharp.Algo.Indicators.BaseComplexIndicator</codeEntityReference> class,
+			and pass indicator components to the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseComplexIndicator.InnerIndicators</codeEntityReference>
+			<codeEntityReference>T:StockSharp.Algo.Indicators.BaseComplexIndicator</codeEntityReference> will process these parts, one after another.
+			If the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Indicators.BaseComplexIndicator.Mode</codeEntityReference>
+			set as the <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Indicators.ComplexIndicatorModes.Sequence</codeEntityReference>,
+			the resulting value of the first indicator will be passed as input value to the second one, and so on until the end.
+			If the <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Indicators.ComplexIndicatorModes.Parallel</codeEntityReference>, value set, the results
+			of embedded indicators are ignored.
 		</para>
     </introduction>
     <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->

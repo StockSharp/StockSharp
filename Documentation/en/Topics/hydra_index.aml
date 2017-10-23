@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f6d767a6-150e-4fba-ad39-f48d5a0cf0e6" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+		<para>With <token>hydra</token>, you can create your own index.</para> 
+		<para>To do this, on the <legacyBold>Common</legacyBold> tab, you need to select <legacyBold>Securities</legacyBold>, the <legacyBold>All Securities</legacyBold> tab will appear.</para>
+		<para>Before creating the <legacyBold>Index</legacyBold>, you need to check which market data is available. 
+		To do this, select the path where the data stored and in turn view the instruments that are 
+		supposed to participate in the calculation of the index. If there are omissions, then you need 
+		to download the necessary market data (for example, from Finam).</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingCheckData" /></mediaLink>
+		
+		<para>As an example, the instrument ratio index AAPL@NYSE/GOOG@NYSE will be considered.</para>
+		<para>The first step is the creation of the <legacyBold>Index</legacyBold>. To do this, click on 
+		the <legacyBold>All Securities</legacyBold> tab, the <legacyBold>Create security=>Index</legacyBold> button, after that, 
+		the following window will appear:</para>
+		<mediaLink><image placement="center" xlink:href="hydra_index_sec" /></mediaLink>
+		
+		<para>To create the <legacyBold>Index</legacyBold> instrument, you must specify a name and add the mathematical 
+		formula of a combination of several instruments. Together with the standard 
+		mathematical operators, you can use the following functions:</para>
+		<list class="bullet">
+<listItem><para><legacyBold>abs(a)</legacyBold> - Returns the absolute value of a number.</para></listItem>
+<listItem><para><legacyBold>acos(a)</legacyBold> - Returns the angle whose cosine is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>asin(a)</legacyBold> - Returns the angle whose sine is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>atan(a)</legacyBold> - Returns the angle whose tangent is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>ceiling(a)</legacyBold> - Returns the smallest integer that is greater than or equal to a specified number.</para></listItem>
+<listItem><para><legacyBold>cos(a)</legacyBold> - Returns the cosine of the specified angle.</para></listItem>
+<listItem><para><legacyBold>exp(a)</legacyBold> - Returns the value of e raised to the specified degree.</para></listItem>
+<listItem><para><legacyBold>floor(a)</legacyBold> - Returns the largest integer that is less than or equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>log(a)</legacyBold> - Returns the natural logarithm (with base e) of the specified number.</para></listItem>
+<listItem><para><legacyBold>log10(a)</legacyBold> - Returns the logarithm with base 10 of the specified number.</para></listItem>
+<listItem><para><legacyBold>max (a, b)</legacyBold> - Returns the larger of two decimal numbers.</para></listItem>
+<listItem><para><legacyBold>min(a, b)</legacyBold> - Returns the smaller of two decimal numbers.</para></listItem>
+<listItem><para><legacyBold>pow(a, b)</legacyBold> - Returns the specified number raised to the specified power.</para></listItem>
+<listItem><para><legacyBold>sign(a)</legacyBold> - Returns an integer indicating the sign of the specified number.</para></listItem>
+<listItem><para><legacyBold>sin(a)</legacyBold> - Returns the sine of the specified angle.</para></listItem>
+<listItem><para><legacyBold>sqrt (a)</legacyBold> - Returns the square root of the specified number.</para></listItem>
+<listItem><para><legacyBold>tan(a)</legacyBold> - Returns the tangent of the specified angle.</para></listItem>
+<listItem><para><legacyBold>truncat(a)</legacyBold> - Calculates the integer part of the specified number.</para></listItem>
+
+</list>
+<para>Next, you need to click the <link xlink:href="0adb23fa-a295-43e0-9e75-9060b1d03388" /> 
+		button on the <legacyBold>Common</legacyBold> tab, select the 
+		obtained <legacyBold>Index</legacyBold> instrument, the data period, in the <legacyBold>Create From:</legacyBold> field set the 
+		<legacyBold>Composite Element</legacyBold> value. Then press the button <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline>.</para>
+		<mediaLink>
+<image placement="center" xlink:href="hydra_index_candle"/>
+</mediaLink>
+<para>The generated data can be exported to Excel, xml or txt formats. Export is done using the drop-down list:</para>
+    		<mediaLink>
+    			<image placement="center" xlink:href="hydra_export" />
+    		</mediaLink>
+	</introduction>
+
+  </developerConceptualDocument>
+</topic>

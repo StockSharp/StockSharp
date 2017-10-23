@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Candles
 	/// <summary>
 	/// The candles source for <see cref="ICandleManager"/> that downloads candles from an external storage.
 	/// </summary>
-	public class StorageCandleSource : BaseCandleSource<Candle>, ICandleManagerSource, IStorageCandleSource
+	public class StorageCandleSource : BaseCandleSource<Candle>, IStorageCandleSource
 	{
 		[DebuggerDisplay("{Series} {Reader}")]
 		private sealed class SeriesInfo
@@ -85,11 +85,6 @@ namespace StockSharp.Algo.Candles
 		public IMarketDataDrive Drive { get; set; }
 
 		/// <summary>
-		/// The candles manager which owns this source.
-		/// </summary>
-		ICandleManager ICandleManagerSource.CandleManager { get; set; }
-
-		/// <summary>
 		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
 		/// <param name="series">Candles series.</param>
@@ -108,7 +103,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">The candles series for which data receiving should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
+		public override void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));

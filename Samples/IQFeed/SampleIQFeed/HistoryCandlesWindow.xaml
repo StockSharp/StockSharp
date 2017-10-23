@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
-        Title="{x:Static loc:LocalizedStrings.XamlStr219}" Height="400" Width="Auto" Name="Ctrl">
+        Title="{x:Static loc:LocalizedStrings.XamlStr219}" Height="400" Width="Auto">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -34,7 +34,7 @@
 		<TextBlock Grid.Row="0" Grid.Column="4" Margin="2">
 			<Run Text=" "/><Run Text="{x:Static loc:LocalizedStrings.till}"/>:
 		</TextBlock>
-        <xctk:DateTimePicker Grid.Column="5" Margin="2" ShowButtonSpinner="False" x:Name="DateToPicker" />
+        <xctk:DateTimePicker Grid.Row="0" Grid.Column="5" Margin="2" ShowButtonSpinner="False" x:Name="DateToPicker" />
 
 		<Button Content="{x:Static loc:LocalizedStrings.XamlStr655}" Grid.Row="0" Grid.Column="6" Click="ButtonBase_OnClick"/>
 

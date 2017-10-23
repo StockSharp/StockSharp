@@ -179,7 +179,7 @@ namespace XMLCommToHTM.DOM.Internal
 			for (int i = 0; i < args.Length; i++)
 			{
 				//var debug = TypeToString.ToString(args[i].ParameterType);
-				if (ToDocString(args[i].ParameterType, '{', '}') != argsDoc[i])
+				if (ToDocString(args[i].ParameterType) != argsDoc[i])
 					return false;
 			}
 			return true;

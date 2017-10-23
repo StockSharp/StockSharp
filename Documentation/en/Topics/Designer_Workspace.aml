@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="71792b34-7013-4e7d-a486-400ec92e2410" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The <legacyBold>Workspace</legacyBold> in <token>designer</token> is a windowed 
+interface with locking of panels, like the one used in Microsoft Visual Studio. By 
+clicking the header of the panel with the left mouse button, and holding it, you can 
+lock the panel in a convenient place. And by dragging edges of the panel, you can 
+adjust its height or width:</para>
+ 
+ <content>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Workspace_00"/>
+</mediaLink>
+</content>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

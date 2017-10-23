@@ -7,14 +7,12 @@
 
     <introduction>
 		<para>
-			Для осуществления процесса оптимизации стратегии при тестировании <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">на истории</link>
-			можно применить параллельное вычисление, основанное на нескольких потоках. На компьютерах с несколькими ядрами или процессорами это позволит
-			сократить общее время тестирования за счет одновременного выполнения нескольких действий.
+			To optimize the <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">backtesting</link> process it is possible to use parallel computation based on
+			multiple threads. On computers with multiple cores or processors this will reduce the overall testing time due concurrent execution of multiple operations.
 		</para>
 		<alert class="caution">
-			Использование нескольких потоков увеличивает и потребление памяти (примерно во столько раз, сколько было создано потоков, если каждый поток
-			использует свой диапазон времени в истории). Поэтому, использование параллельного тестирования без достаточного объема свободной памяти не
-			даст существенного прироста в производительности, и даже ee снизит.
+			Using multiple threads increases the memory consumption (approximately as many times as threads created, if each thread uses its time range in the history).
+			Therefore, the use of parallel testing without sufficient memory, will not allow a significant increase in performance, and even reduce it.
 		</alert>
     </introduction>
 
@@ -27,14 +25,15 @@
     <!-- One or more procedure or section elements -->
 
     <procedure>
-      <title>Пример тестирования в несколько потоков стратегии скользящих средних</title>
+      <title>Example of moving averages strategy testing in several threads</title>
 
 		<steps class="ordered">
 			<step>
 				<content>
 					<para>
-						За основу взят пример SampleHistoryTesting, описанный в разделе тестирования <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/>.
-						Данный пример с обычного тестирования изменен на тестирование с оптимизацией через подбор оптимального значения длин скользящих средних:
+						The SampleHistoryTesting example, described in the <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/> testing section, is taken as the
+						basis. This example is a modified conventional testing for testing with optimization through fitting of the optimum value of the moving averages
+						lengths:
 					</para>
 					<mediaLink>
 						<image placement="center" xlink:href="sample_history_test_parallel" />
@@ -44,8 +43,8 @@
 			<step>
 				<content>
 					<para>
-						Создается несколько настроек длин скользящих средних (первое значение отвечает за длину длинной, второе за длину короткой, третье за
-						цвет <link xlink:href="973860e9-8f2d-4035-98de-bb88b33b6751">кривой эквити</link>):
+						Creating a few settings of the moving averages lengths (the first value is responsible for the length of the longest, the second for the length
+						of the shortest, and the third for the <link xlink:href="973860e9-8f2d-4035-98de-bb88b33b6751">equity curve</link> color):
 					</para>
 					<code language="C#"><![CDATA[var periods = new[]
 {
@@ -55,144 +54,182 @@
 };]]></code>
 				</content>
 			</step>
+			
 			<step>
 				<content>
 					<para>
-						Создание объединенного шлюза <codeEntityReference>T:StockSharp.Algo.BasketTrader</codeEntityReference>, который будет
-						содержать все созданные на следующем шаге <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>:
-					</para>
-					<code language="C#">var basketTrader = new BasketTrader
-{
-	// не поддерживать контроль уникальности сделок
-	// (уменьшает потребление памяти)
-	SupportTradesUnique = false,
-};</code>
-				</content>
-			</step>
-			<step>
-				<content>
-					<para>
-						Далее, для каждого периода создается свой отдельный инструмент, портфель, стратегия, шлюз для тестирования и т.д. Это сделано для
-						того, чтобы отдельные потоки могли менять свою копию данных, не создавая коллизии в других потоках тестирования.
+						Creating an instance of the storage, the instrument, the message to set the values of Level1 and the portfolio:
 					</para>
 					<code language="C#"><![CDATA[
-var startTime = new DateTime(2009, 6, 1);
-var stopTime = new DateTime(2009, 9, 1);
-
-foreach (var period in periods)
+					
+// storage to historical data
+var storageRegistry = new StorageRegistry
 {
-	// создаем тестовый инструмент, на котором будет производится тестирование
-	var security = new Security
-	{
-		Id = "RIU9@FORTS", // по идентификатору инструмента будет искаться папка с историческими маркет данными
-		Code = "RIU9",
-		Name = "RTS-9.09",
-		MinStepSize = 5,
-		MinStepPrice = 2,
-		ExchangeBoard = Exchange.Rts,
-	};
+	// set historical path
+	DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
+};
 
-	// тестовый портфель
-	var portfolio = new Portfolio { Name = "test account" };
+var timeFrame = TimeSpan.FromMinutes(5);
 
-	// создаем шлюз для эмуляции
-	// инициализируем настройки (инструмент в истории обновляется раз в секунду)
-	var trader = new EmulationTrader(
-		new [] { security },
-		new[] { portfolio },
-		storageRegistry)
+// create test security
+var security = new Security
+{
+	Id = "ESM2@NYSE", // sec id has the same name as folder with historical data
+	Code = "ESM2",
+	Name = "ES-12.12",
+	Board = ExchangeBoard.Nyse,
+};
+
+var startTime = new DateTime(2012, 10, 1);
+var stopTime = new DateTime(2012, 10, 31);
+
+var level1Info = new Level1ChangeMessage
+{
+	SecurityId = security.ToSecurityId(),
+	ServerTime = startTime,
+}
+.TryAdd(Level1Fields.PriceStep, 10m)
+.TryAdd(Level1Fields.StepPrice, 6m)
+.TryAdd(Level1Fields.MinPrice, 10m)
+.TryAdd(Level1Fields.MaxPrice, 1000000m)
+.TryAdd(Level1Fields.MarginBuy, 10000m)
+.TryAdd(Level1Fields.MarginSell, 10000m);
+
+// test portfolio
+var portfolio = new Portfolio
+{
+	Name = "test account",
+	BeginValue = 1000000,
+};
+]]></code>
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>
+						Creating a unified connector <codeEntityReference>T:StockSharp.Algo.Strategies.Testing.BatchEmulation</codeEntityReference>, which will contain
+						all created in the next step <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>:
+					</para>
+					<code language="C#">
+// create backtesting connector
+var batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
+{
+	EmulationSettings =
 	{
 		MarketTimeChangedInterval = timeFrame,
-		StorageRegistry = storageRegistry,
-	};
+		StartTime = startTime,
+		StopTime = stopTime,
 
-	trader.RegisterMarketDepth(new TrendMarketDepthGenerator(security)
-	{
-		// стакан для инструмента в истории обновляется раз в секунду
-		Interval = TimeSpan.FromSeconds(1),
-	});
-
-	// соединяемся с трейдером и запускаем экспорт,
-	// чтобы инициализировать переданными инструментами и портфелями необходимые свойства EmulationTrader
-	trader.Connect();
-	trader.StartExport();
-
-	var candleManager = new CandleManager(trader);
-
-	var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-	candleManager.Start(series);
-
-	// создаем торговую стратегию
-	var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.First }, new SimpleMovingAverage { Length = period.Second })
-	{
-		Volume = 1,
-		Security = security,
-		Portfolio = portfolio,
-		Trader = trader,
-	};
-
-	var curveItems = Curve.CreateCurve("Длинная {0} Короткая {1}".Put(period.First, period.Second), period.Third);
-	_strategy.PnLChanged += () =>
-	{
-		var data = new EquityData
-		{
-			Time = _strategy.Trader.MarketTime,
-			Value = _strategy.PnL,
-		};
-
-		this.GuiAsync(() => _curveItems.Add(data));
-	};
-
-	// полосу прогресса будет обновлять только первый период
-	if (periods.IndexOf(period) == 0)
-	{
-		// и подписываемся на событие изменения времени, чтобы обновить ProgressBar
-		trader.MarketTimeChanged += () =>
-		{
-			if (trader.MarketTime >= _nextTime || trader.MarketTime >= stopTime)
-			{
-				_nextTime += progressStep;
-				this.GuiAsync(() => TestingProcess.Value++);
-			}
-		};
+		// count of parallel testing strategies
+		BatchSize = periods.Length,
 	}
-
-	trader.StateChanged += () =>
-	{
-		if (trader.State == EmulationStates.Stopped)
-		{
-			this.GuiAsync(() =>
-			{
-				if (Math.Abs(TestingProcess.Value - TestingProcess.Maximum) < double.Epsilon)
-					MessageBox.Show("Закончено за " + (DateTime.Now - _startEmulationTime));
-				else
-					MessageBox.Show("Отменено");
-			});
-		}
-		else if (trader.State == EmulationStates.Started)
-		{
-			// запускаем стратегию когда эмулятор запустился
-			strategy.Start();
-		}
-	};
-
-	basketTrader.InnerTraders.Add(trader);
-}
-}]]></code>
+};
+</code>
 				</content>
 			</step>
 			<step>
 				<content>
 					<para>
-						Запуск тестирования:
+						Next, the subscription to the unified gateway and the connector events is performed, testing parameters are configured, as well as the strategy
+						is created for each period.
 					</para>
-					<code language="C#"><![CDATA[// соединяемся с трейдером и запускаем экспорт,
-// запускаем эмуляцию
-foreach (var trader in basketTrader.InnerTraders.OfType<IEmulationTrader>())
+					<code language="C#"><![CDATA[
+// handle historical time for update ProgressBar
+batchEmulation.ProgressChanged += (curr, total) => this.GuiAsync(() => TestingProcess.Value = total);
+
+batchEmulation.StateChanged += (oldState, newState) =>
 {
-	// указываем даты начала и конца тестирования
-	trader.Start(startTime, stopTime);
-}]]></code>
+	if (batchEmulation.State != EmulationStates.Stopped)
+		return;
+
+	this.GuiAsync(() =>
+	{
+		if (batchEmulation.IsFinished)
+		{
+			TestingProcess.Value = TestingProcess.Maximum;
+			MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+		}
+		else
+			MessageBox.Show(this, LocalizedStrings.cancelled);
+	});
+};
+
+// get emulation connector
+var connector = batchEmulation.EmulationConnector;
+
+logManager.Sources.Add(connector);
+
+connector.NewSecurity += s =>
+{
+	if (s != security)
+		return;
+
+	// fill level1 values
+	connector.SendInMessage(level1Info);
+
+	connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
+	{
+		// order book freq refresh is 1 sec
+		Interval = TimeSpan.FromSeconds(1),
+	});
+};
+
+TestingProcess.Maximum = 100;
+TestingProcess.Value = 0;
+
+_startEmulationTime = DateTime.Now;
+
+var strategies = periods
+	.Select(period =>
+	{
+		var candleManager = new CandleManager(connector);
+        var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+
+		// create strategy based SMA
+		var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
+		{
+			Volume = 1,
+			Security = security,
+			Portfolio = portfolio,
+			Connector = connector,
+
+			// by default interval is 1 min,
+			// it is excessively for time range with several months
+			UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
+		};
+
+		strategy.SetCandleManager(candleManager);
+
+		var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3);
+		strategy.PnLChanged += () =>
+		{
+			var data = new EquityData
+			{
+				Time = strategy.CurrentTime,
+				Value = strategy.PnL,
+			};
+
+			this.GuiAsync(() => curveItems.Add(data));
+		};
+
+		Stat.AddStrategies(new[] { strategy });
+
+		return strategy;
+	});
+
+]]></code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>
+						The testing starts:
+					</para>
+					<code language="C#"><![CDATA[
+// start emulation
+batchEmulation.Start(strategies, periods.Length);
+]]></code>
 				</content>
 			</step>
 		</steps>

@@ -7,8 +7,9 @@
 
     <introduction>
 		<para>
-			Снятие заявки необходимо в том случае, если ситуация на рынке изменилась не в пользу выставленной заявки. Для снятия заявок в <token>stocksharp</token>
-			предусмотрен метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>.
+			Order cancel is needed in case of the market situation has changed in disfavour of the issued order. To cancel orders the 
+			<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+			method used in the <token>stocksharp</token>.
 		</para>
     </introduction>
 
@@ -46,7 +47,7 @@
     </section>-->
 
       <code language="C#">
-// registeredOrder - это ранее зарегистрированная заявка.
+// registeredOrder - successfully registered order.
 trader.CancelOrder(registeredOrder);</code>
 
     <!--<buildInstructions>
@@ -68,8 +69,8 @@ trader.CancelOrder(registeredOrder);</code>
     </security>-->
 
     <relatedTopics>
-	  <link xlink:href="10c62aa1-5e15-4b3e-8b68-e55c2f055c32">Снятие группы заявок</link>
-		<link xlink:href="4b427409-9aa9-41d3-bb97-98745d1bba8e">Замена заявок</link>
+	  <link xlink:href="10c62aa1-5e15-4b3e-8b68-e55c2f055c32">Orders mass cancel</link>
+		<link xlink:href="4b427409-9aa9-41d3-bb97-98745d1bba8e">Orders replacement</link>
       <!-- Supported Link Types
     
          All of the following linking mechanisms may be used in the topic's content 

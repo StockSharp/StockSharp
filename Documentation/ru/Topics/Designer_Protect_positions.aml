@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="49d3744f-77c5-40ee-a4c2-4d7b08125712" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Protect_positions_00"/>
+</mediaLink>
+<para>Кубик используется для автоматической защиты открываемых сделок с помощью 
+стоп-лосса и тейк-профита.
+</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Сделка</legacyBold> – сделка, которую необходимо защищать стоп-лоссом и тейк-профитом.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Заявка</legacyBold> – заявки, которые были выставлены одной из защитных стратегий.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Тейк-профит</legacyBold> - значение тейк-профита.</para></listItem>
+  <listItem><para><legacyBold>Стоп-лосс</legacyBold> – значение стоп-лосса.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+
+    <relatedTopics>
+<link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

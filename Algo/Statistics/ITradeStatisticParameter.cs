@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Total number of trades .
+	/// Total number of trades.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str988Key)]
 	[DescriptionLoc(LocalizedStrings.Str989Key)]

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="002dce1f-2b00-4ef1-b166-8805a98f9004" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To open the <legacyBold>Schemas</legacyBold> panel, click the <legacyBold>Schemas</legacyBold> button in the <legacyBold>Common</legacyBold> tab. 
+The <legacyBold>Schemas</legacyBold> panel contains a tree of scripts grouped into folders according to 
+their purpose. Schemas of strategies and composite elements are no different. To 
+edit them, one common editor,  <link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" /> is used. 
+But, in order not to create confusion between them, they are divided into two independent lists 
+and stored in different folders (strategies in the <legacyBold>Strategies</legacyBold> folder, composite elements 
+in the <legacyBold>Composite elements</legacyBold> folder). The selection of the schema for editing is performed 
+by double clicking the mouse on the required element in the list. The selected schema 
+will open in the designer for viewing and editing. Below is a description of 
+the <legacyBold>Schemas</legacyBold> panel folders:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Panel_Circuits_00"/>
+</mediaLink>  
+
+   <para>1. The <legacyBold>Composite elements</legacyBold> folder contains elements that are a complete 
+   functionality and can be used in different schemas or one schema multiple times 
+   with different property values. Similar sets of elements can be put into a 
+   separate composite element, which will be used as any ordinary element. A 
+   <legacyBold>Composite element</legacyBold> is a conventional schema that is saved/loaded/edited as any 
+   strategy schema. To add a new composite element, click 
+   the <legacyBold>Add</legacyBold>  <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>
+   button in the <legacyBold>Common</legacyBold> tab and select the <legacyBold>Composite element</legacyBold>. Or, right-click 
+   the <legacyBold>Composite elements</legacyBold> folder in the <legacyBold>Schemas</legacyBold> panel, and click 
+   the <legacyBold>Add</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> button 
+   in the drop-down menu. When you add new composite elements, they are automatically 
+   added to the <legacyBold>Element palette</legacyBold>, to the <legacyBold>Composite elements</legacyBold> group and can be used to 
+   create other strategy schemas and composite elements. <legacyBold>Composite elements</legacyBold> are
+   described in detail in the <link xlink:href="cab51564-727a-483e-8cf1-d179ebcb2944" /> section.</para>
+   
+   <para>2.	The <legacyBold>Strategies</legacyBold> folder contains strategies that represent a schema 
+   from a set of elements and the links between them, called connections. 
+   To add a new strategy, click the <legacyBold>Add</legacyBold>  <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>
+   button in the <legacyBold>Common</legacyBold> tab and select <legacyBold>Strategy</legacyBold>. Or, right-click the <legacyBold>Strategy</legacyBold> 
+   folder in the <legacyBold>Schemas</legacyBold> panel, and click 
+   the <legacyBold>Add</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>
+   button in the drop-down menu. <legacyBold>Strategies</legacyBold> are described in detail in the <link xlink:href="6974891d-4c8d-46e1-bdeb-fc7391bc0625" /> section.</para>
+   
+   <para>3.	The <legacyBold>Strategy gallery</legacyBold> folder contains the strategies you subscribed 
+   to in the Strategy gallery panel. <legacyBold>Strategy gallery</legacyBold> is described in detail 
+   the <link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" /> section.</para>
+   
+   <para>4.	The <legacyBold>Live</legacyBold> folder contains strategies that are added to run in the trade. 
+   With that, the strategies that are running are marked with 
+   the <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>
+   icon, and which are stopped are marked with the <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline> icon. 
+   How to add strategies to the <legacyBold>Live</legacyBold> folder and how to start them is described in 
+   the  <link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" /> section.</para>
+   
+   <para>5.	The <legacyBold>Source code</legacyBold> folder contains the strategies that are created using 
+   the library for the professional development of trading algorithms in C# <token>stocksharpapi</token>.
+   To add a new strategy to the <legacyBold>Source code</legacyBold> folder, click 
+   the <legacyBold>Add</legacyBold> <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>
+   button in the <legacyBold>Common</legacyBold> tab and select <legacyBold>Source code</legacyBold>. Or, right-click the Source 
+   code folder in the <legacyBold>Schemas</legacyBold> panel and click 
+   the  <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> button in the drop-down menu.</para>
+   
+   
+   </introduction>
+   <relatedTopics>
+<link xlink:href="d416a6d9-0a42-40c0-8f9f-0c1df29f5cda" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

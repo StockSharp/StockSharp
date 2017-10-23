@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The base class for indicators with one resulting value and based on the period.
 	/// </summary>
+	/// <typeparam name="TResult">Result values type.</typeparam>
 	public abstract class LengthIndicator<TResult> : BaseIndicator
 	{
 		/// <summary>
@@ -55,7 +56,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Length
 		{
-			get { return _length; }
+			get => _length;
 			set
 			{
 				if (value < 1)

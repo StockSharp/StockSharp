@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+      <para>In the window that appears, select the desired time range, the underlying asset, 
+      add options for the underlying asset, and click the button  <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <para>If there is no history, but there is data on the spread, you can 
+      calculate the main Greeks (Delta, Gamma, Vega, Theta, Ro, Volatility (implicit)), 
+      to do this you need to select them in the <legacyBold>Calculate Greeks</legacyBold> field.
+      </para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_option_desk" />
+      </mediaLink>
+      <para>To view the <legacyBold>Volatility Smile</legacyBold>, you need 
+      to go to the <legacyBold>Volatility Smile</legacyBold> tab.</para>
+         <mediaLink>
+        <image placement="center" xlink:href="hydra_option_smile_of_volatility" />
+      </mediaLink>
+    <para>Using the context menu, you can configure the parameters of your own 
+    transactions table: grouping of rows, available columns, display format, etc.</para>
+	 <mediaLink>
+       <image placement="center" xlink:href="hydra_export_context" />
+     </mediaLink>
+  
+    <para>The found transactions can be exported to the <token>excel</token>, xml, 
+    sql, bin or txt formats. This is done using the drop-down list:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

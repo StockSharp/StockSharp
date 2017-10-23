@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c927a56f-d547-42f8-b5ad-0acb85edb6cb" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To output candles by an instrument to a chart, the following schema can be used:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_conclusion_of_the_candles_on_the_chart_00"/>
+</mediaLink>
+<para>For the <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> cube, 
+the <legacyBold>Instrument</legacyBold> data type is selected. If the instrument 
+is not specified, but the <legacyBold>Parameters</legacyBold> flag of the 
+<legacyBold>Common</legacyBold> properties group is set, it will be taken from 
+the strategy and passed to 
+the <link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" /> cube. For the 
+<link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" />
+ cube, the settings for building 5-minute candles and passing only fully formed candles are specified.</para>
+<para>For the <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" /> cube, 
+one graphic element with a candle type was added, for which the input parameter 
+was automatically added.</para>
+<para>After adding the necessary graphic elements to the chart panel, the 
+connection of the  <link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" /> 
+and  <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />,
+elements is added, through which the built candles will be passed for output to 
+the chart.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="8f13421b-0ad7-47a7-80ea-b347df00f173" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

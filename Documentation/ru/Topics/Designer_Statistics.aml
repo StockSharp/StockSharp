@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="62959b32-c500-4e91-95eb-88c17fdf4f4d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Компонент <legacyBold>Статистика</legacyBold> представляет собой таблицу, 
+сгруппированную по категориям: Заявки, П/У, Позиции сделки. Статистика помогает 
+оценить правильность и перфоманс работы стратегии. Например, для пример-стратегии SMA  
+не может быть больше 1 позиции. Статистика помогает оценить 
+по другим качественным параметрам. Например, максимальной просадке, коэффициенту Шарпа и др.</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Statistics_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="667ad9ff-6afe-48e2-9c53-1850d0533a77" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

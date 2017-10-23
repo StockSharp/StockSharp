@@ -24,7 +24,7 @@
 
       
      	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_MytradeGrid" /></mediaLink>
@@ -51,18 +51,18 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		if (Trader == null)
 		{
 			// создаем подключение
-			Trader = isLua
-				? new QuikTrader
-				{
-					LuaFixServerAddress = Address.Text.To<EndPoint>(),
-					LuaLogin = Login.Text,
-					LuaPassword = Password.Password.To<SecureString>()
-				}
-				: new QuikTrader(Path.Text) { IsDde = true };
+		    Trader = new QuikTrader
+		    {
+		        LuaFixServerAddress = Address.Text.To<EndPoint>(),
+		        LuaLogin = Login.Text,
+		        LuaPassword = Password.Password.To<SecureString>(),
+		        LogLevel = LogLevels.Debug
+		    };
+
 				
             ...............................................
 
-			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
 			
 			...............................................
 

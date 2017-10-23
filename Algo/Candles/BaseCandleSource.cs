@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">The candles series for which data receiving should be started.</param>
 		/// <param name="from">The initial date from which you need to get data.</param>
 		/// <param name="to">The final date by which you need to get data.</param>
-		public abstract void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to);
+		public abstract void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to);
 
 		/// <summary>
 		/// To stop data receiving starting through <see cref="Start"/>.
@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To call the event <see cref="Error"/>.
 		/// </summary>
-		/// <param name="error">Error detais.</param>
+		/// <param name="error">Error details.</param>
 		protected void RaiseError(Exception error)
 		{
 			Error?.Invoke(error);

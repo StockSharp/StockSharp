@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Strategies
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -36,16 +37,24 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// The base class for all trade strategies.
 	/// </summary>
-	[CategoryOrderLoc(LocalizedStrings.GeneralKey, 10)]
-	[CategoryOrderLoc(LocalizedStrings.Str436Key, 11)]
-	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 12)]
-	public class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer, ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider
+	public class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer, ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider, IPositionProvider
 	{
+		private class StrategyChangeStateMessage : Message
+		{
+			public Strategy Strategy { get; }
+			public ProcessStates State { get; }
+
+			public StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
+				: base(ExtendedMessageTypes.StrategyChangeState)
+			{
+				Strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+				State = state;
+			}
+		}
+
 		private static readonly MemoryStatisticsValue<Strategy> _strategyStat = new MemoryStatisticsValue<Strategy>(LocalizedStrings.Str1355);
 
 		static Strategy()
@@ -55,7 +64,7 @@ namespace StockSharp.Algo.Strategies
 
 		sealed class ChildStrategyList : SynchronizedSet<Strategy>, IStrategyChildStrategyList
 		{
-			private readonly SynchronizedDictionary<Strategy, IMarketRule> _childStrategyRules = new SynchronizedDictionary<Strategy, IMarketRule>();
+			private readonly Dictionary<Strategy, IMarketRule> _childStrategyRules = new Dictionary<Strategy, IMarketRule>();
 			private readonly Strategy _parent;
 
 			public ChildStrategyList(Strategy parent)
@@ -86,7 +95,7 @@ namespace StockSharp.Algo.Strategies
 				if (item.Security == null)
 					item.Security = _parent.Security;
 
-				item.OrderRegistering += _parent.OnOrderRegistering;
+				item.OrderRegistering += _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered += _parent.ProcessOrder;
 				//item.ReRegistering += _parent.ReRegisterSlippage;
 				item.OrderChanged += _parent.OnChildOrderChanged;
@@ -97,7 +106,7 @@ namespace StockSharp.Algo.Strategies
 				item.StopOrderChanged += _parent.OnChildStopOrderChanged;
 				item.StopOrderRegisterFailed += _parent.OnChildStopOrderRegisterFailed;
 				item.StopOrderCancelFailed += _parent.OnChildStopOrderCancelFailed;
-				item.NewMyTrades += _parent.AddMyTrades;
+				item.NewMyTrade += _parent.AddMyTrade;
 				item.OrderReRegistering += _parent.OnOrderReRegistering;
 				item.StopOrderReRegistering += _parent.OnStopOrderReRegistering;
 				item.ProcessStateChanged += OnChildProcessStateChanged;
@@ -106,7 +115,7 @@ namespace StockSharp.Algo.Strategies
 				item.Orders.ForEach(_parent.ProcessOrder);
 
 				if (!item.MyTrades.IsEmpty())
-					_parent.AddMyTrades(item.MyTrades);
+					item.MyTrades.ForEach(_parent.AddMyTrade);
 
 				//_parent._orderFails.AddRange(item.OrderFails);
 
@@ -146,7 +155,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				//item.Parent = null;
 
-				item.OrderRegistering -= _parent.OnOrderRegistering;
+				item.OrderRegistering -= _parent.ProcessChildOrderRegistering;
 				item.OrderRegistered -= _parent.ProcessOrder;
 				//item.ReRegistering -= _parent.ReRegisterSlippage;
 				item.OrderChanged -= _parent.OnChildOrderChanged;
@@ -159,33 +168,28 @@ namespace StockSharp.Algo.Strategies
 				item.StopOrderRegisterFailed -= _parent.OnChildStopOrderRegisterFailed;
 				item.StopOrderCancelFailed -= _parent.OnChildStopOrderCancelFailed;
 				item.StopOrderCanceling -= _parent.OnStopOrderCanceling;
-				item.NewMyTrades -= _parent.AddMyTrades;
+				item.NewMyTrade -= _parent.AddMyTrade;
 				item.OrderReRegistering -= _parent.OnOrderReRegistering;
 				item.StopOrderReRegistering -= _parent.OnStopOrderReRegistering;
 				item.ProcessStateChanged -= OnChildProcessStateChanged;
 
-				_childStrategyRules.SyncDo(d =>
+				var rule = _childStrategyRules.TryGetValue(item);
+
+				if (rule != null)
 				{
-					var rule = d.TryGetValue(item);
-
-					if (rule == null)
-						return;
-
 					// правило могло быть удалено при остановке дочерней стратегии, но перед ее удалением из коллекции у родителя
 					if (rule.IsReady)
 						_parent.TryRemoveRule(rule);
 
-					d.Remove(item);
-				});
+					_childStrategyRules.Remove(item);	
+				}
 
 				return base.OnRemoving(item);
 			}
 
 			public void TryRemoveStoppedRule(IMarketRule rule)
 			{
-				var child = rule.Token as Strategy;
-
-				if (child != null)
+				if (rule.Token is Strategy child)
 					_childStrategyRules.Remove(child);
 			}
 		}
@@ -247,20 +251,22 @@ namespace StockSharp.Algo.Strategies
 			NameGenerator = new StrategyNameGenerator(this);
 			NameGenerator.Changed += name => _name.Value = name;
 
-			_id = this.Param("Id", base.Id);
-			_volume = this.Param<decimal>("Volume", 1);
-			_name = this.Param("Name", new string(GetType().Name.Where(char.IsUpper).ToArray()));
-			_maxErrorCount = this.Param("MaxErrorCount", 1);
-			_disposeOnStop = this.Param("DisposeOnStop", false);
-			_cancelOrdersWhenStopping = this.Param("CancelOrdersWhenStopping", true);
-			_waitAllTrades = this.Param<bool>("WaitAllTrades");
-			_commentOrders = this.Param<bool>("CommentOrders");
-			_ordersKeepTime = this.Param("OrdersKeepTime", TimeSpan.FromDays(1));
-			_logLevel = this.Param("LogLevel", LogLevels.Inherit);
+			_id = this.Param(nameof(Id), base.Id);
+			_volume = this.Param<decimal>(nameof(Volume), 1);
+			_name = this.Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
+			_maxErrorCount = this.Param(nameof(MaxErrorCount), 1);
+			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
+			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
+			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades));
+			_commentOrders = this.Param<bool>(nameof(CommentOrders));
+			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1));
+			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 
 			InitMaxOrdersKeepTime();
 
 			_strategyStat.Add(this);
+
+			_riskManager = new RiskManager { Parent = this };
 		}
 
 		private readonly StrategyParam<Guid> _id;
@@ -270,8 +276,8 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public override Guid Id
 		{
-			get { return _id.Value; }
-			set { _id.Value = value; }
+			get => _id.Value;
+			set => _id.Value = value;
 		}
 
 		private readonly StrategyParam<LogLevels> _logLevel;
@@ -285,8 +291,8 @@ namespace StockSharp.Algo.Strategies
 		[DescriptionLoc(LocalizedStrings.Str1358Key)]
 		public override LogLevels LogLevel
 		{
-			get { return _logLevel.Value; }
-			set { _logLevel.Value = value; }
+			get => _logLevel.Value;
+			set => _logLevel.Value = value;
 		}
 
 		private readonly StrategyParam<string> _name;
@@ -294,13 +300,15 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Strategy name.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[PropertyOrder(0)]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str1359Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str1359Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public override string Name
 		{
-			get { return _name.Value; }
+			get => _name.Value;
 			set
 			{
 				if (value == Name)
@@ -325,7 +333,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public virtual IConnector Connector
 		{
-			get { return _connector; }
+			get => _connector;
 			set
 			{
 				if (Connector == value)
@@ -333,16 +341,16 @@ namespace StockSharp.Algo.Strategies
 
 				if (_connector != null)
 				{
-					_connector.NewOrders -= OnConnectorNewOrders;
-					_connector.OrdersChanged -= OnConnectorOrdersChanged;
-					_connector.OrdersRegisterFailed -= OnConnectorOrdersRegisterFailed;
-					_connector.OrdersCancelFailed -= ProcessCancelOrderFails;
-					_connector.NewStopOrders -= OnConnectorNewOrders;
-					_connector.StopOrdersChanged -= OnConnectorStopOrdersChanged;
-					_connector.StopOrdersRegisterFailed -= OnConnectorStopOrdersRegisterFailed;
-					_connector.StopOrdersCancelFailed -= ProcessCancelOrderFails;
-					_connector.NewMyTrades -= OnConnectorNewMyTrades;
-					_connector.PositionsChanged -= OnConnectorPositionsChanged;
+					_connector.NewOrder -= OnConnectorNewOrder;
+					_connector.OrderChanged -= OnConnectorOrderChanged;
+					_connector.OrderRegisterFailed -= OnConnectorOrderRegisterFailed;
+					_connector.OrderCancelFailed -= ProcessCancelOrderFail;
+					_connector.NewStopOrder -= OnConnectorNewOrder;
+					_connector.StopOrderChanged -= OnConnectorStopOrderChanged;
+					_connector.StopOrderRegisterFailed -= OnConnectorStopOrderRegisterFailed;
+					_connector.StopOrderCancelFailed -= ProcessCancelOrderFail;
+					_connector.NewMyTrade -= OnConnectorNewMyTrade;
+					_connector.PositionChanged -= OnConnectorPositionChanged;
 					_connector.NewMessage -= OnConnectorNewMessage;
 					_connector.ValuesChanged -= OnConnectorValuesChanged;
 					//_connector.NewTrades -= OnConnectorNewTrades;
@@ -353,37 +361,34 @@ namespace StockSharp.Algo.Strategies
 
 				if (_connector != null)
 				{
-					_connector.NewOrders += OnConnectorNewOrders;
-					_connector.OrdersChanged += OnConnectorOrdersChanged;
-					_connector.OrdersRegisterFailed += OnConnectorOrdersRegisterFailed;
-					_connector.OrdersCancelFailed += ProcessCancelOrderFails;
-					_connector.NewStopOrders += OnConnectorNewOrders;
-					_connector.StopOrdersChanged += OnConnectorStopOrdersChanged;
-					_connector.StopOrdersRegisterFailed += OnConnectorStopOrdersRegisterFailed;
-					_connector.StopOrdersCancelFailed += ProcessCancelOrderFails;
-					_connector.NewMyTrades += OnConnectorNewMyTrades;
-					_connector.PositionsChanged += OnConnectorPositionsChanged;
+					_connector.NewOrder += OnConnectorNewOrder;
+					_connector.OrderChanged += OnConnectorOrderChanged;
+					_connector.OrderRegisterFailed += OnConnectorOrderRegisterFailed;
+					_connector.OrderCancelFailed += ProcessCancelOrderFail;
+					_connector.NewStopOrder += OnConnectorNewOrder;
+					_connector.StopOrderChanged += OnConnectorStopOrderChanged;
+					_connector.StopOrderRegisterFailed += OnConnectorStopOrderRegisterFailed;
+					_connector.StopOrderCancelFailed += ProcessCancelOrderFail;
+					_connector.NewMyTrade += OnConnectorNewMyTrade;
+					_connector.PositionChanged += OnConnectorPositionChanged;
 					_connector.NewMessage += OnConnectorNewMessage;
 					_connector.ValuesChanged += OnConnectorValuesChanged;
 					//_connector.NewTrades += OnConnectorNewTrades;
 					//_connector.MarketDepthsChanged += OnConnectorMarketDepthsChanged;
 				}
 
-				ChildStrategies.SyncDo(c =>
+				foreach (var strategy in ChildStrategies)
 				{
-					foreach (var strategy in c)
-					{
-						if (strategy.Connector == null || value == null)
-							strategy.Connector = value;
-					}
-				});
+					if (strategy.Connector == null || value == null)
+						strategy.Connector = value;
+				}
 
 				ConnectorChanged?.Invoke();
 			}
 		}
 
 		/// <summary>
-		/// To get the strategy getting <see cref="Strategy.Connector"/>. If it is not initialized, the exception will be discarded.
+		/// To get the strategy getting <see cref="Connector"/>. If it is not initialized, the exception will be discarded.
 		/// </summary>
 		/// <returns>Connection string.</returns>
 		public IConnector SafeGetConnector()
@@ -401,13 +406,15 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Portfolio.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[PropertyOrder(1)]
-		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
-		[DescriptionLoc(LocalizedStrings.Str1361Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PortfolioKey,
+			Description = LocalizedStrings.Str1361Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 1)]
 		public virtual Portfolio Portfolio
 		{
-			get { return _portfolio; }
+			get => _portfolio;
 			set
 			{
 				if (_portfolio == value)
@@ -415,16 +422,13 @@ namespace StockSharp.Algo.Strategies
 
 				_portfolio = value;
 
-				ChildStrategies.SyncDo(c =>
+				foreach (var strategy in ChildStrategies)
 				{
-					foreach (var strategy in c)
-					{
-						if (strategy.Portfolio == null)
-							strategy.Portfolio = value;
-					}
-				});
+					if (strategy.Portfolio == null)
+						strategy.Portfolio = value;
+				}
 
-				RaiseParametersChanged("Portfolio");
+				RaiseParametersChanged(nameof(Portfolio));
 				PortfolioChanged?.Invoke();
 			}
 		}
@@ -434,13 +438,15 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Security.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[PropertyOrder(2)]
-		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-		[DescriptionLoc(LocalizedStrings.Str1362Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityKey,
+			Description = LocalizedStrings.Str1362Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 2)]
 		public virtual Security Security
 		{
-			get { return _security; }
+			get => _security;
 			set
 			{
 				if (_security == value)
@@ -448,28 +454,30 @@ namespace StockSharp.Algo.Strategies
 
 				_security = value;
 
-				ChildStrategies.SyncDo(c =>
+				foreach (var strategy in ChildStrategies)
 				{
-					foreach (var strategy in c)
-					{
-						if (strategy.Security == null)
-							strategy.Security = value;
-					}
-				});
+					if (strategy.Security == null)
+						strategy.Security = value;
+				}
 				
-				RaiseParametersChanged("Security");
+				RaiseParametersChanged(nameof(Security));
 				SecurityChanged?.Invoke();
+
+				PositionManager.SecurityId = value?.ToSecurityId();
 			}
 		}
 
 		/// <summary>
 		/// Total slippage.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(4)]
-		[DisplayNameLoc(LocalizedStrings.Str163Key)]
-		[DescriptionLoc(LocalizedStrings.Str1363Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str163Key,
+			Description = LocalizedStrings.Str1363Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 99)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public decimal? Slippage { get; private set; }
 
 		/// <summary>
@@ -485,7 +493,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public IPnLManager PnLManager
 		{
-			get { return _pnLManager; }
+			get => _pnLManager;
 			set
 			{
 				if (value == null)
@@ -498,11 +506,14 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The aggregate value of profit-loss without accounting commission <see cref="Strategy.Commission"/>.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(5)]
-		[DisplayNameLoc(LocalizedStrings.PnLKey)]
-		[DescriptionLoc(LocalizedStrings.Str1364Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PnLKey,
+			Description = LocalizedStrings.Str1364Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 100)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public decimal PnL => PnLManager.PnL;
 
 		/// <summary>
@@ -513,15 +524,18 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Total commission.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(6)]
-		[DisplayNameLoc(LocalizedStrings.Str159Key)]
-		[DescriptionLoc(LocalizedStrings.Str1365Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str159Key,
+			Description = LocalizedStrings.Str1365Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 101)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public decimal? Commission { get; private set; }
 
 		/// <summary>
-		/// <see cref="Strategy.Commission"/> change event.
+		/// <see cref="Commission"/> change event.
 		/// </summary>
 		public event Action CommissionChanged;
 
@@ -533,14 +547,48 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public IPositionManager PositionManager
 		{
-			get { return _positionManager; }
+			get => _positionManager;
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
+				if (_positionManager != null)
+				{
+					_positionManager.NewPosition -= PositionManager_OnNewPosition;
+					_positionManager.PositionChanged -= PositionManager_OnPositionChanged;
+				}
+
 				_positionManager = value;
+
+				_positionManager.NewPosition += PositionManager_OnNewPosition;
+				_positionManager.PositionChanged += PositionManager_OnPositionChanged;
 			}
+		}
+
+		private readonly Dictionary<Tuple<Security, Portfolio>, Position> _positions = new Dictionary<Tuple<Security, Portfolio>, Position>();
+
+		private Position ProcessPositionInfo(Tuple<SecurityId, string> key, decimal value)
+		{
+			var security = SafeGetConnector().LookupSecurity(key.Item1);
+			var pf = SafeGetConnector().GetPortfolio(key.Item2);
+			var position = _positions.SafeAdd(Tuple.Create(security, pf), k => new Position
+			{
+				Security = security,
+				Portfolio = pf,
+			});
+			position.CurrentValue = value;
+			return position;
+		}
+
+		private void PositionManager_OnNewPosition(Tuple<SecurityId, string> key, decimal value)
+		{
+			_newPosition?.Invoke(ProcessPositionInfo(key, value));
+		}
+
+		private void PositionManager_OnPositionChanged(Tuple<SecurityId, string> key, decimal value)
+		{
+			_positionChanged?.Invoke(ProcessPositionInfo(key, value));
 		}
 
 		/// <summary>
@@ -549,7 +597,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public decimal Position
 		{
-			get { return PositionManager.Position; }
+			get => PositionManager.Position;
 			set
 			{
 				if (Position == value)
@@ -560,23 +608,44 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
+		IEnumerable<Position> IPositionProvider.Positions => _positions.Values.ToArray();
+
+		private event Action<Position> _newPosition;
+
+		event Action<Position> IPositionProvider.NewPosition
+		{
+			add => _newPosition += value;
+			remove => _newPosition -= value;
+		}
+
+		private event Action<Position> _positionChanged;
+
+		event Action<Position> IPositionProvider.PositionChanged
+		{
+			add => _positionChanged += value;
+			remove => _positionChanged -= value;
+		}
+
 		/// <summary>
-		/// <see cref="Strategy.Position"/> change event.
+		/// <see cref="Position"/> change event.
 		/// </summary>
 		public event Action PositionChanged;
 
 		/// <summary>
 		/// Total latency.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(8)]
-		[DisplayNameLoc(LocalizedStrings.Str161Key)]
-		[DescriptionLoc(LocalizedStrings.Str1366Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str161Key,
+			Description = LocalizedStrings.Str1366Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 102)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public TimeSpan? Latency { get; private set; }
 
 		/// <summary>
-		/// <see cref="Strategy.Latency"/> change event.
+		/// <see cref="Latency"/> change event.
 		/// </summary>
 		public event Action LatencyChanged;
 
@@ -588,7 +657,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public StatisticManager StatisticManager
 		{
-			get { return _statisticManager; }
+			get => _statisticManager;
 			protected set
 			{
 				if (value == null)
@@ -598,7 +667,7 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		private IRiskManager _riskManager = new RiskManager();
+		private IRiskManager _riskManager;
 
 		/// <summary>
 		/// The risks control manager.
@@ -606,7 +675,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public IRiskManager RiskManager
 		{
-			get { return _riskManager; }
+			get => _riskManager;
 			set
 			{
 				if (value == null)
@@ -616,21 +685,19 @@ namespace StockSharp.Algo.Strategies
 			}
 		}
 
-		private readonly SynchronizedSet<IStrategyParam> _parameters = new SynchronizedSet<IStrategyParam>();
-
 		/// <summary>
 		/// Strategy parameters.
 		/// </summary>
 		[Browsable(false)]
-		public ISynchronizedCollection<IStrategyParam> Parameters => _parameters;
+		public CachedSynchronizedDictionary<string, IStrategyParam> Parameters { get; } = new CachedSynchronizedDictionary<string, IStrategyParam>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
-		/// <see cref="Strategy.Parameters"/> change event.
+		/// <see cref="Parameters"/> change event.
 		/// </summary>
 		public event Action ParametersChanged;
 
 		/// <summary>
-		/// To call events <see cref="Strategy.ParametersChanged"/> and <see cref="Strategy.PropertyChanged"/>.
+		/// To call events <see cref="ParametersChanged"/> and <see cref="PropertyChanged"/>.
 		/// </summary>
 		/// <param name="name">Parameter name.</param>
 		protected internal void RaiseParametersChanged(string name)
@@ -656,7 +723,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public int MaxErrorCount
 		{
-			get { return _maxErrorCount.Value; }
+			get => _maxErrorCount.Value;
 			set
 			{
 				if (value < 1)
@@ -674,14 +741,14 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public int ErrorCount
 		{
-			get { return _errorCount; }
+			get => _errorCount;
 			private set
 			{
 				if (_errorCount == value)
 					return;
 
 				_errorCount = value;
-				this.Notify("ErrorCount");
+				this.Notify(nameof(ErrorCount));
 			}
 		}
 
@@ -693,7 +760,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public virtual ProcessStates ProcessState
 		{
-			get { return _processState; }
+			get => _processState;
 			private set
 			{
 				if (_processState == value)
@@ -708,15 +775,12 @@ namespace StockSharp.Algo.Strategies
 
 				try
 				{
-					ChildStrategies.SyncDo(c =>
-					{
-						var child = (IEnumerable<Strategy>)c;
+					var child = (IEnumerable<Strategy>)ChildStrategies;
 
-						if (ProcessState == ProcessStates.Stopping)
-							child = child.Where(s => s.ProcessState == ProcessStates.Started);
+					if (ProcessState == ProcessStates.Stopping)
+						child = child.Where(s => s.ProcessState == ProcessStates.Started);
 
-						child.ToArray().ForEach(s => s.ProcessState = ProcessState);
-					});
+					child.ToArray().ForEach(s => s.ProcessState = ProcessState);
 
 					switch (value)
 					{
@@ -751,7 +815,7 @@ namespace StockSharp.Algo.Strategies
 				try
 				{
 					RaiseProcessStateChanged(this);
-					this.Notify("ProcessState");
+					this.Notify(nameof(ProcessState));
 				}
 				catch (Exception error)
 				{
@@ -766,7 +830,7 @@ namespace StockSharp.Algo.Strategies
 						ProcessCancelActiveOrders();
 					}
 
-					foreach (var rule in Rules.SyncGet(c => c.ToArray()))
+					foreach (var rule in Rules.ToArray())
 					{
 						if (this.TryRemoveWithExclusive(rule))
 							_childStrategies.TryRemoveStoppedRule(rule);
@@ -793,7 +857,7 @@ namespace StockSharp.Algo.Strategies
 					stateStr = LocalizedStrings.Str1373;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(state));
+					throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.Str1219);
 			}
 
 			this.AddInfoLog(LocalizedStrings.Str1374Params, stateStr, ChildStrategies.Count, Parent != null ? ParentStrategy.ChildStrategies.Count : -1, Position);
@@ -826,8 +890,8 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public virtual bool CancelOrdersWhenStopping
 		{
-			get { return _cancelOrdersWhenStopping.Value; }
-			set { _cancelOrdersWhenStopping.Value = value; }
+			get => _cancelOrdersWhenStopping.Value;
+			set => _cancelOrdersWhenStopping.Value = value;
 		}
 
 		/// <summary>
@@ -851,12 +915,12 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<TimeSpan> _ordersKeepTime;
 
 		/// <summary>
-		/// The time for storing <see cref="Strategy.Orders"/> � <see cref="Strategy.StopOrders"/> orders in memory. By default it equals to 2 days. If value is set in <see cref="TimeSpan.Zero"/>, orders will not be deleted.
+		/// The time for storing <see cref="Orders"/> and <see cref="StopOrders"/> orders in memory. By default it equals to 2 days. If value is set in <see cref="TimeSpan.Zero"/>, orders will not be deleted.
 		/// </summary>
 		[Browsable(false)]
 		public TimeSpan OrdersKeepTime
 		{
-			get { return _ordersKeepTime.Value; }
+			get => _ordersKeepTime.Value;
 			set
 			{
 				if (value < TimeSpan.Zero)
@@ -900,13 +964,15 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// If the value is set 0, the parameter is ignored.
 		/// </remarks>
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[PropertyOrder(3)]
-		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
-		[DescriptionLoc(LocalizedStrings.Str1376Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeKey,
+			Description = LocalizedStrings.Str1376Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 4)]
 		public decimal Volume
 		{
-			get { return _volume.Value; }
+			get => _volume.Value;
 			set
 			{
 				if (value < 0)
@@ -924,14 +990,14 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public LogLevels ErrorState
 		{
-			get { return _errorState; }
+			get => _errorState;
 			private set
 			{
 				if (_errorState == value)
 					return;
 
 				_errorState = value;
-				this.Notify("ErrorState");
+				this.Notify(nameof(ErrorState));
 			}
 		}
 
@@ -948,18 +1014,21 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Strategy start time.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(3)]
-		[DisplayNameLoc(LocalizedStrings.Str1378Key)]
-		[DescriptionLoc(LocalizedStrings.Str1379Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1378Key,
+			Description = LocalizedStrings.Str1379Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 105)]
 		[ReadOnly(true)]
+		[Browsable(false)]
 		public DateTimeOffset StartedTime
 		{
-			get { return _startedTime; }
+			get => _startedTime;
 			private set
 			{
 				_startedTime = value;
-				this.Notify("StartedTime");
+				this.Notify(nameof(StartedTime));
 			}
 		}
 
@@ -986,7 +1055,7 @@ namespace StockSharp.Algo.Strategies
 					return;
 
 				_totalWorkingTime = value;
-				this.Notify("TotalWorkingTime");
+				this.Notify(nameof(TotalWorkingTime));
 			}
 		}
 
@@ -1001,14 +1070,14 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool DisposeOnStop
 		{
-			get { return _disposeOnStop.Value; }
-			set { _disposeOnStop.Value = value; }
+			get => _disposeOnStop.Value;
+			set => _disposeOnStop.Value = value;
 		}
 
 		private readonly StrategyParam<bool> _waitAllTrades;
 
 		/// <summary>
-		/// Stop strategy only after getting all trades by registered trades.
+		/// Stop strategy only after getting all trades by registered orders.
 		/// </summary>
 		/// <remarks>
 		/// It is disabled by default.
@@ -1016,8 +1085,8 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool WaitAllTrades
 		{
-			get { return _waitAllTrades.Value; }
-			set { _waitAllTrades.Value = value; }
+			get => _waitAllTrades.Value;
+			set => _waitAllTrades.Value = value;
 		}
 
 		private readonly StrategyParam<bool> _commentOrders;
@@ -1031,8 +1100,8 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool CommentOrders
 		{
-			get { return _commentOrders.Value; }
-			set { _commentOrders.Value = value; }
+			get => _commentOrders.Value;
+			set => _commentOrders.Value = value;
 		}
 
 		/// <summary>
@@ -1041,14 +1110,14 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public IMarketRuleList Rules { get; }
 
-		private readonly object _rulesSuspendLock = new object();
+		//private readonly object _rulesSuspendLock = new object();
 		private int _rulesSuspendCount;
 
 		/// <summary>
 		/// Is rules execution suspended.
 		/// </summary>
 		/// <remarks>
-		/// Rules suspension is performed through the method <see cref="Strategy.SuspendRules"/>.
+		/// Rules suspension is performed through the method <see cref="IMarketRuleContainer.SuspendRules"/>.
 		/// </remarks>
 		[Browsable(false)]
 		public bool IsRulesSuspended => _rulesSuspendCount > 0;
@@ -1079,7 +1148,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Order> StopOrderRegistered;
 
 		/// <summary>
-		/// The event of stop-order successful registration.
+		/// The event of stop-order registration error.
 		/// </summary>
 		public event Action<OrderFail> StopOrderRegisterFailed;
 
@@ -1124,9 +1193,9 @@ namespace StockSharp.Algo.Strategies
 		public event Action<OrderFail> StopOrderCancelFailed;
 
 		/// <summary>
-		/// The event of new trades occurrence.
+		/// The event of new trade occurrence.
 		/// </summary>
-		public event Action<IEnumerable<MyTrade>> NewMyTrades;
+		public event Action<MyTrade> NewMyTrade;
 
 		/// <summary>
 		/// The event of strategy connection change.
@@ -1146,7 +1215,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The event of strategy position change.
 		/// </summary>
-		public event Action<IEnumerable<Position>> PositionsChanged;
+		public event Action<Position> PositionChanged2;
 
 		/// <summary>
 		/// The event of error occurrence in the strategy.
@@ -1154,7 +1223,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Exception> Error;
 
 		/// <summary>
-		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
+		/// The method is called when the <see cref="Start"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
 		protected virtual void OnStarted()
 		{
@@ -1164,35 +1233,25 @@ namespace StockSharp.Algo.Strategies
 			if (Portfolio == null)
 				throw new InvalidOperationException(LocalizedStrings.Str1381);
 
-			foreach (var parameter in Parameters)
+			foreach (var parameter in Parameters.CachedValues)
 			{
-				var unit = parameter.Value as Unit;
-
-				if (unit != null && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
+				if (parameter.Value is Unit unit && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))
 					unit.SetSecurity(Security);
 			}
 
-			//pyh: Это сильно замедляет тестирование + объясните зачем это нужно.
-
-			//ProcessNewOrders(Trader.StopOrders, true).ForEach(AddOrder);
-			//ProcessNewOrders(Trader.Orders, false).ForEach(AddOrder);
-
 			ErrorCount = 0;
 			ErrorState = LogLevels.Info;
-
-			//_pnlUpdateByDepth = false;
-			//_pnlUpdateByTrades = false;
 		}
 
 		/// <summary>
-		/// The method is called when the <see cref="Strategy.ProcessState"/> process state has been taken the <see cref="ProcessStates.Stopping"/> value.
+		/// The method is called when the <see cref="ProcessState"/> process state has been taken the <see cref="ProcessStates.Stopping"/> value.
 		/// </summary>
 		protected virtual void OnStopping()
 		{
 		}
 
 		/// <summary>
-		/// The method is called when the <see cref="Strategy.ProcessState"/> process state has been taken the <see cref="ProcessStates.Stopped"/> value.
+		/// The method is called when the <see cref="ProcessState"/> process state has been taken the <see cref="ProcessStates.Stopped"/> value.
 		/// </summary>
 		protected virtual void OnStopped()
 		{
@@ -1277,14 +1336,26 @@ namespace StockSharp.Algo.Strategies
 			});
 		}
 
+		private void ProcessRisk(Order order)
+		{
+			ProcessRisk(order.CreateRegisterMessage());
+		}
+
+		private void ProcessChildOrderRegistering(Order order)
+		{
+			OnOrderRegistering(order);
+
+			ProcessRisk(order);
+		}
+
 		private void AddOrder(Order order)
 		{
+			ProcessRisk(order);
+
 			_ordersInfo.Add(order, new OrderInfo { IsOwn = true });
 
 			if (order.State != OrderStates.Failed && order.State != OrderStates.Done)
 				ApplyMonitorRules(order);
-
-			ProcessRisk(order.CreateRegisterMessage(order.Security.ToSecurityId()));
 		}
 
 		private void ProcessRegisterOrderAction(Order oOrder, Order nOrder, Action<Order, Order> action)
@@ -1299,12 +1370,12 @@ namespace StockSharp.Algo.Strategies
 
 				nOrder.State = nOrder.State.CheckModification(OrderStates.Failed);
 
-				var fails = new[] { new OrderFail { Order = nOrder, Error = excp, ServerTime = CurrentTime } };
+				var fail = new OrderFail { Order = nOrder, Error = excp, ServerTime = CurrentTime };
 
 				if (nOrder.Type == OrderTypes.Conditional)
-					OnConnectorStopOrdersRegisterFailed(fails);
+					OnConnectorStopOrderRegisterFailed(fail);
 				else
-					OnConnectorOrdersRegisterFailed(fails);
+					OnConnectorOrderRegisterFailed(fail);
 			}
 		}
 
@@ -1328,22 +1399,33 @@ namespace StockSharp.Algo.Strategies
 						return true;
 
 					if (order.State != OrderStates.Done)
+					{
+						this.AddWarningLog("Order {0} has state {1}. Rule cannot be stopped.", order.GetTraceId(), order.State);
 						return false;
+					}
 
 					if (!WaitAllTrades)
 						return true;
 
-					var matchedVolume = order.GetMatchedVolume(Connector);
+					//var leftVolume = order.Volume - order.GetMatchedVolume(Connector, true);
 
-					if (matchedVolume == 0)
-						return true;
+					//if (leftVolume == 0)
+					//	return true;
 
 					var info = _ordersInfo.TryGetValue(order);
 
 					if (info == null)
+					{
+						this.AddWarningLog("Order {0} info not found.", order.GetTraceId(), order.State);
 						return false;
+					}
 
-					return matchedVolume == info.ReceivedVolume;
+					var leftVolume = order.Volume - info.ReceivedVolume;
+
+					if (leftVolume != 0)
+						this.AddDebugLog("Order {0} has left trade volume {1}.", order.GetTraceId(), leftVolume);
+
+					return leftVolume == 0;
 				})
 				.Apply(this);
 
@@ -1509,14 +1591,13 @@ namespace StockSharp.Algo.Strategies
 				}
 				else if (isChanging)
 				{
-					OnOrderChanged(order);
-
 					var pos = PositionManager.ProcessMessage(order.ToMessage());
+					StatisticManager.AddChangedOrder(order);
+
+					OnOrderChanged(order);
 
 					if (pos != null)
 						RaisePositionChanged();
-
-					StatisticManager.AddChangedOrder(order);
 				}
 			});
 		}
@@ -1539,7 +1620,7 @@ namespace StockSharp.Algo.Strategies
 
 			AttachOrder(order);
 
-			OnConnectorNewMyTrades(myTrades);
+			myTrades.ForEach(OnConnectorNewMyTrade);
 		}
 
 		private void AttachOrder(Order order)
@@ -1588,7 +1669,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
-		public override DateTimeOffset CurrentTime => Connector == null ? TimeHelper.NowWithOffset : Connector.CurrentTime;
+		public override DateTimeOffset CurrentTime => Connector?.CurrentTime ?? TimeHelper.NowWithOffset;
 
 		/// <summary>
 		/// To call the event <see cref="ILogSource.Log"/>.
@@ -1622,10 +1703,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public virtual void Start()
 		{
-			if (ProcessState == ProcessStates.Stopped)
-				ProcessState = ProcessStates.Started;
-			else 
-				this.AddDebugLog(LocalizedStrings.Str1391Params, ProcessState);
+			SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Started));
 		}
 
 		/// <summary>
@@ -1633,10 +1711,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public virtual void Stop()
 		{
-			if (ProcessState == ProcessStates.Started)
-				ProcessState = ProcessStates.Stopping;
-			else
-				this.AddDebugLog(LocalizedStrings.Str1392Params, ProcessState);
+			SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Stopping));
 		}
 
 		/// <summary>
@@ -1645,7 +1720,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action Reseted;
 
 		/// <summary>
-		/// To call the event <see cref="Strategy.Reseted"/>.
+		/// To call the event <see cref="Reseted"/>.
 		/// </summary>
 		private void RaiseReseted()
 		{
@@ -1662,12 +1737,12 @@ namespace StockSharp.Algo.Strategies
 			//ThrowIfTraderNotRegistered();
 
 			//if (Security == null)
-			//	throw new InvalidOperationException("Инструмент не инициализирован.");
+			//	throw new InvalidOperationException(LocalizedStrings.Str1380);
 
 			//if (Portfolio == null)
-			//	throw new InvalidOperationException("Портфель не инициализирован.");
+			//	throw new InvalidOperationException(LocalizedStrings.Str1381);
 
-			ChildStrategies.SyncDo(c => c.ForEach(s => s.Reset()));
+			ChildStrategies.ForEach(s => s.Reset());
 
 			StatisticManager.Reset();
 
@@ -1696,6 +1771,8 @@ namespace StockSharp.Algo.Strategies
 			_firstOrderTime = _lastOrderTime = _lastPnlRefreshTime = _prevTradeDate = default(DateTimeOffset);
 			_idStr = null;
 
+			_positions.Clear();
+
 			OnReseted();
 
 			// события вызываем только после вызова Reseted
@@ -1708,7 +1785,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// It is called from the <see cref="Strategy.Reset"/> method.
+		/// It is called from the <see cref="Reset"/> method.
 		/// </summary>
 		protected virtual void OnReseted()
 		{
@@ -1716,26 +1793,22 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To suspend rules execution until next restoration through the method <see cref="Strategy.ResumeRules"/>.
+		/// To suspend rules execution until next restoration through the method <see cref="IMarketRuleContainer.ResumeRules"/>.
 		/// </summary>
-		public virtual void SuspendRules()
+		void IMarketRuleContainer.SuspendRules()
 		{
-			lock (_rulesSuspendLock)
-				_rulesSuspendCount++;
+			_rulesSuspendCount++;
 
 			this.AddDebugLog(LocalizedStrings.Str1394Params, _rulesSuspendCount);
 		}
 
 		/// <summary>
-		/// To restore rules execution, suspended through the method <see cref="Strategy.SuspendRules"/>.
+		/// To restore rules execution, suspended through the method <see cref="IMarketRuleContainer.SuspendRules"/>.
 		/// </summary>
-		public virtual void ResumeRules()
+		void IMarketRuleContainer.ResumeRules()
 		{
-			lock (_rulesSuspendLock)
-			{
-				if (_rulesSuspendCount > 0)
-					_rulesSuspendCount--;
-			}
+			if (_rulesSuspendCount > 0)
+				_rulesSuspendCount--;
 
 			this.AddDebugLog(LocalizedStrings.Str1395Params, _rulesSuspendCount);
 		}
@@ -1745,8 +1818,7 @@ namespace StockSharp.Algo.Strategies
 			if (!Rules.IsEmpty())
 			{
 				this.AddLog(LogLevels.Debug,
-					() => LocalizedStrings.Str1396Params
-						.Put(Rules.Count, Rules.SyncGet(c => c.Select(r => r.Name).Join(", "))));
+					() => LocalizedStrings.Str1396Params.Put(Rules.Count, Rules.Select(r => r.Name).Join(", ")));
 
 				return;
 			}
@@ -1795,7 +1867,7 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public virtual TimeSpan UnrealizedPnLInterval
 		{
-			get { return _unrealizedPnLInterval; }
+			get => _unrealizedPnLInterval;
 			set
 			{
 				if (value <= TimeSpan.Zero)
@@ -1806,21 +1878,21 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// The method, called at strategy positions change.
+		/// The method, called at strategy position change.
 		/// </summary>
-		/// <param name="positions">The strategy positions change.</param>
-		protected virtual void OnPositionsChanged(IEnumerable<Position> positions)
+		/// <param name="position">The strategy position change.</param>
+		protected virtual void OnPositionChanged(Position position)
 		{
-			PositionsChanged?.Invoke(positions);
+			PositionChanged2?.Invoke(position);
 		}
 
 		/// <summary>
-		/// The method, called at occurrence of new strategy trades.
+		/// The method, called at occurrence of new strategy trade.
 		/// </summary>
-		/// <param name="trades">New trades of a strategy.</param>
-		protected virtual void OnNewMyTrades(IEnumerable<MyTrade> trades)
+		/// <param name="trade">New trade of a strategy.</param>
+		protected virtual void OnNewMyTrade(MyTrade trade)
 		{
-			NewMyTrades?.Invoke(trades);
+			NewMyTrade?.Invoke(trade);
 		}
 
 		/// <summary>
@@ -1938,23 +2010,23 @@ namespace StockSharp.Algo.Strategies
 			{
 				OnStopOrderChanged(order);
 
-				if (order.DerivedOrder == null)
-					continue;
+				//if (order.DerivedOrder == null)
+				//	continue;
 
-				lock (_ordersInfo.SyncRoot)
-				{
-					var derivedOrder = order.DerivedOrder;
+				//lock (_ordersInfo.SyncRoot)
+				//{
+				//	var derivedOrder = order.DerivedOrder;
 
-					if (_ordersInfo.ContainsKey(derivedOrder))
-						continue;
+				//	if (_ordersInfo.ContainsKey(derivedOrder))
+				//		continue;
 
-					AssignOrderStrategyId(derivedOrder);
-					_ordersInfo.Add(derivedOrder, new OrderInfo { IsOwn = true });
-					ProcessOrder(derivedOrder);
+				//	AssignOrderStrategyId(derivedOrder);
+				//	_ordersInfo.Add(derivedOrder, new OrderInfo { IsOwn = true });
+				//	ProcessOrder(derivedOrder);
 
-					//заявка могла придти позже сделок по ней
-					OnConnectorNewMyTrades(SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder));
-				}
+				//	//заявка могла придти позже сделок по ней
+				//	SafeGetConnector().MyTrades.Where(t => t.Order == derivedOrder).ForEach(OnConnectorNewMyTrade);
+				//}
 			}
 		}
 
@@ -1980,7 +2052,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void TryAddChildOrder(Order order)
 		{
-			lock (_ordersInfo)
+			lock (_ordersInfo.SyncRoot)
 			{
 				var info = _ordersInfo.TryGetValue(order);
 
@@ -2036,6 +2108,42 @@ namespace StockSharp.Algo.Strategies
 				case MessageTypes.Time:
 					break;
 
+				case ExtendedMessageTypes.StrategyChangeState:
+				{
+					var stateMsg = (StrategyChangeStateMessage)message;
+
+					if (stateMsg.Strategy == this)
+					{
+						switch (stateMsg.State)
+						{
+							//case ProcessStates.Stopped:
+							//	break;
+							case ProcessStates.Stopping:
+							{
+								if (ProcessState == ProcessStates.Started)
+									ProcessState = ProcessStates.Stopping;
+								else
+									this.AddDebugLog(LocalizedStrings.Str1392Params, ProcessState);
+
+								break;
+							}
+							case ProcessStates.Started:
+							{
+								if (ProcessState == ProcessStates.Stopped)
+									ProcessState = ProcessStates.Started;
+								else
+									this.AddDebugLog(LocalizedStrings.Str1391Params, ProcessState);
+
+								break;
+							}
+							//default:
+							//	throw new ArgumentOutOfRangeException();
+						}
+					}
+
+					return;
+				}
+
 				default:
 					return;
 			}
@@ -2077,83 +2185,62 @@ namespace StockSharp.Algo.Strategies
 				RaisePnLChanged();
 		}
 
-		private void OnConnectorPositionsChanged(IEnumerable<Position> positions)
+		private void OnConnectorPositionChanged(Position position)
 		{
-			Position[] changedPositions;
+			Position changedPosition = null;
 
-			var basketPortfolio = Portfolio as BasketPortfolio;
-			if (basketPortfolio != null)
+			if (Portfolio is BasketPortfolio basketPortfolio)
 			{
 				var innerPfs = basketPortfolio.InnerPortfolios;
-				changedPositions = positions.Where(pos => innerPfs.Contains(pos.Portfolio)).ToArray();
+
+				if (innerPfs.Contains(position.Portfolio))
+					changedPosition = position;
 			}
 			else
 			{
-				changedPositions = positions.Where(p => p.Portfolio == Portfolio).ToArray();
+				if (position.Portfolio == Portfolio)
+					changedPosition = position;
 			}
 
-			if (changedPositions.Length > 0)
-				TryInvoke(() => OnPositionsChanged(changedPositions));
+			if (changedPosition != null)
+				TryInvoke(() => OnPositionChanged(changedPosition));
 		}
 
-		private void OnConnectorNewMyTrades(IEnumerable<MyTrade> trades)
+		private void OnConnectorNewMyTrade(MyTrade trade)
 		{
-			trades = trades.Where(t => IsOwnOrder(t.Order)).ToArray();
-
-			if (trades.IsEmpty())
-				return;
-			
-			AddMyTrades(trades);
+			if (IsOwnOrder(trade.Order))
+				AddMyTrade(trade);
 		}
 
-		private void OnConnectorNewOrders(IEnumerable<Order> orders)
+		private void OnConnectorNewOrder(Order order)
 		{
 			if (_idStr == null)
 				_idStr = Id.ToString();
 
-			orders = orders.Where(o => !_ordersInfo.ContainsKey(o) && o.UserOrderId == _idStr).ToArray();
-
-			if (orders.IsEmpty())
-				return;
-
-			foreach (var order in orders)
-			{
+			if (!_ordersInfo.ContainsKey(order) && order.UserOrderId == _idStr)
 				AttachOrder(order);
-			}
 		}
 
-		private void OnConnectorOrdersChanged(IEnumerable<Order> orders)
+		private void OnConnectorOrderChanged(Order order)
 		{
-			orders = orders.Where(IsOwnOrder).ToArray();
-
-			if (orders.IsEmpty())
-				return;
-
-			TryInvoke(() =>
-			{
-				foreach (var order in orders)
-				{
-					ProcessOrder(order, true);
-				}
-			});
+			if (IsOwnOrder(order))
+				TryInvoke(() => ProcessOrder(order, true));
 		}
 
-		private void OnConnectorStopOrdersChanged(IEnumerable<Order> orders)
+		private void OnConnectorStopOrderChanged(Order order)
 		{
-			orders = orders.Where(IsOwnOrder).ToArray();
-
-			if (!orders.IsEmpty())
-				TryInvoke(() => OnStopOrdersChanged(orders));
+			if (IsOwnOrder(order))
+				TryInvoke(() => OnStopOrdersChanged(new[] { order }));
 		}
 
-		private void OnConnectorOrdersRegisterFailed(IEnumerable<OrderFail> fails)
+		private void OnConnectorOrderRegisterFailed(OrderFail fail)
 		{
-			ProcessRegisterOrderFails(fails, OnOrderRegisterFailed);
+			ProcessRegisterOrderFail(fail, OnOrderRegisterFailed);
 		}
 
-		private void OnConnectorStopOrdersRegisterFailed(IEnumerable<OrderFail> fails)
+		private void OnConnectorStopOrderRegisterFailed(OrderFail fail)
 		{
-			ProcessRegisterOrderFails(fails, OnStopOrderRegisterFailed);
+			ProcessRegisterOrderFail(fail, OnStopOrderRegisterFailed);
 		}
 
 		private void OnConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
@@ -2165,74 +2252,59 @@ namespace StockSharp.Algo.Strategies
 		{
 			var msg = new Level1ChangeMessage { SecurityId = security.ToSecurityId(), ServerTime = CurrentTime }
 					.TryAdd(Level1Fields.PriceStep, security.PriceStep)
-					.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(security, Level1Fields.StepPrice));
+					.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(security, Level1Fields.StepPrice) ?? security.StepPrice)
+					.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(security, Level1Fields.Multiplier) ?? security.Multiplier);
 
 			PnLManager.ProcessMessage(msg);
 		}
 
-		private void AddMyTrades(IEnumerable<MyTrade> trades)
+		private void AddMyTrade(MyTrade trade)
 		{
-			var filteredTrades = _myTrades.SyncGet(set =>
-			{
-				var newTrades = trades.Where(t => !set.Contains(t)).ToArray();
-				set.AddRange(newTrades);
-				return newTrades;
-			});
-
-			if (filteredTrades.IsEmpty())
+			if (!_myTrades.TryAdd(trade))
 				return;
 
 			if (WaitAllTrades)
 			{
-				foreach (var trade in filteredTrades)
+				lock (_ordersInfo.SyncRoot)
 				{
-					lock (_ordersInfo.SyncRoot)
-					{
-						var info = _ordersInfo.TryGetValue(trade.Order);
-						if (info == null || !info.IsOwn)
-							continue;
-
+					var info = _ordersInfo.TryGetValue(trade.Order);
+					if (info?.IsOwn == true)
 						info.ReceivedVolume += trade.Trade.Volume;
-					}
 				}
 			}
 
-			TryInvoke(() => OnNewMyTrades(filteredTrades));
+			TryInvoke(() => OnNewMyTrade(trade));
 
 			var isComChanged = false;
 			var isPnLChanged = false;
-			decimal? pos = null;
 			var isSlipChanged = false;
 
-			foreach (var trade in filteredTrades)
+			this.AddInfoLog(LocalizedStrings.Str1398Params,
+				trade.Order.Direction,
+				(trade.Trade.Id == 0 ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
+				trade.Trade.Price, trade.Trade.Volume, trade.Order.TransactionId);
+
+			if (trade.Commission != null)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1398Params,
-					trade.Order.Direction,
-					(trade.Trade.Id == 0 ? trade.Trade.StringId : trade.Trade.Id.To<string>()),
-					trade.Trade.Price, trade.Trade.Volume, trade.Order.TransactionId);
-
-				if (trade.Commission != null)
-				{
-					Commission = trade.Commission;
-					isComChanged = true;
-				}
-
-				UpdatePnLManager(trade.Trade.Security);
-
-				var tradeInfo = PnLManager.ProcessMessage(trade.ToMessage());
-				if (tradeInfo.PnL != 0)
-					isPnLChanged = true;
-
-				pos = PositionManager.ProcessMessage(trade.ToMessage());
-
-				if (trade.Slippage != null)
-				{
-					Slippage += trade.Slippage;
-					isSlipChanged = true;
-				}
-
-				StatisticManager.AddMyTrade(tradeInfo);
+				Commission = trade.Commission;
+				isComChanged = true;
 			}
+
+			UpdatePnLManager(trade.Trade.Security);
+
+			var tradeInfo = PnLManager.ProcessMessage(trade.ToMessage());
+			if (tradeInfo.PnL != 0)
+				isPnLChanged = true;
+
+			var pos = PositionManager.ProcessMessage(trade.ToMessage());
+
+			if (trade.Slippage != null)
+			{
+				Slippage += trade.Slippage;
+				isSlipChanged = true;
+			}
+
+			StatisticManager.AddMyTrade(tradeInfo);
 
 			TryInvoke(() =>
 			{
@@ -2249,15 +2321,15 @@ namespace StockSharp.Algo.Strategies
 					RaiseSlippageChanged();
 			});
 
-			foreach (var trade in filteredTrades)
-			{
-				ProcessRisk(trade.ToMessage());
-			}
+			//foreach (var trade in filteredTrades)
+			//{
+			ProcessRisk(trade.ToMessage());
+			//}
 		}
 
 		private void RaiseSlippageChanged()
 		{
-			this.Notify("Slippage");
+			this.Notify(nameof(Slippage));
 			SlippageChanged?.Invoke();
 		}
 
@@ -2265,21 +2337,22 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.AddInfoLog(LocalizedStrings.Str1399Params, PositionManager.Positions.Select(pos => pos.Key + "=" + pos.Value).Join(", "));
 
-			this.Notify("Position");
+			this.Notify(nameof(Position));
 			PositionChanged?.Invoke();
 
 			StatisticManager.AddPosition(CurrentTime, Position);
+			StatisticManager.AddPnL(CurrentTime, PnL);
 		}
 
 		private void RaiseCommissionChanged()
 		{
-			this.Notify("Commission");
+			this.Notify(nameof(Commission));
 			CommissionChanged?.Invoke();
 		}
 
 		private void RaisePnLChanged()
 		{
-			this.Notify("PnL");
+			this.Notify(nameof(PnL));
 			PnLChanged?.Invoke();
 
 			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL);
@@ -2287,7 +2360,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void RaiseLatencyChanged()
 		{
-			this.Notify("Latency");
+			this.Notify(nameof(Latency));
 			LatencyChanged?.Invoke();
 		}
 
@@ -2307,23 +2380,30 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			var parameters = storage.GetValue<SettingsStorage[]>("Parameters");
+			var parameters = storage.GetValue<SettingsStorage[]>(nameof(Parameters));
 
 			if (parameters == null)
 				return;
 
-			var dict = Parameters.SyncGet(c => c.ToDictionary(p => p.Name, p => p, StringComparer.InvariantCultureIgnoreCase));
+			//var dict = Parameters.SyncGet(c => c.ToDictionary(p => p.Name, p => p, StringComparer.InvariantCultureIgnoreCase));
 
 			// в настройках могут быть дополнительные параметры, которые будут добавлены позже
 			foreach (var s in parameters)
 			{
-				var param = dict.TryGetValue(s.GetValue<string>("Name"));
+				var param = Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Name)));
 
-				if (param == null)
-					continue;
-
-				param.Load(s);
+				param?.Load(s);
 			}
+
+			var pnlStorage = storage.GetValue<SettingsStorage>(nameof(PnLManager));
+
+			if (pnlStorage != null)
+				PnLManager.Load(pnlStorage);
+
+			var riskStorage = storage.GetValue<SettingsStorage>(nameof(RiskManager));
+
+			if (riskStorage != null)
+				RiskManager.Load(riskStorage);
 		}
 
 		/// <summary>
@@ -2332,7 +2412,12 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Parameters", Parameters.SyncGet(c => c.Select(p => p.Save()).ToArray()));
+			storage.SetValue(nameof(Parameters), Parameters.CachedValues.Select(p => p.Save()).ToArray());
+
+			storage.SetValue(nameof(PnLManager), PnLManager.Save());
+			storage.SetValue(nameof(RiskManager), RiskManager.Save());
+			//storage.SetValue(nameof(StatisticManager), StatisticManager.Save());
+			//storage.SetValue(nameof(PositionManager), PositionManager.Save());
 		}
 
 		/// <summary>
@@ -2418,58 +2503,46 @@ namespace StockSharp.Algo.Strategies
 			TryInvoke(() => StopOrderCancelFailed?.Invoke(fail));
 		}
 
-		private void ProcessCancelOrderFails(IEnumerable<OrderFail> fails)
+		private void ProcessCancelOrderFail(OrderFail fail)
 		{
-			foreach (var fail in fails)
-			{
-				var order = fail.Order;
-
-				lock (_ordersInfo.SyncRoot)
-				{
-					var info = _ordersInfo.TryGetValue(order);
-
-					if (info == null || !info.IsOwn)
-						continue;
-
-					info.IsCanceled = false;
-				}
-
-				this.AddErrorLog(LocalizedStrings.Str1402Params, order.GetTraceId(), fail.Error);
-
-				if (order.Type == OrderTypes.Conditional)
-					StopOrderCancelFailed?.Invoke(fail);
-				else
-					OrderCancelFailed?.Invoke(fail);
-
-				StatisticManager.AddFailedOrderCancel(fail);
-			}
-		}
-
-		private void ProcessRegisterOrderFails(IEnumerable<OrderFail> fails, Action<OrderFail> evt)
-		{
-			var failedOrders = new List<OrderFail>();
+			var order = fail.Order;
 
 			lock (_ordersInfo.SyncRoot)
 			{
-				foreach (var fail in fails)
-				{
-					var info = _ordersInfo.TryGetValue(fail.Order);
+				var info = _ordersInfo.TryGetValue(order);
 
-					if (info == null)
-						continue;
+				if (info == null || !info.IsOwn)
+					return;
 
-					info.RegistrationFail = fail;
-					failedOrders.Add(fail);
-				}
+				info.IsCanceled = false;
 			}
 
-			foreach (var fail in failedOrders)
+			this.AddErrorLog(LocalizedStrings.Str1402Params, order.GetTraceId(), fail.Error);
+
+			if (order.Type == OrderTypes.Conditional)
+				StopOrderCancelFailed?.Invoke(fail);
+			else
+				OrderCancelFailed?.Invoke(fail);
+
+			StatisticManager.AddFailedOrderCancel(fail);
+		}
+
+		private void ProcessRegisterOrderFail(OrderFail fail, Action<OrderFail> evt)
+		{
+			lock (_ordersInfo.SyncRoot)
 			{
-				this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.GetTraceId(), fail.Error.Message);
-				//SlippageManager.RegisterFailed(fail);
+				var info = _ordersInfo.TryGetValue(fail.Order);
+
+				if (info == null)
+					return;
+
+				info.RegistrationFail = fail;
 			}
 
-			TryInvoke(() => failedOrders.ForEach(evt));
+			this.AddErrorLog(LocalizedStrings.Str1302Params, fail.Order.GetTraceId(), fail.Error.Message);
+			//SlippageManager.RegisterFailed(fail);
+
+			TryInvoke(() => evt?.Invoke(fail));
 		}
 
 		/// <summary>
@@ -2531,6 +2604,9 @@ namespace StockSharp.Algo.Strategies
 		{
 			foreach (var rule in RiskManager.ProcessRules(message))
 			{
+				this.AddWarningLog(LocalizedStrings.Str855Params,
+					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
+
 				switch (rule.Action)
 				{
 					case RiskActions.ClosePositions:
@@ -2594,20 +2670,20 @@ namespace StockSharp.Algo.Strategies
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { SafeGetConnector().Added += value; }
-			remove { SafeGetConnector().Added -= value; }
+			add => SafeGetConnector().Added += value;
+			remove => SafeGetConnector().Added -= value;
 		}
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { SafeGetConnector().Removed += value; }
-			remove { SafeGetConnector().Removed -= value; }
+			add => SafeGetConnector().Removed += value;
+			remove => SafeGetConnector().Removed -= value;
 		}
 
 		event Action ISecurityProvider.Cleared
 		{
-			add { SafeGetConnector().Cleared += value; }
-			remove { SafeGetConnector().Cleared -= value; }
+			add => SafeGetConnector().Cleared += value;
+			remove => SafeGetConnector().Cleared -= value;
 		}
 
 		/// <summary>
@@ -2618,11 +2694,6 @@ namespace StockSharp.Algo.Strategies
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
 			return SafeGetConnector().Lookup(criteria);
-		}
-
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return SafeGetConnector().GetNativeId(security);
 		}
 
 		//private bool IsChildOrder(Order order)
@@ -2638,13 +2709,10 @@ namespace StockSharp.Algo.Strategies
 		{
 			//_disposeLock.WriteAsync(() =>
 			//{
-				ChildStrategies.SyncDo(c =>
-				{
-					c.ForEach(s => s.Dispose());
-					c.Clear();
-				});
+			ChildStrategies.ForEach(s => s.Dispose());
+			ChildStrategies.Clear();
 
-				Connector = null;
+			Connector = null;
 			//});
 
 			base.DisposeManaged();

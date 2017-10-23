@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -17,13 +17,10 @@ namespace SampleAlfaCandles
 {
 	using System;
 	using System.ComponentModel;
-	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
@@ -63,10 +60,10 @@ namespace SampleAlfaCandles
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// подписываемся на ошибку подписки маркет-данных
-			_trader.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-			
-			_trader.NewSecurities += securities =>
+			_trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+
+			_trader.NewSecurity += security =>
 			{
 				// начинаем получать текущие сделки (для построения свечек в реальном времени)
 
@@ -76,8 +73,6 @@ namespace SampleAlfaCandles
 			};
 
 			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
-
-			_trader.NewPortfolios += portfolios => portfolios.ForEach(_trader.RegisterPortfolio);
 
 			_trader.Connected += () =>
 			{
@@ -103,10 +98,7 @@ namespace SampleAlfaCandles
 			base.OnClosing(e);
 		}
 
-		private Security SelectedSecurity
-		{
-			get { return Security.SelectedSecurity; }
-		}
+		private Security SelectedSecurity => Security.SelectedSecurity;
 
 		private void ShowChartClick(object sender, RoutedEventArgs e)
 		{
@@ -115,8 +107,8 @@ namespace SampleAlfaCandles
 
 			var timeFrame = (TimeSpan)HistoryInterval.SelectedItem;
 
-			var from = From.Value ?? DateTimeOffset.MinValue;
-			var to = RealTime.IsChecked == true ? DateTimeOffset.MaxValue : To.Value ?? DateTimeOffset.MaxValue;
+			var from = (DateTimeOffset?)From.Value;
+			var to = RealTime.IsChecked == true ? null : (DateTimeOffset?)To.Value;
 
 			if (from > to)
 			{
@@ -137,12 +129,12 @@ namespace SampleAlfaCandles
 				CandleType = typeof(TimeFrameCandle)
 			};
 
-			_trader.NewCandles += (candleSeries, candles) =>
+			_trader.CandleSeriesProcessing += (candleSeries, candle) =>
 			{
-				_trader.AddInfoLog("newcandles({0}):\n{1}", candles.Count(), candles.Select(c => c.ToString()).Join("\n"));
+				_trader.AddInfoLog("New сandle({0})", candle);
 
 				if (candleSeries == series)
-					wnd.DrawCandles(candles);
+					wnd.DrawCandles(candle);
 			};
 
 			_trader.SubscribeCandles(series, from, to);

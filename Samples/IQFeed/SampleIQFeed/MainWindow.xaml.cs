@@ -60,6 +60,8 @@ namespace SampleIQFeed
 			LookupAddressCtrl.Text = Trader.LookupAddress.To<string>();
 			AdminAddressCtrl.Text = Trader.AdminAddress.To<string>();
 
+			Version.Text = Trader.Version.To<string>();
+
 			DownloadSecurityFromSiteCtrl.IsChecked = Trader.IsDownloadSecurityFromSite;
 
 			_securitiesWindow.MakeHideable();
@@ -116,11 +118,11 @@ namespace SampleIQFeed
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 				// subscribe on error of market data subscription event
-				Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+				Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-				Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-				Trader.NewNews += news => _newsWindow.NewsGrid.News.Add(news);
+				Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+				Trader.NewNews += _newsWindow.NewsGrid.News.Add;
 
 				// set market data provider
 				_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
@@ -139,6 +141,9 @@ namespace SampleIQFeed
 				Trader.LookupAddress = LookupAddressCtrl.Text.To<EndPoint>();
 				Trader.AdminAddress = AdminAddressCtrl.Text.To<EndPoint>();
 
+				Trader.Version = Version.Text.To<Version>();
+
+				Trader.SecuritiesFile = SecFilePath.File;
 				Trader.IsDownloadSecurityFromSite = DownloadSecurityFromSiteCtrl.IsChecked == true;
 
 				Trader.Connect();	

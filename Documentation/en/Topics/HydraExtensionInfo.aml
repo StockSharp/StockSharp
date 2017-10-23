@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b7f2c08a-2920-42a4-9887-eb0441c246cb" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Sources of extended information on instruments are <legacyBold>CSV</legacyBold> files located in the 
+folder "c:\Users\Users\Documents\StockSharp\Hydra\Extended info\", which are automatically loaded when <token>hydra</token> is started.</para>
+
+<para>The extended information can be any necessary information on the instrument (for example, a country, a city, a site, etc.).</para>
+<para>Each source of extended information (<legacyBold>CSV</legacyBold> file) contains a list of instruments 
+and properties of the extended information available in the source for each of the 
+instruments. For each source of extended information, the extended information will be unique.</para>
+<para>If the source does not have extended information on the instrument, empty 
+cells will be displayed in the columns of the corresponding extended information 
+in the list of all instruments.</para>
+<para>To select the required extended information, click the 
+<legacyBold>Extended information</legacyBold> button on the instruments tab.</para>
+<mediaLink>
+<image placement="center" xlink:href="hydra_ExtensionInfo_securities"/>
+</mediaLink>
+<para>After that the window for selecting the extended information appears</para>
+    <mediaLink>
+<image placement="center" xlink:href="hydra_ExtensionInfo_window"/>
+</mediaLink>
+<para>Below is an example of a <legacyBold>CSV</legacyBold> file of extended information, opened in different editors of <legacyBold>MS Excel</legacyBold> and <legacyBold>NotePad</legacyBold></para>
+<mediaLink>
+<image placement="center" xlink:href="hydra_ExtensionInfo_csv_excel"/>
+</mediaLink>
+
+<mediaLink>
+<image placement="center" xlink:href="hydra_ExtensionInfo_csv_notepad"/>
+</mediaLink>
+    </introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

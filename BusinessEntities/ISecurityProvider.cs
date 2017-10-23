@@ -49,12 +49,5 @@ namespace StockSharp.BusinessEntities
 		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
 		/// <returns>Found instruments.</returns>
 		IEnumerable<Security> Lookup(Security criteria);
-
-		/// <summary>
-		/// Get native id.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <returns>Native (internal) trading system security id.</returns>
-		object GetNativeId(Security security);
 	}
 }

@@ -47,7 +47,7 @@ var security = new Security
 			    </listItem>
   					<listItem>
   					<para>Создаем экземпляры классов хранилища инструментов и загрузчика данных с Финама. Обратите внимание, что в данном примере
-  					мы передаем в констуктор <legacyBold>FinamSecurityStorage</legacyBold> один инструмент. Если необходимо работать с несколькими инструментами, то Вы можете
+  					мы передаем в конструктор <legacyBold>FinamSecurityStorage</legacyBold> один инструмент. Если необходимо работать с несколькими инструментами, то Вы можете
   					модифицировать код конструктора и передать массив инструментов.</para>
   					<code>
 				<![CDATA[
@@ -86,7 +86,8 @@ finamHistorySource.Refresh(finamSecurityStorage, security, s => {}, () => false)
 					обычные свечи <codeEntityReference>F:StockSharp.Messages.MarketDataTypes.CandleTimeFrame</codeEntityReference>. Третий аргумент - параметр, связанный с типом рыночных данных. Для обычных свечей - это таймфрейм свечи.  
 				</para>			
 				<para>
-				В последнем аргументе нужно указать функцию, которая возвращает рыночные данные. Причем функция должна возвращать значение типа <legacyBold>IEnumerable&lt;Message&gt;</legacyBold> и принимать параметр типа
+				В последнем аргументе нужно указать функцию, которая возвращает рыночные данные. Причем функция должна возвращать значение 
+				типа <legacyBold>IEnumerable&lt;Message&gt;</legacyBold> и принимать параметр типа
 				<codeEntityReference>T:System.DateTimeOffset</codeEntityReference>. В нашем случае используется метод, который
 				запрашивает свечи с Финама - 
 				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>

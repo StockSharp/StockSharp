@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Storages
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -26,13 +27,14 @@ namespace StockSharp.Algo.Storages
 
 	using MoreLinq;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// The aggregator-storage enumerator.
 	/// </summary>
 	/// <typeparam name="T">Message type.</typeparam>
-	public interface IBasketMarketDataStorageEnumerator<T> : IEnumerator<T>
+	public interface IBasketMarketDataStorageEnumerable<T> : IEnumerable<T>
 	{
 		/// <summary>
 		/// Available message types.
@@ -44,10 +46,10 @@ namespace StockSharp.Algo.Storages
 	/// The aggregator-storage, allowing to load data simultaneously from several market data storages.
 	/// </summary>
 	/// <typeparam name="T">Message type.</typeparam>
-	public class BasketMarketDataStorage<T> : Disposable
+	public class BasketMarketDataStorage<T> : Disposable, IMarketDataStorage<T>, IMarketDataStorageInfo<T>
 		where T : Message
 	{
-		private class BasketMarketDataStorageEnumerator : IBasketMarketDataStorageEnumerator<T>
+		private class BasketMarketDataStorageEnumerator : IEnumerator<T>
 		{
 			private readonly BasketMarketDataStorage<T> _storage;
 			private readonly DateTime _date;
@@ -62,47 +64,13 @@ namespace StockSharp.Algo.Storages
 				_storage = storage;
 				_date = date;
 
-				var dataTypes = new List<MessageTypes>();
-
 				foreach (var s in storage._innerStorages.Cache)
 				{
 					if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.Dates.Contains(date))
 						continue;
 
 					_actions.Add(Tuple.Create(ActionType.Add, s));
-
-					if (s.DataType == typeof(ExecutionMessage))
-						dataTypes.Add(MessageTypes.Execution);
-
-					if (s.DataType == typeof(QuoteChangeMessage))
-						dataTypes.Add(MessageTypes.QuoteChange);
-
-					if (s.DataType == typeof(Level1ChangeMessage))
-						dataTypes.Add(MessageTypes.Level1Change);
-
-					if (s.DataType == typeof(TimeMessage))
-						dataTypes.Add(MessageTypes.Time);
-
-					if (s.DataType == typeof(TimeFrameCandleMessage))
-						dataTypes.Add(MessageTypes.CandleTimeFrame);
-
-					if (s.DataType == typeof(PnFCandleMessage))
-						dataTypes.Add(MessageTypes.CandlePnF);
-
-					if (s.DataType == typeof(RangeCandleMessage))
-						dataTypes.Add(MessageTypes.CandleRange);
-
-					if (s.DataType == typeof(RenkoCandleMessage))
-						dataTypes.Add(MessageTypes.CandleRenko);
-
-					if (s.DataType == typeof(TickCandleMessage))
-						dataTypes.Add(MessageTypes.CandleTick);
-
-					if (s.DataType == typeof(VolumeCandleMessage))
-						dataTypes.Add(MessageTypes.CandleVolume);
 				}
-
-				DataTypes = dataTypes.ToArray();
 
 				_storage._enumerators.Add(this);
 			}
@@ -111,11 +79,6 @@ namespace StockSharp.Algo.Storages
 			/// The current message.
 			/// </summary>
 			public T Current { get; private set; }
-
-			/// <summary>
-			/// Available data types.
-			/// </summary>
-			public IEnumerable<MessageTypes> DataTypes { get; }
 
 			bool IEnumerator.MoveNext()
 			{
@@ -195,12 +158,7 @@ namespace StockSharp.Algo.Storages
 
 			private static DateTimeOffset GetServerTime(IEnumerator enumerator)
 			{
-				var serverTime = ((Message)enumerator.Current).GetServerTime();
-
-				if (serverTime == null)
-					throw new InvalidOperationException();
-
-				return serverTime.Value;
+				return BasketMarketDataStorage<T>.GetServerTime((Message)enumerator.Current);
 			}
 
 			object IEnumerator.Current => Current;
@@ -229,6 +187,58 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private sealed class BasketEnumerable : SimpleEnumerable<T>, IBasketMarketDataStorageEnumerable<T>
+		{
+			public BasketEnumerable(BasketMarketDataStorage<T> storage, DateTime date)
+				: base(() => new BasketMarketDataStorageEnumerator(storage, date))
+			{
+				if (storage == null)
+					throw new ArgumentNullException(nameof(storage));
+
+				var dataTypes = new List<MessageTypes>();
+
+				foreach (var s in storage._innerStorages.Cache)
+				{
+					if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.Dates.Contains(date))
+						continue;
+
+					if (s.DataType == typeof(ExecutionMessage))
+						dataTypes.Add(MessageTypes.Execution);
+
+					if (s.DataType == typeof(QuoteChangeMessage))
+						dataTypes.Add(MessageTypes.QuoteChange);
+
+					if (s.DataType == typeof(Level1ChangeMessage))
+						dataTypes.Add(MessageTypes.Level1Change);
+
+					if (s.DataType == typeof(TimeMessage))
+						dataTypes.Add(MessageTypes.Time);
+
+					if (s.DataType == typeof(TimeFrameCandleMessage))
+						dataTypes.Add(MessageTypes.CandleTimeFrame);
+
+					if (s.DataType == typeof(PnFCandleMessage))
+						dataTypes.Add(MessageTypes.CandlePnF);
+
+					if (s.DataType == typeof(RangeCandleMessage))
+						dataTypes.Add(MessageTypes.CandleRange);
+
+					if (s.DataType == typeof(RenkoCandleMessage))
+						dataTypes.Add(MessageTypes.CandleRenko);
+
+					if (s.DataType == typeof(TickCandleMessage))
+						dataTypes.Add(MessageTypes.CandleTick);
+
+					if (s.DataType == typeof(VolumeCandleMessage))
+						dataTypes.Add(MessageTypes.CandleVolume);
+				}
+
+				DataTypes = dataTypes.ToArray();
+			}
+
+			public IEnumerable<MessageTypes> DataTypes { get; }
+		}
+
 		private enum ActionType
 		{
 			Add,
@@ -252,6 +262,8 @@ namespace StockSharp.Algo.Storages
 			_innerStorages.Added += InnerStoragesOnAdded;
 			_innerStorages.Removed += InnerStoragesOnRemoved;
 			_innerStorages.Cleared += InnerStoragesOnCleared;
+
+			_serializer = new BasketMarketDataSerializer(this);
 		}
 
 		/// <summary>
@@ -288,14 +300,160 @@ namespace StockSharp.Algo.Storages
 			_enumerators.Cache.ForEach(e => e.AddAction(type, storage));
 		}
 
+		IEnumerable<DateTime> IMarketDataStorage.Dates
+		{
+			get { return _innerStorages.Cache.SelectMany(s => s.Dates).OrderBy().Distinct(); }
+		}
+
+		/// <summary>
+		/// The type of market-data, operated by given storage.
+		/// </summary>
+		public virtual Type DataType => throw new NotSupportedException();
+
+		/// <summary>
+		/// The instrument, operated by the external storage.
+		/// </summary>
+		public virtual Security Security => throw new NotSupportedException();
+
+		/// <summary>
+		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.
+		/// </summary>
+		public virtual object Arg => throw new NotSupportedException();
+
+		IMarketDataStorageDrive IMarketDataStorage.Drive => throw new NotSupportedException();
+
+		bool IMarketDataStorage.AppendOnlyNew
+		{
+			get => throw new NotSupportedException();
+			set => throw new NotSupportedException();
+		}
+
+		int IMarketDataStorage.Save(IEnumerable data)
+		{
+			throw new NotSupportedException();
+		}
+
+		void IMarketDataStorage.Delete(IEnumerable data)
+		{
+			throw new NotSupportedException();
+		}
+
+		void IMarketDataStorage.Delete(DateTime date)
+		{
+			throw new NotSupportedException();
+		}
+
+		IEnumerable<T> IMarketDataStorage<T>.Load(DateTime date)
+		{
+			return OnLoad(date);
+		}
+
+		private class BasketMarketDataSerializer : IMarketDataSerializer<T>
+		{
+			private readonly BasketMarketDataStorage<T> _parent;
+
+			public BasketMarketDataSerializer(BasketMarketDataStorage<T> parent)
+			{
+				if (parent == null)
+					throw new ArgumentNullException(nameof(parent));
+
+				_parent = parent;
+			}
+
+			StorageFormats IMarketDataSerializer.Format => _parent.InnerStorages.First().Serializer.Format;
+
+			TimeSpan IMarketDataSerializer.TimePrecision => _parent.InnerStorages.First().Serializer.TimePrecision;
+
+			IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
+			{
+				throw new NotSupportedException();
+			}
+
+			IEnumerable<T> IMarketDataSerializer<T>.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataSerializer<T>.Serialize(Stream stream, IEnumerable<T> data, IMarketDataMetaInfo metaInfo)
+			{
+				throw new NotSupportedException();
+			}
+
+			IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+			{
+				throw new NotSupportedException();
+			}
+		}
+
+		private readonly IMarketDataSerializer<T> _serializer;
+
+		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => _serializer;
+
+		int IMarketDataStorage<T>.Save(IEnumerable<T> data)
+		{
+			throw new NotSupportedException();
+		}
+
+		void IMarketDataStorage<T>.Delete(IEnumerable<T> data)
+		{
+			throw new NotSupportedException();
+		}
+
+		IEnumerable IMarketDataStorage.Load(DateTime date)
+		{
+			return OnLoad(date);
+		}
+
+		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
+		{
+			throw new NotSupportedException();
+		}
+
+		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
+
 		/// <summary>
 		/// To load messages from embedded storages for specified date.
 		/// </summary>
 		/// <param name="date">Date.</param>
 		/// <returns>The messages loader.</returns>
-		public IBasketMarketDataStorageEnumerator<T> Load(DateTime date)
+		public IBasketMarketDataStorageEnumerable<T> Load(DateTime date)
 		{
-			return new BasketMarketDataStorageEnumerator(this, date);
+			return new BasketEnumerable(this, date);
+		}
+
+		/// <summary>
+		/// To load messages from embedded storages for specified date.
+		/// </summary>
+		/// <param name="date">Date.</param>
+		/// <returns>The messages.</returns>
+		protected virtual IEnumerable<T> OnLoad(DateTime date)
+		{
+			return Load(date);
+		}
+
+		DateTimeOffset IMarketDataStorageInfo<T>.GetTime(T data)
+		{
+			return GetServerTime(data);
+		}
+
+		DateTimeOffset IMarketDataStorageInfo.GetTime(object data)
+		{
+			return GetServerTime((Message)data);
+		}
+
+		private static DateTimeOffset GetServerTime(Message message)
+		{
+			var serverTime = message.GetServerTime();
+
+			if (serverTime == null)
+				throw new InvalidOperationException();
+
+			return serverTime.Value;
 		}
 	}
 }

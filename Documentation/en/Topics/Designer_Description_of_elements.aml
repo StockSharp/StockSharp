@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="37e547dd-5141-4a57-9ed2-8ca058e9240c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Inside each cube, an icon is displayed that characterizes it, as well as 
+a name that can be changed to a user-defined one in the <legacyBold>Properties</legacyBold> panel. A 
+tooltip for the cube shows a description of what this cube is for. When you 
+select a cube with a mouse, you can view its properties in the <legacyBold>Properties</legacyBold> panel 
+and, if necessary, change some parameters.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Description_of_cubes_00"/>
+</mediaLink>
+<para>To the left and to the right of the cube, the colored boxes show the 
+incoming (left) and outgoing (right) parameters.</para>
+<para>Parameters are needed to fill the cube with information while the strategy 
+is running. For example, for 
+the <link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" /> cube, the instrument 
+for which you want to build a candle is passed to the input, and the built candles 
+are returned at output. Which, in turn, can be used as an input parameter for 
+the <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" /> element. 
+Or to pass them to a method that determines the candle size.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Description_of_cubes_01"/>
+</mediaLink>
+<para>The color denotes the type of data that is passed in the parameters. Different 
+parameters in different cubes can receive and pass different and incompatible data 
+types. The description of each parameter is indicated in the tooltip. To exclude a 
+lot of errors when connecting parameters of different types, each parameter has its 
+own data type, which differs in color. The following color set is used to indicate 
+the parameters:</para>
+<para></para>
+
+<list class="bullet">
+<listItem><para><legacyBold>Black</legacyBold> –  any type of data, usually used as a signal to perform certain actions within the element.</para></listItem>
+<listItem><para><legacyBold>Darkgreen</legacyBold> –  the instrument.</para></listItem>
+<listItem><para><legacyBold>Darkturquoise</legacyBold> –  the order book.</para></listItem>
+<listItem><para><legacyBold>Turquoise</legacyBold> –  the quote (a pair of price and volume).</para></listItem>
+<listItem><para><legacyBold>Red-orange</legacyBold> – candles.</para></listItem>
+<listItem><para><legacyBold>Darkgold</legacyBold> –  the indicator value.</para></listItem>
+<listItem><para><legacyBold>Olive</legacyBold> –  the order.</para></listItem>
+<listItem><para><legacyBold>Olivegreen</legacyBold> –  own trade.</para></listItem>
+<listItem><para><legacyBold>Blue</legacyBold> –  the flag value (indicates the state and has two values: up (true) and down (false)).</para></listItem>
+<listItem><para><legacyBold>Aquamarine</legacyBold> –  a numerical value, can be set as a number or percentage.</para></listItem>
+<listItem><para><legacyBold>Greenforest</legacyBold> –  values that can be compared (for example, a numeric value, a string, an indicator value, etc.).</para></listItem>
+
+</list>
+<para>Thus, you can connect the parameters of the same colors (the same data 
+types), except for the following types of parameters:</para>
+ 
+<list class="ordered">
+  <listItem><para>1.	The <legacyBold>black</legacyBold> parameter can accept any data. Most often such 
+  parameters are used to pass signals for any actions inside the cube. For 
+  example, the<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" />
+cube stores a certain value and sends it to the output when it receives a signal.</para></listItem>
+  <listItem><para>2.	The <legacyBold>green</legacyBold> parameter can receive on the input various 
+  comparable data types. For example, numeric, indicator values, strings, etc.</para></listItem>
+</list>
+
+
+
+<para>It should be noted that the parameter types can depend on the cube properties. 
+For example, for the  <link xlink:href="d12b6321-af41-40f1-a8c6-87ea59d1b51c" /> cube, 
+the input parameter type is automatically determined by the data source cube data 
+type for  <link xlink:href="d12b6321-af41-40f1-a8c6-87ea59d1b51c" />. When you 
+create a link, the color of the square on the element automatically changes.</para>
+<para>Output parameters usually allow several outgoing connections to different 
+cubes, the input parameters generally allow one connection, except for the 
+<link xlink:href="b596ee27-a887-4814-9ad7-56cd62cec38f" /> cube, which allows you 
+to merge the data stream from different cubes into one. The number of concurrent 
+connections for a parameter is specified in the source code of the cube.</para>
+<para>Cubes for building schemas are divided into several categories, each of 
+the categories is intended for use in a certain part of the schema.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />
+
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

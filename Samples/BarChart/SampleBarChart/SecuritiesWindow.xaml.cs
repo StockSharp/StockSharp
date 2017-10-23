@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleBarChart
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Windows;
 
 	using Ecng.Collections;
@@ -26,6 +25,7 @@ namespace SampleBarChart
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Xaml;
 
 	public partial class SecuritiesWindow
 	{
@@ -41,12 +41,18 @@ namespace SampleBarChart
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			var trader = MainWindow.Instance.Trader;
 			if (trader != null)
 			{
 				if (_initialized)
 				{
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 				}
 
 				_quotesWindows.ForEach(pair =>
@@ -68,10 +74,7 @@ namespace SampleBarChart
 			window.Close();
 		}
 
-		public Security SelectedSecurity
-		{
-			get { return SecurityPicker.SelectedSecurity; }
-		}
+		//public Security SelectedSecurity => SecurityPicker.SelectedSecurity;
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
@@ -82,85 +85,92 @@ namespace SampleBarChart
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// subscribe on order book flow
-				trader.RegisterMarketDepth(security);
+				var window = _quotesWindows.SafeAdd(security, s =>
+				{
+					// subscribe on order book flow
+					trader.RegisterMarketDepth(security);
 
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+				{
+					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
-			TryInitialize();
-		}
-
-		private void TryInitialize()
-		{
-			if (!_initialized)
-			{
-				_initialized = true;
-
-				var trader = MainWindow.Instance.Trader;
-
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
-
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
+				if (!_initialized)
+				{
+					_initialized = true;
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+				}
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 
 		private void HistoryTicksClick(object sender, RoutedEventArgs e)
 		{
-			var window = _historyTicksWindows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create historical ticks window
-				var wnd = new HistoryTicksWindow(SelectedSecurity);
-				wnd.MakeHideable();
-				return wnd;
-			});
+				var window = _historyTicksWindows.SafeAdd(security, s =>
+				{
+					// create historical ticks window
+					var wnd = new HistoryTicksWindow(security);
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
+			}
 		}
 
 		private void HistoryCandlesClick(object sender, RoutedEventArgs e)
 		{
-			var window = _historyCandlesWindows.SafeAdd(SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create historical candles window
-				var wnd = new HistoryCandlesWindow(SelectedSecurity);
-				wnd.MakeHideable();
-				return wnd;
-			});
+				var window = _historyCandlesWindows.SafeAdd(security, s =>
+				{
+					// create historical candles window
+					var wnd = new HistoryCandlesWindow(security);
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+					window.Show();
+			}
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			new FindSecurityWindow().ShowModal(this);
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
 		}
 	}
 }

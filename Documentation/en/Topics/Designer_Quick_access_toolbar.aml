@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="45ae6713-c28b-457d-be6b-19016f54507e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The <legacyBold>Quick access panel</legacyBold> is located at the 
+top of the <token>designer</token> window and is intended for quick access to the 
+most frequently used functions.</para>
+
+<list class="ordered">
+  <listItem><para>When you click the <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_00"/></mediaLinkInline> button   
+  <token>designer</token> connects to trading terminals and data sources (see the 
+  <link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" /> and  <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> 
+  sections for details about working with data sources).</para></listItem>
+  
+  <listItem><para>Clicking the <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_01"/></mediaLinkInline> 
+  button opens <link xlink:href="d416a6d9-0a42-40c0-8f9f-0c1df29f5cda" />. </para></listItem>
+  
+  <listItem><para>When you click the <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline> 
+  button, you will be able to change the program settings (<link xlink:href="57dc2e39-baa6-4c67-83a9-13278370a877" />), 
+  interface language, or completely <link xlink:href="7c04efc6-036c-4c25-855f-f086ee4c266d" /> of <token>designer</token>.</para></listItem></list>
+  <mediaLink><image placement="center" xlink:href="Designer_The_quick_access_toolbar_03"/></mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="2f00e9bc-8ea7-4679-9688-b02c3424f03a" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

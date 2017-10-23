@@ -121,12 +121,10 @@ namespace XMLCommToHTM.DOM.Internal.DOC
 		private void MergeFieldsWithReflection(bool onlyDocumentedMembers, bool privateMembers)
 		{
 			MemberInfo[] fes =
-				Enumerable.Concat<MemberInfo>(
-					ReflectionType
-						.GetFields(AllMembersBindFlags)
-						.Where(_ => privateMembers || !_.IsPrivate)
-						.Where(_ => !ReflectionType.IsEnum || _.Name != "value__"),
-					ReflectionType
+				ReflectionType
+					.GetFields(AllMembersBindFlags)
+					.Where(_ => privateMembers || !_.IsPrivate)
+					.Where(_ => !ReflectionType.IsEnum || _.Name != "value__").Concat<MemberInfo>(ReflectionType
 						.GetEvents(AllMembersBindFlags)
 						.Where(_ => 
 							privateMembers || 
@@ -163,10 +161,8 @@ namespace XMLCommToHTM.DOM.Internal.DOC
 		void MergeMethodsWithReflection(bool onlyDocumentedMembers, bool privateMembers)
 		{
 			var methods = (ReflectionType.IsEnum ? Enumerable.Empty<MethodBase>() :
-				Enumerable.Concat<MethodBase>(
-					ReflectionType.GetMethods(AllMembersBindFlags),
-					ReflectionType.GetConstructors(AllMembersBindFlags)
-					)
+				ReflectionType.GetMethods(AllMembersBindFlags)
+				.Concat<MethodBase>(ReflectionType.GetConstructors(AllMembersBindFlags))
 					.Where(MemberUtils.IsVisibleMethod)
 					.Where(_ => privateMembers || !_.IsPrivate))
 					.ToArray();

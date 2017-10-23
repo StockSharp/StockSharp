@@ -3,19 +3,24 @@
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para><token>stocksharp</token> предоставляет функциональность для сохранения данных и последующую их загрузку. Хранение данных может понадобиться в
-		нескольких случаях:</para>
+		<para><token>stocksharp</token> rovides functionality for data storage and loading. Data storage may be necessary in a few cases:</para>
 		
 		<list class="ordered">
-			<listItem>В процессе работы торговой стратегии, когда необходимо запоминать состояние (заявки, позиции, настройки и т.д.);</listItem>
-			<listItem>Сохранение маркет данных в реальном времени из торгового терминала для тестирования роботов;</listItem>
-			<listItem>Накопление для анализа и поиска закономерностей.</listItem>
+			<listItem>During working of trading strategy, when necessary to save the state (orders, positions, settings, etc.);</listItem>
+			<listItem>Market data saving from the trading terminal for algorithm testing in real time;</listItem>
+			<listItem>Data accumulation for analysis and data mining.</listItem>
 		</list>
 		
-		<para><token>stocksharp</token> делает механизм работы сохранения прозрачным за счет высокоуровневого доступа и сокрытия внутри технических деталей
-		(подробнее, о <link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">API</link>). 
-		А также универсальным, с возможностью расширения типов поддерживаемых хранилищ.</para>
+		<para>
+			<token>stocksharp</token> makes clear the saving mechanism due to high-level access and the technical details hiding (for more details see
+			<link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">API</link>). And also versatile, with possibility to expand the types of supported storages.
+		</para>
 	</introduction>
+	
+	<relatedTopics>
+      <link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">API</link>
+      <link xlink:href="ac584200-f06a-49e6-b2fd-141b5fc898f9">Messages storage</link>
+    </relatedTopics>
 	
 	</developerConceptualDocument>
 </topic>

@@ -30,7 +30,6 @@ namespace SampleHistoryTesting
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Russian.Finam;
@@ -47,21 +46,21 @@ namespace SampleHistoryTesting
 
 	public partial class MainWindow
 	{
-		private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
-		{
-			public TradeCandleBuilderSourceEx(IConnector connector)
-				: base(connector)
-			{
-			}
+		//private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
+		//{
+		//	public TradeCandleBuilderSourceEx(IConnector connector)
+		//		: base(connector)
+		//	{
+		//	}
 
-			protected override void RegisterSecurity(Security security)
-			{
-			}
+		//	protected override void RegisterSecurity(Security security)
+		//	{
+		//	}
 
-			protected override void UnRegisterSecurity(Security security)
-			{
-			}
-		}
+		//	protected override void UnRegisterSecurity(Security security)
+		//	{
+		//	}
+		//}
 
 		private class FinamSecurityStorage : CollectionSecurityProvider, ISecurityStorage
 		{
@@ -84,10 +83,10 @@ namespace SampleHistoryTesting
 				throw new NotSupportedException();
 			}
 
-			IEnumerable<string> ISecurityStorage.GetSecurityIds()
-			{
-				return Enumerable.Empty<string>();
-			}
+			//IEnumerable<string> ISecurityStorage.GetSecurityIds()
+			//{
+			//	return Enumerable.Empty<string>();
+			//}
 		}
 
 		// emulation settings
@@ -106,7 +105,6 @@ namespace SampleHistoryTesting
 		private readonly List<ProgressBar> _progressBars = new List<ProgressBar>();
 		private readonly List<CheckBox> _checkBoxes = new List<CheckBox>();
 		private readonly List<HistoryEmulationConnector> _connectors = new List<HistoryEmulationConnector>();
-		private readonly BufferedChart _bufferedChart;
 		
 		private DateTime _startEmulationTime;
 		private ChartCandleElement _candlesElem;
@@ -117,13 +115,14 @@ namespace SampleHistoryTesting
 		private SimpleMovingAverage _longMa;
 		private ChartArea _area;
 
-		private readonly FinamHistorySource _finamHistorySource = new FinamHistorySource();
+		private readonly InMemoryNativeIdStorage _nativeIdStorage = new InMemoryNativeIdStorage();
+		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
+
+		private readonly FinamHistorySource _finamHistorySource;
 
 		public MainWindow()
 		{
 			InitializeComponent();
-
-			_bufferedChart = new BufferedChart(Chart);
 
 			HistoryPath.Folder = @"..\..\..\HistoryData\".ToFullPath();
 
@@ -171,11 +170,19 @@ namespace SampleHistoryTesting
 				FinamCandlesCheckBox,
 				YahooCandlesCheckBox,
 			});
+
+			_finamHistorySource = new FinamHistorySource(_nativeIdStorage, _exchangeInfoProvider);
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
-			InitChart();
+			if (_connectors.Count > 0)
+			{
+				foreach (var connector in _connectors)
+					connector.Start();
+
+				return;
+			}
 
 			if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
 			{
@@ -189,8 +196,7 @@ namespace SampleHistoryTesting
 				return;
 			}
 
-			var secGen = new SecurityIdGenerator();
-			var id = secGen.Split(SecId.Text);
+			var id = SecId.Text.ToSecurityId();
 
 			//if (secIdParts.Length != 2)
 			//{
@@ -201,7 +207,7 @@ namespace SampleHistoryTesting
 			var timeFrame = TimeSpan.FromMinutes(TimeFrame.SelectedIndex == 0 ? 1 : 5);
 
 			var secCode = id.SecurityCode;
-			var board = ExchangeBoard.GetOrCreateBoard(id.BoardCode);
+			var board = _exchangeInfoProvider.GetOrCreateBoard(id.BoardCode);
 
 			// create test security
 			var security = new Security
@@ -224,63 +230,90 @@ namespace SampleHistoryTesting
 					TicksProgress,
 					TicksParameterGrid,
 					// ticks
-					new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Ticks}),
+					new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Ticks},
+					TicksChart,
+					TicksEquity,
+					TicksPosition),
 
 				Tuple.Create(
 					TicksAndDepthsCheckBox,
 					TicksAndDepthsProgress,
 					TicksAndDepthsParameterGrid,
 					// ticks + order book
-					new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.XamlStr757}),
+					new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.XamlStr757},
+					TicksAndDepthsChart,
+					TicksAndDepthsEquity,
+					TicksAndDepthsPosition),
 
 				Tuple.Create(
 					DepthsCheckBox,
 					DepthsProgress,
 					DepthsParameterGrid,
 					// order book
-					new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.MarketDepths}),
+					new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.MarketDepths},
+					DepthsChart,
+					DepthsEquity,
+					DepthsPosition),
 
 				Tuple.Create(
 					CandlesCheckBox,
 					CandlesProgress,
 					CandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.Candles}),
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.Candles},
+					CandlesChart,
+					CandlesEquity,
+					CandlesPosition),
 				
 				Tuple.Create(
 					CandlesAndDepthsCheckBox,
 					CandlesAndDepthsProgress,
 					CandlesAndDepthsParameterGrid,
 					// candles + orderbook
-					new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.XamlStr635}),
+					new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.XamlStr635},
+					CandlesAndDepthsChart,
+					CandlesAndDepthsEquity,
+					CandlesAndDepthsPosition),
 			
 				Tuple.Create(
 					OrderLogCheckBox,
 					OrderLogProgress,
 					OrderLogParameterGrid,
 					// order log
-					new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog}),
+					new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog},
+					OrderLogChart,
+					OrderLogEquity,
+					OrderLogPosition),
 
 				Tuple.Create(
 					Level1CheckBox,
 					Level1Progress,
 					Level1ParameterGrid,
 					// order log
-					new EmulationInfo {UseLevel1 = true, CurveColor = Colors.Aquamarine, StrategyName = LocalizedStrings.Level1}),
+					new EmulationInfo {UseLevel1 = true, CurveColor = Colors.Aquamarine, StrategyName = LocalizedStrings.Level1},
+					Level1Chart,
+					Level1Equity,
+					Level1Position),
 
 				Tuple.Create(
 					FinamCandlesCheckBox,
 					FinamCandlesProgress,
 					FinamCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles}),
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
+					FinamCandlesChart,
+					FinamCandlesEquity,
+					FinamCandlesPosition),
 
 				Tuple.Create(
 					YahooCandlesCheckBox,
 					YahooCandlesProgress,
 					YahooCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource().GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles}),
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource(_exchangeInfoProvider).GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles},
+					YahooCandlesChart,
+					YahooCandlesEquity,
+					YahooCandlesPosition),
 			};
 
 			// storage to historical data
@@ -317,10 +350,16 @@ namespace SampleHistoryTesting
 			var maxVolume = MaxVolume.Text.To<int>();
 			var secId = security.ToSecurityId();
 
+			SetIsEnabled(false, false, false);
+
 			foreach (var set in settings)
 			{
 				if (set.Item1.IsChecked == false)
 					continue;
+
+				var title = (string)set.Item1.Content;
+
+				InitChart(set.Item5, set.Item6, set.Item7);
 
 				var progressBar = set.Item2;
 				var statistic = set.Item3;
@@ -364,7 +403,7 @@ namespace SampleHistoryTesting
 						}
 					},
 
-					UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
+					//UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
 
 					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
 					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
@@ -396,11 +435,13 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(connector);
 
-				var candleManager = emulationInfo.UseCandleTimeFrame == null
-					? new CandleManager(new TradeCandleBuilderSourceEx(connector))
-					: new CandleManager(connector);
+				var candleManager = new CandleManager(connector);
 
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
+				{
+					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? BuildCandlesModes.Build : BuildCandlesModes.Load,
+					BuildCandlesFrom = emulationInfo.UseOrderLog ? (MarketDataTypes?)MarketDataTypes.OrderLog : null,
+				};
 
 				_shortMa = new SimpleMovingAverage { Length = 10 };
 				_shortElem = new ChartIndicatorElement
@@ -409,7 +450,10 @@ namespace SampleHistoryTesting
 					ShowAxisMarker = false,
 					FullTitle = _shortMa.ToString()
 				};
-				_bufferedChart.AddElement(_area, _shortElem);
+
+				var chart = set.Item5;
+
+				chart.AddElement(_area, _shortElem);
 
 				_longMa = new SimpleMovingAverage { Length = 80 };
 				_longElem = new ChartIndicatorElement
@@ -417,10 +461,10 @@ namespace SampleHistoryTesting
 					ShowAxisMarker = false,
 					FullTitle = _longMa.ToString()
 				};
-				_bufferedChart.AddElement(_area, _longElem);
+				chart.AddElement(_area, _longElem);
 
 				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(_bufferedChart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
+				var strategy = new SmaStrategy(chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
 				{
 					Volume = 1,
 					Portfolio = portfolio,
@@ -435,13 +479,13 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(strategy);
 
-				connector.NewSecurities += securities =>
+				connector.NewSecurity += s =>
 				{
-					if (securities.All(s => s != security))
+					if (s != security)
 						return;
 
 					// fill level1 values
-					connector.SendInMessage(level1Info);
+					connector.HistoryMessageAdapter.SendOutMessage(level1Info);
 
 					if (emulationInfo.HistorySource != null)
 					{
@@ -522,10 +566,12 @@ namespace SampleHistoryTesting
 				statistic.Parameters.Clear();
 				statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 
-				var pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, emulationInfo.CurveColor, EquityCurveChartStyles.Area);
-				var unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal + emulationInfo.StrategyName, Colors.Black);
-				var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, EquityCurveChartStyles.DashedLine);
-				var posItems = PositionCurve.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
+				var equity = set.Item6;
+
+				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, emulationInfo.CurveColor, LineChartStyles.Area);
+				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black);
+				var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, LineChartStyles.DashedLine);
+				var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
 				strategy.PnLChanged += () =>
 				{
 					var pnl = new EquityData
@@ -537,7 +583,7 @@ namespace SampleHistoryTesting
 					var unrealizedPnL = new EquityData
 					{
 						Time = strategy.CurrentTime,
-						Value = strategy.PnLManager.UnrealizedPnL
+						Value = strategy.PnLManager.UnrealizedPnL ?? 0
 					};
 
 					var commission = new EquityData
@@ -573,25 +619,38 @@ namespace SampleHistoryTesting
 						candleManager.Stop(series);
 						strategy.Stop();
 
-						logManager.Dispose();
-						_connectors.Clear();
+						SetIsChartEnabled(chart, false);
 
-						SetIsEnabled(false);
+						if (_connectors.All(c => c.State == EmulationStates.Stopped))
+						{
+							logManager.Dispose();
+							_connectors.Clear();
+
+							SetIsEnabled(true, false, false);
+						}
 
 						this.GuiAsync(() =>
 						{
 							if (connector.IsFinished)
 							{
 								progressBar.Value = progressBar.Maximum;
-								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime), title);
 							}
 							else
-								MessageBox.Show(this, LocalizedStrings.cancelled);
+								MessageBox.Show(this, LocalizedStrings.cancelled, title);
 						});
 					}
 					else if (connector.State == EmulationStates.Started)
 					{
-						SetIsEnabled(true);
+						if (_connectors.All(c => c.State == EmulationStates.Started))
+							SetIsEnabled(false, true, true);
+
+						SetIsChartEnabled(chart, true);
+					}
+					else if (connector.State == EmulationStates.Suspended)
+					{
+						if (_connectors.All(c => c.State == EmulationStates.Suspended))
+							SetIsEnabled(true, false, true);
 					}
 				};
 
@@ -601,9 +660,8 @@ namespace SampleHistoryTesting
 
 					connector.NewMessage += message =>
 					{
-						var quoteMsg = message as QuoteChangeMessage;
 
-						if (quoteMsg != null)
+						if (message is QuoteChangeMessage quoteMsg)
 							MarketDepth.UpdateDepth(quoteMsg);
 					};
 				}
@@ -647,36 +705,48 @@ namespace SampleHistoryTesting
 			}
 		}
 
-		private void InitChart()
+		private void PauseBtnClick(object sender, RoutedEventArgs e)
 		{
-			_bufferedChart.ClearAreas();
-			Curve.Clear();
-			PositionCurve.Clear();
-
-			_area = new ChartArea();
-			_bufferedChart.AddArea(_area);
-
-			_candlesElem = new ChartCandleElement { ShowAxisMarker = false };
-			_bufferedChart.AddElement(_area, _candlesElem);
-
-			_tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
-			_bufferedChart.AddElement(_area, _tradesElem);
+			foreach (var connector in _connectors)
+			{
+				connector.Suspend();
+			}
 		}
 
-		private void SetIsEnabled(bool started)
+		private void InitChart(IChart chart, EquityCurveChart equity, EquityCurveChart position)
+		{
+			chart.ClearAreas();
+			equity.Clear();
+			position.Clear();
+
+			_area = new ChartArea();
+			chart.AddArea(_area);
+
+			_candlesElem = new ChartCandleElement { ShowAxisMarker = false };
+			chart.AddElement(_area, _candlesElem);
+
+			_tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
+			chart.AddElement(_area, _tradesElem);
+		}
+
+		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop)
 		{
 			this.GuiAsync(() =>
 			{
-				StopBtn.IsEnabled = started;
-				StartBtn.IsEnabled = !started;
+				StopBtn.IsEnabled = canStop;
+				StartBtn.IsEnabled = canStart;
+				PauseBtn.IsEnabled = canSuspend;
 
 				foreach (var checkBox in _checkBoxes)
 				{
-					checkBox.IsEnabled = !started;
+					checkBox.IsEnabled = !canStop;
 				}
-
-				_bufferedChart.IsAutoRange = started;
 			});
+		}
+
+		private void SetIsChartEnabled(IChart chart, bool started)
+		{
+			this.GuiAsync(() => chart.IsAutoRange = started);
 		}
 	}
 }

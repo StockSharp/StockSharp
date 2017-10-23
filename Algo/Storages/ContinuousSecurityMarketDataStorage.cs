@@ -16,299 +16,120 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Storages
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
-	using System.Linq;
 
-	using Ecng.Common;
-
-	using MoreLinq;
-
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The interface, describing the storage of market-date of continuous instrument.
+	/// The aggregator-storage, allowing to load data simultaneously market data for <see cref="ContinuousSecurity"/>.
 	/// </summary>
-	public interface IContinuousSecurityMarketDataStorage
+	/// <typeparam name="T">Message type.</typeparam>
+	public class ContinuousSecurityMarketDataStorage<T> : BasketMarketDataStorage<T>
+		where T : Message
 	{
-		/// <summary>
-		/// To get storage for the composite instrument.
-		/// </summary>
-		/// <param name="date">Date.</param>
-		/// <returns>The storage of the composite instrument.</returns>
-		IMarketDataStorage GetStorage(DateTime date);
-	}
-
-	class ContinuousSecurityMarketDataStorage<T> : IMarketDataStorage<T>, IMarketDataStorageInfo<T>, IContinuousSecurityMarketDataStorage
-	{
-		private readonly Func<Security, IMarketDataDrive, IMarketDataStorage<T>> _getStorage;
 		private readonly ContinuousSecurity _security;
-		private readonly Func<T, Security> _getSecurity;
-		private readonly Func<T, DateTimeOffset> _getTime;
 
-		public ContinuousSecurityMarketDataStorage(ContinuousSecurity security, object arg, Func<T, DateTimeOffset> getTime, Func<T, Security> getSecurity, Func<Security, IMarketDataDrive, IMarketDataStorage<T>> getStorage, IMarketDataStorageDrive drive)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ContinuousSecurityMarketDataStorage{T}"/>.
+		/// </summary>
+		/// <param name="security">Continuous security (generally, a futures contract), containing expirable securities.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.</param>
+		public ContinuousSecurityMarketDataStorage(ContinuousSecurity security, object arg)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			if (getTime == null)
-				throw new ArgumentNullException(nameof(getTime));
-
-			if (getSecurity == null)
-				throw new ArgumentNullException(nameof(getSecurity));
-
-			if (getStorage == null)
-				throw new ArgumentNullException(nameof(getStorage));
-
-			if (drive == null)
-				throw new ArgumentNullException(nameof(drive));
-
-			_getStorage = getStorage;
-			_security = security;
-			_getTime = getTime;
-			_getSecurity = getSecurity;
-			
-			_arg = arg;
-			Drive = drive;
-		}
-
-		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
-
-		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
-		{
-			get { throw new NotSupportedException(); }
-		}
-
-		IEnumerable<DateTime> IMarketDataStorage.Dates
-		{
-			get
-			{
-				return from innerSecurity in _security.InnerSecurities
-					let range = _security.ExpirationJumps.GetActivityRange(innerSecurity)
-					//let dates = _getStorage(innerSecurity, Drive.Drive).Dates.ToArray()
-					from date in _getStorage(innerSecurity, Drive.Drive).Dates.Where(d => range.Contains(d.ApplyTimeZone(TimeZoneInfo.Utc)))
-					select date;
-			}
-		}
-
-		Type IMarketDataStorage.DataType => typeof(T);
-
-		Security IMarketDataStorage.Security => _security;
-
-		private readonly object _arg;
-
-		object IMarketDataStorage.Arg => _arg;
-
-		public IMarketDataStorageDrive Drive { get; }
-
-		private bool _appendOnlyNew = true;
-
-		bool IMarketDataStorage.AppendOnlyNew
-		{
-			get { return _appendOnlyNew; }
-			set
-			{
-				_appendOnlyNew = value;
-				_security.InnerSecurities.ForEach(s => _getStorage(s, Drive.Drive).AppendOnlyNew = value);
-			}
+			Security = _security = security;
+			Arg = arg;
 		}
 
 		/// <summary>
-		/// To save market data in storage.
+		/// The type of market-data, operated by given storage.
 		/// </summary>
-		/// <param name="data">Market data.</param>
-		/// <returns>Count of saved data.</returns>
-		public int Save(IEnumerable<T> data)
-		{
-			var count = 0;
-			
-			foreach (var group in data.GroupBy(_getSecurity))
-			{
-				count += _getStorage(group.Key, Drive.Drive).Save(group);
-			}
-
-			return count;
-		}
+		public override Type DataType => typeof(T);
 
 		/// <summary>
-		/// To delete market data from storage.
+		/// The instrument, operated by the external storage.
 		/// </summary>
-		/// <param name="data">Market data to be deleted.</param>
-		public void Delete(IEnumerable<T> data)
-		{
-			foreach (var group in data.GroupBy(d => _getTime(d).Date))
-			{
-				GetStorage(group.Key).Delete(group);
-			}
-		}
-
-		void IMarketDataStorage.Delete(IEnumerable data)
-		{
-			Delete((IEnumerable<T>)data);
-		}
-
-		void IMarketDataStorage.Delete(DateTime date)
-		{
-			GetStorage(date).Delete(date);
-		}
-
-		int IMarketDataStorage.Save(IEnumerable data)
-		{
-			return Save((IEnumerable<T>)data);
-		}
-
-		IEnumerable IMarketDataStorage.Load(DateTime date)
-		{
-			return Load(date);
-		}
-
-		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
-		{
-			return GetStorage(date).GetMetaInfo(date);
-		}
+		public override Security Security { get; }
 
 		/// <summary>
-		/// To load data.
+		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.
 		/// </summary>
-		/// <param name="date">Date, for which data shall be loaded.</param>
-		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-		public IEnumerable<T> Load(DateTime date)
+		public override object Arg { get; }
+
+		/// <summary>
+		/// To load messages from embedded storages for specified date.
+		/// </summary>
+		/// <param name="date">Date.</param>
+		/// <returns>The messages.</returns>
+		protected override IEnumerable<T> OnLoad(DateTime date)
 		{
-			return GetStorage(date).Load(date);
-		}
+			var securityId = _security.ToSecurityId();
+			var currentSecurityId = _security.GetSecurity(date);
 
-		private IMarketDataStorage<T> GetStorage(DateTime date)
-		{
-			return _getStorage(_security.GetSecurity(date.ApplyTimeZone(TimeZoneInfo.Utc)), Drive.Drive);
-		}
-
-		IMarketDataStorage IContinuousSecurityMarketDataStorage.GetStorage(DateTime date)
-		{
-			return GetStorage(date);
-		}
-
-		DateTimeOffset IMarketDataStorageInfo.GetTime(object data)
-		{
-			return _getTime((T)data);
-		}
-
-		DateTimeOffset IMarketDataStorageInfo<T>.GetTime(T data)
-		{
-			return _getTime(data);
-		}
-	}
-
-	class ConvertableContinuousSecurityMarketDataStorage<TMessage, TEntity> : ContinuousSecurityMarketDataStorage<TMessage>, IMarketDataStorage<TEntity>, IMarketDataStorageInfo<TEntity>
-		where TMessage : Message
-	{
-		private readonly ContinuousSecurity _security;
-		private readonly Func<TEntity, TMessage> _toMessage;
-		private readonly Func<TEntity, DateTimeOffset> _getEntityTime;
-
-		public ConvertableContinuousSecurityMarketDataStorage(ContinuousSecurity security, 
-			object arg,
-			Func<TMessage, DateTimeOffset> getTime, 
-			Func<TMessage, Security> getSecurity,
-			Func<TEntity, TMessage> toMessage,
-			Func<TEntity, DateTimeOffset> getEntityTime,
-			Func<Security, IMarketDataDrive, IMarketDataStorage<TMessage>> getStorage, 
-			IMarketDataStorageDrive drive)
-			: base(security, arg, getTime, getSecurity, getStorage, drive)
-		{
-			if (toMessage == null)
-				throw new ArgumentNullException(nameof(toMessage));
-
-			if (getEntityTime == null)
-				throw new ArgumentNullException(nameof(getEntityTime));
-
-			_security = security;
-			_toMessage = toMessage;
-			_getEntityTime = getEntityTime;
-		}
-
-		int IMarketDataStorage<TEntity>.Save(IEnumerable<TEntity> data)
-		{
-			return Save(data.Select(_toMessage));
-		}
-
-		void IMarketDataStorage<TEntity>.Delete(IEnumerable<TEntity> data)
-		{
-			Delete(data.Select(_toMessage));
-		}
-
-		IEnumerable<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
-		{
-			var security = _security.GetSecurity(date.ApplyTimeZone(TimeZoneInfo.Utc));
-
-			if (typeof(TEntity) == typeof(Candle))
+			foreach (Message msg in base.OnLoad(date))
 			{
-				var messages = Load(date);
+				switch (msg.Type)
+				{
+					case MessageTypes.CandlePnF:
+					case MessageTypes.CandleRange:
+					case MessageTypes.CandleRenko:
+					case MessageTypes.CandleTick:
+					case MessageTypes.CandleTimeFrame:
+					case MessageTypes.CandleVolume:
+					{
+						var candleMsg = (CandleMessage)msg;
 
-				return messages
-					.Cast<CandleMessage>()
-					.ToCandles<TEntity>(security);
+						if (candleMsg.SecurityId == currentSecurityId)
+							yield return ReplaceSecurityId(msg, securityId);
+
+						break;
+					}
+
+					case MessageTypes.Execution:
+					{
+						var execMsg = (ExecutionMessage)msg;
+
+						if (execMsg.SecurityId == currentSecurityId)
+							yield return ReplaceSecurityId(msg, securityId);
+
+						break;
+					}
+
+					case MessageTypes.QuoteChange:
+					{
+						var quoteMsg = (QuoteChangeMessage)msg;
+
+						if (quoteMsg.SecurityId == currentSecurityId)
+							yield return ReplaceSecurityId(msg, securityId);
+
+						break;
+					}
+
+					case MessageTypes.Level1Change:
+					{
+						var l1Msg = (Level1ChangeMessage)msg;
+
+						if (l1Msg.SecurityId == currentSecurityId)
+							yield return ReplaceSecurityId(msg, securityId);
+
+						break;
+					}
+
+					default:
+						yield return (T)msg;
+						break;
+				}
 			}
-			else
-				return Load(date).ToEntities<TMessage, TEntity>(security);
 		}
 
-		IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer
+		private static T ReplaceSecurityId(Message msg, SecurityId securityId)
 		{
-			get { throw new NotSupportedException(); }
-		}
-
-		DateTimeOffset IMarketDataStorageInfo<TEntity>.GetTime(TEntity data)
-		{
-			return _getEntityTime(data);
-		}
-	}
-
-	class CandleContinuousSecurityMarketDataStorage<TCandle> : ContinuousSecurityMarketDataStorage<CandleMessage>, IMarketDataStorage<Candle>, IMarketDataStorageInfo<Candle>
-	{
-		private readonly ContinuousSecurity _security;
-		private readonly object _arg;
-
-		public CandleContinuousSecurityMarketDataStorage(ContinuousSecurity security,
-			object arg,
-			Func<CandleMessage, DateTimeOffset> getTime,
-			Func<CandleMessage, Security> getSecurity,
-			Func<Security, IMarketDataDrive, IMarketDataStorage<CandleMessage>> getStorage,
-			IMarketDataStorageDrive drive)
-			: base(security, arg, getTime, getSecurity, getStorage, drive)
-		{
-			_security = security;
-			_arg = arg;
-		}
-
-		int IMarketDataStorage<Candle>.Save(IEnumerable<Candle> data)
-		{
-			return Save(data.Select(c => c.ToMessage()));
-		}
-
-		void IMarketDataStorage<Candle>.Delete(IEnumerable<Candle> data)
-		{
-			Delete(data.Select(c => c.ToMessage()));
-		}
-
-		IEnumerable<Candle> IMarketDataStorage<Candle>.Load(DateTime date)
-		{
-			var messages = Load(date);
-
-			return messages
-				.ToCandles<TCandle>(_security.GetSecurity(date.ApplyTimeZone(TimeZoneInfo.Utc)))
-				.Cast<Candle>();
-		}
-
-		IMarketDataSerializer<Candle> IMarketDataStorage<Candle>.Serializer
-		{
-			get { throw new NotSupportedException(); }
-		}
-
-		DateTimeOffset IMarketDataStorageInfo<Candle>.GetTime(Candle data)
-		{
-			return data.OpenTime;
+			var clone = msg.Clone();
+			clone.ReplaceSecurityId(securityId);
+			return (T)clone;
 		}
 	}
 }

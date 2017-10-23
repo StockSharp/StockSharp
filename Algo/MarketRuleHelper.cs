@@ -21,13 +21,11 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
-
-	using MoreLinq;
+	using Ecng.Configuration;
 
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Testing;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -51,12 +49,6 @@ namespace StockSharp.Algo
 
 				Order = order;
 				Connector = connector;
-
-				//if (order.Connector == null)
-				//{
-				//	((INotifyPropertyChanged)order).PropertyChanged += OnOrderPropertyChanged;
-				//	//throw new ArgumentException("Заявка не имеет информации о подключении.");
-				//}
 			}
 
 			protected override bool CanFinish()
@@ -69,28 +61,14 @@ namespace StockSharp.Algo
 				return Order.State == OrderStates.Done || Order.State == OrderStates.Failed;
 			}
 
-			//private void OnOrderPropertyChanged(object sender, PropertyChangedEventArgs e)
-			//{
-			//	if (TrySubscribe())
-			//	{
-			//		((INotifyPropertyChanged)Order).PropertyChanged -= OnOrderPropertyChanged;
-			//	}
-			//}
-
 			protected Order Order { get; }
 
 			protected IConnector Connector { get; }
 
 			protected void TrySubscribe()
 			{
-				//if (Order.Connector != null)
-				{
-					Subscribe();
-					Container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Str1028);
-					//return true;
-				}
-
-				//return false;
+				Subscribe();
+				Container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Str1028);
 			}
 
 			protected abstract void Subscribe();
@@ -151,14 +129,14 @@ namespace StockSharp.Algo
 			public RegisterFailedOrderRule(Order order, IConnector connector)
 				: base(order, connector)
 			{
-				Name = LocalizedStrings.Str2960 + " ";
+				Name = LocalizedStrings.Str717 + " ";
 				TrySubscribe();
 			}
 
 			protected override void Subscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrdersRegisterFailed += OnOrdersRegisterFailed;
+					Connector.StopOrderRegisterFailed += OnOrderRegisterFailed;
 				else
 					Connector.OrderRegisterFailed += OnOrderRegisterFailed;
 			}
@@ -166,14 +144,9 @@ namespace StockSharp.Algo
 			protected override void UnSubscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrdersRegisterFailed -= OnOrdersRegisterFailed;
+					Connector.StopOrderRegisterFailed -= OnOrderRegisterFailed;
 				else
 					Connector.OrderRegisterFailed -= OnOrderRegisterFailed;
-			}
-
-			private void OnOrdersRegisterFailed(IEnumerable<OrderFail> fails)
-			{
-				fails.ForEach(OnOrderRegisterFailed);
 			}
 
 			private void OnOrderRegisterFailed(OrderFail fail)
@@ -195,7 +168,7 @@ namespace StockSharp.Algo
 			protected override void Subscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrdersCancelFailed += OnOrdersCancelFailed;
+					Connector.StopOrderCancelFailed += OnOrderCancelFailed;
 				else
 					Connector.OrderCancelFailed += OnOrderCancelFailed;
 			}
@@ -203,14 +176,9 @@ namespace StockSharp.Algo
 			protected override void UnSubscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrdersCancelFailed -= OnOrdersCancelFailed;
+					Connector.StopOrderCancelFailed -= OnOrderCancelFailed;
 				else
 					Connector.OrderCancelFailed -= OnOrderCancelFailed;
-			}
-
-			private void OnOrdersCancelFailed(IEnumerable<OrderFail> fails)
-			{
-				fails.ForEach(OnOrderCancelFailed);
 			}
 
 			private void OnOrderCancelFailed(OrderFail fail)
@@ -223,6 +191,7 @@ namespace StockSharp.Algo
 		private sealed class ChangedOrNewOrderRule : OrderRule<Order>
 		{
 			private readonly Func<Order, bool> _condition;
+			private bool _activated;
 
 			public ChangedOrNewOrderRule(Order order, IConnector connector)
 				: this(order, connector, o => true)
@@ -246,8 +215,8 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrdersChanged += OnOrdersChanged;
-					Connector.NewStopOrders += OnOrdersChanged;
+					Connector.StopOrderChanged += OnOrderChanged;
+					Connector.NewStopOrder += OnOrderChanged;
 				}
 				else
 				{
@@ -260,8 +229,8 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrdersChanged -= OnOrdersChanged;
-					Connector.NewStopOrders -= OnOrdersChanged;
+					Connector.StopOrderChanged -= OnOrderChanged;
+					Connector.NewStopOrder -= OnOrderChanged;
 				}
 				else
 				{
@@ -270,25 +239,23 @@ namespace StockSharp.Algo
 				}
 			}
 
-			private void OnOrdersChanged(IEnumerable<Order> orders)
-			{
-				orders.ForEach(OnOrderChanged);
-			}
-
 			private void OnOrderChanged(Order order)
 			{
-				if (order == Order && _condition(order))
+				if (!_activated && order == Order && _condition(order))
+				{
+					_activated = true;
 					Activate(order);
+				}
 			}
 		}
 
-		private class NewTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
+		private class NewTradeOrderRule : OrderRule<MyTrade>
 		{
 			private decimal _receivedVolume;
 
-			protected bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
+			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
 
-			public NewTradesOrderRule(Order order, IConnector connector)
+			public NewTradeOrderRule(Order order, IConnector connector)
 				: base(order, connector)
 			{
 				Name = LocalizedStrings.Str1032;
@@ -312,17 +279,19 @@ namespace StockSharp.Algo
 
 			private void OnNewMyTrade(MyTrade trade)
 			{
-				if (trade.Order != Order && (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder))
+				if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
 					return;
 
 				_receivedVolume += trade.Trade.Volume;
-				Activate(new[] { trade });
+				Activate(trade);
 			}
 		}
 
-		private sealed class AllTradesOrderRule : NewTradesOrderRule
+		private sealed class AllTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
 		{
-			private readonly SynchronizedList<MyTrade> _trades = new SynchronizedList<MyTrade>();
+			private decimal _receivedVolume;
+
+			private readonly CachedSynchronizedList<MyTrade> _trades = new CachedSynchronizedList<MyTrade>();
 
 			public AllTradesOrderRule(Order order, IConnector connector)
 				: base(order, connector)
@@ -331,12 +300,14 @@ namespace StockSharp.Algo
 				TrySubscribe();
 			}
 
+			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
+
 			protected override void Subscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrdersChanged += OnOrdersChanged;
-					Connector.NewStopOrders += OnOrdersChanged;
+					Connector.StopOrderChanged += OnOrderChanged;
+					Connector.NewStopOrder += OnOrderChanged;
 				}
 				else
 				{
@@ -344,15 +315,15 @@ namespace StockSharp.Algo
 					Connector.NewOrder += OnOrderChanged;
 				}
 
-				base.Subscribe();
+				Connector.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrdersChanged -= OnOrdersChanged;
-					Connector.NewStopOrders -= OnOrdersChanged;
+					Connector.StopOrderChanged -= OnOrderChanged;
+					Connector.NewStopOrder -= OnOrderChanged;
 				}
 				else
 				{
@@ -360,12 +331,7 @@ namespace StockSharp.Algo
 					Connector.NewOrder -= OnOrderChanged;
 				}
 
-				base.UnSubscribe();
-			}
-
-			private void OnOrdersChanged(IEnumerable<Order> orders)
-			{
-				orders.ForEach(OnOrderChanged);
+				Connector.NewMyTrade -= OnNewMyTrade;
 			}
 
 			private void OnOrderChanged(Order order)
@@ -376,9 +342,14 @@ namespace StockSharp.Algo
 				}
 			}
 
-			protected override void Activate(IEnumerable<MyTrade> trades)
+			private void OnNewMyTrade(MyTrade trade)
 			{
-				_trades.AddRange(trades);
+				if (trade.Order != Order /*&& (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder)*/)
+					return;
+
+				_receivedVolume += trade.Trade.Volume;
+
+				_trades.Add(trade);
 				TryActivate();
 			}
 
@@ -386,7 +357,7 @@ namespace StockSharp.Algo
 			{
 				if (AllTradesReceived)
 				{
-					base.Activate(_trades.ToArray());
+					Activate(_trades.Cache);
 				}
 			}
 		}
@@ -402,22 +373,22 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			return new ChangedOrNewOrderRule(order, connector, o => o.State == OrderStates.Active) { Name = LocalizedStrings.Str1034 }.Once();
+			return new ChangedOrNewOrderRule(order, connector, o => o.State == OrderStates.Active || o.State == OrderStates.Done) { Name = LocalizedStrings.Str1034 }.Once();
 		}
 
-		/// <summary>
-		/// To create a rule for the stop order activation.
-		/// </summary>
-		/// <param name="stopOrder">The stop order to be traced for the activation event.</param>
-		/// <param name="connector">The connection of interaction with trade systems.</param>
-		/// <returns>Rule.</returns>
-		public static MarketRule<Order, Order> WhenActivated(this Order stopOrder, IConnector connector)
-		{
-			if (stopOrder == null)
-				throw new ArgumentNullException(nameof(stopOrder));
+		///// <summary>
+		///// To create a rule for the stop order activation.
+		///// </summary>
+		///// <param name="stopOrder">The stop order to be traced for the activation event.</param>
+		///// <param name="connector">The connection of interaction with trade systems.</param>
+		///// <returns>Rule.</returns>
+		//public static MarketRule<Order, Order> WhenActivated(this Order stopOrder, IConnector connector)
+		//{
+		//	if (stopOrder == null)
+		//		throw new ArgumentNullException(nameof(stopOrder));
 
-			return new ChangedOrNewOrderRule(stopOrder, connector, o => o.DerivedOrder != null) { Name = LocalizedStrings.Str1035 }.Once();
-		}
+		//	return new ChangedOrNewOrderRule(stopOrder, connector, o => o.DerivedOrder != null) { Name = LocalizedStrings.Str1035 }.Once();
+		//}
 
 		/// <summary>
 		/// To create a rule for the event of order partial matching.
@@ -512,9 +483,9 @@ namespace StockSharp.Algo
 		/// <param name="order">The order to be traced for trades occurrence events.</param>
 		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, IEnumerable<MyTrade>> WhenNewTrades(this Order order, IConnector connector)
+		public static MarketRule<Order, MyTrade> WhenNewTrade(this Order order, IConnector connector)
 		{
-			return new NewTradesOrderRule(order, connector);
+			return new NewTradeOrderRule(order, connector);
 		}
 
 		/// <summary>
@@ -554,20 +525,37 @@ namespace StockSharp.Algo
 
 				_portfolio = portfolio;
 				_connector = connector;
-				_connector.PortfoliosChanged += OnPortfoliosChanged;
+				_connector.PortfolioChanged += OnPortfolioChanged;
 			}
 
-			private void OnPortfoliosChanged(IEnumerable<Portfolio> portfolios)
+			private void OnPortfolioChanged(Portfolio portfolio)
 			{
-				if (portfolios.Contains(_portfolio) && _changed(_portfolio))
+				if (portfolio == _portfolio && _changed(_portfolio))
 					Activate(_portfolio);
 			}
 
 			protected override void DisposeManaged()
 			{
-				_connector.PortfoliosChanged -= OnPortfoliosChanged;
+				_connector.PortfolioChanged -= OnPortfolioChanged;
 				base.DisposeManaged();
 			}
+		}
+
+		/// <summary>
+		/// To create a rule for the event of change portfolio .
+		/// </summary>
+		/// <param name="portfolio">The portfolio to be traced for the event of change.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Portfolio, Portfolio> WhenChanged(this Portfolio portfolio, IConnector connector)
+		{
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			return new PortfolioRule(portfolio, connector, pf => true)
+			{
+				Name = "Pf {0} change".Put(portfolio)
+			};
 		}
 
 		/// <summary>
@@ -648,18 +636,18 @@ namespace StockSharp.Algo
 
 				_position = position;
 				_connector = connector;
-				_connector.PositionsChanged += OnPositionsChanged;
+				_connector.PositionChanged += OnPositionChanged;
 			}
 
-			private void OnPositionsChanged(IEnumerable<Position> positions)
+			private void OnPositionChanged(Position position)
 			{
-				if (positions.Contains(_position) && _changed(_position))
+				if (position == _position && _changed(_position))
 					Activate(_position);
 			}
 
 			protected override void DisposeManaged()
 			{
-				_connector.PositionsChanged -= OnPositionsChanged;
+				_connector.PositionChanged -= OnPositionChanged;
 				base.DisposeManaged();
 			}
 		}
@@ -742,6 +730,8 @@ namespace StockSharp.Algo
 
 			protected Security Security { get; }
 			protected IConnector Connector { get; }
+
+			protected static ISecurityProvider SecurityProvider => ConfigManager.GetService<ISecurityProvider>();
 		}
 
 		private sealed class SecurityChangedRule : SecurityRule<Security>
@@ -762,110 +752,82 @@ namespace StockSharp.Algo
 				_condition = condition;
 
 				Name = LocalizedStrings.Str1046 + " " + security;
-				Connector.SecuritiesChanged += OnSecuritiesChanged;
+				Connector.SecurityChanged += OnSecurityChanged;
 			}
 
-			private void OnSecuritiesChanged(IEnumerable<Security> securities)
+			private void OnSecurityChanged(Security security)
 			{
-				var basket = Security as BasketSecurity;
-
-				if (basket != null)
+				if (Security is BasketSecurity basket)
 				{
-					var basketSecurities = securities
-						.Where(s => basket.Contains(s) && _condition(s))
-						.ToArray();
-
-					if (basketSecurities.Length > 0)
-						Activate(basketSecurities[0]);
+					if (basket.Contains(SecurityProvider, security) && _condition(security))
+						Activate(security);
 				}
 				else
 				{
-					if (securities.Contains(Security) && _condition(Security))
+					if (security == Security && _condition(Security))
 						Activate(Security);
 				}
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.SecuritiesChanged -= OnSecuritiesChanged;
+				Connector.SecurityChanged -= OnSecurityChanged;
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class SecurityNewTradesRule : SecurityRule<IEnumerable<Trade>>
+		private sealed class SecurityNewTradeRule : SecurityRule<Trade>
 		{
-			public SecurityNewTradesRule(Security security, IConnector connector)
+			public SecurityNewTradeRule(Security security, IConnector connector)
 				: base(security, connector)
 			{
 				Name = LocalizedStrings.Str1047 + " " + security;
-				Connector.NewTrades += OnNewTrades;
+				Connector.NewTrade += OnNewTrade;
 			}
 
-			private void OnNewTrades(IEnumerable<Trade> trades)
+			private void OnNewTrade(Trade trade)
 			{
 				var sec = Security;
 
 				var basket = sec as BasketSecurity;
 
-				if (Connector is HistoryEmulationConnector)
-				{
-					// в рилтайме сделки приходят гарантированно по одной. см. BaseTrader.GetTrade
-					// в эмуляции сделки приходят кучками, но все для одного и того же интсрумента. см. EmuTrader.Message
+				var has = basket?.Contains(SecurityProvider, trade.Security) ?? trade.Security == sec;
 
-					// mika: для Квика утверждение не справедливо
-
-					var t = trades.FirstOrDefault();
-
-					if (!ReferenceEquals(t, null) &&
-					    (!ReferenceEquals(basket, null)
-					     	? basket.Contains(t.Security)
-					     	: ReferenceEquals(sec, t.Security)))
-						Activate(trades);
-				}
-				else
-				{
-					var securityTrades = (basket != null
-					                      	? trades.Where(t => basket.Contains(t.Security))
-					                      	: trades.Where(t => t.Security == sec)).ToArray();
-
-					if (securityTrades.Length > 0)
-						Activate(securityTrades);
-				}
+				if (has)
+					Activate(trade);
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewTrades -= OnNewTrades;
+				Connector.NewTrade -= OnNewTrade;
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class SecurityNewOrderLogItems : SecurityRule<IEnumerable<OrderLogItem>>
+		private sealed class SecurityNewOrderLogItemRule : SecurityRule<OrderLogItem>
 		{
-			public SecurityNewOrderLogItems(Security security, IConnector connector)
+			public SecurityNewOrderLogItemRule(Security security, IConnector connector)
 				: base(security, connector)
 			{
 				Name = LocalizedStrings.Str1048 + " " + security;
-				Connector.NewOrderLogItems += OnNewOrderLogItems;
+				Connector.NewOrderLogItem += OnNewOrderLogItem;
 			}
 
-			private void OnNewOrderLogItems(IEnumerable<OrderLogItem> items)
+			private void OnNewOrderLogItem(OrderLogItem item)
 			{
 				var sec = Security;
 
 				var basket = sec as BasketSecurity;
 
-				var securityLogItems = (basket != null
-										? items.Where(i => basket.Contains(i.Order.Security))
-										: items.Where(i => i.Order.Security == sec)).ToArray();
+				var has = basket?.Contains(SecurityProvider, item.Order.Security) ?? item.Order.Security == sec;
 
-				if (securityLogItems.Length > 0)
-					Activate(securityLogItems);
+				if (has)
+					Activate(item);
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewOrderLogItems -= OnNewOrderLogItems;
+				Connector.NewOrderLogItem -= OnNewOrderLogItem;
 				base.DisposeManaged();
 			}
 		}
@@ -884,55 +846,45 @@ namespace StockSharp.Algo
 
 				Name = LocalizedStrings.Str1049 + " " + security;
 
-				Connector.SecuritiesChanged += OnSecuritiesChanged;
-				Connector.NewTrades += OnNewTrades;
+				Connector.SecurityChanged += OnSecurityChanged;
+				Connector.NewTrade += OnNewTrade;
 			}
 
-			private void OnSecuritiesChanged(IEnumerable<Security> securities)
+			private void OnSecurityChanged(Security security)
 			{
-				var security = CheckLastTrade(securities);
-
-				if (security != null)
+				if (CheckLastTrade(security))
 					Activate(security);
 			}
 
-			private Security CheckLastTrade(IEnumerable<Security> securities)
+			private bool CheckLastTrade(Security security)
 			{
-				var basket = Security as BasketSecurity;
-				if (basket != null)
+				if (Security is BasketSecurity basket)
 				{
-					return securities.FirstOrDefault(sec => basket.Contains(sec) && _condition(sec));
+					return basket.Contains(SecurityProvider, security) && _condition(security);
 				}
 				else
 				{
-					if (securities.Contains(Security) && _condition(Security))
-						return Security;
+					return security == Security && _condition(Security);
 				}
-
-				return null;
 			}
 
-			private void OnNewTrades(IEnumerable<Trade> trades)
+			private void OnNewTrade(Trade trade)
 			{
-				var trade = CheckTrades(Security, trades);
-
-				if (trade != null)
+				if (CheckTrades(Security, trade))
 					Activate(trade.Security);
 			}
 
-			private Trade CheckTrades(Security security, IEnumerable<Trade> trades)
+			private bool CheckTrades(Security security, Trade trade)
 			{
-				var basket = security as BasketSecurity;
-
-				return basket != null
-					? trades.FirstOrDefault(t => basket.Contains(t.Security) && _condition(t.Security))
-					: trades.FirstOrDefault(t => t.Security == security && _condition(t.Security));
+				return security is BasketSecurity basket
+					? basket.Contains(SecurityProvider, trade.Security) && _condition(trade.Security)
+					: trade.Security == security && _condition(trade.Security);
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewTrades -= OnNewTrades;
-				Connector.SecuritiesChanged -= OnSecuritiesChanged;
+				Connector.NewTrade -= OnNewTrade;
+				Connector.SecurityChanged -= OnSecurityChanged;
 
 				base.DisposeManaged();
 			}
@@ -944,53 +896,49 @@ namespace StockSharp.Algo
 				: base(security, connector)
 			{
 				Name = LocalizedStrings.Str1050 + " " + security;
-				Connector.MarketDepthsChanged += OnMarketDepthsChanged;
+				Connector.MarketDepthChanged += OnMarketDepthChanged;
 			}
 
-			private void OnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+			private void OnMarketDepthChanged(MarketDepth depth)
 			{
-				var depth = depths.FirstOrDefault(d => d.Security == Security);
+				if (depth.Security != Security)
+					return;
 
-				if (depth != null)
-					Activate(depth);
+				Activate(depth);
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.MarketDepthsChanged -= OnMarketDepthsChanged;
+				Connector.MarketDepthChanged -= OnMarketDepthChanged;
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class BasketSecurityMarketDepthChangedRule : SecurityRule<IEnumerable<MarketDepth>>
+		private sealed class BasketSecurityMarketDepthChangedRule : SecurityRule<MarketDepth>
 		{
 			public BasketSecurityMarketDepthChangedRule(BasketSecurity security, IConnector connector)
 				: base(security, connector)
 			{
 				Name = LocalizedStrings.Str1050 + " " + security;
-				Connector.MarketDepthsChanged += OnMarketDepthsChanged;
+				Connector.MarketDepthChanged += OnMarketDepthChanged;
 			}
 
-			private void OnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+			private void OnMarketDepthChanged(MarketDepth depth)
 			{
-				var basketDepths = CheckDepths(Security, depths).ToArray();
-
-				if (!basketDepths.IsEmpty())
-					Activate(basketDepths);
+				if (CheckDepth(Security, depth))
+					Activate(depth);
 			}
 
-			private static IEnumerable<MarketDepth> CheckDepths(Security security, IEnumerable<MarketDepth> depths)
+			private static bool CheckDepth(Security security, MarketDepth depth)
 			{
 				var basket = security as BasketSecurity;
 
-				return basket != null 
-					? depths.Where(d => basket.Contains(d.Security)) 
-					: depths.Where(d => d.Security == security);
+				return basket?.Contains(SecurityProvider, depth.Security) ?? depth.Security == security;
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.MarketDepthsChanged -= OnMarketDepthsChanged;
+				Connector.MarketDepthChanged -= OnMarketDepthChanged;
 				base.DisposeManaged();
 			}
 		}
@@ -1012,9 +960,9 @@ namespace StockSharp.Algo
 		/// <param name="security">The instrument to be traced for new trade occurrence event.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, IEnumerable<Trade>> WhenNewTrades(this Security security, IConnector connector)
+		public static MarketRule<Security, Trade> WhenNewTrade(this Security security, IConnector connector)
 		{
-			return new SecurityNewTradesRule(security, connector);
+			return new SecurityNewTradeRule(security, connector);
 		}
 
 		/// <summary>
@@ -1023,9 +971,9 @@ namespace StockSharp.Algo
 		/// <param name="security">The instrument to be traced for the event of new notes occurrence in the orders log.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, IEnumerable<OrderLogItem>> WhenNewOrderLogItems(this Security security, IConnector connector)
+		public static MarketRule<Security, OrderLogItem> WhenNewOrderLogItem(this Security security, IConnector connector)
 		{
-			return new SecurityNewOrderLogItems(security, connector);
+			return new SecurityNewOrderLogItemRule(security, connector);
 		}
 
 		/// <summary>
@@ -1045,7 +993,7 @@ namespace StockSharp.Algo
 		/// <param name="security">Instruments basket to be traced for the event of order books change by internal instruments.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, IEnumerable<MarketDepth>> WhenMarketDepthChanged(this BasketSecurity security, IConnector connector)
+		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this BasketSecurity security, IConnector connector)
 		{
 			return new BasketSecurityMarketDepthChangedRule(security, connector);
 		}
@@ -1197,12 +1145,12 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private sealed class SecurityMarketTimeRule : SecurityRule<DateTimeOffset>
+		private sealed class TimeComeRule : MarketRule<IConnector, DateTimeOffset>
 		{
 			private readonly MarketTimer _timer;
 
-			public SecurityMarketTimeRule(Security security, IConnector connector, IEnumerable<DateTimeOffset> times)
-				: base(security, connector)
+			public TimeComeRule(IConnector connector, IEnumerable<DateTimeOffset> times)
+				: base(connector)
 			{
 				if (times == null)
 					throw new ArgumentNullException(nameof(times));
@@ -1267,25 +1215,23 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To create a rule, activated at the exact time, specified through <paramref name="times" />.
 		/// </summary>
-		/// <param name="security">Security.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="times">The exact time. Several values may be sent.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, DateTimeOffset> WhenTimeCome(this Security security, IConnector connector, params DateTimeOffset[] times)
+		public static MarketRule<IConnector, DateTimeOffset> WhenTimeCome(this IConnector connector, params DateTimeOffset[] times)
 		{
-			return security.WhenTimeCome(connector, (IEnumerable<DateTimeOffset>)times);
+			return connector.WhenTimeCome((IEnumerable<DateTimeOffset>)times);
 		}
 
 		/// <summary>
 		/// To create a rule, activated at the exact time, specified through <paramref name="times" />.
 		/// </summary>
-		/// <param name="security">Security.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="times">The exact time. Several values may be sent.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, DateTimeOffset> WhenTimeCome(this Security security, IConnector connector, IEnumerable<DateTimeOffset> times)
+		public static MarketRule<IConnector, DateTimeOffset> WhenTimeCome(this IConnector connector, IEnumerable<DateTimeOffset> times)
 		{
-			return new SecurityMarketTimeRule(security, connector, times);
+			return new TimeComeRule(connector, times);
 		}
 
 		#endregion
@@ -1552,6 +1498,25 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private sealed class CandleStartedRule : CandleSeriesRule<Candle>
+		{
+			private Candle _currCandle;
+
+			public CandleStartedRule(ICandleManager candleManager, CandleSeries series)
+				: base(candleManager, series)
+			{
+			}
+
+			protected override void OnProcessCandle(Candle candle)
+			{
+				if (_currCandle != null && _currCandle == candle)
+					return;
+
+				_currCandle = candle;
+				Activate(candle);
+			}
+		}
+
 		private sealed class CandleChangedSeriesRule : CandleSeriesRule<Candle>
 		{
 			private readonly Func<Candle, bool> _condition;
@@ -1791,7 +1756,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCandlesStarted(this ICandleManager candleManager, CandleSeries series)
 		{
-			return new CandleStateSeriesRule(candleManager, series, CandleStates.Active) { Name = LocalizedStrings.Str1072 + " " + series };
+			return new CandleStartedRule(candleManager, series) { Name = LocalizedStrings.Str1072 + " " + series };
 		}
 
 		/// <summary>
@@ -1984,8 +1949,9 @@ namespace StockSharp.Algo
 
 			if (type == typeof(TickCandle))
 			{
+				var tickCandle = (TickCandle)candle;
 				var count = realPercent * (int)candle.Arg;
-				return ((TickCandle)candle).CurrentTradeCount >= count;
+				return tickCandle.TotalTicks != null && tickCandle.TotalTicks.Value >= count;
 			}
 			else if (type == typeof(RangeCandle))
 			{
@@ -2018,11 +1984,11 @@ namespace StockSharp.Algo
 			protected IConnector Connector { get; }
 		}
 
-		private sealed class MarketTimeRule : ConnectorRule<IConnector>
+		private sealed class IntervalTimeRule : ConnectorRule<IConnector>
 		{
 			private readonly MarketTimer _timer;
 
-			public MarketTimeRule(IConnector connector, TimeSpan interval/*, bool firstTimeRun*/)
+			public IntervalTimeRule(IConnector connector, TimeSpan interval/*, bool firstTimeRun*/)
 				: base(connector)
 			{
 				Name = LocalizedStrings.Str175 + " " + interval;
@@ -2039,44 +2005,44 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private sealed class NewMyTradesTraderRule : ConnectorRule<IEnumerable<MyTrade>>
+		private sealed class NewMyTradeTraderRule : ConnectorRule<MyTrade>
 		{
-			public NewMyTradesTraderRule(IConnector connector)
+			public NewMyTradeTraderRule(IConnector connector)
 				: base(connector)
 			{
 				Name = LocalizedStrings.Str1080;
-				Connector.NewMyTrades += OnNewMyTrades;
+				Connector.NewMyTrade += OnNewMyTrade;
 			}
 
-			private void OnNewMyTrades(IEnumerable<MyTrade> trades)
+			private void OnNewMyTrade(MyTrade trade)
 			{
-				Activate(trades);
+				Activate(trade);
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewMyTrades -= OnNewMyTrades;
+				Connector.NewMyTrade -= OnNewMyTrade;
 				base.DisposeManaged();
 			}
 		}
 
-		private sealed class NewOrdersTraderRule : ConnectorRule<IEnumerable<Order>>
+		private sealed class NewOrderTraderRule : ConnectorRule<Order>
 		{
-			public NewOrdersTraderRule(IConnector connector)
+			public NewOrderTraderRule(IConnector connector)
 				: base(connector)
 			{
 				Name = LocalizedStrings.Str1081;
-				Connector.NewOrders += OnNewOrders;
+				Connector.NewOrder += OnNewOrder;
 			}
 
-			private void OnNewOrders(IEnumerable<Order> orders)
+			private void OnNewOrder(Order order)
 			{
-				Activate(orders);
+				Activate(order);
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewOrders -= OnNewOrders;
+				Connector.NewOrder -= OnNewOrder;
 				base.DisposeManaged();
 			}
 		}
@@ -2094,17 +2060,17 @@ namespace StockSharp.Algo
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
-			return new MarketTimeRule(connector, interval/*, firstTimeRun*/);
+			return new IntervalTimeRule(connector, interval/*, firstTimeRun*/);
 		}
 
 		/// <summary>
-		/// To create a rule for the event of new trades occurrences.
+		/// To create a rule for the event of new trade occurrences.
 		/// </summary>
 		/// <param name="connector">The connection to be traced for trades occurrences.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, IEnumerable<MyTrade>> WhenNewMyTrades(this IConnector connector)
+		public static MarketRule<IConnector, MyTrade> WhenNewMyTrade(this IConnector connector)
 		{
-			return new NewMyTradesTraderRule(connector);
+			return new NewMyTradeTraderRule(connector);
 		}
 
 		/// <summary>
@@ -2112,9 +2078,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">The connection to be traced for orders occurrences.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, IEnumerable<Order>> WhenNewOrder(this IConnector connector)
+		public static MarketRule<IConnector, Order> WhenNewOrder(this IConnector connector)
 		{
-			return new NewOrdersTraderRule(connector);
+			return new NewOrderTraderRule(connector);
 		}
 
 		#endregion
@@ -2185,6 +2151,9 @@ namespace StockSharp.Algo
 		/// <param name="process">The handler.</param>
 		public static void ActiveRule(this IMarketRuleContainer container, IMarketRule rule, Func<bool> process)
 		{
+			if (process == null)
+				throw new ArgumentNullException(nameof(process));
+
 			container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Str1082);
 
 			List<IMarketRule> removedRules = null;
@@ -2313,7 +2282,7 @@ namespace StockSharp.Algo
 		/// <param name="container">The rules container.</param>
 		/// <param name="rule">Rule.</param>
 		/// <param name="checkCanFinish">To check the possibility of rule suspension.</param>
-		/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" /> � if a rule can not be currently deleted.</returns>
+		/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" />, if a rule cannot be currently deleted.</returns>
 		public static bool TryRemoveRule(this IMarketRuleContainer container, IMarketRule rule, bool checkCanFinish = true)
 		{
 			if (container == null)
@@ -2355,6 +2324,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="container">The rules container.</param>
 		/// <param name="rule">Rule.</param>
+		/// <returns><see langword="true" />, if rule was removed, otherwise, <see langword="false" />.</returns>
 		public static bool TryRemoveWithExclusive(this IMarketRuleContainer container, IMarketRule rule)
 		{
 			if (container == null)
@@ -2455,23 +2425,20 @@ namespace StockSharp.Algo
 
 			ILogSource ILogSource.Parent
 			{
-				get { return Container; }
-				set
-				{
-					throw new NotSupportedException();
-				}
+				get => Container;
+				set => throw new NotSupportedException();
 			}
 
 			LogLevels ILogSource.LogLevel
 			{
-				get { return Container.LogLevel; }
-				set { throw new NotSupportedException(); }
+				get => Container.LogLevel;
+				set => throw new NotSupportedException();
 			}
 
 			event Action<LogMessage> ILogSource.Log
 			{
-				add { Container.Log += value; }
-				remove { Container.Log -= value; }
+				add => Container.Log += value;
+				remove => Container.Log -= value;
 			}
 
 			DateTimeOffset ILogSource.CurrentTime => Container.CurrentTime;
@@ -2506,10 +2473,7 @@ namespace StockSharp.Algo
 				throw new NotSupportedException();
 			}
 
-			IMarketRuleList IMarketRuleContainer.Rules
-			{
-				get { throw new NotSupportedException(); }
-			}
+			IMarketRuleList IMarketRuleContainer.Rules => throw new NotSupportedException();
 
 			#endregion
 

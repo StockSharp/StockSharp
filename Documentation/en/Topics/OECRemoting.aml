@@ -3,37 +3,32 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>В зависимости от конкретного пользователя/приложения сервер OEC может не поддерживать одновременное соединение нескольких приложений. 
-		В этом случае, если существуют другие соединения, они могут быть разорваны. Для обхода этого ограничения данная реализация <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> поддерживает 
-		одновременную работу нескольких приложений через одно соединение с OEC сервером – <token>OECRemoting</token>.</para>
+		<para>
+		Depending on the particular user/application the OEC server may not support simultaneous connection of multiple applications. In this case,
+		other connections can be interrupted. For circumvention of these limitations this <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>
+		implementation supports simultaneous operation of multiple applications through a single connection to the OEC server – <token>OECRemoting</token>.</para>
 		
-		<para>Поддерживаются следующие режимы <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryRemoting</codeEntityReference>:</para>
+		<para>The following modes of <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryRemoting</codeEntityReference> supported:</para>
 		
 		<list class="bullet">
 			<listItem>
 				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.None</codeEntityReference> - 
-				<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryRemoting</codeEntityReference> отключен. Приложение создает собственное соединение с сервером OEC. 
-				Приложение не может выступать как <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> для других приложений.</para>
+				<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryRemoting</codeEntityReference> disconnected. The application creates its own connection to the OEC server. 
+				The application can not serve as the <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> for other applications.</para>
 			</listItem>
-			<!--<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Auto</codeEntityReference> – 
-				В момент инициализации выполняется поиск локальных приложений, работающих в режиме <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>.
-				Если такие приложения найдены, то приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Secondary</codeEntityReference>
-				и использует соединение <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> приложения.
-				В противном случае приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>.</para>
-			</listItem> -->
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> – приложение создает собственное соединение с сервером OEC.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> – the application creates its own connection to the OEC server.</para>
 			</listItem>
 			<listItem>
 				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Secondary</codeEntityReference> - 
-				В момент инициализации выполняется поиск локальных приложений, работающих в режиме <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>.
-				Если такие приложения найдены, используется их соединение с сервером OEC. В противном случае приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.None</codeEntityReference>.</para>
+				it searches for local applications running in the <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>
+				mode at the time of initialization. If such applications are found it uses their connection to the OEC server. Otherwise, the application enters
+				<codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.None</codeEntityReference> mode.</para>
 			</listItem>
 		</list>
 		
-		<para>Для явного задания режима <token>OECRemoting</token> необходимо сразу после создания объекта <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> указать требуемый режим. 
-		Например, для указания режима <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Secondary</codeEntityReference>:</para>
+		<para>To explicitly set the <token>OECRemoting</token> mode you should specify the desired mode immediately after the <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>
+		object creation. For example, to set the <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Secondary</codeEntityReference> mode:</para>
 
         <code language="C#">
         <![CDATA[
@@ -41,8 +36,8 @@ Trader.RemotingRequired = OECRemoting.Secondary;
 		]]>
 		</code>		
 		
-		<para>По умолчанию адаптер <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> работает в режиме 
-		<codeEntityReference qualifyHint="true">F:StockSharp.OpenECry.OpenECryRemoting.None</codeEntityReference>.</para>
+		<para>By default, the <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> adapter operates in the 
+		<codeEntityReference qualifyHint="true">F:StockSharp.OpenECry.OpenECryRemoting.None</codeEntityReference> mode.</para>
 	</introduction>
 
 	</developerWalkthroughDocument>

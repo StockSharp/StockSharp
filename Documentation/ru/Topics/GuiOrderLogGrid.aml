@@ -5,7 +5,6 @@
     <para>
       	<codeEntityReference>T:StockSharp.Xaml.OrderLogGrid</codeEntityReference> - графический компонент для отображения лога заявок (
       	<codeEntityReference>T:StockSharp.BusinessEntities.OrderLogItem</codeEntityReference>).
-      	В основе данного компонента лежит <link xlink:href="88a40124-43a6-4be9-b04b-a245000fca70">универсальная таблица</link>.
       </para>
       
             <para>
@@ -25,10 +24,10 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/ITCH/SampleITCH</legacyItalic>.
+Ниже показан внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/ITCH/SampleITCH</legacyItalic>.
       </para>
       
-      <mediaLink><image placement="left" xlink:href="hydra_export_order_log" /></mediaLink>
+      <mediaLink><image placement="left" xlink:href="GUI_orderlog" /></mediaLink>
       
        <code title="XAML" language="XAML">
 	  				<![CDATA[
@@ -51,14 +50,6 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		if (!_initialized)
 		{
 			_initialized = true;
-
-			// update gui labes
-			Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-			Trader.Restored += () => this.GuiAsync(() =>
-			{
-				ChangeConnectStatus(true);
-				MessageBox.Show(this, LocalizedStrings.Str2958);
-			});
 
 			// subscribe on connection successfully event
 			Trader.Connected += () =>

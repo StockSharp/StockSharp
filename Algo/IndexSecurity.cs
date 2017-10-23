@@ -31,108 +31,100 @@ namespace StockSharp.Algo
 	public abstract class IndexSecurity : BasketSecurity
 	{
 		/// <summary>
+		/// Ignore calculation errors.
+		/// </summary>
+		public bool IgnoreErrors { get; set; }
+
+		/// <summary>
+		/// Calculate extended information.
+		/// </summary>
+		public bool CalculateExtended { get; set; }
+
+		/// <summary>
 		/// Initialize <see cref="IndexSecurity"/>.
 		/// </summary>
 		protected IndexSecurity()
 		{
 			Type = SecurityTypes.Index;
+			//Board = ExchangeBoard.Associated;
 		}
 
 		/// <summary>
 		/// To calculate the basket value.
 		/// </summary>
-		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurities"/>.</param>
+		/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
+		/// <param name="isPrice">Is price based value calculation.</param>
 		/// <returns>The basket value.</returns>
-		public abstract decimal? Calculate(IDictionary<Security, decimal> prices);
+		public decimal Calculate(decimal[] values, bool isPrice)
+		{
+			var value = OnCalculate(values);
+
+			if (isPrice)
+			{
+				if (PriceStep != null)
+					value = this.ShrinkPrice(value);
+			}
+			else
+			{
+				if (VolumeStep != null)
+					value = MathHelper.Round(value, VolumeStep.Value, VolumeStep.Value.GetCachedDecimals());
+			}
+
+			return value;
+		}
+
+		/// <summary>
+		/// To calculate the basket value.
+		/// </summary>
+		/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
+		/// <returns>The basket value.</returns>
+		protected abstract decimal OnCalculate(decimal[] values);
 	}
 
 	/// <summary>
-	/// The instruments basket, based on weigh-scales <see cref="WeightedIndexSecurity.Weights"/>.
+	/// The instruments basket, based on weigh-scales <see cref="Weights"/>.
 	/// </summary>
 	public class WeightedIndexSecurity : IndexSecurity
 	{
-		private sealed class WeightsDictionary : CachedSynchronizedDictionary<Security, decimal>
-		{
-			private readonly WeightedIndexSecurity _parent;
-
-			public WeightsDictionary(WeightedIndexSecurity parent)
-			{
-				if (parent == null)
-					throw new ArgumentNullException(nameof(parent));
-
-				_parent = parent;
-			}
-
-			public override void Add(Security key, decimal value)
-			{
-				base.Add(key, value);
-				RefreshName();
-			}
-
-			public override bool Remove(Security key)
-			{
-				if (base.Remove(key))
-				{
-					RefreshName();
-					return true;
-				}
-
-				return false;
-			}
-
-			public override void Clear()
-			{
-				base.Clear();
-				RefreshName();
-			}
-
-			private void RefreshName()
-			{
-				_parent.Id = GetName(s => s.Id);
-				_parent.Code = GetName(s => s.Code);
-				_parent.Name = GetName(s => s.Name);
-			}
-
-			private string GetName(Func<Security, string> getSecurityName)
-			{
-				return this.Select(p => "{0} * {1}".Put(p.Value, getSecurityName(p.Key))).Join(", ");
-			}
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WeightedIndexSecurity"/>.
 		/// </summary>
 		public WeightedIndexSecurity()
 		{
-			_weights = new WeightsDictionary(this);
+			_weights = new CachedSynchronizedDictionary<SecurityId, decimal>();
 		}
 
-		private readonly WeightsDictionary _weights;
+		private readonly CachedSynchronizedDictionary<SecurityId, decimal> _weights;
 
 		/// <summary>
 		/// Instruments and their weighting coefficients in the basket.
 		/// </summary>
-		public SynchronizedDictionary<Security, decimal> Weights => _weights;
+		public SynchronizedDictionary<SecurityId, decimal> Weights => _weights;
 
 		/// <summary>
 		/// Instruments, from which this basket is created.
 		/// </summary>
-		public override IEnumerable<Security> InnerSecurities => _weights.CachedKeys;
+		public override IEnumerable<SecurityId> InnerSecurityIds => _weights.CachedKeys;
 
 		/// <summary>
 		/// To calculate the basket value.
 		/// </summary>
-		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurities"/>.</param>
+		/// <param name="values">Values of basket composite instruments <see cref="BasketSecurity.InnerSecurityIds"/>.</param>
 		/// <returns>The basket value.</returns>
-		public override decimal? Calculate(IDictionary<Security, decimal> prices)
+		protected override decimal OnCalculate(decimal[] values)
 		{
-			if (prices == null)
-				throw new ArgumentNullException(nameof(prices));
+			if (values == null)
+				throw new ArgumentNullException(nameof(values));
 
-			if (prices.Count != _weights.Count || !InnerSecurities.All(prices.ContainsKey))
-				return null;
+			if (values.Length != _weights.Count)// || !InnerSecurities.All(prices.ContainsKey))
+				throw new ArgumentOutOfRangeException(nameof(values));
 
-			return prices.Sum(pair => _weights[pair.Key] * pair.Value);
+			var value = 0M;
+
+			for (var i = 0; i < values.Length; i++)
+				value += _weights.CachedValues[i] * values[i];
+
+			return value;
 		}
 
 		/// <summary>
@@ -142,9 +134,44 @@ namespace StockSharp.Algo
 		public override Security Clone()
 		{
 			var clone = new WeightedIndexSecurity();
-			clone.Weights.AddRange(Weights.SyncGet(d => d.ToArray()));
+			clone.Weights.AddRange(_weights.CachedPairs);
 			CopyTo(clone);
 			return clone;
+		}
+
+		/// <summary>
+		/// Load security state from <paramref name="text"/>.
+		/// </summary>
+		/// <param name="text">Value, received from <see cref="ToSerializedString"/>.</param>
+		public override void FromSerializedString(string text)
+		{
+			lock (_weights.SyncRoot)
+			{
+				_weights.Clear();
+				_weights.AddRange(text.Split(",").Select(p =>
+				{
+					var parts = p.Split("=");
+					return new KeyValuePair<SecurityId, decimal>(parts[0].ToSecurityId(), parts[1].To<decimal>());
+				}));
+			}
+		}
+
+		/// <summary>
+		/// Save security state to string.
+		/// </summary>
+		/// <returns>String.</returns>
+		public override string ToSerializedString()
+		{
+			return _weights.CachedPairs.Select(p => $"{p.Key.ToStringId()}={p.Value}").Join(",");
+		}
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>A string that represents the current object.</returns>
+		public override string ToString()
+		{
+			return _weights.CachedPairs.Select(p => "{0} * {1}".Put(p.Value, p.Key.ToStringId())).Join(", ");
 		}
 	}
 }

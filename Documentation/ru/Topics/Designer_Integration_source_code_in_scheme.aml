@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="77322bb8-139a-40e8-b871-8a13ddc96b13" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для добавления стратегии SMA, описанной в пункте <link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" />, 
+необходимо в <legacyBold>Палитре</legacyBold> выбрать кубик <link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> и 
+перенести его в панель <legacyBold>Дизайнер</legacyBold>. В свойствах кубика <legacyBold>Исходный код</legacyBold> 
+необходимо выбрать имя стратегии:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_integration_of_dice_Source_code_in_the_General_scheme_00"/>
+</mediaLink>
+<para> Так как метод ProcessCandle(Candle candle) (пункт <link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" />) принимает свечи, то необходимо добавить 
+ кубик свечи и кубик <link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> с типом <legacyBold>Инструмент</legacyBold>. 
+ Соединить все кубики линиями. Так как <token>designer</token> ни как не ограничивает количество 
+ любых кубиков в стратегии, то в одной стратегии можно использовать несколько 
+ кубиков <link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" />. Наиболее рациональным 
+ подходом является комбинирование кубиков. Те действия, которые проще описать в 
+ коде, стоит описывать в коде и интегрировать с помощью кубиков <link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> или 
+ <link xlink:href="6971235a-c9e5-4606-a266-5df4a3b9da94" />. А те действия, что проще сделать с помощью стандартных кубиков, 
+ стоит делать стандартными кубиками. Пример с данным подходом описан в 
+ пункте <link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" />.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

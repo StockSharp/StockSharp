@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="24d370d1-fd00-4914-83ac-574721299e93" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>The P/L component is a chart of the Profit/Loss (not realized), Profit/Loss 
+(realized) and commission. In the upper left corner of the chart, 
+all the graphic elements added to the chart are shown, if you remove 
+the <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline> 
+check box on the graphic element, the element is also removed from the chart. Click 
+on the<mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline> 
+button will open the settings for the graphic element.
+</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Schedule_PU_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="91644d63-00b3-416f-8677-ca57dfa8032e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

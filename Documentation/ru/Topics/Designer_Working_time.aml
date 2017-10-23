@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="992fd698-345f-4bc0-8420-b8a57c0619b4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink><image xlink:href="Designer_Working_time_00"/></mediaLink>
+<para>Кубик используется для определения рабочего времени. Например, для определения, 
+когда идут торги по определенному инструменту.</para>
+ 
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> - инструмент, для которого необходимо определить
+ активна ли торговая сессия.</para></listItem>
+  <listItem><para><legacyBold>Триггер</legacyBold> - сигнал, с помощью которого определяется момент, 
+ когда необходимо выполнять проверку.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Флаг</legacyBold> - флаг, который определяет активна ли торговая сессия.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+ <para>Кубик может использоваться для определения момента, когда торги 
+ ведутся по нескольким инструментам с различных торговых площадок.</para>
+ <mediaLink><image xlink:href="Designer_Working_time_01"/></mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="08ebe03d-a446-4738-98fb-44cff38ddfda" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

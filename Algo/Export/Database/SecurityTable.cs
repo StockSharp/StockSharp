@@ -18,19 +18,16 @@ namespace StockSharp.Algo.Export.Database
 	using System;
 	using System.Collections.Generic;
 
-	using Ecng.Common;
-
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	class SecurityTable : Table<SecurityMessage>
 	{
-		public SecurityTable(Security security)
-			: base("Security", CreateColumns(security))
+		public SecurityTable()
+			: base("Security", CreateColumns())
 		{
 		}
 
-		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
+		private static IEnumerable<ColumnDescription> CreateColumns()
 		{
 			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
@@ -47,17 +44,17 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(SecurityMessage.PriceStep))
 			{
 				DbType = typeof(decimal?),
-				ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 }
+				ValueRestriction = new DecimalRestriction()
 			};
 			yield return new ColumnDescription(nameof(SecurityMessage.VolumeStep))
 			{
 				DbType = typeof(decimal?),
-				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 }
+				ValueRestriction = new DecimalRestriction { Scale = 1 }
 			};
 			yield return new ColumnDescription(nameof(SecurityMessage.Multiplier))
 			{
 				DbType = typeof(decimal?),
-				ValueRestriction = new DecimalRestriction { Scale = security.Multiplier?.GetCachedDecimals() ?? 1 }
+				ValueRestriction = new DecimalRestriction { Scale = 1 }
 			};
 			yield return new ColumnDescription(nameof(SecurityMessage.Decimals))
 			{
@@ -110,6 +107,11 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(SecurityMessage.SettlementDate))
 			{
 				DbType = typeof(DateTimeOffset?),
+			};
+			yield return new ColumnDescription(nameof(SecurityMessage.CfiCode))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(6)
 			};
 			yield return new ColumnDescription(nameof(SecurityId.Bloomberg))
 			{
@@ -172,6 +174,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(SecurityMessage.Name), value.Name },
 				{ nameof(SecurityMessage.ShortName), value.ShortName },
 				{ nameof(SecurityMessage.SettlementDate), value.SettlementDate },
+				{ nameof(SecurityMessage.CfiCode), value.CfiCode },
 				{ nameof(SecurityId.Bloomberg), value.SecurityId.Bloomberg },
 				{ nameof(SecurityId.Cusip), value.SecurityId.Cusip },
 				{ nameof(SecurityId.IQFeed), value.SecurityId.IQFeed },

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ee6c9d13-def9-4be2-a480-34c93037a53b" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_A_logic_function_with_one_argument_00"/>
+</mediaLink>
+<para>The cube is used to calculate a logical formula with one argument.
+</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Flag</legacyBold> - the flag value (indicates the 
+  state and has two values: up (true) and down (false)).</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Flag</legacyBold> - the flag value (indicates the 
+  state and has two values: up (true) and down (false)).</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Formula</legacyBold> - the predefined set of logical 
+  formulas, NOT.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="bb34a4ed-f260-4f08-88db-163d852fb384" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

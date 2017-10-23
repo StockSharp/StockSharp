@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+    <para><token>hydra</token> может использоваться в серверном режиме, в данном режиме можно 
+удаленно подключиться к <token>hydra</token> и получить имеющиеся данные в хранилище или записать новые. 
+Включение серверного режима <token>hydra</token> описано в 
+пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" />.</para>
+     <para>Для подключения к <token>hydra</token> через WCF в <token>stocksharpapi</token> есть 
+класс <codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference>. 
+Ниже приведен пример подключения к <token>hydra</token> с настроенным <legacyBold>Локальным пользователем</legacyBold> с
+ логином "hydra_user" и паролем "qwerty", добавление 
+<legacyBold>Локального пользователя</legacyBold> описано в пункте <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /></para>
+<code language="C#" title="C#"><![CDATA[
+...
+var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))
+{
+    Credentials = { AutoLogon = true, Email = "hydra_user", Password = "qwerty".To<SecureString>() },
+};
+...
+]]></code>
+
+<para>Получение всех имеющихся в <token>hydra</token> инструментов:</para>
+<code language="C#" title="C#"><![CDATA[
+...
+var storageRegistry = new StorageRegistry();
+client.Refresh(storageRegistry.GetSecurityStorage(), new Security(), s => { }, () => false);
+var allSecurity = storageRegistry.GetSecurityStorage().Lookup(new Security());
+...
+]]></code>
+<para>Получение всех имеющихся данных в <token>hydra</token> по инструменту, и сохранение в локальном хранилище:</para>
+
+<code language="C#" title="C#"><![CDATA[
+...
+StorageRegistry storageRegistry = new StorageRegistry();
+List<DataType> supportedDataTypes = new List<DataType>()
+    {
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromMinutes(1)),
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromMinutes(5)),
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromMinutes(15)),
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromHours(1)),
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromDays(1)),
+        DataType.Create(typeof (ExecutionMessage), ExecutionTypes.Tick),
+        DataType.Create(typeof (ExecutionMessage), ExecutionTypes.Transaction),
+        DataType.Create(typeof (ExecutionMessage), ExecutionTypes.OrderLog),
+        DataType.Create(typeof (QuoteChangeMessage), null),
+        DataType.Create(typeof (Level1ChangeMessage), null),
+        DataType.Create(typeof (NewsMessage), null),
+    };
+...
+foreach (var dataType in supportedDataTypes)
+{
+
+    var localStorage = storageRegistry.GetStorage(security, dataType.MessageType, dataType.Arg,
+        localMarketDataDrive, StorageFormats.Csv);
+    var remoteStorage = client.GetRemoteStorage(security.ToSecurityId(), dataType.MessageType, dataType.Arg,
+        StorageFormats.Csv);
+
+    var dates = remoteStorage.Dates.Where(date => date >= start && date <= end).Except(localStorage.Dates).ToArray();
+    foreach (var dateTime in dates)
+    {
+        using (var stream = remoteStorage.LoadStream(dateTime))
+        {
+            localStorage.Drive.SaveStream(dateTime, stream);
+        }
+        Console.WriteLine(dataType.MessageType + "; " + dataType.Arg + "; " + dateTime);
+
+        var localStor = localStorage.Load(dateTime);
+        foreach (var marketData in localStor)
+        {
+            Console.WriteLine(marketData);
+        }
+    }
+}
+...
+
+]]></code>
+    </introduction>
+   
+    <relatedTopics>
+      
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

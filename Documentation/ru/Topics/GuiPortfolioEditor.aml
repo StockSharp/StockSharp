@@ -2,7 +2,7 @@
 <topic id="528beb23-24fd-4d30-a9ff-4a3602b34fc2" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para><codeEntityReference>T:StockSharp.Xaml.PortfolioEditor</codeEntityReference> - компонент, состоящий из комбинированного списка 
+      <para><codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PortfolioEditor</codeEntityReference> - компонент, состоящий из комбинированного списка 
       <link xlink:href="bacfd0de-8a09-4ef8-a302-5dc010e36dc9">PortfolioComboBox</link> и
       кнопки, которая открывает окно <link xlink:href="059d6abd-2ef6-459f-bc1a-69c72213689b">PortfolioPickerWindow</link>.</para>
 	<para>

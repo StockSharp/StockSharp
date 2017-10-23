@@ -3,21 +3,22 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	Подключение к серверам IQ производится с помощью приложения IQConnect, которое может быть установлено как на локальном компьютере, так и на удаленном.
-      	Обмен данными между клиентским приложением и IQConnect, а так же между IQConnect и серверами производится посредством протокола TCP/IP.
+      	The connection to the IQ servers is established using the IQConnect application, which can be installed both on the local computer and on the remote one.
+      	The communication between the client application and the IQConnect, as well as between IQConnect and servers is carried out by the TCP/IP protocol.
       </para>
       <para>
-      	Для получения данных клиентским приложением используется четыре подключения через различные порты:
+      	To get the data the client application uses four connections through various ports:
       </para>
       <list class="ordered">
-  	  	<listItem>Level1 (порт 5009) – используется для получения реалтайм данных по инструментам (тики, цены открытия, закрытия, волатильность и т.д.) и новостей.</listItem>
-  	  	<listItem>Level2 (порт 9200) – используется для получения расширенных котировок по инструментам, для каждого ECN можно получить лучшую пару котировок.</listItem>
-  	  	<listItem>Lookup (порт 9100) – используется для поиска инструментов, получения исторических данных, получения расширенной информации по новостям.</listItem>
-  	  	<listItem>Admin (порт 9300) – используется для получения общей информации о подключении и изменения настроек.</listItem>
+  	  	<listItem>Level1 (port 5009) – used for real time data on instruments (ticks, the opening price, the closing price, volatility, etc.) and news.</listItem>
+  	  	<listItem>Level2 (port 9200) – used to get extended quotes on instruments, the best couple of quotes can get for each ECN.</listItem>
+  	  	<listItem>Lookup (port 9100) – used for instruments search, historical data getting, obtaining extended information on the news.</listItem>
+  	  	<listItem>Admin (port 9300) – used to obtain general information about the connection and the settings change.</listItem>
 	  </list>
 	  <para>
-      	В скобках указаны номера портов, которые используются по умолчанию для подключения к IQConnect. Для клиентских подключений номера портов можно изменить в реестре,
-      	например, для Level1 по следующему пути: [HKEY_CURRENT_USER\SOFTWARE\DTN\IQFEED\Startup\Level1Port]. Номера портов для подключения к серверам IQ изменить нельзя.
+      	The numbers of ports in brackets are used by default to connect to the IQConnect. For client connections, you can change the port numbers in the registry,
+      	for example, for Level1 on the following path: [HKEY_CURRENT_USER\SOFTWARE\DTN\IQFEED\Startup\Level1Port]. The ports numbers to connect to IQ servers can
+      	not be changed.
       </para>
     </introduction>
   </developerConceptualDocument>

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="31a208d0-d543-47aa-8008-389c07e1e8d4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Панель <legacyBold>Свойства</legacyBold> по умолчанию свернута справа во вкладки 
+стратегии. Данная панель представляет собой таблицу свойств эмуляции или Live торговли. 
+При выделении определенного свойства внизу таблицы появится подробное описание 
+этого свойства. Все свойства сгруппированы в группы:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Properties_emulation_00"/>
+</mediaLink>
+
+<para><legacyBold>Настройки</legacyBold></para>
+
+<list class="bullet">
+<listItem><para><legacyBold>Маркет-данные</legacyBold> - хранилище данных.</para></listItem>
+<listItem><para><legacyBold>Формат хранилища</legacyBold> - формат хранилища.</para></listItem>
+<listItem><para><legacyBold>Тип данных</legacyBold> - тип данных.</para></listItem>
+<listItem><para><legacyBold>Тайм-фрейм</legacyBold> - использовать свечи с заданным тайм-фреймом.</para></listItem>
+<listItem><para><legacyBold>Максимальный объем котировки генерируемого стакана</legacyBold> - максимальный объем котировки генерируемого стакана.</para></listItem>
+<listItem><para><legacyBold>Интервал</legacyBold> - интервал изменения времени.</para></listItem>
+<listItem><para><legacyBold>Нереализ. П/У</legacyBold> - интервал пересчета нереализованной прибыли.</para></listItem>
+<listItem><para><legacyBold>Сделки</legacyBold> - какие использовать сделки.</para></listItem>
+<listItem><para><legacyBold>Стаканы</legacyBold> - какие использовать стаканы.</para></listItem>
+<listItem><para><legacyBold>Лог заявок</legacyBold> - использовать лог заявок.</para></listItem>
+<listItem><para><legacyBold>Кол-во стратегий</legacyBold> - количество одновременно тестируемых стратегий.</para></listItem>
+<listItem><para><legacyBold>Уровень логирования</legacyBold> - уровень логирования.</para></listItem>
+<listItem><para><legacyBold>Сводить при касании</legacyBold> - при эмулировании сведения по сделкам, производить сведение заявок, когда цена сделки коснулась цены заявки (равна цене заявки).</para></listItem>
+<listItem><para><legacyBold>Стакан (время жизни)</legacyBold> - максимальное время, которое стакан находится в эмуляторе. Если за это время не произошло обновление, стакан стирается. это свойство можно использовать, чтобы убирать старые стаканы при наличии дыр в данных.</para></listItem>
+<listItem><para><legacyBold>Процент ошибок.</legacyBold> - процентное значение ошибки регистрации новых заявок. значение может быть от 0 (не будет ни одной ошибки) до 100.</para></listItem>
+<listItem><para><legacyBold>Задержка</legacyBold> - минимальное значение задержки выставляемых заявок.</para></listItem>
+<listItem><para><legacyBold>Перерегистрация</legacyBold> - поддерживается ли перерегистрация заявок в виде одной транзакции.</para></listItem>
+<listItem><para><legacyBold>Период буферизации</legacyBold> - отправлять ответы интервально целым пакетом. Эмулируется сетевая задержка и буферизированная работа биржевого ядра.</para></listItem>
+<listItem><para><legacyBold>Идентификатор заявки</legacyBold> - число, начиная с которого эмулятор будет генерировать идентификаторы для заявок.</para></listItem>
+<listItem><para><legacyBold>Идентификатор сделки</legacyBold> - число, начиная с которого эмулятор будет генерировать идентификаторы для сделок.</para></listItem>
+<listItem><para><legacyBold>Транзакция</legacyBold> - число, начиная с которого эмулятор будет генерировать идентификаторы для транзакций заявок.</para></listItem>
+<listItem><para><legacyBold>Размер спреда</legacyBold> - размер спреда в шагах цены. Используется при определении спреда для генерации стакана из тиковых сделок.</para></listItem>
+<listItem><para><legacyBold>Глубина стакана</legacyBold> - максимальная глубина стакана, который будет генерироваться из тиков.</para></listItem>
+<listItem><para><legacyBold>Количество шагов объема</legacyBold> - количество шагов объема, на которое заявка больше тиковой сделки. Используется при тестировании на тиковых сделках.</para></listItem>
+<listItem><para><legacyBold>Интервал портфелей</legacyBold> - интервал перерасчета данных по портфелям. Если интервал равен нулю, то перерасчет не выполняется.</para></listItem>
+<listItem><para><legacyBold>Переводить время</legacyBold> - переводить время для заявок и сделок в биржевое.</para></listItem>
+<listItem><para><legacyBold>Часовой пояс</legacyBold> - информация о временной зоне, где находится биржа.</para></listItem>
+<listItem><para><legacyBold>Сдвиг цены</legacyBold> - сдвиг цены от последней сделки, определяющий границы максимальной и минимальной цен на следующую сессию.</para></listItem>
+<listItem><para><legacyBold>Добавлять доп. объем </legacyBold> - добавлять дополнительный объем в стакан при выставлении заявок с большим объемом.</para></listItem>
+<listItem><para><legacyBold>Комиссия</legacyBold> - комиссия (брокерская, биржевая и т.д.).</para></listItem>
+<listItem><para><legacyBold>Уровень логирования</legacyBold> - уровень логирования.</para></listItem>
+<listItem><para><link xlink:href="b4f8c503-6589-4979-93ee-506df859d967" /> - настройка контроля рисков.</para></listItem>
+<listItem><para><legacyBold>Инструмент</legacyBold> - значение элемента.</para></listItem>
+
+
+
+</list>
+
+<para><legacyBold>Уровень логирования</legacyBold></para>
+<list class="bullet">
+<listItem><para><legacyBold>Уровень логирования</legacyBold> – уровень ведения логов для данного элемента.</para></listItem>
+</list>
+
+<para><legacyBold>Параметры схемы</legacyBold> </para>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> - инструмент</para></listItem>
+<listItem><para><legacyBold>Портфель</legacyBold> - портфель</para></listItem>
+</list>
+<para>Если не заполнять <legacyBold>Параметры схемы</legacyBold>,
+ то при эмуляции инструмент будет использоваться из 
+ поля <legacyBold>Инструмент</legacyBold> вкладки <legacyBold>Эмуляция</legacyBold>, 
+ а в качестве портфеля будет использоваться тестовый портфель по умолчанию.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

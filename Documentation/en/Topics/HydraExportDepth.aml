@@ -2,20 +2,20 @@
 <topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>В появившимся окне выбрать интересуемый диапазон времени, выбрать инструмент и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <para>In the appearing window select the required time range, then select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline> button:</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_export_depth" />
       </mediaLink>
       <alert class="note">
-        <para>Стаканы могут быть созданы из файлов ордер лога. Для этого надо поставить соответствующую галочку. Кроме того можно настроить глубину и период обновления стакана.</para>
+        <para>Order books can be created from the order log files. To do this, check the appropriate checkbox. Also, you can adjust the depth and the update period of the order book.</para>
       </alert>
       
-      <para>При помощи контекстного меню можно настроить различные параметры таблицы стакана: группировку строк, доступные колонки, формат отображения и др.</para>
+      <para>By means of the context menu you can set various settings of the order book table: rows grouping, columns available, the display format, and others.</para>
 	 <mediaLink>
        <image placement="center" xlink:href="hydra_export_context" />
      </mediaLink>
       
-    <para>Найденные стаканы можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
+    <para>Found order books can be exported to formats <token>excel</token>, xml, sql, bin or txt. This can be done by using the drop-down list:</para>
     	<mediaLink>
     		<image placement="center" xlink:href="hydra_export" />
     	</mediaLink>

@@ -1,8 +1,10 @@
 # Development stage
 
-[S#.Studio](http://stocksharp.com/products/studio/) - beta.
+[S#.Designer](http://stocksharp.com/products/designer/) - stable.
 
 [S#.Data](http://stocksharp.com/products/hydra/) - stable.
+
+[S#.Terminal](http://stocksharp.com/products/terminal/) - beta.
 
 [S#.API](http://stocksharp.com/products/api/) - stable.
 
@@ -13,36 +15,39 @@
 | Connnector | Stage |
 | --- |:---:|
 | Blackwood/Fusion | Stable |
-| BarChart | beta |
-| CQG | Alfa |
+| BarChart | Beta |
+| CQG | Stable |
 | E*Trade | Stable |
-| FIX | Stable |
+| FXCM | Stable |
+| FIX/FAST | Stable |
 | IQFeed | Stable |
 | ITCH | Stable |
 | InteractiveBrokers | Beta |
 | LMAX | Stable |
 | MatLab | Stable |
 | Oanda | Stable |
-| OpenECry | Stable |
+| OpenECry (GainFutures) | Stable |
 | Rithmic | Beta |
 | RSS | Stable |
-| Sterling | Beta |
+| Sterling | Stable |
+| QuantHouse | Beta |
 
 ## BitCoin
 
 | Connnector | Stage |
 | --- |:---:|
 | BTCE | Stable |
-| BitStamp | Stable |
+| BitStamp | Beta |
 
 ## Russian
 
 | Connnector | Stage |
 | --- |:---:|
-| AlfaDirect | Stable |
-| Alor | Not finished |
+| AlfaDirect 3.5 | Stable |
+| Alor | Planning |
 | Micex (TEAP) | Stable |
 | Plaza 2 | Stable |
 | Quik | Stable |
 | SmartCom | Stable |
+| SpbEx | Stable |
 | Transaq | Stable |

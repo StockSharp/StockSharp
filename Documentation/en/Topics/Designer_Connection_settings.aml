@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>1.	When clicking the arrow next to the <legacyBold>Connect</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_00"/></mediaLinkInline> 
+button, the <legacyBold>Connection settings</legacyBold> button appears:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_connection_settings_00"/>
+</mediaLink>
+<para>2.	When clicking the <legacyBold>Connection settings</legacyBold> button, 
+the <legacyBold>Connection settings</legacyBold> window opens:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_connection_settings_01"/>
+</mediaLink>
+<para>The Connection settings window is divided to 3 areas.</para>
+<para>3.	Clicking the 
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_02"/></mediaLinkInline> 
+button activates the drop-down list of supported connectors. The selected 
+connectors are displayed in the area No. 1. The 
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_03"/></mediaLinkInline> 
+button removes the selected connector. The first column of the area No. 1 displays 
+whether the connector will connect when you click the Connect 
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_04"/></mediaLinkInline> 
+button or will not connect 
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_05"/></mediaLinkInline>. 
+These values are set using the 
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_06"/></mediaLinkInline>  
+and  
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_07"/></mediaLinkInline> buttons.</para>
+
+<para>The <legacyBold>Market data</legacyBold> and <legacyBold>Trades</legacyBold> 
+display, whether the connector supports market data and work with orders.</para>
+
+<para>4.	When the <legacyBold>Auto-connect</legacyBold> check box is selected, 
+the connection is automatically connected with the start of the 
+<token>designer</token>.</para>
+
+<para>5.	The area No. 2 displays the selected connector settings. When the 
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_09"/></mediaLinkInline>
+is clicked, the program redirects to documentation (<token>stocksharpapi</token>) 
+on the selected connector adjustment.</para>
+
+<para>6.	Clicking the <legacyBold>Check</legacyBold> button will check the 
+current connector connection. If the check fails, a window with an error will 
+appear, describing the reason for the unsuccessful connection. If the check is 
+successful, a window will appear:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_connection_settings_10"/>
+</mediaLink>
+<para>7.	The area No. 3 displays data types, which will be received or 
+transmitted by the connector. By clicking the 
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_11"/></mediaLinkInline>/
+<mediaLinkInline><image xlink:href="Designer_The_connection_settings_12"/></mediaLinkInline>
+checkbox you can enable/disable transmission or reception for this type of data.</para>
+<para>8.	Clicking the <legacyBold>Network settings</legacyBold> button will 
+open the <legacyBold>Proxy-server settings</legacyBold> window:</para>
+ <mediaLinkInline><image placement="center" xlink:href="Designer_The_connection_settings_13"/></mediaLinkInline>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="24d370d1-fd00-4914-83ac-57472eb99e93" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

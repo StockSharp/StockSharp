@@ -63,7 +63,7 @@
 			  <row>
 			      <entry>Quik</entry>
 				  <entry>SampleCandles</entry>
-				  <entry>Построение свечек (временных, объемных, ценовых и тиковых).</entry>
+				  <entry>Построение свечей (временных, объемных, ценовых и тиковых).</entry>
 			  </row>
 			  <row>
 			      <entry>Quik</entry>
@@ -131,7 +131,7 @@
 			  	  <entry>OEC</entry>
 				  <entry>SampleOEC</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>.
 				  </entry>
 				  
 			  </row>
@@ -139,7 +139,7 @@
 			  	  <entry>Interactive Brokers</entry>
 				  <entry>SampleIB</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 			  <row>
@@ -167,7 +167,7 @@
 			  	  <entry>CQG</entry>
 				  <entry>SampleCQG</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.CQG.CQGTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference>, <codeEntityReference qualifyHint="false">T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 			  <row>
@@ -358,7 +358,7 @@
 			  </row>
 			  <row>
 				  <entry>SampleCandles</entry>
-				  <entry>Построение свечек (временных, объемных, ценовых и тиковых).</entry>
+				  <entry>Построение свечей (временных, объемных, ценовых и тиковых).</entry>
 			  </row>
 			  <row>
 				  <entry>SampleQuikStartStop</entry>
@@ -449,7 +449,7 @@
 			  <row>
 				  <entry>SampleOEC</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OECTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OpenECryTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 		  </table> 
@@ -467,7 +467,7 @@
 			  <row>
 				  <entry>SampleIB</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 		  </table> 

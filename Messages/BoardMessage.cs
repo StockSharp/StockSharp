@@ -41,27 +41,27 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CodeKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string Code { get; set; }
 
-		/// <summary>
-		/// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
-		[DescriptionLoc(LocalizedStrings.Str60Key)]
-		[MainCategory]
-		public bool IsSupportAtomicReRegister { get; set; }
+		///// <summary>
+		///// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
+		//[DescriptionLoc(LocalizedStrings.Str60Key)]
+		//[MainCategory]
+		//public bool IsSupportAtomicReRegister { get; set; }
 
-		/// <summary>
-		/// Are market type orders <see cref="OrderTypes.Market"/> supported.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
-		[DescriptionLoc(LocalizedStrings.MarketOrdersSupportedKey)]
-		[MainCategory]
-		public bool IsSupportMarketOrders { get; set; }
+		///// <summary>
+		///// Are market type orders <see cref="OrderTypes.Market"/> supported.
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
+		//[DescriptionLoc(LocalizedStrings.MarketOrdersSupportedKey)]
+		//[MainCategory]
+		//public bool IsSupportMarketOrders { get; set; }
 
 		/// <summary>
 		/// Securities expiration times.
@@ -83,7 +83,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public WorkingTime WorkingTime
 		{
-			get { return _workingTime; }
+			get => _workingTime;
 			set
 			{
 				if (value == null)
@@ -108,7 +108,7 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public TimeZoneInfo TimeZone
 		{
-			get { return _timeZone; }
+			get => _timeZone;
 			set
 			{
 				if (value == null)
@@ -140,8 +140,8 @@ namespace StockSharp.Messages
 				Code = Code,
 				ExchangeCode = ExchangeCode,
 				ExpiryTime = ExpiryTime,
-				IsSupportAtomicReRegister = IsSupportAtomicReRegister,
-				IsSupportMarketOrders = IsSupportMarketOrders,
+				//IsSupportAtomicReRegister = IsSupportAtomicReRegister,
+				//IsSupportMarketOrders = IsSupportMarketOrders,
 				WorkingTime = WorkingTime.Clone(),
 				TimeZone = TimeZone,
 			};

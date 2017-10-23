@@ -2,53 +2,53 @@
 <topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
   <introduction>
-     <para>Ниже описана последовательность действий для проведения анализа данных.</para>
+     <para>The following describes the sequence of steps for data analysis.</para>
     <procedure>
      	<title>
-      		<para>Запуск скрипта и отображение результатов анализа</para>
+      		<para>Running the script and the analysis results display</para>
       	</title>
 	    <mediaLink>
-    	    <image placement="left" xlink:href="hydra_analitics_toolbar" />
+    	    <image placement="center" xlink:href="hydra_analitics_toolbar" />
       	</mediaLink>
 	    <steps class="ordered">
     	    <step>
         	  <content>
-	          	<para>Выбрать данные для анализа:</para>
+	          	<para>Select data for analysis:</para>
 				<list class="bullet">
   					<listItem>
-  						<para>Открыть окно <legacyBold>Параметры</legacyBold> при помощи одноименной кнопки на панели инструментов.</para>
+  						<para>In the <legacyBold>Parameters</legacyBold> window located on the right side of the program.</para>
   						<mediaLink>
     	    				<image placement="left" xlink:href="hydra_analitics_parameters" />
       					</mediaLink>
   					</listItem>
   					<listItem>
-  						<para>Выбрать инструмент, начальную и конечную дату, путь к данным и их формат.</para>
+  						<para>Select instrument, start and end dates, the path to the data and its format.</para>
   					</listItem>
 				</list>
     	      </content>
         	</step>
         	<step>
           		<content>
-          			<para>Выбрать шаблон при помощи списка <legacyBold>Шаблон</legacyBold> на панели инструментов.</para>
+          			<para>Select a template using the <legacyBold>Template</legacyBold> list on the toolbar.</para>
           		</content>
         	</step>
         	<step>
           		<content>
-          			<para>Запустить скрипт при помощи кнопки <mediaLinkInline><image xlink:href="hydra_analitics_run"/></mediaLinkInline>.</para>
+          			<para>Run the script using the <mediaLinkInline><image xlink:href="hydra_analitics_run"/></mediaLinkInline> button.</para>
           		</content>
         	</step>
         	<step>
           		<content>
-          			<para>Просмотреть результаты:</para>
+          			<para>View the results:</para>
 					<list class="bullet">
   					<listItem>
-  						<para>Для просмотра графика выбрать закладку <legacyBold>График</legacyBold>.</para>
+  						<para>To view the chart, select the <legacyBold>Chart</legacyBold> tab.</para>
   						<mediaLink>
     	    				<image placement="left" xlink:href="hydra_analitics_chart" />
       					</mediaLink>
   					</listItem>
   					<listItem>
-  						<para>Для просмотра таблицы выбрать закладку <legacyBold>Таблица</legacyBold>.</para>
+  						<para>To view the table results select the <legacyBold>Table</legacyBold> tab.</para>
   						<mediaLink>
     	    				<image placement="left" xlink:href="hydra_analitics_table" />
       					</mediaLink>

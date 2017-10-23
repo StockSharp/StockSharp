@@ -21,7 +21,6 @@ namespace StockSharp.Algo.Storages
 	using System.IO;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Interop;
 
 	using StockSharp.Algo.Candles;
@@ -31,18 +30,17 @@ namespace StockSharp.Algo.Storages
 	class AllSecurityMarketDataStorage<T> : IMarketDataStorage<T>, IMarketDataStorageInfo<T>
 		where T : Message
 	{
-		private sealed class BasketEnumerable : SimpleEnumerable<T>
-		{
-			public BasketEnumerable(Func<IEnumerator<T>> createEnumerator)
-				: base(createEnumerator)
-			{
-			}
-		}
-
 		private readonly Security _security;
+		private readonly IExchangeInfoProvider _exchangeInfoProvider;
 		private readonly BasketMarketDataStorage<T> _basket;
 
-		public AllSecurityMarketDataStorage(Security security, object arg, Func<T, DateTimeOffset> getTime, Func<T, Security> getSecurity, Func<Security, IMarketDataDrive, IMarketDataStorage<T>> getStorage, IMarketDataStorageDrive drive)
+		public AllSecurityMarketDataStorage(Security security,
+			object arg,
+			Func<T, DateTimeOffset> getTime,
+			Func<T, Security> getSecurity,
+			Func<Security, IMarketDataDrive, IMarketDataStorage<T>> getStorage, 
+			IMarketDataStorageDrive drive,
+			IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -59,7 +57,11 @@ namespace StockSharp.Algo.Storages
 			if (drive == null)
 				throw new ArgumentNullException(nameof(drive));
 
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
 			_security = security;
+			_exchangeInfoProvider = exchangeInfoProvider;
 			_getTime = getTime;
 
 			_arg = arg;
@@ -67,9 +69,7 @@ namespace StockSharp.Algo.Storages
 
 			_basket = new BasketMarketDataStorage<T>();
 
-			var idGenerator = new SecurityIdGenerator();
-
-			var id = idGenerator.Split(security.Id);
+			var id = security.Id.ToSecurityId();
 			var code = id.SecurityCode;
 
 			var securities = InteropHelper
@@ -77,11 +77,11 @@ namespace StockSharp.Algo.Storages
 				.Select(p => Path.GetFileName(p).FolderNameToSecurityId())
 				.Select(s =>
 				{
-					var idInfo = idGenerator.Split(s);
+					var idInfo = s.ToSecurityId();
 
 					var clone = security.Clone();
 					clone.Id = s;
-					clone.Board = ExchangeBoard.GetOrCreateBoard(idInfo.BoardCode);
+					clone.Board = _exchangeInfoProvider.GetOrCreateBoard(idInfo.BoardCode);
 					return clone;
 				});
 
@@ -160,7 +160,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
 		public IEnumerable<T> Load(DateTime date)
 		{
-			return new BasketEnumerable(() => _basket.Load(date));
+			return _basket.Load(date);
 		}
 
 		private readonly Func<T, DateTimeOffset> _getTime;
@@ -188,8 +188,9 @@ namespace StockSharp.Algo.Storages
 			Func<TMessage, Security> getSecurity,
 			Func<TEntity, DateTimeOffset> getEntityTime,
 			Func<Security, IMarketDataDrive, IMarketDataStorage<TMessage>> getStorage,
-			IMarketDataStorageDrive drive)
-			: base(security, arg, getTime, getSecurity, getStorage, drive)
+			IMarketDataStorageDrive drive,
+			IExchangeInfoProvider exchangeInfoProvider)
+			: base(security, arg, getTime, getSecurity, getStorage, drive, exchangeInfoProvider)
 		{
 			if (getEntityTime == null)
 				throw new ArgumentNullException(nameof(getEntityTime));

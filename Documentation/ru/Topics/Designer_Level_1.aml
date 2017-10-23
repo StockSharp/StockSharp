@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="bc7fbe5c-9e8a-4c39-af1a-35c6c3c2a43c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Level_1_00"/>
+</mediaLink>
+<para>Кубик используется для получения <legacyBold>Level1</legacyBold> данных по инструменту.
+</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо 
+получать <legacyBold>Level1</legacyBold> данные.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Изменение</legacyBold> – <legacyBold>Level1</legacyBold> значения 
+отслеживаемого параметра.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Значение</legacyBold> – <legacyBold>Level1</legacyBold> параметр, 
+который необходимо отслеживать.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="9aa0288d-e086-4da8-bd76-98cf52cb17a7" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -14,26 +14,13 @@
 			нереализованному балансу <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Balance</codeEntityReference> старой.-->
 		</para>
 	  <para>
-			 При замене стоп-заявок используется алгоритм с отменой заявки и выставлением новой. В итоге, всегда получается новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
+			 В итоге при замене заявок всегда получается новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
 		который содержит информацию старой заявки + измененная часть. В дальнейшем, если требуется работа с измененной заявкой (например, отменить ее или опять изменить),
 		то необходимо использовать именно этот новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
 
 	  </para>
-	  <list class="ordered">
-		<!--<listItem>
-		  Если инструмент принадлежит <token>rts</token>, то посылается специализированная команда на замену заявки. Это сделано из-за того,
-		  что только <token>rts</token> умеет сам заменять заявки. Это самый быстрый способ из поддерживаемых, но у него есть свои
-		  ограничения - менять можно только цену и объем заявок. Также, он работает только с лимитированными заявками.
-		</listItem>
-		<listItem>Если инструмент принадлежит другой бирже, то заявка снимается через <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
-		  а затем регистрируется через <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>.
-		</listItem> -->
-	
-	  </list>
 
-		<para>
-			В примере ниже показан способ "движения" заявки по лучшей цене:
-		</para>
+		<para>В примере ниже показан способ "движения" заявки по лучшей цене:</para>
 	</introduction>
 
     <!-- Specify at least one procedure or section/procedure and codeExample -->
@@ -75,7 +62,7 @@
 	var newOrder = registeredOrder.Clone();
 
 	// изменяем цену на лучшую
-	newOrder.Price = (registeredOrder.Direction == OrderDirections.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
+	newOrder.Price = (registeredOrder.Direction == Sides.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
 
 	// заменяем заявку на бирже
 	trader.ReRegisterOrder(registeredOrder, newOrder);

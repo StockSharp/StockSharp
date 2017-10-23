@@ -16,8 +16,6 @@ Copyright 2010 by StockSharp, LLC
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace XMLCommToHTM.DOM.Internal
@@ -37,15 +35,14 @@ namespace XMLCommToHTM.DOM.Internal
 
 			foreach (var typeDom in allTypes)
 			{
-				List<TypeDom> curEntry; // = dict[typeDom.Type];
-				if(!dict.TryGetValue(typeDom.Type, out curEntry))
+				// = dict[typeDom.Type];
+				if (!dict.TryGetValue(typeDom.Type, out var curEntry))
 					continue;
 
-				foreach (Type baseType in TypeUtils.GetBaseTypes(typeDom.Type))
+				foreach (Type baseType in typeDom.Type.GetBaseTypes())
 				{
 					//Извлечение и удаление из словаря, и добавление извлеченного списка к curEntry
-					List<TypeDom> baseEntry;
-					if (dict.TryGetValue(baseType, out baseEntry))
+					if (dict.TryGetValue(baseType, out var baseEntry))
 					{
 						dict.Remove(baseType);
 						curEntry.AddRange(baseEntry);

@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="040cdc40-39b4-47be-b3f0-441710515562" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+<para><token>hydra</token> can be used in server mode, in this mode you can remotely connect to 
+<token>hydra</token> and get the existing data in the storage or write new ones. 
+Enabling the <token>hydra</token> server mode is described in the <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
+<para>To connect to <token>hydra</token> through WCF there is the 
+<codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in <token>stocksharpapi</token>:</para>
+<code language="C#" title="C#"><![CDATA[
+...
+var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))
+{
+    Credentials = { AutoLogon = true, Email = "hydra_user", Password = "qwerty".To<SecureString>() },
+};
+...
+]]></code>
+
+      <para>2. Saving information about the
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Exchange</codeEntityReference> in <token>hydra</token>:</para>
+<code language="C#" title="C#"><![CDATA[
+...
+Console.WriteLine("Enter Exchange name (example: NYSE or TESTE)");
+var exch = Console.ReadLine();
+var exchange = new Exchange[]
+{
+    new Exchange()
+    {
+        CountryCode = Exchange.Nyse.CountryCode,
+        EngName = exch,
+        Name = exch,
+        RusName = exch,
+    },
+};
+client.SaveExchanges(exchange);
+...
+]]></code>
+
+      <para>3. Saving information about the 
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ExchangeBoard</codeEntityReference> in <token>hydra</token>:</para>
+<code language="C#" title="C#"><![CDATA[
+...
+Console.WriteLine("Enter ExchangeBoard name (example: NYMEX or TESTB)");
+var exchBoard = Console.ReadLine();
+var exchangeBoard = new ExchangeBoard[]
+{
+    new ExchangeBoard()
+    {
+        Code = exchBoard,
+        Exchange = exchange.First(),
+        ExpiryTime = new TimeSpan(18, 45, 00),
+        TimeZone = TimeZoneInfo.Utc,
+        WorkingTime = new WorkingTime(),
+    },
+};
+client.SaveExchangeBoards(exchangeBoard);
+...
+]]></code>
+      <para>4. Saving instrument in <token>hydra</token> (share, futures, option, etc.) 
+      <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Security</codeEntityReference>:</para>
+<code language="C#" title="C#"><![CDATA[
+...
+Security[] security = new Security[]
+{
+    new Security()
+    {
+        Class = "TESTWC1F",
+        Code = "TESTWCF",
+        Id = "TESTWCF1@TESTWCF",
+        PriceStep = 0.1m,
+        Decimals = 1,
+        Board = exchangeBoard.First(),
+    }
+};
+client.SaveSecurities(security);
+...
+]]></code>
+      <para>5. Getting data from <token>hydra</token>:</para>
+<code language="C#" title="C#"><![CDATA[
+... 
+Console.WriteLine("All Exchange");
+var ex = client.LoadExchanges(new Exchange());
+foreach (var i in ex)
+{
+    Console.WriteLine("Exchange: " + i);
+}
+...
+Console.WriteLine("All ExchangeBoard");
+var eb = client.LoadExchangeBoards(new ExchangeBoard());
+foreach (var i in eb)
+{
+    Console.WriteLine("ExchangeBoard: " + i);
+}
+...
+Console.WriteLine("All Security");
+var storageRegistry = new StorageRegistry();
+client.Refresh(storageRegistry.GetSecurityStorage(), new Security(), s => { }, () => false);
+var allSecurity = storageRegistry.GetSecurityStorage().Lookup(new Security());
+foreach (var i in allSecurity)
+{
+    Console.WriteLine("Security: " + i);
+}
+...
+]]></code>
+
+
+
+<para>6. Getting the extended information from <token>hydra</token> storage and saving the extended information to it:</para>
+<code language="C#" title="C#"><![CDATA[
+...
+var extendedStorage = client.GetExtendedStorage("MyExtendedStorage");
+
+Tuple<string, Type>[] ei = new Tuple<string, Type>[]
+{
+    new Tuple<string, Type>("NewExtensionInfo1", typeof(string)), 
+    new Tuple<string, Type>("NewExtensionInfo2", typeof(string)),
+    new Tuple<string, Type>("NewExtensionInfo3", typeof(string)),
+};
+Console.Write("Enter ExtensionInfo1:");
+var str1 = Console.ReadLine();
+Console.Write("Enter ExtensionInfo2:");
+var str2 = Console.ReadLine();
+Console.Write("Enter ExtensionInfo3:");
+var str3 = Console.ReadLine();
+
+extendedStorage.CreateSecurityExtendedFields(ei);
+var sid = extendedStorage.GetSecurityStorage(MessageConverterHelper.ToSecurityId(NewSecurity[0].Id));
+sid.AddSecurityExtendedInfo(new object[] { str1, str3 , str2 });
+...
+]]></code>
+
+    </introduction>
+    <relatedTopics>
+
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

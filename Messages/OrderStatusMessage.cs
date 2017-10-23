@@ -18,6 +18,8 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// A message requesting current registered orders and trades.
 	/// </summary>
@@ -25,6 +27,24 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class OrderStatusMessage : OrderCancelMessage
 	{
+		/// <summary>
+		/// Start date, from which data needs to be retrieved.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str343Key)]
+		[DescriptionLoc(LocalizedStrings.Str344Key)]
+		[MainCategory]
+		public DateTimeOffset? From { get; set; }
+
+		/// <summary>
+		/// End date, until which data needs to be retrieved.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str345Key)]
+		[DescriptionLoc(LocalizedStrings.Str346Key)]
+		[MainCategory]
+		public DateTimeOffset? To { get; set; }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
 		/// </summary>
@@ -50,6 +70,8 @@ namespace StockSharp.Messages
 				PortfolioName = PortfolioName,
 				SecurityId = SecurityId,
 				Side = Side,
+				From = From,
+				To = To
 			};
 
 			CopyTo(clone);

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="319208d0-d543-47aa-8008-3891079198d4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The <legacyBold>Properties</legacyBold> panel is minimized on the right side of the strategy tab by 
+default. This panel is a table of emulation properties or Live settings. When you 
+select a specific property, a detailed description of this property appears at 
+the bottom of the table. All properties are grouped into groups:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Properties_Live_00"/>
+</mediaLink>
+<para><legacyBold>Logging </legacyBold></para>
+<list class="bullet">
+<listItem><para><legacyBold>Logging level</legacyBold> – the logging level for this element.</para></listItem>
+</list>
+
+
+<para><legacyBold>Initialization</legacyBold></para>
+<list class="bullet">
+  <listItem><para><legacyBold>Data type</legacyBold> - the data type.</para></listItem>
+<listItem><para><legacyBold>Time frame </legacyBold> - to use candles with the specified time-frame.</para></listItem>
+<listItem><para><legacyBold>Days of history data </legacyBold> - the number of days of history data to initialize the strategy.</para></listItem>
+</list>
+<para><legacyBold>Settings</legacyBold></para>
+<list class="bullet">
+<listItem><para><link xlink:href="b4f8c503-6589-4979-93ee-506df859d967" /> - settings of risk management.</para></listItem>
+</list>
+<para><legacyBold>Diagram parameters</legacyBold> </para>
+<list class="bullet">
+  <listItem><para><legacyBold>Security </legacyBold> - the security.</para></listItem>
+<listItem><para><legacyBold>Portfolio </legacyBold> - the portfolio.</para></listItem>
+</list>
+<para>If you do not fill in the <legacyBold>Diagram parameters</legacyBold>, when emulating, the instrument
+ will be used from the <legacyBold>Instrument</legacyBold> field of the <legacyBold>Emulation</legacyBold> tab, and as a portfolio,
+ the test portfolio will be used by default.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

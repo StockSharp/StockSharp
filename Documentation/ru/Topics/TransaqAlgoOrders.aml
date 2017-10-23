@@ -9,43 +9,43 @@
     
      <code language="C#">
         <![CDATA[
-pprivate void SendClick(object sender, RoutedEventArgs e)
+private void SendClick(object sender, RoutedEventArgs e)
 {
-	var algoOrder = new Order
-	{
-		Portfolio = Portfolio.SelectedPortfolio,
-		Security = Security,
-		Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-		Price = OrderPrice.Text.To<decimal>(),
-		Volume = OrderVolume.Text.To<decimal>()
-	};
+    var algoOrder = new Order
+    {
+        Portfolio = Portfolio.SelectedPortfolio,
+        Security = Security,
+        Direction = IsBuy.IsChecked == true ? Sides.Buy : Sides.Sell,
+        Price = OrderPrice.Text.To<decimal>(),
+        Volume = OrderVolume.Text.To<decimal>()
+    };
 
-	var condition = new TransaqAlgoOrderCondition() { AlgoType = _selectedTrigger, AlgoValue = OrderPrice.Text.To<decimal>() } ;
+    var condition = new TransaqOrderCondition() { AlgoType = _selectedTrigger, AlgoValue = OrderPrice.Text.To<decimal>() };
 
-	if (ValidAfterImmediately.IsChecked.Value)
-	{
-		condition.AlgoValidAfterType = TransaqAlgoOrderValidTypes.Immediately;
-	}
-	else
-	{
-		condition.AlgoValidAfterType = TransaqAlgoOrderValidTypes.Date;
-		condition.AlgoValidAfter = ValidAfterDate.Value;
-	}
+    if (ValidAfterImmediately.IsChecked.Value)
+    {
+        condition.AlgoValidAfterType = TransaqAlgoOrderValidTypes.Immediately;
+    }
+    else
+    {
+        condition.AlgoValidAfterType = TransaqAlgoOrderValidTypes.Date;
+        condition.AlgoValidAfter = ValidAfterDate.Value;
+    }
 
-	if (ValidBeforeTillCancelled.IsChecked.Value)
-	{
-		condition.AlgoValidBeforeType = TransaqAlgoOrderValidTypes.TillCancelled;
-	}
-	else
-	{
-		condition.AlgoValidBeforeType = TransaqAlgoOrderValidTypes.Date;
-		condition.AlgoValidBefore = ValidBefore.Value;
-	}
+    if (ValidBeforeTillCancelled.IsChecked.Value)
+    {
+        condition.AlgoValidBeforeType = TransaqAlgoOrderValidTypes.TillCancelled;
+    }
+    else
+    {
+        condition.AlgoValidBeforeType = TransaqAlgoOrderValidTypes.Date;
+        condition.AlgoValidBefore = ValidBefore.Value;
+    }
 
-	algoOrder.Condition = condition;
+    algoOrder.Condition = condition;
 
-	MainWindow.Instance.Trader.RegisterOrder(algoOrder);
-	DialogResult = true;
+    MainWindow.Instance.Trader.RegisterOrder(algoOrder);
+    DialogResult = true;
 }
 		]]>
 		</code>		

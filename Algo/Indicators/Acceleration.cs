@@ -22,10 +22,8 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
-	/// Acceleration / Decelration Indicator.
+	/// Acceleration / Deceleration Indicator.
 	/// </summary>
 	/// <remarks>
 	/// http://ta.mql4.com/indicators/bills/acceleration_deceleration.
@@ -62,7 +60,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The moving average.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("MA")]
 		[DescriptionLoc(LocalizedStrings.Str731Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -71,7 +69,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Awesome Oscillator.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("AO")]
 		[DescriptionLoc(LocalizedStrings.Str836Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -105,8 +103,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			Sma.LoadNotNull(settings, "Sma");
-			Ao.LoadNotNull(settings, "Ao");
+			Sma.LoadNotNull(settings, nameof(Sma));
+			Ao.LoadNotNull(settings, nameof(Ao));
 		}
 
 		/// <summary>
@@ -117,8 +115,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("Sma", Sma.Save());
-			settings.SetValue("Ao", Ao.Save());
+			settings.SetValue(nameof(Sma), Sma.Save());
+			settings.SetValue(nameof(Ao), Ao.Save());
 		}
 	}
 }

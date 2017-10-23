@@ -16,10 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.Localization;
@@ -30,29 +28,6 @@ namespace StockSharp.Messages
 	/// </summary>
 	public class InMemoryMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
 	{
-		private class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTimeOffset, Message>, OrderedPriorityQueue<DateTimeOffset, Message>>
-		{
-			public BlockingPriorityQueue()
-				: base(new OrderedPriorityQueue<DateTimeOffset, Message>())
-			{
-			}
-
-			protected override void OnEnqueue(KeyValuePair<DateTimeOffset, Message> item, bool force)
-			{
-				InnerCollection.Enqueue(item.Key, item.Value);
-			}
-
-			protected override KeyValuePair<DateTimeOffset, Message> OnDequeue()
-			{
-				return InnerCollection.Dequeue();
-			}
-
-			protected override KeyValuePair<DateTimeOffset, Message> OnPeek()
-			{
-				return InnerCollection.Peek();
-			}
-		}
-
 		private static readonly MemoryStatisticsValue<Message> _msgStat = new MemoryStatisticsValue<Message>(LocalizedStrings.Messages);
 
 		static InMemoryMessageChannel()
@@ -61,7 +36,7 @@ namespace StockSharp.Messages
 		}
 
 		private readonly Action<Exception> _errorHandler;
-		private readonly BlockingPriorityQueue _messageQueue = new BlockingPriorityQueue();
+		private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InMemoryMessageChannel"/>.
@@ -100,8 +75,8 @@ namespace StockSharp.Messages
 		/// </remarks>
 		public int MaxMessageCount
 		{
-			get { return _messageQueue.MaxSize; }
-			set { _messageQueue.MaxSize = value; }
+			get => _messageQueue.MaxSize;
+			set => _messageQueue.MaxSize = value;
 		}
 
 		/// <summary>
@@ -128,9 +103,7 @@ namespace StockSharp.Messages
 					{
 						try
 						{
-							KeyValuePair<DateTimeOffset, Message> pair;
-
-							if (!_messageQueue.TryDequeue(out pair))
+							if (!_messageQueue.TryDequeue(out var message))
 							{
 								break;
 							}
@@ -138,8 +111,8 @@ namespace StockSharp.Messages
 							//if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
 							//	Console.WriteLine("<< ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
 
-							_msgStat.Remove(pair.Value);
-							NewOutMessage?.Invoke(pair.Value);
+							_msgStat.Remove(message);
+							NewOutMessage?.Invoke(message);
 						}
 						catch (Exception ex)
 						{
@@ -175,7 +148,7 @@ namespace StockSharp.Messages
 			//	Console.WriteLine(">> ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
 
 			_msgStat.Add(message);
-			_messageQueue.Enqueue(new KeyValuePair<DateTimeOffset, Message>(message.LocalTime, message));
+			_messageQueue.Enqueue(message);
 		}
 
 		/// <summary>

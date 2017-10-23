@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="622b706b-f729-46f2-8509-900c5bde2244" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Основной процесс работы по дизайну стратегии и составных элементов 
+проходит в панели <legacyBold>Схема</legacyBold>, путём комбинирования кубиков и соединительных линий. 
+Панель Схема состоит из панелей: <legacyBold>Палитра</legacyBold>, 
+<legacyBold>Дизайнер</legacyBold>, <legacyBold>Свойства</legacyBold>. </para>
+<mediaLink>
+<caption placement="after">_</caption>
+<image placement="center" xlink:href="Designer_Designer_schemes_strategies_and_component_elements_00"/>
+</mediaLink>
+<title>Панель Палитра</title>
+
+  <para>На панели <legacyBold>Палитра</legacyBold> расположены кубики, из которых создаются стратегии.
+  Все элементы в палитре разделены на категории, которые описаны в разделе
+  <link xlink:href="37e547dd-5141-4a57-9ed2-8ca058e9240c" />. 
+  Для добавления кубика на панель <legacyBold>Дизайнер</legacyBold> достаточно 
+  нажать правой кнопкой мыши на требуемый кубик и, не отпуская кнопки, перенести 
+  его на панель <legacyBold>Дизайнер</legacyBold>. После чего элемент 
+  будет автоматически выделен и его параметры будут показаны в 
+  окне для редактирования свойств кубика.
+</para>
+
+<title>Панель Дизайнер</title>
+<para>На панели <legacyBold>Дизайнер</legacyBold> происходит весь процесс 
+создания стратегии с помощью комбинирования кубиков и соединений (линий). 
+При этом наглядно представляется схема стратегии. Подробно о создания 
+стратегии описано в пункте <link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" />.
+</para>
+<title>Панель Свойства</title>
+
+<para>На панели <legacyBold>Свойства</legacyBold> отображаются параметры выбранного
+ кубика на панели <legacyBold>Дизайнер</legacyBold>. При выборе кубика на 
+ панели <legacyBold>Дизайнер</legacyBold> рамка вокруг него окрашивается в черный цвет.
+</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_Properties_Panel_00"/>
+</mediaLink>
+<para>Все кубики содержат набор предопределенных свойств:</para>
+<list class="bullet">
+  <listItem><para><legacyBold>Название</legacyBold> – название элемента, которое отображается в дизайнере.</para></listItem>
+  <listItem><para><legacyBold>Уровень логирования</legacyBold> – уровень ведения логов для данного элемента.</para></listItem>
+  <listItem><para><legacyBold>Параметры</legacyBold> – отображать параметры элемента в элементах более высокого уровня.</para></listItem>
+  <listItem><para><legacyBold>Сокеты</legacyBold> – отображать сокеты элемента в элементах более высокого уровня.</para></listItem>
+</list>
+
+<para>Подробно о свойствах каждого кубика описано в пункте <link xlink:href="37e547dd-5141-4a57-9ed2-8ca058e9240c" />.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="37e547dd-5141-4a57-9ed2-8ca058e9240c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

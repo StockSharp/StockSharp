@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
@@ -6,29 +6,29 @@
 		
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> - cобытие появления новых заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> - событие появления новых заявок.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersCancelFailed</codeEntityReference> - cобытие об ошибках, связанных со снятием заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersCancelFailed</codeEntityReference> - событие об ошибках, связанных со снятием заявок.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference> - cобытие изменения состояния заявок (снята, удовлетворена).
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference> - событие изменения состояния заявок (снята, удовлетворена).
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference> - cобытие об ошибках, связанных с регистрацией заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference> - событие об ошибках, связанных с регистрацией заявок.
 			</listItem>
 			
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewStopOrders</codeEntityReference> - cобытие появления новых стоп-заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewStopOrders</codeEntityReference> - событие появления новых стоп-заявок.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersCancelFailed</codeEntityReference> - cобытие об ошибках, связанных со снятием стоп-заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersCancelFailed</codeEntityReference> - событие об ошибках, связанных со снятием стоп-заявок.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersChanged</codeEntityReference> - cобытие изменения состояния стоп-заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersChanged</codeEntityReference> - событие изменения состояния стоп-заявок.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersRegisterFailed</codeEntityReference> - cобытие об ошибках, связанных с регистрацией стоп-заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.StopOrdersRegisterFailed</codeEntityReference> - событие об ошибках, связанных с регистрацией стоп-заявок.
 			</listItem>
 		</list>
 
@@ -39,7 +39,7 @@
 		</para>
 		<para>
 			Чтобы узнать в программе, когда биржа присвоила заявке <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference>,
-			необходимо подписатся на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>
+			необходимо подписаться на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>
 			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrdersChanged</codeEntityReference>).
 			Для определения неудачной регистрации используется событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference>
 			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.StopOrdersRegisterFailed</codeEntityReference>).

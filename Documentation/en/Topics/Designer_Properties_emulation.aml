@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="31a208d0-d543-47aa-8008-389c07e1e8d4" revisionNumber="1">
+ <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <introduction>
+<para>The <legacyBold>Properties</legacyBold> panel is minimized on the right side of the strategy tab by 
+default. This panel is a table of emulation or Live trade properties. When you 
+select a specific property, a detailed description of this property appears at 
+the bottom of the table. All properties are grouped into groups:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Properties_emulation_00"/>
+</mediaLink>
+
+<para><legacyBold>Settings</legacyBold></para>
+
+<list class="bullet">
+<listItem><para><legacyBold>Market data </legacyBold> – the data storage.</para></listItem>
+<listItem><para><legacyBold>Storage format </legacyBold> – the storage format.</para></listItem>
+<listItem><para><legacyBold>Data type </legacyBold> – the data type.</para></listItem>
+<listItem><para><legacyBold>Time frame </legacyBold> – to use candles with the specified time-frame.</para></listItem>
+<listItem><para><legacyBold>Maximum quote volume in generated depth </legacyBold> – the maximum quote volume in generated order book.</para></listItem>
+<listItem><para><legacyBold>Interval </legacyBold> – the time interval.</para></listItem>
+<listItem><para><legacyBold>Unrealized P/L </legacyBold> – the interval of recalculation of the unrealized profit.</para></listItem>
+<listItem><para><legacyBold>Trades </legacyBold> – which trades to use.</para></listItem>
+<listItem><para><legacyBold>Marked depth </legacyBold> – which order books to use.</para></listItem>
+<listItem><para><legacyBold>Order log </legacyBold> – to use the order log.</para></listItem>
+<listItem><para><legacyBold>Number of strategies </legacyBold> – the number of simultaneously tested strategies.</para></listItem>
+<listItem><para><legacyBold>Logging level </legacyBold> – the logging level.</para></listItem>
+<listItem><para><legacyBold>Combine on touch </legacyBold> – when emulating the combine on trades, perform the combine of orders when the trade price touched the order price (equal to the order price).</para></listItem>
+<listItem><para><legacyBold>Marked depth (lifetime) </legacyBold> – the maximum time during which the order book is in the emulator. If during this time there was no update, the order book is deleted. This property can be used to remove old order books when there are holes in the data.</para></listItem>
+<listItem><para><legacyBold>Errors percentage </legacyBold> – the percentage value of the error in registering new orders. The value can be from 0 (there will be no errors) to 100.</para></listItem>
+<listItem><para><legacyBold>Latency </legacyBold> – the minimum value of the registered order latency.</para></listItem>
+<listItem><para><legacyBold>Reregistering </legacyBold> – whether order reregistering is supported as a single trade.</para></listItem>
+<listItem><para><legacyBold>Buffering period </legacyBold> – to send responses in whole packet with intervals. The network latency and the buffered work of the exchange core are emulated.</para></listItem>
+<listItem><para><legacyBold>Order ID </legacyBold> – the number from which the emulator will generate identifiers for orders.</para></listItem>
+<listItem><para><legacyBold>Trade ID </legacyBold> – the number from which the emulator will generate identifiers for trades.</para></listItem>
+<listItem><para><legacyBold>Transaction </legacyBold> – the number from which the emulator will generate identifiers for order transactions.</para></listItem>
+<listItem><para><legacyBold>Spread size </legacyBold> – the spread size in the price steps. It is used in specifying the spread for the generation of an order book from tick trades.</para></listItem>
+<listItem><para><legacyBold>Depth of book </legacyBold> – the maximum depth of the order book that will be generated from the ticks.</para></listItem>
+<listItem><para><legacyBold>Number of volume steps </legacyBold> – the number of volume steps for which the order is larger than the tick trade. It is used for testing on tick trades.</para></listItem>
+<listItem><para><legacyBold>Portfolios interval </legacyBold> – the interval for the recalculation of portfolios data. If the interval is zero, no recalculation is performed.</para></listItem>
+<listItem><para><legacyBold>Change time </legacyBold> – to change time for orders and trades into exchange time.</para></listItem>
+<listItem><para><legacyBold>Time zone </legacyBold> – information about the time zone where the exchange is located.</para></listItem>
+<listItem><para><legacyBold>Price shift </legacyBold> – the price shift from the last trade, specifying the limits of the maximum and minimum prices for the next session.</para></listItem>
+<listItem><para><legacyBold>Add extra volume </legacyBold> – add extra volume to the order book when orders with large volume are being registered.</para></listItem>
+<listItem><para><legacyBold><link xlink:href="e8449e6a-bd7f-4bc9-a1a6-e92404e3a44b" /> </legacyBold> – the commission (brokerage, exchange, etc.).</para></listItem>
+</list>
+
+<para><legacyBold>Logging</legacyBold></para>
+<list class="bullet">
+<listItem><para><legacyBold>Logging level</legacyBold> – the logging level for this element.</para></listItem>
+</list>
+<para><legacyBold>Setting</legacyBold></para>
+<list class="bullet">
+<listItem><para><legacyBold><link xlink:href="b4f8c503-6589-4979-93ee-506df859d967" /> </legacyBold> – the risk management settings.</para></listItem>
+</list>
+
+<para><legacyBold>Diagram parameters</legacyBold> </para>
+<list class="bullet">
+ <listItem><para><legacyBold>Security</legacyBold> - the security.</para></listItem>
+<listItem><para><legacyBold>Portfolio</legacyBold> - the portfolio.</para></listItem>
+</list>
+<para>If you do not fill in the <legacyBold>Diagram parameters</legacyBold>, when emulating, the instrument 
+will be used from the <legacyBold>Instrument</legacyBold> field of the <legacyBold>Emulation</legacyBold> tab, and as a portfolio, 
+the test portfolio will be used by default.</para>
+
+ </introduction>
+ <relatedTopics>
+<link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />
+</relatedTopics>
+ </developerConceptualDocument>
+</topic>

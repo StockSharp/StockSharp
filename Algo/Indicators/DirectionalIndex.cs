@@ -23,8 +23,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Welles Wilder Directional Movement Index.
 	/// </summary>
@@ -71,7 +69,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public virtual int Length
 		{
-			get { return Plus.Length; }
+			get => Plus.Length;
 			set
 			{
 				Plus.Length = Minus.Length = value;
@@ -82,7 +80,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// DI+.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("DI+")]
 		[Description("DI+.")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -91,7 +89,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// DI-.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("DI-")]
 		[Description("DI-.")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -121,7 +119,9 @@ namespace StockSharp.Algo.Indicators
 			var diSum = plus + minus;
 			var diDiff = Math.Abs(plus - minus);
 
-			return value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m);
+			value.InnerValues.Add(this, value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m));
+
+			return value;
 		}
 
 		/// <summary>

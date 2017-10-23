@@ -16,11 +16,12 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
-	using System.Linq;
+	using System.Security;
+	using System.Threading;
 
 	using Ecng.Common;
 
-	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// The client for access to the StockSharp authentication service.
@@ -31,6 +32,9 @@ namespace StockSharp.Community
 		{
 			_instance = new Lazy<AuthenticationClient>(() => new AuthenticationClient());
 		}
+
+		private Timer _pingTimer;
+		private readonly SyncObject _pingSync = new SyncObject();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AuthenticationClient"/>.
@@ -63,11 +67,14 @@ namespace StockSharp.Community
 		public ServerCredentials Credentials { get; }
 
 		/// <summary>
+		/// Product.
+		/// </summary>
+		public Products? Product { get; set; }
+
+		/// <summary>
 		/// Has the client successfully authenticated.
 		/// </summary>
-		public bool IsLoggedIn { get; private set; }
-
-		private Guid _sessionId;
+		public bool IsLoggedIn => NullableSessionId != null;
 
 		/// <summary>
 		/// Session ID.
@@ -79,24 +86,35 @@ namespace StockSharp.Community
 				if (!IsLoggedIn)
 					Login();
 
-				return _sessionId;
+				return NullableSessionId.Value;
 			}
 		}
+
+		/// <summary>
+		/// To get the <see cref="SessionId"/> if the user was authorized.
+		/// </summary>
+		public Guid? NullableSessionId { get; private set; }
+
+		/// <summary>
+		/// The user identifier for <see cref="SessionId"/>.
+		/// </summary>
+		public long UserId { get; private set; }
 
 		/// <summary>
 		/// To log in.
 		/// </summary>
 		public void Login()
 		{
-			Login(Credentials.Login, Credentials.Password.To<string>());
+			Login(Product, Credentials.Email, Credentials.Password);
 		}
 
 		/// <summary>
 		/// To log in.
 		/// </summary>
+		/// <param name="product">Product.</param>
 		/// <param name="login">Login.</param>
 		/// <param name="password">Password.</param>
-		public void Login(string login, string password)
+		public void Login(Products? product, string login, SecureString password)
 		{
 			if (login.IsEmpty())
 				throw new ArgumentNullException(nameof(login));
@@ -104,17 +122,47 @@ namespace StockSharp.Community
 			if (password.IsEmpty())
 				throw new ArgumentNullException(nameof(password));
 
-			var sessionId = Invoke(f => f.Login(login, password));
+			Guid sessionId;
 
-			if (sessionId == Guid.Empty)
-				throw new InvalidOperationException(LocalizedStrings.UnknownServerError);
+			if (product == null)
+			{
+				sessionId = Invoke(f => f.Login(login, password.To<string>()));
+				sessionId.ToErrorCode().ThrowIfError();
 
-			var bytes = sessionId.ToByteArray();
-			if (bytes.Take(14).All(b => b == 0))
-				((ErrorCodes)bytes[15]).ThrowIfError();
+				NullableSessionId = sessionId;
+				UserId = Invoke(f => f.GetId(sessionId));
+			}
+			else
+			{
+				var tuple = Invoke(f => f.Login2(product.Value, login, password.To<string>()));
+				tuple.Item1.ToErrorCode().ThrowIfError();
 
-			_sessionId = sessionId;
-			IsLoggedIn = true;
+				NullableSessionId = tuple.Item1;
+				UserId = tuple.Item2;
+			}
+
+			if (product != null)
+			{
+				_pingTimer = ThreadingHelper.Timer(() =>
+				{
+					try
+					{
+						var session = NullableSessionId;
+
+						if (session == null)
+							return;
+
+						lock (_pingSync)
+						{
+							Invoke(f => f.Ping(session.Value));
+						}
+					}
+					catch (Exception ex)
+					{
+						ex.LogError();
+					}
+				}).Interval(TimeSpan.FromMinutes(10));
+			}
 		}
 
 		/// <summary>
@@ -123,7 +171,10 @@ namespace StockSharp.Community
 		public void Logout()
 		{
 			Invoke(f => f.Logout(SessionId));
-			IsLoggedIn = false;
+			NullableSessionId = null;
+			UserId = 0;
+
+			_pingTimer.Dispose();
 		}
 
 		/// <summary>

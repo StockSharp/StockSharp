@@ -153,19 +153,13 @@ namespace SampleHistoryTestingParallel
 
 			logManager.Sources.Add(connector);
 
-			connector.NewSecurities += securities =>
+			connector.NewSecurity += s =>
 			{
-				if (securities.All(s => s != security))
+				if (s != security)
 					return;
 
 				// fill level1 values
 				connector.SendInMessage(level1Info);
-
-				connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
-				{
-					// order book freq refresh is 1 sec
-					Interval = TimeSpan.FromSeconds(1),
-				});
 			};
 
 			TestingProcess.Maximum = 100;
@@ -177,7 +171,7 @@ namespace SampleHistoryTestingParallel
 				.Select(period =>
 				{
 					var candleManager = new CandleManager(connector);
-                    var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+					var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 					// create strategy based SMA
 					var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
@@ -212,7 +206,7 @@ namespace SampleHistoryTestingParallel
 				});
 
 			// start emulation
-			batchEmulation.Start(strategies);
+			batchEmulation.Start(strategies, periods.Length);
 		}
 	}
 }

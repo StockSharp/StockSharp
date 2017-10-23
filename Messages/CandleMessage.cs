@@ -113,19 +113,19 @@ namespace StockSharp.Messages
 		public decimal OpenPrice { get; set; }
 
 		/// <summary>
-		/// Maximum price.
+		/// Highest price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str81Key)]
+		[DisplayNameLoc(LocalizedStrings.HighestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str82Key)]
 		[MainCategory]
 		public decimal HighPrice { get; set; }
 
 		/// <summary>
-		/// Minimum price.
+		/// Lowest price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str83Key)]
+		[DisplayNameLoc(LocalizedStrings.LowestPriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str84Key)]
 		[MainCategory]
 		public decimal LowPrice { get; set; }
@@ -161,17 +161,24 @@ namespace StockSharp.Messages
 		public decimal? HighVolume { get; set; }
 
 		/// <summary>
-		/// Minimum volume.
+		/// Volume at low.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public decimal? LowVolume { get; set; }
 
 		/// <summary>
-		/// Relative colume.
+		/// Relative volume.
 		/// </summary>
 		[DataMember]
 		public decimal? RelativeVolume { get; set; }
+
+		/// <summary>
+		/// Total price size.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.TotalPriceKey)]
+		public decimal TotalPrice { get; set; }
 
 		/// <summary>
 		/// Total volume.
@@ -201,7 +208,7 @@ namespace StockSharp.Messages
 		public int? TotalTicks { get; set; }
 
 		/// <summary>
-		/// Number of uptrending ticks.
+		/// Number of up trending ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickUpKey)]
@@ -210,7 +217,7 @@ namespace StockSharp.Messages
 		public int? UpTicks { get; set; }
 
 		/// <summary>
-		/// Number of downtrending ticks.
+		/// Number of down trending ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickDownKey)]
@@ -223,7 +230,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.CandleStateKey)]
+		[DescriptionLoc(LocalizedStrings.CandleStateKey, true)]
 		[MainCategory]
 		public CandleStates State { get; set; }
 
@@ -234,16 +241,26 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// It is the last message in the requested batch of candles.
-		/// </summary>
-		[DataMember]
-		public bool IsFinished { get; set; }
-
-		/// <summary>
 		/// Price levels.
 		/// </summary>
 		[DataMember]
 		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
+
+		private CandleMessageVolumeProfile _volumeProfile;
+
+		/// <summary>
+		/// Volume profile.
+		/// </summary>
+		[Ignore]
+		public CandleMessageVolumeProfile VolumeProfile
+		{
+			get => _volumeProfile;
+			set
+			{
+				_volumeProfile = value;
+				PriceLevels = value?.PriceLevels;
+			}
+		}
 
 		/// <summary>
 		/// Candle arg.
@@ -270,17 +287,19 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(copy));
 
 			copy.LocalTime = LocalTime;
+			copy.OpenPrice = OpenPrice;
+			copy.OpenTime = OpenTime;
+			copy.OpenVolume = OpenVolume;
 			copy.ClosePrice = ClosePrice;
 			copy.CloseTime = CloseTime;
 			copy.CloseVolume = CloseVolume;
 			copy.HighPrice = HighPrice;
 			copy.HighVolume = HighVolume;
+			copy.HighTime = HighTime;
 			copy.LowPrice = LowPrice;
 			copy.LowVolume = LowVolume;
+			copy.LowTime = LowTime;
 			copy.OpenInterest = OpenInterest;
-			copy.OpenPrice = OpenPrice;
-			copy.OpenTime = OpenTime;
-			copy.OpenVolume = OpenVolume;
 			copy.SecurityId = SecurityId;
 			copy.TotalVolume = TotalVolume;
 			copy.RelativeVolume = RelativeVolume;
@@ -288,8 +307,8 @@ namespace StockSharp.Messages
 			copy.DownTicks = DownTicks;
 			copy.UpTicks = UpTicks;
 			copy.TotalTicks = TotalTicks;
-			copy.IsFinished = IsFinished;
 			copy.PriceLevels = PriceLevels?.Select(l => l.Clone()).ToArray();
+			copy.State = State;
 
 			return copy;
 		}
@@ -300,7 +319,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return $"{Type},T={OpenTime:yyyy/MM/dd HH:mm:ss.fff},O={OpenPrice},H={HighPrice},L={LowPrice},C={ClosePrice},V={TotalVolume}";
+			return $"{Type},Sec={SecurityId},A={Arg},T={OpenTime:yyyy/MM/dd HH:mm:ss.fff},O={OpenPrice},H={HighPrice},L={LowPrice},C={ClosePrice},V={TotalVolume},S={State}";
 		}
 	}
 
@@ -342,8 +361,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return TimeFrame; }
-			set { TimeFrame = (TimeSpan)value; }
+			get => TimeFrame;
+			set => TimeFrame = (TimeSpan)value;
 		}
 	}
 
@@ -385,8 +404,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return MaxTradeCount; }
-			set { MaxTradeCount = (int)value; }
+			get => MaxTradeCount;
+			set => MaxTradeCount = (int)value;
 		}
 	}
 
@@ -428,8 +447,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return Volume; }
-			set { Volume = (decimal)value; }
+			get => Volume;
+			set => Volume = (decimal)value;
 		}
 	}
 
@@ -471,33 +490,33 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return PriceRange; }
-			set { PriceRange = (Unit)value; }
+			get => PriceRange;
+			set => PriceRange = (Unit)value;
 		}
 	}
 
-	/// <summary>
-	/// Symbol types.
-	/// </summary>
-	[System.Runtime.Serialization.DataContract]
-	[Serializable]
-	public enum PnFTypes
-	{
-		/// <summary>
-		/// X (price up).
-		/// </summary>
-		[EnumMember]
-		X,
+	///// <summary>
+	///// Symbol types.
+	///// </summary>
+	//[System.Runtime.Serialization.DataContract]
+	//[Serializable]
+	//public enum PnFTypes
+	//{
+	//	/// <summary>
+	//	/// X (price up).
+	//	/// </summary>
+	//	[EnumMember]
+	//	X,
 
-		/// <summary>
-		/// 0 (price down).
-		/// </summary>
-		[EnumMember]
-		O,
-	}
+	//	/// <summary>
+	//	/// 0 (price down).
+	//	/// </summary>
+	//	[EnumMember]
+	//	O,
+	//}
 
 	/// <summary>
-	/// Point in fugure (X0) candle arg.
+	/// Point in figure (X0) candle arg.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
@@ -506,12 +525,12 @@ namespace StockSharp.Messages
 		private Unit _boxSize = new Unit();
 
 		/// <summary>
-		/// Range of price above which create a new <see cref="PnFTypes.X"/> or <see cref="PnFTypes.O"/>.
+		/// Range of price above which increase the candle body.
 		/// </summary>
 		[DataMember]
 		public Unit BoxSize
 		{
-			get { return _boxSize; }
+			get => _boxSize;
 			set
 			{
 				if (value == null)
@@ -521,11 +540,23 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private int _reversalAmount = 1;
+
 		/// <summary>
-		/// The number of boxes (an <see cref="PnFTypes.X"/> or an <see cref="PnFTypes.O"/>) required to cause a reversal.
+		/// The number of boxes required to cause a reversal.
 		/// </summary>
 		[DataMember]
-		public int ReversalAmount { get; set; }
+		public int ReversalAmount
+		{
+			get => _reversalAmount;
+			set
+			{
+				if (value < 1)
+					throw new ArgumentOutOfRangeException();
+
+				_reversalAmount = value;
+			}
+		}
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -590,11 +621,11 @@ namespace StockSharp.Messages
 		[DataMember]
 		public PnFArg PnFArg { get; set; }
 
-		/// <summary>
-		/// Type of symbols.
-		/// </summary>
-		[DataMember]
-		public PnFTypes PnFType { get; set; }
+		///// <summary>
+		///// Type of symbols.
+		///// </summary>
+		//[DataMember]
+		//public PnFTypes PnFType { get; set; }
 
 		/// <summary>
 		/// Create a copy of <see cref="PnFCandleMessage"/>.
@@ -605,7 +636,7 @@ namespace StockSharp.Messages
 			return CopyTo(new PnFCandleMessage
 			{
 				PnFArg = PnFArg,
-				PnFType = PnFType
+				//PnFType = PnFType
 			});
 		}
 
@@ -614,8 +645,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return PnFArg; }
-			set { PnFArg = (PnFArg)value; }
+			get => PnFArg;
+			set => PnFArg = (PnFArg)value;
 		}
 	}
 
@@ -657,8 +688,8 @@ namespace StockSharp.Messages
 		/// </summary>
 		public override object Arg
 		{
-			get { return BoxSize; }
-			set { BoxSize = (Unit)value; }
+			get => BoxSize;
+			set => BoxSize = (Unit)value;
 		}
 	}
 }

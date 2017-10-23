@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8642146a-2f86-475a-b447-e9106195717e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Black_Sols_00"/>
+</mediaLink>
+<para>The cube is used to calculate the main Greeks: Delta, Gamma, Vega, Theta, 
+Ro at the current time.</para>
+
+
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Price of underlying asset</legacyBold> - the price 
+  of the underlying asset.</para></listItem>
+  <listItem><para><legacyBold>Options</legacyBold> - the list of options from 
+  the <legacyBold>Derivative</legacyBold> cube.</para></listItem>
+  <listItem><para><legacyBold>Maximum deviation</legacyBold> - the maximum 
+  deviation.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Result</legacyBold> - the result of calculating 
+  the main Greeks: Delta, Gamma, Vega, Theta, Po at the current time.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+<listItem><para><legacyBold>Black model</legacyBold> - the flag, indicating 
+whether values will be calculated according to the Black-Scholes model.</para></listItem>
+<listItem><para><legacyBold>Value</legacyBold> - can take the values of Delta, 
+Gamma, Vega, Theta, Po and determines what value will be at the cube output.</para></listItem>
+
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b49f617f-7425-4c1d-bb45-c347f55d1d1e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

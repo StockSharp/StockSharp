@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para><token>stocksharp</token> предлагает несколько графических компонет для отображения логов, в основе которых лежит
+      <para><token>stocksharp</token> предлагает несколько графических компонент для отображения логов, в основе которых лежит
       <codeEntityReference>T:StockSharp.Xaml.LogControl</codeEntityReference>. Другие компоненты: 
       <codeEntityReference>T:StockSharp.Xaml.LogWindow</codeEntityReference>,
       <codeEntityReference>T:StockSharp.Xaml.Monitor</codeEntityReference> и 
@@ -16,10 +16,8 @@
  
     <relatedTopics>
        <link xlink:href="82437493-cd53-41eb-b756-d913af0f4f8e">Логирование</link>
-       <link xlink:href="a206d470-20f1-42ed-b066-6e322d55d436">LogControl</link>
-       <link xlink:href="3fc605a8-3011-404f-b31d-3ff6d459eddf">LogWindow</link>
-       <link xlink:href="dc573dca-b2ea-44c4-884d-b7d0ba8b212d">Monitor</link>
-       <link xlink:href="da7fa5ab-4d4e-4205-a5ad-c41c24e88661">MonitorWindow</link>
+       <link xlink:href="a206d470-20f1-42ed-b066-6e322d55d436">Панель логов</link>
+       <link xlink:href="dc573dca-b2ea-44c4-884d-b7d0ba8b212d">Расширенная панель логов</link>
     </relatedTopics>
     
   </developerConceptualDocument>

@@ -74,7 +74,7 @@ namespace XMLCommToHTM.DOM.Internal
 		{
 			var baseTypes =
 				Enumerable.Repeat(type, 1)
-				.Concat(TypeUtils.GetBaseTypes(type))
+				.Concat(type.GetBaseTypes())
 				.Concat(type.GetInterfaces());
 			var res = new List<MethodDom>();
 			foreach (var baseType in baseTypes)

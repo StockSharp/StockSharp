@@ -26,6 +26,15 @@
 		</list>
 		<para><legacyBold>Основные</legacyBold></para>
 	   <list class="bullet">
+	   <listItem>
+ <legacyBold>Дата начала(свечи)</legacyBold> - с какой даты начать скачивать данные.
+</listItem>
+<listItem>
+ <legacyBold>Дата начала(тики)</legacyBold> - с какой даты начать скачивать данные.
+</listItem>
+<listItem>
+ <legacyBold>Заголовок</legacyBold> - заголовок задачи.
+</listItem>
         <listItem>
           <legacyBold>Работать с</legacyBold> - время начала работы источника.
 		</listItem>

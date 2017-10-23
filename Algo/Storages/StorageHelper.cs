@@ -19,15 +19,18 @@ namespace StockSharp.Algo.Storages
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+	using Ecng.Interop;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -150,7 +153,7 @@ namespace StockSharp.Algo.Storages
 					throw new ArgumentNullException(nameof(getTime));
 
 				if (from > to)
-					throw new ArgumentOutOfRangeException(nameof(@from));
+					throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
 
 				//_storage = storage;
 				//_from = from;
@@ -315,7 +318,10 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(storage));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014);
+			{
+				return null;
+				//throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014.Put(from));
+			}
 
 			var dates = storage.Dates.ToArray();
 
@@ -325,7 +331,11 @@ namespace StockSharp.Algo.Storages
 			var first = dates.First().ApplyTimeZone(TimeZoneInfo.Utc);
 			var last = dates.Last().EndOfDay().ApplyTimeZone(TimeZoneInfo.Utc);
 
-			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).Truncate(), (to ?? last).Truncate()));
+			if (from > last)
+				return null;
+
+			var timePrecision = storage.Serializer.TimePrecision;
+			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));
 		}
 
 		/// <summary>
@@ -371,47 +381,47 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// To convert string representation of the candle argument into typified.
 		/// </summary>
-		/// <param name="type">The type of candle message.</param>
+		/// <param name="messageType">The type of candle message.</param>
 		/// <param name="str">The string representation of the argument.</param>
 		/// <returns>Argument.</returns>
-		public static object ToCandleArg(this Type type, string str)
+		public static object ToCandleArg(this Type messageType, string str)
 		{
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
 
 			if (str.IsEmpty())
 				throw new ArgumentNullException(nameof(str));
 
-			if (type == typeof(TimeFrameCandleMessage))
+			if (messageType == typeof(TimeFrameCandleMessage))
 			{
-				return str.Replace("-", ":").To<TimeSpan>();
+				return str.Replace('-', ':').To<TimeSpan>();
 			}
-			else if (type == typeof(TickCandleMessage))
+			else if (messageType == typeof(TickCandleMessage))
 			{
 				return str.To<int>();
 			}
-			else if (type == typeof(VolumeCandleMessage))
+			else if (messageType == typeof(VolumeCandleMessage))
 			{
 				return str.To<decimal>();
 			}
-			else if (type == typeof(RangeCandleMessage) || type == typeof(RenkoCandleMessage))
+			else if (messageType == typeof(RangeCandleMessage) || messageType == typeof(RenkoCandleMessage))
 			{
 				return str.To<Unit>();
 			}
-			else if (type == typeof(PnFCandleMessage))
+			else if (messageType == typeof(PnFCandleMessage))
 			{
 				return str.To<PnFArg>();
 			}
 			else
-				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 		}
 
 		/// <summary>
-		/// Read instrument by indentifier.
+		/// Read instrument by identifier.
 		/// </summary>
 		/// <param name="securities">Instrument storage collection.</param>
 		/// <param name="securityId">Identifier.</param>
-		/// <returns>Insturment.</returns>
+		/// <returns>Instrument.</returns>
 		public static Security ReadBySecurityId(this IStorageEntityList<Security> securities, SecurityId securityId)
 		{
 			if (securities == null)
@@ -423,9 +433,236 @@ namespace StockSharp.Algo.Storages
 			return securities.ReadById(securityId.ToStringId());
 		}
 
-		internal static DateTimeOffset Truncate(this DateTimeOffset time)
+		internal static DateTimeOffset StorageTruncate(this DateTimeOffset time, TimeSpan precision)
 		{
-			return time.Truncate(TimeSpan.TicksPerMillisecond);
+			var ticks = precision.Ticks;
+
+			return ticks == 1 ? time : time.Truncate(ticks);
+		}
+
+		internal static DateTimeOffset StorageBinaryOldTruncate(this DateTimeOffset time)
+		{
+			return time.StorageTruncate(TimeSpan.FromMilliseconds(1));
+		}
+
+		/// <summary>
+		/// Synchronize securities with storage.
+		/// </summary>
+		/// <param name="drives">Storage drives.</param>
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+		/// <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
+		/// <param name="logsReceiver">Logs receiver.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+		public static void SynchronizeSecurities(this IEnumerable<IMarketDataDrive> drives,
+			ISecurityStorage securityStorage, IExchangeInfoProvider exchangeInfoProvider,
+			Action<Security> newSecurity, Action<int, int> updateProgress,
+			Func<bool> isCancelled, ILogReceiver logsReceiver)
+		{
+			if (drives == null)
+				throw new ArgumentNullException(nameof(drives));
+
+			if (securityStorage == null)
+				throw new ArgumentNullException(nameof(securityStorage));
+
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
+
+			if (newSecurity == null)
+				throw new ArgumentNullException(nameof(newSecurity));
+
+			if (updateProgress == null)
+				throw new ArgumentNullException(nameof(updateProgress));
+
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
+
+			if (logsReceiver == null)
+				throw new ArgumentNullException(nameof(logsReceiver));
+
+			var securityPaths = new List<string>();
+			var progress = 0;
+
+			foreach (var dir in drives.Select(drive => drive.Path).Distinct())
+			{
+				foreach (var letterDir in InteropHelper.GetDirectories(dir))
+				{
+					if (isCancelled())
+						break;
+
+					var name = Path.GetFileName(letterDir);
+
+					if (name == null || name.Length != 1)
+						continue;
+
+					securityPaths.AddRange(InteropHelper.GetDirectories(letterDir));
+				}
+
+				if (isCancelled())
+					break;
+			}
+
+			if (isCancelled())
+				return;
+
+			// кол-во проходов по директории для создания инструмента
+			var iterCount = securityPaths.Count;
+
+			updateProgress(0, iterCount);
+
+			var securities = securityStorage.LookupAll().ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
+
+			foreach (var securityPath in securityPaths)
+			{
+				if (isCancelled())
+					break;
+
+				var securityId = Path.GetFileName(securityPath).FolderNameToSecurityId();
+
+				var isNew = false;
+
+				var security = securities.TryGetValue(securityId);
+
+				if (security == null)
+				{
+					var firstDataFile =
+						Directory.EnumerateDirectories(securityPath)
+							.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
+								.Concat(Directory.EnumerateFiles(d, "*.csv"))
+								.OrderBy(f => Path.GetExtension(f).CompareIgnoreCase(".bin") ? 0 : 1))
+							.FirstOrDefault();
+
+					if (firstDataFile != null)
+					{
+						var id = securityId.ToSecurityId();
+
+						decimal priceStep;
+
+						if (Path.GetExtension(firstDataFile).CompareIgnoreCase(".bin"))
+						{
+							try
+							{
+								priceStep = File.ReadAllBytes(firstDataFile).Range(6, 16).To<decimal>();
+							}
+							catch (Exception ex)
+							{
+								throw new InvalidOperationException(LocalizedStrings.Str2929Params.Put(firstDataFile), ex);
+							}
+						}
+						else
+							priceStep = 0.01m;
+
+						security = new Security
+						{
+							Id = securityId,
+							PriceStep = priceStep,
+							Name = id.SecurityCode,
+							Code = id.SecurityCode,
+							Board = exchangeInfoProvider.GetOrCreateBoard(id.BoardCode),
+						};
+
+						securities.Add(securityId, security);
+
+						securityStorage.Save(security);
+						newSecurity(security);
+
+						isNew = true;
+					}
+				}
+
+				updateProgress(progress++, iterCount);
+
+				if (isNew)
+					logsReceiver.AddInfoLog(LocalizedStrings.Str2930Params, security);
+			}
+		}
+
+		/// <summary>
+		/// Clear dates cache for storages.
+		/// </summary>
+		/// <param name="drives">Storage drives.</param>
+		/// <param name="updateProgress">The handler through which a progress change will be passed.</param>
+		/// <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
+		/// <param name="logsReceiver">Logs receiver.</param>
+		public static void ClearDatesCache(this IEnumerable<IMarketDataDrive> drives, Action<int, int> updateProgress,
+			Func<bool> isCancelled, ILogReceiver logsReceiver)
+		{
+			if (drives == null)
+				throw new ArgumentNullException(nameof(drives));
+
+			if (updateProgress == null)
+				throw new ArgumentNullException(nameof(updateProgress));
+
+			if (isCancelled == null)
+				throw new ArgumentNullException(nameof(isCancelled));
+
+			if (logsReceiver == null)
+				throw new ArgumentNullException(nameof(logsReceiver));
+
+			//var dataTypes = new[]
+			//{
+			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick),
+			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog),
+			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order),
+			//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade),
+			//	Tuple.Create(typeof(QuoteChangeMessage), (object)null),
+			//	Tuple.Create(typeof(Level1ChangeMessage), (object)null),
+			//	Tuple.Create(typeof(NewsMessage), (object)null)
+			//};
+
+			var formats = Enumerator.GetValues<StorageFormats>().ToArray();
+			var progress = 0;
+
+			var marketDataDrives = drives as IMarketDataDrive[] ?? drives.ToArray();
+			var iterCount = marketDataDrives.Sum(d => d.AvailableSecurities.Count()); // кол-во сбросов кэша дат
+
+			updateProgress(progress, iterCount);
+
+			foreach (var drive in marketDataDrives)
+			{
+				foreach (var secId in drive.AvailableSecurities)
+				{
+					foreach (var format in formats)
+					{
+						foreach (var dataType in drive.GetAvailableDataTypes(secId, format))
+						{
+							if (isCancelled())
+								break;
+
+							drive
+								.GetStorageDrive(secId, dataType.MessageType, dataType.Arg, format)
+								.ClearDatesCache();
+						}
+					}
+
+					if (isCancelled())
+						break;
+
+					updateProgress(progress++, iterCount);
+
+					logsReceiver.AddInfoLog(LocalizedStrings.Str2931Params, secId, drive.Path);
+				}
+
+				if (isCancelled())
+					break;
+			}
+		}
+
+		/// <summary>
+		/// Delete instrument by identifier.
+		/// </summary>
+		/// <param name="securityStorage">Securities meta info storage.</param>
+		/// <param name="securityId">Identifier.</param>
+		public static void DeleteById(this ISecurityStorage securityStorage, string securityId)
+		{
+			if (securityStorage == null)
+				throw new ArgumentNullException(nameof(securityStorage));
+
+			if (securityId.IsEmpty())
+				throw new ArgumentNullException(nameof(securityId));
+
+			securityStorage.DeleteBy(new Security { Id = securityId });
 		}
 	}
 }

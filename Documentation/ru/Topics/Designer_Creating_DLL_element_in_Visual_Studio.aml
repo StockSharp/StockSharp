@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для написания кода в Visual Studio необходимо создать проект в Visual Studio:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_00"/>
+</mediaLink>
+
+
+
+ <para>В созданный проект необходимо установить <token>stocksharpapi</token>. 
+ Существуют два способа установки <token>stocksharpapi</token>: Установка из репозитория GitHub/StockSharp 
+ с веб-сервиса GitHub <token>stocksharpgithub</token> и установка из Visual Studio при помощи сервиса Nuget. 
+ Об установке <token>stocksharpapi</token> описано в
+ пункте <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8" />.
+</para>
+
+<para>В дальнейшем процесс создания стратегии не отличается от описанного в 
+пункте <link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" />. 
+После создания стратегии необходимо собрать проект, нажав <legacyBold>Собрать решение</legacyBold>
+во вкладке <legacyBold>Сборка</legacyBold>.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_01"/>
+</mediaLink>
+<para>В Visual Studio по умолчанию проект собирается в папку …\bin\Debug\ .</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_02"/>
+</mediaLink>
+<para>Для добавления Dll в общую схему необходимо вынести кубик <link xlink:href="6971235a-c9e5-4606-a266-5df4a3b9da94" />, 
+в панели свойства указать в поле <legacyBold>Сборка</legacyBold> Dll сборку. После чего появится 
+возможность выбрать кубик по имени в поле <legacyBold>Имя типа стратегии</legacyBold>:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_03"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="9f19e3b0-bbed-444e-a049-ba107d501664" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

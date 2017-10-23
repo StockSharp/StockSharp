@@ -1,0 +1,77 @@
+﻿<Window x:Class="SampleStrategies.StrategyAddWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:sx="http://schemas.stocksharp.com/xaml"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        Title="{x:Static loc:LocalizedStrings.Str1264}" Width="300" SizeToContent="Height">
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+			<ColumnDefinition Width="110" />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.Security}"/>:
+		</TextBlock>
+		<sx:SecurityEditor x:Name="SecurityCtrl" Grid.Column="2" Grid.Row="0" EditValueChanged="SecurityCtrl_OnSecuritySelected" />
+
+		<TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.Account}"/>:
+		</TextBlock>
+		<sx:PortfolioEditor x:Name="PortfolioCtrl" Grid.Column="2" Grid.Row="2" EditValueChanged="PortfolioCtrl_OnSelectionChanged" />
+
+		<TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.ClientCode}" />:
+		</TextBlock>
+		<TextBox x:Name="ClientCodeCtrl" Grid.Column="2" Grid.Row="4" Height="25" />
+
+		<dxlc:GroupBox Grid.Row="6" Grid.Column="2" Padding="0,0,0,0">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="15" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<RadioButton x:Name="IsBuyCtrl" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Str403}" GroupName="Direction" IsChecked="True" HorizontalAlignment="Right" />
+				<RadioButton x:Name="IsSellCtrl" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Str404}" GroupName="Direction" />
+			</Grid>
+		</dxlc:GroupBox>
+
+		<TextBlock Grid.Row="8" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.Amount}" />:
+		</TextBlock>
+		<dxe:SpinEdit Grid.Row="8" Grid.Column="2" x:Name="AmountCtrl" MinValue="0" Increment="0.01" EditValueChanged="AmountCtrl_OnValueChanged" />
+
+		<TextBlock Grid.Row="10" Grid.Column="0" HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.TakeProfit}" />:</TextBlock>
+		<dxe:SpinEdit x:Name="TakeProfitCtrl" Grid.Row="10" Grid.Column="2" IsFloatValue="True" MinValue="0" />
+
+		<TextBlock Grid.Row="12" Grid.Column="0" HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.StopLoss}" />:</TextBlock>
+		<dxe:SpinEdit x:Name="StopLossCtrl" Grid.Row="12" Grid.Column="2" IsFloatValue="True" MinValue="0" />
+
+		<dx:SimpleButton x:Name="Send" Content="{x:Static loc:LocalizedStrings.XamlStr427}" xaml:XamlHelper.DialogResult="True" IsEnabled="False" IsDefault="True" Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="3" Width="100" />
+	</Grid>
+</Window>

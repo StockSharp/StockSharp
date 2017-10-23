@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="cab51564-727a-483e-8cf1-d179ebcb2944" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>When composing schemas, there often sets of elements appear that are a 
+complete functional and can be used in different schemas or in one schema many 
+times with different values of properties. Such sets of elements can be put into 
+a separate composite element, which will be used further as any ordinary cube.</para>
+
+<para>A composite element is a usual schema that is saved/loaded/edited as 
+any strategy schema.</para>
+<para>When you add a composite element to a schema, all unconnected parameters 
+of all inner cubes are automatically added to it. Unconnected parameters at the 
+input of cubes are added as input, unconnected parameters at the output as 
+output. Each added parameter is named in the same way as the source element 
+and its parameter. In addition, for this element, the properties of all elements 
+for which the <legacyBold>Parameters</legacyBold> property was specified are 
+added.</para>
+
+<para>Examples of schemas for composite elements are shown in the 
+<link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" />,
+<link xlink:href="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" /> sections.</para>
+
+<para>We will consider the use of composite elements in the example of the 
+moving average intersection strategy, which illustrates the use of the 
+
+<link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" /> composite element 
+several times. The strategy can open as a long position when the short moving 
+average crosses the long one bottom-up, and the short position at the when the 
+short moving average crosses the long one top-down. The schema of the part of 
+the moving averages intersection strategy, where the moment of moving averages 
+intersection is determined, is shown in the figure below:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_composite_elements_00"/>
+</mediaLink>
+<para>Because the moving averages intersection differs only in the possible 
+direction of intersection (short crosses from top to bottom or from bottom to 
+top), then the part of the schema that determines the moment of intersection 
+can be taken out into a separate composite element. When you add a strategy to 
+the schema, you will specify the properties for determining the algorithm for 
+moving averages intersection. The schema of the composite element by which the 
+intersection is determined is shown in the figure below:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Crossing_01"/>
+</mediaLink>
+<para>The diagram of the composite element consists of simple elements and is 
+based on memorization the current values (Prev In 1 and Prev In 2) and comparing 
+the pairs, current (CurrComparison) and previous (PrevComparison) values with 
+each other. Because each of the input values is used in two elements of the 
+diagram, the elements of 
+<link xlink:href="b596ee27-a887-4814-9ad7-56cd62cec38f" /> (In 1, In 2) are 
+placed at the input of the composite element, and they allow one input to be 
+divided into two elements and pass the input value to 
+the <link xlink:href="08ebe03d-a446-4738-98fb-44cff38ddfda" /> 
+and  <link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" /> elements. When 
+a new value arrives at the input, the current values are compared and a new 
+value is passed to the <link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" /> 
+element, from which the previous value for the current input is passed, then 
+the previous values are compared. If both conditions are fulfilled, that is 
+checked using the And <link xlink:href="50685c1a-72e3-443d-9b0d-6c71055cc56c" />,
+ then the value of the raised flag is passed to the output of the composite 
+ element, which can be used as a trigger for further action.</para>
+<para>For the CurrComparison and PrevComparison cubes, 
+the <legacyBold>Parameters</legacyBold> flag of the <legacyBold>Common</legacyBold> 
+properties group is set. Therefore, the properties of these cubes 
+were taken into the properties of the composite element 
+<link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" />, which will be further 
+specified when using a composite element in the strategy schema.</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Crossing_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="c927a56f-d547-42f8-b5ad-0acb85edb6cb" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

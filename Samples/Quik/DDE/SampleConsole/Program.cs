@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleConsole
 {
 	using System;
-	using System.Linq;
 	using System.Threading;
 
 	using Ecng.Common;
@@ -48,7 +47,7 @@ namespace SampleConsole
 					return;
 				}
 
-				Console.WriteLine(LocalizedStrings.Str2985 + quikPath);
+				Console.WriteLine(LocalizedStrings.Str2985.Put(quikPath));
 
 				Console.Write(LocalizedStrings.Str2986);
 				var account = Console.ReadLine();
@@ -81,32 +80,32 @@ namespace SampleConsole
 						// дожидаемся события об успешном соединении
 						waitHandle.WaitOne();
 
-						trader.NewPortfolios += portfolios =>
+						trader.NewPortfolio += portfolio =>
 						{
-							if (_portfolio == null)
+							if (_portfolio == null && portfolio.Name == account)
 							{
 								// находим нужный портфель и присваиваем его переменной _portfolio
-								_portfolio = portfolios.FirstOrDefault(p => p.Name == account);
+								_portfolio = portfolio;
 
-								if (_portfolio != null)
-								{
-									Console.WriteLine(LocalizedStrings.Str2171Params, account);
+								Console.WriteLine(LocalizedStrings.Str2171Params, account);
 
-									// если инструмент и стакан уже появились,
-									// то извещаем об этом основной поток для выставления заявки
-									if (_lkoh != null && _depth != null)
-										waitHandle.Set();
-								}
+								// если инструмент и стакан уже появились,
+								// то извещаем об этом основной поток для выставления заявки
+								if (_lkoh != null && _depth != null)
+									waitHandle.Set();
 							}
 						};
 
 						// подписываемся на событие появление инструментов
-						trader.NewSecurities += securities =>
+						trader.NewSecurity += security =>
 						{
 							if (_lkoh == null)
 							{
+								if (!security.Code.CompareIgnoreCase(secCode))
+									return;
+
 								// находим Лукойл и присваиваем ее переменной lkoh
-								_lkoh = securities.FirstOrDefault(sec => sec.Code == secCode);
+								_lkoh = security;
 
 								if (_lkoh != null)
 								{
@@ -122,30 +121,24 @@ namespace SampleConsole
 						};
 
 						// подписываемся на событие появления моих новых сделок
-						trader.NewMyTrades += myTrades =>
+						trader.NewMyTrade += myTrade =>
 						{
-							foreach (var myTrade in myTrades)
-							{
-								var trade = myTrade.Trade;
-								Console.WriteLine(LocalizedStrings.Str2173Params, trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
-							}
+							var trade = myTrade.Trade;
+							Console.WriteLine(LocalizedStrings.Str2173Params, trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
 						};
 
 						// подписываемся на событие обновления стакана
-						trader.MarketDepthsChanged += depths =>
+						trader.MarketDepthChanged += depth =>
 						{
-							if (_depth == null && _lkoh != null)
+							if (_depth == null && _lkoh != null && depth.Security == _lkoh)
 							{
-								_depth = depths.FirstOrDefault(d => d.Security == _lkoh);
+								_depth = depth;
 
-								if (_depth != null)
-								{
-									Console.WriteLine(LocalizedStrings.Str2988);
+								Console.WriteLine(LocalizedStrings.Str2988);
 
-									// если портфель и инструмент уже появился, то извещаем об этом основной поток для выставления заявки
-									if (_portfolio != null && _lkoh != null)
-										waitHandle.Set();
-								}
+								// если портфель и инструмент уже появился, то извещаем об этом основной поток для выставления заявки
+								if (_portfolio != null && _lkoh != null)
+									waitHandle.Set();
 							}
 						};
 

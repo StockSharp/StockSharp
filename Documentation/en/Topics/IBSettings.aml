@@ -3,18 +3,18 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 		<para>
-			Для корректной работы с <codeEntityReference>T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference> необходимо предварительно 
-			настроить торговый терминал <token>IB_TWS</token>.
+			To work correctly with <codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> you should preset
+			<token>IB_TWS</token> trading terminal.
 		</para>
     </introduction>
     
     <procedure>
-      <title>Настройка терминала Trader Workstation</title>
+      <title>Trader Workstation terminal configuration</title>
       <steps class="ordered">
         <step>
           <content>
-            <para>Необходимо разрешить подключения от других программ (такие как торговый робот на <token>stocksharp</token>).
-            Для этого нужно открыть настройки через меню "File -> Global configuration...". В новом окне выбрать "Configuration -> API -> Settings":</para>
+            <para>You must allow connections from other programs (such as the trading algorithm on <token>stocksharp</token>).
+            To do this, open the settings menu "File -> Global configuration...". Select "Configuration -> API -> Settings" in the new window:</para>
             <para>
 				<mediaLink>
 				  <image placement="center" xlink:href="ib_settings" />
@@ -24,13 +24,13 @@
         </step>
         <step>
           <content>
-            <para>Включить режим "Enable ActiveX and Socket Clients".</para>
+            <para>Turn on "Enable ActiveX and Socket Clients" mode.</para>
           </content>
         </step>
         <step>
           <content>
-            <para>Рекомендуется также добавить адрес компьютера, на котором будет запускаться робот (локальный адрес - 127.0.0.1).
-            Это позволит не подтверждать каждый раз при запуске робота разрешение на его подключение в терминале.</para>
+            <para>Also it is recommended to add the address of the computer that will run the algorithm (the local address - 127.0.0.1).
+            It allows not confirming the terminal connection permission each time you start the algorithm.</para>
           </content>
         </step>
       </steps>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="628d619b-ef20-4496-9bd1-d854d4a853e4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To add a strategy to <legacyBold>Live trading</legacyBold>, in the 
+<token>SchemeDis</token> panel right-click the required strategy from the 
+<legacyBold>Strategies</legacyBold> folder and select 
+<mediaLinkInline><image xlink:href="Designer_Live_trade_00"/></mediaLinkInline> 
+<legacyBold>Trade</legacyBold>. The strategy will be added to the 
+<legacyBold>Trade</legacyBold> folder of the <legacyBold>Schemas</legacyBold> panel.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Live_trade_01"/>
+</mediaLink>
+<para>Also, you can add a strategy to Live trade by clicking the 
+<mediaLinkInline><image xlink:href="Designer_Live_trade_00"/></mediaLinkInline>  
+<legacyBold>Trade</legacyBold> button on the <legacyBold>Emulation</legacyBold> 
+tab.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Live_trade_02"/>
+</mediaLink>
+<para>The Trade folder contains the strategies, added for running in Live-trade. 
+At that, the running strategies are marked with the 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>,
+ sign, and the stopped strategies - with the 
+ <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline> 
+ sign.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="0dec6014-51ee-4463-b102-aed24464833e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

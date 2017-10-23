@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f143c9e7-d5a6-4464-9b01-18117183cc7a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+    <para><token>hydra</token> can be used in server mode, in this mode it is possible remotely to 
+    connect to <token>hydra</token> and get the data available in the storage or write new ones. 
+    The activation of the <token>hydra</token> server mode is described in the 
+    <link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
+     <para>To connect to <token>hydra</token> through WCF there is the 
+     <codeEntityReference qualifyHint="false">T:StockSharp.Algo.History.Hydra.RemoteStorageClient</codeEntityReference> class in <token>stocksharpapi</token>.</para>
+<code language="C#" title="C#"><![CDATA[
+...
+var client = new RemoteStorageClient(new InMemoryExchangeInfoProvider(), new Uri("net.tcp://localhost:8000"))
+{
+    Credentials = { AutoLogon = true, Email = "hydra_user", Password = "qwerty".To<SecureString>() },
+};
+...
+]]></code>
+
+<para>Getting all the instruments available in <token>hydra</token>:</para>
+<code language="C#" title="C#"><![CDATA[
+...
+var storageRegistry = new StorageRegistry();
+client.Refresh(storageRegistry.GetSecurityStorage(), new Security(), s => { }, () => false);
+var allSecurity = storageRegistry.GetSecurityStorage().Lookup(new Security());
+...
+]]></code>
+<para>Getting all available data in <token>hydra</token> by instrument, and saving to local storage:</para>
+
+<code language="C#" title="C#"><![CDATA[
+...
+StorageRegistry storageRegistry = new StorageRegistry();
+List<DataType> supportedDataTypes = new List<DataType>()
+    {
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromMinutes(1)),
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromMinutes(5)),
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromMinutes(15)),
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromHours(1)),
+        DataType.Create(typeof (TimeFrameCandleMessage), TimeSpan.FromDays(1)),
+        DataType.Create(typeof (ExecutionMessage), ExecutionTypes.Tick),
+        DataType.Create(typeof (ExecutionMessage), ExecutionTypes.Transaction),
+        DataType.Create(typeof (ExecutionMessage), ExecutionTypes.OrderLog),
+        DataType.Create(typeof (QuoteChangeMessage), null),
+        DataType.Create(typeof (Level1ChangeMessage), null),
+        DataType.Create(typeof (NewsMessage), null),
+    };
+...
+foreach (var dataType in supportedDataTypes)
+{
+
+    var localStorage = storageRegistry.GetStorage(security, dataType.MessageType, dataType.Arg,
+        localMarketDataDrive, StorageFormats.Csv);
+    var remoteStorage = client.GetRemoteStorage(security.ToSecurityId(), dataType.MessageType, dataType.Arg,
+        StorageFormats.Csv);
+
+    var dates = remoteStorage.Dates.Where(date => date >= start && date <= end).Except(localStorage.Dates).ToArray();
+    foreach (var dateTime in dates)
+    {
+        using (var stream = remoteStorage.LoadStream(dateTime))
+        {
+            localStorage.Drive.SaveStream(dateTime, stream);
+        }
+        Console.WriteLine(dataType.MessageType + "; " + dataType.Arg + "; " + dateTime);
+
+        var localStor = localStorage.Load(dateTime);
+        foreach (var marketData in localStor)
+        {
+            Console.WriteLine(marketData);
+        }
+    }
+}
+...
+
+]]></code>
+    </introduction>
+   
+    <relatedTopics>
+      
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

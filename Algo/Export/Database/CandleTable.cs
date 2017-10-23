@@ -25,20 +25,9 @@ namespace StockSharp.Algo.Export.Database
 
 	class CandleTable : Table<CandleMessage>
 	{
-		private readonly Type _candleType;
-		private readonly object _arg;
-
-		public CandleTable(Security security, Type candleType, object arg)
+		public CandleTable(Security security)
 			: base("Candle", CreateColumns(security))
 		{
-			if (candleType == null)
-				throw new ArgumentNullException(nameof(candleType));
-
-			if (arg == null)
-				throw new ArgumentNullException(nameof(arg));
-
-			_candleType = candleType;
-			_arg = arg;
 		}
 
 		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
@@ -86,6 +75,9 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(decimal?),
 				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 }
 			};
+			yield return new ColumnDescription(nameof(CandleMessage.TotalTicks)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(CandleMessage.UpTicks)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(CandleMessage.DownTicks)) { DbType = typeof(int?) };
 		}
 
 		private static ColumnDescription CreateDecimalColumn(string name, decimal? step)
@@ -103,8 +95,8 @@ namespace StockSharp.Algo.Export.Database
 			{
 				{ nameof(SecurityId.SecurityCode), value.SecurityId.SecurityCode },
 				{ nameof(SecurityId.BoardCode), value.SecurityId.BoardCode },
-				{ "CandleType", _candleType.Name },
-				{ "Argument", _arg.To<string>() },
+				{ "CandleType", value.GetType().Name.Replace(nameof(Message), string.Empty) },
+				{ "Argument", value.Arg.To<string>() },
 				{ nameof(CandleMessage.OpenTime), value.OpenTime },
 				{ nameof(CandleMessage.CloseTime), value.CloseTime },
 				{ nameof(CandleMessage.OpenPrice), value.OpenPrice },
@@ -113,6 +105,9 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(CandleMessage.ClosePrice), value.ClosePrice },
 				{ nameof(CandleMessage.TotalVolume), value.TotalVolume },
 				{ nameof(CandleMessage.OpenInterest), value.OpenInterest },
+				{ nameof(CandleMessage.TotalTicks), value.TotalTicks },
+				{ nameof(CandleMessage.UpTicks), value.UpTicks },
+				{ nameof(CandleMessage.DownTicks), value.DownTicks },
 			};
 			return result;
 		}

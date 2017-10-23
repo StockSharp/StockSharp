@@ -28,20 +28,22 @@ namespace StockSharp.Localization
 	{
 		static LocalizedStrings()
 		{
-			var activeLang = CultureInfo.CurrentCulture.Name.CompareIgnoreCase("ru-RU")
+			var activeLang = CultureInfo.CurrentCulture.Name.CompareIgnoreCase(LocalizationHelper.Ru)
 				? Languages.Russian
 				: Languages.English;
 
 			LocalizationHelper.DefaultManager = new LocalizationManager(typeof(LocalizedStrings).Assembly, "text.csv") { ActiveLanguage = activeLang };
 		}
 
+		private static LocalizationManager Manager => LocalizationHelper.DefaultManager;
+
 		/// <summary>
 		/// Error handler to track missed translations or resource keys.
 		/// </summary>
 		public static event Action<string, bool> Missing
 		{
-			add { LocalizationHelper.DefaultManager.Missing += value; }
-			remove { LocalizationHelper.DefaultManager.Missing -= value; }
+			add => Manager.Missing += value;
+			remove => Manager.Missing -= value;
 		}
 
 		/// <summary>
@@ -49,8 +51,8 @@ namespace StockSharp.Localization
 		/// </summary>
 		public static Languages ActiveLanguage
 		{
-			get { return LocalizationHelper.DefaultManager.ActiveLanguage; }
-			set { LocalizationHelper.DefaultManager.ActiveLanguage = value; }
+			get => Manager.ActiveLanguage;
+			set => Manager.ActiveLanguage = value;
 		}
 
 		/// <summary>
@@ -61,7 +63,12 @@ namespace StockSharp.Localization
 		/// <returns>Localized string.</returns>
 		public static string GetString(string resourceId, Languages? language = null)
 		{
-			return LocalizationHelper.DefaultManager.GetString(resourceId, language);
+			return Manager.GetString(resourceId, language);
 		}
+
+		/// <summary>
+		/// Web site domain.
+		/// </summary>
+		public static string Domain => ActiveLanguage == Languages.Russian ? "ru" : "com";
 	}
 }

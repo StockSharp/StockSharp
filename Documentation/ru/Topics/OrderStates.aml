@@ -11,8 +11,8 @@
 			  <listItem>
 				  <codeEntityReference>F:StockSharp.Messages.OrderStates.Pending</codeEntityReference> - заявка была отправлена на регистрацию
 				  (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>) и для нее было вызвано событие
-				  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference>. Для заявки ожидается подтверждение ее принятия от биржи.
-				  В случае успеха принятия  будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>,
+				  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference>. Для заявки ожидается подтверждение ее принятия от биржи.
+				  В случае успеха принятия  будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>,
 				  и заявка будет переведена в состояние <codeEntityReference>F:StockSharp.Messages.OrderStates.Active</codeEntityReference>. Также будут проинициализированы
 				  свойства <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Time</codeEntityReference>.
 				  В случае отвержения заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference>
@@ -22,8 +22,8 @@
 				  <codeEntityReference>F:StockSharp.Messages.OrderStates.Active</codeEntityReference> - заявка активна на бирже. Такая
 				  заявка будет активна до тех пор, пока не исполнится весь ее выставленный объем <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Volume</codeEntityReference>,
 				  или она не будет снята принудительно через <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>.
-				  Если заявка исполняется частично, то вызываются события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrades</codeEntityReference>
-				  о новых сделках по выставленной заявке, а так же событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>,
+				  Если заявка исполняется частично, то вызываются события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewMyTrade</codeEntityReference>
+				  о новых сделках по выставленной заявке, а так же событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>,
 				  где передается уведомление об изменении баланса по заявке <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Balance</codeEntityReference>.
 				  Последнее событие будет выведено и в случае отмены заявки.</listItem>
 			  <listItem>

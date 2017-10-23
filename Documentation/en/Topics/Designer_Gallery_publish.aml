@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f8bbe4c2-293b-4a5d-aa0c-4ddf4b2bef87" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   <introduction>
+<para>You can publish your own strategy by left-clicking the <token>SchemeDis</token>,
+ panel and selecting Publish. Or, by switching to the strategy panel and clicking 
+ the <legacyBold>Publish</legacyBold> button on the <legacyBold>Backtesting</legacyBold> tab:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_01"/>
+</mediaLink>
+<para>Clicking the <legacyBold>Publish</legacyBold> button opens the 
+<legacyBold>Publish</legacyBold> window with the publishing parameters:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_02"/>
+</mediaLink>
+<para>In the <legacyBold>Publish</legacyBold> window specify the strategy name, 
+brief description, logo, price. Also, n the <legacyBold>Publish</legacyBold> window 
+you can check the <legacyBold>Is encrypted</legacyBold> checkbox. After downloading 
+the strategy published with the checked Is encrypted checkbox. The structure, 
+code and used cubes will not be viewable. The <legacyBold>Designer</legacyBold> 
+panel will display: 
+<legacyBold>"Strategy has been encrypted and cannot be viewed"</legacyBold>. 
+Also, see more on strategies encryption in the 
+<link xlink:href="66413582-a15e-414a-a413-8d77fe00f0e0" /> section.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_03"/>
+</mediaLink>
+<para>After clicking the <legacyBold>OK</legacyBold> button, the strategy will 
+appear in the <legacyBold>Strategy gallery</legacyBold> panel. You can quickly 
+find it by setting the <legacyBold>Own strategies</legacyBold> filter.</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

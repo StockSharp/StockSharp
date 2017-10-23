@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -16,13 +16,12 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleMicex
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Linq;
-	using System.Net;
+	using System.IO;
 	using System.Windows;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -43,6 +42,8 @@ namespace SampleMicex
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly NewsWindow _newsWindow = new NewsWindow();
 
+		private const string _settingsFile = "settings.xml";
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -56,6 +57,13 @@ namespace SampleMicex
 			_securitiesWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 			_newsWindow.MakeHideable();
+
+			if (File.Exists(_settingsFile))
+			{
+				Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+			}
+
+			Settings.SelectedObject = Trader.MarketDataAdapter;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -88,17 +96,6 @@ namespace SampleMicex
 			{
 				if (!_isConnected)
 				{
-					// создаем подключение
-					Trader.Addresses = new[] { Address.Text.To<EndPoint>() };
-					Trader.Server = Server.Text;
-					Trader.Login = Login.Text;
-					Trader.CompressionLevel = (CompressionLevels)Compression.SelectedValue;
-					Trader.Interface = Interface.Text;
-					Trader.OrderBookDepth = Depth.Text.To<int>();
-
-					if (!Password.Password.IsEmpty())
-						Trader.Password = Password.Password;
-	
 					if (!_initialized)
 					{
 						_initialized = true;
@@ -131,35 +128,37 @@ namespace SampleMicex
 							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 						// подписываемся на ошибку подписки маркет-данных
-						Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+						Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
 						var ticksSubscribed = false;
 
-						Trader.NewSecurities += securities =>
+						Trader.NewSecurity += security =>
 						{
 							// запускаем экспорт всех тиков
 							if (!ticksSubscribed)
 							{
-								Trader.RegisterTrades(securities.First());
+								Trader.RegisterTrades(security);
 								ticksSubscribed = true;
 							}
 
-							_securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+							_securitiesWindow.SecurityPicker.Securities.Add(security);
 						};
 
-						Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-						Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-						Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+						Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+						Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+						Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 
-						Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-						Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+						Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+						Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 						// подписываемся на событие о неудачной регистрации заявок
-						Trader.OrdersRegisterFailed += OrdersFailed;
-
+						Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 						// подписываемся на событие о неудачном снятии заявок
-						Trader.OrdersCancelFailed += OrdersFailed;
+						Trader.OrderCancelFailed += OrderFailed;
+
+						Trader.MassOrderCancelFailed += (transId, error) =>
+							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 						Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
@@ -169,6 +168,8 @@ namespace SampleMicex
 						// set news provider
 						_newsWindow.NewsPanel.NewsProvider = Trader;
 					}
+
+					new XmlSerializer<SettingsStorage>().Serialize(Trader.Save(), _settingsFile);
 
 					Trader.Connect();
 				}
@@ -185,12 +186,11 @@ namespace SampleMicex
 			}
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

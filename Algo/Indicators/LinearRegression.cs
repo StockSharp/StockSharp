@@ -21,8 +21,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// The full class of linear regression, calculates LinearReg, LinearRegSlope, RSquared and StandardError at the same time.
 	/// </summary>
@@ -65,7 +63,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Length
 		{
-			get { return LinearReg.Length; }
+			get => LinearReg.Length;
 			set
 			{
 				LinearReg.Length = RSquared.Length = LinearRegSlope.Length = StandardError.Length = value;
@@ -76,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Linear regression.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("LinearReg")]
 		[DescriptionLoc(LocalizedStrings.Str738Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -85,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Regression R-squared.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("RSquared")]
 		[DescriptionLoc(LocalizedStrings.Str739Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -94,7 +92,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Standard error.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("StdErr")]
 		[DescriptionLoc(LocalizedStrings.Str740Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -103,7 +101,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Coefficient with independent variable, slope of a straight line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("LinearRegSlope")]
 		[DescriptionLoc(LocalizedStrings.Str741Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

@@ -2,7 +2,595 @@
 <topic id="fb79e67d-945c-493d-bdac-85d0040af828" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-       <para>Раздел в разработке</para>
+       <para>
+       The message mechanism allows creating own connections to any external trading system. To do that, it is necessary to create an own class of the
+       <legacyItalic>message adapter</legacyItalic>, inherited from the abstract class <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
+       </para>
+       <para>
+       	The following task shall be solved at development of own message adapter:
+       </para>
+       
+		<list class="ordered">
+  			<listItem>
+  				<para>Write the code, converting outgoing messages <token>stocksharp</token> into external system commands.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Write the code, converting information from the external system into incoming messages.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Perform conversion of encoded information from the external system (codes of instruments and boards, listings etc.) into types of <token>stocksharp</token>.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Perform additional adjustments, related with the external system features.</para>
+  			</listItem>
+		</list>
+		
+       <para>
+       	Prior to starting description of the own adapter development, let's consider the process of creation and processing of incoming and outgoing messages in the
+       	<token>stocksharp</token> by the example of the message <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
+       	Supposing, that the program called the <codeEntityReference>M:StockSharp.Algo.Connector.Connect</codeEntityReference> method, then the following will happen
+       	in the base class <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>:
+		</para>
+		<list class="ordered">
+  			<listItem>
+  				<para>The protected method 
+  				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnConnect</codeEntityReference>, 
+  				is called, in which the message is created and transmitted to the method
+  				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>.</para>
+  				<code language="C#">
+protected virtual void OnConnect()
+{
+	SendInMessage(new ConnectMessage());
+}
+  				</code>
+  			</listItem>
+  			<listItem>
+  			<para>In the method <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  			the message is sent to the adapter method with the same name.</para>
+  			<code language="C#">
+public void SendInMessage(Message message)
+{
+	_inAdapter.SendInMessage(message);
+}
+  			</code>
+  			</listItem>
+  			<listItem>
+  				<para>In the adapter method <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					additional checks are performed. If everything is OK, then the message is sent to the method 
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					(see below). If error was generated, a new incoming message of the similar type is created, the exception object is transferred into the message's
+  					<codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference> feature. This new message is sent to the
+  					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					method, in which event will be generated for occurrence of new incoming message <codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>,
+  					signaling on error.
+  				</para>
+  			</listItem>
+		</list>
+		
+		<para>
+			Incoming messages are created using the  
+			<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>
+			method, where the message object is sent to. In this method the event of new incoming message 
+			<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference> is generated. Next, this
+			event is processed in the base class of the connecter on the protected method 
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)</codeEntityReference>
+			where, depending on situation, the message is converted into the corresponding <token>stocksharp</token> type, and connector event is generated, also,
+			additional outgoing messages can be created.
+		</para>
+		
+		<para>
+		Below see description of own adapter creation process for <token>ib</token>.
+		</para>
+       
+       
     </introduction>
+    
+    <procedure>
+			<title>Example of Interactive Brokers message adapter creating</title>
+			<steps class="ordered">
+			   <step>
+					<content>
+						<para>
+						<legacyBold>Creating an adapter class.</legacyBold>
+						</para>
+						<para>
+						 First, we create the <legacyBold>InteractiveBrokersAdapter</legacyBold> message 
+						 adapter class, inherited from the abstract <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
+						 class:
+						</para>
+						<code language="C#">
+public class InteractiveBrokersAdapter : MessageAdapter 
+{
+}						
+						
+</code>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>
+						<legacyBold>Adapter constructor.</legacyBold>
+						</para>
+						<list class="bullet">
+  							<listItem>
+  								<para>The transactions identifier generator is passed to the adapter constructor, which will be used to create the message IDs.</para>
+  							</listItem>
+  							<!--<listItem>
+  								<para>Then we fill in the <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityClassInfo</codeEntityReference> dictionary. 
+  								This dictionary maps instrument class codes in <token>IB</token> with the 
+  								<codeEntityReference>P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> instrument type and the board code in <token>stocksharp</token>.</para>
+  							</listItem>
+  							<listItem>
+  								<para>The <legacyBold>PortfolioBoardCodes</legacyBold> dictionary is filled, which maps the board codes for portfolios.</para>
+  							</listItem>-->
+  							<listItem>
+  								<para>
+  								Using the 
+  								<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)</codeEntityReference>
+    							 method, we add to the <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedMessages</codeEntityReference> array 
+    							 the types of messages that the adapter will support.
+  								</para>
+  							</listItem>
+						</list>
+	
+						<code language="C#">
+						<![CDATA[
+public InteractiveBrokersAdapter(IdGenerator transactionIdGenerator)
+	: base(transactionIdGenerator)
+{
+    this.AddSupportedMessage(MessageTypes.MarketData);
+    this.AddSupportedMessage(MessageTypes.SecurityLookup);
+
+    this.AddSupportedMessage(MessageTypes.OrderCancel);
+    this.AddSupportedMessage(MessageTypes.OrderGroupCancel);
+    this.AddSupportedMessage(MessageTypes.OrderPairReplace);
+    this.AddSupportedMessage(MessageTypes.OrderRegister);
+    this.AddSupportedMessage(MessageTypes.OrderReplace);
+    // this.AddSupportedMessage(MessageTypes.OrderStatus);
+    this.AddSupportedMessage(MessageTypes.Portfolio);
+    this.AddSupportedMessage(MessageTypes.PortfolioLookup);
+    this.AddSupportedMessage(MessageTypes.Position);
+}
+						
+]]>
+						
+						</code>
+					</content>
+				</step>
+				<step>
+					<content>
+					<para>
+					<legacyBold>Adapter properties.</legacyBold>
+					</para>
+						<para>
+						 	We override the <codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativePortfolioLookup</codeEntityReference> and 
+						 	<codeEntityReference>P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup</codeEntityReference> properties. 
+						 	Because <token>IB</token> supports searching for portfolios and instruments, we make the properties return ‘true’. 
+						 	Also add properties for the login, password, address and port of the <token>IB</token> server.
+						</para>
+						<code language="C#">
+protected override bool IsSupportNativePortfolioLookup
+{
+	get { return true; }
+}
+
+protected override bool IsSupportNativeSecurityLookup
+{
+	get { return true; }
+}
+						</code>
+					</content>
+				</step>
+
+				<step>
+					<content>
+					<para>
+					 The  <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> method.
+					</para>
+						<para>
+					    Next, you need to override the 
+					    <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>. 
+					    method. As mentioned above, all outgoing messages are passed to this method and for each type 
+					    of message you need to write code that converts messages into <token>IB</token> commands.
+						</para>
+						<para>
+						When the 
+						<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Reset</codeEntityReference> 
+			message is received it is necessary to perform a "zeroing" of the state and free up resources. 
+			Upon completion of these operations, you need to send outgoing message
+						<codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference>.
+						</para>
+						<para>
+			When the 
+			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference>
+			message arrives, we initialize the _ibSocket variable, subscribe to <token>IB</token> events and 
+			establish a connection using the <legacyBold>Connect</legacyBold> method 
+			of the native API. In case of successful connection, the <legacyBold>IBSocket.Connected</legacyBold> event should occur
+			where reverse <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference>
+			instance should be generated.
+						</para>
+
+						<code language="C#">
+						<![CDATA[
+protected override void OnSendInMessage(Message message)
+{
+    switch (message.Type)
+    {
+         case MessageTypes.Reset:
+         {
+              _lookupSecuritiesId = 0;
+              _lookupPortfoliosId = 0;
+
+              if (_ibSocket != null)
+              {
+                  try
+                  {
+                      DisposeSocket();
+                  }
+                  catch (Exception ex)
+                  {
+                      SendOutError(ex);
+                  }
+
+                  _ibSocket = null;
+              }
+
+              SendOutMessage(new ResetMessage());
+
+              break;
+        }
+
+        case MessageTypes.Connect:
+        {
+            if (_ibSocket != null)
+                throw new InvalidOperationException("_ibSocket != null");
+
+            _ibSocket = new IBSocket();
+
+            _ibSocket.Connect(Address, Port);
+
+            break;
+        }
+
+        case MessageTypes.Disconnect:
+        {
+            if (_ibSocket == null)
+                throw new InvalidOperationException(LocalizedStrings.Str1856);
+                
+            _ibSocket.disconnect();
+
+            break;
+        }
+
+        case MessageTypes.OrderRegister:
+            // TODO
+            break;
+
+        case MessageTypes.OrderCancel:
+            // TODO
+            break;
+
+        case MessageTypes.OrderGroupCancel:
+             // TODO
+             break;
+
+        case MessageTypes.OrderReplace:
+             // TODO
+             break;
+
+        case MessageTypes.Portfolio:
+             // TODO
+             break;
+
+        case MessageTypes.PortfolioLookup:
+             ProcessPortolioLookupMessage((PortfolioLookupMessage)message);
+             break;
+
+        case MessageTypes.MarketData:
+             ProcessMarketDataMessage((MarketDataMessage)message);
+             break;
+
+        case MessageTypes.SecurityLookup:
+             ProcessSecurityLookupMessage((SecurityLookupMessage)message);
+             break;
+    }
+}
+]]>			
+						</code>
+					</content>
+				</step>
+				<step>
+				<content>
+					<para>
+The events.
+					</para>
+					<para>
+In the native API connection event handler, you must send the outgoing <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
+message. When processing this message in the code of the base <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> 
+class, the values of the Boolean properties will be checked:
+					 </para>
+					<list class="bullet">
+  						<listItem>
+  								<para>
+  									<codeEntityReference>P:StockSharp.Messages.MessageAdapter.PortfolioLookupRequired</codeEntityReference> - whether the 
+  									<codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> message is required to obtain portfolios and positions.
+  								</para>
+  						</listItem>
+  						<listItem>
+  							<para>
+  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.SecurityLookupRequired</codeEntityReference> - whether the 
+  									<codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> message is required to receive the instruments.
+  							</para>
+  						</listItem>
+  						<listItem>
+  							<para>
+  								<codeEntityReference>P:StockSharp.Messages.MessageAdapter.OrderStatusRequired</codeEntityReference>  - whether the 
+  									<codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference> message is required to receive orders and own trades.
+  							</para>
+  						</listItem>
+					</list>
+					<para>
+					 If <legacyBold>‘true’</legacyBold>, then the corresponding message will be sent. By default, the values of these properties depend on the availability 
+					 of the corresponding message type in the list of supported messages. In our example (see Adapter constructor) the
+					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> and   
+					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference>, 
+					 types were added to this list, so you should expect to receive outbound messages 
+					 <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> and 
+					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference>.
+					</para>
+					<code language="C#">
+						<![CDATA[
+private void IBSocket_Connected()
+{
+    SendOutMessage(new ConnectMessage());
+}
+						]]>	
+					</code>
+				</content>
+				</step>
+				<step>
+				<content>
+				<para>
+Outgoing messages <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference> 
+and <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference>.
+				</para>
+				<para>
+When you receive these messages, you should call <token>IB</token>, functions 
+that request portfolios and instruments, respectively. Calling these functions will trigger <legacyBold>IBSocket.NewPortfolio</legacyBold> (portfolios)
+and <legacyBold>IBSocket.NewSymbol</legacyBold> (instruments) events.
+				</para>
+				<code language="C#">
+						<![CDATA[
+private void ProcessPortolioLookupMessage(PortfolioLookupMessage pfMsg)
+{
+    if (_lookupPortfoliosId == 0)
+    {
+        _lookupPortfoliosId = pfMsg.TransactionId;
+        _ibSocket.GetPrortfolioList(); 
+    }
+    else
+        SendOutError(LocalizedStrings.Str1868);
+}
+
+private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
+{
+    if (_lookupSecuritiesId == 0)
+    {
+        _lookupSecuritiesId = message.TransactionId;
+        _ibSocket.GetSymbols();
+    }
+    else
+        SendOutError(LocalizedStrings.Str1854);
+}
+						
+						]]>	
+				</code>
+				
+				</content>
+				</step>
+				<step>
+				<content>
+				<para>
+					 The <legacyBold>IBSocket.NewPortfolio</legacyBold> event.
+				</para>
+                <para>
+In the <legacyBold>IBSocket.NewPortfolio</legacyBold> event handler, the received portfolio information must 
+be converted to the incoming <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.
+message. And after receiving all the portfolios, you need to send the incoming 
+<codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference> message. 
+Note that in the latter case, the <codeEntityReference>P:StockSharp.Messages.PortfolioLookupResultMessage.OriginalTransactionId</codeEntityReference> 
+property must be set to the <legacyBold>TransactionId</legacyBold> value of the corresponding outgoing message.
+				</para>
+				<code language="C#">
+				<![CDATA[
+private void IBSocket_NewPortfolio(int row, int nrows, string portfolioName, string portfolioExch)
+{
+	SendOutMessage(new PortfolioMessage
+    {
+		PortfolioName = portfolioName,
+		BoardCode = PortfolioBoardCodes.TryGetValue(portfolioExch),
+        ExtensionInfo = new Dictionary<object, object>
+     });
+
+     if ((row + 1) < nrows)
+          return;
+
+     SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = _lookupPortfoliosId });
+     _lookupPortfoliosId = 0;
+}
+				]]>	
+				</code>
+				</content>
+				</step>
+				<step>
+				<content>
+				<para>
+					 The <legacyBold>IBSocket.NewSymbol</legacyBold> event.
+				</para>
+				<para>
+In the <legacyBold>IBSocket.NewSymbol</legacyBold> event handler, the received information about the instrument 
+must be converted to the incoming <codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference> message. 
+And after receiving all the instruments, you need to send the incoming message 
+<codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.
+Note that the <legacyBold>OriginalTransactionId</legacyBold> property of both incoming messages must be 
+set to the <legacyBold>TransactionId</legacyBold> value of the corresponding outgoing message.
+				</para>
+				<code language="C#">
+				<![CDATA[
+private void IBSocket_NewSymbol(int row, int rowCount, long contractId, string name, string secCode, string secClass, int decimals, int lotSize, double stepPrice, double priceStep,
+            string isin, string board, System.DateTime expiryDate, double daysBeforeExpiry, double strike)
+{
+	if (secCode.IsEmpty())
+    	secCode = contractId.To<string>();
+
+    var securityId = new SecurityId
+    {
+        SecurityCode = secCode,
+        BoardCode = board,
+        NativeAsInt = contractId,
+        Isin = isin
+    };
+
+    if (secClass.IsEmpty())
+        secClass = board;
+
+    DateTime? expDate = DateTime.FromOADate(0) == expiryDate ? (DateTime?)null : expiryDate;
+
+    var secMsg = new SecurityMessage
+    {
+        PriceStep = priceStep.ToDecimal(),
+        Decimals = decimals,
+        Multiplier = lotSize,
+        Name = name,
+        ShortName = name,
+        ExpiryDate = expDate == null ? (DateTimeOffset?)null : expDate.Value.ApplyTimeZone(TimeHelper.EST),
+        ExtensionInfo = new Dictionary<object, object>
+		{
+			{ "Class", secClass }
+		},
+        OriginalTransactionId = _lookupSecuritiesId
+     };
+
+     SendOutMessage(secMsg);
+}
+				]]>	
+				</code>
+				</content>
+				</step>
+				
+				<step>
+				<content>
+				<para>
+				 <legacyBold>Registration/cancellation of registration of trades.</legacyBold>
+				</para>
+				<para>
+When you call the <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> or
+				 <codeEntityReference>M:StockSharp.Algo.Connector.UnRegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> 
+				 methods, the outgoing message MarketDataMessage <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference> will be received.
+				 </para>
+				 <para>
+				When processing this message, you must call the  <token>IB</token> methods registering/canceling the registration of trades receiving.
+				 </para>
+				 <para>
+				Since the message is used to work with all types of market data, you need to use the 
+				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType</codeEntityReference> 
+				 property to select a specific type. For trades, the value of this property is
+				 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MarketDataTypes.Trades</codeEntityReference>.
+				</para>
+				<para>
+				After calling the <legacyBold>IBSocket.ListenTicks</legacyBold> method, the trades will be received in the <legacyBold>IBSocket.NewTick</legacyBold> event.
+				 </para>
+				
+				<code language="C#">
+                <![CDATA[
+private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
+{
+    var contractId = mdMsg.SecurityId.NativeAsInt;
+
+    switch (mdMsg.DataType)
+    {
+        case MarketDataTypes.Level1:
+        {
+             //TODO
+             break;
+        }
+        case MarketDataTypes.MarketDepth:
+        {
+             //TODO
+             break;
+        }
+        case MarketDataTypes.Trades:
+        {
+            if (mdMsg.From == null)
+            {
+                if (mdMsg.IsSubscribe)
+                    _ibSocket.ListenTicks(contractId);
+                else
+                    _ibSocket.CancelTicks(contractId);
+           }
+           else
+           {
+                //TODO
+           }
+           
+           break;
+        }
+        case MarketDataTypes.CandleTimeFrame:
+        {
+             //TODO
+             break;
+        }
+        default:
+        {
+            SendOutMarketDataNotSupported(mdMsg.TransactionId);
+            return;
+     }
+}
+				]]>	
+				</code>
+			</content>
+			</step>
+			<step>
+				<content>
+				<para>
+					The <legacyBold>IBSocket.NewTick</legacyBold> event.
+				</para>
+				<para>
+In the <legacyBold>IBSocket.NewTick</legacyBold> event handler, the received trade information must be converted to the incoming 
+<codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>.
+message. Note that <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> messages are used for both trades and orders. 
+Therefore, the message states that it refers to the trade -
+  				<codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference> = 
+  				<codeEntityReference qualifyHint="true">F:StockSharp.Messages.ExecutionTypes.Tick</codeEntityReference>.
+				</para>
+				<code language="C#">
+				<![CDATA[
+private void IBSocket_NewTick(string contractId, System.DateTime time, double price, double volume, string tradeId)
+{
+    SendOutMessage(CreateTrade(contractId, time, price.ToDecimal(), volume.ToDecimal(), tradeId.To<long>(), action));
+}
+
+private static ExecutionMessage CreateTrade(long contractId, DateTime time, decimal? price, decimal? volume, long tradeId)
+{
+    return new ExecutionMessage
+    {
+         SecurityId = new SecurityId { NativeAsInt = contractId },
+         TradeId = tradeId,
+         TradePrice = price,
+         Volume = volume,
+         ServerTime = time.ApplyTimeZone(TimeHelper.EST),
+         ExecutionType = ExecutionTypes.Tick
+   };
+}
+
+
+			    ]]>	
+			   </code>
+			</content>
+				</step>
+			</steps>
+		</procedure>
+    
   </developerConceptualDocument>
 </topic>
+

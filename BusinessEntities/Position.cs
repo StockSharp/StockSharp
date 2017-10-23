@@ -31,8 +31,6 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
-	[CategoryOrderLoc(MainCategoryAttribute.NameKey, 0)]
-	[CategoryOrderLoc(StatisticsCategoryAttribute.NameKey, 1)]
 	public class Position : BasePosition
 	{
 		/// <summary>
@@ -69,6 +67,15 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
 		[MainCategory]
 		public string DepoName { get; set; }
+
+		/// <summary>
+		/// Client code assigned by the broker.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
 
 		/// <summary>
 		/// Limit type for Т+ market.

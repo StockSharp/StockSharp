@@ -18,17 +18,17 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Security (shares, futures, options etc.).
@@ -37,9 +37,6 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str546Key)]
-	[CategoryOrderLoc(MainCategoryAttribute.NameKey, 0)]
-	[CategoryOrderLoc(DerivativesCategoryAttribute.NameKey, 1)]
-	[CategoryOrderLoc(StatisticsCategoryAttribute.NameKey, 2)]
 	public class Security : Cloneable<Security>, IExtendableEntity, INotifyPropertyChanged
 	{
 		/// <summary>
@@ -49,297 +46,56 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
-		private string _id = string.Empty;
+		private string _id;
 
 		/// <summary>
 		/// Security ID.
 		/// </summary>
 		[DataMember]
 		[Identity]
-		[DisplayNameLoc(LocalizedStrings.Str361Key)]
-		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
-		[MainCategory]
 		[ReadOnly(true)]
-		[PropertyOrder(0)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str361Key,
+			Description = LocalizedStrings.SecurityIdKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public string Id
 		{
-			get { return _id; }
+			get => _id;
 			set
 			{
 				if (_id == value)
 					return;
 
 				_id = value;
-				Notify("Id");
+				Notify(nameof(Id));
 			}
 		}
 
-		private string _name = string.Empty;
-
-		/// <summary>
-		/// Security name.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str362Key)]
-		[MainCategory]
-		[PropertyOrder(3)]
-		public string Name
-		{
-			get { return _name; }
-			set
-			{
-				if (_name == value)
-					return;
-
-				_name = value;
-				Notify("Name");
-			}
-		}
-
-		private string _shortName = string.Empty;
-
-		/// <summary>
-		/// Short security name.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str363Key)]
-		[DescriptionLoc(LocalizedStrings.Str364Key)]
-		[MainCategory]
-		public string ShortName
-		{
-			get { return _shortName; }
-			set
-			{
-				if (_shortName == value)
-					return;
-
-				_shortName = value;
-				Notify("ShortName");
-			}
-		}
-
-		private string _code = string.Empty;
+		private string _code;
 
 		/// <summary>
 		/// Security code.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CodeKey)]
-		[DescriptionLoc(LocalizedStrings.Str349Key, true)]
-		[MainCategory]
-		[PropertyOrder(1)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CodeKey,
+			Description = LocalizedStrings.Str349Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 1)]
+		[Required(AllowEmptyStrings = false)]
 		public string Code
 		{
-			get { return _code; }
+			get => _code;
 			set
 			{
 				if (_code == value)
 					return;
 
 				_code = value;
-				Notify("Code");
-			}
-		}
-
-		private string _class = string.Empty;
-
-		/// <summary>
-		/// Security class.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ClassKey)]
-		[DescriptionLoc(LocalizedStrings.SecurityClassKey)]
-		[MainCategory]
-		public string Class
-		{
-			get { return _class; }
-			set
-			{
-				if (_class == value)
-					return;
-
-				_class = value;
-				Notify("Class");
-			}
-		}
-
-		private decimal? _priceStep;
-
-		/// <summary>
-		/// Minimum price step.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PriceStepKey)]
-		[DescriptionLoc(LocalizedStrings.MinPriceStepKey)]
-		[MainCategory]
-		[PropertyOrder(5)]
-		[Nullable]
-		public decimal? PriceStep
-		{
-			get { return _priceStep; }
-			set
-			{
-				if (_priceStep == value)
-					return;
-
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_priceStep = value;
-				Notify("PriceStep");
-			}
-		}
-
-		private decimal? _volumeStep;
-
-		/// <summary>
-		/// Minimum volume step.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeStepKey)]
-		[DescriptionLoc(LocalizedStrings.Str366Key)]
-		[MainCategory]
-		[PropertyOrder(6)]
-		[Nullable]
-		public decimal? VolumeStep
-		{
-			get { return _volumeStep; }
-			set
-			{
-				if (_volumeStep == value)
-					return;
-
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_volumeStep = value;
-				Notify("VolumeStep");
-			}
-		}
-
-		private decimal? _multiplier;
-
-		/// <summary>
-		/// Lot multiplier.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str330Key)]
-		[DescriptionLoc(LocalizedStrings.LotVolumeKey)]
-		[MainCategory]
-		[PropertyOrder(7)]
-		[Nullable]
-		public decimal? Multiplier
-		{
-			get { return _multiplier; }
-			set
-			{
-				if (_multiplier == value)
-					return;
-
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_multiplier = value;
-				Notify("Multiplier");
-			}
-		}
-
-		private int? _decimals;
-
-		/// <summary>
-		/// Number of digits in price after coma.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.DecimalsKey)]
-		[DescriptionLoc(LocalizedStrings.Str548Key)]
-		[MainCategory]
-		[PropertyOrder(7)]
-		//[ReadOnly(true)]
-		[Nullable]
-		public int? Decimals
-		{
-			get { return _decimals; }
-			set
-			{
-				if (_decimals == value)
-					return;
-
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
-
-				_decimals = value;
-				Notify("Decimals");
-			}
-		}
-
-		private SecurityTypes? _type;
-
-		/// <summary>
-		/// Security type.
-		/// </summary>
-		[DataMember]
-		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.TypeKey)]
-		[DescriptionLoc(LocalizedStrings.Str360Key)]
-		[MainCategory]
-		[PropertyOrder(4)]
-		public SecurityTypes? Type
-		{
-			get { return _type; }
-			set
-			{
-				if (_type == value)
-					return;
-
-				_type = value;
-				Notify("Type");
-			}
-		}
-
-		private DateTimeOffset? _expiryDate;
-
-		/// <summary>
-		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
-		/// </summary>
-		[DataMember]
-		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
-		[DescriptionLoc(LocalizedStrings.Str371Key)]
-		[MainCategory]
-		public DateTimeOffset? ExpiryDate
-		{
-			get { return _expiryDate; }
-			set
-			{
-				if (_expiryDate == value)
-					return;
-
-				_expiryDate = value;
-				Notify("ExpiryDate");
-			}
-		}
-
-		private DateTimeOffset? _settlementDate;
-
-		/// <summary>
-		/// Settlement date for security (for derivatives and bonds).
-		/// </summary>
-		[DataMember]
-		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.SettlementDateKey)]
-		[DescriptionLoc(LocalizedStrings.Str373Key)]
-		[MainCategory]
-		public DateTimeOffset? SettlementDate
-		{
-			get { return _settlementDate; }
-			set
-			{
-				if (_settlementDate == value)
-					return;
-
-				_settlementDate = value;
-				Notify("SettlementDate");
+				Notify(nameof(Code));
 			}
 		}
 
@@ -350,94 +106,99 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.BoardKey)]
-		[DescriptionLoc(LocalizedStrings.Str549Key)]
-		[MainCategory]
-		[PropertyOrder(2)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BoardKey,
+			Description = LocalizedStrings.Str549Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 2)]
+		[Required]
 		public ExchangeBoard Board
 		{
-			get { return _board; }
+			get => _board;
 			set
 			{
 				if (_board == value)
 					return;
 
 				_board = value;
-				Notify("Board");
+				Notify(nameof(Board));
 			}
 		}
 
-		private string _underlyingSecurityId = string.Empty;
+		private SecurityTypes? _type;
 
 		/// <summary>
-		/// Underlying asset on which the current security is built.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.UnderlyingAssetKey)]
-		[DescriptionLoc(LocalizedStrings.Str550Key)]
-		[DerivativesCategory]
-		[PropertyOrder(2)]
-		public string UnderlyingSecurityId
-		{
-			get { return _underlyingSecurityId; }
-			set
-			{
-				if (_underlyingSecurityId == value)
-					return;
-
-				_underlyingSecurityId = value;
-				Notify("UnderlyingSecurityCode");
-			}
-		}
-
-		private OptionTypes? _optionType;
-
-		/// <summary>
-		/// Option type.
+		/// Security type.
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.Str551Key)]
-		[DescriptionLoc(LocalizedStrings.OptionContractTypeKey)]
-		[DerivativesCategory]
-		[PropertyOrder(0)]
-		public OptionTypes? OptionType
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TypeKey,
+			Description = LocalizedStrings.Str360Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 3)]
+		public SecurityTypes? Type
 		{
-			get { return _optionType; }
+			get => _type;
 			set
 			{
-				if (_optionType == value)
+				if (_type == value)
 					return;
 
-				_optionType = value;
-				Notify("OptionType");
+				_type = value;
+				Notify(nameof(Type));
 			}
 		}
 
-		private decimal? _strike;
+		private string _name;
 
 		/// <summary>
-		/// Option strike price.
+		/// Security name.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
-		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
-		[DerivativesCategory]
-		[PropertyOrder(1)]
-		[Nullable]
-		public decimal? Strike
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str362Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 4)]
+		public string Name
 		{
-			get { return _strike; }
+			get => _name;
 			set
 			{
-				if (_strike == value)
+				if (_name == value)
 					return;
 
-				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+				_name = value;
+				Notify(nameof(Name));
+			}
+		}
 
-				_strike = value;
-				Notify("Strike");
+		private string _shortName;
+
+		/// <summary>
+		/// Short security name.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str363Key,
+			Description = LocalizedStrings.Str364Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 5)]
+		public string ShortName
+		{
+			get => _shortName;
+			set
+			{
+				if (_shortName == value)
+					return;
+
+				_shortName = value;
+				Notify(nameof(ShortName));
 			}
 		}
 
@@ -448,65 +209,272 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str382Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CurrencyKey,
+			Description = LocalizedStrings.Str382Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 6)]
 		public CurrencyTypes? Currency
 		{
-			get { return _currency; }
+			get => _currency;
 			set
 			{
 				_currency = value;
-				Notify("Currency");
+				Notify(nameof(Currency));
 			}
 		}
 
-		private string _binaryOptionType;
-
-		/// <summary>
-		/// Type of binary option.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str552Key)]
-		[DescriptionLoc(LocalizedStrings.TypeBinaryOptionKey)]
-		[DerivativesCategory]
-		[PropertyOrder(2)]
-		public string BinaryOptionType
-		{
-			get { return _binaryOptionType; }
-			set
-			{
-				if (_binaryOptionType == value)
-					return;
-
-				_binaryOptionType = value;
-				Notify("BinaryOptionType");
-			}
-		}
-
-		private SecurityExternalId _externalId;
+		private SecurityExternalId _externalId = new SecurityExternalId();
 
 		/// <summary>
 		/// Security ID in other systems.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str553Key)]
-		[DescriptionLoc(LocalizedStrings.Str554Key)]
-		[MainCategory]
-		[ExpandableObject]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str553Key,
+			Description = LocalizedStrings.Str554Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 7)]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[InnerSchema(NullWhenAllEmpty = false)]
 		public SecurityExternalId ExternalId
 		{
-			get { return _externalId; }
+			get => _externalId;
 			set
 			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
 				_externalId = value;
-				Notify("ExternalId");
+				Notify(nameof(ExternalId));
+			}
+		}
+
+		private string _class;
+
+		/// <summary>
+		/// Security class.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ClassKey,
+			Description = LocalizedStrings.SecurityClassKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 8)]
+		public string Class
+		{
+			get => _class;
+			set
+			{
+				if (_class == value)
+					return;
+
+				_class = value;
+				Notify(nameof(Class));
+			}
+		}
+
+		private decimal? _priceStep;
+
+		/// <summary>
+		/// Minimum price step.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceStepKey,
+			Description = LocalizedStrings.MinPriceStepKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 9)]
+		[Nullable]
+		[GreaterThanZero]
+		public decimal? PriceStep
+		{
+			get => _priceStep;
+			set
+			{
+				if (_priceStep == value)
+					return;
+
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_priceStep = value;
+				Notify(nameof(PriceStep));
+			}
+		}
+
+		private decimal? _volumeStep;
+
+		/// <summary>
+		/// Minimum volume step.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeStepKey,
+			Description = LocalizedStrings.Str366Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 10)]
+		[Nullable]
+		[GreaterThanZero]
+		public decimal? VolumeStep
+		{
+			get => _volumeStep;
+			set
+			{
+				if (_volumeStep == value)
+					return;
+
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_volumeStep = value;
+				Notify(nameof(VolumeStep));
+			}
+		}
+
+		private decimal? _multiplier;
+
+		/// <summary>
+		/// Lot multiplier.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str330Key,
+			Description = LocalizedStrings.LotVolumeKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 11)]
+		[Nullable]
+		public decimal? Multiplier
+		{
+			get => _multiplier;
+			set
+			{
+				if (_multiplier == value)
+					return;
+
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_multiplier = value;
+				Notify(nameof(Multiplier));
+			}
+		}
+
+		private int? _decimals;
+
+		/// <summary>
+		/// Number of digits in price after coma.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DecimalsKey,
+			Description = LocalizedStrings.Str548Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 12)]
+		//[ReadOnly(true)]
+		[Nullable]
+		public int? Decimals
+		{
+			get => _decimals;
+			set
+			{
+				if (_decimals == value)
+					return;
+
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_decimals = value;
+				Notify(nameof(Decimals));
+			}
+		}
+
+		private DateTimeOffset? _expiryDate;
+
+		/// <summary>
+		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExpiryDateKey,
+			Description = LocalizedStrings.Str371Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 13)]
+		public DateTimeOffset? ExpiryDate
+		{
+			get => _expiryDate;
+			set
+			{
+				if (_expiryDate == value)
+					return;
+
+				_expiryDate = value;
+				Notify(nameof(ExpiryDate));
+			}
+		}
+
+		private DateTimeOffset? _settlementDate;
+
+		/// <summary>
+		/// Settlement date for security (for derivatives and bonds).
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SettlementDateKey,
+			Description = LocalizedStrings.Str373Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 14)]
+		public DateTimeOffset? SettlementDate
+		{
+			get => _settlementDate;
+			set
+			{
+				if (_settlementDate == value)
+					return;
+
+				_settlementDate = value;
+				Notify(nameof(SettlementDate));
+			}
+		}
+
+		private string _cfiCode;
+
+		/// <summary>
+		/// Type in ISO 10962 standard.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CfiCodeKey,
+			Description = LocalizedStrings.CfiCodeDescKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 15)]
+		public string CfiCode
+		{
+			get => _cfiCode;
+			set
+			{
+				if (_cfiCode == value)
+					return;
+
+				_cfiCode = value;
+				Notify(nameof(CfiCode));
 			}
 		}
 
 		[field: NonSerialized]
-		private SynchronizedDictionary<object, object> _extensionInfo;
+		private SynchronizedDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended security info.
@@ -516,16 +484,20 @@ namespace StockSharp.BusinessEntities
 		/// </remarks>
 		[XmlIgnore]
 		//[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str427Key)]
-		[MainCategory]
-		public IDictionary<object, object> ExtensionInfo
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExtendedInfoKey,
+			Description = LocalizedStrings.Str427Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 20)]
+		[Ignore]
+		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
+			get => _extensionInfo;
 			set
 			{
 				_extensionInfo = value.Sync();
-				Notify("ExtensionInfo");
+				Notify(nameof(ExtensionInfo));
 			}
 		}
 
@@ -537,15 +509,17 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.Str290Key)]
-		[DescriptionLoc(LocalizedStrings.Str555Key)]
-		[StatisticsCategory]
-		[PropertyOrder(0)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str290Key,
+			Description = LocalizedStrings.Str555Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 200)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? StepPrice
 		{
-			get { return _stepPrice; }
+			get => _stepPrice;
 			set
 			{
 				if (value < 0)
@@ -555,7 +529,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_stepPrice = value;
-				Notify("StepPrice");
+				Notify(nameof(StepPrice));
 			}
 		}
 
@@ -567,23 +541,25 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.Str289Key)]
-		[DescriptionLoc(LocalizedStrings.Str557Key)]
-		[ExpandableObject]
-		[StatisticsCategory]
-		[PropertyOrder(3)]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str289Key,
+			Description = LocalizedStrings.Str557Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 201)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Trade LastTrade
 		{
-			get { return _lastTrade; }
+			get => _lastTrade;
 			set
 			{
 				if (_lastTrade == value)
 					return;
 
 				_lastTrade = value;
-				Notify("LastTrade");
+				Notify(nameof(LastTrade));
 
 			    if (value == null)
 			        return;
@@ -599,24 +575,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// First trade price for the session.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str558Key)]
-		[DescriptionLoc(LocalizedStrings.Str559Key)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(11)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str558Key,
+			Description = LocalizedStrings.Str559Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 202)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? OpenPrice
 		{
-			get { return _openPrice; }
+			get => _openPrice;
 			set
 			{
 				if (_openPrice == value)
 					return;
 
 				_openPrice = value;
-				Notify("OpenPrice");
+				Notify(nameof(OpenPrice));
 			}
 		}
 
@@ -626,24 +604,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Last trade price for the previous session.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str560Key)]
-		[DescriptionLoc(LocalizedStrings.Str561Key)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(14)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str560Key,
+			Description = LocalizedStrings.Str561Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 203)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? ClosePrice
 		{
-			get { return _closePrice; }
+			get => _closePrice;
 			set
 			{
 				if (_closePrice == value)
 					return;
 
 				_closePrice = value;
-				Notify("ClosePrice");
+				Notify(nameof(ClosePrice));
 			}
 		}
 
@@ -653,24 +633,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Lowest price for the session.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str288Key)]
-		[DescriptionLoc(LocalizedStrings.Str562Key)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(13)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str288Key,
+			Description = LocalizedStrings.Str562Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 204)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? LowPrice
 		{
-			get { return _lowPrice; }
+			get => _lowPrice;
 			set
 			{
 				if (_lowPrice == value)
 					return;
 
 				_lowPrice = value;
-				Notify("LowPrice");
+				Notify(nameof(LowPrice));
 			}
 		}
 
@@ -680,24 +662,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Highest price for the session.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str563Key)]
-		[DescriptionLoc(LocalizedStrings.Str564Key)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(12)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str563Key,
+			Description = LocalizedStrings.Str564Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 205)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HighPrice
 		{
-			get { return _highPrice; }
+			get => _highPrice;
 			set
 			{
 				if (_highPrice == value)
 					return;
 
 				_highPrice = value;
-				Notify("HighPrice");
+				Notify(nameof(HighPrice));
 			}
 		}
 
@@ -709,15 +693,17 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.Str565Key)]
-		[DescriptionLoc(LocalizedStrings.Str566Key)]
-		[StatisticsCategory]
-		[PropertyOrder(1)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str565Key,
+			Description = LocalizedStrings.Str566Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 206)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Quote BestBid
 		{
-			get { return _bestBid; }
+			get => _bestBid;
 			set
 			{
 				//TODO: решить другим методом, OnEquals не тормозит, медленно работает GUI
@@ -727,7 +713,7 @@ namespace StockSharp.BusinessEntities
 				//	return;
 
 				_bestBid = value;
-				Notify("BestBid");
+				Notify(nameof(BestBid));
 			}
 		}
 
@@ -739,22 +725,24 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.BestAskKey)]
-		[DescriptionLoc(LocalizedStrings.BestAskDescKey)]
-		[StatisticsCategory]
-		[PropertyOrder(2)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BestAskKey,
+			Description = LocalizedStrings.BestAskDescKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 207)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Quote BestAsk
 		{
-			get { return _bestAsk; }
+			get => _bestAsk;
 			set
 			{
 				// if (_bestAsk == value)
 				//	return;
 
 				_bestAsk = value;
-				Notify("BestAsk");
+				Notify(nameof(BestAsk));
 			}
 		}
 
@@ -766,9 +754,13 @@ namespace StockSharp.BusinessEntities
 		/// Best pair quotes.
 		/// </summary>
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		[DisplayNameLoc(LocalizedStrings.BestPairKey)]
-		[DescriptionLoc(LocalizedStrings.BestPairKey, true)]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BestPairKey,
+			Description = LocalizedStrings.BestPairKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 208)]
 		public MarketDepthPair BestPair => new MarketDepthPair(this, BestBid, BestAsk);
 
 		private SecurityStates? _state;
@@ -778,23 +770,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Current state of security.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.Str569Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.StateKey,
+			Description = LocalizedStrings.Str569Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 209)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public SecurityStates? State
 		{
-			get { return _state; }
+			get => _state;
 			set
 			{
 				if (_state == value)
 					return;
 
 				_state = value;
-				Notify("State");
+				Notify(nameof(State));
 			}
 		}
 
@@ -804,23 +799,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Lower price limit.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.PriceMinKey)]
-		[DescriptionLoc(LocalizedStrings.PriceMinLimitKey)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceMinKey,
+			Description = LocalizedStrings.PriceMinLimitKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 210)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MinPrice
 		{
-			get { return _minPrice; }
+			get => _minPrice;
 			set
 			{
 				if (_minPrice == value)
 					return;
 
 				_minPrice = value;
-				Notify("MinPrice");
+				Notify(nameof(MinPrice));
 			}
 		}
 
@@ -830,23 +828,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Upper price limit.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.PriceMaxKey)]
-		[DescriptionLoc(LocalizedStrings.PriceMaxLimitKey)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceMaxKey,
+			Description = LocalizedStrings.PriceMaxLimitKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 211)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MaxPrice
 		{
-			get { return _maxPrice; }
+			get => _maxPrice;
 			set
 			{
 				if (_maxPrice == value)
 					return;
 
 				_maxPrice = value;
-				Notify("MaxPrice");
+				Notify(nameof(MaxPrice));
 			}
 		}
 
@@ -856,23 +857,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Initial margin to buy.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str304Key)]
-		[DescriptionLoc(LocalizedStrings.MarginBuyKey)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str304Key,
+			Description = LocalizedStrings.MarginBuyKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 212)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MarginBuy
 		{
-			get { return _marginBuy; }
+			get => _marginBuy;
 			set
 			{
 				if (_marginBuy == value)
 					return;
 
 				_marginBuy = value;
-				Notify("MarginBuy");
+				Notify(nameof(MarginBuy));
 			}
 		}
 
@@ -882,23 +886,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Initial margin to sell.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str305Key)]
-		[DescriptionLoc(LocalizedStrings.MarginSellKey)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str305Key,
+			Description = LocalizedStrings.MarginSellKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 213)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MarginSell
 		{
-			get { return _marginSell; }
+			get => _marginSell;
 			set
 			{
 				if (_marginSell == value)
 					return;
 
 				_marginSell = value;
-				Notify("MarginSell");
+				Notify(nameof(MarginSell));
 			}
 		}
 
@@ -921,9 +928,114 @@ namespace StockSharp.BusinessEntities
 		//			return;
 
 		//		_connector = value;
-		//		Notify("Trader");
+		//		Notify(nameof(Trader));
 		//	}
 		//}
+
+		private string _underlyingSecurityId;
+
+		/// <summary>
+		/// Underlying asset on which the current security is built.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UnderlyingAssetKey,
+			Description = LocalizedStrings.Str550Key,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 100)]
+		public string UnderlyingSecurityId
+		{
+			get => _underlyingSecurityId;
+			set
+			{
+				if (_underlyingSecurityId == value)
+					return;
+
+				_underlyingSecurityId = value;
+				Notify(nameof(UnderlyingSecurityId));
+			}
+		}
+
+		private OptionTypes? _optionType;
+
+		/// <summary>
+		/// Option type.
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str551Key,
+			Description = LocalizedStrings.OptionContractTypeKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 101)]
+		public OptionTypes? OptionType
+		{
+			get => _optionType;
+			set
+			{
+				if (_optionType == value)
+					return;
+
+				_optionType = value;
+				Notify(nameof(OptionType));
+			}
+		}
+
+		private decimal? _strike;
+
+		/// <summary>
+		/// Option strike price.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.StrikeKey,
+			Description = LocalizedStrings.OptionStrikePriceKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 102)]
+		[Nullable]
+		public decimal? Strike
+		{
+			get => _strike;
+			set
+			{
+				if (_strike == value)
+					return;
+
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
+				_strike = value;
+				Notify(nameof(Strike));
+			}
+		}
+
+		private string _binaryOptionType;
+
+		/// <summary>
+		/// Type of binary option.
+		/// </summary>
+		[DataMember]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str552Key,
+			Description = LocalizedStrings.TypeBinaryOptionKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 103)]
+		public string BinaryOptionType
+		{
+			get => _binaryOptionType;
+			set
+			{
+				if (_binaryOptionType == value)
+					return;
+
+				_binaryOptionType = value;
+				Notify(nameof(BinaryOptionType));
+			}
+		}
 
 		private decimal? _impliedVolatility;
 
@@ -931,24 +1043,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Volatility (implied).
 		/// </summary>
-		[DisplayName("IV")]
-		[DescriptionLoc(LocalizedStrings.Str293Key, true)]
-		[DerivativesCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(9)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IVKey,
+			Description = LocalizedStrings.Str293Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 104)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? ImpliedVolatility
 		{
-			get { return _impliedVolatility; }
+			get => _impliedVolatility;
 			set
 			{
 				if (_impliedVolatility == value)
 					return;
 
 				_impliedVolatility = value;
-				Notify("ImpliedVolatility");
+				Notify(nameof(ImpliedVolatility));
 			}
 		}
 
@@ -956,26 +1070,28 @@ namespace StockSharp.BusinessEntities
 
 		//[DataMember]
 		/// <summary>
-		/// Volatility (historic).
+		/// Volatility (historical).
 		/// </summary>
-		[DisplayName("HV")]
-		[DescriptionLoc(LocalizedStrings.Str299Key, true)]
-		[DerivativesCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(10)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.HVKey,
+			Description = LocalizedStrings.Str299Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 105)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HistoricalVolatility
 		{
-			get { return _historicalVolatility; }
+			get => _historicalVolatility;
 			set
 			{
 				if (_historicalVolatility == value)
 					return;
 
 				_historicalVolatility = value;
-				Notify("HistoricalVolatility");
+				Notify(nameof(HistoricalVolatility));
 			}
 		}
 
@@ -985,24 +1101,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Theoretical price.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str294Key)]
-		[DescriptionLoc(LocalizedStrings.TheoreticalPriceKey)]
-		[DerivativesCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(7)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str294Key,
+			Description = LocalizedStrings.TheoreticalPriceKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 106)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? TheorPrice
 		{
-			get { return _theorPrice; }
+			get => _theorPrice;
 			set
 			{
 				if (_theorPrice == value)
 					return;
 
 				_theorPrice = value;
-				Notify("TheorPrice");
+				Notify(nameof(TheorPrice));
 			}
 		}
 
@@ -1012,24 +1130,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option delta.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.DeltaKey)]
-		[DescriptionLoc(LocalizedStrings.OptionDeltaKey)]
-		[DerivativesCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.DeltaKey,
+			Description = LocalizedStrings.OptionDeltaKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 107)]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(3)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Delta
 		{
-			get { return _delta; }
+			get => _delta;
 			set
 			{
 				if (_delta == value)
 					return;
 
 				_delta = value;
-				Notify("Delta");
+				Notify(nameof(Delta));
 			}
 		}
 
@@ -1039,24 +1159,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option gamma.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.GammaKey)]
-		[DescriptionLoc(LocalizedStrings.OptionGammaKey)]
-		[DerivativesCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(4)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.GammaKey,
+			Description = LocalizedStrings.OptionGammaKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 108)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Gamma
 		{
-			get { return _gamma; }
+			get => _gamma;
 			set
 			{
 				if (_gamma == value)
 					return;
 
 				_gamma = value;
-				Notify("Gamma");
+				Notify(nameof(Gamma));
 			}
 		}
 
@@ -1066,24 +1188,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option vega.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.VegaKey)]
-		[DescriptionLoc(LocalizedStrings.OptionVegaKey)]
-		[DerivativesCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(5)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VegaKey,
+			Description = LocalizedStrings.OptionVegaKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 109)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Vega
 		{
-			get { return _vega; }
+			get => _vega;
 			set
 			{
 				if (_vega == value)
 					return;
 
 				_vega = value;
-				Notify("Vega");
+				Notify(nameof(Vega));
 			}
 		}
 
@@ -1093,24 +1217,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option theta.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.ThetaKey)]
-		[DescriptionLoc(LocalizedStrings.OptionThetaKey)]
-		[DerivativesCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(6)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ThetaKey,
+			Description = LocalizedStrings.OptionThetaKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 110)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Theta
 		{
-			get { return _theta; }
+			get => _theta;
 			set
 			{
 				if (_theta == value)
 					return;
 
 				_theta = value;
-				Notify("Theta");
+				Notify(nameof(Theta));
 			}
 		}
 
@@ -1120,24 +1246,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Option rho.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.RhoKey)]
-		[DescriptionLoc(LocalizedStrings.OptionRhoKey)]
-		[DerivativesCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(7)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.RhoKey,
+			Description = LocalizedStrings.OptionRhoKey,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 111)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Rho
 		{
-			get { return _rho; }
+			get => _rho;
 			set
 			{
 				if (_rho == value)
 					return;
 
 				_rho = value;
-				Notify("Rho");
+				Notify(nameof(Rho));
 			}
 		}
 
@@ -1147,23 +1275,26 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Number of open positions (open interest).
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str150Key)]
-		[DescriptionLoc(LocalizedStrings.Str151Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str150Key,
+			Description = LocalizedStrings.Str151Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 220)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? OpenInterest
 		{
-			get { return _openInterest; }
+			get => _openInterest;
 			set
 			{
 				if (_openInterest == value)
 					return;
 
 				_openInterest = value;
-				Notify("OpenInterest");
+				Notify(nameof(OpenInterest));
 			}
 		}
 
@@ -1177,33 +1308,31 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		public DateTimeOffset LocalTime
 		{
-			get { return _localTime; }
+			get => _localTime;
 			set
 			{
 				_localTime = value;
-				Notify("LocalTime");
+				Notify(nameof(LocalTime));
 			}
 		}
 
 		private DateTimeOffset _lastChangeTime;
 
-		//[DisplayName("Изменен")]
-		//[Description("Время последнего изменения инструмента.")]
 		//[StatisticsCategory]
 		/// <summary>
 		/// Time of the last instrument change.
 		/// </summary>
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		[Ignore]
 		[XmlIgnore]
 		public DateTimeOffset LastChangeTime
 		{
-			get { return _lastChangeTime; }
+			get => _lastChangeTime;
 			set
 			{
 				_lastChangeTime = value;
-				Notify("LastChangeTime");
+				Notify(nameof(LastChangeTime));
 			}
 		}
 
@@ -1213,21 +1342,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Total volume in all buy orders.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str295Key)]
-		[DescriptionLoc(LocalizedStrings.BidsVolumeKey)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(6)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str295Key,
+			Description = LocalizedStrings.BidsVolumeKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 221)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? BidsVolume
 		{
-			get { return _bidsVolume; }
+			get => _bidsVolume;
 			set
 			{
 				_bidsVolume = value;
-				Notify("BidsVolume");
+				Notify(nameof(BidsVolume));
 			}
 		}
 
@@ -1237,21 +1368,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Number of buy orders.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.BidsKey)]
-		[DescriptionLoc(LocalizedStrings.BidsCountKey)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(8)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.BidsKey,
+			Description = LocalizedStrings.BidsCountKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 222)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? BidsCount
 		{
-			get { return _bidsCount; }
+			get => _bidsCount;
 			set
 			{
 				_bidsCount = value;
-				Notify("BidsCount");
+				Notify(nameof(BidsCount));
 			}
 		}
 
@@ -1261,21 +1394,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Total volume in all sell orders.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str297Key)]
-		[DescriptionLoc(LocalizedStrings.AsksVolumeKey)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(7)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str297Key,
+			Description = LocalizedStrings.AsksVolumeKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 223)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? AsksVolume
 		{
-			get { return _asksVolume; }
+			get => _asksVolume;
 			set
 			{
 				_asksVolume = value;
-				Notify("AsksVolume");
+				Notify(nameof(AsksVolume));
 			}
 		}
 
@@ -1285,21 +1420,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Number of sell orders.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.AsksKey)]
-		[DescriptionLoc(LocalizedStrings.AsksCountKey)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(9)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AsksKey,
+			Description = LocalizedStrings.AsksCountKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 224)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? AsksCount
 		{
-			get { return _asksCount; }
+			get => _asksCount;
 			set
 			{
 				_asksCount = value;
-				Notify("AsksCount");
+				Notify(nameof(AsksCount));
 			}
 		}
 
@@ -1309,21 +1446,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Number of trades.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.TradesOfKey)]
-		[DescriptionLoc(LocalizedStrings.Str232Key, true)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(10)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TradesOfKey,
+			Description = LocalizedStrings.Str232Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 225)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? TradesCount
 		{
-			get { return _tradesCount; }
+			get => _tradesCount;
 			set
 			{
 				_tradesCount = value;
-				Notify("TradesCount");
+				Notify(nameof(TradesCount));
 			}
 		}
 
@@ -1333,21 +1472,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Maximum bid during the session.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str319Key)]
-		[DescriptionLoc(LocalizedStrings.Str594Key)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(4)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str319Key,
+			Description = LocalizedStrings.Str594Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 226)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HighBidPrice
 		{
-			get { return _highBidPrice; }
+			get => _highBidPrice;
 			set
 			{
 				_highBidPrice = value;
-				Notify("HighBidPrice");
+				Notify(nameof(HighBidPrice));
 			}
 		}
 
@@ -1357,21 +1498,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Maximum ask during the session.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str320Key)]
-		[DescriptionLoc(LocalizedStrings.Str595Key)]
-		[StatisticsCategory]
 		[Ignore]
 		[XmlIgnore]
-		[PropertyOrder(5)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str320Key,
+			Description = LocalizedStrings.Str595Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 227)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? LowAskPrice
 		{
-			get { return _lowAskPrice; }
+			get => _lowAskPrice;
 			set
 			{
 				_lowAskPrice = value;
-				Notify("LowAskPrice");
+				Notify(nameof(LowAskPrice));
 			}
 		}
 
@@ -1381,20 +1524,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Yield.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str321Key)]
-		[DescriptionLoc(LocalizedStrings.Str321Key, true)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str321Key,
+			Description = LocalizedStrings.Str321Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 228)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Yield
 		{
-			get { return _yield; }
+			get => _yield;
 			set
 			{
 				_yield = value;
-				Notify("Yield");
+				Notify(nameof(Yield));
 			}
 		}
 
@@ -1404,20 +1550,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Average price.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.AveragePriceKey)]
-		[DescriptionLoc(LocalizedStrings.AveragePriceKey, true)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AveragePriceKey,
+			Description = LocalizedStrings.AveragePriceKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 229)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? VWAP
 		{
-			get { return _vwap; }
+			get => _vwap;
 			set
 			{
 				_vwap = value;
-				Notify("VWAP");
+				Notify(nameof(VWAP));
 			}
 		}
 
@@ -1427,20 +1576,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Settlement price.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str312Key)]
-		[DescriptionLoc(LocalizedStrings.SettlementPriceKey)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str312Key,
+			Description = LocalizedStrings.SettlementPriceKey,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 230)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? SettlementPrice
 		{
-			get { return _settlementPrice; }
+			get => _settlementPrice;
 			set
 			{
 				_settlementPrice = value;
-				Notify("SettlementPrice");
+				Notify(nameof(SettlementPrice));
 			}
 		}
 
@@ -1450,20 +1602,23 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Average price per session.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.AveragePriceKey)]
-		[DescriptionLoc(LocalizedStrings.Str600Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.AveragePriceKey,
+			Description = LocalizedStrings.Str600Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 231)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? AveragePrice
 		{
-			get { return _averagePrice; }
+			get => _averagePrice;
 			set
 			{
 				_averagePrice = value;
-				Notify("AveragePrice");
+				Notify(nameof(AveragePrice));
 			}
 		}
 
@@ -1473,30 +1628,58 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Volume per session.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
-		[DescriptionLoc(LocalizedStrings.Str601Key)]
-		[StatisticsCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeKey,
+			Description = LocalizedStrings.Str601Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 232)]
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Volume
 		{
-			get { return _volume; }
+			get => _volume;
 			set
 			{
 				_volume = value;
-				Notify("Volume");
+				Notify(nameof(Volume));
+			}
+		}
+
+		private decimal? _turnover;
+
+		/// <summary>
+		/// Turnover.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TurnoverKey,
+			Description = LocalizedStrings.TurnoverKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 232)]
+		[Ignore]
+		[XmlIgnore]
+		[Browsable(false)]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
+		public decimal? Turnover
+		{
+			get => _turnover;
+			set
+			{
+				_turnover = value;
+				Notify(nameof(Turnover));
 			}
 		}
 
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
-	    event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
-			add { _propertyChanged += value; }
-			remove { _propertyChanged -= value; }
+			add => _propertyChanged += value;
+			remove => _propertyChanged -= value;
 		}
 
 		/// <summary>
@@ -1565,6 +1748,8 @@ namespace StockSharp.BusinessEntities
 			destination.BidsVolume = BidsVolume;
 			destination.AsksCount = AsksCount;
 			destination.AsksVolume = AsksVolume;
+			destination.CfiCode = CfiCode;
+			destination.Turnover = Turnover;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

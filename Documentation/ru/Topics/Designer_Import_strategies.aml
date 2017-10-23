@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="47c764fa-a28c-48f7-81b3-714c059e0e57" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для импорта стратегии или составного элемента есть следующие способы</para>
+
+<list class="bullet">
+  <listItem><para>В панели <legacyBold>Схемы</legacyBold> нажать на правую кнопку 
+  мыши на папке стратегии, в появившемся меню выбрать <legacyBold>Импорт</legacyBold>.</para></listItem>
+  <listItem><para>На вкладке <legacyBold>Общее</legacyBold> нажать 
+  кнопку <legacyBold>Импорт</legacyBold> в появившемся меню 
+  выбрать <legacyBold>Составной элемент</legacyBold> или <legacyBold>Стратегии</legacyBold>:</para></listItem>
+</list>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Import_strategies_00"/>
+</mediaLink>
+ 
+<para>Если стратегия с этим именем есть, то появится окно 
+с предложением перезаписать, добавить с другим названием:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Import_strategies_01"/>
+</mediaLink>
+<para>При импорте зашифрованного файла, необходимо ввести пароль, 
+который был введен при шифровке файла:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Import_strategies_02"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="18a5214f-1c03-445a-ab96-d29c91555af4" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -40,9 +40,9 @@ _logManager.Listeners.Add(new GuiLogListener(Monitor));
                   </code>
               </content>
 </section>
-      <relatedTopics>
+      <!--<relatedTopics>
        <link xlink:href="da7fa5ab-4d4e-4205-a5ad-c41c24e88661">MonitorWindow</link>
-    </relatedTopics>
+    </relatedTopics>-->
 
   </developerConceptualDocument>
 </topic>

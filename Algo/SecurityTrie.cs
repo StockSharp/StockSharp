@@ -62,7 +62,7 @@ namespace StockSharp.Algo
 		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
 		/// </summary>
 		/// <returns>
-		/// true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
+		/// <see langword="true"/> if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, <see langword="false"/>.
 		/// </returns>
 		public bool IsReadOnly => false;
 
@@ -72,17 +72,22 @@ namespace StockSharp.Algo
 		/// <param name="security">New instrument.</param>
 		public void Add(Security security)
 		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			var externalId = security.ExternalId;
+
 			lock (_sync)
 			{
 				AddSuffix(security.Id, security);
 				AddSuffix(security.Code, security);
-				AddSuffix(security.Name, security);
-				AddSuffix(security.ShortName, security);
-				AddSuffix(security.ExternalId.Bloomberg, security);
-				AddSuffix(security.ExternalId.Cusip, security);
-				AddSuffix(security.ExternalId.Isin, security);
-				AddSuffix(security.ExternalId.Ric, security);
-				AddSuffix(security.ExternalId.Sedol, security);
+				//AddSuffix(security.Name, security);
+				//AddSuffix(security.ShortName, security);
+				AddSuffix(externalId.Bloomberg, security);
+				AddSuffix(externalId.Cusip, security);
+				AddSuffix(externalId.Isin, security);
+				AddSuffix(externalId.Ric, security);
+				AddSuffix(externalId.Sedol, security);
 
 				_allSecurities.Add(security);
 			}
@@ -100,11 +105,11 @@ namespace StockSharp.Algo
 		/// Find all instrument by filter.
 		/// </summary>
 		/// <param name="filter">Filter</param>
-		/// <returns>Founded instruments.</returns>
+		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Retrieve(string filter)
 		{
 			lock (_sync)
-				return (filter.IsEmpty() ? _allSecurities : _trie.Retrieve(filter)).ToArray();
+				return (filter.IsEmpty() ? _allSecurities : _trie.Retrieve(filter.ToLowerInvariant())).ToArray();
 		}
 
 		/// <summary>
@@ -143,24 +148,31 @@ namespace StockSharp.Algo
 
 			securities = securities.ToArray();
 
-            lock (_sync)
+			lock (_sync)
 			{
-				if (securities.Count() > 1000 || securities.Count() > _allSecurities.Count * 0.1)
+				if (securities.Count() > 1000 || (_allSecurities.Count > 1000 && securities.Count() > _allSecurities.Count * 0.1))
 				{
-					_trie.Clear();
-					securities.ForEach(Add);
-                }
-				else
-					_trie.RemoveRange(securities);
+					_allSecurities.RemoveRange(securities);
 
-				_allSecurities.RemoveRange(securities);
+					securities = _allSecurities.ToArray();
+
+					_allSecurities.Clear();
+					_trie.Clear();
+
+					securities.ForEach(Add);
+				}
+				else
+				{
+					_trie.RemoveRange(securities);
+					_allSecurities.RemoveRange(securities);
+				}
 			}
 		}
 
 		/// <summary>
 		/// Remove all instruments.
 		/// </summary>
-		public void Clear()
+		public virtual void Clear()
 		{
 			lock (_sync)
 			{
@@ -173,7 +185,7 @@ namespace StockSharp.Algo
 		/// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"/> contains a specific value.
 		/// </summary>
 		/// <returns>
-		/// true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
+		/// <see langword="true"/> if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, <see langword="false"/>.
 		/// </returns>
 		/// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
 		public bool Contains(Security item)

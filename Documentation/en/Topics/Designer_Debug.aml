@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="667ad9ff-6afe-48e2-9c53-1850d0533a77" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>In the process of strategies testing, it often becomes necessary to check 
+what data enters the input of a given cube or passed at its output. To do that, 
+the <token>designer</token> features the <legacyBold>Debugger</legacyBold>.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Debug_00"/>
+</mediaLink>
+<para>The following buttons are located in the <legacyBold>Debugger</legacyBold> 
+group of the <legacyBold>Emulation</legacyBold> Ribbon:</para>
+
+<list class="bullet">
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_01"/></mediaLinkInline> 
+  <legacyBold>Add breakpoint</legacyBold> – to add a breakpoint at the selected 
+  element. Elements, for which a breakpoint is added, are highlighted with a 
+  red border.</para></listItem>
+  
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_02"/></mediaLinkInline> 
+<legacyBold>Delete breakpoint</legacyBold> – to delete a breakpoint.</para></listItem>
+
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_03"/></mediaLinkInline> 
+  <legacyBold>Next element</legacyBold> – when the breakpoint is triggered, 
+  moves to the next element of the scheme.</para></listItem>
+  
+  <listItem><para><legacyBold>Step to out</legacyBold> – when the breakpoint is 
+  triggered, moves to the  output of the current element, is used to check the 
+  values, passed at the element output.</para></listItem>
+  
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_04"/></mediaLinkInline> 
+ <legacyBold>Step in</legacyBold> – when the breakpoint is triggered, moves inside 
+ the composite element. Automatically opens the composite element scheme and stops 
+ at the element to which the data is first transmitted.</para></listItem>
+ 
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_05"/></mediaLinkInline>
+  <legacyBold>Step out</legacyBold> – when the breakpoint is triggered and is within the composite element, 
+  it exits one level up where an open composite element is used.</para></listItem>
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_06"/></mediaLinkInline>
+  <legacyBold>Continue</legacyBold> – Continues until the next breakpoint is triggered.</para></listItem>
+</list>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="81221569-7e65-4817-9b1f-7d6c6efccdf6" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class OrderLogMetaInfo : BinaryMetaInfo<OrderLogMetaInfo>
+	class OrderLogMetaInfo : BinaryMetaInfo
 	{
 		public OrderLogMetaInfo(DateTime date)
 			: base(date)
@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Storages.Binary
 			foreach (var portfolio in Portfolios)
 				stream.Write(portfolio);
 
-			WriteNonSystemPrice(stream);
+			WriteFractionalPrice(stream);
 			WriteFractionalVolume(stream);
 
 			if (Version < MarketDataVersions.Version45)
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Storages.Binary
 			for (var i = 0; i < count; i++)
 				Portfolios.Add(stream.Read<string>());
 
-			ReadNonSystemPrice(stream);
+			ReadFractionalPrice(stream);
 			ReadFractionalVolume(stream);
 
 			if (Version < MarketDataVersions.Version45)
@@ -147,33 +147,32 @@ namespace StockSharp.Algo.Storages.Binary
 			ReadOffsets(stream);
 		}
 
-		public override void CopyFrom(OrderLogMetaInfo src)
+		public override void CopyFrom(BinaryMetaInfo src)
 		{
 			base.CopyFrom(src);
 
-			FirstOrderId = src.FirstOrderId;
-			FirstTradeId = src.FirstTradeId;
-			LastOrderId = src.LastOrderId;
-			LastTradeId = src.LastTradeId;
+			var olInfo = (OrderLogMetaInfo)src;
 
-			FirstPrice = src.FirstPrice;
-			LastPrice = src.LastPrice;
+			FirstOrderId = olInfo.FirstOrderId;
+			FirstTradeId = olInfo.FirstTradeId;
+			LastOrderId = olInfo.LastOrderId;
+			LastTradeId = olInfo.LastTradeId;
 
-			FirstTransactionId = src.FirstTransactionId;
-			LastTransactionId = src.LastTransactionId;
+			FirstTransactionId = olInfo.FirstTransactionId;
+			LastTransactionId = olInfo.LastTransactionId;
 
-			FirstOrderPrice = src.FirstOrderPrice;
-			LastOrderPrice = src.LastOrderPrice;
+			FirstOrderPrice = olInfo.FirstOrderPrice;
+			LastOrderPrice = olInfo.LastOrderPrice;
 
 			Portfolios.Clear();
-			Portfolios.AddRange(src.Portfolios);
+			Portfolios.AddRange(olInfo.Portfolios);
 		}
 	}
 
 	class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
-		public OrderLogBinarySerializer(SecurityId securityId)
-			: base(securityId, 200, MarketDataVersions.Version52)
+		public OrderLogBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
+			: base(securityId, 200, MarketDataVersions.Version53, exchangeInfoProvider)
 		{
 		}
 
@@ -193,6 +192,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version47;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
 
 			foreach (var message in messages)
 			{
@@ -209,7 +209,7 @@ namespace StockSharp.Algo.Storages.Binary
 				// execution ticks (like option execution) may be a zero cost
 				// ticks for spreads may be a zero cost or less than zero
 				//if (item.Price < 0)
-				//	throw new ArgumentOutOfRangeException("items", item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
+				//	throw new ArgumentOutOfRangeException(nameof(messages), item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
 
 				var volume = message.SafeGetVolume();
 				if (volume <= 0)
@@ -227,7 +227,7 @@ namespace StockSharp.Algo.Storages.Binary
 					// execution ticks (like option execution) may be a zero cost
 					// ticks for spreads may be a zero cost or less than zero
 					//if (item.TradePrice <= 0)
-					//	throw new ArgumentOutOfRangeException("items", item.TradePrice, LocalizedStrings.Str929Params.Put(item.TradeId, item.OrderId));
+					//	throw new ArgumentOutOfRangeException(nameof(messages), item.TradePrice, LocalizedStrings.Str929Params.Put(item.TradeId, item.OrderId));
 				}
 
 				metaInfo.LastOrderId = writer.SerializeId(orderId, metaInfo.LastOrderId);
@@ -246,15 +246,16 @@ namespace StockSharp.Algo.Storages.Binary
 						if (metaInfo.FirstOrderPrice == 0)
 							metaInfo.FirstOrderPrice = metaInfo.LastOrderPrice = orderPrice;
 
-						writer.WritePrice(orderPrice, metaInfo.LastOrderPrice, metaInfo, SecurityId, true);
-						metaInfo.LastOrderPrice = orderPrice;
+						var prevPrice = metaInfo.LastOrderPrice;
+						writer.WritePrice(orderPrice, ref prevPrice, metaInfo, SecurityId, true);
+						metaInfo.LastOrderPrice = prevPrice;
 					}
 					else
 					{
-						if (metaInfo.FirstNonSystemPrice == 0)
-							metaInfo.FirstNonSystemPrice = metaInfo.LastNonSystemPrice = orderPrice;
+						if (metaInfo.FirstFractionalPrice == 0)
+							metaInfo.FirstFractionalPrice = metaInfo.LastFractionalPrice = orderPrice;
 
-						metaInfo.LastNonSystemPrice = writer.WriteDecimal(orderPrice, metaInfo.LastNonSystemPrice);
+						metaInfo.LastFractionalPrice = writer.WriteDecimal(orderPrice, metaInfo.LastFractionalPrice);
 					}
 				}
 
@@ -263,7 +264,7 @@ namespace StockSharp.Algo.Storages.Binary
 				writer.Write(message.Side == Sides.Buy);
 
 				var lastOffset = metaInfo.LastServerOffset;
-				metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, LocalizedStrings.Str1013, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+				metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, LocalizedStrings.Str1013, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
 				if (hasTrade)
@@ -332,7 +333,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (!isEmptyPf)
 				{
 					metaInfo.Portfolios.TryAdd(message.PortfolioName);
-					writer.WriteInt(metaInfo.Portfolios.IndexOf(message.PortfolioName));	
+					writer.WriteInt(metaInfo.Portfolios.IndexOf(message.PortfolioName));
 				}
 
 				if (metaInfo.Version < MarketDataVersions.Version51)
@@ -361,9 +362,13 @@ namespace StockSharp.Algo.Storages.Binary
 			else
 			{
 				if (reader.Read())
-					price = metaInfo.FirstOrderPrice = reader.ReadPrice(metaInfo.FirstOrderPrice, metaInfo, true);
+				{
+					var prevPrice = metaInfo.FirstOrderPrice;
+					price = reader.ReadPrice(ref prevPrice, metaInfo, true);
+					metaInfo.FirstOrderPrice = prevPrice;
+				}
 				else
-					price = metaInfo.FirstNonSystemPrice = reader.ReadDecimal(metaInfo.FirstNonSystemPrice);
+					price = metaInfo.FirstFractionalPrice = reader.ReadDecimal(metaInfo.FirstFractionalPrice);
 			}
 
 			var volume = reader.ReadVolume(metaInfo);
@@ -373,10 +378,11 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version47;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
+			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
-			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset);
+			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider), allowDiffOffsets, isTickPrecision, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 
@@ -439,7 +445,7 @@ namespace StockSharp.Algo.Storages.Binary
 				else
 				{
 					if (execMsg.OrderStatus != null)
-						execMsg.IsSystem = execMsg.OrderStatus.Value.IsSystem();
+						execMsg.IsSystem = execMsg.OrderStatus.Value.IsPlazaSystem();
 				}
 			}
 

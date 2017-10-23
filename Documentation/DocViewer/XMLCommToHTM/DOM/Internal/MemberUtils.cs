@@ -72,7 +72,7 @@ namespace XMLCommToHTM.DOM.Internal
 				})
 				.ToArray();
 
-			return new XElement("span", new XElement("span", "("), args.Take(args.Count() - 1), new XElement("span", ")"));
+			return new XElement("span", new XElement("span", "("), args.Take(args.Length - 1), new XElement("span", ")"));
 		}
 	}
 }

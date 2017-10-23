@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("VMA")]
 	[DescriptionLoc(LocalizedStrings.Str823Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 	{
 		// Текущее значение числителя
@@ -71,7 +72,7 @@ namespace StockSharp.Algo.Indicators
 			var znValue = _denominator.Process(input.SetValue(this, candle.TotalVolume)).GetValue<decimal>();
 
 			return znValue != 0 
-				? new DecimalIndicatorValue(this, (shValue / znValue)) 
+				? new DecimalIndicatorValue(this, shValue / znValue) 
 				: new DecimalIndicatorValue(this);
 		}
 	}

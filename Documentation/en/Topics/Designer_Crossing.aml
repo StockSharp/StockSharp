@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="317b6393-19eb-424b-84ea-ccf70b0c9c18" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Crossing_00"/>
+</mediaLink>
+<para>The element is used to track the position of two values relative to each 
+other. For example, for the identification of the intersection of two lines 
+(the moment when the previous value of the first line was less than the second 
+one, and the current value of the first line is greater than the second one), 
+or when the value crosses a certain level.</para>
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Comparison</legacyBold> - values that can be 
+  compared (for example, a numeric value, a string, an indicator value, 
+  etc.).</para></listItem>
+  <listItem><para><legacyBold>Comparison</legacyBold> - values that can be 
+  compared (for example, a numeric value, a string, an indicator value, 
+  etc.).</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Flag</legacyBold> - the flag value (indicated the 
+  state and has two values: up (true) and down (false)).</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Operator (Comparison)</legacyBold> - the current 
+  value.</para></listItem>
+  <listItem><para><legacyBold>Operator (PrevComparison)</legacyBold> – the previous 
+  value.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+
+<mediaLink>
+<image xlink:href="Designer_Crossing_01"/>
+</mediaLink>
+<para>The diagram of the composite element consists of simple elements and is 
+based on memorization the current values (Prev In 1 and Prev In 2) and comparing 
+the pairs, current (CurrComparison) and previous (PrevComparison) values with 
+each other. Because each of the input values is used in two elements of the 
+diagram, the elements of 
+<link xlink:href="b596ee27-a887-4814-9ad7-56cd62cec38f" /> (In 1, In 2) are 
+placed at the input of the composite element, and they allow one input to be 
+divided into two elements and pass the input value to the 
+<link xlink:href="08ebe03d-a446-4738-98fb-44cff38ddfda" /> 
+and <link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" /> elements. When a 
+new value arrives at the input, the current values are compared and a new value 
+is passed to the <link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" /> 
+element, from which the previous value for the current input is passed, then 
+the previous values are compared, and if both conditions are fulfilled, that 
+is checked using the And logical condition, then the value of the raised flag 
+is passed to the output of the composite element, which can be used as a trigger 
+for further action.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

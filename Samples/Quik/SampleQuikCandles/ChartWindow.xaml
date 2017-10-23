@@ -1,8 +1,0 @@
-﻿<Window x:Class="SampleQuikCandles.ChartWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:charting="http://schemas.stocksharp.com/xaml"
-        Title="ChartWindow" Height="300" Width="300">
-
-    <charting:Chart x:Name="Chart" x:FieldModifier="public" />
-</Window>

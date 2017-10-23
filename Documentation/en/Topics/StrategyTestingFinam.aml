@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="abfde7cc-fa0e-4705-b610-41b2ba1a2252" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+     <para>For backtesting in the <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> class, along with
+     <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference> data storage using, an alternative mechanism for working
+     with data sources is provided. This mechanism allows to download data directly from servers of the historical information providers, in particular from the
+     Quandl, Google Finance, or to work with one’s own data sources.
+     </para>
+     <para>
+     Consider the work of this mechanism using the example of the data getting from the Quandl. To work with Google Finance there is special
+     <codeEntityReference>T:StockSharp.Algo.History.QuandlHistorySource</codeEntityReference> class in <token>stocksharp</token>,
+     which allows to get candles, ticks and information about instruments.
+     <!--Func<DateTimeOffset, IEnumerable<Message>-->
+     
+     </para>
+     
+	<procedure>
+		<title>Testing with data downloaded from Quandl</title>
+		<steps class="ordered">
+			<step>
+				<content>
+				<para>
+				 At first we need to get information about the instruments from the Quandl service. To do this, it is necessary to create a storage for the instruments
+				 (<legacyBold>QuandlSecurityStorage</legacyBold>). This is a class that implements the <codeEntityReference>T:StockSharp.Algo.Storages.ISecurityStorage</codeEntityReference>
+				 interface. The code of this class is in the example <legacyItalic>Samples/Testing/SampleHistoryTesting</legacyItalic>.
+				</para>
+				
+				<list class="ordered">
+  					<listItem>
+  						<para>Creating the instrument.</para>
+  <code>
+<![CDATA[
+var security = new Security
+{
+    Id = secid,
+    Code = secCode,
+    Board = board
+};
+]]>
+				</code>
+			    </listItem>
+  					<listItem>
+  					<para>Creating the instances of classes of the instrument storage and data loader from Quandl. Note that in this example we pass one instrument to
+  					the <legacyBold>QuandlSecurityStorage</legacyBold> constructor. If it is necessary to work with multiple instruments, you can modify the constructor
+  					code to pass an array of instruments.</para>
+  					<code>
+<![CDATA[
+var qlSecurityStorage = new QuandlSecurityStorage(security);
+var qlHistorySource = new QuandlHistorySource();
+]]>
+  					</code>
+  					</listItem>
+  					<listItem>
+  					<para>
+  					Next, it is necessary to update the instrument storage. The
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})</codeEntityReference>
+  					method is used for it. In fact, this method records to the <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExtensionInfo</codeEntityReference>
+  					property the instrument and site codes used in Quandl, which will be used to download data by the instrument. Note that the first argument of the
+  					method is of the <codeEntityReference>T:StockSharp.Algo.Storages.ISecurityStorage</codeEntityReference> type - this interface has been implemented
+  					in <legacyBold>QuandlSecurityStorage</legacyBold>. Also it is necessary to bear in mind that the second argument
+  					(<codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>) performs the template function while updating instruments of the storage.
+  					</para>
+  					<code>
+				<![CDATA[
+qlHistorySource.Refresh(qlSecurityStorage, security, s => {}, () => false);
+]]>
+  					</code>
+  					</listItem>
+				</list>
+				</content>
+			</step>
+			<step>
+				<content>
+				<para>
+					Now it is necessary to register a new data source in <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>.
+					This is done using the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.HistoryEmulationConnector.RegisterHistorySource(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes,System.Object,System.Func{System.DateTimeOffset,System.Collections.Generic.IEnumerable{StockSharp.Messages.Message}})</codeEntityReference>
+					method. The first argument of the method is the instrument. Next, the source data type is specified. In our case these are usual candles
+					<codeEntityReference>F:StockSharp.Messages.MarketDataTypes.CandleTimeFrame</codeEntityReference>. 
+					The third argument is a parameter related to the market data type. For ordinary candles this is the candles timeframe.
+				</para>			
+				<para>
+				In the last argument it is necessary to specify a function that returns the market data. At that the function must return a value of the
+				<legacyBold>IEnumerable&lt;Message&gt;</legacyBold> type and take a parameter of the <codeEntityReference>T:System.DateTimeOffset</codeEntityReference> type.
+				In our case, the method that requests the candles from Quandl is used - <codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.QuandlHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>.
+				</para>
+				<para>
+				The data will be downloaded after the connector’s start, and the values of the 
+				<codeEntityReference>P:StockSharp.Algo.Testing.HistoryMessageAdapter.StartDate</codeEntityReference> and
+				<codeEntityReference>P:StockSharp.Algo.Testing.HistoryMessageAdapter.StopDate</codeEntityReference> properties from
+				<codeEntityReference>T:StockSharp.Algo.Testing.HistoryMessageAdapter</codeEntityReference> will be used as the start and end dates of the download interval.
+				</para>
+				
+				<code >
+				<![CDATA[
+connector.RegisterHistorySource(security, MarketDataTypes.CandleTimeFrame, TimeSpan.FromMinutes(1), d =>
+	qlHistorySource.GetCandles(security, TimeSpan.FromMinutes(1), d.Date, d.Date));
+					  ]]>
+				</code>
+				</content>
+			</step>
+		  </steps>
+	  </procedure>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

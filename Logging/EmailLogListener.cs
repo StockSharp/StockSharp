@@ -100,9 +100,7 @@ namespace StockSharp.Logging
 						{
 							while (true)
 							{
-								Tuple<string, string> m;
-
-								if (!_queue.TryDequeue(out m))
+								if (!_queue.TryDequeue(out var m))
 									break;
 
 								email.Send(From, To, m.Item1, m.Item2);

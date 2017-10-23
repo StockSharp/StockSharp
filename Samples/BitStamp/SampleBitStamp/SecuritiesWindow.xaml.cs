@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleBitStamp
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 
@@ -41,25 +40,17 @@ namespace SampleBitStamp
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			var trader = MainWindow.Instance.Trader;
 			if (trader != null)
 			{
 				if (_initialized)
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
-
-				_quotesWindows.SyncDo(d =>
-				{
-					foreach (var pair in d)
-					{
-						trader.UnRegisterMarketDepth(pair.Key);
-
-						pair.Value.DeleteHideable();
-						pair.Value.Close();
-					}
-				});
-
-				trader.RegisteredSecurities.ForEach(trader.UnRegisterSecurity);
-				trader.RegisteredTrades.ForEach(trader.UnRegisterTrades);
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 			}
 
 			base.OnClosed(e);
@@ -88,65 +79,69 @@ namespace SampleBitStamp
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var security = SecurityPicker.SelectedSecurity;
-
-			var window = _quotesWindows.SafeAdd(security, key =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// create order book window
-				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
-				wnd.MakeHideable();
-				return wnd;
-			});
+				var window = _quotesWindows.SafeAdd(security, key =>
+				{
+					// create order book window
+					var wnd = new QuotesWindow
+					{
+						Title = security.Id + " " + LocalizedStrings.MarketDepth
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-			{
-				// unsubscribe from order book flow
-				trader.UnRegisterMarketDepth(security);
+				if (window.Visibility == Visibility.Visible)
+				{
+					// unsubscribe from order book flow
+					trader.UnRegisterMarketDepth(security);
 
-				window.Hide();
-			}
-			else
-			{
-				// subscribe on order book flow
-				trader.RegisterMarketDepth(security);
+					window.Hide();
+				}
+				else
+				{
+					// subscribe on order book flow
+					trader.RegisterMarketDepth(security);
 
-				window.Show();
-			}
+					window.Show();
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(security) });
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
-				_initialized = true;
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
+
+				if (!_initialized)
+				{
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 
 		private void QuotesClick(object sender, RoutedEventArgs e)
 		{
-			var security = SecurityPicker.SelectedSecurity;
 			var trader = MainWindow.Instance.Trader;
 
-			if (trader.RegisteredSecurities.Contains(security))
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				trader.UnRegisterSecurity(security);
-				trader.UnRegisterTrades(security);
-			}
-			else
-			{
-				trader.RegisterSecurity(security);
-				trader.RegisterTrades(security);
+				if (trader.RegisteredSecurities.Contains(security))
+				{
+					trader.UnRegisterSecurity(security);
+					trader.UnRegisterTrades(security);
+				}
+				else
+				{
+					trader.RegisterSecurity(security);
+					trader.RegisterTrades(security);
+				}
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 	}
 }

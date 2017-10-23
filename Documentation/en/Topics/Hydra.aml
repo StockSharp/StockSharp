@@ -1,104 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-	  
-	  <!--<prerequisites>
-		  <content>
-			  <para>
-				  <link xlink:href="7a8a9518-6270-4cfe-a829-fa6c40e5fabd">Хранилища</link>
-			  </para>
-		  </content>
-	  </prerequisites>-->
-
 	  <introduction>
 		  <mediaLink>
 			  <image placement="center" xlink:href="hydra_main" />
 		  </mediaLink>	  
 		  <para>
-			  Программа <token>hydra</token> (кодовое название Hydra) предназначена для автоматической загрузки маркет-данных (инструменты, свечки, тиковые сделки и стаканы) из различных источников и хранения их в локальном хранилище.
-			  Данные могут сохраняются в двух форматах: в специальном бинарном формате <token>hydra</token> (BIN), что обеспечивает максимальную степень сжатия, или в текстовом формате CSV, что удобно при анализе данных в других программах. В дальнейшем сохраненная информация доступна для использования торговыми стратегиями (подробнее, о тестировании стратегий
-			  написано в разделе <link xlink:href="febbcf31-63d1-449d-847e-92fd8424f926">Тестирование</link>). Доступ к данным можно получить напрямую,
-			  через использование 
-			  <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference>
-			  (подробнее, написано в разделе
-			  <link xlink:href="7a8a9518-6270-4cfe-a829-fa6c40e5fabd">Хранение данных</link>), или через обычную выгрузки в так форматы, как <token>excel</token>,
-			  xml или txt (подробнее, в разделе <link xlink:href="755b1c72-57ee-4f26-8a92-5da9af7a7345">Установка и работа</link>).
+			  The <token>hydra</token> program (code-named Hydra) is intended for automatic download of market data (instruments, candles, tick trades and order books)
+			  from various sources and storing them in a local storage. Data can be stored in two formats: in the special binary format <token>hydra</token> (BIN),
+			  which provides the maximum compression rate, or in the plain text format CSV, which is useful in analyzing the data in other programs.
+			  Later the stored information is available for trading strategies (for more information about strategies testing see the
+			  <link xlink:href="febbcf31-63d1-449d-847e-92fd8424f926">Backtesting</link> section). Access to data can be obtained directly through the
+			  <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> use (for more details see the
+			  <link xlink:href="7a8a9518-6270-4cfe-a829-fa6c40e5fabd">Market-data storage</link>), or through the usual export to formats such as <token>excel</token>,
+			  xml or txt (for more details see the <link xlink:href="755b1c72-57ee-4f26-8a92-5da9af7a7345">Installation and operation</link> section).
 		  </para>
 		  <para>
-			  Одновременно, <token>hydra</token> может использовать источники как исторических, так и данных реального времени (например, подключение к
-			  <token>quik</token> или <token>smartcom</token> для получения стаканов). Это возможно за счет использования расширяемой (плагинной) модели источников.
+			  At the same time, <token>hydra</token> can use both historical and real-time data sources (for example, connection to the <token>openecry</token> or
+			  <token>rithmic</token> for the order books getting). This is possible through the use of the extensible (plug-in) sources model.
 		  </para>
 		  <para>
-			  Плагинная модель позволяет разрабатывать собственные источники. О разработке собственных источников и установке их в программу <token>hydra</token>, написано в разделе
-			  <link xlink:href="d1058e35-8539-4297-9dbf-c0f4fec5d5eb">Создание источника</link>.
+			  Plugin model allows you to develop your own sources. About the development of own sources and installing them in the <token>hydra</token> program, see the
+			  <link xlink:href="d1058e35-8539-4297-9dbf-c0f4fec5d5eb">Creating source</link> section.
 		  </para>
 	  </introduction>
-
-	<!--<section>
-      <title>A topic section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
-
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-        
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
-
   </developerConceptualDocument>
 </topic>

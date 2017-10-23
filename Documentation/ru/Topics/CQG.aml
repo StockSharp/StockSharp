@@ -2,14 +2,21 @@
 <topic id="aac980b1-ac5b-415b-811c-a8d128942391" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>
-			Для написания торговых роботов для <token>cqg</token> необходимо использовать 
-			<codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference>. Авторизация выполняется при запуске терминала <legacyBold>CQG Integrated Client</legacyBold>.  
-		</para>
+
+			<para>Для написания торговых роботов для <token>cqg_external</token> необходимо использовать </para>
+			
+<list class="bullet">
+  <listItem><para><codeEntityReference>T:StockSharp.Cqg.Com.CqgComTrader</codeEntityReference> - при работе с теминала. Авторизация выполняется при запуске терминала <legacyBold>CQG Integrated Client</legacyBold>.</para></listItem>
+  <listItem><para><codeEntityReference>T:StockSharp.Cqg.Continuum.CqgContinuumTrader</codeEntityReference> - при работе с сервером.</para></listItem>
+</list>
+
+			  
+
     </introduction>
      <relatedTopics>
     	<link xlink:href="436fc377-85ff-4d37-ad62-4846313a8563">Пример работы с CQGTrader</link>
-  		<link xlink:href="355f6b70-c920-48b6-b2f1-31584ebb82f3">Стоп-заявки</link>
+  	<link xlink:href="355f6b70-c920-48b6-b2f1-31584ebb82f3">Стоп-заявки</link>
+	<link xlink:href="20bbe0ce-703e-46c3-9af4-d1b517a00e82">Исторические данные</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

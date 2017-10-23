@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="992fd698-345f-4bc0-8420-b8a57c0619b4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink><image xlink:href="Designer_Working_time_00"/></mediaLink>
+<para>The cube is used to determine the working time. For example, to determine 
+when a particular instrument is trading.</para>
+ 
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Instrument</legacyBold> - an instrument for which 
+  you need to determine whether a trading session is active.</para></listItem>
+  <listItem><para><legacyBold>Trigger</legacyBold> - is the signal used to 
+  determine when to check.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Flag</legacyBold> - a flag that determines whether 
+  a trading session is active.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+ <para>The cube can be used to determine the moment when trades are conducted 
+ on several instruments from various trading platforms.</para>
+ <mediaLink><image xlink:href="Designer_Working_time_01"/></mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="08ebe03d-a446-4738-98fb-44cff38ddfda" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

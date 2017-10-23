@@ -29,6 +29,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("VHF")]
 	[DescriptionLoc(LocalizedStrings.Str754Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class VerticalHorizontalFilter : LengthIndicator<decimal>
 	{
 		// Текущее значение минимума

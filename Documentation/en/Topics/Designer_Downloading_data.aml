@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="085174e5-3be9-4dc3-bdeb-dcc3706b483d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To get the historical data for the security, select the required security 
+from the <legacyBold>All securities</legacyBold> list, move it to the 
+<legacyBold>Active</legacyBold> securities list. Set the historical data period, 
+select type and Time Frame for candles and click the <legacyBold>Start</legacyBold> 
+button. All data will be saved in the  
+<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Quick_start_02"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="4456e138-a1be-4bc2-8aab-a1f0f226759d" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

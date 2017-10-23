@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The part of the indicator <see cref="DirectionalIndex"/>.
 	/// </summary>
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public abstract class DiPart : LengthIndicator<decimal>
 	{
 		private readonly AverageTrueRange _averageTrueRange;
@@ -68,7 +69,7 @@ namespace StockSharp.Algo.Indicators
 
 			var candle = input.GetValue<Candle>();
 
-			// задержка в 1 период
+			// 1 period delay
 			_isFormed = _averageTrueRange.IsFormed && _movingAverage.IsFormed;
 
 			_averageTrueRange.Process(input);
@@ -77,11 +78,10 @@ namespace StockSharp.Algo.Indicators
 			{
 				var trValue = _averageTrueRange.GetCurrentValue();
 
-				// не вносить в тернарный оператор! 
 				var maValue = _movingAverage.Process(new DecimalIndicatorValue(this, GetValue(candle, _lastCandle)) { IsFinal = input.IsFinal });
 
 				if (!maValue.IsEmpty)
-					result = (trValue != 0m) ? (100m * maValue.GetValue<decimal>() / trValue) : 0m;
+					result = trValue != 0m ? 100m * maValue.GetValue<decimal>() / trValue : 0m;
 			}
 
 			if (input.IsFinal)

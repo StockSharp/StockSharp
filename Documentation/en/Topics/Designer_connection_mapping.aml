@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="057382bf-1726-48e4-8563-df1069510823" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>When connected, the <legacyBold>Designer</legacyBold>, if specified in the connector settings, 
+      automatically maps the received portfolios with the connections, from 
+      which these portfolios were received. Further, in the course of <legacyBold>Live</legacyBold>, 
+      selection of portfolio will automatically set up the connection, through 
+      which the trade will be performed.</para>
+      
+<para>You can view and change the mapped portfolios and connections by clicking 
+the <legacyBold>Portfolios</legacyBold> and connections button on the 
+<legacyBold>Live</legacyBold> tab.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_connection_mapping_1"/>
+</mediaLink>
+<para>In the appeared window, you can delete or add a mapping of portfolios and 
+connections. For example, by clicking on the
+<mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline> 
+button and selecting the <legacyBold>Transaq</legacyBold> connection and the 
+Simulator portfolio, the Simulator portfolio will be mapped to the Transaq 
+connection. Further, in the course of <legacyBold>Live trading</legacyBold>, choosing the 
+Simulator portfolio for trading will use the Transaq connection.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_connection_mapping_0"/>
+</mediaLink>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

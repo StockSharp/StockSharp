@@ -2,20 +2,39 @@
 <topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para> <token>fix</token> позволяет создавать торговых роботов, использующих стандартные международные протоколы для доступа на биржевые рынки - <externalLink>
-		<linkText>FIX</linkText>
-		<linkAlternateText>Financial Information eXchange protocol</linkAlternateText>
-		<linkUri>https://ru.wikipedia.org/wiki/Financial_Information_eXchange</linkUri>
-		<linkTarget>_blank</linkTarget>
-		</externalLink>
-		/<externalLink>
-		<linkText>FAST</linkText>
-		<linkAlternateText>Fix Adapted for STreaming protocol</linkAlternateText>
-		<linkUri>https://en.wikipedia.org/wiki/FAST_protocol</linkUri>
-		<linkTarget>_blank</linkTarget>
-		</externalLink>. Для написания такого робота необходимо применять <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixTrader</codeEntityReference>. 
+      <para> <token>fix</token> позволяет создавать торговых роботов, использующих стандартные международные протоколы для доступа на биржевые рынки - <token>fix_external</token>/<token>fast_external</token>.
+	Для написания такого робота необходимо применять <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixTrader</codeEntityReference>. 
       </para>
     </introduction>
+    
+    <para>
+		  В настоящий момент поддерживаются следующие площадки:
+    </para>
+    
+    <list class="bullet">
+		<listItem>
+			MOEX ASTS (FIX/FAST);
+		</listItem>
+		<listItem>
+			MOEX RTS Spectra (FIX/FAST);
+		</listItem>
+		<listItem>
+			QUIK Server (FIX);
+		</listItem>
+		<listItem>
+			CFH (FIX);
+		</listItem>
+		<listItem>
+			Otkritie Securities (FIX);
+		</listItem>
+		<listItem>
+			Exante (FIX).
+		</listItem>
+	</list>
+	
+	<para>
+		  <legacyItalic>В случае необходимости возможно подключение дополнительной площадки.</legacyItalic>
+    </para>
     
     <relatedTopics>
     	<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43">Пример работы с FixTrader</link>

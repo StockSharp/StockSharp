@@ -3,23 +3,23 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>Для учета общей прибыли-убытка (P&amp;L) в торговом роботе необходимо использовать реализацию интерфейса <codeEntityReference qualifyHint="false">T:StockSharp.Algo.PnL.IPnLManager</codeEntityReference>,
-		в виде <codeEntityReference qualifyHint="false">T:StockSharp.Algo.PnL.PnLManager</codeEntityReference>.</para>
+		<para>For the total profit-loss calculation (P&amp;L) in a trading algorithm it is necessary to use the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.PnL.IPnLManager</codeEntityReference>
+		interface implementation, by way of <codeEntityReference qualifyHint="false">T:StockSharp.Algo.PnL.PnLManager</codeEntityReference>.</para>
 	</introduction>
 
 	<prerequisites>
 		<content>
-			<para><link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Стратегии</link></para>
+			<para><link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Strategies</link></para>
 		</content>
 	</prerequisites>
     
 
 	<procedure>
-		<title>Добавление в SampleSMA учета прибыли-убытка</title>
+		<title>The profit-loss calculation adding to the SampleSMA</title>
 			<steps class="ordered">
 				<step>
 					<content>
-						<para>В окно вывода информации необходимо добавить текстовое поле для P&amp;L:</para>
+						<para>You should add the text box for the P&amp;L in the information output window:</para>
 						<code language="C#">
 						<![CDATA[
 <Label Grid.Column="0" Grid.Row="3" Content="P&amp;L:" />
@@ -30,7 +30,7 @@
 				</step>
 				<step>
 					<content>
-						<para>Далее, необходимо расширить метод-обработчик события изменения параметров стратегии:</para>
+						<para>Next, you need to extend the event method-handler of the strategy parameter change:</para>
 						<code language="C#">
 						<![CDATA[
 this.Sync(() =>
@@ -49,7 +49,7 @@ this.Sync(() =>
     
 	<nextSteps>
 		<content>
-			<para><link xlink:href="662def8c-4f1e-4a92-b7db-f1735945b03b">Позиция</link></para>
+			<para><link xlink:href="662def8c-4f1e-4a92-b7db-f1735945b03b">Position</link></para>
 		</content>
 	</nextSteps>
     

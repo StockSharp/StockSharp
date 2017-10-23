@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="66413582-a15e-414a-a413-8d77fe00f0e0" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>You can set up encryption in the <legacyBold>Export scheme</legacyBold> window 
+(<link xlink:href="559d140c-5b71-4582-a65e-ca3cad7a66e8" />).</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Encryption_00"/>
+</mediaLink>
+<para>If you open an xml file after encryption, you can see that the schema 
+description is not readable:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Encryption_01"/>
+</mediaLink>
+<para>When importing an encrypted file, you should enter the password that was 
+entered when the file was encrypted.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="47c764fa-a28c-48f7-81b3-714c059e0e57" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

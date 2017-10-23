@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Panel_graphics_00"/>
+</mediaLink>
+<para>The cube is designed to display data on the chart in the <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />. 
+panel. Each element corresponds to one area on the chart and contains a set of 
+properties with which you can define a set of axes on the chart, a set of 
+graphic elements and the parameters of their display. Adding any graphic element 
+is done by pressing the <mediaLinkInline><image xlink:href="Designer_Panel_graphics_01"/></mediaLinkInline>  
+button, deletion by pressing the <mediaLinkInline><image xlink:href="Designer_Panel_graphics_02"/></mediaLinkInline> 
+button. When adding a graphic element (a series of candles, indicator, trades, 
+etc.) in the settings, a special input parameter is created in the cube, through 
+which the data to display will be passed to this cube, and as a result will be 
+displayed in the  <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" /> 
+ panel. When you click the <mediaLinkInline><image xlink:href="Designer_Panel_graphics_03"/></mediaLinkInline>
+ button, the child graphic elements or their settings will be opened.</para>
+ <mediaLink><image xlink:href="Designer_Panel_graphics_04"/></mediaLink>
+ <para>The <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" /> panel 
+ displays all the data received in the <legacyBold>Chart panel</legacyBold> cubes. For different series 
+ of candles, it is necessary to take different <legacyBold>Chart panel</legacyBold> cubes. At that, the 
+ charts will be placed one above the other, but only the corresponding graphic 
+ elements (candle series, indicator, trades, etc.) will be displayed on each 
+ one. The example shows that the top chart displays candles, 2 indicators and 
+ trades, that corresponds to 4 input parameters of the top cube. Only candles 
+ are shown on the bottom chart. For more information about the 
+ <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" /> panel, 
+ see <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" /> section.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="992fd698-345f-4bc0-8420-b8a57c0619b4" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

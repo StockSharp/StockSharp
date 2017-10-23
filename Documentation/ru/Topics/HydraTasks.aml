@@ -2,14 +2,18 @@
 <topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>Задача - повторяющееся действие в определенное время.</para>
-    	<para>Для того чтобы просмотреть список задач, необходимо в левой панели выбрать пункт <mediaLinkInline>
-<image xlink:href="hydra_tasks_option"/></mediaLinkInline>. 
-    	Работа с задачами идет точно также как и с источниками - задачу можно добавит, удалить, редактировать, включить/выключить.</para>
+    	<para>Утилита - повторяющееся действие в определенное время.</para>
+    	<para>Для того чтобы просмотреть список утилит, необходимо в левой панели выбрать пункт <legacyBold>Утилиты</legacyBold>. 
+    	Работа с утилитами идет точно также как и с источниками - утилиту можно добавит, удалить, редактировать, включить/выключить.
+    	Для добавления <legacyBold>Утилиты</legacyBold> необходимо на вкладке <legacyBold>Общая</legacyBold> 
+    	выбрать <legacyBold>Добавить=>Утилиты</legacyBold>.
+    	Появится соответсвующее окно, на котором можно выбрать необходимую <legacyBold>Утилиту</legacyBold>.
+    	</para>
+    	
     	<mediaLink>
-        <image placement="left" xlink:href="hydra_tasks" />
+        <image placement="center" xlink:href="hydra_tasks" />
       </mediaLink>
-    	<para>На теущий момент в <token>hydra</token> существуют три класса задач:</para>
+    	<para>На текущий момент в <token>hydra</token> существуют три класса задач:</para>
     	
       <list class="bullet">
         <listItem>

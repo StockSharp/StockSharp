@@ -7,35 +7,33 @@
 
 	  <introduction>
 		  <para>
-			  Тестирование на случайных данных является особой разновидностью тестирования. Оно не презназначено для поиска оптимальных параметров. Вместо
-			  этого такое тестирование позволяет выявить ошибки в программном коде за счет подверганию торгового робота разнообразным биржевым сценариям.
+			  Testing on random data is a special kind of testing. It is not intended to search for the optimal parameters. Instead, such testing can detect errors
+			  in the code by means of exposure trading algorithm to various exchange scenarios.
 		  </para>
 		  <para>
-			  Как правило, при разработке роботов используется только определенный набор сценариев. Поэтому, когда появляется особая ситуация, робот может 
-			  неправильно среагировать или выбросить исключения. Например, могут быть следующие ситуации:
+			  As a rule, only a certain set of scenarios is used in the algorithm development. Therefore, when there is a special situation, the algorithm may not react
+			  right or throw exceptions. For example, the following situations may occur:
 		  </para>
 		  <list class="bullet">
 			  <listItem>
-				  Стратегия работает со свечками <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>, и ожидает при каждой
-				  итерации, что за запрашиваемое время всегда будет существовать свечка. Наступил период, когда не было ни одной сделки, и свечка не
-				  сформировалась. В итоге, в случае отсутствия правильной обработки, будет выброшено исключение
-				  <codeEntityReference>T:System.NullReferenceException</codeEntityReference> и стратегия остановится.
+				  The strategy works with the <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> candles and expects at each iteration,
+				  that there will always be a candle for the requested period of time. A period began when there was not a single trade, and a candle was not created.
+				  As a result, in the absence of proper handling, the <codeEntityReference>T:System.NullReferenceException</codeEntityReference> will be thrown and the strategy will stop.
 			  </listItem>
 			  <listItem>
-				  Стратегия работает с неликвидным инструментом, и использует <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>.
-				  Стратегия расчитывает, что стакан всегда заполнен. В определенный момент стакан оказывается наполовину заполнен (например, есть биды, но нет
-				  оферов). Если стратегия такое не ожидает, то она или неправильно выставит заявку, или будет сгенерировано исключение и стратегия остановится.
+				  The strategy works with non-liquid instrument and uses <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>.
+				  The strategy expects that the order book is always filled. At some time, the order book is half filled (for example, there are bids, but no offers).
+				  If the strategy does not expect this situation, then either it will wrong register an order, or it will throw an exception and the strategy will stop.
 			  </listItem>
 			  <listItem>
-				  Стратегия расчитывает ценовые уровни. Код написан таким образом, что стратегия ждет появления пробоя выставленных заранее уровней. Если уровни
-				  расчитываются и выставляются неправильно, то они никогда не будут пробиты, или всегда будет пробиваться только один из них. В итоге, стратегия
-				  или не будет совершать никаких сделок, или они будут убыточны.
+				  The strategy calculates the price levels. The code is written in such a way that the strategy awaits when levels set in advance will be broken through.
+				  If the levels are calculated and are set not correctly, then they will never be broken through, or always only one of them will be broken through.
+				  As a result, either the strategy will not perform any trades, or these trades will lose money.
 			  </listItem>
 		  </list>
 		  <para>
-			  Для этих и для множества других сценариев работы биржи, которые невозможно заранее предугадать, <token>stocksharp</token> и представляет
-			  тестирование на случайных данных, которые за счет своей равномерной уникальности смогут сгенерировать максимальное количество условий на коротком
-			  интервале.
+			  For these and for many other scenarios of the exchange work, which is impossible to predict in advance, the <token>stocksharp</token> provides testing on
+			  random data, which will be able to generate the maximum number of conditions at the short range due to its uniform uniqueness.
 		  </para>
 	  </introduction>
 
@@ -43,18 +41,17 @@
 				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });-->
 
 	  <procedure>
-		  <title>Тестирование на случаных данных стратегии скользящих средних из примеров SampleSMA и SampleSmartSMA</title>
+		  <title>Testing on random data of moving averages strategy</title>
 		  <steps class="ordered">
 			  <step>
 				  <content>
 					  <para>
-						  Пример SampleRandomEmulation (<legacyItalic>..Samples/Testing/SampleRandomEmulation</legacyItalic>) практически идентичен примеру 
-						  SampleHistoryTesting (его описание находится в разделе
-						  <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link>) за счет использования единого шлюза
-						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>. Но, в отличие от
-						  <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link>, при тестировании на случайных данных
-						  маркет-данные не подгружаются, а генерируются "на лету". Поэтому в пример добавляются два генератора случайных данных: для стакана
-						  и для тиковых сделок. В SampleHistoryTesting используется только один генератор - для стакана, так как нет сохраненной истории.
+						  The SampleRandomEmulation example  (<legacyItalic>..Samples/Testing/SampleRandomEmulation</legacyItalic>) is almost identical to the 
+						  SampleHistoryTesting example (its description can be found in the <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">testing on historical data</link>
+						  section) due the use of the unified <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> class. But, unlike the
+						  <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">testing on historical data</link>, testing on random data the market data are
+						  not loaded and are generated "on the fly". Therefore, two random data generators are added to the example: for the order book and for the
+						  tick trades. In SampleHistoryTesting only one generator is used - for the order book, as there is no history stored.
 					  </para>
 					  <code language="C#"><![CDATA[
 _connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
@@ -65,7 +62,7 @@ _connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecur
 			  <step>
 				  <content>
 					  <para>
-						  Результат работы примера выглядит следующим образом:
+						  The result of the example work is as follows:
 					  </para>
 					  <mediaLink>
 						  <image placement="center" xlink:href="sampleemulationtest" />

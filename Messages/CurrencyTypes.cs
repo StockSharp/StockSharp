@@ -81,6 +81,12 @@ namespace StockSharp.Messages
 		BYR,
 
 		/// <summary>
+		/// Belarus, Belarusian ruble.
+		/// </summary>
+		[EnumMember]
+		BYN,
+
+		/// <summary>
 		/// Romania, Romanian new leu.
 		/// </summary>
 		[EnumMember]
@@ -1021,6 +1027,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		GHS,
+
+		/// <summary>
+		/// China, offshore RMB.
+		/// </summary>
+		[EnumMember]
+		CNT,
 // ReSharper restore InconsistentNaming
 	}
 }

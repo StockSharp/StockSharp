@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e6218e30-74f0-4a0b-b189-5ed71b7aded9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>An example of writing the SMA strategy code, given in the 
+<link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" /> 
+section, can be optimized by a competent combination of 
+<link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> cubes and standard 
+cubes. We take out from the code all actions of the strategy, which are easier 
+to create from the standard 
+<link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" />, 
+<link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />,
+<link xlink:href="250003df-48b4-4211-9c8e-25ac3f6a45be" /> cubes.</para>
+<para>Since the SMA Indicators were placed in separate cubes, you need to rewrite 
+the ProcessCandle(Candle candle) method so that it takes two 
+ProcessCandle(DecimalIndicatorValue ssma, DecimalIndicatorValue lsma, Candle candle) 
+indicators in addition to (Candle candle) candles. 
+And on the basis of these values, it calculates the strategy. And also, 
+it is necessary to delete all superfluous in the code. The final version 
+of the cube source code looks like this:</para>
+<code language="C#" title="C#"><![CDATA[
+using Ecng.Common;
+using StockSharp.Messages;
+using StockSharp.Algo;
+using StockSharp.Algo.Candles;
+using StockSharp.Algo.Strategies;
+using StockSharp.Algo.Indicators;
+using StockSharp.Xaml.Diagram.Elements;
+
+public class NewStrategy : Strategy
+{
+    private bool _isShortLessThenLong;
+    [DiagramExternal]
+    public void ProcessCandle(DecimalIndicatorValue ssma, DecimalIndicatorValue lsma, Candle candle)
+    {
+        // strategy are stopping
+        if (ProcessState == ProcessStates.Stopping)
+        {
+            CancelActiveOrders();
+            return;
+        }
+
+        // calc new values for short and long
+        var isShortLessThenLong = ssma.Value < lsma.Value;
+
+        // crossing happened
+        if (_isShortLessThenLong != isShortLessThenLong)
+        {
+            // if short less than long, the sale, otherwise buy
+            var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+
+            // calc size for open position or revert
+            var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+
+            // calc order price as a close price + offset
+            var price = candle.ClosePrice + ((direction == Sides.Buy ? Security.PriceStep : -Security.PriceStep) ?? 1);
+
+            RegisterOrder(this.CreateOrder(direction, price, volume));
+
+            // store current values for short and long
+            _isShortLessThenLong = isShortLessThenLong;
+        }
+    }
+}
+]]></code>
+
+<para>It is necessary to put 
+<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> 
+cubes with the Instrument Type, 
+<link xlink:href="a89a0073-cb59-4a79-be90-463ea1683dad" />, 2 
+<link xlink:href="b5a47771-4584-403b-b812-61f8bf0e9ac5" /> SMA, 
+<link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />,
+<link xlink:href="250003df-48b4-4211-9c8e-25ac3f6a45be" /> on the common schema. 
+How to do this is described in detail in the 
+<link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" /> section. Also, it is 
+necessary to put on the common schema the 
+<link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> cube, having moved it 
+to the <legacyBold>Designer</legacyBold> panel from the 
+<legacyBold>Palette</legacyBold> panel. You should select the name of the 
+strategy in the 
+<link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> cube properties. 
+Since the 
+<legacyBold>ProcessCandle(DecimalIndicatorValue ssma, DecimalIndicatorValue lsma, Candle candle)</legacyBold> 
+method takes three parameters, then there will be three parameters at the cube 
+input. The first two parameters are of the Indicator value type, and the third 
+is of the <legacyBold>Candle</legacyBold> type. By connecting all the cubes with 
+lines, we get the following schema:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Combine_cubes_of_Source_code_and_standard_cubes_00"/>
+</mediaLink>
+<para>As a result, the strategy code has decreased from 213 lines to 43. But 
+only 4 standard cubes were added. If you compare with the same strategy created 
+from cubes in the <link xlink:href="6974891d-4c8d-46e1-bdeb-fc7391bc0625" /> 
+section, the number of cubes decreased from 17 to 7.
+</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

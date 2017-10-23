@@ -20,7 +20,7 @@
 
 		<xctk:DropDownButton Content="{x:Static loc:LocalizedStrings.Settings}">
 			<xctk:DropDownButton.DropDownContent>
-				<xaml:PropertyGridEx x:Name="Settings" />
+				<xaml:PropertyGridEx x:Name="Settings" Width="300" />
 			</xctk:DropDownButton.DropDownContent>
 		</xctk:DropDownButton>
 

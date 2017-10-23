@@ -139,17 +139,17 @@ namespace SampleITCH
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// subscribe on error of market data subscription event
-					Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurities += _securitiesWindow.SecurityPicker.Securities.AddRange;
-					Trader.NewTrades += _tradesWindow.TradeGrid.Trades.AddRange;
-					Trader.NewOrderLogItems += _orderLogWindow.OrderLogGrid.LogItems.AddRange;
+					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+					Trader.NewOrderLogItem += _orderLogWindow.OrderLogGrid.LogItems.Add;
 
 					var subscribed = false;
 					//if (AllDepths.IsChecked == true)
 					{
-						Trader.LookupSecuritiesResult += securities =>
+						Trader.LookupSecuritiesResult += (error, securities) =>
 						{
 							if (subscribed)
 								return;

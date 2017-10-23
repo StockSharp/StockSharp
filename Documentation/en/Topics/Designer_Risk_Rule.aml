@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b4f8c503-6589-4979-93ee-506df859d967" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<introduction>
+
+<para>In the <link xlink:href="31a208d0-d543-47aa-8008-389c07e1e8d4" /> and  <link xlink:href="319208d0-d543-47aa-8008-3891079198d4" /> 
+panels, you can set the risk control settings.</para>
+<para>In the Risk window, you should select the <legacyBold>Risk-rule</legacyBold>, configure the trigger 
+condition for the <legacyBold>Risk-rule</legacyBold> and the action (Close positions, Stop trading, Cancel 
+orders), which will be executed when the <legacyBold>Risk-rule</legacyBold> condition is triggered.</para>
+
+<mediaLink>
+<image placement="center" xlink:href="Designer_Risk_Rule"/>
+</mediaLink>
+
+<definitionTable>
+  <definedTerm>List of Risk-rules</definedTerm>
+  <definition>
+<list class="bullet">
+<listItem><para><legacyBold>Order (volume)</legacyBold> – the risk-rule that monitors the volume of the order.</para></listItem>
+<listItem><para><legacyBold>Order (price)</legacyBold> – the risk-rule that monitors the order price.</para></listItem>
+<listItem><para><legacyBold>Order (frequency)</legacyBold> – the risk-rule that monitors the frequency of orders.</para></listItem>
+<listItem><para><legacyBold>Commission</legacyBold> – the risk-rule that monitors the amount of the commission.</para></listItem>
+<listItem><para><legacyBold>P/L</legacyBold> – the risk-rule that monitors profit-loss.</para></listItem>
+<listItem><para><legacyBold>Position</legacyBold> – the risk-rule that monitors the position size.</para></listItem>
+<listItem><para><legacyBold>Position (time</legacyBold> – the risk-rule that monitors the lifetime of a position.</para></listItem>
+<listItem><para><legacyBold>Slippage</legacyBold> – the risk-rule that monitors the slippage size.</para></listItem>
+<listItem><para><legacyBold>Trade (volume)</legacyBold> – the risk-rule that monitors the frequency of trades.</para></listItem>
+<listItem><para><legacyBold>Trade (price)</legacyBold> – the risk-rule that monitors the trade price.</para></listItem>
+<listItem><para><legacyBold>Trade (frequency)</legacyBold> – the risk-rule that monitors the trade volume.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+</introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

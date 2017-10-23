@@ -24,11 +24,10 @@ namespace SampleUnit
 	{
 		static void Main()
 		{
-			// тестовый инструмент и шагом цены в 1 копейку и стоимостью в 10 рублей
-			// (в реальном приложении информацию необходимо получать через IConnector.NewSecurities)
+			// test instrument with pips = 1 cent and points = 10 usd
 			var security = new Security
 			{
-				Id = "LKOH@TQNE",
+				Id = "AAPL@NASDAQ",
 				StepPrice = 10,
 				PriceStep = 0.01m,
 			};
@@ -44,54 +43,54 @@ namespace SampleUnit
 			Console.WriteLine("point = " + point);
 			Console.WriteLine();
 
-			// тестовые значение в 90 рублей
+			// test values as a $90
 			const decimal testValue = 90m;
-			// или можно создать через приведение
+			// or using this notation
 			// var testValue = (decimal)new Unit { Value = 90 };
 
 			Console.WriteLine("testValue = " + testValue);
 			Console.WriteLine();
 
-			// сложение всех величин
+			// addition of all values
 			Console.WriteLine("testValue + absolute = " + (testValue + absolute));
 			Console.WriteLine("testValue + percent = " + (testValue + percent));
 			Console.WriteLine("testValue + pips = " + (testValue + pips));
 			Console.WriteLine("testValue + point = " + (testValue + point));
 			Console.WriteLine();
 
-			// умножение всех величин
+			// multiplication of all values
 			Console.WriteLine("testValue * absolute = " + (testValue * absolute));
 			Console.WriteLine("testValue * percent = " + (testValue * percent));
 			Console.WriteLine("testValue * pips = " + (testValue * pips));
 			Console.WriteLine("testValue * point = " + (testValue * point));
 			Console.WriteLine();
 
-			// вычитание всех величин
+			// subtraction of values
 			Console.WriteLine("testValue - absolute = " + (testValue - absolute));
 			Console.WriteLine("testValue - percent = " + (testValue - percent));
 			Console.WriteLine("testValue - pips = " + (testValue - pips));
 			Console.WriteLine("testValue - point = " + (testValue - point));
 			Console.WriteLine();
 
-			// деление всех величин
+			// division of all values
 			Console.WriteLine("testValue / absolute = " + (testValue / absolute));
 			Console.WriteLine("testValue / percent = " + (testValue / percent));
 			Console.WriteLine("testValue / pips = " + (testValue / pips));
 			Console.WriteLine("testValue / point = " + (testValue / point));
 			Console.WriteLine();
 
-			// сложение пипсов и пунктов
+			// addition of pips and points
 			var resultPipsPoint = pips + point;
-			// и приведением из в decimal
+			// and casting to decimal
 			var resultPipsPointDecimal = (decimal)resultPipsPoint;
 
 			Console.WriteLine("pips + point = " + resultPipsPoint);
 			Console.WriteLine("(decimal)(pips + point) = " + resultPipsPointDecimal);
 			Console.WriteLine();
 
-			// сложение пипсов и процентов
+			// addition of pips and percents
 			var resultPipsPercents = pips + percent;
-			// и приведением из в decimal
+			// and casting to decimal
 			var resultPipsPercentsDecimal = (decimal)resultPipsPercents;
 
 			Console.WriteLine("pips + percent = " + resultPipsPercents);

@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleETrade
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Reflection;
@@ -24,8 +23,6 @@ namespace SampleETrade
 
 	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
@@ -39,12 +36,12 @@ namespace SampleETrade
 	{
 		public static MainWindow Instance { get; private set; }
 
-		public static readonly DependencyProperty IsConnectedProperty = DependencyProperty.Register("IsConnected", typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
+		public static readonly DependencyProperty IsConnectedProperty = DependencyProperty.Register(nameof(IsConnected), typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
 
 		public bool IsConnected
 		{
-			get { return (bool)GetValue(IsConnectedProperty); }
-			set { SetValue(IsConnectedProperty, value); }
+			get => (bool)GetValue(IsConnectedProperty);
+			set => SetValue(IsConnectedProperty, value);
 		}
 
 		public ETradeTrader Trader { get; private set; }
@@ -57,15 +54,9 @@ namespace SampleETrade
 
 		//private Security[] _securities;
 
-		private static string ConsumerKey
-		{
-			get { return Properties.Settings.Default.ConsumerKey; }
-		}
+		private static string ConsumerKey => Properties.Settings.Default.ConsumerKey;
 
-		private static bool IsSandbox
-		{
-			get { return Properties.Settings.Default.Sandbox; }
-		}
+		private static bool IsSandbox => Properties.Settings.Default.Sandbox;
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -84,7 +75,7 @@ namespace SampleETrade
 			_portfoliosWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 
-			var guilistener = new GuiLogListener(_logControl);
+			var guilistener = new GuiLogListener(LogControl);
 			guilistener.Filters.Add(msg => msg.Level > LogLevels.Debug);
 			_logManager.Listeners.Add(guilistener);
 
@@ -175,31 +166,28 @@ namespace SampleETrade
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// subscribe on error of market data subscription event
-					Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.NewPortfolios += portfolios =>
-					{
-						// subscribe on portfolio updates
-						portfolios.ForEach(Trader.RegisterPortfolio);
-
-						_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-					};
-					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+					Trader.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 					// subscribe on error of order registration event
-					Trader.OrdersRegisterFailed += OrdersFailed;
+					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of order cancelling event
-					Trader.OrdersCancelFailed += OrdersFailed;
+					Trader.OrderCancelFailed += OrderFailed;
 
 					// subscribe on error of stop-order registration event
-					Trader.StopOrdersRegisterFailed += OrdersFailed;
+					Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
 					// subscribe on error of stop-order cancelling event
-					Trader.StopOrdersCancelFailed += OrdersFailed;
+					Trader.StopOrderCancelFailed += OrderFailed;
+
+					Trader.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
@@ -224,15 +212,11 @@ namespace SampleETrade
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
 		}
 
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
+		private void OrderFailed(OrderFail fail)
 		{
 			this.GuiAsync(() =>
 			{
-				foreach(var fail in fails)
-				{
-					var msg = fail.Error.ToString();
-					MessageBox.Show(this, msg, LocalizedStrings.Str2960);
-				}
+				MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="18f61c09-d6f3-4765-b180-11e9d3e74133" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Mass_Cancellations_00"/>
+</mediaLink>
+<para>The cube is used to cancel all orders by the instrument.</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Portfolio</legacyBold> - the portfolio for which 
+  you need to cancel all orders.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> - the instrument for which 
+  you need to cancel all orders.</para></listItem>
+  <listItem><para><legacyBold>Direction</legacyBold> – the direction of canceled 
+  orders (purchase or sale), it is a signal of order cancellation.</para></listItem>
+</list>
+  </definition>
+
+</definitionTable>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="33d15f2c-5d73-4c95-8e67-2612d34f14a2" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

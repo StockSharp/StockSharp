@@ -24,7 +24,6 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -38,66 +37,66 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The interface describing the internal instruments collection <see cref="ContinuousSecurity.ExpirationJumps"/>.
 		/// </summary>
-		public interface IExpirationJumpList : ISynchronizedCollection<KeyValuePair<Security, DateTimeOffset>>, IDictionary<Security, DateTimeOffset>
+		public interface IExpirationJumpList : ISynchronizedCollection<KeyValuePair<SecurityId, DateTimeOffset>>, IDictionary<SecurityId, DateTimeOffset>
 		{
 			/// <summary>
 			/// To get the instrument for the specified expiration time.
 			/// </summary>
 			/// <param name="time">The expiration time.</param>
 			/// <returns>Security.</returns>
-			Security this[DateTimeOffset time] { get; }
+			SecurityId this[DateTimeOffset time] { get; }
 
 			/// <summary>
 			/// To get the first instrument by expiration.
 			/// </summary>
-			/// <returns>The first instrument. If the <see cref="ContinuousSecurity.ExpirationJumps"/> is empty, the <see langword="null" /> will be returned.</returns>
-			Security FirstSecurity { get; }
+			/// <returns>The first instrument. If the <see cref="ExpirationJumps"/> is empty, the <see langword="null" /> will be returned.</returns>
+			SecurityId FirstSecurity { get; }
 
 			/// <summary>
 			/// To get the last instrument by expiration.
 			/// </summary>
-			/// <returns>The last instrument. If the <see cref="ContinuousSecurity.ExpirationJumps"/> is empty, the <see langword="null" /> will be returned.</returns>
-			Security LastSecurity { get; }
+			/// <returns>The last instrument. If the <see cref="ExpirationJumps"/> is empty, the <see langword="null" /> will be returned.</returns>
+			SecurityId LastSecurity { get; }
 
 			/// <summary>
 			/// To get the next instrument.
 			/// </summary>
 			/// <param name="security">Security.</param>
 			/// <returns>The next instrument. If the <paramref name="security" /> is the last instrument then <see langword="null" /> will be returned.</returns>
-			Security GetNextSecurity(Security security);
+			SecurityId GetNextSecurity(SecurityId security);
 
 			/// <summary>
 			/// To get the previous instrument.
 			/// </summary>
 			/// <param name="security">Security.</param>
 			/// <returns>The previous instrument. If the <paramref name="security" /> is the first instrument then <see langword="null" /> will be returned.</returns>
-			Security GetPrevSecurity(Security security);
+			SecurityId GetPrevSecurity(SecurityId security);
 			
 			/// <summary>
 			/// To get the range of operation of the internal instrument.
 			/// </summary>
 			/// <param name="security">The internal instrument.</param>
 			/// <returns>The range of operation.</returns>
-			Range<DateTimeOffset> GetActivityRange(Security security);
+			Range<DateTimeOffset> GetActivityRange(SecurityId security);
 		}
 
-		private sealed class ExpirationJumpsDictionary : SynchronizedPairSet<Security, DateTimeOffset>, IExpirationJumpList
+		private sealed class ExpirationJumpsDictionary : SynchronizedPairSet<SecurityId, DateTimeOffset>, IExpirationJumpList
 		{
-			private readonly SortedDictionary<Range<DateTimeOffset>, Security> _expirationRanges;
-			private IEnumerator<KeyValuePair<Range<DateTimeOffset>, Security>> _enumerator;
-			private KeyValuePair<Range<DateTimeOffset>, Security>? _current;
+			private readonly SortedDictionary<Range<DateTimeOffset>, SecurityId> _expirationRanges;
+			private IEnumerator<KeyValuePair<Range<DateTimeOffset>, SecurityId>> _enumerator;
+			private KeyValuePair<Range<DateTimeOffset>, SecurityId>? _current;
 
 			public ExpirationJumpsDictionary()
 			{
 				Func<Range<DateTimeOffset>, Range<DateTimeOffset>, int> comparer = (r1, r2) => r1.Max.CompareTo(r2.Max);
-				_expirationRanges = new SortedDictionary<Range<DateTimeOffset>, Security>(comparer.ToComparer());
+				_expirationRanges = new SortedDictionary<Range<DateTimeOffset>, SecurityId>(comparer.ToComparer());
 
-				InnerSecurities = ArrayHelper.Empty<Security>();
+				InnerSecurities = ArrayHelper.Empty<SecurityId>();
 			}
 
-			public Security[] InnerSecurities { get; private set; }
+			public SecurityId[] InnerSecurities { get; private set; }
 
-			public override void Add(Security key, DateTimeOffset value)
+			public override void Add(SecurityId key, DateTimeOffset value)
 			{
 				lock (SyncRoot)
 				{
@@ -106,7 +105,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			public override bool Remove(Security key)
+			public override bool Remove(SecurityId key)
 			{
 				lock (SyncRoot)
 				{
@@ -128,7 +127,7 @@ namespace StockSharp.Algo
 
 					_expirationRanges.Clear();
 					_current = null;
-					InnerSecurities = ArrayHelper.Empty<Security>();
+					InnerSecurities = ArrayHelper.Empty<SecurityId>();
 
 					DisposeEnumerator();
 				}
@@ -150,7 +149,7 @@ namespace StockSharp.Algo
 
 				DisposeEnumerator();
 
-				_enumerator = ((IEnumerable<KeyValuePair<Range<DateTimeOffset>, Security>>)new CircularBuffer<KeyValuePair<Range<DateTimeOffset>, Security>>(_expirationRanges)).GetEnumerator();
+				_enumerator = ((IEnumerable<KeyValuePair<Range<DateTimeOffset>, SecurityId>>)new CircularBuffer<KeyValuePair<Range<DateTimeOffset>, SecurityId>>(_expirationRanges)).GetEnumerator();
 
 				MoveNext();
 			}
@@ -163,11 +162,11 @@ namespace StockSharp.Algo
 					_current = null;
 			}
 
-			public Security GetSecurity(DateTimeOffset marketTime)
+			public SecurityId GetSecurity(DateTimeOffset marketTime)
 			{
 				lock (SyncRoot)
 				{
-					Security security = null;
+					var security = default(SecurityId);
 
 					while (_current != null)
 					{
@@ -180,27 +179,26 @@ namespace StockSharp.Algo
 						if (kv.Key.Contains(marketTime))
 							return kv.Value;
 
-						if (security == null)
+						if (security.IsDefault())
 							security = _current.Value.Value;
 
 						MoveNext();
 					}
 
-					return null;
+					return default(SecurityId);
 				}
 			}
 
 			private void DisposeEnumerator()
 			{
-				if (_enumerator != null)
-					_enumerator.Dispose();
+				_enumerator?.Dispose();
 			}
 
-			Security IExpirationJumpList.FirstSecurity => GetSecurity(DateTimeOffset.MinValue);
+			SecurityId IExpirationJumpList.FirstSecurity => GetSecurity(DateTimeOffset.MinValue);
 
-			Security IExpirationJumpList.LastSecurity => _expirationRanges.LastOrDefault().Value;
+			SecurityId IExpirationJumpList.LastSecurity => _expirationRanges.LastOrDefault().Value;
 
-			Security IExpirationJumpList.GetNextSecurity(Security security)
+			SecurityId IExpirationJumpList.GetNextSecurity(SecurityId security)
 			{
 				lock (SyncRoot)
 				{
@@ -208,11 +206,11 @@ namespace StockSharp.Algo
 						throw new ArgumentException(LocalizedStrings.Str697Params.Put(security));
 
 					var index = InnerSecurities.IndexOf(security);
-					return index == InnerSecurities.Length - 1 ? null : InnerSecurities[index + 1];
+					return index == InnerSecurities.Length - 1 ? default(SecurityId) : InnerSecurities[index + 1];
 				}
 			}
 
-			Security IExpirationJumpList.GetPrevSecurity(Security security)
+			SecurityId IExpirationJumpList.GetPrevSecurity(SecurityId security)
 			{
 				lock (SyncRoot)
 				{
@@ -220,11 +218,11 @@ namespace StockSharp.Algo
 						throw new ArgumentException(LocalizedStrings.Str697Params.Put(security));
 
 					var index = InnerSecurities.IndexOf(security);
-					return index == 0 ? null : InnerSecurities[index - 1];
+					return index == 0 ? default(SecurityId) : InnerSecurities[index - 1];
 				}
 			}
 
-			Range<DateTimeOffset> IExpirationJumpList.GetActivityRange(Security security)
+			Range<DateTimeOffset> IExpirationJumpList.GetActivityRange(SecurityId security)
 			{
 				if (security == null)
 					throw new ArgumentNullException(nameof(security));
@@ -259,69 +257,73 @@ namespace StockSharp.Algo
 		/// Instruments, from which this basket is created.
 		/// </summary>
 		[Browsable(false)]
-		public override IEnumerable<Security> InnerSecurities => _expirationJumps.InnerSecurities;
-
-		///// <summary>
-		///// Проверить, используется ли указанный инструмент в настоящее время.
-		///// </summary>
-		///// <param name="security">Инструмент, который необходимо проверить.</param>
-		///// <returns><see langword="true"/>, если указанный инструмент используется в настоящее время, иначе, <see langword="false"/>.</returns>
-		//public override bool Contains(Security security)
-		//{
-		//	var innerSecurity = GetSecurity();
-		//	var basket = innerSecurity as BasketSecurity;
-
-		//	if (basket == null)
-		//		return innerSecurity == security;
-
-		//	return basket.Contains(security);
-		//}
-
-		///// <summary>
-		///// Получить инструмент, который торгуется в текущий момент (текущее время вычисляется через метод <see cref="TraderHelper.GetMarketTime"/>).
-		///// </summary>
-		///// <returns>Инструмент. Если не существует инструмента для указанного времени, то будет возвращено <see langword="null"/>.</returns>
-		//public Security GetSecurity()
-		//{
-		//	return GetSecurity(this.GetMarketTime());
-		//}
+		public override IEnumerable<SecurityId> InnerSecurityIds => _expirationJumps.InnerSecurities;
 
 		/// <summary>
 		/// To get the instrument that trades for the specified exchange time.
 		/// </summary>
 		/// <param name="marketTime">The exchange time.</param>
 		/// <returns>The instrument. If there is no instrument for the specified time then the <see langword="null" /> will be returned.</returns>
-		public Security GetSecurity(DateTimeOffset marketTime)
+		public SecurityId GetSecurity(DateTimeOffset marketTime)
 		{
 			return _expirationJumps.GetSecurity(marketTime);
 		}
 
+		private const string _dateFormat = "yyyyMMddHHmmss";
+
 		/// <summary>
-		/// To shift the expiration of internal instruments <see cref="ContinuousSecurity.ExpirationJumps"/> to a size equas to <paramref name="offset" />.
+		/// Save security state to string.
 		/// </summary>
-		/// <param name="offset">The size of the expiration shift.</param>
-		public void Offset(TimeSpan offset)
+		/// <returns>String.</returns>
+		public override string ToSerializedString()
+		{
+			lock (_expirationJumps.SyncRoot)
+				return _expirationJumps.Select(j => $"{j.Key.ToStringId()}={j.Value.UtcDateTime.ToString(_dateFormat)}").Join(",");
+		}
+
+		/// <summary>
+		/// Load security state from <paramref name="text"/>.
+		/// </summary>
+		/// <param name="text">Value, received from <see cref="BasketSecurity.ToSerializedString"/>.</param>
+		public override void FromSerializedString(string text)
 		{
 			lock (_expirationJumps.SyncRoot)
 			{
-				var dict = new PairSet<Security, DateTimeOffset>();
-
-				foreach (var security in InnerSecurities)
-				{
-					if (security.ExpiryDate == null)
-						throw new InvalidOperationException(LocalizedStrings.Str698Params.Put(security.Id));
-
-					var expiryDate = (DateTimeOffset)security.ExpiryDate + offset;
-
-					if (expiryDate > security.ExpiryDate)
-						throw new ArgumentOutOfRangeException(nameof(offset), offset, LocalizedStrings.Str699Params.Put(security.Id, expiryDate, security.ExpiryDate));
-
-					dict.Add(security, expiryDate);
-				}
-
 				_expirationJumps.Clear();
-				_expirationJumps.AddRange(dict);
+				_expirationJumps.AddRange(text.Split(",").Select(p =>
+				{
+					var parts = p.Split("=");
+					return new KeyValuePair<SecurityId, DateTimeOffset>(parts[0].ToSecurityId(), parts[1].ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc));
+				}));
 			}
 		}
+
+		///// <summary>
+		///// To shift the expiration of internal instruments <see cref="ExpirationJumps"/> to a size equas to <paramref name="offset" />.
+		///// </summary>
+		///// <param name="offset">The size of the expiration shift.</param>
+		//public void Offset(TimeSpan offset)
+		//{
+		//	lock (_expirationJumps.SyncRoot)
+		//	{
+		//		var dict = new PairSet<Security, DateTimeOffset>();
+
+		//		foreach (var security in InnerSecurityIds)
+		//		{
+		//			if (security.ExpiryDate == null)
+		//				throw new InvalidOperationException(LocalizedStrings.Str698Params.Put(security.Id));
+
+		//			var expiryDate = (DateTimeOffset)security.ExpiryDate + offset;
+
+		//			if (expiryDate > security.ExpiryDate)
+		//				throw new ArgumentOutOfRangeException(nameof(offset), offset, LocalizedStrings.Str699Params.Put(security.Id, expiryDate, security.ExpiryDate));
+
+		//			dict.Add(security, expiryDate);
+		//		}
+
+		//		_expirationJumps.Clear();
+		//		_expirationJumps.AddRange(dict);
+		//	}
+		//}
 	}
 }

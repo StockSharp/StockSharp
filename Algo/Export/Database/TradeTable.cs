@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Export.Database
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
-	internal class TradeTable : Table<ExecutionMessage>
+	class TradeTable : Table<ExecutionMessage>
 	{
 		public TradeTable(Security security)
 			: base("Trade", CreateColumns(security))

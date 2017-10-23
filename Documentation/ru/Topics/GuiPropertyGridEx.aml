@@ -1,16 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> - таблица для редактирования свойств объектов. Этот компонент создан
-      	на основе <externalLink>
-<linkText>PropertyGrid</linkText>
-<linkAlternateText>PropertyGrid</linkAlternateText>
-<linkUri>http://wpftoolkit.codeplex.com/wikipage?title=PropertyGrid</linkUri>
-<linkTarget>_blank</linkTarget>
-</externalLink>
- из библиотеки Xceed.Wpf.Toolkit. В состав компонента входит набор дополнительных редакторов для системных типов и типов <token>stocksharp</token>.
+      	<codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference> - таблица для редактирования свойств объектов.
+      	В состав компонента входит набор дополнительных редакторов для системных типов и типов <token>stocksharp</token>.
       </para>
       
       <para>
@@ -111,7 +105,7 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Fix/SampleFix</legacyItalic>.
+	  Ниже показаны внешний вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Fix/SampleFix</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_PropertyDataGridEx" /></mediaLink>

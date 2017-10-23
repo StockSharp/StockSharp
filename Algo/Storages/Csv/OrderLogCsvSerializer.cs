@@ -52,11 +52,12 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(CsvFileWriter writer, ExecutionMessage data)
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			writer.WriteRow(new[]
 			{
-				data.ServerTime.UtcDateTime.ToString(TimeFormat),
+				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
 				data.TransactionId.ToString(),
 				data.OrderId.ToString(),
@@ -70,21 +71,24 @@ namespace StockSharp.Algo.Storages.Csv
 				data.PortfolioName,
 				data.IsSystem.ToString()
 			});
+
+			metaInfo.LastTime = data.ServerTime.UtcDateTime;
+			metaInfo.LastId = data.TransactionId;
 		}
 
 		/// <summary>
-		/// Load data from the specified reader.
+		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected override ExecutionMessage Read(FastCsvReader reader, DateTime date)
+		protected override ExecutionMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			return new ExecutionMessage
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.OrderLog,
-				ServerTime = ReadTime(reader, date),
+				ServerTime = reader.ReadTime(metaInfo.Date),
 				TransactionId = reader.ReadLong(),
 				OrderId = reader.ReadLong(),
 				OrderPrice = reader.ReadDecimal(),

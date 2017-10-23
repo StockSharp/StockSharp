@@ -15,17 +15,16 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleTwime
 {
-	using System.Collections.Generic;
+	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
 	public partial class OrdersWindow
@@ -35,9 +34,11 @@ namespace SampleTwime
 			InitializeComponent();
 		}
 
-		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
+		private static IConnector Connector => MainWindow.Instance.Trader;
+
+		private void OrderGrid_OnOrderCanceling(Order order)
 		{
-			orders.ForEach(MainWindow.Instance.Trader.CancelOrder);
+			Connector.CancelOrder(order);
 		}
 
 		private void OrderGrid_OnOrderReRegistering(Order order)
@@ -45,21 +46,24 @@ namespace SampleTwime
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+				SecurityProvider = Connector,
+				MarketDataProvider = Connector,
+				Portfolios = new PortfolioDataSource(Connector),
 				Order = order.ReRegisterClone(newVolume: order.Balance),
 			};
 
 			if (window.ShowModal(this))
 			{
-				MainWindow.Instance.Trader.ReRegisterOrder(order, window.Order);
+				Connector.ReRegisterOrder(order, window.Order);
 			}
 		}
 
 		private void CancelAll_OnClick(object sender, RoutedEventArgs e)
 		{
-			MainWindow.Instance.Trader.CancelOrders();
+			var pf = Connector.Portfolios.FirstOrDefault();
+
+			Connector.CancelOrders(portfolio: pf, securityType: SecurityTypes.Future);
+			Connector.CancelOrders(portfolio: pf, securityType: SecurityTypes.Option);
 		}
 	}
 }

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5327010f-dc4c-4e6c-8812-e02e6e36a423" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+     <para>При создании собственного кубика <legacyBold>Исходный код</legacyBold> на ряду с библиотеками 
+     <token>stocksharpapi</token> можно использовать и другие библиотеки C#, в том числе и собственные.</para>
+     <para>Нажав на кнопку <legacyBold>Ссылки</legacyBold> вкладки <legacyBold>Исходный код</legacyBold>, откроется окно 
+     <legacyBold>Дополнительные библиотеки</legacyBold>, в котором можно добавить или удалить Dll библиотеку.</para>
+  <mediaLink>
+<image placement="center" xlink:href="Designer_Add_Dll_Lib"/>
+</mediaLink>
+    </introduction>
+   
+    <relatedTopics>
+      
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

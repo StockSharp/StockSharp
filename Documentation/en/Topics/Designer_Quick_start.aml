@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>When you start <token>designer</token> for the first time, the following window will be displayed:</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_00"/></mediaLink>
+<para>You should select the startup mode and click <legacyBold>OK</legacyBold>.</para>
+<para>On first run  <token>designer</token> will prompt you to open the <link xlink:href="085174e5-3be9-4dc3-bdeb-dcc3706b483d" />  window.
+Also, historical data can be downloaded by the <token>hydra</token> program (codenamed Hydra) 
+designed for automatically downloading market data (instruments, candles, tick trades and order 
+books, etc.) from various sources and storing them in a local storage. About downloading 
+and storing historical data is described in detail in the <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />  section.</para>
+<para>When you click the <legacyBold>Download securities</legacyBold> button, 
+the <link xlink:href="d0a1bb26-7a29-4607-992c-4f539632c2eb" /> window appears.
+To download the instrument, you should enter the instrument code, instrument type, select the data source and click <legacyBold>OK</legacyBold>. 
+<token>designer</token> will query the data source for available instruments. All 
+found instruments will appear in the <legacyBold>All securities</legacyBold> panel. By default, it 
+is specified as a data source in <token>designer</token>. You can also use trading 
+terminals as a data source. How to configure the connection to terminals is described in the 
+<link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" /> section.</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_01"/></mediaLink>
+<para>To obtain historical data on the instrument, you should select the necessary 
+instrument from the <legacyBold>All securities</legacyBold> list, set the historical data period, select the 
+type and Time Frame of the candles and press the <legacyBold>Start</legacyBold> button. All data will be stored 
+in the <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />.</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_02"/></mediaLink>
+
+<para>After obtaining the historical data, choose one of the demonstration strategies. 
+Double-click the <token>SchemeDis</token> panel in the <legacyBold>Strategy</legacyBold> folder selects 
+the <legacyBold>SMA</legacyBold> strategy example, after that the Sma tab appears in the workspace. After 
+switching to the strategy, in the bar the <legacyBold>Emulation</legacyBold> tab will automatically open, 
+which contains the main elements for strategy creation, debugging, strategy 
+testing (<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, 
+<link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />)</para>
+
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_03"/></mediaLink>
+<para>In the <legacyBold>Emulation</legacyBold> tab, you need to set a test period, and select 
+<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> in the <legacyBold>Market Data</legacyBold> field.</para>
+
+<para>Clicking the <mediaLinkInline><image xlink:href="Designer_Quick_start_04"/></mediaLinkInline> icon 
+in the <legacyBold>Security</legacyBold> field opens the <legacyBold>Select security</legacyBold> window. 
+You should select the required instrument in this window.</para>
+
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_05"/></mediaLink>
+<para>After selecting any block in the <legacyBold>Designer</legacyBold> panel, the properties of this block 
+appear in the <legacyBold>Properties</legacyBold> panel. In the <legacyBold>Properties</legacyBold> panel 
+of the <legacyBold>Candles</legacyBold> block, you 
+can set the type and Time Frame of <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792" />.</para>
+
+<para>After clicking the <legacyBold>Start</legacyBold> button, the trading emulation will start.</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_06"/></mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="c74991fa-bad6-4196-98c0-8952e2a57b3e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

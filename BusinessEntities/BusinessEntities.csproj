@@ -41,41 +41,36 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\References\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\References\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Configuration">
-      <HintPath>..\References\Ecng\Ecng.Configuration.dll</HintPath>
+      <HintPath>..\References\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Reflection">
-      <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
+      <HintPath>..\References\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization.FieldFactories">
-      <HintPath>..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
+      <HintPath>..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\References\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
-      <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
+      <HintPath>..\References\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">
@@ -83,17 +78,16 @@
     </Compile>
     <Compile Include="AggregatedQuote.cs" />
     <Compile Include="BasePosition.cs" />
-    <Compile Include="BasketSecurity.cs" />
     <Compile Include="CategoryAttributes.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="ExchangeBoard.cs" />
     <Compile Include="ExchangeBoard_Instances.cs" />
     <Compile Include="Exchange_Instances.cs" />
     <Compile Include="IConnector.cs" />
-    <Compile Include="IExchangeInfoProvider.cs" />
     <Compile Include="IMarketDataProvider.cs" />
     <Compile Include="INewsProvider.cs" />
     <Compile Include="IPortfolioProvider.cs" />
+    <Compile Include="IPositionProvider.cs" />
     <Compile Include="ISecurityProvider.cs" />
     <Compile Include="MarketDepth.cs" />
     <Compile Include="MarketDepthPair.cs" />

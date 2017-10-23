@@ -27,8 +27,6 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class EntityRegistry : IEntityRegistry
 	{
-		private DelayAction _delayAction;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EntityRegistry"/>.
 		/// </summary>
@@ -53,13 +51,13 @@ namespace StockSharp.Algo.Storages
 			Exchanges = new ExchangeList(storage) { BulkLoad = true };
 			ExchangeBoards = new ExchangeBoardList(storage) { BulkLoad = true };
 			Securities = new SecurityList(this);
-			Trades = new TradeList(storage);
-			MyTrades = new MyTradeList(storage);
-			Orders = new OrderList(storage);
-			OrderFails = new OrderFailList(storage);
+			//Trades = new TradeList(storage);
+			//MyTrades = new MyTradeList(storage);
+			//Orders = new OrderList(storage);
+			//OrderFails = new OrderFailList(storage);
 			Portfolios = new PortfolioList(storage);
 			Positions = new PositionList(storage);
-			News = new NewsList(storage);
+			//News = new NewsList(storage);
 		}
 
 		/// <summary>
@@ -70,73 +68,85 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// List of exchanges.
 		/// </summary>
-		public virtual IStorageEntityList<Exchange> Exchanges { get; }
+		public IStorageEntityList<Exchange> Exchanges { get; }
 
 		/// <summary>
 		/// The list of stock boards.
 		/// </summary>
-		public virtual IStorageEntityList<ExchangeBoard> ExchangeBoards { get; }
+		public IStorageEntityList<ExchangeBoard> ExchangeBoards { get; }
 
 		/// <summary>
 		/// The list of instruments.
 		/// </summary>
-		public virtual IStorageSecurityList Securities { get; }
+		public IStorageSecurityList Securities { get; }
 
 		/// <summary>
 		/// The list of portfolios.
 		/// </summary>
-		public virtual IStorageEntityList<Portfolio> Portfolios { get; }
+		public IStorageEntityList<Portfolio> Portfolios { get; }
 
 		/// <summary>
 		/// The list of positions.
 		/// </summary>
-		public virtual IStoragePositionList Positions { get; }
+		public IStoragePositionList Positions { get; }
 
-		/// <summary>
-		/// The list of own trades.
-		/// </summary>
-		public virtual IStorageEntityList<MyTrade> MyTrades { get; }
+		///// <summary>
+		///// The list of own trades.
+		///// </summary>
+		//public virtual IStorageEntityList<MyTrade> MyTrades { get; }
 
-		/// <summary>
-		/// The list of tick trades.
-		/// </summary>
-		public virtual IStorageEntityList<Trade> Trades { get; }
+		///// <summary>
+		///// The list of tick trades.
+		///// </summary>
+		//public virtual IStorageEntityList<Trade> Trades { get; }
 
-		/// <summary>
-		/// The list of orders.
-		/// </summary>
-		public virtual IStorageEntityList<Order> Orders { get; }
+		///// <summary>
+		///// The list of orders.
+		///// </summary>
+		//public virtual IStorageEntityList<Order> Orders { get; }
 
-		/// <summary>
-		/// The list of orders registration and cancelling errors.
-		/// </summary>
-		public virtual IStorageEntityList<OrderFail> OrderFails { get; }
+		///// <summary>
+		///// The list of orders registration and cancelling errors.
+		///// </summary>
+		//public virtual IStorageEntityList<OrderFail> OrderFails { get; }
 
-		/// <summary>
-		/// The list of news.
-		/// </summary>
-		public virtual IStorageEntityList<News> News { get; }
+		///// <summary>
+		///// The list of news.
+		///// </summary>
+		//public virtual IStorageEntityList<News> News { get; }
+
+		void IEntityRegistry.Init()
+		{
+		}
+
+		DelayAction IEntityRegistry.DelayAction
+		{
+			get => DelayAction;
+			set => DelayAction = (StorageDelayAction)value;
+		}
+
+		private StorageDelayAction _delayAction;
 
 		/// <summary>
 		/// The time delayed action.
 		/// </summary>
-		public DelayAction DelayAction
+		public StorageDelayAction DelayAction
 		{
-			get { return _delayAction; }
+			get => _delayAction;
 			set
 			{
 				_delayAction = value;
 
-				Exchanges.DelayAction = _delayAction;
-				ExchangeBoards.DelayAction = _delayAction;
-				Securities.DelayAction = _delayAction;
-				Trades.DelayAction = _delayAction;
-				MyTrades.DelayAction = _delayAction;
-				Orders.DelayAction = _delayAction;
-				OrderFails.DelayAction = _delayAction;
-				Portfolios.DelayAction = _delayAction;
-				Positions.DelayAction = _delayAction;
-				News.DelayAction = _delayAction;
+				((ExchangeList)Exchanges).DelayAction = _delayAction;
+				((ExchangeBoardList)ExchangeBoards).DelayAction = _delayAction;
+				((SecurityList)Securities).DelayAction = _delayAction;
+				//Trades.DelayAction = _delayAction;
+				//MyTrades.DelayAction = _delayAction;
+				//Orders.DelayAction = _delayAction;
+				//OrderFails.DelayAction = _delayAction;
+				((PortfolioList)Portfolios).DelayAction = _delayAction;
+				((PositionList)Positions).DelayAction = _delayAction;
+				//News.DelayAction = _delayAction;
 			}
 		}
 	}

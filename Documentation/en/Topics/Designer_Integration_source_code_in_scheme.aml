@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="77322bb8-139a-40e8-b871-8a13ddc96b13" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To add the SMA strategy described in 
+<link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" />
+section, you should select the  
+<link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> cube in the 
+<legacyBold>Palette</legacyBold> and move it to 
+the <legacyBold>Designer</legacyBold> panel. In the <legacyBold>Source code</legacyBold> 
+cube properties, you should select the strategy name:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_integration_of_dice_Source_code_in_the_General_scheme_00"/>
+</mediaLink>
+<para>Since the ProcessCandle(Candle candle) method 
+(<link xlink:href="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" /> section) accepts the 
+candles, you need to add the candle cube and the 
+<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" /> cube with the 
+<legacyBold>Instrument</legacyBold> type. Join all the cubes with lines. Since 
+<token>designer</token> does not limit the number of any cubes in the strategy, 
+you can use several <link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> 
+cubes in one strategy. The most rational approach is to combine cubes. Those 
+actions that are easier to write in the code are worth writing in the code and 
+integrating with the help of the 
+<link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" /> or  
+ <link xlink:href="6971235a-c9e5-4606-a266-5df4a3b9da94" /> cubes. And those actions, 
+ which are easier to do with standard cubes, should be done with standard cubes. 
+ An example with this approach is described in the 
+ <link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" /> section.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

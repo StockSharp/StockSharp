@@ -2,15 +2,16 @@
 <topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
-	    <para>Добавление индикатора для отрисовки на графике демонстрирует следующий пример:</para>
+	    <para>The following example shows adding of indicator to draw on the chart:</para>
 	    	
         <code language="C#">
         <![CDATA[
-private QuikTrader _trader;
+private RithmicTrader _trader;
 private Security _security;
 
 private CandleManager _candleManager;
 private CandleSeries _candleSeries;
+private SimpleMovingAverage _sma;
 
 readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(1);
 
@@ -21,24 +22,23 @@ private ChartIndicatorElement _longMaElem;
 ...
 
 // _chart - StockSharp.Xaml.Charting.Chart
-// Создание области графика
+// new chart area
 _area = new ChartArea();
 _chart.Areas.Add(_area);
 
-// Создание элемента графика представляющего свечки
+// Special chart element to draw a candles
 _candlesElem = new ChartCandleElement();
 _area.Elements.Add(_candlesElem);
 
-// Создание элемента графика представляющего индикатор
+// Special chart element to draw an indicator
 _longMaElem = new ChartIndicatorElement
 {
-	Title = "Длинная",
-	Indicator = new SimpleMovingAverage{ Length = 80 }
+	Title = "Long"
 };
 _area.Elements.Add(_longMaElem);
 ...
 
-
+_sma = new SimpleMovingAverage() { Length = 80 };
 _candleManager = new CandleManager(_trader);
 _candleManager.Processing += Draw;
 
@@ -51,18 +51,27 @@ _candleManager.Start(_candleSeries);
 
 private void Draw(CandleSeries series, Candle candle)
 {
-	var longValue = candle.State == CandleStates.Finished ? new ChartIndicatorValue(_longMaElem.Indicator, _longMaElem.Indicator.Process(candle)) : null;
+   if (candle.State != CandleStates.Finished)
+       return;
 
-	this.GuiAsync(() => _chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
-	{
-		{ _candlesElem, candle },
-		{ _longMaElem, longValue}
-	}));
+    var longValue = _sma.Process(candle);
+    var data = new ChartDrawData();
+
+    data
+        .Group(candle.OpenTime)
+            .Add(_candlesElem, candle)
+            .Add(_longElem, longValue);
+
+    _chart.Draw(data);
+
 }
 		]]>
 		</code>	  
 		
 		<mediaLink><image placement="center" xlink:href="indicators_chart" /></mediaLink>
     </introduction>
+    <relatedTopics>
+		<link xlink:href="956b3163-c537-4e1d-af29-cf80b633db3c">Chart components</link>
+    </relatedTopics>
 	</developerWalkthroughDocument>
 </topic>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f1929c45-e092-4b11-a31e-9d153e075429" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для отслеживания пошагового исполнения точку остановки 
+необходимо поставить на кубике, с которого необходимо начать пошаговое 
+исполнение. После остановки на необходимом кубике нажимать на 
+кнопку  <mediaLinkInline><image xlink:href="Designer_Debug_03"/></mediaLinkInline> <legacyBold>К следующему элементу</legacyBold>, 
+<token>designer</token> будет последовательно 
+переходить от кубика к кубику, показывая пошаговое исполнение 
+стратегии. Если есть необходимость зайти в <legacyBold>Составной элемент</legacyBold>, 
+то в момент, когда на кубике <legacyBold>Составного элемента</legacyBold> окажется шаг пошагового исполнения, необходимо нажать 
+кнопку  <mediaLinkInline><image xlink:href="Designer_Debug_04"/></mediaLinkInline> <legacyBold>В составной элемент</legacyBold>.
+И следующий шаг пошагового исполнения будет внутри <legacyBold>Составного элемента</legacyBold>. 
+Для выхода из <legacyBold>Составного элемента</legacyBold> необходимо нажать 
+кнопку  <mediaLinkInline><image xlink:href="Designer_Debug_05"/></mediaLinkInline> <legacyBold>Из составного элемента</legacyBold>.
+</para>	
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b162bfe7-9e25-4f36-92b0-00872dca443f" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

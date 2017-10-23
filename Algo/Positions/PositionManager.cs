@@ -44,6 +44,25 @@ namespace StockSharp.Algo.Positions
 		/// </summary>
 		public bool ByOrders { get; }
 
+		private SecurityId? _securityId;
+
+		/// <summary>
+		/// The security for which <see cref="Position"/> will be calculated.
+		/// </summary>
+		public SecurityId? SecurityId
+		{
+			get => _securityId;
+			set
+			{
+				_securityId = value;
+
+				lock (_positions.SyncRoot)
+				{
+					UpdatePositionValue(_positions);
+				}
+			}
+		}
+
 		/// <summary>
 		/// The position aggregate value.
 		/// </summary>
@@ -56,7 +75,7 @@ namespace StockSharp.Algo.Positions
 		/// </summary>
 		public IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> Positions
 		{
-			get { return _positions.CachedPairs; }
+			get => _positions.CachedPairs;
 			set
 			{
 				if (value == null)
@@ -65,23 +84,33 @@ namespace StockSharp.Algo.Positions
 				lock (_positions.SyncRoot)
 				{
 					_byOrderPositions.Clear();
+
                     _positions.Clear();
 					_positions.AddRange(value);
 
-					Position = value.Sum(p => p.Value);
+					UpdatePositionValue(value);
 				}
 			}
+		}
+
+		private void UpdatePositionValue(IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> positions)
+		{
+			var secId = SecurityId;
+
+			Position = secId == null
+				? positions.Sum(p => p.Value)
+				: positions.Where(p => p.Key.Item1 == secId.Value).Sum(p => p.Value);
 		}
 
 		/// <summary>
 		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		public event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> NewPosition;
+		public event Action<Tuple<SecurityId, string>, decimal> NewPosition;
 
 		/// <summary>
 		/// The event of position change in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		public event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> PositionChanged;
+		public event Action<Tuple<SecurityId, string>, decimal> PositionChanged;
 
 		/// <summary>
 		/// To null position.
@@ -114,66 +143,75 @@ namespace StockSharp.Algo.Positions
 					if (ByOrders && execMsg.HasOrderInfo())
 					{
 						var orderId = execMsg.OriginalTransactionId;
-						var newPosition = execMsg.GetPosition();
+						var newPosition = execMsg.GetPosition(true);
+
+						if (newPosition == null)
+							break;
 
 						bool isNew;
-						decimal position;
+						decimal diff;
+						decimal abs;
 
 						lock (_positions.SyncRoot)
 						{
-							decimal prev;
-							isNew = _positions.TryGetValue(key, out prev);
+							isNew = _positions.TryGetValue(key, out decimal prev);
 
-							Tuple<Sides, decimal> oldPosition;
-
-							if (_byOrderPositions.TryGetValue(orderId, out oldPosition))
+							if (_byOrderPositions.TryGetValue(orderId, out Tuple<Sides, decimal> oldPosition))
 							{
-								if (newPosition != oldPosition.Item2)
-									_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition);
+								if (newPosition.Value != oldPosition.Item2)
+									_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition.Value);
 
-								position = newPosition - oldPosition.Item2;
+								diff = newPosition.Value - oldPosition.Item2;
 							}
 							else
 							{
-								_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition));
-								position = newPosition;
+								_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition.Value));
+								diff = newPosition.Value;
 							}
 
-							_positions[key] = prev + position;
-							Position += position;
+							abs = prev + diff;
+
+							_positions[key] = abs;
+
+							if (SecurityId == null || SecurityId.Value == execMsg.SecurityId)
+								Position += diff;
 						}
 
 						if (isNew)
-							NewPosition?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							NewPosition?.Invoke(key, abs);
 						else
-							PositionChanged?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							PositionChanged?.Invoke(key, abs);
 
-						return position;
+						return diff;
 					}
 
 					if (!ByOrders && execMsg.HasTradeInfo())
 					{
-						var position = execMsg.GetPosition();
+						var diff = execMsg.GetPosition(false);
 
-						if (position == 0)
+						if (diff == null || diff == 0)
 							break;
 
 						bool isNew;
+						decimal abs;
 
 						lock (_positions.SyncRoot)
 						{
-							decimal prev;
-							isNew = _positions.TryGetValue(key, out prev);
-							_positions[key] = prev + position;
-							Position += position;
+							isNew = _positions.TryGetValue(key, out var prev);
+							abs = prev + diff.Value;
+
+							_positions[key] = abs;
+
+							if (SecurityId == null || SecurityId.Value == execMsg.SecurityId)
+								Position += diff.Value;
 						}
 
 						if (isNew)
-							NewPosition?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							NewPosition?.Invoke(key, abs);
 						else
-							PositionChanged?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							PositionChanged?.Invoke(key, abs);
 
-						return position;
+						return diff;
 					}
 
 					break;

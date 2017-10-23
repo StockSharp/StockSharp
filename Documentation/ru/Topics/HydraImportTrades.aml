@@ -2,7 +2,7 @@
 <topic id="1e18851f-69f7-4fa0-a5ea-c059c7694990" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-       <para>Для импорта сделок нужно выбрать пункт <legacyBold>Импорт => Сделки</legacyBold> из главного меню приложения.</para>
+       <para>Для импорта сделок нужно выбрать вкладку <legacyBold>Импорт => Тики</legacyBold>.</para>
        <mediaLink>
 		  		<image placement="left" xlink:href="hydra_import_trades" />
 	   </mediaLink>
@@ -19,6 +19,11 @@
           <content>
           	<para>Настроить параметры импорта для полей <token>stocksharp</token>.</para>
           	<para> См. импорт <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Инструменты</link>.</para>
+          </content>
+        </step>
+                <step>
+          <content>
+          	<para>Для преварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>
           </content>
         </step>
         <step>

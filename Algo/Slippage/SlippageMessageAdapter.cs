@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Slippage
 		/// </summary>
 		public ISlippageManager SlippageManager
 		{
-			get { return _slippageManager; }
+			get => _slippageManager;
 			set
 			{
 				if (value == null)
@@ -56,8 +56,14 @@ namespace StockSharp.Algo.Slippage
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
+
 			SlippageManager.ProcessMessage(message);
-			InnerAdapter.SendInMessage(message);
+			base.SendInMessage(message);
 		}
 
 		/// <summary>

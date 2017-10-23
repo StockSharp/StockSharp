@@ -1,70 +1,77 @@
 ﻿namespace SampleFix
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows.Media;
 	
 	using Ecng.Common;
-	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.LMAX;
+	using StockSharp.Fix;
+	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 
 	partial class ChartWindow
 	{
-		private readonly LmaxTrader _trader;
+		private readonly FixTrader _trader;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
+		private readonly long _transactionId;
 
 		public ChartWindow(CandleSeries candleSeries, DateTime from, DateTime to)
 		{
 			InitializeComponent();
 
 			if (candleSeries.IsNull())
-				throw new ArgumentNullException("candleSeries");
+				throw new ArgumentNullException(nameof(candleSeries));
 
 			_candleSeries = candleSeries;
 			_trader = MainWindow.Instance.Trader;
 
-			Chart.ChartTheme = "ExpressionDark";
+			Chart.ChartTheme = ChartThemes.ExpressionDark;
 
 			var area = new ChartArea();
 			Chart.Areas.Add(area);
 
 			_candleElem = new ChartCandleElement
 			{
-				Antialiasinig = false, 
-				UpBodyColor = Colors.White,
-				UpWickColor = Colors.Black,
-				DownBodyColor = Colors.Black,
-				DownWickColor = Colors.Black,
+				AntiAliasing = false, 
+				UpFillColor = Colors.White,
+				UpBorderColor = Colors.Black,
+				DownFillColor = Colors.Black,
+				DownBorderColor = Colors.Black,
 			};
 
 			area.Elements.Add(_candleElem);
 
-			_trader.NewHistoricalCandles += ProcessNewCandles;
-			_trader.SubscribeHistoricalCandles(_candleSeries, from, to);
+			_trader.NewMessage += ProcessNewMessage;
+
+			_trader.SubscribeMarketData(candleSeries.Security, new MarketDataMessage
+			{
+				TransactionId = _transactionId = _trader.TransactionIdGenerator.GetNextId(),
+				DataType = MarketDataTypes.CandleTimeFrame,
+				//SecurityId = GetSecurityId(series.Security),
+				Arg = candleSeries.Arg,
+				IsSubscribe = true,
+				From = from,
+				To = to,
+			}.ValidateBounds());
 		}
 
-		private void ProcessNewCandles(CandleSeries series, IEnumerable<Candle> candles)
+		private void ProcessNewMessage(Message message)
 		{
-			if (series != _candleSeries)
+			var candleMsg = message as CandleMessage;
+
+			if (candleMsg?.OriginalTransactionId != _transactionId)
 				return;
 
-			this.GuiAsync(() =>
-			{
-				foreach (var timeFrameCandle in candles)
-				{
-					Chart.ProcessCandle(_candleElem, timeFrameCandle);
-				}
-			});
+			Chart.Draw(_candleElem, candleMsg.ToCandle(_candleSeries));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			_trader.NewHistoricalCandles -= ProcessNewCandles;
+			_trader.NewMessage -= ProcessNewMessage;
 			base.OnClosing(e);
 		}
 	}

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+      <token>spbex_external</token> предоставляет бинарный протокол торговли на бирже. Для работы с этим протоколом необходимо использовать
+	<codeEntityReference>T:StockSharp.SpbEx.SpbExTrader</codeEntityReference>. 
+	      См. <link xlink:href="f43e0966-da3b-4709-ae47-c6c7f9546567">Пример работы с SpbExTrader</link>.
+      </para>
+    </introduction>
+     <relatedTopics>
+    	<link xlink:href="f43e0966-da3b-4709-ae47-c6c7f9546567">Пример работы с SpbExTrader</link>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

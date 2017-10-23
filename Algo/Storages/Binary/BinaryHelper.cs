@@ -24,7 +24,6 @@ namespace StockSharp.Algo.Storages.Binary
 
 	using MoreLinq;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -64,33 +63,96 @@ namespace StockSharp.Algo.Storages.Binary
 			return prevPrice + diff;
 		}
 
-		public static void WritePrice(this BitArrayWriter writer, decimal price, decimal prevPrice, MetaInfo info, SecurityId securityId, bool useLong = false)
+		public static void WritePrice(this BitArrayWriter writer, decimal price, ref decimal prevPrice, BinaryMetaInfo info, SecurityId securityId, bool useLong = false, bool nonAdjustPrice = false)
 		{
-			if ((price % info.PriceStep) != 0)
-				throw new ArgumentException(LocalizedStrings.Str1007Params.Put(info.PriceStep, securityId, price), nameof(info));
+			var priceStep = info.PriceStep;
+
+			if (priceStep == 0)
+				throw new InvalidOperationException(LocalizedStrings.Str2925);
+
+			if ((price % priceStep) != 0)
+			{
+				if (!nonAdjustPrice)
+					throw new ArgumentException(LocalizedStrings.Str1007Params.Put(priceStep, securityId, price), nameof(info));
+
+				writer.Write(false);
+
+				var priceStepChanged = false;
+
+				if (info.FirstPriceStep == 0 || (price % info.LastPriceStep) != 0)
+				{
+					var newPriceStep = 1m;
+
+					var found = false;
+
+					for (var i = 0; i < 10; i++)
+					{
+						if ((price % newPriceStep) == 0)
+						{
+							found = true;
+							break;
+						}
+
+						newPriceStep /= 10;
+					}
+
+					if (!found)
+						throw new ArgumentException(LocalizedStrings.Str1007Params.Put(priceStep, securityId, price), nameof(info));
+
+					info.LastPriceStep = newPriceStep;
+
+					if (info.FirstPriceStep == 0)
+						info.FirstPriceStep = info.LastPriceStep;
+
+					priceStepChanged = true;
+				}
+
+				writer.Write(priceStepChanged);
+
+				if (priceStepChanged)
+					WriteDecimal(writer, info.LastPriceStep, 0);
+
+				if (info.FirstFractionalPrice == 0)
+					info.FirstFractionalPrice = info.LastFractionalPrice = price;
+
+				var stepCount = (long)((price - info.LastFractionalPrice) / info.LastPriceStep);
+
+				if (useLong)
+					writer.WriteLong(stepCount);
+				else
+					writer.WriteInt((int)stepCount);
+
+				info.LastFractionalPrice = price;
+				return;
+			}
+
+			if (nonAdjustPrice)
+				writer.Write(true);
 
 			try
 			{
-				var stepCount = (long)((price - prevPrice) / info.PriceStep);
+				var stepCount = (long)((price - prevPrice) / priceStep);
 
 				// ОЛ может содержать заявки с произвольно большими ценами
 				if (useLong)
 					writer.WriteLong(stepCount);
 				else
 					writer.WriteInt((int)stepCount);
+
+				prevPrice = price;
 			}
 			catch (OverflowException ex)
 			{
-				throw new ArgumentException(LocalizedStrings.Str1008Params.Put(price, prevPrice, info.PriceStep, useLong), ex);
+				throw new ArgumentException(LocalizedStrings.Str1008Params.Put(price, prevPrice, priceStep, useLong), ex);
 			}
 		}
 
-		public static void WritePriceEx<T>(this BitArrayWriter writer, decimal price, BinaryMetaInfo<T> info, SecurityId securityId)
-			where T : BinaryMetaInfo<T>
+		public static void WritePriceEx(this BitArrayWriter writer, decimal price, BinaryMetaInfo info, SecurityId securityId)
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
-				writer.WritePrice(price, info.LastPrice, info, securityId);
+				var prevPrice = info.LastPrice;
+				writer.WritePrice(price, ref prevPrice, info, securityId);
 				info.LastPrice = price;
 			}
 			else
@@ -103,41 +165,58 @@ namespace StockSharp.Algo.Storages.Binary
 					if (info.FirstPrice == 0)
 						info.FirstPrice = info.LastPrice = price;
 
-					writer.WritePrice(price, info.LastPrice, info, securityId);
+					var prevPrice = info.LastPrice;
+					writer.WritePrice(price, ref prevPrice, info, securityId);
 					info.LastPrice = price;
 				}
 				else
 				{
-					if (info.FirstNonSystemPrice == 0)
-						info.FirstNonSystemPrice = info.LastNonSystemPrice = price;
+					if (info.FirstFractionalPrice == 0)
+						info.FirstFractionalPrice = info.LastFractionalPrice = price;
 
-					info.LastNonSystemPrice = writer.WriteDecimal(price, info.LastNonSystemPrice);
+					info.LastFractionalPrice = writer.WriteDecimal(price, info.LastFractionalPrice);
 				}
 			}
 		}
 
-		public static decimal ReadPrice(this BitArrayReader reader, decimal prevPrice, MetaInfo info, bool useLong = false)
+		private static decimal ReadPrice(this BitArrayReader reader, decimal prevPrice, decimal priceStep, bool useLong)
 		{
 			var count = useLong ? reader.ReadLong() : reader.ReadInt();
-			return prevPrice + count * info.PriceStep;
+			return prevPrice + count * priceStep;
 		}
 
-		public static decimal ReadPriceEx<T>(this BitArrayReader reader, BinaryMetaInfo<T> info)
-			where T : BinaryMetaInfo<T>
+		public static decimal ReadPrice(this BitArrayReader reader, ref decimal prevPrice, BinaryMetaInfo info, bool useLong = false, bool nonAdjustPrice = false)
+		{
+			if (!nonAdjustPrice || reader.Read())
+			{
+				return prevPrice = ReadPrice(reader, prevPrice, info.PriceStep, useLong);
+			}
+			else
+			{
+				if (reader.Read())
+					info.FirstPriceStep = ReadDecimal(reader, 0);
+
+				return info.FirstFractionalPrice = ReadPrice(reader, info.FirstFractionalPrice, info.FirstPriceStep, useLong);
+			}
+		}
+
+		public static decimal ReadPriceEx(this BitArrayReader reader, BinaryMetaInfo info)
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
-				return info.FirstPrice = reader.ReadPrice(info.FirstPrice, info);
+				var prevPrice = info.FirstPrice;
+				return info.FirstPrice = reader.ReadPrice(ref prevPrice, info);
 			}
 			else
 			{
 				if (reader.Read())
 				{
-					return info.FirstPrice = reader.ReadPrice(info.FirstPrice, info);
+					var prevPrice = info.FirstPrice;
+					return info.FirstPrice = reader.ReadPrice(ref prevPrice, info);
 				}
 				else
 				{
-					return info.FirstNonSystemPrice = reader.ReadDecimal(info.FirstNonSystemPrice);
+					return info.FirstFractionalPrice = reader.ReadDecimal(info.FirstFractionalPrice);
 				}
 			}
 		}
@@ -148,7 +227,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return id;
 		}
 
-		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset)
+		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset, bool bigRange = false)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(nameof(writer));
@@ -172,7 +251,8 @@ namespace StockSharp.Algo.Storages.Binary
 			else if (isUtc && dto.Offset != offset)
 				throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(dto, offset));
 
-			dto = dto.Truncate();
+			if (!isTickPrecision)
+				dto = dto.StorageBinaryOldTruncate();
 
 			var time = isUtc ? dto.UtcDateTime : dto.LocalDateTime;
 
@@ -201,6 +281,17 @@ namespace StockSharp.Algo.Storages.Binary
 					{
 						writer.Write(false);
 						writer.WriteInt(timeDiff.Hours);
+
+						if (timeDiff.Days > 0)
+						{
+							if (!bigRange)
+								throw new ArgumentOutOfRangeException(nameof(dto), LocalizedStrings.BigRangeError.Put(prevTime, dto));
+
+							writer.Write(true);
+							writer.WriteInt(timeDiff.Days);
+						}
+						else
+							writer.Write(false);
 					}
 
 					writer.WriteBits(timeDiff.Minutes, 6);
@@ -238,10 +329,15 @@ namespace StockSharp.Algo.Storages.Binary
 			
 			writer.WriteInt(timeDiff.Milliseconds);
 
+			if (isTickPrecision)
+			{
+				writer.WriteInt((int)(timeDiff.Ticks % 10000));
+			}
+
 			return time;
 		}
 
-		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset)
+		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, bool isTickPrecision, ref TimeSpan prevOffset, bool bigRange = false)
 		{
 			if (allowDiffOffsets)
 			{
@@ -263,7 +359,16 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (reader.Read())
 				{
-					time += (reader.Read() ? reader.Read(5) : reader.ReadInt()) * TimeSpan.TicksPerHour;
+					if (reader.Read())
+						time += reader.Read(5) * TimeSpan.TicksPerHour;
+					else
+					{
+						time += reader.ReadInt() * TimeSpan.TicksPerHour;
+
+						if (reader.Read())
+							time += reader.ReadInt() * TimeSpan.TicksPerDay;
+					}
+
 					time += reader.Read(6) * TimeSpan.TicksPerMinute;
 					time += reader.Read(6) * TimeSpan.TicksPerSecond;
 				}
@@ -273,6 +378,9 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 
 				time += reader.ReadInt() * TimeSpan.TicksPerMillisecond;
+
+				if (isTickPrecision)
+					time += reader.ReadInt();
 
 				time = prevTime.Ticks + sign * time;
 			}
@@ -301,8 +409,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return (isUtc ? new DateTime(time + offset.Ticks) : prevTime).ApplyTimeZone(offset);
 		}
 
-		public static void WriteVolume<T>(this BitArrayWriter writer, decimal volume, BinaryMetaInfo<T> info, SecurityId securityId)
-			where T : BinaryMetaInfo<T>
+		public static void WriteVolume(this BitArrayWriter writer, decimal volume, BinaryMetaInfo info, SecurityId securityId)
 		{
 			if (info.Version < MarketDataVersions.Version44)
 			{
@@ -338,8 +445,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static decimal ReadVolume<T>(this BitArrayReader reader, BinaryMetaInfo<T> info)
-			where T : BinaryMetaInfo<T>
+		public static decimal ReadVolume(this BitArrayReader reader, BinaryMetaInfo info)
 		{
 			if (info.Version < MarketDataVersions.Version44)
 			{
@@ -386,13 +492,12 @@ namespace StockSharp.Algo.Storages.Binary
 			return Encoding.UTF8.GetString(reader.ReadArray(len).To<BitArray>().To<byte[]>());
 		}
 
-		public static TimeSpan GetTimeZone<TMetaInfo>(this BinaryMetaInfo<TMetaInfo> metaInfo, bool isUtc, SecurityId securityId)
-			where TMetaInfo : BinaryMetaInfo<TMetaInfo>
+		public static TimeSpan GetTimeZone(this BinaryMetaInfo metaInfo, bool isUtc, SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (isUtc)
 				return metaInfo.ServerOffset;
 
-			var board = ExchangeBoard.GetBoard(securityId.BoardCode);
+			var board = exchangeInfoProvider.GetExchangeBoard(securityId.BoardCode);
 
 			return board == null ? metaInfo.LocalOffset : board.TimeZone.BaseUtcOffset;
 		}

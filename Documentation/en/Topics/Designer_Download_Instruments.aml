@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d0a1bb26-7a29-4607-992c-4f539632c2eb" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Clicking the <legacyBold>Download securities</legacyBold> button opens the 
+<legacyBold>Download securities</legacyBold> 
+window. To download securities, you have to enter their code, type, select data 
+source and click the <legacyBold>OK</legacyBold> button. 
+<token>designer</token> starts searching securities in the source. 
+All found securities are added to the securities list on the 
+<legacyBold>All securities</legacyBold> panel. 
+If a storage is selected as the source, and the storage already 
+contains downloaded securities, <token>designer</token> will find all securities 
+available in the storage. It may be useful, when the history on securities is 
+already downloaded and copied to the storage folder.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Download_the_tools_00"/>
+</mediaLink>
+ 
+<para>Clicking the <legacyBold>Add connection</legacyBold> button opens the 
+<link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" /> window.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="2ee93171-34db-4f23-a5d3-30ff5c81dda3" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -26,6 +26,11 @@
 				<p>Алгоритмы построения свечек.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Algo.Candles.Compression">
+			<summary>
+				<p>Механизмы работы построителей свечек и источников данных.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Algo.Candles.VolumePriceStatistics">
 			<summary>
 				<p>Профили рынка (ценовые, объема).</p>
@@ -116,11 +121,6 @@
 				<p>Механизм тестирования торговых стратегий на историческим, реальных и эмулируемых данных.</p>
 			</summary>
 		</member>
-				<member name="N:StockSharp.Algo.Candles.Compression">
-			<summary>
-				<p>Механизмы работы построителей свечек и источников данных.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.Algo.Commissions">
 			<summary>
 				<p>Менеджер расчета комиссий.</p>
@@ -129,6 +129,11 @@
 		<member name="N:StockSharp.Algo.Derivatives">
 			<summary>
 				<p>Торговые сущности для работы с опционами.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Import">
+			<summary>
+				<p>Классы для импорта данных из CSV формата.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Export">
@@ -146,7 +151,6 @@
 				<p>Базовые классы индикаторов и классы самих индикаторов.</p>
 			</summary>
 		</member>
-
 		<member name="N:StockSharp.Algo.Statistics">
 			<summary>
 				<p>Расчет статистических параметров.</p>
@@ -162,14 +166,14 @@
 				<p>Механизмы сохранения и загрузки маркет данных.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Algo.Storages.Backup">
+		<member name="N:StockSharp.Algo.Expressions">
 			<summary>
-				<p>Классы для бэкапа данных хранилища.</p>
+				<p>Математические формулы.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Algo.Storages.Backup.Xaml">
+		<member name="N:StockSharp.Algo.Expressions.Xaml">
 			<summary>
-				<p>Графические компоненты бэкапа данных хранилища.</p>
+				<p>Графические компоненты для математических формул.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Storages.Csv">
@@ -212,9 +216,14 @@
 				<p>Классы для конфигурирования различных компонентов StockSharp.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.CQG">
+		<member name="N:StockSharp.Cqg.Com">
 			<summary>
-				<p>Коннектор к торговой программе CQG.</p>
+				<p>Коннектор к торговой программе CQG Client.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Cqg.Continuum">
+			<summary>
+				<p>Коннектор прямого доступа к торговой системе CQG.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Logging">
@@ -297,6 +306,11 @@
 				<p>Графические компоненты (график для отрисовки свечек, окно для логов, монитор работы стратегий и т.д.).</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Xaml.Converters">
+			<summary>
+				<p>WPF конвертеры.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Xaml.Charting">
 			<summary>
 				<p>График для отрисовки свечек и эквити.</p>
@@ -307,19 +321,9 @@
 				<p>Графические рендереры индикаторов <see cref="N:StockSharp.Algo.Indicators"/>.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Xaml.Charting.MsChart">
-			<summary>
-				<p>Устаревшие графические компоненты для графиков свечек.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.Hydra.Core">
 			<summary>
 				<p>Общие классы S#.Data, использующиеся для написания собственных источников.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Hydra.Core.HydraTasks">
-			<summary>
-				<p>Общие классы S#.Data, использующиеся для написания собственных задач.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Licensing">
@@ -339,7 +343,12 @@
 		</member>
 		<member name="N:StockSharp.InteractiveBrokers.Web">
 			<summary>
-				<p>Классы для работы с Web-компонентами InteractiveBrokers.</p>
+				<p>Классы для работы с Web-компонентами <see cref="N:StockSharp.InteractiveBrokers"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.InteractiveBrokers.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.InteractiveBrokers"/>.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Oanda">
@@ -484,7 +493,7 @@
 		</member>
 		<member name="N:StockSharp.Rithmic.Xaml">
 			<summary>
-				<p>Графические компоненты Rithmic.</p>
+				<p>Графические компоненты <see cref="N:StockSharp.Rithmic"/>.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Rss">
@@ -517,14 +526,39 @@
 				<p>Элементы для <see cref="N:StockSharp.Xaml.Diagram"/>.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Xaml.Code">
+		<member name="N:StockSharp.Xaml.GridControl">
 			<summary>
-				<p>Классы для <see cref="N:StockSharp.Xaml"/>.</p>
+				<p>Табличные компоненты.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml.PropertyGrid">
 			<summary>
 				<p>Графический компонент PropertyGridEx.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Code">
+			<summary>
+				<p>Графические компоненты для редактирования кода.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SpbEx">
+			<summary>
+				<p>Коннектор прямого подключения по бинарному протоколу к SPB Exchange.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.SpbEx.Xaml">
+			<summary>
+				<p>Графические компоненты для <see cref="N:StockSharp.SpbEx"/>.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Fxcm">
+			<summary>
+				<p>Коннектор к брокеру FXCM.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.QuantHouse">
+			<summary>
+				<p>Коннектор к сервисам QuantHouse (QuantFEED и т.д.).</p>
 			</summary>
 		</member>
 	</members>

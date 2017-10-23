@@ -19,8 +19,8 @@ namespace StockSharp.Algo.Storages
 	using System.Collections;
 	using System.Collections.Generic;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface, describing the storage of market data (ticks, order books etc.).
@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Storages
 		Security Security { get; }
 
 		/// <summary>
-		/// The additional argument, associated with data. For example, <see cref="Candle.Arg"/>.
+		/// The additional argument, associated with data. For example, <see cref="CandleMessage.Arg"/>.
 		/// </summary>
 		object Arg { get; }
 
@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Storages
 		IEnumerable Load(DateTime date);
 
 		/// <summary>
-		/// To ger meta-information on data.
+		/// To get meta-information on data.
 		/// </summary>
 		/// <param name="date">Date, for which meta-information on data shall be received.</param>
 		/// <returns>Meta-information on data. If there is no such date in history, <see langword="null" /> will be returned.</returns>

@@ -233,7 +233,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
-					Reset();
+					Current = null;
 					_itemsEnumerator.Dispose();
 				}
 			}
@@ -333,9 +333,10 @@ namespace StockSharp.Algo
 								TradeId = tradeId,
 								TradePrice = currItem.TradePrice,
 								TradeStatus = currItem.TradeStatus,
-								TradeVolume = currItem.TradeVolume,
+								TradeVolume = currItem.OrderVolume,
 								ServerTime = currItem.ServerTime,
 								LocalTime = currItem.LocalTime,
+								IsSystem = currItem.IsSystem,
 								OpenInterest = currItem.OpenInterest,
 								OriginSide = prevItem.Item2 == Sides.Buy
 									? (prevItem.Item1 > currItem.OrderId ? Sides.Buy : Sides.Sell)
@@ -360,6 +361,7 @@ namespace StockSharp.Algo
 
 				void IDisposable.Dispose()
 				{
+					Current = null;
 					_itemsEnumerator.Dispose();
 				}
 			}

@@ -7,27 +7,26 @@
 
     <introduction>
       <para>
-		С помощью подхода <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">дочерних стратегий</link> и использования
-		<codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference> в <token>stocksharp</token> реализован механизм
-		автоматической защиты позиции через стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
-		и <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>. Данные стратегии имеют ряд преимуществ перед обычными
-		стоп заявками:
+		The <token>stocksharp</token> has a mechanism of automatic position protection through <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
+		and <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference> strategies using the <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">child strategies</link>
+		approach and the <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference>. These strategies have a number of advantages over
+		usual stop order:
 	  </para>
 	  	<list class="ordered">
 	  		<listItem>
-	  			<para>Защитные стратегии не выставляют заявки до тех пор, пока не наступит условие. Размер депозита под заявки при этом не блокируются брокером.</para>
+	  			<para>Protective strategies do not register orders as long as the condition occurs. The orders deposit size is not blocked by the broker.</para>
 	  		</listItem>
 	  		<listItem>
-	  			<para>Стратегии платформо-независимые, а значит будут работать через любого брокера вне зависимости от их технологии.
-	  			Стоп-заявки же, условия которых задаются через <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Condition</codeEntityReference>,
-				эмулируются платформами <token>quik</token>, <token>smartcom</token> и т.д. самостоятельно, и их логика привязана к брокеру.</para>
+	  			<para>Strategies are platform-independent, and hence will work through any broker regardless of its technology. And stop orders, which conditions set
+	  			via <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Condition</codeEntityReference>,
+				emulated by the <token>rithmic</token>, <token>openecry</token> etc. platforms by itself, and their logic is locked to the broker.</para>
 	  		</listItem>
 	  		<listItem>
-	  			<para>Защитные стратегии могут работать при прямом подключении к биржам.</para>
+	  			<para>Protective strategies can work with direct connection to exchanges.</para>
 	  		</listItem>
 	  		<listItem>
-	  			<para>Автоматическое отслеживание частичного или полного закрытия защищаемой позиции (с последующим снятием стопов). А также переворот
-	  			позиции. Например, когда была длинная позиция, и она была перевернута в короткую. Стопы в этом случае нужно так же "перевернуть".</para>
+	  			<para>Automatic tracking of partial or complete closing of the protected position (with the following stops removal). And also the position reverting.
+	  			For example, when the position was long, and then it was turned into a short. In this case stops should be also "reverted".</para>
 	  		</listItem>
 		</list>
 		
@@ -36,10 +35,10 @@
     <prerequisites>
       <content>
         <para>
-		  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Дочерние стратегии</link>
+		  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Child strategies</link>
 		</para>
 		<para>
-			<link xlink:href="8c0327db-494a-4fe0-aba8-0d4b93dea60e">Событийная модель</link>
+			<link xlink:href="8c0327db-494a-4fe0-aba8-0d4b93dea60e">Event model</link>
 		</para>
       </content>
     </prerequisites>
@@ -47,30 +46,28 @@
     <!-- One or more procedure or section elements -->
 
     <procedure>
-      <title>Тейк-профит и Стоп-лосс</title>
+      <title>Take-profit and stop-loss</title>
 
       <steps class="ordered">
 		  <step>
 			  <content>
 				  <para>
-					  В качестве примера разобрана регистрация заявки на покупку "по рынку" и последующая защита длинной позиции. Для этого создается
-					  правило, реагирующее на появление у заявки сделок (подробнее, в разделе <link xlink:href="8c0327db-494a-4fe0-aba8-0d4b93dea60e">Событийная модель</link>):
+					  As an example, the order registration for the "at market" purchase and the following protection of the long position considered. To do this,
+					  the rule responsive to the order’s trades occurring (for details see the <link xlink:href="8c0327db-494a-4fe0-aba8-0d4b93dea60e">Event model</link>) created:
 				  </para>
 				  <code language="C#">
 public class MyStrategy : Strategy
 {
 	public void OpenPosition()
 	{
-		// создаем заявку для открытия длинной позиции
 		var longPos = this.BuyAtMarket();
 		
-		// регистрируем правило, отслеживающее появление новых сделок по заявке
+		// applying rules to track the order's trades
 		longPos
-			.WhenNewTrades()
-			.Do(OnNewOrderTrades)
+			.WhenNewTrade()
+			.Do(OnNewOrderTrade)
 			.Apply(this);
 		
-		// отправляем заявку на регистрацию
 		RegisterOrder(longPos);
 	}
 }
@@ -80,45 +77,41 @@ public class MyStrategy : Strategy
         <step>
           <content>
           	<para>
-          		Чтобы защитить позицию необходимо использовать стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
-				или <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>. Если требуется одновременная защита с двух
-				сторон, то рекомендуется использовать <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy</codeEntityReference>.
-				Данная стратегия автоматически изменяет объем одной из стратегий при частичной активации (например, при касании стоп-лосс уровня закрылась
-				лишь часть позиции, а затем рынок снова вернулся в безубыточную зону):
+          		In order to protect the position you should use <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
+				or <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference> strategies. If you need simultaneous protection
+				from both sides, it is recommended to use the <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy</codeEntityReference>.
+				This strategy automatically changes the one of strategies volume with partial activation (for example, at the touch of a stop-loss level only part of
+				the position has been closed, and then the market came back to break-even zone):
           	</para>
-			<code language="C#"><![CDATA[private void OnNewOrderTrades(IEnumerable<MyTrade> trades)
+			<code language="C#"><![CDATA[
+private void OnNewOrderTrade(MyTrade trade)
 {
-	// для каждой сделки добавляем защитную пару стратегии
-	var protectiveStrategies = trades.Select(t =>
-	{
-		// выставляет тейк-профит в 40 пунктов
-		var takeProfit = new TakeProfitStrategy(t, 40);
+    // take is 40 points
+    var takeProfit = new TakeProfitStrategy(trade, 40);
 
-		// выставляет стоп-лосс в 20 пунктов
-		var stopLoss = new StopLossStrategy(t, 20);
+    // stop is 20 points
+    var stopLoss = new StopLossStrategy(trade, 20);
 
-		return new TakeProfitStopLossStrategy(takeProfit, stopLoss);
-	});
-
-	ChildStrategies.AddRange(protectiveStrategies);
-}]]></code>
+    var protectiveStrategies = new TakeProfitStopLossStrategy(takeProfit, stopLoss);
+    ChildStrategies.AddRange(protectiveStrategies);
+}
+]]></code>
           </content>
         </step>
       </steps>
     </procedure>
     
     <section>
-      <title>Автоматическое закрытие и переворот позиции</title>
+      <title>Automatic closing and position reverting</title>
 
       <content>
         <para>
-        	Стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference> и
-        	<codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference> не отслеживают частичное закрытие позиции или ее переворот
-        	(например, позиция была закрыта руками в терминале и была открыта в противоположную сторону). Для того, чтобы автоматически отслеживать в роботе
-        	подобные ситуации, необходимо использовать <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy</codeEntityReference>.
-        	Данная стратегия через поступающие в нее сделки (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})</codeEntityReference>)
-        	решает, что нужно сделать: защитить их (если идет открытие позиции или ее увеличение) или остановить защитные стратегии (если идет закрытие позиции или ее уменьшение).
-        	Также стратегия автоматически переворачивает защитные стратегии в случае переворота позиции (из длинной в короткую или из короткой в длинную).
+        	<codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference> and <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>
+        	strategies do not track partial position closing or its reverting (for example, the position was closed by hands at the terminal and was opened in the
+        	opposite direction). To automatically track such situations in the algorithm, you must use <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy</codeEntityReference>.
+        	This strategy by trades incoming into it (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade(StockSharp.BusinessEntities.MyTrade)</codeEntityReference>)
+        	decides what to do: to protect them (if there is a position opening or its increase) or to stop the protective strategies (if there is a position closing or its
+        	decrease). The strategy also automatically reverts protective strategies in case of position reverting (from long to short or from short to long).
         </para>
       </content>
     </section>
@@ -126,7 +119,7 @@ public class MyStrategy : Strategy
     <nextSteps>
       <content>
         <para>
-		  <link xlink:href="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5">Отчеты</link>
+		  <link xlink:href="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5">Reports</link>
 		</para>
       </content>
     </nextSteps>

@@ -25,8 +25,6 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Fractals.
 	/// </summary>
@@ -35,6 +33,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("Fractals")]
 	[DescriptionLoc(LocalizedStrings.Str844Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class Fractals : BaseComplexIndicator
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();
@@ -60,8 +59,8 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="Fractals"/>.
 		/// </summary>
 		/// <param name="length">Period length.</param>
-		/// <param name="up">Up fractal.</param>
-		/// <param name="down">Down fractal.</param>
+		/// <param name="up">Fractal up.</param>
+		/// <param name="down">Fractal down.</param>
 		public Fractals(int length, FractalPart up, FractalPart down)
 			: base(up, down)
 		{
@@ -81,9 +80,12 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str736Key)]
+		[DescriptionLoc(LocalizedStrings.Str778Key, true)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Length
 		{
-			get { return _length; }
+			get => _length;
 			set
 			{
 				_length = value;
@@ -98,20 +100,20 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsFormed => _buffer.Count >= Length && base.IsFormed;
 
 		/// <summary>
-		/// Up fractal.
+		/// Fractal up.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str846Key)]
-		[DescriptionLoc(LocalizedStrings.Str847Key)]
+		[DescriptionLoc(LocalizedStrings.Str846Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public FractalPart Up { get; }
 
 		/// <summary>
-		/// Down fractal.
+		/// Fractal down.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str848Key)]
-		[DescriptionLoc(LocalizedStrings.Str849Key)]
+		[DescriptionLoc(LocalizedStrings.Str848Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public FractalPart Down { get; }
 

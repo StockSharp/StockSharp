@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// Chinkou line.
 	/// </summary>
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class IchimokuChinkouLine : LengthIndicator<decimal>
 	{
 		/// <summary>

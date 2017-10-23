@@ -32,6 +32,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("TroughBar")]
 	[DescriptionLoc(LocalizedStrings.Str822Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class TroughBar : BaseIndicator
 	{
 		private decimal _currentMinimum = decimal.MaxValue;
@@ -55,7 +56,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public Unit ReversalAmount
 		{
-			get { return _reversalAmount; }
+			get => _reversalAmount;
 			set
 			{
 				if (value == null)

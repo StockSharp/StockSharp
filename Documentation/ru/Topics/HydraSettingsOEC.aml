@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="4d84a1e0-fe23-4b14-8323-c5f68f117cc7" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -17,11 +17,20 @@
           <legacyBold>Пароль</legacyBold> - пароль.
 		</listItem>
 		 <listItem>
-          <legacyBold>UUID</legacyBold> - уникальный идентификатор програмного обеспечения.
+          <legacyBold>UUID</legacyBold> - уникальный идентификатор программного обеспечения.
 		</listItem>
 		</list>
 		<para><legacyBold>Основные</legacyBold></para>
 	   <list class="bullet">
+	   <listItem>
+ <legacyBold>Дата начала(свечи)</legacyBold> - с какой даты начать скачивать данные.
+</listItem>
+<listItem>
+ <legacyBold>Дата начала(тики)</legacyBold> - с какой даты начать скачивать данные.
+</listItem>
+<listItem>
+ <legacyBold>Заголовок</legacyBold> - заголовок задачи.
+</listItem>
         <listItem>
           <legacyBold>Работать с</legacyBold> - время начала работы источника.
 		</listItem>

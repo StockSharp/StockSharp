@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="12a1678b-14f4-432b-8b2e-3b8af7f93348" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Variable_00"/>
+</mediaLink>
+<para>Кубик используется для хранения значений, передачи ранее сохраненного 
+значения дальше по цепочке элементов.</para>
+
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> – значение выбранного типа, которое будет сохранено вместо значения по умолчанию.</para></listItem>
+  <listItem><para><legacyBold>Триггер</legacyBold> –  сигнал, с помощью которого 
+  определяется момент, когда необходимо передать хранящееся значение через
+  выходной параметр.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> – значение выбранного типа передаваемых данных.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Тип данных</legacyBold> – тип хранимых данных внутри переменной, от выбранного типа данных зависит тип входного и выходного
+параметра.</para></listItem>
+  <listItem><para><legacyBold>Значение</legacyBold> – значение по умолчанию, которое хранится в переменной. 
+  Данное значение используется, если на вход элемента не поступало других значений.</para></listItem>
+  <listItem><para><legacyBold>Обрабатывать при запуске</legacyBold> – при установленном флажке значение будет передаваться при запуске стратегии.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+<para>При выбранном типе данных <legacyBold>Инструмент</legacyBold> или <legacyBold>Портфель</legacyBold>, значение по умолчанию 
+может отсутствовать. В этом случае, если в свойствах установлен флаг <legacyBold>Параметры</legacyBold>, 
+при запуске стратегии на выполнение, эти данные будут взяты из соответствующих свойств стратегии.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="26be4914-b6c4-48e7-8e0e-d2f02677e747" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

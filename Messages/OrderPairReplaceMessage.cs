@@ -18,8 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	/// <summary>
 	/// The message containing the information for modify order's pair.
 	/// </summary>
@@ -56,8 +54,8 @@ namespace StockSharp.Messages
 			var clone = new OrderPairReplaceMessage
 			{
 				LocalTime = LocalTime,
-				Message1 = Message1.CloneNullable(),
-				Message2 = Message2.CloneNullable(),
+				Message1 = (OrderReplaceMessage)Message1?.Clone(),
+				Message2 = (OrderReplaceMessage)Message2?.Clone(),
 			};
 
 			CopyTo(clone);

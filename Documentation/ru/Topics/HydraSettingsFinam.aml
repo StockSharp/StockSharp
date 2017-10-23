@@ -19,6 +19,9 @@
 		<listItem>
           <legacyBold>Временные файлы</legacyBold> - режим использования временных файлов: использовать/не использовать/использовать и удалять.
 		</listItem>
+		<listItem>
+<legacyBold>Интервал времени</legacyBold> - Интервал в днях, за который скачиваются данные.
+</listItem>
 		</list>
 		<para><legacyBold>Основные</legacyBold></para>
 		<list class="bullet">
@@ -52,7 +55,7 @@
       
       
       <alert class="note">
-			Данный источник поддерживает закачку в виде готовых свечек. Подробнее в <link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Список инструментов</link>.
+			Данный источник поддерживает закачку в виде готовых свечей. Подробнее в <link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Список инструментов</link>.
 	  </alert>
     </introduction>
   </developerWalkthroughDocument>

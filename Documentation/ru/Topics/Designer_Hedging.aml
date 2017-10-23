@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b49f617f-7425-4c1d-bb45-c347f55d1d1e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Hedging_00"/>
+</mediaLink>
+<para>Кубик используется для защиты позиции по опционным стратегиям.</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, базовый актив.</para></listItem>
+   <listItem><para><legacyBold>Объем</legacyBold> – числовое значение объема.</para></listItem>
+   <listItem><para><legacyBold>Позиция по базовому активу</legacyBold> – позиция по базовому активу.</para></listItem>
+
+  <listItem><para><legacyBold>Флаг</legacyBold> – сигнал (флаг), который инициирует процесс хеджирования.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, 
+которая может использоваться для получения сделок по ней с помощью элемента 
+<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью 
+кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Тип хеджирования</legacyBold> - тип хеджирования, может принимать значения Дельта, Гамма, Вега, Тета, Ро.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b85d4d51-2824-44e5-aad1-0bde76d409ae" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.BarChart</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.BarChart.BarChartMessageAdapter">
+            <summary>
+            The message adapter for BarChart.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BarChart.BarChartMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.Login">
+            <summary>
+            Login.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.Password">
+            <summary>
+            Password.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames">
+            <summary>
+            Available time frames.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.BarChart.BarChartTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the BarChart.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BarChart.BarChartTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BarChart.BarChartTrader.Login">
+            <summary>
+            Login.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BarChart.BarChartTrader.Password">
+            <summary>
+            Password.
+            </summary>
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartTrader.GetHistoricalTicks(StockSharp.BusinessEntities.Security,System.Int64,System.Boolean@)">
+            <summary>
+            To get historical ticks.
+            </summary>
+            <param name="security">The instrument for which you need to get all trades.</param>
+            <param name="count">Maximum ticks count.</param>
+            <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+            <returns>Historical ticks.</returns>
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartTrader.GetHistoricalTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean@)">
+            <summary>
+            To get historical ticks.
+            </summary>
+            <param name="security">The instrument for which you need to get all trades.</param>
+            <param name="from">Begin period.</param>
+            <param name="to">End period.</param>
+            <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+            <returns>Historical ticks.</returns>
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)">
+            <summary>
+            To get historical candles.
+            </summary>
+            <param name="security">The instrument for which you need to get candles.</param>
+            <param name="candleMessageType">The candle message type.</param>
+            <param name="arg">The candle parameter (for example, time-frame).</param>
+            <param name="count">Maximum ticks count.</param>
+            <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+            <returns>Historical candles.</returns>
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTime,System.DateTime,System.Boolean@)">
+            <summary>
+            To get historical candles.
+            </summary>
+            <param name="security">The instrument for which you need to get candles.</param>
+            <param name="candleMessageType">The candle message type.</param>
+            <param name="arg">The candle parameter (for example, time-frame).</param>
+            <param name="from">Begin period.</param>
+            <param name="to">End period.</param>
+            <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+            <returns>Historical candles.</returns>
+        </member>
+        <member name="M:StockSharp.BarChart.BarChartTrader.OnProcessMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

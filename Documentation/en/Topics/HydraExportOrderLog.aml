@@ -2,17 +2,17 @@
 <topic id="fe4f5992-a496-45bb-82e6-d353b42df894" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>В появившимся окне выбрать интересуемый диапазон времени, выбрать инструмент и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <para>In the appearing window select the required time range, then select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline> button:</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_export_order_log" />
       </mediaLink>
       
-     <para>При помощи контекстного меню можно настроить различные параметры таблицы ордер лога: группировку строк, доступные колонки, формат отображения и др.</para>
+     <para>By means of the context menu you can set various settings of the order log table: rows grouping, columns available, the display format, and others</para>
 	 <mediaLink>
        <image placement="center" xlink:href="hydra_export_context" />
      </mediaLink>
       
-   <para>Найденные заявки можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
+   <para>Found log items can be exported to formats <token>excel</token>, xml, sql, bin or txt. This can be done by using the drop-down list:</para>
     	<mediaLink>
     		<image placement="center" xlink:href="hydra_export" />
     	</mediaLink>

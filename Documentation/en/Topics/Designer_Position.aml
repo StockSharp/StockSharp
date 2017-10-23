@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Position_00"/>
+</mediaLink>
+<para>The element is used to obtain information on the position change for the 
+specified instrument and portfolio.</para>
+ <definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Instrument</legacyBold> - the instrument for which 
+  you want to obtain a position.</para></listItem>
+  <listItem><para><legacyBold>Portfolio</legacyBold> - the portfolio for which 
+  you want to obtain a position.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Position</legacyBold> - the numeric value of the 
+  position on the instrument or the current amount of available funds on the 
+  account, it is generated when they are changed and after the strategy is 
+  started.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Money</legacyBold> - when the flag on the input is 
+  set, the element only accepts the portfolio, the money position for the selected 
+  portfolio is passed to the output of the element.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

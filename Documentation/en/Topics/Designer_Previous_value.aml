@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5d869a7b-616f-4e40-92de-576fd0206c91" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_The_previous_value_00"/>
+</mediaLink>
+<para>The cube is used to obtain the previous value passed to the input, with 
+the specified offset.</para>
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Any data</legacyBold> - the certain type of data 
+  received and passed.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+<listItem><para><legacyBold>Any data</legacyBold> - the certain type of data 
+received and passed, entered at the input with the offset specified in the 
+parameters.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Data type</legacyBold> - the data type that can be 
+  entered through the input socket. If you change this parameter, the data type 
+  for the parameters is automatically changed.</para></listItem>
+  <listItem><para><legacyBold>Offset</legacyBold> - the size of the offset, the 
+  output value for how many changes will lag behind the input one.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="49d3744f-77c5-40ee-a4c2-4d7b08125712" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

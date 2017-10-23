@@ -40,7 +40,7 @@ namespace StockSharp.Algo.PnL
 		/// </summary>
 		public IPnLManager PnLManager
 		{
-			get { return _pnLManager; }
+			get => _pnLManager;
 			set
 			{
 				if (value == null)
@@ -56,8 +56,13 @@ namespace StockSharp.Algo.PnL
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
-			PnLManager.ProcessMessage(message);
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
 
+			PnLManager.ProcessMessage(message);
 			base.SendInMessage(message);
 		}
 

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="840e49ea-f9e1-4704-8324-098b002f78f9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <introduction>
+		  <steps class="ordered">
+			  <step>
+				  <content>
+		  				<para>To install <token>designer</token> go to the <token>download</token> page:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Installation_00"/>
+</mediaLink>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+		  				<para>Download the <token>designer</token> installation package.</para>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+		  				<para>Unlock (right click the file, properties) and 
+		  				unpack <legacyBold>designer.zip</legacyBold> in an empty directory (for example, c:\S#Designer \)</para>
+		  				<mediaLink>
+<image placement="center" xlink:href="Designer_Installation_01"/>
+</mediaLink>
+				  </content>
+			  </step>
+			  			  <step>
+				  <content>
+		  				<para>Then run <legacyBold>Designer.Update.exe</legacyBold> and 
+		  				click the <legacyBold>Update</legacyBold> button.</para>
+		  				<mediaLink>
+<image placement="center" xlink:href="Designer_Installation_02"/>
+</mediaLink>
+				  </content>
+			  </step>
+		  </steps>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="a9e273cf-9daa-4f8f-80d2-d58abab23d59" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -22,6 +22,11 @@
           	<para> См. импорт <link xlink:href="2a830015-5cfb-4468-8538-4e94820b3659">Инструменты</link>.</para>
           </content>
         </step>
+                <step>
+          <content>
+          	<para>Для предварительного просмотра данных, нажать кнопку <legacyBold>Предпросмотр</legacyBold>.</para>
+          </content>
+        </step>
         <step>
           <content>
           	<para>Нажать кнопку <legacyBold>Импорт</legacyBold>.</para>

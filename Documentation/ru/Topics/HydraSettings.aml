@@ -1,51 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7d845e99-6bde-437e-b7f4-059be0438894" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-    	<para>Пункт главного меню приложения <legacyBold>Дополнительно => Настройки...</legacyBold>.</para>
-    	<para>
-    		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режиме. Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
-    	</para>
-		<mediaLink>
-        	<image placement="center" xlink:href="hydra_settings" />
-		</mediaLink>
-      
-       	<para> <legacyBold>S#.Data Server</legacyBold></para>
-      
-      <list class="bullet">
-        <listItem>
-          <legacyBold>Серверный режим</legacyBold> - перевести <token>hydra</token> в серверный режим.
-		</listItem>
-        <listItem>
-          <legacyBold>Авторизация</legacyBold> - метод авторизациии для получения доступа к <token>hydra</token>: Анонимно/Windows/Пользовательский/StockSharp.
-		</listItem>  
-		<listItem>
-          <legacyBold>Количество инструментов</legacyBold> - максимальное количество инструментов, которое можно запрашивать с сервера.
-		</listItem>	
+   <introduction>
+<para><token>hydra</token> может исользоваться в серверном режиме, в данном режиме можно 
+удаленно подключиться к <token>hydra</token> и получить имеющиеся данные в хранилище. К 
+<token>hydra</token>, работающей в серверном режиме, можно подключиться из <token>designer</token>
+ (как это сделать описано в пункте <link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" /> документации 
+ по <token>designer</token>). Также к <token>hydra</token> можно подключиться через <token>stocksharpapi</token> (как 
+ это сделать описано в пунктах <link xlink:href="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" />, <link xlink:href="f143c9e7-d5a6-4464-9b01-18117183cc7a" />, <link xlink:href="040cdc40-39b4-47be-b3f0-441710515562" />).</para>
+<para>Для включения серверного режима <token>hydra</token> необходимо на вкладке <legacyBold>Общее</legacyBold> нажать 
+кнопку <legacyBold>Настройки</legacyBold> откроется 
+окно настройки серверного режима.</para>
 
-	  </list>			
-		
-	<para> <legacyBold>Основные</legacyBold></para>
-	<list class="bullet">
-	    <listItem>
-          <legacyBold>Автостарт</legacyBold> - автостарт скачивания котировок при запуске.
-		</listItem>
-        <listItem>
-          <legacyBold>Трей</legacyBold> - сворачивать в трей.
-		</listItem>
-        <listItem>
-          <legacyBold>Авто-стоп</legacyBold> - остановка работы по времени.
-		</listItem>		
-        <listItem>
-          <legacyBold>Время для Авто-стоп</legacyBold> - время для Авто-стоп.
-		</listItem>	
-        <listItem>
-          <legacyBold>Ошибки (кол-во)</legacyBold> - количество ошибок, после которого будет отправлено письмо на почту с сообщением об ошибке. Значение 0 означает выключенный режим.
-		</listItem>	
-        <listItem>
-          <legacyBold>Ошибки (email)</legacyBold> - адрес почты, куда будет отправлено сообщение о превышении максимально допустимого количества ошибок.
-		</listItem>	
-      </list>		
-	</introduction>
+   <mediaLink><image placement="center" xlink:href="hydra_server"/></mediaLink>
+   
+<para><legacyBold>S#.Data сервер</legacyBold></para>
+<list class="bullet">
+<listItem>
+<legacyBold>Серверный режим</legacyBold> - перевести <token>hydra</token> в серверный режим
+</listItem>
+<listItem>
+<legacyBold>Сервер, работающий через FIX протокол</legacyBold> - 
+сервер, распространяющий live и исторические данные через FIX протокол
+</listItem>
+<listItem>
+<legacyBold>Авторизация</legacyBold> - авторизация для получения доступа к S#.Data сервер
+</listItem>
+<listItem>
+<legacyBold>Количество инструментов</legacyBold> - максимальное количество инструментов, 
+которое можно запрашивать с сервера
+</listItem>
+<listItem>
+<legacyBold>Количество дней для свечи</legacyBold> - максимальное количество дней, 
+доступных для загрузки истории свечей
+</listItem>
+<listItem>
+<legacyBold>Количество дней для тиков</legacyBold> - максимальное количество дней, 
+доступных для загрузки истории тиковых данных
+</listItem>
+</list>
+<para><legacyBold>CSV</legacyBold></para>
+<list class="bullet">
+<listItem>
+<legacyBold>Шаблон</legacyBold> - шаблон для экспорта соответствующего типа данных
+</listItem>
+</list>
+<para><legacyBold>Основные</legacyBold></para>
+<list class="bullet">
+<listItem>
+<legacyBold>Автостарт</legacyBold> - автостарт скачивания котировок при запуске
+</listItem>
+<listItem>
+<legacyBold>Трей</legacyBold> - сворачивать в трей
+</listItem>
+<listItem>
+<legacyBold>Авто-стоп</legacyBold> - остановка работы по времени
+</listItem>
+<listItem>
+<legacyBold>Время для Авто-стоп</legacyBold> - Время для Авто-стоп
+</listItem>
+<listItem>
+<legacyBold>Ошибки (кол-во)</legacyBold> - количество ошибок, после которых будет 
+отправлено письмо на почту с сообщением об ошибке. Значение 0 означает выключеный режим
+</listItem>
+<listItem>
+<legacyBold>Ошибки (email)</legacyBold> - Адрес почты, куда будет отправлено письмо 
+с сообщением о превышении максимально допустимого количества ошибок
+</listItem>
+</list>
+      <para>Если установить <legacyBold>Авторизацию</legacyBold> отличную от <legacyBold>Анонимно</legacyBold>, 
+    на вкладке <legacyBold>Общее</legacyBold> появится кнопка <legacyBold>Пользователи</legacyBold>, 
+    после нажатия на которую появляется окно <legacyBold>Пользователи</legacyBold></para>
+<mediaLink>
+<image placement="center" xlink:href="hydra_users"/>
+</mediaLink>
+      <para>В левой части окна можно добавить нового пользователя, а в правой установить для него права доступа.</para>
+
+     </introduction>
 	</developerWalkthroughDocument>
 </topic>

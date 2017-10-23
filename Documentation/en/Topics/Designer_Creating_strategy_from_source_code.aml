@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e146e4f0-8f6d-4d39-9595-ee38d09d6c43" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To create strategies from the source code, you need programming skills in 
+C#, as well as knowledge of the library for the professional development of 
+trading algorithms in C# <token>stocksharpapi</token>.</para>
+<para>Creating a strategy from the source code will be discussed on the example 
+of the SMA strategy - a similar to SMA example-strategy, compiled from the cubes 
+in the <link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" /> section.</para>
+<para>The first line is the namespace name. It can be any combination of Latin 
+characters, by default StockSharp.Designer.Strategies.</para>
+<para>Next is the listing of the DLL libraries needed to run the cube code:</para>
+<code language="C#" title="C#"><![CDATA[
+sing System.Windows.Media;
+using System.Runtime.InteropServices;
+
+using Ecng.Common;
+using Ecng.ComponentModel;
+using Ecng.Collections;
+
+using StockSharp.Messages;
+using StockSharp.Algo;
+]]></code>
+
+<para>Dll libraries are added by clicking the <legacyBold>References</legacyBold> 
+button in the <legacyBold>Source code</legacyBold> tab.</para>
+
+<para>Then the class is declared. The class name can be any combination of Latin 
+characters. The cube class must be inherited from the 
+<codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class:</para>
+<code language="C#" title="C#"><![CDATA[
+	public class NewStrategy : Strategy
+]]></code>
+
+<para>Next, there is a declaration of variables in the example. SMA strategy 
+requires two moving averages with different calculation periods, a long SMA and 
+a short SMA:</para>
+<code language="C#" title="C#"><![CDATA[
+ private readonly SimpleMovingAverage _long;
+ private readonly SimpleMovingAverage _short;
+]]></code>
+
+<para>The strategy parameters are declared, the SMA indicators parameters will 
+be stored in them:</para>
+<code language="C#" title="C#"><![CDATA[
+ private readonly StrategyParam<int> _longParam;
+ private readonly StrategyParam<int> _shortParam;
+]]></code>
+
+<para>Variables necessary for displaying graphic elements are also declared. 
+They do not have a useful information and are shown in the example as a 
+demonstration of possibilities. To display graphic elements, it is better to 
+use <token>designer</token> standard cubes. How to do this is shown in the 
+<link xlink:href="e6218e30-74f0-4a0b-b189-5ed71b7aded9" /> section:</para>
+<code language="C#" title="C#"><![CDATA[
+ private readonly List<MyTrade> _myTrades = new List<MyTrade>();
+ private readonly ChartCandleElement _candlesElem;
+ private readonly ChartTradeElement _tradesElem;
+ private readonly ChartIndicatorElement _shortElem;
+ private readonly ChartIndicatorElement _longElem; 
+ private readonly ChartArea _area = new ChartArea();
+]]></code>
+
+<para>The 
+<codeEntityReference>T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute</codeEntityReference> 
+attribute is required to indicate the input and output cube parameters. If the 
+attribute defines an event, it means it will be an output parameter, if the 
+method - it means the input parameter:</para>
+<code language="C#" title="C#"><![CDATA[
+ [DiagramExternal]
+ public event Action<Order> NewMyOrder;
+]]></code>
+
+<code language="C#" title="C#"><![CDATA[
+ [DiagramExternal]
+ public void ProcessCandle(Candle candle)
+]]></code>
+
+<para>After declaring variables, you need to set the cube properties. These properties 
+will be displayed in the <legacyBold>Properties</legacyBold> panel in the common schema:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_strategy_from_the_source_code_00"/>
+</mediaLink>
+<code language="C#" title="C#"><![CDATA[
+public int Long
+{
+    get { return _longParam.Value; }
+    set
+    {
+        _longParam.Value = value;
+        _long.Length = value;
+    }
+}
+
+public int Short
+{
+    get { return _shortParam.Value; }
+    set
+    {
+        _shortParam.Value = value;
+        _short.Length = value;
+    }
+}
+
+]]></code>
+
+<para>Initialization of variables occurs in the class constructor:</para>
+<code language="C#" title="C#"><![CDATA[
+public NewStrategy()
+{
+    _longParam = new StrategyParam<int>(this, nameof(Long), 80);
+    _shortParam = new StrategyParam<int>(this, nameof(Short), 20);
+
+    _long = new SimpleMovingAverage { Length = Long };
+    _short = new SimpleMovingAverage { Length = Short };
+    
+    _candlesElem = new ChartCandleElement { ShowAxisMarker = false };
+    _tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
+
+    _shortElem = new ChartIndicatorElement
+    {
+        Color = Colors.Coral,
+        ShowAxisMarker = false,
+        FullTitle = _short.ToString()
+    };
+
+    _longElem = new ChartIndicatorElement
+    {
+        ShowAxisMarker = false,
+        FullTitle = _long.ToString()
+    };
+}
+
+]]></code>
+
+<para>The 
+<codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> 
+class has methods that you can override. In the example, the 
+<codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnReseted</codeEntityReference> 
+method is overridden in order to - when the trading algorithm is reinitialized, 
+moving averages and graphical elements are also reinitialized:</para>
+<code language="C#" title="C#"><![CDATA[
+protected override void OnReseted()
+{
+    this.AddInfoLog("OnReseted");
+
+    _long.Reset();
+    _short.Reset();
+
+    var chart = this.GetChart();
+
+    if (chart != null)
+    {
+        foreach (var element in _area.Elements.ToArray())
+        {
+            if (_area.Elements.Contains(element))
+                chart.RemoveElement(_area, element);
+        }
+
+        if (chart.Areas.Contains(_area))
+            chart.RemoveArea(_area);
+    }
+
+    base.OnReseted();
+}
+
+]]></code>
+
+<para>The 
+<codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStarted</codeEntityReference> 
+method is override in order to: 1) when the trading algorithm starts, the moving 
+averages are reinitialized, 2) all graphic elements are added to the chart, 
+3) subscribe to the event of new trades occurrence, 4) subscribe to the event 
+of new orders occurrence or change of old ones, start receiving new information 
+by the instrument.</para>
+<code language="C#" title="C#"><![CDATA[
+protected override void OnStarted()
+{
+    this.AddInfoLog("OnStarted");
+    
+    _long.Reset();
+    _short.Reset();
+   
+    var chart = this.GetChart();
+
+    if (!chart.Areas.Contains(_area))
+    {
+        chart.AddArea(_area);
+
+        chart.AddElement(_area, _candlesElem);
+        chart.AddElement(_area, _tradesElem);
+        chart.AddElement(_area, _shortElem);
+        chart.AddElement(_area, _longElem);
+    }
+   
+    this
+    .WhenNewMyTrades()
+    .Do(trades => _myTrades.AddRange(trades))
+    .Apply(this);
+   
+    this
+    .WhenOrderRegistered()
+    .Or(this.WhenOrderChanged())
+    .Do(ord => NewMyOrder?.Invoke(ord))
+    .Apply(this);
+    
+    Connector.RegisterSecurity(Security);
+
+    base.OnStarted();
+}
+
+]]></code>
+
+<para>The 
+<codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.OnStopped</codeEntityReference>
+method is overridden to stop receiving new information by the instrument:</para>
+<code language="C#" title="C#"><![CDATA[
+protected override void OnStopped()
+{
+    this.AddInfoLog("OnStopped");
+    Connector.UnRegisterSecurity(Security);
+    base.OnStopped();
+}
+
+]]></code>
+
+<para>The <legacyBold>this.AddInfoLog("OnStopped");</legacyBold> string displays 
+the message OnStopped in the <legacyBold>Logs</legacyBold> window.</para>
+<para>The main strategy calculation is performed in the 
+<legacyBold>ProcessCandle(Candle candle)</legacyBold> method. Since it is 
+designated by the 
+<codeEntityReference>T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute</codeEntityReference> 
+attribute, this means that it is the input cube parameter accepting 
+the <legacyBold>Candles</legacyBold>.</para>
+<code language="C#" title="C#"><![CDATA[
+[DiagramExternal]
+public void ProcessCandle(Candle candle)
+{
+
+    if (ProcessState == ProcessStates.Stopping)
+    {
+        CancelActiveOrders();
+        return;
+    }
+
+    this.AddInfoLog(LocalizedStrings.Str3634Params.Put(candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security));
+
+
+    var longValue = _long.Process(candle);
+    var shortValue = _short.Process(candle);
+
+    var isShortLessThenLong = _short.GetCurrentValue() < _long.GetCurrentValue();
+
+   
+    if (_isShortLessThenLong != isShortLessThenLong)
+    {
+     
+        var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+
+       
+        var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+
+      
+        var price = candle.ClosePrice + ((direction == Sides.Buy ? Security.PriceStep : -Security.PriceStep) ?? 1);
+     
+        RegisterOrder(this.CreateOrder(direction, price, volume));
+
+        _isShortLessThenLong = isShortLessThenLong;
+    }
+
+  
+    var trade = _myTrades.FirstOrDefault();
+    _myTrades.Clear();
+
+    var data = new ChartDrawData();
+
+    data
+      .Group(candle.OpenTime)
+        .Add(_candlesElem, candle)
+        .Add(_shortElem, shortValue)
+        .Add(_longElem, longValue)
+        .Add(_tradesElem, trade);
+
+    this.GetChart().Draw(data);
+}
+
+]]></code>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="77322bb8-139a-40e8-b871-8a13ddc96b13" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

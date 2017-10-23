@@ -7,9 +7,9 @@
 
 	  <introduction>
 		  <para>
-			  Стаканы в <token>stocksharp</token> представлены типом данных <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>.
-			  С помощью этого типа можно совершать ряд операций над данными в стакане. Например, можно делать разреженными или, наоборот, группировать
-			  по ценовым уровням.
+			  Order books in the <token>stocksharp</token> are presented by the <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>
+			  data type. A number of operations on the data in the order book can be performed with this type. For example, you can sparse or, vice versa,
+			  groupe the data by price levels.
 		  </para>
 	  </introduction>
 
@@ -22,24 +22,24 @@
     <!-- One or more procedure or section elements -->
 
 	  <procedure>
-		  <title>Модификации стакана</title>
+		  <title>Order book modifications</title>
 
 		  <steps class="ordered">
 			  <step>
 				  <content>
 					  <para>
-						  Создание разреженного стакана из обычного осуществляется через метод <codeEntityReference qualifyHint="true">Overload:StockSharp.Algo.TraderHelper.Sparse</codeEntityReference>:
+						  The creating of sparse order book from the normal one is carried out through the <codeEntityReference qualifyHint="true">Overload:StockSharp.Algo.TraderHelper.Sparse</codeEntityReference> method:
 					  </para>
 					  <code language="C#">MarketDepth depth = ....;
 
 var sparseDepth = depth.Sparse();</code>
 					  <para>
-						  Все котировки <codeEntityReference>T:StockSharp.BusinessEntities.Quote</codeEntityReference> в полученном стакане будут иметь нулевой объем,
-						  и они будут созданы с шагом <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.StepPrice</codeEntityReference>.
+						  All the <codeEntityReference>T:StockSharp.BusinessEntities.Quote</codeEntityReference> quotations in the resulting order book will have
+						  zero volume, and they will created with the <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.StepPrice</codeEntityReference> step.
 					  </para>
 					  <para>
-						  Чтобы объединить разреженный стакан с первоначальным (соединить реальные котировки и разреженные), необходимо вызвать метод
-						  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.Join(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.MarketDepth)</codeEntityReference>:
+						  To combine the sparse order book with the original one (to connect the real and sparse quotations), you must call the
+						  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.Join(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.MarketDepth)</codeEntityReference> method:
 					  </para>
 					  <code language="C#">var joinedDepth = sparseDepth.Join(depth);</code>
 				  </content>
@@ -47,18 +47,18 @@ var sparseDepth = depth.Sparse();</code>
 			  <step>
 				  <content>
 					  <para>
-						  Группировка стакана по ценовым уровням осуществляется через метод 
-						  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.Group(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference>:
+						  The grouping of the order book by price levels is carried out through the 
+						  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.Group(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference> method:
 					  </para>
 					  <code language="C#">MarketDepth depth = ....;
 
-// сгруппировать стакан по ценовому уровню в 10 пунктов
+// grouping of the order book by 10 points price levels
 var grouppedDepth = depth.Group(10.Points(depth.Security));</code>
 					  <para>
-						  Результатом группировки будет стакан <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>,
-						  состоящий из котировок типа <codeEntityReference>T:StockSharp.BusinessEntities.AggregatedQuote</codeEntityReference>. Через свойство
-						  <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.AggregatedQuote.InnerQuotes</codeEntityReference>
-						  можно получить реальные котировки стакана, на основе которых произошла группировка по ценовому уровню.
+						  The result of the grouping will be the <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>
+						  order book, consisting of quotations of the <codeEntityReference>T:StockSharp.BusinessEntities.AggregatedQuote</codeEntityReference> type.
+						  Through the <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.AggregatedQuote.InnerQuotes</codeEntityReference>
+						  property the real order book quotations  can get, on which the grouping by price level was done.
 					  </para>
 				  </content>
 			  </step>
@@ -66,14 +66,14 @@ var grouppedDepth = depth.Group(10.Points(depth.Security));</code>
 	  </procedure>
     
     <section>
-      <title>Проверка данных</title>
+      <title>Data check</title>
 
       <content>
         <para>
-        	Иногда требуется проверять данные в стакане для обнаружения в них коллизий. Например, проверка загруженных стаканов из внешних источников,
-       		или отслеживание корректности работы биржи в период аномальной работы (кризис, стоп торги). Для этого можно использовать специальный метод
-       		<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.MarketDepth.Verify</codeEntityReference>, который проверяет, не перемешаны
-       		ли между собой биды и оффера.
+        	Sometimes you need to check the data in the order book to reveal data collisions. For example, the check of downloaded order books from external sources,
+        	or tracing the correctness of the exchange operation during the abnormal (the crisis, stop trading) period. To do this you can use the special
+       		<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.MarketDepth.Verify</codeEntityReference> method, which checks whether bids and offers
+       		are mixed among themselves.
        	</para>
       </content>
     </section>

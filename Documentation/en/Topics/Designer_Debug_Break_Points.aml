@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="81221569-7e65-4817-9b1f-7d6c6efccdf6" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To add a breakpoint, select a cube and click the 
+<mediaLinkInline><image xlink:href="Designer_Debug_01"/></mediaLinkInline> 
+<legacyBold>Add breakpoint</legacyBold> button. Breakpoints will be highlighted 
+with a red circle:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Stopping_point_00"/>
+</mediaLink>
+ 
+<para>When the breakpoint on the element is triggered, the element background 
+changes to light red, the element is automatically highlighted, the properties 
+window displays its properties and the values of the input and output parameters. 
+If input or output parameter is pointed by mouse, a prompt appears with its value. 
+An example of viewing the composite element values at the input and output during 
+the strategy execution is shown in the figure below:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Stopping_point_01"/>
+</mediaLink>
+ 
+<para>Breakpoints can be added both before testing process startup and during 
+the testing of the strategy on the history.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="f1929c45-e092-4b11-a31e-9d153e075429" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

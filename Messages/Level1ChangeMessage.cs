@@ -40,7 +40,7 @@ namespace StockSharp.Messages
 		OpenPrice,
 
 		/// <summary>
-		/// Greatest price.
+		/// Highest price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str287Key)]
@@ -110,17 +110,17 @@ namespace StockSharp.Messages
 		OpenInterest,
 
 		/// <summary>
-		/// Minimum price.
+		/// Price (min).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str83Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.PriceMinKey)]
 		MinPrice,
 
 		/// <summary>
-		/// Maximum price.
+		/// Price (max).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str81Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.PriceMaxKey)]
 		MaxPrice,
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace StockSharp.Messages
 		AsksCount,
 
 		/// <summary>
-		/// Volatility (historic).
+		/// Volatility (historical).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str299Key)]
@@ -344,7 +344,7 @@ namespace StockSharp.Messages
 		/// Number of trades.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str323Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.NumOfTradesKey)]
 		TradesCount,
 
 		/// <summary>
@@ -516,7 +516,7 @@ namespace StockSharp.Messages
 		QuickRatio,
 
 		/// <summary>
-		/// Capital (longterm debt).
+		/// Capital (long-term debt).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str334Key)]
@@ -590,7 +590,49 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.DecimalsKey)]
-		Decimals
+		Decimals,
+
+		/// <summary>
+		/// Duration.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.DurationKey)]
+		Duration,
+
+		/// <summary>
+		/// Number of issued contracts.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.IssueSizeKey)]
+		IssueSize,
+
+		/// <summary>
+		/// BuyBack date.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.BuyBackDateKey)]
+		BuyBackDate,
+
+		/// <summary>
+		/// BuyBack price.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.BuyBackPriceKey)]
+		BuyBackPrice,
+
+		/// <summary>
+		/// Turnover.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.TurnoverKey)]
+		Turnover,
+
+		/// <summary>
+		/// The middle of spread.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.SpreadKey)]
+		SpreadMiddle,
 	}
 
 	/// <summary>

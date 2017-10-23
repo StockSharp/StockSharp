@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b596ee27-a887-4814-9ad7-56cd62cec38f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Association_00"/>
+</mediaLink>
+<para>The cube is used to combine the same type of data coming from different 
+cubes into one output parameter for further passing to some element. Or dividing 
+the received data into several elements.</para>
+
+ <definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Any data</legacyBold> - specifies the type of data 
+  received and passed.</para></listItem>
+</list>
+  </definition>
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Any data</legacyBold> - specifies the type of data 
+  received and passed.</para></listItem>
+</list>
+  </definition>
+  <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Type</legacyBold> - specifies the type of data 
+  received and passed.</para></listItem>
+
+</list>
+  </definition>
+</definitionTable>
+ <para>An example of using a cube is given in 
+ <link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" />, 
+ <link xlink:href="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" /> sections. For example, 
+ in the <legacyBold>Intersection</legacyBold> element, the values of two lines 
+ are passed to input, which are used by different inner cubes. In order for the 
+ cube does not have duplicate parameters for the same data, there are 
+ <legacyBold>Combination</legacyBold> cubes at the input that allow
+ you to divide the incoming data into several cubes of elements.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

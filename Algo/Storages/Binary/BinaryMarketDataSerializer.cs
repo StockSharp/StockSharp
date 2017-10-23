@@ -53,18 +53,19 @@ namespace StockSharp.Algo.Storages.Binary
 		public static readonly Version Version56 = new Version(5, 6);
 		public static readonly Version Version57 = new Version(5, 7);
 		public static readonly Version Version58 = new Version(5, 8);
+		public static readonly Version Version59 = new Version(5, 9);
+		public static readonly Version Version60 = new Version(6, 0);
+		public static readonly Version Version61 = new Version(6, 1);
 	}
 
-	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo
-		where TMetaInfo : BinaryMetaInfo<TMetaInfo>
+	abstract class BinaryMetaInfo : MetaInfo
 	{
 		protected BinaryMetaInfo(DateTime date)
 			: base(date)
 		{
 			LocalOffset = DateTimeOffset.Now.Offset;
 
-			FirstLocalTime = date;
-			LastLocalTime = date;
+			FirstLocalTime = LastLocalTime = DateTime.UtcNow;
 		}
 
 		public Version Version { get; set; }
@@ -75,8 +76,10 @@ namespace StockSharp.Algo.Storages.Binary
 		// сериализация и десериализация их полей сделана в дочерних классах
 		public decimal FirstPrice { get; set; }
 		public decimal LastPrice { get; set; }
-		public decimal FirstNonSystemPrice { get; set; }
-		public decimal LastNonSystemPrice { get; set; }
+		public decimal FirstFractionalPrice { get; set; }
+		public decimal LastFractionalPrice { get; set; }
+		public decimal FirstPriceStep { get; set; }
+		public decimal LastPriceStep { get; set; }
 
 		public decimal FirstFractionalVolume { get; set; }
 		public decimal LastFractionalVolume { get; set; }
@@ -90,7 +93,16 @@ namespace StockSharp.Algo.Storages.Binary
 		public TimeSpan FirstServerOffset { get; set; }
 		public TimeSpan LastServerOffset { get; set; }
 
-		public override object LastId => LastTime;
+		public TimeSpan FirstItemLocalOffset { get; set; }
+		public TimeSpan LastItemLocalOffset { get; set; }
+		public DateTime FirstItemLocalTime { get; set; }
+		public DateTime LastItemLocalTime { get; set; }
+
+		public override object LastId
+		{
+			get { return LastTime; }
+			set { }
+		}
 
 		public bool IsEmpty()
 		{
@@ -145,22 +157,38 @@ namespace StockSharp.Algo.Storages.Binary
 			stream.Position += extInfoSize;
 		}
 
-		protected void WriteNonSystemPrice(Stream stream)
+		protected void WriteFractionalPrice(Stream stream)
 		{
 			if (Version < MarketDataVersions.Version43)
 				return;
 
-			stream.Write(FirstNonSystemPrice);
-			stream.Write(LastNonSystemPrice);
+			stream.Write(FirstFractionalPrice);
+			stream.Write(LastFractionalPrice);
 		}
 
-		protected void ReadNonSystemPrice(Stream stream)
+		protected void ReadFractionalPrice(Stream stream)
 		{
 			if (Version < MarketDataVersions.Version43)
 				return;
 
-			FirstNonSystemPrice = stream.Read<decimal>();
-			LastNonSystemPrice = stream.Read<decimal>();
+			FirstFractionalPrice = stream.Read<decimal>();
+			LastFractionalPrice = stream.Read<decimal>();
+		}
+
+		protected void WritePriceStep(Stream stream)
+		{
+			WriteFractionalPrice(stream);
+
+			stream.Write(FirstPriceStep);
+			stream.Write(LastPriceStep);
+		}
+
+		protected void ReadPriceStep(Stream stream)
+		{
+			ReadFractionalPrice(stream);
+
+			FirstPriceStep = stream.Read<decimal>();
+			LastPriceStep = stream.Read<decimal>();
 		}
 
 		protected void WriteFractionalVolume(Stream stream)
@@ -219,6 +247,42 @@ namespace StockSharp.Algo.Storages.Binary
 			LastServerOffset = stream.Read<TimeSpan>();
 		}
 
+		protected void WriteItemLocalOffset(Stream stream, Version minVersion)
+		{
+			if (Version < minVersion)
+				return;
+
+			stream.Write(FirstItemLocalOffset);
+			stream.Write(LastItemLocalOffset);
+		}
+
+		protected void ReadItemLocalOffset(Stream stream, Version minVersion)
+		{
+			if (Version < minVersion)
+				return;
+
+			FirstItemLocalOffset = stream.Read<TimeSpan>();
+			LastItemLocalOffset = stream.Read<TimeSpan>();
+		}
+
+		protected void WriteItemLocalTime(Stream stream, Version minVersion)
+		{
+			if (Version < minVersion)
+				return;
+
+			stream.Write(FirstItemLocalTime);
+			stream.Write(LastItemLocalTime);
+		}
+
+		protected void ReadItemLocalTime(Stream stream, Version minVersion)
+		{
+			if (Version < minVersion)
+				return;
+
+			FirstItemLocalTime = stream.Read<DateTime>();
+			LastItemLocalTime = stream.Read<DateTime>();
+		}
+
 		//public override TMetaInfo Clone()
 		//{
 		//	var copy = typeof(TMetaInfo).CreateInstance<TMetaInfo>(Date);
@@ -226,7 +290,7 @@ namespace StockSharp.Algo.Storages.Binary
 		//	return copy;
 		//}
 
-		public virtual void CopyFrom(TMetaInfo src)
+		public virtual void CopyFrom(BinaryMetaInfo src)
 		{
 			Version = src.Version;
 			Count = src.Count;
@@ -236,8 +300,8 @@ namespace StockSharp.Algo.Storages.Binary
 			LastTime = src.LastTime;
 			LocalOffset = src.LocalOffset;
 			ServerOffset = src.ServerOffset;
-			FirstNonSystemPrice = src.FirstNonSystemPrice;
-			LastNonSystemPrice = src.LastNonSystemPrice;
+			FirstFractionalPrice = src.FirstFractionalPrice;
+			LastFractionalPrice = src.LastFractionalPrice;
 			VolumeStep = src.VolumeStep;
 			FirstFractionalVolume = src.FirstFractionalVolume;
 			LastFractionalVolume = src.LastFractionalVolume;
@@ -247,11 +311,19 @@ namespace StockSharp.Algo.Storages.Binary
 			LastLocalOffset = src.LastLocalOffset;
 			FirstServerOffset = src.FirstServerOffset;
 			LastServerOffset = src.LastServerOffset;
+			FirstItemLocalTime = src.FirstItemLocalTime;
+			LastItemLocalTime = src.LastItemLocalTime;
+			FirstItemLocalOffset = src.FirstItemLocalOffset;
+			LastItemLocalOffset = src.LastItemLocalOffset;
+			FirstPriceStep = src.FirstPriceStep;
+			LastPriceStep = src.LastPriceStep;
+			FirstPrice = src.FirstPrice;
+			LastPrice = src.LastPrice;
 		}
 	}
 
 	abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSerializer<TData>
-		where TMetaInfo : BinaryMetaInfo<TMetaInfo>
+		where TMetaInfo : BinaryMetaInfo
 	{
 		public class MarketDataEnumerator : SimpleEnumerator<TData>
 		{
@@ -334,20 +406,29 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		protected BinaryMarketDataSerializer(SecurityId securityId, int dataSize, Version version)
+		protected BinaryMarketDataSerializer(SecurityId securityId, int dataSize, Version version, IExchangeInfoProvider exchangeInfoProvider)
 		{
 			if (securityId == null)
 				throw new ArgumentNullException(nameof(securityId));
+
+			if (exchangeInfoProvider == null)
+				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			SecurityId = securityId;
 			DataSize = dataSize;
 
 			Version = version;
+			ExchangeInfoProvider = exchangeInfoProvider;
 		}
 
-		protected SecurityId SecurityId { get; private set; }
-		protected int DataSize { get; private set; }
+		protected SecurityId SecurityId { get; }
+		protected int DataSize { get; }
 		protected Version Version { get; set; }
+		protected IExchangeInfoProvider ExchangeInfoProvider { get; }
+
+		public TimeSpan TimePrecision { get; } = TimeSpan.FromTicks(1);
+
+		public StorageFormats Format => StorageFormats.Binary;
 
 		IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
 		{
@@ -387,5 +468,22 @@ namespace StockSharp.Algo.Storages.Binary
 
 		protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);
 		public abstract TData MoveNext(MarketDataEnumerator enumerator);
+
+		protected void WriteItemLocalTime(BitArrayWriter writer, TMetaInfo metaInfo, Message message, bool isTickPrecision)
+		{
+			var lastLocalOffset = metaInfo.LastItemLocalOffset;
+			metaInfo.LastItemLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastItemLocalTime, "local time", true, true, metaInfo.LocalOffset, true, isTickPrecision, ref lastLocalOffset);
+			metaInfo.LastItemLocalOffset = lastLocalOffset;
+		}
+
+		protected DateTimeOffset ReadItemLocalTime(BitArrayReader reader, TMetaInfo metaInfo, bool isTickPrecision)
+		{
+			var prevTsTime = metaInfo.FirstItemLocalTime;
+			var lastOffset = metaInfo.FirstItemLocalOffset;
+			var retVal = reader.ReadTime(ref prevTsTime, true, true, lastOffset, true, isTickPrecision, ref lastOffset);
+			metaInfo.FirstItemLocalTime = prevTsTime;
+			metaInfo.FirstItemLocalOffset = lastOffset;
+			return retVal;
+		}
 	}
 }

@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		/// <param name="from">The initial date from which the candles will be get.</param>
 		/// <param name="to">The final date by which the candles will be get.</param>
-		void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to);
+		void Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to);
 
 		/// <summary>
 		/// To add a candle for the series.

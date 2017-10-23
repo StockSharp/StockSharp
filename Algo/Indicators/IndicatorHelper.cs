@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// To get the indicator value by the index (0 � last value).
+		/// To get the indicator value by the index (0 - last value).
 		/// </summary>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="index">The value index.</param>
@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// To get the indicator value by the index (0 � last value).
+		/// To get the indicator value by the index (0 - last value).
 		/// </summary>
 		/// <typeparam name="T">Value type.</typeparam>
 		/// <param name="indicator">Indicator.</param>
@@ -119,6 +119,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// To renew the indicator with numeric pair.
 		/// </summary>
+		/// <typeparam name="TValue">Value type.</typeparam>
 		/// <param name="indicator">Indicator.</param>
 		/// <param name="value">The pair of values.</param>
 		/// <param name="isFinal">If the pair final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
@@ -151,6 +152,26 @@ namespace StockSharp.Algo.Indicators
 			}
 
 			return input == null ? default(T) : input.GetValue<T>();
+		}
+
+		/// <summary>
+		/// Get value type for specified indicator.
+		/// </summary>
+		/// <param name="indicatorType">Indicator type.</param>
+		/// <param name="isInput">Is input.</param>
+		/// <returns>Value type.</returns>
+		public static Type GetValueType(this Type indicatorType, bool isInput)
+		{
+			if (indicatorType == null)
+				throw new ArgumentNullException(nameof(indicatorType));
+
+			if (!typeof(IIndicator).IsAssignableFrom(indicatorType))
+				throw new ArgumentException(nameof(indicatorType));
+
+			return (isInput
+					? (IndicatorValueAttribute)indicatorType.GetAttribute<IndicatorInAttribute>()
+					: indicatorType.GetAttribute<IndicatorOutAttribute>()
+				)?.Type ?? typeof(DecimalIndicatorValue);
 		}
 	}
 }

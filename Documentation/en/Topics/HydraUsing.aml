@@ -6,32 +6,25 @@
 			  <step>
 				  <content>
 		  				<para>
-							Для установки <token>hydra</token> необходимо на сайте <token>StockSharp</token>
- 							перейти в <externalLink>
-							<linkText>раздел скачивания</linkText>
-								<linkAlternateText>stocksharp.com/products/download</linkAlternateText>
-								<linkUri>http://stocksharp.com/products/download/</linkUri>
-								<linkTarget>_blank</linkTarget>
-							</externalLink>
-.
+							To install the <token>hydra</token> you should go to the <token>download</token> page.
 		  				</para>
 		  				<mediaLink><image placement="center" xlink:href="hydra_setup1" /></mediaLink>	
 				  </content>
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Скачать дистрибутив <token>hydra</token>.</para>
+		  				<para>Download the <token>hydra</token> installation package.</para>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Разблокировать(правая кнопка мышки на файле, свойства) и распаковать Hydra.zip в пустой каталог.</para>
+		  				<para>Unlock (right-click on the file properties) and to unpack Hydra.zip into an empty directory.</para>
 		  				<mediaLink><image placement="center" xlink:href="hydra_setup3" /></mediaLink>
 				  </content>
 			  </step>			  
 			  <step>
 				  <content>
-		  				<para>Затем запустить Hydra.Update.exe и нажать кнопку <legacyBold>Установить</legacyBold>.</para>
+		  				<para>Then run Hydra.Update.exe and to click the <legacyBold>Install</legacyBold> button.</para>
 		  				<mediaLink><image placement="center" xlink:href="hydra_setup4" /></mediaLink>
 				  </content>
 			  </step>			  

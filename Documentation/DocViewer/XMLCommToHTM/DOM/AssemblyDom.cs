@@ -80,22 +80,21 @@ namespace XMLCommToHTM.DOM
 			var nsDict = new Dictionary<string, List<TypeDom>>();
 			foreach (var type in AllTypes.Where(_ => _.Type.DeclaringType == null))
 			{
-				List<TypeDom> nsTypes;
-				if (nsDict.TryGetValue(type.Namespace, out nsTypes))
+				if (nsDict.TryGetValue(type.Namespace, out var nsTypes))
 				{
 					nsTypes.Add(type);
 				}
 				else
 				{
-					nsTypes = new List<TypeDom>{type};
-					nsDict.Add(type.Namespace,nsTypes);
+					nsTypes = new List<TypeDom> { type };
+					nsDict.Add(type.Namespace, nsTypes);
 				}
 			}
 			Namespaces = nsDict
 				.Select(_ =>
 				{
 					var ns = new NamespaceDom(_.Key);
-					ns.Types.AddMany(_.Value);
+					ns.Types.AddRange(_.Value);
 					return ns;
 				})
 				.ToArray();
@@ -112,11 +111,10 @@ namespace XMLCommToHTM.DOM
 		{
 			foreach (var ntype in typeDom.Type.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic))
 			{
-				TypeDom nestedTypeDom;
-				if (dict.TryGetValue(TypeUtils.GetNameWithNamespaceShortGeneric(ntype), out nestedTypeDom))
+				if (dict.TryGetValue(TypeUtils.GetNameWithNamespaceShortGeneric(ntype), out var nestedTypeDom))
 				{
-					if(typeDom.NestedTypes==null)
-						typeDom.NestedTypes=new TypeDom[0];
+					if (typeDom.NestedTypes == null)
+						typeDom.NestedTypes = new TypeDom[0];
 					typeDom.NestedTypes = typeDom.NestedTypes
 						.Concat(Enumerable.Repeat(nestedTypeDom, 1))
 						.ToArray();

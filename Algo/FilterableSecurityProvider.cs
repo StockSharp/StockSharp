@@ -89,20 +89,15 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(criteria));
 
 			var filter = criteria.Id.IsEmpty()
-				? (criteria.IsLookupAll() ? string.Empty : criteria.Code.ToLowerInvariant())
-				: criteria.Id.ToLowerInvariant();
+				? (criteria.IsLookupAll() ? string.Empty : criteria.Code)
+				: criteria.Id;
 
 			var securities = _trie.Retrieve(filter);
 
 			if (!criteria.Id.IsEmpty())
 				securities = securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id));
 
-			return securities;
-		}
-
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return null;
+			return securities.Filter(criteria);
 		}
 
 		private void AddSecurities(IEnumerable<Security> securities)

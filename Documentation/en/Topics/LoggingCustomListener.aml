@@ -13,56 +13,153 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       	<para>
-      		Если необходимо создать свою реализацию <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference> (например, когда
-      		требуется сохранять сообщения в базе данных), то можно или отнаследоваться от класса <codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference>
-      		или напрямую реализовать интерфейс <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference>. Через метод
+      		If you want to create your own implementation of the <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference> (for example, when you
+      		want to save messages in the database), the class <codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference>
+      		can be inherited or the <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference> interface can be implemented directly. The object of the
+      		<codeEntityReference>T:StockSharp.Logging.LogMessage</codeEntityReference> class is passed through the
 			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Logging.ILogListener.WriteMessages(System.Collections.Generic.IEnumerable{StockSharp.Logging.LogMessage})</codeEntityReference>
-			передается объект класса <codeEntityReference>T:StockSharp.Logging.LogMessage</codeEntityReference>. Данный класс содержит информацию об
-			источнике сообщения <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Source</codeEntityReference> (например, стратегия,
-			которая сгенерировала сообщение), тип сообщения	<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Level</codeEntityReference>
-			(информация, предупреждение или ошибка), а также сам текст	<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Message</codeEntityReference>.
-			Ниже в качестве примера приведен код класс <codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference>:
+			method. This class contains the information about the message source <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Source</codeEntityReference> (
+			for example, a strategy that has generated the message), the message type <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Level</codeEntityReference>
+			(information, warning or error), as well as the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogMessage.Message</codeEntityReference>.
+			text itself. The following example shows the source code of <codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference>:
 		</para>
 		<code language="C#"><![CDATA[/// <summary>
-/// Логгер, отсылающий данные на email. 
+/// The logger sending data to the email.
 /// </summary>
 public class EmailLogListener : LogListener
 {
+	private readonly BlockingQueue<Tuple<string, string>> _queue = new BlockingQueue<Tuple<string, string>>();
+
+	private bool _isThreadStarted;
+
 	/// <summary>
-	/// Создать <see cref="EmailLogListener"/>.
+	/// Initializes a new instance of the <see cref="EmailLogListener"/>.
 	/// </summary>
-	/// <param name="from">Адрес, от имени которого будет отправлено сообщение.</param>
-	/// <param name="to">Адрес, куда будет отправлено сообщение.</param>
-	public EmailLogListener(string from, string to)
+	public EmailLogListener()
 	{
-		if (from.IsEmpty())
-			throw new ArgumentNullException("from");
-
-		if (to.IsEmpty())
-			throw new ArgumentNullException("to");
-
-		From = from;
-		To = to;
 	}
 
 	/// <summary>
-	/// Адрес, от имени которого будет отправлено сообщение.
+	/// The address, on whose behalf the message will be sent.
 	/// </summary>
-	public string From { get; private set; }
+	public string From { get; set; }
 
 	/// <summary>
-	/// Адрес, куда будет отправлено сообщение.
+	/// The address to which the message will be sent to.
 	/// </summary>
-	public string To { get; private set; }
+	public string To { get; set; }
 
 	/// <summary>
-	/// Записать сообщение.
+	/// To create the email client.
 	/// </summary>
-	/// <param name="message">Отладочное сообщение.</param>
+	/// <returns>The email client.</returns>
+	protected virtual SmtpClient CreateClient()
+	{
+		return new SmtpClient();
+	}
+
+	/// <summary>
+	/// To create a header.
+	/// </summary>
+	/// <param name="message">A debug message.</param>
+	/// <returns>Header.</returns>
+	protected virtual string GetSubject(LogMessage message)
+	{
+		if (message == null)
+			throw new ArgumentNullException(nameof(message));
+
+		return message.Source.Name + " " + message.Level + " " + message.Time.ToString(TimeFormat);
+	}
+
+	/// <summary>
+	/// To add a message in a queue for sending.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	private void EnqueueMessage(LogMessage message)
+	{
+		if (message.IsDispose)
+		{
+			Dispose();
+			return;
+		}
+
+		_queue.Enqueue(Tuple.Create(GetSubject(message), message.Message));
+
+		lock (_queue.SyncRoot)
+		{
+			if (_isThreadStarted)
+				return;
+
+			_isThreadStarted = true;
+
+			ThreadingHelper.Thread(() =>
+			{
+				try
+				{
+					using (var email = CreateClient())
+					{
+						while (true)
+						{
+							Tuple<string, string> m;
+
+							if (!_queue.TryDequeue(out m))
+								break;
+
+							email.Send(From, To, m.Item1, m.Item2);
+						}
+					}
+
+					lock (_queue.SyncRoot)
+						_isThreadStarted = false;
+				}
+				catch (Exception ex)
+				{
+					Trace.WriteLine(ex);
+				}
+			}).Name("Email log queue").Launch();
+		}
+	}
+
+	/// <summary>
+	/// To record a message.
+	/// </summary>
+	/// <param name="message">A debug message.</param>
 	protected override void OnWriteMessage(LogMessage message)
 	{
-		var email = new SmtpClient();
-		email.Send(new MailMessage(From, To, message.Source.Name + " " + message.Level, message.Message));
+		EnqueueMessage(message);
+	}
+
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		From = storage.GetValue<string>(nameof(From));
+		To = storage.GetValue<string>(nameof(To));
+	}
+
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.SetValue(nameof(From), From);
+		storage.SetValue(nameof(To), To);
+	}
+
+	/// <summary>
+	/// Release resources.
+	/// </summary>
+	protected override void DisposeManaged()
+	{
+		_queue.Close();
+		base.DisposeManaged();
 	}
 }]]></code>
     </introduction>

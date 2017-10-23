@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="66f50d15-6eaa-4692-ba88-12bee0b6e6e5" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+
+<para>In the <legacyBold>Board editor</legacyBold> panel, you can create <legacyBold>Boards</legacyBold> 
+and <legacyBold>Exchanges</legacyBold>, and view or customize existing ones.</para>
+      <mediaLink>
+       		<image placement="left" xlink:href="Designer_Boards" />
+	  </mediaLink>
+	  
+	  
+	  <para>In <token>stocksharp</token>, instruments from different sources have 
+	  a unified identifier that consists of the instrument code and the board code 
+	  and the following syntax is used - [<legacyBold>instrument code]@[board code]</legacyBold>. For example, 
+	  for <legacyBold>AAPL</legacyBold> shares of the <legacyBold>NASDAQ</legacyBold> 
+	  exchange, the identifier is <legacyBold>AAPL@NASDAQ</legacyBold>. Each
+	  instrument is attached to a specific board on which it is traded. With that, 
+	  the instrument can be traded on different boards. In this case, the board codes 
+	  will be different. For each board, you can set up a work schedule, work days 
+	  and weekends.</para>
+	  <para>The exchange may have several boards with different terms of trade 
+	  (session time, commission, etc.). But each board is attached to a specific 
+	  exchange. Therefore, in the <legacyBold>Board editor</legacyBold>, when you select a board, the 
+	  information about the exchange will automatically be changed, to the exchange 
+	  on which the board is to be placed. For each exchange, you can set the 
+	  exchange's code, country, Russian-language and English-language names.</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

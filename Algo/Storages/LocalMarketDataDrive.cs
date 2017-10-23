@@ -29,6 +29,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
+	using Ecng.Configuration;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -290,7 +291,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="path">The path to the directory with data.</param>
 		public LocalMarketDataDrive(string path)
 		{
-			_path = path;
+			_path = path.ToFullPathIfNeed();
 		}
 
 		private string _path;
@@ -300,7 +301,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public override string Path
 		{
-			get { return _path; }
+			get => _path;
 			set
 			{
 				if (value.IsEmpty())
@@ -342,22 +343,27 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Get all available instruments.
 		/// </summary>
-		public override IEnumerable<SecurityId> AvailableSecurities
+		public override IEnumerable<SecurityId> AvailableSecurities => GetAvailableSecurities(Path);
+
+		/// <summary>
+		/// Get all available instruments.
+		/// </summary>
+		/// <param name="path">The path to the directory with data.</param>
+		/// <returns>All available instruments.</returns>
+		public static IEnumerable<SecurityId> GetAvailableSecurities(string path)
 		{
-			get
-			{
-				var idGenerator = new SecurityIdGenerator();
+			var idGenerator = new SecurityIdGenerator();
 
-				if (!Directory.Exists(Path))
-					return Enumerable.Empty<SecurityId>();
+			if (!Directory.Exists(path))
+				return Enumerable.Empty<SecurityId>();
 
-				return Directory
-					.EnumerateDirectories(Path)
-					.SelectMany(Directory.EnumerateDirectories)
-					.Select(System.IO.Path.GetFileName)
-					.Select(n => idGenerator.Split(n, true))
-					.Where(t => !t.IsDefault());
-			}
+			return Directory
+				.EnumerateDirectories(path)
+				.SelectMany(Directory.EnumerateDirectories)
+				.Select(IOPath.GetFileName)
+				.Select(TraderHelper.FolderNameToSecurityId)
+				.Select(n => idGenerator.Split(n, true))
+				.Where(t => !t.IsDefault());
 		}
 
 		/// <summary>
@@ -414,18 +420,19 @@ namespace StockSharp.Algo.Storages
 				case StorageFormats.Csv:
 					return ".csv";
 				default:
-					throw new ArgumentOutOfRangeException(nameof(format));
+					throw new ArgumentOutOfRangeException(nameof(format), format, LocalizedStrings.Str1219);
 			}
 		}
 
 		private static readonly SynchronizedPairSet<DataType, string> _fileNames = new SynchronizedPairSet<DataType, string>
 		{
-			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick), "trades" },
-			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog), "orderLog" },
-			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction), "transactions" },
-			{ DataType.Create(typeof(QuoteChangeMessage), null), "quotes" },
-			{ DataType.Create(typeof(Level1ChangeMessage), null), "security" },
-			{ DataType.Create(typeof(NewsMessage), null), "news" },
+			{ DataType.Ticks, "trades" },
+			{ DataType.OrderLog, "orderLog" },
+			{ DataType.Transactions, "transactions" },
+			{ DataType.MarketDepth, "quotes" },
+			{ DataType.Level1, "security" },
+			{ DataType.PositionChanges, "position" },
+			{ DataType.News, "news" },
 		};
 
 		/// <summary>
@@ -465,7 +472,7 @@ namespace StockSharp.Algo.Storages
 			string fileName;
 
 			if (dataType.IsCandleMessage())
-				fileName = "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
+				fileName = "candles_{0}_{1}".Put(dataType.Name.Remove(nameof(Message)), TraderHelper.CandleArgToFolderName(arg));
 			else
 			{
 				fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));

@@ -19,13 +19,10 @@ namespace StockSharp.Algo.Candles
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
-
-	using MoreLinq;
 
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
@@ -271,140 +268,144 @@ namespace StockSharp.Algo.Candles
 			return manager;
 		}
 
-		private sealed class CandleEnumerable<TValue> : SimpleEnumerable<Candle>//, IEnumerableEx<Candle>
+		private sealed class CandleMessageEnumerable : SimpleEnumerable<CandleMessage>
 		{
-			private sealed class CandleEnumerator : SimpleEnumerator<Candle>
+			private sealed class CandleMessageEnumerator : SimpleEnumerator<CandleMessage>
 			{
-				private sealed class EnumeratorCandleBuilderSource : ConvertableCandleBuilderSource<TValue>
+				private IEnumerator<Message> _messagesEnumerator;
+				private readonly List<CandleMessage> _finishedCandles = new List<CandleMessage>();
+				private readonly ICandleBuilder _candleBuilder;
+				private readonly MarketDataMessage _mdMsg;
+				private readonly bool _onlyFormed;
+				private readonly ICandleBuilderValueTransform _transform;
+				private readonly IEnumerable<Message> _messages;
+				private CandleMessage _lastActiveCandle;
+				private CandleMessage _lastCandle;
+
+				public CandleMessageEnumerator(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<Message> messages, ICandleBuilderValueTransform transform)
 				{
-					private readonly Security _security;
+					_mdMsg = mdMsg;
+					_onlyFormed = onlyFormed;
+					_transform = transform;
+					_messages = messages;
 
-					public EnumeratorCandleBuilderSource(Security security)
+					_messagesEnumerator = _messages.GetEnumerator();
+
+					switch (mdMsg.DataType)
 					{
-						if (security == null)
-							throw new ArgumentNullException(nameof(security));
-
-						_security = security;
-					}
-
-					public override int SpeedPriority => 0;
-
-					public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
-					{
-						if (series == null)
-							throw new ArgumentNullException(nameof(series));
-
-						if (series.Security != _security)
-							yield break;
-
-						yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
-					}
-
-					public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
-					{
-					}
-
-					public override void Stop(CandleSeries series)
-					{
-						RaiseStopped(series);
-					}
-
-					public void PushNewValue(CandleSeries series, TValue value)
-					{
-						NewSourceValues(series, new[] { value });
-					}
-				}
-
-				private readonly CandleSeries _series;
-				private bool _isNewCandle;
-				private readonly IEnumerator<TValue> _valuesEnumerator;
-				private readonly EnumeratorCandleBuilderSource _builderSource;
-				private Candle _lastCandle;
-				private readonly CandleManager _candleManager;
-
-				public CandleEnumerator(CandleSeries series, IEnumerable<TValue> values)
-				{
-					_series = series;
-
-					_valuesEnumerator = values.GetEnumerator();
-
-					_candleManager = new CandleManager();
-					_candleManager.Processing += OnProcessCandle;
-
-					_builderSource = new EnumeratorCandleBuilderSource(series.Security);
-					_candleManager.Sources.OfType<ICandleBuilder>().ForEach(b => b.Sources.Add(_builderSource));
-
-					_candleManager.Start(series);
-				}
-
-				private void OnProcessCandle(CandleSeries series, Candle candle)
-				{
-					if (series != _series)
-						return;
-
-					_lastCandle = candle;
-
-					if (candle.State != CandleStates.Finished)
-						return;
-
-					Current = candle;
-					_isNewCandle = true;
-				}
-
-				public override bool MoveNext()
-				{
-					while (!_isNewCandle)
-					{
-						if (!_valuesEnumerator.MoveNext())
+						case MarketDataTypes.CandleTimeFrame:
+							_candleBuilder = new TimeFrameCandleBuilder();
 							break;
+						case MarketDataTypes.CandleTick:
+							_candleBuilder = new TickCandleBuilder();
+							break;
+						case MarketDataTypes.CandleVolume:
+							_candleBuilder = new VolumeCandleBuilder();
+							break;
+						case MarketDataTypes.CandleRange:
+							_candleBuilder = new RangeCandleBuilder();
+							break;
+						case MarketDataTypes.CandlePnF:
+							_candleBuilder = new PnFCandleBuilder();
+							break;
+						case MarketDataTypes.CandleRenko:
+							_candleBuilder = new RenkoCandleBuilder();
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				}
 
-						_builderSource.PushNewValue(_series, _valuesEnumerator.Current);
-					}
+				public override void Reset()
+				{
+					base.Reset();
 
-					if (_isNewCandle)
-					{
-						_isNewCandle = false;
-						return true;
-					}
-
-					if (_lastCandle != null)
-					{
-						Current = _lastCandle;
-						_lastCandle = null;
-						return true;
-					}
-					else
-					{
-						Current = null;
-						return false;
-					}
+					_finishedCandles.Clear();
+					_messagesEnumerator = _messages.GetEnumerator();
+					_lastActiveCandle = null;
+					_lastCandle = null;
+					//_candleBuilder.Reset();
 				}
 
 				protected override void DisposeManaged()
 				{
-					Reset();
-					_candleManager.Processing -= OnProcessCandle;
-					_candleManager.Stop(_series);
-                    _candleManager.Dispose();
+					_finishedCandles.Clear();
+					_lastActiveCandle = null;
+					_lastCandle = null;
+
+					_messagesEnumerator.Dispose();
+					_candleBuilder.Dispose();
 
 					base.DisposeManaged();
 				}
+
+				public override bool MoveNext()
+				{
+					while (_finishedCandles.Count == 0)
+					{
+						if (!_messagesEnumerator.MoveNext())
+							break;
+
+						if (!_transform.Process(_messagesEnumerator.Current))
+							continue;
+
+						_lastActiveCandle = null;
+
+						foreach (var candleMessage in _candleBuilder.Process(_mdMsg, _lastCandle, _transform))
+						{
+							_lastCandle = candleMessage;
+
+							if (candleMessage.State == CandleStates.Finished)
+								_finishedCandles.Add(candleMessage);
+
+							if (!_onlyFormed)
+							{
+								if (candleMessage.State != CandleStates.Finished)
+									_lastActiveCandle = candleMessage;
+							}
+						}
+					}
+
+					if (_finishedCandles.Count > 0)
+					{
+						Current = _finishedCandles[0];
+						_finishedCandles.RemoveAt(0);
+
+						return true;
+					}
+
+					if (_lastActiveCandle != null)
+					{
+						Current = _lastActiveCandle;
+						_lastActiveCandle = null;
+
+						return true;
+					}
+
+					Current = null;
+					return false;
+				}
 			}
 
-			//private readonly IEnumerableEx<TValue> _values;
-
-			public CandleEnumerable(CandleSeries series, IEnumerable<TValue> values)
-				: base(() => new CandleEnumerator(series, values))
+			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<ExecutionMessage> ticks)
+				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, ticks, new TickCandleBuilderValueTransform()))
 			{
-				if (series == null)
-					throw new ArgumentNullException(nameof(series));
+				if (mdMsg == null)
+					throw new ArgumentNullException(nameof(mdMsg));
 
-				if (values == null)
-					throw new ArgumentNullException(nameof(values));
-				//_values = values;
+				if (ticks == null)
+					throw new ArgumentNullException(nameof(ticks));
 			}
 
-			//int IEnumerableEx.Count => _values.Count;
+			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<QuoteChangeMessage> depths, Level1Fields type)
+				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, depths, new QuoteCandleBuilderValueTransform { Type = type }))
+			{
+				if (mdMsg == null)
+					throw new ArgumentNullException(nameof(mdMsg));
+
+				if (depths == null)
+					throw new ArgumentNullException(nameof(depths));
+			}
 		}
 
 		/// <summary>
@@ -413,8 +414,9 @@ namespace StockSharp.Algo.Candles
 		/// <typeparam name="TCandle">The candles type.</typeparam>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="arg">Candle arg.</param>
+		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<Trade> trades, object arg)
+		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<Trade> trades, object arg, bool onlyFormed = true)
 			where TCandle : Candle
 		{
 			var firstTrade = trades.FirstOrDefault();
@@ -422,7 +424,7 @@ namespace StockSharp.Algo.Candles
 			if (firstTrade == null)
 				return Enumerable.Empty<TCandle>();
 
-			return trades.ToCandles(new CandleSeries(typeof(TCandle), firstTrade.Security, arg)).Cast<TCandle>();
+			return trades.ToCandles(new CandleSeries(typeof(TCandle), firstTrade.Security, arg), onlyFormed).Cast<TCandle>();
 		}
 
 		/// <summary>
@@ -430,35 +432,26 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
+		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<Candle> ToCandles(this IEnumerable<Trade> trades, CandleSeries series)
-		{
-			return new CandleEnumerable<Trade>(series, trades);
-		}
-
-		/// <summary>
-		/// To create candles from the tick trades collection.
-		/// </summary>
-		/// <param name="trades">Tick trades.</param>
-		/// <param name="series">Candles series.</param>
-		/// <returns>Candles.</returns>
-		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> trades, CandleSeries series)
+		public static IEnumerable<Candle> ToCandles(this IEnumerable<Trade> trades, CandleSeries series, bool onlyFormed = true)
 		{
 			return trades
-				.ToEntities<ExecutionMessage, Trade>(series.Security)
-				.ToCandles(series)
-				.ToMessages<Candle, CandleMessage>();
+				.ToMessages<Trade, ExecutionMessage>()
+				.ToCandles(series, onlyFormed)
+				.ToCandles<Candle>(series.Security, series.CandleType);
 		}
 
 		/// <summary>
-		/// To create candles from the order books collection.
+		/// To create candles from the tick trades collection.
 		/// </summary>
-		/// <param name="depths">Market depths.</param>
+		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
+		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series)
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> trades, CandleSeries series, bool onlyFormed = true)
 		{
-			return new CandleEnumerable<MarketDepth>(series, depths);
+			return new CandleMessageEnumerable(series.ToMarketDataMessage(true), onlyFormed, trades);
 		}
 
 		/// <summary>
@@ -466,13 +459,28 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
+		/// <param name="type">Type of candle depth based data.</param>
+		/// <param name="onlyFormed">Process only formed candles.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series)
+		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true)
 		{
 			return depths
-				.ToEntities<QuoteChangeMessage, MarketDepth>(series.Security)
-				.ToCandles(series)
-				.ToMessages<Candle, CandleMessage>();
+				.ToMessages<MarketDepth, QuoteChangeMessage>()
+				.ToCandles(series, type, onlyFormed)
+				.ToCandles<Candle>(series.Security, series.CandleType);
+		}
+
+		/// <summary>
+		/// To create candles from the order books collection.
+		/// </summary>
+		/// <param name="depths">Market depths.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="type">Type of candle depth based data.</param>
+		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <returns>Candles.</returns>
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true)
+		{
+			return new CandleMessageEnumerable(series.ToMarketDataMessage(true), onlyFormed, depths, type);
 		}
 
 		/// <summary>
@@ -639,7 +647,7 @@ namespace StockSharp.Algo.Candles
 
 				public void Dispose()
 				{
-					Reset();
+					Current = null;
 					_valuesEnumerator.Dispose();
 				}
 
@@ -675,17 +683,6 @@ namespace StockSharp.Algo.Candles
 		{
 			return manager.GetSeries<TCandle>(security, arg) != null;
 		}
-
-		///// <summary>
-		///// Получить время формирования свечи.
-		///// </summary>
-		///// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить время формирования свечи.</param>
-		///// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
-		///// <returns>Время формирования свечи.</returns>
-		//public static DateTimeOffset GetCandleTime(this TimeSpan timeFrame, DateTimeOffset currentTime)
-		//{
-		//	return timeFrame.GetCandleBounds(currentTime).Min;
-		//}
 
 		/// <summary>
 		/// To get the candle time range.
@@ -763,7 +760,7 @@ namespace StockSharp.Algo.Candles
 
 				// http://stocksharp.com/forum/yaf_postsm13887_RealtimeEmulationTrader---niepravil-nyie-sviechi.aspx#post13887
 				// отсчет свечек идет от начала сессии и игнорируются клиринги
-				var startTime = period != null && period.Times.Length > 0 ? period.Times[0].Min : TimeSpan.Zero;
+				var startTime = period != null && period.Times.Count > 0 ? period.Times[0].Min : TimeSpan.Zero;
 
 				var length = (exchangeTime.TimeOfDay - startTime).To<long>();
 				var beginTime = exchangeTime.Date + (startTime + length.Floor(timeFrame.Ticks).To<TimeSpan>());
@@ -772,7 +769,7 @@ namespace StockSharp.Algo.Candles
 				var tempEndTime = beginTime.TimeOfDay + timeFrame;
 				TimeSpan stopTime;
 
-				if (period != null && period.Times.Length > 0)
+				if (period != null && period.Times.Count > 0)
 				{
 					var last = period.Times.LastOrDefault(t => tempEndTime > t.Min);
 					stopTime = last == null ? TimeSpan.MaxValue : last.Max;
@@ -1053,7 +1050,7 @@ namespace StockSharp.Algo.Candles
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
-			return series.Security.Board.IsTradeTime(time) && time >= series.From && time < series.To;
+			return time >= series.From && time < series.To && series.Security.Board.IsTradeTime(time);
 		}
 
 		/// <summary>
@@ -1061,9 +1058,9 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candles">Candles.</param>
 		/// <returns>The area.</returns>
-		public static VolumeProfile GetValueArea(this IEnumerable<Candle> candles)
+		public static CandleMessageVolumeProfile GetValueArea(this IEnumerable<Candle> candles)
 		{
-			var area = new VolumeProfile();
+			var area = new CandleMessageVolumeProfile();
 
 			foreach (var candle in candles)
 			{
@@ -1080,49 +1077,56 @@ namespace StockSharp.Algo.Candles
 			return area;
 		}
 
-		/// <summary>
-		/// To start timer of getting from sent <paramref name="connector" /> of real time candles.
-		/// </summary>
-		/// <typeparam name="TConnector">The type of the connection implementing <see cref="IExternalCandleSource"/>.</typeparam>
-		/// <param name="connector">The connection implementing <see cref="IExternalCandleSource"/>.</param>
-		/// <param name="registeredSeries">All registered candles series.</param>
-		/// <param name="offset">The time shift for the new request to obtain a new candle. It is needed for the server will have time to create data in its candles storage.</param>
-		/// <param name="requestNewCandles">The handler getting new candles.</param>
-		/// <param name="interval">The interval between data updates.</param>
-		/// <returns>Created timer.</returns>
-		public static Timer StartRealTime<TConnector>(this TConnector connector, CachedSynchronizedSet<CandleSeries> registeredSeries, TimeSpan offset, Action<CandleSeries, Range<DateTimeOffset>> requestNewCandles, TimeSpan interval)
-			where TConnector : class, IConnector, IExternalCandleSource
-		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
+		///// <summary>
+		///// To start timer of getting from sent <paramref name="connector" /> of real time candles.
+		///// </summary>
+		///// <typeparam name="TConnector">The type of the connection implementing <see cref="IExternalCandleSource"/>.</typeparam>
+		///// <param name="connector">The connection implementing <see cref="IExternalCandleSource"/>.</param>
+		///// <param name="registeredSeries">All registered candles series.</param>
+		///// <param name="offset">The time shift for the new request to obtain a new candle. It is needed for the server will have time to create data in its candles storage.</param>
+		///// <param name="requestNewCandles">The handler getting new candles.</param>
+		///// <param name="interval">The interval between data updates.</param>
+		///// <returns>Created timer.</returns>
+		//public static Timer StartRealTime<TConnector>(this TConnector connector, CachedSynchronizedSet<CandleSeries> registeredSeries, TimeSpan offset, Action<CandleSeries, Range<DateTimeOffset>> requestNewCandles, TimeSpan interval)
+		//	where TConnector : class, IConnector//, IExternalCandleSource
+		//{
+		//	if (connector == null)
+		//		throw new ArgumentNullException(nameof(connector));
 
-			if (registeredSeries == null)
-				throw new ArgumentNullException(nameof(registeredSeries));
+		//	if (registeredSeries == null)
+		//		throw new ArgumentNullException(nameof(registeredSeries));
 
-			if (requestNewCandles == null)
-				throw new ArgumentNullException(nameof(requestNewCandles));
+		//	if (requestNewCandles == null)
+		//		throw new ArgumentNullException(nameof(requestNewCandles));
 
-			return ThreadingHelper.Timer(() =>
-			{
-				if (connector.ConnectionState != ConnectionStates.Connected)
-					return;
+		//	return ThreadingHelper.Timer(() =>
+		//	{
+		//		try
+		//		{
+		//			if (connector.ConnectionState != ConnectionStates.Connected)
+		//				return;
 
-				lock (registeredSeries.SyncRoot)
-				{
-					foreach (var series in registeredSeries.Cache)
-					{
-						var tf = (TimeSpan)series.Arg;
-						var time = connector.CurrentTime;
-						var bounds = tf.GetCandleBounds(time, series.Security.Board);
+		//			lock (registeredSeries.SyncRoot)
+		//			{
+		//				foreach (var series in registeredSeries.Cache)
+		//				{
+		//					var tf = (TimeSpan)series.Arg;
+		//					var time = connector.CurrentTime;
+		//					var bounds = tf.GetCandleBounds(time, series.Security.Board);
 
-						var beginTime = (time - bounds.Min) < offset ? (bounds.Min - tf) : bounds.Min;
-						var finishTime = bounds.Max;
+		//					var beginTime = (time - bounds.Min) < offset ? (bounds.Min - tf) : bounds.Min;
+		//					var finishTime = bounds.Max;
 
-						requestNewCandles(series, new Range<DateTimeOffset>(beginTime, finishTime));
-					}
-				}
-			})
-			.Interval(interval);
-		}
+		//					requestNewCandles(series, new Range<DateTimeOffset>(beginTime, finishTime));
+		//				}
+		//			}
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			ex.LogError();
+		//		}
+		//	})
+		//	.Interval(interval);
+		//}
 	}
 }

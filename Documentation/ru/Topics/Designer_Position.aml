@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Position_00"/>
+</mediaLink>
+<para>Элемент используется для получения информации по изменению позиции для 
+указанного инструмента и портфеля.</para>
+ <definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого необходимо получить позицию.</para></listItem>
+  <listItem><para><legacyBold>Портфель</legacyBold> – портфель, для которого необходимо получить позицию.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Позиция</legacyBold> – числовое значение позиции 
+ по инструменту или текущего количества доступных средств по счету, генерируется при их 
+ изменении и после запуска стратегии.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Деньги</legacyBold> – при установленном флаге на входе элемент принимает только портфель, на выход элемента 
+ передается денежная позиция для выбранного портфеля.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="5d869a7b-616f-4e40-92de-576fd0206c91" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

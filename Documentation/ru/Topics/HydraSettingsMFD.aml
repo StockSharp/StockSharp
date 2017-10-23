@@ -19,6 +19,9 @@
 		<listItem>
           <legacyBold>Временные файлы</legacyBold> - режим использования временных файлов: использовать/не использовать/использовать и удалять.
 		</listItem>
+		<listItem>
+<legacyBold>Интервал времени</legacyBold> - Интервал в днях, за который скачиваются данные.
+</listItem>
 	 </list>
 		<para><legacyBold>Основные</legacyBold></para>
 		<list class="bullet">

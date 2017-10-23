@@ -19,8 +19,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// The stochastic oscillator.
 	/// </summary>
@@ -42,19 +40,19 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// %K.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("%K")]
 		[Description("%K")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public StochasticK K { get; private set; }
+		public StochasticK K { get; }
 
 		/// <summary>
 		/// %D.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("%D")]
 		[Description("%D")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage D { get; private set; }
+		public SimpleMovingAverage D { get; }
 	}
 }

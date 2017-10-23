@@ -27,8 +27,6 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Market depth quote representing bid or ask.
 	/// </summary>
@@ -36,7 +34,7 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
-	[ExpandableObject]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class Quote : Cloneable<Quote>, IExtendableEntity
 	{
 		/// <summary>
@@ -71,8 +69,8 @@ namespace StockSharp.BusinessEntities
 		[Browsable(false)]
 		public Security Security
 		{
-			get { return _security; }  
-			set { _security = value; }
+			get => _security;
+			set => _security = value;
 		}
 
 		private decimal _price;
@@ -86,8 +84,8 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal Price
 		{
-			get { return _price; }
-			set { _price = value; }
+			get => _price;
+			set => _price = value;
 		}
 
 		private decimal _volume;
@@ -101,8 +99,8 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public decimal Volume
 		{
-			get { return _volume; }
-			set { _volume = value; }
+			get => _volume;
+			set => _volume = value;
 		}
 
 		private Sides _direction;
@@ -116,12 +114,12 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public Sides OrderDirection
 		{
-			get { return _direction; }
-			set { _direction = value; }
+			get => _direction;
+			set => _direction = value;
 		}
 
 		[field: NonSerialized]
-		private IDictionary<object, object> _extensionInfo;
+		private IDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended quote info.
@@ -134,10 +132,10 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
-			set { _extensionInfo = value; }
+			get => _extensionInfo;
+			set => _extensionInfo = value;
 		}
 
 		/// <summary>

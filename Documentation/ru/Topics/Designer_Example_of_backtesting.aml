@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="664a3969-2b3c-4688-a3c9-8034e38cddfd" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>В качестве примера будет рассмотрена пример-стратегия SMA.</para>
+<para>Для запуска тестирования на истории необходимо выбрать стратегию, 
+схема которой будет тестироваться на истории. 
+Стратегия выбирается на панели <token>SchemeDis</token> в папке стратегии, 
+двойным нажатием на интересующей стратегии.</para>
+<para>Перед тестированием необходимо загрузить маркет-данные (инструменты, свечи, 
+тиковые сделки и/или стаканы). Как это сделать написано в пункте <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />.</para>
+<para>При переходе на вкладку со стратегией в ленте автоматически 
+откроется вкладка <legacyBold>Эмуляция</legacyBold>. На ней необходимо 
+установить период тестирования. В поле маркет-данные указать нужное хранилище 
+(<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />), в поле инструмент 
+указываем необходимый инструмент.</para>
+<para>В примере со стратегией SMA будут использоваться следующие параметры:</para>
+
+<list class="ordered">
+  <listItem><para>Инструмент SBER@TQBR</para></listItem>
+  <listItem><para>Стандартное хранилище \Documents\StockSharp\Designer\Storage</para></listItem>
+  <listItem><para>Формат хранилища CSV</para></listItem>
+  <listItem><para>Тип данных, которые будем брать из хранилища Ticks</para></listItem>
+  <listItem><para>Стакан Сгенерированный</para></listItem>
+  <listItem><para>Глубина стакана 5</para></listItem>
+  <listItem><para>Размер спреда 2</para></listItem>
+  <listItem><para>Свечи с тайм-фреймом 30 секунд</para></listItem>
+  <listItem><para>Объем 100</para></listItem>
+</list>
+ 
+ <para>Необходимо установить выбранные параметры:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_00"/>
+</mediaLink>
+<mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_01"/>
+</mediaLink>
+<para>После установки всех необходимых параметров, запускаем тестирование стратегии, нажав 
+кнопку <mediaLinkInline><image xlink:href="Designer_Interface_Backtesting_01"/></mediaLinkInline>. </para>
+<para>Во время или после тестирования можно рассмотреть графики и таблицы с информацией о тестировании.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_02"/>
+</mediaLink>
+<para>На графике видно, что сделки проходят на пересечении скользящих средних, 
+как и задумано стратегией. Также видно, что заявки удовлетворяются за 
+несколько сделок. Это происходит из-за того, что используется сгенерированный 
+стакан, что увеличивает реалистичность тестирования. То, что заявки 
+удовлетворяются за несколько сделок, видно и из таблиц Сделки, Статистика, графика Позиции.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_03"/>
+</mediaLink>
+ 
+<para>На графике <legacyBold>Позиции</legacyBold> видно, что у стратегии уменьшился оперируемый объём. 
+Это произошло потому, что генерируемый стакан имеет глубину 5 и вследствие чего 
+всей глубины стакана не хватало, чтобы удовлетворить заявку в 200 лотов. 
+А так как стратегия только переворачивает позицию, то каждый раз, когда 
+глубины стакана не хватало удовлетворить заявку, оперируемый объём уменьшался.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_An_example_of_backtesting_04"/>
+</mediaLink>
+<para>График <legacyBold>П/У</legacyBold> говорит об убыточности стратегии при таких параметрах.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="26be4914-b6c4-48e7-8e0e-d2f02677e747" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Indexer_00"/>
+</mediaLink>
+<para>Элемент используется для получения элемента из коллекции с указанным индексом.
+</para>
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> – коллекция элементов.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> – элемент из коллекции с указанным в параметрах индексом.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Индекс</legacyBold> – индекс необходимого элемента</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="d12b6321-af41-40f1-a8c6-87ea59d1b51c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

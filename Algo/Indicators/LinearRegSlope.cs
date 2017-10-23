@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Indicators
 			}
 
 			//коэффициент при независимой переменной
-			var divisor = (Length * sumX2 - sumX * sumX);
+			var divisor = Length * sumX2 - sumX * sumX;
 			if (divisor == 0) 
 				return new DecimalIndicatorValue(this);
 

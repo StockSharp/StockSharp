@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="da0010aa-3bf4-4f8d-89a0-55f1b41946ac" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+
+<para><token>designer</token> offers the following opportunities for team working:</para>
+
+<list class="bullet">
+  <listItem><para><link xlink:href="d99a1e55-2438-4e34-8ee5-ed7b15727e75" /> 
+  - for instant exchange of messages.</para></listItem>
+  <listItem><para><link xlink:href="559d140c-5b71-4582-a65e-ca3cad7a66e8" /> 
+  - to export, for further transfer of the strategy without encryption. For 
+  example, to pass the schema for further analysis by other users.</para></listItem>
+  <listItem><para><link xlink:href="66413582-a15e-414a-a413-8d77fe00f0e0" /> 
+  - to export, for further transfer of the strategy with encryption. For example, 
+  to deliver the ready-made robot with hidden scheme structure.</para></listItem>
+  <listItem><para><link xlink:href="47c764fa-a28c-48f7-81b3-714c059e0e57" /> 
+  - to import received strategy with or without encryption.</para></listItem>
+  <listItem><para><link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" /> 
+  - to acquire ready strategies or to offer own strategies to other users.</para></listItem>
+  <listItem><para><link xlink:href="6d13af11-61ae-47b7-93a3-097abe7640c9" /> 
+  - to publish or auto-publish the trading or testing results.</para></listItem>
+</list>
+
+
+    </introduction>
+
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

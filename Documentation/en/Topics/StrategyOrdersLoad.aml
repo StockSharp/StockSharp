@@ -7,45 +7,46 @@
 
     <introduction>
       	<para>
-      		При старте стратегии может возникнуть необходимость загрузки ранее совершённых заявок и сделок (например, когда робот был перезагружен в течении
-      		торговой сессии или сделки и заявки переносятся через ночь). Для этого нужно:
+      		At the start of the strategy you may need to load the previously matched orders and trades (for example, when the algorithm has been restarted during
+      		the trading session or orders and trades transferred through the night). To do this:
       	</para>
 	  <list class="ordered">
 		<listItem>
-		  Найти те заявки, которые необходимо загрузить в стратегию, и вернуть их из метода (например, загрузить идентификаторы заявок, если стратегия записывает каждый
-		  раз при регистрации через метод 
-		  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference> из файла).
+		  To find those orders to be downloaded into the strategy, and to return them back from the method (for example, to download orders identifiers, if the strategy
+		  records every registration through the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>
+		  method from the file).
 		</listItem>
 		<listItem>
-		  Объединить полученный результат с базовым методом <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>.
+		  To combine the result with the base method <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>.
 		</listItem>
 		<listItem>
-		  После того, как заявки будут загружены в стратегию, загрузятся и все совершенные по ним сделки. Это будет сделано автоматически.
+		  Once orders are loaded in the strategy, all of their matched trades will be also loaded. This will be done automatically.
 		</listItem>
 	  </list>
+	  
 	  <para>
-		  Следующий пример показывает загрузку всех сделок в стратегию:
+		  The following example shows the loading of all trades in the strategy:
 	  </para>
     </introduction>
     
     <procedure>
-      <title>Загрузка в стратегию ранее совершенных заявок и сделок</title>
+      <title>Loading in the strategy previously matched orders and trades</title>
 
       <steps class="ordered">
         <step>
           <content>
-            <para>Для этого, чтобы <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> загрузила свое предыдущее состояние,
-            необходимо переопределить <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>.
-		  	На вход данному методу из <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.Strategy.OnStarted</codeEntityReference>
-		  	поступят все <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.IConnector.Orders</codeEntityReference>
-		  	и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.IConnector.StopOrders</codeEntityReference>, и их необходимо
-		  	отфильтровать:</para>
+            <para>To load the previous state of the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>, you must override 
+            <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>.
+		  	All <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.IConnector.Orders</codeEntityReference>
+		  	and <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.IConnector.StopOrders</codeEntityReference> will be received by this method from
+		  	the <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.Strategy.OnStarted</codeEntityReference>.
+		  	And you should to filter them:</para>
 		  	<code language="C#"><![CDATA[private bool _isOrdersLoaded;
 private bool _isStopOrdersLoaded;
 		  	
 protected override IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrders, bool isStopOrders)
 {
-	// если заявки уже были ранее загружены
+	// check if the orders was already loaded
 	if ((!isStopOrders && _isOrdersLoaded) || (isStopOrders && _isStopOrdersLoaded))
 		return base.ProcessNewOrders(newOrders, isStopOrders);
 
@@ -56,16 +57,16 @@ protected override IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrd
         <step>
         	<content>
         		<para>
-        			Чтобы реализовать фильтрацию заявок, необходимо определить критерий отсеивания. Например, если в процессе работы стратегии сохранять
-        			все регистрируемые заявки в файл, то можно сделать фильтр по номеру транзакции <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.TransactionId</codeEntityReference>.
-        			Если такой номер присутствует в файле, значит заявка была зарегистрирована через данную стратегию:
+        			To implement orders filtering, you must determine the filter criterion. For example, if to save all registered during the strategy work orders in
+        			the file, you can create the filter by the transaction number <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.TransactionId</codeEntityReference>.
+        			If such number is in the file, so the order was registered through this strategy:
         		</para>
         		<code language="C#"><![CDATA[private IEnumerable<Order> Filter(IEnumerable<Order> orders)
 {
-	// считываем номера транзакций из файла
+	// to get the identifiers from text file
 	var transactions = File.ReadAllLines("orders_{0}.txt".Put(Name)).Select(l => l.To<long>()).ToArray();
 	
-	// находим наши заявки по считанным номерам
+	// finding our orders
 	return orders.Where(o => transactions.Contains(o.TransactionId));
 }]]></code>
         	</content>
@@ -73,15 +74,15 @@ protected override IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrd
         <step>
         	<content>
         		<para>
-        			Запись номеров транзакций заявок, регистрируемых через стратегию, можно осуществить, переопределив метод
-        			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>:
+        			A record of orders transaction numbers registering through the strategy can be accomplished by overriding the 
+        			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> method:
         		</para>
         		<code language="C#"><![CDATA[protected override void RegisterOrder(Order order)
 {
-	// отравляем заявку дальше на регистрацию
+	// registering the order
 	base.RegisterOrder(order);
 	
-	// добавляем новый номер транзакции
+	// and saving order's transaction id
 	File.AppendAllLines("orders_{0}.txt".Put(Name), new[]{ order.TransactionId.ToString() });
 }]]></code>
         	</content>
@@ -89,7 +90,7 @@ protected override IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrd
         <step>
         	<content>
         		<para>
-        			После того, как заявки будут загружены в стратегию, загрузятся и все совершенные по ним сделки. Это будет сделано автоматически.
+        			Once orders are loaded in the strategy, all of their matched trades will be also loaded. This will be done automatically.
         		</para>
         	</content>
         </step>

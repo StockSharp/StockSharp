@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d416a6d9-0a42-40c0-8f9f-0c1df29f5cda" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To simplify the monitoring of work there is a special <legacyBold>Logs</legacyBold> panel in <token>designer</token>. 
+This panel displays messages from all sources, strategies, connections, <token>designer</token>. 
+The <legacyBold>Logs</legacyBold> panel shows the nesting of the sources as a tree. Each parent vertex contains 
+messages from all nested ones, and so on, down to the lowest level. For strategies, 
+such a hierarchy allows you to see child strategies. To open the <legacyBold>Logs</legacyBold> panel, click 
+the <legacyBold>Logs</legacyBold> button in the <legacyBold>Common</legacyBold> tab 
+or click the <legacyBold>Logs</legacyBold> button on the <legacyBold>Quick access panel</legacyBold>. 
+If there are errors in the <legacyBold>Logs</legacyBold> panel, 
+the  <mediaLinkInline><image xlink:href="Designer_Panel_Logs_00"/></mediaLinkInline> icon 
+on the <legacyBold>Quick access panel</legacyBold> will blink.</para>
+ <mediaLink><image placement="center" xlink:href="Designer_Panel_Logs_01"/></mediaLink>
+    </introduction>
+      <relatedTopics>
+<link xlink:href="0fc19f50-24cb-4f8b-bb22-728968686f8b" />
+</relatedTopics>
+  </developerConceptualDocument>
+
+</topic>

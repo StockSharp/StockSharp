@@ -18,8 +18,6 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -28,8 +26,8 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// http://ta.mql4.com/indicators/oscillators/ichimoku.
 	/// </remarks>
-	[DisplayName("Ichimoku")]
-	[DescriptionLoc(LocalizedStrings.Str763Key)]
+	[DisplayNameLoc(LocalizedStrings.Str763Key)]
+	[DescriptionLoc(LocalizedStrings.Str763Key, true)]
 	public class Ichimoku : BaseComplexIndicator
 	{
 		/// <summary>
@@ -63,46 +61,46 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Tenkan line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Tenkan")]
-		[DescriptionLoc(LocalizedStrings.Str764Key)]
+		[DescriptionLoc(LocalizedStrings.Str764Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public IchimokuLine Tenkan { get; }
 
 		/// <summary>
 		/// Kijun line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Kijun")]
-		[DescriptionLoc(LocalizedStrings.Str765Key)]
+		[DescriptionLoc(LocalizedStrings.Str765Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public IchimokuLine Kijun { get; }
 
 		/// <summary>
-		/// Senkou Span A line.
+		/// Senkou (A) line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("SenkouA")]
-		[DescriptionLoc(LocalizedStrings.Str766Key)]
+		[DescriptionLoc(LocalizedStrings.Str766Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public IchimokuSenkouALine SenkouA { get; private set; }
+		public IchimokuSenkouALine SenkouA { get; }
 
 		/// <summary>
-		/// Senkou Span B line.
+		/// Senkou (B) line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("SenkouB")]
-		[DescriptionLoc(LocalizedStrings.Str767Key)]
+		[DescriptionLoc(LocalizedStrings.Str767Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public IchimokuSenkouBLine SenkouB { get; private set; }
+		public IchimokuSenkouBLine SenkouB { get; }
 
 		/// <summary>
 		/// Chinkou line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Chinkou")]
-		[DescriptionLoc(LocalizedStrings.Str768Key)]
+		[DescriptionLoc(LocalizedStrings.Str768Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public IchimokuChinkouLine Chinkou { get; private set; }
+		public IchimokuChinkouLine Chinkou { get; }
 	}
 }

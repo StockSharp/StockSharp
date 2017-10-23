@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="9978237f-cadb-4388-b334-7c293c080561" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para><codeEntityReference>T:StockSharp.Fxcm.FxcmTrader</codeEntityReference> позволяет получать новости. 
+    	Список полученных новостей можно получить через
+		<codeEntityReference qualifyHint="false">P:StockSharp.BusinessEntities.IConnector.News</codeEntityReference>.</para>
+		<para>Для того, чтобы начать получить новости, необходимо подписаться на событие <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference>
+		и вызвать метод	<codeEntityReference qualifyHint="false">M:StockSharp.BusinessEntities.IConnector.RegisterNews</codeEntityReference>.</para>
+		<para>В примере, показанном в предыдущих разделах, поступающие новости в событии
+		<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference>,
+		передаются для отображения в специальный визуальный элемент
+		<codeEntityReference qualifyHint="false">T:StockSharp.Xaml.NewsPanel</codeEntityReference>.</para>
+		<code language="C#">
+            				<![CDATA[
+// подписываемся на событие получения новости
+Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
+							]]>
+					</code>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="67a08284-5d80-42f1-b311-f6c78789c48d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Notice_00"/>
+</mediaLink>
+<para>Кубик используется для уведомления пользователя при возникновении 
+определенных сигналов.
+</para>
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Флаг</legacyBold> – сигнал (флаг), который инициирует процесс оповещения.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Тип</legacyBold> – тип сообщения (всплывающее окно, e-mail, смс и т.д.). Типы оповещений описаны в пункте <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para></listItem>
+  <listItem><para><legacyBold>Заголовок</legacyBold> – заголовок сообщения.</para></listItem>
+  <listItem><para><legacyBold>Сообщение</legacyBold> – текст сообщения.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

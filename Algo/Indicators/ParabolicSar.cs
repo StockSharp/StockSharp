@@ -33,6 +33,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("Parabolic SAR")]
 	[DescriptionLoc(LocalizedStrings.Str809Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class ParabolicSar : BaseIndicator
 	{
 		private decimal _prevValue;

@@ -17,7 +17,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
-using XMLCommToHTM.DOM.Internal;
 
 namespace XMLCommToHTM.DOM
 {
@@ -86,12 +85,11 @@ namespace XMLCommToHTM.DOM
 
 	public class GenericParameterDom : ParameterBaseDom
 	{
-		string _name;
 		public GenericParameterDom(string name)
 		{
-			_name = name;
+			Name = name;
 		}
-		public override string Name => _name;
+		public override string Name { get; }
 
 		public override Type Type => null;
 
@@ -108,10 +106,7 @@ namespace XMLCommToHTM.DOM
 		{
 			if (!mi.IsGenericMethod)
 				return null;
-			mi = mi.GetGenericMethodDefinition();
-			if (mi == null)
-				return null;
-			return BuildGenericParameters(mi.GetGenericArguments(), typeDoc);
+			return BuildGenericParameters(mi.GetGenericMethodDefinition().GetGenericArguments(), typeDoc);
 		}
 		public static GenericParameterDom[] BuildGenericParameters(Type[] genericArgs, XElement typeDoc)
 		{

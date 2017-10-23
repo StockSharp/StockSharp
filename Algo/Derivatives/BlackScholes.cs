@@ -61,6 +61,38 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="BlackScholes"/>.
+		/// </summary>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		protected BlackScholes(Security underlyingAsset, IMarketDataProvider dataProvider)
+		{
+			if (underlyingAsset == null)
+				throw new ArgumentNullException(nameof(underlyingAsset));
+
+			if (dataProvider == null)
+				throw new ArgumentNullException(nameof(dataProvider));
+
+			_underlyingAsset = underlyingAsset;
+			DataProvider = dataProvider;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BlackScholes"/>.
+		/// </summary>
+		/// <param name="option">Options contract.</param>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		public BlackScholes(Security option, Security underlyingAsset, IMarketDataProvider dataProvider)
+			: this(underlyingAsset, dataProvider)
+		{
+			if (option == null)
+				throw new ArgumentNullException(nameof(option));
+
+			Option = option;
+		}
+
+		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; }
@@ -92,7 +124,7 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		public virtual int RoundDecimals
 		{
-			get { return _roundDecimals; }
+			get => _roundDecimals;
 			set
 			{
 				if (value < -1)
@@ -107,7 +139,11 @@ namespace StockSharp.Algo.Derivatives
 		/// <summary>
 		/// Underlying asset.
 		/// </summary>
-		public virtual Security UnderlyingAsset => _underlyingAsset ?? (_underlyingAsset = Option.GetUnderlyingAsset(SecurityProvider));
+		public virtual Security UnderlyingAsset
+		{
+			get => _underlyingAsset ?? (_underlyingAsset = Option.GetUnderlyingAsset(SecurityProvider));
+			set => _underlyingAsset = value;
+		}
 
 		/// <summary>
 		/// The standard deviation by default.

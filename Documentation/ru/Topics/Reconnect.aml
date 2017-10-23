@@ -57,7 +57,7 @@
         <step>
           <content>
 			  <para>
-				  В качестве демонстрации взят пример Sample, который работает с <token>quik</token>. Точно такой же код внедрен и в программу SampleSmart,
+				  В качестве демонстрации взят пример SampleSmart,
 				  работающий с <token>smartcom</token>.
 			  </para>
 			  <para>
@@ -82,11 +82,7 @@ Trader.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.T
         </step>
 		<step>
 		  <content>
-        <alert class="note">
-  				<para>Этот и следующие пункты относятся к старому подключению <link xlink:href="c338d4b4-ba54-4671-9206-976c07ef655e">Quik DDE</link>. </para>
-		</alert>
-			<para>Чтобы проверить, как работает механизм, можно, к примеру, зайти в настройки Внешние Транзакции в <token>quik</token>-e и
-			выключить их:
+			<para>Чтобы проверить, как работает механизм, можно, к примеру, выключить подключение к Интернету:
 			</para>
 			<para>
 			  <mediaLink>

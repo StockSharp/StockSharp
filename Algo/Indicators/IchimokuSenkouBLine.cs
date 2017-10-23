@@ -25,8 +25,9 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
-	/// Senkou Span B line.
+	/// Senkou (B) line.
 	/// </summary>
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class IchimokuSenkouBLine : LengthIndicator<decimal>
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();

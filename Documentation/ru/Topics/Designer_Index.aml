@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="9aa0288d-e086-4da8-bd76-98cf52cb17a7" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Index_00"/>
+</mediaLink>
+<para>Кубик используется для создания собственного индекса.
+</para>
+<definitionTable>
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Инструмент</legacyBold> – вычисленный индекс, представленный как <legacyBold>Инструмент</legacyBold>.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Индекс</legacyBold> – математическая формула комбинации нескольких инструментов  (например, (SBER@TQBR+10)*(abs(20/LKOH@TQBR)).</para></listItem>
+  <listItem><para><legacyBold>Игнорировать ошибки</legacyBold> – установленный флаг 
+  обозначает, что при расчете индекса будут игнорироваться ошибки;</para></listItem>
+  <listItem><para><legacyBold>Вычислять расширенную информацию</legacyBold> - установленный флаг обозначает, 
+  что при расчете индекса помимо основной информации (Общий объем, Цена открытия, 
+  Цена закрытия, Цена наивысшая, Цена наименьшая) будет вычисляться расширенная 
+  информация (Суммарный оборот по сделкам, Объем открытия, Объем закрытия, 
+  Максимальный объем, Минимальный объем);</para></listItem>
+  </list>
+  </definition>
+</definitionTable>
+
+
+
+
+<para>Совместно со стандартными математическими операторами можно использовать следующие 
+функции:</para>
+<list class="bullet">
+  <listItem><para><legacyBold>abs(a)</legacyBold> - Возвращает абсолютное значение числа.</para></listItem>
+  <listItem><para><legacyBold>acos(a)</legacyBold> - Возвращает угол, косинус которого равен указанному числу.</para></listItem>
+  <listItem><para><legacyBold>asin(a)</legacyBold> - Возвращает угол, синус которого равен указанному числу.</para></listItem>
+  <listItem><para><legacyBold>atan(a)</legacyBold> - Возвращает угол, тангенс которого равен указанному числу.</para></listItem>
+  <listItem><para><legacyBold>ceiling(a)</legacyBold> - Возвращает наименьшее целое число, которое больше или равно заданному числу.</para></listItem>
+  <listItem><para><legacyBold>cos(a)</legacyBold> - Возвращает косинус указанного угла.</para></listItem>
+  <listItem><para><legacyBold>exp(a)</legacyBold> - Возвращает значение <legacyBold>e</legacyBold>, возведенное в указанную степень.</para></listItem>
+  <listItem><para><legacyBold>floor(a)</legacyBold> - Возвращает наибольшее целое число, которое меньше или равно указанному числу.</para></listItem>
+  <listItem><para><legacyBold>log(a)</legacyBold> - Возвращает натуральный логарифм (с основанием <legacyBold>e</legacyBold>) указанного числа.</para></listItem>
+  <listItem><para><legacyBold>log10(a)</legacyBold> - Возвращает логарифм с основанием 10 указанного числа.</para></listItem>
+  <listItem><para><legacyBold>max (a, b)</legacyBold>- Возвращает большее из двух десятичных чисел.</para></listItem>
+  <listItem><para><legacyBold>min(a, b)</legacyBold> - Возвращает меньшее из двух десятичных чисел.</para></listItem>
+  <listItem><para><legacyBold>pow(a, b)</legacyBold> - Возвращает указанное число, возведенное в указанную степень.</para></listItem>
+  <listItem><para><legacyBold>sign(a)</legacyBold> - Возвращает целое число, указывающее знак указанного числа.</para></listItem>
+  <listItem><para><legacyBold>sin(a)</legacyBold> - Возвращает синус указанного угла.</para></listItem>
+  <listItem><para><legacyBold>sqrt (a)</legacyBold>- Возвращает квадратный корень из указанного числа.</para></listItem>
+  <listItem><para><legacyBold>tan(a)</legacyBold> - Возвращает тангенс указанного угла.</para></listItem>
+  <listItem><para><legacyBold>truncat(a)</legacyBold> - Вычисляет целую часть указанного числа.</para></listItem>
+</list>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="12a1678b-14f4-432b-8b2e-3b8af7f93348" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

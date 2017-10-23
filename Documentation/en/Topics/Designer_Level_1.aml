@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="bc7fbe5c-9e8a-4c39-af1a-35c6c3c2a43c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Level_1_00"/>
+</mediaLink>
+<para>The cube is used to get the <legacyBold>Level1</legacyBold> data by the 
+instrument.
+</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Instrument</legacyBold> - the instrument for which 
+  you need to get Level1 data.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Change</legacyBold> - <legacyBold>Level1</legacyBold> 
+  values of the monitored parameter.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Value</legacyBold> – the <legacyBold>Level1</legacyBold> 
+  parameter to be monitored.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="9aa0288d-e086-4da8-bd76-98cf52cb17a7" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

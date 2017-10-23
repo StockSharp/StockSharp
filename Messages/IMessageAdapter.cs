@@ -24,6 +24,22 @@ namespace StockSharp.Messages
 	using StockSharp.Logging;
 
 	/// <summary>
+	/// Types of <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
+	/// </summary>
+	public enum OrderCancelVolumeRequireTypes
+	{
+		/// <summary>
+		/// Non filled balance.
+		/// </summary>
+		Balance,
+
+		/// <summary>
+		/// Initial volume.
+		/// </summary>
+		Volume
+	}
+
+	/// <summary>
 	/// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 	/// </summary>
 	public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
@@ -39,9 +55,9 @@ namespace StockSharp.Messages
 		MessageTypes[] SupportedMessages { get; set; }
 
 		/// <summary>
-		/// The parameters validity check.
+		/// Supported by adapter market data types.
 		/// </summary>
-		bool IsValid { get; }
+		MarketDataTypes[] SupportedMarketDataTypes { get; set; }
 
 		/// <summary>
 		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
@@ -69,19 +85,59 @@ namespace StockSharp.Messages
 		bool SecurityLookupRequired { get; }
 
 		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
+		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
 		/// </summary>
 		bool OrderStatusRequired { get; }
 
 		/// <summary>
+		/// The storage name, associated with the adapter.
+		/// </summary>
+		string StorageName { get; }
+
+		/// <summary>
+		/// Native identifier can be stored.
+		/// </summary>
+		bool IsNativeIdentifiersPersistable { get; }
+
+		/// <summary>
+		/// Identify security in messages by native identifier <see cref="SecurityId.Native"/>.
+		/// </summary>
+		bool IsNativeIdentifiers { get; }
+
+		/// <summary>
+		/// Translates <see cref="CandleMessage"/> as only fully filled.
+		/// </summary>
+		bool IsFullCandlesOnly { get; }
+
+		/// <summary>
+		/// Support any subscriptions (ticks, order books etc.).
+		/// </summary>
+		bool IsSupportSubscriptions { get; }
+
+		/// <summary>
+		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
+		/// </summary>
+		bool IsSupportSubscriptionBySecurity { get; }
+
+		/// <summary>
+		/// Support portfolio subscriptions.
+		/// </summary>
+		bool IsSupportSubscriptionByPortfolio { get; }
+
+		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
-		bool OrderCancelVolumeRequired { get; }
+		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }
 
 		/// <summary>
 		/// Board code for combined security.
 		/// </summary>
 		string AssociatedBoardCode { get; }
+
+		/// <summary>
+		/// Names of extended security fields in <see cref="SecurityMessage"/>.
+		/// </summary>
+		Tuple<string, Type>[] SecurityExtendedFields { get; }
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.

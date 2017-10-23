@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="67a08284-5d80-42f1-b311-f6c78789c48d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Notice_00"/>
+</mediaLink>
+<para>The cube is used to notify the user when certain signals occur.
+</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Flag</legacyBold> - the signal (flag) that initiates 
+  the notification process.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Type</legacyBold> - type of message (pop-up window, 
+  e-mail, sms, etc.). The types of notifications are described in the
+  <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" /> section.</para></listItem>
+  <listItem><para><legacyBold>Header</legacyBold> - the header of the message.</para></listItem>
+  <listItem><para><legacyBold>Message</legacyBold> - the text of the message.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

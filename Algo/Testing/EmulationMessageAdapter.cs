@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IMarketEmulator Emulator
 		{
-			get { return _emulator; }
+			get => _emulator;
 			set
 			{
 				if (value == null)
@@ -86,9 +86,7 @@ namespace StockSharp.Algo.Testing
 
 		private DateTimeOffset _currentTime;
 
-		/// <summary>
-		/// The current time.
-		/// </summary>
+		/// <inheritdoc />
 		public override DateTimeOffset CurrentTime => _currentTime;
 
 		/// <summary>
@@ -96,10 +94,13 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public int ProcessedMessageCount { get; private set; }
 
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
+		/// <inheritdoc />
+		public override bool IsFullCandlesOnly => false;
+
+		/// <inheritdoc />
+		public override bool IsSupportSubscriptions => false;
+
+		/// <inheritdoc />
 		protected override void OnSendInMessage(Message message)
 		{
 			var localTime = message.LocalTime;
@@ -110,14 +111,14 @@ namespace StockSharp.Algo.Testing
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
+					
 					SendOutMessage(new ConnectMessage());
 					return;
 
 				case MessageTypes.Reset:
 					ProcessedMessageCount = 0;
 
-					var incGen = TransactionIdGenerator as IncrementalIdGenerator;
-					if (incGen != null)
+					if (TransactionIdGenerator is IncrementalIdGenerator incGen)
 						incGen.Current = Emulator.Settings.InitialTransactionId;
 
 					_currentTime = default(DateTimeOffset);

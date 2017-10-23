@@ -21,15 +21,12 @@ namespace StockSharp.BusinessEntities
 	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+	using System.Xml;
 	using System.Xml.Serialization;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Configuration;
 	using Ecng.Reflection;
-
-	using MoreLinq;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -41,115 +38,6 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	public partial class ExchangeBoard : Equatable<ExchangeBoard>, IExtendableEntity, IPersistable, INotifyPropertyChanged
 	{
-		private class InMemoryExchangeInfoProvider : IExchangeInfoProvider
-		{
-			private readonly CachedSynchronizedDictionary<string, ExchangeBoard> _boards = new CachedSynchronizedDictionary<string, ExchangeBoard>(StringComparer.InvariantCultureIgnoreCase);
-			private readonly CachedSynchronizedDictionary<string, Exchange> _exchanges = new CachedSynchronizedDictionary<string, Exchange>(StringComparer.InvariantCultureIgnoreCase);
-
-			IEnumerable<ExchangeBoard> IExchangeInfoProvider.Boards => _boards.CachedValues;
-
-			IEnumerable<Exchange> IExchangeInfoProvider.Exchanges => _exchanges.CachedValues;
-
-			ExchangeBoard IExchangeInfoProvider.GetExchangeBoard(string code)
-			{
-				return _boards.TryGetValue(code);
-			}
-
-			Exchange IExchangeInfoProvider.GetExchange(string code)
-			{
-				return _exchanges.TryGetValue(code);
-			}
-
-			void IExchangeInfoProvider.Save(ExchangeBoard board)
-			{
-				if (board == null)
-					throw new ArgumentNullException(nameof(board));
-
-				lock (_boards.SyncRoot)
-				{
-					if (!_boards.TryAdd(board.Code, board))
-						return;
-				}
-
-				BoardAdded?.Invoke(board);
-			}
-
-			void IExchangeInfoProvider.Save(Exchange exchange)
-			{
-				if (exchange == null)
-					throw new ArgumentNullException(nameof(exchange));
-
-				lock (_exchanges.SyncRoot)
-				{
-					if (!_exchanges.TryAdd(exchange.Name, exchange))
-						return;
-				}
-
-				ExchangeAdded?.Invoke(exchange);
-			}
-
-			public event Action<ExchangeBoard> BoardAdded;
-
-			public event Action<Exchange> ExchangeAdded;
-
-			public InMemoryExchangeInfoProvider()
-			{
-				EnumerateExchanges().ForEach(b => _exchanges[b.Name] = b);
-				EnumerateExchangeBoards().ForEach(b => _boards[b.Code] = b);
-			}
-		}
-
-		private static readonly SyncObject _syncObject = new SyncObject();
-		private static IExchangeInfoProvider _exchangeInfoProvider;
-
-		private static IExchangeInfoProvider ExchangeInfoProvider
-		{
-			get
-			{
-				if (_exchangeInfoProvider != null)
-					return _exchangeInfoProvider;
-
-				lock (_syncObject)
-				{
-					if (_exchangeInfoProvider == null)
-					{
-						_exchangeInfoProvider = ConfigManager.TryGetService<IExchangeInfoProvider>();
-
-						if (_exchangeInfoProvider != null)
-							return _exchangeInfoProvider;
-
-						ConfigManager.RegisterService(_exchangeInfoProvider = new InMemoryExchangeInfoProvider());	
-					}
-
-					return _exchangeInfoProvider;
-				}
-			}
-		}
-
-		//private static IEnumerable<DateTime> GetDefaultRussianHolidays(DateTime startYear, DateTime endYear)
-		//{
-		//	if (startYear >= endYear)
-		//		throw new ArgumentOutOfRangeException(nameof(endYear));
-
-		//	var holidays = new List<DateTime>();
-
-		//	for (var year = startYear.Year; year <= endYear.Year; year++)
-		//	{
-		//		for (var i = 1; i <= 10; i++)
-		//			holidays.Add(new DateTime(year, 1, i));
-
-		//		holidays.Add(new DateTime(year, 2, 23));
-		//		holidays.Add(new DateTime(year, 3, 8));
-		//		holidays.Add(new DateTime(year, 5, 1));
-		//		holidays.Add(new DateTime(year, 5, 2));
-		//		holidays.Add(new DateTime(year, 5, 9));
-		//		holidays.Add(new DateTime(year, 6, 12));
-		//		holidays.Add(new DateTime(year, 11, 4));
-		//	}
-
-		//	return holidays;
-		//}
-
 		private const BindingFlags _publicStatic = BindingFlags.Public | BindingFlags.Static;
 
 		/// <summary>
@@ -177,7 +65,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public ExchangeBoard()
 		{
-			ExtensionInfo = new Dictionary<object, object>();
+			ExtensionInfo = new Dictionary<string, object>();
 		}
 
 		private string _code = string.Empty;
@@ -188,11 +76,11 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Identity]
 		[DisplayNameLoc(LocalizedStrings.CodeKey)]
-		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
+		[DescriptionLoc(LocalizedStrings.BoardCodeKey, true)]
 		[MainCategory]
 		public string Code
 		{
-			get { return _code; }
+			get => _code;
 			set
 			{
 				if (value == null)
@@ -216,9 +104,10 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str64Key)]
 		[MainCategory]
+		[XmlIgnore]
 		public TimeSpan ExpiryTime
 		{
-			get { return _expiryTime; }
+			get => _expiryTime;
 			set
 			{
 				if (ExpiryTime == value)
@@ -227,6 +116,20 @@ namespace StockSharp.BusinessEntities
 				_expiryTime = value;
 				Notify(nameof(ExpiryTime));
 			}
+		}
+
+		/// <summary>
+		/// Reserved.
+		/// </summary>
+		[Browsable(false)]
+		[XmlElement(DataType = "duration", ElementName = nameof(ExpiryTime))]
+		[Ignore]
+		public string ExpiryTimeStr
+		{
+			// XmlSerializer does not support TimeSpan, so use this property for 
+			// serialization instead.
+			get => XmlConvert.ToString(ExpiryTime);
+			set => ExpiryTime = value.IsEmpty() ? TimeSpan.Zero : XmlConvert.ToTimeSpan(value);
 		}
 
 		/// <summary>
@@ -239,43 +142,43 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public Exchange Exchange { get; set; }
 
-		private bool _isSupportAtomicReRegister;
+		//private bool _isSupportAtomicReRegister;
 
-		/// <summary>
-		/// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
-		[DescriptionLoc(LocalizedStrings.Str60Key)]
-		[MainCategory]
-		public bool IsSupportAtomicReRegister
-		{
-			get { return _isSupportAtomicReRegister; }
-			set
-			{
-				_isSupportAtomicReRegister = value;
-				Notify(nameof(IsSupportAtomicReRegister));
-			}
-		}
+		///// <summary>
+		///// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
+		//[DescriptionLoc(LocalizedStrings.Str60Key)]
+		//[MainCategory]
+		//public bool IsSupportAtomicReRegister
+		//{
+		//	get { return _isSupportAtomicReRegister; }
+		//	set
+		//	{
+		//		_isSupportAtomicReRegister = value;
+		//		Notify(nameof(IsSupportAtomicReRegister));
+		//	}
+		//}
 
-		private bool _isSupportMarketOrders;
+		//private bool _isSupportMarketOrders;
 
-		/// <summary>
-		/// Are market type orders <see cref="OrderTypes.Market"/> supported.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
-		[DescriptionLoc(LocalizedStrings.MarketOrdersSupportedKey)]
-		[MainCategory]
-		public bool IsSupportMarketOrders
-		{
-			get { return _isSupportMarketOrders; }
-			set
-			{
-				_isSupportMarketOrders = value;
-				Notify(nameof(IsSupportMarketOrders));
-			}
-		}
+		///// <summary>
+		///// Are market type orders <see cref="OrderTypes.Market"/> supported.
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
+		//[DescriptionLoc(LocalizedStrings.MarketOrdersSupportedKey)]
+		//[MainCategory]
+		//public bool IsSupportMarketOrders
+		//{
+		//	get { return _isSupportMarketOrders; }
+		//	set
+		//	{
+		//		_isSupportMarketOrders = value;
+		//		Notify(nameof(IsSupportMarketOrders));
+		//	}
+		//}
 
 		private WorkingTime _workingTime = new WorkingTime();
 
@@ -289,7 +192,7 @@ namespace StockSharp.BusinessEntities
 		[InnerSchema]
 		public WorkingTime WorkingTime
 		{
-			get { return _workingTime; }
+			get => _workingTime;
 			set
 			{
 				if (value == null)
@@ -311,10 +214,10 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[TimeZoneInfo]
 		[XmlIgnore]
-		[DataMember]
+		//[DataMember]
 		public TimeZoneInfo TimeZone
 		{
-			get { return _timeZone; }
+			get => _timeZone;
 			set
 			{
 				if (value == null)
@@ -328,99 +231,33 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		///// <summary>
-		///// Все площадки.
-		///// </summary>
-		//public static ExchangeBoard[] AllBoards
-		//{
-		//	get { return ExchangeInfoProvider.Boards; }
-		//}
-
 		/// <summary>
-		/// To get a board by its code.
+		/// Reserved.
 		/// </summary>
-		/// <param name="code">Board code.</param>
-		/// <returns>Found board. If board with the passed name does not exist, then <see langword="null" /> will be returned.</returns>
-		public static ExchangeBoard GetBoard(string code)
+		[Browsable(false)]
+		[DataMember]
+		[Ignore]
+		public string TimeZoneStr
 		{
-			return code.CompareIgnoreCase("RTS") ? Forts : ExchangeInfoProvider.GetExchangeBoard(code);
-		}
-
-		/// <summary>
-		/// To get a board by its code. If board with the passed name does not exist, then it will be created.
-		/// </summary>
-		/// <param name="code">Board code.</param>
-		/// <param name="createBoard">The handler creating a board, if it is not found. If the value is <see langword="null" />, then the board is created by default initialization.</param>
-		/// <returns>Exchange board.</returns>
-		public static ExchangeBoard GetOrCreateBoard(string code, Func<string, ExchangeBoard> createBoard = null)
-		{
-			if (code.IsEmpty())
-				throw new ArgumentNullException(nameof(code));
-
-			if (code.CompareIgnoreCase("RTS"))
-				return Forts;
-
-			var board = ExchangeInfoProvider.GetExchangeBoard(code);
-
-			if (board != null)
-				return board;
-
-			if (createBoard == null)
-			{
-				var exchange = ExchangeInfoProvider.GetExchange(code);
-
-				if (exchange == null)
-				{
-					exchange = new Exchange { Name = code };
-					ExchangeInfoProvider.Save(exchange);
-				}
-
-				board = new ExchangeBoard
-				{
-					Code = code,
-					Exchange = exchange
-				};
-			}
-			else
-			{
-				board = createBoard(code);
-
-				if (ExchangeInfoProvider.GetExchange(board.Exchange.Name) == null)
-					ExchangeInfoProvider.Save(board.Exchange);
-			}
-
-			SaveBoard(board);
-
-			return board;
-		}
-
-		/// <summary>
-		/// To save the board.
-		/// </summary>
-		/// <param name="board">Board.</param>
-		public static void SaveBoard(ExchangeBoard board)
-		{
-			if (board == null)
-				throw new ArgumentNullException(nameof(board));
-
-			ExchangeInfoProvider.Save(board);
+			get => TimeZone.To<string>();
+			set => TimeZone = value.To<TimeZoneInfo>();
 		}
 
 		[field: NonSerialized]
-		private IDictionary<object, object> _extensionInfo;
+		private IDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended exchange info.
 		/// </summary>
 		/// <remarks>
-		/// Required if additional information associated with the exchange is stored in the program. .
+		/// Required if additional information associated with the exchange is stored in the program.
 		/// </remarks>
 		[XmlIgnore]
 		[Browsable(false)]
 		[DataMember]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
+			get => _extensionInfo;
 			set
 			{
 				if (value == null)
@@ -435,7 +272,7 @@ namespace StockSharp.BusinessEntities
 		private void AfterDeserialization(StreamingContext ctx)
 		{
 			if (ExtensionInfo == null)
-				ExtensionInfo = new Dictionary<object, object>();
+				ExtensionInfo = new Dictionary<string, object>();
 		}
 
 		[field: NonSerialized]
@@ -443,8 +280,8 @@ namespace StockSharp.BusinessEntities
 
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
 		{
-			add { _propertyChanged += value; }
-			remove { _propertyChanged -= value; }
+			add => _propertyChanged += value;
+			remove => _propertyChanged -= value;
 		}
 
 		private void Notify(string info)
@@ -495,23 +332,13 @@ namespace StockSharp.BusinessEntities
 			{
 				Exchange = Exchange,
 				Code = Code,
-				IsSupportAtomicReRegister = IsSupportAtomicReRegister,
-				IsSupportMarketOrders = IsSupportMarketOrders,
+				//IsSupportAtomicReRegister = IsSupportAtomicReRegister,
+				//IsSupportMarketOrders = IsSupportMarketOrders,
 				ExpiryTime = ExpiryTime,
 				WorkingTime = WorkingTime.Clone(),
 				TimeZone = TimeZone,
 			};
 		}
-
-		/// <summary>
-		/// Is MICEX board.
-		/// </summary>
-		public bool IsMicex => Exchange == Exchange.Moex && this != Forts;
-
-		/// <summary>
-		/// Is the UX exchange stock market board.
-		/// </summary>
-		public bool IsUxStock => Exchange == Exchange.Ux && this != Ux;
 
 		/// <summary>
 		/// Load settings.
@@ -521,8 +348,8 @@ namespace StockSharp.BusinessEntities
 		{
 			Exchange = storage.GetValue<SettingsStorage>(nameof(Exchange)).Load<Exchange>();
 			Code = storage.GetValue<string>(nameof(Code));
-			IsSupportMarketOrders = storage.GetValue<bool>(nameof(IsSupportMarketOrders));
-			IsSupportAtomicReRegister = storage.GetValue<bool>(nameof(IsSupportAtomicReRegister));
+			//IsSupportMarketOrders = storage.GetValue<bool>(nameof(IsSupportMarketOrders));
+			//IsSupportAtomicReRegister = storage.GetValue<bool>(nameof(IsSupportAtomicReRegister));
 			ExpiryTime = storage.GetValue<TimeSpan>(nameof(ExpiryTime));
 			WorkingTime = storage.GetValue<SettingsStorage>(nameof(WorkingTime)).Load<WorkingTime>();
 			TimeZone = storage.GetValue(nameof(TimeZone), TimeZone);
@@ -536,8 +363,8 @@ namespace StockSharp.BusinessEntities
 		{
 			storage.SetValue(nameof(Exchange), Exchange.Save());
 			storage.SetValue(nameof(Code), Code);
-			storage.SetValue(nameof(IsSupportMarketOrders), IsSupportMarketOrders);
-			storage.SetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
+			//storage.SetValue(nameof(IsSupportMarketOrders), IsSupportMarketOrders);
+			//storage.SetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
 			storage.SetValue(nameof(ExpiryTime), ExpiryTime);
 			storage.SetValue(nameof(WorkingTime), WorkingTime.Save());
 			storage.SetValue(nameof(TimeZone), TimeZone);

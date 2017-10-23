@@ -25,7 +25,6 @@ namespace SampleDdeExtendedInfo
 	using Ecng.Xaml;
 
 	using StockSharp.Quik;
-
 	using StockSharp.Localization;
 
 	public partial class MainWindow
@@ -94,7 +93,7 @@ namespace SampleDdeExtendedInfo
 						// подписываемся на событие ошибки соединения
 						Trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
 
-						Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+						Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 
 						Trader.Error += error => System.Diagnostics.Debug.WriteLine(error);
 

@@ -34,18 +34,28 @@ namespace XMLCommToHTM.DOM
 		public static MemberDom Build(TypeDom typeDom, MemberInfo memberInfo, XElement doc)
 		{
 			MemberDom ret;
-			if (memberInfo is MethodInfo)
-				ret = new MethodDom(memberInfo as MethodInfo, doc);
-			else if (memberInfo is ConstructorInfo)
-				ret = new ConstructorDom(memberInfo as ConstructorInfo, doc);
-			else if (memberInfo is PropertyInfo)
-				ret = new PropertyDom(memberInfo as PropertyInfo, doc);
-			else if (memberInfo is EventInfo)
-				ret = new EventDom(memberInfo as EventInfo, doc);
-			else if (memberInfo is FieldInfo)
-				ret = new FieldDom(memberInfo as FieldInfo, doc);
-			else
-				throw new Exception();
+
+			switch (memberInfo)
+			{
+				case MethodInfo method:
+					ret = new MethodDom(method, doc);
+					break;
+				case ConstructorInfo ctor:
+					ret = new ConstructorDom(ctor, doc);
+					break;
+				case PropertyInfo prop:
+					ret = new PropertyDom(prop, doc);
+					break;
+				case EventInfo evt:
+					ret = new EventDom(evt, doc);
+					break;
+				case FieldInfo field:
+					ret = new FieldDom(field, doc);
+					break;
+				default:
+					throw new Exception();
+			}
+
 			ret.Type = typeDom; //ToTo: передавать конструктор? Иначе в конструкторе _typeDom==null
 			return ret;
 		}

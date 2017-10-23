@@ -80,6 +80,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Position.
 		/// </summary>
+		[Obsolete]
 		Position,
 
 		/// <summary>
@@ -174,7 +175,7 @@ namespace StockSharp.Messages
 		ChangePassword,
 
 		/// <summary>
-		/// Clear message queueu.
+		/// Clear message queue.
 		/// </summary>
 		ClearQueue,
 
@@ -206,6 +207,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Reset state.
 		/// </summary>
-		Reset
+		Reset,
+
+		/// <summary>
+		/// Market data request finished.
+		/// </summary>
+		MarketDataFinished,
 	}
 }

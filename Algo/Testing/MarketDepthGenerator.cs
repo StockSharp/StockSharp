@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int MinSpreadStepCount
 		{
-			get { return _minSpreadStepCount; }
+			get => _minSpreadStepCount;
 			set
 			{
 				if (value < 1)
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int MaxSpreadStepCount
 		{
-			get { return _maxSpreadStepCount; }
+			get => _maxSpreadStepCount;
 			set
 			{
 				if (value < 1)
@@ -106,7 +106,7 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int MaxBidsDepth
 		{
-			get { return _maxBidsDepth; }
+			get => _maxBidsDepth;
 			set
 			{
 				if (value < 0)
@@ -126,7 +126,7 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int MaxAsksDepth
 		{
-			get { return _maxAsksDepth; }
+			get => _maxAsksDepth;
 			set
 			{
 				if (value < 0)
@@ -151,7 +151,7 @@ namespace StockSharp.Algo.Testing
 		/// </remarks>
 		public int MaxGenerations
 		{
-			get { return _maxGenerations; }
+			get => _maxGenerations;
 			set
 			{
 				if (value < 1)

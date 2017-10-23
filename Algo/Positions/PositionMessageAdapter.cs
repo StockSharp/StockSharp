@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Positions
 		/// </summary>
 		public IPositionManager PositionManager
 		{
-			get { return _positionManager; }
+			get => _positionManager;
 			set
 			{
 				if (value == null)
@@ -56,8 +56,13 @@ namespace StockSharp.Algo.Positions
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
-			PositionManager.ProcessMessage(message);
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
 
+			PositionManager.ProcessMessage(message);
 			base.SendInMessage(message);
 		}
 

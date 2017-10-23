@@ -17,20 +17,18 @@ using System.Xml.Linq;
 
 namespace XMLCommToHTM.DOM
 {
-	using Wintellect.PowerCollections;
+	using System.Collections.Generic;
 
 	public class NamespaceDom
 	{
-		public OrderedBag<TypeDom> Types = new OrderedBag<TypeDom>((t1, t2) => t1.SimpleName.CompareTo(t2.SimpleName));
+		public List<TypeDom> Types = new List<TypeDom>();
 		public XElement DocInfo;
-
-		private readonly string _name;
 
 		public NamespaceDom(string name)
 		{
-			_name = name;
+			Name = name;
 		}
 
-		public string Name => _name;
+		public string Name { get; }
 	}
 }

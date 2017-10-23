@@ -28,7 +28,9 @@ namespace StockSharp.Algo.Indicators
 	/// Volume profile.
 	/// </summary>
 	[DisplayName("VolumeProfile")]
-	[DescriptionLoc(LocalizedStrings.Str729Key)]
+	[DescriptionLoc(LocalizedStrings.VolumeProfileKey, true)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[IndicatorOut(typeof(VolumeProfileIndicatorValue))]
 	public class VolumeProfileIndicator : BaseIndicator
 	{
 		private readonly Dictionary<decimal, decimal> _levels = new Dictionary<decimal, decimal>();
@@ -72,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 				if (candle.PriceLevels != null)
 				{
 					foreach (var priceLevel in candle.PriceLevels)
-						AddVolume(priceLevel.Price, priceLevel.BuyVolume + priceLevel.SellVolume);
+						AddVolume(priceLevel.Price, priceLevel.TotalVolume);
 				}
 			}
 			else

@@ -2,75 +2,73 @@
 <topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <summary>
-      <para>Данный топик предназначен для трейдеров, которые разрабатывают графические торговые программы с
-	  помощью <token>stocksharp</token>, но недостаточно знакомы с азами программирования графического интерфейса под <token>dotnet</token>.</para>
+      <para>This topic is designed for traders who develop graphical trading programs via <token>stocksharp</token>, but not enough familiar with the basics of GUI
+      programming in <token>dotnet</token>.</para>
     </summary>
 
     <introduction>
-      <para>В <token>dotnet</token> существует специальная технология для построения графического интерфейса – <token>wpf</token> (до этого была
-	  технология <token>winforms</token>, которая значительно уступает по графическим возможностям). В этой технологии для создания графических элементов 
-	  используется специальный декларативынй язык <externalLink>
+      <para>There is a special technology <token>wpf</token> for the GUI building in <token>dotnet</token> (before there was the <token>winforms</token> technology that
+      significantly was inferior by the graphics capabilities). To create graphical elements a special declarative language <externalLink>
 		<linkText>XAML</linkText>
 		<linkAlternateText>eXtensible Application Markup Language</linkAlternateText>
-		<linkUri>https://msdn.microsoft.com/ru-ru/library/hh700354.aspx</linkUri>
+		<linkUri>https://msdn.microsoft.com/library/hh700354.aspx</linkUri>
 		<linkTarget>_blank</linkTarget>
-		</externalLink>.</para>
-	  <para>Основное ограничение визуального API под Windows состоит в том, что нельзя обращаться из другого потока к элементам окна. Это связанно с ограничениями архитектуры Windows (подробнее описано здесь
-	  <token>messagepump</token>). Реализации шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> в целях повышения
-	  производительности работают в многопоточном режиме. Поэтому, подписываясь на событие, например, 
-	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
-	  нельзя напрямую выводить полученные данные в окно пользователя. Для этого нужно провести операцию синхронизации при помощи специального объекта
+		</externalLink> is used in this technology.</para>
+	  <para>The main limitation of the Windows visual API is that it is impossible to access to the window elements from another thread. This is due to the Windows
+	  architectural limitations (described in more detail here <token>messagepump</token>). The <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
+	  interface implementations work in multithreaded mode to improve productivity. Therefore, by subscribing to an event, for example,
+	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
+	  it is impossible to directly display the data in a user window. To do this, in is necessary to perform the synchronizing operation via the special 
 	  <externalLink>
 		<linkText>Dispatcher</linkText>
 		<linkAlternateText>Dispatcher</linkAlternateText>
-		<linkUri>https://msdn.microsoft.com/ru-ru/library/system.windows.threading.dispatcher(v=vs.110).aspx</linkUri>
+		<linkUri>https://msdn.microsoft.com/library/system.windows.threading.dispatcher.aspx</linkUri>
 		<linkTarget>_blank</linkTarget>
-		</externalLink>, который управляет очередью рабочих элементов потока. </para>
-	  <para> Вот простой пример, как это делается:</para>
+		</externalLink> object, which controls the queue of the thread working elements.</para>
+	  <para>Here is a simple example of how this is done:</para>
 	  <code language="C#">
-// обязательно нужно вызвать метод BeginInvoke,
-// и уже в его обработчике можно обратиться к элементу окна 'Security' (это выпадающий список)
-_trader.NewSecurities += securities => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
+// the BeginInvoke method must be invoked for access to any UI compenents in market-data handles
+_trader.NewSecurity += security => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
 	  <para>
-		<token>stocksharp</token> уже содержит специальные методы, которые скрывают использование Dispatcher и упрощают написание кода:
+		<token>stocksharp</token> already has special methods that hide the Dispatcher use and simplify coding:
 	  </para>
-	  <code language="C#">// обязательно нужно вызвать метод GuiSync, прежде чем обратиться к элементу окна 'Security' (это выпадающий список)
-_trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
+	  <code language="C#">// the same as a prev example but uses short notation
+_trader.NewSecurity += security => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
 
 <section address="optionalAddress">
-  <title>Графические компоненты S#</title>
+  <title>Graphical components of S#</title>
   <content>
-    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, а так же бесплатная библиотека для Wpf
+    <para><token>stocksharp</token> includes a large number of its own graphical components, as well as a free library for Wpf 
     <externalLink>
 	<linkText>Xceed.Wpf.Toolkit</linkText>
 <linkAlternateText>Optional alternate text</linkAlternateText>
 <linkUri>http://wpftoolkit.codeplex.com/</linkUri>
 <linkTarget>_blank</linkTarget>
-</externalLink>. Собственные графические компоненты размещены в пространствах имен 
+</externalLink>. Its own graphical components are placed in the 
 <codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>
-и <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference>. Некоторые специфические компоненты находятся в пространствах имен коннекторов,
- как например, комбинированный список <codeEntityReference qualifyHint="false">T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox</codeEntityReference> для выбора адреса сервера
- <token>smartcom</token>.
+and <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference> namespaces. Some specific components are in the connectors namespaces, for
+ example the combined list <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox</codeEntityReference> for the <token>openecry</token>
+ server address selecting.
  </para>
 <para>
- <token>stocksharp</token> имеет различные контролы для:
+ <token>stocksharp</token> has a variety of controls for:
 </para>
 
 <list class="bullet">
-  <listItem><para>поиска и выбора данных (инструментов, портфелей, адресов); </para></listItem>
-  <listItem><para>создания заявок; </para></listItem>
-  <listItem><para>отображения биржевой и другой информации (сделки, заявки, транзакции, стаканы, логи и т.д.);</para></listItem>
-  <listItem><para>построения графиков.</para></listItem>
+  <listItem><para>search and select data (instruments, portfolios, addresses);</para></listItem>
+  <listItem><para>the orders creation;</para></listItem>
+  <listItem><para>display exchange and other information (trades, orders, transactions, order books, logs, etc.);</para></listItem>
+  <listItem><para>charts plotting.</para></listItem>
 </list>
 
 
 <para>
-	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соотвествующих пространств имен и использовать эти
-	 псевдонимы в коде XAML. Как это сделать показано в следующем примере:
+	 To access the <token>stocksharp</token> graphical controls in the XAML code it is necessary to define the aliases for the corresponding namespace and to use these
+	 aliases in the XAML code. How to do this is shown in the following example:
 </para>
 	  <code language="XAML">
 	  <![CDATA[
-<Window x:Class="SampleSmartSMA.MainWindow"
+<Window x:Class="SampleOEC.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -80,237 +78,15 @@ _trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSou
         Title="{x:Static loc:LocalizedStrings.XamlStr570}" Height="700" Width="900">
     
     <Grid>
-		<Grid.RowDefinitions>
-			...............................
-		</Grid.RowDefinitions>
-			
-		<Grid Grid.Row="0">
-			<Grid.ColumnDefinitions>
-				...............................
-			</Grid.ColumnDefinitions>
-        	    <charting:Chart x:Name="_chart" Grid.Column="0" />
-			<Grid Grid.Column="1">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="*" />
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					...............................
-				</Grid.RowDefinitions>
-				
-					...............................
-					
-				<Label Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.XamlStr651}" />
-				<ss:SmartComAddressComboBox x:Name="Address" Grid.Column="1" Grid.Row="2" />
-
-                <TextBlock Grid.Column="0" Grid.Row="3">
-					<Run Text="{x:Static loc:LocalizedStrings.Account}"/><Run Text=":"/>
-				</TextBlock>
-                <sx:PortfolioComboBox x:Name="Portfolios" Grid.Column="1" Grid.Row="3" />
-
-					...............................
-
-			</Grid>
-		</Grid>
-		
-		<Grid Grid.Row="1">
-			<Grid.ColumnDefinitions>
-				...............................
-			</Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                ...............................
-            </Grid.RowDefinitions>
-
-			<sx:MyTradeGrid x:Name="_trades" Grid.Column="0" />
-			<sx:OrderGrid x:Name="_orders" Grid.Column="1" SelectionChanged="OrdersOrderSelected" />
-            <sx:LogControl x:Name="LogControl" Grid.Row="1" Grid.ColumnSpan="2"/>
-		</Grid>
-    </Grid>
+   </Grid>
 </Window>
 	]]>
 </code>
 
-<para>
-	 Ниже приведена таблица с описанием некоторых полезных графических компонент, входящих в состав <token>stocksharp</token>:
-</para>
-
-<table>
-  <tableHeader>
-    <row>
-      <entry><para>Компонент</para></entry>
-      <entry><para>Описание</para></entry>
-    </row>
-  </tableHeader>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.Monitor</codeEntityReference></para></entry>
-    <entry><para>Компонент для мониторинга работы торговых стратегий.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.LogControl</codeEntityReference></para></entry>
-    <entry><para>Компонент для отображения информации из логов.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.IndexSecurityWindow</codeEntityReference></para></entry>
-    <entry><para>Окно для редактирования параметров индексных инструментов.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.MarketDepthControl</codeEntityReference></para></entry>
-    <entry><para>Визуальный контрол, отображающий стакан с котировками.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.OptionDesk</codeEntityReference></para></entry>
-    <entry><para>Доска опционов.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.PortfolioComboBox</codeEntityReference></para></entry>
-    <entry><para>Выпадающий список для выбора портфеля.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.PortfolioGrid</codeEntityReference></para></entry>
-    <entry><para>Таблица, отображающая портфели и позиции.</para></entry>
-  </row>
-  <row>
-    <entry>
-    <para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.SecurityEditor</codeEntityReference></para>
-    <para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.SecurityPicker</codeEntityReference></para>
-    </entry>
-    <entry><para>Визуальные компоненты для поиска и выбора инструмента.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.Level1Grid</codeEntityReference></para></entry>
-    <entry><para>Таблица для отображения полей Level1.</para></entry>
-  </row>
-    <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.TradeGrid</codeEntityReference></para></entry>
-    <entry><para>Таблица, отображающая тиковые сделки.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.OrderGrid</codeEntityReference></para></entry>
-    <entry><para>Таблица, отображающая заявки.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.StatisticParameterGrid</codeEntityReference></para></entry>
-    <entry><para>Визуальная панель для статистики работы стратегии.</para></entry>
-  </row>
-  <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xaml.Charting.Chart</codeEntityReference></para></entry>
-    <entry><para>Графический компонент отображения графиков.</para></entry>
-  </row>
-   <row>
-    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference></para></entry>
-    <entry><para>Графический компонент отображения кривой эквити.</para></entry>
-  </row>
-  
-</table>
- 
   </content>
 </section>
-
-
-
- 
 	  
-	  <!--<para>
-		Для того, чтобы не осложнять процесс разработки торговых программ деталями и ограничениями, <token>stocksharp</token> содержит специальный шлюз
-		<codeEntityReference>T:StockSharp.Xaml.GuiTrader`1</codeEntityReference>. Данный класс синхронизует события в один поток, и нет необходимости делать
-		это в коде. Вышеприведенный код с использованием <codeEntityReference>T:StockSharp.Xaml.GuiTrader`1</codeEntityReference>:
-	  </para>
-	  <code language="C#">// теперь можно обратиться к элементу окна 'Security' (это выпадающий список) без конструкции GuiSync
-_trader.NewSecurities += securities => this.Security.ItemsSource = _trader.Securities;</code>
-	  <para>
-		Для менеджера свечек <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> также существует синхронизованный
-		вариант. Для того, чтобы получать синхронизованно события свечек 
-		<codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>,
-		  необходимо создать <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> и передать в него несинхронизованный шлюз
-		  <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> (можно передавать и <codeEntityReference>T:StockSharp.Xaml.GuiTrader`1</codeEntityReference>,
-		  но в этом случае будет происходить двойная синхронизация).
-	  </para> -->
     </introduction>
-
-    <!-- <procedure>
-      <title>Пример SampleSync</title>
-
-      <steps class="ordered">
-        <step>
-          <content>
-            <para>В самом начале необходимо создать подключение к торговой системе и синхронизовать его:</para>
-			<code language="C#"><![CDATA[
-// создаем шлюз к Quik-у и синхронизуем его
-_trader = new QuikTrader(this.Path.Text).GuiSyncTrader();
-
-// или напрямую через конструктор GuiTrader
-// (пред. нужно закомментировать, это - раскомментировать)
-// new GuiTrader<QuikTrader>(new QuikTrader(this.Path.Text));
-
-// производим соединение
-_trader.Connect();]]></code>
-          </content>
-        </step>
-		<step>
-		  <content>
-			<para>Затем, подписаться на событие, в обработчике которого уже не нужно вызывать синхронизацию:</para>
-			<code language="C#">// теперь можно обратиться к элементу окна 'Security' (это выпадающий список) без конструкции GuiSync
-_trader.NewSecurities += securities => this.Security.ItemsSource = _trader.Securities;</code>
-		  </content>
-		</step>
-		<step>
-		  <content>
-			<para>Работа со свечками, где также не требуется синхронизация:</para>
-			<code language="C#"><![CDATA[
-// создаем синхронизованный менеджер свечек по несинхронизованному шлюзу
-_candleManager = new CandleManager(_trader.Trader);
-
-private void ShowChart_Click(object sender, RoutedEventArgs e)
-{
-	var security = (Security)Security.SelectedValue;
-	var series = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5));
-	_chartWindows.SafeAdd(series, key =>
-	{
-		var wnd = new ChartWindow
-		{
-			Title = "{0} {1}".Put(security.Code, series.Arg)
-		};
-
-		wnd.MakeHideable();
-
-		series.ProcessCandle += candle => wnd.Chart.Candles.Add(candle);
-
-		return wnd;
-	}).Show();
-
-	_candleManager.Start(series);
-}
-			]]>
-			</code>
-			<alert class="note">
-			  Исходники примера лежат в папке SampleSync.
-			</alert>
-		  </content>
-		</step>
-      </steps>
-    </procedure>
-
-	<section>
-      <title>Недостаток синхронизованного шлюза GuiTrader</title>
-
-      <content>
-		<para>
-		  Основным минусом такого подхода является то, что графические операции (например, прорисовка графиков или таблиц, в зависимости от того,
-		  какой будет сделан интерфейс) и торговые операции будут выполняться в одном потоке. А это приведет к тому, что данные операции будут
-		  делить между собой процессорное время. И, если на компьютере установлен процессор с несколькими ядрами, то будет задействовано только
-		  одно из них, а другие в это время будут простаивать. Визуально это будет проявляться в том, что окно с данными будет замирать на период
-		  обработки события. И наоборот, событие будет дожидаться, пока полностью не прорисуется окно.
-		</para>
-		<para>
-		  Как резюме, такое решение стоит использовать только в начале разработки роботов, когда еще нет достаточного опыта по написанию
-		  автономным торговых программ с графическим интерфейсом.
-		</para>
-      </content>
-    </section> -->
-
-     <relatedTopics>
-       <link xlink:href="4cd2b7f9-fe8d-404a-bec6-227783410beb">Визуальные компоненты логирования</link>
-    </relatedTopics>
     
   </developerWalkthroughDocument>
 </topic>

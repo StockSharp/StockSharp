@@ -17,6 +17,7 @@ namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -40,7 +41,7 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
-		private decimal _beginValue;
+		private decimal? _beginValue;
 
 		/// <summary>
 		/// Position size at the beginning of the trading session.
@@ -49,9 +50,11 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str253Key)]
 		[DescriptionLoc(LocalizedStrings.Str424Key)]
 		[StatisticsCategory]
-		public decimal BeginValue
+		[Nullable]
+		[Browsable(false)]
+		public decimal? BeginValue
 		{
-			get { return _beginValue; }
+			get => _beginValue;
 			set
 			{
 				if (_beginValue == value)
@@ -62,7 +65,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _currentValue;
+		private decimal? _currentValue;
 
 		/// <summary>
 		/// Current position size.
@@ -71,9 +74,11 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str254Key)]
 		[DescriptionLoc(LocalizedStrings.Str425Key)]
 		[StatisticsCategory]
-		public decimal CurrentValue
+		[Nullable]
+		//[Browsable(false)]
+		public decimal? CurrentValue
 		{
-			get { return _currentValue; }
+			get => _currentValue;
 			set
 			{
 				if (_currentValue == value)
@@ -84,7 +89,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _blockedValue;
+		private decimal? _blockedValue;
 
 		/// <summary>
 		/// Position size, registered for active orders.
@@ -93,9 +98,11 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str255Key)]
 		[DescriptionLoc(LocalizedStrings.Str426Key)]
 		[StatisticsCategory]
-		public decimal BlockedValue
+		[Nullable]
+		[Browsable(false)]
+		public decimal? BlockedValue
 		{
-			get { return _blockedValue; }
+			get => _blockedValue;
 			set
 			{
 				if (_blockedValue == value)
@@ -107,7 +114,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		[field: NonSerialized]
-		private IDictionary<object, object> _extensionInfo;
+		private IDictionary<string, object> _extensionInfo;
 
 		/// <summary>
 		/// Extended information.
@@ -120,9 +127,9 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str427Key)]
 		[MainCategory]
-		public IDictionary<object, object> ExtensionInfo
+		public IDictionary<string, object> ExtensionInfo
 		{
-			get { return _extensionInfo; }
+			get => _extensionInfo;
 			set
 			{
 				_extensionInfo = value;
@@ -130,7 +137,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _currentPrice;
+		private decimal? _currentPrice;
 
 		/// <summary>
 		/// Position price.
@@ -140,9 +147,10 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str256Key)]
 		[DescriptionLoc(LocalizedStrings.Str428Key)]
 		[StatisticsCategory]
-		public decimal CurrentPrice
+		[Browsable(false)]
+		public decimal? CurrentPrice
 		{
-			get { return _currentPrice; }
+			get => _currentPrice;
 			set
 			{
 				if (_currentPrice == value)
@@ -153,7 +161,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _averagePrice;
+		private decimal? _averagePrice;
 
 		/// <summary>
 		/// Average price.
@@ -163,9 +171,10 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str257Key)]
 		[DescriptionLoc(LocalizedStrings.Str429Key)]
 		[StatisticsCategory]
-		public decimal AveragePrice
+		[Browsable(false)]
+		public decimal? AveragePrice
 		{
-			get { return _averagePrice; }
+			get => _averagePrice;
 			set
 			{
 				if (_averagePrice == value)
@@ -176,7 +185,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _unrealizedPnL;
+		private decimal? _unrealizedPnL;
 
 		/// <summary>
 		/// Unrealized profit.
@@ -186,9 +195,10 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str258Key)]
 		[DescriptionLoc(LocalizedStrings.Str430Key)]
 		[StatisticsCategory]
-		public decimal UnrealizedPnL
+		[Browsable(false)]
+		public decimal? UnrealizedPnL
 		{
-			get { return _unrealizedPnL; }
+			get => _unrealizedPnL;
 			set
 			{
 				if (_unrealizedPnL == value)
@@ -199,7 +209,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _realizedPnL;
+		private decimal? _realizedPnL;
 
 		/// <summary>
 		/// Realized profit.
@@ -209,9 +219,10 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str259Key)]
 		[DescriptionLoc(LocalizedStrings.Str431Key)]
 		[StatisticsCategory]
-		public decimal RealizedPnL
+		[Browsable(false)]
+		public decimal? RealizedPnL
 		{
-			get { return _realizedPnL; }
+			get => _realizedPnL;
 			set
 			{
 				if (_realizedPnL == value)
@@ -222,7 +233,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _variationMargin;
+		private decimal? _variationMargin;
 
 		/// <summary>
 		/// Variation margin.
@@ -231,9 +242,11 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str260Key)]
 		[DescriptionLoc(LocalizedStrings.Str432Key)]
 		[StatisticsCategory]
-		public decimal VariationMargin
+		[Nullable]
+		[Browsable(false)]
+		public decimal? VariationMargin
 		{
-			get { return _variationMargin; }
+			get => _variationMargin;
 			set
 			{
 				if (_variationMargin == value)
@@ -244,7 +257,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _commission;
+		private decimal? _commission;
 
 		/// <summary>
 		/// Total commission.
@@ -253,9 +266,11 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
 		[DescriptionLoc(LocalizedStrings.Str433Key)]
 		[StatisticsCategory]
-		public decimal Commission
+		[Nullable]
+		[Browsable(false)]
+		public decimal? Commission
 		{
-			get { return _commission; }
+			get => _commission;
 			set
 			{
 				if (_commission == value)
@@ -275,9 +290,10 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str434Key)]
 		[DescriptionLoc(LocalizedStrings.Str435Key)]
 		[StatisticsCategory]
+		[Browsable(false)]
 		public DateTimeOffset LastChangeTime
 		{
-			get { return _lastChangeTime; }
+			get => _lastChangeTime;
 			set
 			{
 				_lastChangeTime = value;
@@ -294,9 +310,10 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str530Key)]
 		[DescriptionLoc(LocalizedStrings.Str530Key, true)]
 		[StatisticsCategory]
+		[Browsable(false)]
 		public DateTimeOffset LocalTime
 		{
-			get { return _localTime; }
+			get => _localTime;
 			set
 			{
 				_localTime = value;
@@ -315,11 +332,31 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public string Description
 		{
-			get { return _description; }
+			get => _description;
 			set
 			{
 				_description = value;
 				NotifyChanged(nameof(Description));
+			}
+		}
+
+		private CurrencyTypes? _currency;
+
+		/// <summary>
+		/// Portfolio currency.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
+		[DescriptionLoc(LocalizedStrings.Str251Key)]
+		[MainCategory]
+		[Nullable]
+		public CurrencyTypes? Currency
+		{
+			get => _currency;
+			set
+			{
+				_currency = value;
+				NotifyChanged(nameof(Currency));
 			}
 		}
 
@@ -342,8 +379,8 @@ namespace StockSharp.BusinessEntities
 			destination.AveragePrice = AveragePrice;
 			destination.CurrentPrice = CurrentPrice;
 			destination.Description = Description;
-			destination.LastChangeTime = LastChangeTime;
-			destination.LocalTime = LocalTime;
+			//destination.LastChangeTime = LastChangeTime;
+			//destination.LocalTime = LocalTime;
 		}
 	}
 }

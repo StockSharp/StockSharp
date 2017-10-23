@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="622b706b-f729-46f2-8509-900c5bde2244" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The main process of working on the design of strategy and composite 
+elements is in the <legacyBold>Schemas</legacyBold> panel, by combining cubes and connecting lines. 
+The Schemas panel consists of panels: 
+<legacyBold>Palette</legacyBold>, <legacyBold>Designer</legacyBold>, <legacyBold>Properties</legacyBold>.</para>
+<mediaLink>
+<caption placement="after">_</caption>
+<image placement="center" xlink:href="Designer_Designer_schemes_strategies_and_component_elements_00"/>
+</mediaLink>
+<title>Palette panel </title>
+
+  <para>The <legacyBold>Palette</legacyBold> panel contains the cubes from which the strategy is created. 
+  All the elements in the palette are divided into categories, which are described in the
+  <link xlink:href="37e547dd-5141-4a57-9ed2-8ca058e9240c" /> section. To add a cube 
+  to the <legacyBold>Designer</legacyBold> panel, just right-click on the required cube and, holding the 
+  mouse button, move it to the <legacyBold>Designer</legacyBold> panel. After that the element will be 
+  automatically selected and its parameters will be displayed in the window to 
+  edit the cube properties.
+</para>
+
+<title>Designer panel</title>
+<para>The entire process of creating a strategy is performed in the <legacyBold>Designer</legacyBold> panel 
+by combining cubes and connections (lines). At that, the strategy diagram is presented 
+visually. For details on creating a strategy, see <link xlink:href="4e9c31e9-c3b3-4a98-885d-89ef62248b1c" />.
+</para>
+<title>Properties panel</title>
+
+<para>The Properties panel displays the parameters of the cube selected in the 
+<legacyBold>Designer</legacyBold> panel. When you select a cube in the 
+<legacyBold>Designer</legacyBold> panel, the frame around it is painted black.
+</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_Properties_Panel_00"/>
+</mediaLink>
+<para>All cubes contain a set of predefined properties:</para>
+<list class="bullet">
+  <listItem><para><legacyBold>Name </legacyBold> – the name of the element that is displayed in the designer.</para></listItem>
+  <listItem><para><legacyBold>Logging level </legacyBold> – the logging level for this element.</para></listItem>
+  <listItem><para><legacyBold>Parameters </legacyBold> – to display the element parameters in elements of a higher level.</para></listItem>
+  <listItem><para><legacyBold>Sockets </legacyBold> – to display the element sockets in elements of a higher level.</para></listItem>
+</list>
+
+<para>Details about the properties of each cube are described in the <link xlink:href="37e547dd-5141-4a57-9ed2-8ca058e9240c" /> section.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="37e547dd-5141-4a57-9ed2-8ca058e9240c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

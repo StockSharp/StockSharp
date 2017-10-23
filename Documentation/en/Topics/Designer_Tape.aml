@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2f00e9bc-8ea7-4679-9688-b02c3424f03a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The main element of the <token>designer</token> user interface is a <legacyBold>Ribbon</legacyBold> that 
+is located along the top of the application window. Using the ribbon, you can quickly 
+find the necessary commands. The commands are arranged in logical groups, collected on 
+tabs. To go to the required tab, just click its name. Each tab is associated with the 
+type of action being performed.</para>
+
+<para>1.	The <legacyBold>Common</legacyBold> tab, which is opened by default after startup, contains 
+the elements that you might need at the beginning of the work. In the <legacyBold>Common</legacyBold> tab, you can open  
+<link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" />, <link xlink:href="d416a6d9-0a42-40c0-8f9f-0c1df29f5cda" />, 
+<link xlink:href="0fc19f50-24cb-4f8b-bb22-728968686f8b" />, <link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" />, 
+<link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" />, <link xlink:href="24d370d1-fd00-4914-83ac-57472eb99e93" />, 
+<link xlink:href="b162bfe7-9e25-4f36-92b0-00872dca443f" />. 
+Also in the <legacyBold>Common</legacyBold> tab, you can select the Theme of <token>designer</token>.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Tape_00"/>
+</mediaLink>
+
+<para>2.	The <legacyBold>Backtesting</legacyBold> tab is automatically opened when you select a strategy 
+in the <link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" /> panel. 
+The <legacyBold>Backtesting</legacyBold> tab contains the basic elements for creating 
+a strategy, debugging, testing strategies. 
+(<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, 
+ <link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />)</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Tape_01"/>
+</mediaLink>
+
+<para>3.	The <legacyBold>Live</legacyBold> tab is designed directly for real trading. Details of the 
+connection settings are described in the <link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" /> 
+section. Real trading using <token>designer</token> is described in the <link xlink:href="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" /> section.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Tape_02"/>
+</mediaLink>
+ <para>4.	The <legacyBold>Strategies gallery</legacyBold> tab of <token>designer</token> provides an opportunity 
+ not only to create strategies, but also to publish them. Also, it is possible to download 
+ ready-made strategies published by other users. Details about the <legacyBold>Strategies gallery</legacyBold> are 
+ described in the <link xlink:href="3c44a545-4674-4272-9269-e50265efcd82" /> section.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Tape_03"/>
+</mediaLink>
+ <para>5.	The <legacyBold>Source code</legacyBold> tab is automatically opened 
+ when selecting the contents of the <legacyBold>Source code</legacyBold> folder in 
+ the <token>SchemeDis</token> panel. For details on creating strategies from the 
+ code, see the <link xlink:href="20a8932b-09cb-4f13-bade-770a68ac96fd" /> section.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Tape_04"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="71792b34-7013-4e7d-a486-400ec92e2410" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

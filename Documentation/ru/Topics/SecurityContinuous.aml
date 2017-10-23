@@ -31,7 +31,7 @@ private ContinuousSecurity _ri;
 							<para>Создать <codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-_ri = new ContinuousSecurity { ExchangeBoard = ExchangeBoard.Forts, Id = "RI" };
+_ri = new ContinuousSecurity { Board = ExchangeBoard.Forts, Id = "RI" };
 							]]>
 							</code>
 						</content>
@@ -42,8 +42,8 @@ _ri = new ContinuousSecurity { ExchangeBoard = ExchangeBoard.Forts, Id = "RI" };
 							<para>Добавить в него составные инструменты, указав для каждого добавляемого инструмента дату и время экспирации:</para>
             				<code language="C#">
             				<![CDATA[
-_ri.ExpirationJumps.Add(_rim5, new DateTime(2015, 6, 15, 18, 45, 00));
-_ri.ExpirationJumps.Add(_riu5, new DateTime(2015, 9, 15, 18, 45, 00));
+_ri.ExpirationJumps.Add(_rim5.ToSecurityId(), new DateTime(2015, 6, 15, 18, 45, 00));
+_ri.ExpirationJumps.Add(_riu5.ToSecurityId(), new DateTime(2015, 9, 15, 18, 45, 00));
 							]]>
 							</code>						
 						</content>

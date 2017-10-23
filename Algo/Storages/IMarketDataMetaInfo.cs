@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Last record identifier.
 		/// </summary>
-		object LastId { get; }
+		object LastId { get; set; }
 
 		/// <summary>
 		/// To save meta-information parameters to stream.
@@ -71,6 +71,11 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="stream">Data stream.</param>
 		void Read(Stream stream);
+
+		/// <summary>
+		/// Is override all data.
+		/// </summary>
+		bool IsOverride { get; }
 	}
 
 	abstract class MetaInfo : IMarketDataMetaInfo
@@ -89,7 +94,7 @@ namespace StockSharp.Algo.Storages
 		public DateTime FirstTime { get; set; }
 		public DateTime LastTime { get; set; }
 
-		public abstract object LastId { get; }
+		public abstract object LastId { get; set; }
 
 		/// <summary>
 		/// To save meta-information parameters to stream.
@@ -102,6 +107,11 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="stream">Data stream.</param>
 		public abstract void Read(Stream stream);
+
+		/// <summary>
+		/// Is override all data.
+		/// </summary>
+		public virtual bool IsOverride => false;
 
 		//public static TMetaInfo CreateMetaInfo(DateTime date)
 		//{

@@ -99,11 +99,17 @@ namespace StockSharp.Algo.Testing
 
 				if (quote != null)
 				{
-					_securityDefinition.PriceStep = quote.Price.GetDecimalInfo().EffectiveScale.GetPriceStep();
-					_securityDefinition.VolumeStep = quote.Volume.GetDecimalInfo().EffectiveScale.GetPriceStep();
-					
-					_priceStepUpdated = true;
-					_volumeStepUpdated = true;
+					if (!_priceStepUpdated)
+					{
+						_securityDefinition.PriceStep = quote.Price.GetDecimalInfo().EffectiveScale.GetPriceStep();
+						_priceStepUpdated = true;
+					}
+
+					if (!_volumeStepUpdated)
+					{
+						_securityDefinition.VolumeStep = quote.Volume.GetDecimalInfo().EffectiveScale.GetPriceStep();
+						_volumeStepUpdated = true;
+					}
 				}
 			}
 
@@ -120,13 +126,10 @@ namespace StockSharp.Algo.Testing
 
 		private IEnumerable<ExecutionMessage> ProcessQuoteChange(DateTimeOffset time, DateTimeOffset serverTime, QuoteChange[] newBids, QuoteChange[] newAsks)
 		{
-			decimal bestBidPrice;
-			decimal bestAskPrice;
-
 			var diff = new List<ExecutionMessage>();
 
-			GetDiff(diff, time, serverTime, _bids, newBids, Sides.Buy, out bestBidPrice);
-			GetDiff(diff, time, serverTime, _asks, newAsks, Sides.Sell, out bestAskPrice);
+			GetDiff(diff, time, serverTime, _bids, newBids, Sides.Buy, out var bestBidPrice);
+			GetDiff(diff, time, serverTime, _asks, newAsks, Sides.Sell, out var bestAskPrice);
 
 			var spreadPrice = bestAskPrice == 0
 				? bestBidPrice
@@ -289,12 +292,17 @@ namespace StockSharp.Algo.Testing
 
 			if (!_volumeStepUpdated)
 			{
-				_securityDefinition.VolumeStep = tick.SafeGetVolume().GetDecimalInfo().EffectiveScale.GetPriceStep();
-				_volumeStepUpdated = true;
+				var tickVolume = tick.TradeVolume;
+
+				if (tickVolume != null)
+				{
+					_securityDefinition.VolumeStep = tickVolume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
+					_volumeStepUpdated = true;
+				}
 			}
 
-			//if (message.DataType != ExecutionDataTypes.Trade)
-			//	throw new ArgumentOutOfRangeException("Тип данных не может быть {0}.".Put(message.DataType), "message");
+			//if (tick.ExecutionType != ExecutionTypes.Tick)
+			//	throw new ArgumentOutOfRangeException(nameof(tick), tick.ExecutionType, LocalizedStrings.Str1655);
 
 			//_lastTradeDate = message.LocalTime.Date;
 
@@ -441,7 +449,7 @@ namespace StockSharp.Algo.Testing
 			if (message.IsContainsTick())
 				yield return message.ToTick();
 
-			if (message.IsContainsQuotes())
+			if (message.IsContainsQuotes() && !HasDepth(message.LocalTime))
 			{
 				var prevBidPrice = _prevBidPrice;
 				var prevBidVolume = _prevBidVolume;
@@ -534,7 +542,8 @@ namespace StockSharp.Algo.Testing
 			if (HasDepth(localTime))
 				return;
 
-			var oppositePrice = tradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
+			var priceStep = GetPriceStep();
+            var oppositePrice = (tradePrice + _settings.SpreadSize * priceStep * (originSide == Sides.Buy ? 1 : -1)).Max(priceStep);
 
 			var bestQuote = quotes.FirstOrDefault();
 
@@ -562,7 +571,7 @@ namespace StockSharp.Algo.Testing
 				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str1144);
 
 			//if (volume <= 0)
-			//	throw new ArgumentOutOfRangeException("volume", volume, "Объем задан не верно.");
+			//	throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str3344);
 
 			if (volume == 0)
 				volume = _volumeRandom.Next(10, 100);

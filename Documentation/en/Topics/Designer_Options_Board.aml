@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="bba01d56-3a8c-4016-af1f-d23f067dd693" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Options_Board_00"/>
+</mediaLink>
+<para>The cube is used to display the option desk.</para> 
+<para>To display the <legacyBold>Option desk</legacyBold>, you need to add the 
+<legacyBold>Option desk</legacyBold> graphic component.</para>
+
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Instrument</legacyBold> - the instrument, the 
+  basic asset.</para></listItem>
+  <listItem><para><legacyBold>Options</legacyBold> - the list of options from 
+  the <legacyBold>Derivatives</legacyBold> cube.</para></listItem>
+  <listItem><para><legacyBold>Price of the underlying asset</legacyBold> - the 
+  price of the underlying asset.</para></listItem>
+</list>
+  </definition>
+
+
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Black’s model</legacyBold> - the flag, indicating 
+  whether values will be calculated according to the Black-Scholes model.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+<mediaLink>
+<image xlink:href="Designer_Options_Board_01"/>
+</mediaLink>
+<mediaLink>
+<image xlink:href="Designer_Options_Board_02"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="4a0cd565-b871-4be3-91a2-423eadb1540f" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

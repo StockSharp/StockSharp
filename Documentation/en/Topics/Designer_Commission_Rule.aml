@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e8449e6a-bd7f-4bc9-a1a6-e92404e3a44b" revisionNumber="1">
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+
+<para>In the <link xlink:href="31a208d0-d543-47aa-8008-389c07e1e8d4" /> 
+panel, you can set the commission monitoring settings.</para>
+<para>In the <legacyBold>Commissions</legacyBold> window, you should select the type of commission, 
+set the commission value and the condition under which the commission will be charged.</para>
+
+<mediaLink>
+<image placement="center" xlink:href="Designer_Commission_Rule"/>
+</mediaLink>
+
+<definitionTable>
+<definedTerm>List of commission types</definedTerm>
+<definition>
+<list class="bullet">
+<listItem><para><legacyBold>Orders (number)</legacyBold> – the commission for the number of orders.</para></listItem>
+<listItem><para><legacyBold>Order</legacyBold> – the commission for the order.</para></listItem>
+<listItem><para><legacyBold>Order (volume)</legacyBold> – the commission for the volume in the order.</para></listItem>
+<listItem><para><legacyBold>Trade (number)</legacyBold> – the commission for the number of trades.</para></listItem>
+<listItem><para><legacyBold>Trade (price)</legacyBold> – the commission for the trade price.</para></listItem>
+<listItem><para><legacyBold>Trade</legacyBold> – the commission for the trade.</para></listItem>
+<listItem><para><legacyBold>Trade (volume)</legacyBold> – the commission for the volume in the order.</para></listItem>
+<listItem><para><legacyBold>Security</legacyBold> – the instrument commission.</para></listItem>
+<listItem><para><legacyBold>Security (type)</legacyBold> – the instrument type commission.</para></listItem>
+<listItem><para><legacyBold>Turnover</legacyBold> – the commission for turnover.</para></listItem>
+<listItem><para><legacyBold>Board</legacyBold> – the board commission.</para></listItem>
+
+
+</list>
+</definition>
+</definitionTable>
+
+</introduction>
+</developerConceptualDocument>
+</topic>

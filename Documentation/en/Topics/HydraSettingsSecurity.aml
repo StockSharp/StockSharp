@@ -2,65 +2,72 @@
 <topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Нажав на кнопку <legacyBold>Добавить</legacyBold> в окне с источником данных, откроется окно для поиска и добавления инструментов.</para>
+      <para>Click the <legacyBold>Add</legacyBold> <mediaLinkInline><image xlink:href="hydra_add"/></mediaLinkInline>, 
+      button, then select the <legacyBold>Instrument</legacyBold> item in the drop-down menu. The window for searching and adding instruments opens.</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_securities" />
       </mediaLink>
-      <para>Первоначально база данных инструментов в <token>hydra</token> пуста, есть только вспомогательный инструмент <legacyBold>All@All</legacyBold> (при выборе данного инструмента будут скачиваться данные по всем доступным для данного источника инструментам). 
-      Поэтому, если необходимо скачивать данные для каких то конкретных инструментов, то их надо найти (поиск идет по базе данных инструментов, а также по доступным инструментам который предоставляет конкретный источник) и добавить в источник.</para>
+      <para>Initially, the instrument database in the <token>hydra</token> is empty, 
+      there is only an auxiliary instrument <legacyBold>All@All</legacyBold> (when this instrument is selected 
+      the data on all available for this source instruments will be downloaded). Therefore, 
+      if you want to download data for the specific instruments, they should be found 
+      (search is carried out in the instrument database, as well as in the available 
+      instruments that a specific source provides) and added to the source.
+</para>
 	  
-	  <para>Для поиска инструментов необходимо нажать соответсвующую кнопку <mediaLinkInline><image xlink:href="hydra_security_find" /></mediaLinkInline>.</para>
-	  <para>Поиск идет в зависимости от настроек выставленных в фильтре. Если фильтр пустой, то будет выведен список всех доступных инструментов.</para>
-	  <para>Фильтр можно очистить с помошью соответсвующей кнопки <mediaLinkInline><image xlink:href="hydra_security_clear_filter" /></mediaLinkInline>.</para>
-      
-      <para>После того как инструменты будут найдены окно примет следующий вид.</para>
+	  <para>To download the instruments, you must click the corresponding <legacyBold>Download Instrument</legacyBold> button.</para>
+	  
+      <para>Once the instruments are received, the window will be as shown below.</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_security_full_list" />
       </mediaLink>
-      <para>В котором будут видны все доступные для добавления инструменты.</para>
+      <para>All the instruments available for adding will be visible in this window.</para>
       <alert class="caution">
-			Для <token>rts</token> и <token>ux</token> источников действует особая схема. Данные источники сами добавляют инструменты в базу
-			<token>hydra</token> по мере скачивания новой информации о сделках. Поэтому для этих источников не нужно предварительно находить
-			и настраивать инструменты.
+			For <token>rts</token> and <token>ux</token> sources there is a special scheme. These sources add instruments to the 
+			<token>hydra</token> base themselves as new information about trades is downloaded. Therefore, 
+			for these sources it is not necessary to find and to set up instruments beforehand.
 	  </alert>
       <para>
-			Источники данных скачивают маркет-данные только по инструментам, которые в них добавлены (за исключением источников для <token>rts</token> и <token>ux</token>) 
-			и у которых выбран хотя бы один тип маркет-данных.
+Data sources download market data only on instruments that are added to these sources (with the exception of sources for RTS and UrkBirzha) and have selected at least one type of market data.
 	  </para>
       <para>
-			Для этого, после добавления инструментов, у каждого инструмента надо выбрать небходимый для скачивания тип маркет-данных. 
-			Если не выбран ни один тип маркет-данных, то в строке с инструментом (слева) будет значок с восклицательным знаком:
+To do this, after the instruments adding, for each instrument you should select the market data type required for download. If you do not select any type of market data, then there will be an icon with an exclamation mark in line with the instrument (on the left):
 	  </para>
 	  <para>
-			Если не установлены все необходимые параметры инструмента, то в левой колонке строки с инструментом появится значок <mediaLinkInline><image xlink:href="hydra_zero" /></mediaLinkInline>.
+If you do not set all parameters of the instrument, then in the left column of the line with the instrument the <mediaLinkInline><image xlink:href="hydra_zero" /></mediaLinkInline> icon appears.
 	  </para>
 	  
       <mediaLink>
         <image placement="center" xlink:href="hydra_security_select" />
       </mediaLink>
       <alert class="note">
-      		<para>При нажатии на кнопку <legacyBold>All@All</legacyBold> будут удалены все добавленные в источник инструменты, и вместо них добавлен один вспомогательный инструмент All@All, 
-      		при котором будут скачиваться маркет-данные по всем доступным для источника инструментам. Например для <link xlink:href="54a1e95e-ea39-4322-9613-e74859a3a596">Quik</link> 
-      		это будет все инструменты находящиеся в таблице "Инструменты".</para>
-      		<para>Кнопка <mediaLinkInline><image xlink:href="hydra_delete" /></mediaLinkInline> позволяет удалить ненужные инструменты.</para>
+      		<para>When you click on the All@All button all added to the source instruments will be deleted, and 
+      		instead one auxiliary instrument All@All will be added, with which market data will be downloaded by 
+      		all instruments available for the source. For example, for <link xlink:href="0b962432-d81d-4646-a818-9fa7093cbe4f">LMAX</link>, 
+      		this will be all the instruments that are in the Instruments table.</para>
+      		<para>The <mediaLinkInline><image xlink:href="hydra_delete" /></mediaLinkInline> button allows you to remove unnecessary instruments.</para>
 	  </alert>      
       <para>
-			Чтобы отредактировать инструмент (например, когда инструмент был заполнен не всеми необходимыми данными), надо двойным кликом мышкой по инструменту или нажатием на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> открыть окно,
-			в котором произвести необходимые настройки:
+To edit the instrument (for example, when the instrument was not filled with all the required data), 
+you have to double click on the instrument or by pressing the <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> 
+button to open a window in which to make the necessary settings:
 		</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_security_edit" />
       </mediaLink>
       <para>
-			При необходимости можно отредактировать группу инструментов. Для этого надо выбрать группу инструментов, и нажать на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline>.
+If necessary, you can edit a group of instruments. To do this, select a group of instruments and press the 
+<mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> button.
 		</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_securities_edit" />
       </mediaLink>
       <para>
-      		Если у выбранной группы инструментов есть одинаковые значения, то это поле будет заполнено данным значением. Если значения разные, то это поле будет пустым. 
-      		Например выбрано два инструмента у которох значение "Шаг цены" равно 1, у одного инструмента размер лота 10 у другого 100. Соответсвенно в поле "Шаг цены" будет 1, а поле
-      		"Шаг объема" будет пустое.
+If the selected group of instruments has the same values, then this field will be 
+filled with that value. If values are different, then this field will be empty. For 
+example, two instruments have selected whose Price Increment value is 1, one instrument 
+has lot size 10 and another has 100. Correspondingly the value of the Price Increment 
+field will be 1, and the Volume Increment field will be empty.
       </para>
       
     </introduction>

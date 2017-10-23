@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="973860e9-8f2d-4035-98de-bb88b33b6751" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--
@@ -15,7 +15,7 @@
       <para><token>stocksharp</token> предусмотрена возможность построения кривых доходности (эквити) с целью дальнейшего анализа работы торгового робота.
       Данные для кривой получаются с помощью класса 
       <codeEntityReference qualifyHint="false">T:StockSharp.Algo.PnL.PnLManager</codeEntityReference>. Данный класс
-      производит рассчет текущего значения, оповещая робота об изменениях через событие 
+      производит расчёт текущего значения, оповещая робота об изменениях через событие 
       <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>.
       </para>
       
@@ -41,13 +41,14 @@
       <code language="C#">
 _strategy.PnLChanged += () =>
 {
-	var data = new EquityData
+	var pnl = new EquityData
 	{
-		Time = _strategy.Trader.MarketTime,
-		Value = _strategy.PnL,
+		Time = strategy.CurrentTime,
+		Value = strategy.PnL - strategy.Commission ?? 0
 	};
 
-	this.GuiAsync(() => _curveItems.Add(data));
+
+	pnlCurve.Add(pnl);
 };      
       </code>
       <para>

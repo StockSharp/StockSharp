@@ -190,7 +190,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					worker.SetCell(0, rowIndex, LocalizedStrings.Str1340);
 					rowIndex++;
 
-					foreach (var strategyParam in strategy.Parameters.SyncGet(c => c.ToArray()))
+					foreach (var strategyParam in strategy.Parameters.CachedValues)
 					{
 						var value = strategyParam.Value;
 
@@ -262,7 +262,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 						var info = strategy.PnLManager.ProcessMessage(trade.ToMessage());
 
 						totalPnL += info.PnL;
-						position += trade.GetPosition();
+						position += trade.GetPosition() ?? 0;
 
 						var queue = queues.SafeAdd(trade.Trade.Security, key => new PnLQueue(key.ToSecurityId()));
 
@@ -359,7 +359,8 @@ namespace StockSharp.Algo.Strategies.Reporting
 								.SetCell(columnShift + 7, rowIndex, LocalizedStrings.Volume).SetStyle(columnShift + 7, typeof(decimal))
 								.SetCell(columnShift + 8, rowIndex, LocalizedStrings.Str1326)
 								.SetCell(columnShift + 9, rowIndex, LocalizedStrings.Str1327)
-								.SetCell(columnShift + 10, rowIndex, LocalizedStrings.Str1352).SetStyle(columnShift + 9, typeof(long));
+								//.SetCell(columnShift + 10, rowIndex, LocalizedStrings.Str1352).SetStyle(columnShift + 9, typeof(long))
+								;
 
 							var stopParams = stopOrders[0].Condition.Parameters.Keys.ToArray();
 
@@ -379,7 +380,8 @@ namespace StockSharp.Algo.Strategies.Reporting
 									.SetCell(columnShift + 7, rowIndex, order.Volume)
 									.SetCell(columnShift + 8, rowIndex, Format(order.LatencyRegistration))
 									.SetCell(columnShift + 9, rowIndex, Format(order.LatencyCancellation))
-									.SetCell(columnShift + 10, rowIndex, order.DerivedOrder != null ? (object)order.DerivedOrder.Id : string.Empty);
+									//.SetCell(columnShift + 10, rowIndex, order.DerivedOrder != null ? (object)order.DerivedOrder.Id : string.Empty)
+									;
 
 								for (var i = 0; i < stopParams.Length; i++)
 									worker.SetCell(columnShift + 11 + i, rowIndex, order.Condition.Parameters[stopParams[i]] ?? string.Empty);

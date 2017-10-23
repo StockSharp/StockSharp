@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d0a1bb26-7a29-4607-992c-4f539632c2eb" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>При нажатии на кнопку <legacyBold>Скачать инструмент</legacyBold> появится окно <legacyBold>Скачать инструмент</legacyBold>. 
+Для скачивания инструмента необходимо ввести код инструмента, тип инструмента, 
+выбрать источник данных и нажать кнопку <legacyBold>ОК</legacyBold>. <token>designer</token> начнет поиск 
+инструментов в источнике. Все найденные инструменты добавятся в список 
+инструментов панели <legacyBold>Все инструменты</legacyBold>. Если источником выбрать хранилище и в 
+хранилище уже есть скачанные инструменты, то <token>designer</token> найдет все имеющиеся 
+инструменты в хранилище. Это может быть полезно, когда история по инструменту 
+уже скачана и скопирована в папку хранилища.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Download_the_tools_00"/>
+</mediaLink>
+ 
+<para>Если нажать на кнопку <legacyBold>Добавить подключение</legacyBold> появится 
+окно <link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" />.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="2ee93171-34db-4f23-a5d3-30ff5c81dda3" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

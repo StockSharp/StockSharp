@@ -44,6 +44,7 @@
 		<Button x:Name="ShowMyTrades" Grid.Column="0" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.MyTrades}" Click="ShowMyTradesClick" />
 		<Button x:Name="ShowOrders" Grid.Column="1" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
 		<Button x:Name="ShowConditionOrders" Grid.Column="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.StopOrders}" Click="ShowConditionOrdersClick" />
+		<Button x:Name="ShowScanner" Grid.Column="3" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Scanner}" Click="ShowScannerClick" />
 
 		<StatusBar Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top">
             <StatusBarItem x:Name="ConnectionStatus" Content="{x:Static loc:LocalizedStrings.Disconnected}" VerticalAlignment="Stretch"></StatusBarItem>

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="91644d63-00b3-416f-8677-ca57dfa8032e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Для запуска примера в <legacyBold>Live торговлю</legacyBold> понадобится:</para>
+<para>1.	Тестовый терминал QUIK-Junior, он предоставляется практически 
+всеми брокерами на Российском рынке бесплатно, либо его можно получить на сайте производителя.</para>
+<para>2.	Настроить терминал QUIK-Junior для работы с <token>designer</token>. 
+Как настроить терминал QUIK можно посмотреть в пункте <link xlink:href="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" />.</para>
+<para>3.	Настроить подключение к QUIK в <token>designer</token> и подключиться.</para>
+<para>4.	Скачать историю для необходимого инструмента. 
+Для примера будет использоваться инструмент SBER@TQBR. 
+В стратегии будут использоваться свечи с тайм-фреймом в 5 сек., и история не понадобится, 
+но для демонстрации возможности такой истории будет достаточно.</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_00"/>
+</mediaLink>
+<para>5.	Настроить и запустить стратегию:</para>
+
+<para>В примере со стратегией SMA будут использоваться следующие параметры:</para>
+
+
+<list class="bullet">
+  <listItem><para>Инструмент SBER@TQBR</para></listItem>
+  <listItem><para>Стандартное хранилище \Documents\StockSharp\Designer\Storage</para></listItem>
+  <listItem><para>Формат хранилища CSV</para></listItem>
+  <listItem><para>Тип данных которые будем брать из хранилища Ticks</para></listItem>
+  <listItem><para>Свечи с тайм-фреймом 5 секунд</para></listItem>
+  <listItem><para>Объем 100</para></listItem>
+  <listItem><para>Дней истории 2</para></listItem>
+</list>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_01"/>
+</mediaLink>
+
+<para>После установки всех необходимых параметров идет запуск Live торговли стратегии, нажав кнопку
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>  Старт.</para>
+<para>После нажатия кнопки <mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline> Старт на графике начнет отображаться вся
+загруженная история за 2 дня:</para> 
+<mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_02"/>
+</mediaLink>
+<para>Как прогрузится вся история из <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> и Таблицы обезличенных сделок из терминала, стратегия
+начнет торговлю.</para>
+<para>Ниже представлены графики из <token>designer</token> и из терминала QUIK за одинаковый период времени.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_03"/>
+</mediaLink>
+<para> 
+График из <token>designer</token>:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Example_of_Live_trading_04"/>
+</mediaLink>
+<para>График из QUIK:</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

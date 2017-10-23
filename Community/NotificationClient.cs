@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.Linq;
 	using System.Threading;
 
 	using Ecng.Common;
@@ -47,20 +48,38 @@ namespace StockSharp.Community
 		{
 		}
 
+		private int? _smsCount;
+
 		/// <summary>
 		/// The available number of SMS-messages.
 		/// </summary>
 		public int SmsCount
 		{
-			get { return Invoke(f => f.GetSmsCount(SessionId)); }
+			get
+			{
+				if (_smsCount == null)
+					_smsCount = Invoke(f => f.GetSmsCount(SessionId));
+
+				return _smsCount.Value;
+			}
+			private set => _smsCount = value;
 		}
+
+		private int? _emailCount;
 
 		/// <summary>
 		/// The available number of email messages.
 		/// </summary>
 		public int EmailCount
 		{
-			get { return Invoke(f => f.GetEmailCount(SessionId)); }
+			get
+			{
+				if (_emailCount == null)
+					_emailCount = Invoke(f => f.GetEmailCount(SessionId));
+
+				return _emailCount.Value;
+			}
+			private set => _emailCount = value;
 		}
 
 		/// <summary>
@@ -70,31 +89,78 @@ namespace StockSharp.Community
 		public void SendSms(string message)
 		{
 			ValidateError(Invoke(f => f.SendSms(SessionId, message)));
+			SmsCount--;
 		}
 
 		/// <summary>
 		/// To send an email message.
 		/// </summary>
-		/// <param name="caption">The message title.</param>
-		/// <param name="message">Message body.</param>
-		public void SendEmail(string caption, string message)
+		/// <param name="title">The message title.</param>
+		/// <param name="body">Message body.</param>
+		public void SendEmail(string title, string body)
 		{
-			ValidateError(Invoke(f => f.SendEmail(SessionId, caption, message)));
+			ValidateError(Invoke(f => f.SendEmail(SessionId, title, body)));
+			EmailCount--;
+		}
+
+		/// <summary>
+		/// To send a message.
+		/// </summary>
+		/// <param name="title">The message title.</param>
+		/// <param name="body">Message body.</param>
+		/// <param name="attachments">Attachments.</param>
+		public void SendMessage(string title, string body, FileData[] attachments)
+		{
+			if (attachments == null)
+				throw new ArgumentNullException(nameof(attachments));
+
+			ValidateError(Invoke(f => f.SendMessage(SessionId, title, body, attachments.Select(a => a.Id).ToArray(), IsEnglish)));
+		}
+
+		/// <summary>
+		/// Send feedback for specified product.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <param name="rating">Rating.</param>
+		/// <param name="comment">Comment.</param>
+		public void SendFeedback(Products product, int rating, string comment)
+		{
+			ValidateError(Invoke(f => f.SendFeedback(SessionId, product, rating, comment)));
+		}
+
+		/// <summary>
+		/// Has feedback for specified product.
+		/// </summary>
+		/// <param name="product">Product.</param>
+		/// <returns>Check result.</returns>
+		public bool HasFeedback(Products product)
+		{
+			return Invoke(f => f.HasFeedback(SessionId, product));
 		}
 
 		/// <summary>
 		/// News received.
 		/// </summary>
-		public event Action<CommunityNews> NewsReceived; 
+		public event Action<CommunityNews> NewsReceived;
+
+		private readonly SyncObject _syncObject = new SyncObject();
+		private bool _isProcessing;
 
 		/// <summary>
 		/// To subscribe for news.
 		/// </summary>
 		public void SubscribeNews()
 		{
-			RequestNews();
 			_newsTimer = ThreadingHelper.Timer(() =>
 			{
+				lock (_syncObject)
+				{
+					if (_isProcessing)
+						return;
+
+					_isProcessing = true;
+				}
+
 				try
 				{
 					RequestNews();
@@ -103,7 +169,12 @@ namespace StockSharp.Community
 				{
 					ex.LogError();
 				}
-			}).Interval(TimeSpan.FromDays(1));
+				finally
+				{
+					lock (_syncObject)
+						_isProcessing = false;
+				}
+			}).Interval(TimeSpan.Zero, TimeSpan.FromDays(1));
 		}
 
 		/// <summary>
@@ -116,7 +187,7 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews(Guid.Empty, 0));
+			var news = Invoke(f => f.GetNews2(NullableSessionId ?? Guid.Empty, IsEnglish, 0));
 
 			//if (news.Length <= 0)
 			//	return;

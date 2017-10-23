@@ -202,7 +202,7 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
   					</listItem>
   					<listItem>
   						<para>Для отрисовки графика вызываем метод 
-  						<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})</codeEntityReference>,
+  						<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference>,
   						в который передаем время и словарь элементов.</para>
   					</listItem>
 				</list>
@@ -218,23 +218,24 @@ private void DrawCandle(CandleSeries series, Candle candle)
 	var wnd = _chartWindows.TryGetValue(series);
 
 	if (wnd != null)
-    {
+	{
 		if (candle.State != CandleStates.Finished)
-        	return;
+			return;
 
-        var smaValue = _sma.Process(candle);
-        var macdValue = _macd.Process(candle);
+		var smaValue = _sma.Process(candle);
+		var macdValue = _macd.Process(candle);
 
-        var elements = new Dictionary<IChartElement, object>();
-        elements.Add(_candlesElem, candle);
-        elements.Add(_smaChartElement, smaValue);
-        elements.Add(_macdChartElement, macdValue);
+		var data = new ChartDrawData();
+		data
+		  .Group(candle.OpenTime)
+		    .Add(_candlesElem, candle)
+		    .Add(_smaChartElement, smaValue)
+		    .Add(_macdChartElement, macdValue);
 
-        wnd.Chart.Draw(candle.OpenTime, elements);
+        	wnd.Chart.Draw(data);
                
 	}
-}
-	  				]]>
+}]]>
 				   </code>
 			  </content>
 		  </step>

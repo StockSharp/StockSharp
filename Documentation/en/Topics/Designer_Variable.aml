@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="12a1678b-14f4-432b-8b2e-3b8af7f93348" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Variable_00"/>
+</mediaLink>
+<para>The cube is used to store values, pass the previously stored value further 
+along the chain of elements.</para>
+
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Any data</legacyBold> - the value of the selected 
+  type, which will be stored instead of the default value.</para></listItem>
+  <listItem><para><legacyBold>Trigger</legacyBold> – the signal that determines 
+  the point at which it is necessary to pass the stored value through the output 
+  parameter.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Any data</legacyBold> - the value of the selected 
+  type of passed data.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Data type</legacyBold> - the type of stored data 
+  within the variable, the type of the input and output parameters depends on the 
+  selected data type.</para></listItem>
+  <listItem><para><legacyBold>Value</legacyBold> - the default value that is 
+  stored in the variable. This value is used if no other values were received to 
+  the element input.</para></listItem>
+  <listItem><para><legacyBold>Raise on start</legacyBold> - when the checkbox is 
+  selected, the value will be passed when the strategy is started.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+<para>If the <legacyBold>Instrument</legacyBold> or <legacyBold>Portfolio</legacyBold> 
+data type is selected, the default value may be missing. In this case, if the 
+<legacyBold>Parameters</legacyBold> flag is set in the properties, when the 
+strategy is executed, these data will be taken from the corresponding properties 
+of the strategy.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="26be4914-b6c4-48e7-8e0e-d2f02677e747" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

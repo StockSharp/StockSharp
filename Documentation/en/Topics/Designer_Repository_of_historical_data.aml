@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>The historical data storage is designed to load market data (instruments, 
+candles, tick trades and order books) from various sources and store them in a 
+local or remote storage. 
+<token>designer</token> can use sources of both historical and real-time data 
+(<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />). Further, the stored 
+information is available for use by trading strategies.</para>
+<para>To open the <legacyBold>Market data</legacyBold> tab, switch to the 
+<legacyBold>Common</legacyBold> tab and click the <legacyBold>Market data</legacyBold> 
+button. The <legacyBold>Market data</legacyBold> area is divided to three areas. 
+The left area contains the list of all received instruments, from all sources 
+that have ever been connected. The central areas contain the active instruments. 
+Using these instruments, you can download or view the downloaded history. The 
+right area displays the available data for the instrument selected in the central 
+zone, and you also can download data using the selected instrument.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Repository_of_historical_data_00"/>
+</mediaLink>
+
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="ec56221a-92a0-45f4-9fec-e6e7edc7c264" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

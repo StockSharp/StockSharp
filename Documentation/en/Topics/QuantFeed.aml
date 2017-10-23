@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="003e9486-6ed9-4afc-a325-6b2cbc382794" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+		The <codeEntityReference>T:StockSharp.QuantHouse.QuantFeedTrader</codeEntityReference> should be used for trading algorithms using <token>quantfeed_external</token>.
+	</para>
+		
+	<alert class="caution">
+		<para>
+			<codeEntityReference>T:StockSharp.QuantHouse.QuantFeedTrader</codeEntityReference> only supports the receiving of market data and does not support the sending of transactions.
+		</para>
+	</alert>
+    </introduction>
+     <relatedTopics>
+    	<link xlink:href="733374e6-1410-468e-b2df-c7d3f2081ef3">Getting started</link>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

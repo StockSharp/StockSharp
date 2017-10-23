@@ -31,17 +31,6 @@ Trader = new LmaxTrader
 							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-// инициализируем механизм переподключения (будет автоматически соединяться
-// каждые 10 секунд, если шлюз потеряется связь с сервером)
-Trader.ReConnectionSettings.Interval = TimeSpan.FromSeconds(10);
-//Trader.ReConnectionSettings.WorkingTime = Exchange.Rts.WorkingTime;
-Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() =>
-{
-	// разблокируем кнопку (соединение было восстановлено)
-	ChangeConnectStatus(true);
-	MessageBox.Show(this, "Соединение восстановлено.");
-});
-
 // подписываемся на событие успешного соединения
 Trader.Connected += () =>
 {
@@ -62,29 +51,25 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
 });
 
-Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
-Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
-
-Trader.NewMyTrades += trades => this.GuiAsync(() => _myTradesWindow.Trades.AddRange(trades));
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
+Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
+Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
 					
-Trader.NewTrades += trades => this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
-					
-Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
-					
-Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
-					
-Trader.NewPortfolios += portfolios =>
+Trader.NewPortfolio += portfolio =>
 {
 	// регистрирует портфели на обновление данных
-	portfolios.ForEach(Trader.RegisterPortfolio);
+	Trader.RegisterPortfolio(portfolio);
 
-	_portfoliosWindow.Portfolios.AddRange(portfolios);
+	_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 };
-Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
+Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 // подписываемся на событие о неудачной регистрации заявок
-Trader.OrdersRegisterFailed += OrdersFailed;
+Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
 // подписываемся на событие о неудачном снятии заявок
 Trader.OrdersCancelFailed += OrdersFailed;
 // подписываемся на событие о неудачной регистрации стоп-заявок
@@ -115,20 +100,20 @@ Trader.Connect();
 							<para>После подключения можно ожидать срабатывания событий:</para>
 							<list class="bullet">
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecurityChanged</codeEntityReference> – 
 									изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через 
 									<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
 								</listItem>
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthChanged</codeEntityReference> – 
 									изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
 								</listItem>
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
 									новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</para>
 								</listItem>
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfolioChanged</codeEntityReference> – 
 									изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
 								</listItem>
 							</list>
@@ -143,13 +128,16 @@ Trader.Connect();
             				
             				<code language="C#">
             				<![CDATA[
-var criteria = new Security
+private void FindClick(object sender, RoutedEventArgs e)
 {
-	Currency = CurrencyTypes.USD,
-	Code = SecCode.Text
-};
+	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "USD" } };
 
-MainWindow.Instance.Trader.LookupSecurities(criteria);
+	if (!wnd.ShowModal(this))
+		return;
+
+	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
+}
+
 							]]>
 							</code>
 							
@@ -162,7 +150,17 @@ MainWindow.Instance.Trader.LookupSecurities(criteria);
 							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-Trader.RegisterSecurity(SelectedSecurity);
+private void Level1Click(object sender, RoutedEventArgs e)
+{
+	var security = SecurityPicker.SelectedSecurity;
+	var trader = MainWindow.Instance.Trader;
+
+	if (trader.RegisteredSecurities.Contains(security))
+		trader.UnRegisterSecurity(security);
+	else
+		trader.RegisterSecurity(security);
+}
+
 							]]>
 							</code>						
 						</content>
@@ -174,15 +172,17 @@ Trader.RegisterSecurity(SelectedSecurity);
 							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-private void QuotesClick(object sender, RoutedEventArgs e)
+private void DepthClick(object sender, RoutedEventArgs e)
 {
-	var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
-	{
-		// начинаем получать котировки стакана
-		MainWindow.Instance.Trader.RegisterMarketDepth(security);
+	var trader = MainWindow.Instance.Trader;
 
-		// создаем окно со стаканом
-		var wnd = new QuotesWindow { Title = security.Code + " котировки" };
+	var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+	{
+		// subscribe on order book flow
+		trader.RegisterMarketDepth(security);
+
+		// create order book window
+		var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 		wnd.MakeHideable();
 		return wnd;
 	});
@@ -191,7 +191,15 @@ private void QuotesClick(object sender, RoutedEventArgs e)
 		window.Hide();
 	else
 		window.Show();
+
+	if (!_initialized)
+	{
+		TraderOnMarketDepthChanged(trader.GetMarketDepth(SecurityPicker.SelectedSecurity));
+		trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+		_initialized = true;
+	}
 }
+
 							]]>
 							</code>
 							<mediaLink><image placement="center" xlink:href="lmax_sample_market_depth"/></mediaLink>
@@ -204,21 +212,18 @@ private void QuotesClick(object sender, RoutedEventArgs e)
 							Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
             				<code language="C#">
             				<![CDATA[
-private void Send_Click(object sender, RoutedEventArgs e)
+private void NewOrderClick(object sender, RoutedEventArgs e)
 {
-    var order = new Order
-    {
-        Type = IsMarket.IsChecked == true ? OrderTypes.Market : OrderTypes.Limit,
-        Portfolio = Portfolio.SelectedPortfolio,
-        Volume = Volume.Text.To<decimal>(),
-        Price = Price.Text.To<decimal>(),
-        Security = Security,
-        Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-    };
+	var newOrder = new OrderWindow
+	{
+		Order = new Order { Security = SecurityPicker.SelectedSecurity },
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+	};
 
-    MainWindow.Instance.Trader.RegisterOrder(order);
-
-    DialogResult = true;
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 }
 							]]>
 							</code>						

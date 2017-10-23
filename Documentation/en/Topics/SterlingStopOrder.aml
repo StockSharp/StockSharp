@@ -7,8 +7,8 @@
     </summary>
     -->
     <introduction>
-     <para>Для регистрации стоп-заявок используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
-		но с указанием типа заявки <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference>:</para>   
+     <para>The same <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+		method used to register stop orders, but with the <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> type of order indicating:</para>   
 		
         <code language="C#">
         <![CDATA[
@@ -21,7 +21,10 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 			Security = SecurityPicker.SelectedSecurity,
 			Type = OrderTypes.Conditional,
 		},
-		Connector = MainWindow.Instance.Trader,
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
 	};
 
 	if (newOrder.ShowModal(this))
@@ -30,11 +33,11 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		]]>
 		</code>
 		
-		<para>Далее открывается диалог <legacyBold>Регистрация условной заявки</legacyBold>, где нужно указать тип 
-		<codeEntityReference>T:StockSharp.Sterling.SterlingExtendedOrderTypes</codeEntityReference> и параметры такой заявки.</para>
+		<para>Next, the <legacyBold>Conditional Order Register</legacyBold> dialogue opened where you need to specify the
+		<codeEntityReference>T:StockSharp.Sterling.SterlingExtendedOrderTypes</codeEntityReference> type and parameters of such order.</para>
 		<mediaLink><image placement="center" xlink:href="Sterling_StopOrder"/></mediaLink>
-		<para>За кулисами в коде <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference> создаются и настраиваются условия при помощи класса
-		<codeEntityReference>T:StockSharp.Sterling.SterlingOrderCondition</codeEntityReference>.</para>
+		<para>Behind the scenes the conditions are created and configured in the <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference>
+		code using the<codeEntityReference>T:StockSharp.Sterling.SterlingOrderCondition</codeEntityReference> class.</para>
 		
     </introduction>
    

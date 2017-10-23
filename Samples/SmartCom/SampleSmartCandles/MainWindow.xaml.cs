@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -70,7 +70,7 @@ namespace SampleSmartCandles
 				Address = Address.SelectedAddress,
 
 				// применить нужную версию SmartCOM
-				Version = IsSmartCom3.IsChecked == true ? SmartComVersions.V3 : SmartComVersions.V2,
+				Version = IsSmartCom4.IsChecked == true ? SmartComVersions.V4 : SmartComVersions.V3,
 			};
 
 			// очищаем из текстового поля в целях безопасности
@@ -81,8 +81,8 @@ namespace SampleSmartCandles
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// подписываемся на ошибку подписки маркет-данных
-			_trader.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+			_trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
 			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
@@ -103,10 +103,7 @@ namespace SampleSmartCandles
 			base.OnClosing(e);
 		}
 
-		private Security SelectedSecurity
-		{
-			get { return Security.SelectedSecurity; }
-		}
+		private Security SelectedSecurity => Security.SelectedSecurity;
 
 		private void ShowChartClick(object sender, RoutedEventArgs e)
 		{
@@ -128,7 +125,7 @@ namespace SampleSmartCandles
 			{
 				var wnd = new ChartWindow
 				{
-					Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name.Replace("Candle", string.Empty), series.Arg)
+					Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name.Remove("Candle"), series.Arg)
 				};
 
 				wnd.MakeHideable();
@@ -139,15 +136,19 @@ namespace SampleSmartCandles
 				var candlesElem = new ChartCandleElement();
 				area.Elements.Add(candlesElem);
 
-				_candleManager.Processing += (s, candle) => wnd.Chart.Draw(candlesElem, candle);
+				_candleManager.Processing += (s, candle) =>
+				{
+					if (s == series)
+						wnd.Chart.Draw(candlesElem, candle);
+				};
 
 				return wnd;
 			}).Show();
 
 			if (IsRealTime.IsChecked == true)
-				_candleManager.Start(series, DateTime.Today, DateTimeOffset.MaxValue);
+				_candleManager.Start(series, DateTime.Today, null);
 			else
-				_candleManager.Start(series, (DateTimeOffset)From.Value, (DateTimeOffset)To.Value);
+				_candleManager.Start(series, From.Value, To.Value);
 		}
 
 		private void OnSecuritySelected()
@@ -157,7 +158,7 @@ namespace SampleSmartCandles
 
 		private void OnChartTypeChanged(object sender, RoutedEventArgs e)
 		{
-			RealTimeSettings.IsEnabled = IsRealTime.IsChecked == true;
+			CandleSettingsEditorGrid.IsEnabled = IsRealTime.IsChecked == true;
 			HistorySettings.IsEnabled = IsHistory.IsChecked == true;
 		}
 	}

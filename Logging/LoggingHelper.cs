@@ -83,7 +83,18 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// To record a debugging to the log.
+		/// To record a verbose message to the log.
+		/// </summary>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+		public static void AddVerboseLog(this ILogReceiver receiver, string message, params object[] args)
+		{
+			receiver.AddMessage(LogLevels.Verbose, message, args);
+		}
+
+		/// <summary>
+		/// To record a debug message to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
 		/// <param name="message">Text message.</param>
@@ -108,7 +119,7 @@ namespace StockSharp.Logging
 		/// To record an error to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
-		/// <param name="exception">Error detais.</param>
+		/// <param name="exception">Error details.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, Exception exception)
 		{
 			receiver.AddErrorLog(exception, null);
@@ -118,9 +129,9 @@ namespace StockSharp.Logging
 		/// To record an error to the log.
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
-		/// <param name="exception">Error detais.</param>
-		/// <param name="message">Text message.</param>
-		public static void AddErrorLog(this ILogReceiver receiver, Exception exception, string message)
+		/// <param name="exception">Error details.</param>
+		/// <param name="format">A format string.</param>
+		public static void AddErrorLog(this ILogReceiver receiver, Exception exception, string format)
 		{
 			if (receiver == null)
 				throw new ArgumentNullException(nameof(receiver));
@@ -131,10 +142,9 @@ namespace StockSharp.Logging
 			receiver.AddLog(new LogMessage(receiver, receiver.CurrentTime, LogLevels.Error, () =>
 			{
 				var msg = exception.ToString();
-				
-				var refExc = exception as ReflectionTypeLoadException;
 
-				if (refExc != null)
+
+				if (exception is ReflectionTypeLoadException refExc)
 				{
 					msg += Environment.NewLine
 						+ refExc
@@ -143,8 +153,8 @@ namespace StockSharp.Logging
 							.Join(Environment.NewLine);
 				}
 
-				if (message != null)
-					msg = message.Put(msg);
+				if (format != null)
+					msg = format.Put(msg);
 
 				return msg;
 			}));
@@ -176,8 +186,8 @@ namespace StockSharp.Logging
 		/// To record an error to the <see cref="LogManager.Application"/>.
 		/// </summary>
 		/// <param name="error">Error.</param>
-		/// <param name="message">Text message.</param>
-		public static void LogError(this Exception error, string message = null)
+		/// <param name="format">A format string.</param>
+		public static void LogError(this Exception error, string format = null)
 		{
 			if (error == null)
 				throw new ArgumentNullException(nameof(error));
@@ -185,7 +195,7 @@ namespace StockSharp.Logging
 			var manager = ConfigManager.TryGetService<LogManager>();
 
 			if (manager != null)
-				manager.Application.AddErrorLog(error, message);
+				manager.Application.AddErrorLog(error, format);
 		}
 
 		/// <summary>
@@ -210,6 +220,47 @@ namespace StockSharp.Logging
 			while (source != null);
 			
 			return LogLevels.Inherit;
+		}
+
+		/// <summary>
+		/// Wrap the specified action in try/catch clause with logging.
+		/// </summary>
+		/// <param name="action">The action.</param>
+		public static void DoWithLog(this Action action)
+		{
+			if (action == null)
+				throw new ArgumentNullException(nameof(action));
+
+			try
+			{
+				action();
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
+		}
+
+		/// <summary>
+		/// Wrap the specified action in try/catch clause with logging.
+		/// </summary>
+		/// <typeparam name="T">The type of returned result.</typeparam>
+		/// <param name="action">The action.</param>
+		/// <returns>The resulting value.</returns>
+		public static T DoWithLog<T>(this Func<T> action)
+		{
+			if (action == null)
+				throw new ArgumentNullException(nameof(action));
+
+			try
+			{
+				return action();
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+				return default(T);
+			}
 		}
 	}
 }

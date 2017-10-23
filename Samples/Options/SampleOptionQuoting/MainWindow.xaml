@@ -4,9 +4,8 @@
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
         Title="{x:Static loc:LocalizedStrings.XamlStr539}" Height="430" Width="630">
-	<Grid Margin="5,5,5,5">
+	<Grid Margin="5">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
 			<ColumnDefinition />
@@ -27,13 +26,16 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Content="{x:Static loc:LocalizedStrings.XamlStr592}" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
-        <ex:FolderBrowserPicker x:Name="QuikPath" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
-        <CheckBox x:Name="IsDde" Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" Content="{x:Static loc:LocalizedStrings.ObsoleteDDE}" />
-		<Button x:Name="Connect" Content="{x:Static loc:LocalizedStrings.XamlStr666}" Grid.Row="0" Grid.Column="5" Click="ConnectClick" />
+		<Button x:Name="SettingsBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" />
+        <Button x:Name="ConnectBtn" Content="{x:Static loc:LocalizedStrings.XamlStr666}" Grid.Row="0" Grid.Column="1" Click="ConnectClick" />
 
-		<TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<Run Text="{x:Static loc:LocalizedStrings.UnderlyingAsset}"/><Run Text=":"/>
+        <TextBlock Grid.Row="0" Grid.Column="3" VerticalAlignment="Center">
+					<Run Text="{x:Static loc:LocalizedStrings.EvaluateGreeks}" />:
+        </TextBlock>
+        <xaml:Level1FieldsComboBox x:Name="Level1FieldsCtrl" Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="2" EditValueChanged="Level1FieldsCtrl_OnEditValueChanged"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.UnderlyingAsset}"/>:
 		</TextBlock>
 		<ComboBox x:Name="Assets" Grid.Column="1" Grid.Row="2" DisplayMemberPath="Code" SelectionChanged="Assets_OnSelectionChanged" />
 
@@ -50,7 +52,17 @@
 
 		<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr63}" Grid.Column="4" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
 		<xctk:DecimalUpDown x:Name="ImpliedVolatilityMax" Grid.Column="5" Grid.Row="5" IsReadOnly="True" />
-		
-		<xaml:OptionPositionChart x:Name="PosChart" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6" />
+
+		<TabControl Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
+			<TabItem Header="Position">
+				<xaml:OptionPositionChart x:Name="PosChart" />
+			</TabItem>
+			<TabItem Header="Desk">
+				<xaml:OptionDesk x:Name="Desk" />
+			</TabItem>
+			<TabItem Header="Smile">
+				<xaml:OptionVolatilitySmileChart x:Name="SmileChart" />
+			</TabItem>
+		</TabControl>
 	</Grid>
 </Window>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2ee93171-34db-4f23-a5d3-30ff5c81dda3" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Clicking the <legacyBold>Create security</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline>
+button opens the <legacyBold>Editing</legacyBold> window. To create a security, 
+you should fill the security 
+properties and click <legacyBold>OK</legacyBold> button:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Creation_tool_01"/>
+</mediaLink>
+<para>Securities from different sources have unified identifiers. This is done 
+so that the trading robot code does not depend on the connection type 
+(<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />).
+The following syntax is used for the security identifier - 
+<legacyBold>[security code]@[board code]</legacyBold>. For example, for Apple 
+shares NASDAQ stock-exchange the identifier will be 
+<legacyBold>AAPL@NASDAQ</legacyBold>.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="bc271b21-3ef5-422e-b6cf-9f0228607d2b" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

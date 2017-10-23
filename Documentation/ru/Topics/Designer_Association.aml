@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b596ee27-a887-4814-9ad7-56cd62cec38f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Association_00"/>
+</mediaLink>
+<para>Кубик используется для объединения однотипных данных поступающих из разных
+ кубиков в один выходной параметр для дальнейшей передачи в какой-либо элемент.
+ Или разделения получаемых данных на несколько элементов.</para>
+
+ <definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> – определяет тип получаемых и передаваемых данных.</para></listItem>
+</list>
+  </definition>
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> – определяет тип получаемых и передаваемых данных.</para></listItem>
+</list>
+  </definition>
+  <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Тип</legacyBold> – определяет тип получаемых и передаваемых данных.</para></listItem>
+
+</list>
+  </definition>
+</definitionTable>
+ <para>Пример использования кубика приведен в 
+ пунктах <link xlink:href="317b6393-19eb-424b-84ea-ccf70b0c9c18" />, <link xlink:href="6f701cdc-b61c-42ed-a003-fdbb3da37f3c" />.
+ Например, в элементе <legacyBold>Пересечение</legacyBold> на вход передаются значения двух линий, 
+ которые используются различными внутренними кубиками. Чтобы в кубике не было 
+ повторяющихся параметров для одних и тех же данных, на входе стоят кубики
+ <legacyBold>Объединение</legacyBold>, которые позволяют разделить входящие
+ данные на несколько кубиков элементов.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="71724b03-e1aa-4a8d-8f0c-e1c0b55c2b64" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

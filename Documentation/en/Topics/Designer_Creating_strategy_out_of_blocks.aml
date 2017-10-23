@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6974891d-4c8d-46e1-bdeb-fc7391bc0625" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>1.	You can add a new strategy by clicking the <legacyBold>Add</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> 
+button in the <legacyBold>Common</legacyBold> tab and selecting <legacyBold>Strategy</legacyBold>. 
+Or, by right-clicking the <legacyBold>Strategies</legacyBold> folder of 
+the <legacyBold>Schemas panel</legacyBold>, and click the  
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline> button in the drop-down menu:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_00"/>
+</mediaLink>
+<para>After clicking the <legacyBold>Add</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_01"/></mediaLinkInline>
+ button in the <legacyBold>Strategies</legacyBold> folder of the 
+ <legacyBold>Schemas panel</legacyBold>, a new strategy will appear.
+ In the workspace, a new tab with a strategy appears, when you switch to the tab, 
+ the <legacyBold>Emulation</legacyBold> tab will automatically open in the ribbon. 
+ In the <legacyBold>Emulation</legacyBold> tab, you can change the name of the 
+ strategy and give it a brief description:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_creation_of_a_strategy_01"/>
+</mediaLink>
+<para>2.	The strategy tab consists of the <link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />
+and <link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" /> panels. The <legacyBold>Chart</legacyBold> 
+area is required to display the test results of the strategy created in the  <link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />. 
+For details on testing strategies, see <link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

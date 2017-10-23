@@ -40,19 +40,27 @@ if (marketOrder != null)
 		<alert class="note">
 			<para>Исходные коды примера лежат в дистрибутиве в папке под названием SampleSmart.</para>
 		</alert>
-		<code language="C#"><![CDATA[var stopOrder = new Order
+		<code language="C#"><![CDATA[
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
-	Portfolio = (Portfolio)this.Portfolio.SelectedValue,
-	Type = OrderTypes.Conditional,
-	Volume = this.Volume.Text.To<int>(),
-	Price = this.Price.Text.To<decimal>(),
-	Security = this.Security,
-	Direction = this.IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-	StopCondition = new StockSharp.Smart.SmartOrderCondition
+	var newOrder = new OrderConditionalWindow
 	{
-		StopPrice = this.StopPrice.Text.To<decimal>(),
-	},
-};]]></code>
+		Order = new Order
+		{
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
+	};
+
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+}
+
+]]></code>
 		<para>
 			Если значение <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Price</codeEntityReference> равно 0, то будет создана стоп-заявка, при 
 			исполнении которой будет зарегистрирована рыночная заявка (<codeEntityReference qualifyHint="true">F:StockSharp.Messages.OrderTypes.Market</codeEntityReference>).

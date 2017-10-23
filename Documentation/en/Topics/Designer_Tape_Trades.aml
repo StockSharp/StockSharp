@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a06c5482-e2d0-413d-888f-3307c80f7b65" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>The <legacyBold>Trades feed</legacyBold> component is a table with trades, which displays complete 
+information about all trades for the selected instruments.</para> 
+<para>The <legacyBold>Trades feed</legacyBold> has a filter to select the necessary 
+instruments. You can also configure notification of the events of the 
+selected <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" /> instruments.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Tape_Trades"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="3efed911-8876-40b8-8203-b9b48b1c599c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

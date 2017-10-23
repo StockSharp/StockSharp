@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7c04efc6-036c-4c25-855f-f086ee4c266d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    
+    
+<alert class="caution">
+  <para><legacyBold>CAUTION!!! Prior to resetting please read this paragraph through!</legacyBold></para>
+</alert>
+
+<para>On the <legacyBold>Quick access panel</legacyBold>, located by default at 
+the top of the  
+<token>designer</token>, window, there is a <legacyBold>Settings </legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline>
+button. Clicking the 
+<mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline> 
+button allows changing the program launch mode, interface language or totally 
+reset the <token>designer</token> settings.</para> 
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Start_mode_00"/>
+</mediaLink>
+<para>When the <legacyBold>Resetting</legacyBold> is selected, the confirmation 
+window is opened.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Reset_language_settings_00"/>
+</mediaLink>
+<para>After clicking the <legacyBold>OK</legacyBold> button all <token>designer</token> 
+settings will be reset to default values. The directory with the 
+<token>designer</token> will be cleared completely, <legacyBold>all created strategies and 
+downloaded instruments and other information stored in the settings directory 
+will be DESTROYED.</legacyBold> After that, <token>designer</token> will reboot and the window 
+<link xlink:href="57dc2e39-baa6-4c67-83a9-13278370a877" /> window will be opened.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="5789f207-56f6-4ee3-8040-44913ba1f2c9" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

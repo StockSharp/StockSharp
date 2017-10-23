@@ -16,12 +16,12 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleMicex
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Windows;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 	using Ecng.Xaml;
+
+	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
@@ -39,16 +39,22 @@ namespace SampleMicex
 
 		protected override void OnClosed(EventArgs e)
 		{
+			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
+			{
+				w.DeleteHideable();
+				w.Close();
+			}));
+
 			if (_initialized)
 			{
-				MainWindow.Instance.Trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+				MainWindow.Instance.Trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 			}
 
 			var trader = MainWindow.Instance.Trader;
 			if (trader != null)
 			{
 				if (_initialized)
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					trader.MarketDepthChanged -= TraderOnMarketDepthChanged;
 
 				_quotesWindows.SyncDo(d =>
 				{
@@ -91,46 +97,48 @@ namespace SampleMicex
 		{
 			var trader = MainWindow.Instance.Trader;
 
-			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
+			foreach (var security in SecurityPicker.SelectedSecurities)
 			{
-				// начинаем получать котировки стакана
-				trader.RegisterMarketDepth(security);
-
-				// создаем окно со стаканом
-				var wnd = new QuotesWindow
+				var window = _quotesWindows.SafeAdd(security, s =>
 				{
-					Title = security.Id + " " + LocalizedStrings.MarketDepth,
-					DepthCtrl =
+					// начинаем получать котировки стакана
+					trader.RegisterMarketDepth(security);
+
+					// создаем окно со стаканом
+					var wnd = new QuotesWindow
 					{
-						MaxDepth = MainWindow.Instance.Depth.Text.To<int>()
-					}
-				};
-				wnd.MakeHideable();
-				return wnd;
-			});
+						Title = security.Id + " " + LocalizedStrings.MarketDepth,
+						DepthCtrl =
+						{
+							MaxDepth = MainWindow.Instance.Trader.OrderBookDepth ?? 100
+						}
+					};
+					wnd.MakeHideable();
+					return wnd;
+				});
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
+				if (window.Visibility == Visibility.Visible)
+					window.Hide();
+				else
+				{
+					window.Show();
+					window.DepthCtrl.UpdateDepth(trader.GetMarketDepth(security));
+				}
 
-			if (!_initialized)
-			{
-				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
-				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
-				_initialized = true;
+				if (!_initialized)
+				{
+					trader.MarketDepthChanged += TraderOnMarketDepthChanged;
+					_initialized = true;
+				}
 			}
 		}
 
-		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		private void TraderOnMarketDepthChanged(MarketDepth depth)
 		{
-			foreach (var depth in depths)
-			{
-				var wnd = _quotesWindows.TryGetValue(depth.Security);
+			var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepth(depth);
-			}
+			if (wnd != null)
+				wnd.DepthCtrl.UpdateDepth(depth);
 		}
 	}
 }

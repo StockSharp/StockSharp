@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="09d8c617-e7de-4405-bc07-b06118b9c655" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Компонент <legacyBold>График</legacyBold> содержит в себе все 
+кубики <legacyBold>Панель графика</legacyBold> что есть в стратегии. 
+Например, если в стратегии используется два кубика <legacyBold>Панель графика</legacyBold>, то в 
+компоненте <legacyBold>График</legacyBold> будут выведены 2 графика, как на рисунке.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Panel_graphics_04"/>
+</mediaLink>
+
+<para>В левом верхнем углу каждого графика показаны все графические элементы, 
+добавленные на график. Если убрать 
+флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline> на 
+графическом элементе, уберется и элемент с графика. Нажав на 
+кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline>, откроются 
+настройки графического элемента. Также, настроить графический элемент можно в свойствах кубика <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Schedule_02"/>
+</mediaLink>
+<para>В настройках графического элемента можно установить необходимый стиль графика: 
+японские свечи, бары, боксовый график, кластерный профиль и др.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Schedule_04"/>
+</mediaLink>
+<para>Для боксового графика свечи можно дополнительно группировать, порядок группировки 
+устанавливается в полях: мультипликатор 2-го таймфрейма, мультипликатор 3-го таймфрейма.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Schedule_05"/>
+</mediaLink>
+<para>Над графиком расположена лента инструментов, на которой можно выбрать режимы автопрокрутки, 
+авто-масштабирования, показа легенды и других общих настроек графика. 
+Также можно выбрать элементы для рисования на графике: линии, уровни, указатели, прямоугольник, текст.</para>
+  <mediaLink>
+<image placement="center" xlink:href="Designer_Schedule_03"/>
+</mediaLink>
+<para><token>designer</token> предоставляет возможность публикации, а также автоматической публикации графиков, как это сделать описано в пункте <link xlink:href="6d13af11-61ae-47b7-93a3-097abe7640c9" />. </para>
+      
+     </introduction>
+    <relatedTopics>
+<link xlink:href="f17f9b12-4676-4815-83f3-9cbc3e1e87fc" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

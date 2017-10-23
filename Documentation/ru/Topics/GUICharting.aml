@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <topic id="956b3163-c537-4e1d-af29-cf80b633db3c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -18,9 +18,9 @@
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> - расширенный графический компонент для отображения биржевых графиков.</para>
   		</listItem>
-  		<listItem>
+  		<!--listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.BufferedChart</codeEntityReference> - графический компонент для отображения биржевых графиков, который использует буфферизацию при выводе данных.</para>
-  		</listItem>
+  		</listItem-->
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> - графический компонент для отображения кривой доходности.</para>
   		</listItem>
@@ -41,13 +41,13 @@
 	</para>
 	
 	<para>
-	  На следующем рисунке показаны основные элементы графического компонета.
+	  На следующем рисунке показаны основные элементы графического компонента.
 	</para>
 	 <mediaLink><image placement="left" xlink:href="Gui_ChartElements" /></mediaLink>
 
 	
 	<sections>
-	 <title>Элементы графического компонета</title>
+	 <title>Элементы графического компонента</title>
 	 <section>
       <title>Chart</title>
       <content>
@@ -102,7 +102,7 @@
   			</listItem>
   			<listItem>
   				<para>
-  				<codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})</codeEntityReference> - отрисовать значение на графике.
+  				<codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference> - отрисовать значение на графике.
   				</para>
   			</listItem>
   			
@@ -164,10 +164,10 @@
 		Классы визуальных элементов имеют ряд свойств для настройки внешнего вида графика. Можно настроить цвета, толщину линий и стиль элементов. Например,
 		при помощи свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle</codeEntityReference> можно изменять внешний вид 
 		свечи (свеча или бар). При помощи свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.DrawStyle</codeEntityReference> 
-		можно установить стиль линии индикатора. Так чтобы отображать индикатор в виде гистограмы нужно использовать значение 
+		можно установить стиль линии индикатора. Так чтобы отображать индикатор в виде гистограммы нужно использовать значение 
 		<codeEntityReference qualifyHint="true">F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Histogram</codeEntityReference>.
 		Свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker</codeEntityReference> и
-		<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker</codeEntityReference> позволяют включать/выключать отбражения
+		<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker</codeEntityReference> позволяют включать/выключать отображения
 		маркёров (см. рисунок) на осях графика.  
 		</para>   
 		
@@ -178,12 +178,11 @@
 
     </introduction>
      <relatedTopics>
-		<link xlink:href="a76a0a9c-bb95-4596-9464-9903379b3096">Chart</link>
-		<link xlink:href="bb71ead8-62c4-47f8-a1aa-242d63d631fb">ChartPanel</link>
-		<link xlink:href="d71b5e6e-fc05-429d-9888-7603f6b7c508">BufferedChart</link>
-		<link xlink:href="da275a7f-ff6f-4dc7-8451-bf4fc22624a6">EquityCurveChart</link>
-		<link xlink:href="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce">BoxChart</link>
-		<link xlink:href="96f4c342-1d2f-4e0d-9352-5452643df5ab">ClasterChart</link>
+		<link xlink:href="a76a0a9c-bb95-4596-9464-9903379b3096">Свечной график</link>
+		<link xlink:href="bb71ead8-62c4-47f8-a1aa-242d63d631fb">График-панель</link>
+		<link xlink:href="da275a7f-ff6f-4dc7-8451-bf4fc22624a6">График эквити</link>
+		<link xlink:href="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce">Графики box chart</link>
+		<link xlink:href="96f4c342-1d2f-4e0d-9352-5452643df5ab">Кластеры</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

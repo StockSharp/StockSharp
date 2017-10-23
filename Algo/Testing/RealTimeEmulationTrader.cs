@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Testing
 	using EntityFactory = StockSharp.Algo.EntityFactory;
 
 	/// <summary>
-	/// The simulational connection, intended for strategy testing with real connection to trading system through <see cref="RealTimeEmulationTrader{T}.UnderlyngMarketDataAdapter"/>, but without real resitering orders on stock. Execution of orders and their trades are emulated by connection, using information by order books, coming from real connection.
+	/// The simulation connection, intended for strategy testing with real connection to trading system through <see cref="RealTimeEmulationTrader{T}.UnderlyngMarketDataAdapter"/>, but without real registering orders on stock. Execution of orders and their trades are emulated by connection, using information by order books, coming from real connection.
 	/// </summary>
 	/// <typeparam name="TUnderlyingMarketDataAdapter">The type <see cref="IMessageAdapter"/>, through which market data will be received.</typeparam>
 	public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulationConnector
@@ -123,9 +123,9 @@ namespace StockSharp.Algo.Testing
 				TransactionAdapter.SendInMessage(new PortfolioChangeMessage
 				{
 					PortfolioName = _portfolio.Name
-				}.Add(PositionChangeTypes.BeginValue, _portfolio.BeginValue));
+				}.TryAdd(PositionChangeTypes.BeginValue, _portfolio.BeginValue));
 			}
-			else if (message.Adapter == MarketDataAdapter)
+			else if (message.Adapter == MarketDataAdapter || message.Adapter?.Parent == MarketDataAdapter)
 			{
 				switch (message.Type)
 				{
@@ -133,7 +133,9 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Disconnect:
 					case MessageTypes.MarketData:
 					case MessageTypes.SecurityLookupResult:
+					case MessageTypes.Session:
 						break;
+
 					default:
 						TransactionAdapter.SendInMessage(message);
 						break;
@@ -180,8 +182,8 @@ namespace StockSharp.Algo.Testing
 
 			if (_ownAdapter)
 			{
-				MarketDataAdapter.Log -= RaiseLog;
-				MarketDataAdapter.Dispose();
+				UnderlyngMarketDataAdapter.Log -= RaiseLog;
+				UnderlyngMarketDataAdapter.Dispose();
 			}
 
 			base.DisposeManaged();

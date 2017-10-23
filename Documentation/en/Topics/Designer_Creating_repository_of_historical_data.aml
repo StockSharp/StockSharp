@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ec56221a-92a0-45f4-9fec-e6e7edc7c264" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>In order to create historical data storage, click the 
+<mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_00"/></mediaLinkInline> 
+button on the <legacyBold>Market data</legacyBold> tab. By clicking the 
+<mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_01"/></mediaLinkInline>
+button, you can change the current storage parameters. By clicking the 
+<mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_02"/></mediaLinkInline>
+button, you can delete the current storage from the list of storages.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_03"/>
+</mediaLink>
+<para>Historical data storage can be a local or remote.</para>
+ 
+<para>Local storage - when all data is stored on local computer. To set the local 
+storage, it is sufficient to set the path to the folder with stored data.</para>
+
+<para>Remote storage may be located on the remote computer. To set the remote 
+storage you have to set the remote storage address, login and password, if necessary.
+</para>
+
+<para>You can reproduce the remote storage on a local machine, using the 
+<token>hydra</token> software (code name Hydra), designed for automatic loading 
+of market data (instruments, candles, tick trades and order books etc.) from 
+various source and for storing them in the local storage. To do that, switch 
+<token>hydra</token> into a the server mode, such functionality is available in
+ the extended license 
+ (<link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5" />).</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_04"/>
+</mediaLink>
+<para>After that, in <token>designer</token>, create new storage by clicking the 
+<mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_00"/></mediaLinkInline>
+ button. In the storage settings in the address field, specify 
+ "net.tcp://localhost:8000". Click OK. When using <token>hydra</token> as a 
+ remote storage, don't forget, that <token>hydra</token> shall be started up and 
+ configured accordingly.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_05"/>
+</mediaLink>
+   
+<para>After adding a new storage, it can be selected in the 
+<legacyBold>Storage</legacyBold> drop down list.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_06"/>
+</mediaLink>
+
+<para>You also have to select the format of storage files - BIN or CSV. Data can 
+be stored in two formats: in a special binary BIN format, which provides the 
+maximum compression ratio, or in text format CSV, which is convenient when 
+analyzing data in other programs. The BIN format is preferred when there is a 
+need to save space on disk. The CSV format is preferred when there is a need to 
+adjust data manually. CSV is easily edited by standard notepad, MS Excel, etc.</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="d0a1bb26-7a29-4607-992c-4f539632c2eb" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

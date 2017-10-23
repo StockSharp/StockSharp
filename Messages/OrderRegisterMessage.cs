@@ -18,7 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -40,7 +39,7 @@ namespace StockSharp.Messages
 		public decimal Price { get; set; }
 
 		/// <summary>
-		/// Number of contracts in an order.
+		/// Number of contracts in the order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
@@ -80,7 +79,7 @@ namespace StockSharp.Messages
 		/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
 		/// </summary>
 		/// <remarks>
-		/// If the value is equal <see langword="null" /> or <see cref="DateTimeOffset.MaxValue"/>, order will be GTC (good til cancel). Or uses exact date.
+		/// If the value is equal <see langword="null" />, order will be GTC (good til cancel). Or uses exact date.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
@@ -114,6 +113,15 @@ namespace StockSharp.Messages
 		public RpsOrderInfo RpsInfo { get; set; }
 
 		/// <summary>
+		/// Is the order of market-maker.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MarketMakerKey)]
+		[DescriptionLoc(LocalizedStrings.MarketMakerOrderKey, true)]
+		[MainCategory]
+		public bool? IsMarketMaker { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
@@ -144,8 +152,8 @@ namespace StockSharp.Messages
 				OrderType = OrderType,
 				PortfolioName = PortfolioName,
 				Price = Price,
-				RepoInfo = RepoInfo.CloneNullable(),
-				RpsInfo = RpsInfo.CloneNullable(),
+				RepoInfo = RepoInfo?.Clone(),
+				RpsInfo = RpsInfo?.Clone(),
 				SecurityId = SecurityId,
 				//SecurityType = SecurityType,
 				Side = Side,
@@ -157,6 +165,7 @@ namespace StockSharp.Messages
 				UserOrderId = UserOrderId,
 				ClientCode = ClientCode,
 				BrokerCode = BrokerCode,
+				IsMarketMaker = IsMarketMaker
 			};
 
 			CopyTo(clone);
@@ -170,7 +179,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + $",TransId={TransactionId},Price={Price},Side={Side},OrdType={OrderType},Vol={Volume},Sec={SecurityId}";
+			return base.ToString() + $",TransId={TransactionId},Price={Price},Side={Side},OrdType={OrderType},Vol={Volume},Sec={SecurityId},Pf={PortfolioName}";
 		}
 	}
 }

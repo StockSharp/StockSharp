@@ -3,7 +3,12 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    
     <introduction>
-      <para>Раздел в разработке</para>
+      <para>
+      <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixServer</codeEntityReference> allows you to create own server, based on 
+      	<token>fix_external</token>/<token>fast_external</token> protocol communication.
+		For a transactions uses the FIX 4.4, for market-data - FAST protocol. The scheme of interaction is shown in this figure:
+      </para>
+       <mediaLink><image placement="left" xlink:href="FixServer" /></mediaLink>
     </introduction>
   </developerConceptualDocument>
 </topic>

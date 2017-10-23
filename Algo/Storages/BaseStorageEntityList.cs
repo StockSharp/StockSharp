@@ -54,6 +54,8 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
+		DelayAction IStorageEntityList<T>.DelayAction => DelayAction;
+
 		/// <summary>
 		/// To add the trading object to the collection.
 		/// </summary>
@@ -64,6 +66,8 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(entity));
 
 			base.Add(entity);
+
+			_addedRange?.Invoke(new[] { entity });
 		}
 
 		/// <summary>
@@ -76,7 +80,13 @@ namespace StockSharp.Algo.Storages
 			if (entity == null)
 				throw new ArgumentNullException(nameof(entity));
 
-			return base.Remove(entity);
+			if (base.Remove(entity))
+			{
+				_removedRange?.Invoke(new[] { entity });
+				return true;
+			}
+			else
+				return false;
 		}
 
 		/// <summary>
@@ -199,16 +209,16 @@ namespace StockSharp.Algo.Storages
 
 		event Action<IEnumerable<T>> ICollectionEx<T>.AddedRange
 		{
-			add { _addedRange += value; }
-			remove { _addedRange -= value; }
+			add => _addedRange += value;
+			remove => _addedRange -= value;
 		}
 
 		private Action<IEnumerable<T>> _removedRange;
 
 		event Action<IEnumerable<T>> ICollectionEx<T>.RemovedRange
 		{
-			add { _removedRange += value; }
-			remove { _removedRange -= value; }
+			add => _removedRange += value;
+			remove => _removedRange -= value;
 		}
 	}
 }

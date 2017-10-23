@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="28c61dc6-f1f3-4c02-906b-e0cf0e9ceb00" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+<para><token>hydra</token> can be used in server mode, in this mode 
+it is possible remotely to connect to <token>hydra</token> and get the data available in the storage. 
+The activation of the <token>hydra</token> server mode is described in the  
+<link xlink:href="7d845e99-6bde-437e-b7f4-059be0438894" /> item.</para>
+
+<para>To connect via <link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" /> , you need to create and configure FixTrader 
+(<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" />).</para>
+<code language="C#" title="C#"><![CDATA[
+...
+FixTrader Trader = new FixTrader();
+...
+var marketDataAdapter = ((FixMessageAdapter) Trader.MarketDataAdapter);
+marketDataAdapter.Address = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5002); 
+marketDataAdapter.SenderCompId = "hydra_user";
+marketDataAdapter.TargetCompId = "StockSharpHydraMD";
+marketDataAdapter.Login = "hydra_user";
+marketDataAdapter.Password = "qwerty".To<SecureString>();
+
+var transactionDataAdapter = ((FixMessageAdapter) Trader.TransactionAdapter);
+transactionDataAdapter.Address = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5002);
+transactionDataAdapter.SenderCompId = "hydra_user";
+transactionDataAdapter.TargetCompId = "StockSharpHydraMD";
+transactionDataAdapter.Login = "hydra_user";
+transactionDataAdapter.Password = "qwerty".To<SecureString>();
+
+...
+]]></code>
+<para>To subscribe to getting data events and connect</para>
+<code language="C#" title="C#"><![CDATA[
+...
+Trader.Connected += () =>
+{
+    Console.WriteLine("Trader.Connected");
+    Trader.LookupSecurities(new Security ());
+    
+    
+};
+Trader.Disconnected += () =>
+{
+    Console.WriteLine("Trader.Disconnected");
+};
+
+Trader.NewSecurity += security =>
+{
+    Console.Write("Trader.NewSecurity: ");
+    Console.WriteLine(security);
+    BuffeSecurity.Add(security);
+    if (security.Id == seid)
+    {
+        Trader.RegisterMarketDepth(security);
+        Trader.RegisterTrades(security);
+        series.CandleType = typeof (TimeFrameCandle);
+        series.Security = security;
+        series.Arg = TimeSpan.FromMinutes(5);
+        _candleManager.Start(series);
+    }
+};
+
+Trader.NewTrade += trade =>
+{
+    Console.WriteLine("Trader.NewTrade");
+    Console.WriteLine(trade);
+};
+Trader.MarketDepthChanged+= depth =>
+{
+    Console.WriteLine("Trader.MarketDepthChanged");
+    Console.WriteLine(depth);
+};
+
+Trader.ConnectionError += error =>
+{
+    Console.WriteLine("Trader.ConnectionError");
+    Console.WriteLine(error.Message);
+};
+
+Trader.Error += error =>
+{
+    Console.WriteLine("Trader.Error");
+    Console.WriteLine(error.Message);
+};
+
+Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+{
+    Console.WriteLine("Trader.MarketDataSubscriptionFailed");
+    Console.WriteLine(security);
+    Console.WriteLine(msg);
+    Console.WriteLine(error);
+};
+...
+Trader.Connect();
+...
+]]></code>
+    </introduction>
+  
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

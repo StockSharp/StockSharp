@@ -25,6 +25,8 @@ namespace StockSharp.Logging
 	using log4net;
 	using log4net.Config;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// Helper class for messages logging based on log4net.
 	/// </summary>
@@ -98,6 +100,16 @@ namespace StockSharp.Logging
 			Log(LogLevels.Debug, message, source);
 		}
 
+		/// <summary>
+		/// To send a verbose message.
+		/// </summary>
+		/// <param name="message">Message text.</param>
+		/// <param name="source">The message source.</param>
+		public void Verbose(string message, string source = "")
+		{
+			Log(LogLevels.Verbose, message, source);
+		}
+
 		private void Log(LogLevels level, string message, string source)
 		{
 			WriteMessages(new[] { new LogMessage(_sources.SafeAdd(source, key => new Source(key)), TimeHelper.NowWithOffset, level, message) });
@@ -128,11 +140,12 @@ namespace StockSharp.Logging
 				case LogLevels.Error:
 					_log.Error(str);
 					break;
+				case LogLevels.Verbose:
 				case LogLevels.Debug:
 					_log.Debug(str);
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(message));
+					throw new ArgumentOutOfRangeException(nameof(message), message.Level, LocalizedStrings.Str1219);
 			}
 		}
 	}

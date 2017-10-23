@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="47c764fa-a28c-48f7-81b3-714c059e0e57" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>There following ways to import a strategy or composite element</para>
+
+<list class="bullet">
+  <listItem><para>In the <legacyBold>Schema</legacyBold> panel, right-click the 
+  strategy folder, and select <legacyBold>Import</legacyBold> from menu.</para></listItem>
+  <listItem><para>On the <legacyBold>Common</legacyBold> tab click the 
+  <legacyBold>Import</legacyBold> button and select <legacyBold>Composite element</legacyBold> 
+  or <legacyBold>Strategies</legacyBold> from the menu:</para></listItem>
+</list>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Import_strategies_00"/>
+</mediaLink>
+ 
+<para>If there is a strategy with the same, a window will appear with a suggestion 
+to overwrite, add with a different name:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Import_strategies_01"/>
+</mediaLink>
+<para>When importing an encrypted file, you should enter the password that was 
+entered when the file was encrypted:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Import_strategies_02"/>
+</mediaLink>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="18a5214f-1c03-445a-ab96-d29c91555af4" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

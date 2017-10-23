@@ -15,24 +15,20 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleBlackwood
 {
-	using System.Linq;
-	using System.Windows;
-
-	using MoreLinq;
-
 	public partial class Level1Window
 	{
 		public Level1Window()
 		{
 			InitializeComponent();
 
-			Level1Grid.Columns[0].Visibility = Visibility.Visible;
-			Level1Grid.Columns[1].Visibility = Visibility.Visible;
+			Level1Grid.ColumnVisibility[0] = true;
+			Level1Grid.ColumnVisibility[1] = true;
 
-			Level1Grid.Columns[3].Visibility = Visibility.Collapsed;
-			Level1Grid.Columns[4].Visibility = Visibility.Collapsed;
+			Level1Grid.ColumnVisibility[3] = false;
+			Level1Grid.ColumnVisibility[4] = false;
 
-			Level1Grid.Columns.Skip(11).ForEach(c => c.Visibility = Visibility.Collapsed);
+			for (int i = 11; i < Level1Grid.ColumnVisibility.Count; i++)
+				Level1Grid.ColumnVisibility[i] = false;
 		}
 	}
 }

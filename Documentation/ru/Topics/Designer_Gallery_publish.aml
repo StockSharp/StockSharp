@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f8bbe4c2-293b-4a5d-aa0c-4ddf4b2bef87" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   <introduction>
+<para>Опубликовать свою стратегию можно, нажав на стратегию левой кнопкой мыши панели <token>SchemeDis</token>,
+ и выбрать <legacyBold>Опубликовать</legacyBold>. Или перейдя на панель стратегии и нажать на кнопку 
+ <legacyBold>Опубликовать</legacyBold> на вкладке <legacyBold>Эмуляция</legacyBold>:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_01"/>
+</mediaLink>
+<para>После нажатия на кнопку <legacyBold>Опубликовать</legacyBold> появится 
+окно <legacyBold>Опубликовать</legacyBold> с параметрами публикации:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_02"/>
+</mediaLink>
+<para>В окне <legacyBold>Опубликовать</legacyBold> необходимо дать название стратегии, 
+краткое описание, логотип, цену. Также в окне <legacyBold>Опубликовать</legacyBold> можно установить 
+флажок <legacyBold>Зашифровать</legacyBold>. Скачав стратегию, опубликованную 
+с установленным флажком <legacyBold>Зашифровать</legacyBold>, структуру, код и 
+используемые кубики просмотреть будет невозможно. На панели <legacyBold>Дизайнер</legacyBold> 
+будет надпись: <legacyBold>«Стратегия зашифрована и не может быть просмотрена»</legacyBold>. 
+Также о шифровании стратегий можно посмотреть в пункте <link xlink:href="66413582-a15e-414a-a413-8d77fe00f0e0" />.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_gallery_of_strategies_03"/>
+</mediaLink>
+<para>После нажатия на кнопку <legacyBold>ОК</legacyBold>, стратегия появится в 
+панели <legacyBold>Галерея стратегий</legacyBold>. Ее можно будет быстро найти при установке фильтра <legacyBold>Свои стратегии</legacyBold>.</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

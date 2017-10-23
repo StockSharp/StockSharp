@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="840e49ea-f9e1-4704-8324-098b002f78f9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <introduction>
+		  <steps class="ordered">
+			  <step>
+				  <content>
+		  				<para>Для установки <token>designer</token> необходимо перейти на страницу <token>download</token>:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Installation_00"/>
+</mediaLink>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+		  				<para>Скачать дистрибутив <token>designer</token>.</para>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+		  				<para>Разблокировать (правая кнопка мышки на файле, свойства) и распаковать <legacyBold>designer.zip</legacyBold> в пустую директорию (например, c:\S#Designer\)</para>
+		  				<mediaLink>
+<image placement="center" xlink:href="Designer_Installation_01"/>
+</mediaLink>
+				  </content>
+			  </step>
+			  			  <step>
+				  <content>
+		  				<para>Затем запустить <legacyBold>Designer.Update.exe</legacyBold> и нажать кнопку <legacyBold>Обновить</legacyBold>.</para>
+		  				<mediaLink>
+<image placement="center" xlink:href="Designer_Installation_02"/>
+</mediaLink>
+				  </content>
+			  </step>
+		  </steps>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="a9e273cf-9daa-4f8f-80d2-d58abab23d59" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

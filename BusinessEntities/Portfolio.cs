@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
+	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
 	using Ecng.Serialization;
@@ -30,8 +31,6 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
-	[CategoryOrderLoc(MainCategoryAttribute.NameKey, 0)]
-	[CategoryOrderLoc(StatisticsCategoryAttribute.NameKey, 1)]
 	public class Portfolio : BasePosition
 	{
 		/// <summary>
@@ -53,7 +52,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (_name == value)
@@ -64,45 +63,29 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _leverage;
+		private decimal? _leverage;
 
 		/// <summary>
 		/// Margin leverage.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str542Key)]
+		[DisplayNameLoc(LocalizedStrings.LeverageKey)]
 		[DescriptionLoc(LocalizedStrings.Str261Key, true)]
 		[MainCategory]
-		public decimal Leverage
+		[Nullable]
+		public decimal? Leverage
 		{
-			get { return _leverage; }
+			get => _leverage;
 			set
 			{
 				if (_leverage == value)
 					return;
 
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
+
 				_leverage = value;
 				NotifyChanged(nameof(Leverage));
-			}
-		}
-
-		private CurrencyTypes? _currency;
-
-		/// <summary>
-		/// Portfolio currency.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str251Key)]
-		[MainCategory]
-		[Nullable]
-		public CurrencyTypes? Currency
-		{
-			get { return _currency; }
-			set
-			{
-				_currency = value;
-				NotifyChanged(nameof(Currency));
 			}
 		}
 
@@ -142,9 +125,10 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str252Key)]
 		[MainCategory]
 		[Nullable]
+		[Browsable(false)]
 		public PortfolioStates? State
 		{
-			get { return _state; }
+			get => _state;
 			set
 			{
 				if (_state == value)
@@ -176,7 +160,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To copy the current portfolio fields to the <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">The portfolio, in which fields should be copied .</param>
+		/// <param name="destination">The portfolio, in which fields should be copied.</param>
 		public void CopyTo(Portfolio destination)
 		{
 			base.CopyTo(destination);

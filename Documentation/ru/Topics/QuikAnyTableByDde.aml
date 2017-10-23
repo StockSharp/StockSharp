@@ -24,7 +24,7 @@
     <!-- One or more procedure or section elements -->
 
     <procedure>
-      <title>Экспорт свечек, экспортируемых с помощью QPILE из графика цены и объема</title>
+      <title>Экспорт свечей, экспортируемых с помощью QPILE из графика цены и объема</title>
 
       <steps class="ordered">
 		  <step>
@@ -45,7 +45,7 @@
 		  <step>
 			  <content>
 				  <para>
-					  Затем, описать строку таблицы со свечками в виде <token>dotnet</token> класса:
+					  Затем, описать строку таблицы со свечами в виде <token>dotnet</token> класса:
 				  </para>
 				  <code language="C#"><![CDATA[public class QuikCandleDateTime : Equatable<QuikCandleDateTime>
 {
@@ -71,7 +71,7 @@
 	}
 }
 
-[DdeCustomTable("Исторические свечки")]
+[DdeCustomTable("Исторические свечи")]
 public class QuikCandle
 {
 	[Identity]
@@ -102,7 +102,7 @@ public class QuikCandle
 				  <para>
 					  Через специальный атрибут <codeEntityReference qualifyHint="true">T:Ecng.Serialization.IdentityAttribute</codeEntityReference>
 					  указывается идентификатор экспортируемой строки. Это позволит не создавать каждый раз объекты, а использовать уже ранее
-					  созданные. В случае с таблицей исторических свечек, идентификатор состоит их двух параметров: дата и время. Поэтому они были вынесены
+					  созданные. В случае с таблицей исторических свечей, идентификатор состоит их двух параметров: дата и время. Поэтому они были вынесены
 					  в отдельный класс <legacyItalic>QuikCandleDateTime</legacyItalic>.
 				  </para>
 			  </content>

@@ -3,82 +3,59 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>Вся работа по сохранению и восстановлению данных в <token>stocksharp</token> происходит через специальный API, расположенный в разделе
-		<codeEntityReference>N:StockSharp.Algo.Storages</codeEntityReference>.
-		В данном разделе находится интерфейс
-		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>,
-		который создан для описания всех возможных действий с хранилищем, и содержит такие свойства как
+		<para>All processes of the data saving and recovery in the <token>stocksharp</token> run through a special API, located in the <codeEntityReference>N:StockSharp.Algo.Storages</codeEntityReference> section.
+		There is the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>,
+		interface in this section, which created to describe all the possible actions with the storage and contains such properties as
 		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Securities</codeEntityReference>,
-		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Orders</codeEntityReference>
-		и т.д. Через эти свойства можно получить все сохраненные ранее торговые объекты, например, инструменты. Вся работа идет как с обычной
-		коллекцией за счет использования интерфейса
-		<codeEntityReference>T:StockSharp.Algo.Storages.IStorageEntityList`1</codeEntityReference>.
-		Если требуется сохранить торговый объект в хранилище (например, появилась новая заявка, или обновилась ранее зарегистрированная), то необходимо использовать метод
-		<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IStorageEntityList`1.Save(`0)</codeEntityReference>.</para>
+		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Storages.IEntityRegistry.Positions</codeEntityReference>
+		etc. Through these properties, it is possible to get all the previously saved trading objects, for example, instruments. All processes run as with regular
+		collection using the <codeEntityReference>T:StockSharp.Algo.Storages.IStorageEntityList`1</codeEntityReference> interface. If you want to save the trading object
+		in the storage (for example, a new order appeared or previously registered order updated), you should use the
+		<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.IStorageEntityList`1.Save(`0)</codeEntityReference> method.</para>
          
-		<para>Реализацией по умолчанию интерфейса
-		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>
-		является класс
-		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference>.
-		Он взаимодействует с данными через низкоуровневый системный интерфейс <codeEntityReference>T:Ecng.Serialization.IStorage</codeEntityReference>. 
-		Именно данный интерфейс предоставляет прозрачную работу с
-		<link xlink:href="38595e78-cff6-44ed-b525-2be13e6c17e4">Базами данных</link>, скрывая особенности.</para>
+		<para>The default implementation of the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>
+		interface is the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> class.
+		It interacts with the data through a low-level system interface <codeEntityReference>T:Ecng.Serialization.IStorage</codeEntityReference>. 
+		This interface provides a transparent work with <link xlink:href="38595e78-cff6-44ed-b525-2be13e6c17e4">databases</link>, hiding details.</para>
 		  
-		<para>Работа с маркет-данными, такие как тиковые сделки или стаканы, происходит через отдельный интерфейс
-		<codeEntityReference>T:StockSharp.Algo.Storages.IMarketDataStorage`1</codeEntityReference>,
-		который получается на основе информации об инструменте через методы
+		<para>The work with market data, such as tick trades or order books, takes place through the certain interface
+		<codeEntityReference>T:StockSharp.Algo.Storages.IMarketDataStorage`1</codeEntityReference>, which is obtained based on the information about the instrument through
 		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetTradeStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>
-		и
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetMarketDepthStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>
-		для тиковых сделок и стаканов соответственно.</para>
+		mathod. <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetMarketDepthStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>
+		for tick trades or order books accordingly.</para>
 		  
-		<para>Если используется
-		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference>,
-		то реализация методов с маркет-данными не зависит от
-		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.StorageRegistry.DefaultDrive</codeEntityReference>,
-		так как данные всегда сохраняются в файл. Это внутренний формат <token>stocksharp</token>, и он организован таким образом, чтобы сделки или стаканы занимали
-		минимум места на диске. Путь к директории, где будут сохраняться (или считываться) маркет-данные, указывается через свойство
-		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.Path</codeEntityReference> у хранилища
-		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.IStorageRegistry.DefaultDrive</codeEntityReference>.</para>
+		<para>If the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> used, the implementation of methods with
+		market data does not depend on <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.StorageRegistry.DefaultDrive</codeEntityReference>,
+		since the data is always stored in the file. This is the internal format of the <token>stocksharp</token>, and it is organized in such a way that the trades or
+		order books takes a minimum of disk space. The path to the directory where the market data will be stored (or read) indicated by the
+		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.Path</codeEntityReference> property of the
+		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.IStorageRegistry.DefaultDrive</codeEntityReference> storage.</para>
 		
-		<para>По этому пути будут созданы папки с названиями, равные
-		<link xlink:href="34a9c518-60ca-45c0-a118-5e2e42165efa">идентификаторам инструментов</link>
-		(для каждого инструмента отдельная папка).</para>
-
-		<alert class="note">
-  			<para>Если у <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.LocalMarketDataDrive</codeEntityReference> свойство 
-			<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.UseAlphabeticPath</codeEntityReference> = <legacyBold>true</legacyBold>,
-			то папки с названиями инструментов будут создаваться внутри алфавитной папки, имя которой берется из первой буквы инструмента.</para>
-		</alert>
+		<para>The folders with the names equal <link xlink:href="34a9c518-60ca-45c0-a118-5e2e42165efa">instruments identifiers</link> (separate folder for each
+		instrument) will be created at this path.</para>
+				
+		<para>Subfolders, indicating the date of the market data will be created inside each of these folders. For example, if you save the tick trades for a period of
+		3 days, then three separate folders with dates will be created. The format of the folder name is always fixed as yyyy_MM_dd.</para>
 		
-		<para>Внутри каждой такой папки будут созданы подпапки, обозначающие даты маркет-данных. Например, если сохранять
-		тиковые сделки за период 3 дня, то для них будут созданы 3 отдельные папки с датами. Формат названия папки всегда фиксирован и равен yyyy_MM_dd. </para>
+		<para>Files with the bin extension are inside each folder with dates. Trades are stored in the <legacyBold>trades.bin</legacyBold> file, order books in the <legacyBold>quotes.bin</legacyBold> file.
+		Also the <legacyItalic>candles_XXX.bin</legacyItalic> files may be present, which store various types of <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">candles</link>
+		(filename indicates the type and parameter of candles) and the <legacyItalic>orderLog.bin</legacyItalic> files where the order log stored.</para>
 		
-		<para>Внутри каждой папки с датами находятся файлы, с расширением bin. Сделки хранятся в файле <legacyItalic>trades.bin</legacyItalic>, стаканы в <legacyItalic>quotes.bin</legacyItalic>.
-		Также могут присутствовать файлы <legacyItalic>candles_XXX.bin</legacyItalic>, где хранятся
-		<link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">свечки</link>
-		разных типов (название файла указывает на тип и параметр свечек) и файлы <legacyItalic>orderLog.bin</legacyItalic> в которых хранится ордер лог.</para>
-		
-		<para>
-		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.UseAlphabeticPath</codeEntityReference>
-		</para>
 	</introduction>
 
 	<procedure>
-		<title>Пример работы с хранилищем маркет данных</title>
+		<title>Example of working with market data storage</title>
 
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>Пример SampleStorage, находящийся в дистрибутиве <token>stocksharp</token>, показывает, как сохранить и загрузить сделки через класс
-					<codeEntityReference>T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference>.
-					В начале создается инструмент, у которого инициализируются основные свойства -
-					<codeEntityReference>P:StockSharp.BusinessEntities.Security.Id</codeEntityReference>
-					(для определения месторасположения),
-					<codeEntityReference>P:StockSharp.BusinessEntities.Security.StepPrice</codeEntityReference>
-					и
+					<para>The SampleStorage example, located in the <token>stocksharp</token> installation package, shows how to save and load the trades through the
+					<codeEntityReference>T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference>class. In the beginning an instrument created and its basic
+					properties  are initialized - <codeEntityReference>P:StockSharp.BusinessEntities.Security.Id</codeEntityReference>
+					(to determine location on disk), <codeEntityReference>P:StockSharp.BusinessEntities.Security.StepPrice</codeEntityReference>
+					and
 					<codeEntityReference>P:StockSharp.BusinessEntities.Security.Decimals</codeEntityReference>
-					(для сжатия цены в файле <legacyItalic>trades.bin</legacyItalic>):</para>
+					(for decimal value compression in the <legacyBold>trades.bin</legacyBold> file):</para>
 					
 					<code language="C#">
 					<![CDATA[
@@ -95,14 +72,14 @@ var security = new Security
 			
 			<step>
 				<content>
-					<para>Далее, в качестве исходных данных, создается список из 1000 произвольных сделок (в реальном приложении это будут те сделки, которые или
-					получены из внешних источников, или торгового приложения):</para>
+					<para>Further, as initial data, a list of the 1,000 undefined trades created (in a real application, it will be those trades that are get from
+					external sources or trade application):</para>
 					
 					<code language="C#">
 					<![CDATA[
 var trades = new List<Trade>();
 
-// генерируем 1000 произвольных сделок
+// generating 1000 random ticks
 //
 
 var tradeGenerator = new RandomWalkTradeGenerator(security, 99)
@@ -113,7 +90,7 @@ var tradeGenerator = new RandomWalkTradeGenerator(security, 99)
 	}
 };
 
-// инициализация генератора
+// generator initialization
 tradeGenerator.Init();
 
 for (var i = 0; i < 1000; i++)
@@ -129,8 +106,7 @@ for (var i = 0; i < 1000; i++)
 			
 			<step>
 				<content>
-					<para>Следующим шагом создается сам
-					<codeEntityReference>T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference>:</para>
+					<para>The <codeEntityReference>T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> itself created on the next step:</para>
 				  
 					<code language="C#">
 					<![CDATA[
@@ -142,8 +118,9 @@ var storage = new StorageRegistry();
 			
 			<step>
 				<content>
-					<para>Через хранилище торговых объектов получается хранилище маркет-данных. В примере используется хранилище тиковых сделок, которое получается через метод
-					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.StorageRegistry.GetTradeStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>:</para>
+					<para>The market data storage obtained via the trade objects store. The tick trades storage, which is obtained via the
+					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.StorageRegistry.GetTradeStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>
+					method, used in example:</para>
 				  
 					<code language="C#">
 					<![CDATA[
@@ -155,7 +132,7 @@ var tradeStorage = storage.GetTradeStorage(security);
 			
 			<step>
 				<content>
-					<para>Сохранение сделок:</para>
+					<para>The saving of trades:</para>
 				  
 					<code language="C#">
 					<![CDATA[
@@ -167,7 +144,7 @@ tradeStorage.Save(trades);
 		  
 			<step>
 				<content>
-					<para>Загрузка сделок, сохраненных на предыдущем шаге:</para>
+					<para>The loading of trades, which were saved in the previous step:</para>
 				  
 					<code language="C#">
 					<![CDATA[
@@ -175,7 +152,7 @@ var loadedTrades = tradeStorage.Load(DateTime.Today, DateTime.Today + TimeSpan.F
  	  
 foreach (var trade in loadedTrades)
 {
-	Console.WriteLine("Сделка № {0}: {1}", trade.Id, trade);
+	Console.WriteLine("Tick № {0}: {1}", trade.Id, trade);
 }
 					]]>
 					</code>
@@ -184,8 +161,8 @@ foreach (var trade in loadedTrades)
 		  
 			<step>
 				<content>
-					<para>Так как сделки сохраняются в файл, то при следующем запуске примера они будут там присутствовать, и пример выведет уже не 1000 сделок,
-					а 2000. Чтобы пример работал правильно, сделки в конце работы необходимо удалить:</para>
+					<para>Since the trades are stored in the file, the next time you run the sample, they will be present there, and you will get 2000 trades instead
+					of 1000. For correct work of example, it is necessary to remove the trades at the end of the work:</para>
 				  
 					<code language="C#">
 					<![CDATA[

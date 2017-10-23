@@ -3,52 +3,52 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>Для регистрации стоп-заявок используется тот же метод 
-		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
-		но с указанием стоп-условия 
-		<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryOrderCondition</codeEntityReference>
-		и типа заявки 
-		<codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference>:</para>
+		<para>The same 
+		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+		method is used to register stop orders, but with stop condition <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryOrderCondition</codeEntityReference>
+		and the <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> type of order indicating:</para>
         
         <code language="C#">
         <![CDATA[
-private void Send_Click(object sender, RoutedEventArgs e)
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
 {
-    var stopOrder = new Order
-    {
-        Portfolio = Portfolio.SelectedPortfolio,
-        Type = OrderTypes.Conditional,
-        Volume = Volume.Text.To<decimal>(),
-        Price = Price.Text.To<decimal>(),
-        Security = Security,
-        Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
-        ExpiryDate = IsOneDay.IsChecked == true ? DateTime.Today : DateTime.MaxValue,
-        StopCondition = new OECOrderCondition(StopMarket ? OECStopType.StopMarket : OECStopType.StopLimit, StopPrice.Text.To<decimal>())
-    };
+	var newOrder = new OrderConditionalWindow
+	{
+		Order = new Order
+		{
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		SecurityProvider = MainWindow.Instance.Trader,
+		MarketDataProvider = MainWindow.Instance.Trader,
+		Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+		Adapter = MainWindow.Instance.Trader.TransactionAdapter
+	};
 
-    MainWindow.Instance.Trader.RegisterOrder(stopOrder);
-    DialogResult = true;
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 }
 		]]>
 		</code>		
 
-		<para>Для работы с условиями стоп-заявок адаптер <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> предоставляет специальный класс 
-		<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryOrderCondition</codeEntityReference>. Данным классом поддерживаются следующие типы стоп-заявок:</para>
+		<para>The <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> adapter provides the special 
+		<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryOrderCondition</codeEntityReference> class to work with the stop orders conditions.
+		This class supports the following types of stop orders:</para>
 
 		<list class="bullet">
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopMarket</codeEntityReference> – после достижения стоп-цены автоматически выставляется рыночная заявка.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopMarket</codeEntityReference> – a market order is automatically executed after the stop price is reached.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopLimit</codeEntityReference> – после достижения стоп-цены автоматически выставляется лимитная заявка.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopLimit</codeEntityReference> – a limit order is automatically executed after the stop price is reached.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference> – cтоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, 
-				оставаясь на заранее заявленном интервале от рыночной цены. В случае, если рынок достигает стоп-цены, автоматически выставляется рыночная заявка.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference> – stop price automatically follows the market,
+				but only in a favorable direction for the position, remaining the stated-in-advance  distancefrom market price. If the market reaches the stop price, market order is automatically executed.</para>
 			</listItem>
 			<listItem>
 				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopLimit</codeEntityReference> – 
-				как <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference>, но при достижении стоп-цены выставляется лимитная заявка.</para>
+				same as <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference>, but when stop price is reached the limit order is registered.</para>
 			</listItem>
 		</list>
 	</introduction>

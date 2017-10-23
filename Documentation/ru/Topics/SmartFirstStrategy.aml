@@ -36,8 +36,11 @@
 					  на <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>:
 				  </para>
 				  <code language="C#">
-// создаем шлюз к Smart-у
-var trader = new SmartTrader(login, password);</code>
+using (var trader = new SmartTrader { Login = login, Password = password, Address = SmartComAddresses.Demo })
+		{
+			// ...
+		}
+					</code>
 			  </content>
 		  </step>
 		  <step>
@@ -46,7 +49,8 @@ var trader = new SmartTrader(login, password);</code>
 					  После создания шлюза необходимо подключиться к торговой системе. В случае с <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>
 					  такой системой выступает <token>smartcom</token>:
 				  </para>
-				  <code language="C#">// подписываемся на событие успешного подключения
+<code language="C#">
+// подписываемся на событие успешного подключения
 // все действия необходимо производить только после подключения
 trader.Connected += () =>
 {
@@ -71,54 +75,53 @@ waitHandle.WaitOne();</code>
 					  и портфелям (для выставления заявок). А также на событие появления Моих Сделок (сигнал пользователю о том, что произошла сделка по его
 					  заявке):
 				  </para>
-				  <code language="C#"><![CDATA[// подписываемся на все портфели-счета
-trader.NewPortfolios += portfolios =>
+				  <code language="C#"><![CDATA[
+// подписываемся на все портфели-счета
+trader.NewPortfolio += portfolio =>
 {
-	// необходимое условие работы в SmartCOM
-	portfolios.ForEach(trader.RegisterPortfolio);
+    if (_portfolio != null)
+        return;
 
-	if (_portfolio == null)
-	{
-		// находим нужный портфель и присваиваем его переменной _portfolio
-		_portfolio = portfolios.FirstOrDefault(p => p.Name == account);
+    // находим нужный портфель и присваиваем его переменной _portfolio
 
-		if (_portfolio != null)
-		{
-			Console.WriteLine("Портфель {0} появился.", account);
+    if (portfolio.Name != account)
+        return;
 
-			if (_lkoh != null)
-				waitHandle.Set();
-		}
-	}
+    _portfolio = portfolio;
+    Console.WriteLine("Портфель {0} появился.", account);
+
+    if (_lkoh != null)
+        waitHandle.Set();
 };
 
-// подписываемся на событие появления инструментов
-trader.NewSecurities += securities =>
+// подписываемся на событие появление инструментов
+trader.NewSecurity += security =>
 {
-	if (_lkoh == null)
-	{
-		// находим Лукойл и присваиваем ее переменной lkoh
-		_lkoh = securities.FirstOrDefault(sec => sec.Code == secCode && sec.Type == SecurityTypes.Equity);
+    if (_lkoh == null)
+    {
+        if (security.Code != secCode || security.Type != SecurityTypes.Stock)
+            return;
 
-		if (_lkoh != null)
-		{
-			Console.WriteLine("Инструмент Лукойл появился.");
+        // находим Лукойл и присваиваем ее переменной lkoh
+        _lkoh = security;
 
-			if (_portfolio != null)
-				waitHandle.Set();
-		}
-	}
+        if (_lkoh != null)
+        {
+            Console.WriteLine("Инструмент Лукойл появился.");
+
+            if (_portfolio != null)
+                waitHandle.Set();
+        }
+    }
 };
 
 // подписываемся на событие появления моих новых сделок
-trader.NewMyTrades += myTrades =>
+trader.NewMyTrade += myTrade =>
 {
-	foreach (var myTrade in myTrades)
-	{
-		var trade = myTrade.Trade;
-		Console.WriteLine("Сделка {0} по цене {1} по бумаге {2} по объему {3} в {4}.", trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
-	}
-};]]></code>
+    var trade = myTrade.Trade;
+    Console.WriteLine("Сделка {0} по цене {1} по бумаге {2} по объему {3} в {4}.", trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
+};
+]]></code>
 			  </content>
 		  </step>
 		  <step>
@@ -126,30 +129,32 @@ trader.NewMyTrades += myTrades =>
 				  <para>
 					  Дожидаемся появления портфеля и инструмента и запускаем обновления по инструменту:
 				  </para>
-				  <code language="C#">Console.WriteLine("Дожидаемся появления в программе инструмента Лукойл и портфеля {0}...".Put(account));
-
+<code language="C#"><![CDATA[
+Console.WriteLine("Дожидаемся появления в программе инструмента Лукойл и портфеля {0}...".Put(account));
 
 // дожидаемся появления портфеля и инструмента
 waitHandle.WaitOne();
 
-trader.SecuritiesChanged += securities =>
+trader.SecurityChanged += security =>
 {
 	// если инструмент хоть раз изменился (по нему пришли актуальные данные)
-	if (securities.Contains(_lkoh))
+	if (security == _lkoh && _lkoh.BestBid != null && _lkoh.BestAsk != null)
 		waitHandle.Set();
 };
+
 
 Console.WriteLine("Дожидаемся обновления данных по инструменту Лукойл...");
 
 // запускаем обновление по инструменту
 trader.RegisterSecurity(_lkoh);
-waitHandle.WaitOne();</code>
+waitHandle.WaitOne();
+]]></code>
 				  <para>
 					  Когда данные начнут приходить в <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, то будут вызываться
-					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> и т.д. Для тех данных,
+					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurity</codeEntityReference>,
+					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrder</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
-					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>.
+					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrderChanged</codeEntityReference>.
 				  </para>
 			  </content>
 		  </step>
@@ -168,21 +173,21 @@ Console.WriteLine("Первоначальное значение середин�
 
 while (true)
 {
-	var mid = lkoh.BestPair.SpreadPrice / 2;
+	var mid = _lkoh.BestPair.SpreadPrice / 2;
 
 	// если спред вышел за пределы нашего диапазона
-	if	(
-			((firstMid + firstMid * delta) <= mid) ||
-			((firstMid - firstMid * delta) >= mid)
+	if (mid != null &&
+		((firstMid + firstMid * delta) <= mid ||
+		(firstMid - firstMid * delta) >= mid)
 		)
 	{
 		var order = new Order
 		{
 			Portfolio = _portfolio,
-			Price = lkoh.ShrinkPrice(lkoh.BestBid + mid),
-			Security = lkoh,
+			Price = _lkoh.ShrinkPrice(_lkoh.BestBid.Price + mid.Value),
+			Security = _lkoh,
 			Volume = 1,
-			Direction = OrderDirections.Buy,
+			Direction = Sides.Buy,
 		};
 		trader.RegisterOrder(order);
 		Console.WriteLine("Заявка {0} зарегистрирована", order.Id);

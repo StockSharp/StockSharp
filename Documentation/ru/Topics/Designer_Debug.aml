@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="667ad9ff-6afe-48e2-9c53-1850d0533a77" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>В процессе тестирования стратегий часто возникает необходимость проверить, 
+какие данные поступают на вход того или иного кубика или передаются 
+на его выходе. Для этого в <token>designer</token> существует <legacyBold>Отладчик</legacyBold>.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Debug_00"/>
+</mediaLink>
+<para>На вкладке <legacyBold>Эмуляция</legacyBold> ленты в группе <legacyBold>Отладчик</legacyBold> расположены кнопки:</para>
+
+
+<list class="bullet">
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_01"/></mediaLinkInline> <legacyBold>Добавить 
+точку остановки</legacyBold> – при выделенном элементе добавить точку останова. Элементы, для
+ которых добавлена точка останова, выделяются красной рамкой.</para></listItem>
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_02"/></mediaLinkInline> <legacyBold>Убрать 
+точку остановки</legacyBold> – удалить точку останова.</para></listItem>
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_03"/></mediaLinkInline> <legacyBold>К следующему элементу</legacyBold> –
+ при сработавшей точке останова выполняет переход к следующему элементу схемы.</para></listItem>
+  <listItem><para><legacyBold>Step to out</legacyBold> 
+– при сработавшей точке останова выполняет переход к выходу текущего элемента, 
+используется для проверки значений, которые передаются на выходе элемента.</para></listItem>
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_04"/></mediaLinkInline> <legacyBold>В составной элемент</legacyBold> – 
+при сработавшей точке останова выполняет переход внутрь составного 
+элемента. При этом автоматически открывается схема составного элемента и выполняется 
+остановка на элементе, в который первым передаются данные.</para></listItem>
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_05"/></mediaLinkInline> <legacyBold>Из 
+составного элемента</legacyBold> – при сработавшей точке останова и нахождении внутри составного 
+элемента, выполняет выход на уровень вверх, где используется открытый составной элемент.</para></listItem>
+  <listItem><para><mediaLinkInline><image xlink:href="Designer_Debug_06"/></mediaLinkInline> <legacyBold>Продолжить</legacyBold> 
+– продолжает выполнение до срабатывания следующей точки останова.</para></listItem>
+</list>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="81221569-7e65-4817-9b1f-7d6c6efccdf6" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

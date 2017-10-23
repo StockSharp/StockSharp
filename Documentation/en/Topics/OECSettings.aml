@@ -3,11 +3,11 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>При необходимости можно настроить терминал OEC Trader для работы в режиме <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>, 
-		после чего запустить робота <token>stocksharp</token> в режиме <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>.
-		В этом случае терминал и робот будут использовать одно и то же соединение с сервером OEC. 
-		Для настройки следует отметить пункт меню File -> Allow Remoting в терминале OEC Trader:</para>
-		
+		<para>
+		If necessary, you can configure the OEC Trader terminal to operate in <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>
+		mode and then run the algorithm <token>stocksharp</token> in <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> mode.
+		In this case, the terminal and the algorithm will use the same connection to the OEC server.
+		To configure it you should check the menu item File -> Allow Remoting in OEC Trader terminal:</para>
 		<mediaLink><image placement="center" xlink:href="OECTraderSettings"/></mediaLink>
 
 	</introduction>

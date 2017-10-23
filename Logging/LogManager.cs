@@ -130,6 +130,11 @@ namespace StockSharp.Logging
 			FlushInterval = TimeSpan.FromMilliseconds(500);
 		}
 
+		/// <summary>
+		/// Local time zone to convert all incoming messages. Not use in case of <see langword="null"/>.
+		/// </summary>
+		public TimeZoneInfo LocalTimeZone { get; set; }
+
 		private void Flush()
 		{
 			LogMessage[] temp;
@@ -173,6 +178,8 @@ namespace StockSharp.Logging
 
 					if (message.IsDispose)
 						disposeMessage = (DisposeLogMessage)message;
+					else if (LocalTimeZone != null)
+						message.Time = message.Time.Convert(LocalTimeZone);
 				}
 
 				if (messages.Count > 0)
@@ -194,11 +201,11 @@ namespace StockSharp.Logging
 		private ILogReceiver _application = new ApplicationReceiver();
 
 		/// <summary>
-		/// The all application level logs recipient .
+		/// The all application level logs recipient.
 		/// </summary>
 		public ILogReceiver Application
 		{
-			get { return _application; }
+			get => _application;
 			set
 			{
 				if (value == null)
@@ -230,7 +237,7 @@ namespace StockSharp.Logging
 		/// </summary>
 		public TimeSpan FlushInterval
 		{
-			get { return _flushTimer.Interval(); }
+			get => _flushTimer.Interval();
 			set
 			{
 				if (value < TimeSpan.FromMilliseconds(1))
@@ -253,7 +260,7 @@ namespace StockSharp.Logging
 		//	set
 		//	{
 		//		if (value < -1) 
-		//			throw new ArgumentOutOfRangeException("value", value, "Количество не может быть отрицательным.");
+		//			throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str2796);
 
 		//		_maxMessageCount = value;
 		//	}
@@ -266,23 +273,14 @@ namespace StockSharp.Logging
 
 			_logMsgStat.Add(message);
 
-			//bool needFlush;
-
 			lock (_syncRoot)
 			{
 				_pendingMessages.Add(message);
-				//needFlush = MaxMessageCount > 0 && _pendingMessages.Count > MaxMessageCount || MaxMessageCount == -1;
-
-				// mika: если накопилось слишком много сообщений, то нужно принудительно вызвать таймер
+				
+				// mika: force flush in case too many messages
 				if (_pendingMessages.Count > 1000000)
 					ImmediateFlush();
 			}
-
-			// mika: сбрасывание логов необходимо делать только в одном потоке, чтобы избежать
-			// усложнения логики в Listener-ах
-
-			//if (needFlush)
-			//	Flush();
 		}
 
 		private void ImmediateFlush()
@@ -295,7 +293,6 @@ namespace StockSharp.Logging
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			// сначала удаляем поставщиков логов
 			Sources.Clear();
 
 			lock (_syncRoot)
@@ -304,7 +301,8 @@ namespace StockSharp.Logging
 				_pendingMessages.Add(_disposeMessage);
 			}
 
-			// сбрасываем в логи то, что еще не сбросилось и выключаем таймер
+			// flushing accumulated messages and closing the timer
+
 			ImmediateFlush();
 
 			_disposeMessage.Wait();
@@ -322,6 +320,9 @@ namespace StockSharp.Logging
 			FlushInterval = storage.GetValue<TimeSpan>(nameof(FlushInterval));
 			//MaxMessageCount = storage.GetValue<int>(nameof(MaxMessageCount));
 			Listeners.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Listeners)).Select(s => s.LoadEntire<ILogListener>()));
+
+			if (storage.Contains(nameof(LocalTimeZone)))
+				LocalTimeZone = storage.GetValue<TimeZoneInfo>(nameof(LocalTimeZone));
 		}
 
 		/// <summary>
@@ -333,6 +334,9 @@ namespace StockSharp.Logging
 			storage.SetValue(nameof(FlushInterval), FlushInterval);
 			//storage.SetValue(nameof(MaxMessageCount), MaxMessageCount);
 			storage.SetValue(nameof(Listeners), Listeners.Select(l => l.SaveEntire(false)).ToArray());
+
+			if (LocalTimeZone != null)
+				storage.SetValue(nameof(LocalTimeZone), LocalTimeZone);
 		}
 	}
 }

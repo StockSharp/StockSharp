@@ -22,6 +22,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The weight-average part of indicator <see cref="RelativeVigorIndex"/>.
 	/// </summary>
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();

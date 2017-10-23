@@ -83,7 +83,7 @@ namespace XMLCommToHTM
 
 		private Dictionary<string, string> CurrentNames => IsRussian ? RussianNames : EnglishNames;
 
-		private Dictionary<string, string> EnglishNames = new Dictionary<string, string>()
+		private readonly Dictionary<string, string> EnglishNames = new Dictionary<string, string>
 			{ { NestedTypes, "Nested types" },
 				{ Constructors, "Constructors" },
 				{ Properties, "Properties" },
@@ -147,7 +147,7 @@ namespace XMLCommToHTM
 				{ OverloadList , "Overload List" }
 			};
 
-		private Dictionary<string, string> RussianNames = new Dictionary<string, string>()
+		private readonly Dictionary<string, string> RussianNames = new Dictionary<string, string>
 			{
 				{ NestedTypes,"Вложенные классы" },
 				{ Constructors,"Конструкторы" },

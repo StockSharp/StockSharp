@@ -2,18 +2,18 @@
 <topic id="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>В появившимся окне выбрать интересуемый диапазон времени, выбрать инструмент и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <para>In the appearing window select the required time range, then select the instrument and click the <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline> button:</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_export_level1" />
       </mediaLink>
       <para>
-      	Также можно выбрать какие именно типы изменений должны экспортироваться. Это делается при помощи раскрывающегося списка, показанного ниже:
+      	You can also select which fields of level1 should be exported. This is done by using the drop-down list, as shown below:
       </para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_export_security_change_selected" />
       </mediaLink>
       
-    <para>Найденные изменения можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
+    <para>Found level1 can be exported to formats <token>excel</token>, xml, sql, bin or txt. This can be done by using the drop-down list:</para>
     	<mediaLink>
     		<image placement="center" xlink:href="hydra_export" />
     	</mediaLink>

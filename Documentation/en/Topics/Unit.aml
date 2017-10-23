@@ -7,14 +7,13 @@
 
     <introduction>
 		<para>
-			Для упрощения работы с арифметическими операциями над такими величинами как проценты, пункты или пипсы можно использовать тип
-			данных <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference>. Он позволяет прозрачно оперировать с операциями
-			сложения, вычитания, умножения и деления. <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> можно
-			конвертировать в <codeEntityReference>T:System.Decimal</codeEntityReference> (невозможно только если величина является процентной, то есть
-			тип <codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> установлен в
-			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.UnitTypes.Percent</codeEntityReference>) и обратно
-			(в этом случае всегда создается величина с абсолютным значением, то есть тип
-			<codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> установлен в
+			To simplify works with arithmetic operations on such values as percent, points or pips, the
+			<codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> data type can be used. It allows transparently operate with operations of addition,
+			subtraction, multiplication and division. <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> may be converted into 
+			<codeEntityReference>T:System.Decimal</codeEntityReference> (not possible, of the value is percentage, i.e. the 
+			type <codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> is set to 
+			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.UnitTypes.Percent</codeEntityReference>) and vice versa (in this case the created value is
+			always of the absolute value, i.e. the <codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> is set to
 			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.UnitTypes.Absolute</codeEntityReference>).
 		</para>
     </introduction>
@@ -27,20 +26,19 @@
     <!-- One or more procedure or section elements -->
 
     <procedure>
-      <title>Использование Unit</title>
+      <title>Usage of Unit</title>
 
       <steps class="bullet">
 		  <step>
 			  <content>
 				  <para>
-					  Создавать <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> можно через специальные конструкторы,
-					  или использовать более короткую запись с помощью <codeEntityReference>T:StockSharp.Messages.UnitHelper</codeEntityReference>:
+					  The <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> can be created using special design kits, or using shorter recording by
+					  <codeEntityReference>T:StockSharp.Messages.UnitHelper</codeEntityReference>:
 				  </para>
-				  <code language="C#">// тестовый инструмент с шагом цены в 1 копейку и стоимостью в 10 рублей
-// (в реальном приложении информацию необходимо получать через IConnector.NewSecurities)
+				  <code language="C#">// test instrument with pips = 1 cent and points = 10 usd
 var security = new Security
 {
-	Name = "Тестовый инструмент",
+	Id = "AAPL@NASDAQ",
 	StepPrice = 10,
 	PriceStep = 0.01m,
 };
@@ -54,49 +52,49 @@ var point = 30.0.Points(security);</code>
 		  <step>
 			  <content>
 				  <para>
-					  <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> имеет форматированный вывод. Поэтому приведение
-					  значений к строке в зависимости от типа <codeEntityReference>T:StockSharp.Messages.UnitTypes</codeEntityReference>:
+					  <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> features formatted output. Therefore, reducing the values to a string
+					  depending on the <codeEntityReference>T:StockSharp.Messages.UnitTypes</codeEntityReference> type:
 				  </para>
 				  <code language="C#">Console.WriteLine("absolute = " + absolute);
 Console.WriteLine("percent = " + percent);
 Console.WriteLine("pips = " + pips);
 Console.WriteLine("point = " + point);</code>
-				  <para>будет выводить следующие строчки:</para>
+				  <para>will output the following strings:</para>
 				  <code>absolute = 30
 percent = 30%
-pips = 30ш
-point = 30п</code>
-				  <para>Символ ш означает минимальный шаг цены (пипс), п - стоимость шага цены (пункт).</para>
+pips = 30s
+point = 30p</code>
+				  <para>The s symbol means minimal price increment (pips), p - cost of price increment (point).</para>
 			  </content>
 		  </step>
 		  <step>
 			  <content>
 				  <para>
-					  Арифметические операции над <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> осуществляются так же,
-					  как и над обычными числами:
+					  Arithmetic operations with <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> are performed in the same way, as with normal
+					  numbers:
 				  </para>
-				  <code language="C#">// сложение всех величин
+				  <code language="C#">// addition of all values
 Console.WriteLine("testValue + absolute = " + (testValue + absolute));
 Console.WriteLine("testValue + percent = " + (testValue + percent));
 Console.WriteLine("testValue + pips = " + (testValue + pips));
 Console.WriteLine("testValue + point = " + (testValue + point));
 Console.WriteLine();
 
-// умножение всех величин
+// multiplication of all values
 Console.WriteLine("testValue * absolute = " + (testValue * absolute));
 Console.WriteLine("testValue * percent = " + (testValue * percent));
 Console.WriteLine("testValue * pips = " + (testValue * pips));
 Console.WriteLine("testValue * point = " + (testValue * point));
 Console.WriteLine();
 
-// вычитание всех величин
+// subtraction of values
 Console.WriteLine("testValue - absolute = " + (testValue - absolute));
 Console.WriteLine("testValue - percent = " + (testValue - percent));
 Console.WriteLine("testValue - pips = " + (testValue - pips));
 Console.WriteLine("testValue - point = " + (testValue - point));
 Console.WriteLine();
 
-// деление всех величин
+// division of all values
 Console.WriteLine("testValue / absolute = " + (testValue / absolute));
 Console.WriteLine("testValue / percent = " + (testValue / percent));
 Console.WriteLine("testValue / pips = " + (testValue / pips));
@@ -107,33 +105,33 @@ Console.WriteLine();</code>
 		  <step>
 			  <content>
 				  <para>
-					  Результатом арифметических операций <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> становится
-					  сам <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference>, тип которого равен типу первого операнда.
-					  Например, если сложить пипсы и пункты, то результат будет в пипсах:
+					  The result of arithmetic operations <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> itself becomes 
+					  <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference>, type of each is equal to the first operand type. For example, when adding
+					  pips and points, the result will be in pips:
 				  </para>
-				  <code language="C#">// сложение пипсов и пунктов
+				  <code language="C#">// addition of pips and points
 var resultPipsPoint = pips + point;
-// и приведением из пипсов в decimal
+// and casting to decimal
 var resultPipsPointDecimal = (decimal)resultPipsPoint;
 
 Console.WriteLine("pips + point = " + resultPipsPoint);
 Console.WriteLine("(decimal)(pips + point) = " + resultPipsPointDecimal);</code>
-				  <para>Вывод такой операции будет следующим:</para>
-				  <code>pips + point = 30030ш
-(decimal)(pips + point) = 300,3</code>
+				  <para>Output of such operation will be as follows:</para>
+				  <code>pips + point = 30030s
+(decimal)(pips + point) = 300.3</code>
 				  <para>
-					  Или, если сложить пипсы и проценты:
+					  Or, when adding pips and percent:
 				  </para>
-				  <code language="C#">// сложение пипсов и процентов
+				  <code language="C#">// addition of pips and percents
 var resultPipsPercents = pips + percent;
-// и приведением из пипсов в decimal
+// and casting to decimal
 var resultPipsPercentsDecimal = (decimal)resultPipsPercents;
 
 Console.WriteLine("pips + percent = " + resultPipsPercents);
 Console.WriteLine("(decimal)(pips + percent) = " + resultPipsPercentsDecimal);</code>
-				  <para>Вывод будет следующим:</para>
-				  <code>pips + percent = 39ш
-(decimal)(pips + percent) = 0,39</code>
+				  <para>The output will be as follows:</para>
+				  <code>pips + percent = 39s
+(decimal)(pips + percent) = 0.39</code>
 			  </content>
 		  </step>
       </steps>
@@ -143,7 +141,7 @@ Console.WriteLine("(decimal)(pips + percent) = " + resultPipsPercentsDecimal);</
     <nextSteps>
       <content>
         <para>
-			<link xlink:href="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92">Пользовательский интерфейс (GUI)</link>
+			<link xlink:href="aca28ee6-5c0c-47ee-a7e6-fe295e001be7">Currency converter</link>
 		</para>
       </content>
     </nextSteps>

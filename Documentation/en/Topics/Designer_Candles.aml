@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a89a0073-cb59-4a79-be90-463ea1683dad" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    <mediaLink>
+<image xlink:href="Designer_Candles_00"/>
+</mediaLink>
+<para>The cube is used to build candles for a specified instrument.
+</para>
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Instrument</legacyBold> – the instrument for which 
+  it is necessary to build candles with specified parameters.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Candles</legacyBold> - built candles.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Series</legacyBold> – the type of candle series 
+  and parameters for the specified type.</para></listItem>
+  <listItem><para><legacyBold>Only formed</legacyBold> - to pass to the output 
+  only fully formed candles or any change.</para></listItem>
+  <listItem><para><legacyBold>Volume profile</legacyBold> – to perform the building 
+  of the market profile (for cluster charts).</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="bc7fbe5c-9e8a-4c39-af1a-35c6c3c2a43c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

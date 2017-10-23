@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="fc9ff491-f74a-4f53-bdbf-172dee4ff0d9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+      <para>В появившимся окне выбрать нужный диапазон времени, базовый актив, 
+      добавить опционы по базовому активу и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <para>Если истории нет, но есть данные по спреду, можно рассчитать основные "греки" (Дельта, Гамма, Вега, Тета, Ро, 
+      Волатильность (подразумеваемую)), для этого необходимо их выбрать в поле <legacyBold>Вычислять греки</legacyBold>. 
+      </para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_option_desk" />
+      </mediaLink>
+      <para>Для просмотра <legacyBold>Улыбки волатильности</legacyBold>, необходимо 
+      перейти на вкладку <legacyBold>Улыбка волатильности</legacyBold>.</para>
+         <mediaLink>
+        <image placement="center" xlink:href="hydra_option_smile_of_volatility" />
+      </mediaLink>
+    <para>При помощи контекстного меню можно настроить параметры таблицы собственных транзакций: группировку строк, доступные колонки, формат отображения и др.</para>
+	 <mediaLink>
+       <image placement="center" xlink:href="hydra_export_context" />
+     </mediaLink>
+  
+    <para>Найденные транзакции можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+    </introduction>
+  </developerConceptualDocument>
+</topic>

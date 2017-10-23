@@ -20,6 +20,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -88,6 +89,26 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <summary>
+		/// Stop-order registration error event.
+		/// </summary>
+		public event Action<OrderFail> StopOrderRegisterFailed;
+
+		/// <summary>
+		/// Stop-order cancellation error event.
+		/// </summary>
+		public event Action<OrderFail> StopOrderCancelFailed;
+
+		/// <summary>
+		/// Stop-order received.
+		/// </summary>
+		public event Action<Order> NewStopOrder;
+
+		/// <summary>
+		/// Stop order state change event.
+		/// </summary>
+		public event Action<Order> StopOrderChanged;
+
+		/// <summary>
 		/// Security received.
 		/// </summary>
 		public event Action<Security> NewSecurity;
@@ -101,6 +122,21 @@ namespace StockSharp.Algo
 		/// Order cancellation errors event.
 		/// </summary>
 		public event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
+
+		/// <summary>
+		/// Mass order cancellation event.
+		/// </summary>
+		public event Action<long> MassOrderCanceled;
+
+		/// <summary>
+		/// Mass order cancellation errors event.
+		/// </summary>
+		public event Action<long, Exception> MassOrderCancelFailed;
+
+		/// <summary>
+		/// Failed order status request event.
+		/// </summary>
+		public event Action<long, Exception> OrderStatusFailed;
 
 		/// <summary>
 		/// Stop-order registration errors event.
@@ -248,29 +284,39 @@ namespace StockSharp.Algo
 		public event Action<IMessageAdapter, Exception> ConnectionErrorEx;
 
 		/// <summary>
-		/// Dats process error.
+		/// Data process error.
 		/// </summary>
 		public event Action<Exception> Error;
 
 		/// <summary>
-		/// Lookup result <see cref="IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)"/> received.
+		/// Lookup result <see cref="IConnector.LookupSecurities(Security)"/> received.
 		/// </summary>
-		public event Action<IEnumerable<Security>> LookupSecuritiesResult;
+		public event Action<Exception, IEnumerable<Security>> LookupSecuritiesResult;
 
 		/// <summary>
 		/// Lookup result <see cref="IConnector.LookupPortfolios"/> received.
 		/// </summary>
-		public event Action<IEnumerable<Portfolio>> LookupPortfoliosResult;
+		public event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
 
 		/// <summary>
 		/// Successful subscription market-data.
 		/// </summary>
-		public event Action<Security, MarketDataTypes> MarketDataSubscriptionSucceeded;
+		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <summary>
 		/// Error subscription market-data.
 		/// </summary>
-		public event Action<Security, MarketDataTypes, Exception> MarketDataSubscriptionFailed;
+		public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
+
+		/// <summary>
+		/// Successful unsubscription market-data.
+		/// </summary>
+		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
+
+		/// <summary>
+		/// Error unsubscription market-data.
+		/// </summary>
+		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
 
 		/// <summary>
 		/// Session changed.
@@ -291,6 +337,16 @@ namespace StockSharp.Algo
 		/// Connection timed-out.
 		/// </summary>
 		public event Action TimeOut;
+
+		/// <summary>
+		/// A new value for processing occurrence event.
+		/// </summary>
+		public event Action<CandleSeries, Candle> CandleSeriesProcessing;
+
+		/// <summary>
+		/// The series processing end event.
+		/// </summary>
+		public event Action<CandleSeries> CandleSeriesStopped;
 
 		private void RaiseNewMyTrade(MyTrade trade)
 		{
@@ -319,18 +375,30 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the event <see cref="NewStopOrders"/>.
 		/// </summary>
-		/// <param name="stopOrders">Stop orders that should be passed to the event.</param>
-		private void RaiseNewStopOrders(IEnumerable<Order> stopOrders)
+		/// <param name="stopOrder">Stop order that should be passed to the event.</param>
+		private void RaiseNewStopOrder(Order stopOrder)
 		{
-			NewStopOrders?.Invoke(stopOrders);
+			NewStopOrder?.Invoke(stopOrder);
+			NewStopOrders?.Invoke(new[] { stopOrder });
 		}
 
 		/// <summary>
 		/// To call the event <see cref="StopOrdersChanged"/>.
 		/// </summary>
-		/// <param name="stopOrders">Stop orders that should be passed to the event.</param>
+		/// <param name="stopOrder">Stop orders that should be passed to the event.</param>
+		private void RaiseStopOrderChanged(Order stopOrder)
+		{
+			StopOrderChanged?.Invoke(stopOrder);
+			StopOrdersChanged?.Invoke(new[] { stopOrder });
+		}
+
 		private void RaiseStopOrdersChanged(IEnumerable<Order> stopOrders)
 		{
+			foreach (var stopOrder in stopOrders)
+			{
+				StopOrderChanged?.Invoke(stopOrder);
+			}
+
 			StopOrdersChanged?.Invoke(stopOrders);
 		}
 
@@ -349,19 +417,36 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the event <see cref="StopOrdersRegisterFailed"/>.
 		/// </summary>
-		/// <param name="fails">Error information that should be passed to the event.</param>
-		private void RaiseStopOrdersRegisterFailed(IEnumerable<OrderFail> fails)
+		/// <param name="fail">Error information that should be passed to the event.</param>
+		private void RaiseStopOrdersRegisterFailed(OrderFail fail)
 		{
-			StopOrdersRegisterFailed?.Invoke(fails);
+			StopOrderRegisterFailed?.Invoke(fail);
+			StopOrdersRegisterFailed?.Invoke(new[] { fail });
 		}
 
 		/// <summary>
 		/// To call the event <see cref="StopOrdersCancelFailed"/>.
 		/// </summary>
-		/// <param name="fails">Error information that should be passed to the event.</param>
-		private void RaiseStopOrdersCancelFailed(IEnumerable<OrderFail> fails)
+		/// <param name="fail">Error information that should be passed to the event.</param>
+		private void RaiseStopOrdersCancelFailed(OrderFail fail)
 		{
-			StopOrdersCancelFailed?.Invoke(fails);
+			StopOrderCancelFailed?.Invoke(fail);
+			StopOrdersCancelFailed?.Invoke(new[] { fail });
+		}
+
+		private void RaiseMassOrderCanceled(long transactionId)
+		{
+			MassOrderCanceled?.Invoke(transactionId);
+		}
+
+		private void RaiseMassOrderCancelFailed(long transactionId, Exception error)
+		{
+			MassOrderCancelFailed?.Invoke(transactionId, error);
+		}
+
+		private void RaiseOrderStatusFailed(long transactionId, Exception error)
+		{
+			OrderStatusFailed?.Invoke(transactionId, error);
 		}
 
 		private void RaiseNewSecurity(Security security)
@@ -430,7 +515,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.NewNews"/>.
+		/// To call the event <see cref="NewNews"/>.
 		/// </summary>
 		/// <param name="news">News.</param>
 		private void RaiseNewNews(News news)
@@ -439,7 +524,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.NewsChanged"/>.
+		/// To call the event <see cref="NewsChanged"/>.
 		/// </summary>
 		/// <param name="news">News.</param>
 		private void RaiseNewsChanged(News news)
@@ -521,7 +606,7 @@ namespace StockSharp.Algo
 		/// To call the event <see cref="Connector.Error"/>.
 		/// </summary>
 		/// <param name="exception">Data processing error.</param>
-		private void RaiseError(Exception exception)
+		protected void RaiseError(Exception exception)
 		{
 			if (exception == null)
 				throw new ArgumentNullException(nameof(exception));
@@ -533,7 +618,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.MarketTimeChanged"/>.
+		/// To call the event <see cref="MarketTimeChanged"/>.
 		/// </summary>
 		/// <param name="diff">The difference in the time since the last call of the event. The first time the event passes the <see cref="TimeSpan.Zero"/> value.</param>
 		private void RaiseMarketTimeChanged(TimeSpan diff)
@@ -542,39 +627,52 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.LookupSecuritiesResult"/>.
+		/// To call the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
+		/// <param name="error">An error of security lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="securities">Found instruments.</param>
-		private void RaiseLookupSecuritiesResult(IEnumerable<Security> securities)
+		private void RaiseLookupSecuritiesResult(Exception error, IEnumerable<Security> securities)
 		{
-			LookupSecuritiesResult?.Invoke(securities);
+			LookupSecuritiesResult?.Invoke(error, securities);
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.LookupPortfoliosResult"/>.
+		/// To call the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
+		/// <param name="error">An error of portfolio lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="portfolios">Found portfolios.</param>
-		private void RaiseLookupPortfoliosResult(IEnumerable<Portfolio> portfolios)
+		private void RaiseLookupPortfoliosResult(Exception error, IEnumerable<Portfolio> portfolios)
 		{
-			LookupPortfoliosResult?.Invoke(portfolios);
+			LookupPortfoliosResult?.Invoke(error, portfolios);
 		}
 
 		private void RaiseMarketDataSubscriptionSucceeded(Security security, MarketDataMessage message)
 		{
-			var msg = LocalizedStrings.Str690Params.Put(security.Id, message.DataType);
+			var msg = LocalizedStrings.Str690Params.Put(security.Id,
+				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
 
 			if (message.From != null && message.To != null)
 				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
 
 			this.AddInfoLog(msg + ".");
 
-			MarketDataSubscriptionSucceeded?.Invoke(security, message.DataType);
+			MarketDataSubscriptionSucceeded?.Invoke(security, message);
 		}
 
-		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataTypes dataType, Exception error)
+		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
 		{
-			this.AddErrorLog(LocalizedStrings.Str634Params, security.Id, dataType, error);
-			MarketDataSubscriptionFailed?.Invoke(security, dataType, error);
+			this.AddErrorLog(LocalizedStrings.Str634Params, security.Id, message.DataType, message.Error);
+			MarketDataSubscriptionFailed?.Invoke(security, message, error);
+		}
+
+		private void RaiseMarketDataUnSubscriptionSucceeded(Security security, MarketDataMessage message)
+		{
+			MarketDataUnSubscriptionSucceeded?.Invoke(security, message);
+		}
+
+		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
+		{
+			MarketDataUnSubscriptionFailed?.Invoke(security, message, error);
 		}
 
 		/// <summary>
@@ -599,6 +697,16 @@ namespace StockSharp.Algo
 		private void RaiseTimeOut()
 		{
 			TimeOut?.Invoke();
+		}
+
+		private void RaiseCandleSeriesProcessing(CandleSeries series, Candle candle)
+		{
+			CandleSeriesProcessing?.Invoke(series, candle);
+		}
+
+		private void RaiseCandleSeriesStopped(CandleSeries series)
+		{
+			CandleSeriesStopped?.Invoke(series);
 		}
 	}
 }

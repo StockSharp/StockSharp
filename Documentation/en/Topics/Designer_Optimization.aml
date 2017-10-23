@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b162bfe7-9e25-4f36-92b0-00872dca443f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To switch to the strategy optimization mode, click the 
+<legacyBold>Optimization</legacyBold> button on the 
+<legacyBold>Emulation</legacyBold> tab.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Optimization_00"/>
+</mediaLink>
+<para>A tab will open in the workspace with the name Optimization + Strategy
+ Name. The Optimization tab is separated into three areas, 
+ <legacyBold>Properties</legacyBold>, <legacyBold>Parameters for optimization</legacyBold>, 
+ <legacyBold>Optimization result</legacyBold>:
+</para>
+
+<list class="bullet">
+  <listItem><para>In the <legacyBold>Properties</legacyBold> area, you can change 
+  emulation settings, basic scheme parameters.</para></listItem>
+  <listItem><para>The <legacyBold>Optimization result</legacyBold> area is a table, 
+  were each line is a result of strategy testing with unique parameters. Also, 
+  in the <legacyBold>Optimization result</legacyBold> area there is a 
+  progress-bar, showing optimization progress, elapsed time and calculated time 
+  to the end of optimization.</para></listItem>
+  <listItem><para>The <legacyBold>Parameters for optimization</legacyBold> consists of 
+  two tables. The upper table is a list of strategy parameters, which could be 
+  optimized. The lower table adjusts the optimization range and optimization 
+  increment for the parameter, selected from the upper table.</para></listItem>
+</list>
+
+<para>Further, optimization will be considered using the SMA strategy as an 
+example. If in the SMA strategy, without preliminary preparation, click the 
+<legacyBold>Optimization</legacyBold> button, there will be only one 
+optimization parameter - Volume. In order to add the moving average periods as 
+optimization parameters it is necessary in the SMA Indicator Cube check the 
+<legacyBold>Parameter</legacyBold> check box:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Optimization_01"/>
+</mediaLink>
+<para>After checking the <legacyBold>Parameter</legacyBold> check box in the 
+required units and clicking the <legacyBold>Optimization</legacyBold> button, 
+the <legacyBold>SMA Optimization</legacyBold> tab is opened:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Optimization_02"/>
+</mediaLink>
+<para>In the example, one optimization parameter is taken - the length of short 
+moving average, Short SMA, from 10 to 20 in increments of 1. As a result, we 
+get 11 SMA strategies with different parameters.</para>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

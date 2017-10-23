@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ec56221a-92a0-45f4-9fec-e6e7edc7c264" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Создать хранилище исторических данных можно, нажав на 
+кнопку <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_00"/></mediaLinkInline> вкладки 
+<legacyBold>Маркет-данные</legacyBold>. Нажав на 
+кнопку <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_01"/></mediaLinkInline> , можно 
+изменить параметры текущего хранилища . Нажав на 
+кнопку <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_02"/></mediaLinkInline> , можно 
+удалить из списка хранилищ текущее хранилище.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_03"/>
+</mediaLink>
+<para>Хранилище исторических данных может быть локальное или удаленное.</para>
+ 
+<para>Локальное хранилище - это когда все данные хранятся на локальном компьютере. 
+Для задания локального хранилища достаточно задать путь до папки где хранятся данные.</para>
+
+<para>Удаленное хранилище может быть расположено на удаленном компьютере. 
+Для задания удаленного хранилища необходимо задать адрес удаленного хранилища, логин и пароль при необходимости.
+</para>
+
+<para>Воспроизвести удаленное хранилище на локальной машине можно с 
+помощью программы <token>hydra</token> (кодовое название Hydra), предназначенной 
+для автоматической загрузки маркет-данных (инструменты, свечи, тиковые сделки и стаканы и др.) из различных источников, и хранения 
+их в локальном хранилище. Для этого <token>hydra</token> необходимо перевести в серверный 
+режим, данный функционал доступен в расширенной лицензии (<link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5" />).</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_04"/>
+</mediaLink>
+<para>После чего в <token>designer</token>, нажав на 
+кнопку <mediaLinkInline><image xlink:href="Designer_Creating_a_repository_of_historical_data_00"/></mediaLinkInline> , добавить 
+новое хранилище. В настройках хранилища в поле адрес указываем «net.tcp://localhost:8000». Нажать ОК. 
+При использовании <token>hydra</token> в качестве удаленного хранилища не стоит забывать, что <token>hydra</token> должна быть 
+запущена и настроена соответствующим образом.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_05"/>
+</mediaLink>
+   
+<para>После добавления нового хранилища, его можно выбрать в выпадающем списке <legacyBold>Хранилище</legacyBold>.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_repository_of_historical_data_06"/>
+</mediaLink>
+
+<para> Также необходимо выбрать формат файлов хранилища BIN или CSV. 
+ Данные могут сохраняться в двух форматах:
+ в специальном бинарном формате BIN, что обеспечивает максимальную степень сжатия,
+ или в текстовом формате CSV, что удобно при анализе данных в других программах. 
+ BIN формат предпочтителен, когда есть необходимость экономить место на диске. 
+ CSV формат предпочтителен, когда есть необходимость корректировать данные вручную. 
+ CSV легко редактируется стандартным блокнотом, MS Excel и др..</para>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="d0a1bb26-7a29-4607-992c-4f539632c2eb" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

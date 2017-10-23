@@ -12,13 +12,13 @@
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
-      <para>На текущий момент <token>stocksharp</token> поддерживает следующие коннекторы Bitcoins:</para>
+      <para>Currently, <token>stocksharp</token> supports the following bitcoin (or cryptocurrency) connectors:</para>
 		<list class="ordered">
   			<listItem>
-  					<codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> для <token>btce</token>
+  					<codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> for <token>btce</token>
   			</listItem>
   			<listItem>
-  					<codeEntityReference>T:StockSharp.BitStamp.BitStampTrader</codeEntityReference> для <token>bitstamp</token>
+  					<codeEntityReference>T:StockSharp.BitStamp.BitStampTrader</codeEntityReference> for <token>bitstamp</token>
   			</listItem>
 		</list>
 

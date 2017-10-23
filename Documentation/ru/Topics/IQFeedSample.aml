@@ -42,13 +42,11 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
 });
 
-Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
-Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
+Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
+Trader.NewNews += news => _newsWindow.NewsGrid.News.Add(news);
 
-Trader.NewTrades += trades => this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
-
-Trader.NewNews += news => this.GuiAsync(() => _newsWindow.News.Add(news));
 			</code>
 		</listItem>
 		<listItem>
@@ -64,10 +62,10 @@ Trader.RegisterNews();
 			</code>
  	  		<para>После этого можно ожидать срабатывания событий:</para>
  	  		<list class="ordered">
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.).</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.SecurityChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.).</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.MarketDepthChanged</codeEntityReference> – 
  	  			изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> – 
  	  			новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</listItem>
  	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> – поступление новости.</listItem>
  	  		</list>
@@ -76,13 +74,16 @@ Trader.RegisterNews();
  	  		<para>Поиск инструментов:</para>
  	  		<mediaLink><image placement="center" xlink:href="IQFeedFindSecurity"/></mediaLink>
  	  		<code language="C#">
-var criteria = new Security
+private void FindClick(object sender, RoutedEventArgs e)
 {
-	Type = (SecurityTypes)SecType.SelectedValue,
-	Code = SecCode.Text,
-};
+	var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
 
-MainWindow.Instance.Trader.LookupSecurities(criteria);
+	if (!wnd.ShowModal(this))
+		return;
+
+	MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
+}
+
 			</code>
 		</listItem>
 		<listItem>
@@ -92,42 +93,18 @@ MainWindow.Instance.Trader.LookupSecurities(criteria);
  	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:
  	  		</para>
  	  		<code language="C#">
-private void TradesClick(object sender, RoutedEventArgs e)
+private void Level1Click(object sender, RoutedEventArgs e)
 {
-	var security = SelectedSecurity;
-	var trader = MainWindow.Instance.Trader;
+	TryInitialize();
 
-	if (_tradesSecurities.Contains(security))
+	var window = _level1Windows.SafeAdd(SelectedSecurity, security =>
 	{
-      	// останавливаем обновления по инструменту
-		trader.UnRegisterSecurity(security);
-		trader.UnRegisterTrades(security);
+		// create level1 window
+		var wnd = new Level1Window { Title = security.Code + " level1" };
 
-		_tradesSecurities.Remove(security);
-	}
-	else
-	{
-		// начинаем получать обновления по инструменту
-		trader.RegisterSecurity(security);
-		trader.RegisterTrades(security);
+		// subscribe on level1
+		MainWindow.Instance.Trader.RegisterSecurity(security);
 
-		_tradesSecurities.Add(security);
-	}
-}
-			</code>
-		</listItem>
-		<listItem>
- 	  		<para>Для запроса обновлений по стаканам необходимо воспользоваться методом <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
- 	  		<code language="C#">
-private void QuotesClick(object sender, RoutedEventArgs e)
-{
-	var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
-	{
-		// начинаем получать котировки стакана
-		MainWindow.Instance.Trader.RegisterMarketDepth(security);
-
-		// создаем окно со стаканом
-		var wnd = new QuotesWindow { Title = security.Code + " котировки" };
 		wnd.MakeHideable();
 		return wnd;
 	});
@@ -137,6 +114,35 @@ private void QuotesClick(object sender, RoutedEventArgs e)
 	else
 		window.Show();
 }
+
+			</code>
+		</listItem>
+		<listItem>
+ 	  		<para>Для запроса обновлений по стаканам необходимо воспользоваться методом <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+ 	  		<code language="C#">
+private void DepthClick(object sender, RoutedEventArgs e)
+{
+	var trader = MainWindow.Instance.Trader;
+
+	var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
+	{
+		// subscribe on order book flow
+		trader.RegisterMarketDepth(security);
+
+		// create order book window
+		var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
+		wnd.MakeHideable();
+		return wnd;
+	});
+
+	if (window.Visibility == Visibility.Visible)
+		window.Hide();
+	else
+		window.Show();
+
+	TryInitialize();
+}
+
 			</code>
 		</listItem>
 		
@@ -163,17 +169,27 @@ private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
  	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)</codeEntityReference>:</para>
  	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryTrades"/></mediaLink>
   	  		<code language="C#">
-Trades.Clear();
-Trades.AddRange(MainWindow.Instance.Trader.GetTrades(SecurityPicker.SelectedSecurity, (DateTime)DatePicker.SelectedDate));
+var ticks = MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out isSuccess);
+
+this.GuiAsync(() =>
+{
+	BusyIndicator.IsBusy = false;
+
+	L1Grid.Messages.Clear();
+	L1Grid.Messages.AddRange(ticks);
+});
 			</code>
 		</listItem>
 		<listItem>
- 	  		<para>Для получения истории свечек по инструменту за указанный период необходимо воспользоваться методом 
+ 	  		<para>Для получения истории свечей по инструменту за указанный период необходимо воспользоваться методом 
  	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>:</para>
  	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryCandles"/></mediaLink>
   	  		<code language="C#">
-Candles.Clear();
-Candles.AddRange(MainWindow.Instance.Trader.GetCandles(SecurityPicker.SelectedSecurity, (TimeSpan)TimeFramePicker.SelectedValue, (DateTimeOffset)DateFromPicker.SelectedDate, (DateTimeOffset)DateToPicker.SelectedDate));
+var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandle), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
+Chart.Reset(new[] { _candlesElem });
+foreach (var message in messages)
+	Chart.Draw(_candlesElem, message.ToCandle(_security));
+
 			</code>
 		</listItem>
       </list>

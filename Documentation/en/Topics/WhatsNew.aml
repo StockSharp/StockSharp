@@ -2,11 +2,11 @@
 <topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<introduction>
-			<para>Список изменений версий <token>stocksharp</token>:</para>
+			<para>Change log <token>stocksharp</token>:</para>
 			
 			<para>
 				<externalLink>
-					<linkText>StockSharp v4.2.0 и старше</linkText>
+					<linkText>StockSharp v4.2.0 till latest (on English)</linkText>
 					<linkUri>https://github.com/stocksharp/stocksharp/blob/master/_ReleaseNotes/CHANGE_LOG_API.md</linkUri>
 				</externalLink>
 			</para>

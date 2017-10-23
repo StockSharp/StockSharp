@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b49f617f-7425-4c1d-bb45-c347f55d1d1e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Hedging_00"/>
+</mediaLink>
+<para>The cube is used to protect the position on option strategies.</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Instrument</legacyBold> – the instrument, the 
+  underlying asset.</para></listItem>
+   <listItem><para><legacyBold>Volume</legacyBold> - the numerical value of the 
+   volume.</para></listItem>
+   <listItem><para><legacyBold>Position by underlying asset</legacyBold> – the 
+   position by the underlying asset.</para></listItem>
+
+  <listItem><para><legacyBold>Flag</legacyBold> – the signal (flag) that initiates 
+  the hedging process.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Order</legacyBold> – the registered order that can 
+  be used to obtain trades on it by using the Trades element by the order and 
+  displaying it on the chart using the Chart panel cube</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Hedging type</legacyBold> - the hedging type, it 
+  can take the values of Delta, Gamma, Vega, Theta, Po.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b85d4d51-2824-44e5-aad1-0bde76d409ae" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="538b6ea4-bf0f-4833-9fb6-a3b1f0a59039" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Moving_applications_00"/>
+</mediaLink>
+<para>The cube is used to change the order by the instrument.</para>
+    
+    <definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Order</legacyBold> - the order that will be changed.</para></listItem>
+  <listItem><para><legacyBold>Price</legacyBold> - the numerical value of the new price.</para></listItem>
+  <listItem><para><legacyBold>Volume</legacyBold> - the numerical value of the new volume.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Order</legacyBold> - the modified order that can 
+  be used to obtain trades on it by using the <legacyBold>Trades</legacyBold> 
+  element on the order and displaying it on the chart using 
+  the <legacyBold>Chart panel</legacyBold> cube.</para></listItem>
+</list>
+  </definition>
+  
+</definitionTable>
+
+</introduction>
+    <relatedTopics>
+<link xlink:href="d24ceb19-8e17-48fa-88c4-be64efa3a93e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

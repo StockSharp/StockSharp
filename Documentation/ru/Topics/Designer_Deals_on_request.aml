@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d24ceb19-8e17-48fa-88c4-be64efa3a93e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Deals_on_request_00"/>
+</mediaLink>
+<para>Кубик используется для получения сделок по конкретной заявке.</para>
+
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+<listItem><para><legacyBold>Заявка</legacyBold> – заявка, по которой нужно получить сделки. 
+Может быть получена из элемента <legacyBold>Открытие позиции</legacyBold>.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Сделки</legacyBold> – сделки, возникающие по переданной заявке. 
+  Могут использоваться как для отображения на графике с помощью элемента
+<legacyBold>Панель графика</legacyBold>, так и для защиты позиции с помощью 
+элемента <legacyBold>Защита позиции</legacyBold>.</para></listItem>
+</list>
+  </definition>
+
+</definitionTable>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b596ee27-a887-4814-9ad7-56cd62cec38f" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

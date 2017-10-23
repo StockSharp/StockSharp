@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5327010f-dc4c-4e6c-8812-e02e6e36a423" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <introduction>
+     <para>When you create your own <legacyBold>Source code</legacyBold> cube, 
+     you can use other C# libraries, including your own, along with the 
+     <token>stocksharpapi</token> libraries.</para>
+     <para>Clicking the <legacyBold>References</legacyBold> button of the
+     <legacyBold>Source code</legacyBold> tab opens the <legacyBold>Extra references</legacyBold> 
+     window, where you can add or remove the Dll library.</para>
+  <mediaLink>
+<image placement="center" xlink:href="Designer_Add_Dll_Lib"/>
+</mediaLink>
+    </introduction>
+   
+    <relatedTopics>
+      
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

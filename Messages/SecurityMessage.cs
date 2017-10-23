@@ -109,6 +109,15 @@ namespace StockSharp.Messages
 		public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
+		/// Type in ISO 10962 standard.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CfiCodeKey)]
+		[DescriptionLoc(LocalizedStrings.CfiCodeDescKey)]
+		[MainCategory]
+		public string CfiCode { get; set; }
+
+		/// <summary>
 		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		[DataMember]
@@ -196,7 +205,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Initialize <see cref="SecurityMessage"/>.
+		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>
 		protected SecurityMessage(MessageTypes type)
@@ -218,8 +227,9 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">The object, which copied information.</param>
-		public void CopyTo(SecurityMessage destination)
+		/// <param name="destination">The object, to which copied information.</param>
+		/// <param name="copyOriginalTransactionId">Copy <see cref="OriginalTransactionId"/>.</param>
+		public void CopyTo(SecurityMessage destination, bool copyOriginalTransactionId = true)
 		{
 			if (destination == null)
 				throw new ArgumentNullException(nameof(destination));
@@ -229,11 +239,11 @@ namespace StockSharp.Messages
 			destination.ShortName = ShortName;
 			destination.Currency = Currency;
 			destination.ExpiryDate = ExpiryDate;
-			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.OptionType = OptionType;
 			destination.PriceStep = PriceStep;
 			destination.Decimals = Decimals;
 			destination.SecurityType = SecurityType;
+			destination.CfiCode = CfiCode;
 			destination.SettlementDate = SettlementDate;
 			destination.Strike = Strike;
 			destination.UnderlyingSecurityCode = UnderlyingSecurityCode;
@@ -242,6 +252,9 @@ namespace StockSharp.Messages
 			destination.Class = Class;
 			destination.BinaryOptionType = BinaryOptionType;
 			destination.LocalTime = LocalTime;
+
+			if (copyOriginalTransactionId)
+				destination.OriginalTransactionId = OriginalTransactionId;
 		}
 
 		/// <summary>

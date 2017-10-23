@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="9f19e3b0-bbed-444e-a049-ba107d501664" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>There is a mechanism to attach to running processes using the Visual Studio 
+debugger in Visual Studio. The most detailed description of the Visual Studio 
+debugger is in the <token>MSDN_VS_Attach_process</token> 
+documentation. Further, debugging will be considered using the example of a cube 
+created in <link xlink:href="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" /> section.</para>
+
+<para>1.	In order to attach to the process and start debugging the DLL cube, 
+it is necessary that it be loaded into memory. Loading the DLL into memory 
+occurs after selecting the strategy name in the <legacyBold>Strategy type name</legacyBold> 
+field. After loading the DLL into memory, it will be possible to attach it to 
+the process.</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_Creating_a_DLL_cube_in_Visual_Studio_03"/>
+</mediaLink>
+<para>2.	In Visual Studio, select 
+<legacyBold>Debug -> Attach to Process</legacyBold> item.</para>
+  <mediaLink>
+<image placement="center" xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_00"/>
+</mediaLink>
+<para>3.	Find the <legacyBold>Designer.exe</legacyBold> process that you want 
+to attach in the <legacyBold>Available Processes</legacyBold> list of 
+the <legacyBold>Attach to Process</legacyBold> dialog box.</para>
+
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_01"/>
+</mediaLink>
+
+<para>If the process is running from a different user account, you should select 
+the <legacyBold>Show processes for all users</legacyBold> check box.</para>
+<para>4.	It is important that in the <legacyBold>Attach</legacyBold> window 
+the code type that you need to debug was specified. The default setting 
+<legacyBold>Auto</legacyBold> tries to determine the code type to be debugged, 
+but does not always correctly determine the code type. To manually set the code 
+type, you should do the following:</para>
+
+<list class="bullet">
+  <listItem><para>Click <legacyBold>Select</legacyBold> in the 
+  <legacyBold>Attach</legacyBold> field.</para></listItem>
+  <listItem><para>In the <legacyBold>Select code type</legacyBold> dialog box, 
+  click the <legacyBold>Debug these code</legacyBold> types option and select 
+  the types for debugging.</para></listItem>
+  <listItem><para>Click the <legacyBold>OK</legacyBold> button.</para></listItem>
+</list>
+
+
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_02"/>
+</mediaLink>
+<para>5.	Click the <legacyBold>Attach</legacyBold> button.</para>
+<para>6.	In Visual Studio, you need to set breakpoints in code. If the 
+breakpoints are red and filled with red 
+<mediaLinkInline><image xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_03"/></mediaLinkInline> 
+(and the Studio is in debug mode) then it means that correct version of dll was 
+loaded. And if the breakpoints are red and filled with white 
+<mediaLinkInline><image xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_04"/></mediaLinkInline> 
+(and Studio is in debug mode), then it means that wrong version of dll was loaded.</para>
+<para>7.	In the example, the breakpoint is in the first line of the 
+<legacyBold>public void ProcessCandle(Candle candle</legacyBold>) method. When 
+you run the strategy in <token>designer</token>, as soon as the candle values 
+start to be passed to the DLL cube, Visual Studio stops at the point where the 
+breakpoint is set. Next, you can trace the code progress:</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Debugging_DLL_cube_using_Visual_Studio_05"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="559d140c-5b71-4582-a65e-ca3cad7a66e8" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

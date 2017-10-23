@@ -28,7 +28,7 @@ namespace StockSharp.Community
 		/// Initializes a new instance of the <see cref="ProfileClient"/>.
 		/// </summary>
 		public ProfileClient()
-			: this("http://stocksharp.com/services/registrationservice.svc".To<Uri>())
+			: this("http://stocksharp.com/services/profileservice.svc".To<Uri>())
 		{
 		}
 
@@ -44,7 +44,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To start the registration.
 		/// </summary>
-		/// <param name="profile">The profile Information.</param>
+		/// <param name="profile">The profile information.</param>
 		public void CreateProfile(Profile profile)
 		{
 			ValidateError(Invoke(f => f.CreateProfile(profile)));
@@ -54,49 +54,45 @@ namespace StockSharp.Community
 		/// To send an e-mail message.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
-		public void SendEmail(string email, string login)
+		public void SendEmail(string email)
 		{
-			ValidateError(Invoke(f => f.SendEmail(email, login)));
+			ValidateError(Invoke(f => f.SendEmail(email)));
 		}
 
 		/// <summary>
 		/// To confirm the e-mail address.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="emailCode">The e-mail confirmation code.</param>
-		public void ValidateEmail(string email, string login, string emailCode)
+		public void ValidateEmail(string email, string emailCode)
 		{
-			ValidateError(Invoke(f => f.ValidateEmail(email, login, emailCode)));
+			ValidateError(Invoke(f => f.ValidateEmail(email, emailCode)));
 		}
 
 		/// <summary>
 		/// To send SMS.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="phone">Phone.</param>
-		public void SendSms(string email, string login, string phone)
+		public void SendSms(string email, string phone)
 		{
-			ValidateError(Invoke(f => f.SendSms(email, login, phone)));
+			ValidateError(Invoke(f => f.SendSms(email, phone)));
 		}
 
 		/// <summary>
 		/// To confirm the phone number.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="smsCode">SMS verification code.</param>
-		public void ValidatePhone(string email, string login, string smsCode)
+		public void ValidatePhone(string email, string smsCode)
 		{
-			ValidateError(Invoke(f => f.ValidatePhone(email, login, smsCode)));
+			ValidateError(Invoke(f => f.ValidatePhone(email, smsCode)));
 		}
 
 		/// <summary>
 		/// To update profile information.
 		/// </summary>
-		/// <param name="profile">The profile Information.</param>
+		/// <param name="profile">The profile information.</param>
 		public void UpdateProfile(Profile profile)
 		{
 			ValidateError(Invoke(f => f.UpdateProfile(SessionId, profile)));
@@ -105,29 +101,20 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To get profile information.
 		/// </summary>
-		/// <returns>The profile Information.</returns>
+		/// <returns>The profile information.</returns>
 		public Profile GetProfile()
 		{
 			return Invoke(f => f.GetProfile(SessionId));
 		}
 
 		/// <summary>
-		/// To update the profile photo.
+		/// To get user information.
 		/// </summary>
-		/// <param name="fileName">The file name.</param>
-		/// <param name="body">The contents of the image file.</param>
-		public void UpdateAvatar(string fileName, byte[] body)
+		/// <param name="userId">User ID.</param>
+		/// <returns>The user information.</returns>
+		public Profile GetUserProfile(long userId)
 		{
-			ValidateError(Invoke(f => f.UpdateAvatar(SessionId, fileName, body)));
-		}
-
-		/// <summary>
-		/// To get a profile photo.
-		/// </summary>
-		/// <returns>The contents of the image file.</returns>
-		public byte[] GetAvatar()
-		{
-			return Invoke(f => f.GetAvatar(SessionId));
+			return Invoke(f => f.GetUserProfile(userId));
 		}
 
 		private static void ValidateError(byte errorCode)

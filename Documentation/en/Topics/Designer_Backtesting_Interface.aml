@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="18a5214f-1c03-445a-ab96-d29c91555af4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>To run the test on the history, you shall select a strategy, the scheme 
+of which will be tested on the history. The strategy is selected on 
+the <token>SchemeDis</token> panel in the strategy folder, by double clicking on 
+the strategy of interest. When you select a strategy for the workspace, a new 
+tab with a strategy appears, when you switch to this tab, the 
+<legacyBold>Emulation</legacyBold> tab will automatically open in the Ribbon.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Interface_Backtesting_00"/>
+</mediaLink>
+
+<para>On the <legacyBold>Emulation</legacyBold> tab, you can change the strategy 
+name and give it a brief description.</para>
+<para>To run the test on the history, on the <legacyBold>Emulation tab</legacyBold> 
+specify the path to the historical data in the Market Data field and set the 
+testing period. The strategy for testing is started by clicking the 
+<legacyBold>Start button</legacyBold><mediaLinkInline> 
+<image xlink:href="Designer_Interface_Backtesting_01"/></mediaLinkInline>. 
+After starting the strategy for testing, the <legacyBold>Pause</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Interface_Backtesting_02"/></mediaLinkInline> 
+button, suspending the testing and the <legacyBold>Stop</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Interface_Backtesting_03"/></mediaLinkInline> 
+button, completely stopping the testing, become active. When editing the strategy, 
+the <legacyBold>Undo(Ctrl+Z)</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Interface_Backtesting_04"/></mediaLinkInline>,
+canceling the last action, <legacyBold>Redo(Ctrl+Y)</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Interface_Backtesting_05"/></mediaLinkInline>, 
+returning undo, <legacyBold>Refresh(Ctrl+R)</legacyBold> 
+<mediaLinkInline><image xlink:href="Designer_Interface_Backtesting_06"/></mediaLinkInline>, 
+completely updating the scheme, buttons will be useful. Also, from the 
+<legacyBold>Emulation tab</legacyBold> you can use the <legacyBold>Debugger</legacyBold>
+(<link xlink:href="667ad9ff-6afe-48e2-9c53-1850d0533a77" />) 
+or run strategy <legacyBold>Optimization</legacyBold>.</para>
+
+<para>The selected strategy tab contains the following panels by default:</para>
+<list class="bullet">
+  <listItem><para>The <legacyBold>Scheme</legacyBold> panel, in which the main 
+  working process on the strategy and its components design is performed, by 
+  combining cubes and connecting lines. The Scheme is described in detail in the 
+  <link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" /> section.</para></listItem>
+  <listItem><para>Panel of information elements, containing the 
+  <legacyBold>Chart</legacyBold>, <legacyBold>Orders</legacyBold>, <legacyBold>Trades</legacyBold>, 
+  <legacyBold>Statistics</legacyBold> and other components. You can add required 
+  component, selecting it on the <legacyBold>Emulation</legacyBold> tab in the 
+  <legacyBold>Components</legacyBold> group.</para></listItem>
+  <listItem><para>The <legacyBold>Properties</legacyBold> panel by default is 
+  fold up on the right side in the strategy tab. On the <legacyBold>Properties</legacyBold> 
+  panel, you  can arrange the <legacyBold>Emulation</legacyBold> general settings. 
+  For example, the <legacyBold>Market-data storage format</legacyBold> can be set 
+  to <legacyBold>BIN</legacyBold> or <legacyBold>CSV</legacyBold>, depending on 
+  the file format of the selected storage. Data type Ticks or Candles. If Ticks 
+  is selected, candles will be formed from the 
+  <link xlink:href="31a208d0-d543-47aa-8008-389c07e1e8d4" /> ticks.</para></listItem>
+</list>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="31a208d0-d543-47aa-8008-389c07e1e8d4" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

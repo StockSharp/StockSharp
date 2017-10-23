@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+      	<codeEntityReference>T:StockSharp.Xaml.OrderWindow</codeEntityReference> is the window for creating an order.
+      </para>
+      <para>
+       <legacyBold>Main properties</legacyBold>
+       </para>
+      
+		<list class="bullet">
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.OrderWindow.Portfolios</codeEntityReference> - the list of portfolios.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.OrderWindow.MarketDataProvider</codeEntityReference> - the provider of market data.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.OrderWindow.SecurityProvider</codeEntityReference> - the provider of information about instruments.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.OrderWindow.Order</codeEntityReference> - the created order.</para>
+  			</listItem>
+		</list>
+		
+	  <para>
+Below is the appearance of the component, as well as code snippets with its use. The code example is taken from <legacyItalic>Samples/OpenECry/SampleOEC</legacyItalic>.
+      </para>
+      
+      <mediaLink><image placement="left" xlink:href="GUI_OrderWindow" /></mediaLink>
+      
+              <code title="C#" language="C#">
+              		<![CDATA[
+private void NewOrderClick(object sender, RoutedEventArgs e)
+{
+	var newOrder = new OrderWindow
+	{
+		Order = new Order { Security = SelectedSecurity },
+		SecurityProvider = Trader,
+		MarketDataProvider = Trader,
+		Portfolios = new PortfolioDataSource(Trader),
+	};
+
+	if (newOrder.ShowModal(this))
+		Trader.RegisterOrder(newOrder.Order);
+}
+              		
+	  				]]>
+             </code>
+      
+      
+      
+      
+    </introduction>
+  </developerConceptualDocument>
+</topic>

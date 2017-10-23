@@ -25,7 +25,7 @@
 		<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Grid.Row="2" Grid.Column="0" Click="StartBtnClick" />
 		<ProgressBar x:Name="TestingProcess" Grid.Column="1" Grid.Row="2" />
 
-        <TabControl Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" >
+        <TabControl Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" >
             <TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
                 <charting:EquityCurveChart x:Name="Curve" />
             </TabItem>

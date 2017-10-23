@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>Компонент <codeEntityReference>T:StockSharp.Xaml.SecurityCreateWindow</codeEntityReference> - это окно для создания и редактирования инструмента. Компонент состоит из двух основных элементов:
-      специального тектового поля <codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> и сетки редактирования свойств 
+      специального текстового поля <codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> и сетки редактирования свойств 
       <codeEntityReference>T:StockSharp.Xaml.PropertyGrid.PropertyGridEx</codeEntityReference>. Получить доступ к созданному (отредактированному) инструменту
       можно при помощи свойства <codeEntityReference>P:StockSharp.Xaml.SecurityCreateWindow.Security</codeEntityReference>.
       </para>

@@ -27,36 +27,31 @@ public class SimpleMovingAverage : LengthIndicator<decimal>
 	/// <summary>
 	/// Создать <see cref="SimpleMovingAverage"/>.
 	/// </summary>
-	public SimpleMovingAverage()
-		: base(typeof(decimal))
-	{
-	}
-
+    public SimpleMovingAverage()
+    {
+    	Length = 32;
+    }
 	/// <summary>
 	/// Обработать входное значение.
 	/// </summary>
 	/// <param name="input">Входное значение.</param>
 	/// <returns>Результирующее значение.</returns>
-	public override decimal OnProcess(IIndicatorValue input)
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var lastValue = LastValue;
 		var newValue = input.GetValue<decimal>();
-
-		// добавляем новое начало
-		lastValue += newValue / Length;
-
-		// если буффер стал достаточно большим (стал больше длины)
-		if (IsFormed)
+		if (input.IsFinal)
 		{
-			// удаляем хвостовое значение
-			lastValue -= Buffer[0] / Length;
+			Buffer.Add(newValue);
+			if (Buffer.Count > Length)
 			Buffer.RemoveAt(0);
 		}
 
-		Buffer.Add(newValue);
-		return lastValue;
+		if (input.IsFinal)
+			return new DecimalIndicatorValue(this, Buffer.Sum() / Length);
+		return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
 	}
-}]]></code>
+}
+]]></code>
 		<para>
 			<codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> наследуется от класса
 			<codeEntityReference>T:StockSharp.Algo.Indicators.LengthIndicator`1</codeEntityReference>, от которого необходимо наследовать все индикаторы,
@@ -117,12 +112,20 @@ public class ChaikinVolatility : BaseIndicator<IIndicatorValue>
 	/// </summary>
 	/// <param name="input">Входное значение.</param>
 	/// <returns>Результирующее значение.</returns>
-	public override IIndicatorValue OnProcess(IIndicatorValue input)
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.GetValue<Candle>();
-		return Roc.Process(Ema.Process(input.SetValue(candle.HighPrice - candle.LowPrice)));
+		var emaValue = Ema.Process(input.SetValue(this, candle.HighPrice - candle.LowPrice));
+
+		if (Ema.IsFormed)
+		{
+			return Roc.Process(emaValue);
+		}
+
+		return input;				
 	}
-}]]></code>
+}
+]]></code>
 		<para>
 			Последний вид индикаторов - это те, которые не просто состоят из других индикаторов, но так же графически отображаются несколькими состояниями
 			одновременно (несколькими линиями). Например, <codeEntityReference>T:StockSharp.Algo.Indicators.AverageDirectionalIndex</codeEntityReference>:
@@ -150,10 +153,10 @@ public class AverageDirectionalIndex : BaseComplexIndicator
 	public AverageDirectionalIndex(DirectionalIndex dx, LengthIndicator<decimal> movingAverage)
 	{
 		if (dx == null)
-			throw new ArgumentNullException("dx");
+			throw new ArgumentNullException(nameof(dx));
 
 		if (movingAverage == null)
-			throw new ArgumentNullException("movingAverage");
+			throw new ArgumentNullException(nameof(movingAverage));
 
 		InnerIndicators.Add(Dx = dx);
 		InnerIndicators.Add(MovingAverage = movingAverage);

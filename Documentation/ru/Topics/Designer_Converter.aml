@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d12b6321-af41-40f1-a8c6-87ea59d1b51c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Converter_00"/>
+</mediaLink>
+<para>Кубик используется для конвертации сложных объектов в простые типы данных. Например, позволяет получить значение шага цены для инструмента.
+</para>
+
+
+
+<definitionTable>
+  <definedTerm>Входящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> – определенный тип получаемых сложных объектов.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Исходящие сокеты</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Любые данные</legacyBold> –  значение выбранного свойства для полученного объекта.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Параметры</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Тип данных</legacyBold> – тип принимаемых на вход данных. От выбранного значения зависит тип входного параметра.</para></listItem>
+  <listItem><para><legacyBold>Свойство</legacyBold> – дерево свойств выбранного типа, которые можно получить на выходе кубика. Набор доступных свойств
+ зависит от выбранного типа данных и появляется только после выбора нужного типа данных.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="ee6c9d13-def9-4be2-a480-34c93037a53b" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

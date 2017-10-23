@@ -4,7 +4,7 @@
     <introduction>
       <para>
       	<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> может предоставлять исторические данные за предыдущие торговые сессии.
-      	Такие данные поставляются в виде тиков и свечек <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> с тайм-фреймами менее одного дня и кратными одной секунде,
+      	Такие данные поставляются в виде тиков и свечей <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> с тайм-фреймами менее одного дня и кратными одной секунде,
       	а также дневным, недельным (7 дней) и месячным (31 день).  Исторические данные, в зависимости от типа, можно получить за следующие периоды времени:
       </para>
       <list class="ordered">
@@ -16,7 +16,7 @@
 	  </list>
 	  <para>Для получения исторических сделок необходимо воспользоваться методом 
 	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)</codeEntityReference>.</para>
-	  <para>Для получения исторических свечек необходимо воспользоваться методом 
+	  <para>Для получения исторических свечей необходимо воспользоваться методом 
 	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>.</para>
     </introduction>
   </developerConceptualDocument>

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6971235a-c9e5-4606-a266-5df4a3b9da94" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_DLL_Strategy_00"/>
+</mediaLink>
+<para>The cube is used to import DLL libraries with strategies 
+(<link xlink:href="adb8e379-e4f8-47fe-9a16-14d71a9c99c7" />).</para>
+
+<definitionTable>
+  <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Assembly</legacyBold> - Dll library containing the 
+  strategy you want to add.</para></listItem>
+  <listItem><para><legacyBold>Name of strategy type</legacyBold> - the name of 
+  the strategy type that you want to add.</para></listItem>
+
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="250003df-48b4-4211-9c8e-25ac3f6a45be" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

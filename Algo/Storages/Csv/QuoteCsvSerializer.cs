@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Storages.Csv
 {
-	using System;
 	using System.Text;
 
 	using Ecng.Common;
@@ -42,29 +41,32 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(CsvFileWriter writer, TimeQuoteChange data)
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		protected override void Write(CsvFileWriter writer, TimeQuoteChange data, IMarketDataMetaInfo metaInfo)
 		{
 			writer.WriteRow(new[]
 			{
-				data.ServerTime.UtcDateTime.ToString(TimeFormat),
+				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
 				data.Price.ToString(),
 				data.Volume.ToString(),
 				data.Side.ToString()
 			});
+
+			metaInfo.LastTime = data.ServerTime.UtcDateTime;
 		}
 
 		/// <summary>
 		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected override TimeQuoteChange Read(FastCsvReader reader, DateTime date)
+		protected override TimeQuoteChange Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			return new TimeQuoteChange
 			{
-				ServerTime = ReadTime(reader, date),
+				ServerTime = reader.ReadTime(metaInfo.Date),
 				Price = reader.ReadDecimal(),
 				Volume = reader.ReadDecimal(),
 				Side = reader.ReadEnum<Sides>()

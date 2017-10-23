@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleSmartConsole
 {
 	using System;
-	using System.Linq;
 	using System.Threading;
 
 	using Ecng.Common;
@@ -72,16 +71,17 @@ namespace SampleSmartConsole
 						waitHandle.WaitOne();
 
 						// подписываемся на все портфели-счета
-						trader.NewPortfolios += portfolios =>
+						trader.NewPortfolio += portfolio =>
 						{
 							if (_portfolio != null)
 								return;
 
 							// находим нужный портфель и присваиваем его переменной _portfolio
-							_portfolio = portfolios.FirstOrDefault(p => p.Name == account);
 
-							if (_portfolio == null)
+							if (portfolio.Name != account)
 								return;
+
+							_portfolio = portfolio;
 
 							Console.WriteLine(LocalizedStrings.Str2171Params, account);
 
@@ -90,12 +90,15 @@ namespace SampleSmartConsole
 						};
 
 						// подписываемся на событие появление инструментов
-						trader.NewSecurities += securities =>
+						trader.NewSecurity += security =>
 						{
 							if (_lkoh == null)
 							{
+								if (security.Code != secCode || security.Type != SecurityTypes.Stock)
+									return;
+
 								// находим Лукойл и присваиваем ее переменной lkoh
-								_lkoh = securities.FirstOrDefault(sec => sec.Code == secCode && sec.Type == SecurityTypes.Stock);
+								_lkoh = security;
 
 								if (_lkoh != null)
 								{
@@ -108,13 +111,10 @@ namespace SampleSmartConsole
 						};
 
 						// подписываемся на событие появления моих новых сделок
-						trader.NewMyTrades += myTrades =>
+						trader.NewMyTrade += myTrade =>
 						{
-							foreach (var myTrade in myTrades)
-							{
-								var trade = myTrade.Trade;
-								Console.WriteLine(LocalizedStrings.Str2173Params, trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
-							}
+							var trade = myTrade.Trade;
+							Console.WriteLine(LocalizedStrings.Str2173Params, trade.Id, trade.Price, trade.Security.Code, trade.Volume, trade.Time);
 						};
 
 						Console.WriteLine(LocalizedStrings.Str2989Params.Put(account));
@@ -122,10 +122,10 @@ namespace SampleSmartConsole
 						// дожидаемся появления портфеля и инструмента
 						waitHandle.WaitOne();
 
-						trader.SecuritiesChanged += securities =>
+						trader.SecurityChanged += security =>
 						{
 							// если инструмент хоть раз изменился (по нему пришли актуальные данные)
-							if (securities.Contains(_lkoh) && _lkoh.BestBid != null && _lkoh.BestAsk != null)
+							if (security == _lkoh && _lkoh.BestBid != null && _lkoh.BestAsk != null)
 								waitHandle.Set();
 						};
 

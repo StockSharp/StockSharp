@@ -18,6 +18,7 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Logging;
@@ -26,7 +27,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The main interface providing the connection to the trading systems.
 	/// </summary>
-	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider
+	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider, IPositionProvider
 	{
 		/// <summary>
 		/// Own trade received.
@@ -89,6 +90,21 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
 
 		/// <summary>
+		/// Mass order cancellation event.
+		/// </summary>
+		event Action<long> MassOrderCanceled;
+
+		/// <summary>
+		/// Mass order cancellation errors event.
+		/// </summary>
+		event Action<long, Exception> MassOrderCancelFailed;
+
+		/// <summary>
+		/// Failed order status request event.
+		/// </summary>
+		event Action<long, Exception> OrderStatusFailed;
+
+		/// <summary>
 		/// Stop-order registration errors event.
 		/// </summary>
 		event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
@@ -107,6 +123,26 @@ namespace StockSharp.BusinessEntities
 		/// Stop orders state change event.
 		/// </summary>
 		event Action<IEnumerable<Order>> StopOrdersChanged;
+
+		/// <summary>
+		/// Stop-order registration error event.
+		/// </summary>
+		event Action<OrderFail> StopOrderRegisterFailed;
+
+		/// <summary>
+		/// Stop-order cancellation error event.
+		/// </summary>
+		event Action<OrderFail> StopOrderCancelFailed;
+
+		/// <summary>
+		/// Stop-order received.
+		/// </summary>
+		event Action<Order> NewStopOrder;
+
+		/// <summary>
+		/// Stop order state change event.
+		/// </summary>
+		event Action<Order> StopOrderChanged;
 
 		/// <summary>
 		/// Security received.
@@ -133,30 +169,30 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> NewPortfolios;
 
-		/// <summary>
-		/// Portfolio changed.
-		/// </summary>
-		event Action<Portfolio> PortfolioChanged;
+		///// <summary>
+		///// Portfolio changed.
+		///// </summary>
+		//event Action<Portfolio> PortfolioChanged;
 
 		/// <summary>
 		/// Portfolios changed.
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
-		/// <summary>
-		/// Position received.
-		/// </summary>
-		event Action<Position> NewPosition;
+		///// <summary>
+		///// Position received.
+		///// </summary>
+		//event Action<Position> NewPosition;
 
 		/// <summary>
 		/// Positions received.
 		/// </summary>
 		event Action<IEnumerable<Position>> NewPositions;
 
-		/// <summary>
-		/// Position changed.
-		/// </summary>
-		event Action<Position> PositionChanged;
+		///// <summary>
+		///// Position changed.
+		///// </summary>
+		//event Action<Position> PositionChanged;
 
 		/// <summary>
 		/// Positions changed.
@@ -239,7 +275,7 @@ namespace StockSharp.BusinessEntities
 		event Action<IMessageAdapter, Exception> ConnectionErrorEx;
 
 		/// <summary>
-		/// Dats process error.
+		/// Data process error.
 		/// </summary>
 		event Action<Exception> Error;
 
@@ -249,29 +285,44 @@ namespace StockSharp.BusinessEntities
 		event Action<TimeSpan> MarketTimeChanged;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupSecurities(StockSharp.BusinessEntities.Security)"/> received.
+		/// Lookup result <see cref="LookupSecurities(Security)"/> received.
 		/// </summary>
-		event Action<IEnumerable<Security>> LookupSecuritiesResult;
+		event Action<Exception, IEnumerable<Security>> LookupSecuritiesResult;
 
 		/// <summary>
 		/// Lookup result <see cref="LookupPortfolios"/> received.
 		/// </summary>
-		event Action<IEnumerable<Portfolio>> LookupPortfoliosResult;
+		event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
 
 		/// <summary>
 		/// Successful subscription market-data.
 		/// </summary>
-		event Action<Security, MarketDataTypes> MarketDataSubscriptionSucceeded;
+		event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <summary>
 		/// Error subscription market-data.
 		/// </summary>
-		event Action<Security, MarketDataTypes, Exception> MarketDataSubscriptionFailed;
+		event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
+
+		/// <summary>
+		/// Successful unsubscription market-data.
+		/// </summary>
+		event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
+
+		/// <summary>
+		/// Error unsubscription market-data.
+		/// </summary>
+		event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
 
 		/// <summary>
 		/// Session changed.
 		/// </summary>
 		event Action<ExchangeBoard, SessionStates> SessionStateChanged;
+
+		/// <summary>
+		/// Transaction id generator.
+		/// </summary>
+		IdGenerator TransactionIdGenerator { get; }
 
 		/// <summary>
 		/// Get session state for required board.
@@ -320,10 +371,10 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		IEnumerable<MyTrade> MyTrades { get; }
 
-		/// <summary>
-		/// Get all positions.
-		/// </summary>
-		IEnumerable<Position> Positions { get; }
+		///// <summary>
+		///// Get all positions.
+		///// </summary>
+		//IEnumerable<Position> Positions { get; }
 
 		/// <summary>
 		/// All news.
@@ -335,10 +386,10 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		ConnectionStates ConnectionState { get; }
 
-		/// <summary>
-		/// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
-		/// </summary>
-		bool IsSupportAtomicReRegister { get; }
+		///// <summary>
+		///// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
+		///// </summary>
+		//bool IsSupportAtomicReRegister { get; }
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
@@ -398,19 +449,41 @@ namespace StockSharp.BusinessEntities
 		void LookupSecurities(SecurityLookupMessage criteria);
 
 		/// <summary>
+		/// Get <see cref="SecurityId"/>.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <returns>Security ID.</returns>
+		SecurityId GetSecurityId(Security security);
+
+		/// <summary>
 		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
 		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
 		void LookupPortfolios(Portfolio criteria);
 
 		/// <summary>
+		/// Lookup security by identifier.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Security.</returns>
+		Security LookupSecurity(SecurityId securityId);
+
+		/// <summary>
+		/// To get the portfolio by the name. If the portfolio is not registered, it will be created.
+		/// </summary>
+		/// <param name="name">Portfolio name.</param>
+		/// <returns>Portfolio.</returns>
+		Portfolio GetPortfolio(string name);
+
+		/// <summary>
 		/// To get the position by portfolio and instrument.
 		/// </summary>
 		/// <param name="portfolio">The portfolio on which the position should be found.</param>
 		/// <param name="security">The instrument on which the position should be found.</param>
+		/// <param name="clientCode">The client code.</param>
 		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
 		/// <returns>Position.</returns>
-		Position GetPosition(Portfolio portfolio, Security security, string depoName = "");
+		Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "");
 
 		/// <summary>
 		/// Get filtered order book.
@@ -455,21 +528,23 @@ namespace StockSharp.BusinessEntities
 		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null);
+		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+		/// <param name="transactionId">Order cancellation transaction id.</param>
+		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null);
 
 		/// <summary>
 		/// To sign up to get market data by the instrument.
 		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started .</param>
-		/// <param name="type">Market data type.</param>
-		void SubscribeMarketData(Security security, MarketDataTypes type);
+		/// <param name="security">The instrument by which new information getting should be started.</param>
+		/// <param name="message">The message that contain subscribe info.</param>
+		void SubscribeMarketData(Security security, MarketDataMessage message);
 
 		/// <summary>
 		/// To unsubscribe from getting market data by the instrument.
 		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started .</param>
-		/// <param name="type">Market data type.</param>
-		void UnSubscribeMarketData(Security security, MarketDataTypes type);
+		/// <param name="security">The instrument by which new information getting should be started.</param>
+		/// <param name="message">The message that contain unsubscribe info.</param>
+		void UnSubscribeMarketData(Security security, MarketDataMessage message);
 
 		/// <summary>
 		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.MarketDepthsChanged"/>.
@@ -510,7 +585,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
 		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started .</param>
+		/// <param name="security">The instrument by which new information getting should be started.</param>
 		void RegisterSecurity(Security security);
 
 		/// <summary>
@@ -552,5 +627,17 @@ namespace StockSharp.BusinessEntities
 		/// Unsubscribe from news.
 		/// </summary>
 		void UnRegisterNews();
+
+		/// <summary>
+		/// Send outgoing message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendOutMessage(Message message);
+
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendInMessage(Message message);
 	}
 }

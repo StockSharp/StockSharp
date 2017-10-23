@@ -8,7 +8,7 @@
     <introduction>
       <para>
 		  <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> может предоставлять исторические данные за предыдущие торговые сессии.
-		  Такие данные поставляются только свечками вида <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>,
+		  Такие данные поставляются только свечами вида <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>,
 		  и со строго ограниченными тайм-фреймами <codeEntityReference>T:StockSharp.SmartCom.SmartComTimeFrames</codeEntityReference>.
 	  </para>
     </introduction>
@@ -16,7 +16,7 @@
     <prerequisites>
       <content>
         <para>
-			<link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>
+			<link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечи</link>
 		</para>
       </content>
     </prerequisites>
@@ -24,7 +24,7 @@
     <!-- One or more procedure or section elements -->
 
     <procedure>
-      <title>Пример работы с историческими свечками</title>
+      <title>Пример работы с историческими свечами</title>
 
       <steps class="ordered">
 		  <step>
@@ -32,7 +32,7 @@
 				  <para>
 					  В самом начале необходимо добавить <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> 
 					  в <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>
-					  как источник свечек:
+					  как источник свечей:
 				  </para>
 				  <code language="C#"><![CDATA[// создаем шлюз
 _trader = new SmartTrader(this.Login.Text, this.Password.Password);
@@ -42,8 +42,8 @@ _candleManager = new CandleManager(_trader);]]></code>
 
 				<alert class="note">
   					<para>
-  						Исторические свечки можно получить напрямую из <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, подписавшись на событие
-  						<codeEntityReference qualifyHint="true">E:StockSharp.SmartCom.SmartTrader.NewCandles</codeEntityReference>. Для начала получения свечек необходимо вызвать метод
+  						Исторические свечи можно получить напрямую из <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, подписавшись на событие
+  						<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>. Для начала получения свечей необходимо вызвать метод
   						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,Ecng.ComponentModel.Range{System.DateTimeOffset})</codeEntityReference> или
   						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,System.DateTimeOffset,System.Int64,StockSharp.SmartCom.SmartComHistoryDirections)</codeEntityReference>.
   					</para>
@@ -59,18 +59,18 @@ _candleManager = new CandleManager(_trader);]]></code>
 					  <image placement="center" xlink:href="samplesmarthistory" />
 				  </mediaLink>
 				  <alert class="note">
-					  <para>Исходные коды примера лежат в папке SampleSmartCandles, где показана работа как со свечками реального времени, так и с историческими.</para>
+					  <para>Исходные коды примера лежат в папке SampleSmartCandles, где показана работа как со свечами реального времени, так и с историческими.</para>
 				  </alert>
 			  </content>
 		  </step>
 		  <step>
 			  <content>
 				  <para>
-					  Если в программе требуется получать свечки постоянно (например, за текущую торговую сессию по мере появления новых сформированных
-					  свечек), то для этого можно использовать метод 
-					  <codeEntityReference qualifyHint="true">M:StockSharp.SmartCom.SmartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>.
-					  После этого, событие <codeEntityReference qualifyHint="true">E:StockSharp.SmartCom.SmartTrader.NewCandles</codeEntityReference> будет
-					  вызываться постоянно, как только сформируется очередная свечка.
+					  Если в программе требуется получать свечи постоянно (например, за текущую торговую сессию по мере появления новых сформированных
+					  свечей), то для этого можно использовать метод 
+					  <codeEntityReference qualifyHint="false">M:StockSharp.Algo.Connector.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.Nullable{System.Int64},System.Nullable{System.Int64},System.Collections.Generic.IDictionary{System.String,System.Object})</codeEntityReference>.
+					  После этого, событие <codeEntityReference qualifyHint="false">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> будет
+					  вызываться постоянно, как только сформируется очередная свеча.
 				  </para>
 				  
 				  <!-- RequestCandles(StockSharp.BusinessEntities.Security security, StockSharp.SmartCom.SmartComTimeFrames timeFrame, Ecng.ComponentModel.Range<DateTimeOffset> range)

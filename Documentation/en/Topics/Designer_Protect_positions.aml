@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="49d3744f-77c5-40ee-a4c2-4d7b08125712" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Protect_positions_00"/>
+</mediaLink>
+<para>The cube is used to automatically protect opened trades using stop loss 
+and take-profit.</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Trade</legacyBold> - the trade that must be protected 
+  with a stop-loss and take-profit.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Order</legacyBold> – orders that were registered 
+  by one of the protection strategies.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Take-profit</legacyBold> - the take-profit value.</para></listItem>
+  <listItem><para><legacyBold>Stop-loss</legacyBold> - the stop-loss value.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+
+    <relatedTopics>
+<link xlink:href="a4a79ae1-4e40-43fc-ad0f-59c3a2add664" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

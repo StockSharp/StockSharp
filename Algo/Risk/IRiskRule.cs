@@ -17,12 +17,13 @@ namespace StockSharp.Algo.Risk
 {
 	using Ecng.Serialization;
 
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface, describing risk-rule.
 	/// </summary>
-	public interface IRiskRule : IPersistable
+	public interface IRiskRule : ILogSource, IPersistable
 	{
 		/// <summary>
 		/// Header.

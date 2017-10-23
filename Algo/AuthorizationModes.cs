@@ -27,7 +27,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Anonymous.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str886Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.AnonymousKey)]
 		Anonymous,
 
 		/// <summary>
@@ -37,9 +37,9 @@ namespace StockSharp.Algo
 		Windows,
 
 		/// <summary>
-		/// User.
+		/// Custom.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str887Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.CustomKey)]
 		Custom,
 
 		/// <summary>

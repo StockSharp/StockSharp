@@ -23,6 +23,7 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -49,7 +50,7 @@ namespace StockSharp.Algo.Candles
 				throw new ArgumentNullException(nameof(candleType));
 
 			if (!candleType.IsCandle())
-				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, "Íåïðàâèëüíûé òèï ñâå÷êè.");
+				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -70,11 +71,11 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual Security Security
 		{
-			get { return _security; }
+			get => _security;
 			set
 			{
 				_security = value;
-				NotifyChanged("Security");
+				NotifyChanged(nameof(Security));
 			}
 		}
 
@@ -85,11 +86,12 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual Type CandleType
 		{
-			get { return _candleType; }
+			get => _candleType;
 			set
 			{
+				NotifyChanging(nameof(CandleType));
 				_candleType = value;
-				NotifyChanged("CandleType");
+				NotifyChanged(nameof(CandleType));
 			}
 		}
 
@@ -100,11 +102,12 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public virtual object Arg
 		{
-			get { return _arg; }
+			get => _arg;
 			set
 			{
+				NotifyChanging(nameof(Arg));
 				_arg = value;
-				NotifyChanged("Arg");
+				NotifyChanged(nameof(Arg));
 			}
 		}
 
@@ -118,17 +121,32 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public bool IsCalcVolumeProfile { get; set; }
 
-		internal bool IsNew { get; set; }
-
 		/// <summary>
 		/// The initial date from which you need to get data.
 		/// </summary>
-		public DateTimeOffset From { get; set; } = DateTimeOffset.MinValue;
+		[Nullable]
+		public DateTimeOffset? From { get; set; }
 
 		/// <summary>
 		/// The final date by which you need to get data.
 		/// </summary>
-		public DateTimeOffset To { get; set; } = DateTimeOffset.MaxValue;
+		[Nullable]
+		public DateTimeOffset? To { get; set; }
+
+		/// <summary>
+		/// Build candles mode.
+		/// </summary>
+		public BuildCandlesModes BuildCandlesMode { get; set; }
+
+		/// <summary>
+		/// Which market-data type is used as an candle source value.
+		/// </summary>
+		public MarketDataTypes? BuildCandlesFrom { get; set; }
+
+		/// <summary>
+		/// Extra info for the <see cref="BuildCandlesFrom"/>.
+		/// </summary>
+		public Level1Fields? BuildCandlesField { get; set; }
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -159,7 +177,12 @@ namespace StockSharp.Algo.Candles
 			From = storage.GetValue(nameof(From), From);
 			To = storage.GetValue(nameof(To), To);
 			WorkingTime = storage.GetValue(nameof(WorkingTime), WorkingTime);
+
 			IsCalcVolumeProfile = storage.GetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
+
+			BuildCandlesMode = storage.GetValue(nameof(BuildCandlesMode), BuildCandlesMode);
+			BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
+			BuildCandlesField = storage.GetValue(nameof(BuildCandlesField), BuildCandlesField);
 		}
 
 		/// <summary>
@@ -184,6 +207,10 @@ namespace StockSharp.Algo.Candles
 				storage.SetValue(nameof(WorkingTime), WorkingTime);
 
 			storage.SetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
+
+			storage.SetValue(nameof(BuildCandlesMode), BuildCandlesMode);
+			storage.SetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
+			storage.SetValue(nameof(BuildCandlesField), BuildCandlesField);
 		}
 	}
 }

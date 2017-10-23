@@ -35,28 +35,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\References\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\References\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\References\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Net">
-      <HintPath>..\References\Ecng\Ecng.Net.dll</HintPath>
+      <HintPath>..\References\Ecng.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Security">
-      <HintPath>..\References\Ecng\Ecng.Security.dll</HintPath>
+      <HintPath>..\References\Ecng.Security.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\References\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\References\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
-      <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
+      <HintPath>..\References\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -65,6 +65,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">
@@ -74,29 +75,28 @@
     <Compile Include="BaseCommunityClient.cs" />
     <Compile Include="BaseServiceClient.cs" />
     <Compile Include="CommunityNews.cs" />
-    <Compile Include="DocClient.cs" />
-    <Compile Include="DocPage.cs" />
     <Compile Include="CommunityAuthorization.cs" />
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="FileClient.cs" />
     <Compile Include="IAuthenticationService.cs" />
-    <Compile Include="IDocService.cs" />
     <Compile Include="IFileService.cs" />
     <Compile Include="INotificationService.cs" />
     <Compile Include="IProfileService.cs" />
     <Compile Include="IStrategyService.cs" />
-    <Compile Include="IStrategyServiceCallback.cs" />
     <Compile Include="NotificationClient.cs" />
+    <Compile Include="Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProfileClient.cs" />
     <Compile Include="ServerCredentials.cs" />
+    <Compile Include="ServerCredentialsExtensions.cs" />
     <Compile Include="StrategyClient.cs" />
     <Compile Include="StrategyData.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="StrategySubscription.cs" />
     <Compile Include="Products.cs" />
     <Compile Include="ISessionService.cs" />
-    <Compile Include="SessionClient.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FileData.cs" />
+    <Compile Include="StrategyBacktest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Localization\Localization.csproj">

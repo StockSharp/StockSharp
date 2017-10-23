@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b85d4d51-2824-44e5-aad1-0bde76d409ae" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_Quoting_00"/>
+</mediaLink>
+<para>The cube is used to quote options according to the specified parameters.</para>
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Options</legacyBold> - the list of options from 
+  the <legacyBold>Derivative</legacyBold> cube.</para></listItem>
+  <listItem><para><legacyBold>Volume</legacyBold> - the volume of quoting.</para></listItem>
+
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Order</legacyBold> - the registered order that can 
+  be used to obtain trades on it by using the <legacyBold>Trades</legacyBold> 
+  element by the order and displaying it on the chart using the 
+  <legacyBold>Chart panel</legacyBold> cube.</para></listItem>
+</list>
+  </definition>
+  
+    <definedTerm>Parameters</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Quoting</legacyBold> - by what parameter the
+  quoting will be conducted, can volatility take values (the volume quoting 
+  will be conducted by the specified limits of volatility) and the theoretical 
+  price (the volume quoting will be conducted by the specified limits of the 
+  theoretical price).</para></listItem>
+  <listItem><para><legacyBold>Direction</legacyBold> - the direction of quoting 
+  can take the values of Purchase and Sell.</para></listItem>
+  <listItem><para><legacyBold>Minimum</legacyBold> – the minimum value of 
+  volatility or theoretical price.</para></listItem>
+  <listItem><para><legacyBold>Maximum</legacyBold> - the maximum value of 
+  volatility or theoretical price.</para></listItem>
+</list>
+  </definition>
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="7f308694-a0c5-4c1a-8aa7-4f7b2b129f0c" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

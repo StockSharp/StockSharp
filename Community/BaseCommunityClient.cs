@@ -17,6 +17,10 @@ namespace StockSharp.Community
 {
 	using System;
 
+	using Ecng.Localization;
+
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// The base client for access to the StockSharp services.
 	/// </summary>
@@ -41,8 +45,13 @@ namespace StockSharp.Community
 		protected virtual Guid SessionId => AuthenticationClient.Instance.SessionId;
 
 		/// <summary>
-		/// The user identifier for <see cref="SessionId"/>.
+		/// To get the <see cref="SessionId"/> if the user was authorized.
 		/// </summary>
-		public long UserId => AuthenticationClient.Instance.GetId(SessionId);
+		protected virtual Guid? NullableSessionId => AuthenticationClient.Instance.NullableSessionId;
+
+		/// <summary>
+		/// Is current language is English.
+		/// </summary>
+		protected static bool IsEnglish => LocalizedStrings.ActiveLanguage != Languages.Russian;
 	}
 }

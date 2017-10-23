@@ -66,14 +66,12 @@ public class DeltaHedgeStrategy : Strategy
     protected override void OnStarted()
     {
         _tradingStrategy
-            .WhenNewMyTrades()
+            .WhenNewMyTrade()
             .Do(ReHedge).Apply(this);
 
-        Security
-            .WhenChanged()
-            .Do(ReHedge).Apply(this);
+        Security.WhenChanged(Connector).Do(ReHedge).Apply(this);
 
-        base.OnStarting();
+        base.OnStarted();
     }
 
     private void ReHedge()
@@ -86,7 +84,7 @@ public class DeltaHedgeStrategy : Strategy
 
         var futurePosition = _tradingStrategy.ChildStrategies.SyncGet(c => c.Sum(strategy =>
         {
-            var delta = strategy.Security.Delta(strategy.Security.Volatility / 100m);
+            var delta = strategy.Security.Delta;
 
             this.AddInfoLog("Дельта по инструменту {0} равна {1}.", strategy.Security, delta);
             this.AddInfoLog("Позиция {0}.", strategy.PositionManager.Position);
@@ -102,7 +100,7 @@ public class DeltaHedgeStrategy : Strategy
         {
             this.AddInfoLog("Разница в позиции {0}.", diff);
 
-            base.ChildStrategies.Add(CreateQuoting(diff > 0 ? OrderDirections.Sell : OrderDirections.Buy, diff.Abs()));
+            base.ChildStrategies.Add(CreateQuoting(diff > 0 ? Sides.Sell : Sides.Buy, diff.Abs()));
         }
     }
 
@@ -112,7 +110,7 @@ public class DeltaHedgeStrategy : Strategy
     /// <param name="direction">Направление котирования.</param>
     /// <param name="volume">Объем котирования.</param>
     /// <returns>Стратегия котирования.</returns>
-    protected virtual QuotingStrategy CreateQuoting(OrderDirections direction, int volume)
+    protected virtual QuotingStrategy CreateQuoting(Sides direction, int volume)
     {
         return new MarketQuotingStrategy(direction, volume);
     }
@@ -123,17 +121,13 @@ public class DeltaHedgeStrategy : Strategy
 			Данная стратегия добавляет при запуске правило на событие появления новых сделок (для рехеджирования):
 		</para>
 		<code language="C#">
-_tradingStrategy
-	.WhenNewMyTrades()
-	.Do(ReHedge).Apply(this);
+_tradingStrategy.WhenNewMyTrade().Do(ReHedge).Apply(this);
 		</code>
 		<para>
 			а также правило на событие изменения фьючерсного контракта (его цены):
 		</para>
 		<code language="C#">
-Security
-	.WhenChanged()
-	.Do(ReHedge).Apply(this);
+Security.WhenChanged(Connector).Do(ReHedge).Apply(this);
 		</code>
 				
 		<para>

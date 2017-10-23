@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="24d370d1-fd00-4914-83ac-57472eb99e93" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Clicking the 
+<mediaLinkInline><image xlink:href="Designer_Panel_strategies_00"/></mediaLinkInline> 
+button on the <legacyBold>Common</legacyBold> tab opens the 
+<legacyBold>Live</legacyBold> panel.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Panel_strategies_01"/>
+</mediaLink>
+<para>The <legacyBold>Live</legacyBold> panel is a table, displaying all strategies, 
+added to the <legacyBold>Live</legacyBold>. 
+On the <legacyBold>Live</legacyBold> panel, you can view the strategy current state, 
+and run or stop the strategy using the 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_02"/></mediaLinkInline>, 
+<mediaLinkInline><image xlink:href="Designer_Panel_Circuits_03"/></mediaLinkInline>
+buttons.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Panel_strategies_02"/>
+</mediaLink>
+
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="91644d63-00b3-416f-8677-ca57dfa8032e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

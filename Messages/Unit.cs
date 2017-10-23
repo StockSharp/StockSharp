@@ -27,7 +27,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Mearure units.
+	/// Measure units.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 		Step,
 
 		/// <summary>
-		/// The limited value. This unit allows to set a specific change number, which can not be used in arithmetic operations <see cref="Unit"/>.
+		/// The limited value. This unit allows to set a specific change number, which cannot be used in arithmetic operations <see cref="Unit"/>.
 		/// </summary>
 		[EnumMember]
 		Limit,
@@ -100,7 +100,7 @@ namespace StockSharp.Messages
 		/// Create a value of types <see cref="UnitTypes.Absolute"/> and <see cref="UnitTypes.Percent"/>.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		/// <param name="type">Mearure unit.</param>
+		/// <param name="type">Measure unit.</param>
 		public Unit(decimal value, UnitTypes type)
 			: this(value, type, null)
 		{
@@ -110,7 +110,7 @@ namespace StockSharp.Messages
 		/// Create a value of types <see cref="UnitTypes.Point"/> and <see cref="UnitTypes.Step"/>.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		/// <param name="type">Mearure unit.</param>
+		/// <param name="type">Measure unit.</param>
 		/// <param name="getTypeValue">The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).</param>
 		public Unit(decimal value, UnitTypes type, Func<UnitTypes, decimal?> getTypeValue)
 		{
@@ -128,7 +128,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Mearure unit.
+		/// Measure unit.
 		/// </summary>
 		[DataMember]
 		public UnitTypes Type { get; set; }
@@ -148,8 +148,8 @@ namespace StockSharp.Messages
 		[Ignore]
 		public Func<UnitTypes, decimal?> GetTypeValue
 		{
-			get { return _getTypeValue; }
-			set { _getTypeValue = value; }
+			get => _getTypeValue;
+			set => _getTypeValue = value;
 		}
 
 		/// <summary>
@@ -183,9 +183,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast <see cref="Decimal"/> object to the type <see cref="Unit"/>.
+		/// Cast <see cref="decimal"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(decimal value)
 		{
@@ -193,9 +193,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast <see cref="Int32"/> object to the type <see cref="Unit"/>.
+		/// Cast <see cref="int"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="Int32"/> value.</param>
+		/// <param name="value"><see cref="int"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(int value)
 		{
@@ -203,10 +203,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast object from <see cref="Unit"/> to <see cref="Decimal"/>.
+		/// Cast object from <see cref="Unit"/> to <see cref="decimal"/>.
 		/// </summary>
 		/// <param name="unit">Object <see cref="Unit"/>.</param>
-		/// <returns><see cref="Decimal"/> value.</returns>
+		/// <returns><see cref="decimal"/> value.</returns>
 		public static explicit operator decimal(Unit unit)
 		{
 			if (unit == null)
@@ -224,14 +224,14 @@ namespace StockSharp.Messages
 				case UnitTypes.Step:
 					return unit.Value * unit.SafeGetTypeValue(null);
 				default:
-					throw new ArgumentOutOfRangeException(nameof(unit));
+					throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.Str1219);
 			}
 		}
 
 		/// <summary>
-		/// Cast <see cref="Double"/> object to the type <see cref="Unit"/>.
+		/// Cast <see cref="double"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <param name="value"><see cref="double"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(double value)
 		{
@@ -239,10 +239,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast object from <see cref="Unit"/> to <see cref="Double"/>.
+		/// Cast object from <see cref="Unit"/> to <see cref="double"/>.
 		/// </summary>
 		/// <param name="unit">Object <see cref="Unit"/>.</param>
-		/// <returns><see cref="Double"/> value.</returns>
+		/// <returns><see cref="double"/> value.</returns>
 		public static explicit operator double(Unit unit)
 		{
 			return (double)(decimal)unit;
@@ -253,7 +253,7 @@ namespace StockSharp.Messages
 			var func = GetTypeValue ?? getTypeValue;
 
 			if (func == null)
-				throw new InvalidOperationException("The handler is not set.");
+				throw new InvalidOperationException(LocalizedStrings.UnitHandlerNotSet);
 
 			var value = func(Type);
 
@@ -276,11 +276,17 @@ namespace StockSharp.Messages
 			//  prevent operator '==' call
 			//if (u1 == null)
 			if (u1.IsNull())
-				throw new ArgumentNullException(nameof(u1));
+			{
+				return null;
+				//throw new ArgumentNullException(nameof(u1));	
+			}
 
 			//if (u2 == null)
 			if (u2.IsNull())
-				throw new ArgumentNullException(nameof(u2));
+			{
+				return null;
+				//throw new ArgumentNullException(nameof(u2));	
+			}
 
 			if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
 				throw new ArgumentException(LocalizedStrings.LimitedValueNotMath);
@@ -437,7 +443,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Compare two values in the inequality (if the value of different types, the convertion will be used).
+		/// Compare two values in the inequality (if the value of different types, the conversion will be used).
 		/// </summary>
 		/// <param name="u1">First unit.</param>
 		/// <param name="u2">Second unit.</param>
@@ -448,7 +454,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Compare two values for equality (if the value of different types, the convertion will be used).
+		/// Compare two values for equality (if the value of different types, the conversion will be used).
 		/// </summary>
 		/// <param name="u1">First unit.</param>
 		/// <param name="u2">Second unit.</param>
@@ -477,11 +483,11 @@ namespace StockSharp.Messages
 				case UnitTypes.Absolute:
 					return Value.To<string>();
 				case UnitTypes.Step:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ø" : "s");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s");
 				case UnitTypes.Point:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ï" : "p");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p");
 				case UnitTypes.Limit:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ë" : "l");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l");
 				default:
 					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(Type));
 			}
@@ -524,7 +530,7 @@ namespace StockSharp.Messages
 						var point = getTypeValue(UnitTypes.Point);
 
 						if (point == null || point == 0)
-							throw new InvalidOperationException("Price step cost is equal to zero.".Translate());
+							throw new InvalidOperationException(LocalizedStrings.PriceStepIsZeroKey);
 
 						value /= point.Value;
 						break;
@@ -653,8 +659,8 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Type = storage.GetValue<UnitTypes>("Type");
-			Value = storage.GetValue<decimal>("Value");
+			Type = storage.GetValue<UnitTypes>(nameof(Type));
+			Value = storage.GetValue<decimal>(nameof(Value));
 		}
 
 		/// <summary>
@@ -663,8 +669,8 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Type", Type.To<string>());
-			storage.SetValue("Value", Value);
+			storage.SetValue(nameof(Type), Type.To<string>());
+			storage.SetValue(nameof(Value), Value);
 		}
 	}
 
@@ -674,9 +680,9 @@ namespace StockSharp.Messages
 	public static class UnitHelper
 	{
 		/// <summary>
-		/// Convert the <see cref="Int32"/> to percents.
+		/// Convert the <see cref="int"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="Int32"/> value.</param>
+		/// <param name="value"><see cref="int"/> value.</param>
 		/// <returns>Percents.</returns>
 		public static Unit Percents(this int value)
 		{
@@ -684,9 +690,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Convert the <see cref="Double"/> to percents.
+		/// Convert the <see cref="double"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <param name="value"><see cref="double"/> value.</param>
 		/// <returns>Percents.</returns>
 		public static Unit Percents(this double value)
 		{
@@ -694,9 +700,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Convert the <see cref="Decimal"/> to percents.
+		/// Convert the <see cref="decimal"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Percents.</returns>
 		public static Unit Percents(this decimal value)
 		{
@@ -725,14 +731,14 @@ namespace StockSharp.Messages
 
 			switch (lastSymbol)
 			{
-				case 'ø':
+				case 'ш':
 				case 's':
 					if (getTypeValue == null)
 						throw new ArgumentNullException(nameof(getTypeValue));
 
 					type = UnitTypes.Step;
 					break;
-				case 'ï':
+				case 'п':
 				case 'p':
 					if (getTypeValue == null)
 						throw new ArgumentNullException(nameof(getTypeValue));
@@ -742,7 +748,7 @@ namespace StockSharp.Messages
 				case '%':
 					type = UnitTypes.Percent;
 					break;
-				case 'ë':
+				case 'л':
 				case 'l':
 					type = UnitTypes.Limit;
 					break;

@@ -19,8 +19,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Convergence/divergence of moving averages with signal line.
 	/// </summary>
@@ -40,7 +38,7 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignal"/>.
 		/// </summary>
 		/// <param name="macd">Convergence/divergence of moving averages.</param>
-		/// <param name="signalMa">Signalling Voving Average.</param>
+		/// <param name="signalMa">Signaling Moving Average.</param>
 		public MovingAverageConvergenceDivergenceSignal(MovingAverageConvergenceDivergence macd, ExponentialMovingAverage signalMa)
 			: base(macd, signalMa)
 		{
@@ -52,19 +50,19 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Convergence/divergence of moving averages.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("MACD")]
 		[DescriptionLoc(LocalizedStrings.Str797Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public MovingAverageConvergenceDivergence Macd { get; private set; }
+		public MovingAverageConvergenceDivergence Macd { get; }
 
 		/// <summary>
-		/// Signalling Voving Average.
+		/// Signaling Moving Average.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str804Key)]
 		[DescriptionLoc(LocalizedStrings.Str805Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public ExponentialMovingAverage SignalMa { get; private set; }
+		public ExponentialMovingAverage SignalMa { get; }
 	}
 }

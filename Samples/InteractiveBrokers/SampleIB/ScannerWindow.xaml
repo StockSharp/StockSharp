@@ -1,0 +1,53 @@
+﻿<Window x:Class="SampleIB.ScannerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:sx="http://schemas.stocksharp.com/xaml"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        Title="{x:Static loc:LocalizedStrings.Scanner}" Height="300" Width="800">
+	<Grid Margin="5">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="5"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<TabControl>
+			<TabItem Header="{x:Static loc:LocalizedStrings.Str1738}">
+				<sx:BaseGridControl x:Name="Results">
+					<sx:BaseGridControl.Columns>
+						<dxg:GridColumn Header="{x:Static loc:LocalizedStrings.Code}" Width="50" FieldName="SecurityId.SecurityCode"/>
+						<dxg:GridColumn Header="{x:Static loc:LocalizedStrings.Rank}" Width="50" FieldName="Rank"/>
+						<dxg:GridColumn Header="{x:Static loc:LocalizedStrings.Distance}" Width="100" FieldName="Distance"/>
+						<dxg:GridColumn Header="{x:Static loc:LocalizedStrings.Benchmark}" Width="100" FieldName="Benchmark"/>
+						<dxg:GridColumn Header="{x:Static loc:LocalizedStrings.Projection}" Width="100" FieldName="Projection"/>
+						<dxg:GridColumn Header="{x:Static loc:LocalizedStrings.Legs}" Width="100" FieldName="Legs"/>
+					</sx:BaseGridControl.Columns>
+				</sx:BaseGridControl>
+			</TabItem>
+			<TabItem Header="{x:Static loc:LocalizedStrings.Str225}">
+				<TextBox x:Name="ScannerParameters" IsReadOnly="True" />
+			</TabItem>
+		</TabControl>
+
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<ComboBox x:Name="ScanCode" Width="100" Grid.Column="0"/>
+			<TextBox x:Name="SecurityType" Width="100" Grid.Column="2" Text="STOCK.EU"/>
+			<TextBox x:Name="BoardCode" Width="100" Grid.Column="4" Text="STK.EU.IBIS"/>
+			<Button x:Name="Subscribe" Grid.Column="6" Width="100" Click="Subscribe_OnClick" Content="{x:Static loc:LocalizedStrings.Subscribe}" />
+
+			<Button x:Name="Parameters" Grid.Column="8" Width="100" Click="Parameters_OnClick" Content="{x:Static loc:LocalizedStrings.Str225}" />
+		</Grid>
+	</Grid>
+</Window>

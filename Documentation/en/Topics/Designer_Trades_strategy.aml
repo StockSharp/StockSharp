@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="250003df-48b4-4211-9c8e-25ac3f6a45be" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<mediaLink>
+<image xlink:href="Designer_The_transaction_strategy_00"/>
+</mediaLink>
+<para>The cube is used to obtain all the strategy trades.
+</para>
+
+
+<definitionTable>
+  <definedTerm>Incoming sockets</definedTerm>
+  <definition>
+<list class="bullet">
+<listItem><para><legacyBold>Instrument</legacyBold> - the instrument for which 
+you need to obtain trades. If the instrument is not passed, then trades by all 
+strategy instruments are transferred to the output.</para></listItem>
+</list>
+  </definition>
+
+  <definedTerm>Outgoing sockets</definedTerm>
+  <definition>
+<list class="bullet">
+  <listItem><para><legacyBold>Trades</legacyBold> - trades arising from the passed 
+  instrument. They can be used both for displaying on the chart using the 
+  <legacyBold>Chart panel</legacyBold> element, and for position protection using 
+  the <legacyBold>Position protection</legacyBold> element.</para></listItem>
+</list>
+  </definition>
+
+</definitionTable>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="67a08284-5d80-42f1-b311-f6c78789c48d" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -39,7 +39,7 @@
   			</listItem>
   			  			<listItem>
   				<para>
-  					Кнопока <legacyBold>Ok</legacyBold> - завершение создания <legacyItalic>непрерывного</legacyItalic> инструмента.
+  					Кнопка <legacyBold>Ok</legacyBold> - завершение создания <legacyItalic>непрерывного</legacyItalic> инструмента.
   				</para>
   			</listItem>
 		</list>
@@ -50,10 +50,11 @@
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity</codeEntityReference> - непрерывный инструмент.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.Security</codeEntityReference> - непрерывный инструмент.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityProvider</codeEntityReference> - поставщик информации об инструментах.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.ContinuousSecurityWindow.SecurityStorage</codeEntityReference> - хранилище информации об инструментах.
+</para>
   			</listItem>
 		</list>
 		
@@ -70,14 +71,14 @@ private void CreateContinuousSecurity_OnClick(object sender, RoutedEventArgs e)
 {
 	_continuousSecurityWindow = new ContinuousSecurityWindow
 	{
-		SecurityProvider = _entityRegistry.Securities,
-		ContinuousSecurity = new ContinuousSecurity { Board = ExchangeBoard.Associated }
+		SecurityStorage = _entityRegistry.Securities,
+		Security = new ContinuousSecurity { Board = ExchangeBoard.Associated }
 	};
 
 	if (!_continuousSecurityWindow.ShowModal(this))
 		return;
 
-	_continuousSecurity = _continuousSecurityWindow.ContinuousSecurity;
+	_continuousSecurity = _continuousSecurityWindow.Security;
 	ContinuousSecurity.Content = _continuousSecurity.Id;
 
 	var first = _continuousSecurity.InnerSecurities.First();

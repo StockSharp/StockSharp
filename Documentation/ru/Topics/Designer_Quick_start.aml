@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>При первом запуске <token>designer</token> будет показано следующее окно:</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_00"/></mediaLink>
+<para>Необходимо выбрать режим запуска и нажать кнопку <legacyBold>ОК</legacyBold>.</para>
+<para>При первом запуске <token>designer</token> предложит открыть окно <link xlink:href="085174e5-3be9-4dc3-bdeb-dcc3706b483d" />.
+Также исторические данные можно скачать программой <token>hydra</token> (кодовое название Hydra) 
+предназначенной для автоматической загрузки маркет-данных (инструменты, свечи, тиковые сделки и стаканы и др.) 
+из различных источников и хранения их в локальном хранилище. О скачивании и хранении исторических данных подробно описано 
+в пункте <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />.</para>
+<para>При нажатии на кнопку <legacyBold>Скачать инструмент</legacyBold> появится окно <legacyBold>Скачать инструмент</legacyBold> (<link xlink:href="d0a1bb26-7a29-4607-992c-4f539632c2eb" />).
+Для скачивания инструмента необходимо ввести код инструмента, тип инструмента, выбрать источник данных и нажать кнопку <legacyBold>ОК</legacyBold>. 
+<token>designer</token> запросит у источника данных имеющиеся у него инструменты. Все найденные инструменты появятся в панели <legacyBold>Все инструменты</legacyBold>.
+Для Российского рынка наиболее популярный бесплатный источник исторических данных брокер Финам. По умолчанию в <token>designer</token> он указан
+как источник данных. Также как источник данных можно использовать торговые терминалы. Как настроить подключение к терминалам описано
+в пункте <link xlink:href="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" />.</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_01"/></mediaLink>
+<para>Для получения исторических данных по инструменту необходимо из списка <legacyBold>Все инструменты</legacyBold> выбрать необходимый инструмент, 
+установить период исторических данных, выбрать тип и Time Frame свечей и нажать кнопку <legacyBold>Старт</legacyBold>. 
+Все данные сохранятся в <link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" />.</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_02"/></mediaLink>
+<para>После получения исторических данных выберем одну из демонстрационных стратегий. 
+На панели <token>SchemeDis</token> в папке <legacyBold>Стратегии</legacyBold> двойным нажатием 
+выбираем пример-стратегию <legacyBold>SMA</legacyBold>, после чего в рабочей области появится вкладка <legacyBold>Sma</legacyBold>. 
+После перехода на стратегию в ленте в ленте автоматически откроется вкладка <legacyBold>Эмуляция</legacyBold>, на которой расположены основные элементы по 
+созданию стратегии, отладке, тестированию стратегий (<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, 
+<link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />)</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_03"/></mediaLink>
+<para>На вкладке <legacyBold>Эмуляция</legacyBold> необходимо установить период тестирования, а также выбрать
+<link xlink:href="24710dbe-d5e1-4aab-996e-ba5fb8b5636e" /> в поле <legacyBold>Маркет-данные</legacyBold>.</para>
+<para>Нажав на значок <mediaLinkInline><image xlink:href="Designer_Quick_start_04"/></mediaLinkInline> в поле <legacyBold>Инструмент</legacyBold>
+откроется окно <legacyBold>Выбор инструмента</legacyBold>. В этом окне необходимо выбрать требуемый инструмент.</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_05"/></mediaLink>
+<para>Выбрав любой блок на панели <legacyBold>Дизайнер</legacyBold>, в панели <legacyBold>Свойства</legacyBold> появятся свойства этого блока. 
+В панели <legacyBold>Свойства</legacyBold> блока <legacyBold>Candles</legacyBold> можно настроить тип и Time Frame свечей
+(<link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792" />).</para>
+<para>После нажатия кнопку <legacyBold>Старт</legacyBold> начнется эмуляция торгов.</para>
+<mediaLink><image placement="center" xlink:href="Designer_Quick_start_06"/></mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="c74991fa-bad6-4196-98c0-8952e2a57b3e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="31a208d0-d543-47aa-8008-389c071118d4" revisionNumber="1">
+<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para><token>designer</token> allows running the created strategies in the 
+<legacyBold>Simulation</legacyBold> mode, to customize the <legacyBold>Simulation</legacyBold>, 
+the following actions shall be performed:</para>
+   
+<para>1.	When clicking the arrow next to the <legacyBold>Connect</legacyBold>
+<mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_00"/></mediaLinkInline> 
+button, the <legacyBold>Emulator settings</legacyBold> button appears:</para>
+<mediaLink>
+<image placement="center" xlink:href="Designer_The_connection_settings_00"/>
+</mediaLink>
+
+<para>2.	When clicking the <legacyBold>Emulator settings</legacyBold> button, 
+the <legacyBold>Emulator settings</legacyBold> window opens:</para>
+
+
+ <mediaLink>
+<image placement="center" xlink:href="Designer_Properties_emulation_00"/>
+</mediaLink>
+<para>1.<legacyBold>Simulator</legacyBold></para>
+<list class="bullet">
+<listItem><para><legacyBold>Use emulator</legacyBold> – Use emulator.</para></listItem>
+<listItem><para><legacyBold>Instruments</legacyBold> – Instruments.</para></listItem>
+</list>
+<para>2. <legacyBold>Settings</legacyBold></para>
+
+<list class="bullet">
+<listItem><para><legacyBold>Combine on touch</legacyBold> - During emulation of trade combining, combine trades when the trade price touches the order price (equal to order price).</para></listItem>
+<listItem><para><legacyBold>Market depth (lifetime)</legacyBold> - Maximum time, during which the order book is in emulator. If during this time there was no update, the order book is erased. This property can be used to remove old order books when there are holes in the data.</para></listItem>
+<listItem><para><legacyBold>Errors percentage</legacyBold> - The percentage value of the error when registering new orders. Value may be from 0 (no errors at all) to 100.</para></listItem>
+<listItem><para><legacyBold>Latency</legacyBold> - The minimum value of delay for registered orders.</para></listItem>
+<listItem><para><legacyBold>Reregistering</legacyBold> - Is re-registration of orders in the form of single trade supported?</para></listItem>
+<listItem><para><legacyBold>Buffering period</legacyBold> - Send responses in batches in a single package. The network delay and the buffered work of the stock exchange core are emulated.</para></listItem>
+<listItem><para><legacyBold>Order ID</legacyBold> - The number, starting from which, the emulator will generate the identifiers for orders.</para></listItem>
+<listItem><para><legacyBold>Trade ID</legacyBold> - The number, starting from which, the emulator will generate the identifiers for trades.</para></listItem>
+<listItem><para><legacyBold>Transaction</legacyBold> - The number, starting from which, the emulator will generate the identifiers for orders transactions.</para></listItem>
+<listItem><para><legacyBold>Spread size</legacyBold> - Spread size in price increments. Used in determining the spread for the order book generation from tick trades.</para></listItem>
+<listItem><para><legacyBold>Depth of book</legacyBold> - The maximum depth of the order book, that will be generated from ticks.</para></listItem>
+<listItem><para><legacyBold>Number of volume steps</legacyBold> - The number of volume steps, for which the order is larger than the tick trade. Used at testing of tick trades.</para></listItem>
+<listItem><para><legacyBold>Portfolios interval</legacyBold> - Portfolio recalculation interval. In the interval equals zero, no recalculation is performed.</para></listItem>
+<listItem><para><legacyBold>Change time</legacyBold> - Change time for orders and trades with the stock exchange time.</para></listItem>
+<listItem><para><legacyBold>Time zone</legacyBold> - Information on the stock exchange time zone.</para></listItem>
+<listItem><para><legacyBold>Price shift</legacyBold> - Price shift from the last trade, determining boundaries of maximal and minimal prices for the next session.</para></listItem>
+<listItem><para><legacyBold>Add extra volume</legacyBold> - Add extra volume to the book order when registering large volume orders.</para></listItem>
+
+</list>
+
+    </introduction>
+    <relatedTopics>
+<link xlink:href="09d8c617-e7de-4405-bc07-b06118b9c655" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

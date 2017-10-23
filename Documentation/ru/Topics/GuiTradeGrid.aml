@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.TradeGrid</codeEntityReference> - таблица сделок. В основе данного компонента лежит <link xlink:href="88a40124-43a6-4be9-b04b-a245000fca70">универсальная таблица</link>.
+      	<codeEntityReference>T:StockSharp.Xaml.TradeGrid</codeEntityReference> - таблица сделок.
       </para>
       <para>
        <legacyBold>Основные свойства</legacyBold>
@@ -22,7 +22,7 @@
 		</list>
 		
 	  <para>
-	  Ниже показаны внеший вид компонета, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
+Ниже показан внеший вид компонента, а также фрагменты кода с его использованием. Пример кода взят из <legacyItalic>Samples/Quik/Sample</legacyItalic>.
       </para>
       
       <mediaLink><image placement="left" xlink:href="GUI_TradeGrid" /></mediaLink>
@@ -51,43 +51,43 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		if (Trader == null)
 		{
 			// создаем подключение
-			Trader = isLua
-				? new QuikTrader
-				{
-					LuaFixServerAddress = Address.Text.To<EndPoint>(),
-					LuaLogin = Login.Text,
-					LuaPassword = Password.Password.To<SecureString>()
-				}
-				: new QuikTrader(Path.Text) { IsDde = true };
+	      Trader = new QuikTrader
+	      {
+	          LuaFixServerAddress = Address.Text.To<EndPoint>(),
+	          LuaLogin = Login.Text,
+	          LuaPassword = Password.Password.To<SecureString>(),
+	          LogLevel = LogLevels.Debug
+	      };
+
 
             .......................................			
 			
 			// Добавляем инструменты в компонент SecurityPicker
-			Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+			Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
 			
 			// Добавляем свои сделки в таблицу MyTradeGrid
-			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+			Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
 			
 			// Добавляем сделки в таблицу TradeGrid
-			Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
+			Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
 			
 			// Добавляем заявки в таблицу OrderGrid
-			Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
+			Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
 			
 			// Добавляем стоп-заявки в таблицу OrderGrid
-			Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
+			Trader.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
 			
-			Trader.OrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-			Trader.OrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-			Trader.StopOrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-			Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
+			Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
+			Trader.OrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены заявки"));
+			Trader.StopOrderRegisterFailed += _stopOrdersWindow.OrderGrid.AddRegistrationFail;
+			Trader.StopOrderCancelFailed += fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, "Ошибка отмены стоп заявки"));
 			
 			
 			// Добавляем портфели в таблицу PortfolioGrid
-			Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+			Trader.NewPortfolio += portfolio => _portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
 			
 			// Добавляем позиции в таблицу PortfolioGrid
-			Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+			Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
 
 			// устанавливаем поставщик маркет-данных для компонента SecurityPicker
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
@@ -109,8 +109,7 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		_isConnected = false;
 		ConnectBtn.Content = LocalizedStrings.Connect;
 	}
-}
-              		
+}            		
 	  				]]>
              </code>
     </introduction>

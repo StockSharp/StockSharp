@@ -30,11 +30,15 @@ namespace StockSharp.Algo.Indicators
 	public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	{
 		/// <summary>
-		/// To initialize <see cref="BaseIndicator"/> which works with the <see cref="Decimal"/> data type.
+		/// Initialize <see cref="BaseIndicator"/>.
 		/// </summary>
 		protected BaseIndicator()
 		{
-			_name = GetType().GetDisplayName();
+			var type = GetType();
+
+			_name = type.GetDisplayName();
+			InputType = type.GetValueType(true);
+			ResultType = type.GetValueType(false);
 		}
 
 		/// <summary>
@@ -53,7 +57,7 @@ namespace StockSharp.Algo.Indicators
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public virtual string Name
 		{
-			get { return _name; }
+			get => _name;
 			set
 			{
 				if (value.IsEmpty())
@@ -104,6 +108,18 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[Browsable(false)]
 		public IIndicatorContainer Container { get; } = new IndicatorContainer();
+
+		/// <summary>
+		/// Input values type.
+		/// </summary>
+		[Browsable(false)]
+		public virtual Type InputType { get; }
+
+		/// <summary>
+		/// Result values type.
+		/// </summary>
+		[Browsable(false)]
+		public virtual Type ResultType { get; }
 
 		/// <summary>
 		/// The indicator change event (for example, a new value is added).
