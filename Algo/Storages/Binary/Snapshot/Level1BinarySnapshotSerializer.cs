@@ -370,13 +370,13 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				if (snapshot.LastTradeTime > 0)
 					level1Msg.Add(Level1Fields.LastTradeTime, snapshot.LastTradeTime.To<DateTimeOffset>());
 
-				if (snapshot.LastTradeUpDown >= 0)
+				if (snapshot.LastTradeUpDown != -1)
 					level1Msg.Add(Level1Fields.LastTradeUpDown, snapshot.LastTradeUpDown == 0);
 
-				if (snapshot.LastTradeOrigin >= 0)
+				if (snapshot.LastTradeOrigin != -1)
 					level1Msg.Add(Level1Fields.LastTradeOrigin, (Sides)snapshot.LastTradeOrigin);
 
-				if (snapshot.State >= 0)
+				if (snapshot.State != -1)
 					level1Msg.Add(Level1Fields.State, (SecurityStates)snapshot.State);
 
 				return level1Msg;

@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public decimal Leverage;
 			public decimal Commission;
 			public decimal CurrentValueInLots;
-			public byte State;
+			public sbyte State;
 		}
 
 		Version ISnapshotSerializer<PositionChangeMessage>.Version { get; } = new Version(1, 0);
@@ -62,6 +62,9 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				Portfolio = message.PortfolioName,
 				LastChangeServerTime = message.ServerTime.To<long>(),
 				LastChangeLocalTime = message.LocalTime.To<long>(),
+
+				Currency = -1,
+				State = -1,
 			};
 
 			foreach (var change in message.Changes)
@@ -105,7 +108,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 						snapshot.CurrentValueInLots = (decimal)change.Value;
 						break;
 					case PositionChangeTypes.State:
-						snapshot.State = (byte)(PortfolioStates)change.Value;
+						snapshot.State = (sbyte)(PortfolioStates)change.Value;
 						break;
 				}
 			}
@@ -157,7 +160,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				if (snapshot.VariationMargin != 0)
 					posMsg.Add(PositionChangeTypes.VariationMargin, snapshot.VariationMargin);
 
-				if (snapshot.Currency != 0)
+				if (snapshot.Currency != -1)
 					posMsg.Add(PositionChangeTypes.Currency, (CurrencyTypes)snapshot.Currency);
 
 				if (snapshot.Leverage != 0)
@@ -169,7 +172,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				if (snapshot.CurrentValueInLots != 0)
 					posMsg.Add(PositionChangeTypes.CurrentValueInLots, snapshot.CurrentValueInLots);
 
-				if (snapshot.State != 0)
+				if (snapshot.State != -1)
 					posMsg.Add(PositionChangeTypes.State, (PortfolioStates)snapshot.State);
 
 				return posMsg;
