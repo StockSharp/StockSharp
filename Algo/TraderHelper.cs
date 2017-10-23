@@ -1785,6 +1785,8 @@ namespace StockSharp.Algo
 				BinaryOptionType = criteria.BinaryOptionType,
 				Currency = criteria.Currency,
 				SettlementDate = criteria.SettlementDate,
+				IssueSize = criteria.IssueSize,
+				IssueDate = criteria.IssueDate,
 				UnderlyingSecurityId = criteria.UnderlyingSecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
 					? null
 					: connector.SecurityIdGenerator.GenerateId(criteria.UnderlyingSecurityCode, criteria.SecurityId.BoardCode),
@@ -2803,6 +2805,12 @@ namespace StockSharp.Algo
 
 			if (message.SecurityId.HasExternalId())
 				security.ExternalId = message.SecurityId.ToExternalId();
+
+			if (message.IssueDate != null)
+				security.IssueDate = message.IssueDate.Value;
+
+			if (message.IssueSize != null)
+				security.IssueSize = message.IssueSize.Value;
 
 			message.CopyExtensionInfo(security);
 		}

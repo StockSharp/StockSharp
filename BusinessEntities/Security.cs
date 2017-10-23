@@ -1673,6 +1673,38 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _issueSize;
+
+		/// <summary>
+		/// Number of issued contracts.
+		/// </summary>
+		[DataMember]
+		public decimal? IssueSize
+		{
+			get => _issueSize;
+			set
+			{
+				_issueSize = value;
+				Notify(nameof(IssueSize));
+			}
+		}
+
+		private DateTimeOffset? _issueDate;
+		
+		/// <summary>
+		/// Date of issue.
+		/// </summary>
+		[DataMember]
+		public DateTimeOffset? IssueDate
+		{
+			get => _issueDate;
+			set
+			{
+				_issueDate = value;
+				Notify(nameof(IssueDate));
+			}
+		}
+
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
@@ -1750,6 +1782,8 @@ namespace StockSharp.BusinessEntities
 			destination.AsksVolume = AsksVolume;
 			destination.CfiCode = CfiCode;
 			destination.Turnover = Turnover;
+			destination.IssueSize = IssueSize;
+			destination.IssueDate = IssueDate;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

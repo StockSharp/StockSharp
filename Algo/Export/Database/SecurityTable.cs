@@ -108,6 +108,15 @@ namespace StockSharp.Algo.Export.Database
 			{
 				DbType = typeof(DateTimeOffset?),
 			};
+			yield return new ColumnDescription(nameof(SecurityMessage.IssueSize))
+			{
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction()
+			};
+			yield return new ColumnDescription(nameof(SecurityMessage.IssueDate))
+			{
+				DbType = typeof(DateTimeOffset?),
+			};
 			yield return new ColumnDescription(nameof(SecurityMessage.CfiCode))
 			{
 				DbType = typeof(string),
@@ -174,6 +183,8 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(SecurityMessage.Name), value.Name },
 				{ nameof(SecurityMessage.ShortName), value.ShortName },
 				{ nameof(SecurityMessage.SettlementDate), value.SettlementDate },
+				{ nameof(SecurityMessage.IssueSize), value.IssueSize },
+				{ nameof(SecurityMessage.IssueDate), value.IssueDate },
 				{ nameof(SecurityMessage.CfiCode), value.CfiCode },
 				{ nameof(SecurityId.Bloomberg), value.SecurityId.Bloomberg },
 				{ nameof(SecurityId.Cusip), value.SecurityId.Cusip },

@@ -492,6 +492,8 @@ namespace StockSharp.Algo.Export
 					.SetCell(colIndex, 0, LocalizedStrings.UnderlyingAsset).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.ExpiryDate).SetStyle(colIndex++, "yyyy-MM-dd")
 					.SetCell(colIndex, 0, LocalizedStrings.SettlementDate).SetStyle(colIndex++, "yyyy-MM-dd")
+					.SetCell(colIndex, 0, LocalizedStrings.IssueSize).SetStyle(colIndex++, typeof(decimal))
+					.SetCell(colIndex, 0, LocalizedStrings.IssueDate).SetStyle(colIndex++, "yyyy-MM-dd")
 					.SetCell(colIndex, 0, LocalizedStrings.Currency).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.CfiCode).SetStyle(colIndex++, typeof(string))
 
@@ -526,6 +528,8 @@ namespace StockSharp.Algo.Export
 						.SetCell(colIndex++, rowIndex, security.UnderlyingSecurityCode)
 						.SetCell(colIndex++, rowIndex, security.ExpiryDate)
 						.SetCell(colIndex++, rowIndex, security.SettlementDate)
+						.SetCell(colIndex++, rowIndex, security.IssueSize)
+						.SetCell(colIndex++, rowIndex, security.IssueDate)
 						.SetCell(colIndex++, rowIndex, security.Currency == null ? string.Empty : security.Currency.Value.GetDisplayName())
 						.SetCell(colIndex++, rowIndex, security.CfiCode)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Bloomberg)

@@ -109,6 +109,8 @@
 							security.Decimals = secMsg.Decimals;
 							security.VolumeStep = secMsg.VolumeStep;
 							security.Multiplier = secMsg.Multiplier;
+							security.IssueSize = secMsg.IssueSize;
+							security.IssueDate = secMsg.IssueDate;
 						}
 						else
 							security = secMsg.ToSecurity(_exchangeInfoProvider);

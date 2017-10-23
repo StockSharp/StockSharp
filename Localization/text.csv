@@ -4332,6 +4332,7 @@ OrderCancelling;Order cancelling;Отмена заявки
 OrderReplacing;Order replacing;Перемещение заявки
 Duration;Duration;Дюрация
 IssueSize;Number of issued contracts;Объем выпуска
+IssueDate;Date of issue;Дата выпуска
 BuyBackDate;BuyBack date;Дата выкупа
 BuyBackPrice;BuyBack price;Цена выкупа
 NotSpecifiedPriceOrVolume;Not specified new value of price or volume.;Необходимо указать новое значение цены или объема.
@@ -14550,7 +14551,6 @@ DocStr10182;Parent id;Родительский идентификатор
 DocStr10184;Is row expanded;Раскрыта ли строка
 DocStr10185;The parent element changed event;Событие изменения родительского элемента
 DocStr10186;The tree item settings changed event;Событие изменения свойств элемента дерева
-DocStr10187;Date of issue;Дата выпуска
 DocStr10188;Can store message;Можно ли сохранить сообщение
 DocStr10189;The interface for access to the storage of snapshot prices;Интерфейс для доступа к хранилищу снэпшотов цен
 DocStr10190;Clear storage;Очистить хранилище

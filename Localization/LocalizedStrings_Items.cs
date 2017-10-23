@@ -42968,6 +42968,16 @@ namespace StockSharp.Localization
 		public static string IssueSize => GetString(IssueSizeKey);
 
 		/// <summary>
+		/// Date of issue
+		/// </summary>
+		public const string IssueDateKey = nameof(IssueDate);
+
+		/// <summary>
+		/// Date of issue
+		/// </summary>
+		public static string IssueDate => GetString(IssueDateKey);
+
+		/// <summary>
 		/// BuyBack date
 		/// </summary>
 		public const string BuyBackDateKey = nameof(BuyBackDate);

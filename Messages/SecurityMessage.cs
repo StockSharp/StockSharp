@@ -197,6 +197,18 @@ namespace StockSharp.Messages
 		public string Class { get; set; }
 
 		/// <summary>
+		/// Number of issued contracts.
+		/// </summary>
+		[DataMember]
+		public decimal? IssueSize { get; set; }
+		
+		/// <summary>
+		/// Date of issue.
+		/// </summary>
+		[DataMember]
+		public DateTimeOffset? IssueDate { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
 		public SecurityMessage()
@@ -252,6 +264,8 @@ namespace StockSharp.Messages
 			destination.Class = Class;
 			destination.BinaryOptionType = BinaryOptionType;
 			destination.LocalTime = LocalTime;
+			destination.IssueSize = IssueSize;
+			destination.IssueDate = IssueDate;
 
 			if (copyOriginalTransactionId)
 				destination.OriginalTransactionId = OriginalTransactionId;
