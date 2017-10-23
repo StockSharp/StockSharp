@@ -19828,12 +19828,12 @@ namespace StockSharp.Localization
 		public static string Str2083 => GetString(Str2083Key);
 
 		/// <summary>
-		/// Session {0}. Created for user {1}.
+		/// Session {0}. Created for user {1} (product={2}, version={3}).
 		/// </summary>
 		public const string Str2084ParamsKey = nameof(Str2084Params);
 
 		/// <summary>
-		/// Session {0}. Created for user {1}.
+		/// Session {0}. Created for user {1} (product={2}, version={3}).
 		/// </summary>
 		public static string Str2084Params => GetString(Str2084ParamsKey);
 

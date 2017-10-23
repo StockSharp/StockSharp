@@ -1983,7 +1983,7 @@ Str2080Params;Session with ID {0} not found.;Сессия с идентифик�
 Str2081Params;Session {0} does not have the rights for {1} for {2} {3} ({4}) {5}.;Сессия {0} не имеет прав на {1} для {2} {3} ({4}) {5}.
 Str2082Params;Type of data {0} is not supported.;Тип данных {0} не поддерживается.
 Str2083;HydraServer is not available.;HydraServer недоступен.
-Str2084Params;Session {0}. Created for user {1}.;Сессия {0}. Создание для юзера {1}.
+Str2084Params;Session {0}. Created for user {1} (product={2}, version={3}).;Сессия {0}. Создание для юзера {1} (программа={2}, версия={3}).
 Str2085Params;Session {0}. End.;Сессия {0}. Окончание.
 Str2086Params;Session {0}. Securities search.;Сессия {0}. Поиск инструментов.
 Str2087Params;Session {0}. Filtered securities search.;Сессия {0}. Поиск инструментов по фильтру.
