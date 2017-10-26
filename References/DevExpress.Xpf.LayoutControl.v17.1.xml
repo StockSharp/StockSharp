@@ -3534,47 +3534,6 @@ This is an attached property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.LayoutControl.TileSize">
-
-            <summary>
-                <para>Lists values that specify a tile's size.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.ExtraLarge">
-            <summary>
-                <para>An extra large square tile of 310x310 pixels.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.ExtraSmall">
-            <summary>
-                <para>A small square tile of 70x70 pixels.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.Large">
-            <summary>
-                <para>A wide tile of 310x150 pixels.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.Small">
-            <summary>
-                <para>A medium square tile of 150x150 pixels.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs">
 
             <summary>
@@ -4123,6 +4082,47 @@ This is a dependency property.
             </summary>
             <value>A Char value that indicates that children within the current DataLayoutControl group will be arranged vertically.
 </value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.TileSize">
+
+            <summary>
+                <para>Lists values that specify a tile's size.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.ExtraLarge">
+            <summary>
+                <para>An extra large square tile of 310x310 pixels.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.ExtraSmall">
+            <summary>
+                <para>A small square tile of 70x70 pixels.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.Large">
+            <summary>
+                <para>A wide tile of 310x150 pixels.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.Small">
+            <summary>
+                <para>A medium square tile of 150x150 pixels.
+</para>
+            </summary>
 
 
         </member>

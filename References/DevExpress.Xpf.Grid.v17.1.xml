@@ -202,6 +202,265 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.RowControl">
+
+            <summary>
+                <para>A grid row.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.RowControl.#ctor(DevExpress.Xpf.Grid.RowData)">
+            <summary>
+                <para>Initializes a new instance of the RowControl class with the specified row data.
+</para>
+            </summary>
+            <param name="rowData">
+		A row data.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.CellBackgroundBrushes">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.CellBackgroundBrushesProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.CellForegroundBrushes">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.CellForegroundBrushesProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.FadeSelection">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.FadeSelectionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.FixedRowPosition">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.FixedRowPositionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.IsAlternateRow">
+            <summary>
+                <para>Gets whether the current row is alternate.
+</para>
+            </summary>
+            <value><b>true</b>, if the row is alternate; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.IsAlternateRowProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.IsLastFixedRow">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.IsLastFixedRowProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.RowControl.OnApplyTemplate">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.RowFitBorderBrush">
+            <summary>
+                <para>Gets or sets the brush used to draw the row fit border.
+
+</para>
+            </summary>
+            <value>A <see cref="Brush"/> object that is a brush used to draw the row fit border.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.RowFitBorderBrushProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.SelectionState">
+            <summary>
+                <para>Gets a value that indicates the row's selection state. 
+</para>
+            </summary>
+            <value>A <see cref="SelectionState"/> enumeration value that specifies the row's selection state. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.SelectionStateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.ShowBottomLine">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.ShowBottomLineProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.ShowHorizontalLine">
+            <summary>
+                <para>Gets or sets whether to show horizontal row lines.
+</para>
+            </summary>
+            <value><b>true</b>, to show horizontal grid lines; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.ShowHorizontalLineProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.ShowRowBreak">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.ShowRowBreakProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.RowControl.ShowVerticalLines">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. 
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.RowControl.ShowVerticalLinesProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.LightweightCellEditor">
 
             <summary>
@@ -337,76 +596,6 @@
 
         </member>
         <member name="F:DevExpress.Xpf.Grid.LightweightCellEditor.SelectionStateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.LightweightCellEditorBase">
-
-            <summary>
-                <para>Serves as the base for classes that display the content of a data cell in the optimized mode.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LightweightCellEditorBase.FontFamily">
-            <summary>
-                <para>Gets or sets the font family name for the grid cells. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.Media.FontFamily"/> object representing the font family.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LightweightCellEditorBase.FontFamilyProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LightweightCellEditorBase.FontSize">
-            <summary>
-                <para>Gets or sets the size of the text font for the grid cells. This is a dependency property.
-
-</para>
-            </summary>
-            <value>A <see cref="T:System.Double"/> value representing the font size for the grid cells.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LightweightCellEditorBase.FontSizeProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LightweightCellEditorBase.Foreground">
-            <summary>
-                <para>Gets or sets the foreground color. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Drawing.Color"/> value representing the foreground color.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LightweightCellEditorBase.ForegroundProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -892,262 +1081,6 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.CardViewHitTest">
-
-            <summary>
-                <para>Lists values which identify card view elements.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.Card">
-            <summary>
-                <para>The test object belongs to a card.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.CardHeader">
-            <summary>
-                <para>The test object belongs to a card's header.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.CardHeaderButton">
-            <summary>
-                <para>The test object belongs to a card expand button. These buttons are displayed at the right edge of card headers, allowing end-users to expand and collapse cards.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.ColumnHeader">
-            <summary>
-                <para>The test object belongs to a column's header.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.ColumnHeaderFilterButton">
-            <summary>
-                <para>The test object belongs to a column header's filter button.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.ColumnHeaderPanel">
-            <summary>
-                <para>The test object belongs to the Column Header Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.ColumnPanelShowButton">
-            <summary>
-                <para>The test object belongs to the button used to show/hide the column header panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.DataArea">
-            <summary>
-                <para>The test object belongs to the area within a card view which is not occupied by cards.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FieldCaption">
-            <summary>
-                <para>The test object belongs to a field's caption.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FieldValue">
-            <summary>
-                <para>The test object belongs to a field value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanel">
-            <summary>
-                <para>The test object belongs to the Filter Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanelActiveButton">
-            <summary>
-                <para>The test object belongs to the button in the Filter Panel used to activate filtering within a View.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanelCloseButton">
-            <summary>
-                <para>The test object belongs to the Close button displayed within the Filter Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanelCustomizeButton">
-            <summary>
-                <para>The test object belongs to the  button displayed within the Filter Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanelText">
-            <summary>
-                <para>The test object belongs to a filter expression displayed within the Filter Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FixedTotalSummary">
-            <summary>
-                <para>The test object belongs to the Fixed Summary Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupPanel">
-            <summary>
-                <para>The test object belongs to the Group Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupPanelColumnHeader">
-            <summary>
-                <para>The test object belongs to a column header displayed within the Group Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupPanelColumnHeaderFilterButton">
-            <summary>
-                <para>The test object belongs to the filter button displayed by a column header that resides within the Group Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupRow">
-            <summary>
-                <para>The test object belongs to the group row.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupRowButton">
-            <summary>
-                <para>The test object belongs to the button used to expand/collapse a group row.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupSummary">
-            <summary>
-                <para>The test object belongs to a group summary.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupValue">
-            <summary>
-                <para>The test object belongs to a value displayed within the group row.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.HorizontalScrollBar">
-            <summary>
-                <para>The test object belongs to a view's the horizontal scrollbar.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.MRUFilterListComboBox">
-            <summary>
-                <para>The test object belongs to a combobox that contains MRU filters. It is displayed within the Filter Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.None">
-            <summary>
-                <para>The test object doesn't belong to a View (it is outside the View).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.SearchPanel">
-            <summary>
-                <para>The test object belongs to a search panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.Separator">
-            <summary>
-                <para>The test point belongs to a card separator.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.TotalSummary">
-            <summary>
-                <para>The test object belongs to a total summary.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.TotalSummaryPanel">
-            <summary>
-                <para>The test object belongs to the Summary Panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.VerticalScrollBar">
-            <summary>
-                <para>The test object belongs to a view's the vertical scrollbar.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.TableViewHitInfo">
 
             <summary>
@@ -1422,6 +1355,262 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.CardViewHitTest">
+
+            <summary>
+                <para>Lists values which identify card view elements.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.Card">
+            <summary>
+                <para>The test object belongs to a card.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.CardHeader">
+            <summary>
+                <para>The test object belongs to a card's header.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.CardHeaderButton">
+            <summary>
+                <para>The test object belongs to a card expand button. These buttons are displayed at the right edge of card headers, allowing end-users to expand and collapse cards.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.ColumnHeader">
+            <summary>
+                <para>The test object belongs to a column's header.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.ColumnHeaderFilterButton">
+            <summary>
+                <para>The test object belongs to a column header's filter button.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.ColumnHeaderPanel">
+            <summary>
+                <para>The test object belongs to the Column Header Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.ColumnPanelShowButton">
+            <summary>
+                <para>The test object belongs to the button used to show/hide the column header panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.DataArea">
+            <summary>
+                <para>The test object belongs to the area within a card view which is not occupied by cards.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FieldCaption">
+            <summary>
+                <para>The test object belongs to a field's caption.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FieldValue">
+            <summary>
+                <para>The test object belongs to a field value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanel">
+            <summary>
+                <para>The test object belongs to the Filter Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanelActiveButton">
+            <summary>
+                <para>The test object belongs to the button in the Filter Panel used to activate filtering within a View.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanelCloseButton">
+            <summary>
+                <para>The test object belongs to the Close button displayed within the Filter Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanelCustomizeButton">
+            <summary>
+                <para>The test object belongs to the  button displayed within the Filter Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FilterPanelText">
+            <summary>
+                <para>The test object belongs to a filter expression displayed within the Filter Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.FixedTotalSummary">
+            <summary>
+                <para>The test object belongs to the Fixed Summary Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupPanel">
+            <summary>
+                <para>The test object belongs to the Group Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupPanelColumnHeader">
+            <summary>
+                <para>The test object belongs to a column header displayed within the Group Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupPanelColumnHeaderFilterButton">
+            <summary>
+                <para>The test object belongs to the filter button displayed by a column header that resides within the Group Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupRow">
+            <summary>
+                <para>The test object belongs to the group row.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupRowButton">
+            <summary>
+                <para>The test object belongs to the button used to expand/collapse a group row.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupSummary">
+            <summary>
+                <para>The test object belongs to a group summary.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.GroupValue">
+            <summary>
+                <para>The test object belongs to a value displayed within the group row.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.HorizontalScrollBar">
+            <summary>
+                <para>The test object belongs to a view's the horizontal scrollbar.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.MRUFilterListComboBox">
+            <summary>
+                <para>The test object belongs to a combobox that contains MRU filters. It is displayed within the Filter Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.None">
+            <summary>
+                <para>The test object doesn't belong to a View (it is outside the View).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.SearchPanel">
+            <summary>
+                <para>The test object belongs to a search panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.Separator">
+            <summary>
+                <para>The test point belongs to a card separator.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.TotalSummary">
+            <summary>
+                <para>The test object belongs to a total summary.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.TotalSummaryPanel">
+            <summary>
+                <para>The test object belongs to the Summary Panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.CardViewHitTest.VerticalScrollBar">
+            <summary>
+                <para>The test object belongs to a view's the vertical scrollbar.
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.CellValueChangedEventHandler">
 
             <summary>
@@ -1636,246 +1825,6 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.CustomColumnSortEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnSort"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Int32,System.Int32,System.Object,System.Object,DevExpress.Data.ColumnSortOrder)">
-            <summary>
-                <para>Initializes a new instance of the CustomColumnSortEventArgs class.
-</para>
-            </summary>
-            <param name="column">
-		A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object, representing the column that contains the values to compare. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Column"/> property.
-
-            </param>
-            <param name="listSourceRowIndex1">
-		An integer value that specifies the first row's index in the data source. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.ListSourceRowIndex1"/> property.
-
-            </param>
-            <param name="listSourceRowIndex2">
-		An integer value that specifies the second row's index in the data source. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.ListSourceRowIndex2"/> property.
-
-            </param>
-            <param name="value1">
-		An object that represents the first of the two values being compared. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Value1"/> property.
-
-            </param>
-            <param name="value2">
-		An object that represents the second of the two values being compared. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Value2"/> property.
-
-            </param>
-            <param name="sortOrder">
-		A <see cref="T:DevExpress.Data.ColumnSortOrder"/> value that specifies the sort order applied to the specified column. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.SortOrder"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Column">
-            <summary>
-                <para>Gets the column whose values are being compared.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object, representing the column that contains the values to compare.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Handled">
-            <summary>
-                <para>Gets or sets whether a comparison operation is handled and no default processing is required.
-</para>
-            </summary>
-            <value><b>true</b> if a comparison operation is handled; otherwise <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.ListSourceRowIndex1">
-            <summary>
-                <para>Gets the index of the first of the two rows being compared in the data source. 
-
-</para>
-            </summary>
-            <value>An integer value that specifies the first row's index in the data source.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.ListSourceRowIndex2">
-            <summary>
-                <para>Gets the index of the second of the two rows being compared in the data source.
-
-</para>
-            </summary>
-            <value>An integer value that specifies the second row's index in the data source.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Result">
-            <summary>
-                <para>Gets or sets the result of a custom comparison.
-</para>
-            </summary>
-            <value>An integer value that specifies the result.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.SortOrder">
-            <summary>
-                <para>Gets the sort order applied to the column.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Data.ColumnSortOrder"/> value that specifies the column's sort order.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Source">
-            <summary>
-                <para>Gets the grid control that raised the event.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.GridControl"/> object that raised the event.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Value1">
-            <summary>
-                <para>Gets the first value being compared.
-</para>
-            </summary>
-            <value>An object that represents the first of the two values being compared.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Value2">
-            <summary>
-                <para>Gets the second value being compared.
-</para>
-            </summary>
-            <value>An object that represents the second of the two values being compared.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.GridGroupSummarySortInfo">
-
-            <summary>
-                <para>Represents an element in the <see cref="T:DevExpress.Xpf.Grid.GridGroupSummarySortInfoCollection"/>.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.#ctor(DevExpress.Xpf.Grid.GridSummaryItem,System.String,System.ComponentModel.ListSortDirection)">
-            <summary>
-                <para>Initializes a new instance of the GridGroupSummarySortInfo class with the specified summary item, group column and sort order.
-</para>
-            </summary>
-            <param name="summaryItem">
-		A <see cref="T:DevExpress.Xpf.Grid.GridSummaryItem"/> object, representing a summary item used to calculate summary values for groups of rows. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SummaryItem"/> property.
-
-            </param>
-            <param name="fieldName">
-		A <see cref="T:System.String"/> value that specifies the field name of a column that defines the nesting level of the group whose data rows are sorted by summary values. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.FieldName"/> property.
-
-            </param>
-            <param name="sortOrder">
-		A <see cref="T:System.ComponentModel.ListSortDirection"/> enumeration value that specifies the sort order. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SortOrder"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.#ctor(DevExpress.Xpf.Grid.GridSummaryItem,System.String)">
-            <summary>
-                <para>Initializes a new instance of the GridGroupSummarySortInfo class with the specified summary item and group column.
-</para>
-            </summary>
-            <param name="summaryItem">
-		A <see cref="T:DevExpress.Xpf.Grid.GridSummaryItem"/> object, representing a summary item used to calculate summary values for groups of rows. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SummaryItem"/> property.
-
-            </param>
-            <param name="fieldName">
-		A <see cref="T:System.String"/> value that specifies the field name of a column that defines the nesting level of the group whose data rows are sorted by summary values. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.FieldName"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.FieldName">
-            <summary>
-                <para>Gets or sets the field name of a grouping column.
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> value that specifies the field name of a column that defines the nesting level of the group whose data rows are sorted by summary values.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SortOrder">
-            <summary>
-                <para>Gets or sets the order in which group rows are sorted.
-</para>
-            </summary>
-            <value>A <see cref="T:System.ComponentModel.ListSortDirection"/> enumeration value that specifies the sort order.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SummaryItem">
-            <summary>
-                <para>Gets the summary item.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.GridSummaryItem"/> object that represents the summary item.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SummaryItemIndex">
-            <summary>
-                <para>Gets the summary item's position within the <see cref="P:DevExpress.Xpf.Grid.GridControl.GroupSummary"/> collection.
-</para>
-            </summary>
-            <value>An integer value that specifies the item's position within the <see cref="P:DevExpress.Xpf.Grid.GridControl.GroupSummary"/> collection.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.GridCellValidationEventHandler">
-
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridColumn.Validate"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.GridCellValidationEventHandler.Invoke(System.Object,DevExpress.Xpf.Grid.GridCellValidationEventArgs)">
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridViewBase.ValidateCell"/> event.
-</para>
-            </summary>
-            <param name="sender">
-		The event source.
-
-            </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.Grid.GridCellValidationEventArgs"/> object that contains event data.
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.EditorEventHandler">
 
             <summary>
@@ -1961,30 +1910,6 @@
             <value>A <see cref="T:System.Object"/> specifying the data row.
 
 </value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.CustomColumnSortEventHandler">
-
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnSort"/> and <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnGroup"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.CustomColumnSortEventHandler.Invoke(System.Object,DevExpress.Xpf.Grid.CustomColumnSortEventArgs)">
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnSort"/> and <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnGroup"/> events.
-</para>
-            </summary>
-            <param name="sender">
-		The event source.
-
-            </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.Grid.CustomColumnSortEventArgs"/> object that contains event data.
-
-            </param>
 
 
         </member>
@@ -2788,30 +2713,6 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventHandler">
-
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomGroupDisplayText"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventHandler.Invoke(System.Object,DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs)">
-            <summary>
-                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnDisplayText"/> and <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomGroupDisplayText"/> events.
-</para>
-            </summary>
-            <param name="sender">
-		The event source.
-
-            </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs"/> object that contains event data.
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.CardLayout">
 
             <summary>
@@ -2876,103 +2777,6 @@
                 <para>Rows are fixed at the top of the grid.
 </para>
             </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnDisplayText"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.#ctor">
-            <summary>
-                <para>Initializes a new instance of the CustomColumnDisplayTextEventArgs class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.Column">
-            <summary>
-                <para>Gets the column which owns the processed cell.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object that represents the column to which the processed cell belongs.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.DisplayText">
-            <summary>
-                <para>Gets or sets the display text for the cell currently being processed.
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> value that specifies the cell's display text.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.ListSourceIndex">
-            <summary>
-                <para>Gets the index of a record in a data source that corresponds to the processed data row.
-</para>
-            </summary>
-            <value>An integer value that specifies the index of the processed record in a data source.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.Row">
-            <summary>
-                <para>Gets the row which owns the processed cell.
-</para>
-            </summary>
-            <value>An object that represents the row in which the processed cell resides.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.RowHandle">
-            <summary>
-                <para>Gets the processed row's handle.
-</para>
-            </summary>
-            <value>An integer value that specifies the row's handle.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.ShowAsNullText">
-            <summary>
-                <para>Specifies whether text corresponding to a null value appears faded.
-
-</para>
-            </summary>
-            <value><b>true</b>, to fade the null text; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.Source">
-            <summary>
-                <para>Gets the grid control that raised the event.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.GridControl"/> object that raised the event.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.Value">
-            <summary>
-                <para>Gets the processed cell's value.
-</para>
-            </summary>
-            <value>An object that represents the value of the processed cell.
-</value>
 
 
         </member>
@@ -8542,6 +8346,114 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.GridGroupSummarySortInfo">
+
+            <summary>
+                <para>Represents an element in the <see cref="T:DevExpress.Xpf.Grid.GridGroupSummarySortInfoCollection"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.#ctor(DevExpress.Xpf.Grid.GridSummaryItem,System.String,System.ComponentModel.ListSortDirection)">
+            <summary>
+                <para>Initializes a new instance of the GridGroupSummarySortInfo class with the specified summary item, group column and sort order.
+</para>
+            </summary>
+            <param name="summaryItem">
+		A <see cref="T:DevExpress.Xpf.Grid.GridSummaryItem"/> object, representing a summary item used to calculate summary values for groups of rows. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SummaryItem"/> property.
+
+            </param>
+            <param name="fieldName">
+		A <see cref="T:System.String"/> value that specifies the field name of a column that defines the nesting level of the group whose data rows are sorted by summary values. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.FieldName"/> property.
+
+            </param>
+            <param name="sortOrder">
+		A <see cref="T:System.ComponentModel.ListSortDirection"/> enumeration value that specifies the sort order. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SortOrder"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.#ctor(DevExpress.Xpf.Grid.GridSummaryItem,System.String)">
+            <summary>
+                <para>Initializes a new instance of the GridGroupSummarySortInfo class with the specified summary item and group column.
+</para>
+            </summary>
+            <param name="summaryItem">
+		A <see cref="T:DevExpress.Xpf.Grid.GridSummaryItem"/> object, representing a summary item used to calculate summary values for groups of rows. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SummaryItem"/> property.
+
+            </param>
+            <param name="fieldName">
+		A <see cref="T:System.String"/> value that specifies the field name of a column that defines the nesting level of the group whose data rows are sorted by summary values. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.FieldName"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.FieldName">
+            <summary>
+                <para>Gets or sets the field name of a grouping column.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value that specifies the field name of a column that defines the nesting level of the group whose data rows are sorted by summary values.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SortOrder">
+            <summary>
+                <para>Gets or sets the order in which group rows are sorted.
+</para>
+            </summary>
+            <value>A <see cref="T:System.ComponentModel.ListSortDirection"/> enumeration value that specifies the sort order.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SummaryItem">
+            <summary>
+                <para>Gets the summary item.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.GridSummaryItem"/> object that represents the summary item.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.GridGroupSummarySortInfo.SummaryItemIndex">
+            <summary>
+                <para>Gets the summary item's position within the <see cref="P:DevExpress.Xpf.Grid.GridControl.GroupSummary"/> collection.
+</para>
+            </summary>
+            <value>An integer value that specifies the item's position within the <see cref="P:DevExpress.Xpf.Grid.GridControl.GroupSummary"/> collection.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.GridCellValidationEventHandler">
+
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridColumn.Validate"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.GridCellValidationEventHandler.Invoke(System.Object,DevExpress.Xpf.Grid.GridCellValidationEventArgs)">
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridViewBase.ValidateCell"/> event.
+</para>
+            </summary>
+            <param name="sender">
+		The event source.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.Grid.GridCellValidationEventArgs"/> object that contains event data.
+
+            </param>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.GridCellValidationEventArgs">
 
             <summary>
@@ -8608,6 +8520,283 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.CustomColumnSortEventHandler">
+
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnSort"/> and <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnGroup"/> events.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomColumnSortEventHandler.Invoke(System.Object,DevExpress.Xpf.Grid.CustomColumnSortEventArgs)">
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnSort"/> and <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnGroup"/> events.
+</para>
+            </summary>
+            <param name="sender">
+		The event source.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.Grid.CustomColumnSortEventArgs"/> object that contains event data.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.CustomColumnSortEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnSort"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Int32,System.Int32,System.Object,System.Object,DevExpress.Data.ColumnSortOrder)">
+            <summary>
+                <para>Initializes a new instance of the CustomColumnSortEventArgs class.
+</para>
+            </summary>
+            <param name="column">
+		A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object, representing the column that contains the values to compare. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Column"/> property.
+
+            </param>
+            <param name="listSourceRowIndex1">
+		An integer value that specifies the first row's index in the data source. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.ListSourceRowIndex1"/> property.
+
+            </param>
+            <param name="listSourceRowIndex2">
+		An integer value that specifies the second row's index in the data source. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.ListSourceRowIndex2"/> property.
+
+            </param>
+            <param name="value1">
+		An object that represents the first of the two values being compared. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Value1"/> property.
+
+            </param>
+            <param name="value2">
+		An object that represents the second of the two values being compared. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Value2"/> property.
+
+            </param>
+            <param name="sortOrder">
+		A <see cref="T:DevExpress.Data.ColumnSortOrder"/> value that specifies the sort order applied to the specified column. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.SortOrder"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Column">
+            <summary>
+                <para>Gets the column whose values are being compared.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object, representing the column that contains the values to compare.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Handled">
+            <summary>
+                <para>Gets or sets whether a comparison operation is handled and no default processing is required.
+</para>
+            </summary>
+            <value><b>true</b> if a comparison operation is handled; otherwise <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.ListSourceRowIndex1">
+            <summary>
+                <para>Gets the index of the first of the two rows being compared in the data source. 
+
+</para>
+            </summary>
+            <value>An integer value that specifies the first row's index in the data source.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.ListSourceRowIndex2">
+            <summary>
+                <para>Gets the index of the second of the two rows being compared in the data source.
+
+</para>
+            </summary>
+            <value>An integer value that specifies the second row's index in the data source.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Result">
+            <summary>
+                <para>Gets or sets the result of a custom comparison.
+</para>
+            </summary>
+            <value>An integer value that specifies the result.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.SortOrder">
+            <summary>
+                <para>Gets the sort order applied to the column.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Data.ColumnSortOrder"/> value that specifies the column's sort order.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Source">
+            <summary>
+                <para>Gets the grid control that raised the event.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.GridControl"/> object that raised the event.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Value1">
+            <summary>
+                <para>Gets the first value being compared.
+</para>
+            </summary>
+            <value>An object that represents the first of the two values being compared.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnSortEventArgs.Value2">
+            <summary>
+                <para>Gets the second value being compared.
+</para>
+            </summary>
+            <value>An object that represents the second of the two values being compared.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventHandler">
+
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomGroupDisplayText"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventHandler.Invoke(System.Object,DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs)">
+            <summary>
+                <para>Represents a method that will handle the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnDisplayText"/> and <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomGroupDisplayText"/> events.
+</para>
+            </summary>
+            <param name="sender">
+		The event source.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs"/> object that contains event data.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.GridControl.CustomColumnDisplayText"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.#ctor">
+            <summary>
+                <para>Initializes a new instance of the CustomColumnDisplayTextEventArgs class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.Column">
+            <summary>
+                <para>Gets the column which owns the processed cell.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object that represents the column to which the processed cell belongs.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.DisplayText">
+            <summary>
+                <para>Gets or sets the display text for the cell currently being processed.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value that specifies the cell's display text.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.ListSourceIndex">
+            <summary>
+                <para>Gets the index of a record in a data source that corresponds to the processed data row.
+</para>
+            </summary>
+            <value>An integer value that specifies the index of the processed record in a data source.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.Row">
+            <summary>
+                <para>Gets the row which owns the processed cell.
+</para>
+            </summary>
+            <value>An object that represents the row in which the processed cell resides.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.RowHandle">
+            <summary>
+                <para>Gets the processed row's handle.
+</para>
+            </summary>
+            <value>An integer value that specifies the row's handle.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.ShowAsNullText">
+            <summary>
+                <para>Specifies whether text corresponding to a null value appears faded.
+
+</para>
+            </summary>
+            <value><b>true</b>, to fade the null text; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.Source">
+            <summary>
+                <para>Gets the grid control that raised the event.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Grid.GridControl"/> object that raised the event.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomColumnDisplayTextEventArgs.Value">
+            <summary>
+                <para>Gets the processed cell's value.
+</para>
+            </summary>
+            <value>An object that represents the value of the processed cell.
+</value>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.CellValueEventHandler">
 
             <summary>
@@ -8632,181 +8821,103 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings">
+        <member name="T:DevExpress.Xpf.Grid.CellValueEventArgs">
 
             <summary>
-                <para>Defines the appearance and behavior of the <b>SearchTokenLookUpEdit</b>.
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.GridViewBase.CellValueChanging"/> and <see cref="E:DevExpress.Xpf.Grid.GridViewBase.CellValueChanged"/> events.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.#ctor">
+        <member name="M:DevExpress.Xpf.Grid.CellValueEventArgs.#ctor(System.Windows.RoutedEvent,DevExpress.Xpf.Grid.GridViewBase,System.Int32,DevExpress.Xpf.Grid.GridColumn,System.Object)">
             <summary>
-                <para>Initializes a new instance of the SearchTokenLookUpEditStyleSettings class with default settings.
+                <para>Initializes a new instance of the CellValueEventArgs class.
 </para>
             </summary>
+            <param name="routedEvent">
+		The routed event.
+
+            </param>
+            <param name="view">
+		A <see cref="T:DevExpress.Xpf.Grid.DataViewBase"/> descendant that is the view that raised the event.
+
+            </param>
+            <param name="rowHandle">
+		An integer value that specifies the row's handle. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.RowEventArgs.RowHandle"/> property.
+
+            </param>
+            <param name="column">
+		A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object that is the column. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CellValueEventArgs.Column"/> property.
+
+            </param>
+            <param name="value">
+		An object that represents the cell's new value. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CellValueEventArgs.Value"/> property.
+
+            </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.AllowEditTokens">
+        <member name="P:DevExpress.Xpf.Grid.CellValueEventArgs.Cell">
             <summary>
-                <para>Gets or sets whether to enable editing of existing tokens. This is a dependency property.
+                <para>Gets or sets the <b>CellValue</b> object consisting of information about the cell being processed.
+
 </para>
             </summary>
-            <value><b>true</b>, to enable editing of existing tokens; otherwise, <b>false</b>.
+            <value>The <b>CellValue</b> object consisting of information about the cell being processed.
+
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.AllowEditTokensProperty">
+        <member name="P:DevExpress.Xpf.Grid.CellValueEventArgs.Column">
             <summary>
-                <para>Identifies the  dependency property.
+                <para>Gets a column that contains the edited cell.
 </para>
             </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.EnableTokenWrapping">
-            <summary>
-                <para>Gets or sets whether to enable token wrapping. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b>, to enable token wrapping; otherwise, <b>false</b>.
+            <value>A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object that represents the column that contains the edited cell.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.EnableTokenWrappingProperty">
+        <member name="P:DevExpress.Xpf.Grid.CellValueEventArgs.Value">
             <summary>
-                <para>Identifies the  dependency property.
+                <para>Gets or sets the processed cell's value.
 </para>
             </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.IsTokenStyleSettings">
-            <summary>
-                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.NewTokenPosition">
-            <summary>
-                <para>Specifies the placement of new tokens. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Editors.NewTokenPosition"/> enumeration value.
+            <value>An object that represents the cell's value.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.NewTokenPositionProperty">
+        <member name="T:DevExpress.Xpf.Grid.NewItemRowPosition">
+
             <summary>
-                <para>Identifies the  dependency property.
+                <para>Lists values that specify the New Item Row's position within a View.
 </para>
             </summary>
-            <returns> </returns>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.NewItemRowPosition.Bottom">
+            <summary>
+                <para><para>The new item row is displayed at the bottom of the view.</para>
+</para>
+            </summary>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.ShowTokenButtons">
+        <member name="F:DevExpress.Xpf.Grid.NewItemRowPosition.None">
             <summary>
-                <para>Specifies whether to display the delete button within tokens. This is a dependency property.
+                <para>The new item row is not shown.
 </para>
             </summary>
-            <value><b>true</b>, to show the delete button; otherwise, <b>false</b>.
-</value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.ShowTokenButtonsProperty">
+        <member name="F:DevExpress.Xpf.Grid.NewItemRowPosition.Top">
             <summary>
-                <para>Identifies the  dependency property.
+                <para><para>The new item row is displayed at the top of the view.</para>
 </para>
             </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenBorderTemplate">
-            <summary>
-                <para>Specifies the template used to represent a gallery item's borders on-screen. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.Controls.ControlTemplate"/> object that is the corresponding template.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenBorderTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenMaxWidth">
-            <summary>
-                <para>Gets or sets the token's maximum width. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Double"/> value that specifies the token's maximum width.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenMaxWidthProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenStyle">
-            <summary>
-                <para>Gets or sets the appearance settings applied to tokens.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.Style"/> object that is the style applied to tokens.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenStyleProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenTextTrimming">
-            <summary>
-                <para>Gets or sets the trimming behavior for tokens. This is a dependency property.
-</para>
-            </summary>
-            <value>A System.Windows.TextTrimming enumeration value.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenTextTrimmingProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
 
 
         </member>
@@ -11181,7 +11292,7 @@
         </member>
         <member name="P:DevExpress.Xpf.Grid.GridViewBase.GroupColumnSummaryElementStyle">
             <summary>
-                <para>Gets or sets the style applied to individual text elements in group summary items that is aligned by columns. This is a dependency property.
+                <para>Gets or sets the style applied to individual text elements in group summary items that are aligned by columns. This is a dependency property.
 </para>
             </summary>
             <value>A <see cref="T:System.Windows.Style"/> object that is the style applied to individual text elements in group summary items that are aligned by columns.
@@ -12285,6 +12396,170 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings">
+
+            <summary>
+                <para>Defines the native appearance and behavior of the <see cref="T:DevExpress.Xpf.Grid.LookUp.LookUpEdit"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.#ctor">
+            <summary>
+                <para>Initializes a new instance of the LookUpEditStyleSettings class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowColumnFiltering">
+            <summary>
+                <para>Gets or sets whether an end-user can filter data by column. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> to allow filtering data by column; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowColumnFilteringProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowGrouping">
+            <summary>
+                <para>Gets or sets a value that specifies whether an end-user can group data within an embedded grid control. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> to allow an end-user to group data; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowGroupingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowSorting">
+            <summary>
+                <para>Gets or sets whether an end-user can sort data within an embedded grid. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> to allow an end-user to sort data; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowSortingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.GetPopupFooterButtons(DevExpress.Xpf.Editors.PopupBaseEdit)">
+            <summary>
+                <para>Indicates which buttons are displayed within an editor's popup.
+</para>
+            </summary>
+            <param name="editor">
+		A <see cref="T:DevExpress.Xpf.Editors.PopupBaseEdit"/> descendant that is the dropdown editor.
+
+            </param>
+            <returns>The <see cref="F:DevExpress.Xpf.Editors.PopupFooterButtons.None"/> value.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.SelectionMode">
+            <summary>
+                <para>Gets or sets the selection behavior for the <see cref="T:DevExpress.Xpf.Grid.LookUp.LookUpEdit"/>. This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.SelectionMode"/> enumeration value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.SelectionModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowColumnHeaders">
+            <summary>
+                <para>Gets or sets whether column headers are displayed within an embedded grid. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> to display column headers; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowColumnHeadersProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowGroupPanel">
+            <summary>
+                <para>Gets or sets whether the Group Panel is displayed within an embedded grid. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> to display the Group Panel; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowGroupPanelProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowTotalSummary">
+            <summary>
+                <para>Gets or sets whether the Summary Panel is displayed within an embedded grid. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> to display the Total Summary Panel within an embedded grid; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowTotalSummaryProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.LookUp.SearchLookUpEditStyleSettings">
 
             <summary>
@@ -12340,74 +12615,6 @@
 </para>
             </summary>
             <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.CellValueEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.GridViewBase.CellValueChanging"/> and <see cref="E:DevExpress.Xpf.Grid.GridViewBase.CellValueChanged"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.CellValueEventArgs.#ctor(System.Windows.RoutedEvent,DevExpress.Xpf.Grid.GridViewBase,System.Int32,DevExpress.Xpf.Grid.GridColumn,System.Object)">
-            <summary>
-                <para>Initializes a new instance of the CellValueEventArgs class.
-</para>
-            </summary>
-            <param name="routedEvent">
-		The routed event.
-
-            </param>
-            <param name="view">
-		A <see cref="T:DevExpress.Xpf.Grid.DataViewBase"/> descendant that is the view that raised the event.
-
-            </param>
-            <param name="rowHandle">
-		An integer value that specifies the row's handle. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.RowEventArgs.RowHandle"/> property.
-
-            </param>
-            <param name="column">
-		A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object that is the column. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CellValueEventArgs.Column"/> property.
-
-            </param>
-            <param name="value">
-		An object that represents the cell's new value. This value is assigned to the <see cref="P:DevExpress.Xpf.Grid.CellValueEventArgs.Value"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CellValueEventArgs.Cell">
-            <summary>
-                <para>Gets or sets the <b>CellValue</b> object consisting of information about the cell being processed.
-
-</para>
-            </summary>
-            <value>The <b>CellValue</b> object consisting of information about the cell being processed.
-
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CellValueEventArgs.Column">
-            <summary>
-                <para>Gets a column that contains the edited cell.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Grid.GridColumn"/> object that represents the column that contains the edited cell.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CellValueEventArgs.Value">
-            <summary>
-                <para>Gets or sets the processed cell's value.
-</para>
-            </summary>
-            <value>An object that represents the cell's value.
-</value>
 
 
         </member>
@@ -14376,38 +14583,6 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.NewItemRowPosition">
-
-            <summary>
-                <para>Lists values that specify the New Item Row's position within a View.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.NewItemRowPosition.Bottom">
-            <summary>
-                <para><para>The new item row is displayed at the bottom of the view.</para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.NewItemRowPosition.None">
-            <summary>
-                <para>The new item row is not shown.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.NewItemRowPosition.Top">
-            <summary>
-                <para><para>The new item row is displayed at the top of the view.</para>
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.RowDoubleClickEventHandler">
 
             <summary>
@@ -14690,37 +14865,33 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.RowControl">
+        <member name="T:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings">
 
             <summary>
-                <para>A grid row.
+                <para>Defines the appearance and behavior of the <b>SearchTokenLookUpEdit</b>.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Grid.RowControl.#ctor(DevExpress.Xpf.Grid.RowData)">
+        <member name="M:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.#ctor">
             <summary>
-                <para>Initializes a new instance of the RowControl class with the specified row data.
+                <para>Initializes a new instance of the SearchTokenLookUpEditStyleSettings class with default settings.
 </para>
             </summary>
-            <param name="rowData">
-		A row data.
-
-            </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.CellBackgroundBrushes">
+        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.AllowEditTokens">
             <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+                <para>Gets or sets whether to enable editing of existing tokens. This is a dependency property.
 </para>
             </summary>
-            <value> 
+            <value><b>true</b>, to enable editing of existing tokens; otherwise, <b>false</b>.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.CellBackgroundBrushesProperty">
+        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.AllowEditTokensProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -14729,17 +14900,17 @@
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.CellForegroundBrushes">
+        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.EnableTokenWrapping">
             <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+                <para>Gets or sets whether to enable token wrapping. This is a dependency property.
 </para>
             </summary>
-            <value> 
+            <value><b>true</b>, to enable token wrapping; otherwise, <b>false</b>.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.CellForegroundBrushesProperty">
+        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.EnableTokenWrappingProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -14748,306 +14919,27 @@
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.FadeSelection">
+        <member name="M:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.IsTokenStyleSettings">
             <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
 </para>
             </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.FadeSelectionProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.FixedRowPosition">
-            <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.FixedRowPositionProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.IsAlternateRow">
-            <summary>
-                <para>Gets whether the current row is alternate.
-</para>
-            </summary>
-            <value><b>true</b>, if the row is alternate; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.IsAlternateRowProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.IsLastFixedRow">
-            <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
-
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.IsLastFixedRowProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.RowControl.OnApplyTemplate">
-            <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.RowFitBorderBrush">
-            <summary>
-                <para>Gets or sets the brush used to draw the row fit border.
-
-</para>
-            </summary>
-            <value>A <see cref="Brush"/> object that is a brush used to draw the row fit border.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.RowFitBorderBrushProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.SelectionState">
-            <summary>
-                <para>Gets a value that indicates the row's selection state. 
-</para>
-            </summary>
-            <value>A <see cref="SelectionState"/> enumeration value that specifies the row's selection state. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.SelectionStateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.ShowBottomLine">
-            <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.ShowBottomLineProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.ShowHorizontalLine">
-            <summary>
-                <para>Gets or sets whether to show horizontal row lines.
-</para>
-            </summary>
-            <value><b>true</b>, to show horizontal grid lines; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.ShowHorizontalLineProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.ShowRowBreak">
-            <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.ShowRowBreakProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.RowControl.ShowVerticalLines">
-            <summary>
-                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. 
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.RowControl.ShowVerticalLinesProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings">
-
-            <summary>
-                <para>Defines the native appearance and behavior of the <see cref="T:DevExpress.Xpf.Grid.LookUp.LookUpEdit"/>.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.#ctor">
-            <summary>
-                <para>Initializes a new instance of the LookUpEditStyleSettings class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowColumnFiltering">
-            <summary>
-                <para>Gets or sets whether an end-user can filter data by column. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b> to allow filtering data by column; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowColumnFilteringProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowGrouping">
-            <summary>
-                <para>Gets or sets a value that specifies whether an end-user can group data within an embedded grid control. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b> to allow an end-user to group data; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowGroupingProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowSorting">
-            <summary>
-                <para>Gets or sets whether an end-user can sort data within an embedded grid. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b> to allow an end-user to sort data; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.AllowSortingProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.GetPopupFooterButtons(DevExpress.Xpf.Editors.PopupBaseEdit)">
-            <summary>
-                <para>Indicates which buttons are displayed within an editor's popup.
-</para>
-            </summary>
-            <param name="editor">
-		A <see cref="T:DevExpress.Xpf.Editors.PopupBaseEdit"/> descendant that is the dropdown editor.
-
-            </param>
-            <returns>The <see cref="F:DevExpress.Xpf.Editors.PopupFooterButtons.None"/> value.
+            <returns> 
 </returns>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.SelectionMode">
+        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.NewTokenPosition">
             <summary>
-                <para>Gets or sets the selection behavior for the <see cref="T:DevExpress.Xpf.Grid.LookUp.LookUpEdit"/>. This is a dependency property.
-
+                <para>Specifies the placement of new tokens. This is a dependency property.
 </para>
             </summary>
-            <value>A <see cref="T:System.Windows.Controls.SelectionMode"/> enumeration value.
+            <value>A <see cref="T:DevExpress.Xpf.Editors.NewTokenPosition"/> enumeration value.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.SelectionModeProperty">
+        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.NewTokenPositionProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -15056,17 +14948,17 @@
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowColumnHeaders">
+        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.ShowTokenButtons">
             <summary>
-                <para>Gets or sets whether column headers are displayed within an embedded grid. This is a dependency property.
+                <para>Specifies whether to display the delete button within tokens. This is a dependency property.
 </para>
             </summary>
-            <value><b>true</b> to display column headers; otherwise, <b>false</b>.
+            <value><b>true</b>, to show the delete button; otherwise, <b>false</b>.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowColumnHeadersProperty">
+        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.ShowTokenButtonsProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -15075,17 +14967,17 @@
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowGroupPanel">
+        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenBorderTemplate">
             <summary>
-                <para>Gets or sets whether the Group Panel is displayed within an embedded grid. This is a dependency property.
+                <para>Specifies the template used to represent a gallery item's borders on-screen. This is a dependency property.
 </para>
             </summary>
-            <value><b>true</b> to display the Group Panel; otherwise, <b>false</b>.
+            <value>A <see cref="T:System.Windows.Controls.ControlTemplate"/> object that is the corresponding template.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowGroupPanelProperty">
+        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenBorderTemplateProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -15094,22 +14986,130 @@
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowTotalSummary">
+        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenMaxWidth">
             <summary>
-                <para>Gets or sets whether the Summary Panel is displayed within an embedded grid. This is a dependency property.
+                <para>Gets or sets the token's maximum width. This is a dependency property.
 </para>
             </summary>
-            <value><b>true</b> to display the Total Summary Panel within an embedded grid; otherwise, <b>false</b>.
+            <value>A <see cref="T:System.Double"/> value that specifies the token's maximum width.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.LookUp.LookUpEditStyleSettings.ShowTotalSummaryProperty">
+        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenMaxWidthProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
             </summary>
             <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenStyle">
+            <summary>
+                <para>Gets or sets the appearance settings applied to tokens.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Style"/> object that is the style applied to tokens.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenTextTrimming">
+            <summary>
+                <para>Gets or sets the trimming behavior for tokens. This is a dependency property.
+</para>
+            </summary>
+            <value>A System.Windows.TextTrimming enumeration value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LookUp.SearchTokenLookUpEditStyleSettings.TokenTextTrimmingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.LightweightCellEditorBase">
+
+            <summary>
+                <para>Serves as the base for classes that display the content of a data cell in the optimized mode.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LightweightCellEditorBase.FontFamily">
+            <summary>
+                <para>Gets or sets the font family name for the grid cells. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Media.FontFamily"/> object representing the font family.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LightweightCellEditorBase.FontFamilyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LightweightCellEditorBase.FontSize">
+            <summary>
+                <para>Gets or sets the size of the text font for the grid cells. This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="T:System.Double"/> value representing the font size for the grid cells.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LightweightCellEditorBase.FontSizeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.LightweightCellEditorBase.Foreground">
+            <summary>
+                <para>Gets or sets the foreground color. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Drawing.Color"/> value representing the foreground color.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.LightweightCellEditorBase.ForegroundProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
 
 
         </member>

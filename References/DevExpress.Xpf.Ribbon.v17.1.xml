@@ -5775,6 +5775,30 @@ This is a dependency property.
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Ribbon.SelectedPageOnMerging">
+
+            <summary>
+                <para>Provides members that specify which <see cref="T:DevExpress.Xpf.Ribbon.RibbonPage"/> will be selected after ribbon controls are merged.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.SelectedPageOnMerging.ParentSelectedPage">
+            <summary>
+                <para>Specifies that the parent <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/>'s currently selected page should be selected within a resulting <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/>.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.SelectedPageOnMerging.SelectedPage">
+            <summary>
+                <para>Specifies that the child <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/>'s currently selected page should be selected within a resulting <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/>.
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Ribbon.RibbonMergeType">
 
             <summary>
@@ -7141,30 +7165,6 @@ This is dependency property.
 		A  whose items will be removed from this BackstageViewControl.
 
             </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Ribbon.SelectedPageOnMerging">
-
-            <summary>
-                <para>Provides members that specify which <see cref="T:DevExpress.Xpf.Ribbon.RibbonPage"/> will be selected after ribbon controls are merged.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.SelectedPageOnMerging.ParentSelectedPage">
-            <summary>
-                <para>Specifies that the parent <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/>'s currently selected page should be selected within a resulting <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/>.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.SelectedPageOnMerging.SelectedPage">
-            <summary>
-                <para>Specifies that the child <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/>'s currently selected page should be selected within a resulting <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/>.
-</para>
-            </summary>
 
 
         </member>

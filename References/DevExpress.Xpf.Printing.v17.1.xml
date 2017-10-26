@@ -4,22 +4,6 @@
         <name>DevExpress.Xpf.Printing.v17.1</name>
     </assembly>
     <members>
-        <member name="T:DevExpress.Xpf.Printing.Parameters.ParameterLineLayout">
-
-            <summary>
-                <para>Specifies the default layout of report parameters in the <see cref="T:DevExpress.Xpf.Printing.Parameters.ParametersPanel"/>.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterLineLayout.#ctor">
-            <summary>
-                <para>Initializes a new instance of the ParameterLineLayout class with default settings.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Printing.LinkPreviewModel">
 
             <summary>
@@ -75,100 +59,6 @@
             </summary>
             <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> object.
 </value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.DocumentViewer">
-
-            <summary>
-                <para>Obsolete. Use the <see cref="T:DevExpress.Xpf.Printing.DocumentPreviewControl"/> class to display a print preview.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.DocumentViewer.#ctor">
-            <summary>
-                <para>Initializes a new instance of the DocumentViewer class with default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.DocumentViewer.DocumentViewer(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets or sets the <see cref="T:DevExpress.Xpf.Printing.DocumentViewer"/>. This is an attached property. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Printing.DocumentViewer"/> object. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.DocumentViewer.DocumentViewerProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.DocumentViewer.GetDocumentViewer(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets the value of the <see cref="P:DevExpress.Xpf.Printing.DocumentViewer.DocumentViewer"/> attached property from a given object.
-</para>
-            </summary>
-            <param name="obj">
-		An object whose <b>DocumentViewer</b> property's value must be returned.
-
-            </param>
-            <returns>The value of the <b>DocumentViewer</b> attached property for the specified object. 
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.DocumentViewer.Model">
-            <summary>
-                <para>Specifies the model for the Document Preview. This is a dependency property.
-</para>
-            </summary>
-            <value>An object implementing the <see cref="T:DevExpress.Xpf.Printing.IPreviewModel"/> interface.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.DocumentViewer.ModelProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.DocumentViewer.ParametersPanel">
-            <summary>
-                <para>Provides access to the <see cref="T:DevExpress.Xpf.Printing.Parameters.ParametersPanel"/> settings of the DocumentViewer object.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.ParametersPanel"/> value.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.DocumentViewer.SetDocumentViewer(System.Windows.DependencyObject,DevExpress.Xpf.Printing.DocumentPreview)">
-            <summary>
-                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Printing.DocumentViewer.DocumentViewer"/> attached property for a given object.
-</para>
-            </summary>
-            <param name="obj">
-		An object for which the <b>DocumentViewer</b> attached property is set. 
-
-            </param>
-            <param name="value">
-		The value for the <b>DocumentViewer</b> attached property. 
-
-            </param>
 
 
         </member>
@@ -350,47 +240,19 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow">
+        <member name="T:DevExpress.Xpf.Printing.Parameters.ParameterLineLayout">
 
             <summary>
-                <para>Obsolete. Use the <see cref="T:DevExpress.Xpf.Printing.DocumentPreviewWindow"/> class instead.
+                <para>Specifies the default layout of report parameters in the <see cref="T:DevExpress.Xpf.Printing.Parameters.ParametersPanel"/>.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow.#ctor">
+        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterLineLayout.#ctor">
             <summary>
-                <para>Initializes a new instance of the RibbonDocumentPreviewWindow class with default settings.
+                <para>Initializes a new instance of the ParameterLineLayout class with default settings.
 </para>
             </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow.InitializeComponent">
-            <summary>
-                <para>For internal use. Initializes the RibbonDocumentPreviewWindow from XAML.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow.Model">
-            <summary>
-                <para>Specifies the model for the Document Preview.
-</para>
-            </summary>
-            <value>An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDocumentPreviewModel"/> interface.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow.ModelProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
 
 
         </member>
@@ -455,6 +317,36 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Printing.ParametersMergingErrorEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Printing.ReportServicePreviewModel.ParametersMergingError"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.ParametersMergingErrorEventArgs.#ctor(System.Exception)">
+            <summary>
+                <para>Initializes a new instance of the ParametersMergingErrorEventArgs class with the specified exception.
+</para>
+            </summary>
+            <param name="error">
+		A <see cref="T:System.Exception"/> object.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.ParametersMergingErrorEventArgs.Error">
+            <summary>
+                <para>Gets the text of the error message.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Exception"/> object.
+</value>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Printing.GdiPlusImageRenderHook">
 
             <summary>
@@ -480,6 +372,50 @@
 		A <see cref="T:System.Drawing.Graphics"/> object.
 
             </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow">
+
+            <summary>
+                <para>Obsolete. Use the <see cref="T:DevExpress.Xpf.Printing.DocumentPreviewWindow"/> class instead.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow.#ctor">
+            <summary>
+                <para>Initializes a new instance of the RibbonDocumentPreviewWindow class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow.InitializeComponent">
+            <summary>
+                <para>For internal use. Initializes the RibbonDocumentPreviewWindow from XAML.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow.Model">
+            <summary>
+                <para>Specifies the model for the Document Preview.
+</para>
+            </summary>
+            <value>An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDocumentPreviewModel"/> interface.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.RibbonDocumentPreviewWindow.ModelProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
 
 
         </member>
@@ -1620,40 +1556,6 @@
 
             </param>
             <returns>A <see cref="T:System.String"/> value, corresponding to the specified identifier.
-</returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider">
-
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider.#ctor(System.Collections.Generic.IEnumerable`1)">
-            <summary>
-                <para>Initializes a new instance of the ParameterValueProvider class with the specified parameter models.
-</para>
-            </summary>
-            <param name="parameterModels">
-		A collection of <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> values.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider.GetValue(DevExpress.Data.IParameter)">
-            <summary>
-                <para>Returns the value of a specified parameter.
-</para>
-            </summary>
-            <param name="parameterIdentity">
-		An object implementing the <see cref="T:DevExpress.Data.IParameter"/> interface.
-
-            </param>
-            <returns>A <see cref="T:System.Object"/>, specifying the parameter value.
 </returns>
 
 
@@ -8337,6 +8239,40 @@ The caption of the <b>Thumbnails</b> panel and the text of the corresponding too
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider">
+
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider.#ctor(System.Collections.Generic.IEnumerable`1)">
+            <summary>
+                <para>Initializes a new instance of the ParameterValueProvider class with the specified parameter models.
+</para>
+            </summary>
+            <param name="parameterModels">
+		A collection of <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> values.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider.GetValue(DevExpress.Data.IParameter)">
+            <summary>
+                <para>Returns the value of a specified parameter.
+</para>
+            </summary>
+            <param name="parameterIdentity">
+		An object implementing the <see cref="T:DevExpress.Data.IParameter"/> interface.
+
+            </param>
+            <returns>A <see cref="T:System.Object"/>, specifying the parameter value.
+</returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Printing.Parameters.ParametersPanel">
 
             <summary>
@@ -8551,22 +8487,6 @@ The caption of the <b>Thumbnails</b> panel and the text of the corresponding too
             </summary>
             <value>A <see cref="T:System.Windows.DataTemplate"/> containing a template definition.
 </value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.PageBreakInfoCollection">
-
-            <summary>
-                <para>A collection of <see cref="T:DevExpress.Xpf.Printing.PageBreakInfo"/> objects.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.PageBreakInfoCollection.#ctor">
-            <summary>
-                <para>Initializes a new instance of the PageBreakInfoCollection class with default settings.
-</para>
-            </summary>
 
 
         </member>
@@ -10082,68 +10002,97 @@ An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Printing.CompositeLink">
+        <member name="T:DevExpress.Xpf.Printing.DocumentViewer">
 
             <summary>
-                <para>A composite link that can be used to combine several Printing Links together into a composite document.
+                <para>Obsolete. Use the <see cref="T:DevExpress.Xpf.Printing.DocumentPreviewControl"/> class to display a print preview.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Printing.CompositeLink.#ctor(System.Collections.Generic.IEnumerable`1)">
+        <member name="M:DevExpress.Xpf.Printing.DocumentViewer.#ctor">
             <summary>
-                <para>Initializes a new instance of the CompositeLink class with the specified collection of printing links to compose.
-</para>
-            </summary>
-            <param name="links">
-		A collection of <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> objects specifying printing links to compose.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.CompositeLink.#ctor(System.Collections.Generic.IEnumerable`1,System.String)">
-            <summary>
-                <para>Initializes a new object of the CompositeLink type with the specified settings.
-</para>
-            </summary>
-            <param name="links">
-		A collection of <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> objects specifying printing links to compose.
-
-            </param>
-            <param name="documentName">
-		A <see cref="T:System.String"/> value, specifying the document name.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.CompositeLink.CreatePageForEachLink">
-            <summary>
-                <para>Used to export each link contained in the Composite Link to a separate page (e.g., when exported to PDF, Excel or RTF files).
+                <para>Initializes a new instance of the DocumentViewer class with default settings.
 </para>
             </summary>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Printing.CompositeLink.Links">
+        <member name="P:DevExpress.Xpf.Printing.DocumentViewer.DocumentViewer(System.Windows.DependencyObject)">
             <summary>
-                <para>Gets a collection of links belonging to the CompositeLink object.
+                <para>Gets or sets the <see cref="T:DevExpress.Xpf.Printing.DocumentViewer"/>. This is an attached property. This is a dependency property.
 </para>
             </summary>
-            <value>A collection of printing links.
+            <value>A <see cref="T:DevExpress.Xpf.Printing.DocumentViewer"/> object. 
 </value>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Printing.CompositeLink.PageBreaks">
+        <member name="F:DevExpress.Xpf.Printing.DocumentViewer.DocumentViewerProperty">
             <summary>
-                <para>Provides access to a collection of page breaks to be inserted into the resulting document.
+                <para>Identifies the  dependency property.
 </para>
             </summary>
-            <value>A collection of page breaks to be inserted into the resulting document.
+            <returns> </returns>
 
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.DocumentViewer.GetDocumentViewer(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets the value of the <see cref="P:DevExpress.Xpf.Printing.DocumentViewer.DocumentViewer"/> attached property from a given object.
+</para>
+            </summary>
+            <param name="obj">
+		An object whose <b>DocumentViewer</b> property's value must be returned.
+
+            </param>
+            <returns>The value of the <b>DocumentViewer</b> attached property for the specified object. 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.DocumentViewer.Model">
+            <summary>
+                <para>Specifies the model for the Document Preview. This is a dependency property.
+</para>
+            </summary>
+            <value>An object implementing the <see cref="T:DevExpress.Xpf.Printing.IPreviewModel"/> interface.
 </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.DocumentViewer.ModelProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.DocumentViewer.ParametersPanel">
+            <summary>
+                <para>Provides access to the <see cref="T:DevExpress.Xpf.Printing.Parameters.ParametersPanel"/> settings of the DocumentViewer object.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.ParametersPanel"/> value.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.DocumentViewer.SetDocumentViewer(System.Windows.DependencyObject,DevExpress.Xpf.Printing.DocumentPreview)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Printing.DocumentViewer.DocumentViewer"/> attached property for a given object.
+</para>
+            </summary>
+            <param name="obj">
+		An object for which the <b>DocumentViewer</b> attached property is set. 
+
+            </param>
+            <param name="value">
+		The value for the <b>DocumentViewer</b> attached property. 
+
+            </param>
 
 
         </member>
@@ -10589,6 +10538,22 @@ An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Printing.PageBreakInfoCollection">
+
+            <summary>
+                <para>A collection of <see cref="T:DevExpress.Xpf.Printing.PageBreakInfo"/> objects.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.PageBreakInfoCollection.#ctor">
+            <summary>
+                <para>Initializes a new instance of the PageBreakInfoCollection class with default settings.
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Printing.LegacyPrintableComponentLink">
 
             <summary>
@@ -10676,36 +10641,6 @@ An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/
 </para>
             </summary>
             <value>A <see cref="T:System.String"/> value.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.ParametersMergingErrorEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Printing.ReportServicePreviewModel.ParametersMergingError"/> event.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.ParametersMergingErrorEventArgs.#ctor(System.Exception)">
-            <summary>
-                <para>Initializes a new instance of the ParametersMergingErrorEventArgs class with the specified exception.
-</para>
-            </summary>
-            <param name="error">
-		A <see cref="T:System.Exception"/> object.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.ParametersMergingErrorEventArgs.Error">
-            <summary>
-                <para>Gets the text of the error message.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Exception"/> object.
 </value>
 
 
@@ -10800,6 +10735,71 @@ An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/
 </para>
             </summary>
             <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Printing.CompositeLink">
+
+            <summary>
+                <para>A composite link that can be used to combine several Printing Links together into a composite document.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.CompositeLink.#ctor(System.Collections.Generic.IEnumerable`1)">
+            <summary>
+                <para>Initializes a new instance of the CompositeLink class with the specified collection of printing links to compose.
+</para>
+            </summary>
+            <param name="links">
+		A collection of <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> objects specifying printing links to compose.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.CompositeLink.#ctor(System.Collections.Generic.IEnumerable`1,System.String)">
+            <summary>
+                <para>Initializes a new object of the CompositeLink type with the specified settings.
+</para>
+            </summary>
+            <param name="links">
+		A collection of <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> objects specifying printing links to compose.
+
+            </param>
+            <param name="documentName">
+		A <see cref="T:System.String"/> value, specifying the document name.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.CompositeLink.CreatePageForEachLink">
+            <summary>
+                <para>Used to export each link contained in the Composite Link to a separate page (e.g., when exported to PDF, Excel or RTF files).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.CompositeLink.Links">
+            <summary>
+                <para>Gets a collection of links belonging to the CompositeLink object.
+</para>
+            </summary>
+            <value>A collection of printing links.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.CompositeLink.PageBreaks">
+            <summary>
+                <para>Provides access to a collection of page breaks to be inserted into the resulting document.
+</para>
+            </summary>
+            <value>A collection of page breaks to be inserted into the resulting document.
+
+</value>
 
 
         </member>
