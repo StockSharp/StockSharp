@@ -289,7 +289,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.Version < MarketDataVersions.Version31)
 					continue;
 
-				writer.WriteNullableInt(message.OrderStatus);
+				writer.WriteNullableInt((int?)message.OrderStatus);
 
 				if (metaInfo.Version < MarketDataVersions.Version33)
 					continue;
@@ -417,7 +417,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (metaInfo.Version >= MarketDataVersions.Version31)
 			{
-				execMsg.OrderStatus = reader.ReadNullableInt<long>();
+				execMsg.OrderStatus = reader.ReadNullableInt();
 
 				if (execMsg.OrderStatus != null)
 				{

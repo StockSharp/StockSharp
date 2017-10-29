@@ -328,7 +328,7 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				msg.TradeStatus = metaInfo.Version < MarketDataVersions.Version51
 					? reader.ReadInt()
-					: reader.ReadNullableInt<int>();
+					: reader.ReadNullableInt();
 			}
 
 			if (metaInfo.Version < MarketDataVersions.Version46 || reader.Read())

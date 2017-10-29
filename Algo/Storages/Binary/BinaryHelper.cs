@@ -502,25 +502,23 @@ namespace StockSharp.Algo.Storages.Binary
 			return board == null ? metaInfo.LocalOffset : board.TimeZone.BaseUtcOffset;
 		}
 
-		public static void WriteNullableInt<T>(this BitArrayWriter writer, T? value)
-			where T : struct
+		public static void WriteNullableInt(this BitArrayWriter writer, int? value)
 		{
 			if (value == null)
 				writer.Write(false);
 			else
 			{
 				writer.Write(true);
-				writer.WriteInt(value.To<int>());
+				writer.WriteInt(value.Value);
 			}
 		}
 
-		public static T? ReadNullableInt<T>(this BitArrayReader reader)
-			where T : struct
+		public static int? ReadNullableInt(this BitArrayReader reader)
 		{
 			if (!reader.Read())
 				return null;
 
-			return reader.ReadInt().To<T?>();
+			return reader.ReadInt();
 		}
 
 		public static void WriteNullableLong(this BitArrayWriter writer, long? value)

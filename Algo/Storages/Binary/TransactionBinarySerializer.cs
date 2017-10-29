@@ -381,11 +381,11 @@ namespace StockSharp.Algo.Storages.Binary
 				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
-				writer.WriteNullableInt(msg.OrderType);
-				writer.WriteNullableInt(msg.OrderState);
+				writer.WriteNullableInt((int?)msg.OrderType);
+				writer.WriteNullableInt((int?)msg.OrderState);
 				writer.WriteNullableLong(msg.OrderStatus);
 				writer.WriteNullableInt(msg.TradeStatus);
-				writer.WriteNullableInt(msg.TimeInForce);
+				writer.WriteNullableInt((int?)msg.TimeInForce);
 
 				writer.Write(msg.IsSystem != null);
 
@@ -421,7 +421,7 @@ namespace StockSharp.Algo.Storages.Binary
 				WriteString(writer, metaInfo.SystemComments, msg.SystemComment);
 				WriteString(writer, metaInfo.Errors, msg.Error?.Message);
 
-				writer.WriteNullableInt(msg.Currency);
+				writer.WriteNullableInt((int?)msg.Currency);
 
 				writer.Write(msg.Latency != null);
 
@@ -509,11 +509,11 @@ namespace StockSharp.Algo.Storages.Binary
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 
-			var type = reader.ReadNullableInt<OrderTypes>();
-			var state = reader.ReadNullableInt<OrderStates>();
+			var type = (OrderTypes?)reader.ReadNullableInt();
+			var state = (OrderStates?)reader.ReadNullableInt();
 			var status = reader.ReadNullableLong();
-			var tradeStatus = reader.ReadNullableInt<int>();
-			var timeInForce = reader.ReadNullableInt<TimeInForce>();
+			var tradeStatus = reader.ReadNullableInt();
+			var timeInForce = (TimeInForce?)reader.ReadNullableInt();
 
 			var isSystem = reader.Read() ? reader.Read() : (bool?)null;
 			var isUpTick = reader.Read() ? reader.Read() : (bool?)null;
@@ -589,7 +589,7 @@ namespace StockSharp.Algo.Storages.Binary
 			if (!error.IsEmpty())
 				msg.Error = new InvalidOperationException(error);
 
-			msg.Currency = reader.ReadNullableInt<CurrencyTypes>();
+			msg.Currency = (CurrencyTypes?)reader.ReadNullableInt();
 
 			if (reader.Read())
 				msg.Latency = reader.ReadLong().To<TimeSpan>();
