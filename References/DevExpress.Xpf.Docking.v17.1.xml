@@ -391,6 +391,81 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Docking.DockOperation">
+
+            <summary>
+                <para>Provides members to label different docking operation types.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockOperation.Close">
+            <summary>
+                <para>A target Dock Item is being closed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockOperation.Dock">
+            <summary>
+                <para>A target Dock Item is being docked to a <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/>'s edge or another Dock Item.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockOperation.Float">
+            <summary>
+                <para>A docked Dock Item is made floating.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockOperation.Hide">
+            <summary>
+                <para>A Dock Item is made auto-hidden.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockOperation.Move">
+            <summary>
+                <para>A Dock Item is being moved.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockOperation.Reorder">
+            <summary>
+                <para>A target Dock Item is being re-arranged within its current container.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockOperation.Resize">
+            <summary>
+                <para>A Dock Item is being resized.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Docking.DockOperation.Restore">
+            <summary>
+                <para>A closed Dock Item is being restored (see the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.ClosedPanels"/> property to learn more).
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Docking.ClosePageButtonShowMode">
 
             <summary>
@@ -598,81 +673,6 @@ When applied to a <see cref="T:DevExpress.Xpf.Docking.BaseLayoutItem"/> via the 
             </summary>
             <value>A <see cref="T:DevExpress.Xpf.Docking.DockOperation"/> enumerator value that specifies the type of an operation that is processed within the <see cref="E:DevExpress.Xpf.Docking.DockLayoutManager.DockOperationCompleted"/> event.
 </value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Docking.DockOperation">
-
-            <summary>
-                <para>Provides members to label different docking operation types.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.DockOperation.Close">
-            <summary>
-                <para>A target Dock Item is being closed.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.DockOperation.Dock">
-            <summary>
-                <para>A target Dock Item is being docked to a <see cref="T:DevExpress.Xpf.Docking.DockLayoutManager"/>'s edge or another Dock Item.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.DockOperation.Float">
-            <summary>
-                <para>A docked Dock Item is made floating.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.DockOperation.Hide">
-            <summary>
-                <para>A Dock Item is made auto-hidden.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.DockOperation.Move">
-            <summary>
-                <para>A Dock Item is being moved.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.DockOperation.Reorder">
-            <summary>
-                <para>A target Dock Item is being re-arranged within its current container.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.DockOperation.Resize">
-            <summary>
-                <para>A Dock Item is being resized.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Docking.DockOperation.Restore">
-            <summary>
-                <para>A closed Dock Item is being restored (see the <see cref="P:DevExpress.Xpf.Docking.DockLayoutManager.ClosedPanels"/> property to learn more).
-</para>
-            </summary>
 
 
         </member>

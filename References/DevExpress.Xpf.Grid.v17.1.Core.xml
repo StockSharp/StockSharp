@@ -4,114 +4,6 @@
         <name>DevExpress.Xpf.Grid.v17.1.Core</name>
     </assembly>
     <members>
-        <member name="T:DevExpress.Xpf.Grid.IndicatorFormatConditionBase">
-
-            <summary>
-                <para>Serves as a base class for indicator-type conditional formats.
-</para>
-            </summary>
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimateTransition">
-            <summary>
-                <para>Gets or sets whether the transition between conditional formattings should be animated. This is a dependency property.
-
-</para>
-            </summary>
-            <value><b>true</b>, if the transition is animated; otherwise, <b>false</b>.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimateTransitionProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimationSettings">
-            <summary>
-                <para>Gets or sets the transition animation settings applied to the current conditional formatting. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="ConditionalFormattingAnimationSettings"/> object that contains conditional formatting animation settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimationSettingsProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MaxValue">
-            <summary>
-                <para>Specifies the maximum column value to accept for conditional formatting. This is a dependency property.
-
-</para>
-            </summary>
-            <value>An object accepted as the maximum column value.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MaxValueProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MinValue">
-            <summary>
-                <para>Specifies the minimum column value to accept for conditional formatting. This is a dependency property.
-
-</para>
-            </summary>
-            <value>An object accepted as the minimum column value.
-
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MinValueProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.SelectiveExpression">
-            <summary>
-                <para>Gets or sets an expression that selects data records to which a conditional format is applied. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> value that is the rule expression.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.SelectiveExpressionProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.ExcelColumnFilterSettings">
 
             <summary>
@@ -135,116 +27,6 @@
 </para>
             </summary>
             <value>A list of filter items displayed within the Excel-style filter.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.GridColumnWidth">
-
-            <summary>
-                <para>Represents the width of the columns in the <see cref="T:DevExpress.Xpf.Grid.GridControl"/>.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.#ctor(System.Double)">
-            <summary>
-                <para>Initializes a new instance of the GridColumnWidth class with an absolute value in pixels.
-</para>
-            </summary>
-            <param name="value">
-		The absolute pixel value to initialize the width to.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.#ctor(System.Double,DevExpress.Xpf.Grid.GridColumnUnitType)">
-            <summary>
-                <para>Initializes a new instance of the GridColumnWidth class with a specified value and unit.
-</para>
-            </summary>
-            <param name="value">
-		The absolute pixel value to initialize the width to.
-
-            </param>
-            <param name="unitType">
-		The type that is used to determine how the size of the element is calculated.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.Equals(System.Object)">
-            <summary>
-                <para>Determines whether the specified object is equal to the current GridColumnWidth instance.
-</para>
-            </summary>
-            <param name="obj">
-		The object to be compared with the current object.
-
-            </param>
-            <returns><b>true</b> if the specified object is equal to the current GridColumnWidth instance; otherwise <b>false</b>.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.GetHashCode">
-            <summary>
-                <para>Gets the hash code (a number) that corresponds to the value of the current GridColumnWidth object.
-</para>
-            </summary>
-            <returns>An integer value representing the hash code for the current object.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.GridColumnWidth.IsAbsolute">
-            <summary>
-                <para>Gets a value that indicates whether this instance sizes elements based on a fixed pixel value.
-</para>
-            </summary>
-            <value><b>true</b> if the <see cref="P:DevExpress.Xpf.Grid.GridColumnWidth.UnitType"/> property is set to <b>Pixel</b>; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.GridColumnWidth.IsStar">
-            <summary>
-                <para>Gets a value that indicates whether this instance automatically sizes elements based on a weighted proportion of available space.
-</para>
-            </summary>
-            <value><b>true</b> if the <see cref="P:DevExpress.Xpf.Grid.GridColumnWidth.UnitType"/> property is set to <b>Star</b>; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.ToString">
-            <summary>
-                <para>Returns a string that represents the current object.
-</para>
-            </summary>
-            <returns>A string that represents the current object.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.GridColumnWidth.UnitType">
-            <summary>
-                <para>Gets the type that is used to determine how the size of the element is calculated.
-</para>
-            </summary>
-            <value>One of the <see cref="GridColumnUnitType"/> enumeration value that represents how size is determined.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.GridColumnWidth.Value">
-            <summary>
-                <para>Gets the absolute value of the column width.
-</para>
-            </summary>
-            <value>The absolute value of the grid column width in pixels or in stars.
 </value>
 
 
@@ -316,6 +98,22 @@
         <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationMode.Selected">
             <summary>
                 <para>GridControl marks selected rows.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.DataBarFormat">
+
+            <summary>
+                <para>Represents the data bar format.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.DataBarFormat.#ctor">
+            <summary>
+                <para>Initializes a new instance of the DataBarFormat class with the default settings.
 </para>
             </summary>
 
@@ -2172,121 +1970,135 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.FixedStyle">
+        <member name="T:DevExpress.Xpf.Grid.GridColumnWidth">
 
             <summary>
-                <para>Lists values that specify a column/band's behavior when a view is horizontally scrolled.
+                <para>Represents the width of the columns in the <see cref="T:DevExpress.Xpf.Grid.GridControl"/>.
 </para>
             </summary>
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedStyle.Left">
+        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.#ctor(System.Double)">
             <summary>
-                <para>A column/band is anchored to the vew's left edge.
+                <para>Initializes a new instance of the GridColumnWidth class with an absolute value in pixels.
+</para>
+            </summary>
+            <param name="value">
+		The absolute pixel value to initialize the width to.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.#ctor(System.Double,DevExpress.Xpf.Grid.GridColumnUnitType)">
+            <summary>
+                <para>Initializes a new instance of the GridColumnWidth class with a specified value and unit.
+</para>
+            </summary>
+            <param name="value">
+		The absolute pixel value to initialize the width to.
+
+            </param>
+            <param name="unitType">
+		The type that is used to determine how the size of the element is calculated.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.Equals(System.Object)">
+            <summary>
+                <para>Determines whether the specified object is equal to the current GridColumnWidth instance.
+</para>
+            </summary>
+            <param name="obj">
+		The object to be compared with the current object.
+
+            </param>
+            <returns><b>true</b> if the specified object is equal to the current GridColumnWidth instance; otherwise <b>false</b>.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.GetHashCode">
+            <summary>
+                <para>Gets the hash code (a number) that corresponds to the value of the current GridColumnWidth object.
+</para>
+            </summary>
+            <returns>An integer value representing the hash code for the current object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.GridColumnWidth.IsAbsolute">
+            <summary>
+                <para>Gets a value that indicates whether this instance sizes elements based on a fixed pixel value.
+</para>
+            </summary>
+            <value><b>true</b> if the <see cref="P:DevExpress.Xpf.Grid.GridColumnWidth.UnitType"/> property is set to <b>Pixel</b>; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.GridColumnWidth.IsStar">
+            <summary>
+                <para>Gets a value that indicates whether this instance automatically sizes elements based on a weighted proportion of available space.
+</para>
+            </summary>
+            <value><b>true</b> if the <see cref="P:DevExpress.Xpf.Grid.GridColumnWidth.UnitType"/> property is set to <b>Star</b>; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.GridColumnWidth.ToString">
+            <summary>
+                <para>Returns a string that represents the current object.
+</para>
+            </summary>
+            <returns>A string that represents the current object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.GridColumnWidth.UnitType">
+            <summary>
+                <para>Gets the type that is used to determine how the size of the element is calculated.
+</para>
+            </summary>
+            <value>One of the <see cref="GridColumnUnitType"/> enumeration value that represents how size is determined.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.GridColumnWidth.Value">
+            <summary>
+                <para>Gets the absolute value of the column width.
+</para>
+            </summary>
+            <value>The absolute value of the grid column width in pixels or in stars.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ColumnFilterPopupMode">
+
+            <summary>
+                <para>Lists values that specify the display mode of the filter dropdown for all columns within the view.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ColumnFilterPopupMode.Default">
+            <summary>
+                <para>Filter dropdowns of date-time columns are represented by the calendar, filter dropdowns of all other columns are represented by regular lists.
 </para>
             </summary>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedStyle.None">
+        <member name="F:DevExpress.Xpf.Grid.ColumnFilterPopupMode.Excel">
             <summary>
-                <para>A column/band takes part in horizontal scrolling.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FixedStyle.Right">
-            <summary>
-                <para>A column/band is anchored to the view's right edge.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.GridMenuType">
-
-            <summary>
-                <para>Lists values that specify the context menu type.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.Band">
-            <summary>
-                <para><para>Corresponds to a menu invoked for a band.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.Column">
-            <summary>
-                <para><para>Corresponds to a menu invoked for a column header.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.FixedTotalSummary">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the Fixed Summary Panel.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.FixRowControl">
-            <summary>
-                <para>Corresponds to a menu invoked for a fix row button. <br />
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupFooterSummary">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the Group Footer's summary.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupPanel">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the group panel.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupRow">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the group row.</para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.RowCell">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the <b>Row Cell</b>.</para>
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.GridMenuType.TotalSummary">
-            <summary>
-                <para><para>Corresponds to a menu invoked for the Summary Panel.</para>
-<para></para>
+                <para>Displays an Excel style filter dropdown.
 </para>
             </summary>
 
@@ -4421,50 +4233,6 @@ This is a dependency property.
 </para>
             </summary>
             <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.DataViewBase.FontFamily">
-            <summary>
-                <para>This inherited property is not in effect for the DataViewBase object. To prevent developers from using this property, its code attributes are set to hide it in MS Visual Studio designer tools.
-
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.DataViewBase.FontSize">
-            <summary>
-                <para>This inherited property is not in effect for the DataViewBase object. To prevent developers from using this property, its code attributes are set to hide it in MS Visual Studio designer tools.
-
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.DataViewBase.FontStretch">
-            <summary>
-                <para>This inherited property is not in effect for the DataViewBase object. To prevent developers from using this property, its code attributes are set to hide it in MS Visual Studio designer tools.
-
-</para>
-            </summary>
-            <value> 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.DataViewBase.FontWeight">
-            <summary>
-                <para>This inherited property is not in effect for the DataViewBase object. To prevent developers from using this property, its code attributes are set to hide it in MS Visual Studio designer tools.
-
-</para>
-            </summary>
-            <value> 
-</value>
 
 
         </member>
@@ -9555,92 +9323,6 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.CustomCellAppearance"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.CustomCellAppearance"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.#ctor(System.Windows.DependencyProperty,System.Object,System.Object)">
-            <summary>
-                <para>Initializes a new instance of the CustomCellAppearanceEventArgs class with the specified event arguments.
-</para>
-            </summary>
-            <param name="property">
-		A DependencyProperty whose value is changed by the conditional formatting mechanism. 
-
-            </param>
-            <param name="originalValue">
-		The original value of the property.
-
-            </param>
-            <param name="conditionalValue">
-		A value of the property calculated by the conditional formatting mechanism.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.#ctor(DevExpress.Xpf.Core.ConditionalFormatting.CustomAppearanceEventArgs)">
-            <summary>
-                <para>Initializes a new instance of the CustomCellAppearanceEventArgs class with the specified event arguments.
-</para>
-            </summary>
-            <param name="args">
-		A CustomAppearanceEventArgs object whose properties are used to initialize a newly created object. 
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.CellSelectionState">
-            <summary>
-                <para>Gets a cell's selection state.
-</para>
-            </summary>
-            <value>A cell's selection state.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.Column">
-            <summary>
-                <para>Gets a column that contains the corresponding cell.
-</para>
-            </summary>
-            <value>A column that contains the corresponding cell.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.IsEditorVisible">
-            <summary>
-                <para>Gets whether an editor is visible for corresponding cell.
-</para>
-            </summary>
-            <value><b>true</b>, if an editor is visible; otherwise, <b>false</b>. 
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.DataBarFormat">
-
-            <summary>
-                <para>Represents the data bar format.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.DataBarFormat.#ctor">
-            <summary>
-                <para>Initializes a new instance of the DataBarFormat class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.SelectionState">
 
             <summary>
@@ -11260,6 +10942,114 @@ This is a dependency property.
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.IndicatorFormatConditionBase">
+
+            <summary>
+                <para>Serves as a base class for indicator-type conditional formats.
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimateTransition">
+            <summary>
+                <para>Gets or sets whether the transition between conditional formattings should be animated. This is a dependency property.
+
+</para>
+            </summary>
+            <value><b>true</b>, if the transition is animated; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimateTransitionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimationSettings">
+            <summary>
+                <para>Gets or sets the transition animation settings applied to the current conditional formatting. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="ConditionalFormattingAnimationSettings"/> object that contains conditional formatting animation settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.AnimationSettingsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MaxValue">
+            <summary>
+                <para>Specifies the maximum column value to accept for conditional formatting. This is a dependency property.
+
+</para>
+            </summary>
+            <value>An object accepted as the maximum column value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MaxValueProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MinValue">
+            <summary>
+                <para>Specifies the minimum column value to accept for conditional formatting. This is a dependency property.
+
+</para>
+            </summary>
+            <value>An object accepted as the minimum column value.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.MinValueProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.SelectiveExpression">
+            <summary>
+                <para>Gets or sets an expression that selects data records to which a conditional format is applied. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value that is the rule expression.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IndicatorFormatConditionBase.SelectiveExpressionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.GridSelectionChangedEventHandler">
 
             <summary>
@@ -11646,22 +11436,6 @@ Indicates the New Item Row.
         <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.ColorScaleFormat.#ctor">
             <summary>
                 <para>Initializes a new instance of the ColorScaleFormat class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.IconSetFormat">
-
-            <summary>
-                <para>Represents the icon set format.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.IconSetFormat.#ctor">
-            <summary>
-                <para>Initializes a new instance of the IconSetFormat class with the default settings.
 </para>
             </summary>
 
@@ -17646,16 +17420,6 @@ This class supports the internal infrastructure and is not intended to be used d
             </summary>
 
         </member>
-        <member name="P:DevExpress.Xpf.Grid.MultiDetailDescriptor.DataControlDetailDescriptors">
-            <summary>
-                <para>Gets the collection of <see cref="T:DevExpress.Xpf.Grid.DataControlDetailDescriptor"/> objects owned by this Detail Descriptor. This method supports the internal infrastructure and is not intended to be used from your code.
-</para>
-            </summary>
-            <value>A collection of <see cref="T:DevExpress.Xpf.Grid.DataControlDetailDescriptor"/> objects.
-</value>
-
-
-        </member>
         <member name="P:DevExpress.Xpf.Grid.MultiDetailDescriptor.DetailDescriptors">
             <summary>
                 <para>Provides access to Detail Descriptors to be displayed by this multi-detail container.
@@ -17732,16 +17496,6 @@ This class supports the internal infrastructure and is not intended to be used d
             </summary>
             <value>A <see cref="T:DevExpress.Xpf.Grid.GridControl"/> that displays detail data. Although the property type is <see cref="T:DevExpress.Xpf.Grid.DataControlBase"/>, it currently only accepts <see cref="T:DevExpress.Xpf.Grid.GridControl"/> objects and otherwise, throws exceptions. 
 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Grid.DataControlDetailDescriptor.DataControlDetailDescriptors">
-            <summary>
-                <para>Gets the collection of <see cref="T:DevExpress.Xpf.Grid.DataControlDetailDescriptor"/> objects owned by this Detail Descriptor. This method supports the internal infrastructure and is not intended to be used from your code.
-</para>
-            </summary>
-            <value>A collection of <see cref="T:DevExpress.Xpf.Grid.DataControlDetailDescriptor"/> objects.
 </value>
 
 
@@ -18278,6 +18032,64 @@ This class supports the internal infrastructure and is not intended to be used d
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.ShowFilterPanelMode">
+
+            <summary>
+                <para>Lists values that specify when a View displays the Filter Panel.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.Default">
+            <summary>
+                <para>The filter panel is shown when data is filtered. Otherwise, the filter panel is hidden.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.Never">
+            <summary>
+                <para>The filter panel is hidden.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.ShowAlways">
+            <summary>
+                <para>The filter panel is always shown at the bottom of the view.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ScrollingMode">
+
+            <summary>
+                <para>Lists values that specify how many rows are displayed onscreen when a View is scrolled to the bottom.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollingMode.Normal">
+            <summary>
+                <para><para>Only one row (the last row) is displayed when a view is scrolled to the bottom.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ScrollingMode.Smart">
+            <summary>
+                <para><para>When a view is scrolled to the bottom, it displays as many rows as can completely fit into its content area.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.GridViewNavigationStyle">
 
             <summary>
@@ -18305,6 +18117,295 @@ This class supports the internal infrastructure and is not intended to be used d
         <member name="F:DevExpress.Xpf.Grid.GridViewNavigationStyle.Row">
             <summary>
                 <para>A View displays only the focused row. The focused cell is not displayed. Data editing is not allowed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.GridMenuType">
+
+            <summary>
+                <para>Lists values that specify the context menu type.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.Band">
+            <summary>
+                <para><para>Corresponds to a menu invoked for a band.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.Column">
+            <summary>
+                <para><para>Corresponds to a menu invoked for a column header.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.FixedTotalSummary">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the Fixed Summary Panel.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.FixRowControl">
+            <summary>
+                <para>Corresponds to a menu invoked for a fix row button. <br />
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupFooterSummary">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the Group Footer's summary.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupPanel">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the group panel.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.GroupRow">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the group row.</para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.RowCell">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the <b>Row Cell</b>.</para>
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.GridMenuType.TotalSummary">
+            <summary>
+                <para><para>Corresponds to a menu invoked for the Summary Panel.</para>
+<para></para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.FilterPopupMode">
+
+            <summary>
+                <para>Lists values that specify the display mode of a column's filter dropdown.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.CheckedList">
+            <summary>
+                <para><para>A filter dropdown is represented as a checked list (multiple items can be selected/checked simultaneously).</para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.Custom">
+            <summary>
+                <para><para>A filter dropdown is represented by a custom template assigned to the <see cref="P:DevExpress.Xpf.Grid.ColumnBase.CustomColumnFilterPopupTemplate"/> property.</para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.Date">
+            <summary>
+                <para>This mode is equivalent to <b>DateSmart</b> regarding the appearance of the filter dropdown. The filter dropdown displays all the available check boxes, even if there is no data that falls into a corresponding date range. 
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.DateAlt">
+            <summary>
+                <para>This mode is equivalent to <b>DateSmart</b>, but with a different set of filters: Today, This week, This month, Next month, etc.
+
+<para>
+The table below describes several of the date ranges for the DateAlt mode.
+</para>
+
+<list type="table">
+
+<listheader>
+    <term>Interval</term>
+    <description>Description</description>
+</listheader>
+
+<item>
+    <term>Beyond</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Beyond"/></description>
+</item>
+<item>
+    <term>Earlier</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Earlier"/></description>
+</item>
+</list>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.DateCompact">
+            <summary>
+                <para>A date-time filter dropdown without predefined values.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.DateSmart">
+            <summary>
+                <para>The filter dropdown provides a built-in calendar plus check boxes to select common non-intersecting date intervals. 
+
+<para>
+The table below describes the available date ranges for the DateSmart and Date modes.
+</para>
+
+<list type="table">
+
+<listheader>
+    <term>Interval</term>
+    <description>Description</description>
+</listheader>
+
+<item>
+    <term>Beyond this year</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.BeyondThisYear"/></description>
+</item>
+<item>
+    <term>Later this year</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.LaterThisYear"/></description>
+</item>
+<item>
+    <term>Later this month</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.LaterThisMonth"/></description>
+</item>
+<item>
+    <term>Next week</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.NextWeek"/></description>
+</item>
+<item>
+    <term>Later this week</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.LaterThisWeek"/></description>
+</item>
+<item>
+    <term>Tomorrow</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Tomorrow"/></description>
+</item>
+<item>
+    <term>Today</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Today"/></description>
+</item>
+<item>
+    <term>Yesterday</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Yesterday"/></description>
+</item>
+<item>
+    <term>Earlier this week</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.EarlierThisWeek"/></description>
+</item>
+<item>
+    <term>Last week</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.LastWeek"/></description>
+</item>
+<item>
+    <term>Earlier this year</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.EarlierThisYear"/></description>
+</item>
+<item>
+    <term>Prior to this year</term>
+    <description><see short="F:DevExpress.XtraEditors.FilterDateType.PriorThisYear"/></description>
+</item>
+</list>
+
+<para>
+If there is no underlying data that would fall into a specific date range, the corresponding check box is hidden. 
+If all values in the date-time column are set to null, all check boxes are visible. 
+</para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.Default">
+            <summary>
+                <para>For date-time columns, this option is equivalent to the <b>DateSmart</b> option. For other columns, this option is equivalent to the <b>List</b> option.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.Excel">
+            <summary>
+                <para>This mode is equivalent to filtering in Excel.
+<para>
+</para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.List">
+            <summary>
+                <para><para>A filter dropdown is represented as a regular list of items (one item at a time can be selected).</para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.FixedStyle">
+
+            <summary>
+                <para>Lists values that specify a column/band's behavior when a view is horizontally scrolled.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FixedStyle.Left">
+            <summary>
+                <para>A column/band is anchored to the vew's left edge.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FixedStyle.None">
+            <summary>
+                <para>A column/band takes part in horizontal scrolling.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.FixedStyle.Right">
+            <summary>
+                <para>A column/band is anchored to the view's right edge.
 </para>
             </summary>
 
@@ -18410,6 +18511,26 @@ This class supports the internal infrastructure and is not intended to be used d
                 <para>The current column is merged with the column on its right side.
 </para>
             </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.EditGridCellData">
+
+            <summary>
+                <para>Contains information about a data cell in edit mode.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.EditGridCellData.#ctor(DevExpress.Xpf.Grid.RowData)">
+            <summary>
+                <para>Initializes a new instance of the EditGridCellData class.
+</para>
+            </summary>
+            <param name="rowData">
+		A <see cref="T:DevExpress.Xpf.Grid.RowData"/> object that contains information about the data row. 
+
+            </param>
 
 
         </member>
@@ -18887,6 +19008,76 @@ This class supports the internal infrastructure and is not intended to be used d
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Grid.TableView.CustomCellAppearance"/> and <see cref="E:DevExpress.Xpf.Grid.TreeListView.CustomCellAppearance"/> events.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.#ctor(System.Windows.DependencyProperty,System.Object,System.Object)">
+            <summary>
+                <para>Initializes a new instance of the CustomCellAppearanceEventArgs class with the specified event arguments.
+</para>
+            </summary>
+            <param name="property">
+		A DependencyProperty whose value is changed by the conditional formatting mechanism. 
+
+            </param>
+            <param name="originalValue">
+		The original value of the property.
+
+            </param>
+            <param name="conditionalValue">
+		A value of the property calculated by the conditional formatting mechanism.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.#ctor(DevExpress.Xpf.Core.ConditionalFormatting.CustomAppearanceEventArgs)">
+            <summary>
+                <para>Initializes a new instance of the CustomCellAppearanceEventArgs class with the specified event arguments.
+</para>
+            </summary>
+            <param name="args">
+		A CustomAppearanceEventArgs object whose properties are used to initialize a newly created object. 
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.CellSelectionState">
+            <summary>
+                <para>Gets a cell's selection state.
+</para>
+            </summary>
+            <value>A cell's selection state.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.Column">
+            <summary>
+                <para>Gets a column that contains the corresponding cell.
+</para>
+            </summary>
+            <value>A column that contains the corresponding cell.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Grid.CustomCellAppearanceEventArgs.IsEditorVisible">
+            <summary>
+                <para>Gets whether an editor is visible for corresponding cell.
+</para>
+            </summary>
+            <value><b>true</b>, if an editor is visible; otherwise, <b>false</b>. 
+</value>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.AutoFilterCondition">
 
             <summary>
@@ -19068,32 +19259,6 @@ This class supports the internal infrastructure and is not intended to be used d
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.ScrollingMode">
-
-            <summary>
-                <para>Lists values that specify how many rows are displayed onscreen when a View is scrolled to the bottom.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollingMode.Normal">
-            <summary>
-                <para><para>Only one row (the last row) is displayed when a view is scrolled to the bottom.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ScrollingMode.Smart">
-            <summary>
-                <para><para>When a view is scrolled to the bottom, it displays as many rows as can completely fit into its content area.</para>
-<para></para>
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.FixedRowPosition">
 
             <summary>
@@ -19175,38 +19340,6 @@ This class supports the internal infrastructure and is not intended to be used d
         <member name="F:DevExpress.Xpf.Grid.ErrorsWatchMode.Rows">
             <summary>
                 <para>Grid View detects invalid rows.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ShowFilterPanelMode">
-
-            <summary>
-                <para>Lists values that specify when a View displays the Filter Panel.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.Default">
-            <summary>
-                <para>The filter panel is shown when data is filtered. Otherwise, the filter panel is hidden.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.Never">
-            <summary>
-                <para>The filter panel is hidden.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ShowFilterPanelMode.ShowAlways">
-            <summary>
-                <para>The filter panel is always shown at the bottom of the view.
 </para>
             </summary>
 
@@ -20089,195 +20222,6 @@ This class supports the internal infrastructure and is not intended to be used d
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Grid.FilterPopupMode">
-
-            <summary>
-                <para>Lists values that specify the display mode of a column's filter dropdown.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.CheckedList">
-            <summary>
-                <para><para>A filter dropdown is represented as a checked list (multiple items can be selected/checked simultaneously).</para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.Custom">
-            <summary>
-                <para><para>A filter dropdown is represented by a custom template assigned to the <see cref="P:DevExpress.Xpf.Grid.ColumnBase.CustomColumnFilterPopupTemplate"/> property.</para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.Date">
-            <summary>
-                <para>This mode is equivalent to <b>DateSmart</b> regarding the appearance of the filter dropdown. The filter dropdown displays all the available check boxes, even if there is no data that falls into a corresponding date range. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.DateAlt">
-            <summary>
-                <para>This mode is equivalent to <b>DateSmart</b>, but with a different set of filters: Today, This week, This month, Next month, etc.
-
-<para>
-The table below describes several of the date ranges for the DateAlt mode.
-</para>
-
-<list type="table">
-
-<listheader>
-    <term>Interval</term>
-    <description>Description</description>
-</listheader>
-
-<item>
-    <term>Beyond</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Beyond"/></description>
-</item>
-<item>
-    <term>Earlier</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Earlier"/></description>
-</item>
-</list>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.DateCompact">
-            <summary>
-                <para>A date-time filter dropdown without predefined values.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.DateSmart">
-            <summary>
-                <para>The filter dropdown provides a built-in calendar plus check boxes to select common non-intersecting date intervals. 
-
-<para>
-The table below describes the available date ranges for the DateSmart and Date modes.
-</para>
-
-<list type="table">
-
-<listheader>
-    <term>Interval</term>
-    <description>Description</description>
-</listheader>
-
-<item>
-    <term>Beyond this year</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.BeyondThisYear"/></description>
-</item>
-<item>
-    <term>Later this year</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.LaterThisYear"/></description>
-</item>
-<item>
-    <term>Later this month</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.LaterThisMonth"/></description>
-</item>
-<item>
-    <term>Next week</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.NextWeek"/></description>
-</item>
-<item>
-    <term>Later this week</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.LaterThisWeek"/></description>
-</item>
-<item>
-    <term>Tomorrow</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Tomorrow"/></description>
-</item>
-<item>
-    <term>Today</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Today"/></description>
-</item>
-<item>
-    <term>Yesterday</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.Yesterday"/></description>
-</item>
-<item>
-    <term>Earlier this week</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.EarlierThisWeek"/></description>
-</item>
-<item>
-    <term>Last week</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.LastWeek"/></description>
-</item>
-<item>
-    <term>Earlier this year</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.EarlierThisYear"/></description>
-</item>
-<item>
-    <term>Prior to this year</term>
-    <description><see short="F:DevExpress.XtraEditors.FilterDateType.PriorThisYear"/></description>
-</item>
-</list>
-
-<para>
-If there is no underlying data that would fall into a specific date range, the corresponding check box is hidden. 
-If all values in the date-time column are set to null, all check boxes are visible. 
-</para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.Default">
-            <summary>
-                <para>For date-time columns, this option is equivalent to the <b>DateSmart</b> option. For other columns, this option is equivalent to the <b>List</b> option.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.Excel">
-            <summary>
-                <para>This mode is equivalent to filtering in Excel.
-<para>
-</para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.FilterPopupMode.List">
-            <summary>
-                <para><para>A filter dropdown is represented as a regular list of items (one item at a time can be selected).</para>
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.EditGridCellData">
-
-            <summary>
-                <para>Contains information about a data cell in edit mode.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Grid.EditGridCellData.#ctor(DevExpress.Xpf.Grid.RowData)">
-            <summary>
-                <para>Initializes a new instance of the EditGridCellData class.
-</para>
-            </summary>
-            <param name="rowData">
-		A <see cref="T:DevExpress.Xpf.Grid.RowData"/> object that contains information about the data row. 
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationsCreatingEventArgs">
 
             <summary>
@@ -20344,6 +20288,78 @@ If all values in the date-time column are set to null, all check boxes are visib
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Grid.IncrementalSearchMode">
+
+            <summary>
+                <para>Lists values that specify the incremental search mode.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IncrementalSearchMode.Default">
+            <summary>
+                <para>For the master or regular grid, the incremental search is disabled by default. For the detail grid, the incremental search is enabled if the incremental search for the master grid is enabled.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IncrementalSearchMode.Disabled">
+            <summary>
+                <para>The incremental search is disabled.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.IncrementalSearchMode.Enabled">
+            <summary>
+                <para>The incremental search is enabled.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ConditionalFormatting.IconSetFormat">
+
+            <summary>
+                <para>Represents the icon set format.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Grid.ConditionalFormatting.IconSetFormat.#ctor">
+            <summary>
+                <para>Initializes a new instance of the IconSetFormat class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.MergedGroupingMode">
+
+            <summary>
+                <para>Lists values that specify merged grouping modes.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.MergedGroupingMode.Always">
+            <summary>
+                <para>Grid always merges groups when end-users drag column headers into the group panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.MergedGroupingMode.CtrlKeyPressed">
+            <summary>
+                <para>End-users should hold the Ctrl key pressed when dragging column headers into the group panel to merge groups.
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment">
 
             <summary>
@@ -20379,86 +20395,6 @@ If all values in the date-time column are set to null, all check boxes are visib
         <member name="F:DevExpress.Xpf.Grid.ScrollBarAnnotationAlignment.Right">
             <summary>
                 <para>Specifies that the scrollbar annotation marks are aligned to the right of the scrollbar. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.IncrementalSearchMode">
-
-            <summary>
-                <para>Lists values that specify the incremental search mode.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IncrementalSearchMode.Default">
-            <summary>
-                <para>For the master or regular grid, the incremental search is disabled by default. For the detail grid, the incremental search is enabled if the incremental search for the master grid is enabled.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IncrementalSearchMode.Disabled">
-            <summary>
-                <para>The incremental search is disabled.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.IncrementalSearchMode.Enabled">
-            <summary>
-                <para>The incremental search is enabled.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.ColumnFilterPopupMode">
-
-            <summary>
-                <para>Lists values that specify the display mode of the filter dropdown for all columns within the view.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ColumnFilterPopupMode.Default">
-            <summary>
-                <para>Filter dropdowns of date-time columns are represented by the calendar, filter dropdowns of all other columns are represented by regular lists.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.ColumnFilterPopupMode.Excel">
-            <summary>
-                <para>Displays an Excel style filter dropdown.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Grid.MergedGroupingMode">
-
-            <summary>
-                <para>Lists values that specify merged grouping modes.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.MergedGroupingMode.Always">
-            <summary>
-                <para>Grid always merges groups when end-users drag column headers into the group panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Grid.MergedGroupingMode.CtrlKeyPressed">
-            <summary>
-                <para>End-users should hold the Ctrl key pressed when dragging column headers into the group panel to merge groups.
 </para>
             </summary>
 

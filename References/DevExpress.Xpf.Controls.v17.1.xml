@@ -97,6 +97,117 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.MenuFlyout">
+
+            <summary>
+                <para>A Windows-8 styled pop-up menu.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.MenuFlyout.#ctor">
+            <summary>
+                <para>Initializes a new instance of the MenuFlyout class with default settings.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.Items">
+            <summary>
+                <para>Provides access to the collection of <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s used in this MenuFlyout.
+
+</para>
+            </summary>
+            <value>A MenuFlyoutItemCollection that stores <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s used in this MenuFlyout.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemsSource">
+            <summary>
+                <para>Gets or sets an object that provides information to generate and initialize <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s for the current MenuFlyout.
+ This is a dependency property.
+</para>
+            </summary>
+            <value>An Object that serves as a source for this MenuFlyout's items.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemsSourceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemStyle">
+            <summary>
+                <para>Gets or sets the style applied to a <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/> object contained within this MenuFlyout.
+This is a dependency property. 
+</para>
+            </summary>
+            <value>A Style object providing corresponding style settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemTemplate">
+            <summary>
+                <para>Gets or sets a template used to visualize <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s within this MenuFlyout. This is a dependency property.
+</para>
+            </summary>
+            <value>A DataTemplate object that specifies the corresponding template.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a template used to visualize <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s within this MenuFlyout. This is a dependency property. 
+</para>
+            </summary>
+            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Navigation.TileBarItem">
 
             <summary>
@@ -496,121 +607,6 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Controls.WizardService">
-
-            <summary>
-                <para>Allows you to use the <see cref="T:DevExpress.Xpf.Controls.Wizard"/> control in compliance with MVVM.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Controls.WizardService.#ctor">
-            <summary>
-                <para>Initializes a new instance of the WizardService class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Controls.WizardService.GoBack(System.Object)">
-            <summary>
-                <para>Navigates back to the previous wizard page. 
-</para>
-            </summary>
-            <param name="parameter">
-		An object that specifies the navigation parameter for the current navigation. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Controls.WizardService.GoForward(System.Object)">
-            <summary>
-                <para>Navigates forward to the next wizard page. 
-</para>
-            </summary>
-            <param name="parameter">
-		An object that specifies the navigation parameter for the current navigation.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Controls.WizardService.Navigate(System.String,System.Object,System.Object,System.Object)">
-            <summary>
-                <para>Performs navigation to the target View.
-</para>
-            </summary>
-            <param name="viewType">
-		A <b>System.String</b> value that specifies the name of the target View type. 
-
-            </param>
-            <param name="viewModel">
-		An object specifying the ViewModel of the target View. 
-
-            </param>
-            <param name="parameter">
-		A parameter for passing data to the target ViewModel. 
-
-            </param>
-            <param name="parentViewModel">
-		The parent ViewModel for building a parent-child view model relationship. 
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplate">
-            <summary>
-                <para> </para>
-            </summary>
-            <value> </value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateProperty">
-            <summary>
-                <para> </para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateSelector">
-            <summary>
-                <para> </para>
-            </summary>
-            <value> </value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateSelectorProperty">
-            <summary>
-                <para> </para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Controls.WizardService.Wizard">
-            <summary>
-                <para>Gets or sets the wizard that is used by the service. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Controls.Wizard"/> object.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Controls.WizardService.WizardProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Navigation.OfficeNavigationBar">
 
             <summary>
@@ -874,6 +870,120 @@
 
         </member>
         <member name="F:DevExpress.Xpf.Navigation.OfficeNavigationBar.ShowPeekFormOnItemHoverProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.WinUIDialogWindow">
+
+            <summary>
+                <para>A Windows Modern-styled dialog window.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String)">
+            <summary>
+                <para>Initializes a new instance of the WinUIDialogWindow class with the specified title.
+</para>
+            </summary>
+            <param name="title">
+		A string value that specifies the dialog's title. This value is assigned to the <see cref="P:System.Windows.Window.Title"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String,System.Windows.MessageBoxButton,System.Nullable`1,System.Nullable`1)">
+            <summary>
+                <para>Initializes a new instance of the WinUIDialogWindow class with the specified settings.
+</para>
+            </summary>
+            <param name="title">
+		A <see cref="T:System.String"/> value that specifies  the WinUIDialogWindow's title.
+
+            </param>
+            <param name="dialogButtons">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIDialogWindow.
+
+            </param>
+            <param name="defaultButton">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which dialog button is default.
+
+            </param>
+            <param name="cancelButton">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which dialog button is cancel.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String,System.Collections.Generic.IEnumerable`1)">
+            <summary>
+                <para>Initializes a new instance of the WinUIDialogWindow class with the specified settings.
+</para>
+            </summary>
+            <param name="title">
+		A <b>System.String</b> value that specifies the dialog's title.
+
+            </param>
+            <param name="commands">
+		A list of <see cref="T:DevExpress.Mvvm.UICommand"/> objects that are used to generate dialog buttons. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor">
+            <summary>
+                <para>Initializes a new instance of the WinUIDialogWindow class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Activate">
+            <summary>
+                <para>Activates the current WinUIDialogWindow.
+</para>
+            </summary>
+            <returns><b>true</b>, if the dialog is activated; otherwise, <b>false</b>.
+
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Close">
+            <summary>
+                <para>Closes the opened dialog.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Show">
+            <summary>
+                <para>Opens a dialog.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.TitleStyle">
+            <summary>
+                <para>Gets or sets the dialog title style.This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Style"/> object that represents the style of the dialog title.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.TitleStyleProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -2224,422 +2334,6 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.WinUIMessageBox">
-
-            <summary>
-                <para>A Windows Modern UI-styled message box.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.#ctor">
-            <summary>
-                <para>Initializes a new instance of the WinUIMessageBox class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific text, title, icon and set of buttons, one of which is set as default.
-</para>
-            </summary>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="icon">
-		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
-
-            </param>
-            <param name="defaultResult">
-		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specified text and title.
-</para>
-            </summary>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <returns>A System.Windows.MessageBoxResult.OK value.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specified owner and text.
-</para>
-            </summary>
-            <param name="owner">
-		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
-
-            </param>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <returns>A <b>System.Windows.MessageBoxResult.OK</b> value.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String,System.Windows.MessageBoxButton)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific text, title and set of buttons.
-</para>
-            </summary>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <returns>A System.Windows.MessageBoxResult enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific owner, text and title.
-</para>
-            </summary>
-            <param name="owner">
-		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
-
-            </param>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <returns>A System.Windows.MessageBoxResult.OK value.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific text, title, image and set of buttons.
-</para>
-            </summary>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="icon">
-		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific owner, text, title and set of buttons.
-</para>
-            </summary>
-            <param name="owner">
-		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
-
-            </param>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific owner, text, title, image and set of buttons, one of which is set as default.
-</para>
-            </summary>
-            <param name="owner">
-		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
-
-            </param>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="icon">
-		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
-
-            </param>
-            <param name="defaultResult">
-		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific owner, text, title, icon and set of buttons.
-</para>
-            </summary>
-            <param name="owner">
-		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
-
-            </param>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="icon">
-		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult,System.Windows.MessageBoxOptions)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific text, title, icon, display options and set of buttons, one of which is set as default.
-</para>
-            </summary>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="icon">
-		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
-
-            </param>
-            <param name="defaultResult">
-		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
-
-            </param>
-            <param name="options">
-		A <see cref="T:System.Windows.MessageBoxOptions"/> enumerator value that specifies which display and association options will be used for the message box.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult,System.Windows.MessageBoxOptions)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific owner, text, title, icon, display options and set of buttons, one of which is set as default.
-</para>
-            </summary>
-            <param name="owner">
-		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
-
-            </param>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="icon">
-		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
-
-            </param>
-            <param name="defaultResult">
-		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
-
-            </param>
-            <param name="options">
-		A <see cref="T:System.Windows.MessageBoxOptions"/> enumerator value that specifies which display and association options will be used for the message box.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult,System.Windows.MessageBoxOptions,DevExpress.Xpf.Core.FloatingMode)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific owner, text, title, icon, display options, floating mode and set of buttons, one of which is set as default.
-</para>
-            </summary>
-            <param name="owner">
-		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
-
-            </param>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="icon">
-		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
-
-            </param>
-            <param name="defaultResult">
-		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
-
-            </param>
-            <param name="options">
-		A <see cref="T:System.Windows.MessageBoxOptions"/> enumerator value that specifies which display and association options will be used for the message box.
-
-            </param>
-            <param name="desiredFloatingMode">
-		A <see cref="T:DevExpress.Xpf.Core.FloatingMode"/> enumerator value that specifies the floating mode for the WinUIMessageBox.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult,System.Windows.MessageBoxOptions,DevExpress.Xpf.Core.FloatingMode,System.Boolean)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specific owner, text, title, icon, display options, floating mode, animation, and set of buttons, one of which is set as default.
-</para>
-            </summary>
-            <param name="owner">
-		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox. 
-
-            </param>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox. 
-
-            </param>
-            <param name="caption">
-		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption. 
-
-            </param>
-            <param name="button">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
-
-            </param>
-            <param name="icon">
-		A <see cref="T:System.Windows.MessageBoxImage"/>enumerator value that specifies which icon to display within the current WinUIMessageBox. 
-
-            </param>
-            <param name="defaultResult">
-		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown. 
-
-            </param>
-            <param name="options">
-		A <see cref="T:System.Windows.MessageBoxOptions"/> enumerator value that specifies which display and association options will be used for the message box. 
-
-            </param>
-            <param name="desiredFloatingMode">
-		A <see cref="T:DevExpress.Xpf.Core.FloatingMode"/> enumerator value that specifies the floating mode for the WinUIMessageBox. 
-
-            </param>
-            <param name="allowShowAnimatoin">
-		<b>true</b>, if message box show should be followed with smooth animation effects; otherwise, <b>false</b>.
-
-            </param>
-            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String)">
-            <summary>
-                <para>Displays the WinUIMessageBox with specified text. 
-</para>
-            </summary>
-            <param name="messageBoxText">
-		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
-
-            </param>
-            <returns>A System.Windows.MessageBoxResult.OK value.
-</returns>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.WindowsUI.Navigation.JournalEntry">
 
             <summary>
@@ -3423,432 +3117,6 @@ This is a dependency property.
             </summary>
             <returns> 
 </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Navigation.TileNavPane">
-
-            <summary>
-                <para>A hierarchical tile menu, providing navigation in a touch-friendly manner.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.#ctor">
-            <summary>
-                <para>Initializes a new instance of the TileNavPane class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.Categories">
-            <summary>
-                <para>Provides access to the collection of navigation categories available in the current TileNavPane.
-</para>
-            </summary>
-            <value>A <b>TileNavCategoryCollection</b> object that represents a collection of <see cref="T:DevExpress.Xpf.Navigation.TileNavCategory"/> objects.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CategoriesSource">
-            <summary>
-                <para>Gets or sets an object that provides data to generate and initialize categories for the current TileNavPane. This is a dependency property.
-</para>
-            </summary>
-            <value>An Object that provides data to generate and initialize categories for the current TileNavPane. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CategoriesSourceProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CategoryStyle">
-            <summary>
-                <para>Gets or sets the style applied to a <see cref="T:DevExpress.Xpf.Navigation.TileNavCategory"/> object defined as the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplate"/>'s content.
-
-
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A Style object providing corresponding style settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CategoryStyleProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplate">
-            <summary>
-                <para>Gets or sets the template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.CategoriesSource"/> collection.
- This is a dependency property. 
-</para>
-            </summary>
-            <value>A DataTemplate object that specifies the corresponding template.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplateSelector">
-            <summary>
-                <para>Gets or sets an object that chooses a template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.CategoriesSource"/> collection.
- This is a dependency property. 
-</para>
-            </summary>
-            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplateSelectorProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.CloseFlyout">
-            <summary>
-                <para>Hides the currently displayed drop-down tile bar.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CloseOnOuterClick">
-            <summary>
-                <para>Gets or sets whether the opened drop-down tile bar closes on light dismiss. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b>, if the opened drop-down tile bar closes on light dismiss; otherwise, <b>false</b>. The default is <b>true</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CloseOnOuterClickProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.ContinuousNavigation">
-            <summary>
-                <para>Gets or sets whether selecting an element automatically shows the primary drop-down tile bar with the children of this element. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b>, if selecting an element automatically shows the primary drop-down tile bar on selecting a navigation element; otherwise, <b>false</b>. The default is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.ContinuousNavigationProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.FlyoutShowDirection">
-            <summary>
-                <para>Gets or sets the direction in which the TileNavPane's flyouts open.
-</para>
-            </summary>
-            <value>A <see cref="FlyoutShowDirection"/> enumeration value that specifies the direction in which the TileNavPane's flyouts open.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.FlyoutShowDirectionProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.FlyoutShowMode">
-            <summary>
-                <para>Gets or sets the mode that specifies how drop-down tile bars are displayed. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="FlyoutShowMode"/> enumeration value, such as <b>Adorner</b> or <b>Popup</b>, that specifies how drop-down tile bars are displayed. The default is <b>Adorner</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.FlyoutShowModeProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.GetTileNavGroupHeader(System.Windows.DependencyObject)">
-            <summary>
-                <para>Returns the group header of the specified navigation element.
-</para>
-            </summary>
-            <param name="element">
-		A DependencyObject representing a navigation element whose group header should be returned.
-
-            </param>
-            <returns>An Object representing a group header assigned to the specified navigation element. <b>null</b> (<b>Nothing</b> in VB) if no group header is assigned.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.GroupHeaderStyle">
-            <summary>
-                <para>Gets or sets the style applied to group headers.
-
-
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A Style object providing corresponding style settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.GroupHeaderStyleProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.GroupHeaderTemplate">
-            <summary>
-                <para>Gets or sets the <b>DataTemplate</b> used to render group headers. This is a dependency property.
-</para>
-            </summary>
-            <value>A <b>DataTemplate</b> object used to render group headers.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.GroupHeaderTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtons">
-            <summary>
-                <para>Provides access to the collection of NavButton objects displayed in the TileNavPane's nav bar.
-</para>
-            </summary>
-            <value>A collection of <b>NavButton</b> objects.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonsSource">
-            <summary>
-                <para>Gets or sets an object that provides information to generate and initialize navigation buttons for the current TileNavPane. This is a dependency property.
-</para>
-            </summary>
-            <value>An Object that provides information to generate and initialize navigation buttons for the current TileNavPane. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.NavButtonsSourceProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonStyle">
-            <summary>
-                <para>Gets or sets the style applied to a NavButton object defined as the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplate"/>'s content.
-
-
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A Style object providing corresponding style settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.NavButtonStyleProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplate">
-            <summary>
-                <para>Gets or sets the template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonsSource"/> collection.
- This is a dependency property. 
-</para>
-            </summary>
-            <value>A DataTemplate object that specifies the corresponding template.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplateSelector">
-            <summary>
-                <para>Gets or sets an object that chooses a template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonsSource"/> collection.
- This is a dependency property. 
-</para>
-            </summary>
-            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplateSelectorProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.OnApplyTemplate">
-            <summary>
-                <para>Called after the template is completely generated and attached to the visual tree.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.SelectedElement">
-            <summary>
-                <para>Returns the NavElementBase object currently selected in the TileNavPane.
-</para>
-            </summary>
-            <value>A NavElementBase object that is currently selected in the TileNavPane. <b>null</b> (<b>Nothing</b> in VB) if there is no selected element in the TileNavPane.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.SelectedElementProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="E:DevExpress.Xpf.Navigation.TileNavPane.SelectionChanged">
-            <summary>
-                <para>Fires after the TileNavPane's selected element is changed.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.SetTileNavGroupHeader(System.Windows.DependencyObject,System.Object)">
-            <summary>
-                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeader"/> attached property for a specific object.
-</para>
-            </summary>
-            <param name="element">
-		A <b>DependencyObject</b> whose <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeader"/> attached property is to be set.
-
-            </param>
-            <param name="value">
-		A new value of the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeader"/> attached property for the specified object.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.ShowItemShadow">
-            <summary>
-                <para>Gets or sets whether tiles cast shadows in the drop-down bars. This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b>, if tiles cast shadows in the drop-down bars; otherwise, <b>false</b>. The default is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.ShowItemShadowProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeader(System.Windows.DependencyObject)">
-            <summary>
-                <para>Gets or sets a group header associated with a specific object. This is an attached property. 
-</para>
-            </summary>
-            <value>An <b>Object</b> representing a group header associated with a specific object.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeaderProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
 
 
         </member>
@@ -5781,6 +5049,121 @@ This is a dependency property.
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Controls.WizardService">
+
+            <summary>
+                <para>Allows you to use the <see cref="T:DevExpress.Xpf.Controls.Wizard"/> control in compliance with MVVM.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Controls.WizardService.#ctor">
+            <summary>
+                <para>Initializes a new instance of the WizardService class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Controls.WizardService.GoBack(System.Object)">
+            <summary>
+                <para>Navigates back to the previous wizard page. 
+</para>
+            </summary>
+            <param name="parameter">
+		An object that specifies the navigation parameter for the current navigation. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Controls.WizardService.GoForward(System.Object)">
+            <summary>
+                <para>Navigates forward to the next wizard page. 
+</para>
+            </summary>
+            <param name="parameter">
+		An object that specifies the navigation parameter for the current navigation.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Controls.WizardService.Navigate(System.String,System.Object,System.Object,System.Object)">
+            <summary>
+                <para>Performs navigation to the target View.
+</para>
+            </summary>
+            <param name="viewType">
+		A <b>System.String</b> value that specifies the name of the target View type. 
+
+            </param>
+            <param name="viewModel">
+		An object specifying the ViewModel of the target View. 
+
+            </param>
+            <param name="parameter">
+		A parameter for passing data to the target ViewModel. 
+
+            </param>
+            <param name="parentViewModel">
+		The parent ViewModel for building a parent-child view model relationship. 
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplate">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateProperty">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateSelector">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Controls.WizardService.PageGeneratorTemplateSelectorProperty">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Controls.WizardService.Wizard">
+            <summary>
+                <para>Gets or sets the wizard that is used by the service. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Controls.Wizard"/> object.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Controls.WizardService.WizardProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.WindowsUI.Navigation.NavigationEventArgs">
 
             <summary>
@@ -5819,117 +5202,47 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.WinUIDialogWindow">
+        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs">
 
             <summary>
-                <para>A Windows Modern-styled dialog window.
+                <para>Provides base properties for navigation events in Windows Modern UI applications.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String)">
+        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.#ctor(System.Object,System.Object)">
             <summary>
-                <para>Initializes a new instance of the WinUIDialogWindow class with the specified title.
+                <para>Initializes a new instance of the NavigationBaseEventArgs class with the specified settings.
 </para>
             </summary>
-            <param name="title">
-		A string value that specifies the dialog's title. This value is assigned to the <see cref="P:System.Windows.Window.Title"/> property.
+            <param name="source">
+		An Object that points to the navigation destination for the related navigation event.
+
+            </param>
+            <param name="parameter">
+		An Object that is the parameter passed to the related navigation event.
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String,System.Windows.MessageBoxButton,System.Nullable`1,System.Nullable`1)">
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.Parameter">
             <summary>
-                <para>Initializes a new instance of the WinUIDialogWindow class with the specified settings.
+                <para>Gets the parameter passed to the related navigation event.
 </para>
             </summary>
-            <param name="title">
-		A <see cref="T:System.String"/> value that specifies  the WinUIDialogWindow's title.
-
-            </param>
-            <param name="dialogButtons">
-		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIDialogWindow.
-
-            </param>
-            <param name="defaultButton">
-		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which dialog button is default.
-
-            </param>
-            <param name="cancelButton">
-		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which dialog button is cancel.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor(System.String,System.Collections.Generic.IEnumerable`1)">
-            <summary>
-                <para>Initializes a new instance of the WinUIDialogWindow class with the specified settings.
-</para>
-            </summary>
-            <param name="title">
-		A <b>System.String</b> value that specifies the dialog's title.
-
-            </param>
-            <param name="commands">
-		A list of <see cref="T:DevExpress.Mvvm.UICommand"/> objects that are used to generate dialog buttons. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.#ctor">
-            <summary>
-                <para>Initializes a new instance of the WinUIDialogWindow class with the default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Activate">
-            <summary>
-                <para>Activates the current WinUIDialogWindow.
-</para>
-            </summary>
-            <returns><b>true</b>, if the dialog is activated; otherwise, <b>false</b>.
-
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Close">
-            <summary>
-                <para>Closes the opened dialog.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.Show">
-            <summary>
-                <para>Opens a dialog.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.TitleStyle">
-            <summary>
-                <para>Gets or sets the dialog title style.This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.Style"/> object that represents the style of the dialog title.
+            <value>An Object that is the parameter passed to the related navigation event.
 </value>
 
 
         </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.WinUIDialogWindow.TitleStyleProperty">
+        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.Source">
             <summary>
-                <para>Identifies the  dependency property.
+                <para>Gets the navigation destination for the related navigation event.
 </para>
             </summary>
-            <returns> </returns>
+            <value>An Object that points to the navigation target for the related navigation event.
+</value>
 
 
         </member>
@@ -5972,34 +5285,6 @@ This is a dependency property.
             </summary>
             <param name="e">
 		A NavigatingEventArgs object that contains event data.
-
-            </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.AnimationSelector">
-
-            <summary>
-                <para>Represents a base class for objects that provide a custom logic to select a frame animation.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.AnimationSelector.#ctor">
-            <summary>
-                <para>Initializes a new instance of the AnimationSelector class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.AnimationSelector.Select(DevExpress.Xpf.WindowsUI.FrameAnimation)">
-            <summary>
-                <para>Returns a storyboard used to render a frame animation based on the specified settings.
-</para>
-            </summary>
-            <param name="animation">
-		A <b>FrameAnimation</b> object that comprises the animation settings.
 
             </param>
 
@@ -6216,50 +5501,6 @@ This is a dependency property.
 		An Object that is the Navigation Frame for a specific object.
 
             </param>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs">
-
-            <summary>
-                <para>Provides base properties for navigation events in Windows Modern UI applications.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.#ctor(System.Object,System.Object)">
-            <summary>
-                <para>Initializes a new instance of the NavigationBaseEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="source">
-		An Object that points to the navigation destination for the related navigation event.
-
-            </param>
-            <param name="parameter">
-		An Object that is the parameter passed to the related navigation event.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.Parameter">
-            <summary>
-                <para>Gets the parameter passed to the related navigation event.
-</para>
-            </summary>
-            <value>An Object that is the parameter passed to the related navigation event.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.Navigation.NavigationBaseEventArgs.Source">
-            <summary>
-                <para>Gets the navigation destination for the related navigation event.
-</para>
-            </summary>
-            <value>An Object that points to the navigation target for the related navigation event.
-</value>
 
 
         </member>
@@ -6621,6 +5862,34 @@ This is a dependency property.
             </summary>
             <returns> 
 </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.AnimationSelector">
+
+            <summary>
+                <para>Represents a base class for objects that provide a custom logic to select a frame animation.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.AnimationSelector.#ctor">
+            <summary>
+                <para>Initializes a new instance of the AnimationSelector class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.AnimationSelector.Select(DevExpress.Xpf.WindowsUI.FrameAnimation)">
+            <summary>
+                <para>Returns a storyboard used to render a frame animation based on the specified settings.
+</para>
+            </summary>
+            <param name="animation">
+		A <b>FrameAnimation</b> object that comprises the animation settings.
+
+            </param>
 
 
         </member>
@@ -7063,117 +6332,6 @@ This is a dependency property.
 
 
         </member>
-        <member name="T:DevExpress.Xpf.WindowsUI.MenuFlyout">
-
-            <summary>
-                <para>A Windows-8 styled pop-up menu.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.WindowsUI.MenuFlyout.#ctor">
-            <summary>
-                <para>Initializes a new instance of the MenuFlyout class with default settings.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.Items">
-            <summary>
-                <para>Provides access to the collection of <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s used in this MenuFlyout.
-
-</para>
-            </summary>
-            <value>A MenuFlyoutItemCollection that stores <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s used in this MenuFlyout.
-
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemsSource">
-            <summary>
-                <para>Gets or sets an object that provides information to generate and initialize <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s for the current MenuFlyout.
- This is a dependency property.
-</para>
-            </summary>
-            <value>An Object that serves as a source for this MenuFlyout's items.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemsSourceProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemStyle">
-            <summary>
-                <para>Gets or sets the style applied to a <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/> object contained within this MenuFlyout.
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A Style object providing corresponding style settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemStyleProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemTemplate">
-            <summary>
-                <para>Gets or sets a template used to visualize <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s within this MenuFlyout. This is a dependency property.
-</para>
-            </summary>
-            <value>A DataTemplate object that specifies the corresponding template.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemTemplateSelector">
-            <summary>
-                <para>Gets or sets an object that chooses a template used to visualize <see cref="T:DevExpress.Xpf.WindowsUI.MenuFlyoutItem"/>s within this MenuFlyout. This is a dependency property. 
-</para>
-            </summary>
-            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.WindowsUI.MenuFlyout.ItemTemplateSelectorProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.WindowsUI.Flyout">
 
             <summary>
@@ -7316,6 +6474,432 @@ This is a dependency property.
 
         </member>
         <member name="F:DevExpress.Xpf.WindowsUI.Flyout.ContentTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Navigation.TileNavPane">
+
+            <summary>
+                <para>A hierarchical tile menu, providing navigation in a touch-friendly manner.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.#ctor">
+            <summary>
+                <para>Initializes a new instance of the TileNavPane class with the default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.Categories">
+            <summary>
+                <para>Provides access to the collection of navigation categories available in the current TileNavPane.
+</para>
+            </summary>
+            <value>A <b>TileNavCategoryCollection</b> object that represents a collection of <see cref="T:DevExpress.Xpf.Navigation.TileNavCategory"/> objects.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CategoriesSource">
+            <summary>
+                <para>Gets or sets an object that provides data to generate and initialize categories for the current TileNavPane. This is a dependency property.
+</para>
+            </summary>
+            <value>An Object that provides data to generate and initialize categories for the current TileNavPane. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CategoriesSourceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CategoryStyle">
+            <summary>
+                <para>Gets or sets the style applied to a <see cref="T:DevExpress.Xpf.Navigation.TileNavCategory"/> object defined as the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplate"/>'s content.
+
+
+This is a dependency property. 
+</para>
+            </summary>
+            <value>A Style object providing corresponding style settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CategoryStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplate">
+            <summary>
+                <para>Gets or sets the template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.CategoriesSource"/> collection.
+ This is a dependency property. 
+</para>
+            </summary>
+            <value>A DataTemplate object that specifies the corresponding template.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.CategoriesSource"/> collection.
+ This is a dependency property. 
+</para>
+            </summary>
+            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CategoryTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.CloseFlyout">
+            <summary>
+                <para>Hides the currently displayed drop-down tile bar.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.CloseOnOuterClick">
+            <summary>
+                <para>Gets or sets whether the opened drop-down tile bar closes on light dismiss. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, if the opened drop-down tile bar closes on light dismiss; otherwise, <b>false</b>. The default is <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.CloseOnOuterClickProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.ContinuousNavigation">
+            <summary>
+                <para>Gets or sets whether selecting an element automatically shows the primary drop-down tile bar with the children of this element. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, if selecting an element automatically shows the primary drop-down tile bar on selecting a navigation element; otherwise, <b>false</b>. The default is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.ContinuousNavigationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.FlyoutShowDirection">
+            <summary>
+                <para>Gets or sets the direction in which the TileNavPane's flyouts open.
+</para>
+            </summary>
+            <value>A <see cref="FlyoutShowDirection"/> enumeration value that specifies the direction in which the TileNavPane's flyouts open.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.FlyoutShowDirectionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.FlyoutShowMode">
+            <summary>
+                <para>Gets or sets the mode that specifies how drop-down tile bars are displayed. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="FlyoutShowMode"/> enumeration value, such as <b>Adorner</b> or <b>Popup</b>, that specifies how drop-down tile bars are displayed. The default is <b>Adorner</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.FlyoutShowModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.GetTileNavGroupHeader(System.Windows.DependencyObject)">
+            <summary>
+                <para>Returns the group header of the specified navigation element.
+</para>
+            </summary>
+            <param name="element">
+		A DependencyObject representing a navigation element whose group header should be returned.
+
+            </param>
+            <returns>An Object representing a group header assigned to the specified navigation element. <b>null</b> (<b>Nothing</b> in VB) if no group header is assigned.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.GroupHeaderStyle">
+            <summary>
+                <para>Gets or sets the style applied to group headers.
+
+
+This is a dependency property. 
+</para>
+            </summary>
+            <value>A Style object providing corresponding style settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.GroupHeaderStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.GroupHeaderTemplate">
+            <summary>
+                <para>Gets or sets the <b>DataTemplate</b> used to render group headers. This is a dependency property.
+</para>
+            </summary>
+            <value>A <b>DataTemplate</b> object used to render group headers.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.GroupHeaderTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtons">
+            <summary>
+                <para>Provides access to the collection of NavButton objects displayed in the TileNavPane's nav bar.
+</para>
+            </summary>
+            <value>A collection of <b>NavButton</b> objects.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonsSource">
+            <summary>
+                <para>Gets or sets an object that provides information to generate and initialize navigation buttons for the current TileNavPane. This is a dependency property.
+</para>
+            </summary>
+            <value>An Object that provides information to generate and initialize navigation buttons for the current TileNavPane. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.NavButtonsSourceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonStyle">
+            <summary>
+                <para>Gets or sets the style applied to a NavButton object defined as the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplate"/>'s content.
+
+
+This is a dependency property. 
+</para>
+            </summary>
+            <value>A Style object providing corresponding style settings.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.NavButtonStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplate">
+            <summary>
+                <para>Gets or sets the template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonsSource"/> collection.
+ This is a dependency property. 
+</para>
+            </summary>
+            <value>A DataTemplate object that specifies the corresponding template.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a template used to visualize objects stored as elements in the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.NavButtonsSource"/> collection.
+ This is a dependency property. 
+</para>
+            </summary>
+            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.NavButtonTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.OnApplyTemplate">
+            <summary>
+                <para>Called after the template is completely generated and attached to the visual tree.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.SelectedElement">
+            <summary>
+                <para>Returns the NavElementBase object currently selected in the TileNavPane.
+</para>
+            </summary>
+            <value>A NavElementBase object that is currently selected in the TileNavPane. <b>null</b> (<b>Nothing</b> in VB) if there is no selected element in the TileNavPane.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.SelectedElementProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.Navigation.TileNavPane.SelectionChanged">
+            <summary>
+                <para>Fires after the TileNavPane's selected element is changed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Navigation.TileNavPane.SetTileNavGroupHeader(System.Windows.DependencyObject,System.Object)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeader"/> attached property for a specific object.
+</para>
+            </summary>
+            <param name="element">
+		A <b>DependencyObject</b> whose <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeader"/> attached property is to be set.
+
+            </param>
+            <param name="value">
+		A new value of the <see cref="P:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeader"/> attached property for the specified object.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.ShowItemShadow">
+            <summary>
+                <para>Gets or sets whether tiles cast shadows in the drop-down bars. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, if tiles cast shadows in the drop-down bars; otherwise, <b>false</b>. The default is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.ShowItemShadowProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeader(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets or sets a group header associated with a specific object. This is an attached property. 
+</para>
+            </summary>
+            <value>An <b>Object</b> representing a group header associated with a specific object.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Navigation.TileNavPane.TileNavGroupHeaderProperty">
             <summary>
                 <para>Identifies the  dependency property.
 </para>
@@ -7588,6 +7172,422 @@ This is a dependency property.
                 <para>No additional options.
 </para>
             </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.WindowsUI.WinUIMessageBox">
+
+            <summary>
+                <para>A Windows Modern UI-styled message box.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.#ctor">
+            <summary>
+                <para>Initializes a new instance of the WinUIMessageBox class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific text, title, icon and set of buttons, one of which is set as default.
+</para>
+            </summary>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="icon">
+		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
+
+            </param>
+            <param name="defaultResult">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specified text and title.
+</para>
+            </summary>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <returns>A System.Windows.MessageBoxResult.OK value.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specified owner and text.
+</para>
+            </summary>
+            <param name="owner">
+		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
+
+            </param>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <returns>A <b>System.Windows.MessageBoxResult.OK</b> value.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String,System.Windows.MessageBoxButton)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific text, title and set of buttons.
+</para>
+            </summary>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <returns>A System.Windows.MessageBoxResult enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific owner, text and title.
+</para>
+            </summary>
+            <param name="owner">
+		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
+
+            </param>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <returns>A System.Windows.MessageBoxResult.OK value.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific text, title, image and set of buttons.
+</para>
+            </summary>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="icon">
+		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific owner, text, title and set of buttons.
+</para>
+            </summary>
+            <param name="owner">
+		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
+
+            </param>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific owner, text, title, image and set of buttons, one of which is set as default.
+</para>
+            </summary>
+            <param name="owner">
+		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
+
+            </param>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="icon">
+		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
+
+            </param>
+            <param name="defaultResult">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific owner, text, title, icon and set of buttons.
+</para>
+            </summary>
+            <param name="owner">
+		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
+
+            </param>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="icon">
+		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult,System.Windows.MessageBoxOptions)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific text, title, icon, display options and set of buttons, one of which is set as default.
+</para>
+            </summary>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="icon">
+		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
+
+            </param>
+            <param name="defaultResult">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
+
+            </param>
+            <param name="options">
+		A <see cref="T:System.Windows.MessageBoxOptions"/> enumerator value that specifies which display and association options will be used for the message box.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult,System.Windows.MessageBoxOptions)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific owner, text, title, icon, display options and set of buttons, one of which is set as default.
+</para>
+            </summary>
+            <param name="owner">
+		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
+
+            </param>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="icon">
+		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
+
+            </param>
+            <param name="defaultResult">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
+
+            </param>
+            <param name="options">
+		A <see cref="T:System.Windows.MessageBoxOptions"/> enumerator value that specifies which display and association options will be used for the message box.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult,System.Windows.MessageBoxOptions,DevExpress.Xpf.Core.FloatingMode)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific owner, text, title, icon, display options, floating mode and set of buttons, one of which is set as default.
+</para>
+            </summary>
+            <param name="owner">
+		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox.
+
+            </param>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption.
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="icon">
+		A <see cref="T:System.Windows.MessageBoxImage"/> enumerator value that specifies which icon to display within the current WinUIMessageBox.
+
+            </param>
+            <param name="defaultResult">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown.
+
+            </param>
+            <param name="options">
+		A <see cref="T:System.Windows.MessageBoxOptions"/> enumerator value that specifies which display and association options will be used for the message box.
+
+            </param>
+            <param name="desiredFloatingMode">
+		A <see cref="T:DevExpress.Xpf.Core.FloatingMode"/> enumerator value that specifies the floating mode for the WinUIMessageBox.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.Windows.FrameworkElement,System.String,System.String,System.Windows.MessageBoxButton,System.Windows.MessageBoxImage,System.Windows.MessageBoxResult,System.Windows.MessageBoxOptions,DevExpress.Xpf.Core.FloatingMode,System.Boolean)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specific owner, text, title, icon, display options, floating mode, animation, and set of buttons, one of which is set as default.
+</para>
+            </summary>
+            <param name="owner">
+		A <see cref="T:System.Windows.FrameworkElement"/> object that owns the current WinUIMessageBox. 
+
+            </param>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox. 
+
+            </param>
+            <param name="caption">
+		A <see cref="T:System.String"/> value that is the WinUIMessageBox window caption. 
+
+            </param>
+            <param name="button">
+		A <see cref="T:System.Windows.MessageBoxButton"/> enumerator value that specifies the set of buttons displayed within the current WinUIMessageBox.
+
+            </param>
+            <param name="icon">
+		A <see cref="T:System.Windows.MessageBoxImage"/>enumerator value that specifies which icon to display within the current WinUIMessageBox. 
+
+            </param>
+            <param name="defaultResult">
+		A <see cref="T:System.Windows.MessageBoxResult"/> that specifies which message box button is default. A default button is highlighted when a WinUIMessageBox is shown. 
+
+            </param>
+            <param name="options">
+		A <see cref="T:System.Windows.MessageBoxOptions"/> enumerator value that specifies which display and association options will be used for the message box. 
+
+            </param>
+            <param name="desiredFloatingMode">
+		A <see cref="T:DevExpress.Xpf.Core.FloatingMode"/> enumerator value that specifies the floating mode for the WinUIMessageBox. 
+
+            </param>
+            <param name="allowShowAnimatoin">
+		<b>true</b>, if message box show should be followed with smooth animation effects; otherwise, <b>false</b>.
+
+            </param>
+            <returns>A <see cref="T:System.Windows.MessageBoxResult"/> enumerator value that indicates which message box button an end-user has clicked. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.WindowsUI.WinUIMessageBox.Show(System.String)">
+            <summary>
+                <para>Displays the WinUIMessageBox with specified text. 
+</para>
+            </summary>
+            <param name="messageBoxText">
+		A <see cref="T:System.String"/> value that is the text to be displayed within the current WinUIMessageBox.
+
+            </param>
+            <returns>A System.Windows.MessageBoxResult.OK value.
+</returns>
 
 
         </member>
