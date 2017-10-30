@@ -1373,11 +1373,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.PropertyGridEx" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SetSelectedObject(System.Object)">
-      <summary>
-            Change selected object.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent">
       <summary>
             InitializeComponent
