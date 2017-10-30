@@ -1679,6 +1679,7 @@ namespace StockSharp.BusinessEntities
 		/// Number of issued contracts.
 		/// </summary>
 		[DataMember]
+		[Nullable]
 		public decimal? IssueSize
 		{
 			get => _issueSize;
@@ -1695,6 +1696,7 @@ namespace StockSharp.BusinessEntities
 		/// Date of issue.
 		/// </summary>
 		[DataMember]
+		[Nullable]
 		public DateTimeOffset? IssueDate
 		{
 			get => _issueDate;
