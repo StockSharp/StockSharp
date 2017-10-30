@@ -5,6 +5,7 @@ M:StockSharp.Community.AuthenticationClient.#ctor(System.Uri)/param/address;DocS
 P:StockSharp.Community.AuthenticationClient.Instance/summary;DocStr2967
 P:StockSharp.Community.AuthenticationClient.Credentials/summary;DocStr2968
 P:StockSharp.Community.AuthenticationClient.Product/summary;Product
+P:StockSharp.Community.AuthenticationClient.Version/summary;Product
 P:StockSharp.Community.AuthenticationClient.IsLoggedIn/summary;DocStr2969
 P:StockSharp.Community.AuthenticationClient.SessionId/summary;DocStr138
 P:StockSharp.Community.AuthenticationClient.NullableSessionId/summary;DocStr9213
@@ -111,6 +112,12 @@ M:StockSharp.Community.IAuthenticationService.Login2(StockSharp.Community.Produc
 M:StockSharp.Community.IAuthenticationService.Login2(StockSharp.Community.Products,System.String,System.String)/param/email;Email
 M:StockSharp.Community.IAuthenticationService.Login2(StockSharp.Community.Products,System.String,System.String)/param/password;Password
 M:StockSharp.Community.IAuthenticationService.Login2(StockSharp.Community.Products,System.String,System.String)/returns;DocStr138
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/summary;DocStr2963
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/param/product;Product
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/param/version;Version
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/param/email;Email
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/param/password;Password
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/returns;DocStr138
 M:StockSharp.Community.IAuthenticationService.Ping(System.Guid)/summary;DocStr8701
 M:StockSharp.Community.IAuthenticationService.Ping(System.Guid)/param/sessionId;DocStr138
 M:StockSharp.Community.IAuthenticationService.Logout(System.Guid)/summary;DocStr2964

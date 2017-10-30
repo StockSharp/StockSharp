@@ -1312,6 +1312,8 @@ P:StockSharp.Messages.SecurityMessage.BinaryOptionType/summary;TypeBinaryOption
 P:StockSharp.Messages.SecurityMessage.Currency/summary;Str382
 P:StockSharp.Messages.SecurityMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.SecurityMessage.Class/summary;SecurityClass
+P:StockSharp.Messages.SecurityMessage.IssueSize/summary;IssueSize
+P:StockSharp.Messages.SecurityMessage.IssueDate/summary;IssueDate
 M:StockSharp.Messages.SecurityMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
 M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9

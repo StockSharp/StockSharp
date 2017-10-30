@@ -628,7 +628,7 @@ P:StockSharp.Algo.History.Russian.SecurityInfo.Isin/summary;Str353
 P:StockSharp.Algo.History.Russian.SecurityInfo.Asset/summary;Str550
 P:StockSharp.Algo.History.Russian.SecurityInfo.Type/summary;Str360
 P:StockSharp.Algo.History.Russian.SecurityInfo.IssueSize/summary;IssueSize
-P:StockSharp.Algo.History.Russian.SecurityInfo.IssueDate/summary;DocStr10187
+P:StockSharp.Algo.History.Russian.SecurityInfo.IssueDate/summary;IssueDate
 P:StockSharp.Algo.History.Russian.SecurityInfo.LastDate/summary;Str371
 P:StockSharp.Algo.History.Russian.SecurityInfo.Decimals/summary;Str548
 P:StockSharp.Algo.History.Russian.SecurityInfo.Multiplier/summary;DocStr2623

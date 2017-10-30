@@ -308,7 +308,6 @@ M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Obj
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Object,System.Object)/param/oldValue;Str3140
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.OnSelectedObjectChanged(System.Object,System.Object)/param/newValue;DocStr8276
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.#ctor/summary;DocStr1
-M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SetSelectedObject(System.Object)/summary;DocStr10057
 M:StockSharp.Xaml.PropertyGrid.PropertyGridEx.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ExtendedInfoStorageComboBox/summary;DocStr10009
 M:StockSharp.Xaml.ExtendedInfoStorageComboBox.CreateEditorSettings/summary;DocStr8459
