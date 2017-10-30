@@ -79,6 +79,11 @@
             Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.
             </summary>
     </member>
+    <member name="F:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.DefaultVersion">
+      <summary>
+            Default value for <see cref="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Version" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Version">
       <summary>
             Protocol version.

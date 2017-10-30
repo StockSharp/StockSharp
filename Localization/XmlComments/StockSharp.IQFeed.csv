@@ -13,6 +13,7 @@ P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1Columns/summary;DocStr3
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecurityTypesFilter/summary;Str2134
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsDownloadSecurityFromSite/summary;DocStr3698
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecuritiesFile/summary;Str2138
+F:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.DefaultVersion/summary;DocStr9884
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Version/summary;DocStr9384
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1ColumnRegistry/summary;DocStr3699
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.TimeFrames/summary;DocStr2531
