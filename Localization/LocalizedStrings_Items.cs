@@ -46316,5 +46316,15 @@ namespace StockSharp.Localization
 		/// Underlying security type
 		/// </summary>
 		public static string UnderlyingSecurityType => GetString(UnderlyingSecurityTypeKey);
+
+		/// <summary>
+		/// Underlying
+		/// </summary>
+		public const string UnderlyingKey = nameof(Underlying);
+
+		/// <summary>
+		/// Underlying
+		/// </summary>
+		public static string Underlying => GetString(UnderlyingKey);
 	}
 }

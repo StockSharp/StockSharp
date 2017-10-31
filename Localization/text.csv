@@ -4669,6 +4669,7 @@ CandleActiveNotSupport;Candle {0} has active state and cannot be stored.;Све�
 NNOptions;{0} options;{0} опционов
 CannotOpenLink;Cannot open link '{0}'. Please try it manually (was copied to clipboard).;Невозможно открыть ссылку '{0}'. Попробуйте открыть вручную (ссылки скопирована в буфер обмена).
 UnderlyingSecurityType;Underlying security type;Тип базового инструмента
+Underlying;Underlying;Базовый
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

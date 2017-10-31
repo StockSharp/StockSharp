@@ -2886,19 +2886,19 @@
     </Image>
     <Image Include="Art\sample_sma.png">
       <ImageId>samplesma</ImageId>
-      <AlternateText>Пример скользящих средних.</AlternateText>
+      <AlternateText>Simple moving average sample.</AlternateText>
     </Image>
     <Image Include="Art\sample_currency.png">
       <ImageId>samplecurrency</ImageId>
-      <AlternateText>Перевод валюты.</AlternateText>
+      <AlternateText>Currency conversion.</AlternateText>
     </Image>
     <Image Include="Art\sample_connection_error.png">
       <ImageId>sampleconnectionerror</ImageId>
-      <AlternateText>Разрыв соединения.</AlternateText>
+      <AlternateText>Connection lost.</AlternateText>
     </Image>
     <Image Include="Art\sample_connection_restored.png">
       <ImageId>sampleconnectionrestore</ImageId>
-      <AlternateText>Восстановление соединения.</AlternateText>
+      <AlternateText>Connection restored.</AlternateText>
     </Image>
     <Image Include="Art\sample_metadata_trades.png">
       <ImageId>samplemetadatatrades</ImageId>
@@ -2954,19 +2954,19 @@
     </Image>
     <Image Include="Art\strategy.png">
       <ImageId>strategy</ImageId>
-      <AlternateText>Архитектура стратегий.</AlternateText>
+      <AlternateText>Strategy.</AlternateText>
     </Image>
     <Image Include="Art\strategy_childs.png">
       <ImageId>strategychilds</ImageId>
-      <AlternateText>Дочерние стратегий.</AlternateText>
+      <AlternateText>Child strategies.</AlternateText>
     </Image>
     <Image Include="Art\strategy_logging.png">
       <ImageId>strategylogging</ImageId>
-      <AlternateText>Логирование стратегий.</AlternateText>
+      <AlternateText>Strategy logging.</AlternateText>
     </Image>
     <Image Include="Art\platform_independency.png">
       <ImageId>platformindep</ImageId>
-      <AlternateText>Макет платформо-независимого робота.</AlternateText>
+      <AlternateText>platform independency.</AlternateText>
     </Image>
     <Image Include="Art\hydra.png">
       <ImageId>hydra</ImageId>
@@ -2974,31 +2974,31 @@
     </Image>
     <Image Include="Art\hydra_main_first.png">
       <ImageId>hydra_main_first</ImageId>
-      <AlternateText>Главное окно.</AlternateText>
+      <AlternateText>Main window.</AlternateText>
     </Image>
     <Image Include="Art\hydra_securities.png">
       <ImageId>hydra_securities</ImageId>
-      <AlternateText>Окно инструментов.</AlternateText>
+      <AlternateText>Securities window.</AlternateText>
     </Image>
     <Image Include="Art\hydra_security_edit.png">
       <ImageId>hydra_security_edit</ImageId>
-      <AlternateText>Окно нового инструмента.</AlternateText>
+      <AlternateText>Security edit window.</AlternateText>
     </Image>
     <Image Include="Art\hydra_security_select.png">
       <ImageId>hydra_security_select</ImageId>
-      <AlternateText>Окно выбора инструмента.</AlternateText>
+      <AlternateText>Security select window.</AlternateText>
     </Image>
     <Image Include="Art\security_options.png">
       <ImageId>security_options</ImageId>
-      <AlternateText>Опционные инструменты.</AlternateText>
+      <AlternateText>Options.</AlternateText>
     </Image>
     <Image Include="Art\sample_options_calc.png">
       <ImageId>sample_options_calc</ImageId>
-      <AlternateText>Опционный калькулятор.</AlternateText>
+      <AlternateText>Options calc.</AlternateText>
     </Image>
     <Image Include="Art\sample_quote_iv.png">
       <ImageId>sample_quote_iv</ImageId>
-      <AlternateText>Стакан волатильности.</AlternateText>
+      <AlternateText>Volatility order book.</AlternateText>
     </Image>
     <Image Include="Art\AlfaTrader.png">
       <ImageId>AlfaTrader</ImageId>
@@ -3030,7 +3030,7 @@
     </Image>
     <Image Include="Art\sample_history_test_parallel.png">
       <ImageId>sample_history_test_parallel</ImageId>
-      <AlternateText>Оптимизация на истории.</AlternateText>
+      <AlternateText>Historical optimiation.</AlternateText>
     </Image>
     <None Include="Art\transactions.png">
       <ImageId>transactions</ImageId>
