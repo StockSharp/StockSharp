@@ -42958,12 +42958,12 @@ namespace StockSharp.Localization
 		public static string Duration => GetString(DurationKey);
 
 		/// <summary>
-		/// Number of issued contracts
+		/// Issue size
 		/// </summary>
 		public const string IssueSizeKey = nameof(IssueSize);
 
 		/// <summary>
-		/// Number of issued contracts
+		/// Issue size
 		/// </summary>
 		public static string IssueSize => GetString(IssueSizeKey);
 

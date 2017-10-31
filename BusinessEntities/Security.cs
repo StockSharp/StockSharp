@@ -1678,6 +1678,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Number of issued contracts.
 		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IssueSizeKey,
+			Description = LocalizedStrings.IssueSizeKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 21)]
 		[DataMember]
 		[Nullable]
 		public decimal? IssueSize
@@ -1695,6 +1701,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Date of issue.
 		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IssueDateKey,
+			Description = LocalizedStrings.IssueDateKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 22)]
 		[DataMember]
 		[Nullable]
 		public DateTimeOffset? IssueDate
@@ -1712,6 +1724,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Underlying security type.
 		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UnderlyingSecurityTypeKey,
+			Description = LocalizedStrings.UnderlyingSecurityTypeKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 103)]
 		[DataMember]
 		[Nullable]
 		public SecurityTypes? UnderlyingSecurityType

@@ -468,5 +468,20 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string ResultTypeDot => AppendDot(ResultType);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string IssueSizeDot => AppendDot(IssueSize);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string IssueDateDot => AppendDot(IssueDate);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string UnderlyingSecurityTypeDot => AppendDot(UnderlyingSecurityType);
 	}
 }

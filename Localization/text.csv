@@ -4331,7 +4331,7 @@ NotInitializedParams;{0} not initialized.;{0} не выбрано.
 OrderCancelling;Order cancelling;Отмена заявки
 OrderReplacing;Order replacing;Перемещение заявки
 Duration;Duration;Дюрация
-IssueSize;Number of issued contracts;Объем выпуска
+IssueSize;Issue size;Объем выпуска
 IssueDate;Date of issue;Дата выпуска
 BuyBackDate;BuyBack date;Дата выкупа
 BuyBackPrice;BuyBack price;Цена выкупа
