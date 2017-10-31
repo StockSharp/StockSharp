@@ -383,7 +383,7 @@ namespace StockSharp.Algo.Storages
 					Subscribe(msg.SecurityId, CreateDataType(msg));
 
 					var clone = (MarketDataMessage)msg.Clone();
-					clone.From = lastTime;
+					//clone.From = lastTime;
 
 					base.SendInMessage(clone.ValidateBounds());	
 				}

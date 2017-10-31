@@ -351,6 +351,9 @@ namespace StockSharp.Algo.Export
 				if (!security.UnderlyingSecurityCode.IsEmpty())
 					writer.WriteAttribute("underlyingSecurityCode", security.UnderlyingSecurityCode);
 
+				if (security.UnderlyingSecurityType != null)
+					writer.WriteAttribute("underlyingSecurityType", security.UnderlyingSecurityType);
+
 				if (security.ExpiryDate != null)
 					writer.WriteAttribute("expiryDate", security.ExpiryDate.Value.ToString("yyyy-MM-dd"));
 

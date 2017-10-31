@@ -111,6 +111,7 @@
 							security.Multiplier = secMsg.Multiplier;
 							security.IssueSize = secMsg.IssueSize;
 							security.IssueDate = secMsg.IssueDate;
+							security.UnderlyingSecurityType = secMsg.UnderlyingSecurityType;
 						}
 						else
 							security = secMsg.ToSecurity(_exchangeInfoProvider);

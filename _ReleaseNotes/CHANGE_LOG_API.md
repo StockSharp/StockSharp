@@ -18,7 +18,7 @@ StockSharp API Change log
 * (bug) CandleMessage.State init fix.
 * (bug) MarketDepthControl. Binding fixes.
 * (feature) Snapshot storage.
-* (feature) Security. IssueDate and IssueSize properties.
+* (feature) Security. IssueDate, IssueSize and UnderlyingSecurityType properties.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

@@ -1707,6 +1707,23 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private SecurityTypes? _underlyingSecurityType;
+
+		/// <summary>
+		/// Underlying security type.
+		/// </summary>
+		[DataMember]
+		[Nullable]
+		public SecurityTypes? UnderlyingSecurityType
+		{
+			get => _underlyingSecurityType;
+			set
+			{
+				_underlyingSecurityType = value;
+				Notify(nameof(UnderlyingSecurityType));
+			}
+		}
+
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
@@ -1786,6 +1803,7 @@ namespace StockSharp.BusinessEntities
 			destination.Turnover = Turnover;
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
+			destination.UnderlyingSecurityType = UnderlyingSecurityType;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

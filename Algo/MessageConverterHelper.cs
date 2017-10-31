@@ -596,6 +596,7 @@ namespace StockSharp.Algo
 				ExpiryDate = security.ExpiryDate,
 				IssueSize = security.IssueSize,
 				IssueDate = security.IssueDate,
+				UnderlyingSecurityType = security.UnderlyingSecurityType,
 			};
 		}
 
@@ -635,6 +636,7 @@ namespace StockSharp.Algo
 				UnderlyingSecurityId = message.UnderlyingSecurityCode.IsEmpty() ? null : _defaultGenerator.GenerateId(message.UnderlyingSecurityCode, message.SecurityId.BoardCode),
 				IssueSize = message.IssueSize,
 				IssueDate = message.IssueDate,
+				UnderlyingSecurityType = message.UnderlyingSecurityType,
 			};
 		}
 
@@ -671,6 +673,7 @@ namespace StockSharp.Algo
 				UnderlyingSecurityCode = criteria.UnderlyingSecurityId.IsEmpty() ? null : _defaultGenerator.Split(criteria.UnderlyingSecurityId).SecurityCode,
 				IssueSize = criteria.IssueSize,
 				IssueDate = criteria.IssueDate,
+				UnderlyingSecurityType = criteria.UnderlyingSecurityType,
 			};
 		}
 
@@ -712,6 +715,7 @@ namespace StockSharp.Algo
 				Multiplier = message.Multiplier,
 				IssueSize = message.IssueSize,
 				IssueDate = message.IssueDate,
+				UnderlyingSecurityType = message.UnderlyingSecurityType,
 			};
 		}
 

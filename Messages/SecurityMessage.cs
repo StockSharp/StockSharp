@@ -209,6 +209,13 @@ namespace StockSharp.Messages
 		public DateTimeOffset? IssueDate { get; set; }
 
 		/// <summary>
+		/// Underlying security type.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		public SecurityTypes? UnderlyingSecurityType { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
 		public SecurityMessage()
@@ -266,6 +273,7 @@ namespace StockSharp.Messages
 			destination.LocalTime = LocalTime;
 			destination.IssueSize = IssueSize;
 			destination.IssueDate = IssueDate;
+			destination.UnderlyingSecurityType = UnderlyingSecurityType;
 
 			if (copyOriginalTransactionId)
 				destination.OriginalTransactionId = OriginalTransactionId;

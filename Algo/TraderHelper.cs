@@ -1790,6 +1790,7 @@ namespace StockSharp.Algo
 				UnderlyingSecurityId = criteria.UnderlyingSecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
 					? null
 					: connector.SecurityIdGenerator.GenerateId(criteria.UnderlyingSecurityCode, criteria.SecurityId.BoardCode),
+				UnderlyingSecurityType = criteria.UnderlyingSecurityType,
 			};
 
 			return security;
@@ -2811,6 +2812,9 @@ namespace StockSharp.Algo
 
 			if (message.IssueSize != null)
 				security.IssueSize = message.IssueSize.Value;
+
+			if (message.UnderlyingSecurityType != null)
+				security.UnderlyingSecurityType = message.UnderlyingSecurityType.Value;
 
 			message.CopyExtensionInfo(security);
 		}

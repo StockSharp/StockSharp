@@ -46306,5 +46306,15 @@ namespace StockSharp.Localization
 		/// Cannot open link '{0}'. Please try it manually (was copied to clipboard).
 		/// </summary>
 		public static string CannotOpenLink => GetString(CannotOpenLinkKey);
+
+		/// <summary>
+		/// Underlying security type
+		/// </summary>
+		public const string UnderlyingSecurityTypeKey = nameof(UnderlyingSecurityType);
+
+		/// <summary>
+		/// Underlying security type
+		/// </summary>
+		public static string UnderlyingSecurityType => GetString(UnderlyingSecurityTypeKey);
 	}
 }
