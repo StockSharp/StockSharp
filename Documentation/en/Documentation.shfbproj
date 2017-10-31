@@ -2976,10 +2976,6 @@
       <ImageId>hydra_main_first</ImageId>
       <AlternateText>Главное окно.</AlternateText>
     </Image>
-    <Image Include="Art\hydra_settings.png">
-      <ImageId>hydra_settings</ImageId>
-      <AlternateText>Окно настроек.</AlternateText>
-    </Image>
     <Image Include="Art\hydra_securities.png">
       <ImageId>hydra_securities</ImageId>
       <AlternateText>Окно инструментов.</AlternateText>
