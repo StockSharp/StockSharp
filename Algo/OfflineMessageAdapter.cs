@@ -85,6 +85,7 @@
 				}
 				case MessageTypes.Connect:
 				case MessageTypes.Disconnect:
+				case ExtendedMessageTypes.Reconnect:
 					break;
 				case MessageTypes.Time:
 				{

@@ -35,10 +35,8 @@ namespace StockSharp.Algo
 	{
 		private class ReconnectMessage : Message
 		{
-			public const MessageTypes ReconnectMessageType = (MessageTypes)(-17000);
-
 			public ReconnectMessage()
-				: base(ReconnectMessageType)
+				: base(ExtendedMessageTypes.Reconnect)
 			{
 			}
 		}
@@ -202,7 +200,7 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case ReconnectMessage.ReconnectMessageType:
+				case ExtendedMessageTypes.Reconnect:
 				{
 					SendInMessage(new ConnectMessage());
 					break;

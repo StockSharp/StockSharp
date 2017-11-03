@@ -31,5 +31,6 @@ namespace StockSharp.Algo
 		public const MessageTypes RemoveSecurity = (MessageTypes)(-9);
 		public const MessageTypes ProcessSuspendedSecurityMessages = (MessageTypes)(-10);
 		public const MessageTypes StrategyChangeState = (MessageTypes)(-11);
+		public const MessageTypes Reconnect = (MessageTypes)(-12);
 	}
 }
