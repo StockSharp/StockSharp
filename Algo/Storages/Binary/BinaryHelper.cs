@@ -137,7 +137,12 @@ namespace StockSharp.Algo.Storages.Binary
 				if (useLong)
 					writer.WriteLong(stepCount);
 				else
+				{
+					if (stepCount.Abs() > int.MaxValue)
+						throw new InvalidOperationException("Range is overflow.");
+
 					writer.WriteInt((int)stepCount);
+				}
 
 				prevPrice = price;
 			}
@@ -147,7 +152,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static void WritePriceEx(this BitArrayWriter writer, decimal price, BinaryMetaInfo info, SecurityId securityId)
+		public static void WritePriceEx(this BitArrayWriter writer, decimal price, BinaryMetaInfo info, SecurityId securityId, bool useLong = false)
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
@@ -166,7 +171,7 @@ namespace StockSharp.Algo.Storages.Binary
 						info.FirstPrice = info.LastPrice = price;
 
 					var prevPrice = info.LastPrice;
-					writer.WritePrice(price, ref prevPrice, info, securityId);
+					writer.WritePrice(price, ref prevPrice, info, securityId, useLong);
 					info.LastPrice = price;
 				}
 				else
@@ -200,7 +205,7 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 		}
 
-		public static decimal ReadPriceEx(this BitArrayReader reader, BinaryMetaInfo info)
+		public static decimal ReadPriceEx(this BitArrayReader reader, BinaryMetaInfo info, bool useLong = false)
 		{
 			if (info.Version < MarketDataVersions.Version41)
 			{
@@ -212,7 +217,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (reader.Read())
 				{
 					var prevPrice = info.FirstPrice;
-					return info.FirstPrice = reader.ReadPrice(ref prevPrice, info);
+					return info.FirstPrice = reader.ReadPrice(ref prevPrice, info, useLong);
 				}
 				else
 				{

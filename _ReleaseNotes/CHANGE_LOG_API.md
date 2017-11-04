@@ -19,6 +19,7 @@ StockSharp API Change log
 * (bug) MarketDepthControl. Binding fixes.
 * (feature) Snapshot storage.
 * (feature) Security. IssueDate, IssueSize and UnderlyingSecurityType properties.
+* (bug) http://stocksharp.com/forum/8795/Binary-Storage-Corrupted/
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Storages.Binary
 		private readonly object _arg;
 
 		public CandleBinarySerializer(SecurityId securityId, object arg, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 74, MarketDataVersions.Version57, exchangeInfoProvider)
+			: base(securityId, 74, MarketDataVersions.Version58, exchangeInfoProvider)
 		{
 			if (arg == null)
 				throw new ArgumentNullException(nameof(arg));
@@ -122,6 +122,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
 			var bigRange = metaInfo.Version >= MarketDataVersions.Version57;
 			var isTickPrecision = bigRange;
+			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
 
 			foreach (var candle in candles)
 			{
@@ -157,24 +158,24 @@ namespace StockSharp.Algo.Storages.Binary
 				}
 				else
 				{
-					writer.WritePriceEx(candle.LowPrice, metaInfo, SecurityId);
+					writer.WritePriceEx(candle.LowPrice, metaInfo, SecurityId, useLong);
 
 					if (candle.OpenPrice <= candle.ClosePrice)
 					{
 						writer.Write(true);
 
-						writer.WritePriceEx(candle.OpenPrice, metaInfo, SecurityId);
-						writer.WritePriceEx(candle.ClosePrice, metaInfo, SecurityId);
+						writer.WritePriceEx(candle.OpenPrice, metaInfo, SecurityId, useLong);
+						writer.WritePriceEx(candle.ClosePrice, metaInfo, SecurityId, useLong);
 					}
 					else
 					{
 						writer.Write(false);
 
-						writer.WritePriceEx(candle.ClosePrice, metaInfo, SecurityId);
-						writer.WritePriceEx(candle.OpenPrice, metaInfo, SecurityId);
+						writer.WritePriceEx(candle.ClosePrice, metaInfo, SecurityId, useLong);
+						writer.WritePriceEx(candle.OpenPrice, metaInfo, SecurityId, useLong);
 					}
 
-					writer.WritePriceEx(candle.HighPrice, metaInfo, SecurityId);
+					writer.WritePriceEx(candle.HighPrice, metaInfo, SecurityId, useLong);
 				}
 
 				if (!candle.CloseTime.IsDefault() && candle.OpenTime > candle.CloseTime)
@@ -429,6 +430,15 @@ namespace StockSharp.Algo.Storages.Binary
 				Arg = _arg
 			};
 
+			var prevTime = metaInfo.FirstTime;
+			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version49;
+			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
+			var timeZone = metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider);
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
+			var bigRange = metaInfo.Version >= MarketDataVersions.Version57;
+			var isTickPrecision = bigRange;
+			var useLong = metaInfo.Version >= MarketDataVersions.Version58;
+
 			if (metaInfo.Version < MarketDataVersions.Version56)
 			{
 				var prevPrice = metaInfo.FirstPrice;
@@ -446,29 +456,21 @@ namespace StockSharp.Algo.Storages.Binary
 			}
 			else
 			{
-				candle.LowPrice = reader.ReadPriceEx(metaInfo);
+				candle.LowPrice = reader.ReadPriceEx(metaInfo, useLong);
 
 				if (reader.Read())
 				{
-					candle.OpenPrice = reader.ReadPriceEx(metaInfo);
-					candle.ClosePrice = reader.ReadPriceEx(metaInfo);
+					candle.OpenPrice = reader.ReadPriceEx(metaInfo, useLong);
+					candle.ClosePrice = reader.ReadPriceEx(metaInfo, useLong);
 				}
 				else
 				{
-					candle.ClosePrice = reader.ReadPriceEx(metaInfo);
-					candle.OpenPrice = reader.ReadPriceEx(metaInfo);
+					candle.ClosePrice = reader.ReadPriceEx(metaInfo, useLong);
+					candle.OpenPrice = reader.ReadPriceEx(metaInfo, useLong);
 				}
 
-				candle.HighPrice = reader.ReadPriceEx(metaInfo);
+				candle.HighPrice = reader.ReadPriceEx(metaInfo, useLong);
 			}
-
-			var prevTime = metaInfo.FirstTime;
-			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version49;
-			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
-			var timeZone = metaInfo.GetTimeZone(isUtc, SecurityId, ExchangeInfoProvider);
-			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version53;
-			var bigRange = metaInfo.Version >= MarketDataVersions.Version57;
-			var isTickPrecision = bigRange;
 
 			var lastOffset = metaInfo.FirstServerOffset;
 			candle.OpenTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, timeZone, allowDiffOffsets, isTickPrecision, ref lastOffset);
