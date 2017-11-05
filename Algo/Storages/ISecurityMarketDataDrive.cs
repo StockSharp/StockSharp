@@ -270,8 +270,8 @@ namespace StockSharp.Algo.Storages
 		{
 			private readonly SecurityMarketDataDrive _parent;
 
-			protected ConvertableStorage(SecurityMarketDataDrive parent, Security security, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurity, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive)
-				: base(security, arg, getTime, getSecurity, getId, serializer, drive)
+			protected ConvertableStorage(SecurityMarketDataDrive parent, Security security, SecurityId securityId, object arg, Func<TMessage, DateTimeOffset> getTime, Func<TMessage, SecurityId> getSecurity, Func<TMessage, TId> getId, IMarketDataSerializer<TMessage> serializer, IMarketDataStorageDrive drive)
+				: base(security, securityId, arg, getTime, getSecurity, getId, serializer, drive)
 			{
 				_parent = parent;
 			}
@@ -300,8 +300,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class TradeStorage : ConvertableStorage<ExecutionMessage, Trade, long>
 		{
-			public TradeStorage(SecurityMarketDataDrive parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(parent, security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.TradeId ?? 0, serializer, drive)
+			public TradeStorage(SecurityMarketDataDrive parent, Security security, SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+				: base(parent, security, securityId, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.TradeId ?? 0, serializer, drive)
 			{
 			}
 
@@ -346,8 +346,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class MarketDepthStorage : ConvertableStorage<QuoteChangeMessage, MarketDepth, DateTimeOffset>
 		{
-			public MarketDepthStorage(SecurityMarketDataDrive parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<QuoteChangeMessage> serializer)
-				: base(parent, security, null, depth => depth.ServerTime, depth => depth.SecurityId, depth => depth.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
+			public MarketDepthStorage(SecurityMarketDataDrive parent, Security security, SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<QuoteChangeMessage> serializer)
+				: base(parent, security, securityId, null, depth => depth.ServerTime, depth => depth.SecurityId, depth => depth.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
 			{
 			}
 
@@ -364,8 +364,8 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class OrderLogStorage : ConvertableStorage<ExecutionMessage, OrderLogItem, long>
 		{
-			public OrderLogStorage(SecurityMarketDataDrive parent, Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(parent, security, ExecutionTypes.OrderLog, item => item.ServerTime, item => item.SecurityId, item => item.TransactionId, serializer, drive)
+			public OrderLogStorage(SecurityMarketDataDrive parent, Security security, SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+				: base(parent, security, securityId, ExecutionTypes.OrderLog, item => item.ServerTime, item => item.SecurityId, item => item.TransactionId, serializer, drive)
 			{
 			}
 
@@ -401,8 +401,8 @@ namespace StockSharp.Algo.Storages
 				IMarketDataStorageInfo<CandleMessage>
 			where TCandleMessage : CandleMessage, new()
 		{
-			protected CandleMessageStorage(Security security, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
-				: base(security, arg, candle => candle.OpenTime, candle => candle.SecurityId, candle => candle.OpenTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
+			protected CandleMessageStorage(Security security, SecurityId securityId, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
+				: base(security, securityId, arg, candle => candle.OpenTime, candle => candle.SecurityId, candle => candle.OpenTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
 			{
 			}
 
@@ -436,8 +436,8 @@ namespace StockSharp.Algo.Storages
 			where TCandleMessage : CandleMessage, new()
 			where TCandle : Candle
 		{
-			protected TypedCandleStorage(Security security, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
-				: base(security, arg, drive, serializer)
+			protected TypedCandleStorage(Security security, SecurityId securityId, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
+				: base(security, securityId, arg, drive, serializer)
 			{
 			}
 
@@ -479,8 +479,8 @@ namespace StockSharp.Algo.Storages
 			where TCandleMessage : CandleMessage, new()
 			where TCandle : Candle
 		{
-			public CandleStorage(Security security, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
-				: base(security, arg, drive, serializer)
+			public CandleStorage(Security security, SecurityId securityId, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
+				: base(security, securityId, arg, drive, serializer)
 			{
 			}
 
@@ -512,16 +512,16 @@ namespace StockSharp.Algo.Storages
 
 		private sealed class Level1Storage : MarketDataStorage<Level1ChangeMessage, DateTimeOffset>
 		{
-			public Level1Storage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<Level1ChangeMessage> serializer)
-				: base(security, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
+			public Level1Storage(Security security, SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<Level1ChangeMessage> serializer)
+				: base(security, securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
 			{
 			}
 		}
 
 		private sealed class PositionStorage : MarketDataStorage<PositionChangeMessage, DateTimeOffset>
 		{
-			public PositionStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<PositionChangeMessage> serializer)
-				: base(security, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
+			public PositionStorage(Security security, SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<PositionChangeMessage> serializer)
+				: base(security, securityId, null, value => value.ServerTime, value => value.SecurityId, value => value.ServerTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
 			{
 			}
 		}
@@ -529,8 +529,8 @@ namespace StockSharp.Algo.Storages
 		private sealed class TransactionStorage : MarketDataStorage<ExecutionMessage, long>, IMarketDataStorage<Order>,
 			IMarketDataStorageInfo<Order>, IMarketDataStorage<MyTrade>, IMarketDataStorageInfo<MyTrade>
 		{
-			public TransactionStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(security, ExecutionTypes.Transaction, msg => msg.ServerTime, msg => msg.SecurityId, msg => msg.TransactionId, serializer, drive)
+			public TransactionStorage(Security security, SecurityId securityId, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+				: base(security, securityId, ExecutionTypes.Transaction, msg => msg.ServerTime, msg => msg.SecurityId, msg => msg.TransactionId, serializer, drive)
 			{
 				AppendOnlyNew = false;
 			}
@@ -604,6 +604,7 @@ namespace StockSharp.Algo.Storages
 			Drive = drive;
 			Security = security;
 			SecurityId = security.ToSecurityId();
+			SecurityId.EnsureHashCode();
 		}
 
 		/// <summary>
@@ -634,7 +635,7 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorageDrive GetStorageDrive(IMarketDataSerializer serializer, Type messageType, object arg = null)
 		{
-			return Drive.GetStorageDrive(Security.ToSecurityId(), messageType, arg, ToFormat(serializer));
+			return Drive.GetStorageDrive(SecurityId, messageType, arg, ToFormat(serializer));
 		}
 
 		/// <summary>
@@ -662,31 +663,31 @@ namespace StockSharp.Algo.Storages
 		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetTickStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
-			return new TradeStorage(this, Security, GetStorageDrive(serializer, ExecutionTypes.Tick), serializer);
+			return new TradeStorage(this, Security, SecurityId, GetStorageDrive(serializer, ExecutionTypes.Tick), serializer);
 		}
 
 		/// <inheritdoc />
 		public IMarketDataStorage<QuoteChangeMessage> GetQuoteStorage(IMarketDataSerializer<QuoteChangeMessage> serializer)
 		{
-			return new MarketDepthStorage(this, Security, GetStorageDrive(serializer), serializer);
+			return new MarketDepthStorage(this, Security, SecurityId, GetStorageDrive(serializer), serializer);
 		}
 
 		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetOrderLogStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
-			return new OrderLogStorage(this, Security, GetStorageDrive(serializer, ExecutionTypes.OrderLog), serializer);
+			return new OrderLogStorage(this, Security, SecurityId, GetStorageDrive(serializer, ExecutionTypes.OrderLog), serializer);
 		}
 
 		/// <inheritdoc />
 		public IMarketDataStorage<Level1ChangeMessage> GetLevel1Storage(IMarketDataSerializer<Level1ChangeMessage> serializer)
 		{
-			return new Level1Storage(Security, GetStorageDrive(serializer), serializer);
+			return new Level1Storage(Security, SecurityId, GetStorageDrive(serializer), serializer);
 		}
 
 		/// <inheritdoc />
 		public IMarketDataStorage<PositionChangeMessage> GetPositionMessageStorage(IMarketDataSerializer<PositionChangeMessage> serializer)
 		{
-			return new PositionStorage(Security, GetStorageDrive(serializer), serializer);
+			return new PositionStorage(Security, SecurityId, GetStorageDrive(serializer), serializer);
 		}
 
 		/// <inheritdoc />
@@ -698,13 +699,13 @@ namespace StockSharp.Algo.Storages
 			if (!candleType.IsCandleMessage())
 				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 
-			return typeof(CandleStorage<,>).Make(candleType, candleType.ToCandleType()).CreateInstance<IMarketDataStorage<CandleMessage>>(Security, arg, GetStorageDrive(serializer, candleType, arg), serializer);
+			return typeof(CandleStorage<,>).Make(candleType, candleType.ToCandleType()).CreateInstance<IMarketDataStorage<CandleMessage>>(Security, SecurityId, arg, GetStorageDrive(serializer, candleType, arg), serializer);
 		}
 
 		/// <inheritdoc />
 		public IMarketDataStorage<ExecutionMessage> GetTransactionStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
-			return new TransactionStorage(Security, GetStorageDrive(serializer, ExecutionTypes.Transaction), serializer);
+			return new TransactionStorage(Security, SecurityId, GetStorageDrive(serializer, ExecutionTypes.Transaction), serializer);
 		}
 
 		/// <inheritdoc />

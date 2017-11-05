@@ -67,6 +67,8 @@ namespace StockSharp.Algo.Storages
 		protected override IEnumerable<T> OnLoad(DateTime date)
 		{
 			var securityId = _security.ToSecurityId();
+			securityId.EnsureHashCode();
+
 			var currentSecurityId = _security.GetSecurity(date);
 
 			foreach (Message msg in base.OnLoad(date))

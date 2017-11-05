@@ -178,14 +178,21 @@ namespace StockSharp.Messages
 			return EnsureGetHashCode();
 		}
 
-		private int EnsureGetHashCode()
+		/// <summary>
+		/// Evaluate and cache hash code.
+		/// </summary>
+		public void EnsureHashCode()
 		{
 			if (_hashCode == 0)
 			{
 				_hashCode = (_nativeAsInt != 0 ? _nativeAsInt.GetHashCode() : _native?.GetHashCode())
-					?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
+						?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
 			}
+		}
 
+		private int EnsureGetHashCode()
+		{
+			EnsureHashCode();
 			return _hashCode;
 		}
 
