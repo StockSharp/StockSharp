@@ -538,6 +538,7 @@ namespace StockSharp.Algo
 						throw new InvalidOperationException(LocalizedStrings.Str720Params.Put(registerKey.Item1));
 
 					o.Time = message.ServerTime;
+					o.LastChangeTime = message.ServerTime;
 					o.Price = message.OrderPrice;
 					o.Volume = message.OrderVolume ?? 0;
 					o.Direction = message.Side;
