@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Testing
 		/// The maximal depth of bids.
 		/// </summary>
 		/// <remarks>
-		/// The default value is 1.
+		/// The default value is 10.
 		/// </remarks>
 		public int MaxBidsDepth
 		{
@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Testing
 		/// The maximal depth of offers.
 		/// </summary>
 		/// <remarks>
-		/// The default value is 1.
+		/// The default value is 10.
 		/// </remarks>
 		public int MaxAsksDepth
 		{
