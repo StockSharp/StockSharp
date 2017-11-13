@@ -29,6 +29,7 @@ StockSharp API Change log
 * (feature) InteractiveBrokers. v9.73.05 support.
 * (bug) SmartCOM. Position translation fix.
 * (feature) OptionDesk. Show expiration date columns.
+* (feature) Security.UnderlyingSecurityType.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

@@ -1,5 +1,16 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.1:
+* (bug) InteractiveBrokers fixes.
+* (bug) LMAX fixes.
+* (bug) Quandl lookup securities fixes.
+* (bug) Hydra. Market depth export txt preview fix. http://stocksharp.ru/forum/8805/kak-vygruzit-istoriyu-po-instrumentu/
+* (bug) Hydra. Fix Analytic pane.
+* (feature) Hydra. BitStamp. ClientId
+* (feature) Lookup securities panel redesign.
+* (feature) Security. UnderlyingSecurityType, IssueDate and IssueSize.
+* (feature) OptionDesk. Show expiration date columns.
+
 ## v4.4.0:
 * (bug) OptionDesk fixes.
 * (bug) Finam history. Fix security lookup. http://stocksharp.ru/posts/m/41218/
