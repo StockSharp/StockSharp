@@ -27,6 +27,7 @@ StockSharp API Change log
 * (bug) LMAX. Instruments file parsing fix.
 * (bug) InteractiveBrokers. Market data fixes.
 * (feature) InteractiveBrokers. v9.73.05 support.
+* (bug) SmartCOM. Position translation fix.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
