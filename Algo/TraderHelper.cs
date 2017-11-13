@@ -4304,5 +4304,18 @@ namespace StockSharp.Algo
 
 			return level1;
 		}
+
+		/// <summary>
+		/// Convert depths to quotes.
+		/// </summary>
+		/// <param name="messages">Depths.</param>
+		/// <returns>Quotes.</returns>
+		public static IEnumerable<TimeQuoteChange> ToTimeQuotes(this IEnumerable<QuoteChangeMessage> messages)
+		{
+			if (messages == null)
+				throw new ArgumentNullException(nameof(messages));
+
+			return messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
+		}
 	}
 }
