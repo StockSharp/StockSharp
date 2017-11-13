@@ -21,6 +21,7 @@ StockSharp API Change log
 * (feature) Security. IssueDate, IssueSize and UnderlyingSecurityType properties.
 * (bug) http://stocksharp.com/forum/8795/Binary-Storage-Corrupted/
 * (feature) Backtesting. Performance boost.
+* (feature) CurrencyTypes.ETH.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
