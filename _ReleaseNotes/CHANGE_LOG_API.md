@@ -22,6 +22,8 @@ StockSharp API Change log
 * (bug) http://stocksharp.com/forum/8795/Binary-Storage-Corrupted/
 * (feature) Backtesting. Performance boost.
 * (feature) CurrencyTypes.ETH.
+* (bug) QuandlHistorySource. Lookup fix.
+* (bug) MfdHistorySource. Fix options lookup.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
