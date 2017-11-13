@@ -1233,6 +1233,14 @@ namespace StockSharp.Algo.Strategies
 			if (Portfolio == null)
 				throw new InvalidOperationException(LocalizedStrings.Str1381);
 
+			InitStartValues();
+		}
+		
+		/// <summary>
+		/// Init.
+		/// </summary>
+		protected void InitStartValues()
+		{
 			foreach (var parameter in Parameters.CachedValues)
 			{
 				if (parameter.Value is Unit unit && unit.GetTypeValue == null && (unit.Type == UnitTypes.Point || unit.Type == UnitTypes.Step))

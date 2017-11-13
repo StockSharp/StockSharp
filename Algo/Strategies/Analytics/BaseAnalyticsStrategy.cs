@@ -163,6 +163,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// </summary>
 		protected override void OnStarted()
 		{
+			InitStartValues();
+
 			OnAnalyze();
 		}
 
