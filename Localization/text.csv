@@ -14583,3 +14583,8 @@ DocStr10215;Is the specified {0} is related to best bid;Относится ли 
 DocStr10216;Is the specified {0} is related to best ask;Относится ли к лучшему оферу указанное {0}
 DocStr10217;Try to open the specified link;Попытаться открыть указанную ссылку
 DocStr10218;Days before expiration;Дней до экспирации
+DocStr10219;Number of issued contracts;Количество выпущенных контрактов
+DocStr10220;Evaluate and cache hash code;Вычислить и запомнить хэш-код
+DocStr10221;Init;Инициализировать
+DocStr10222;Convert depths to quotes;Преобразовать стаканы в котировки
+DocStr10223;Ethereum;Эфир

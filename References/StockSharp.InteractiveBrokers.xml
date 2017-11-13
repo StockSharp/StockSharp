@@ -172,11 +172,6 @@
             The connection time.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTimeZone">
-      <summary>
-            The time zone for <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTime" />.
-            </summary>
-    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ExtraAuth">
       <summary>
             Extra authentication.

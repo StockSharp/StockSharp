@@ -5253,6 +5253,7 @@ E:StockSharp.Algo.Strategies.Strategy.PortfolioChanged/summary;DocStr1722
 E:StockSharp.Algo.Strategies.Strategy.PositionChanged2/summary;DocStr1723
 E:StockSharp.Algo.Strategies.Strategy.Error/summary;DocStr1724
 M:StockSharp.Algo.Strategies.Strategy.OnStarted/summary;DocStr282
+M:StockSharp.Algo.Strategies.Strategy.InitStartValues/summary;DocStr10221
 M:StockSharp.Algo.Strategies.Strategy.OnStopping/summary;DocStr322
 M:StockSharp.Algo.Strategies.Strategy.OnStopped/summary;DocStr322
 M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)/summary;DocStr1644
@@ -5755,9 +5756,9 @@ P:StockSharp.Algo.Testing.MarketDepthGenerator.MinSpreadStepCount/remarks;DocStr
 P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxSpreadStepCount/summary;DocStr2207
 P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxSpreadStepCount/remarks;DocStr2204
 P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxBidsDepth/summary;DocStr2208
-P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxBidsDepth/remarks;DocStr2206
+P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxBidsDepth/remarks;DocStr2195
 P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxAsksDepth/summary;DocStr2209
-P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxAsksDepth/remarks;DocStr2206
+P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxAsksDepth/remarks;DocStr2195
 P:StockSharp.Algo.Testing.MarketDepthGenerator.GenerateDepthOnEachTrade/summary;DocStr2210
 P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxGenerations/summary;DocStr2211
 P:StockSharp.Algo.Testing.MarketDepthGenerator.MaxGenerations/remarks;DocStr2193
@@ -7147,6 +7148,9 @@ M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.CandleMessage)/retur
 M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.ExecutionMessage)/summary;DocStr8644
 M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.ExecutionMessage)/param/message;DocStr8766
 M:StockSharp.Algo.TraderHelper.ToLevel1(StockSharp.Messages.ExecutionMessage)/returns;DocStr8766
+M:StockSharp.Algo.TraderHelper.ToTimeQuotes(System.Collections.Generic.IEnumerable{StockSharp.Messages.QuoteChangeMessage})/summary;DocStr10222
+M:StockSharp.Algo.TraderHelper.ToTimeQuotes(System.Collections.Generic.IEnumerable{StockSharp.Messages.QuoteChangeMessage})/param/messages;DepthsOf
+M:StockSharp.Algo.TraderHelper.ToTimeQuotes(System.Collections.Generic.IEnumerable{StockSharp.Messages.QuoteChangeMessage})/returns;Str1659
 T:StockSharp.Algo.UserPermissions/summary;DocStr163
 F:StockSharp.Algo.UserPermissions.Save/summary;DocStr164
 F:StockSharp.Algo.UserPermissions.Load/summary;DocStr165

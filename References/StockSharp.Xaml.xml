@@ -710,44 +710,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.GridControl.PriceChartEditor">
-      <summary>
-            Price chart editor.
-            </summary>
-      <summary>
-            PriceChartEditor
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.GridControl.PriceChartEditor.SecurityProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.PriceChartEditor.Security" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.PriceChartEditor.Security">
-      <summary>
-            Security.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.GridControl.PriceChartEditor.Level1FieldProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.PriceChartEditor.Level1Field" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.PriceChartEditor.Level1Field">
-      <summary>
-            Level1 field.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.PriceChartEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.PriceChartEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.PriceChartEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.GridControl.IPriceChartDataProvider">
       <summary>
             Price chart data provider interface.
@@ -799,6 +761,44 @@
     </member>
     <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.UnSubscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
       <inheritdoc />
+    </member>
+    <member name="T:StockSharp.Xaml.GridControl.PriceChartEditor">
+      <summary>
+            Price chart editor.
+            </summary>
+      <summary>
+            PriceChartEditor
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.GridControl.PriceChartEditor.SecurityProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.PriceChartEditor.Security" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.PriceChartEditor.Security">
+      <summary>
+            Security.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.GridControl.PriceChartEditor.Level1FieldProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.PriceChartEditor.Level1Field" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.PriceChartEditor.Level1Field">
+      <summary>
+            Level1 field.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.PriceChartEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
     </member>
     <member name="T:StockSharp.Xaml.GridControl.SearchBox">
       <summary>
@@ -2506,6 +2506,11 @@
             Securities meta info storage.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.ExchangeInfoProvider">
+      <summary>
+            The exchange info provider.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.ContinuousSecurityWindow.ValidateId">
       <summary>
             The handler checking the entered identifier availability for <see cref="P:StockSharp.Xaml.ContinuousSecurityWindow.Security" />.
@@ -3664,6 +3669,11 @@
     <member name="P:StockSharp.Xaml.SecurityGrid.MarketDataProvider">
       <summary>
             The market data provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityGrid.PriceChartDataProvider">
+      <summary>
+            Price chart data provider.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityGrid.InitializeComponent">
@@ -5229,6 +5239,11 @@
     <member name="P:StockSharp.Xaml.SecurityPicker.ExtendedInfoStorage">
       <summary>
             Extended info <see cref="P:StockSharp.Messages.Message.ExtensionInfo" /> storage.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityPicker.PriceChartDataProvider">
+      <summary>
+            Price chart data provider.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityPicker.SetColumnVisibility(System.String,System.Windows.Visibility)">

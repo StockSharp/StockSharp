@@ -357,6 +357,7 @@ F:StockSharp.Messages.CurrencyTypes.BTC/summary;DocStr4278
 F:StockSharp.Messages.CurrencyTypes.GBX/summary;DocStr4279
 F:StockSharp.Messages.CurrencyTypes.GHS/summary;DocStr4280
 F:StockSharp.Messages.CurrencyTypes.CNT/summary;DocStr4153
+F:StockSharp.Messages.CurrencyTypes.ETH/summary;DocStr10223
 T:StockSharp.Messages.DisconnectMessage/summary;DocStr4281
 M:StockSharp.Messages.DisconnectMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.DisconnectMessage.Clone/summary;DocStr643
@@ -1165,7 +1166,7 @@ F:StockSharp.Messages.Level1Fields.HistoricalVolatilityMonth/summary;DocStr4468
 F:StockSharp.Messages.Level1Fields.IsSystem/summary;DocStr4469
 F:StockSharp.Messages.Level1Fields.Decimals/summary;Str548
 F:StockSharp.Messages.Level1Fields.Duration/summary;Duration
-F:StockSharp.Messages.Level1Fields.IssueSize/summary;IssueSize
+F:StockSharp.Messages.Level1Fields.IssueSize/summary;DocStr10219
 F:StockSharp.Messages.Level1Fields.BuyBackDate/summary;BuyBackDate
 F:StockSharp.Messages.Level1Fields.BuyBackPrice/summary;BuyBackPrice
 F:StockSharp.Messages.Level1Fields.Turnover/summary;Turnover
@@ -1261,6 +1262,7 @@ P:StockSharp.Messages.SecurityId.InteractiveBrokers/summary;Str357
 P:StockSharp.Messages.SecurityId.Plaza/summary;Str358
 M:StockSharp.Messages.SecurityId.GetHashCode/summary;DocStr4498
 M:StockSharp.Messages.SecurityId.GetHashCode/returns;DocStr2638
+M:StockSharp.Messages.SecurityId.EnsureHashCode/summary;DocStr10220
 M:StockSharp.Messages.SecurityId.Equals(System.Object)/summary;DocStr2634
 M:StockSharp.Messages.SecurityId.Equals(System.Object)/param/other;DocStr1157
 M:StockSharp.Messages.SecurityId.Equals(System.Object)/returns;DocStr2636
@@ -1312,8 +1314,9 @@ P:StockSharp.Messages.SecurityMessage.BinaryOptionType/summary;TypeBinaryOption
 P:StockSharp.Messages.SecurityMessage.Currency/summary;Str382
 P:StockSharp.Messages.SecurityMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.SecurityMessage.Class/summary;SecurityClass
-P:StockSharp.Messages.SecurityMessage.IssueSize/summary;IssueSize
+P:StockSharp.Messages.SecurityMessage.IssueSize/summary;DocStr10219
 P:StockSharp.Messages.SecurityMessage.IssueDate/summary;IssueDate
+P:StockSharp.Messages.SecurityMessage.UnderlyingSecurityType/summary;UnderlyingSecurityType
 M:StockSharp.Messages.SecurityMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr1
 M:StockSharp.Messages.SecurityMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9

@@ -770,8 +770,9 @@ P:StockSharp.BusinessEntities.Security.SettlementPrice/summary;Str312
 P:StockSharp.BusinessEntities.Security.AveragePrice/summary;Str311
 P:StockSharp.BusinessEntities.Security.Volume/summary;Str310
 P:StockSharp.BusinessEntities.Security.Turnover/summary;Turnover
-P:StockSharp.BusinessEntities.Security.IssueSize/summary;IssueSize
+P:StockSharp.BusinessEntities.Security.IssueSize/summary;DocStr10219
 P:StockSharp.BusinessEntities.Security.IssueDate/summary;IssueDate
+P:StockSharp.BusinessEntities.Security.UnderlyingSecurityType/summary;UnderlyingSecurityType
 M:StockSharp.BusinessEntities.Security.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Security.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.Security.Clone/summary;DocStr643
