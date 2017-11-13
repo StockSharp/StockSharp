@@ -24,6 +24,7 @@ StockSharp API Change log
 * (feature) CurrencyTypes.ETH.
 * (bug) QuandlHistorySource. Lookup fix.
 * (bug) MfdHistorySource. Fix options lookup.
+* (bug) LMAX. Instruments file parsing fix.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
