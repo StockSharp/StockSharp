@@ -25,6 +25,8 @@ StockSharp API Change log
 * (bug) QuandlHistorySource. Lookup fix.
 * (bug) MfdHistorySource. Fix options lookup.
 * (bug) LMAX. Instruments file parsing fix.
+* (bug) InteractiveBrokers. Market data fixes.
+* (feature) InteractiveBrokers. v9.73.05 support.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
