@@ -489,9 +489,14 @@ namespace StockSharp.Messages
 		{
 			message.TryInitLocalTime(this);
 
-			if (message is BaseChangeMessage<PositionChangeTypes> posMsg && posMsg.ServerTime.IsDefault())
+			switch (message)
 			{
-				posMsg.ServerTime = CurrentTime;
+				case BaseChangeMessage<PositionChangeTypes> posMsg when posMsg.ServerTime.IsDefault():
+					posMsg.ServerTime = CurrentTime;
+					break;
+				case ExecutionMessage execMsg when execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.ServerTime.IsDefault():
+					execMsg.ServerTime = CurrentTime;
+					break;
 			}
 		}
 
