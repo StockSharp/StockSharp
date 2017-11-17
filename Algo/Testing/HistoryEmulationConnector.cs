@@ -445,31 +445,13 @@ namespace StockSharp.Algo.Testing
 					{
 						var adapter = message.Adapter; //.GetInnerAdapter();
 
-						if (adapter == TransactionAdapter)
+						if (adapter == MarketDataAdapter)
 						{
-							if (message is CandleMessage candleMsg)
-							{
-								//if (!UseExternalCandleSource)
-								//	break;
-
-								//var seriesList = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
-
-								//if (seriesList == null)
-								//	break;
-
-								//foreach (var series in seriesList.Cache)
-								//{
-								//	_newCandles?.Invoke(series, new[] {candleMsg.ToCandle(series)});
-
-								//	if (candleMsg.IsFinished)
-								//		_stopped?.Invoke(series);
-								//}
-
-								break;
-							}
-						}
-						else if (adapter == MarketDataAdapter)
 							TransactionAdapter.SendInMessage(message);
+
+							if (message is CandleMessage)
+								break;
+						}
 
 						base.OnProcessMessage(message);
 						break;
