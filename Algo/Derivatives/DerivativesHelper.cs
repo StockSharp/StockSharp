@@ -393,7 +393,7 @@ namespace StockSharp.Algo.Derivatives
 			if (cs == null)
 				return Enumerable.Empty<Security>();
 
-			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike);
+			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike);
 		}
 
 		/// <summary>
@@ -427,7 +427,7 @@ namespace StockSharp.Algo.Derivatives
 			if (cs == null)
 				return Enumerable.Empty<Security>();
 
-			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike);
+			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike);
 		}
 
 		/// <summary>

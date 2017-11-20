@@ -30,6 +30,7 @@ StockSharp API Change log
 * (bug) SmartCOM. Position translation fix.
 * (feature) OptionDesk. Show expiration date columns.
 * (feature) Security.UnderlyingSecurityType.
+* (bug) Options OTM ITM. Fix http://stocksharp.ru/forum/8834/optsiony-itm-otm/
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
