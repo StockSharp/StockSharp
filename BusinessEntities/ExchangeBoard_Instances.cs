@@ -3018,7 +3018,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Currenex { get; } = new ExchangeBoard
 		{
-			Code = "CURRENEX",
+			Code = Exchange.Currenex.Name,
 			Exchange = Exchange.Currenex,
 		};
 
@@ -3027,8 +3027,98 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public static ExchangeBoard Fxcm { get; } = new ExchangeBoard
 		{
-			Code = "FXCM",
+			Code = Exchange.Fxcm.Name,
 			Exchange = Exchange.Fxcm,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Poloniex"/>.
+		/// </summary>
+		public static ExchangeBoard Poloniex { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Poloniex.Name,
+			Exchange = Exchange.Poloniex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Kraken"/>.
+		/// </summary>
+		public static ExchangeBoard Kraken { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Kraken.Name,
+			Exchange = Exchange.Kraken,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Bittrex"/>.
+		/// </summary>
+		public static ExchangeBoard Bittrex { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bittrex.Name,
+			Exchange = Exchange.Bittrex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Bitfinex"/>.
+		/// </summary>
+		public static ExchangeBoard Bitfinex { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bitfinex.Name,
+			Exchange = Exchange.Bitfinex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Coinbase"/>.
+		/// </summary>
+		public static ExchangeBoard Coinbase { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Coinbase.Name,
+			Exchange = Exchange.Coinbase,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Gdax"/>.
+		/// </summary>
+		public static ExchangeBoard Gdax { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Gdax.Name,
+			Exchange = Exchange.Gdax,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Bithumb"/>.
+		/// </summary>
+		public static ExchangeBoard Bithumb { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bithumb.Name,
+			Exchange = Exchange.Bithumb,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.HitBtc"/>.
+		/// </summary>
+		public static ExchangeBoard HitBtc { get; } = new ExchangeBoard
+		{
+			Code = Exchange.HitBtc.Name,
+			Exchange = Exchange.HitBtc,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.OkCoin"/>.
+		/// </summary>
+		public static ExchangeBoard OkCoin { get; } = new ExchangeBoard
+		{
+			Code = Exchange.OkCoin.Name,
+			Exchange = Exchange.OkCoin,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Coincheck"/>.
+		/// </summary>
+		public static ExchangeBoard Coincheck { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Coincheck.Name,
+			Exchange = Exchange.Coincheck,
 		};
 	}
 }

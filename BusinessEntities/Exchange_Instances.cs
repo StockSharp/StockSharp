@@ -666,5 +666,105 @@ namespace StockSharp.BusinessEntities
 			RusName = "FXCM",
 			CountryCode = CountryCodes.US,
 		};
+
+		/// <summary>
+		/// Information about Poloniex.
+		/// </summary>
+		public static Exchange Poloniex { get; } = new Exchange
+		{
+			Name = "PLNX",
+			EngName = "Poloniex",
+			RusName = "Poloniex",
+		};
+
+		/// <summary>
+		/// Information about Kraken.
+		/// </summary>
+		public static Exchange Kraken { get; } = new Exchange
+		{
+			Name = "KRKN",
+			EngName = "Kraken",
+			RusName = "Kraken",
+		};
+
+		/// <summary>
+		/// Information about Bittrex.
+		/// </summary>
+		public static Exchange Bittrex { get; } = new Exchange
+		{
+			Name = "BTRX",
+			EngName = "Bittrex",
+			RusName = "Bittrex",
+		};
+
+		/// <summary>
+		/// Information about Bitfinex.
+		/// </summary>
+		public static Exchange Bitfinex { get; } = new Exchange
+		{
+			Name = "BTFX",
+			EngName = "Bitfinex",
+			RusName = "Bitfinex",
+		};
+
+		/// <summary>
+		/// Information about Coinbase.
+		/// </summary>
+		public static Exchange Coinbase { get; } = new Exchange
+		{
+			Name = "CNBS",
+			EngName = "Coinbase",
+			RusName = "Coinbase",
+		};
+
+		/// <summary>
+		/// Information about GDAX.
+		/// </summary>
+		public static Exchange Gdax { get; } = new Exchange
+		{
+			Name = "GDAX",
+			EngName = "GDAX",
+			RusName = "GDAX",
+		};
+
+		/// <summary>
+		/// Information about Bithumb.
+		/// </summary>
+		public static Exchange Bithumb { get; } = new Exchange
+		{
+			Name = "BTHB",
+			EngName = "Bithumb",
+			RusName = "Bithumb",
+		};
+
+		/// <summary>
+		/// Information about HitBTC.
+		/// </summary>
+		public static Exchange HitBtc { get; } = new Exchange
+		{
+			Name = "HTBTC",
+			EngName = "HitBTC",
+			RusName = "HitBTC",
+		};
+
+		/// <summary>
+		/// Information about OKCoin.
+		/// </summary>
+		public static Exchange OkCoin { get; } = new Exchange
+		{
+			Name = "OKCN",
+			EngName = "OKCoin",
+			RusName = "OKCoin",
+		};
+
+		/// <summary>
+		/// Information about Coincheck.
+		/// </summary>
+		public static Exchange Coincheck { get; } = new Exchange
+		{
+			Name = "CNCK",
+			EngName = "Coincheck",
+			RusName = "Coincheck",
+		};
 	}
 }
