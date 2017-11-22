@@ -91,6 +91,11 @@
             Игнорировать дубликаты по транзакциям.
             </summary>
     </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixServer.AutoFixFutureCodes">
+      <summary>
+            Автоматически править коды фьючерсов для Si и Eu.
+            </summary>
+    </member>
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.LogFile">
       <summary>
             Название текстового файла, в который будут писаться логи.
