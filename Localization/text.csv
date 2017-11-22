@@ -14588,3 +14588,14 @@ DocStr10220;Evaluate and cache hash code;Вычислить и запомнит�
 DocStr10221;Init;Инициализировать
 DocStr10222;Convert depths to quotes;Преобразовать стаканы в котировки
 DocStr10223;Ethereum;Эфир
+DocStr10224;Information about Poloniex;Информация о Poloniex
+DocStr10225;Information about Kraken;Информация о Kraken
+DocStr10226;Information about Bittrex;Информация о Bittrex
+DocStr10227;Information about Bitfinex;Информация о Bitfinex
+DocStr10228;Information about Coinbase;Информация о Coinbase
+DocStr10229;Information about GDAX;Информация о GDAX
+DocStr10230;Information about Bithumb;Информация о Bithumb
+DocStr10231;Information about HitBTC;Информация о HitBTC
+DocStr10232;Information about OKCoin;Информация о OKCoin
+DocStr10233;Information about Coincheck;Информация о Coincheck
+DocStr10234;Get changes for {0};Получить изменения для {0}

@@ -715,13 +715,20 @@
             Price chart data provider interface.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.GridControl.IPriceChartDataProvider.Get(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
+      <summary>
+            Get changes for <see cref="T:StockSharp.BusinessEntities.Security" />.
+            </summary>
+      <param name="security">Security.</param>
+      <param name="field">Level1 field.</param>
+      <returns>Price items collection.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.GridControl.IPriceChartDataProvider.Subscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
       <summary>
             Subscribe for changes.
             </summary>
       <param name="security">Security.</param>
       <param name="field">Level1 field.</param>
-      <returns>Price items collection.</returns>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.IPriceChartDataProvider.UnSubscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
       <summary>
@@ -740,11 +747,6 @@
             Refresh chart data period.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.GridControl.PriceChartDataProvider.MaxCount">
-      <summary>
-            Maximum number of items in chart.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.#ctor(StockSharp.BusinessEntities.IMarketDataProvider)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.PriceChartDataProvider" />.
@@ -755,6 +757,9 @@
       <summary>
             Release resources.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.Get(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.Subscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
       <inheritdoc />
