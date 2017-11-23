@@ -1,5 +1,9 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.2:
+* (bug) InteractiveBrokers fixes.
+* (bug) Quik. Subscribe/unsubscribe fixes.
+
 ## v4.4.1:
 * (bug) InteractiveBrokers fixes.
 * (bug) LMAX fixes.
