@@ -3,6 +3,8 @@ StockSharp Data (Hydra) Change log
 ## v4.4.2:
 * (bug) InteractiveBrokers fixes.
 * (bug) Quik. Subscribe/unsubscribe fixes.
+* (feature) Binary quotes. Allow save bid > ask.
+* (bug) Candles pane. Fix arg validation.
 
 ## v4.4.1:
 * (bug) InteractiveBrokers fixes.

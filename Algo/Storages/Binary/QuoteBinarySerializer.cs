@@ -143,8 +143,8 @@ namespace StockSharp.Algo.Storages.Binary
 				var ask = quoteMsg.GetBestAsk();
 
 				// LMAX has equals best bid and ask
-				if (bid != null && ask != null && bid.Price > ask.Price)
-					throw new ArgumentException(LocalizedStrings.Str932Params.Put(bid.Price, ask.Price, quoteMsg.ServerTime), nameof(messages));
+				//if (bid != null && ask != null && bid.Price > ask.Price)
+				//	throw new ArgumentException(LocalizedStrings.Str932Params.Put(bid.Price, ask.Price, quoteMsg.ServerTime), nameof(messages));
 
 				var lastOffset = metaInfo.LastServerOffset;
 				metaInfo.LastTime = writer.WriteTime(quoteMsg.ServerTime, metaInfo.LastTime, LocalizedStrings.MarketDepth, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
