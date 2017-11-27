@@ -69,6 +69,43 @@ namespace StockSharp.Algo.Testing
 			}
 
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
+
+			protected override void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.Security:
+					case MessageTypes.Board:
+					case MessageTypes.Level1Change:
+					case MessageTypes.QuoteChange:
+					case MessageTypes.Time:
+					{
+						var adapter = message.Adapter;
+
+						if (adapter == _parent.MarketDataAdapter)
+							_parent.TransactionAdapter.SendInMessage(message);
+
+						break;
+					}
+
+					case MessageTypes.CandlePnF:
+					case MessageTypes.CandleRange:
+					case MessageTypes.CandleRenko:
+					case MessageTypes.CandleTick:
+					case MessageTypes.CandleTimeFrame:
+					case MessageTypes.CandleVolume:
+					case MessageTypes.Execution:
+					{
+						if (message.Adapter != _parent.MarketDataAdapter)
+							break;
+
+						_parent.TransactionAdapter.SendInMessage(message);
+						return;
+					}
+				}
+
+				base.OnInnerAdapterNewOutMessage(innerAdapter, message);
+			}
 		}
 
 		private sealed class HistoryEmulationMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
@@ -318,6 +355,13 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public bool IsFinished { get; private set; }
 
+		/// <inheritdoc />
+		public override TimeSpan MarketTimeChangedInterval
+		{
+			get => HistoryMessageAdapter.MarketTimeChangedInterval;
+			set => HistoryMessageAdapter.MarketTimeChangedInterval = value;
+		}
+
 		///// <summary>
 		///// To enable the possibility to give out candles directly into <see cref="ICandleManager"/>. It accelerates operation, but candle change events will not be available. By default it is disabled.
 		///// </summary>
@@ -429,33 +473,6 @@ namespace StockSharp.Algo.Testing
 					case ExtendedMessageTypes.EmulationState:
 						ProcessEmulationStateMessage(((EmulationStateMessage)message).State);
 						break;
-
-					case MessageTypes.Security:
-					case MessageTypes.Board:
-					case MessageTypes.Level1Change:
-					case MessageTypes.QuoteChange:
-					case MessageTypes.Time:
-					case MessageTypes.CandlePnF:
-					case MessageTypes.CandleRange:
-					case MessageTypes.CandleRenko:
-					case MessageTypes.CandleTick:
-					case MessageTypes.CandleTimeFrame:
-					case MessageTypes.CandleVolume:
-					case MessageTypes.Execution:
-					{
-						var adapter = message.Adapter; //.GetInnerAdapter();
-
-						if (adapter == MarketDataAdapter)
-						{
-							TransactionAdapter.SendInMessage(message);
-
-							if (message is CandleMessage)
-								break;
-						}
-
-						base.OnProcessMessage(message);
-						break;
-					}
 
 					default:
 					{
