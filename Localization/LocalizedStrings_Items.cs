@@ -46326,5 +46326,15 @@ namespace StockSharp.Localization
 		/// Underlying
 		/// </summary>
 		public static string Underlying => GetString(UnderlyingKey);
+
+		/// <summary>
+		/// New folder
+		/// </summary>
+		public const string NewFolderKey = nameof(NewFolder);
+
+		/// <summary>
+		/// New folder
+		/// </summary>
+		public static string NewFolder => GetString(NewFolderKey);
 	}
 }
