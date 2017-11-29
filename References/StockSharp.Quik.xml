@@ -140,6 +140,11 @@
             </summary>
       <param name="message">Сообщение.</param>
     </member>
+    <member name="P:StockSharp.Quik.Lua.LuaFixServer.SecurityClassInfo">
+      <summary>
+            Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="P:StockSharp.Messages.SecurityMessage.SecurityType" /> и <see cref="P:StockSharp.Messages.SecurityId.BoardCode" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetNextRequest">
       <summary>
             Получить пользовательский запрос.

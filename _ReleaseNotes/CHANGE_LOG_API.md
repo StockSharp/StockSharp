@@ -34,6 +34,7 @@ StockSharp API Change log
 * (feature) Exchange. New info for Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck.
 * (feature) QuikLua. AutoFixFutureCodes
 * (feature) Binary quotes. Allow save bid > ask.
+* (feature) QuikLua. Filter securities by type.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
