@@ -35,6 +35,7 @@ StockSharp API Change log
 * (feature) QuikLua. AutoFixFutureCodes
 * (feature) Binary quotes. Allow save bid > ask.
 * (feature) QuikLua. Filter securities by type.
+* (bug) FIX server. Fix security lookup. http://stocksharp.ru/forum/8874/problemy-podklyucheniya-k-hydra-cherez-fix-/
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
