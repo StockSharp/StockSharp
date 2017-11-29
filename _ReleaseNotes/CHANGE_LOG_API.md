@@ -36,6 +36,9 @@ StockSharp API Change log
 * (feature) Binary quotes. Allow save bid > ask.
 * (feature) QuikLua. Filter securities by type.
 * (bug) FIX server. Fix security lookup. http://stocksharp.ru/forum/8874/problemy-podklyucheniya-k-hydra-cherez-fix-/
+* (feature) FIX connector. Spectra dialect. Support nanoseconds.
+* (feature) FIX connector. ExecutionReport.LastCapacity
+* (feature) FIX connector. Otkritie microseconds support.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

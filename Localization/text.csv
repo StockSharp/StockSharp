@@ -14599,3 +14599,4 @@ DocStr10231;Information about HitBTC;Информация о HitBTC
 DocStr10232;Information about OKCoin;Информация о OKCoin
 DocStr10233;Information about Coincheck;Информация о Coincheck
 DocStr10234;Get changes for {0};Получить изменения для {0}
+DocStr10235;Broker capacity in order execution;Емкость брокера в исполнении заявки
