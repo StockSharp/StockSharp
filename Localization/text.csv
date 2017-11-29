@@ -7137,7 +7137,7 @@ DocStr2496;The date in time for search of appropriate period;Дата во вр�
 DocStr2497;The schedule period. If no period is appropriate, {0} is returned;Период расписания. Если ни один период не подходит, то будет возвращено {0}
 DocStr2498;To get the instrument description by the class;Получить описание инструмента по классу
 DocStr2499;Description of the class of securities, depending on which will be marked in the {0} and {1};Описание классов инструментов, в зависимости от которых будут проставляться параметры в {0} и {1}
-DocStr2500;The instrument description. If the class is not found, then {0} value is returned as instrument type;Описание инструмента. Если класс не найден, то будет возвращено значение {0} в качестве типа инструмента
+DocStr2500;The instrument description. If the class is not found, then empty value is returned as instrument type;Описание инструмента. Если класс не найден, то будет возвращено пустое значение в качестве типа инструмента
 DocStr2501;To get the board code for the instrument class;Получить код площадки для класса инструмента
 DocStr2502;Adapter to the trading system;Адаптер к торговой системе
 DocStr2503;To get the price increment on the basis of accuracy;Получить шаг цены на основе точности

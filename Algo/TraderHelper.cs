@@ -3098,7 +3098,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="securityClassInfo">Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.</param>
 		/// <param name="secClass">Security class.</param>
-		/// <returns>The instrument description. If the class is not found, then <see langword="null" /> value is returned as instrument type.</returns>
+		/// <returns>The instrument description. If the class is not found, then empty value is returned as instrument type.</returns>
 		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
 		{
 			var pair = securityClassInfo.TryGetValue(secClass);
