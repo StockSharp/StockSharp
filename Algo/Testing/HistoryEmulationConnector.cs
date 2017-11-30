@@ -79,6 +79,7 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Level1Change:
 					case MessageTypes.QuoteChange:
 					case MessageTypes.Time:
+					case MessageTypes.Execution:
 					{
 						var adapter = message.Adapter;
 
@@ -94,7 +95,6 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.CandleTick:
 					case MessageTypes.CandleTimeFrame:
 					case MessageTypes.CandleVolume:
-					case MessageTypes.Execution:
 					{
 						if (message.Adapter != _parent.MarketDataAdapter)
 							break;
