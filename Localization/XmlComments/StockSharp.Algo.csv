@@ -5686,6 +5686,7 @@ P:StockSharp.Algo.Testing.HistoryEmulationConnector.ProcessedMessageCount/summar
 P:StockSharp.Algo.Testing.HistoryEmulationConnector.State/summary;DocStr1878
 E:StockSharp.Algo.Testing.HistoryEmulationConnector.StateChanged/summary;DocStr2124
 P:StockSharp.Algo.Testing.HistoryEmulationConnector.IsFinished/summary;DocStr1875
+P:StockSharp.Algo.Testing.HistoryEmulationConnector.MarketTimeChangedInterval/inheritdoc;DocStr8459
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.ClearCache/summary;DocStr858
 P:StockSharp.Algo.Testing.HistoryEmulationConnector.RaiseConnectedOnFirstAdapter/summary;DocStr862
 M:StockSharp.Algo.Testing.HistoryEmulationConnector.OnDisconnect/summary;DocStr807

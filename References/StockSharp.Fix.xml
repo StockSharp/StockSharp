@@ -4441,6 +4441,11 @@
             Required if responding to and if provided on the <see cref="F:StockSharp.Fix.Native.FixMessages.OrderMassStatusRequest" /> message.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.LastCapacity">
+      <summary>
+            Broker capacity in order execution.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Native.ExecutionReport.OrderCapacity">
       <summary>
             Designates the capacity of the firm placing the order.
@@ -4877,6 +4882,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.IDSource">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.LastCapacity">
       <summary>
       </summary>
     </member>
