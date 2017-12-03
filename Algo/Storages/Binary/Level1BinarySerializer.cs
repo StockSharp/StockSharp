@@ -1195,7 +1195,7 @@ namespace StockSharp.Algo.Storages.Binary
 						var origin = reader.ReadSide();
 
 						if (origin != null)
-							l1Msg.Add(Level1Fields.LastTradeOrigin, origin);
+							l1Msg.Add(Level1Fields.LastTradeOrigin, origin.Value);
 
 						break;
 					}
@@ -1316,7 +1316,7 @@ namespace StockSharp.Algo.Storages.Binary
 					}
 					case Level1Fields.LastTradeOrigin:
 					{
-						l1Msg.Add(field, reader.ReadSide());
+						l1Msg.TryAdd(field, reader.ReadSide());
 						break;
 					}
 					case Level1Fields.PriceEarnings:
