@@ -39,6 +39,7 @@ StockSharp API Change log
 * (feature) FIX connector. Spectra dialect. Support nanoseconds.
 * (feature) FIX connector. ExecutionReport.LastCapacity
 * (feature) FIX connector. Otkritie microseconds support.
+* (bug) Level1 binary storage. Fix min max serialization.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

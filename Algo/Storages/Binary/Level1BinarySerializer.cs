@@ -80,6 +80,8 @@ namespace StockSharp.Algo.Storages.Binary
 			IssueSize = new RefPair<decimal, decimal>();
 			Duration = new RefPair<decimal, decimal>();
 			BuyBackPrice = new RefPair<decimal, decimal>();
+			MinPrice = new RefPair<decimal, decimal>();
+			MaxPrice = new RefPair<decimal, decimal>();
 		}
 
 		public RefPair<decimal, decimal> Price { get; private set; }
@@ -129,6 +131,8 @@ namespace StockSharp.Algo.Storages.Binary
 		public RefPair<decimal, decimal> IssueSize { get; private set; }
 		public RefPair<decimal, decimal> Duration { get; private set; }
 		public RefPair<decimal, decimal> BuyBackPrice { get; private set; }
+		public RefPair<decimal, decimal> MinPrice { get; private set; }
+		public RefPair<decimal, decimal> MaxPrice { get; private set; }
 
 		public DateTime FirstFieldTime { get; set; }
 		public DateTime LastFieldTime { get; set; }
@@ -259,6 +263,12 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WritePriceStep(stream);
+
+			if (Version < MarketDataVersions.Version60)
+				return;
+
+			Write(stream, MinPrice);
+			Write(stream, MaxPrice);
 		}
 
 		public override void Read(Stream stream)
@@ -379,6 +389,12 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadPriceStep(stream);
+
+			if (Version < MarketDataVersions.Version60)
+				return;
+
+			MinPrice = ReadInfo(stream);
+			MaxPrice = ReadInfo(stream);
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -452,6 +468,8 @@ namespace StockSharp.Algo.Storages.Binary
 			FirstBuyBackDateOffset = l1Info.FirstBuyBackDateOffset;
 			LastBuyBackDateOffset = l1Info.LastBuyBackDateOffset;
 			MaxKnownType = l1Info.MaxKnownType;
+			MinPrice = Clone(l1Info.MinPrice);
+			MaxPrice = Clone(l1Info.MaxPrice);
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
@@ -493,7 +511,7 @@ namespace StockSharp.Algo.Storages.Binary
 		};
 
 		public Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 50, MarketDataVersions.Version59, exchangeInfoProvider)
+			: base(securityId, 50, MarketDataVersions.Version60, exchangeInfoProvider)
 		{
 		}
 
@@ -541,6 +559,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 			var unkTypes = metaInfo.Version >= MarketDataVersions.Version58;
 			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version59;
+			var minMaxPrice = metaInfo.Version >= MarketDataVersions.Version60;
 
 			foreach (var message in messages)
 			{
@@ -618,15 +637,28 @@ namespace StockSharp.Algo.Storages.Binary
 						case Level1Fields.HighPrice:
 						case Level1Fields.LowPrice:
 						case Level1Fields.ClosePrice:
-						case Level1Fields.MinPrice:
 						{
 							SerializePrice(writer, metaInfo, (decimal)value, nonAdjustPrice);
+							break;
+						}
+						case Level1Fields.MinPrice:
+						{
+							if (minMaxPrice)
+								SerializeChange(writer, metaInfo.MinPrice, (decimal)value);
+							else
+								SerializePrice(writer, metaInfo, (decimal)value, nonAdjustPrice);
+
 							break;
 						}
 						case Level1Fields.MaxPrice:
 						{
 							var price = (decimal)value;
-							SerializePrice(writer, metaInfo, price == int.MaxValue ? metaInfo.PriceStep : price, nonAdjustPrice);
+
+							if (minMaxPrice)
+								SerializeChange(writer, metaInfo.MaxPrice, (decimal)value);
+							else
+								SerializePrice(writer, metaInfo, price == int.MaxValue ? metaInfo.PriceStep : price, nonAdjustPrice);
+							
 							break;
 						}
 						case Level1Fields.BidsVolume:
@@ -1017,6 +1049,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version55;
 			var unkTypes = metaInfo.Version >= MarketDataVersions.Version58;
 			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version59;
+			var minMaxPrice = metaInfo.Version >= MarketDataVersions.Version60;
 
 			var l1Msg = new Level1ChangeMessage { SecurityId = SecurityId };
 
@@ -1091,12 +1124,26 @@ namespace StockSharp.Algo.Storages.Binary
 					case Level1Fields.HighPrice:
 					case Level1Fields.LowPrice:
 					case Level1Fields.ClosePrice:
-					case Level1Fields.MinPrice:
-					case Level1Fields.MaxPrice:
 					{
 						var prevPrice = metaInfo.Price.First;
 						l1Msg.Add(field, reader.ReadPrice(ref prevPrice, metaInfo, false, nonAdjustPrice));
 						metaInfo.Price.First = prevPrice;
+						break;
+					}
+					case Level1Fields.MinPrice:
+					case Level1Fields.MaxPrice:
+					{
+						if (minMaxPrice)
+						{
+							l1Msg.Add(field, DeserializeChange(reader, field == Level1Fields.MinPrice ? metaInfo.MinPrice : metaInfo.MaxPrice));
+						}
+						else
+						{
+							var prevPrice = metaInfo.Price.First;
+							l1Msg.Add(field, reader.ReadPrice(ref prevPrice, metaInfo, false, nonAdjustPrice));
+							metaInfo.Price.First = prevPrice;
+						}
+
 						break;
 					}
 					//case Level1Fields.MaxPrice:

@@ -2,6 +2,7 @@ StockSharp Data (Hydra) Change log
 ========================
 ## current:
 * (bug) FIX server. Fix security lookup. http://stocksharp.ru/forum/8874/problemy-podklyucheniya-k-hydra-cherez-fix-/
+* (bug) Level1 binary storage. Fix min max serialization.
 
 ## v4.4.2:
 * (bug) InteractiveBrokers fixes.
