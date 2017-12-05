@@ -41,6 +41,8 @@ StockSharp API Change log
 * (feature) FIX connector. Otkritie microseconds support.
 * (bug) Level1 binary storage. Fix min max serialization.
 * (feature) Level1 binary storage. Use long as step counts.
+* (bug) Binary storage. Fix non adjust price steps.
+* (bug) MarketDepthGenerator fixes.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

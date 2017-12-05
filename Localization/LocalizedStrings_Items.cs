@@ -10798,52 +10798,52 @@ namespace StockSharp.Localization
 		public static string Str1136 => GetString(Str1136Key);
 
 		/// <summary>
-		/// Minimum spread size cannot be less than one.
+		/// Minimum spread size cannot be less than 1.
 		/// </summary>
 		public const string Str1137Key = nameof(Str1137);
 
 		/// <summary>
-		/// Minimum spread size cannot be less than one.
+		/// Minimum spread size cannot be less than 1.
 		/// </summary>
 		public static string Str1137 => GetString(Str1137Key);
 
 		/// <summary>
-		/// Maximum spread size cannot be less than one.
+		/// Maximum spread size cannot be less than 1.
 		/// </summary>
 		public const string Str1138Key = nameof(Str1138);
 
 		/// <summary>
-		/// Maximum spread size cannot be less than one.
+		/// Maximum spread size cannot be less than 1.
 		/// </summary>
 		public static string Str1138 => GetString(Str1138Key);
 
 		/// <summary>
-		/// Maximum bids depth cannot be less than zero.
+		/// Maximum bids depth cannot be less than 1.
 		/// </summary>
 		public const string Str1139Key = nameof(Str1139);
 
 		/// <summary>
-		/// Maximum bids depth cannot be less than zero.
+		/// Maximum bids depth cannot be less than 1.
 		/// </summary>
 		public static string Str1139 => GetString(Str1139Key);
 
 		/// <summary>
-		/// Maximum asks depth cannot be less than zero.
+		/// Maximum asks depth cannot be less than 1.
 		/// </summary>
 		public const string Str1140Key = nameof(Str1140);
 
 		/// <summary>
-		/// Maximum asks depth cannot be less than zero.
+		/// Maximum asks depth cannot be less than 1.
 		/// </summary>
 		public static string Str1140 => GetString(Str1140Key);
 
 		/// <summary>
-		/// Maximum number of generations cannot be less than one.
+		/// Maximum number of generations cannot be less than 1.
 		/// </summary>
 		public const string Str1141Key = nameof(Str1141);
 
 		/// <summary>
-		/// Maximum number of generations cannot be less than one.
+		/// Maximum number of generations cannot be less than 1.
 		/// </summary>
 		public static string Str1141 => GetString(Str1141Key);
 
