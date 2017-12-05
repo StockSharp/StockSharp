@@ -78,9 +78,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public decimal LastPrice { get; set; }
 		public decimal FirstFractionalPrice { get; set; }
 		public decimal LastFractionalPrice { get; set; }
-		public decimal FirstPriceStep { get; set; }
-		public decimal LastPriceStep { get; set; }
-
+		
 		public decimal FirstFractionalVolume { get; set; }
 		public decimal LastFractionalVolume { get; set; }
 
@@ -138,6 +136,8 @@ namespace StockSharp.Algo.Storages.Binary
 			Count = stream.Read<int>();
 			PriceStep = stream.Read<decimal>();
 
+			/*FirstPriceStep = */LastPriceStep = PriceStep;
+
 			if (Version < MarketDataVersions.Version40)
 				stream.Read<decimal>(); // ранее был StepPrice
 
@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			WriteFractionalPrice(stream);
 
-			stream.Write(FirstPriceStep);
+			stream.Write(/*FirstPriceStep*/0m);
 			stream.Write(LastPriceStep);
 		}
 
@@ -187,7 +187,7 @@ namespace StockSharp.Algo.Storages.Binary
 		{
 			ReadFractionalPrice(stream);
 
-			FirstPriceStep = stream.Read<decimal>();
+			/*FirstPriceStep = */stream.Read<decimal>();
 			LastPriceStep = stream.Read<decimal>();
 		}
 
@@ -315,7 +315,7 @@ namespace StockSharp.Algo.Storages.Binary
 			LastItemLocalTime = src.LastItemLocalTime;
 			FirstItemLocalOffset = src.FirstItemLocalOffset;
 			LastItemLocalOffset = src.LastItemLocalOffset;
-			FirstPriceStep = src.FirstPriceStep;
+			//FirstPriceStep = src.FirstPriceStep;
 			LastPriceStep = src.LastPriceStep;
 			FirstPrice = src.FirstPrice;
 			LastPrice = src.LastPrice;

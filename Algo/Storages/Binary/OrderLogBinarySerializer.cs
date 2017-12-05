@@ -238,7 +238,7 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WritePriceEx(orderPrice, metaInfo, SecurityId);
 				else
 				{
-					var isAligned = (orderPrice % metaInfo.PriceStep) == 0;
+					var isAligned = (orderPrice % metaInfo.LastPriceStep) == 0;
 					writer.Write(isAligned);
 
 					if (isAligned)
