@@ -43,6 +43,8 @@ StockSharp API Change log
 * (feature) Level1 binary storage. Use long as step counts.
 * (bug) Binary storage. Fix non adjust price steps.
 * (bug) MarketDepthGenerator fixes.
+* (feature) DevExpress v17.1.7
+* (bug) IQFeed. Symbol lookup fixes.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
