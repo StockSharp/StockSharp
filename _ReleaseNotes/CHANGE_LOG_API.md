@@ -45,6 +45,8 @@ StockSharp API Change log
 * (bug) MarketDepthGenerator fixes.
 * (feature) DevExpress v17.1.7
 * (bug) IQFeed. Symbol lookup fixes.
+* (bug) Backtesting candles fix http://stocksharp.ru/forum/8816/ne-pravilnoe-ispolnenie-sdelok-pri-testirovanii-na-svechah/ 
+* (bug) Tick and quotes binary storage. Fix store highly fractional prices.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
