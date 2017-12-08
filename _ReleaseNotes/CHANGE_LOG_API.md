@@ -47,6 +47,7 @@ StockSharp API Change log
 * (bug) IQFeed. Symbol lookup fixes.
 * (bug) Backtesting candles fix http://stocksharp.ru/forum/8816/ne-pravilnoe-ispolnenie-sdelok-pri-testirovanii-na-svechah/ 
 * (bug) Tick and quotes binary storage. Fix store highly fractional prices.
+* (feature) Order log binary storage. Nullable volumes posibilites.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

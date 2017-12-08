@@ -212,7 +212,7 @@ namespace StockSharp.Algo.Storages.Binary
 				//	throw new ArgumentOutOfRangeException(nameof(messages), item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
 
 				var volume = message.SafeGetVolume();
-				if (volume <= 0)
+				if (volume <= 0 && message.OrderState != OrderStates.Done)
 					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(message.OrderId));
 
 				long? tradeId = null;
