@@ -224,6 +224,8 @@ namespace StockSharp.Algo.Storages
 				metaInfo.VolumeStep = volumeStep == null || volumeStep == 0 ? 1m : volumeStep.Value;
 				metaInfo.LastTime = time;
 				metaInfo.FirstTime = time;
+
+				/*metaInfo.FirstPriceStep = */((MetaInfo)metaInfo).LastPriceStep = metaInfo.PriceStep;
 			}
 			else
 			{

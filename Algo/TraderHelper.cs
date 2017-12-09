@@ -2884,6 +2884,25 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Add change into collection.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, SecurityStates value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.Changes[type] = value;
+			return message;
+		}
+
+		/// <summary>
 		/// To add a change to the collection, if value is other than <see langword="null"/>.
 		/// </summary>
 		/// <typeparam name="TMessage">Change message type.</typeparam>
@@ -2898,7 +2917,26 @@ namespace StockSharp.Algo
 			if (value == null)
 				return message;
 
-			return message.Add(type, value);
+			return message.Add(type, value.Value);
+		}
+
+		/// <summary>
+		/// Add change into collection.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, Sides value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.Changes[type] = value;
+			return message;
 		}
 
 		/// <summary>
@@ -2916,7 +2954,155 @@ namespace StockSharp.Algo
 			if (value == null)
 				return message;
 
-			return message.Add(type, value);
+			return message.Add(type, value.Value);
+		}
+
+		/// <summary>
+		/// Add change into collection.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, CurrencyTypes value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.Changes[type] = value;
+			return message;
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, CurrencyTypes? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value.Value);
+		}
+
+		/// <summary>
+		/// Add change into collection.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, PortfolioStates value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.Changes[type] = value;
+			return message;
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, PortfolioStates? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value.Value);
+		}
+
+		/// <summary>
+		/// Add change into collection.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, DateTimeOffset value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.Changes[type] = value;
+			return message;
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, DateTimeOffset? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value.Value);
+		}
+
+		/// <summary>
+		/// Add change into collection.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, bool value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			message.Changes[type] = value;
+			return message;
+		}
+
+		/// <summary>
+		/// To add a change to the collection, if value is other than <see langword="null"/>.
+		/// </summary>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, bool? value)
+			where TMessage : BaseChangeMessage<TChange>
+		{
+			if (value == null)
+				return message;
+
+			return message.Add(type, value.Value);
 		}
 
 		/// <summary>

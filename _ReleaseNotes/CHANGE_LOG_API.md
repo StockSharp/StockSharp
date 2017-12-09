@@ -39,6 +39,15 @@ StockSharp API Change log
 * (feature) FIX connector. Spectra dialect. Support nanoseconds.
 * (feature) FIX connector. ExecutionReport.LastCapacity
 * (feature) FIX connector. Otkritie microseconds support.
+* (bug) Level1 binary storage. Fix min max serialization.
+* (feature) Level1 binary storage. Use long as step counts.
+* (bug) Binary storage. Fix non adjust price steps.
+* (bug) MarketDepthGenerator fixes.
+* (feature) DevExpress v17.1.7
+* (bug) IQFeed. Symbol lookup fixes.
+* (bug) Backtesting candles fix http://stocksharp.ru/forum/8816/ne-pravilnoe-ispolnenie-sdelok-pri-testirovanii-na-svechah/ 
+* (bug) Tick and quotes binary storage. Fix store highly fractional prices.
+* (feature) Order log binary storage. Nullable volumes posibilites.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

@@ -532,8 +532,8 @@ namespace StockSharp.Algo.Testing
 			SendInMessage(
 				EmulationAdapter
 					.CreatePortfolioChangeMessage(portfolio.Name)
-						.Add(PositionChangeTypes.BeginValue, money)
-						.Add(PositionChangeTypes.CurrentValue, money)
+						.TryAdd(PositionChangeTypes.BeginValue, money)
+						.TryAdd(PositionChangeTypes.CurrentValue, money)
 						.Add(PositionChangeTypes.BlockedValue, 0m));
 		}
 
