@@ -7,6 +7,7 @@ StockSharp Data (Hydra) Change log
 * (bug) IQFeed. Symbol lookup fixes.
 * (bug) Tick and quotes binary storage. Fix store highly fractional prices.
 * (feature) Order log binary storage. Nullable volumes posibilites.
+* (bug) Quotes storage. Fix zero and negative prices store.
 
 ## v4.4.2:
 * (bug) InteractiveBrokers fixes.

@@ -48,6 +48,7 @@ StockSharp API Change log
 * (bug) Backtesting candles fix http://stocksharp.ru/forum/8816/ne-pravilnoe-ispolnenie-sdelok-pri-testirovanii-na-svechah/ 
 * (bug) Tick and quotes binary storage. Fix store highly fractional prices.
 * (feature) Order log binary storage. Nullable volumes posibilites.
+* (bug) Quotes storage. Fix zero and negative prices store.
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

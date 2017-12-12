@@ -987,8 +987,9 @@ namespace StockSharp.BusinessEntities
 			if (quote.Security == null)
 				quote.Security = Security;
 
-			if (quote.Price <= 0)
-				throw new ArgumentOutOfRangeException(nameof(quote), quote.Price, LocalizedStrings.Str488);
+			// quotes for indecies may have zero prices
+			//if (quote.Price <= 0)
+			//	throw new ArgumentOutOfRangeException(nameof(quote), quote.Price, LocalizedStrings.Str488);
 
 			if (quote.Volume < 0)
 				throw new ArgumentOutOfRangeException(nameof(quote), quote.Volume, LocalizedStrings.Str489);
