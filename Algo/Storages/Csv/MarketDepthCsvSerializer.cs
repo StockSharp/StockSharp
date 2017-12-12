@@ -16,13 +16,13 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			private class QuoteEnumerator : SimpleEnumerator<QuoteChangeMessage>
 			{
-				private readonly IEnumerator<TimeQuoteChange> _enumerator;
+				private readonly IEnumerator<NullableTimeQuoteChange> _enumerator;
 				private readonly SecurityId _securityId;
 
 				private bool _resetCurrent = true;
 				private bool _needMoveNext = true;
 
-				public QuoteEnumerator(IEnumerator<TimeQuoteChange> enumerator, SecurityId securityId)
+				public QuoteEnumerator(IEnumerator<NullableTimeQuoteChange> enumerator, SecurityId securityId)
 				{
 					_enumerator = enumerator;
 					_securityId = securityId;
@@ -46,6 +46,9 @@ namespace StockSharp.Algo.Storages.Csv
 					{
 						var quote = _enumerator.Current;
 
+						if (quote == null)
+							throw new InvalidOperationException("quote == null");
+
 						if (Current == null)
 						{
 							Current = new QuoteChangeMessage
@@ -68,10 +71,10 @@ namespace StockSharp.Algo.Storages.Csv
 
 						side = quote.Side;
 
-						if (quote.Price != long.MinValue && quote.Price != long.MaxValue)
+						if (quote.Price != null)
 						{
 							var quotes = (List<QuoteChange>)(quote.Side == Sides.Buy ? Current.Bids : Current.Asks);
-							quotes.Add(quote);
+							quotes.Add(new QuoteChange(quote.Side, quote.Price.Value, quote.Volume));
 						}
 					}
 					while (_enumerator.MoveNext());
@@ -101,7 +104,7 @@ namespace StockSharp.Algo.Storages.Csv
 				}
 			}
 
-			public QuoteEnumerable(IEnumerable<TimeQuoteChange> quotes, SecurityId securityId)
+			public QuoteEnumerable(IEnumerable<NullableTimeQuoteChange> quotes, SecurityId securityId)
 				: base(() => new QuoteEnumerator(quotes.GetEnumerator(), securityId))
 			{
 				if (quotes == null)
@@ -109,7 +112,7 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		private readonly CsvMarketDataSerializer<TimeQuoteChange> _quoteSerializer;
+		private readonly CsvMarketDataSerializer<NullableTimeQuoteChange> _quoteSerializer;
 
 		public MarketDepthCsvSerializer(SecurityId securityId)
 			: base(securityId)
@@ -126,31 +129,29 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			var list = data.SelectMany(d =>
 			{
-				var items = new List<TimeQuoteChange>();
+				var items = new List<NullableTimeQuoteChange>();
 
-				items.AddRange(d.Bids.OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
+				items.AddRange(d.Bids.OrderByDescending(q => q.Price).Select(q => new NullableTimeQuoteChange(q, d)));
 
 				if (items.Count == 0)
 				{
-					items.Add(new TimeQuoteChange
+					items.Add(new NullableTimeQuoteChange
 					{
 						Side = Sides.Buy,
 						ServerTime = d.ServerTime,
-						Price = long.MinValue,
 					});
 				}
 
 				var bidsCount = items.Count;
 
-				items.AddRange(d.Asks.OrderBy(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
+				items.AddRange(d.Asks.OrderBy(q => q.Price).Select(q => new NullableTimeQuoteChange(q, d)));
 
 				if (items.Count == bidsCount)
 				{
-					items.Add(new TimeQuoteChange
+					items.Add(new NullableTimeQuoteChange
 					{
 						Side = Sides.Sell,
 						ServerTime = d.ServerTime,
-						Price = long.MaxValue,
 					});
 				}
 
