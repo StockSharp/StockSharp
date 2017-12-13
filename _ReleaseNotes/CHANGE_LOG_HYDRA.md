@@ -1,6 +1,6 @@
 StockSharp Data (Hydra) Change log
 ========================
-## current:
+## v4.4.3:
 * (bug) FIX server. Fix security lookup. http://stocksharp.ru/forum/8874/problemy-podklyucheniya-k-hydra-cherez-fix-/
 * (bug) Level1 binary storage. Fixes.
 * (bug) Binary storage. Fix non adjust price steps.
@@ -8,6 +8,7 @@ StockSharp Data (Hydra) Change log
 * (bug) Tick and quotes binary storage. Fix store highly fractional prices.
 * (feature) Order log binary storage. Nullable volumes posibilites.
 * (bug) Quotes storage. Fix zero and negative prices store.
+* (bug) FIX server. Fix market data request for the specified dates.
 
 ## v4.4.2:
 * (bug) InteractiveBrokers fixes.
