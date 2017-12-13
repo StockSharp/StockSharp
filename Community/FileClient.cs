@@ -80,7 +80,7 @@ namespace StockSharp.Community
 		/// <param name="data">The file data.</param>
 		/// <param name="progress">Progress callback.</param>
 		/// <param name="cancel">Cancel callback.</param>
-		/// <returns>If the operation was cancelled by <paramref name="cancel"/> <see langword="false"/> will return.</returns>
+		/// <returns>If the operation was cancelled by <paramref name="cancel"/>, <see langword="false"/> will return.</returns>
 		public bool Download(FileData data, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			if (data == null)
@@ -167,7 +167,7 @@ namespace StockSharp.Community
 		/// <param name="isPublic">Is the file available for public.</param>
 		/// <param name="progress">Progress callback.</param>
 		/// <param name="cancel">Cancel callback.</param>
-		/// <returns>File data. If the operation was cancelled by <paramref name="cancel"/> <see langword="null"/> will return.</returns>
+		/// <returns>File data. If the operation was cancelled by <paramref name="cancel"/>, <see langword="null"/> will return.</returns>
 		public FileData Upload(string fileName, byte[] body, bool isPublic, Action<int> progress = null, Func<bool> cancel = null)
 		{
 			if (fileName.IsEmpty())

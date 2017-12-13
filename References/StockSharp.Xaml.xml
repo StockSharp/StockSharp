@@ -683,27 +683,22 @@
             FileProgressWindow
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.FileProgressWindow.#ctor">
+    <member name="M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.FileProgressWindow" />.
             </summary>
+      <param name="fileId">Downloading file ID.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.FileProgressWindow.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.FileProgressWindow" />.
+            </summary>
+      <param name="path">Link to uploading file.</param>
     </member>
     <member name="P:StockSharp.Xaml.FileProgressWindow.File">
       <summary>
             The file data.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.FileProgressWindow.Download(System.Int64)">
-      <summary>
-            Download file.
-            </summary>
-      <param name="id">File ID.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.FileProgressWindow.Upload(System.String)">
-      <summary>
-            Upload file.
-            </summary>
-      <param name="path">Link to file.</param>
     </member>
     <member name="M:StockSharp.Xaml.FileProgressWindow.InitializeComponent">
       <summary>

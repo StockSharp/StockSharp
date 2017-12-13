@@ -4885,7 +4885,6 @@ DocStr221;The key by which the instrument Mfd identifier will be present in {0};
 DocStr222;To download tick trades;Загрузить тиковые сделки
 DocStr223;The instrument for which you need to get trades;Инструмент, для которого необходимо получить сделки
 DocStr224;Loaded ticks;Загруженные сделки
-DocStr225;The helper class that filling fields in {0} and {1} based on information from the site http://moex.com/ru/derivatives/contracts.aspx?p=act;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://moex.com/ru/derivatives/contracts.aspx?p=act
 DocStr226;To update information for the instrument;Обновить информацию по инструменту
 DocStr227;Whether to download information from the site, if it is not found locally;Скачивать ли информацию с сайта, если она не была найдена локально
 DocStr228;{0}, if the instrument has been updated successfully. Otherwise, {1};{0}, если инструмент был успешно обновлен. Иначе, {1}
@@ -12998,7 +12997,7 @@ DocStr8482;The unscreened text;Дэ-экранировать выражение
 DocStr8483;Data types;Типы данных
 DocStr8484;Get all available data types;Получить все доступные типы данных
 DocStr8485;Instrument identifier;Идентификатор инструмента
-DocStr8486;The helper class that filling fields in {0} and {1} based on information from the site http://moex.com;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://moex.com
+DocStr8486;The helper class that filling fields in {0} and {1} based on information from the site https://moex.com;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта https://moex.com
 DocStr8487;The message adapter, automatically calculating commission;Адаптер сообщений, автоматически считающий комиссию
 DocStr8488;Process {0} output message;Обработать {0} исходящее сообщение
 DocStr8489;The message;Сообщение
@@ -14602,3 +14601,7 @@ DocStr10232;Information about OKCoin;Информация о OKCoin
 DocStr10233;Information about Coincheck;Информация о Coincheck
 DocStr10234;Get changes for {0};Получить изменения для {0}
 DocStr10235;Broker capacity in order execution;Емкость брокера в исполнении заявки
+DocStr10237;If the operation was cancelled by {0}, {1} will return;Если операция будет отменена через {0}, будет возвращено значение {1}
+DocStr10238;File data. If the operation was cancelled by {0}, {1} will return;Файл. Если операция будет отменена через {0}, будет возвращено значение {1}
+DocStr10239;Downloading file ID;Идентификатор скачиваемого файла
+DocStr10240;Link to uploading file;Ссылка за загружаемый файл

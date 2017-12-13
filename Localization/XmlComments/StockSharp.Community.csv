@@ -89,6 +89,7 @@ M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.
 M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/data;DocStr9032
 M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/progress;DocStr9091
 M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/cancel;DocStr9780
+M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/returns;DocStr10237
 M:StockSharp.Community.FileClient.Update(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/summary;DocStr9089
 M:StockSharp.Community.FileClient.Update(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/data;DocStr9090
 M:StockSharp.Community.FileClient.Update(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/progress;DocStr9091
@@ -99,7 +100,7 @@ M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Bool
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/param/isPublic;DocStr9033
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/param/progress;DocStr9091
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/param/cancel;DocStr9780
-M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/returns;DocStr9090
+M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/returns;DocStr10238
 M:StockSharp.Community.FileClient.GetUploadLimit/summary;DocStr10166
 M:StockSharp.Community.FileClient.GetUploadLimit/returns;DocStr10167
 T:StockSharp.Community.IAuthenticationService/summary;DocStr2997

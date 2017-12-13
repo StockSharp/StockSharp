@@ -154,12 +154,11 @@ M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.Dependency
 M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)/param/url;Str221
 M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)/param/owner;DocStr8719
 T:StockSharp.Xaml.FileProgressWindow/summary;DocStr9782
-M:StockSharp.Xaml.FileProgressWindow.#ctor/summary;DocStr1
+M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/summary;DocStr1
+M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/param/fileId;DocStr10239
+M:StockSharp.Xaml.FileProgressWindow.#ctor(System.String)/summary;DocStr1
+M:StockSharp.Xaml.FileProgressWindow.#ctor(System.String)/param/path;DocStr10240
 P:StockSharp.Xaml.FileProgressWindow.File/summary;DocStr9032
-M:StockSharp.Xaml.FileProgressWindow.Download(System.Int64)/summary;DocStr9088
-M:StockSharp.Xaml.FileProgressWindow.Download(System.Int64)/param/id;DocStr9031
-M:StockSharp.Xaml.FileProgressWindow.Upload(System.String)/summary;DocStr426
-M:StockSharp.Xaml.FileProgressWindow.Upload(System.String)/param/path;DocStr9491
 M:StockSharp.Xaml.FileProgressWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.GridControl.IPriceChartDataProvider/summary;DocStr10159
 M:StockSharp.Xaml.GridControl.IPriceChartDataProvider.Get(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)/summary;DocStr10234

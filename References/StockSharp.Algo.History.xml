@@ -1326,7 +1326,7 @@
     </member>
     <member name="T:StockSharp.Algo.History.Russian.MoexDownloader">
       <summary>
-            The helper class that filling fields in <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> and <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" /> based on information from the site http://moex.com.
+            The helper class that filling fields in <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> and <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" /> based on information from the site https://moex.com.
             </summary>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Boolean)">
