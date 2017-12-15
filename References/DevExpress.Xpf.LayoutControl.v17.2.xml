@@ -1,0 +1,4831 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DevExpress.Xpf.LayoutControl.v17.2</name>
+    </assembly>
+    <members>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutControlReadElementFromXMLEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.LayoutControl.LayoutControl.ReadElementFromXML"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControlReadElementFromXMLEventArgs.#ctor(System.Xml.XmlReader,System.Windows.FrameworkElement)">
+            <summary>
+                <para>Initializes a new instance of the LayoutControlReadElementFromXMLEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="xml">
+		An XMLReader object that implements reading XML data. This object is used to initialize the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControlReadElementFromXMLEventArgs.Xml"/> property.
+
+            </param>
+            <param name="element">
+		A layout element being processed. This object is used to initialize the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControlReadElementFromXMLEventArgs.Element"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControlReadElementFromXMLEventArgs.Element">
+            <summary>
+                <para>Gets the layout element being read from a data store.
+</para>
+            </summary>
+            <value>A FrameworkElement object that is the layout element being read from a data store.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControlReadElementFromXMLEventArgs.Xml">
+            <summary>
+                <para>Gets an XMLReader object that implements reading XML data.
+</para>
+            </summary>
+            <value>An XMLReader object that implements reading XML data.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutControlWriteElementToXMLEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.LayoutControl.LayoutControl.WriteElementToXML"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControlWriteElementToXMLEventArgs.#ctor(System.Xml.XmlWriter,System.Windows.FrameworkElement)">
+            <summary>
+                <para>Initializes a new instance of the LayoutControlWriteElementToXMLEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="xml">
+		An XMLWriter object that implements writing XML data. This object is used to initialize the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControlWriteElementToXMLEventArgs.Xml"/> property.
+
+            </param>
+            <param name="element">
+		A layout element being processed. This object is used to initialize the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControlWriteElementToXMLEventArgs.Element"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControlWriteElementToXMLEventArgs.Element">
+            <summary>
+                <para>Gets the layout element being written to a data store.
+</para>
+            </summary>
+            <value>A FrameworkElement object that is the layout element being written to a data store.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControlWriteElementToXMLEventArgs.Xml">
+            <summary>
+                <para>Gets an XMLWriter object that implements saving XML data.
+</para>
+            </summary>
+            <value>An XMLWriter object that implements saving XML data.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutControlInitNewElementEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.LayoutControl.LayoutControl.InitNewElement"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControlInitNewElementEventArgs.#ctor(System.Windows.FrameworkElement)">
+            <summary>
+                <para>Initializes a new instance of the LayoutControlInitNewElementEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="element">
+		A FrameworkElement object that represents the created element. This parameter is used to initialize the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControlInitNewElementEventArgs.Element"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControlInitNewElementEventArgs.Element">
+            <summary>
+                <para>Gets the created layout element.
+</para>
+            </summary>
+            <value>The created layout element.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.ScrollBox">
+
+            <summary>
+                <para>Represents a container that supports absolute positioning of child controls and enables scrolling.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.ScrollBox.#ctor">
+            <summary>
+                <para>Initializes a new instance of the ScrollBox class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.ScrollBox.GetLeft(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Left"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Left"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Left"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.ScrollBox.GetTop(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Top"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Top"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Top"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.ScrollBox.Left(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets the x-axis value of a child control's left edge.
+This is an attached property.
+</para>
+            </summary>
+            <value>A Double value that specifies the x-axis value of a child control's left edge.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.ScrollBox.LeftProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.ScrollBox.SetLeft(System.Windows.UIElement,System.Double)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Left"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Left"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Left"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.ScrollBox.SetTop(System.Windows.UIElement,System.Double)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Top"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Top"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.ScrollBox.Top"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.ScrollBox.Top(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets the y-axis value of a child control's top edge.
+This is an attached property.
+</para>
+            </summary>
+            <value>A Double value that specifies the y-axis value of a child control's top edge.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.ScrollBox.TopProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.MaximizedElementPosition">
+
+            <summary>
+                <para>Contains values that specify the position of the maximized element, relative to other items within a <see cref="T:DevExpress.Xpf.LayoutControl.FlowLayoutControl"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.MaximizedElementPosition.Bottom">
+            <summary>
+                <para>The <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElement"/> is displayed below the layer, where other items of the <see cref="T:DevExpress.Xpf.LayoutControl.FlowLayoutControl"/> are arranged.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.MaximizedElementPosition.Left">
+            <summary>
+                <para>The <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElement"/> is displayed to the left of the layer, where other items of the <see cref="T:DevExpress.Xpf.LayoutControl.FlowLayoutControl"/> are arranged.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.MaximizedElementPosition.Right">
+            <summary>
+                <para>The <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElement"/> is displayed to the right of the layer, where other items of the <see cref="T:DevExpress.Xpf.LayoutControl.FlowLayoutControl"/> are arranged.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.MaximizedElementPosition.Top">
+            <summary>
+                <para>The <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElement"/> is displayed above the layer, where other items of the <see cref="T:DevExpress.Xpf.LayoutControl.FlowLayoutControl"/> are arranged.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutItemLabelsAlignment">
+
+            <summary>
+                <para>Contains values that specify how content regions of LayoutItems are aligned within a <see cref="T:DevExpress.Xpf.LayoutControl.LayoutControl"/> object.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItemLabelsAlignment.Default">
+            <summary>
+                <para>Content regions of LayoutItems in the current group are aligned taking into account the labels of LayoutItems in other groups (Groups that have the ItemLabelsAlignment property set to <b>Local</b> are not taken into account).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItemLabelsAlignment.Local">
+            <summary>
+                <para>Content regions of LayoutItems in the current group are aligned locally, taking into account labels of nested groups, and disregarding labels in other groups.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutItemLabelPosition">
+
+            <summary>
+                <para>Contains values that specify where labels of layout items are displayed relative to the items' contents.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItemLabelPosition.Left">
+            <summary>
+                <para>A layout item's label is displayed to the left of the item's content.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItemLabelPosition.Top">
+            <summary>
+                <para>A layout item's label is displayed on the top of the item's content.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutItem">
+
+            <summary>
+                <para>Represents a control that consists of a label and content regions. The LayoutItem cannot be used outside a <see cref="T:DevExpress.Xpf.LayoutControl.LayoutControl"/>.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutItem.#ctor">
+            <summary>
+                <para>Initializes a new instance of the LayoutItem class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.ActualLabel">
+            <summary>
+                <para>Gets the layout item's actual label.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A string that specifies the layout item's actual label.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.ActualLabelProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.AddColonToLabel">
+            <summary>
+                <para>Gets or sets whether the colon character is appended to the current layout item's label.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the colon character is appended to the current layout item's label; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.AddColonToLabelProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.CalculatedLabelVisibilityProperty">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.Content">
+            <summary>
+                <para>Specifies the content of the LayoutItem.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A UIElement object that represents the content of the LayoutItem.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.ContentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.ElementSpace">
+            <summary>
+                <para>Gets or sets the distance between the objects specified by the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Label"/> and <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Content"/> properties.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Double value that specifies the distance between the objects specified by the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Label"/> and <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Content"/> properties.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.ElementSpaceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.IsActuallyRequired">
+            <summary>
+                <para>Gets whether the layout item's field is required.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the layout item's field is required; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.IsActuallyRequiredProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.IsLabelVisible">
+            <summary>
+                <para>Gets whether the label is visible.
+</para>
+            </summary>
+            <value><b>true</b> if the label is visible; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.IsRequired">
+            <summary>
+                <para>Gets or sets whether the current item's label is painted bold, indicating to an end-user that the current field is required.
+This is a dependency property.
+
+</para>
+            </summary>
+            <value><b>true</b>, if the current item's label is painted bold, indicating to an end-user that the current field is required; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.IsRequiredProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.Label">
+            <summary>
+                <para>Gets or sets a label for the current LayoutItem.
+This is a dependency property.
+</para>
+            </summary>
+            <value>An object that represents a label for the current LayoutItem.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.LabelHorizontalAlignment">
+            <summary>
+                <para>Gets or sets the horizontal alignment of the label within the layout item's label region.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A HorizontalAlignment value that specifies the horizontal alignment of the label within the layout item's label region.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.LabelHorizontalAlignmentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.LabelPosition">
+            <summary>
+                <para>Gets or sets the position of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Label"/> relative to the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Content"/>.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.LayoutItemLabelPosition"/> value that specifies the position of the label, relative to the item's content.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.LabelPositionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.LabelProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.LabelStyle">
+            <summary>
+                <para>Gets or sets a style used by the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Label"/> object when it is rendered.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style object that represents a style used by the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Label"/> object when it is rendered.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.LabelStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.LabelTemplate">
+            <summary>
+                <para>Gets or sets a data template used to display the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Label"/>.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A DataTemplate object used to display the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutItem.Label"/>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.LabelTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutItem.LabelVerticalAlignment">
+            <summary>
+                <para>Gets or sets the vertical alignment of the label within the layout item's label region.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A VerticalAlignment value that specifies the vertical alignment of the label within the layout item's label region.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutItem.LabelVerticalAlignmentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutItem.OnApplyTemplate">
+            <summary>
+                <para>The method is invoked whenever the application code or internal processes call <b>ApplyTemplate</b>.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutGroupView">
+
+            <summary>
+                <para>Contains values that specify how a <see cref="T:DevExpress.Xpf.LayoutControl.LayoutGroup"/> is visually represented.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroupView.Group">
+            <summary>
+                <para>A LayoutGroup is represented on-screen without borders or a title. Its items are arranged in a single column or row.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroupView.GroupBox">
+            <summary>
+                <para>A LayoutGroup is represented on-screen as a group box with borders and a title. Its items are arranged in a single column or row.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroupView.Tabs">
+            <summary>
+                <para>A LayoutGroup is represented on-screen as a tabbed group.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutGroup">
+
+            <summary>
+                <para>Represents a container that arranges its items side by side (in a single row or column) or as tabs. The LayoutGroup cannot be used outside a <see cref="T:DevExpress.Xpf.LayoutControl.LayoutControl"/> or <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.#ctor">
+            <summary>
+                <para>Initializes a new instance of the LayoutGroup class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ActualGroupBoxDisplayMode">
+            <summary>
+                <para>Returns the value of currently used display mode for the LayoutGroup header, when this group is displayed as a group box.
+This is an dependency property.
+
+
+</para>
+            </summary>
+            <value>A <see cref="GroupBoxDisplayMode"/> object that specifies the display mode of the current LayoutGroup header, when this group is displayed as a group box.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.ActualGroupBoxDisplayModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ActualHorizontalAlignment">
+            <summary>
+                <para>Gets the group's actual horizontal alignment.
+</para>
+            </summary>
+            <value>A HorizontalAlignment value. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ActualMaxSize">
+            <summary>
+                <para>Gets the group's actual maximum size.
+</para>
+            </summary>
+            <value>A Size structure that specifies the group's actual maximum size.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ActualMinSize">
+            <summary>
+                <para>Gets the group's actual minimum size.
+</para>
+            </summary>
+            <value>A Size structure that specifies the group's actual minimum size.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ActualVerticalAlignment">
+            <summary>
+                <para>Gets the group's actual vertical alignment.
+</para>
+            </summary>
+            <value>A VerticalAlignment value. 
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.ApplyItemStyle">
+            <summary>
+                <para>Applies styles specified by the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ItemStyle"/> property to child elements.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.LayoutGroup.Collapsed">
+            <summary>
+                <para>Fires when a group is collapsed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.Controller">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.CreateGroup">
+            <summary>
+                <para>Creates an object of the type that is returned by the <b>GetGroupType</b> protected virtual method. 
+</para>
+            </summary>
+            <returns>The created object. 
+</returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.DefaultOrientation">
+            <summary>
+                <para>Identifies the default orientation of child items in the LayoutGroup. This field is set to <b>Orientation.Horizontal</b>. To override the orienation for individual groups, use the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutGroup.Orientation"/> property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.LayoutGroup.Expanded">
+            <summary>
+                <para>Fires when a group is expanded.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.GetArrangedLogicalChildren(System.Boolean)">
+            <summary>
+                <para>Returns a collection of child items in display order. 
+</para>
+            </summary>
+            <param name="visibleOnly">
+		<b>true</b> to return only visible items; <b>false</b> to include visible and hidden items. 
+
+            </param>
+            <returns>A FrameworkElements collection that contains child items in the order they are displayed within the group. 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.GroupBoxDisplayMode">
+            <summary>
+                <para>Gets or sets the display mode of the current LayoutGroup header when this group is displayed as a group box.
+This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="GroupBoxDisplayMode"/> enumerator value that specifies the display mode of the current LayoutGroup header.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.GroupBoxDisplayModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.GroupBoxStyle">
+            <summary>
+                <para>Gets or sets the style applied to the GroupBox that represents the current LayoutGroup when the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutGroup.View"/> property is set to <see cref="F:DevExpress.Xpf.LayoutControl.LayoutGroupView.GroupBox"/>.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style that is applied to the LayoutGroup when it's visually represented as a GroupBox.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.GroupBoxStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.Header">
+            <summary>
+                <para>Gets or sets the group's header.
+This is a dependency property.
+</para>
+            </summary>
+            <value>An object that represents the group's header.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.HeaderProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.HeaderTemplate">
+            <summary>
+                <para>Gets or sets a data template used to display the group's header.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A DataTemplate object used to display the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutGroup.Header"/>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.HeaderTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.IsActuallyCollapsed">
+            <summary>
+                <para>Gets whether the group is actually collapsed.
+</para>
+            </summary>
+            <value><b>true</b> if the group is actually collapsed; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.IsCollapsed">
+            <summary>
+                <para>Gets or sets whether the group is collapsed.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the group is collapsed; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.IsCollapsedProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.IsCollapsible">
+            <summary>
+                <para>Gets or sets whether the group may be collapsed.
+
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the group may be collapsed; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.IsCollapsibleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.IsLocked">
+            <summary>
+                <para>Gets or sets whether the group is locked, and so items cannot be selected, moved within, into or outside the group.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Boolean value that specifes that the group is locked.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.IsLockedProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.IsPermanent">
+            <summary>
+                <para>Gets whether the group remains alive during layout optimization.
+
+</para>
+            </summary>
+            <value><b>true</b> if the group remains alive during layout optimization; <b>false</b> if the group is deleted.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.IsRoot">
+            <summary>
+                <para>Gets whether the current object is a root object for layout elements.
+</para>
+            </summary>
+            <value>Always <b>false</b>
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ItemLabelsAlignment">
+            <summary>
+                <para>Gets or sets how content regions of LayoutItems are aligned, according to their labels. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.LayoutItemLabelsAlignment"/> value that specifies how content regions of LayoutItems are aligned. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.ItemLabelsAlignmentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ItemStyle">
+            <summary>
+                <para>Gets or sets the style of layout items that belong to the current group and nested groups (provided that the nested group's <b>ItemStyle</b> property is not set).
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style object that represents the style of layout items.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.ItemStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.KeepSelectionOnTabRemoval">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.KeepSelectionOnTabRemovalProperty">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.MeasureSelectedTabChildOnly">
+            <summary>
+                <para>In a tabbed UI, gets or sets if a measurement operation (computing control sizes and positioning) is performed for a tab only when this tab is selected. This is a dependency property.
+
+
+</para>
+            </summary>
+            <value><b>true</b> if a measurement operation is performed for a tab's contents when this tab is selected; <b>false</b> if measurement operations are performed for selected and non-selected tabs simultaneously when the LayoutGroup is loaded. The default value is <b>false</b>.
+
+
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.MeasureSelectedTabChildOnlyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.MoveChildrenToNewGroup">
+            <summary>
+                <para>Moves the current group's children to a newly created group, and then adds the new group as a child to the current group. 
+</para>
+            </summary>
+            <returns>An ILayoutGroup object that represents the newly created group. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.MoveChildrenToParent">
+            <summary>
+                <para>Moves the group's child items to the parent group.
+</para>
+            </summary>
+            <returns>A Boolean value that specifies that the child items were successfully moved.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.MoveChildToNewGroup(System.Windows.FrameworkElement)">
+            <summary>
+                <para>Creates a new child group and moves the specified child to this group.
+</para>
+            </summary>
+            <param name="child">
+		The current group's element to be moved to the new group. 
+
+            </param>
+            <returns>An ILayoutGroup object that represents the newly created group. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.OptimizeLayout(System.Boolean)">
+            <summary>
+                <para>Optimizes the layout of controls, removing unnecessary groups, without visually breaking the existent layout. This method allows you to retain empty tabs during optimization.
+</para>
+            </summary>
+            <param name="keepEmptyTabs">
+		<b>true</b> to retain empty tabs during optimization; <b>false</b> to destroy empty tabs.
+
+            </param>
+            <returns>A Boolean value that specifies whether the layout has been optimized. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.OptimizeLayout">
+            <summary>
+                <para>Optimizes the layout of controls, removing unnecessary groups, without visually breaking the existent layout.
+</para>
+            </summary>
+            <returns>A Boolean value that specifies whether the layout has been optimized.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.Orientation">
+            <summary>
+                <para>Gets or sets whether the group's items are arranged horizontally or vertically.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.Orientation"/> value that specifies the group's orientation.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.OrientationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.Root">
+            <summary>
+                <para>Gets the layout control that owns the current group.
+</para>
+            </summary>
+            <value>An ILayoutControl object that represents the owner of the current group.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.SelectedTabChild">
+            <summary>
+                <para>Gets the currently selected tabbed child. This member is in effect when the current group is rendered as a tabbed group.
+</para>
+            </summary>
+            <value>A FrameworkElement object that represents the currently selected tabbed child.
+</value>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.LayoutGroup.SelectedTabChildChanged">
+            <summary>
+                <para>Fires when a new tab is selected in the current group. This member is in effect when the current group is rendered as a tabbed group.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.SelectedTabIndex">
+            <summary>
+                <para>Gets or sets the index of the selected tabbed child among visible children. This member is in effect when the current group is rendered as a tabbed group.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A zero-based integer that specifies the index of the selected tabbed child among visible children.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.SelectedTabIndexProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutGroup.SelectTab(System.Windows.FrameworkElement)">
+            <summary>
+                <para>Selects the specified child, displayed as a tab within the current LayoutGroup. This member is in effect when the current group is rendered as a tabbed group.
+</para>
+            </summary>
+            <param name="child">
+		A FrameworkElement object that specifies the group's child to be selected
+
+            </param>
+            <returns><b>true</b> if the specified item has been selected; otherwise, <b>false</b>.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.TabsStyle">
+            <summary>
+                <para>Gets or sets a style applied to the group, when the group is represented as a tab container.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style object that represents the group's style.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.TabsStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.TabStyle">
+            <summary>
+                <para>Gets or sets a style applied to the group's individual tabs, when the group is represented as a tab container.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style object that is applied to the group's individual styles.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.TabStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.View">
+            <summary>
+                <para>Gets or sets the LayoutGroup's visual style. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>A LayoutGroupView value that specifies how the LayoutGroup is represented on-screen. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.ViewProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutControlBase">
+
+            <summary>
+                <para>Represents the base class for the controls that constitute the DXLayoutControl Suite.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControlBase.#ctor">
+            <summary>
+                <para>Initializes a new instance of the LayoutControlBase class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControlBase.Controller">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControlBase.DefaultItemSpace">
+            <summary>
+                <para>Specifies the default value for the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControlBase.ItemSpace"/> property. This constant returns the value of 5.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControlBase.DefaultPadding">
+            <summary>
+                <para>Specifies the default value for the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControlBase.Padding"/> property. This constant returns the value of 10.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControlBase.ItemSpace">
+            <summary>
+                <para>Gets or sets the distance between child items.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Double value that specifies the distance between child items.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControlBase.ItemSpaceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControlBase.Padding">
+            <summary>
+                <para>Gets or sets padding settings for the current control.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Thickness object that specifies the control's padding settings. 
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControlBase.PaddingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControlBase.ReadFromXML(System.Xml.XmlReader)">
+            <summary>
+                <para>Restores the layout of child items that have been previously saved via the <see cref="M:DevExpress.Xpf.LayoutControl.LayoutControlBase.WriteToXML"/> method.
+</para>
+            </summary>
+            <param name="xml">
+		A System.Xml.XmlReader object from which data is read.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControlBase.WriteToXML(System.Xml.XmlWriter)">
+            <summary>
+                <para>Saves the layout of items that reside within the current object.
+</para>
+            </summary>
+            <param name="xml">
+		A System.Xml.XmlWriter object to which data will be written.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.GroupBoxState">
+
+            <summary>
+                <para>Enumerates states for a <see cref="T:DevExpress.Xpf.LayoutControl.GroupBox"/> control.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxState.Maximized">
+            <summary>
+                <para>A GroupBox is in the maximized state. This state is supported for GroupBoxes displayed within a <see cref="T:DevExpress.Xpf.LayoutControl.FlowLayoutControl"/>.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxState.Minimized">
+            <summary>
+                <para>A GroupBox is collapsed and its content is not visible.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxState.Normal">
+            <summary>
+                <para>A GroupBox is in the normal state.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.GroupBoxShadowVisibility">
+
+            <summary>
+                <para>Enumerates display modes of a <see cref="T:DevExpress.Xpf.LayoutControl.GroupBox"/>'s shadow.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxShadowVisibility.Always">
+            <summary>
+                <para>A shadow is always visible for a <see cref="T:DevExpress.Xpf.LayoutControl.GroupBox"/>.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxShadowVisibility.Never">
+            <summary>
+                <para>A shadow is always hidden for a <see cref="T:DevExpress.Xpf.LayoutControl.GroupBox"/>.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxShadowVisibility.WhenHasMouse">
+            <summary>
+                <para>A shadow is visible for a <see cref="T:DevExpress.Xpf.LayoutControl.GroupBox"/> when the mouse hovers over the control.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.GroupBox">
+
+            <summary>
+                <para>Represents a control container with a GroupBox-style title, capable of displaying a single child.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.GroupBox.#ctor">
+            <summary>
+                <para>Initializes a new instance of the GroupBox class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.CornerRadius">
+            <summary>
+                <para>Gets or sets the radius of the GroupBox's corners.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.CornerRadius"/> value that specifies the radius of the GroupBox's corners.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.CornerRadiusProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.DisplayMode">
+            <summary>
+                <para>Gets or sets the display mode of the current GroupBox header.
+This is a dependency property.
+
+
+</para>
+            </summary>
+            <value>A <see cref="GroupBoxDisplayMode"/> enumerator value that specifies the display mode of the current GroupBox header.
+
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.DisplayModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.LightTemplate">
+            <summary>
+                <para>Gets or sets the template applied to the current GroupBox header, when this group uses light display mode.
+This is a dependency property.
+
+
+</para>
+            </summary>
+            <value>A <see cref="ControlTemplate"/> object that specifies the template of the current GroupBox header.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.LightTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.MaximizeElementVisibility">
+            <summary>
+                <para>Gets or sets whether the Maximize Element is displayed within the GroupBox's header. The Maximize Element is in effect when the GroupBox is an item of a <see cref="T:DevExpress.Xpf.LayoutControl.FlowLayoutControl"/>. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Visibility"/> value that specifies the Maximize Element's visibility.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.MaximizeElementVisibilityProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.MinimizationDirection">
+            <summary>
+                <para>Gets or sets how the GroupBox is minimized.
+This is a dependency property.
+</para>
+            </summary>
+            <value>An Orientation property that specifies how the GroupBox is minimized.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.MinimizationDirectionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.MinimizeElementVisibility">
+            <summary>
+                <para>Gets or sets whether the Minimize Element is displayed within the GroupBox's header. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Visibility"/> value that specifies the Minimize Element's visibility.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.MinimizeElementVisibilityProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.NormalTemplate">
+            <summary>
+                <para>Gets or sets the template applied to the current GroupBox header, when this group uses the light display mode.
+This is a dependency property.
+
+
+</para>
+            </summary>
+            <value>A <see cref="ControlTemplate"/> object that specifies the template of the current GroupBox header.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.NormalTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.GroupBox.OnApplyTemplate">
+            <summary>
+                <para>The method is invoked whenever the application code or internal processes call <b>ApplyTemplate</b>.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.SeparatorBrush">
+            <summary>
+                <para>Gets or sets the brush used to paint a line that separates the GroupBox's title and content.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Brush used to paint a line that separates the GroupBox's title and content.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.SeparatorBrushProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.ShadowOffset">
+            <summary>
+                <para>Gets or sets the size of the shadow, enabled if the <see cref="P:DevExpress.Xpf.LayoutControl.GroupBox.ShowShadow"/> option is enabled.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Double value that specifies the size of the shadow.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.ShadowOffsetProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.ShadowVisibilityProperty">
+            <summary>
+                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
+
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.ShowShadow">
+            <summary>
+                <para>Gets or sets when and if a shadow is visible for the GroupBox. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.GroupBoxShadowVisibility"/> value that specifies when and if a shadow is visible for the GroupBox.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.ShowShadowProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.State">
+            <summary>
+                <para>Gets or sets the GroupBox's state. 
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.GroupBoxState"/> value that specifies the GroupBox's state.
+</value>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.GroupBox.StateChanged">
+            <summary>
+                <para>Fires after the value of the <see cref="P:DevExpress.Xpf.LayoutControl.GroupBox.State"/> property has been changed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.StateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.TitleBackground">
+            <summary>
+                <para>Gets or sets the brush used to render the GroupBox's title.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Brush used to render the GroupBox's title.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.TitleBackgroundProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.TitleForeground">
+            <summary>
+                <para>Gets or sets the brush used to paint the title of the current GroupBox.
+
+</para>
+            </summary>
+            <value>A Brush object used to paint the title of the current GroupBox.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.TitleForegroundProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.TitleVisibility">
+            <summary>
+                <para>Gets or sets whether the GroupBox displays a title. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Visibility"/> value that specifies the title's visibility.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.TitleVisibilityProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.FlowLayoutControl">
+
+            <summary>
+                <para>Represents a container that arranges child controls into rows or columns, and alows the flow of the controls to be wrapped (automatically at the container's edge or manually at any child control).
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.FlowLayoutControl.#ctor">
+            <summary>
+                <para>Initializes a new instance of the FlowLayoutControl class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AllowAddFlowBreaksDuringItemMoving">
+            <summary>
+                <para>Gets or sets if adding flow breaks during item movement is enabled. This is a dependency property.
+
+</para>
+            </summary>
+            <value><b>true</b> if adding flow breaks during item movement is enabled; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AllowAddFlowBreaksDuringItemMovingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AllowItemMoving">
+            <summary>
+                <para>Gets or sets whether items are allowed to be moved to new positions via drag-and-drop.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Boolean value that specifies whether dragging-and-dropping items is enabled.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AllowItemMovingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AllowLayerSizing">
+            <summary>
+                <para>Gets or sets whether columns or rows of items are allowed to be resized via built-in separators. Separators must be enabled via the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ShowLayerSeparators"/> property.
+</para>
+            </summary>
+            <value>A Boolean value that specifies whether columns or rows of items are allowed to be resized via built-in separators.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AllowMaximizedElementMoving">
+            <summary>
+                <para>Gets or sets whether a maximized element's position can be changed at runtime via drag-and-drop.
+</para>
+            </summary>
+            <value>A Boolean value that indicates if a maximized element's position can be changed at runtime via drag-and-drop.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AnimateItemMaximization">
+            <summary>
+                <para>Gets or sets if changing a FlowLayoutControl's maximized item should be animated. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if changing a FlowLayoutControl's maximized item should be animated; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AnimateItemMaximizationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AnimateItemMoving">
+            <summary>
+                <para>Gets or sets if FlowLayoutControl animation is enabled.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if FlowLayoutControl animation is enabled; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AnimateItemMovingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.BreakFlowToFit">
+            <summary>
+                <para>Gets or sets whether automatic item wrapping is enabled.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Boolean value that specifies whether automatic item wrapping is enabled.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.BreakFlowToFitProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.Controller">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.DefaultItemMovingAnimationDuration">
+            <summary>
+                <para>Specifies the default value for the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemMovingAnimationDuration"/> property. The property is set to 200.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.DefaultLayerMinWidth">
+            <summary>
+                <para>Returns the minimum value for the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerMinWidth"/> property. This field is set to 20.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.DefaultLayerSpace">
+            <summary>
+                <para>Returns the default value for the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerSpace"/> property. This field is set to 7.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.FlowLayoutControl.GetIsFlowBreak(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsFlowBreak"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsFlowBreak"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsFlowBreak"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsFlowBreak(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether the flow of the control's items is wrapped at the preceding item and the current item must start a new column or row.
+When applied to a <see cref="T:DevExpress.Xpf.LayoutControl.Tile"/> within a <see cref="T:DevExpress.Xpf.LayoutControl.TileLayoutControl"/>, this property allows you to start a new group.
+This is an attached property.
+</para>
+            </summary>
+            <value>A Boolean value that specifies whether an item must start a new layer.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsFlowBreakProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsItemMaximizationAnimationActive">
+            <summary>
+                <para>Gets if the FlowLayoutControl's item maximization animation is currently performed.
+</para>
+            </summary>
+            <value><b>true</b> if the FlowLayoutControl's item maximization animation is currently performed; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemContainerStyle">
+            <summary>
+                <para>Gets or sets the style that is applied to the container element generated for each item. This is a dependency property.
+</para>
+            </summary>
+            <value>A System.Windows.Style object that is applied to the container element generated for each item.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemContainerStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemDropAnimationDuration">
+            <summary>
+                <para>Specifies how long the item drop animation lasts after the mouse button is released, until the item being moved achieves its final position. 
+<para>
+To enable runtime item movement, set the control's <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AllowItemMoving"/> property to true. You need to enable the move animation (see the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.AnimateItemMoving"/> topic) as well. 
+</para>
+
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemMaximizationAnimationDuration">
+            <summary>
+                <para>Gets or sets the duration of item maximization animation in the FlowLayoutControl.
+</para>
+            </summary>
+            <returns>A System.TimeSpan structure that indicates the duration of item maximization animation in the FlowLayoutControl.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemMovingAnimationDuration">
+            <summary>
+                <para>Gets or sets the duration of item movement animation in the FlowLayoutControl. This is a dependency property. 
+
+</para>
+            </summary>
+            <value>A <see cref="TimeSpan"/> value that specifies the duration of item movement animation in the FlowLayoutControl.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemMovingAnimationDurationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemPositionChanged">
+            <summary>
+                <para>Fires when an item is moved to a new position.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemsSizeChanged">
+            <summary>
+                <para>Fires after a layer (column or row) of items has been resized.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemsSource">
+            <summary>
+                <para>Gets or sets a collection of objects providing information to generate and initialize layout items for the current FlowLayoutControl container.
+This is a dependency property. 
+</para>
+            </summary>
+            <value>A source of objects to be visualized as <see cref="T:DevExpress.Xpf.LayoutControl.LayoutItem"/>s.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemsSourceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemTemplate">
+            <summary>
+                <para>Gets or sets the template used to visualize <see cref="T:DevExpress.Xpf.LayoutControl.LayoutItem"/>s stored as elements in the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemsSource"/> collection.
+This is a dependency property. 
+</para>
+            </summary>
+            <value>A DataTemplate object that specifies the corresponding template.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a template used to visualize <see cref="T:DevExpress.Xpf.LayoutControl.LayoutItem"/>s stored as elements in the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemsSource"/> collection.
+ This is a dependency property. 
+</para>
+            </summary>
+            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemTemplate"/> based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ItemTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerMaxWidth">
+            <summary>
+                <para>Gets the maximum width of columns (if items are arranged in columns) or height of rows (if items are arranged in rows).
+</para>
+            </summary>
+            <value>A Double value that specifies the maximum width of columns (if items are arranged in columns) or height of rows (if items are arranged in rows).
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerMinWidth">
+            <summary>
+                <para>Gets the minimum width of columns (if items are arranged in columns) or height of rows (if items are arranged in rows).
+</para>
+            </summary>
+            <value>A Double value that specifies the minimum width of columns (if items are arranged in columns) or height of rows (if items are arranged in rows).
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerSeparatorStyle">
+            <summary>
+                <para>Gets or sets the style applied to separators.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style that is applied to layer separators.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerSeparatorStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerSizingCoverBrush">
+            <summary>
+                <para>Gets or sets the brush used to fill the FlowLayoutControl when columns/rows are being resized.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Brush used to fill the FlowLayoutControl when columns/rows are being resized.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerSizingCoverBrushProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerSpace">
+            <summary>
+                <para>Gets or sets the outer space for columns/rows.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Double value that specifies the outer space for columns/rows.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerSpaceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.LayerWidth">
+            <summary>
+                <para>Gets or sets the width/height of layers (columns/rows) into which items are arranged.
+</para>
+            </summary>
+            <value>A Double value that specifies the width or height of layers.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElement">
+            <summary>
+                <para>Gets or sets the FlowLayoutControl's item that is maximized.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A FrameworkElement that represents the FlowLayoutControl's maximized item.
+</value>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementChanged">
+            <summary>
+                <para>Fires after the value of the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElement"/> property has been changed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementOriginalSize">
+            <summary>
+                <para>Gets or sets the original size of the maximized element, exhibited before it was maximized.
+
+</para>
+            </summary>
+            <value>A Size structure that specifies the original size of the maximized element, exhibited before it was maximized.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementPosition">
+            <summary>
+                <para>Gets or sets the position of the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElement"/> relative to the remaining items. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>A MaximizedElementPosition value that specifies the position of the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElement"/> relative to the remaining items. 
+</value>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementPositionChanged">
+            <summary>
+                <para>Fires after the value of the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementPosition"/> property has been changed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementPositionIndicatorStyle">
+            <summary>
+                <para>Gets or sets the style applied to the maximized element's drag-and-drop indicator.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style object that is applied to the maximized element's drag-and-drop indicator.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementPositionIndicatorStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementPositionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MaximizedElementProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MovingItemPlaceHolderBrush">
+            <summary>
+                <para>Gets or sets the brush used to paint the placeholder for the item that is being dragged.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Brush used to paint the placeholder for the item that is being dragged.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.MovingItemPlaceHolderBrushProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.Orientation">
+            <summary>
+                <para>Gets or sets whether the control's items are arranged in columns or rows.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.Orientation"/> value that specifies whether the control's items are arranged in columns or rows.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.OrientationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.FlowLayoutControl.SetIsFlowBreak(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsFlowBreak"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsFlowBreak"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.IsFlowBreak"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ShowLayerSeparators">
+            <summary>
+                <para>Gets or sets whether separators between columns or rows of items are visible.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if separators between columns or rows of items are visible; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.ShowLayerSeparatorsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.FlowLayoutControl.StretchContent">
+            <summary>
+                <para>Gets or sets whether items are stretched to fit the control's width/height.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if items are stretched to fit the control's width/height; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.FlowLayoutControl.StretchContentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.DockLayoutControl">
+
+            <summary>
+                <para>Represents a control container that arranges its child items, docking them to its edges or making them occupy the remaining area of the container.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.#ctor">
+            <summary>
+                <para>Initializes a new instance of the DockLayoutControl class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowHorizontalSizing(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether horizontal re-sizing is enabled for a specific child element of the DockLayoutControl.
+This is an attached property.
+</para>
+            </summary>
+            <value><b>true</b> if horizontal re-sizing is enabled for a specific child element of the DockLayoutControl; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowHorizontalSizingProperty">
+            <summary>
+                <para>Identifies the  attached property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowItemSizing">
+            <summary>
+                <para>Gets or sets whether item re-sizing is enabled within the DockLayoutControl.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if item re-sizing is enabled within the DockLayoutControl; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowItemSizingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowVerticalSizing(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether vertical re-sizing is enabled for a specific child element of the DockLayoutControl.
+This is an attached property.
+</para>
+            </summary>
+            <value><b>true</b> if vertical re-sizing is enabled for a specific child element of the DockLayoutControl; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowVerticalSizingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.Dock(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets the position of a child element within a parent DockLayoutControl. This is an attached property. 
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.Dock"/> object that specifies the position of a child element within a parent <b>DockLayoutControl</b>. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DockLayoutControl.DockProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.GetAllowHorizontalSizing(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowHorizontalSizing"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowHorizontalSizing"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowHorizontalSizing"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.GetAllowVerticalSizing(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowVerticalSizing"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowVerticalSizing"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowVerticalSizing"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.GetDock(System.Windows.UIElement)">
+            <summary>
+                <para>Gets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.Dock"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		A UIElement object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.Dock"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.Dock"/> attached property for the specified object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.GetUseDesiredHeightAsMaxHeight(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredHeightAsMaxHeight"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredHeightAsMaxHeight"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredHeightAsMaxHeight"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.GetUseDesiredWidthAsMaxWidth(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredWidthAsMaxWidth"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredWidthAsMaxWidth"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredWidthAsMaxWidth"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.ItemSizerStyle">
+            <summary>
+                <para>Gets or sets the style applied to visual elements used to re-size the DockLayoutControl's items vertically or horizontally.
+</para>
+            </summary>
+            <value>A Style that is applied to visual elements used to re-size the DockLayoutControl's items.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DockLayoutControl.ItemSizerStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.SetAllowHorizontalSizing(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowHorizontalSizing"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowHorizontalSizing"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowHorizontalSizing"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.SetAllowVerticalSizing(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowVerticalSizing"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowVerticalSizing"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.AllowVerticalSizing"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.SetDock(System.Windows.UIElement,DevExpress.Xpf.LayoutControl.Dock)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.Dock"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		A UIElement object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.Dock"/> attached property is to be set.
+
+            </param>
+            <param name="value">
+		The new value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.Dock"/> attached property
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.SetUseDesiredHeightAsMaxHeight(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredHeightAsMaxHeight"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredHeightAsMaxHeight"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredHeightAsMaxHeight"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DockLayoutControl.SetUseDesiredWidthAsMaxWidth(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredWidthAsMaxWidth"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredWidthAsMaxWidth"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredWidthAsMaxWidth"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredHeightAsMaxHeight(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether an item's maximum height is set to a value sufficient to display the item and its content in its entirety.
+This is an attached property.
+
+</para>
+            </summary>
+            <value><b>true</b> if an item's maximum height is set to a value sufficient to display the item and its content in its entirety; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredHeightAsMaxHeightProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredWidthAsMaxWidth(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether an item's maximum width is set to a value sufficient to display the item and its content in its entirety.
+This is an attached property.
+
+</para>
+            </summary>
+            <value><b>true</b> if an item's maximum width is set to a value sufficient to display the item and its content in it's entirety; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DockLayoutControl.UseDesiredWidthAsMaxWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.Dock">
+
+            <summary>
+                <para>Contains values that specify how an element is positioned within its parent.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Dock.Bottom">
+            <summary>
+                <para>An item is docked at the bottom side of its parent.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Dock.Client">
+            <summary>
+                <para>An item fills the remaining part of its parent, not occupied by other items.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Dock.Left">
+            <summary>
+                <para>An item is docked at the left side of its parent.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Dock.None">
+            <summary>
+                <para>An item is not docked. The item is displayed at the left top corner of its parent.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Dock.Right">
+            <summary>
+                <para>An item is docked at the right side of its parent.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Dock.Top">
+            <summary>
+                <para>An item is docked at the top side of its parent.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.LayoutControl">
+
+            <summary>
+                <para>Represents a control container that arranges its items in a single column or row, and allows you to create compound layouts of controls, with the ability to combine the controls into groups and align the controls according to their labels.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.#ctor">
+            <summary>
+                <para>Initializes a new instance of the LayoutControl class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.ActualAllowAvailableItemsDuringCustomizationProperty">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowAvailableItemsDuringCustomization">
+            <summary>
+                <para>Gets or sets whether the Available Items feature is enabled in Customization Mode at runtime.
+</para>
+            </summary>
+            <value><b>true</b> if the Available Items feature is enabled in Customization Mode at runtime; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.AllowAvailableItemsDuringCustomizationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowHorizontalSizing(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether horizontal re-sizing is enabled for a specific child element of the LayoutControl.
+This is an attached property.
+</para>
+            </summary>
+            <value><b>true</b> if horizontal re-sizing is enabled for a specific child element of the LayoutControl; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.AllowHorizontalSizingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowItemMovingDuringCustomization">
+            <summary>
+                <para>Gets or sets whether items can be dragged-and-droppped in customization mode.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if items can be dragged-and-dropped in customization mode; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.AllowItemMovingDuringCustomizationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowItemRenamingDuringCustomization">
+            <summary>
+                <para>Gets or sets whether an end-user can rename items in Customization Mode.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if an end-user can rename items in Customization mode; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.AllowItemRenamingDuringCustomizationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowItemSizing">
+            <summary>
+                <para>Gets or sets whether item re-sizing is enabled within the LayoutControl.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if item re-sizing is enabled within the LayoutControl; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowItemSizingDuringCustomization">
+            <summary>
+                <para>Gets or sets whether item re-sizing is enabled in customization mode.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if item re-sizing is enabled in customization mode; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.AllowItemSizingDuringCustomizationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.AllowItemSizingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowNewItemsDuringCustomization">
+            <summary>
+                <para>Gets or sets whether an end-user can add new items (e.g. groups) in Customization Mode.
+</para>
+            </summary>
+            <value><b>true</b> if an end-user can add new items (e.g. groups) in Customization mode; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.AllowNewItemsDuringCustomizationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowVerticalSizing(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether vertical re-sizing is enabled for a specific child element of the LayoutControl.
+This is an attached property.
+</para>
+            </summary>
+            <value><b>true</b> if vertical re-sizing is enabled for a specific child element of the LayoutControl; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.AllowVerticalSizingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.AvailableItems">
+            <summary>
+                <para>Provides access to hidden items (items in the Available Items list).
+</para>
+            </summary>
+            <value>A collection of items stored in the Available Items list.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.Controller">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.CustomizationControlStyle">
+            <summary>
+                <para>Gets or sets the style applied to the Customization Control.
+</para>
+            </summary>
+            <value>A Style object that represents the corresponding style.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.CustomizationControlStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.CustomizationLabel(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets a custom label for a layout item, when this item is displayed in the Available Items List.
+This is an attached property.
+</para>
+            </summary>
+            <value>An object that represents a label for an item when this item is displayed in the Available Items List.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.CustomizationLabelProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetAllowHorizontalSizing(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowHorizontalSizing"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowHorizontalSizing"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowHorizontalSizing"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetAllowVerticalSizing(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowVerticalSizing"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowVerticalSizing"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowVerticalSizing"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetCustomizationDefaultLabel(System.Windows.UIElement)">
+            <summary>
+                <para>Gets the default label for a layout item, when this item is displayed in the Available Items List.
+</para>
+            </summary>
+            <param name="element">
+		An element whose default customization label is to be returned.
+
+            </param>
+            <returns>A string that specifies the default label for a layout item, when this item is displayed in the Available Items List.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetCustomizationLabel(System.Windows.UIElement)">
+            <summary>
+                <para>Gets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.CustomizationLabel"/> attached property for the specified <see cref="T:System.Windows.UIElement"/> object.
+</para>
+            </summary>
+            <param name="element">
+		The <see cref="T:System.Windows.UIElement"/> object from which the property value is read.
+
+            </param>
+            <returns>The <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.CustomizationLabel"/> property value for the object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetIsUserDefined(System.Windows.UIElement)">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <param name="element">
+		 
+
+            </param>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetTabHeader(System.Windows.UIElement)">
+            <summary>
+                <para>Gets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeader"/> attached property for a specific object.
+</para>
+            </summary>
+            <param name="element">
+		A UIElement object whose value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeader"/> property is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeader"/> property for a specific object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetTabHeaderTemplate(System.Windows.UIElement)">
+            <summary>
+                <para>Gets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderTemplate"/> attached property for a specific object.
+</para>
+            </summary>
+            <param name="element">
+		A UIElement object whose value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderTemplate"/> property is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderTemplate"/> property for a specific object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetUseDesiredHeightAsMaxHeight(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredHeightAsMaxHeight"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredHeightAsMaxHeight"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredHeightAsMaxHeight"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.GetUseDesiredWidthAsMaxWidth(System.Windows.UIElement)">
+            <summary>
+                <para>Returns the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredWidthAsMaxWidth"/> attached property for the specified UIElement object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredWidthAsMaxWidth"/> property's value is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredWidthAsMaxWidth"/> property for the specified UIElement object.
+</returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.LayoutControl.InitNewElement">
+            <summary>
+                <para>Allows you to customize properties of items created by an end-user at runtime in Customization Mode.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.IsCustomization">
+            <summary>
+                <para>Gets or sets whether customization mode is active.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if customization mode is active; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.LayoutControl.IsCustomizationChanged">
+            <summary>
+                <para>Fires when the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.IsCustomization"/> property's value is changed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.IsCustomizationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.IsRoot">
+            <summary>
+                <para>Gets whether the current object is a root object for layout elements.
+</para>
+            </summary>
+            <value>Always <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.ItemCustomizationToolbarStyle">
+            <summary>
+                <para>Gets or sets the style applied to an item's Customization Toolbar.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style that is applied to an item's Customization Toolbar.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.ItemCustomizationToolbarStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.ItemInsertionPointIndicatorStyle">
+            <summary>
+                <para>Gets or sets the style used to render areas where an item being dragged in Customization Mode can be potentially dropped.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style object applied to areas where an item can be potentially dropped.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.ItemInsertionPointIndicatorStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.ItemLabelsAlignment">
+            <summary>
+                <para>Gets the alignment of child LayoutItems' content regions.
+</para>
+            </summary>
+            <value>The <see cref="F:DevExpress.Xpf.LayoutControl.LayoutItemLabelsAlignment.Local"/> value.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.ItemParentIndicatorStyle">
+            <summary>
+                <para>Gets or sets the style used to paint a rectangle, indicating an item's parent in Customization Mode.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style used to paint a rectangle, indicating an item's parent in Customization Mode.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.ItemParentIndicatorStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.Items">
+            <summary>
+                <para>Gets the collection of items within the LayoutControl control.
+</para>
+            </summary>
+            <value>A <see cref="SerializableItemCollection"/> object which represents the collection of <see cref="T:DevExpress.Xpf.LayoutControl.LayoutItem"/>s.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.ItemSelectionIndicatorStyle">
+            <summary>
+                <para>Gets or sets the style used to paint selected items in Customization Mode.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style used to paint selected items in Customization Mode.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.ItemSelectionIndicatorStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.ItemSizerStyle">
+            <summary>
+                <para>Gets or sets the style applied to visual elements used to re-size the LayoutControl's items vertically or horizontally.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Style that is applied to visual elements used to re-size the LayoutControl's items.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.ItemSizerStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.LayoutUri">
+            <summary>
+                <para>Gets or sets a uniform resource identifier (URI) of the layout to be loaded.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Uri"/> object that specifies a path to the layout to be loaded.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.LayoutUriProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.MovingItemPlaceHolderBrush">
+            <summary>
+                <para>Gets or sets the brush used to paint the placeholder of the item that is being dragged in Customization Mode.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Brush used to paint the placeholder of the item that is being dragged in Customization Mode.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.MovingItemPlaceHolderBrushProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.LayoutControl.ReadElementFromXML">
+            <summary>
+                <para>Allows you to load custom properties of layout groups and their children when loading layouts.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.ReadFromXML(System.Xml.XmlReader)">
+            <summary>
+                <para>Restores the layout of child items that have been previously saved via the <see cref="M:DevExpress.Xpf.LayoutControl.LayoutControlBase.WriteToXML"/> method. The method optimizes the layout after loading (removes empty and unnecessary groups) without visually breaking the layout.
+
+</para>
+            </summary>
+            <param name="xml">
+		An <see cref="T:System.Xml.XmlReader"/> object from which data is read.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.SetAllowHorizontalSizing(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowHorizontalSizing"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowHorizontalSizing"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowHorizontalSizing"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.SetAllowVerticalSizing(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowVerticalSizing"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowVerticalSizing"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AllowVerticalSizing"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.SetCustomizationLabel(System.Windows.UIElement,System.Object)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.CustomizationLabel"/> attached property to a specified <see cref="T:System.Windows.UIElement"/> object.
+</para>
+            </summary>
+            <param name="element">
+		The <see cref="T:System.Windows.UIElement"/> object to which the attached property is written.
+
+            </param>
+            <param name="value">
+		The required <see cref="T:System.Object"/> value.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.SetIsUserDefined(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <param name="element">
+		 
+
+            </param>
+            <param name="value">
+		 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.SetTabHeader(System.Windows.UIElement,System.Object)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeader"/> attached property for a specific object.
+</para>
+            </summary>
+            <param name="element">
+		A UIElement object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeader"/> attached property is to be set.
+
+            </param>
+            <param name="value">
+		A new value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeader"/> attached property for the specified object.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.SetTabHeaderTemplate(System.Windows.UIElement,System.Windows.DataTemplate)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderTemplate"/> attached property for a specific object.
+</para>
+            </summary>
+            <param name="element">
+		A UIElement object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderTemplate"/> attached property is to be set.
+
+            </param>
+            <param name="value">
+		A new value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderTemplate"/> attached property for the specified object.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.SetUseDesiredHeightAsMaxHeight(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredHeightAsMaxHeight"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredHeightAsMaxHeight"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredHeightAsMaxHeight"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.LayoutControl.SetUseDesiredWidthAsMaxWidth(System.Windows.UIElement,System.Boolean)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredWidthAsMaxWidth"/> attached property for the specified object.
+</para>
+            </summary>
+            <param name="element">
+		An object whose <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredWidthAsMaxWidth"/> property is to be set.
+
+            </param>
+            <param name="value">
+		The value to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredWidthAsMaxWidth"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.StretchContentHorizontally">
+            <summary>
+                <para>Gets or sets whether the control's immediate children are stretched horizontally to fit the control's width. This property is in effect for the items that have their <b>HorizontalAlignment</b> property set to <b>Stretch</b>.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the control's immediate children are stretched horizontally to fit the control's width; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.StretchContentHorizontallyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.StretchContentVertically">
+            <summary>
+                <para>Gets or sets whether the control's immediate children are stretched vertically to fit the control's height. 
+This property is in effect for the items that have their <b>VerticalAlignment</b> property set to <b>Stretch</b>.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the control's immediate children are stretched vertically to fit the control's height; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.StretchContentVerticallyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeader(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets a tab header for a specific child. This property is in effect when the child is represented as a tab.
+This is an attached property.
+</para>
+            </summary>
+            <value>An object that specifies the tab header.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderTemplate(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets a data template used to display the headers of items displayed as tabs within a tabbed group.
+This is an attached property.
+</para>
+            </summary>
+            <value>A DataTemplate object used to display a tab header.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.TabHeaderTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredHeightAsMaxHeight(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether an item's maximum height is set to a value sufficient to display the item and its content in its entirety.
+This is an attached property.
+
+</para>
+            </summary>
+            <value><b>true</b> if an item's maximum height is set to a value sufficient to display the item and its content in its entirety; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredHeightAsMaxHeightProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredWidthAsMaxWidth(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets whether an item's maximum width is set to a value sufficient to display the item and its content in its entirety.
+This is an attached property.
+
+</para>
+            </summary>
+            <value><b>true</b> if an item's maximum width is set to a value sufficient to display the item and its content in its entirety; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.LayoutControl.UseDesiredWidthAsMaxWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.LayoutControl.WriteElementToXML">
+            <summary>
+                <para>Allows you to save custom properties of layout groups and their children when saving layouts.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode">
+
+            <summary>
+                <para>Contains values that specify the display mode for the <see cref="T:DevExpress.Xpf.LayoutControl.LayoutGroup"/> and <see cref="T:DevExpress.Xpf.LayoutControl.GroupBox"/> headers.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode.Default">
+            <summary>
+                <para>Equal to the <see cref="F:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode.Normal"/> value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode.Light">
+            <summary>
+                <para>Container headers should be painted more lightly.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode.Normal">
+            <summary>
+                <para>Container headers should be painted by default.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGeneratingItem"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs.#ctor(System.String,System.Type,DevExpress.Xpf.LayoutControl.DataLayoutItem)">
+            <summary>
+                <para>Initializes a new instance of the DataLayoutControlAutoGeneratingItemEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="propertyName">
+		A string to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs.PropertyName"/> property.
+
+            </param>
+            <param name="propertyType">
+		A <see cref="T:System.Type"/> object to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs.PropertyType"/> property.
+
+            </param>
+            <param name="item">
+		A <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutItem"/> object to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs.Item"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs.Item">
+            <summary>
+                <para>Gets or sets the item that has been generated.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutItem"/> object that is the generated item.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs.PropertyName">
+            <summary>
+                <para>Gets the name of the property to which the generated layout item is bound.
+</para>
+            </summary>
+            <value>A string that is the bound property name.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratingItemEventArgs.PropertyType">
+            <summary>
+                <para>Gets the type of the bound property.
+</para>
+            </summary>
+            <value>A Type object that specifies the type of the bound property.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratedGroupEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGeneratedGroup"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratedGroupEventArgs.#ctor(DevExpress.Xpf.LayoutControl.LayoutGroup)">
+            <summary>
+                <para>Initializes a new instance of the DataLayoutControlAutoGeneratedGroupEventArgs class with the specified settings.
+</para>
+            </summary>
+            <param name="group">
+		A <see cref="T:DevExpress.Xpf.LayoutControl.LayoutGroup"/> object to be assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratedGroupEventArgs.Group"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratedGroupEventArgs.Group">
+            <summary>
+                <para>Gets the group that has been generated.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Docking.LayoutGroup"/> object that has been generated.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratedItemsLocation">
+
+            <summary>
+                <para>Contains values that specify where generated layout items are added.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratedItemsLocation.AvailableItems">
+            <summary>
+                <para>Layout items, when generated, are added to the <see cref="P:DevExpress.Xpf.LayoutControl.LayoutControl.AvailableItems"/> collection.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratedItemsLocation.Control">
+            <summary>
+                <para>Layout items, when generated, are added directly to the <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/> collection.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.DataLayoutItem">
+
+            <summary>
+                <para>A layout item within a <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DataLayoutItem.#ctor">
+            <summary>
+                <para>Initializes a new instance of the DataLayoutItem class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.ApplySettingsForCustomContent">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. This is a dependency property.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutItem.ApplySettingsForCustomContentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.AttributeSettings(System.Windows.DependencyObject)">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. This is an attached and a dependency property.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutItem.AttributeSettingsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.Binding">
+            <summary>
+                <para>Gets or sets the Binding object for the current DataLayoutItem.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Data.Binding"/> object 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.CurrencyValueAlignment">
+            <summary>
+                <para>Gets or sets the horizontal alignment for the layout item editor's value, if this value is formatted as currency.
+</para>
+            </summary>
+            <value>A <see cref="HorizontalAlignment"/> enumerator value that specifies the horizontal alignment for the layout item editor's value.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DataLayoutItem.GetAttributeSettings(System.Windows.DependencyObject)">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <param name="obj">
+		 
+
+            </param>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DataLayoutItem.GetUnderlyingObject(System.Windows.DependencyObject)">
+            <summary>
+                <para>Returns the current value of a property to which the specific DataLayoutItem is bound.
+
+</para>
+            </summary>
+            <param name="obj">
+		A DataLayoutItem for which the current property value is to be returned.
+
+            </param>
+            <returns>An Object that is the current value of a property to which the specific DataLayoutItem is bound.
+
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.IsActuallyReadOnly">
+            <summary>
+                <para>Gets whether the layout item's editor is actually read-only.
+</para>
+            </summary>
+            <value><b>true</b> if the layout item's editor is actually read-only; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.IsReadOnly">
+            <summary>
+                <para>Gets or sets whether the layout item's editor is read-only.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the layout item's editor is read-only; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutItem.IsReadOnlyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.MultilineTextMinHeight">
+            <summary>
+                <para>Gets or sets the minimum height of the layout item editor, if this editor displays multiline text.
+</para>
+            </summary>
+            <value>A Double value that specifies the minimum height of the layout item editor.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.PhoneNumberMask">
+            <summary>
+                <para>Gets or sets the mask for editing this DataLayoutItem's value, if this value is formatted as a phone number.
+</para>
+            </summary>
+            <value>A String value that is the edit mask for this DataLayoutItem.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.UnderlyingObject(System.Windows.DependencyObject)">
+            <summary>
+                <para>Gets the current value of a property, to which this DataLayoutItem is bound.
+
+</para>
+            </summary>
+            <value>An Object that is the current property value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutItem.UnderlyingObjectProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.DataLayoutControl">
+
+            <summary>
+                <para>A data-bound version of the <see cref="T:DevExpress.Xpf.LayoutControl.LayoutControl"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.DataLayoutControl.#ctor">
+            <summary>
+                <para>Initializes a new instance of the DataLayoutControl class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.AddColonToItemLabels">
+            <summary>
+                <para>Gets or sets whether the colon character is appended to layout item labels.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the colon character is appended to layout item labels; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControl.AddColonToItemLabelsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGeneratedGroup">
+            <summary>
+                <para>Allows you to customize a group when it is auto-generated during layout generation.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGeneratedItemsLocation">
+            <summary>
+                <para>Gets or sets the location where layout items are generated by the <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/>.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControlAutoGeneratedItemsLocation"/> value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGeneratedItemsLocationProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGeneratedUI">
+            <summary>
+                <para>Allows you to customize the layout after it has been auto generated.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGenerateItems">
+            <summary>
+                <para>Gets or sets whether or not the <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/> should generate layout items automatically. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, if the <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/> should generate layout items automatically; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGenerateItemsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGeneratingItem">
+            <summary>
+                <para>Allows you to customize a layout item when its auto generation has been completed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.BorderlessGroupMarkEnd">
+            <summary>
+                <para>Specifies the symbol that labels a borderless group's end.
+</para>
+            </summary>
+            <value>A Char value that labels a borderless group's end.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.BorderlessGroupMarkStart">
+            <summary>
+                <para>Specifies the symbol that labels a borderless group's beginning.
+</para>
+            </summary>
+            <value>A Char value that labels a borderless group's beginning.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.Controller">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.CurrentItem">
+            <summary>
+                <para>Gets or sets the object whose properties are being currently displayed and edited by the DataLayoutControl.
+This is a dependency property.
+</para>
+            </summary>
+            <value>An object whose properties are being currently edited.
+</value>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.DataLayoutControl.CurrentItemChanged">
+            <summary>
+                <para>Fires after the value of <see cref="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.CurrentItem"/> is changed and after a new UI is generated.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControl.CurrentItemProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControl.GeneratedItemNamePrefix">
+            <summary>
+                <para>The prefix for auto-generated item names. The <b>GeneratedItemNamePrefix</b> field is set to "li".
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.GroupBoxMarkEnd">
+            <summary>
+                <para>Specifies the symbol that labels the end of a DataLayoutControl group with borders and a caption.
+
+</para>
+            </summary>
+            <value>A Char value that labels the end of a DataLayoutControl group with borders and a caption.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.GroupBoxMarkStart">
+            <summary>
+                <para>Specifies the symbol that labels the beginning of a DataLayoutControl group with borders and a caption.
+
+</para>
+            </summary>
+            <value>A Char value that labels the beginning of a DataLayoutControl group with borders and a caption.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.GroupPathSeparator">
+            <summary>
+                <para>Specifies the symbol that separates individual group descriptions.
+</para>
+            </summary>
+            <value>A Char value that separates individual group descriptions.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.HorizontalGroupMark">
+            <summary>
+                <para>Specifies the symbol that indicates that children within the current DataLayoutControl group will be arranged horizontally.
+</para>
+            </summary>
+            <value>A Char value that indicates that children within the current DataLayoutControl group will be arranged horizontally.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.IsReadOnly">
+            <summary>
+                <para>Gets or sets whether layout items' editors are in read-only mode.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if layout items' editors are in read-only mode; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControl.IsReadOnlyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.TabbedGroupMarkEnd">
+            <summary>
+                <para>Specifies a symbol that labels the end of a tabbed group within this DataLayoutControl.
+</para>
+            </summary>
+            <value>A Char value that labels the end of a tabbed group within this DataLayoutControl.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.TabbedGroupMarkStart">
+            <summary>
+                <para>Specifies a symbol that labels the beginning of a tabbed group within this DataLayoutControl.
+</para>
+            </summary>
+            <value>A Char value that labels the beginning of a tabbed group within this DataLayoutControl.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.VerticalGroupMark">
+            <summary>
+                <para>Specifies the symbol that indicates that children within the current DataLayoutControl group will be arranged vertically.
+</para>
+            </summary>
+            <value>A Char value that indicates that children within the current DataLayoutControl group will be arranged vertically.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.TileSize">
+
+            <summary>
+                <para>Lists values that specify a tile's size.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.ExtraLarge">
+            <summary>
+                <para>An extra large square tile of 310x310 pixels.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.ExtraSmall">
+            <summary>
+                <para>A small square tile of 70x70 pixels.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.Large">
+            <summary>
+                <para>A wide tile of 310x150 pixels.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileSize.Small">
+            <summary>
+                <para>A medium square tile of 150x150 pixels.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.TileLayoutControl">
+
+            <summary>
+                <para>The Tile Layout Control.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.TileLayoutControl.#ctor">
+            <summary>
+                <para>Initializes a new instance of the TileLayoutControl class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.AllowGroupHeaderEditing">
+            <summary>
+                <para>Gets or sets whether end-users are allowed to edit group headers. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, if end-users are allowed to edit group headers; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.AllowGroupHeaderEditingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.DefaultBackground">
+            <summary>
+                <para>Specifies the background used by default.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.DefaultGroupHeaderSpace">
+            <summary>
+                <para>Gets the default value for the <see cref="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeaderSpace"/> property. The <b>DefaultGroupHeaderSpace</b> field is set to 11.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.DefaultItemSpace">
+            <summary>
+                <para>Specifies the space between tiles used by default, in pixels. Default value: <b>10</b>.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.DefaultLayerSpace">
+            <summary>
+                <para>Specifies the distance between tile groups used by default, in pixels. Default value: <b>70</b>.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.DefaultPadding">
+            <summary>
+                <para>Specifies the padding within the TileLayoutControl used by default.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.TileLayoutControl.GetGroupHeader(System.Windows.UIElement)">
+            <summary>
+                <para>Gets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeader"/> attached property for a specific object.
+</para>
+            </summary>
+            <param name="element">
+		A UIElement object whose value of the <see cref="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeader"/> property is to be returned.
+
+            </param>
+            <returns>The value of the <see cref="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeader"/> property for a specific object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeader(System.Windows.UIElement)">
+            <summary>
+                <para>Gets or sets a tile group header.
+This is an attached property.
+</para>
+            </summary>
+            <value>An object that specifies a tile group header.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeaderProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeaderSpace">
+            <summary>
+                <para>Gets or sets the vertical distance between tile group headers and tiles.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A Double value that is the vertical distance between tile group headers and tiles.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeaderSpaceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeaderStyle">
+            <summary>
+                <para>Gets or sets a style applied to tile group headers.
+This is a dependency property.
+
+</para>
+            </summary>
+            <value>The style applied to tile group headers.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeaderStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeaderTemplate">
+            <summary>
+                <para>Gets or sets a data template used to display tile group headers.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A DataTemplate object used to display a tile group header.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeaderTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.TileLayoutControl.SetGroupHeader(System.Windows.UIElement,System.Object)">
+            <summary>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeader"/> attached property for a specific object.
+</para>
+            </summary>
+            <param name="element">
+		A UIElement object whose <see cref="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeader"/> attached property is to be set.
+
+            </param>
+            <param name="value">
+		A new value of the <see cref="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.GroupHeader"/> attached property for the specified object.
+
+            </param>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.TileLayoutControl.TileClick">
+            <summary>
+                <para>Occurs after a tile has been clicked.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.TileLayoutControl.TileClickCommand">
+            <summary>
+                <para>Gets or sets the command to invoke when a tile is clicked. This is a dependency property.
+</para>
+            </summary>
+            <value>The command to invoke when the tile is clicked.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.TileLayoutControl.TileClickCommandProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.TileClickEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.LayoutControl.TileLayoutControl.TileClick"/> event.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.TileClickEventArgs.#ctor(DevExpress.Xpf.LayoutControl.Tile)">
+            <summary>
+                <para>Initializes a new instance of the TileClickEventArgs class.
+</para>
+            </summary>
+            <param name="tile">
+		A <see cref="T:DevExpress.Xpf.LayoutControl.Tile"/> object that is the tile currently being processed. This value is assigned to the <see cref="P:DevExpress.Xpf.LayoutControl.TileClickEventArgs.Tile"/> property.
+
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.TileClickEventArgs.Tile">
+            <summary>
+                <para>Gets the tile that has been clicked.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.Tile"/> object that is the tile currently being processed.
+
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.Tile">
+
+            <summary>
+                <para>A tile in a <see cref="T:DevExpress.Xpf.LayoutControl.TileLayoutControl"/>.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.Tile.#ctor">
+            <summary>
+                <para>Initializes a new instance of the Tile class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.AnimateContentChange">
+            <summary>
+                <para>Gets or sets whether or not  to play the animation when the tile's content changes. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> to play the animation when the tile's content changes; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.AnimateContentChangeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.CalculatedBackground">
+            <summary>
+                <para>Gets the tile's actual background. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Drawing.Brush"/> object used to paint the tile's background.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.CalculatedBackgroundProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.CalculatedHeaderVisibilityProperty">
+            <summary>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.Tile.Click">
+            <summary>
+                <para>Occurs after the tile has been clicked.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.Command">
+            <summary>
+                <para>Gets or sets the command to invoke when the tile is clicked. This is a dependency property.
+</para>
+            </summary>
+            <value>The command to invoke when the tile is clicked.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.CommandParameter">
+            <summary>
+                <para>Gets or sets the parameter to pass to the <see cref="P:DevExpress.Xpf.LayoutControl.Tile.Command"/>. This is a dependency property.
+</para>
+            </summary>
+            <value>A parameter to pass to the <see cref="P:DevExpress.Xpf.LayoutControl.Tile.Command"/>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.CommandParameterProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.CommandProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.ContentChangeInterval">
+            <summary>
+                <para>Gets or sets the content change interval. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.TimeSpan"/> structure that specifies the content change interval.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.ContentChangeIntervalProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.ContentSource">
+            <summary>
+                <para>Gets or sets the content source. This is a dependency property.
+</para>
+            </summary>
+            <value>An object that enumerates contents for the tile.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.ContentSourceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.Controller">
+            <summary>
+                <para>This member supports the internal infrastructure and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <value> 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.DefaultContentChangeInterval">
+            <summary>
+                <para>Specifies the content change interval used by default, in seconds. Default value - <b>5</b>. To specify the content change interval, use the <see cref="P:DevExpress.Xpf.LayoutControl.Tile.ContentChangeInterval"/> property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.ExtraLargeSize">
+            <summary>
+                <para>Specifies the size of square extra large tiles, in pixels. The field's value is <b>310</b>. See <see cref="P:DevExpress.Xpf.LayoutControl.Tile.Size"/> to learn more.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.ExtraSmallSize">
+            <summary>
+                <para>Specifies the size of square extra small tiles, in pixels. The field's value is <b>70</b>. See <see cref="P:DevExpress.Xpf.LayoutControl.Tile.Size"/> to learn more.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.HorizontalHeaderAlignment">
+            <summary>
+                <para>Gets or sets the horizontal alignment of the tile's header. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.HorizontalAlignment"/> enumeration value that specifies the header's horizontal alignment.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.HorizontalHeaderAlignmentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.IsMaximized">
+            <summary>
+                <para>Gets or sets whether the tile is maximized. A maximized tile is automatically resized to fit available space in the TileLayoutControl. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the tile is maximized; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.LayoutControl.Tile.IsMaximizedChanged">
+            <summary>
+                <para>Occurs after the <see cref="P:DevExpress.Xpf.LayoutControl.Tile.IsMaximized"/> property's value has been changed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.IsMaximizedProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.LargeHeight">
+            <summary>
+                <para>Specifies the height of large tiles, in pixels. The field's value is <b>150</b>. See <see cref="P:DevExpress.Xpf.LayoutControl.Tile.Size"/> to learn more.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.LargeWidth">
+            <summary>
+                <para>Specifies the width of large tiles, in pixels. The field's value is  <b>310</b>. See <see cref="P:DevExpress.Xpf.LayoutControl.Tile.Size"/> to learn more.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.LayoutControl.Tile.OnApplyTemplate">
+            <summary>
+                <para>The method is invoked whenever the application code or internal processes call <b>ApplyTemplate</b>.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.PreviousContent">
+            <summary>
+                <para>Gets the tile's previous content. This is a dependency property.
+</para>
+            </summary>
+            <value>The tile's previous content.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.PreviousContentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.Size">
+            <summary>
+                <para>Gets or sets the tile's size. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.LayoutControl.TileSize"/> enumeration value that specifies the tile size.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.SizeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.SmallHeight">
+            <summary>
+                <para>Specifies the height of small tiles, in pixels. The field's value is <b>150</b>. See <see cref="P:DevExpress.Xpf.LayoutControl.Tile.Size"/> to learn more.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.SmallWidth">
+            <summary>
+                <para>Specifies the width of small tiles, in pixels. The field's value is  <b>150</b>. See <see cref="P:DevExpress.Xpf.LayoutControl.Tile.Size"/> to learn more.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.LayoutControl.Tile.VerticalHeaderAlignment">
+            <summary>
+                <para>Gets or sets the vertical alignment of the tile's header. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.VerticalAlignment"/> enumeration value that specifies the header's vertical alignment.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.Tile.VerticalHeaderAlignmentProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+    </members>
+</doc>

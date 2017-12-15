@@ -32,8 +32,8 @@
     <DocumentationFile>bin\Release\StockSharp.Messages.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Mvvm.v17.1">
-      <HintPath>..\References\DevExpress.Mvvm.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Mvvm.v17.2">
+      <HintPath>..\References\DevExpress.Mvvm.v17.2.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
