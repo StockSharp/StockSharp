@@ -41,7 +41,7 @@ namespace SampleBlackwood
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = BlackwoodMessageAdapter.TimeFrames;
+			CandlesPeriods.ItemsSource = BlackwoodMessageAdapter.AllTimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
 		}
 

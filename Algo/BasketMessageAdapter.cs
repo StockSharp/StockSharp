@@ -251,6 +251,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool IsRestorSubscriptioneOnReconnect { get; set; }
 
+		/// <inheritdoc />
+		public override IEnumerable<TimeSpan> TimeFrames
+		{
+			get { return GetSortedAdapters().SelectMany(a => a.TimeFrames); }
+		}
+
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>

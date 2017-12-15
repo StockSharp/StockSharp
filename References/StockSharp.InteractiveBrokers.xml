@@ -105,6 +105,9 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.TimeFrames">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition">
       <summary>
             Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.

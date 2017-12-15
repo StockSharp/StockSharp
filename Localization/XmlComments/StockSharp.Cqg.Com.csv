@@ -8,7 +8,8 @@ M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Me
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.UserName/summary;Login
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.Password/summary;Password
-F:StockSharp.Cqg.Com.CqgComMessageAdapter.TimeFrames/summary;DocStr2531
+P:StockSharp.Cqg.Com.CqgComMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.Cqg.Com.CqgComMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

@@ -54,10 +54,13 @@
             Pin.
             </summary>
     </member>
-    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.TimeFrames">
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.AllTimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+    </member>
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.TimeFrames">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>

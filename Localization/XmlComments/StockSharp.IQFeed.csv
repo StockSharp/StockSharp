@@ -16,7 +16,8 @@ P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecuritiesFile/summary;Str213
 F:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.DefaultVersion/summary;DocStr9884
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Version/summary;DocStr9384
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1ColumnRegistry/summary;DocStr3699
-P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.TimeFrames/summary;DocStr2531
+P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

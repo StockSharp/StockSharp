@@ -122,10 +122,13 @@
             Logger address.
             </summary>
         </member>
-        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames">
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.AllTimeFrames">
             <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames">
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
             <summary>

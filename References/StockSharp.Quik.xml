@@ -15,9 +15,9 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.TimeFrames">
+    <member name="P:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.AllTimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
     </member>
     <member name="M:StockSharp.Quik.Lua.LuaFixMarketDataMessageAdapter.CreateOrderCondition">

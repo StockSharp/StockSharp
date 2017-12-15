@@ -40,7 +40,7 @@ namespace SampleBarChart
 			InitializeComponent();
 			Title = _security.Code + LocalizedStrings.Str3747;
 
-			TimeFramePicker.ItemsSource = BarChartMessageAdapter.TimeFrames;
+			TimeFramePicker.ItemsSource = BarChartMessageAdapter.AllTimeFrames;
 			TimeFramePicker.SelectedIndex = 0;
 
 			DateFromPicker.Value = DateTime.Today.AddDays(-7);

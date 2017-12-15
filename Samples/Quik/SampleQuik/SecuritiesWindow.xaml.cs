@@ -41,7 +41,7 @@ namespace SampleQuik
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = LuaFixMarketDataMessageAdapter.TimeFrames;
+			CandlesPeriods.ItemsSource = LuaFixMarketDataMessageAdapter.AllTimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
 		}
 

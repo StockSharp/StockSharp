@@ -1050,6 +1050,11 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.TimeFrames">
+      <summary>
+            Возможные тайм-фреймы.
+            </summary>
+    </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.CreateOrderCondition">
       <summary>
             Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.

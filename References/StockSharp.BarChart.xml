@@ -25,10 +25,13 @@
             Password.
             </summary>
         </member>
-        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames">
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.AllTimeFrames">
             <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+        </member>
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames">
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />

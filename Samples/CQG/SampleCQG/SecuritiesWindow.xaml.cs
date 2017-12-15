@@ -25,10 +25,9 @@ namespace SampleCQG
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Cqg.Com;
-	using StockSharp.Cqg.Continuum;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
@@ -41,12 +40,11 @@ namespace SampleCQG
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
-
 		}
 
 		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			CandlesPeriods.ItemsSource = Connector is CqgContinuumTrader ? CqgContinuumMessageAdapter.TimeFrames : CqgComMessageAdapter.TimeFrames;
+			CandlesPeriods.ItemsSource = Connector.Adapter.TimeFrames;
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -66,7 +64,7 @@ namespace SampleCQG
 			base.OnClosed(e);
 		}
 
-		private static IConnector Connector => MainWindow.Instance.Connector;
+		private static Connector Connector => MainWindow.Instance.Connector;
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{

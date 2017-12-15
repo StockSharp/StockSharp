@@ -65,6 +65,11 @@ namespace StockSharp.Messages
 		IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
 		/// <summary>
+		/// Possible time-frames.
+		/// </summary>
+		IEnumerable<TimeSpan> TimeFrames { get; }
+
+		/// <summary>
 		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 		/// </summary>
 		ReConnectionSettings ReConnectionSettings { get; }

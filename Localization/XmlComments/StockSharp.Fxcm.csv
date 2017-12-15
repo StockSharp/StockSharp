@@ -10,7 +10,8 @@ P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo/summary;Str3388
 P:StockSharp.Fxcm.FxcmMessageAdapter.Login/summary;Login
 P:StockSharp.Fxcm.FxcmMessageAdapter.Password/summary;Password
 P:StockSharp.Fxcm.FxcmMessageAdapter.Pin/summary;Pin
-P:StockSharp.Fxcm.FxcmMessageAdapter.TimeFrames/summary;DocStr2531
+P:StockSharp.Fxcm.FxcmMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.Fxcm.FxcmMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Fxcm.FxcmMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Fxcm.FxcmMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

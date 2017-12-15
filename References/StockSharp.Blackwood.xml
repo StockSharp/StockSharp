@@ -164,10 +164,13 @@
             Override dll file from resources. Turned on by default.
             </summary>
     </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames">
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.AllTimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>

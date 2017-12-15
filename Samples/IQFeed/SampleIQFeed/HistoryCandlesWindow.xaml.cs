@@ -40,7 +40,7 @@ namespace SampleIQFeed
 			InitializeComponent();
 			Title = _security.Code + LocalizedStrings.Str3747;
 
-			TimeFramePicker.ItemsSource = IQFeedMarketDataMessageAdapter.TimeFrames;
+			TimeFramePicker.ItemsSource = IQFeedMarketDataMessageAdapter.AllTimeFrames;
 			TimeFramePicker.SelectedIndex = 1;
 
 			DateFromPicker.Value = DateTime.Today.AddDays(-7);

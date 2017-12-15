@@ -41,7 +41,7 @@ namespace SampleRithmic
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = RithmicMessageAdapter.TimeFrames;
+			CandlesPeriods.ItemsSource = RithmicMessageAdapter.AllTimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
 		}
 

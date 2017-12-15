@@ -7167,7 +7167,6 @@ DocStr2527;To get the number of operations, or discard the exception, if no info
 DocStr2528;Operations;Операции
 DocStr2529;To get order identifier, or discard exception, if no information available;Получить идентификатор заявки, или выбросить исключение, если информация отсутствует
 DocStr2530;The message adapter for BarChart;Маркет-дата адаптер сообщений для BarChart
-DocStr2531;Available time frames;Доступные тайм-фреймы
 DocStr2532;The interface {0} implementation which provides a connection to the BarChart;Реализация интерфейса {0} для взаимодействия с BarChart для скачивания исторических и реал-тайм маркет-данных
 DocStr2533;To get historical ticks;Получить исторические тиков
 DocStr2534;Maximum ticks count;Максимальное количество тиков

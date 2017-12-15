@@ -605,7 +605,7 @@
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.SupportedMarketDataTypes">
@@ -6218,9 +6218,7 @@
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
-      <summary>
-            Available time frames.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>

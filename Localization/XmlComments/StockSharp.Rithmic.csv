@@ -24,7 +24,8 @@ P:StockSharp.Rithmic.RithmicMessageAdapter.DomainName/summary;Str3488
 P:StockSharp.Rithmic.RithmicMessageAdapter.LicenseServerAddress/summary;Str3490
 P:StockSharp.Rithmic.RithmicMessageAdapter.LocalBrokerAddress/summary;Str3491
 P:StockSharp.Rithmic.RithmicMessageAdapter.LoggerAddress/summary;Str3493
-P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames/summary;DocStr2531
+P:StockSharp.Rithmic.RithmicMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.Rithmic.RithmicMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Rithmic.RithmicMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Rithmic.RithmicMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

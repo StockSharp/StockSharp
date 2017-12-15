@@ -31,6 +31,11 @@
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
         </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.TimeFrames">
+            <summary>
+            Возможные тайм-фреймы.
+            </summary>
+        </member>
         <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsNativeIdentifiers">
             <summary>
             Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native"/>.

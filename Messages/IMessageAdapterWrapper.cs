@@ -208,6 +208,8 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
+		IEnumerable<TimeSpan> IMessageAdapter.TimeFrames => InnerAdapter.TimeFrames;
+
 		/// <inheritdoc />
 		public string StorageName => InnerAdapter.StorageName;
 

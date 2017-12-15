@@ -3689,6 +3689,7 @@ P:StockSharp.Algo.BasketMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.Algo.BasketMessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
 P:StockSharp.Algo.BasketMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 P:StockSharp.Algo.BasketMessageAdapter.IsRestorSubscriptioneOnReconnect/summary;DocStr9349
+P:StockSharp.Algo.BasketMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.Algo.BasketMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Algo.BasketMessageAdapter.CreateOrderCondition/returns;DocStr45
 M:StockSharp.Algo.BasketMessageAdapter.IsConnectionAlive/summary;DocStr441

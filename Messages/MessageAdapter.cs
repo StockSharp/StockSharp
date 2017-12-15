@@ -156,6 +156,10 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual IEnumerable<TimeSpan> TimeFrames => Enumerable.Empty<TimeSpan>();
+
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
 		/// <summary>

@@ -19,6 +19,7 @@ P:StockSharp.InteractiveBrokers.HistogramMessage.Data/summary;XamlStr109
 T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter/summary;DocStr3461
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition/returns;DocStr45
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SecurityLookupRequired/summary;DocStr452

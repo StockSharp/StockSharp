@@ -57,10 +57,13 @@
             Candle downloading sleep interval.
             </summary>
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames">
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.AllTimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+    </member>
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>

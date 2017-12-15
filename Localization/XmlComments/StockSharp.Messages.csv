@@ -571,6 +571,7 @@ P:StockSharp.Messages.IMessageAdapter.TransactionIdGenerator/summary;DocStr3311
 P:StockSharp.Messages.IMessageAdapter.SupportedMessages/summary;DocStr449
 P:StockSharp.Messages.IMessageAdapter.SupportedMarketDataTypes/summary;DocStr10120
 P:StockSharp.Messages.IMessageAdapter.SecurityClassInfo/summary;DocStr2499
+P:StockSharp.Messages.IMessageAdapter.TimeFrames/summary;DocStr206
 P:StockSharp.Messages.IMessageAdapter.ReConnectionSettings/summary;DocStr4079
 P:StockSharp.Messages.IMessageAdapter.HeartbeatInterval/summary;DocStr4080
 P:StockSharp.Messages.IMessageAdapter.PortfolioLookupRequired/summary;DocStr450
@@ -739,6 +740,7 @@ M:StockSharp.Messages.MessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transa
 P:StockSharp.Messages.MessageAdapter.SupportedMessages/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SupportedMarketDataTypes/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.SecurityClassInfo/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.TimeFrames/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.HeartbeatInterval/summary;DocStr4334
 P:StockSharp.Messages.MessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.PortfolioLookupRequired/inheritdoc;DocStr8459

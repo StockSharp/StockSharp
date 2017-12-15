@@ -34,7 +34,7 @@ namespace SampleOanda
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = OandaMessageAdapter.TimeFrames;
+			CandlesPeriods.ItemsSource = OandaMessageAdapter.AllTimeFrames;
 			CandlesPeriods.SelectedIndex = 0;
 		}
 
