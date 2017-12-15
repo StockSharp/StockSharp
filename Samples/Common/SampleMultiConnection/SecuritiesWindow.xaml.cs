@@ -41,6 +41,12 @@ namespace SampleMultiConnection
 			InitializeComponent();
 		}
 
+		private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			CandlesPeriods.ItemsSource = MainWindow.Instance.Connector.Adapter.TimeFrames;
+			CandlesPeriods.SelectedIndex = 0;
+		}
+
 		protected override void OnClosed(EventArgs e)
 		{
 			_quotesWindows.SyncDo(d => d.Values.ForEach(w =>
@@ -159,7 +165,7 @@ namespace SampleMultiConnection
 			}
 		}
 
-		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
+		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			TryEnableCandles();
 		}

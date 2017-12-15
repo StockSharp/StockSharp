@@ -50,6 +50,7 @@ StockSharp API Change log
 * (feature) Order log binary storage. Nullable volumes posibilites.
 * (bug) Quotes storage. Fix zero and negative prices store.
 * (feature) IMessageAdapter.TimeFrames
+* (bug) SampleMultiConnection. Fill time frames http://stocksharp.ru/forum/8849/primer-samplemulticonnection/
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
