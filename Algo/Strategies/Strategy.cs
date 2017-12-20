@@ -1537,7 +1537,12 @@ namespace StockSharp.Algo.Strategies
 					var isLatChanged = order.LatencyRegistration != null;
 
 					if (isLatChanged)
-						Latency += order.LatencyRegistration;
+					{
+						if (Latency == null)
+							Latency = TimeSpan.Zero;
+							
+						Latency += order.LatencyRegistration.Value;
+					}
 
 					if (order.Type == OrderTypes.Conditional)
 					{
@@ -1993,7 +1998,10 @@ namespace StockSharp.Algo.Strategies
 
 			if (order.LatencyCancellation != null)
 			{
-				Latency += order.LatencyCancellation;
+				if (Latency == null)
+					Latency = TimeSpan.Zero;
+
+				Latency += order.LatencyCancellation.Value;
 				RaiseLatencyChanged();
 			}
 		}
@@ -2294,7 +2302,10 @@ namespace StockSharp.Algo.Strategies
 
 			if (trade.Commission != null)
 			{
-				Commission = trade.Commission;
+				if (Commission == null)
+					Commission = 0;
+
+				Commission += trade.Commission.Value;
 				isComChanged = true;
 			}
 
@@ -2308,7 +2319,10 @@ namespace StockSharp.Algo.Strategies
 
 			if (trade.Slippage != null)
 			{
-				Slippage += trade.Slippage;
+				if (Slippage == null)
+					Slippage = 0;
+
+				Slippage += trade.Slippage.Value;
 				isSlipChanged = true;
 			}
 
