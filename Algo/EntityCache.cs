@@ -1167,7 +1167,17 @@ namespace StockSharp.Algo
 			_candleSeriesInfos.Add(mdMsg.TransactionId, new CandleSeriesInfo(series, mdMsg));
 		}
 
-		public MarketDataMessage RemoveCandleSeries(CandleSeries series, Func<long> getTransactionId)
+		public CandleSeries RemoveCandleSeries(long transactionId)
+		{
+			CandleSeriesInfo info;
+
+			lock (_candleSeriesInfos.SyncRoot)
+				info = _candleSeriesInfos.TryGetAndRemove(transactionId);
+
+			return info?.Series;
+		}
+
+		public MarketDataMessage TryGetCandleSeriesMarketDataMessage(CandleSeries series, Func<long> getTransactionId)
 		{
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
@@ -1186,8 +1196,6 @@ namespace StockSharp.Algo
 			var mdMsg = series.ToMarketDataMessage(false);
 			mdMsg.TransactionId = getTransactionId();
 			mdMsg.OriginalTransactionId = transactionId;
-
-			_candleSeriesInfos.Remove(transactionId);
 
 			return mdMsg;
 		}

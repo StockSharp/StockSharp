@@ -111,8 +111,9 @@ namespace StockSharp.Algo
 				//	UnSubscribeContinuous((ContinuousSecurity)security, message);
 				//else
 				//{
-					//TryUnSubscribe(security, message);
-					_connector.SendInMessage(message);
+				//TryUnSubscribe(security, message);
+				_pendingSubscriptions.Add(message.OriginalTransactionId, Tuple.Create((MarketDataMessage)message.Clone(), security));
+				_connector.SendInMessage(message);
 				//}
 			}
 
@@ -506,7 +507,7 @@ namespace StockSharp.Algo
 		/// <param name="series">Candles series.</param>
 		public virtual void UnSubscribeCandles(CandleSeries series)
 		{
-			var mdMsg = _entityCache.RemoveCandleSeries(series, TransactionIdGenerator.GetNextId);
+			var mdMsg = _entityCache.TryGetCandleSeriesMarketDataMessage(series, TransactionIdGenerator.GetNextId);
 
 			if (mdMsg == null)
 				return;
