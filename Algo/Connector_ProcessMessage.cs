@@ -1907,7 +1907,7 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataFinishedMessage(MarketDataFinishedMessage message)
 		{
-			var series = _entityCache.TryGetCandleSeries(message.OriginalTransactionId);
+			var series = _entityCache.RemoveCandleSeries(message.OriginalTransactionId);
 
 			if (series == null)
 				return;
