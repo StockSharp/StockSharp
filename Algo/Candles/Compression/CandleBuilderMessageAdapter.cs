@@ -445,16 +445,7 @@ namespace StockSharp.Algo.Candles.Compression
 			msg.TransactionId = info.TransactionId;
 			msg.From = info.LastTime;
 
-			var buildFrom = info.Transform.BuildFrom;
-
-			if (msg.DataType != buildFrom)
-			{
-				if (buildFrom.IsCandleDataType())
-					throw new InvalidOperationException(buildFrom.ToString());
-
-				msg.DataType = buildFrom;
-				msg.Arg = null;
-			}
+			ResetMarketDataMessageArg(info, msg);
 
 			_seriesInfosByTransactions.Add(info.TransactionId, info);
 
@@ -472,15 +463,16 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void UnSubscribe(SeriesInfo info, bool isBack)
 		{
-			RemoveSeriesInfo(info);
+			SendMarketDataFinished(info);
 
 			if (info.Transform == null)
 				return;
 
 			var mdMsg = (MarketDataMessage)info.MarketDataMessage.Clone();
 			mdMsg.OriginalTransactionId = info.TransactionId;
-			mdMsg.DataType = info.Transform.BuildFrom;
 			mdMsg.IsSubscribe = false;
+
+			ResetMarketDataMessageArg(info, mdMsg);
 
 			if (isBack)
 			{
@@ -489,6 +481,20 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 			else
 				base.SendInMessage(mdMsg);
+		}
+
+		private static void ResetMarketDataMessageArg(SeriesInfo info, MarketDataMessage msg)
+		{
+			var buildFrom = info.Transform.BuildFrom;
+
+			if (msg.DataType != buildFrom)
+			{
+				if (buildFrom.IsCandleDataType())
+					throw new InvalidOperationException(buildFrom.ToString());
+
+				msg.DataType = buildFrom;
+				msg.Arg = null;
+			}
 		}
 
 		private static ICandleBuilderValueTransform GetCurrentDataType(SeriesInfo info)
