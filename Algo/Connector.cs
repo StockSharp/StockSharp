@@ -670,7 +670,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var position = _entityCache.TryAddPosition(portfolio, security, clientCode, depoName, limitType, description, out bool isNew);
+			var position = _entityCache.TryAddPosition(portfolio, security, clientCode, depoName, limitType, description, out var isNew);
 
 			if (isNew)
 				RaiseNewPosition(position);

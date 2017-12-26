@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Indicators
 				var sumXy = 0m; //сумма x*y
 				var sumX2 = 0m; //сумма x^2
 
-				for (int i = 0; i < Length; i++)
+				for (var i = 0; i < Length; i++)
 				{
 					sumX += i;
 					sumY += buff.ElementAt(i);
@@ -105,7 +105,7 @@ namespace StockSharp.Algo.Indicators
 				//счиаем сумму квадратов ошибок
 				var sumErr2 = 0m; //сумма квадратов ошибок
 
-				for (int i = 0; i < Length; i++)
+				for (var i = 0; i < Length; i++)
 				{
 					var y = buff.ElementAt(i); // значение
 					var yEst = _slope * i + b; // оценка по регрессии

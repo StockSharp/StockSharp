@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 			get => _multiple * 1000;
 			set
 			{
-				decimal tmpValue = value;
+				var tmpValue = value;
 
 				if (tmpValue <= 1)
 					tmpValue = 1;

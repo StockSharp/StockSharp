@@ -941,7 +941,7 @@ namespace StockSharp.Algo
 					p.ExtensionInfo = new Dictionary<string, object>();
 
 				return p;
-			}, out bool isNew);
+			}, out var isNew);
 
 			var isChanged = false;
 			if (changePortfolio != null)

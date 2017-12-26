@@ -864,7 +864,7 @@ namespace StockSharp.Algo
 
 					if (price == maxTradePrice)
 					{
-						if (changedVolume.TryGetValue(price, out decimal vol))
+						if (changedVolume.TryGetValue(price, out var vol))
 						{
 							if (vol <= 0)
 								continue;

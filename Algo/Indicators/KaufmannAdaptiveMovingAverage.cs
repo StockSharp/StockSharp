@@ -116,7 +116,7 @@ namespace StockSharp.Algo.Indicators
 
 			decimal volatility = 0;
 
-			for (int i = 1; i < buff.Count; i++)
+			for (var i = 1; i < buff.Count; i++)
 			{
 				volatility += Math.Abs(buff[i] - buff[i - 1]);
 			}

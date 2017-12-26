@@ -154,9 +154,9 @@ namespace StockSharp.Algo.Positions
 
 						lock (_positions.SyncRoot)
 						{
-							isNew = _positions.TryGetValue(key, out decimal prev);
+							isNew = _positions.TryGetValue(key, out var prev);
 
-							if (_byOrderPositions.TryGetValue(orderId, out Tuple<Sides, decimal> oldPosition))
+							if (_byOrderPositions.TryGetValue(orderId, out var oldPosition))
 							{
 								if (newPosition.Value != oldPosition.Item2)
 									_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition.Value);

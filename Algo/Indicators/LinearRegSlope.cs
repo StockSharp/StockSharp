@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Indicators
 			var sumXy = 0m; //сумма x*y
 			var sumX2 = 0m; //сумма x^2
 
-			for (int i = 0; i < buff.Count; i++)
+			for (var i = 0; i < buff.Count; i++)
 			{
 				sumX += i;
 				sumY += buff.ElementAt(i);
