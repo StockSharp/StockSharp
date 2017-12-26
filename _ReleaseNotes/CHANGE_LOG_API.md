@@ -51,6 +51,7 @@ StockSharp API Change log
 * (bug) Quotes storage. Fix zero and negative prices store.
 * (feature) IMessageAdapter.TimeFrames
 * (bug) SampleMultiConnection. Fill time frames http://stocksharp.ru/forum/8849/primer-samplemulticonnection/
+* (bug) PositionManager events fix http://stocksharp.ru/forum/8961/sobytiya-positionmanager-newposition-i-positionchanged/
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
