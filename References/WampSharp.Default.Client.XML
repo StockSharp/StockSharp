@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WampSharp.Default.Client</name>
+    </assembly>
+    <members>
+        <member name="T:WampSharp.V2.DefaultWampChannelFactory">
+            <summary>
+            A default implementation of <see cref="T:WampSharp.V2.IWampChannelFactory"/>.
+            </summary>
+        </member>
+        <member name="M:WampSharp.V2.DefaultWampChannelFactory.CreateChannel``1(System.String,System.String,WampSharp.V2.Binding.IWampTextBinding{``0})">
+            <summary>
+            Creates a <see cref="T:WampSharp.V2.IWampChannel"/> that connects to a given realm,
+            using the given address and the given text binding
+            </summary>
+            <param name="address">The given address.</param>
+            <param name="realm">The given realm to connect to.</param>
+            <param name="binding">The given text binding.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WampSharp.V2.DefaultWampChannelFactory.CreateChannel``1(System.String,System.String,WampSharp.V2.Binding.IWampTextBinding{``0},WampSharp.V2.Client.IWampClientAuthenticator)">
+            <summary>
+            Creates a <see cref="T:WampSharp.V2.IWampChannel"/> that connects to a given realm,
+            using the given address and the given text binding
+            </summary>
+            <param name="address">The given address.</param>
+            <param name="realm">The given realm to connect to.</param>
+            <param name="binding">The given text binding.</param>
+            <param name="authenticator">The authenticator object to handle CHALLENGE request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WampSharp.V2.DefaultWampChannelFactory.CreateChannel``1(System.String,System.String,WampSharp.V2.Binding.IWampBinaryBinding{``0})">
+            <summary>
+            Creates a <see cref="T:WampSharp.V2.IWampChannel"/> that connects to a given realm,
+            using the given address and the given binary binding
+            </summary>
+            <param name="address">The given address.</param>
+            <param name="realm">The given realm to connect to.</param>
+            <param name="binding">The given binary binding.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WampSharp.V2.DefaultWampChannelFactory.CreateChannel``1(System.String,System.String,WampSharp.V2.Binding.IWampBinaryBinding{``0},WampSharp.V2.Client.IWampClientAuthenticator)">
+            <summary>
+            Creates a <see cref="T:WampSharp.V2.IWampChannel"/> that connects to a given realm,
+            using the given address and the given binary binding
+            </summary>
+            <param name="address">The given address.</param>
+            <param name="realm">The given realm to connect to.</param>
+            <param name="binding">The given binary binding.</param>
+            <param name="authenticator">The authenticator object to handle CHALLENGE request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WampSharp.V2.DefaultWampChannelFactory.CreateJsonChannel(System.String,System.String)">
+            <summary>
+            Creates a <see cref="T:WampSharp.V2.IWampChannel"/> that connects to a given realm,
+            using the given address and json binding
+            </summary>
+            <param name="address">The given address.</param>
+            <param name="realm">The given realm to connect to.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WampSharp.V2.DefaultWampChannelFactory.CreateJsonChannel(System.String,System.String,WampSharp.V2.Client.IWampClientAuthenticator)">
+            <summary>
+            Creates a <see cref="T:WampSharp.V2.IWampChannel"/> that connects to a given realm,
+            using the given address and json binding
+            </summary>
+            <param name="address">The given address.</param>
+            <param name="realm">The given realm to connect to.</param>
+            <param name="authenticator">The authenticator object to handle CHALLENGE request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WampSharp.V2.DefaultWampChannelFactory.CreateMsgpackChannel(System.String,System.String)">
+            <summary>
+            Creates a <see cref="T:WampSharp.V2.IWampChannel"/> that connects to a given realm,
+            using the given address and msgpack binding
+            </summary>
+            <param name="address">The given address.</param>
+            <param name="realm">The given realm to connect to.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WampSharp.V2.DefaultWampChannelFactory.CreateMsgpackChannel(System.String,System.String,WampSharp.V2.Client.IWampClientAuthenticator)">
+            <summary>
+            Creates a <see cref="T:WampSharp.V2.IWampChannel"/> that connects to a given realm,
+            using the given address and msgpack binding
+            </summary>
+            <param name="address">The given address.</param>
+            <param name="realm">The given realm to connect to.</param>
+            <param name="authenticator">The authenticator object to handle CHALLENGE request.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
