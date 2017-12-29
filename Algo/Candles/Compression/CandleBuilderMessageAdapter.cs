@@ -165,7 +165,6 @@ namespace StockSharp.Algo.Candles.Compression
 							base.SendInMessage(message);
 							break;
 						}
-
 					}
 
 					break;
@@ -331,13 +330,12 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void ProcessMarketDataResponse(MarketDataMessage mdMsg)
 		{
+			RaiseNewOutMessage(mdMsg);
+
 			var info = _seriesInfosByTransactions.TryGetValue(mdMsg.OriginalTransactionId);
 
 			if (info == null)
-			{
-				RaiseNewOutMessage(mdMsg);
-                return;
-			}
+				return;
 
 			SetAvailableMarketDataType(info, mdMsg);
 
@@ -445,13 +443,13 @@ namespace StockSharp.Algo.Candles.Compression
 			msg.TransactionId = info.TransactionId;
 			msg.From = info.LastTime;
 
-			ResetMarketDataMessageArg(info, msg);
+			var reseted = ResetMarketDataMessageArg(info, msg);
 
 			_seriesInfosByTransactions.Add(info.TransactionId, info);
 
 			msg.ValidateBounds();
 
-			if (isBack)
+			if (isBack || reseted)
 			{
 				msg.IsBack = true;
 				msg.Adapter = this;
@@ -472,9 +470,9 @@ namespace StockSharp.Algo.Candles.Compression
 			mdMsg.OriginalTransactionId = info.TransactionId;
 			mdMsg.IsSubscribe = false;
 
-			ResetMarketDataMessageArg(info, mdMsg);
+			var reseted = ResetMarketDataMessageArg(info, mdMsg);
 
-			if (isBack)
+			if (isBack || reseted)
 			{
 				mdMsg.IsBack = true;
 				RaiseNewOutMessage(mdMsg);
@@ -483,18 +481,20 @@ namespace StockSharp.Algo.Candles.Compression
 				base.SendInMessage(mdMsg);
 		}
 
-		private static void ResetMarketDataMessageArg(SeriesInfo info, MarketDataMessage msg)
+		private static bool ResetMarketDataMessageArg(SeriesInfo info, MarketDataMessage msg)
 		{
 			var buildFrom = info.Transform.BuildFrom;
 
-			if (msg.DataType != buildFrom)
-			{
-				if (buildFrom.IsCandleDataType())
-					throw new InvalidOperationException(buildFrom.ToString());
+			if (msg.DataType == buildFrom)
+				return false;
 
-				msg.DataType = buildFrom;
-				msg.Arg = null;
-			}
+			if (buildFrom.IsCandleDataType())
+				throw new InvalidOperationException(buildFrom.ToString());
+
+			msg.DataType = buildFrom;
+			msg.Arg = null;
+
+			return true;
 		}
 
 		private static ICandleBuilderValueTransform GetCurrentDataType(SeriesInfo info)
