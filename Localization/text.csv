@@ -14604,3 +14604,9 @@ DocStr10237;If the operation was cancelled by {0}, {1} will return;Если оп
 DocStr10238;File data. If the operation was cancelled by {0}, {1} will return;Файл. Если операция будет отменена через {0}, будет возвращено значение {1}
 DocStr10239;Downloading file ID;Идентификатор скачиваемого файла
 DocStr10240;Link to uploading file;Ссылка за загружаемый файл
+DocStr10241;Identifies a person as the responsible party for investment decisions within the firm. Orders covered by MiFID 2 (Markets in Financial Instruments Directive 2) must include either {0} or {1} field (but not both);Определяет сотрудника как ответственного за инвестиционные решения фирмы. Заявки включенные в MiFID 2 (Markets in Financial Instruments Directive 2) должны включать или {0} или {1} поле (но не оба)
+DocStr10242;Identifies the algorithm responsible for investment decisions within the firm. Orders covered under MiFID 2 must include either {0} or {1}, but cannot have both;Определяет алгоритм ответственный за инвестиционные решения фирмы. Заявки включенные в MiFID 2 должны включать или {0} или {1}, но не оба
+DocStr10243;For MiFID 2 reporting: identifies a person as the responsible party for the execution of a transaction within the firm;Для MiFID 2 отчетов: определяет сотрудника как ответственного за исполнение транзакции внутри фирмы
+DocStr10244;For MiFID 2 reporting: identifies the algorithm responsible for the execution of a transaction within the firm;Для MiFID 2 отчетов: определяет алгоритм ответственный за исполнение транзакции внутри фирмы
+DocStr10245;Tick-by-tick data types;Типы данных тик-за-тиком
+DocStr10246;All last trades;Все последние тики

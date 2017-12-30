@@ -26,7 +26,7 @@ StockSharp API Change log
 * (bug) MfdHistorySource. Fix options lookup.
 * (bug) LMAX. Instruments file parsing fix.
 * (bug) InteractiveBrokers. Market data fixes.
-* (feature) InteractiveBrokers. v9.73.05 support.
+* (feature) InteractiveBrokers. v9.73.06 support.
 * (bug) SmartCOM. Position translation fix.
 * (feature) OptionDesk. Show expiration date columns.
 * (feature) Security.UnderlyingSecurityType.

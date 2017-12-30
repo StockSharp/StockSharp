@@ -1545,6 +1545,26 @@
             Extra conditions.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionMaker">
+      <summary>
+            Identifies a person as the responsible party for investment decisions within the firm. Orders covered by MiFID 2 (Markets in Financial Instruments Directive 2) must include either <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionMaker" /> or <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionAlgo" /> field (but not both).
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionAlgo">
+      <summary>
+            Identifies the algorithm responsible for investment decisions within the firm. Orders covered under MiFID 2 must include either <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionMaker" /> or <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionAlgo" />, but cannot have both.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2ExecutionTrader">
+      <summary>
+            For MiFID 2 reporting: identifies a person as the responsible party for the execution of a transaction within the firm.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2ExecutionAlgo">
+      <summary>
+            For MiFID 2 reporting: identifies the algorithm responsible for the execution of a transaction within the firm.
+            </summary>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.ExchangeNewsTypes">
       <summary>
             News types.
@@ -2518,6 +2538,31 @@
     <member name="P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Tiers">
       <summary>
             Tiers.
+            </summary>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.TickByTickDataTypes">
+      <summary>
+            Tick-by-tick data types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Last">
+      <summary>
+            Last trade.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Midpoint">
+      <summary>
+            Spread middle.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.TickByTickDataTypes.BidAsk">
+      <summary>
+            Best pair quotes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.TickByTickDataTypes.AllLast">
+      <summary>
+            All last trades.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.Web.Market">
