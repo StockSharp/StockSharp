@@ -53,6 +53,7 @@ StockSharp API Change log
 * (bug) SampleMultiConnection. Fill time frames http://stocksharp.ru/forum/8849/primer-samplemulticonnection/
 * (bug) PositionManager events fix http://stocksharp.ru/forum/8961/sobytiya-positionmanager-newposition-i-positionchanged/
 * (bug) Connector. Stop candle series fix http://stocksharp.ru/forum/8919/povtornyi-zapusk-serii-svechek/
+* (bug) Connector. Remove RegisteredXXX fix http://stocksharp.ru/forum/8868/problemy-pri-raborte-so-takanami-pri-konnektore-trader-workstation-ot-ib/
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

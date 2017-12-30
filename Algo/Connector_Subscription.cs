@@ -112,9 +112,11 @@ namespace StockSharp.Algo
 				//else
 				//{
 				//TryUnSubscribe(security, message);
-				if (message.OriginalTransactionId != 0)
-					_pendingSubscriptions.Add(message.OriginalTransactionId, Tuple.Create((MarketDataMessage)message.Clone(), security));
-				
+				var tuple = Tuple.Create((MarketDataMessage)message.Clone(), security);
+
+				// we can cancel by subscription id (message maybe by unfilled) or send fully filled unsubscription message
+				_pendingSubscriptions.Add(message.OriginalTransactionId == 0 ? message.TransactionId : message.OriginalTransactionId, tuple);
+
 				_connector.SendInMessage(message);
 				//}
 			}
