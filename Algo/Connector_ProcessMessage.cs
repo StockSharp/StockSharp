@@ -107,7 +107,21 @@ namespace StockSharp.Algo
 			if (message.IsBack)
 			{
 				//message.IsBack = false;
-				SendInMessage(message);
+
+				if (message.Type == MessageTypes.MarketData)
+				{
+					var mdMsg = (MarketDataMessage)message;
+					var security = GetSecurity(mdMsg.SecurityId);
+
+					if (mdMsg.IsSubscribe)
+					{
+						SubscribeMarketData(security, mdMsg);
+					}
+					else
+						UnSubscribeMarketData(security, mdMsg);
+				}
+				else
+					SendInMessage(message);
 			}
 			else
 				SendOutMessage(message);
