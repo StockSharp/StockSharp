@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.4:
 * (feature) IPositionProvider interface added.
 * (feature) IPortfolioProvider.PortfolioChanged event added.
 * (feature) Strategy. Implemented IPositionProvider interface.
