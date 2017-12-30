@@ -622,7 +622,7 @@ namespace StockSharp.Algo.Testing
 				}
 				else
 				{
-					var message = _parent.CheckRegistration(execution, _securityDefinition, result);
+					var message = _parent.CheckRegistration(execution, _securityDefinition/*, result*/);
 
 					var replyMsg = CreateReply(execution, time);
 
@@ -816,8 +816,10 @@ namespace StockSharp.Algo.Testing
 					{
 						if (executions != null)
 						{
-							foreach (var quote in levelQuotes)
+							for (var i = 0; i < levelQuotes.Count; i++)
 							{
+								var quote = levelQuotes[i];
+
 								// если это пользовательская заявка и матчинг идет о заявку с таким же портфелем
 								if (quote.PortfolioName == order.PortfolioName)
 								{
@@ -836,6 +838,7 @@ namespace StockSharp.Algo.Testing
 								executions[execPrice] = executions.TryGetValue(execPrice) + volume;
 								this.AddInfoLog(LocalizedStrings.Str1163Params, order.TransactionId, volume, execPrice);
 
+								levelQuotes.RemoveAt(i, quote);
 								_messagePool.Free(quote);
 							}
 						}
@@ -860,7 +863,7 @@ namespace StockSharp.Algo.Testing
 						{
 							var quote = levelQuotes[i];
 
-;							// если это пользовательская заявка и матчинг идет о заявку с таким же портфелем
+							// если это пользовательская заявка и матчинг идет о заявку с таким же портфелем
 							if (executions != null && quote.PortfolioName == order.PortfolioName)
 							{
 								var matchError = LocalizedStrings.Str1161Params.Put(quote.TransactionId, order.TransactionId);
@@ -1153,12 +1156,12 @@ namespace StockSharp.Algo.Testing
 						// пришел дифф по стакану - начиная с конца убираем снятый объем
 						for (var i = level.Count - 1; i >= 0 && leftBalance > 0; i--)
 						{
-							var msg = level[i];
+							var quote = level[i];
 
-							if (msg.TransactionId != message.TransactionId)
+							if (quote.TransactionId != message.TransactionId)
 								continue;
 
-							var balance = msg.GetBalance();
+							var balance = quote.GetBalance();
 							leftBalance -= balance;
 
 							if (leftBalance < 0)
@@ -1185,8 +1188,8 @@ namespace StockSharp.Algo.Testing
 							AddTotalVolume(message.Side, -balance);
 
 							pair.Second.Volume -= balance;
-							level.RemoveAt(i);
-							_messagePool.Free(msg);
+							level.RemoveAt(i, quote);
+							_messagePool.Free(quote);
 						}
 					}
 					else
@@ -1503,7 +1506,7 @@ namespace StockSharp.Algo.Testing
 			{
 				var time = tradeMsg.ServerTime;
 
-				PnLManager.ProcessMyTrade(tradeMsg, out var info);
+				PnLManager.ProcessMyTrade(tradeMsg, out var _);
 				tradeMsg.Commission = _parent._commissionManager.Process(tradeMsg);
 
 				var position = tradeMsg.GetPosition(false);
@@ -1603,7 +1606,7 @@ namespace StockSharp.Algo.Testing
 				.Add(PositionChangeTypes.Commission, commission));
 			}
 
-			public string CheckRegistration(ExecutionMessage execMsg, ICollection<Message> result)
+			public string CheckRegistration(ExecutionMessage execMsg)
 			{
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
 				var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
@@ -1899,7 +1902,7 @@ namespace StockSharp.Algo.Testing
 
 		private PortfolioEmulator GetPortfolioInfo(string portfolioName)
 		{
-			return _portfolios.SafeAdd(portfolioName, key => new PortfolioEmulator(this, key), out var isNew);
+			return _portfolios.SafeAdd(portfolioName, key => new PortfolioEmulator(this, key));
 		}
 
 		private void UpdateLevel1Info(Level1ChangeMessage level1Msg, ICollection<Message> retVal, bool addToResult)
@@ -1944,7 +1947,7 @@ namespace StockSharp.Algo.Testing
 				info.ProcessMarginChange(level1Msg.LocalTime, level1Msg.SecurityId, retVal);
 		}
 
-		private string CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition, ICollection<Message> result)
+		private string CheckRegistration(ExecutionMessage execMsg, SecurityMessage securityDefinition/*, ICollection<Message> result*/)
 		{
 			var board = _boardDefinitions.TryGetValue(execMsg.SecurityId.BoardCode);
 
@@ -1989,7 +1992,7 @@ namespace StockSharp.Algo.Testing
 
 			var info = GetPortfolioInfo(execMsg.PortfolioName);
 
-			return info.CheckRegistration(execMsg, result);
+			return info.CheckRegistration(execMsg/*, result*/);
 		}
 
 		private void RecalcPnL(DateTimeOffset time, ICollection<Message> messages)
