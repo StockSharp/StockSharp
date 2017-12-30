@@ -52,6 +52,7 @@ StockSharp API Change log
 * (feature) IMessageAdapter.TimeFrames
 * (bug) SampleMultiConnection. Fill time frames http://stocksharp.ru/forum/8849/primer-samplemulticonnection/
 * (bug) PositionManager events fix http://stocksharp.ru/forum/8961/sobytiya-positionmanager-newposition-i-positionchanged/
+* (bug) Connector. Stop candle series fix http://stocksharp.ru/forum/8919/povtornyi-zapusk-serii-svechek/
 
 ## v4.3.28:
 * (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.

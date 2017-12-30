@@ -112,7 +112,9 @@ namespace StockSharp.Algo
 				//else
 				//{
 				//TryUnSubscribe(security, message);
-				_pendingSubscriptions.Add(message.OriginalTransactionId, Tuple.Create((MarketDataMessage)message.Clone(), security));
+				if (message.OriginalTransactionId != 0)
+					_pendingSubscriptions.Add(message.OriginalTransactionId, Tuple.Create((MarketDataMessage)message.Clone(), security));
+				
 				_connector.SendInMessage(message);
 				//}
 			}
