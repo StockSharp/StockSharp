@@ -4672,6 +4672,7 @@ UnderlyingSecurityType;Underlying security type;Тип базового инст
 Underlying;Underlying;Базовый
 NewFolder;New folder;Новая папка
 CancelOperationQuestion;Cancel operation?;Отменить операцию?
+Passphrase;Passphrase;Кодовое слово
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

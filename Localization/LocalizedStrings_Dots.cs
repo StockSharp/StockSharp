@@ -483,5 +483,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string UnderlyingSecurityTypeDot => AppendDot(UnderlyingSecurityType);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string PassphraseDot => AppendDot(Passphrase);
 	}
 }

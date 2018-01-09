@@ -46346,5 +46346,15 @@ namespace StockSharp.Localization
 		/// Cancel operation?
 		/// </summary>
 		public static string CancelOperationQuestion => GetString(CancelOperationQuestionKey);
+
+		/// <summary>
+		/// Passphrase
+		/// </summary>
+		public const string PassphraseKey = nameof(Passphrase);
+
+		/// <summary>
+		/// Passphrase
+		/// </summary>
+		public static string Passphrase => GetString(PassphraseKey);
 	}
 }
