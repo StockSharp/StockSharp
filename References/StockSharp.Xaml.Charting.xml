@@ -2282,207 +2282,67 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Charting.IThemeableChart">
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter">
       <summary>
-            Base interface for all chart components.
+            The renderer for <see cref="T:StockSharp.Algo.Indicators.Envelope" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.IThemeableChart.ChartTheme">
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.MiddleColor">
       <summary>
-            The name of the graphic theme.
+            Middle line color.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Charting.LineChartStyles">
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.UpperColor">
       <summary>
-            Equity curve chart drawing styles.
+            Upper line color.
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Charting.LineChartStyles.Area">
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.LowerColor">
       <summary>
-            Chart drawing in the form of a fill area.
+            Lower line color.
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Charting.LineChartStyles.Line">
-      <summary>
-            Chart drawing in the form of a line.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.Charting.LineChartStyles.DashedLine">
-      <summary>
-            Chart drawing in the form of a dashed line.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Charting.EquityData">
-      <summary>
-            Equity data.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.EquityData.Time">
-      <summary>
-            The time stamp in which the equity value was equal to <see cref="P:StockSharp.Xaml.Charting.EquityData.Value" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.EquityData.Value">
-      <summary>
-            The equity value.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Charting.ExtendedBaseApplication">
-      <summary>
-            The extended base class for WPF applications.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ExtendedBaseApplication.#ctor">
-      <summary>
-            Initialize <see cref="T:StockSharp.Xaml.Charting.ExtendedBaseApplication" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Charting.IChart">
-      <summary>
-            The interface for work with the chart.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.IChart.Areas">
-      <summary>
-            Chart areas.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.IChart.IsAutoScroll">
-      <summary>
-            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occurred. The default is enabled.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.IChart.IsAutoRange">
-      <summary>
-            To use automatic range for the X-axis. The default is off.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.IChart.IndicatorTypes">
-      <summary>
-            The list of available indicators types.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
-      <summary>
-            To add an area to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.RemoveArea(StockSharp.Xaml.Charting.ChartArea)">
-      <summary>
-            To remove the area from the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.ClearAreas">
-      <summary>
-            To remove all areas from the chart.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="candleSeries">Candles series.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartIndicatorElement,StockSharp.Algo.Candles.CandleSeries,StockSharp.Algo.Indicators.IIndicator)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="candleSeries">Candles series.</param>
-      <param name="indicator">Indicator.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartOrderElement,StockSharp.BusinessEntities.Security)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="security">Security.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartTradeElement,StockSharp.BusinessEntities.Security)">
-      <summary>
-            To add an element to the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-      <param name="security">Security.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.RemoveElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To remove the element from the chart.
-            </summary>
-      <param name="area">Chart area.</param>
-      <param name="element">The chart element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.GetIndicator(StockSharp.Xaml.Charting.ChartIndicatorElement)">
-      <summary>
-            To get an indicator which is associated with <see cref="T:StockSharp.Xaml.Charting.ChartIndicatorElement" />.
-            </summary>
-      <param name="element">The chart element.</param>
-      <returns>Indicator.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.GetSource(StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To get the data source for <see cref="T:StockSharp.Xaml.Charting.IChartElement" />.
-            </summary>
-      <param name="element">The chart element.</param>
-      <returns>Market-data source.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})">
-      <summary>
-            To reset the chart elements values drawn previously.
-            </summary>
-      <param name="elements">Chart elements.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)">
-      <summary>
-            To process the new data.
-            </summary>
-      <param name="data">New data.</param>
-    </member>
-    <member name="T:StockSharp.Xaml.Charting.DrawHandler">
-      <summary>
-            The description of the method of value drawing on the chart.
-            </summary>
-      <param name="element">The chart element.</param>
-      <param name="shift">Offset.</param>
-      <param name="values">Values.</param>
-    </member>
-    <member name="T:StockSharp.Xaml.Charting.IChartIndicatorPainter">
-      <summary>
-            The interface describing the indicator renderer on the chart (for example, lines, histograms, etc.).
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.IChartIndicatorPainter.BaseElement">
-      <summary>
-            The chart element representing the indicator.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Init">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.Init">
       <summary>
             To initialize renderer.
             </summary>
       <returns>Graphical data.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
       <summary>
             To process new values.
             </summary>
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.IndicatorAttribute">
+      <summary>
+            Attribute, applied to indicator's painter, to provide information about type of <see cref="T:StockSharp.Algo.Indicators.IIndicator" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.IndicatorAttribute.Type">
+      <summary>
+            Indicator type.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.IndicatorAttribute.#ctor(System.Type)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.IndicatorPainters.IndicatorAttribute" />.
+            </summary>
+      <param name="type">Indicator type.</param>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter">
       <summary>
@@ -2962,6 +2822,208 @@
       <returns>Graphical data.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
+      <summary>
+            To process new values.
+            </summary>
+      <param name="time">The time stamp of the new data generation.</param>
+      <param name="value">Indicator values.</param>
+      <param name="draw">The method of value drawing on the chart.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.IThemeableChart">
+      <summary>
+            Base interface for all chart components.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IThemeableChart.ChartTheme">
+      <summary>
+            The name of the graphic theme.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.LineChartStyles">
+      <summary>
+            Equity curve chart drawing styles.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.LineChartStyles.Area">
+      <summary>
+            Chart drawing in the form of a fill area.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.LineChartStyles.Line">
+      <summary>
+            Chart drawing in the form of a line.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.LineChartStyles.DashedLine">
+      <summary>
+            Chart drawing in the form of a dashed line.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.EquityData">
+      <summary>
+            Equity data.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.EquityData.Time">
+      <summary>
+            The time stamp in which the equity value was equal to <see cref="P:StockSharp.Xaml.Charting.EquityData.Value" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.EquityData.Value">
+      <summary>
+            The equity value.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.ExtendedBaseApplication">
+      <summary>
+            The extended base class for WPF applications.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ExtendedBaseApplication.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Xaml.Charting.ExtendedBaseApplication" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.IChart">
+      <summary>
+            The interface for work with the chart.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IChart.Areas">
+      <summary>
+            Chart areas.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IChart.IsAutoScroll">
+      <summary>
+            To scroll <see cref="P:StockSharp.Xaml.Charting.IChart.Areas" /> areas automatically when new data occurred. The default is enabled.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IChart.IsAutoRange">
+      <summary>
+            To use automatic range for the X-axis. The default is off.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IChart.IndicatorTypes">
+      <summary>
+            The list of available indicators types.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
+      <summary>
+            To add an area to the chart.
+            </summary>
+      <param name="area">Chart area.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.RemoveArea(StockSharp.Xaml.Charting.ChartArea)">
+      <summary>
+            To remove the area from the chart.
+            </summary>
+      <param name="area">Chart area.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.ClearAreas">
+      <summary>
+            To remove all areas from the chart.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)">
+      <summary>
+            To add an element to the chart.
+            </summary>
+      <param name="area">Chart area.</param>
+      <param name="element">The chart element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.CandleSeries)">
+      <summary>
+            To add an element to the chart.
+            </summary>
+      <param name="area">Chart area.</param>
+      <param name="element">The chart element.</param>
+      <param name="candleSeries">Candles series.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartIndicatorElement,StockSharp.Algo.Candles.CandleSeries,StockSharp.Algo.Indicators.IIndicator)">
+      <summary>
+            To add an element to the chart.
+            </summary>
+      <param name="area">Chart area.</param>
+      <param name="element">The chart element.</param>
+      <param name="candleSeries">Candles series.</param>
+      <param name="indicator">Indicator.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartOrderElement,StockSharp.BusinessEntities.Security)">
+      <summary>
+            To add an element to the chart.
+            </summary>
+      <param name="area">Chart area.</param>
+      <param name="element">The chart element.</param>
+      <param name="security">Security.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.AddElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.ChartTradeElement,StockSharp.BusinessEntities.Security)">
+      <summary>
+            To add an element to the chart.
+            </summary>
+      <param name="area">Chart area.</param>
+      <param name="element">The chart element.</param>
+      <param name="security">Security.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.RemoveElement(StockSharp.Xaml.Charting.ChartArea,StockSharp.Xaml.Charting.IChartElement)">
+      <summary>
+            To remove the element from the chart.
+            </summary>
+      <param name="area">Chart area.</param>
+      <param name="element">The chart element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.GetIndicator(StockSharp.Xaml.Charting.ChartIndicatorElement)">
+      <summary>
+            To get an indicator which is associated with <see cref="T:StockSharp.Xaml.Charting.ChartIndicatorElement" />.
+            </summary>
+      <param name="element">The chart element.</param>
+      <returns>Indicator.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.GetSource(StockSharp.Xaml.Charting.IChartElement)">
+      <summary>
+            To get the data source for <see cref="T:StockSharp.Xaml.Charting.IChartElement" />.
+            </summary>
+      <param name="element">The chart element.</param>
+      <returns>Market-data source.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})">
+      <summary>
+            To reset the chart elements values drawn previously.
+            </summary>
+      <param name="elements">Chart elements.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)">
+      <summary>
+            To process the new data.
+            </summary>
+      <param name="data">New data.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.DrawHandler">
+      <summary>
+            The description of the method of value drawing on the chart.
+            </summary>
+      <param name="element">The chart element.</param>
+      <param name="shift">Offset.</param>
+      <param name="values">Values.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.IChartIndicatorPainter">
+      <summary>
+            The interface describing the indicator renderer on the chart (for example, lines, histograms, etc.).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IChartIndicatorPainter.BaseElement">
+      <summary>
+            The chart element representing the indicator.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChartIndicatorPainter.Init">
+      <summary>
+            To initialize renderer.
+            </summary>
+      <returns>Graphical data.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
       <summary>
             To process new values.
             </summary>

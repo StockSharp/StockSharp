@@ -1,5 +1,9 @@
 StockSharp API Change log
 ========================
+## current:
+* (bug) Charting. Envelope indicator rendering fix.
+* (feature) Charting. Painters lookup refactoring.
+
 ## v4.4.4:
 * (feature) IPositionProvider interface added.
 * (feature) IPortfolioProvider.PortfolioChanged event added.

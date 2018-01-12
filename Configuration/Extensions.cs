@@ -248,13 +248,13 @@ namespace StockSharp.Configuration
 
 				var rendererTypes = typeof(Chart).Assembly
 					.GetTypes()
-					.Where(t => !t.IsAbstract && typeof(BaseChartIndicatorPainter).IsAssignableFrom(t))
-					.ToDictionary(t => t.Name);
+					.Where(t => !t.IsAbstract && typeof(BaseChartIndicatorPainter).IsAssignableFrom(t) && t.GetAttribute<IndicatorAttribute>() != null)
+					.ToDictionary(t => t.GetAttribute<IndicatorAttribute>().Type);
 
 				_indicatorTypes = typeof(IIndicator).Assembly
 					.GetTypes()
 					.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t) && t.GetConstructor(Type.EmptyTypes) != null && t.GetAttribute<BrowsableAttribute>()?.Browsable != false)
-					.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t.Name + "Painter")))
+					.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t)))
 					.Concat(_customIndicators)
 					.OrderBy(t => t.Name)
 					.ToArray();
