@@ -3,6 +3,7 @@ StockSharp API Change log
 ## current:
 * (bug) Charting. Envelope indicator rendering fix.
 * (feature) Charting. Painters lookup refactoring.
+* (feature) Quik. Removed obsolete QuikOrderConditionResults.
 
 ## v4.4.4:
 * (feature) IPositionProvider interface added.
