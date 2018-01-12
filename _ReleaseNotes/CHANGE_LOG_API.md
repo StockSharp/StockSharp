@@ -5,6 +5,7 @@ StockSharp API Change log
 * (feature) Charting. Painters lookup refactoring.
 * (feature) Quik. Removed obsolete QuikOrderConditionResults.
 * (bug) OrderRegMsg.TillDate usage fix.
+* (bug) InteractiveBrokers. Resubscribe fix.
 
 ## v4.4.4:
 * (feature) IPositionProvider interface added.
