@@ -4,6 +4,7 @@ StockSharp API Change log
 * (bug) Charting. Envelope indicator rendering fix.
 * (feature) Charting. Painters lookup refactoring.
 * (feature) Quik. Removed obsolete QuikOrderConditionResults.
+* (bug) OrderRegMsg.TillDate usage fix.
 
 ## v4.4.4:
 * (feature) IPositionProvider interface added.
