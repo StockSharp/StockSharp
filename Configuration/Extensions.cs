@@ -18,6 +18,7 @@ namespace StockSharp.Configuration
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Data.Common;
 	using System.IO;
 	using System.Linq;
@@ -252,7 +253,7 @@ namespace StockSharp.Configuration
 
 				_indicatorTypes = typeof(IIndicator).Assembly
 					.GetTypes()
-					.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t) && t.GetConstructor(Type.EmptyTypes) != null)
+					.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t) && t.GetConstructor(Type.EmptyTypes) != null && t.GetAttribute<BrowsableAttribute>()?.Browsable != false)
 					.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t.Name + "Painter")))
 					.Concat(_customIndicators)
 					.OrderBy(t => t.Name)
