@@ -46356,5 +46356,35 @@ namespace StockSharp.Localization
 		/// Passphrase
 		/// </summary>
 		public static string Passphrase => GetString(PassphraseKey);
+
+		/// <summary>
+		/// Middle line
+		/// </summary>
+		public const string MiddleLineKey = nameof(MiddleLine);
+
+		/// <summary>
+		/// Middle line
+		/// </summary>
+		public static string MiddleLine => GetString(MiddleLineKey);
+
+		/// <summary>
+		/// Upper line
+		/// </summary>
+		public const string UpperLineKey = nameof(UpperLine);
+
+		/// <summary>
+		/// Upper line
+		/// </summary>
+		public static string UpperLine => GetString(UpperLineKey);
+
+		/// <summary>
+		/// Lower line
+		/// </summary>
+		public const string LowerLineKey = nameof(LowerLine);
+
+		/// <summary>
+		/// Lower line
+		/// </summary>
+		public static string LowerLine => GetString(LowerLineKey);
 	}
 }

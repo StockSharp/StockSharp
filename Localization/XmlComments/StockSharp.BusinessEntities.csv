@@ -681,6 +681,8 @@ P:StockSharp.BusinessEntities.OrderFail.Error/summary;DocStr2926
 P:StockSharp.BusinessEntities.OrderFail.ServerTime/summary;ServerTime
 P:StockSharp.BusinessEntities.OrderFail.LocalTime/summary;DocStr2927
 P:StockSharp.BusinessEntities.OrderFail.ExtensionInfo/summary;DocStr2928
+M:StockSharp.BusinessEntities.OrderFail.ToString/summary;DocStr49
+M:StockSharp.BusinessEntities.OrderFail.ToString/returns;DocStr50
 T:StockSharp.BusinessEntities.OrderLogItem/summary;DocStr1442
 M:StockSharp.BusinessEntities.OrderLogItem.#ctor/summary;DocStr1
 M:StockSharp.BusinessEntities.OrderLogItem.ToString/summary;DocStr49

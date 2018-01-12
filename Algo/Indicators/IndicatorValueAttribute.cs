@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IndicatorValueAttribute"/>.
 		/// </summary>
-		/// <param name="type">Input values type.</param>
+		/// <param name="type">Value type.</param>
 		/// <param name="isInput">Is input.</param>
 		protected IndicatorValueAttribute(Type type, bool isInput)
 		{

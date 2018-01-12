@@ -1053,7 +1053,7 @@ T:StockSharp.Algo.Indicators.IndicatorValueAttribute/summary;DocStr10136
 P:StockSharp.Algo.Indicators.IndicatorValueAttribute.Type/summary;DocStr1145
 P:StockSharp.Algo.Indicators.IndicatorValueAttribute.IsInput/summary;DocStr10137
 M:StockSharp.Algo.Indicators.IndicatorValueAttribute.#ctor(System.Type,System.Boolean)/summary;DocStr1
-M:StockSharp.Algo.Indicators.IndicatorValueAttribute.#ctor(System.Type,System.Boolean)/param/type;DocStr10108
+M:StockSharp.Algo.Indicators.IndicatorValueAttribute.#ctor(System.Type,System.Boolean)/param/type;DocStr1145
 M:StockSharp.Algo.Indicators.IndicatorValueAttribute.#ctor(System.Type,System.Boolean)/param/isInput;DocStr10137
 T:StockSharp.Algo.Indicators.IndicatorInAttribute/summary;DocStr10138
 M:StockSharp.Algo.Indicators.IndicatorInAttribute.#ctor(System.Type)/summary;DocStr1
@@ -1438,7 +1438,7 @@ T:StockSharp.Algo.Indicators.BollingerBands/summary;Str777
 M:StockSharp.Algo.Indicators.BollingerBands.#ctor/summary;DocStr1
 M:StockSharp.Algo.Indicators.BollingerBands.#ctor(StockSharp.Algo.Indicators.LengthIndicator{System.Decimal})/summary;DocStr1
 M:StockSharp.Algo.Indicators.BollingerBands.#ctor(StockSharp.Algo.Indicators.LengthIndicator{System.Decimal})/param/ma;Str731
-P:StockSharp.Algo.Indicators.BollingerBands.MovingAverage/summary;DocStr1194
+P:StockSharp.Algo.Indicators.BollingerBands.MovingAverage/summary;MiddleLine
 P:StockSharp.Algo.Indicators.BollingerBands.UpBand/summary;DocStr1195
 P:StockSharp.Algo.Indicators.BollingerBands.LowBand/summary;DocStr1196
 P:StockSharp.Algo.Indicators.BollingerBands.Length/summary;Str779
@@ -1459,10 +1459,10 @@ M:StockSharp.Algo.Indicators.DoubleExponentialMovingAverage.OnProcess(StockSharp
 T:StockSharp.Algo.Indicators.Envelope/summary;DocStr1199
 M:StockSharp.Algo.Indicators.Envelope.#ctor/summary;DocStr1
 M:StockSharp.Algo.Indicators.Envelope.#ctor(StockSharp.Algo.Indicators.LengthIndicator{System.Decimal})/summary;DocStr1
-M:StockSharp.Algo.Indicators.Envelope.#ctor(StockSharp.Algo.Indicators.LengthIndicator{System.Decimal})/param/ma;DocStr1194
-P:StockSharp.Algo.Indicators.Envelope.Middle/summary;DocStr1194
-P:StockSharp.Algo.Indicators.Envelope.Upper/summary;DocStr1200
-P:StockSharp.Algo.Indicators.Envelope.Lower/summary;DocStr1201
+M:StockSharp.Algo.Indicators.Envelope.#ctor(StockSharp.Algo.Indicators.LengthIndicator{System.Decimal})/param/ma;MiddleLine
+P:StockSharp.Algo.Indicators.Envelope.Middle/summary;MiddleLine
+P:StockSharp.Algo.Indicators.Envelope.Upper/summary;UpperLine
+P:StockSharp.Algo.Indicators.Envelope.Lower/summary;LowerLine
 P:StockSharp.Algo.Indicators.Envelope.Length/summary;Str779
 P:StockSharp.Algo.Indicators.Envelope.Shift/summary;DocStr1202
 P:StockSharp.Algo.Indicators.Envelope.IsFormed/summary;DocStr1126

@@ -4673,6 +4673,9 @@ Underlying;Underlying;Базовый
 NewFolder;New folder;Новая папка
 CancelOperationQuestion;Cancel operation?;Отменить операцию?
 Passphrase;Passphrase;Кодовое слово
+MiddleLine;Middle line;Средняя линия
+UpperLine;Upper line;Верхняя линия
+LowerLine;Lower line;Нижняя линия
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5839,14 +5842,11 @@ DocStr1190;To get price components to select the maximal value;Получить 
 DocStr1191;Price components;Компоненты цен
 DocStr1192;http://www2.wealth-lab.com/WL5Wiki/UltimateOsc.ashx http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:ultimate_oscillator;http://www2.wealth-lab.com/WL5Wiki/UltimateOsc.ashx http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:ultimate_oscillator
 DocStr1193;Bollinger band;Полоса Боллинджера
-DocStr1194;Middle line;Средняя линия
 DocStr1195;Upper band +;Верхняя полоса+
 DocStr1196;Lower band -;Нижняя полоса-
 DocStr1197;Double Exponential Moving Average;Double Exponential Moving Average
 DocStr1198;((2 * EMA) – EMA of EMA);((2 * EMA) – EMA of EMA)
 DocStr1199;Envelope;Envelope
-DocStr1200;Upper line;Верхняя линия
-DocStr1201;Lower line;Нижняя линия
 DocStr1202;The shift width. Specified as percentage from 0 to 1. The default equals to 0.25;Ширина сдвига. Задается в процентах от 0 до 1. По умолчанию равно 0.25
 DocStr1203;Hull Moving Average;Скользящая средняя Халла (Hull Moving Average)
 DocStr1204;Variables initial initialization;Начальная инициализация переменных
@@ -14611,3 +14611,7 @@ DocStr10243;For MiFID 2 reporting: identifies a person as the responsible party 
 DocStr10244;For MiFID 2 reporting: identifies the algorithm responsible for the execution of a transaction within the firm;Для MiFID 2 отчетов: определяет алгоритм ответственный за исполнение транзакции внутри фирмы
 DocStr10245;Tick-by-tick data types;Типы данных тик-за-тиком
 DocStr10246;All last trades;Все последние тики
+DocStr10247;Middle line color;Цвет средней линии
+DocStr10248;Upper line color;Цвет верхней линии
+DocStr10249;Lower line color;Цвет нижний линии
+DocStr10250;Attribute, applied to indicator's painter, to provide information about type of {0};Атрибут, применяющийся к отрисовщику индикатора для предоставления информации о типе {0}
