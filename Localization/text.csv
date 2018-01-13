@@ -4677,6 +4677,16 @@ MiddleLine;Middle line;Средняя линия
 UpperLine;Upper line;Верхняя линия
 LowerLine;Lower line;Нижняя линия
 ConnectorIsStub;Connector is stub only. Please contact info@stocksharp.com to real module.;Коннектор является заглушкой. Пожалуйста, напишите нам на info@stocksharp.com для того, чтобы получить настоящие модули.
+Bitfinex;Bitfinex;Bitfinex
+Bithumb;Bithumb;Bithumb
+Bittrex;Bittrex;Bittrex
+Coinbase;Coinbase;Coinbase
+Coincheck;Coincheck;Coincheck
+Gdax;GDAX;GDAX
+HitBtc;HitBTC;HitBTC
+Kraken;Kraken;Kraken
+Okcoin;OKCoin;OKCoin
+Poloniex;Poloniex;Poloniex
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

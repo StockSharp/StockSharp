@@ -46396,5 +46396,105 @@ namespace StockSharp.Localization
 		/// Connector is stub only. Please contact info@stocksharp.com to real module.
 		/// </summary>
 		public static string ConnectorIsStub => GetString(ConnectorIsStubKey);
+
+		/// <summary>
+		/// Bitfinex
+		/// </summary>
+		public const string BitfinexKey = nameof(Bitfinex);
+
+		/// <summary>
+		/// Bitfinex
+		/// </summary>
+		public static string Bitfinex => GetString(BitfinexKey);
+
+		/// <summary>
+		/// Bithumb
+		/// </summary>
+		public const string BithumbKey = nameof(Bithumb);
+
+		/// <summary>
+		/// Bithumb
+		/// </summary>
+		public static string Bithumb => GetString(BithumbKey);
+
+		/// <summary>
+		/// Bittrex
+		/// </summary>
+		public const string BittrexKey = nameof(Bittrex);
+
+		/// <summary>
+		/// Bittrex
+		/// </summary>
+		public static string Bittrex => GetString(BittrexKey);
+
+		/// <summary>
+		/// Coinbase
+		/// </summary>
+		public const string CoinbaseKey = nameof(Coinbase);
+
+		/// <summary>
+		/// Coinbase
+		/// </summary>
+		public static string Coinbase => GetString(CoinbaseKey);
+
+		/// <summary>
+		/// Coincheck
+		/// </summary>
+		public const string CoincheckKey = nameof(Coincheck);
+
+		/// <summary>
+		/// Coincheck
+		/// </summary>
+		public static string Coincheck => GetString(CoincheckKey);
+
+		/// <summary>
+		/// Gdax
+		/// </summary>
+		public const string GdaxKey = nameof(Gdax);
+
+		/// <summary>
+		/// Gdax
+		/// </summary>
+		public static string Gdax => GetString(GdaxKey);
+
+		/// <summary>
+		/// HitBtc
+		/// </summary>
+		public const string HitBtcKey = nameof(HitBtc);
+
+		/// <summary>
+		/// HitBtc
+		/// </summary>
+		public static string HitBtc => GetString(HitBtcKey);
+
+		/// <summary>
+		/// Kraken
+		/// </summary>
+		public const string KrakenKey = nameof(Kraken);
+
+		/// <summary>
+		/// Kraken
+		/// </summary>
+		public static string Kraken => GetString(KrakenKey);
+
+		/// <summary>
+		/// Okcoin
+		/// </summary>
+		public const string OkcoinKey = nameof(Okcoin);
+
+		/// <summary>
+		/// Okcoin
+		/// </summary>
+		public static string Okcoin => GetString(OkcoinKey);
+
+		/// <summary>
+		/// Poloniex
+		/// </summary>
+		public const string PoloniexKey = nameof(Poloniex);
+
+		/// <summary>
+		/// Poloniex
+		/// </summary>
+		public static string Poloniex => GetString(PoloniexKey);
 	}
 }
