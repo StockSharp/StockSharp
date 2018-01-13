@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Okcoin</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Okcoin.OkcoinMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Okcoin"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Okcoin.OkcoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Okcoin.OkcoinMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Okcoin.OkcoinMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Okcoin.OkcoinMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okcoin.OkcoinMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Okcoin.OkcoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Okcoin.OkcoinMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Okcoin.OkcoinMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.Okcoin.OkcoinTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Okcoin"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Okcoin.OkcoinTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Okcoin.OkcoinTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okcoin.OkcoinTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okcoin.OkcoinTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>

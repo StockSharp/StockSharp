@@ -39,23 +39,33 @@ namespace StockSharp.Configuration
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BarChart;
+	using StockSharp.Bitfinex;
+	using StockSharp.Bithumb;
 	using StockSharp.BitStamp;
+	using StockSharp.Bittrex;
 	using StockSharp.Blackwood;
 	using StockSharp.Btce;
+	using StockSharp.Coinbase;
+	using StockSharp.Coincheck;
 	using StockSharp.Cqg.Continuum;
 	using StockSharp.Cqg.Com;
 	using StockSharp.ETrade;
 	using StockSharp.Fix;
 	using StockSharp.Fxcm;
+	using StockSharp.Gdax;
+	using StockSharp.HitBtc;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.IQFeed;
 	using StockSharp.ITCH;
+	using StockSharp.Kraken;
 	using StockSharp.LMAX;
 	using StockSharp.Logging;
 	using StockSharp.Micex;
 	using StockSharp.Oanda;
+	using StockSharp.Okcoin;
 	using StockSharp.OpenECry;
 	using StockSharp.Plaza;
+	using StockSharp.Poloniex;
 	using StockSharp.QuantHouse;
 	using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
@@ -177,6 +187,16 @@ namespace StockSharp.Configuration
 			typeof(SpbExMessageAdapter),
 			typeof(FxcmMessageAdapter),
 			typeof(QuantFeedMessageAdapter),
+			typeof(BitfinexMessageAdapter),
+			typeof(BithumbMessageAdapter),
+			typeof(BittrexMessageAdapter),
+			typeof(CoinbaseMessageAdapter),
+			typeof(CoincheckMessageAdapter),
+			typeof(GdaxMessageAdapter),
+			typeof(HitBtcMessageAdapter),
+			typeof(KrakenMessageAdapter),
+			typeof(OkcoinMessageAdapter),
+			typeof(PoloniexMessageAdapter),
 		});
 
 		/// <summary>

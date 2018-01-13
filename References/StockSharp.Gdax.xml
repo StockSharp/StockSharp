@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Gdax</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Gdax.GdaxMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Gdax"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Gdax.GdaxMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Gdax.GdaxMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Gdax.GdaxMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Gdax.GdaxMessageAdapter.Passphrase">
+            <summary>
+            Passphrase.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.Gdax.GdaxTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Gdax"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Gdax.GdaxTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Gdax.GdaxTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Gdax.GdaxTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Gdax.GdaxTrader.Passphrase">
+            <summary>
+            Passphrase.
+            </summary>
+        </member>
+    </members>
+</doc>

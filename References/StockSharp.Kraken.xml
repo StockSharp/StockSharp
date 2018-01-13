@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Kraken</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Kraken.KrakenMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Kraken"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Kraken.KrakenMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Kraken.KrakenMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Kraken.KrakenMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Kraken.KrakenMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kraken.KrakenMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Kraken.KrakenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Kraken.KrakenMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Kraken.KrakenMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.Kraken.KrakenTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Kraken"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Kraken.KrakenTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Kraken.KrakenTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kraken.KrakenTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kraken.KrakenTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>

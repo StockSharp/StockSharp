@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Bithumb</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Bithumb.BithumbMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Bithumb"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bithumb.BithumbMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Bithumb.BithumbMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bithumb.BithumbMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.Bithumb.BithumbTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bithumb"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bithumb.BithumbTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bithumb.BithumbTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bithumb.BithumbTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>

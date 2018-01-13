@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Coinbase</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Coinbase.CoinbaseMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Coinbase"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Coinbase.CoinbaseMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.Coinbase.CoinbaseTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Coinbase"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Coinbase.CoinbaseTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>
