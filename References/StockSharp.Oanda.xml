@@ -139,7 +139,7 @@
     </member>
     <member name="T:StockSharp.Oanda.OandaTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the OANDA.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.Oanda" />.
             </summary>
     </member>
     <member name="M:StockSharp.Oanda.OandaTrader.#ctor">

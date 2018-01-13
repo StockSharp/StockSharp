@@ -46386,5 +46386,15 @@ namespace StockSharp.Localization
 		/// Lower line
 		/// </summary>
 		public static string LowerLine => GetString(LowerLineKey);
+
+		/// <summary>
+		/// Connector is stub only. Please contact info@stocksharp.com to real module.
+		/// </summary>
+		public const string ConnectorIsStubKey = nameof(ConnectorIsStub);
+
+		/// <summary>
+		/// Connector is stub only. Please contact info@stocksharp.com to real module.
+		/// </summary>
+		public static string ConnectorIsStub => GetString(ConnectorIsStubKey);
 	}
 }

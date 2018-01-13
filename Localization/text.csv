@@ -4676,6 +4676,7 @@ Passphrase;Passphrase;Кодовое слово
 MiddleLine;Middle line;Средняя линия
 UpperLine;Upper line;Верхняя линия
 LowerLine;Lower line;Нижняя линия
+ConnectorIsStub;Connector is stub only. Please contact info@stocksharp.com to real module.;Коннектор является заглушкой. Пожалуйста, напишите нам на info@stocksharp.com для того, чтобы получить настоящие модули.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7167,15 +7168,13 @@ DocStr2526;To convert the type in the ISO 10962 standard into {0};Преобра
 DocStr2527;To get the number of operations, or discard the exception, if no information available;Получить количество операции, или выбросить исключение, если информация отсутствует
 DocStr2528;Operations;Операции
 DocStr2529;To get order identifier, or discard exception, if no information available;Получить идентификатор заявки, или выбросить исключение, если информация отсутствует
-DocStr2530;The message adapter for BarChart;Маркет-дата адаптер сообщений для BarChart
-DocStr2532;The interface {0} implementation which provides a connection to the BarChart;Реализация интерфейса {0} для взаимодействия с BarChart для скачивания исторических и реал-тайм маркет-данных
 DocStr2533;To get historical ticks;Получить исторические тиков
 DocStr2534;Maximum ticks count;Максимальное количество тиков
 DocStr2535;Whether all data were obtained successfully or the download process has been interrupted;Успешно ли получены все данные или процесс загрузки был прерван
 DocStr2536;To get historical candles;Получить исторические свечи
 DocStr2537;The candle parameter (for example, time-frame);Параметр свечки (например, тайм-фрейм)
-DocStr2538;The message adapter for BitStamp;Адаптер сообщений для BitStamp
-DocStr2539;The interface {0} implementation which provides a connection to the BitStamp;Реализация интерфейса {0} для взаимодействия с биржей BitStamp
+DocStr2538;The message adapter for {0};Адаптер сообщений для {0}
+DocStr2539;The interface {0} implementation which provides a connection to the {1};Реализация интерфейса {0} для взаимодействия с {1}
 DocStr2540;Blackwood address list;Адреса серверов Blackwood
 DocStr2541;Transaction server default port;Порт по умолчанию для сервера исполнения транзакций
 DocStr2542;Realtime data server default port;Порт по умолчанию для сервера рыночных данных
@@ -7205,7 +7204,6 @@ DocStr2566;Bid ({0} board);Бид ({0} площадка)
 DocStr2567;Ask ({0} board);Оффер ({0} площадка)
 DocStr2568;Last ({0} board);Последняя ({0} площадка)
 DocStr2569;Spread ({0} board);Спред ({0} площадка)
-DocStr2571;The interface {0} implementation which provides a connection to the Blackwood (Fusion) DMA;Реализация интерфейса {0} для взаимодействия с системой Blackwood (или Fusion) DMA
 DocStr2572;Subscribe to the event imbalance prices of bids and asks. The data will transfer through event {0};Подписаться на событие дисбаланса цен спроса и предложения, данные о котором будут приходить через {0}
 DocStr2573;Subscribe to the new imbalance event for orders type {0}, which have not been filled. The data will transfer through event {1};Подписаться на событие нового дисбаланс объема заявок типа {0}, которые не были исполнены. Данные будут приходить через {1}
 DocStr2574;Request information about prices in the pre-market. The data will transfer through event {0};Запросить информацию о ценовых показателях в пре-маркет. Данные будут приходить через {0}
@@ -7216,7 +7214,6 @@ DocStr2578;Event imbalance in prices, when a bid price of one board more than or
 DocStr2579;Event receiving of imbalance for orders type {0}, which have not been filled;Событие появления нового дисбаланса объема заявок типа {0}, которые не были исполнены
 DocStr2580;Event receiving of a new signal in the pre-market;Событие появления нового показателя в пре-маркет
 DocStr2581;The messages adapter for BTC-e;Адаптер сообщений для BTC-e
-DocStr2582;The interface {0} implementation which provides a connection to the BTC-e;Реализация интерфейса {0} для взаимодействия с биржей BTC-e
 DocStr2583;"Объект этого класса отвечает за общение с биржей BTCE. На одну пару ключ-секрет надо создавать один объект из-за параметра биржи ""nonce""";"Объект этого класса отвечает за общение с биржей BTCE. На одну пару ключ-секрет надо создавать один объект из-за параметра биржи ""nonce"""
 DocStr2584;Конструктор объекта;Конструктор объекта
 DocStr2585;API-ключ. NB не храните в коде!;API-ключ. NB не храните в коде!
@@ -7712,7 +7709,6 @@ DocStr3081;The author identifier;Идентификатор автора
 DocStr3083;Description;Детальное описание
 DocStr3084;Registration date;Дата регистрации
 DocStr3085;CQG message adapter;Адаптер сообщений для CQG
-DocStr3086;The interface {0} implementation which provides a connection to the CQG;Реализация интерфейса {0} для взаимодействия с системой CQG
 DocStr3087;accountlist response;Ответ на запрос accountlist
 DocStr3088;The account information;Информация о счете
 DocStr3089;accountpositions response;Ответ на запрос accountpositions
@@ -7766,7 +7762,6 @@ DocStr3136;OAuth access token. Required to restore connection. Saved AccessToken
 DocStr3137;ETrade condition order type;Тип условной заявки ETrade
 DocStr3138;The market order is automatically registered after reaching the stop price;После достижения стоп-цены автоматически выставляется рыночная заявка
 DocStr3139;The limit order is automatically registered after reaching the stop price;После достижения стоп-цены автоматически выставляется лимитная заявка
-DocStr3140;The interface {0} implementation which provides a connection to the ETrade;Реализация интерфейса {0} для взаимодействия с системой ETrade
 DocStr3141;Sandbox mode;Режим sandbox
 DocStr3142;Token. Uses in OAuth 1.0a;Token. Используется в процедуре авторизации OAuth 1.0a
 DocStr3144;Consumer key;Consumer key
@@ -8414,7 +8409,6 @@ DocStr3794;Download from {0} only active instruments;Загружать из {0}
 DocStr3795;Order log to order book builder for ITCH data;Построитель стакана из лога заявок ITCH протокола
 DocStr3796;Process order log item;Добавить новую строчку из лога заявок к стакану
 DocStr3797;Order book was changed;Был ли изменен стакан
-DocStr3798;The interface {0} implementation which provides a connection to the ITCH (LSE or NASDAQ);Реализация интерфейса {0} для взаимодействия с протоколом ITCH (LSE и NASDAQ)
 DocStr3835;Broker information;Информация о брокере
 DocStr3836;Criteria;Критерии
 DocStr3837;Open an account link;Ссылка на открытие счета
@@ -8486,7 +8480,6 @@ DocStr3904;The messages adapter for LMAX;Адаптер сообщений дл�
 DocStr3905;Convert the instruction code to numeric transaction id;Привести инструкцию к идентификатору транзакции
 DocStr3906;Instruction;Инструкция
 DocStr3907;Converted instruction. If the instruction cannot be converter, the {0} will be returned;Идентификатор транзакции. Если инструкцию невозможно привести к числу, то будет возвращено {0}
-DocStr3908;The interface {0} implementation which provides a connection to the LMAX;Реализация интерфейса {0} для взаимодействия с биржей LMAX
 DocStr3909;The logger that records the data to the console window;Логгер, записывающий данные в консольное окно
 DocStr3910;The base class that monitors the event {0} and saves to some storage;Базовый класс, который мониторит событие {0} и сохраняет в некое хранилище
 DocStr3911;The class interface that monitors the event {0} and saves to some storage;Интерфейс класса, который мониторит событие {0} и сохраняет в некое хранилище
@@ -10477,7 +10470,6 @@ DocStr5921;The list of instruments to request;The list of instruments to request
 DocStr5922;The list of prices;The list of prices
 DocStr5923;The messages adapter for OANDA;Адаптер сообщений для OANDA
 DocStr5924;Servers types;Виды серверов
-DocStr5925;The interface {0} implementation which provides a connection to the OANDA;Реализация интерфейса {0} для взаимодействия с брокером OANDA
 DocStr5926;The messages adapter for OpenECry;Адаптер сообщений для OpenECry
 DocStr5927;The OpenECry server API address. The default is {0};Адрес API сервера OpenECry. По умолчанию равен {0}
 DocStr5928;The required mode of connection to the terminal. The default is {0};Требуемый режим подключения к терминалу. По умолчанию {0}
@@ -10501,7 +10493,6 @@ DocStr5945;The OEC contract;Контракт OEC
 DocStr5946;The instrument condition {0};Состояние инструмента {0}
 DocStr5947;To get the trading time by the instrument;Получить время торгов по инструменту
 DocStr5948;The list of time ranges of day (UTC), during which the instrument is traded;Список диапазонов времени дня (UTC), в течение которых инструмент торгуется
-DocStr5949;The interface {0} implementation which provides a connection to the OEC broker;Реализация интерфейса {0}, предоставляющая подключение к брокеру OEC
 DocStr5950;To send a message to another user;Отправить сообщение другому пользователю
 DocStr5951;The recipient name;Имя получателя
 DocStr5952;To use the OEC library logging;Использовать логирование библиотеки OEC
@@ -11955,9 +11946,7 @@ DocStr7409;Получить список выбранных столбцов;П�
 DocStr7410;Столбцы, исключенные из списка выбора;Столбцы, исключенные из списка выбора
 DocStr7411;Визуальный компонент выбора набора столбцов таблицы Инструменты;Визуальный компонент выбора набора столбцов таблицы Инструменты
 DocStr7412;Визуальный компонент выбора набора столбцов таблицы Инструменты(изменения);Визуальный компонент выбора набора столбцов таблицы Инструменты(изменения)
-DocStr7413;The message adapter for Rithmic;Адаптер сообщений для Rithmic
 DocStr7414;Server types;Типы серверов
-DocStr7415;The interface {0} implementation which provides a connection to the Rithmic;Реализация интерфейса {0} для взаимодействия с системой Rithmic
 DocStr7416;The drop-down list to select {0};Выпадающий список для выбора {0}
 DocStr7417;The selected server;Выбранный сервер
 DocStr7418;The market-data message adapter for Rss;Маркет-дата адаптер сообщений для Rss
@@ -12099,7 +12088,6 @@ DocStr7554;Направление поиска относительно пара
 DocStr7555;Старая заявка, которую нужно перерегистрировать;Старая заявка, которую нужно перерегистрировать
 DocStr7556;Перезапускать службу SmartCOM при подключении;Перезапускать службу SmartCOM при подключении
 DocStr7557;Ограничение по времени для перезапуска службы SmartCOM. Для отключения ограничения по времени необходимо указать {0};Ограничение по времени для перезапуска службы SmartCOM. Для отключения ограничения по времени необходимо указать {0}
-DocStr7558;The message adapter for Sterling;Адаптер сообщений для Sterling
 DocStr7559;Extended order types;Расширенные типы заявок
 DocStr7571;Execution instructions;Инструкции исполнения
 DocStr7572;Reservation;С резервированием
@@ -12112,7 +12100,6 @@ DocStr7578;Average price;Средняя цена исполнения
 DocStr7579;Covered option;Покрытый опцион
 DocStr7580;Asset type;Тип базового актива
 DocStr7581;Strike price;Страйк-цена
-DocStr7582;The interface {0} implementation which provides a connection to the Sterling;Реализация интерфейса {0} для взаимодействия с терминалом Sterling
 DocStr7583;Уровни логирования;Уровни логирования
 DocStr7584;Стандарт (оптимально);Стандарт (оптимально)
 DocStr7585;Информация по инструментам;Информация по инструментам
@@ -14114,7 +14101,6 @@ DocStr9693;Event of server restarting;Событие перезапуска се
 DocStr9694;Event of start downloading;Событие запуска загрузки
 DocStr9695;Event of stop downloading;Событие остановки загрузки
 DocStr9696;CQG Continuum message adapter;Адаптер сообщений для CQG Continuum
-DocStr9698;The interface {0} implementation which provides a connection to the CQG Continuum;Реализация интерфейса {0} для взаимодействия с системой CQG Continuum
 DocStr9699;Designates the capacity of the firm placing the order;Определяет емкость фирмы, размещающая заявку
 DocStr9700;Restrictions associated with an order. If more than one restriction is applicable to an order, this field can contain multiple instructions separated by space;Ограничения, связанные с заявкой. Если к заявке применяется более одного ограничения, это поле может содержать несколько инструкций, разделенных пробелом
 DocStr9703;Add element;Добавить элемент
@@ -14262,7 +14248,6 @@ DocStr9879;Not supported;Не поддерживается
 DocStr9880;FIX server extended message for user based action result;Расширенное сообщение FIX сервера ответа на действие с пользователем
 DocStr9881;Response type;Тип ответа
 DocStr9882;FIX server extended message for force logoff message;Расширенное сообщение FIX сервера на принудительное отключение
-DocStr9883;The message adapter for FXCM;Адаптер сообщений для FXCM
 DocStr9884;Default value for {0};Значение по умолчанию для {0}
 DocStr9885;Market Open order;Заявка типа Market Open
 DocStr9886;Market Open Range order;Заявка типа Market Open Range
@@ -14277,7 +14262,6 @@ DocStr9894;Limit order;Заявка типа Limit
 DocStr9895;Stop order;Заявка типа Stop
 DocStr9896;Open Limit order;Заявка типа Open Limit
 DocStr9897;Close Limit order;Заявка типа Close Limit
-DocStr9898;The interface {0} implementation which provides a connection to the FXCM;Реализация интерфейса {0} для взаимодействия с FXCM
 DocStr9899;The types of the contingent order;Типы условной заявки
 DocStr9900;One Cancels Other;One Cancels Other
 DocStr9901;One Triggers Other;One Triggers Other

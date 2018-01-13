@@ -90,7 +90,7 @@
     </member>
     <member name="T:StockSharp.Cqg.Continuum.CqgContinuumTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the CQG Continuum.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.Cqg.Continuum" />.
             </summary>
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumTrader.#ctor">

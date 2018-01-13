@@ -64,7 +64,7 @@
         </member>
         <member name="T:StockSharp.Btce.BtceTrader">
             <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the BTC-e.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Btce"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Btce.BtceTrader.#ctor">

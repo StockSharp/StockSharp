@@ -367,7 +367,7 @@
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the Blackwood (Fusion) DMA.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.Blackwood" />.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.#ctor">

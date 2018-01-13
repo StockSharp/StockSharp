@@ -80,7 +80,7 @@ T:StockSharp.Blackwood.BlackwoodOrderCondition/summary;DocStr60
 M:StockSharp.Blackwood.BlackwoodOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Blackwood.BlackwoodOrderCondition.StopPrice/summary;Str1885
 P:StockSharp.Blackwood.BlackwoodOrderCondition.Type/summary;Str1737
-T:StockSharp.Blackwood.BlackwoodTrader/summary;DocStr2571
+T:StockSharp.Blackwood.BlackwoodTrader/summary;DocStr2539
 M:StockSharp.Blackwood.BlackwoodTrader.#ctor/summary;DocStr1
 P:StockSharp.Blackwood.BlackwoodTrader.Login/summary;Login
 P:StockSharp.Blackwood.BlackwoodTrader.Password/summary;Password

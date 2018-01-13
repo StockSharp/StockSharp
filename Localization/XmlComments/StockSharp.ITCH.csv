@@ -33,7 +33,7 @@ P:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Depth/summary;MarketDepth
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)/summary;DocStr3796
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)/param/item;DocStr1442
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)/returns;DocStr3797
-T:StockSharp.ITCH.ItchTrader/summary;DocStr3798
+T:StockSharp.ITCH.ItchTrader/summary;DocStr2539
 M:StockSharp.ITCH.ItchTrader.#ctor/summary;DocStr1
 P:StockSharp.ITCH.ItchTrader.Login/summary;Login
 P:StockSharp.ITCH.ItchTrader.Password/summary;Password

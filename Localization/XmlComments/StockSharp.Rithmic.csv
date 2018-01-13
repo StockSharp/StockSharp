@@ -1,4 +1,4 @@
-T:StockSharp.Rithmic.RithmicMessageAdapter/summary;DocStr7413
+T:StockSharp.Rithmic.RithmicMessageAdapter/summary;DocStr2538
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition/summary;DocStr44
@@ -39,7 +39,7 @@ T:StockSharp.Rithmic.RithmicServers/summary;DocStr7414
 F:StockSharp.Rithmic.RithmicServers.Sim/summary;Str3461
 F:StockSharp.Rithmic.RithmicServers.Paper/summary;Str3462
 F:StockSharp.Rithmic.RithmicServers.Real/summary;Str3463
-T:StockSharp.Rithmic.RithmicTrader/summary;DocStr7415
+T:StockSharp.Rithmic.RithmicTrader/summary;DocStr2539
 M:StockSharp.Rithmic.RithmicTrader.#ctor/summary;DocStr1
 P:StockSharp.Rithmic.RithmicTrader.UserName/summary;DocStr3319
 P:StockSharp.Rithmic.RithmicTrader.Password/summary;Password

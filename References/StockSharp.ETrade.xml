@@ -164,7 +164,7 @@
     </member>
     <member name="T:StockSharp.ETrade.ETradeTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the ETrade.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.ETrade" />.
             </summary>
     </member>
     <member name="P:StockSharp.ETrade.ETradeTrader.ConsumerKey">

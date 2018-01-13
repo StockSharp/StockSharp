@@ -29,7 +29,7 @@ T:StockSharp.Oanda.OandaServers/summary;DocStr5924
 F:StockSharp.Oanda.OandaServers.Sandbox/summary;Demo
 F:StockSharp.Oanda.OandaServers.Practice/summary;Str1209
 F:StockSharp.Oanda.OandaServers.Real/summary;Str3463
-T:StockSharp.Oanda.OandaTrader/summary;DocStr5925
+T:StockSharp.Oanda.OandaTrader/summary;DocStr2539
 M:StockSharp.Oanda.OandaTrader.#ctor/summary;DocStr1
 P:StockSharp.Oanda.OandaTrader.Server/summary;Str3416
 P:StockSharp.Oanda.OandaTrader.Token/summary;DocStr3145

@@ -1,4 +1,4 @@
-T:StockSharp.Sterling.SterlingMessageAdapter/summary;DocStr7558
+T:StockSharp.Sterling.SterlingMessageAdapter/summary;DocStr2538
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Sterling.SterlingMessageAdapter.CreateOrderCondition/summary;DocStr44
@@ -50,5 +50,5 @@ P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingCode/summary;DocStr6015
 P:StockSharp.Sterling.SterlingOrderCondition.IsCover/summary;DocStr7579
 P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingType/summary;DocStr7580
 P:StockSharp.Sterling.SterlingOrderCondition.StrikePrice/summary;DocStr7581
-T:StockSharp.Sterling.SterlingTrader/summary;DocStr7582
+T:StockSharp.Sterling.SterlingTrader/summary;DocStr2539
 M:StockSharp.Sterling.SterlingTrader.#ctor/summary;DocStr1

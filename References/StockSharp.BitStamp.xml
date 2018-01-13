@@ -6,7 +6,7 @@
   <members>
     <member name="T:StockSharp.BitStamp.BitStampMessageAdapter">
       <summary>
-            The message adapter for BitStamp.
+            The message adapter for <see cref="N:StockSharp.BitStamp" />.
             </summary>
     </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
@@ -77,7 +77,7 @@
     </member>
     <member name="T:StockSharp.BitStamp.BitStampTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the BitStamp.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.BitStamp" />.
             </summary>
     </member>
     <member name="M:StockSharp.BitStamp.BitStampTrader.#ctor">

@@ -26,7 +26,7 @@ T:StockSharp.LMAX.LmaxOrderCondition/summary;DocStr60
 M:StockSharp.LMAX.LmaxOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3383
 P:StockSharp.LMAX.LmaxOrderCondition.TakeProfitOffset/summary;Str3385
-T:StockSharp.LMAX.LmaxTrader/summary;DocStr3908
+T:StockSharp.LMAX.LmaxTrader/summary;DocStr2539
 M:StockSharp.LMAX.LmaxTrader.#ctor/summary;DocStr1
 P:StockSharp.LMAX.LmaxTrader.Login/summary;Login
 P:StockSharp.LMAX.LmaxTrader.Password/summary;Password

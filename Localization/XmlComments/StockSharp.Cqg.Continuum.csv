@@ -20,7 +20,7 @@ M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Save(Ecng.Serialization.Se
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.ToString/returns;DocStr50
-T:StockSharp.Cqg.Continuum.CqgContinuumTrader/summary;DocStr9698
+T:StockSharp.Cqg.Continuum.CqgContinuumTrader/summary;DocStr2539
 M:StockSharp.Cqg.Continuum.CqgContinuumTrader.#ctor/summary;DocStr1
 P:StockSharp.Cqg.Continuum.CqgContinuumTrader.Address/summary;ServerAddress
 P:StockSharp.Cqg.Continuum.CqgContinuumTrader.UserName/summary;DocStr3319

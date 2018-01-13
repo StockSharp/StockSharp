@@ -40,7 +40,7 @@ T:StockSharp.ETrade.ETradeOrderCondition/summary;DocStr60
 M:StockSharp.ETrade.ETradeOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.ETrade.ETradeOrderCondition.StopType/summary;Str2570
 P:StockSharp.ETrade.ETradeOrderCondition.StopPrice/summary;StopPrice
-T:StockSharp.ETrade.ETradeTrader/summary;DocStr3140
+T:StockSharp.ETrade.ETradeTrader/summary;DocStr2539
 P:StockSharp.ETrade.ETradeTrader.ConsumerKey/summary;Str3304
 P:StockSharp.ETrade.ETradeTrader.ConsumerSecret/summary;DocStr3146
 P:StockSharp.ETrade.ETradeTrader.AccessToken/summary;DocStr3136

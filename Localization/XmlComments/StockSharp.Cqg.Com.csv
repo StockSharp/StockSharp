@@ -19,5 +19,5 @@ M:StockSharp.Cqg.Com.CqgComMessageAdapter.ToString/returns;DocStr50
 T:StockSharp.Cqg.Com.CqgComOrderCondition/summary;DocStr60
 M:StockSharp.Cqg.Com.CqgComOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Cqg.Com.CqgComOrderCondition.StopPrice/summary;Str3460
-T:StockSharp.Cqg.Com.CqgComTrader/summary;DocStr3086
+T:StockSharp.Cqg.Com.CqgComTrader/summary;DocStr2539
 M:StockSharp.Cqg.Com.CqgComTrader.#ctor/summary;DocStr1
