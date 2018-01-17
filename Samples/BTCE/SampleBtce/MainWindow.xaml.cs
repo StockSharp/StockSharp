@@ -98,43 +98,43 @@ namespace SampleBtce
 
 				if (Trader == null)
 				{
-					// создаем подключение
+					// create connector
 					Trader = new BtceTrader();// { LogLevel = LogLevels.Debug };
 
 					_logManager.Sources.Add(Trader);
 
 					Trader.Restored += () => this.GuiAsync(() =>
 					{
-						// разблокируем кнопку Экспорт (соединение было восстановлено)
+						// update gui labes
 						ChangeConnectStatus(true);
 						MessageBox.Show(this, LocalizedStrings.Str2958);
 					});
 
-					// подписываемся на событие успешного соединения
+					// subscribe on connection successfully event
 					Trader.Connected += () =>
 					{
-						// возводим флаг, что соединение установлено
+						// set flag (connection is established)
 						_isConnected = true;
 
-						// разблокируем кнопку Экспорт
+						// update gui labes
 						this.GuiAsync(() => ChangeConnectStatus(true));
 					};
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-					// подписываемся на событие разрыва соединения
+					// subscribe on connection error event
 					Trader.ConnectionError += error => this.GuiAsync(() =>
 					{
-						// заблокируем кнопку Экспорт (так как соединение было потеряно)
+						// update gui labes
 						ChangeConnectStatus(false);
 
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 					});
 
-					// подписываемся на ошибку обработки данных (транзакций и маркет)
+					// subscribe on error event
 					Trader.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-					// подписываемся на ошибку подписки маркет-данных
+					// subscribe on error of market data subscription event
 					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
@@ -165,7 +165,7 @@ namespace SampleBtce
 				Trader.Key = Key.Text;
 				Trader.Secret = Secret.Password;
 
-				// очищаем из текстового поля в целях безопасности
+				// clear password box for security reason
 				//Secret.Clear();
 
 				Trader.Connect();
