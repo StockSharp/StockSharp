@@ -1,0 +1,8 @@
+<Window x:Class="SampleKraken.PortfoliosWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:xaml="http://schemas.stocksharp.com/xaml"
+		Title="{x:Static loc:LocalizedStrings.Portfolios}" Height="200" Width="470">
+	<xaml:PortfolioGrid x:Name="PortfolioGrid" x:FieldModifier="public" />
+</Window>
