@@ -76,9 +76,6 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Xaml.Charting">
-      <HintPath>..\References\Ecng.Xaml.Charting.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Xaml.DevExp">
       <HintPath>..\References\Ecng.Xaml.DevExp.dll</HintPath>
     </Reference>
@@ -113,9 +110,9 @@
     </Compile>
     <Compile Include="AssociatedSecurityAdapter.cs" />
     <Compile Include="BasketSecurity.cs" />
-    <Compile Include="Candles\Compression\BuilderCandleSource.cs" />
     <Compile Include="Candles\Compression\CandleBuilderMessageAdapter.cs" />
     <Compile Include="Candles\Compression\CandleHolderMessageAdapter.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilderValueTransform.cs" />
     <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="DataType.cs" />
@@ -131,7 +128,13 @@
     <Compile Include="Import\FieldMapping.cs" />
     <Compile Include="Import\FieldMappingRegistry.cs" />
     <Compile Include="Import\FieldMappingValue.cs" />
+    <Compile Include="Indicators\IndicatorValueAttribute.cs" />
     <Compile Include="IRemoteAuthorization.cs" />
+    <Compile Include="Storages\Binary\Snapshot\PositionBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\Binary\Snapshot\QuotesBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\Binary\Snapshot\TransactionBinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\Csv\MarketDepthCsvSerializer.cs" />
+    <Compile Include="Storages\ISnapshotSerializer.cs" />
     <Compile Include="Storages\ISecurityMappingStorage.cs" />
     <Compile Include="SecurityMappingMessageAdapter.cs" />
     <Compile Include="Storages\Binary\PositionBinarySerializer.cs" />
@@ -158,20 +161,14 @@
     <Compile Include="BasketPosition.cs" />
     <Compile Include="Candles\BaseCandleSource.cs" />
     <Compile Include="Candles\CandleSourceEnumerator.cs" />
-    <Compile Include="Candles\Compression\BaseCandleBuilderSource.cs" />
     <Compile Include="Candles\Compression\CandleBuilder.cs" />
     <Compile Include="Candles\CandleManagerContainer.cs" />
     <Compile Include="Candles\CandleHelper.cs" />
     <Compile Include="Candles\Candle.cs" />
     <Compile Include="Candles\Compression\ICandleBuilder.cs" />
-    <Compile Include="Candles\Compression\ICandleBuilderSourceValue.cs" />
     <Compile Include="Candles\ICandleManagerContainer.cs" />
     <Compile Include="Candles\ICandleManager.cs" />
     <Compile Include="Candles\ICandleSourceList.cs" />
-    <Compile Include="Candles\Compression\ICandleBuilderSource.cs" />
-    <Compile Include="Candles\Compression\ICandleBuilderSourceList.cs" />
-    <Compile Include="Candles\Compression\StorageCandleBuilderSource.cs" />
-    <Compile Include="Candles\Compression\RawConvertableCandleBuilderSource.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
@@ -341,12 +338,15 @@
     <Compile Include="Storages\InMemoryMarketDataStorage.cs" />
     <Compile Include="Storages\ISecurityMarketDataDrive.cs" />
     <Compile Include="Storages\ISecurityStorage.cs" />
+    <Compile Include="Storages\Binary\Snapshot\Level1BinarySnapshotSerializer.cs" />
+    <Compile Include="Storages\ISnapshotStorage.cs" />
     <Compile Include="Storages\IStoragePositionList.cs" />
     <Compile Include="Storages\IStorageSecurityList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
     <Compile Include="Storages\NewsList.cs" />
+    <Compile Include="Storages\SnapshotStorage.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\Binary\TransactionBinarySerializer.cs" />
     <Compile Include="Storages\Binary\NewsBinarySerializer.cs" />
@@ -384,7 +384,9 @@
     <Compile Include="Storages\StorageRegistry.cs" />
     <Compile Include="Strategies\Analytics\BaseAnalyticsStrategy.cs" />
     <Compile Include="Strategies\Analytics\DailyHighestVolumeStrategy.cs" />
+    <Compile Include="Strategies\Analytics\IAnalyticsChart.cs" />
     <Compile Include="Strategies\Analytics\IAnalyticsGrid.cs" />
+    <Compile Include="Strategies\Analytics\IAnalyticsPanel.cs" />
     <Compile Include="Strategies\Analytics\PriceVolumeDistributionStrategy.cs" />
     <Compile Include="Strategies\BasketStrategy.cs" />
     <Compile Include="Strategies\IStrategyChildStrategyList.cs" />

@@ -56,7 +56,7 @@ namespace SampleOanda
 			area.Elements.Add(_candleElem);
 
 			_trader.CandleSeriesProcessing += ProcessNewCandle;
-			_trader.SubscribeCandles(_candleSeries, @from, to);
+			_trader.SubscribeCandles(_candleSeries, from, to);
 		}
 
 		private void ProcessNewCandle(CandleSeries series, Candle candle)

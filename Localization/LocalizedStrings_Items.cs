@@ -2048,12 +2048,12 @@ namespace StockSharp.Localization
 		public static string Str170 => GetString(Str170Key);
 
 		/// <summary>
-		/// Connection was not broken in allowed time.
+		/// Connection was not disconnected in allowed time.
 		/// </summary>
 		public const string Str171Key = nameof(Str171);
 
 		/// <summary>
-		/// Connection was not broken in allowed time.
+		/// Connection was not disconnected in allowed time.
 		/// </summary>
 		public static string Str171 => GetString(Str171Key);
 
@@ -3138,12 +3138,12 @@ namespace StockSharp.Localization
 		public static string Str285 => GetString(Str285Key);
 
 		/// <summary>
-		/// Greatest price
+		/// Highest price
 		/// </summary>
 		public const string Str287Key = nameof(Str287);
 
 		/// <summary>
-		/// Greatest price
+		/// Highest price
 		/// </summary>
 		public static string Str287 => GetString(Str287Key);
 
@@ -10798,52 +10798,52 @@ namespace StockSharp.Localization
 		public static string Str1136 => GetString(Str1136Key);
 
 		/// <summary>
-		/// Minimum spread size cannot be less than one.
+		/// Minimum spread size cannot be less than 1.
 		/// </summary>
 		public const string Str1137Key = nameof(Str1137);
 
 		/// <summary>
-		/// Minimum spread size cannot be less than one.
+		/// Minimum spread size cannot be less than 1.
 		/// </summary>
 		public static string Str1137 => GetString(Str1137Key);
 
 		/// <summary>
-		/// Maximum spread size cannot be less than one.
+		/// Maximum spread size cannot be less than 1.
 		/// </summary>
 		public const string Str1138Key = nameof(Str1138);
 
 		/// <summary>
-		/// Maximum spread size cannot be less than one.
+		/// Maximum spread size cannot be less than 1.
 		/// </summary>
 		public static string Str1138 => GetString(Str1138Key);
 
 		/// <summary>
-		/// Maximum bids depth cannot be less than zero.
+		/// Maximum bids depth cannot be less than 1.
 		/// </summary>
 		public const string Str1139Key = nameof(Str1139);
 
 		/// <summary>
-		/// Maximum bids depth cannot be less than zero.
+		/// Maximum bids depth cannot be less than 1.
 		/// </summary>
 		public static string Str1139 => GetString(Str1139Key);
 
 		/// <summary>
-		/// Maximum asks depth cannot be less than zero.
+		/// Maximum asks depth cannot be less than 1.
 		/// </summary>
 		public const string Str1140Key = nameof(Str1140);
 
 		/// <summary>
-		/// Maximum asks depth cannot be less than zero.
+		/// Maximum asks depth cannot be less than 1.
 		/// </summary>
 		public static string Str1140 => GetString(Str1140Key);
 
 		/// <summary>
-		/// Maximum number of generations cannot be less than one.
+		/// Maximum number of generations cannot be less than 1.
 		/// </summary>
 		public const string Str1141Key = nameof(Str1141);
 
 		/// <summary>
-		/// Maximum number of generations cannot be less than one.
+		/// Maximum number of generations cannot be less than 1.
 		/// </summary>
 		public static string Str1141 => GetString(Str1141Key);
 
@@ -15308,12 +15308,12 @@ namespace StockSharp.Localization
 		public static string Str1610 => GetString(Str1610Key);
 
 		/// <summary>
-		/// Connection broken.
+		/// Connection dropped.
 		/// </summary>
 		public const string Str1611Key = nameof(Str1611);
 
 		/// <summary>
-		/// Connection broken.
+		/// Connection dropped.
 		/// </summary>
 		public static string Str1611 => GetString(Str1611Key);
 
@@ -15388,12 +15388,12 @@ namespace StockSharp.Localization
 		public static string Str1618 => GetString(Str1618Key);
 
 		/// <summary>
-		/// Connection was not broken from previous time.
+		/// Connection was not disconnected from previous time.
 		/// </summary>
 		public const string Str1619Key = nameof(Str1619);
 
 		/// <summary>
-		/// Connection was not broken from previous time.
+		/// Connection was not disconnected from previous time.
 		/// </summary>
 		public static string Str1619 => GetString(Str1619Key);
 
@@ -15458,12 +15458,12 @@ namespace StockSharp.Localization
 		public static string Str1626 => GetString(Str1626Key);
 
 		/// <summary>
-		/// Message {0} of type {1} was not correctly processed by FIX server. Reason ({2}) {3}.
+		/// Message {0} of type {1} was not correctly processed by FIX server. Reason ({2}) {3} (field {4}).
 		/// </summary>
 		public const string Str1627ParamsKey = nameof(Str1627Params);
 
 		/// <summary>
-		/// Message {0} of type {1} was not correctly processed by FIX server. Reason ({2}) {3}.
+		/// Message {0} of type {1} was not correctly processed by FIX server. Reason ({2}) {3} (field {4}).
 		/// </summary>
 		public static string Str1627Params => GetString(Str1627ParamsKey);
 
@@ -19828,12 +19828,12 @@ namespace StockSharp.Localization
 		public static string Str2083 => GetString(Str2083Key);
 
 		/// <summary>
-		/// Session {0}. Created for user {1}.
+		/// Session {0}. Created for user {1} (product={2}, version={3}).
 		/// </summary>
 		public const string Str2084ParamsKey = nameof(Str2084Params);
 
 		/// <summary>
-		/// Session {0}. Created for user {1}.
+		/// Session {0}. Created for user {1} (product={2}, version={3}).
 		/// </summary>
 		public static string Str2084Params => GetString(Str2084ParamsKey);
 
@@ -21228,12 +21228,12 @@ namespace StockSharp.Localization
 		public static string Str2253Params => GetString(Str2253ParamsKey);
 
 		/// <summary>
-		/// Connection with Alfa-Direct is broken
+		/// Connection with Alfa-Direct is disconnected
 		/// </summary>
 		public const string Str2254Key = nameof(Str2254);
 
 		/// <summary>
-		/// Connection with Alfa-Direct is broken
+		/// Connection with Alfa-Direct is disconnected
 		/// </summary>
 		public static string Str2254 => GetString(Str2254Key);
 
@@ -30108,14 +30108,24 @@ namespace StockSharp.Localization
 		public static string Str3235 => GetString(Str3235Key);
 
 		/// <summary>
-		/// Panel for viewing Level2 data.
+		/// Panel for viewing Level1 data.
 		/// </summary>
-		public const string Str3236Key = nameof(Str3236);
+		public const string Level1PanelKey = nameof(Level1Panel);
+
+		/// <summary>
+		/// Panel for viewing Level1 data.
+		/// </summary>
+		public static string Level1Panel => GetString(Level1PanelKey);
 
 		/// <summary>
 		/// Panel for viewing Level2 data.
 		/// </summary>
-		public static string Str3236 => GetString(Str3236Key);
+		public const string Level2PanelKey = nameof(Level2Panel);
+
+		/// <summary>
+		/// Panel for viewing Level2 data.
+		/// </summary>
+		public static string Level2Panel => GetString(Level2PanelKey);
 
 		/// <summary>
 		/// Logs
@@ -30718,16 +30728,6 @@ namespace StockSharp.Localization
 		public static string Str3301Params => GetString(Str3301ParamsKey);
 
 		/// <summary>
-		/// Bitcoins
-		/// </summary>
-		public const string BitcoinsKey = nameof(Bitcoins);
-
-		/// <summary>
-		/// Bitcoins
-		/// </summary>
-		public static string Bitcoins => GetString(BitcoinsKey);
-
-		/// <summary>
 		/// Key
 		/// </summary>
 		public const string Str3304Key = nameof(Str3304);
@@ -31088,16 +31088,6 @@ namespace StockSharp.Localization
 		public static string Str3344 => GetString(Str3344Key);
 
 		/// <summary>
-		/// Consumer key/secret is not set.
-		/// </summary>
-		public const string Str3345Key = nameof(Str3345);
-
-		/// <summary>
-		/// Consumer key/secret is not set.
-		/// </summary>
-		public static string Str3345 => GetString(Str3345Key);
-
-		/// <summary>
 		/// Error receiving request token: server reply '{0}'.
 		/// </summary>
 		public const string Str3346ParamsKey = nameof(Str3346Params);
@@ -31268,12 +31258,12 @@ namespace StockSharp.Localization
 		public static string Str3365 => GetString(Str3365Key);
 
 		/// <summary>
-		/// broken
+		/// disconnected
 		/// </summary>
 		public const string Str3366Key = nameof(Str3366);
 
 		/// <summary>
-		/// broken
+		/// disconnected
 		/// </summary>
 		public static string Str3366 => GetString(Str3366Key);
 
@@ -34158,22 +34148,22 @@ namespace StockSharp.Localization
 		public static string Str3688 => GetString(Str3688Key);
 
 		/// <summary>
-		/// Consumer key not specified.
+		/// Key not specified.
 		/// </summary>
 		public const string Str3689Key = nameof(Str3689);
 
 		/// <summary>
-		/// Consumer key not specified.
+		/// Key not specified.
 		/// </summary>
 		public static string Str3689 => GetString(Str3689Key);
 
 		/// <summary>
-		/// Consumer secret not specified.
+		/// Secret not specified.
 		/// </summary>
 		public const string Str3690Key = nameof(Str3690);
 
 		/// <summary>
-		/// Consumer secret not specified.
+		/// Secret not specified.
 		/// </summary>
 		public static string Str3690 => GetString(Str3690Key);
 
@@ -42968,14 +42958,24 @@ namespace StockSharp.Localization
 		public static string Duration => GetString(DurationKey);
 
 		/// <summary>
-		/// Number of issued contracts
+		/// Issue size
 		/// </summary>
 		public const string IssueSizeKey = nameof(IssueSize);
 
 		/// <summary>
-		/// Number of issued contracts
+		/// Issue size
 		/// </summary>
 		public static string IssueSize => GetString(IssueSizeKey);
+
+		/// <summary>
+		/// Date of issue
+		/// </summary>
+		public const string IssueDateKey = nameof(IssueDate);
+
+		/// <summary>
+		/// Date of issue
+		/// </summary>
+		public static string IssueDate => GetString(IssueDateKey);
 
 		/// <summary>
 		/// BuyBack date
@@ -43515,7 +43515,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// E-mail address
 		/// </summary>
-		public static string EmailAddress => GetString(EmailAddress);
+		public static string EmailAddress => GetString(EmailAddressKey);
 
 		/// <summary>
 		/// Phone
@@ -45906,5 +45906,595 @@ namespace StockSharp.Localization
 		/// Verbose
 		/// </summary>
 		public static string Verbose => GetString(VerboseKey);
+
+		/// <summary>
+		/// Limits
+		/// </summary>
+		public const string LimitsKey = nameof(Limits);
+
+		/// <summary>
+		/// Limits
+		/// </summary>
+		public static string Limits => GetString(LimitsKey);
+
+		/// <summary>
+		/// Ignore limits.
+		/// </summary>
+		public const string IgnoreLimitsKey = nameof(IgnoreLimits);
+
+		/// <summary>
+		/// Ignore limits.
+		/// </summary>
+		public static string IgnoreLimits => GetString(IgnoreLimitsKey);
+
+		/// <summary>
+		/// Work area
+		/// </summary>
+		public const string WorkAreaKey = nameof(WorkArea);
+
+		/// <summary>
+		/// Work area
+		/// </summary>
+		public static string WorkArea => GetString(WorkAreaKey);
+
+		/// <summary>
+		/// Create a new work area
+		/// </summary>
+		public const string CreateWorkAreaKey = nameof(CreateWorkArea);
+
+		/// <summary>
+		/// Create a new work area
+		/// </summary>
+		public static string CreateWorkArea => GetString(CreateWorkAreaKey);
+
+		/// <summary>
+		/// Level2
+		/// </summary>
+		public const string Level2Key = nameof(Level2);
+
+		/// <summary>
+		/// Level2
+		/// </summary>
+		public static string Level2 => GetString(Level2Key);
+
+		/// <summary>
+		/// Buy/Sell
+		/// </summary>
+		public const string BuySellKey = nameof(BuySell);
+
+		/// <summary>
+		/// Buy/Sell
+		/// </summary>
+		public static string BuySell => GetString(BuySellKey);
+
+		/// <summary>
+		/// Panel for buy/sell operations.
+		/// </summary>
+		public const string BuySellPanelKey = nameof(BuySellPanel);
+
+		/// <summary>
+		/// Panel for buy/sell operations.
+		/// </summary>
+		public static string BuySellPanel => GetString(BuySellPanelKey);
+
+		/// <summary>
+		/// Select indicator.
+		/// </summary>
+		public const string SelectIndicatorKey = nameof(SelectIndicator);
+
+		/// <summary>
+		/// Select indicator.
+		/// </summary>
+		public static string SelectIndicator => GetString(SelectIndicatorKey);
+
+		/// <summary>
+		/// Wait all trades
+		/// </summary>
+		public const string WaitAllTradesKey = nameof(WaitAllTrades);
+
+		/// <summary>
+		/// Wait all trades
+		/// </summary>
+		public static string WaitAllTrades => GetString(WaitAllTradesKey);
+
+		/// <summary>
+		/// Process null values
+		/// </summary>
+		public const string ProcessNullValuesKey = nameof(ProcessNullValues);
+
+		/// <summary>
+		/// Process null values
+		/// </summary>
+		public static string ProcessNullValues => GetString(ProcessNullValuesKey);
+
+		/// <summary>
+		/// {0} securities will be delete permanently.
+		/// </summary>
+		public const string DeleteNSecuritiesKey = nameof(DeleteNSecurities);
+
+		/// <summary>
+		/// {0} securities will be delete permanently.
+		/// </summary>
+		public static string DeleteNSecurities => GetString(DeleteNSecuritiesKey);
+
+		/// <summary>
+		/// Security {0} is not composite.
+		/// </summary>
+		public const string NotCompositeSecurityKey = nameof(NotCompositeSecurity);
+
+		/// <summary>
+		/// Security {0} is not composite.
+		/// </summary>
+		public static string NotCompositeSecurity => GetString(NotCompositeSecurityKey);
+
+		/// <summary>
+		/// Cut the price for the order
+		/// </summary>
+		public const string ShrinkPriceKey = nameof(ShrinkPrice);
+
+		/// <summary>
+		/// Cut the price for the order
+		/// </summary>
+		public static string ShrinkPrice => GetString(ShrinkPriceKey);
+
+		/// <summary>
+		/// Heatmap
+		/// </summary>
+		public const string HeatmapKey = nameof(Heatmap);
+
+		/// <summary>
+		/// Heatmap
+		/// </summary>
+		public static string Heatmap => GetString(HeatmapKey);
+
+		/// <summary>
+		/// Saving
+		/// </summary>
+		public const string SavingKey = nameof(Saving);
+
+		/// <summary>
+		/// Saving
+		/// </summary>
+		public static string Saving => GetString(SavingKey);
+
+		/// <summary>
+		/// Result type
+		/// </summary>
+		public const string ResultTypeKey = nameof(ResultType);
+
+		/// <summary>
+		/// Result type
+		/// </summary>
+		public static string ResultType => GetString(ResultTypeKey);
+
+		/// <summary>
+		/// Portfolio '{0}' already exist.
+		/// </summary>
+		public const string PortfolioAlreadyExistKey = nameof(PortfolioAlreadyExist);
+
+		/// <summary>
+		/// Portfolio '{0}' already exist.
+		/// </summary>
+		public static string PortfolioAlreadyExist => GetString(PortfolioAlreadyExistKey);
+
+		/// <summary>
+		/// Position '{0}' already exist.
+		/// </summary>
+		public const string PositionAlreadyExistKey = nameof(PositionAlreadyExist);
+
+		/// <summary>
+		/// Position '{0}' already exist.
+		/// </summary>
+		public static string PositionAlreadyExist => GetString(PositionAlreadyExistKey);
+
+		/// <summary>
+		/// Bids above
+		/// </summary>
+		public const string BidsOnTopKey = nameof(BidsOnTop);
+
+		/// <summary>
+		/// Bids above
+		/// </summary>
+		public static string BidsOnTop => GetString(BidsOnTopKey);
+
+		/// <summary>
+		/// Whether to show the bids above. The default is off.
+		/// </summary>
+		public const string BidsOnTopDescKey = nameof(BidsOnTopDesc);
+
+		/// <summary>
+		/// Whether to show the bids above. The default is off.
+		/// </summary>
+		public static string BidsOnTopDesc => GetString(BidsOnTopDescKey);
+
+		/// <summary>
+		/// Math formula. For example: (sin(x)+log(y)) / z
+		/// </summary>
+		public const string MathFormulaDescKey = nameof(MathFormulaDesc);
+
+		/// <summary>
+		/// Math formula. For example: (sin(x)+log(y)) / z
+		/// </summary>
+		public static string MathFormulaDesc => GetString(MathFormulaDescKey);
+
+		/// <summary>
+		/// +{0} more
+		/// </summary>
+		public const string NMoreKey = nameof(NMore);
+
+		/// <summary>
+		/// +{0} more
+		/// </summary>
+		public static string NMore => GetString(NMoreKey);
+
+		/// <summary>
+		/// Update securities
+		/// </summary>
+		public const string UpdateSecuritiesKey = nameof(UpdateSecurities);
+
+		/// <summary>
+		/// Update securities
+		/// </summary>
+		public static string UpdateSecurities => GetString(UpdateSecuritiesKey);
+
+		/// <summary>
+		/// Update securities when connected.
+		/// </summary>
+		public const string UpdateSecuritiesOnConnectKey = nameof(UpdateSecuritiesOnConnect);
+
+		/// <summary>
+		/// Update securities when connected.
+		/// </summary>
+		public static string UpdateSecuritiesOnConnect => GetString(UpdateSecuritiesOnConnectKey);
+
+		/// <summary>
+		/// Need {0} securities.
+		/// </summary>
+		public const string NeedNSecuritiesKey = nameof(NeedNSecurities);
+
+		/// <summary>
+		/// Need {0} securities.
+		/// </summary>
+		public static string NeedNSecurities => GetString(NeedNSecuritiesKey);
+
+		/// <summary>
+		/// Closing price (chart)
+		/// </summary>
+		public const string ClosingPriceChartKey = nameof(ClosingPriceChart);
+
+		/// <summary>
+		/// Closing price (chart)
+		/// </summary>
+		public static string ClosingPriceChart => GetString(ClosingPriceChartKey);
+
+		/// <summary>
+		/// P&amp;L (chart)
+		/// </summary>
+		public const string PnLChartKey = nameof(PnLChart);
+
+		/// <summary>
+		/// P&amp;L (chart)
+		/// </summary>
+		public static string PnLChart => GetString(PnLChartKey);
+
+		/// <summary>
+		/// Expiry (days)
+		/// </summary>
+		public const string ExpirationDaysKey = nameof(ExpirationDays);
+
+		/// <summary>
+		/// Expiry (days)
+		/// </summary>
+		public static string ExpirationDays => GetString(ExpirationDaysKey);
+
+		/// <summary>
+		/// Set up task '{0}' now?
+		/// </summary>
+		public const string SetupTaskNowKey = nameof(SetupTaskNow);
+
+		/// <summary>
+		/// Set up task '{0}' now?
+		/// </summary>
+		public static string SetupTaskNow => GetString(SetupTaskNowKey);
+
+		/// <summary>
+		/// Enable task '{0}' now (the task will go into the active mode)?
+		/// </summary>
+		public const string EnableTaskNowKey = nameof(EnableTaskNow);
+
+		/// <summary>
+		/// Enable task '{0}' now (the task will go into the active mode)?
+		/// </summary>
+		public static string EnableTaskNow => GetString(EnableTaskNowKey);
+
+		/// <summary>
+		/// At the moment, no instruments are specified for task '{0}'. Add them now (or download if they are not yet exist)?
+		/// </summary>
+		public const string AddSecuritiesNowKey = nameof(AddSecuritiesNow);
+
+		/// <summary>
+		/// At the moment, no instruments are specified for task '{0}'. Add them now (or download if they are not yet exist)?
+		/// </summary>
+		public static string AddSecuritiesNow => GetString(AddSecuritiesNowKey);
+
+		/// <summary>
+		/// Open account
+		/// </summary>
+		public const string OpenAccountKey = nameof(OpenAccount);
+
+		/// <summary>
+		/// Open account
+		/// </summary>
+		public static string OpenAccount => GetString(OpenAccountKey);
+
+		/// <summary>
+		/// Sender ID not set.
+		/// </summary>
+		public const string SenderIdNotSetKey = nameof(SenderIdNotSet);
+
+		/// <summary>
+		/// Sender ID not set.
+		/// </summary>
+		public static string SenderIdNotSet => GetString(SenderIdNotSetKey);
+
+		/// <summary>
+		/// Target ID not set.
+		/// </summary>
+		public const string TargetIdNotSetKey = nameof(TargetIdNotSet);
+
+		/// <summary>
+		/// Target ID not set.
+		/// </summary>
+		public static string TargetIdNotSet => GetString(TargetIdNotSetKey);
+
+		/// <summary>
+		/// The database is corrupted and can not continue. Do you want to reset all settings?
+		/// </summary>
+		public const string DatabaseCorruptedResetConfigKey = nameof(DatabaseCorruptedResetConfig);
+
+		/// <summary>
+		/// The database is corrupted and can not continue. Do you want to reset all settings?
+		/// </summary>
+		public static string DatabaseCorruptedResetConfig => GetString(DatabaseCorruptedResetConfigKey);
+
+		/// <summary>
+		/// Insufficient memory to download all instruments. The option turned off.
+		/// </summary>
+		public const string InsufficientMemoryKey = nameof(InsufficientMemory);
+
+		/// <summary>
+		/// Insufficient memory to download all instruments. The option turned off.
+		/// </summary>
+		public static string InsufficientMemory => GetString(InsufficientMemoryKey);
+
+		/// <summary>
+		/// Cancelling
+		/// </summary>
+		public const string CancellingKey = nameof(Cancelling);
+
+		/// <summary>
+		/// Cancelling
+		/// </summary>
+		public static string Cancelling => GetString(CancellingKey);
+
+		/// <summary>
+		/// Candle {0} has active state and cannot be stored.
+		/// </summary>
+		public const string CandleActiveNotSupportKey = nameof(CandleActiveNotSupport);
+
+		/// <summary>
+		/// Candle {0} has active state and cannot be stored.
+		/// </summary>
+		public static string CandleActiveNotSupport => GetString(CandleActiveNotSupportKey);
+
+		/// <summary>
+		/// {0} options
+		/// </summary>
+		public const string NNOptionsKey = nameof(NNOptions);
+
+		/// <summary>
+		/// {0} options
+		/// </summary>
+		public static string NNOptions => GetString(NNOptionsKey);
+
+		/// <summary>
+		/// Cannot open link '{0}'. Please try it manually (was copied to clipboard).
+		/// </summary>
+		public const string CannotOpenLinkKey = nameof(CannotOpenLink);
+
+		/// <summary>
+		/// Cannot open link '{0}'. Please try it manually (was copied to clipboard).
+		/// </summary>
+		public static string CannotOpenLink => GetString(CannotOpenLinkKey);
+
+		/// <summary>
+		/// Underlying security type
+		/// </summary>
+		public const string UnderlyingSecurityTypeKey = nameof(UnderlyingSecurityType);
+
+		/// <summary>
+		/// Underlying security type
+		/// </summary>
+		public static string UnderlyingSecurityType => GetString(UnderlyingSecurityTypeKey);
+
+		/// <summary>
+		/// Underlying
+		/// </summary>
+		public const string UnderlyingKey = nameof(Underlying);
+
+		/// <summary>
+		/// Underlying
+		/// </summary>
+		public static string Underlying => GetString(UnderlyingKey);
+
+		/// <summary>
+		/// New folder
+		/// </summary>
+		public const string NewFolderKey = nameof(NewFolder);
+
+		/// <summary>
+		/// New folder
+		/// </summary>
+		public static string NewFolder => GetString(NewFolderKey);
+
+		/// <summary>
+		/// Cancel operation?
+		/// </summary>
+		public const string CancelOperationQuestionKey = nameof(CancelOperationQuestion);
+
+		/// <summary>
+		/// Cancel operation?
+		/// </summary>
+		public static string CancelOperationQuestion => GetString(CancelOperationQuestionKey);
+
+		/// <summary>
+		/// Passphrase
+		/// </summary>
+		public const string PassphraseKey = nameof(Passphrase);
+
+		/// <summary>
+		/// Passphrase
+		/// </summary>
+		public static string Passphrase => GetString(PassphraseKey);
+
+		/// <summary>
+		/// Middle line
+		/// </summary>
+		public const string MiddleLineKey = nameof(MiddleLine);
+
+		/// <summary>
+		/// Middle line
+		/// </summary>
+		public static string MiddleLine => GetString(MiddleLineKey);
+
+		/// <summary>
+		/// Upper line
+		/// </summary>
+		public const string UpperLineKey = nameof(UpperLine);
+
+		/// <summary>
+		/// Upper line
+		/// </summary>
+		public static string UpperLine => GetString(UpperLineKey);
+
+		/// <summary>
+		/// Lower line
+		/// </summary>
+		public const string LowerLineKey = nameof(LowerLine);
+
+		/// <summary>
+		/// Lower line
+		/// </summary>
+		public static string LowerLine => GetString(LowerLineKey);
+
+		/// <summary>
+		/// Connector is stub only. Please contact info@stocksharp.com to real module.
+		/// </summary>
+		public const string ConnectorIsStubKey = nameof(ConnectorIsStub);
+
+		/// <summary>
+		/// Connector is stub only. Please contact info@stocksharp.com to real module.
+		/// </summary>
+		public static string ConnectorIsStub => GetString(ConnectorIsStubKey);
+
+		/// <summary>
+		/// Bitfinex
+		/// </summary>
+		public const string BitfinexKey = nameof(Bitfinex);
+
+		/// <summary>
+		/// Bitfinex
+		/// </summary>
+		public static string Bitfinex => GetString(BitfinexKey);
+
+		/// <summary>
+		/// Bithumb
+		/// </summary>
+		public const string BithumbKey = nameof(Bithumb);
+
+		/// <summary>
+		/// Bithumb
+		/// </summary>
+		public static string Bithumb => GetString(BithumbKey);
+
+		/// <summary>
+		/// Bittrex
+		/// </summary>
+		public const string BittrexKey = nameof(Bittrex);
+
+		/// <summary>
+		/// Bittrex
+		/// </summary>
+		public static string Bittrex => GetString(BittrexKey);
+
+		/// <summary>
+		/// Coinbase
+		/// </summary>
+		public const string CoinbaseKey = nameof(Coinbase);
+
+		/// <summary>
+		/// Coinbase
+		/// </summary>
+		public static string Coinbase => GetString(CoinbaseKey);
+
+		/// <summary>
+		/// Coincheck
+		/// </summary>
+		public const string CoincheckKey = nameof(Coincheck);
+
+		/// <summary>
+		/// Coincheck
+		/// </summary>
+		public static string Coincheck => GetString(CoincheckKey);
+
+		/// <summary>
+		/// Gdax
+		/// </summary>
+		public const string GdaxKey = nameof(Gdax);
+
+		/// <summary>
+		/// Gdax
+		/// </summary>
+		public static string Gdax => GetString(GdaxKey);
+
+		/// <summary>
+		/// HitBtc
+		/// </summary>
+		public const string HitBtcKey = nameof(HitBtc);
+
+		/// <summary>
+		/// HitBtc
+		/// </summary>
+		public static string HitBtc => GetString(HitBtcKey);
+
+		/// <summary>
+		/// Kraken
+		/// </summary>
+		public const string KrakenKey = nameof(Kraken);
+
+		/// <summary>
+		/// Kraken
+		/// </summary>
+		public static string Kraken => GetString(KrakenKey);
+
+		/// <summary>
+		/// Okcoin
+		/// </summary>
+		public const string OkcoinKey = nameof(Okcoin);
+
+		/// <summary>
+		/// Okcoin
+		/// </summary>
+		public static string Okcoin => GetString(OkcoinKey);
+
+		/// <summary>
+		/// Poloniex
+		/// </summary>
+		public const string PoloniexKey = nameof(Poloniex);
+
+		/// <summary>
+		/// Poloniex
+		/// </summary>
+		public static string Poloniex => GetString(PoloniexKey);
 	}
 }

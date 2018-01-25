@@ -3,10 +3,12 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
-     <para>При создании собственного кубика <legacyBold>Исходный код</legacyBold> на ряду с библиотеками 
-     <token>stocksharpapi</token> можно использовать и другие библиотеки C#, в том числе и собственные.</para>
-     <para>Нажав на кнопку <legacyBold>Ссылки</legacyBold> вкладки исходный код, откроется окно 
-     <legacyBold>Дополнительные библиотеки</legacyBold>, в котором можно добавить или удалить Dll библиотеку.</para>
+     <para>When you create your own <legacyBold>Source code</legacyBold> cube, 
+     you can use other C# libraries, including your own, along with the 
+     <token>stocksharpapi</token> libraries.</para>
+     <para>Clicking the <legacyBold>References</legacyBold> button of the
+     <legacyBold>Source code</legacyBold> tab opens the <legacyBold>Extra references</legacyBold> 
+     window, where you can add or remove the Dll library.</para>
   <mediaLink>
 <image placement="center" xlink:href="Designer_Add_Dll_Lib"/>
 </mediaLink>

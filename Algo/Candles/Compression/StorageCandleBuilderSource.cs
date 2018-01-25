@@ -30,6 +30,7 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The base data source for <see cref="ICandleBuilder"/>, which receives data from the external storage.
@@ -300,13 +301,13 @@ namespace StockSharp.Algo.Candles.Compression
 	/// </summary>
 	public class MarketDepthStorageCandleBuilderSource : StorageCandleBuilderSource<MarketDepth>
 	{
-		private readonly DepthCandleSourceTypes _type;
+		private readonly Level1Fields _type;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketDepthStorageCandleBuilderSource"/>.
 		/// </summary>
 		/// <param name="type">Type of candle depth based data.</param>
-		public MarketDepthStorageCandleBuilderSource(DepthCandleSourceTypes type)
+		public MarketDepthStorageCandleBuilderSource(Level1Fields type)
 		{
 			_type = type;
 		}

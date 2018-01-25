@@ -72,17 +72,22 @@ namespace StockSharp.Algo
 		/// <param name="security">New instrument.</param>
 		public void Add(Security security)
 		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			var externalId = security.ExternalId;
+
 			lock (_sync)
 			{
 				AddSuffix(security.Id, security);
 				AddSuffix(security.Code, security);
 				//AddSuffix(security.Name, security);
 				//AddSuffix(security.ShortName, security);
-				AddSuffix(security.ExternalId.Bloomberg, security);
-				AddSuffix(security.ExternalId.Cusip, security);
-				AddSuffix(security.ExternalId.Isin, security);
-				AddSuffix(security.ExternalId.Ric, security);
-				AddSuffix(security.ExternalId.Sedol, security);
+				AddSuffix(externalId.Bloomberg, security);
+				AddSuffix(externalId.Cusip, security);
+				AddSuffix(externalId.Isin, security);
+				AddSuffix(externalId.Ric, security);
+				AddSuffix(externalId.Sedol, security);
 
 				_allSecurities.Add(security);
 			}

@@ -132,19 +132,13 @@ namespace SampleTwime
 				Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-				Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-				Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-				Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-				Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+				Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+				Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+				Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+				Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 
-				Trader.NewPortfolio += portfolio =>
-				{
-					// subscribe on portfolio updates
-					//portfolios.ForEach(Trader.RegisterPortfolio);
-
-					_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-				};
-				Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+				Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+				Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 				// subscribe on error of order registration event
 				Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;

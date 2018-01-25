@@ -142,10 +142,9 @@ namespace StockSharp.Logging
 			receiver.AddLog(new LogMessage(receiver, receiver.CurrentTime, LogLevels.Error, () =>
 			{
 				var msg = exception.ToString();
-				
-				var refExc = exception as ReflectionTypeLoadException;
 
-				if (refExc != null)
+
+				if (exception is ReflectionTypeLoadException refExc)
 				{
 					msg += Environment.NewLine
 						+ refExc

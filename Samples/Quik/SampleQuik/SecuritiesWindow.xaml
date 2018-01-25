@@ -16,7 +16,7 @@
 			<Button x:Name="Find" Width="100" Click="FindClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
 			</Button>
-            <Button x:Name="Level1" Content="Level1..." Width="100" IsEnabled="False" Click="Level1Click" />
+            		<Button x:Name="Level1" Content="Level1..." Width="100" IsEnabled="False" Click="Level1Click" />
 			<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
 			</Button>
@@ -26,6 +26,8 @@
 			<Button x:Name="NewStopOrder" Width="120" IsEnabled="False" Click="NewStopOrderClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
 			</Button>
+			<Button x:Name="Candles" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
+			<ComboBox x:Name="CandlesPeriods" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
 		</StackPanel>
 	</Grid>
 </Window>

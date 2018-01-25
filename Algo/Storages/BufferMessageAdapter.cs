@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Storages
 			return CanStore(securityId, typeof(TMessage), arg);
 		}
 
-		private bool CanStore(SecurityId securityId, Type messageType, object arg = null)
+		private bool CanStore(SecurityId securityId, Type messageType, object arg)
 		{
 			if (!Enabled)
 				return false;
@@ -392,7 +392,7 @@ namespace StockSharp.Algo.Storages
 							buffer = _orderLogBuffer;
 							break;
 						default:
-							throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(execType));
+							throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1695Params.Put(execType));
 					}
 
 					if (CanStore<ExecutionMessage>(secId, execType))

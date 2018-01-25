@@ -35,8 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v17.1">
-      <HintPath>..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v17.2">
+      <HintPath>..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
@@ -91,6 +91,46 @@
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bitfinex\Bitfinex.csproj">
+      <Project>{5D5F59F8-2136-42D1-90B5-B6C41D4C3964}</Project>
+      <Name>Bitfinex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bithumb\Bithumb.csproj">
+      <Project>{4FD21E37-BD2D-4AEF-8297-CEA4C7EBEF01}</Project>
+      <Name>Bithumb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Bittrex\Bittrex.csproj">
+      <Project>{302F3C2A-EB95-4AF7-BE22-E7BE567B2DAB}</Project>
+      <Name>Bittrex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coinbase\Coinbase.csproj">
+      <Project>{AB948D64-73B2-4BDC-972C-337E51A67265}</Project>
+      <Name>Coinbase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Coincheck\Coincheck.csproj">
+      <Project>{1D19F91C-214C-44CD-9064-A22BD89D7AB1}</Project>
+      <Name>Coincheck</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Gdax\Gdax.csproj">
+      <Project>{51134FC5-2DAB-4905-9E41-A3E8E754AF7C}</Project>
+      <Name>Gdax</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\HitBtc\HitBtc.csproj">
+      <Project>{DA6A7BFC-2787-48BA-A6FD-A047006B6901}</Project>
+      <Name>HitBtc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Kraken\Kraken.csproj">
+      <Project>{8F90DE0D-C2A2-4C86-A66E-EEA01F830C70}</Project>
+      <Name>Kraken</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Okcoin\Okcoin.csproj">
+      <Project>{52364231-2047-4785-885C-90D2E20C37FA}</Project>
+      <Name>Okcoin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Poloniex\Poloniex.csproj">
+      <Project>{B8103F63-11BE-455A-89CB-2AD9A0BC07D9}</Project>
+      <Name>Poloniex</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\QuantHouse\QuantHouse.csproj">
       <Project>{E818D294-DBF6-4126-AF13-D83EF9740536}</Project>
       <Name>QuantHouse</Name>

@@ -15,6 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
+	using System;
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
@@ -27,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("OptimalTracking")]
 	[Description("Optimal Tracking Filter published by John Ehlers")]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public sealed class OptimalTracking : LengthIndicator<decimal>
 	{
 		//Fields
@@ -79,7 +81,7 @@ namespace StockSharp.Algo.Indicators
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
-			decimal average = (candle.HighPrice + candle.LowPrice) / 2;
+			var average = (candle.HighPrice + candle.LowPrice) / 2;
 			var halfRange = (candle.HighPrice - candle.LowPrice) / 2;
 
 			Buffer.Add(average);
@@ -91,25 +93,25 @@ namespace StockSharp.Algo.Indicators
 					Buffer.RemoveAt(0);
 				//Сглаженное приращение ****************************************************************************
 				var avgDiff = Buffer[Buffer.Count - 1] - Buffer[Buffer.Count - 2];
-				decimal smoothDiff = _smoothConstant * avgDiff + _smoothConstant1 * _value1Old;
+				var smoothDiff = _smoothConstant * avgDiff + _smoothConstant1 * _value1Old;
 				_value1Old = smoothDiff;
 
 				//Сглаженный Half Range *********************************************************************************
 
-				decimal smoothRng = _smoothConstant * halfRange + _smoothConstant1 * _value2Old;
+				var smoothRng = _smoothConstant * halfRange + _smoothConstant1 * _value2Old;
 				_value2Old = smoothRng;
 
 				//Tracking index ***********************************************************************************
 				if (smoothRng != 0)
-					_lambda = System.Math.Abs(smoothDiff / smoothRng);
+					_lambda = Math.Abs(smoothDiff / smoothRng);
 
 				//Alfa для альфа фильтра ***************************************************************************
-				_alpha = (-_lambda * _lambda + (decimal)System.Math.Sqrt((double)(_lambda * _lambda * _lambda * _lambda + 16 * _lambda * _lambda))) / 8;
+				_alpha = (-_lambda * _lambda + (decimal)Math.Sqrt((double)(_lambda * _lambda * _lambda * _lambda + 16 * _lambda * _lambda))) / 8;
 
 				//Smoothed result **********************************************************************************
 				var check2 = _alpha * average;
 				var check3 = (1 - _alpha) * _resultOld;
-				decimal result = check2 + check3;
+				var result = check2 + check3;
 				_resultOld = result;
 
 				return new DecimalIndicatorValue(this, result);

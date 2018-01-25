@@ -121,6 +121,11 @@
 				<p>Option algorithms.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Algo.Import">
+			<summary>
+				<p>Importing components from CSV format.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Algo.Export">
 			<summary>
 				<p>Exporting components.</p>
@@ -158,12 +163,12 @@
 		</member>
 		<member name="N:StockSharp.Algo.Expressions.Xaml">
 			<summary>
-				<p>Math expressions WPF compontents.</p>
+				<p>Math expressions WPF components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Storages.Csv">
 			<summary>
-				<p>CSV storage compontents.</p>
+				<p>CSV storage components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies.Reporting">
@@ -388,7 +393,12 @@
 		</member>
 		<member name="N:StockSharp.Xaml.PropertyGrid">
 			<summary>
-				<p>PropertyGridEx compontent.</p>
+				<p>PropertyGridEx component.</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Xaml.Code">
+			<summary>
+				<p>Graphical components for code editing.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Fxcm">

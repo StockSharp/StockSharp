@@ -146,6 +146,18 @@ namespace StockSharp.Algo.Testing
 
 			StartDate = DateTimeOffset.MinValue;
 			StopDate = DateTimeOffset.MaxValue;
+
+			this.AddMarketDataSupport();
+			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
+			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
+
+			this.AddSupportedMarketDataType(MarketDataTypes.Trades);
+			this.AddSupportedMarketDataType(MarketDataTypes.MarketDepth);
+			this.AddSupportedMarketDataType(MarketDataTypes.Level1);
+			this.AddSupportedMarketDataType(MarketDataTypes.CandleTimeFrame);
+			this.AddSupportedMarketDataType(MarketDataTypes.News);
+			this.AddSupportedMarketDataType(MarketDataTypes.OrderLog);
 		}
 
 		/// <summary>
@@ -161,11 +173,6 @@ namespace StockSharp.Algo.Testing
 				.LookupAll()
 				.Select(s => s.Board)
 				.Distinct();
-
-			this.AddMarketDataSupport();
-			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
-			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
-			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>

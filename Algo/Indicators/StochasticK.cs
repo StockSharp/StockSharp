@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("Stochastic %K")]
 	[DescriptionLoc(LocalizedStrings.Str774Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class StochasticK : LengthIndicator<decimal>
 	{
 		// Минимальная цена за период.

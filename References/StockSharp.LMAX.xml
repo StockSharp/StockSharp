@@ -57,15 +57,13 @@
             Candle downloading sleep interval.
             </summary>
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsValid">
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.AllTimeFrames">
       <summary>
-            The parameters validity check.
+            Possible time-frames.
             </summary>
     </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames">
-      <summary>
-            Available time frames.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -122,7 +120,7 @@
     </member>
     <member name="T:StockSharp.LMAX.LmaxTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the LMAX.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.LMAX" />.
             </summary>
     </member>
     <member name="M:StockSharp.LMAX.LmaxTrader.#ctor">

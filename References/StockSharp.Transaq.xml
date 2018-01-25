@@ -60,6 +60,11 @@
             Освободить занятые ресурсы.
             </summary>
     </member>
+    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.TimeFrames">
+      <summary>
+            Возможные тайм-фреймы.
+            </summary>
+    </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.CreateOrderCondition">
       <summary>
             Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
@@ -125,11 +130,6 @@
     <member name="P:StockSharp.Transaq.TransaqMessageAdapter.OverrideDll">
       <summary>
             Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
             </summary>
     </member>
     <member name="P:StockSharp.Transaq.TransaqMessageAdapter.ConnectorVersion">

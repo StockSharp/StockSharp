@@ -217,16 +217,16 @@ namespace StockSharp.Algo.Candles.Compression
 		/// To update the profile with new value.
 		/// </summary>
 		/// <param name="volumeProfile">Volume profile.</param>
-		/// <param name="value">Value.</param>
-		public static void Update(this CandleMessageVolumeProfile volumeProfile, ICandleBuilderSourceValue value)
+		/// <param name="transform">The data source transformation.</param>
+		public static void Update(this CandleMessageVolumeProfile volumeProfile, ICandleBuilderValueTransform transform)
 		{
 			if (volumeProfile == null)
 				throw new ArgumentNullException(nameof(volumeProfile));
 
-			if (value == null)
-				throw new ArgumentNullException(nameof(value));
+			if (transform == null)
+				throw new ArgumentNullException(nameof(transform));
 
-			volumeProfile.Update(value.Price, value.Volume, value.OrderDirection);
+			volumeProfile.Update(transform.Price, transform.Volume, transform.Side);
 		}
 	}
 }

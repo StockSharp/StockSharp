@@ -105,5 +105,13 @@ namespace StockSharp.Community
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte Delete(Guid sessionId, long id);
+
+		/// <summary>
+		/// To get a upload size limit.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>Upload size limit.</returns>
+		[OperationContract]
+		int GetUploadLimit(Guid sessionId);
 	}
 }

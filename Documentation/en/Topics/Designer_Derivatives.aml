@@ -5,35 +5,38 @@
 <mediaLink>
 <image xlink:href="Designer_Derivatives_00"/>
 </mediaLink>
-<para>Кубик используется для получения списка опционов по заданному фильтру.</para>
+<para>The cube is used to obtain a list of options by a specified filter.</para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, базовый актив.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> – the instrument, the underlying asset.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Опционы</legacyBold> – список опционов по базовому активу.</para></listItem>
+  <listItem><para><legacyBold>Options</legacyBold> - the list of options by the underlying asset.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-<listItem><para><legacyBold>Тип опционов</legacyBold> – тип опционов может быть Колл (опцион на покупку) или Пут (опцион на продажу).</para></listItem>
-  <listItem><para><legacyBold>Дата экспирации</legacyBold> – дата экспирации опциона</para></listItem>
-  <listItem><para><legacyBold>Страйк (меньше)</legacyBold> – сдвиг влево (меньше) от центрального страйка. 
-Если цена не установлена, то все страйки с меньшим значением центрального 
-будут использованы. Сдвиг считается в шагах страйка, например, если шаг страйка 
-500 у.е., то сдвиг равный 3 будет равняться 1500 у.е.</para></listItem>
-  <listItem><para><legacyBold>Страйк (больше)</legacyBold> – сдвиг вправо (больше) от центрального страйка. 
-Если цена не установлена, то все страйки с большим значением центрального 
-будут использованы. Сдвиг считается в шагах страйка, например, если шаг страйка 
-500 у.е., то сдвиг равный 3 будет равняться 1500 у.е.</para></listItem>
+<listItem><para><legacyBold>Option type</legacyBold> – the option type can be 
+Call option or Put option.</para></listItem>
+  <listItem><para><legacyBold>Expiry date</legacyBold> - expiry date of option.</para></listItem>
+  <listItem><para><legacyBold>Strike (less)</legacyBold> – the shift left (less) 
+  from the central strike.
+  If the price is not set, then all strikes with a lower central value will be 
+  used. Shift is calculated in the strike steps, for example, if the strike step 
+  is 500 c.u., then the shift equal to 3 will be 1,500 c.u.</para></listItem>
+  <listItem><para><legacyBold>Strike (more)</legacyBold> – the shift to the 
+  right (more) from the
+  central strike. If the price is not set, then all strikes with a larger central 
+  value will be used. Shift is calculated in the strike steps, for example, if 
+  the strike step is 500 c.u., then the shift equal to 3 will be 1,500 c.u.</para></listItem>
 </list>
   </definition>
 </definitionTable>

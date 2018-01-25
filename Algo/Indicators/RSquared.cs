@@ -80,12 +80,12 @@ namespace StockSharp.Algo.Indicators
 			{
 				//x - независимая переменная, номер значения в буфере
 				//y - зависимая переменная - значения из буфера
-				decimal sumX = 0m; //сумма x
-				decimal sumY = 0m; //сумма y
-				decimal sumXy = 0m; //сумма x*y
-				decimal sumX2 = 0m; //сумма x^2
+				var sumX = 0m; //сумма x
+				var sumY = 0m; //сумма y
+				var sumXy = 0m; //сумма x*y
+				var sumX2 = 0m; //сумма x^2
 
-				for (int i = 0; i < Length; i++)
+				for (var i = 0; i < Length; i++)
 				{
 					sumX += i;
 					sumY += buff.ElementAt(i);
@@ -99,17 +99,17 @@ namespace StockSharp.Algo.Indicators
 				else _slope = (Length * sumXy - sumX * sumY) / divisor;
 
 				//свободный член
-				decimal b = (sumY - _slope * sumX) / Length;
+				var b = (sumY - _slope * sumX) / Length;
 
 				//сумма квадратов отклонений от среднего и сумма квадратов ошибок
-				decimal av = buff.Average();// срднее значение
-				decimal sumYAv2 = 0m; //сумма квадратов отклонений от среднего
-				decimal sumErr2 = 0m; //сумма квадратов ошибок
+				var av = buff.Average();// срднее значение
+				var sumYAv2 = 0m; //сумма квадратов отклонений от среднего
+				var sumErr2 = 0m; //сумма квадратов ошибок
 
-				for (int i = 0; i < Length; i++)
+				for (var i = 0; i < Length; i++)
 				{
-					decimal y = buff.ElementAt(i);// значение
-					decimal yEst = _slope * i + b;// оценка по регрессии
+					var y = buff.ElementAt(i);// значение
+					var yEst = _slope * i + b;// оценка по регрессии
 					sumYAv2 += (y - av) * (y - av);
 					sumErr2 += (y - yEst) * (y - yEst);
 				}

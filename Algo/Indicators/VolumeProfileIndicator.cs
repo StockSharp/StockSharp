@@ -29,6 +29,8 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("VolumeProfile")]
 	[DescriptionLoc(LocalizedStrings.VolumeProfileKey, true)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[IndicatorOut(typeof(VolumeProfileIndicatorValue))]
 	public class VolumeProfileIndicator : BaseIndicator
 	{
 		private readonly Dictionary<decimal, decimal> _levels = new Dictionary<decimal, decimal>();

@@ -24,10 +24,13 @@ namespace StockSharp.Algo.Indicators
 	/// Williams Percent Range.
 	/// </summary>
 	/// <remarks>
-	/// %R = (Highest High - Close)/(Highest High - Lowest Low) * -100 http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:williams_r http://www2.wealth-lab.com/WL5Wiki/WilliamsR.ashx.
+	/// %R = (Highest High - Close)/(Highest High - Lowest Low) * -100
+	/// http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:williams_r
+	/// http://www2.wealth-lab.com/WL5Wiki/WilliamsR.ashx.
 	/// </remarks>
 	[DisplayName("%R")]
 	[DescriptionLoc(LocalizedStrings.Str854Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class WilliamsR : LengthIndicator<decimal>
 	{
 		// Текущее значение минимума

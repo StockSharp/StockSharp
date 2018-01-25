@@ -4,29 +4,34 @@
 
     <introduction>
 
-      <para>Для работы в команде удобно использовать встроенный <legacyBold>Чат</legacyBold>, 
-      который из себя представляет популярный мессенджер <legacyBold>Telegram</legacyBold> в Web интерфейсе.</para>
-      <para>Использование чата <token>designer</token> на базе мессенджера <legacyBold>Telegram</legacyBold> имее следующие плюсы:</para>
+      <para>For team work, it's convenient to use the built-in <legacyBold>Chat</legacyBold>, 
+      which is a popular <legacyBold>Telegram</legacyBold> messenger in the Web interface.</para>
+      <para>Using the <token>designer</token> chat on the basis of the 
+      <legacyBold>Telegram</legacyBold> messenger has the following advantages:</para>
 
 <list class="bullet">
-  <listItem><para>Защита от несанкционированного чтения осуществляется благодаря 
-  применению протокола связи MTProto.</para></listItem>
-  <listItem><para>Секретные чаты обеспечивают end-to-end шифрование, истории 
-  которых не хранятся ни на каком сервере, обеспечивая анонимность переписки.</para></listItem>
-    <listItem><para>Наличие таймера для самоуничтожения сообщений.</para></listItem>
-  <listItem><para>Моментальная доставка сообщений и файлов.</para></listItem>
-    <listItem><para>Возможность передачи файлов любого формата размером до 1,5 Гб.</para></listItem>
-  <listItem><para>Мессенджер Telegram работает на IPhone, Android, WindowsPhone. 
-  Есть онлайн и десктоп-версии. Существует возможность синхронизации между устройствами.</para></listItem>
-    <listItem><para>Создание больших чатов – до 5000 участников.</para></listItem>
+  <listItem><para>Protection against unauthorized reading is provided through 
+  the use of the MTProto communication protocol.</para></listItem>
+  <listItem><para>Secret chats provide end-to-end encryption, the history of 
+  which is not stored on any server, providing anonymity of correspondence.</para></listItem>
+    <listItem><para>Availability of a timer for messages self-destruction.</para></listItem>
+  <listItem><para>Instant delivery of messages and files.</para></listItem>
+    <listItem><para>Ability to transfer files of any format with the size up 
+    to 1.5 Gb.</para></listItem>
+  <listItem><para>The Telegram messenger works on IPhone, Android, WindowsPhone. 
+  There are online and desktop versions. There is an ability of synchronization 
+  between devices.</para></listItem>
+    <listItem><para>Creation of large chats - up to 5000 members.</para></listItem>
 </list>
-<para>При первом открытии <legacyBold>Чата</legacyBold> появляется страница авторизации, где нужно ввести 
-свой номер телефон и дождаться СМС с кодом активации. После авторизации вы 
-получаете полноценный мессенджер <legacyBold>Telegram</legacyBold> прямо в <token>designer</token>.</para>
+<para>When you first open the <legacyBold>Chat</legacyBold>, an authorization 
+page appears, where you need to enter your phone number and wait for the SMS 
+with the activation code. After authorization, you get a full-featured 
+<legacyBold>Telegram</legacyBold> messenger directly in the 
+<token>designer</token>.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Chat"/>
 </mediaLink>
-<para>После регистрации окно примет вид:</para>
+<para>After registration, the window will look like this:</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Chat_00"/>
 </mediaLink>

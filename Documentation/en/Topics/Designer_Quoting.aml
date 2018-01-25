@@ -5,37 +5,42 @@
 <mediaLink>
 <image xlink:href="Designer_Quoting_00"/>
 </mediaLink>
-<para>Кубик используется для котирования опционов согласно заданным параметрам.</para>
+<para>The cube is used to quote options according to the specified parameters.</para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Опционы</legacyBold> – список опционов из кубика <legacyBold>Деривативы</legacyBold>.</para></listItem>
-  <listItem><para><legacyBold>Объем</legacyBold> – объём котирования.</para></listItem>
+  <listItem><para><legacyBold>Options</legacyBold> - the list of options from 
+  the <legacyBold>Derivative</legacyBold> cube.</para></listItem>
+  <listItem><para><legacyBold>Volume</legacyBold> - the volume of quoting.</para></listItem>
 
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, 
-которая может использоваться для получения сделок по ней с помощью элемента 
-<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью 
-кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+  <listItem><para><legacyBold>Order</legacyBold> - the registered order that can 
+  be used to obtain trades on it by using the <legacyBold>Trades</legacyBold> 
+  element by the order and displaying it on the chart using the 
+  <legacyBold>Chart panel</legacyBold> cube.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Котирование</legacyBold> – по какому параметру будет проводиться котирование, может 
-принимать значения волатильность (котирование объема будет проходить по заданным 
-границам волатильности) и теоретическая цена (котирование объема будет проходить
- по заданным границам теоретической цены).</para></listItem>
-  <listItem><para><legacyBold>Направление</legacyBold> – направление котирования может принимать значения Покупка и Продажа.</para></listItem>
-  <listItem><para><legacyBold>Минимальное</legacyBold> – минимальное значения волатильности или теоретической цены </para></listItem>
-  <listItem><para><legacyBold>Максимальное</legacyBold> – максимальное значения волатильности или теоретической цены</para></listItem>
+  <listItem><para><legacyBold>Quoting</legacyBold> - by what parameter the
+  quoting will be conducted, can volatility take values (the volume quoting 
+  will be conducted by the specified limits of volatility) and the theoretical 
+  price (the volume quoting will be conducted by the specified limits of the 
+  theoretical price).</para></listItem>
+  <listItem><para><legacyBold>Direction</legacyBold> - the direction of quoting 
+  can take the values of Purchase and Sell.</para></listItem>
+  <listItem><para><legacyBold>Minimum</legacyBold> – the minimum value of 
+  volatility or theoretical price.</para></listItem>
+  <listItem><para><legacyBold>Maximum</legacyBold> - the maximum value of 
+  volatility or theoretical price.</para></listItem>
 </list>
   </definition>
 </definitionTable>

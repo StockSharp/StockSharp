@@ -103,9 +103,7 @@ namespace StockSharp.Messages
 					{
 						try
 						{
-							Message message;
-
-							if (!_messageQueue.TryDequeue(out message))
+							if (!_messageQueue.TryDequeue(out var message))
 							{
 								break;
 							}

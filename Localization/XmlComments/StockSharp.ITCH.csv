@@ -18,7 +18,6 @@ P:StockSharp.ITCH.ItchMessageAdapter.SecurityDelayLoad/summary;DocStr8816
 P:StockSharp.ITCH.ItchMessageAdapter.OnlyActiveSecurities/summary;DocStr3794
 P:StockSharp.ITCH.ItchMessageAdapter.GroupId/summary;GroupId
 P:StockSharp.ITCH.ItchMessageAdapter.TimeZone/summary;Str68
-P:StockSharp.ITCH.ItchMessageAdapter.IsValid/summary;DocStr53
 M:StockSharp.ITCH.ItchMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.ITCH.ItchMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.ITCH.ItchMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -34,7 +33,7 @@ P:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Depth/summary;MarketDepth
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)/summary;DocStr3796
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)/param/item;DocStr1442
 M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)/returns;DocStr3797
-T:StockSharp.ITCH.ItchTrader/summary;DocStr3798
+T:StockSharp.ITCH.ItchTrader/summary;DocStr2539
 M:StockSharp.ITCH.ItchTrader.#ctor/summary;DocStr1
 P:StockSharp.ITCH.ItchTrader.Login/summary;Login
 P:StockSharp.ITCH.ItchTrader.Password/summary;Password

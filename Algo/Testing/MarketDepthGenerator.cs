@@ -35,12 +35,6 @@ namespace StockSharp.Algo.Testing
 		protected MarketDepthGenerator(SecurityId securityId)
 			: base(securityId)
 		{
-			UseTradeVolume = true;
-			MinSpreadStepCount = 1;
-			MaxSpreadStepCount = int.MaxValue;
-			MaxBidsDepth = 10;
-			MaxAsksDepth = 10;
-			MaxGenerations = 20;
 		}
 
 		/// <summary>
@@ -54,9 +48,9 @@ namespace StockSharp.Algo.Testing
 		/// <remarks>
 		/// The default value is <see langword="true" />.
 		/// </remarks>
-		public bool UseTradeVolume { get; set; } // TODO
+		public bool UseTradeVolume { get; set; } = true; // TODO
 
-		private int _minSpreadStepCount;
+		private int _minSpreadStepCount = 1;
 
 		/// <summary>
 		/// The minimal value of spread between the best quotes in units of price increments number. The spread value will be selected randomly between <see cref="MarketDepthGenerator.MinSpreadStepCount"/> and <see cref="MarketDepthGenerator.MaxSpreadStepCount"/>.
@@ -76,7 +70,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private int _maxSpreadStepCount;
+		private int _maxSpreadStepCount = int.MaxValue;
 
 		/// <summary>
 		/// The maximal value of spread between the best quotes in units of price increments number. The spread value will be selected randomly between <see cref="MarketDepthGenerator.MinSpreadStepCount"/> and <see cref="MarketDepthGenerator.MaxSpreadStepCount"/>.
@@ -96,40 +90,40 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private int _maxBidsDepth;
+		private int _maxBidsDepth = 10;
 
 		/// <summary>
 		/// The maximal depth of bids.
 		/// </summary>
 		/// <remarks>
-		/// The default value is 1.
+		/// The default value is 10.
 		/// </remarks>
 		public int MaxBidsDepth
 		{
 			get => _maxBidsDepth;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1139);
 
 				_maxBidsDepth = value;
 			}
 		}
 
-		private int _maxAsksDepth;
+		private int _maxAsksDepth = 10;
 
 		/// <summary>
 		/// The maximal depth of offers.
 		/// </summary>
 		/// <remarks>
-		/// The default value is 1.
+		/// The default value is 10.
 		/// </remarks>
 		public int MaxAsksDepth
 		{
 			get => _maxAsksDepth;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1140);
 
 				_maxAsksDepth = value;
@@ -141,7 +135,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public bool GenerateDepthOnEachTrade { get; set; }
 
-		private int _maxGenerations;
+		private int _maxGenerations = 20;
 
 		/// <summary>
 		/// The maximal number of generations after last occurrence of source data for the order book.
@@ -389,12 +383,12 @@ namespace StockSharp.Algo.Testing
 					bidPrice = askPrice - maxStread;
 			}
 
-			var bids = new List<QuoteChange>
-			{
-				new QuoteChange(Sides.Buy, bidPrice.Value, Volumes.Next())
-			};
+			var bids = new List<QuoteChange>();
+			//{
+			//	new QuoteChange(Sides.Buy, bidPrice.Value, Volumes.Next())
+			//};
 
-			var count = MaxBidsDepth - bids.Count;
+			var count = MaxBidsDepth/* - bids.Count*/;
 
 			for (var i = 0; i < count; i++)
 			{
@@ -407,12 +401,12 @@ namespace StockSharp.Algo.Testing
 				bidPrice = quote.Price;
 			}
 
-			var asks = new List<QuoteChange>
-			{
-				new QuoteChange(Sides.Sell, askPrice.Value, Volumes.Next())
-			};
+			var asks = new List<QuoteChange>();
+			//{
+			//	new QuoteChange(Sides.Sell, askPrice.Value, Volumes.Next())
+			//};
 
-			count = MaxAsksDepth - asks.Count;
+			count = MaxAsksDepth/* - asks.Count*/;
 
 			for (var i = 0; i < count; i++)
 			{

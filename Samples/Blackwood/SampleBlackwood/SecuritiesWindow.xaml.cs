@@ -25,6 +25,7 @@ namespace SampleBlackwood
 	using MoreLinq;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Blackwood;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
@@ -40,17 +41,7 @@ namespace SampleBlackwood
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = new[]
-			{
-				TimeSpan.FromTicks(1),
-				TimeSpan.FromMinutes(1),
-				TimeSpan.FromMinutes(5),
-				//TimeSpan.FromMinutes(30),
-				TimeSpan.FromHours(1),
-				TimeSpan.FromDays(1),
-				TimeSpan.FromDays(7),
-				TimeSpan.FromDays(30)
-			};
+			CandlesPeriods.ItemsSource = BlackwoodMessageAdapter.AllTimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
 		}
 

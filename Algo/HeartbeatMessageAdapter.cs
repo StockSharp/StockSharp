@@ -35,10 +35,8 @@ namespace StockSharp.Algo
 	{
 		private class ReconnectMessage : Message
 		{
-			public const MessageTypes ReconnectMessageType = (MessageTypes)(-17000);
-
 			public ReconnectMessage()
-				: base(ReconnectMessageType)
+				: base(ExtendedMessageTypes.Reconnect)
 			{
 			}
 		}
@@ -69,7 +67,7 @@ namespace StockSharp.Algo
 		public HeartbeatMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
-			_reConnectionSettings = InnerAdapter.ReConnectionSettings;
+			_reConnectionSettings = ReConnectionSettings;
 			_timeMessage.Adapter = this;
 		}
 
@@ -149,6 +147,22 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_prevState = _none;
+
+					lock (_timeSync)
+						_currState = _none;
+
+					StopTimer();
+
+					_connectingAttemptCount = 0;
+					_connectionTimeOut = default(TimeSpan);
+					_canSendTime = false;
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					if (_isFirstTimeConnect)
@@ -186,7 +200,7 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case ReconnectMessage.ReconnectMessageType:
+				case ExtendedMessageTypes.Reconnect:
 				{
 					SendInMessage(new ConnectMessage());
 					break;
@@ -209,8 +223,8 @@ namespace StockSharp.Algo
 				if (_timer != null)
 					return;
 
-				var period = InnerAdapter.ReConnectionSettings.Interval;
-				var needHeartbeat = InnerAdapter.HeartbeatInterval != TimeSpan.Zero;
+				var period = ReConnectionSettings.Interval;
+				var needHeartbeat = HeartbeatInterval != TimeSpan.Zero;
 				var time = TimeHelper.Now;
 				var lastHeartBeatTime = TimeHelper.Now;
 				var sync = new SyncObject();
@@ -219,7 +233,7 @@ namespace StockSharp.Algo
 				if (needHeartbeat)
 				{
 					_canSendTime = true;
-					period = period.Min(InnerAdapter.HeartbeatInterval);
+					period = period.Min(HeartbeatInterval);
 				}
 
 				_timer = ThreadingHelper
@@ -238,7 +252,7 @@ namespace StockSharp.Algo
 							var now = TimeHelper.Now;
 							var diff = now - time;
 
-							if (needHeartbeat && now - lastHeartBeatTime >= InnerAdapter.HeartbeatInterval)
+							if (needHeartbeat && now - lastHeartBeatTime >= HeartbeatInterval)
 							{
 								ProcessHeartbeat();
 								lastHeartBeatTime = now;
@@ -384,7 +398,7 @@ namespace StockSharp.Algo
 			}
 
 			_timeMessage.IsBack = true;
-			_timeMessage.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+			_timeMessage.TransactionId = TransactionIdGenerator.GetNextId();
 
 			RaiseNewOutMessage(_timeMessage);
 			//InnerAdapter.SendInMessage(_timeMessage);
@@ -392,8 +406,7 @@ namespace StockSharp.Algo
 
 		private bool IsTradeTime()
 		{
-			WorkingTimePeriod period;
-			return _reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out period);
+			return _reConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now, out var _);
 		}
 
 		/// <summary>

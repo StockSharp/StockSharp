@@ -55,14 +55,19 @@ namespace StockSharp.Messages
 		MessageTypes[] SupportedMessages { get; set; }
 
 		/// <summary>
-		/// The parameters validity check.
+		/// Supported by adapter market data types.
 		/// </summary>
-		bool IsValid { get; }
+		MarketDataTypes[] SupportedMarketDataTypes { get; set; }
 
 		/// <summary>
 		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
 		/// </summary>
 		IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
+
+		/// <summary>
+		/// Possible time-frames.
+		/// </summary>
+		IEnumerable<TimeSpan> TimeFrames { get; }
 
 		/// <summary>
 		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
@@ -118,6 +123,11 @@ namespace StockSharp.Messages
 		/// Support filtering subscriptions (subscribe/unsubscribe for specified security).
 		/// </summary>
 		bool IsSupportSubscriptionBySecurity { get; }
+
+		/// <summary>
+		/// Support portfolio subscriptions.
+		/// </summary>
+		bool IsSupportSubscriptionByPortfolio { get; }
 
 		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.

@@ -1,13 +1,14 @@
-T:StockSharp.BarChart.BarChartMessageAdapter/summary;DocStr2530
+T:StockSharp.BarChart.BarChartMessageAdapter/summary;DocStr2538
 M:StockSharp.BarChart.BarChartMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.BarChart.BarChartMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.BarChart.BarChartMessageAdapter.Login/summary;Login
 P:StockSharp.BarChart.BarChartMessageAdapter.Password/summary;Password
-P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames/summary;DocStr2531
+P:StockSharp.BarChart.BarChartMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
 M:StockSharp.BarChart.BarChartMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/inheritdoc;DocStr8459
-T:StockSharp.BarChart.BarChartTrader/summary;DocStr2532
+T:StockSharp.BarChart.BarChartTrader/summary;DocStr2539
 M:StockSharp.BarChart.BarChartTrader.#ctor/summary;DocStr1
 P:StockSharp.BarChart.BarChartTrader.Login/summary;Login
 P:StockSharp.BarChart.BarChartTrader.Password/summary;Password

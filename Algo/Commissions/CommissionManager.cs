@@ -77,7 +77,20 @@ namespace StockSharp.Algo.Commissions
 					if (_rules.Count == 0)
 						return null;
 
-					var commission = _rules.Cache.Sum(rule => rule.Process(message));
+					decimal? commission = null;
+
+					foreach (var rule in _rules.Cache)
+					{
+						var ruleCom = rule.Process(message);
+
+						if (ruleCom != null)
+						{
+							if (commission == null)
+								commission = 0;
+
+							commission += ruleCom.Value;
+						}
+					}
 
 					if (commission != null)
 						Commission += commission.Value;

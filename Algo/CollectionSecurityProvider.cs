@@ -35,9 +35,7 @@ namespace StockSharp.Algo
 			AddedRange += s => _added?.Invoke(s);
 			RemovedRange += s => _removed?.Invoke(s);
 
-			var notifyList = securities as INotifyList<Security>;
-
-			if (notifyList != null)
+			if (securities is INotifyList<Security> notifyList)
 			{
 				notifyList.Added += Add;
 				notifyList.Removed += s => Remove(s);

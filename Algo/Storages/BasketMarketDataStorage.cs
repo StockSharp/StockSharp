@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Storages
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -261,6 +262,8 @@ namespace StockSharp.Algo.Storages
 			_innerStorages.Added += InnerStoragesOnAdded;
 			_innerStorages.Removed += InnerStoragesOnRemoved;
 			_innerStorages.Cleared += InnerStoragesOnCleared;
+
+			_serializer = new BasketMarketDataSerializer(this);
 		}
 
 		/// <summary>
@@ -345,7 +348,51 @@ namespace StockSharp.Algo.Storages
 			return OnLoad(date);
 		}
 
-		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => throw new NotSupportedException();
+		private class BasketMarketDataSerializer : IMarketDataSerializer<T>
+		{
+			private readonly BasketMarketDataStorage<T> _parent;
+
+			public BasketMarketDataSerializer(BasketMarketDataStorage<T> parent)
+			{
+				if (parent == null)
+					throw new ArgumentNullException(nameof(parent));
+
+				_parent = parent;
+			}
+
+			StorageFormats IMarketDataSerializer.Format => _parent.InnerStorages.First().Serializer.Format;
+
+			TimeSpan IMarketDataSerializer.TimePrecision => _parent.InnerStorages.First().Serializer.TimePrecision;
+
+			IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
+			{
+				throw new NotSupportedException();
+			}
+
+			IEnumerable<T> IMarketDataSerializer<T>.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+			{
+				throw new NotSupportedException();
+			}
+
+			void IMarketDataSerializer<T>.Serialize(Stream stream, IEnumerable<T> data, IMarketDataMetaInfo metaInfo)
+			{
+				throw new NotSupportedException();
+			}
+
+			IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+			{
+				throw new NotSupportedException();
+			}
+		}
+
+		private readonly IMarketDataSerializer<T> _serializer;
+
+		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => _serializer;
 
 		int IMarketDataStorage<T>.Save(IEnumerable<T> data)
 		{
@@ -367,7 +414,7 @@ namespace StockSharp.Algo.Storages
 			throw new NotSupportedException();
 		}
 
-		IMarketDataSerializer IMarketDataStorage.Serializer => throw new NotSupportedException();
+		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
 
 		/// <summary>
 		/// To load messages from embedded storages for specified date.

@@ -87,70 +87,64 @@ namespace SampleBtce
 			{
 				if (Key.Text.IsEmpty())
 				{
-					MessageBox.Show(this, LocalizedStrings.Str2974);
+					MessageBox.Show(this, LocalizedStrings.Str3689);
 					return;
 				}
 				else if (Secret.Password.IsEmpty())
 				{
-					MessageBox.Show(this, LocalizedStrings.Str2975);
+					MessageBox.Show(this, LocalizedStrings.Str3690);
 					return;
 				}
 
 				if (Trader == null)
 				{
-					// создаем подключение
+					// create connector
 					Trader = new BtceTrader();// { LogLevel = LogLevels.Debug };
 
 					_logManager.Sources.Add(Trader);
 
 					Trader.Restored += () => this.GuiAsync(() =>
 					{
-						// разблокируем кнопку Экспорт (соединение было восстановлено)
+						// update gui labes
 						ChangeConnectStatus(true);
 						MessageBox.Show(this, LocalizedStrings.Str2958);
 					});
 
-					// подписываемся на событие успешного соединения
+					// subscribe on connection successfully event
 					Trader.Connected += () =>
 					{
-						// возводим флаг, что соединение установлено
+						// set flag (connection is established)
 						_isConnected = true;
 
-						// разблокируем кнопку Экспорт
+						// update gui labes
 						this.GuiAsync(() => ChangeConnectStatus(true));
 					};
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-					// подписываемся на событие разрыва соединения
+					// subscribe on connection error event
 					Trader.ConnectionError += error => this.GuiAsync(() =>
 					{
-						// заблокируем кнопку Экспорт (так как соединение было потеряно)
+						// update gui labes
 						ChangeConnectStatus(false);
 
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 					});
 
-					// подписываемся на ошибку обработки данных (транзакций и маркет)
+					// subscribe on error event
 					Trader.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-					// подписываемся на ошибку подписки маркет-данных
+					// subscribe on error of market data subscription event
 					Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-					Trader.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-					Trader.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-					Trader.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
+					Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
 
-					Trader.NewPortfolio += portfolio =>
-					{
-						// subscribe on portfolio updates
-						Trader.RegisterPortfolio(portfolio);
-
-						_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-					};
-					Trader.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 					// subscribe on error of order registration event
 					Trader.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;
@@ -171,7 +165,7 @@ namespace SampleBtce
 				Trader.Key = Key.Text;
 				Trader.Secret = Secret.Password;
 
-				// очищаем из текстового поля в целях безопасности
+				// clear password box for security reason
 				//Secret.Clear();
 
 				Trader.Connect();

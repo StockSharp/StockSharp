@@ -28,6 +28,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("VMA")]
 	[DescriptionLoc(LocalizedStrings.Str823Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class VolumeWeightedMovingAverage : LengthIndicator<decimal>
 	{
 		// Текущее значение числителя

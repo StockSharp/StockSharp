@@ -43,11 +43,12 @@
             Available functions.
             </summary>
         </member>
-        <member name="M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String)">
+        <member name="M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String,System.Boolean)">
             <summary>
             Compile mathematical formula.
             </summary>
             <param name="expression">Text expression.</param>
+            <param name="useSecurityIds">Use security ids as variables.</param>
             <returns>Compiled mathematical formula.</returns>
         </member>
         <member name="T:StockSharp.Algo.Expressions.ExpressionHelper">
@@ -81,12 +82,13 @@
             Available functions.
             </summary>
         </member>
-        <member name="M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String)">
+        <member name="M:StockSharp.Algo.Expressions.ExpressionHelper.Compile(Ecng.Common.ICompilerService,System.String,System.Boolean)">
             <summary>
             Compile mathematical formula.
             </summary>
             <param name="service">Compiler service.</param>
             <param name="expression">Text expression.</param>
+            <param name="useSecurityIds">Use security ids as variables.</param>
             <returns>Compiled mathematical formula.</returns>
         </member>
         <member name="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity">

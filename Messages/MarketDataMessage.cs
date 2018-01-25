@@ -216,6 +216,18 @@ namespace StockSharp.Messages
 		public BuildCandlesModes BuildCandlesMode { get; set; }
 
 		/// <summary>
+		/// Which market-data type is used as an candle source value.
+		/// </summary>
+		[DataMember]
+		public MarketDataTypes? BuildCandlesFrom { get; set; }
+
+		/// <summary>
+		/// Extra info for the <see cref="BuildCandlesFrom"/>.
+		/// </summary>
+		[DataMember]
+		public Level1Fields? BuildCandlesField { get; set; }
+
+		/// <summary>
 		/// Contains history market data.
 		/// </summary>
 		[DataMember]
@@ -264,6 +276,8 @@ namespace StockSharp.Messages
 				LocalTime = LocalTime,
 				IsNotSupported = IsNotSupported,
 				BuildCandlesMode = BuildCandlesMode,
+				BuildCandlesFrom = BuildCandlesFrom,
+				BuildCandlesField = BuildCandlesField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
 				IsHistory = IsHistory,
 			};
@@ -279,7 +293,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + $",Sec={SecurityId},Types={DataType},IsSubscribe={IsSubscribe},TransId={TransactionId},OrigId={OriginalTransactionId}";
+			return base.ToString() + $",Sec={SecurityId},Type={DataType},IsSubscribe={IsSubscribe},Arg={Arg},TransId={TransactionId},OrigId={OriginalTransactionId}";
 		}
 	}
 }

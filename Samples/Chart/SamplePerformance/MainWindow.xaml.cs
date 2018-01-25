@@ -436,6 +436,8 @@ namespace SamplePerformance
 		public string Name { get; set; }
 		bool IIndicator.IsFormed => true;
 		IIndicatorContainer IIndicator.Container { get; } = null;
+		Type IIndicator.InputType { get; } = typeof(DecimalIndicatorValue);
+		Type IIndicator.ResultType { get; } = typeof(DecimalIndicatorValue);
 
 		event Action<IIndicatorValue, IIndicatorValue> IIndicator.Changed
 		{

@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("MFI")]
 	[DescriptionLoc(LocalizedStrings.MoneyFlowIndexKey)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class MoneyFlowIndex : LengthIndicator<decimal>
 	{
 		private decimal _previousPrice;

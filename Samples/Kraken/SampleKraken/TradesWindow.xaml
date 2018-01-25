@@ -1,0 +1,7 @@
+<Window x:Class="SampleKraken.TradesWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+    xmlns:xaml="http://schemas.stocksharp.com/xaml"
+    Title="{x:Static loc:LocalizedStrings.Str985}" Height="284" Width="530">
+	<xaml:TradeGrid x:Name="TradeGrid" x:FieldModifier="public" />
+</Window>

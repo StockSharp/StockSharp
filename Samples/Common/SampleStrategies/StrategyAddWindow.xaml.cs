@@ -22,37 +22,37 @@
 
 		public Security Security
 		{
-			get { return SecurityCtrl.SelectedSecurity; }
-			set { SecurityCtrl.SelectedSecurity = value; }
+			get => SecurityCtrl.SelectedSecurity;
+			set => SecurityCtrl.SelectedSecurity = value;
 		}
 
 		public Portfolio Portfolio
 		{
-			get { return PortfolioCtrl.SelectedPortfolio; }
-			set { PortfolioCtrl.SelectedPortfolio = value; }
+			get => PortfolioCtrl.SelectedPortfolio;
+			set => PortfolioCtrl.SelectedPortfolio = value;
 		}
 
 		public decimal Volume
 		{
-			get { return (decimal?)AmountCtrl.EditValue ?? 0; }
-			set { AmountCtrl.EditValue = value; }
+			get => (decimal?)AmountCtrl.EditValue ?? 0;
+			set => AmountCtrl.EditValue = value;
 		}
 
 		public decimal TakeProfit
 		{
-			get { return (decimal?)TakeProfitCtrl.EditValue ?? 0; }
-			set { TakeProfitCtrl.EditValue = value; }
+			get => (decimal?)TakeProfitCtrl.EditValue ?? 0;
+			set => TakeProfitCtrl.EditValue = value;
 		}
 
 		public decimal StopLoss
 		{
-			get { return (decimal?)StopLossCtrl.EditValue ?? 0; }
-			set { StopLossCtrl.EditValue = value; }
+			get => (decimal?)StopLossCtrl.EditValue ?? 0;
+			set => StopLossCtrl.EditValue = value;
 		}
 
 		public Sides Side
 		{
-			get { return IsBuyCtrl.IsChecked == true ? Sides.Buy : Sides.Sell; }
+			get => IsBuyCtrl.IsChecked == true ? Sides.Buy : Sides.Sell;
 			set
 			{
 				switch (value)

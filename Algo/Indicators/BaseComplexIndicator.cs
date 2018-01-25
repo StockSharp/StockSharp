@@ -85,6 +85,11 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
+		/// Result values type.
+		/// </summary>
+		public override Type ResultType { get; } = typeof(ComplexIndicatorValue);
+
+		/// <summary>
 		/// To handle the input value.
 		/// </summary>
 		/// <param name="input">The input value.</param>

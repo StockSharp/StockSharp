@@ -41,7 +41,7 @@ namespace SampleFxcm
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = FxcmMessageAdapter.TimeFrames;
+			CandlesPeriods.ItemsSource = FxcmMessageAdapter.AllTimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
 		}
 

@@ -87,10 +87,13 @@
             Use OpenECry API logging.
             </summary>
     </member>
-    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.TimeFrames">
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.AllTimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.TimeFrames">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -241,7 +244,7 @@
     </member>
     <member name="T:StockSharp.OpenECry.OpenECryTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the OEC broker.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.OpenECry" />.
             </summary>
     </member>
     <member name="M:StockSharp.OpenECry.OpenECryTrader.#ctor">

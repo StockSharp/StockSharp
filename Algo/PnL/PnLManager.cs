@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.PnL
 {
 	using System;
-	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -55,7 +54,25 @@ namespace StockSharp.Algo.PnL
 		/// </summary>
 		public virtual decimal? UnrealizedPnL
 		{
-			get { return _portfolioManagers.CachedValues.Sum(p => p.UnrealizedPnL); }
+			get
+			{
+				decimal? retVal = null;
+
+				foreach (var manager in _portfolioManagers.CachedValues)
+				{
+					var manPnl = manager.UnrealizedPnL;
+
+					if (manPnl != null)
+					{
+						if (retVal == null)
+							retVal = 0;
+
+						retVal += manPnl.Value;
+					}
+				}
+
+				return retVal;
+			}
 		}
 
 		/// <summary>
@@ -102,9 +119,7 @@ namespace StockSharp.Algo.PnL
 						{
 							var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
 
-							PnLInfo info;
-
-							if (manager.ProcessMyTrade(trade, out info))
+							if (manager.ProcessMyTrade(trade, out var info))
 								_realizedPnL += info.PnL;
 
 							return info;

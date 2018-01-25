@@ -6,7 +6,7 @@
     <members>
         <member name="T:StockSharp.Sterling.SterlingMessageAdapter">
             <summary>
-            The message adapter for Sterling.
+            The message adapter for <see cref="N:StockSharp.Sterling"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
@@ -254,7 +254,7 @@
         </member>
         <member name="T:StockSharp.Sterling.SterlingTrader">
             <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the Sterling.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Sterling"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Sterling.SterlingTrader.#ctor">

@@ -6,7 +6,7 @@
     <members>
         <member name="T:StockSharp.BarChart.BarChartMessageAdapter">
             <summary>
-            The message adapter for BarChart.
+            The message adapter for <see cref="N:StockSharp.BarChart"/>.
             </summary>
         </member>
         <member name="M:StockSharp.BarChart.BarChartMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
@@ -25,10 +25,13 @@
             Password.
             </summary>
         </member>
-        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames">
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.AllTimeFrames">
             <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+        </member>
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames">
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
@@ -41,7 +44,7 @@
         </member>
         <member name="T:StockSharp.BarChart.BarChartTrader">
             <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the BarChart.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BarChart"/>.
             </summary>
         </member>
         <member name="M:StockSharp.BarChart.BarChartTrader.#ctor">

@@ -69,6 +69,43 @@ namespace StockSharp.Algo.Testing
 			}
 
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
+
+			protected override void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.Security:
+					case MessageTypes.Board:
+					case MessageTypes.Level1Change:
+					case MessageTypes.QuoteChange:
+					case MessageTypes.Time:
+					case MessageTypes.Execution:
+					{
+						var adapter = message.Adapter;
+
+						if (adapter == _parent.MarketDataAdapter)
+							_parent.TransactionAdapter.SendInMessage(message);
+
+						break;
+					}
+
+					case MessageTypes.CandlePnF:
+					case MessageTypes.CandleRange:
+					case MessageTypes.CandleRenko:
+					case MessageTypes.CandleTick:
+					case MessageTypes.CandleTimeFrame:
+					case MessageTypes.CandleVolume:
+					{
+						if (message.Adapter != _parent.MarketDataAdapter)
+							break;
+
+						_parent.TransactionAdapter.SendInMessage(message);
+						return;
+					}
+				}
+
+				base.OnInnerAdapterNewOutMessage(innerAdapter, message);
+			}
 		}
 
 		private sealed class HistoryEmulationMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
@@ -110,9 +147,7 @@ namespace StockSharp.Algo.Testing
 								var sended = _historyMessageAdapter.SendOutMessage();
 								var block = !sended;
 
-								Message message;
-
-								while (_messageQueue.TryDequeue(out message, true, block))
+								while (_messageQueue.TryDequeue(out var message, true, block))
 								{
 									NewOutMessage?.Invoke(message);
 									block = false;
@@ -291,7 +326,7 @@ namespace StockSharp.Algo.Testing
 						throwError = (_state != EmulationStates.Suspending);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(value));
+						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 				}
 
 				if (throwError)
@@ -319,6 +354,13 @@ namespace StockSharp.Algo.Testing
 		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="IConnector.Disconnect"/>method.
 		/// </summary>
 		public bool IsFinished { get; private set; }
+
+		/// <inheritdoc />
+		public override TimeSpan MarketTimeChangedInterval
+		{
+			get => HistoryMessageAdapter.MarketTimeChangedInterval;
+			set => HistoryMessageAdapter.MarketTimeChangedInterval = value;
+		}
 
 		///// <summary>
 		///// To enable the possibility to give out candles directly into <see cref="ICandleManager"/>. It accelerates operation, but candle change events will not be available. By default it is disabled.
@@ -432,53 +474,6 @@ namespace StockSharp.Algo.Testing
 						ProcessEmulationStateMessage(((EmulationStateMessage)message).State);
 						break;
 
-					case MessageTypes.Security:
-					case MessageTypes.Board:
-					case MessageTypes.Level1Change:
-					case MessageTypes.QuoteChange:
-					case MessageTypes.Time:
-					case MessageTypes.CandlePnF:
-					case MessageTypes.CandleRange:
-					case MessageTypes.CandleRenko:
-					case MessageTypes.CandleTick:
-					case MessageTypes.CandleTimeFrame:
-					case MessageTypes.CandleVolume:
-					case MessageTypes.Execution:
-					{
-						var adapter = message.Adapter; //.GetInnerAdapter();
-
-						if (adapter == TransactionAdapter)
-						{
-							var candleMsg = message as CandleMessage;
-
-							if (candleMsg != null)
-							{
-								//if (!UseExternalCandleSource)
-								//	break;
-
-								//var seriesList = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
-
-								//if (seriesList == null)
-								//	break;
-
-								//foreach (var series in seriesList.Cache)
-								//{
-								//	_newCandles?.Invoke(series, new[] {candleMsg.ToCandle(series)});
-
-								//	if (candleMsg.IsFinished)
-								//		_stopped?.Invoke(series);
-								//}
-
-								break;
-							}
-						}
-						else if (adapter == MarketDataAdapter)
-							TransactionAdapter.SendInMessage(message);
-
-						base.OnProcessMessage(message);
-						break;
-					}
-
 					default:
 					{
 						if (State == EmulationStates.Stopping && message.Type != MessageTypes.Disconnect)
@@ -537,8 +532,8 @@ namespace StockSharp.Algo.Testing
 			SendInMessage(
 				EmulationAdapter
 					.CreatePortfolioChangeMessage(portfolio.Name)
-						.Add(PositionChangeTypes.BeginValue, money)
-						.Add(PositionChangeTypes.CurrentValue, money)
+						.TryAdd(PositionChangeTypes.BeginValue, money)
+						.TryAdd(PositionChangeTypes.CurrentValue, money)
 						.Add(PositionChangeTypes.BlockedValue, 0m));
 		}
 

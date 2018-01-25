@@ -75,8 +75,8 @@ namespace StockSharp.Messages
 
 				_nativeAsInt = 0;
 
-				if (value is long)
-					_nativeAsInt = (long)value;
+				if (value is long l)
+					_nativeAsInt = l;
 			}
 		}
 
@@ -178,14 +178,21 @@ namespace StockSharp.Messages
 			return EnsureGetHashCode();
 		}
 
-		private int EnsureGetHashCode()
+		/// <summary>
+		/// Evaluate and cache hash code.
+		/// </summary>
+		public void EnsureHashCode()
 		{
 			if (_hashCode == 0)
 			{
 				_hashCode = (_nativeAsInt != 0 ? _nativeAsInt.GetHashCode() : _native?.GetHashCode())
-					?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
+						?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
 			}
+		}
 
+		private int EnsureGetHashCode()
+		{
+			EnsureHashCode();
 			return _hashCode;
 		}
 
@@ -196,8 +203,7 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		public override bool Equals(object other)
 		{
-			var secId = other as SecurityId?;
-			return secId != null && Equals(secId.Value);
+			return other is SecurityId secId && Equals(secId);
 		}
 
 		/// <summary>

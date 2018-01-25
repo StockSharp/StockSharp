@@ -757,9 +757,7 @@ namespace StockSharp.Algo
 
 			private void OnSecurityChanged(Security security)
 			{
-				var basket = Security as BasketSecurity;
-
-				if (basket != null)
+				if (Security is BasketSecurity basket)
 				{
 					if (basket.Contains(SecurityProvider, security) && _condition(security))
 						Activate(security);
@@ -860,9 +858,7 @@ namespace StockSharp.Algo
 
 			private bool CheckLastTrade(Security security)
 			{
-				var basket = Security as BasketSecurity;
-
-				if (basket != null)
+				if (Security is BasketSecurity basket)
 				{
 					return basket.Contains(SecurityProvider, security) && _condition(security);
 				}
@@ -880,9 +876,7 @@ namespace StockSharp.Algo
 
 			private bool CheckTrades(Security security, Trade trade)
 			{
-				var basket = security as BasketSecurity;
-
-				return basket != null
+				return security is BasketSecurity basket
 					? basket.Contains(SecurityProvider, trade.Security) && _condition(trade.Security)
 					: trade.Security == security && _condition(trade.Security);
 			}

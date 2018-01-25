@@ -1326,15 +1326,14 @@
     </member>
     <member name="T:StockSharp.Algo.History.Russian.MoexDownloader">
       <summary>
-            The helper class that filling fields in <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> and <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" /> based on information from the site http://moex.com.
+            The helper class that filling fields in <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> and <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" /> based on information from the site https://moex.com.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,StockSharp.Algo.Storages.IExchangeInfoProvider,System.Boolean)">
+    <member name="M:StockSharp.Algo.History.Russian.MoexDownloader.GetSecurities(System.String,System.Boolean)">
       <summary>
             To get securities for the instrument code.
             </summary>
       <param name="code">Instrument code.</param>
-      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
       <param name="isDownload">Whether to download information from the site, if it is not found locally.</param>
       <returns>Found securities.</returns>
     </member>
@@ -1531,6 +1530,94 @@
       <param name="storage">Securities meta info storage.</param>
       <param name="date">The date of the trading session for which you need to get trades.</param>
       <returns>Historical ticks.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.SecurityInfo">
+      <summary>
+            Security info.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Name">
+      <summary>
+            Security name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.ShortName">
+      <summary>
+            Short security name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Code">
+      <summary>
+            Security code.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Board">
+      <summary>
+            Exchange board where the security is traded.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Isin">
+      <summary>
+            ID in ISIN format (International Securities Identification Number).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Asset">
+      <summary>
+            Underlying asset on which the current security is built.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Type">
+      <summary>
+            Security type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.IssueSize">
+      <summary>
+            Number of issued contracts.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.IssueDate">
+      <summary>
+            Date of issue.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.LastDate">
+      <summary>
+            Security expiration date (for derivatives - expiration, for bonds — redemption).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Decimals">
+      <summary>
+            Number of digits in price after coma.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Multiplier">
+      <summary>
+            Lot multiplier.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.PriceStep">
+      <summary>
+            Minimum price step.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.SecurityInfo.Currency">
+      <summary>
+            Trading security currency.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.SecurityInfo.FillTo(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IExchangeInfoProvider)">
+      <summary>
+            To copy fields of the current instrument to <paramref name="security" />.
+            </summary>
+      <param name="security">Security.</param>
+      <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.SecurityInfo.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Algo.History.Russian.SecurityInfo" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.Algo.History.Russian.UxHistorySource">
       <summary>

@@ -285,7 +285,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 				
 				_time = value;
 				Title = value.To<string>();
@@ -624,7 +624,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_volume = value;
 				Title = value.To<string>();
@@ -709,7 +709,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_count = value;
 				UpdateTitle();
@@ -731,7 +731,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_interval = value;
 				UpdateTitle();
@@ -920,7 +920,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_volume = value;
 				Title = value.To<string>();
@@ -997,7 +997,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_count = value;
 				UpdateTitle();
@@ -1018,7 +1018,7 @@ namespace StockSharp.Algo.Risk
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_interval = value;
 				UpdateTitle();

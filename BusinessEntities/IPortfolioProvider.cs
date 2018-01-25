@@ -32,5 +32,10 @@ namespace StockSharp.BusinessEntities
 		/// New portfolio received.
 		/// </summary>
 		event Action<Portfolio> NewPortfolio;
+
+		/// <summary>
+		/// Portfolio changed.
+		/// </summary>
+		event Action<Portfolio> PortfolioChanged;
 	}
 }

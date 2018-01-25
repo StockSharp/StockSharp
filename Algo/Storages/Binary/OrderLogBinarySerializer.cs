@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class OrderLogMetaInfo : BinaryMetaInfo<OrderLogMetaInfo>
+	class OrderLogMetaInfo : BinaryMetaInfo
 	{
 		public OrderLogMetaInfo(DateTime date)
 			: base(date)
@@ -147,26 +147,25 @@ namespace StockSharp.Algo.Storages.Binary
 			ReadOffsets(stream);
 		}
 
-		public override void CopyFrom(OrderLogMetaInfo src)
+		public override void CopyFrom(BinaryMetaInfo src)
 		{
 			base.CopyFrom(src);
 
-			FirstOrderId = src.FirstOrderId;
-			FirstTradeId = src.FirstTradeId;
-			LastOrderId = src.LastOrderId;
-			LastTradeId = src.LastTradeId;
+			var olInfo = (OrderLogMetaInfo)src;
 
-			FirstPrice = src.FirstPrice;
-			LastPrice = src.LastPrice;
+			FirstOrderId = olInfo.FirstOrderId;
+			FirstTradeId = olInfo.FirstTradeId;
+			LastOrderId = olInfo.LastOrderId;
+			LastTradeId = olInfo.LastTradeId;
 
-			FirstTransactionId = src.FirstTransactionId;
-			LastTransactionId = src.LastTransactionId;
+			FirstTransactionId = olInfo.FirstTransactionId;
+			LastTransactionId = olInfo.LastTransactionId;
 
-			FirstOrderPrice = src.FirstOrderPrice;
-			LastOrderPrice = src.LastOrderPrice;
+			FirstOrderPrice = olInfo.FirstOrderPrice;
+			LastOrderPrice = olInfo.LastOrderPrice;
 
 			Portfolios.Clear();
-			Portfolios.AddRange(src.Portfolios);
+			Portfolios.AddRange(olInfo.Portfolios);
 		}
 	}
 
@@ -213,7 +212,7 @@ namespace StockSharp.Algo.Storages.Binary
 				//	throw new ArgumentOutOfRangeException(nameof(messages), item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
 
 				var volume = message.SafeGetVolume();
-				if (volume <= 0)
+				if (volume <= 0 && message.OrderState != OrderStates.Done)
 					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(message.OrderId));
 
 				long? tradeId = null;
@@ -239,7 +238,7 @@ namespace StockSharp.Algo.Storages.Binary
 					writer.WritePriceEx(orderPrice, metaInfo, SecurityId);
 				else
 				{
-					var isAligned = (orderPrice % metaInfo.PriceStep) == 0;
+					var isAligned = (orderPrice % metaInfo.LastPriceStep) == 0;
 					writer.Write(isAligned);
 
 					if (isAligned)
@@ -247,8 +246,9 @@ namespace StockSharp.Algo.Storages.Binary
 						if (metaInfo.FirstOrderPrice == 0)
 							metaInfo.FirstOrderPrice = metaInfo.LastOrderPrice = orderPrice;
 
-						writer.WritePrice(orderPrice, metaInfo.LastOrderPrice, metaInfo, SecurityId, true);
-						metaInfo.LastOrderPrice = orderPrice;
+						var prevPrice = metaInfo.LastOrderPrice;
+						writer.WritePrice(orderPrice, ref prevPrice, metaInfo, SecurityId, true);
+						metaInfo.LastOrderPrice = prevPrice;
 					}
 					else
 					{
@@ -289,7 +289,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (metaInfo.Version < MarketDataVersions.Version31)
 					continue;
 
-				writer.WriteNullableInt(message.OrderStatus);
+				writer.WriteNullableInt((int?)message.OrderStatus);
 
 				if (metaInfo.Version < MarketDataVersions.Version33)
 					continue;
@@ -362,7 +362,11 @@ namespace StockSharp.Algo.Storages.Binary
 			else
 			{
 				if (reader.Read())
-					price = metaInfo.FirstOrderPrice = reader.ReadPrice(metaInfo.FirstOrderPrice, metaInfo, true);
+				{
+					var prevPrice = metaInfo.FirstOrderPrice;
+					price = reader.ReadPrice(ref prevPrice, metaInfo, true);
+					metaInfo.FirstOrderPrice = prevPrice;
+				}
 				else
 					price = metaInfo.FirstFractionalPrice = reader.ReadDecimal(metaInfo.FirstFractionalPrice);
 			}
@@ -413,7 +417,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (metaInfo.Version >= MarketDataVersions.Version31)
 			{
-				execMsg.OrderStatus = reader.ReadNullableInt<long>();
+				execMsg.OrderStatus = reader.ReadNullableInt();
 
 				if (execMsg.OrderStatus != null)
 				{

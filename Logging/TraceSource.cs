@@ -20,6 +20,8 @@ namespace StockSharp.Logging
 
 	using Ecng.Common;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// The logs source which receives information from <see cref="Trace"/>.
 	/// </summary>
@@ -91,7 +93,7 @@ namespace StockSharp.Logging
 					case TraceEventType.Transfer:
 						return null;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(eventType));
+						throw new ArgumentOutOfRangeException(nameof(eventType), eventType, LocalizedStrings.Str1219);
 				}
 			}
 		}

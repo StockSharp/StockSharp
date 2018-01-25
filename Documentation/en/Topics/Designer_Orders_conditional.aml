@@ -2,8 +2,8 @@
 <topic id="acc5951e-e627-453b-896e-d53f1687e3fb" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
         <introduction>
-<para>Компонент <legacyBold>Условные заявки</legacyBold> 
-представляет собой таблицу с заявками, в которой отображается полная информация о всех <legacyBold>Условных заявках</legacyBold> стратегии.
+<para>The <legacyBold>Conditional orders</legacyBold> component is a table with 
+orders, which displays complete information about all <legacyBold>Conditional orders</legacyBold> of the strategy.
 </para> 
 <mediaLink>
 <image placement="center" xlink:href="Designer_Orders_conditional"/>

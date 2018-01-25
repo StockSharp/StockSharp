@@ -78,29 +78,29 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Data.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Data.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Data.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Mvvm.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Mvvm.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Mvvm.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Mvvm.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v17.1.Core">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v17.2.Core">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.LayoutControl.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.PropertyGrid.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -133,8 +133,8 @@
     <Compile Include="SecuritiesWindow.xaml.cs">
       <DependentUpon>SecuritiesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConditionOrdersWindow.xaml.cs">
-      <DependentUpon>ConditionOrdersWindow.xaml</DependentUpon>
+    <Compile Include="StopOrdersWindow.xaml.cs">
+      <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>
@@ -218,7 +218,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ConditionOrdersWindow.xaml">
+    <Page Include="StopOrdersWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

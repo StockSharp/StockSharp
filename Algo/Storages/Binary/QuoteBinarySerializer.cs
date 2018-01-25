@@ -27,12 +27,12 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class QuoteMetaInfo : BinaryMetaInfo<QuoteMetaInfo>
+	class QuoteMetaInfo : BinaryMetaInfo
 	{
 		public QuoteMetaInfo(DateTime date)
 			: base(date)
 		{
-			FirstPrice = -1;
+			//FirstPrice = -1;
 		}
 
 		public override void Write(Stream stream)
@@ -54,6 +54,11 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			WriteOffsets(stream);
+
+			if (Version < MarketDataVersions.Version54)
+				return;
+
+			WritePriceStep(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -75,21 +80,18 @@ namespace StockSharp.Algo.Storages.Binary
 				return;
 
 			ReadOffsets(stream);
-		}
 
-		public override void CopyFrom(QuoteMetaInfo src)
-		{
-			base.CopyFrom(src);
+			if (Version < MarketDataVersions.Version54)
+				return;
 
-			FirstPrice = src.FirstPrice;
-			LastPrice = src.LastPrice;
+			ReadPriceStep(stream);
 		}
 	}
 
 	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
 		public QuoteBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version53, exchangeInfoProvider)
+			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version55, exchangeInfoProvider)
 		{
 		}
 
@@ -99,7 +101,15 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				var firstDepth = messages.FirstOrDefault(d => !d.Bids.IsEmpty() || !d.Asks.IsEmpty());
 
-				metaInfo.LastPrice = metaInfo.FirstPrice = firstDepth != null ? GetDepthPrice(firstDepth) : 0;
+				//var price = firstDepth != null ? GetDepthPrice(firstDepth) : 0;
+
+				//if (price != 0)
+				//{
+				//	if ((price % metaInfo.PriceStep) == 0)
+				//		metaInfo.LastPrice = metaInfo.FirstPrice = price;
+				//	else
+				//		metaInfo.LastFractionalPrice = metaInfo.FirstFractionalPrice = price;
+				//}
 
 				metaInfo.ServerOffset = (firstDepth ?? messages.First()).ServerTime.Offset;
 			}
@@ -112,6 +122,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
+			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
+			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
 
 			foreach (var m in messages)
 			{
@@ -128,12 +140,12 @@ namespace StockSharp.Algo.Storages.Binary
 					quoteMsg.Asks = quoteMsg.Asks.OrderBy(q => q.Price).ToArray();
 				}
 
-				var bid = quoteMsg.GetBestBid();
-				var ask = quoteMsg.GetBestAsk();
+				//var bid = quoteMsg.GetBestBid();
+				//var ask = quoteMsg.GetBestAsk();
 
 				// LMAX has equals best bid and ask
-				if (bid != null && ask != null && bid.Price > ask.Price)
-					throw new ArgumentException(LocalizedStrings.Str932Params.Put(bid.Price, ask.Price, quoteMsg.ServerTime), nameof(messages));
+				//if (bid != null && ask != null && bid.Price > ask.Price)
+				//	throw new ArgumentException(LocalizedStrings.Str932Params.Put(bid.Price, ask.Price, quoteMsg.ServerTime), nameof(messages));
 
 				var lastOffset = metaInfo.LastServerOffset;
 				metaInfo.LastTime = writer.WriteTime(quoteMsg.ServerTime, metaInfo.LastTime, LocalizedStrings.MarketDepth, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
@@ -147,10 +159,10 @@ namespace StockSharp.Algo.Storages.Binary
 
 				prevQuoteMsg = quoteMsg;
 
-				SerializeQuotes(writer, delta.Bids, metaInfo/*, isFull*/);
-				SerializeQuotes(writer, delta.Asks, metaInfo/*, isFull*/);
+				SerializeQuotes(writer, delta.Bids, metaInfo/*, isFull*/, useLong, nonAdjustPrice);
+				SerializeQuotes(writer, delta.Asks, metaInfo/*, isFull*/, useLong, nonAdjustPrice);
 
-				metaInfo.LastPrice = GetDepthPrice(quoteMsg);
+				//metaInfo.LastPrice = GetDepthPrice(quoteMsg);
 
 				if (metaInfo.Version < MarketDataVersions.Version40)
 					continue;
@@ -194,6 +206,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version50;
 			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
 			var isTickPrecision = metaInfo.Version >= MarketDataVersions.Version53;
+			var nonAdjustPrice = metaInfo.Version >= MarketDataVersions.Version54;
+			var useLong = metaInfo.Version >= MarketDataVersions.Version55;
 
 			var prevTime = metaInfo.FirstTime;
 			var lastOffset = metaInfo.FirstServerOffset;
@@ -204,8 +218,8 @@ namespace StockSharp.Algo.Storages.Binary
 			var isFull = reader.Read();
 			var prevDepth = enumerator.Previous;
 
-			var bids = DeserializeQuotes(reader, metaInfo, Sides.Buy);
-			var asks = DeserializeQuotes(reader, metaInfo, Sides.Sell);
+			var bids = DeserializeQuotes(reader, metaInfo, Sides.Buy, useLong, nonAdjustPrice);
+			var asks = DeserializeQuotes(reader, metaInfo, Sides.Sell, useLong, nonAdjustPrice);
 
 			var diff = new QuoteChangeMessage
 			{
@@ -228,7 +242,7 @@ namespace StockSharp.Algo.Storages.Binary
 			//if (depth.BestBid != null && depth.BestAsk != null && depth.BestBid.Price >= depth.BestAsk.Price)
 			//	throw new InvalidOperationException("Лучший бид {0} больше или равен лучшему офферу {1}.".Put(depth.BestBid.Price, depth.BestAsk.Price));
 
-			metaInfo.FirstPrice = GetDepthPrice(quoteMsg);
+			//metaInfo.FirstPrice = GetDepthPrice(quoteMsg);
 
 			if (metaInfo.Version < MarketDataVersions.Version40)
 				return quoteMsg;
@@ -264,7 +278,7 @@ namespace StockSharp.Algo.Storages.Binary
 			return quoteMsg;
 		}
 
-		private void SerializeQuotes(BitArrayWriter writer, IEnumerable<QuoteChange> quotes, QuoteMetaInfo metaInfo/*, bool isFull*/)
+		private void SerializeQuotes(BitArrayWriter writer, IEnumerable<QuoteChange> quotes, QuoteMetaInfo metaInfo/*, bool isFull*/, bool useLong, bool nonAdjustPrice)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(nameof(writer));
@@ -275,13 +289,11 @@ namespace StockSharp.Algo.Storages.Binary
 			if (metaInfo == null)
 				throw new ArgumentNullException(nameof(metaInfo));
 
-			var prevPrice = metaInfo.LastPrice;
-
 			writer.WriteInt(quotes.Count());
 
 			foreach (var quote in quotes)
 			{
-				// quotes for spreads may be a zero cost or less than zero
+				// quotes for indecies may have zero prices
 				//if (quote.Price <= 0)
 				//	throw new ArgumentOutOfRangeException(nameof(quotes), quote.Price, LocalizedStrings.Str935);
 
@@ -290,14 +302,15 @@ namespace StockSharp.Algo.Storages.Binary
 				if (quote.Volume < 0/* || (isFull && quote.Volume == 0)*/)
 					throw new ArgumentOutOfRangeException(nameof(quotes), quote.Volume, LocalizedStrings.Str936);
 
-				writer.WritePrice(quote.Price, prevPrice, metaInfo, SecurityId);
-				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
+				var pricePrice = metaInfo.LastPrice;
+				writer.WritePrice(quote.Price, ref pricePrice, metaInfo, SecurityId, useLong, nonAdjustPrice);
+				metaInfo.LastPrice = pricePrice;
 
-				prevPrice = quote.Price;
+				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
 			}
 		}
 
-		private static IEnumerable<QuoteChange> DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, Sides side)
+		private static IEnumerable<QuoteChange> DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, Sides side, bool useLong, bool nonAdjustPrice)
 		{
 			if (reader == null)
 				throw new ArgumentNullException(nameof(reader));
@@ -312,26 +325,24 @@ namespace StockSharp.Algo.Storages.Binary
 			if (deltaCount == 0)
 				return list;
 
-			var prevPrice = metaInfo.FirstPrice;
-
 			for (var i = 0; i < deltaCount; i++)
 			{
-				metaInfo.FirstPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo);
+				var prevPrice = metaInfo.FirstPrice;
+				var price = reader.ReadPrice(ref prevPrice, metaInfo, useLong, nonAdjustPrice);
+				metaInfo.FirstPrice = prevPrice;
 
 				var volume = reader.ReadVolume(metaInfo);
 
-				list.Add(new QuoteChange(side, metaInfo.FirstPrice, volume));
+				list.Add(new QuoteChange(side, price, volume));
 			}
-
-			metaInfo.FirstPrice = prevPrice;
 
 			return list;
 		}
 
-		private static decimal GetDepthPrice(QuoteChangeMessage message)
-		{
-			var quote = message.GetBestBid() ?? message.GetBestAsk();
-			return quote == null ? 0 : quote.Price;
-		}
+		//private static decimal GetDepthPrice(QuoteChangeMessage message)
+		//{
+		//	var quote = message.GetBestBid() ?? message.GetBestAsk();
+		//	return quote == null ? 0 : quote.Price;
+		//}
 	}
 }

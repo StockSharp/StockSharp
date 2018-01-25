@@ -44,16 +44,16 @@ namespace SampleTransaq
 			{
 				var trader = MainWindow.Instance.Trader;
 
-				Action initialize = () => this.GuiAsync(() =>
+				void Initialize() => this.GuiAsync(() =>
 				{
 					CandlesPeriods.ItemsSource = trader.CandleTimeFrames;
 					CandlesPeriods.SelectedIndex = 0;
 				});
 
 				if (trader.CandleTimeFrames.Any())
-					initialize();
+					Initialize();
 				else
-					trader.CandleTimeFramesInitialized += initialize;
+					trader.CandleTimeFramesInitialized += Initialize;
 			};
 		}
 

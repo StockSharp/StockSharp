@@ -49,8 +49,8 @@ namespace StockSharp.Algo.Storages
 		private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = new SynchronizedDictionary<DateTime, SyncObject>();
 		private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = new SynchronizedDictionary<DateTime, IMarketDataMetaInfo>();
 
-		protected MarketDataStorage(Security security, object arg, Func<TData, DateTimeOffset> getTime, Func<TData, SecurityId> getSecurity, Func<TData, TId> getId, IMarketDataSerializer<TData> serializer, IMarketDataStorageDrive drive)
-			: this(security.ToSecurityId(), arg, getTime, getSecurity, getId, serializer, drive)
+		protected MarketDataStorage(Security security, SecurityId securityId, object arg, Func<TData, DateTimeOffset> getTime, Func<TData, SecurityId> getSecurity, Func<TData, TId> getId, IMarketDataSerializer<TData> serializer, IMarketDataStorageDrive drive)
+			: this(securityId, arg, getTime, getSecurity, getId, serializer, drive)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -171,7 +171,12 @@ namespace StockSharp.Algo.Storages
 							metaInfo = Serializer.CreateMetaInfo(date);
 						}
 
-						count += Save(stream, metaInfo, newItems, false);
+						var diff = Save(stream, metaInfo, newItems, false);
+
+						if (diff == 0)
+							continue;
+
+						count += diff;
 
 						if (!(stream is MemoryStream))
 							continue;
@@ -205,6 +210,11 @@ namespace StockSharp.Algo.Storages
 
 			if (metaInfo.Count == 0)
 			{
+				data = FilterNewData(data, metaInfo).ToArray();
+
+				if (data.IsEmpty())
+					return 0;
+
 				var time = GetTruncatedTime(data[0]);
 
 				var priceStep = Security.PriceStep;
@@ -214,6 +224,8 @@ namespace StockSharp.Algo.Storages
 				metaInfo.VolumeStep = volumeStep == null || volumeStep == 0 ? 1m : volumeStep.Value;
 				metaInfo.LastTime = time;
 				metaInfo.FirstTime = time;
+
+				/*metaInfo.FirstPriceStep = */((MetaInfo)metaInfo).LastPriceStep = metaInfo.PriceStep;
 			}
 			else
 			{
@@ -252,7 +264,17 @@ namespace StockSharp.Algo.Storages
 		protected virtual IEnumerable<TData> FilterNewData(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
 			var lastTime = metaInfo.LastTime;
-			return data.Where(i => GetTruncatedTime(i) >= lastTime);
+
+			foreach (var item in data)
+			{
+				var time = GetTruncatedTime(item);
+
+				if (time < lastTime)
+					continue;
+
+				lastTime = time;
+				yield return item;
+			}
 		}
 
 		int IMarketDataStorage.Save(IEnumerable data)

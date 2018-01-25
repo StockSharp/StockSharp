@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="57dc2e39-baa6-4c67-83a9-13278370a877" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -14,10 +14,10 @@
 </mediaLink>
 <para>При выборе <legacyBold>Режим запуска</legacyBold> появится окно, 
 в котором можно сменить язык интерфейса. Режим запуска возможен в 
-режимах 32-х и 64-ех бит, при выборе режима запуска доступная 
+режимах 32- и 64-бит, при выборе режима запуска доступная 
 функциональность будет выделена 
-значком <mediaLinkInline><image xlink:href="Designer_Start_mode_01"/></mediaLinkInline> например при 64-ех 
-битном режиме могут быть не доступны некоторые подключения (выделены к окне).</para>
+значком <mediaLinkInline><image xlink:href="Designer_Start_mode_01"/></mediaLinkInline> 
+например при 64-битном режиме могут быть недоступны некоторые подключения (выделены в окне).</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Start_mode_02"/>
 </mediaLink>

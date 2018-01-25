@@ -15,12 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleMultiConnection
 {
-	using System.Collections.Generic;
-
 	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
@@ -34,9 +30,11 @@ namespace SampleMultiConnection
 			InitializeComponent();
 		}
 
-		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
+		private static IConnector Connector => MainWindow.Instance.Connector;
+
+		private void OrderGrid_OnOrderCanceling(Order order)
 		{
-			orders.ForEach(MainWindow.Instance.Connector.CancelOrder);
+			Connector.CancelOrder(order);
 		}
 
 		private void OrderGrid_OnOrderReRegistering(Order order)
@@ -44,15 +42,15 @@ namespace SampleMultiConnection
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-				SecurityProvider = MainWindow.Instance.Connector,
-				MarketDataProvider = MainWindow.Instance.Connector,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Connector),
+				SecurityProvider = Connector,
+				MarketDataProvider = Connector,
+				Portfolios = new PortfolioDataSource(Connector),
 				Order = order.ReRegisterClone(newVolume: order.Balance),
 			};
 
 			if (window.ShowModal(this))
 			{
-				MainWindow.Instance.Connector.ReRegisterOrder(order, window.Order);
+				Connector.ReRegisterOrder(order, window.Order);
 			}
 		}
 	}

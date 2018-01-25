@@ -108,6 +108,8 @@ namespace StockSharp.Messages
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
 
 			StorageName = GetType().Namespace.Remove(nameof(StockSharp)).Remove(".");
+
+			Platform = GetType().GetAttribute<TargetPlatformAttribute>()?.Platform ?? Platforms.AnyCPU;
 		}
 
 		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
@@ -130,13 +132,33 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private MarketDataTypes[] _supportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
+
 		/// <inheritdoc />
 		[Browsable(false)]
-		public virtual bool IsValid => true;
+		public virtual MarketDataTypes[] SupportedMarketDataTypes
+		{
+			get => _supportedMarketDataTypes;
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException(nameof(value));
+
+				var duplicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
+				if (duplicate != null)
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
+
+				_supportedMarketDataTypes = value;
+			}
+		}
 
 		/// <inheritdoc />
 		[Browsable(false)]
 		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
+
+		/// <inheritdoc />
+		[Browsable(false)]
+		public virtual IEnumerable<TimeSpan> TimeFrames => Enumerable.Empty<TimeSpan>();
 
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
@@ -196,6 +218,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual bool IsSupportSubscriptionByPortfolio => this.IsMessageSupported(MessageTypes.Portfolio);
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual string StorageName { get; }
 
 		/// <inheritdoc />
@@ -213,10 +239,10 @@ namespace StockSharp.Messages
 		protected virtual bool IsSupportNativePortfolioLookup => false;
 
 		/// <summary>
-		/// Bit process, which can run the adapter. By default is <see cref="Platforms.AnyCPU"/>.
+		/// Bit process, which can run the adapter.
 		/// </summary>
 		[Browsable(false)]
-		public Platforms Platform { get; protected set; }
+		public Platforms Platform { get; }
 
 		/// <inheritdoc />
 		[Browsable(false)]
@@ -266,12 +292,17 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Default value for <see cref="AssociatedBoardCode"/>.
+		/// </summary>
+		public const string DefaultAssociatedBoardCode = "ALL";
+
+		/// <summary>
 		/// Associated board code. The default is ALL.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
 		[DescriptionLoc(LocalizedStrings.Str199Key)]
-		public string AssociatedBoardCode { get; set; } = "ALL";
+		public string AssociatedBoardCode { get; set; } = DefaultAssociatedBoardCode;
 
 		/// <summary>
 		/// Outgoing message event.
@@ -460,8 +491,17 @@ namespace StockSharp.Messages
 		/// <param name="message">Message.</param>
 		private void InitMessageLocalTime(Message message)
 		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = CurrentTime;
+			message.TryInitLocalTime(this);
+
+			switch (message)
+			{
+				case BaseChangeMessage<PositionChangeTypes> posMsg when posMsg.ServerTime.IsDefault():
+					posMsg.ServerTime = CurrentTime;
+					break;
+				case ExecutionMessage execMsg when execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.ServerTime.IsDefault():
+					execMsg.ServerTime = CurrentTime;
+					break;
+			}
 		}
 
 		/// <summary>

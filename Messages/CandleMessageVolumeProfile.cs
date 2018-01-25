@@ -21,6 +21,8 @@ namespace StockSharp.Messages
 
 	using Ecng.Collections;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// Volume profile.
 	/// </summary>
@@ -74,7 +76,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < 0 || value > 100)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_volumePercent = value;
 			}
@@ -275,38 +277,40 @@ namespace StockSharp.Messages
 
 		private static LinkedList<CandlePriceLevel> Combine(IEnumerable<CandlePriceLevel> prices)
 		{
-			var enumerator = prices.GetEnumerator();
-			var list = new LinkedList<CandlePriceLevel>();
-
-			while (true)
+			using (var enumerator = prices.GetEnumerator())
 			{
-				if (!enumerator.MoveNext())
-					break;
+				var list = new LinkedList<CandlePriceLevel>();
 
-				var pl = enumerator.Current;
-
-				if (!enumerator.MoveNext())
+				while (true)
 				{
-					list.AddLast(pl);
-					break;
+					if (!enumerator.MoveNext())
+						break;
+
+					var pl = enumerator.Current;
+
+					if (!enumerator.MoveNext())
+					{
+						list.AddLast(pl);
+						break;
+					}
+
+					var buyVolumes = enumerator.Current.BuyVolumes.Concat(pl.BuyVolumes).ToArray();
+					var sellVolumes = enumerator.Current.SellVolumes.Concat(pl.SellVolumes).ToArray();
+
+					list.AddLast(new CandlePriceLevel
+					{
+						Price = enumerator.Current.Price,
+						BuyCount = buyVolumes.Length,
+						SellCount = sellVolumes.Length,
+						BuyVolumes = buyVolumes,
+						SellVolumes = sellVolumes,
+						BuyVolume = buyVolumes.Sum(),
+						SellVolume = sellVolumes.Sum()
+					});
 				}
 
-				var buyVolumes = enumerator.Current.BuyVolumes.Concat(pl.BuyVolumes).ToArray();
-				var sellVolumes = enumerator.Current.SellVolumes.Concat(pl.SellVolumes).ToArray();
-
-				list.AddLast(new CandlePriceLevel
-				{
-					Price = enumerator.Current.Price,
-					BuyCount = buyVolumes.Length,
-					SellCount = sellVolumes.Length,
-					BuyVolumes = buyVolumes,
-					SellVolumes = sellVolumes,
-					BuyVolume = buyVolumes.Sum(),
-					SellVolume = sellVolumes.Sum()
-				});
+				return list;
 			}
-
-			return list;
 		}
 	}
 }

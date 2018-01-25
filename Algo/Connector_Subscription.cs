@@ -32,19 +32,8 @@ namespace StockSharp.Algo
 	{
 		private sealed class SubscriptionManager
 		{
-			//private sealed class ContinuousInfo : Tuple<ContinuousSecurity, MarketDataMessage>
-			//{
-			//	public ContinuousInfo(ContinuousSecurity security, MarketDataMessage message)
-			//		: base(security, message)
-			//	{
-			//	}
-
-			//	public TimeSpan Elapsed { get; set; }
-			//}
-
 			private readonly SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>> _pendingSubscriptions = new SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>>();
 			private readonly SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>> _subscribers = new SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>>();
-			//private readonly SynchronizedLinkedList<ContinuousInfo> _continuousSecurities = new SynchronizedLinkedList<ContinuousInfo>();
 			private readonly Connector _connector;
 
 			public SubscriptionManager(Connector connector)
@@ -58,7 +47,6 @@ namespace StockSharp.Algo
 			public void ClearCache()
 			{
 				_subscribers.Clear();
-				//_continuousSecurities.Clear();
 				_registeredPortfolios.Clear();
 			}
 
@@ -79,41 +67,13 @@ namespace StockSharp.Algo
 
 			public IEnumerable<Portfolio> RegisteredPortfolios => _registeredPortfolios.Cache;
 
-			public void Subscribe(Security security, MarketDataMessage message)
+			public void SubscribeUnSubscribe(Security security, MarketDataMessage message)
 			{
 				if (security == null)
 					throw new ArgumentNullException(nameof(security));
 
-				//var indexSecurity = security as IndexSecurity;
-
-				//if (indexSecurity != null)
-				//	indexSecurity.InnerSecurities.ForEach(s => _connector.SubscribeMarketData(s, message));
-				//else if (security is ContinuousSecurity)
-				//	SubscribeContinuous((ContinuousSecurity)security, message);
-				//else
-				//{
-					//TrySubscribe(security, message);
-					_pendingSubscriptions.Add(message.TransactionId, Tuple.Create((MarketDataMessage)message.Clone(), security));
-					_connector.SendInMessage(message);
-				//}
-			}
-
-			public void UnSubscribe(Security security, MarketDataMessage message)
-			{
-				if (security == null)
-					throw new ArgumentNullException(nameof(security));
-
-				//var indexSecurity = security as IndexSecurity;
-
-				//if (indexSecurity != null)
-				//	indexSecurity.InnerSecurities.ForEach(s => _connector.UnSubscribeMarketData(s, message));
-				//else if (security is ContinuousSecurity)
-				//	UnSubscribeContinuous((ContinuousSecurity)security, message);
-				//else
-				//{
-					//TryUnSubscribe(security, message);
-					_connector.SendInMessage(message);
-				//}
+				_pendingSubscriptions.Add(message.TransactionId, Tuple.Create((MarketDataMessage)message.Clone(), security));
+				_connector.SendInMessage(message);
 			}
 
 			public void RegisterPortfolio(Portfolio portfolio)
@@ -121,9 +81,7 @@ namespace StockSharp.Algo
 				if (portfolio == null)
 					throw new ArgumentNullException(nameof(portfolio));
 
-				var basketPortfolio = portfolio as BasketPortfolio;
-
-				if (basketPortfolio != null)
+				if (portfolio is BasketPortfolio basketPortfolio)
 					basketPortfolio.InnerPortfolios.ForEach(_connector.RegisterPortfolio);
 				else
 				{
@@ -137,9 +95,7 @@ namespace StockSharp.Algo
 				if (portfolio == null)
 					throw new ArgumentNullException(nameof(portfolio));
 
-				var basketPortfolio = portfolio as BasketPortfolio;
-
-				if (basketPortfolio != null)
+				if (portfolio is BasketPortfolio basketPortfolio)
 					basketPortfolio.InnerPortfolios.ForEach(_connector.UnRegisterPortfolio);
 				else
 				{
@@ -228,7 +184,7 @@ namespace StockSharp.Algo
 
 			message.FillSecurityInfo(this, security);
 
-			_subscriptionManager.Subscribe(security, message);
+			_subscriptionManager.SubscribeUnSubscribe(security, message);
 		}
 
 		/// <summary>
@@ -249,7 +205,7 @@ namespace StockSharp.Algo
 
 			message.FillSecurityInfo(this, security);
 
-			_subscriptionManager.UnSubscribe(security, message);
+			_subscriptionManager.SubscribeUnSubscribe(security, message);
 		}
 
 		private void SubscribeMarketData(Security security, MarketDataTypes type)
@@ -510,7 +466,7 @@ namespace StockSharp.Algo
 		/// <param name="series">Candles series.</param>
 		public virtual void UnSubscribeCandles(CandleSeries series)
 		{
-			var mdMsg = _entityCache.RemoveCandleSeries(series, TransactionIdGenerator.GetNextId);
+			var mdMsg = _entityCache.TryGetCandleSeriesMarketDataMessage(series, TransactionIdGenerator.GetNextId);
 
 			if (mdMsg == null)
 				return;

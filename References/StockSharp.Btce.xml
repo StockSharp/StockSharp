@@ -39,9 +39,9 @@
             Domain address.
             </summary>
         </member>
-        <member name="P:StockSharp.Btce.BtceMessageAdapter.IsValid">
+        <member name="F:StockSharp.Btce.BtceMessageAdapter.DefaultDomain">
             <summary>
-            The parameters validity check.
+            Default value for <see cref="P:StockSharp.Btce.BtceMessageAdapter.Domain"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
@@ -64,7 +64,7 @@
         </member>
         <member name="T:StockSharp.Btce.BtceTrader">
             <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the BTC-e.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Btce"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Btce.BtceTrader.#ctor">

@@ -100,20 +100,20 @@
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Data.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Data.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Data.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Data.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Core.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.2.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Grid.v17.1.Core">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Grid.v17.2.Core">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Grid.v17.2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.1">
-      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Themes.Office2016White.v17.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.Themes.Office2016White.v17.2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +137,9 @@
     </Compile>
     <Compile Include="MyTradesWindow.xaml.cs">
       <DependentUpon>MyTradesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrdersLogWindow.xaml.cs">
+      <DependentUpon>OrdersLogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="OrdersWindow.xaml.cs">
       <DependentUpon>OrdersWindow.xaml</DependentUpon>
@@ -185,6 +188,10 @@
     <Page Include="MyTradesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OrdersLogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

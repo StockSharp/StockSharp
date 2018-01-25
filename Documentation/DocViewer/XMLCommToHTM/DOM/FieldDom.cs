@@ -20,7 +20,7 @@ namespace XMLCommToHTM.DOM
 {
 	public class FieldDom : MemberDom
 	{
-		private FieldInfo _fi;
+		private readonly FieldInfo _fi;
 		public FieldDom(FieldInfo fi, XElement doc): base(fi, doc)
 		{
 			_fi = fi;

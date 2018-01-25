@@ -15,7 +15,7 @@
 флажок <mediaLinkInline><image xlink:href="Designer_Schedule_00"/></mediaLinkInline> на 
 графическом элементе, уберется и элемент с графика. Нажав на 
 кнопку <mediaLinkInline><image xlink:href="Designer_Schedule_01"/></mediaLinkInline>, откроются 
-настройки графического элемента. Также, настроить графический элимент можно в свойствах кубика <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />.</para>
+настройки графического элемента. Также, настроить графический элемент можно в свойствах кубика <link xlink:href="0b60cf78-43e4-4919-a443-2e0ec4f56aa8" />.</para>
  <mediaLink>
 <image placement="center" xlink:href="Designer_Schedule_02"/>
 </mediaLink>
@@ -31,7 +31,7 @@
 </mediaLink>
 <para>Над графиком расположена лента инструментов, на которой можно выбрать режимы автопрокрутки, 
 авто-масштабирования, показа легенды и других общих настроек графика. 
-Также можно выбрать элементы для рисования на графике линии, уровни, указатели, прямоугольник, текст.</para>
+Также можно выбрать элементы для рисования на графике: линии, уровни, указатели, прямоугольник, текст.</para>
   <mediaLink>
 <image placement="center" xlink:href="Designer_Schedule_03"/>
 </mediaLink>

@@ -21,6 +21,7 @@ namespace StockSharp.Algo.PnL
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -58,7 +59,7 @@ namespace StockSharp.Algo.PnL
 			private set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_priceStep = value;
 				UpdateMultiplier();
@@ -76,7 +77,7 @@ namespace StockSharp.Algo.PnL
 			private set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_stepPrice = value;
 				UpdateMultiplier();
@@ -94,7 +95,7 @@ namespace StockSharp.Algo.PnL
 			set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_leverage = value;
 				UpdateMultiplier();
@@ -112,7 +113,7 @@ namespace StockSharp.Algo.PnL
 			set
 			{
 				if (value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_lotMultiplier = value;
 				UpdateMultiplier();

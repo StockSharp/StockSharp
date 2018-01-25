@@ -3,13 +3,13 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     
-<para><legacyBold>S#</legacyBold> предоставляет возможность приобрести готовых роботов, 
-разработанными профессиональными программистами из команды <legacyBold>S#</legacyBold> 
+<para><legacyBold>S#</legacyBold> предоставляет возможность приобрести готовых 
+роботов, разработанных профессиональными программистами из команды <legacyBold>S#</legacyBold> 
 или другими участниками проекта <legacyBold>S#</legacyBold>. 
-Любой имеющий желание присоединиться проекту <legacyBold>S#</legacyBold>, 
+Любой имеющий желание присоединиться к проекту <legacyBold>S#</legacyBold>, 
 готовый поделиться знаниями и при этом <legacyBold>заработать</legacyBold>, может 
 <externalLink>
-<linkText>предложить своего робота другим участникам рынка или преобрести уже готового робота в магазине</linkText>
+<linkText>предложить своего робота другим участникам рынка или приобрести уже готового робота в магазине</linkText>
 <linkUri>http://stocksharp.ru/robot/</linkUri></externalLink>. </para>
 <para>Для приобретения уже готовых стратегий, 
 или предложения собственных стратегий другим пользователям, в <legacyBold>S#.Designer</legacyBold> 
@@ -32,7 +32,7 @@
 
 
 
-<para>На вкладке <legacyBold>Галерея стратегий</legacyBold> отображается текущей баланс, 
+<para>На вкладке <legacyBold>Галерея стратегий</legacyBold> отображается текущий баланс, 
 на который можно приобретать стратегии. Нажав на кнопку <legacyBold>Пополнить баланс</legacyBold>, 
 <token>designer</token> перенаправит на страницу, где можно пополнить баланс с банковской карты или PayPal.</para>
 

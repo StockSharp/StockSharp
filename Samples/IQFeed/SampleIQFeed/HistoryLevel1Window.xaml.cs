@@ -51,7 +51,6 @@ namespace SampleIQFeed
 			}
 
 			var date = ((DateTime)DatePicker.Value).Date;
-			bool isSuccess;
 
 			BusyIndicator.IsBusy = true;
 
@@ -59,7 +58,7 @@ namespace SampleIQFeed
 			{
 				try
 				{
-					var ticks = MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out isSuccess);
+					var ticks = MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out var _);
 
 					this.GuiAsync(() =>
 					{

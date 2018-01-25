@@ -5,19 +5,22 @@
 <mediaLink>
 <image xlink:href="Designer_Glass_00"/>
 </mediaLink>
-<para>Кубик используется для получения стакана по заданному инструменту.</para>
+<para>The cube is used to get the order book by the specified instrument.</para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, для которого надо получить стакан.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> - the instrument for which you need to get an 
+  order book.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Стакан</legacyBold> – изменения стакана с момента подписки на получение данных (поступления инструмента на вход элемента).</para></listItem>
+  <listItem><para><legacyBold>Order book</legacyBold> - changes of the order book from the moment you 
+  subscribe to receive the data (the incoming of the instrument to the input of 
+  the element).</para></listItem>
 </list>
   </definition>
   

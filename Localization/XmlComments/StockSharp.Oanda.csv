@@ -11,7 +11,8 @@ P:StockSharp.Oanda.OandaMessageAdapter.Server/summary;Str3416
 P:StockSharp.Oanda.OandaMessageAdapter.Token/summary;DocStr3145
 P:StockSharp.Oanda.OandaMessageAdapter.UseCompression/summary;Str3423
 P:StockSharp.Oanda.OandaMessageAdapter.LogOnlyTransactions/summary;OnlyTransactionsLog
-P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames/summary;DocStr2531
+P:StockSharp.Oanda.OandaMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Oanda.OandaMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -28,7 +29,7 @@ T:StockSharp.Oanda.OandaServers/summary;DocStr5924
 F:StockSharp.Oanda.OandaServers.Sandbox/summary;Demo
 F:StockSharp.Oanda.OandaServers.Practice/summary;Str1209
 F:StockSharp.Oanda.OandaServers.Real/summary;Str3463
-T:StockSharp.Oanda.OandaTrader/summary;DocStr5925
+T:StockSharp.Oanda.OandaTrader/summary;DocStr2539
 M:StockSharp.Oanda.OandaTrader.#ctor/summary;DocStr1
 P:StockSharp.Oanda.OandaTrader.Server/summary;Str3416
 P:StockSharp.Oanda.OandaTrader.Token/summary;DocStr3145

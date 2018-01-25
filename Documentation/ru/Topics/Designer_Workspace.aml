@@ -3,8 +3,8 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para><legacyBold>Рабочая область</legacyBold> <token>designer</token> является оконным интерфейсом с закреплением панелей, 
-на подобие той, что используется в Microsoft Visual Studio. 
-Нажав, не отпуская на заголовок панели левую кнопку мыши, можно закрепить панель в удобном месте.
+наподобие той, что используется в Microsoft Visual Studio. 
+Нажав на заголовке панели левой кнопкой мыши, и удерживая ее, можно закрепить панель в удобном месте.
  А захватив край панели, можно регулировать высоту или ширину панели:</para>
  
  <content>

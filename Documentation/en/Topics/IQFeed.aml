@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 		<para>
-			The <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> should be used for trading algorithms using <token>iqfeed_external</token> .
+			The <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> should be used for trading algorithms using <token>iqfeed_external</token>.
 			The scheme of interaction is shown in this figure:
 		</para>
 		

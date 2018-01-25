@@ -2,10 +2,11 @@
 <topic id="71792b34-7013-4e7d-a486-400ec92e2410" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para><legacyBold>Рабочая область</legacyBold> <token>designer</token> является оконным интерфейсом с закреплением панелей, 
-на подобие той, что используется в Microsoft Visual Studio. 
-Нажав, не отпуская на заголовок панели левую кнопку мыши, можно закрепить панель в удобном месте.
- А захватив край панели, можно регулировать высоту или ширину панели:</para>
+<para>The <legacyBold>Workspace</legacyBold> in <token>designer</token> is a windowed 
+interface with locking of panels, like the one used in Microsoft Visual Studio. By 
+clicking the header of the panel with the left mouse button, and holding it, you can 
+lock the panel in a convenient place. And by dragging edges of the panel, you can 
+adjust its height or width:</para>
  
  <content>
 <mediaLink>

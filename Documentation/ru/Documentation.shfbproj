@@ -108,6 +108,26 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Fxcm.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.QuantHouse.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.QuantHouse.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Bitfinex.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Bitfinex.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Bithumb.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Bithumb.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Bittrex.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Bittrex.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Coinbase.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Coinbase.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Coincheck.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Coincheck.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Gdax.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Gdax.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.HitBtc.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.HitBtc.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Kraken.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Kraken.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Okcoin.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Okcoin.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Poloniex.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Poloniex.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
@@ -185,6 +205,18 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Poloniex.aml" />
+    <None Include="Topics\OKCoin.aml" />
+    <None Include="Topics\Kraken.aml" />
+    <None Include="Topics\HitBTC.aml" />
+    <None Include="Topics\GDAX.aml" />
+    <None Include="Topics\Coincheck.aml" />
+    <None Include="Topics\Coinbase.aml" />
+    <None Include="Topics\Bittrex.aml" />
+    <None Include="Topics\Bithumb.aml" />
+    <None Include="Topics\Bitfinex.aml" />
+    <None Include="Topics\QuantFeedSample.aml" />
+    <None Include="Topics\SpbExSample.aml" />
     <None Include="Topics\HydraSettingsQuantFeed.aml" />
     <None Include="Topics\QuantFeed.aml" />
     <None Include="Topics\HydraTasksImport.aml" />
@@ -2777,6 +2809,22 @@
       <ImageId>Designer_Security_mapping_01</ImageId>
       <AlternateText>Designer Security mapping 01</AlternateText>
     </Image>
+    <Image Include="Art\SpbExSample.png">
+      <ImageId>SpbExSample</ImageId>
+      <AlternateText>Пример SpbEx</AlternateText>
+    </Image>
+    <Image Include="Art\SpbExSecurities.png">
+      <ImageId>SpbExSecurities</ImageId>
+      <AlternateText>Инструменты Spb Ex</AlternateText>
+    </Image>
+    <Image Include="Art\QuantFeedSample.png">
+      <ImageId>QuantFeedSample</ImageId>
+      <AlternateText>Пример QuantFEED</AlternateText>
+    </Image>
+    <Image Include="Art\SpbExNewOrder.png">
+      <ImageId>SpbExNewOrder</ImageId>
+      <AlternateText>Ввод заявки Spb Ex</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
@@ -2986,10 +3034,6 @@
     <Image Include="Art\hydra_main_first.png">
       <ImageId>hydra_main_first</ImageId>
       <AlternateText>Главное окно.</AlternateText>
-    </Image>
-    <Image Include="Art\hydra_settings.png">
-      <ImageId>hydra_settings</ImageId>
-      <AlternateText>Окно настроек.</AlternateText>
     </Image>
     <Image Include="Art\hydra_securities.png">
       <ImageId>hydra_securities</ImageId>

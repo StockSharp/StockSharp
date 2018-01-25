@@ -103,7 +103,7 @@ namespace StockSharp.Messages
 		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
-			throw new NotSupportedException();
+			throw new NotSupportedException(LocalizedStrings.Str17 + " " + GetType().FullName);
 		}
 	}
 }

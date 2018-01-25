@@ -53,7 +53,7 @@ namespace StockSharp.Algo
 			{
 				case MessageTypes.Connect:
 				{
-					var mappings = Storage.Get(InnerAdapter.StorageName);
+					var mappings = Storage.Get(StorageName);
 
 					lock (_syncRoot)
 					{
@@ -241,7 +241,7 @@ namespace StockSharp.Algo
 
 		private void OnStorageMappingChanged(string storageName, SecurityIdMapping mapping)
 		{
-			if (!InnerAdapter.StorageName.CompareIgnoreCase(storageName))
+			if (!StorageName.CompareIgnoreCase(storageName))
 				return;
 
 			// if adapter code is empty means mapping removed

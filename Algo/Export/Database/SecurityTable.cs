@@ -85,6 +85,11 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
+			yield return new ColumnDescription(nameof(SecurityMessage.UnderlyingSecurityType))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(32)
+			};
 			yield return new ColumnDescription(nameof(SecurityMessage.ExpiryDate))
 			{
 				DbType = typeof(DateTimeOffset?),
@@ -105,6 +110,15 @@ namespace StockSharp.Algo.Export.Database
 				ValueRestriction = new StringRestriction(64)
 			};
 			yield return new ColumnDescription(nameof(SecurityMessage.SettlementDate))
+			{
+				DbType = typeof(DateTimeOffset?),
+			};
+			yield return new ColumnDescription(nameof(SecurityMessage.IssueSize))
+			{
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction()
+			};
+			yield return new ColumnDescription(nameof(SecurityMessage.IssueDate))
 			{
 				DbType = typeof(DateTimeOffset?),
 			};
@@ -169,11 +183,14 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(SecurityMessage.BinaryOptionType), value.BinaryOptionType },
 				{ nameof(SecurityMessage.Strike), value.Strike },
 				{ nameof(SecurityMessage.UnderlyingSecurityCode), value.UnderlyingSecurityCode },
+				{ nameof(SecurityMessage.UnderlyingSecurityType), value.UnderlyingSecurityType.ToString() },
 				{ nameof(SecurityMessage.ExpiryDate), value.ExpiryDate },
 				{ nameof(SecurityMessage.Currency), value.Currency.ToString() },
 				{ nameof(SecurityMessage.Name), value.Name },
 				{ nameof(SecurityMessage.ShortName), value.ShortName },
 				{ nameof(SecurityMessage.SettlementDate), value.SettlementDate },
+				{ nameof(SecurityMessage.IssueSize), value.IssueSize },
+				{ nameof(SecurityMessage.IssueDate), value.IssueDate },
 				{ nameof(SecurityMessage.CfiCode), value.CfiCode },
 				{ nameof(SecurityId.Bloomberg), value.SecurityId.Bloomberg },
 				{ nameof(SecurityId.Cusip), value.SecurityId.Cusip },

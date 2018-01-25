@@ -57,7 +57,7 @@ namespace SampleFewQuiks
 				
 					var portfoliosWait = new ManualResetEvent(false);
 
-					Action<Portfolio> newPortfolio = portfolio =>
+					void NewPortfolio(Portfolio portfolio)
 					{
 						if (_portfolio1 == null && portfolio.Name == account1)
 							_portfolio1 = portfolio;
@@ -68,11 +68,11 @@ namespace SampleFewQuiks
 						// если оба инструмента появились
 						if (_portfolio1 != null && _portfolio2 != null)
 							portfoliosWait.Set();
-					};
+					}
 
 					// подписываемся на события новых портфелей
-					quikTrader1.NewPortfolio += newPortfolio;
-					quikTrader2.NewPortfolio += newPortfolio;
+					quikTrader1.NewPortfolio += NewPortfolio;
+					quikTrader2.NewPortfolio += NewPortfolio;
 
 
 					var securitiesWait = new ManualResetEvent(false);

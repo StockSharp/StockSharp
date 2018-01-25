@@ -28,6 +28,7 @@ namespace StockSharp.Messages
 	using MoreLinq;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Extension class.
@@ -104,6 +105,65 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(message));
 
 			return (message.IsSorted ? message.Asks : message.Asks.OrderBy(q => q.Price)).FirstOrDefault();
+		}
+
+		/// <summary>
+		/// Get middle of spread.
+		/// </summary>
+		/// <param name="message">Market depth.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal? GetSpreadMiddle(this QuoteChangeMessage message)
+		{
+			var bestBid = message.GetBestBid();
+			var bestAsk = message.GetBestAsk();
+
+			return (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price);
+		}
+
+		/// <summary>
+		/// Get middle of spread.
+		/// </summary>
+		/// <param name="message">Market depth.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal? GetSpreadMiddle(this Level1ChangeMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var bestBid = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
+			var bestAsk = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
+
+			return bestBid.GetSpreadMiddle(bestAsk);
+		}
+
+		/// <summary>
+		/// Get middle of spread.
+		/// </summary>
+		/// <param name="bestBidPrice">Best bid price.</param>
+		/// <param name="bestAskPrice">Best ask price.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal? GetSpreadMiddle(this decimal? bestBidPrice, decimal? bestAskPrice)
+		{
+			if (bestBidPrice == null && bestAskPrice == null)
+				return null;
+
+			if (bestBidPrice != null && bestAskPrice != null)
+				return (bestAskPrice + bestBidPrice).Value / 2;
+
+			return bestAskPrice ?? bestBidPrice.Value;
+		}
+
+		/// <summary>
+		/// Get last tick trade price.
+		/// </summary>
+		/// <param name="message">Market depth.</param>
+		/// <returns>The middle of spread. Is <see langword="null" />, if quotes are empty.</returns>
+		public static decimal? GetLastTradePrice(this Level1ChangeMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return (decimal?)message.Changes.TryGetValue(Level1Fields.LastTradePrice);
 		}
 
 		/// <summary>
@@ -316,6 +376,8 @@ namespace StockSharp.Messages
 		{
 			adapter.AddSupportedMessage(MessageTypes.MarketData);
 			adapter.AddSupportedMessage(MessageTypes.SecurityLookup);
+
+			//adapter.AddSupportedAllMarketDataTypes();
 		}
 
 		/// <summary>
@@ -326,6 +388,8 @@ namespace StockSharp.Messages
 		{
 			adapter.RemoveSupportedMessage(MessageTypes.MarketData);
 			adapter.RemoveSupportedMessage(MessageTypes.SecurityLookup);
+
+			adapter.RemoveSupportedAllMarketDataTypes();
 		}
 
 		/// <summary>
@@ -366,6 +430,79 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(adapter));
 
 			return adapter.SupportedMessages.Contains(type);
+		}
+
+		/// <summary>
+		/// Add market data type into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Market data type.</param>
+		public static void AddSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Concat(type).ToArray();
+		}
+
+		/// <summary>
+		/// Remove market data type from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Market data type.</param>
+		public static void RemoveSupportedMarketDataType(this IMessageAdapter adapter, MarketDataTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedMarketDataTypes = adapter.SupportedMarketDataTypes.Except(new[] { type }).ToArray();
+		}
+
+		/// <summary>
+		/// Determines whether the specified market-data type is supported by the adapter.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
+		public static bool IsMarketDataTypeSupported(this IMessageAdapter adapter, MarketDataTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			return adapter.SupportedMarketDataTypes.Contains(type);
+		}
+
+		/// <summary>
+		/// Add all market data types into <see cref="IMessageAdapter.SupportedMarketDataTypes"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		public static void AddSupportedAllMarketDataTypes(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.OrderLog);
+			adapter.AddSupportedMarketDataType(MarketDataTypes.Trades);
+			adapter.AddSupportedMarketDataType(MarketDataTypes.MarketDepth);
+			adapter.AddSupportedMarketDataType(MarketDataTypes.Level1);
+			adapter.AddSupportedMarketDataType(MarketDataTypes.CandleTimeFrame);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleTick);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleVolume);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleRange);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandlePnF);
+			//adapter.AddSupportedMarketDataType(MarketDataTypes.CandleRenko);
+		}
+
+		/// <summary>
+		/// Remove all market data types from <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		public static void RemoveSupportedAllMarketDataTypes(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			adapter.SupportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
 		}
 
 		/// <summary>
@@ -414,6 +551,9 @@ namespace StockSharp.Messages
 		/// <returns><see cref="ErrorMessage"/> instance.</returns>
 		public static ErrorMessage ToErrorMessage(this string description)
 		{
+			if (description.IsEmpty())
+				throw new ArgumentNullException(nameof(description));
+
 			return new InvalidOperationException(description).ToErrorMessage();
 		}
 
@@ -512,7 +652,88 @@ namespace StockSharp.Messages
 		/// Is the specified <see cref="PositionChangeTypes"/> was marked by <see cref="ObsoleteAttribute"/>.
 		/// </summary>
 		/// <param name="type"><see cref="PositionChangeTypes"/> value.</param>
-		/// <returns>Result.</returns>
+		/// <returns><see langword="true" />, if obsolete, otherwise, not obsolete.</returns>
 		public static bool IsObsolete(this PositionChangeTypes type) => type.GetAttributeOfType<ObsoleteAttribute>() != null;
+
+		/// <summary>
+		/// Is the specified <see cref="Level1Fields"/> was obsolete.
+		/// </summary>
+		/// <param name="field"><see cref="Level1Fields"/> value.</param>
+		/// <returns><see langword="true" />, if obsolete, otherwise, not obsolete.</returns>
+		public static bool IsObsolete(this Level1Fields field)
+		{
+			switch (field)
+			{
+				case Level1Fields.LastTrade:
+				case Level1Fields.BestBid:
+				case Level1Fields.BestAsk:
+				case Level1Fields.ExtensionInfo:
+					return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Try to initialize <see cref="Message.LocalTime"/> by <see cref="ILogSource.CurrentTime"/>.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="source">Source.</param>
+		public static void TryInitLocalTime(this Message message, ILogSource source)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (source == null)
+				throw new ArgumentNullException(nameof(source));
+
+			if (message.LocalTime.IsDefault())
+				message.LocalTime = source.CurrentTime;
+		}
+
+		/// <summary>
+		/// Validate <see cref="MarketDataMessage.From"/> and <see cref="MarketDataMessage.To"/> values.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Message.</returns>
+		public static MarketDataMessage ValidateBounds(this MarketDataMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (message.From != null && message.To != null)
+			{
+				if (message.From.Value > message.To.Value)
+					throw new ArgumentOutOfRangeException(nameof(message), message.To, LocalizedStrings.Str1014.Put(message.From));
+			}
+
+			return message;
+		}
+
+		/// <summary>
+		/// Is the specified <see cref="Level1Fields"/> is related to last trade.
+		/// </summary>
+		/// <param name="field">Field.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLastTradeField(this Level1Fields field) =>
+			field == Level1Fields.LastTradeId || field == Level1Fields.LastTradeTime ||
+			field == Level1Fields.LastTradeOrigin || field == Level1Fields.LastTradePrice ||
+			field == Level1Fields.LastTradeUpDown || field == Level1Fields.LastTradeVolume;
+
+		/// <summary>
+		/// Is the specified <see cref="Level1Fields"/> is related to best bid.
+		/// </summary>
+		/// <param name="field">Field.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBestBidField(this Level1Fields field) =>
+			field == Level1Fields.BestBidPrice || field == Level1Fields.BestBidTime || field == Level1Fields.BestBidVolume;
+		
+		/// <summary>
+		/// Is the specified <see cref="Level1Fields"/> is related to best ask.
+		/// </summary>
+		/// <param name="field">Field.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsBestAskField(this Level1Fields field) =>
+			field == Level1Fields.BestAskPrice || field == Level1Fields.BestAskTime || field == Level1Fields.BestAskVolume;
 	}
 }

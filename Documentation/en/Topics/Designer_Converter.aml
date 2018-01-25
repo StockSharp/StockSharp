@@ -5,32 +5,38 @@
 <mediaLink>
 <image xlink:href="Designer_Converter_00"/>
 </mediaLink>
-<para>Кубик используется для конвертации сложных объектов в простые типы данных. Например, позволяет получить значение шага цены для инструмента.
+<para>The cube is used to convert complex objects into simple data types. For 
+example, it allows to get the value of the price step for the instrument.
 </para>
 
 
 
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Любые данные</legacyBold> – определенный тип получаемых сложных объектов.</para></listItem>
+  <listItem><para><legacyBold>Any data</legacyBold> - the certain type of complex 
+  objects that are received.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Любые данные</legacyBold> –  значение выбранного свойства для полученного объекта.</para></listItem>
+  <listItem><para><legacyBold>Any data</legacyBold> - the value of the selected 
+  property for the received object.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Тип данных</legacyBold> – тип принимаемых на вход данных. От выбранного значения зависит тип входного параметра.</para></listItem>
-  <listItem><para><legacyBold>Свойство</legacyBold> – дерево свойств выбранного типа, которые можно получить на выходе кубика. Набор доступных свойств
- зависит от выбранного типа данных и появляется только после выбора нужного типа данных.</para></listItem>
+  <listItem><para><legacyBold>Data type</legacyBold> - the type of data to be 
+  input. The type of the input parameter depends on the selected value.</para></listItem>
+  <listItem><para><legacyBold>Property</legacyBold> – the tree of selected type 
+  properties, which can be obtained at the output of the cube. The set of available 
+  properties depends on the selected data type and appears only after selecting 
+  the required data type.</para></listItem>
 </list>
   </definition>
 </definitionTable>

@@ -99,9 +99,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private static object NormalizedKey(object key)
 		{
-			var str = key as string;
-
-			if (str != null)
+			if (key is string str)
 				return str.ToLowerInvariant();
 
 			return key;
@@ -264,6 +262,8 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					var reader = new FastCsvReader(stream, Registry.Encoding);
 
+					var currErrors = 0;
+
 					while (reader.NextLine())
 					{
 						try
@@ -277,12 +277,16 @@ namespace StockSharp.Algo.Storages.Csv
 								AddCache(item);
 								_items.Add(key, item);
 							}
+
+							currErrors = 0;
 						}
 						catch (Exception ex)
 						{
-							if (errors.Count < 10)
-								errors.Add(ex);
-							else
+							errors.Add(ex);
+
+							currErrors++;
+							
+							if (currErrors >= 10 || errors.Count >= 100)
 								break;
 						}
 					}

@@ -42,10 +42,13 @@
             Password.
             </summary>
         </member>
-        <member name="F:StockSharp.Cqg.Com.CqgComMessageAdapter.TimeFrames">
+        <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.AllTimeFrames">
             <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+        </member>
+        <member name="P:StockSharp.Cqg.Com.CqgComMessageAdapter.TimeFrames">
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
             <summary>
@@ -82,7 +85,7 @@
         </member>
         <member name="T:StockSharp.Cqg.Com.CqgComTrader">
             <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the CQG.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Cqg.Com"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Cqg.Com.CqgComTrader.#ctor">

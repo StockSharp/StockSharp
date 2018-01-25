@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str747Key)]
+	[IndicatorIn(typeof(SingleIndicatorValue<Level1ChangeMessage>))]
 	public class Level1Indicator : BaseIndicator
 	{
 		/// <summary>

@@ -331,14 +331,19 @@ namespace StockSharp.Algo
 			if (fail == null)
 				throw new ArgumentNullException(nameof(fail));
 
+			var order = fail.Order;
+
+			if (order == null)
+				throw new InvalidOperationException();
+
 			return new ExecutionMessage
 			{
-				OrderId = fail.Order.Id,
-				OrderStringId = fail.Order.StringId,
-				TransactionId = fail.Order.TransactionId,
+				OrderId = order.Id,
+				OrderStringId = order.StringId,
+				TransactionId = order.TransactionId,
 				OriginalTransactionId = originalTransactionId,
-				SecurityId = fail.Order.Security.ToSecurityId(),
-				PortfolioName = fail.Order.Portfolio.Name,
+				SecurityId = order.Security?.ToSecurityId() ?? default(SecurityId),
+				PortfolioName = order.Portfolio?.Name,
 				Error = fail.Error,
 				ExecutionType = ExecutionTypes.Transaction,
 				HasOrderInfo = true,
@@ -449,7 +454,7 @@ namespace StockSharp.Algo
 				IsMarketMaker = order.IsMarketMaker,
 			};
 
-			order.Security.ToMessage(securityId).CopyTo(msg);
+			order.Security.ToMessage(securityId).CopyTo(msg, false);
 
 			return msg;
 		}
@@ -482,7 +487,7 @@ namespace StockSharp.Algo
 				Side = order.Direction
 			};
 
-			order.Security.ToMessage(securityId).CopyTo(msg);
+			order.Security.ToMessage(securityId).CopyTo(msg, false);
 
 			return msg;
 		}
@@ -531,7 +536,7 @@ namespace StockSharp.Algo
 				Currency = newOrder.Currency,
 			};
 
-			oldOrder.Security.ToMessage(securityId).CopyTo(msg);
+			oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
 
 			return msg;
 		}
@@ -555,7 +560,7 @@ namespace StockSharp.Algo
 				Message2 = oldOrder2.CreateReplaceMessage(newOrder2, security2)
 			};
 
-			oldOrder1.Security.ToMessage(security1).CopyTo(msg);
+			oldOrder1.Security.ToMessage(security1).CopyTo(msg, false);
 
 			return msg;
 		}
@@ -589,6 +594,9 @@ namespace StockSharp.Algo
 				UnderlyingSecurityCode = security.UnderlyingSecurityId.IsEmpty() ? null : security.UnderlyingSecurityId.ToSecurityId().SecurityCode,
 				SettlementDate = security.SettlementDate,
 				ExpiryDate = security.ExpiryDate,
+				IssueSize = security.IssueSize,
+				IssueDate = security.IssueDate,
+				UnderlyingSecurityType = security.UnderlyingSecurityType,
 			};
 		}
 
@@ -625,7 +633,10 @@ namespace StockSharp.Algo
 				OptionType = message.OptionType,
 				Strike = message.Strike,
 				BinaryOptionType = message.BinaryOptionType,
-				UnderlyingSecurityId = message.UnderlyingSecurityCode.IsEmpty() ? null : _defaultGenerator.GenerateId(message.UnderlyingSecurityCode, message.SecurityId.BoardCode)
+				UnderlyingSecurityId = message.UnderlyingSecurityCode.IsEmpty() ? null : _defaultGenerator.GenerateId(message.UnderlyingSecurityCode, message.SecurityId.BoardCode),
+				IssueSize = message.IssueSize,
+				IssueDate = message.IssueDate,
+				UnderlyingSecurityType = message.UnderlyingSecurityType,
 			};
 		}
 
@@ -659,7 +670,10 @@ namespace StockSharp.Algo
 				OptionType = criteria.OptionType,
 				Strike = criteria.Strike,
 				BinaryOptionType = criteria.BinaryOptionType,
-				UnderlyingSecurityCode = criteria.UnderlyingSecurityId.IsEmpty() ? null : _defaultGenerator.Split(criteria.UnderlyingSecurityId).SecurityCode
+				UnderlyingSecurityCode = criteria.UnderlyingSecurityId.IsEmpty() ? null : _defaultGenerator.Split(criteria.UnderlyingSecurityId).SecurityCode,
+				IssueSize = criteria.IssueSize,
+				IssueDate = criteria.IssueDate,
+				UnderlyingSecurityType = criteria.UnderlyingSecurityType,
 			};
 		}
 
@@ -699,6 +713,9 @@ namespace StockSharp.Algo
 				Decimals = message.Decimals,
 				VolumeStep = message.VolumeStep,
 				Multiplier = message.Multiplier,
+				IssueSize = message.IssueSize,
+				IssueDate = message.IssueDate,
+				UnderlyingSecurityType = message.UnderlyingSecurityType,
 			};
 		}
 
@@ -1564,7 +1581,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			security.ToMessage(security.ToSecurityId()).CopyTo(message);
+			security.ToMessage(security.ToSecurityId()).CopyTo(message, false);
 			return message;
 		}
 
@@ -1586,7 +1603,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			security.ToMessage(connector.GetSecurityId(security)).CopyTo(message);
+			security.ToMessage(connector.GetSecurityId(security)).CopyTo(message, false);
 			return message;
 		}
 
@@ -1731,11 +1748,13 @@ namespace StockSharp.Algo
 				To = to ?? series.To,
 				Count = count,
 				BuildCandlesMode = series.BuildCandlesMode,
+				BuildCandlesFrom = series.BuildCandlesFrom,
+				BuildCandlesField = series.BuildCandlesField,
 				IsCalcVolumeProfile = series.IsCalcVolumeProfile,
 				//ExtensionInfo = extensionInfo
 			};
 
-			mdMsg.FillSecurityInfo(series.Security);
+			mdMsg.ValidateBounds().FillSecurityInfo(series.Security);
 
 			return mdMsg;
 		}

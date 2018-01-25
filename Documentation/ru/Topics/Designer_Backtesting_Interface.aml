@@ -32,8 +32,8 @@
 работы по дизайну стратегии и составных элементов, путём комбинирования кубиков 
 и соединительных линий. Панель <legacyBold>Схема</legacyBold> подробно описана 
 в пункте <link xlink:href="622b706b-f729-46f2-8509-900c5bde2244" />.</para></listItem>
-  <listItem><para>Панель информационных компонентов, содержащей 
-  компоненты <legacyBold>График</legacyBold>, <legacyBold>Заявки</legacyBold>, <legacyBold>Сделки</legacyBold>,
+  <listItem><para>Панель информационных компонентов, содержащая компоненты
+  <legacyBold>График</legacyBold>, <legacyBold>Заявки</legacyBold>, <legacyBold>Сделки</legacyBold>,
 <legacyBold>Статистика</legacyBold> и др.. Добавить необходимый компонент можно, выбрав его на 
 вкладке <legacyBold>Эмуляция</legacyBold> в группе <legacyBold>Компоненты</legacyBold>.</para></listItem>
   <listItem><para>Панель <legacyBold>Свойства</legacyBold> по умолчанию свернута справа во 

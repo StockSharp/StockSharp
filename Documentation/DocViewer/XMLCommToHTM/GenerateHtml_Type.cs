@@ -33,8 +33,7 @@ namespace XMLCommToHTM
 	{
 		static string GeneratePartialType(TypePartialData partialType)
 		{
-			XElement body;
-			var doc = GetDoc(out body);
+			var doc = GetDoc(out var body);
 			body.Add(Section(
 				partialType.Type.SimpleName + Names[Strings.SuffixDelimeter] + Names[partialType.SectionType.ToString()]),
 				BuildMembers(partialType.SectionType, partialType.Type)
@@ -44,9 +43,8 @@ namespace XMLCommToHTM
 
 		static string Generate(TypeDom type)
 		{
-			XElement body;
-			var doc = GetDoc(out body);
-			
+			var doc = GetDoc(out var body);
+
 			body.Add(
 				x("h1", type.GetDisplayName(false) + Names[Strings.SuffixDelimeter] + Names[type.TypeKind.ToString()]),
 				x("p", XMLUtils.GetTagInnerXml(type.DocInfo, "summary", Navigation, true)),
@@ -236,24 +234,23 @@ namespace XMLCommToHTM
 			));
 		}
 
-		static IEnumerable<XElement> GetMemberIcons(MemberDom member)
+		private static IEnumerable<XElement> GetMemberIcons(MemberDom member)
 		{
 			MemberIconsEnum? memberType = null;
-			string memberName="";
+			var memberName = "";
 			if (member is ConstructorDom)
 			{
 				memberType = member.IsPublic ? MemberIconsEnum.MethodPub : MemberIconsEnum.MethodProt;
 				memberName = "Method";
 			}
-			if (member is MethodDom)
+			if (member is MethodDom method)
 			{
-				var meth = (MethodDom) member;
-				if (meth.IsOperator)
+				if (method.IsOperator)
 				{
 					memberType = member.IsPublic ? MemberIconsEnum.OperatorPub : MemberIconsEnum.OperatorProt;
 					memberName = "Operator";
 				}
-				else if (meth.IsExtention)
+				else if (method.IsExtention)
 				{
 					if (!member.IsPublic)
 						throw new InvalidOperationException();
@@ -311,8 +308,7 @@ namespace XMLCommToHTM
 			if (!asExtention)
 				return showType ? m.Type.Type.Name + "." + m.ShortSignature : m.ShortSignature;
 
-			var meth = m as MethodDom;
-			if (meth != null && meth.IsExtention)
+			if (m is MethodDom meth && meth.IsExtention)
 				return meth.GetShortSignature(true);
 			else
 				return m.ShortSignature;

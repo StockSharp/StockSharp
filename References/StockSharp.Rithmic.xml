@@ -6,7 +6,7 @@
     <members>
         <member name="T:StockSharp.Rithmic.RithmicMessageAdapter">
             <summary>
-            The message adapter for Rithmic.
+            The message adapter for <see cref="N:StockSharp.Rithmic"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
@@ -122,15 +122,13 @@
             Logger address.
             </summary>
         </member>
-        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsValid">
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.AllTimeFrames">
             <summary>
-            The parameters validity check.
+            Possible time-frames.
             </summary>
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames">
-            <summary>
-            Available time frames.
-            </summary>
+            <inheritdoc />
         </member>
         <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
             <summary>
@@ -187,7 +185,7 @@
         </member>
         <member name="T:StockSharp.Rithmic.RithmicTrader">
             <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the Rithmic.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Rithmic"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Rithmic.RithmicTrader.#ctor">

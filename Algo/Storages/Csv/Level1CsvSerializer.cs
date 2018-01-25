@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Storages.Csv
 	/// </summary>
 	public class Level1CsvSerializer : CsvMarketDataSerializer<Level1ChangeMessage>
 	{
-		private static readonly Level1Fields[] _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => l1 != Level1Fields.ExtensionInfo && l1 != Level1Fields.BestAsk && l1 != Level1Fields.BestBid && l1 != Level1Fields.LastTrade).OrderBy(l1 => (int)l1).ToArray();
+		private static readonly Level1Fields[] _level1Fields = Enumerator.GetValues<Level1Fields>().Where(l1 => !l1.IsObsolete()).OrderBy(l1 => (int)l1).ToArray();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Level1CsvSerializer"/>.
@@ -61,6 +61,7 @@ namespace StockSharp.Algo.Storages.Csv
 					case Level1Fields.BestAskTime:
 					case Level1Fields.BestBidTime:
 					case Level1Fields.LastTradeTime:
+					case Level1Fields.BuyBackDate:
 						var date = (DateTimeOffset?)data.Changes.TryGetValue(field);
 						row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
 						break;
@@ -91,11 +92,16 @@ namespace StockSharp.Algo.Storages.Csv
 
 			foreach (var field in _level1Fields)
 			{
+				// backward compatibility
+				if (reader.ColumnCurr == reader.ColumnCount)
+					break;
+
 				switch (field)
 				{
 					case Level1Fields.BestAskTime:
 					case Level1Fields.BestBidTime:
 					case Level1Fields.LastTradeTime:
+					case Level1Fields.BuyBackDate:
 						var dtStr = reader.ReadString();
 
 						if (dtStr != null)
@@ -118,6 +124,7 @@ namespace StockSharp.Algo.Storages.Csv
 					case Level1Fields.AsksCount:
 					case Level1Fields.BidsCount:
 					case Level1Fields.TradesCount:
+					case Level1Fields.Decimals:
 						var count = reader.ReadNullableInt();
 
 						if (count != null)
@@ -137,6 +144,13 @@ namespace StockSharp.Algo.Storages.Csv
 
 						if (state != null)
 							level1.Changes.Add(field, state.Value);
+
+						break;
+					case Level1Fields.LastTradeOrigin:
+						var side = reader.ReadNullableEnum<Sides>();
+
+						if (side != null)
+							level1.Changes.Add(field, side.Value);
 
 						break;
 					default:

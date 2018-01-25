@@ -439,7 +439,8 @@ namespace SampleHistoryTesting
 
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame)
 				{
-					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? BuildCandlesModes.Build : BuildCandlesModes.Load
+					BuildCandlesMode = emulationInfo.UseCandleTimeFrame == null ? BuildCandlesModes.Build : BuildCandlesModes.Load,
+					BuildCandlesFrom = emulationInfo.UseOrderLog ? (MarketDataTypes?)MarketDataTypes.OrderLog : null,
 				};
 
 				_shortMa = new SimpleMovingAverage { Length = 10 };
@@ -659,9 +660,8 @@ namespace SampleHistoryTesting
 
 					connector.NewMessage += message =>
 					{
-						var quoteMsg = message as QuoteChangeMessage;
 
-						if (quoteMsg != null)
+						if (message is QuoteChangeMessage quoteMsg)
 							MarketDepth.UpdateDepth(quoteMsg);
 					};
 				}

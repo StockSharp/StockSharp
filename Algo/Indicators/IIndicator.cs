@@ -46,6 +46,16 @@ namespace StockSharp.Algo.Indicators
 		IIndicatorContainer Container { get; }
 
 		/// <summary>
+		/// Input values type.
+		/// </summary>
+		Type InputType { get; }
+
+		/// <summary>
+		/// Result values type.
+		/// </summary>
+		Type ResultType { get; }
+
+		/// <summary>
 		/// The indicator change event (for example, a new value is added).
 		/// </summary>
 		event Action<IIndicatorValue, IIndicatorValue> Changed;

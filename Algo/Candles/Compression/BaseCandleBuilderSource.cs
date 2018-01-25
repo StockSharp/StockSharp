@@ -74,9 +74,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private bool CheckTime(CandleSeries series, DateTimeOffset time, out Tuple<DateTimeOffset, WorkingTimePeriod> tuple)
 		{
-			WorkingTimePeriod period;
-
-			var res = series.Security.Board.IsTradeTime(time, out period);
+			var res = series.Security.Board.IsTradeTime(time, out var period);
 			_currentPeriods[series] = tuple = Tuple.Create(time, period);
 
 			return res;

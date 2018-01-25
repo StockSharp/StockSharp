@@ -18,14 +18,12 @@ namespace StockSharp.Algo.Export
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
-	using System.Linq;
 
 	using Ecng.Common;
 
 	using SmartFormat;
 	using SmartFormat.Core.Formatting;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -65,7 +63,7 @@ namespace StockSharp.Algo.Export
 		/// <inheritdoc />
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
-			Do(messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d))));
+			Do(messages.ToTimeQuotes());
 		}
 
 		/// <inheritdoc />

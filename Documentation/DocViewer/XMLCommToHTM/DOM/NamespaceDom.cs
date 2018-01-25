@@ -24,13 +24,11 @@ namespace XMLCommToHTM.DOM
 		public List<TypeDom> Types = new List<TypeDom>();
 		public XElement DocInfo;
 
-		private readonly string _name;
-
 		public NamespaceDom(string name)
 		{
-			_name = name;
+			Name = name;
 		}
 
-		public string Name => _name;
+		public string Name { get; }
 	}
 }

@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
 
@@ -29,6 +30,28 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+
+	/// <summary>
+	/// Storage modes.
+	/// </summary>
+	[Flags]
+	public enum StorageModes
+	{
+		/// <summary>
+		/// None.
+		/// </summary>
+		None = 1,
+
+		/// <summary>
+		/// Incremental.
+		/// </summary>
+		Incremental = None << 1,
+
+		/// <summary>
+		/// Snapshot.
+		/// </summary>
+		Snapshot = Incremental << 1,
+	}
 
 	/// <summary>
 	/// Storage based message adapter.
@@ -85,17 +108,44 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetTransactions())
 					{
-						GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
+						if (Mode.Contains(StorageModes.Incremental))
+							GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
+						
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					foreach (var pair in GetOrderBooks())
 					{
-						GetStorage(pair.Key, typeof(QuoteChangeMessage), null).Save(pair.Value);
+						if (Mode.Contains(StorageModes.Incremental))
+							GetStorage<QuoteChangeMessage>(pair.Key, null).Save(pair.Value);
+						
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(QuoteChangeMessage), null);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					foreach (var pair in GetLevel1())
 					{
-						GetStorage(pair.Key, typeof(Level1ChangeMessage), null).Save(pair.Value);
+						if (Mode.Contains(StorageModes.Incremental))
+							GetStorage<Level1ChangeMessage>(pair.Key, null).Save(pair.Value);
+						
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(Level1ChangeMessage), null);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					foreach (var pair in GetCandles())
@@ -105,7 +155,16 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetPositionChanges())
 					{
-						GetStorage(pair.Key, typeof(PositionChangeMessage), null).Save(pair.Value);
+						if (Mode.Contains(StorageModes.Incremental))
+							GetStorage<PositionChangeMessage>(pair.Key, null).Save(pair.Value);
+						
+						if (Mode.Contains(StorageModes.Snapshot))
+						{
+							var snapshotStorage = GetSnapshotStorage(typeof(PositionChangeMessage), null);
+
+							foreach (var message in pair.Value)
+								snapshotStorage.Update(message);
+						}
 					}
 
 					var news = GetNews().ToArray();
@@ -160,7 +219,7 @@ namespace StockSharp.Algo.Storages
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_daysLoad = value;
 			}
@@ -175,6 +234,26 @@ namespace StockSharp.Algo.Storages
 		/// Use candles with specified timeframe.
 		/// </summary>
 		public TimeSpan CandlesTimeFrame { get; set; }
+
+		private StorageModes _mode = StorageModes.Incremental;
+
+		/// <summary>
+		/// Storage mode. By default is <see cref="StorageModes.Incremental"/>.
+		/// </summary>
+		public StorageModes Mode
+		{
+			get => _mode;
+			set
+			{
+				_mode = value;
+				Enabled = value != StorageModes.None;
+			}
+		}
+
+		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)
+		{
+			return _storageRegistry.GetSnapshotStorage(messageType, arg, Drive, Format);
+		}
 
 		private IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
 			where TMessage : Message
@@ -235,12 +314,29 @@ namespace StockSharp.Algo.Storages
 			var from = (DateTimeOffset)(today - DaysLoad);
 			var to = DateTimeOffset.Now;
 
-			foreach (var secId in requiredSecurities)
-			{
-				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
-					.Load(from, to)
-					.ForEach(RaiseStorageMessage);
-			}
+			//if (Mode.Contains(StorageModes.Snapshot))
+			//{
+			//	var storage = GetSnapshotStorage(typeof(ExecutionMessage), ExecutionTypes.Transaction);
+
+			//	foreach (var secId in requiredSecurities)
+			//	{
+			//		var snapshot = storage.Get(secId);
+
+			//		if (snapshot != null)
+			//			RaiseStorageMessage(snapshot);
+			//	}
+			//}
+			//else if (Mode.Contains(StorageModes.Incremental))
+			//{
+				// TODO
+
+				foreach (var secId in requiredSecurities)
+				{
+					GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
+						.Load(from, to)
+						.ForEach(RaiseStorageMessage);
+				}	
+			//}
 		}
 
 		/// <summary>
@@ -273,13 +369,11 @@ namespace StockSharp.Algo.Storages
 			{
 				if (Enabled)
 				{
-					var from = msg.From ?? DateTime.UtcNow.Date - DaysLoad;
-					var to = msg.To ?? DateTimeOffset.Now;
 					var transactionId = msg.TransactionId;
 
 					RaiseStorageMessage(new MarketDataMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
-					var lastTime = LoadMessages(msg, from, to, transactionId);
+					var lastTime = LoadMessages(msg, msg.From, msg.To, transactionId);
 
 					RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId, IsHistory = true });
 
@@ -291,7 +385,7 @@ namespace StockSharp.Algo.Storages
 					var clone = (MarketDataMessage)msg.Clone();
 					clone.From = lastTime;
 
-					base.SendInMessage(clone);	
+					base.SendInMessage(clone.ValidateBounds());	
 				}
 				else
 					base.SendInMessage(msg);
@@ -306,24 +400,48 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private DateTimeOffset LoadMessages(MarketDataMessage msg, DateTimeOffset from, DateTimeOffset to, long transactionId)
+		private DateTimeOffset? LoadMessages(MarketDataMessage msg, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
 		{
-			DateTimeOffset lastTime;
+			DateTimeOffset? lastTime = null;
 
 			switch (msg.DataType)
 			{
 				case MarketDataTypes.Level1:
-					lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, null);
+					if (Mode.Contains(StorageModes.Snapshot))
+					{
+						var level1Msg = (Level1ChangeMessage)GetSnapshotStorage(typeof(Level1ChangeMessage), null).Get(msg.SecurityId);
+
+						if (level1Msg != null)
+						{
+							lastTime = level1Msg.ServerTime;
+							RaiseStorageMessage(level1Msg);
+						}
+					}
+					else if (Mode.Contains(StorageModes.Incremental))
+						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, null);
+					
 					break;
 
 				case MarketDataTypes.MarketDepth:
-					lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, null);
+					if (Mode.Contains(StorageModes.Snapshot))
+					{
+						var quotesMsg = (QuoteChangeMessage)GetSnapshotStorage(typeof(QuoteChangeMessage), null).Get(msg.SecurityId);
+
+						if (quotesMsg != null)
+						{
+							lastTime = quotesMsg.ServerTime;
+							RaiseStorageMessage(quotesMsg);
+						}
+					}
+					else if (Mode.Contains(StorageModes.Incremental))
+						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, null);
+					
 					break;
 
 				case MarketDataTypes.Trades:
 					lastTime = !UseCandlesInsteadTrades 
 						? LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, m => SetTransactionId(m, transactionId)) 
-						: LoadMessages(msg.SecurityId, ExecutionTypes.Tick, from, to, transactionId);
+						: LoadTickMessages(msg.SecurityId, from, to, transactionId);
 					break;
 
 				case MarketDataTypes.OrderLog:
@@ -365,11 +483,45 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private DateTimeOffset LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset from, DateTimeOffset to, Func<TMessage, DateTimeOffset> func) 
+		private DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, Func<TMessage, DateTimeOffset> func) 
 			where TMessage : Message
 		{
-			var messages = storage.Load(from.Date, to.Date.EndOfDay());
-			var lastTime = from;
+			var last = storage.Dates.LastOr();
+
+			if (last == null)
+				return null;
+
+			if (from == null)
+			{
+				var days = DaysLoad;
+
+				if (typeof(TMessage) == typeof(TimeFrameCandleMessage))
+				{
+					var tf = (TimeSpan)storage.Arg;
+
+					if (tf.Ticks > 1)
+					{
+						if (tf.TotalMinutes < 15)
+							days = TimeSpan.FromTicks(tf.Ticks * 10000);
+						else if (tf.TotalHours < 2)
+							days = TimeSpan.FromTicks(tf.Ticks * 1000);
+						else if (tf.TotalDays < 2)
+							days = TimeSpan.FromTicks(tf.Ticks * 100);
+						else
+							days = TimeSpan.FromTicks(tf.Ticks * 50);	
+					}
+				}
+				else if (typeof(TMessage) == typeof(QuoteChangeMessage) || typeof(TMessage) == typeof(Level1ChangeMessage))
+					days = TimeSpan.Zero;
+
+				from = (to ?? last.Value) - days;
+			}
+
+			if (to == null)
+				to = last.Value;
+
+			var messages = storage.Load(from.Value.Date, to.Value.Date.EndOfDay());
+			var lastTime = from.Value;
 
 			foreach (var message in messages)
 			{
@@ -382,20 +534,32 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private DateTimeOffset LoadMessages(SecurityId securityId, object arg, DateTimeOffset from, DateTimeOffset to, long transactionId)
+		private DateTimeOffset? LoadTickMessages(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
 		{
-			var tickStorage = GetStorage<ExecutionMessage>(securityId, arg);
-			var tickDates = tickStorage.GetDates(from.Date, to.Date.EndOfDay()).ToArray();
+			var tickStorage = GetStorage<ExecutionMessage>(securityId, ExecutionTypes.Tick);
+
+			var last = tickStorage.Dates.LastOr();
+
+			if (last == null)
+				return null;
+
+			if (from == null)
+				from = (to ?? last.Value) - DaysLoad;
+
+			if (to == null)
+				to = last.Value;
+
+			var tickDates = tickStorage.GetDates(from.Value.Date, to.Value.Date.EndOfDay()).ToArray();
 
 			var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
 
-			var ticksLastDate = tickStorage.GetToDate() ?? from.Date;
-			var candlesLastDate = candleStorage.GetToDate() ?? from.Date;
+			var ticksLastDate = tickStorage.GetToDate() ?? from.Value.Date;
+			var candlesLastDate = candleStorage.GetToDate() ?? from.Value.Date;
 
-			var toDate = ticksLastDate.Max(candlesLastDate).Min(to.Date);
+			var toDate = ticksLastDate.Max(candlesLastDate).Min(to.Value.Date);
 			var lastTime = from;
 
-			for (var date = from.Date; date <= toDate; date = date.AddDays(1))
+			for (var date = from.Value.Date; date <= toDate; date = date.AddDays(1))
 			{
 				var messages = tickDates.Contains(date)
 					? tickStorage.Load(date) 
@@ -597,8 +761,7 @@ namespace StockSharp.Algo.Storages
 
 		private void RaiseStorageMessage(Message message)
 		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = InnerAdapter.CurrentTime;
+			message.TryInitLocalTime(this);
 
 			RaiseNewOutMessage(message);
 		}
@@ -608,22 +771,22 @@ namespace StockSharp.Algo.Storages
 			switch (msg.DataType)
 			{
 				case MarketDataTypes.Level1:
-					return DataType.Create(typeof(Level1ChangeMessage), null);
+					return DataType.Level1;
 
 				case MarketDataTypes.MarketDepth:
-					return DataType.Create(typeof(QuoteChangeMessage), null);
+					return DataType.MarketDepth;
 
 				case MarketDataTypes.Trades:
-					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick);
+					return DataType.Ticks;
 
 				case MarketDataTypes.OrderLog:
-					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+					return DataType.OrderLog;
 
 				case MarketDataTypes.News:
-					return DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+					return DataType.News;
 
 				case MarketDataTypes.CandleTimeFrame:
-					return DataType.Create(typeof(TimeFrameCandleMessage), msg.Arg);
+					return DataType.TimeFrame((TimeSpan)msg.Arg);
 
 				case MarketDataTypes.CandleTick:
 					return DataType.Create(typeof(TickCandleMessage), msg.Arg);

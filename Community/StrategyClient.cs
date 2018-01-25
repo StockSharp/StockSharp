@@ -129,38 +129,62 @@ namespace StockSharp.Community
 		/// </summary>
 		public event Action<StrategyBacktest> BacktestStopped;
 
+		private readonly SyncObject _syncObject = new SyncObject();
+		private bool _isProcessing;
+
 		private void EnsureInit()
 		{
-			if (_refreshTimer != null)
-				return;
-
-			Refresh();
-
-			var subscriptions = Invoke(f => f.GetSubscriptions(SessionId, DateTime.MinValue));
-
-			foreach (var subscription in subscriptions)
+			lock (_syncObject)
 			{
-				_subscriptions.Add(subscription.Id, subscription);
-			}
+				if (_refreshTimer != null)
+					return;
 
-			var backtests = Invoke(f => f.GetBacktests(SessionId, DateTime.Today - TimeSpan.FromDays(5), DateTime.UtcNow));
+				var processSubscriptions = true;
 
-			foreach (var backtest in backtests)
-			{
-				_backtests.Add(backtest.Id, backtest);
-			}
-
-			_refreshTimer = ThreadingHelper.Timer(() =>
-			{
-				try
+				_refreshTimer = ThreadingHelper.Timer(() =>
 				{
-					Refresh();
-				}
-				catch (Exception ex)
-				{
-					ex.LogError();
-				}
-			}).Interval(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+					lock (_syncObject)
+					{
+						if (_isProcessing)
+							return;
+
+						_isProcessing = true;
+					}
+
+					try
+					{
+						Refresh();
+
+						if (processSubscriptions)
+						{
+							var subscriptions = Invoke(f => f.GetSubscriptions(SessionId, DateTime.MinValue));
+
+							foreach (var subscription in subscriptions)
+							{
+								_subscriptions.Add(subscription.Id, subscription);
+							}
+
+							var backtests = Invoke(f => f.GetBacktests(SessionId, DateTime.Today - TimeSpan.FromDays(5), DateTime.UtcNow));
+
+							foreach (var backtest in backtests)
+							{
+								_backtests.Add(backtest.Id, backtest);
+							}
+
+							processSubscriptions = false;
+						}
+					}
+					catch (Exception ex)
+					{
+						ex.LogError();
+					}
+					finally
+					{
+						lock (_syncObject)
+							_isProcessing = false;
+					}
+				}).Interval(TimeSpan.Zero, TimeSpan.FromMinutes(1));
+			}
 		}
 
 		private void Refresh()
@@ -409,7 +433,15 @@ namespace StockSharp.Community
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_refreshTimer?.Dispose();
+			lock (_syncObject)
+			{
+				if (_refreshTimer != null)
+				{
+					_refreshTimer.Dispose();
+					_refreshTimer = null;
+				}
+			}
+
 			base.DisposeManaged();
 		}
 	}

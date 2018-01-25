@@ -106,12 +106,6 @@ Connector.NewPosition += position => this.GuiAsync(() =>
 	if (!assetPos && !newPos)
 		return;
 
-	if (assetPos)
-		PosChart.AssetPosition = position;
-
-	if (newPos)
-		PosChart.Positions.Add(position);
-
 	RefreshChart();
 });
 
@@ -136,13 +130,12 @@ try
 					<para>When connecting, set the initial control settings:</para>
 						<list class="ordered">
   							<listItem>
-Resetting the 
-<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.Positions</codeEntityReference> option position collections and the underlying instrument of the 
-<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.AssetPosition</codeEntityReference> control;
+Resetting the the underlying instrument of the 
+<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.UnderlyingAsset</codeEntityReference> control;
 							</listItem>
   							<listItem>
-Redrawing the chart with the initial values 
-<codeEntityReference>M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Decimal,System.Decimal,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>;
+								Redrawing the chart with the initial values 
+								<codeEntityReference>M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Nullable{System.Decimal},System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})</codeEntityReference>;
 							</listItem>
 <listItem>Specifying message provider for market data and instruments.</listItem>
 						</list>
@@ -155,14 +148,13 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		ConnectBtn.IsEnabled = false;
 ...
 
-		PosChart.Positions.Clear();
-		PosChart.AssetPosition = null;
-		PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
+		PosChart.UnderlyingAsset = null;
 
 ...
 
 		PosChart.MarketDataProvider = Connector;
 		PosChart.SecurityProvider = Connector;
+		PosChart.PositionProvider = Connector;
 
 		Connector.Connect();
 	}
@@ -214,10 +206,7 @@ Connector.NewTrade += trade =>
 				</step>
 				<step>
 					<content>
-						<para>In the new position occurrence event handler we update the 
-							<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.Positions</codeEntityReference> and 
-							<codeEntityReference>P:StockSharp.Xaml.Charting.OptionPositionChart.AssetPosition</codeEntityReference> properties of the control. 
-							In this case, as well as upon position change, we call redraw the chart.</para>
+						<para>In the new position occurrence event handler we call redraw the chart.</para>
             			<code title="C#" language="C#">
                   <![CDATA[
 Connector.NewPosition += position => this.GuiAsync(() =>
@@ -232,12 +221,6 @@ Connector.NewPosition += position => this.GuiAsync(() =>
 
 	if (!assetPos && !newPos)
 		return;
-
-	if (assetPos)
-		PosChart.AssetPosition = position;
-
-	if (newPos)
-		PosChart.Positions.Add(position);
 
 	RefreshChart();
 });
@@ -262,7 +245,7 @@ private void RefreshChart()
 	var trade = asset.LastTrade;
 
 	if (trade != null)
-		PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.NowWithOffset, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
+		PosChart.Refresh(trade.Price);
 }
 ]]>
                		</code>

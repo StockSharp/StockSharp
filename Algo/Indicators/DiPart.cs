@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// The part of the indicator <see cref="DirectionalIndex"/>.
 	/// </summary>
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public abstract class DiPart : LengthIndicator<decimal>
 	{
 		private readonly AverageTrueRange _averageTrueRange;

@@ -33,7 +33,6 @@ namespace SampleChart
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
@@ -109,7 +108,6 @@ namespace SampleChart
 				return;
 
 			ApplicationThemeHelper.ApplicationThemeName = theme;
-			Chart.ChartTheme = ApplicationThemeHelper.ApplicationThemeName.ToChartTheme();
 		}
 
 		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator)
@@ -131,9 +129,8 @@ namespace SampleChart
 
 		private void Chart_OnUnSubscribeElement(IChartElement element)
 		{
-			var indElem = element as ChartIndicatorElement;
 
-			if (indElem != null)
+			if (element is ChartIndicatorElement indElem)
 				_indicators.Remove(indElem);
 		}
 
@@ -367,7 +364,7 @@ namespace SampleChart
 
 			_candle.TotalVolume += tick.TradeVolume.Value;
 
-			_volumeProfile.Update(new TickCandleBuilderSourceValue(tick));
+			_volumeProfile.Update(tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide);
 
 			lock (_updatedCandles.SyncRoot)
 				_updatedCandles[_candle.OpenTime] = _candle;

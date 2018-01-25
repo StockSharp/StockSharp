@@ -31,8 +31,7 @@
   <definition>
 <list class="bullet">
 <listItem><para><legacyBold>Модель Блэка</legacyBold> – флаг, указывает будут ли рассчитываться значения согласно модели Блэка — Шоулза.</para></listItem>
-<listItem><para><legacyBold>Значений</legacyBold> – может принимать значения 
-  Дельта, Гамма, Вега, Тета, Ро и определяет? какое значение будет на выходе кубика.</para></listItem>
+<listItem><para><legacyBold>Значений</legacyBold> – может принимать значения Дельта, Гамма, Вега, Тета, Ро и определяет какое значение будет на выходе кубика.</para></listItem>
 
 </list>
   </definition>

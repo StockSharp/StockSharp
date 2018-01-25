@@ -56,8 +56,13 @@ namespace StockSharp.Algo.Positions
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
-			PositionManager.ProcessMessage(message);
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
 
+			PositionManager.ProcessMessage(message);
 			base.SendInMessage(message);
 		}
 

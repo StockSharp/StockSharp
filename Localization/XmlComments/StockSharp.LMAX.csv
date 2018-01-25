@@ -11,8 +11,8 @@ P:StockSharp.LMAX.LmaxMessageAdapter.Password/summary;Password
 P:StockSharp.LMAX.LmaxMessageAdapter.IsDemo/summary;Str3388
 P:StockSharp.LMAX.LmaxMessageAdapter.IsDownloadSecurityFromSite/summary;Str3389
 P:StockSharp.LMAX.LmaxMessageAdapter.CandleDownloadInterval/summary;DocStr9347
-P:StockSharp.LMAX.LmaxMessageAdapter.IsValid/summary;DocStr53
-P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames/summary;DocStr2531
+P:StockSharp.LMAX.LmaxMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.LMAX.LmaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -26,7 +26,7 @@ T:StockSharp.LMAX.LmaxOrderCondition/summary;DocStr60
 M:StockSharp.LMAX.LmaxOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3383
 P:StockSharp.LMAX.LmaxOrderCondition.TakeProfitOffset/summary;Str3385
-T:StockSharp.LMAX.LmaxTrader/summary;DocStr3908
+T:StockSharp.LMAX.LmaxTrader/summary;DocStr2539
 M:StockSharp.LMAX.LmaxTrader.#ctor/summary;DocStr1
 P:StockSharp.LMAX.LmaxTrader.Login/summary;Login
 P:StockSharp.LMAX.LmaxTrader.Password/summary;Password

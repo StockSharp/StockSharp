@@ -73,9 +73,7 @@
 
 				foreach (var instance in Parse(fileName, isCancelled))
 				{
-					var secMsg = instance as SecurityMessage;
-
-					if (secMsg == null)
+					if (!(instance is SecurityMessage secMsg))
 					{
 						buffer.Add(instance);
 
@@ -111,6 +109,9 @@
 							security.Decimals = secMsg.Decimals;
 							security.VolumeStep = secMsg.VolumeStep;
 							security.Multiplier = secMsg.Multiplier;
+							security.IssueSize = secMsg.IssueSize;
+							security.IssueDate = secMsg.IssueDate;
+							security.UnderlyingSecurityType = secMsg.UnderlyingSecurityType;
 						}
 						else
 							security = secMsg.ToSecurity(_exchangeInfoProvider);

@@ -40,7 +40,7 @@ namespace SampleBarChart
 			InitializeComponent();
 			Title = _security.Code + LocalizedStrings.Str3747;
 
-			TimeFramePicker.ItemsSource = BarChartMessageAdapter.TimeFrames;
+			TimeFramePicker.ItemsSource = BarChartMessageAdapter.AllTimeFrames;
 			TimeFramePicker.SelectedIndex = 0;
 
 			DateFromPicker.Value = DateTime.Today.AddDays(-7);
@@ -61,8 +61,7 @@ namespace SampleBarChart
 				return;
 			}
 
-			bool isSuccess;
-			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandleMessage), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
+			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandleMessage), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out bool isSuccess);
 
 			Chart.Reset(new[] { _candlesElem });
 

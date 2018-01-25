@@ -5,7 +5,6 @@ M:StockSharp.Rss.RssMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages
 M:StockSharp.Rss.RssMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 P:StockSharp.Rss.RssMarketDataMessageAdapter.Address/summary;Str3505
 P:StockSharp.Rss.RssMarketDataMessageAdapter.CustomDateFormat/summary;Str3507
-P:StockSharp.Rss.RssMarketDataMessageAdapter.IsValid/summary;DocStr53
 M:StockSharp.Rss.RssMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Rss.RssMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Rss.RssMarketDataMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

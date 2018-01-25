@@ -224,7 +224,7 @@ namespace StockSharp.Messages
 				case UnitTypes.Step:
 					return unit.Value * unit.SafeGetTypeValue(null);
 				default:
-					throw new ArgumentOutOfRangeException(nameof(unit));
+					throw new ArgumentOutOfRangeException(nameof(unit), unit.Type, LocalizedStrings.Str1219);
 			}
 		}
 
@@ -276,11 +276,17 @@ namespace StockSharp.Messages
 			//  prevent operator '==' call
 			//if (u1 == null)
 			if (u1.IsNull())
-				throw new ArgumentNullException(nameof(u1));
+			{
+				return null;
+				//throw new ArgumentNullException(nameof(u1));	
+			}
 
 			//if (u2 == null)
 			if (u2.IsNull())
-				throw new ArgumentNullException(nameof(u2));
+			{
+				return null;
+				//throw new ArgumentNullException(nameof(u2));	
+			}
 
 			if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
 				throw new ArgumentException(LocalizedStrings.LimitedValueNotMath);

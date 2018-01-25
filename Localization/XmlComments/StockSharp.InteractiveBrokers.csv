@@ -19,6 +19,7 @@ P:StockSharp.InteractiveBrokers.HistogramMessage.Data/summary;XamlStr109
 T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter/summary;DocStr3461
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition/returns;DocStr45
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.SecurityLookupRequired/summary;DocStr452
@@ -34,7 +35,6 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.MarketDataType/
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ServerLogLevel/summary;DocStr3514
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Fields/summary;Str2523
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTime/summary;DocStr3515
-P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTimeZone/summary;DocStr9635
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ExtraAuth/summary;DocStr8460
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.OptionalCapabilities/summary;DocStr8461
 P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.UseV100Plus/summary;DocStr9646
@@ -45,12 +45,12 @@ M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.Save(Ecng.Seria
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ToString/returns;DocStr50
 T:StockSharp.InteractiveBrokers.FundamentalReports/summary;DocStr3353
-F:StockSharp.InteractiveBrokers.FundamentalReports.Overview/summary;DocStr3354
-F:StockSharp.InteractiveBrokers.FundamentalReports.Statements/summary;DocStr3355
-F:StockSharp.InteractiveBrokers.FundamentalReports.Summary/summary;DocStr3356
-F:StockSharp.InteractiveBrokers.FundamentalReports.Ratio/summary;DocStr3357
-F:StockSharp.InteractiveBrokers.FundamentalReports.Estimates/summary;DocStr3358
-F:StockSharp.InteractiveBrokers.FundamentalReports.Calendar/summary;Str3200
+F:StockSharp.InteractiveBrokers.FundamentalReports.CompanyOverview/summary;DocStr10146
+F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialStatements/summary;DocStr10147
+F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialSummary/summary;DocStr10148
+F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialRatio/summary;DocStr10149
+F:StockSharp.InteractiveBrokers.FundamentalReports.Estimates/summary;DocStr10150
+F:StockSharp.InteractiveBrokers.FundamentalReports.Calendar/summary;DocStr10151
 T:StockSharp.InteractiveBrokers.GenericFieldTypes/summary;Str2522
 F:StockSharp.InteractiveBrokers.GenericFieldTypes.OptionVolume/summary;DocStr3359
 F:StockSharp.InteractiveBrokers.GenericFieldTypes.OptionOpenInterest/summary;DocStr3360
@@ -330,6 +330,10 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ConditionsIgnor
 P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ConditionsCancelOrder/summary;DocStr9418
 P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.CashQty/summary;DocStr9555
 P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtraConditions/summary;DocStr9556
+P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionMaker/summary;DocStr10241
+P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionAlgo/summary;DocStr10242
+P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2ExecutionTrader/summary;DocStr10243
+P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2ExecutionAlgo/summary;DocStr10244
 T:StockSharp.InteractiveBrokers.ExchangeNewsTypes/summary;DocStr3459
 F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.Unknown/summary;DocStr3460
 F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.Bbs/summary;DocStr8459
@@ -549,6 +553,7 @@ M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Implicit(System.
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Explicit(StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames)~System.TimeSpan/summary;DocStr67
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Explicit(StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames)~System.TimeSpan/param/timeFrame;DocStr66
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Explicit(StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames)~System.TimeSpan/returns;DocStr65
+P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Tick/summary;DocStr645
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second1/summary;DocStr3672
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second5/summary;DocStr3673
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second15/summary;DocStr3674
@@ -563,7 +568,6 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour/summary;DocStr
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Day/summary;DocStr75
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Week/summary;DocStr76
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month/summary;DocStr77
-P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Year/summary;DocStr78
 T:StockSharp.InteractiveBrokers.SoftDollarTier/summary;DocStr9580
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Name/summary;Name2
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Value/summary;Str3099
@@ -574,6 +578,11 @@ T:StockSharp.InteractiveBrokers.SoftDollarTierMessage/summary;DocStr9582
 M:StockSharp.InteractiveBrokers.SoftDollarTierMessage.#ctor/summary;DocStr1
 P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Tiers/summary;DocStr9572
+T:StockSharp.InteractiveBrokers.TickByTickDataTypes/summary;DocStr10245
+F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Last/summary;XamlStr518
+F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Midpoint/summary;SpreadMiddle
+F:StockSharp.InteractiveBrokers.TickByTickDataTypes.BidAsk/summary;DocStr2627
+F:StockSharp.InteractiveBrokers.TickByTickDataTypes.AllLast/summary;DocStr10246
 T:StockSharp.InteractiveBrokers.Web.Market/summary;ExchangeInfo
 F:StockSharp.InteractiveBrokers.Web.Market.Id/summary;Str1917
 F:StockSharp.InteractiveBrokers.Web.Market.Name/summary;Name2

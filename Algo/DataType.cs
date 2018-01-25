@@ -42,6 +42,61 @@ namespace StockSharp.Algo
 			};
 		}
 
+		private bool _immutable;
+
+		private DataType Immutable()
+		{
+			_immutable = true;
+			return this;
+		}
+
+		/// <summary>
+		/// Level1.
+		/// </summary>
+		public static DataType Level1 { get; } = Create(typeof(Level1ChangeMessage), null).Immutable();
+
+		/// <summary>
+		/// Market depth.
+		/// </summary>
+		public static DataType MarketDepth { get; } = Create(typeof(QuoteChangeMessage), null).Immutable();
+
+		/// <summary>
+		/// Position changes.
+		/// </summary>
+		public static DataType PositionChanges { get; } = Create(typeof(PositionChangeMessage), null).Immutable();
+
+		/// <summary>
+		/// News.
+		/// </summary>
+		public static DataType News { get; } = Create(typeof(NewsMessage), null).Immutable();
+
+		/// <summary>
+		/// Securities.
+		/// </summary>
+		public static DataType Securities { get; } = Create(typeof(SecurityMessage), null).Immutable();
+
+		/// <summary>
+		/// Ticks.
+		/// </summary>
+		public static DataType Ticks { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Tick).Immutable();
+
+		/// <summary>
+		/// Order log.
+		/// </summary>
+		public static DataType OrderLog { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog).Immutable();
+
+		/// <summary>
+		/// Transactions.
+		/// </summary>
+		public static DataType Transactions { get; } = Create(typeof(ExecutionMessage), ExecutionTypes.Transaction).Immutable();
+
+		/// <summary>
+		/// Create data type info for <see cref="TimeFrameCandleMessage"/>.
+		/// </summary>
+		/// <param name="tf">Candle arg.</param>
+		/// <returns>Data type info.</returns>
+		public static DataType TimeFrame(TimeSpan tf) => Create(typeof(TimeFrameCandleMessage), tf).Immutable();
+
 		private Type _messageType;
 
 		/// <summary>
@@ -52,6 +107,9 @@ namespace StockSharp.Algo
 			get => _messageType;
 			set
 			{
+				if (_immutable)
+					throw new InvalidOperationException();
+
 				_messageType = value;
 				ReInitHashCode();
 			}
@@ -67,6 +125,9 @@ namespace StockSharp.Algo
 			get => _arg;
 			set
 			{
+				if (_immutable)
+					throw new InvalidOperationException();
+
 				_arg = value;
 				ReInitHashCode();
 			}

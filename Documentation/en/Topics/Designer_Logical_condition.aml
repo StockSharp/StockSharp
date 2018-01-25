@@ -5,28 +5,30 @@
 <mediaLink>
 <image xlink:href="Designer_The_logical_condition_00"/>
 </mediaLink>
-<para>Элемент используется для вычисления логической формулы с двумя аргументами.</para>
+<para>The element is used to calculate a logical formula with two arguments.</para>
 
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
-  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
-</list>
+  <listItem><para><legacyBold>Flag</legacyBold> – the flag value (indicates the 
+  state and has two values: up (true) and down (false)).</para></listItem>
+  <listItem><para><legacyBold>Flag</legacyBold> – the flag value (indicates the 
+  state and has two values: up (true) and down (false)).</para></listItem></list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Флаг</legacyBold> – значение флага (характеризует состояние и имеет два значения: поднят (true) и опущен (false)).</para></listItem>
-</list>
+  <listItem><para><legacyBold>Flag</legacyBold> – the flag value (indicates the 
+  state and has two values: up (true) and down (false)).</para></listItem></list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Оператор</legacyBold> - предопределенный набор логических формул И, ИЛИ, Исключающее ИЛИ.</para></listItem>
+  <listItem><para><legacyBold>Operator</legacyBold> - the predefined set of 
+  logical formulas AND, OR, Exclusive OR.</para></listItem>
 </list>
   </definition>
 </definitionTable>

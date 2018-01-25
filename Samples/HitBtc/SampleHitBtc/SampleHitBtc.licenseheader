@@ -1,0 +1,45 @@
+﻿extensions: designer.cs generated.cs
+extensions: .cs .cpp .h
+#region S# License
+/******************************************************************************************
+NOTICE!!!  This program and source code is owned and licensed by
+StockSharp Algo Trading, LLC, www.stocksharp.com
+Viewing or use of this code requires your acceptance of the license
+agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
+Removal of this comment is a violation of the license agreement.
+
+Project: %Namespace%.%Project%
+File: %FileName%
+Created: %CreationYear%, %CreationMonth%, %CreationDay%, %CreationTime%
+
+Copyright 2010 by StockSharp Algo Trading, LLC
+*******************************************************************************************/
+#endregion S# License
+extensions: .aspx .ascx
+<%-- 
+NOTICE!!!  This program and source code is owned and licensed by
+StockSharp Algo Trading, LLC, www.stocksharp.com
+Viewing or use of this code requires your acceptance of the license
+agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
+Removal of this comment is a violation of the license agreement.
+
+Project: %Namespace%.%Project%
+File: %FileName%
+Created: %CreationYear%, %CreationMonth%, %CreationDay%, %CreationTime%
+
+Copyright 2010 by StockSharp Algo Trading, LLC
+--%>
+extensions:  .xml .config .xsd
+<!--
+NOTICE!!!  This program and source code is owned and licensed by
+StockSharp Algo Trading, LLC, www.stocksharp.com
+Viewing or use of this code requires your acceptance of the license
+agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
+Removal of this comment is a violation of the license agreement.
+
+Project: %Namespace%.%Project%
+File: %FileName%
+Created: %CreationYear%, %CreationMonth%, %CreationDay%, %CreationTime%
+
+Copyright 2010 by StockSharp Algo Trading, LLC
+-->

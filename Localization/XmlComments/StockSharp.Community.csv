@@ -5,6 +5,7 @@ M:StockSharp.Community.AuthenticationClient.#ctor(System.Uri)/param/address;DocS
 P:StockSharp.Community.AuthenticationClient.Instance/summary;DocStr2967
 P:StockSharp.Community.AuthenticationClient.Credentials/summary;DocStr2968
 P:StockSharp.Community.AuthenticationClient.Product/summary;Product
+P:StockSharp.Community.AuthenticationClient.Version/summary;Product
 P:StockSharp.Community.AuthenticationClient.IsLoggedIn/summary;DocStr2969
 P:StockSharp.Community.AuthenticationClient.SessionId/summary;DocStr138
 P:StockSharp.Community.AuthenticationClient.NullableSessionId/summary;DocStr9213
@@ -88,6 +89,7 @@ M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.
 M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/data;DocStr9032
 M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/progress;DocStr9091
 M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/cancel;DocStr9780
+M:StockSharp.Community.FileClient.Download(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/returns;DocStr10237
 M:StockSharp.Community.FileClient.Update(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/summary;DocStr9089
 M:StockSharp.Community.FileClient.Update(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/data;DocStr9090
 M:StockSharp.Community.FileClient.Update(StockSharp.Community.FileData,System.Action{System.Int32},System.Func{System.Boolean})/param/progress;DocStr9091
@@ -98,7 +100,9 @@ M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Bool
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/param/isPublic;DocStr9033
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/param/progress;DocStr9091
 M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/param/cancel;DocStr9780
-M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/returns;DocStr9090
+M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[],System.Boolean,System.Action{System.Int32},System.Func{System.Boolean})/returns;DocStr10238
+M:StockSharp.Community.FileClient.GetUploadLimit/summary;DocStr10166
+M:StockSharp.Community.FileClient.GetUploadLimit/returns;DocStr10167
 T:StockSharp.Community.IAuthenticationService/summary;DocStr2997
 M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/summary;DocStr2963
 M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)/param/email;Email
@@ -109,6 +113,12 @@ M:StockSharp.Community.IAuthenticationService.Login2(StockSharp.Community.Produc
 M:StockSharp.Community.IAuthenticationService.Login2(StockSharp.Community.Products,System.String,System.String)/param/email;Email
 M:StockSharp.Community.IAuthenticationService.Login2(StockSharp.Community.Products,System.String,System.String)/param/password;Password
 M:StockSharp.Community.IAuthenticationService.Login2(StockSharp.Community.Products,System.String,System.String)/returns;DocStr138
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/summary;DocStr2963
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/param/product;Product
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/param/version;Version
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/param/email;Email
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/param/password;Password
+M:StockSharp.Community.IAuthenticationService.Login3(StockSharp.Community.Products,System.String,System.String,System.String)/returns;DocStr138
 M:StockSharp.Community.IAuthenticationService.Ping(System.Guid)/summary;DocStr8701
 M:StockSharp.Community.IAuthenticationService.Ping(System.Guid)/param/sessionId;DocStr138
 M:StockSharp.Community.IAuthenticationService.Logout(System.Guid)/summary;DocStr2964
@@ -154,6 +164,9 @@ M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/summary;Doc
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/param/sessionId;DocStr138
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/param/id;DocStr9031
 M:StockSharp.Community.IFileService.Delete(System.Guid,System.Int64)/returns;DocStr3021
+M:StockSharp.Community.IFileService.GetUploadLimit(System.Guid)/summary;DocStr10166
+M:StockSharp.Community.IFileService.GetUploadLimit(System.Guid)/param/sessionId;DocStr138
+M:StockSharp.Community.IFileService.GetUploadLimit(System.Guid)/returns;DocStr10167
 T:StockSharp.Community.INotificationService/summary;DocStr3014
 M:StockSharp.Community.INotificationService.GetSmsCount(System.Guid)/summary;DocStr3015
 M:StockSharp.Community.INotificationService.GetSmsCount(System.Guid)/param/sessionId;DocStr138

@@ -20,7 +20,10 @@ namespace StockSharp.Algo.Strategies
 	using System.ComponentModel;
 
 	using Ecng.Common;
+	using Ecng.Collections;
 	using Ecng.Serialization;
+
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// The strategy parameter.
@@ -89,7 +92,8 @@ namespace StockSharp.Algo.Strategies
 			Name = name;
 			_value = initialValue;
 
-			_strategy.Parameters.Add(this);
+			if (!_strategy.Parameters.TryAdd(name, this))
+				throw new ArgumentException(LocalizedStrings.CompositionAlreadyExistParams.Put(name, string.Empty), nameof(name));
 		}
 
 		/// <summary>
@@ -118,8 +122,7 @@ namespace StockSharp.Algo.Strategies
 				if (EqualityComparer<T>.Default.Equals(_value, value))
 					return;
 
-				var propChange = _value as INotifyPropertyChanged;
-				if (propChange != null)
+				if (_value is INotifyPropertyChanged propChange)
 					propChange.PropertyChanged -= OnValueInnerStateChanged;
 
 				_value = value;

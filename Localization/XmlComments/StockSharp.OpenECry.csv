@@ -17,7 +17,8 @@ P:StockSharp.OpenECry.OpenECryMessageAdapter.Uuid/summary;Str2565
 P:StockSharp.OpenECry.OpenECryMessageAdapter.Remoting/summary;DocStr5928
 P:StockSharp.OpenECry.OpenECryMessageAdapter.UseNativeReconnect/summary;DocStr5929
 P:StockSharp.OpenECry.OpenECryMessageAdapter.EnableOECLogging/summary;Str2568
-P:StockSharp.OpenECry.OpenECryMessageAdapter.TimeFrames/summary;DocStr2531
+P:StockSharp.OpenECry.OpenECryMessageAdapter.AllTimeFrames/summary;DocStr206
+P:StockSharp.OpenECry.OpenECryMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.OpenECry.OpenECryMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.OpenECry.OpenECryMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.OpenECry.OpenECryMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -49,7 +50,7 @@ P:StockSharp.OpenECry.OpenECryOrderCondition.TriggerType/summary;Str2575
 P:StockSharp.OpenECry.OpenECryOrderCondition.ReferencePrice/summary;Str2577
 P:StockSharp.OpenECry.OpenECryOrderCondition.SplitVolume/summary;Str2435
 T:StockSharp.OpenECry.OpenECryException/summary;DocStr5942
-T:StockSharp.OpenECry.OpenECryTrader/summary;DocStr5949
+T:StockSharp.OpenECry.OpenECryTrader/summary;DocStr2539
 M:StockSharp.OpenECry.OpenECryTrader.#ctor/summary;DocStr1
 P:StockSharp.OpenECry.OpenECryTrader.Uuid/summary;Str2565
 P:StockSharp.OpenECry.OpenECryTrader.Login/summary;Login

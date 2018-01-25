@@ -60,8 +60,14 @@ namespace StockSharp.Algo.Risk
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.SendInMessage(message);
+				return;
+			}
+
 			ProcessRisk(message);
-			InnerAdapter.SendInMessage(message);
+			base.SendInMessage(message);
 		}
 
 		/// <summary>
@@ -79,7 +85,7 @@ namespace StockSharp.Algo.Risk
 		{
 			foreach (var rule in RiskManager.ProcessRules(message))
 			{
-				InnerAdapter.AddWarningLog(LocalizedStrings.Str855Params,
+				this.AddWarningLog(LocalizedStrings.Str855Params,
 					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
 
 				switch (rule.Action)
@@ -89,10 +95,10 @@ namespace StockSharp.Algo.Risk
 						break;
 					}
 					case RiskActions.StopTrading:
-						InnerAdapter.SendInMessage(new DisconnectMessage());
+						base.SendInMessage(new DisconnectMessage());
 						break;
 					case RiskActions.CancelOrders:
-						InnerAdapter.SendInMessage(new OrderGroupCancelMessage { TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId() });
+						base.SendInMessage(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

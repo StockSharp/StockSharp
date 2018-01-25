@@ -79,14 +79,14 @@
             Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.
             </summary>
     </member>
+    <member name="F:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.DefaultVersion">
+      <summary>
+            Default value for <see cref="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Version" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Version">
       <summary>
             Protocol version.
-            </summary>
-    </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
             </summary>
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1ColumnRegistry">
@@ -94,10 +94,13 @@
             The list of all available <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.TimeFrames">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.AllTimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.TimeFrames">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>

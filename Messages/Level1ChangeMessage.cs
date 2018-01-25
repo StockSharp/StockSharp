@@ -40,7 +40,7 @@ namespace StockSharp.Messages
 		OpenPrice,
 
 		/// <summary>
-		/// Greatest price.
+		/// Highest price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str287Key)]
@@ -626,6 +626,13 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.TurnoverKey)]
 		Turnover,
+
+		/// <summary>
+		/// The middle of spread.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.SpreadKey)]
+		SpreadMiddle,
 	}
 
 	/// <summary>

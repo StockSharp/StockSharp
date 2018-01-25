@@ -5,13 +5,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System.ComponentModel;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
-	using System.Windows.Media;
 
-	using Ecng.Xaml.Charting;
-	using Ecng.Xaml.Charting.Model.DataSeries;
-	using Ecng.Xaml.Charting.Numerics;
-	using Ecng.Xaml.Charting.Visuals.Axes;
-	using Ecng.Xaml.Charting.Visuals.RenderableSeries;
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 	using Ecng.Xaml;
@@ -19,6 +13,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// The analytic strategy, calculating distribution of the volume by price levels.
@@ -72,39 +67,41 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// </summary>
 		protected override void OnAnalyze()
 		{
-			var chart = Chart;
-			var grid = Grid;
+			// clear prev values
+			Panel.ClearControls();
 
-			var chartSeries = new XyDataSeries<double, double>();
 			ThreadSafeObservableCollection<GridRow> gridSeries = null;
+			IAnalyticsChart chart = null;
 
-			chart.GuiSync(() =>
+			switch (ResultType)
 			{
-				// clear prev values
-				chart.RenderableSeries.Clear();
-				grid.ClearColumns();
-
-				chart.RenderableSeries.Add(new FastColumnRenderableSeries
+				case AnalyticsResultTypes.Grid:
 				{
-					ResamplingMode = ResamplingMode.None,
-					DataPointWidth = 1,
-					SeriesColor = Colors.Chocolate,
-					DataSeries = chartSeries
-				});
+					var grid = Panel.CreateGrid(LocalizedStrings.Str3200);
 
-				chart.XAxis = new NumericAxis { AxisTitle = LocalizedStrings.Price };
-				chart.YAxis = new NumericAxis { AxisTitle = LocalizedStrings.Volume, GrowBy = new DoubleRange(0, 0.1) };
+					grid.AddColumn(nameof(GridRow.Price), LocalizedStrings.Price).Width = 150;
+					var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
+					volumeColumn.Width = 100;
 
-				grid.AddColumn(nameof(GridRow.Price), LocalizedStrings.Price).Width = 150;
-				var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
-				volumeColumn.Width = 100;
+					var gridSource = new ObservableCollectionEx<GridRow>();
+					grid.ItemsSource = gridSource;
+					gridSeries = new ThreadSafeObservableCollection<GridRow>(gridSource);
 
-				var gridSource = new ObservableCollectionEx<GridRow>();
-				grid.ItemsSource = gridSource;
-				gridSeries = new ThreadSafeObservableCollection<GridRow>(gridSource);
-
-				grid.SetSort(volumeColumn, ListSortDirection.Descending);
-			});
+					grid.SetSort(volumeColumn, ListSortDirection.Descending);
+					break;
+				}
+				case AnalyticsResultTypes.Bubble:
+					chart = Panel.CreateBubbleChart(LocalizedStrings.Str3280);
+					break;
+				case AnalyticsResultTypes.Heatmap:
+					chart = Panel.CreateHeatmap(LocalizedStrings.Str3280);
+					break;
+				case AnalyticsResultTypes.Histogram:
+					chart = Panel.CreateHistogramChart(LocalizedStrings.Str3280);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 
 			// get candle storage
 			var storage = StorateRegistry.GetCandleStorage(typeof(TimeFrameCandle), Security, TimeFrame, format: StorageFormat);
@@ -112,58 +109,62 @@ namespace StockSharp.Algo.Strategies.Analytics
 			// get available dates for the specified period
 			var dates = storage.GetDates(From, To).ToArray();
 
-			var rows = new Dictionary<decimal, GridRow>();
-
-			foreach (var loadDate in dates)
+			if (dates.Length == 0)
 			{
-				// check if stopped
-				if (ProcessState != ProcessStates.Started)
-					break;
+				this.AddWarningLog(LocalizedStrings.Str2913);
+			}
+			else
+			{
+				var rows = new Dictionary<decimal, GridRow>();
 
-				// load candles
-				var candles = storage.Load(loadDate);
-
-				// groupping candles by candle's middle price
-				var groupedCandles = candles.GroupBy(c => c.LowPrice + c.GetLength() / 2);
-
-				foreach (var group in groupedCandles.OrderBy(g => g.Key))
+				foreach (var loadDate in dates)
 				{
 					// check if stopped
 					if (ProcessState != ProcessStates.Started)
 						break;
 
-					var price = group.Key;
+					// load candles
+					var candles = storage.Load(loadDate);
 
-					// calc total volume for the specified time frame
-					var sumVol = group.Sum(c => c.TotalVolume);
+					// groupping candles by candle's middle price
+					var groupedCandles = candles.GroupBy(c => c.LowPrice + c.GetLength() / 2);
 
-					var row = rows.TryGetValue(price);
-					if (row == null)
+					foreach (var group in groupedCandles.OrderBy(g => g.Key))
 					{
-						// new price level
-						rows.Add(price, row = new GridRow { Price = price, Volume = sumVol });
+						// check if stopped
+						if (ProcessState != ProcessStates.Started)
+							break;
 
-						// draw on chart
-						chartSeries.Append((double)price, (double)sumVol);
+						var price = group.Key;
 
-						// draw on table
-						gridSeries.Add(row);
+						// calc total volume for the specified time frame
+						var sumVol = group.Sum(c => c.TotalVolume);
+
+						var row = rows.TryGetValue(price);
+						if (row == null)
+						{
+							// new price level
+							rows.Add(price, row = new GridRow { Price = price, Volume = sumVol });
+
+							// draw on chart
+							chart?.Append(price, sumVol);
+
+							// draw on table
+							gridSeries?.Add(row);
+						}
+						else
+						{
+							// update existing price level
+							row.Volume += sumVol;
+
+							// update chart
+							chart?.Update(price, row.Volume);
+						}
 					}
-					else
-					{
-						// update existing price level
-						row.Volume += sumVol;
 
-						// update chart
-						chartSeries.Update((double)price, (double)row.Volume);
-					}
+					//// scale chart
+					//chart?.ZoomExtents();
 				}
-
-				chart.GuiAsync(() =>
-				{
-					// scale chart
-					chart.ZoomExtents();
-				});
 			}
 
 			// notify the script stopped

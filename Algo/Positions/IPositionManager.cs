@@ -31,17 +31,22 @@ namespace StockSharp.Algo.Positions
 		decimal Position { get; set; }
 
 		/// <summary>
+		/// The security for which <see cref="Position"/> will be calculated.
+		/// </summary>
+		SecurityId? SecurityId { get; set; }
+
+		/// <summary>
 		/// Positions, grouped by instruments and portfolios.
 		/// </summary>
 		IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> Positions { get; set; }
 
 		/// <summary>
-		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
+		/// The event of new position occurrence in <see cref="Positions"/>.
 		/// </summary>
 		event Action<Tuple<SecurityId, string>, decimal> NewPosition;
 
 		/// <summary>
-		/// The event of position change in <see cref="IPositionManager.Positions"/>.
+		/// The event of position change in <see cref="Positions"/>.
 		/// </summary>
 		event Action<Tuple<SecurityId, string>, decimal> PositionChanged;
 

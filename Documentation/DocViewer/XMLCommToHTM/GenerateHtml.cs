@@ -37,8 +37,8 @@ namespace XMLCommToHTM
 
 		public static bool IsRussian
 		{
-			get { return Names.IsRussian; }
-			set { Names.IsRussian = value; }
+			get => Names.IsRussian;
+			set => Names.IsRussian = value;
 		}
 
 		public static string CssUrl { get; set; }
@@ -54,20 +54,23 @@ namespace XMLCommToHTM
 
 		public static string Generate(object pageData)
 		{
-			if (pageData is TypeDom)
-				return Generate((TypeDom)pageData);
-			else if (pageData is TypePartialData)
-				return GeneratePartialType(pageData as TypePartialData);
-			else if (pageData is MemberDom)
-				return Generate((MemberDom)pageData);
-			else if (pageData is NamespaceDom)
-				return Generate((NamespaceDom)pageData);
-			else if (pageData is IGrouping<string,MethodDom>)
-				return Generate((IGrouping<string, MethodDom>)pageData);
-			else if (pageData is SolutionDom)
-				return Generate((SolutionDom)pageData);
-			else
-				throw new NotSupportedException();
+			switch (pageData)
+			{
+				case TypeDom td:
+					return Generate(td);
+				case TypePartialData tpd:
+					return GeneratePartialType(tpd);
+				case MemberDom md:
+					return Generate(md);
+				case NamespaceDom nd:
+					return Generate(nd);
+				case IGrouping<string,MethodDom> g:
+					return Generate(g);
+				case SolutionDom sd:
+					return Generate(sd);
+				default:
+					throw new NotSupportedException();
+			}
 		}
 
 		static readonly string Nbsp = "" + (char)0x00a0;

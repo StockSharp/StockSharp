@@ -35,8 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v17.1">
-      <HintPath>..\References\DevExpress.Xpf.Core.v17.1.dll</HintPath>
+    <Reference Include="DevExpress.Xpf.Core.v17.2">
+      <HintPath>..\References\DevExpress.Xpf.Core.v17.2.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
@@ -64,17 +64,47 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="StockSharp.Bitfinex">
+      <HintPath>..\References\StockSharp.Bitfinex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bithumb">
+      <HintPath>..\References\StockSharp.Bithumb.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bittrex">
+      <HintPath>..\References\StockSharp.Bittrex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Coinbase">
+      <HintPath>..\References\StockSharp.Coinbase.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Coincheck">
+      <HintPath>..\References\StockSharp.Coincheck.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Fix">
       <HintPath>..\References\StockSharp.Fix.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Gdax">
+      <HintPath>..\References\StockSharp.Gdax.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.HitBtc">
+      <HintPath>..\References\StockSharp.HitBtc.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.ITCH">
       <HintPath>..\References\StockSharp.ITCH.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Kraken">
+      <HintPath>..\References\StockSharp.Kraken.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Micex">
       <HintPath>..\References\StockSharp.Micex.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Okcoin">
+      <HintPath>..\References\StockSharp.Okcoin.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Plaza">
       <HintPath>..\References\StockSharp.Plaza.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Poloniex">
+      <HintPath>..\References\StockSharp.Poloniex.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.QuantHouse">
       <HintPath>..\References\StockSharp.QuantHouse.dll</HintPath>

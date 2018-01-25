@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Poloniex</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Poloniex.PoloniexMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Poloniex"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Poloniex.PoloniexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Poloniex.PoloniexMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Poloniex.PoloniexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.Poloniex.PoloniexMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Poloniex.PoloniexMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Poloniex.PoloniexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Poloniex.PoloniexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Poloniex.PoloniexMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.Poloniex.PoloniexTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Poloniex"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Poloniex.PoloniexTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Poloniex.PoloniexTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Poloniex.PoloniexTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Poloniex.PoloniexTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>

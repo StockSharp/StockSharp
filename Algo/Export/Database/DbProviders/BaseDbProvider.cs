@@ -71,16 +71,15 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 					var result = command.ExecuteScalar();
 					if (result != null)
 					{
-						var value = result as string;
-						if (value != null)
+						if (result is string value)
 						{
 							if (!value.IsEmpty())
 								return;
 						}
 
-						if (result is int)
+						if (result is int i)
 						{
-							if ((int)result != 0)
+							if (i != 0)
 								return;
 						}
 
@@ -189,8 +188,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 			if (type == typeof(string))
 			{
-				var srest = restriction as StringRestriction;
-				if (srest != null)
+				if (restriction is StringRestriction srest)
 				{
 					if (srest.IsFixedSize)
 						return $"nchar({srest.MaxLength})";
@@ -208,8 +206,9 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 
 			if (type == typeof(decimal))
 			{
-				var drest = restriction as DecimalRestriction;
-				return drest != null ? $"decimal({drest.Precision},{drest.Scale})": "decimal";
+				return restriction is DecimalRestriction drest
+					? $"decimal({drest.Precision},{drest.Scale})"
+					: "decimal";
 			}
 
 			if (type == typeof(Enum))

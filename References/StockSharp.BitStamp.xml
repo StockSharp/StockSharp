@@ -6,7 +6,7 @@
   <members>
     <member name="T:StockSharp.BitStamp.BitStampMessageAdapter">
       <summary>
-            The message adapter for BitStamp.
+            The message adapter for <see cref="N:StockSharp.BitStamp" />.
             </summary>
     </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
@@ -19,6 +19,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativePortfolioLookup">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -39,11 +42,6 @@
             Client ID.
             </summary>
     </member>
-    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
-            </summary>
-    </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Save settings.
@@ -62,9 +60,24 @@
             </summary>
       <returns>A string that represents the current object.</returns>
     </member>
+    <member name="T:StockSharp.BitStamp.BitStampOrderCondition">
+      <summary>
+        <see cref="N:StockSharp.BitStamp" /> order condition.
+            </summary>
+    </member>
+    <member name="M:StockSharp.BitStamp.BitStampOrderCondition.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitStamp.BitStampOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.BitStamp.BitStampOrderCondition.StopPrice">
+      <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
+    </member>
     <member name="T:StockSharp.BitStamp.BitStampTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the BitStamp.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.BitStamp" />.
             </summary>
     </member>
     <member name="M:StockSharp.BitStamp.BitStampTrader.#ctor">

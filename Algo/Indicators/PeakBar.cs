@@ -32,6 +32,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("PeakBar")]
 	[DescriptionLoc(LocalizedStrings.Str817Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class PeakBar : BaseIndicator
 	{
 		private decimal _currentMaximum = decimal.MinValue;

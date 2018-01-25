@@ -72,6 +72,11 @@ namespace StockSharp.Community
 		public Products? Product { get; set; }
 
 		/// <summary>
+		/// Product.
+		/// </summary>
+		public Version Version { get; set; }
+
+		/// <summary>
 		/// Has the client successfully authenticated.
 		/// </summary>
 		public bool IsLoggedIn => NullableSessionId != null;
@@ -134,7 +139,10 @@ namespace StockSharp.Community
 			}
 			else
 			{
-				var tuple = Invoke(f => f.Login2(product.Value, login, password.To<string>()));
+				var tuple = Invoke(f => Version == null
+					? f.Login2(product.Value, login, password.To<string>())
+					: f.Login3(product.Value, Version.To<string>(), login, password.To<string>()));
+
 				tuple.Item1.ToErrorCode().ThrowIfError();
 
 				NullableSessionId = tuple.Item1;

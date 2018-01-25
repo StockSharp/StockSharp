@@ -33,6 +33,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("Fractals")]
 	[DescriptionLoc(LocalizedStrings.Str844Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class Fractals : BaseComplexIndicator
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();
@@ -79,6 +80,9 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Period length.
 		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str736Key)]
+		[DescriptionLoc(LocalizedStrings.Str778Key, true)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Length
 		{
 			get => _length;

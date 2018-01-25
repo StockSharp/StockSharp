@@ -309,27 +309,10 @@ namespace StockSharp.Algo.Export
 
 		private static void ApplyCellStyle(ExcelWorker worker, Level1Fields field, int column)
 		{
-			switch (field)
-			{
-				case Level1Fields.LastTrade:
-				case Level1Fields.BestAsk:
-				case Level1Fields.BestBid:
-					break;
-				case Level1Fields.LastTradeId:
-				case Level1Fields.BidsCount:
-				case Level1Fields.AsksCount:
-				case Level1Fields.TradesCount:
-					worker.SetStyle(column, typeof(long));
-					break;
-				case Level1Fields.LastTradeTime:
-				case Level1Fields.BestAskTime:
-				case Level1Fields.BestBidTime:
-					worker.SetStyle(column, typeof(DateTimeOffset));
-					break;
-				default:
-					worker.SetStyle(column, typeof(decimal));
-					break;
-			}
+			var type = field.ToType();
+
+			if (type != null && !type.IsEnum)
+				worker.SetStyle(column, type);
 		}
 
 		/// <inheritdoc />
@@ -387,9 +370,11 @@ namespace StockSharp.Algo.Export
 
 				foreach (var value in values)
 				{
-					worker
-						.SetCell(0, row, value.Time)
-						.SetCell(1, row, value.ValueAsDecimal);
+					worker.SetCell(0, row, value.Time);
+
+					var col = 1;
+					foreach (var indVal in value.ValuesAsDecimal)
+						worker.SetCell(col++, row, indVal);
 				
 					if (!Check(++row))
 						break;
@@ -505,8 +490,11 @@ namespace StockSharp.Algo.Export
 					.SetCell(colIndex, 0, LocalizedStrings.Str551).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.Strike).SetStyle(colIndex++, typeof(decimal))
 					.SetCell(colIndex, 0, LocalizedStrings.UnderlyingAsset).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.UnderlyingSecurityType).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.ExpiryDate).SetStyle(colIndex++, "yyyy-MM-dd")
 					.SetCell(colIndex, 0, LocalizedStrings.SettlementDate).SetStyle(colIndex++, "yyyy-MM-dd")
+					.SetCell(colIndex, 0, LocalizedStrings.IssueSize).SetStyle(colIndex++, typeof(decimal))
+					.SetCell(colIndex, 0, LocalizedStrings.IssueDate).SetStyle(colIndex++, "yyyy-MM-dd")
 					.SetCell(colIndex, 0, LocalizedStrings.Currency).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.CfiCode).SetStyle(colIndex++, typeof(string))
 
@@ -533,15 +521,18 @@ namespace StockSharp.Algo.Export
 						.SetCell(colIndex++, rowIndex, security.PriceStep)
 						.SetCell(colIndex++, rowIndex, security.VolumeStep)
 						.SetCell(colIndex++, rowIndex, security.Multiplier)
-						.SetCell(colIndex++, rowIndex, security.SecurityType == null ? string.Empty : security.SecurityType.Value.GetDisplayName())
+						.SetCell(colIndex++, rowIndex, security.SecurityType?.GetDisplayName() ?? string.Empty)
 						.SetCell(colIndex++, rowIndex, security.Decimals)
-						.SetCell(colIndex++, rowIndex, security.OptionType == null ? string.Empty : security.OptionType.Value.GetDisplayName())
+						.SetCell(colIndex++, rowIndex, security.OptionType?.GetDisplayName() ?? string.Empty)
 						.SetCell(colIndex++, rowIndex, security.Strike)
 						.SetCell(colIndex++, rowIndex, security.BinaryOptionType)
 						.SetCell(colIndex++, rowIndex, security.UnderlyingSecurityCode)
+						.SetCell(colIndex++, rowIndex, security.UnderlyingSecurityType?.GetDisplayName() ?? string.Empty)
 						.SetCell(colIndex++, rowIndex, security.ExpiryDate)
 						.SetCell(colIndex++, rowIndex, security.SettlementDate)
-						.SetCell(colIndex++, rowIndex, security.Currency == null ? string.Empty : security.Currency.Value.GetDisplayName())
+						.SetCell(colIndex++, rowIndex, security.IssueSize)
+						.SetCell(colIndex++, rowIndex, security.IssueDate)
+						.SetCell(colIndex++, rowIndex, security.Currency?.GetDisplayName() ?? string.Empty)
 						.SetCell(colIndex++, rowIndex, security.CfiCode)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Bloomberg)
 						.SetCell(colIndex++, rowIndex, security.SecurityId.Cusip)

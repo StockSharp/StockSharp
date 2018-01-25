@@ -27,7 +27,7 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// The main interface providing the connection to the trading systems.
 	/// </summary>
-	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider
+	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider, INewsProvider, IPortfolioProvider, IPositionProvider
 	{
 		/// <summary>
 		/// Own trade received.
@@ -169,30 +169,30 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> NewPortfolios;
 
-		/// <summary>
-		/// Portfolio changed.
-		/// </summary>
-		event Action<Portfolio> PortfolioChanged;
+		///// <summary>
+		///// Portfolio changed.
+		///// </summary>
+		//event Action<Portfolio> PortfolioChanged;
 
 		/// <summary>
 		/// Portfolios changed.
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
-		/// <summary>
-		/// Position received.
-		/// </summary>
-		event Action<Position> NewPosition;
+		///// <summary>
+		///// Position received.
+		///// </summary>
+		//event Action<Position> NewPosition;
 
 		/// <summary>
 		/// Positions received.
 		/// </summary>
 		event Action<IEnumerable<Position>> NewPositions;
 
-		/// <summary>
-		/// Position changed.
-		/// </summary>
-		event Action<Position> PositionChanged;
+		///// <summary>
+		///// Position changed.
+		///// </summary>
+		//event Action<Position> PositionChanged;
 
 		/// <summary>
 		/// Positions changed.
@@ -371,10 +371,10 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		IEnumerable<MyTrade> MyTrades { get; }
 
-		/// <summary>
-		/// Get all positions.
-		/// </summary>
-		IEnumerable<Position> Positions { get; }
+		///// <summary>
+		///// Get all positions.
+		///// </summary>
+		//IEnumerable<Position> Positions { get; }
 
 		/// <summary>
 		/// All news.
@@ -462,6 +462,20 @@ namespace StockSharp.BusinessEntities
 		void LookupPortfolios(Portfolio criteria);
 
 		/// <summary>
+		/// Lookup security by identifier.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Security.</returns>
+		Security LookupSecurity(SecurityId securityId);
+
+		/// <summary>
+		/// To get the portfolio by the name. If the portfolio is not registered, it will be created.
+		/// </summary>
+		/// <param name="name">Portfolio name.</param>
+		/// <returns>Portfolio.</returns>
+		Portfolio GetPortfolio(string name);
+
+		/// <summary>
 		/// To get the position by portfolio and instrument.
 		/// </summary>
 		/// <param name="portfolio">The portfolio on which the position should be found.</param>
@@ -515,7 +529,8 @@ namespace StockSharp.BusinessEntities
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
-		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null);
+		/// <param name="transactionId">Order cancellation transaction id.</param>
+		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null);
 
 		/// <summary>
 		/// To sign up to get market data by the instrument.
@@ -612,5 +627,17 @@ namespace StockSharp.BusinessEntities
 		/// Unsubscribe from news.
 		/// </summary>
 		void UnRegisterNews();
+
+		/// <summary>
+		/// Send outgoing message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendOutMessage(Message message);
+
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		void SendInMessage(Message message);
 	}
 }

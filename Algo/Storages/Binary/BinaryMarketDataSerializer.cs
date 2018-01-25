@@ -58,8 +58,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public static readonly Version Version61 = new Version(6, 1);
 	}
 
-	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo
-		where TMetaInfo : BinaryMetaInfo<TMetaInfo>
+	abstract class BinaryMetaInfo : MetaInfo
 	{
 		protected BinaryMetaInfo(DateTime date)
 			: base(date)
@@ -79,7 +78,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public decimal LastPrice { get; set; }
 		public decimal FirstFractionalPrice { get; set; }
 		public decimal LastFractionalPrice { get; set; }
-
+		
 		public decimal FirstFractionalVolume { get; set; }
 		public decimal LastFractionalVolume { get; set; }
 
@@ -137,6 +136,8 @@ namespace StockSharp.Algo.Storages.Binary
 			Count = stream.Read<int>();
 			PriceStep = stream.Read<decimal>();
 
+			/*FirstPriceStep = */LastPriceStep = PriceStep;
+
 			if (Version < MarketDataVersions.Version40)
 				stream.Read<decimal>(); // ранее был StepPrice
 
@@ -172,6 +173,22 @@ namespace StockSharp.Algo.Storages.Binary
 
 			FirstFractionalPrice = stream.Read<decimal>();
 			LastFractionalPrice = stream.Read<decimal>();
+		}
+
+		protected void WritePriceStep(Stream stream)
+		{
+			WriteFractionalPrice(stream);
+
+			stream.Write(/*FirstPriceStep*/0m);
+			stream.Write(LastPriceStep);
+		}
+
+		protected void ReadPriceStep(Stream stream)
+		{
+			ReadFractionalPrice(stream);
+
+			/*FirstPriceStep = */stream.Read<decimal>();
+			LastPriceStep = stream.Read<decimal>();
 		}
 
 		protected void WriteFractionalVolume(Stream stream)
@@ -273,7 +290,7 @@ namespace StockSharp.Algo.Storages.Binary
 		//	return copy;
 		//}
 
-		public virtual void CopyFrom(TMetaInfo src)
+		public virtual void CopyFrom(BinaryMetaInfo src)
 		{
 			Version = src.Version;
 			Count = src.Count;
@@ -298,11 +315,15 @@ namespace StockSharp.Algo.Storages.Binary
 			LastItemLocalTime = src.LastItemLocalTime;
 			FirstItemLocalOffset = src.FirstItemLocalOffset;
 			LastItemLocalOffset = src.LastItemLocalOffset;
+			//FirstPriceStep = src.FirstPriceStep;
+			LastPriceStep = src.LastPriceStep;
+			FirstPrice = src.FirstPrice;
+			LastPrice = src.LastPrice;
 		}
 	}
 
 	abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSerializer<TData>
-		where TMetaInfo : BinaryMetaInfo<TMetaInfo>
+		where TMetaInfo : BinaryMetaInfo
 	{
 		public class MarketDataEnumerator : SimpleEnumerator<TData>
 		{

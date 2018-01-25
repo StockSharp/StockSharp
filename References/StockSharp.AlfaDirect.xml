@@ -31,6 +31,11 @@
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
         </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.TimeFrames">
+            <summary>
+            Возможные тайм-фреймы.
+            </summary>
+        </member>
         <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsNativeIdentifiers">
             <summary>
             Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native"/>.
@@ -50,11 +55,6 @@
         <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Password">
             <summary>
             Пароль для входа в терминал.
-            </summary>
-        </member>
-        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsValid">
-            <summary>
-            Проверить введенные параметры на валидность.
             </summary>
         </member>
         <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">

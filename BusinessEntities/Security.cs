@@ -46,7 +46,7 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
-		private string _id = string.Empty;
+		private string _id;
 
 		/// <summary>
 		/// Security ID.
@@ -73,7 +73,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private string _code = string.Empty;
+		private string _code;
 
 		/// <summary>
 		/// Security code.
@@ -152,7 +152,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private string _name = string.Empty;
+		private string _name;
 
 		/// <summary>
 		/// Security name.
@@ -177,7 +177,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private string _shortName = string.Empty;
+		private string _shortName;
 
 		/// <summary>
 		/// Short security name.
@@ -252,7 +252,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private string _class = string.Empty;
+		private string _class;
 
 		/// <summary>
 		/// Security class.
@@ -300,7 +300,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_priceStep = value;
 				Notify(nameof(PriceStep));
@@ -330,7 +330,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_volumeStep = value;
 				Notify(nameof(VolumeStep));
@@ -359,7 +359,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_multiplier = value;
 				Notify(nameof(Multiplier));
@@ -389,7 +389,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_decimals = value;
 				Notify(nameof(Decimals));
@@ -932,7 +932,7 @@ namespace StockSharp.BusinessEntities
 		//	}
 		//}
 
-		private string _underlyingSecurityId = string.Empty;
+		private string _underlyingSecurityId;
 
 		/// <summary>
 		/// Underlying asset on which the current security is built.
@@ -1005,7 +1005,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_strike = value;
 				Notify(nameof(Strike));
@@ -1673,6 +1673,75 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
+		private decimal? _issueSize;
+
+		/// <summary>
+		/// Number of issued contracts.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IssueSizeKey,
+			Description = LocalizedStrings.IssueSizeKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 21)]
+		[DataMember]
+		[Nullable]
+		public decimal? IssueSize
+		{
+			get => _issueSize;
+			set
+			{
+				_issueSize = value;
+				Notify(nameof(IssueSize));
+			}
+		}
+
+		private DateTimeOffset? _issueDate;
+		
+		/// <summary>
+		/// Date of issue.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.IssueDateKey,
+			Description = LocalizedStrings.IssueDateKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 22)]
+		[DataMember]
+		[Nullable]
+		public DateTimeOffset? IssueDate
+		{
+			get => _issueDate;
+			set
+			{
+				_issueDate = value;
+				Notify(nameof(IssueDate));
+			}
+		}
+
+		private SecurityTypes? _underlyingSecurityType;
+
+		/// <summary>
+		/// Underlying security type.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.UnderlyingSecurityTypeKey,
+			Description = LocalizedStrings.UnderlyingSecurityTypeKey + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str437Key,
+			Order = 103)]
+		[DataMember]
+		[Nullable]
+		public SecurityTypes? UnderlyingSecurityType
+		{
+			get => _underlyingSecurityType;
+			set
+			{
+				_underlyingSecurityType = value;
+				Notify(nameof(UnderlyingSecurityType));
+			}
+		}
+
 		[field: NonSerialized]
 		private PropertyChangedEventHandler _propertyChanged;
 
@@ -1750,6 +1819,9 @@ namespace StockSharp.BusinessEntities
 			destination.AsksVolume = AsksVolume;
 			destination.CfiCode = CfiCode;
 			destination.Turnover = Turnover;
+			destination.IssueSize = IssueSize;
+			destination.IssueDate = IssueDate;
+			destination.UnderlyingSecurityType = UnderlyingSecurityType;
 
 			//if (destination.ExtensionInfo == null)
 			//	destination.ExtensionInfo = new SynchronizedDictionary<object, object>();

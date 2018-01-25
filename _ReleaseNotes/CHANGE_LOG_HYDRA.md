@@ -1,7 +1,133 @@
 StockSharp Data (Hydra) Change log
 ========================
-## current:
+## v4.4.3:
+* (bug) FIX server. Fix security lookup. http://stocksharp.ru/forum/8874/problemy-podklyucheniya-k-hydra-cherez-fix-/
+* (bug) Level1 binary storage. Fixes.
+* (bug) Binary storage. Fix non adjust price steps.
+* (bug) IQFeed. Symbol lookup fixes.
+* (bug) Tick and quotes binary storage. Fix store highly fractional prices.
+* (feature) Order log binary storage. Nullable volumes posibilites.
+* (bug) Quotes storage. Fix zero and negative prices store.
+* (bug) FIX server. Fix market data request for the specified dates.
+
+## v4.4.2:
+* (bug) InteractiveBrokers fixes.
+* (bug) Quik. Subscribe/unsubscribe fixes.
+* (feature) Binary quotes. Allow save bid > ask.
+* (bug) Candles pane. Fix arg validation.
+
+## v4.4.1:
+* (bug) InteractiveBrokers fixes.
+* (bug) LMAX fixes.
+* (bug) Quandl lookup securities fixes.
+* (bug) Hydra. Market depth export txt preview fix. http://stocksharp.ru/forum/8805/kak-vygruzit-istoriyu-po-instrumentu/
+* (bug) Hydra. Fix Analytic pane.
+* (feature) Hydra. BitStamp. ClientId
+* (feature) Lookup securities panel redesign.
+* (feature) Security. UnderlyingSecurityType, IssueDate and IssueSize.
+* (feature) OptionDesk. Show expiration date columns.
+
+## v4.4.0:
+* (bug) OptionDesk fixes.
+* (bug) Finam history. Fix security lookup. http://stocksharp.ru/posts/m/41218/
+* (bug) FIX server. Security expiration date fix http://stocksharp.ru/forum/8703/data-ehkspiratsii-optsionov-na-forts/
+* (bug) IQFeed. Level1 fix.
+* (bug) Oanda. Fix large candle's range request.
+* (bug) InteractiveBrokers. Market data fixes.
+* (bug) CandleMessage.State init fix.
+* (bug) Fix DepthPane with big interval set.
+* (bug) Position changes track fix.
+* (bug) MFD. Lookup fixes.
+* (bug) TrayIcon fixes.
+* (bug) Fix loading TaskPane for non exist task.
+
+## v4.3.28:
+* (bug) BitStamp. Market data fix.
+* (bug) FIX protocol. Exante market-data fix.
+* (feature) Binary storage. Support non adjust prices for order book and level1.
+* (bug) FIX connector. Position average price receive fix.
+* (bug) FIX connector. Order book gathering fix.
+* (bug) FIX connector. Check input values while logon.
+* (bug) QuikLua. Fix CurrentValue for money positions http://stocksharp.ru/posts/m/41082/
+* (feature) IQFeed. Security file parsing into separate thread.
+* (bug) BTCE. Fix security price step.
+* (bug) Security create window fix.
+* (feature) Storage. Turned off saving active candles.
+* (bug) Storage. Fix filter first data.
+* (bug) BTCE. Fix market-data only mode.
+* (bug) IQFeed. Connection error handling fix.
+* (feature) InteractiveBrokers. Support historical ticks.
+* (bug) QuikLua. Fix candle states http://stocksharp.ru/posts/m/41144/
+* (feature) Changed default drive. http://stocksharp.ru/posts/m/41138/
+* (bug) Indicator pane fix.
+* (feature) Save/Load main window state.
+* (bug) Fix long time security downloading.
+* (feature) IQFeed. Check memory size for security downloading.
+* (feature) Reset settings option if database corrupted.
+* (bug) Order log pane fix.
+* (feature) IQFeed. SecurityLookupSupportTypes.SupportAll option for downloading instruments from site.
+* (feature) Uses predefined SQLite dll (x64 version).
+
+## v4.3.27.2:
+* (feature) More tooltips.
+* (feature) Connector validation settings.
+* (bug) QuikLua. Candle downloading fix.
+* (bug) SecurityGrid. ExpiryDate, Strike columns sorting fix.
+* (feature) BitStamp. V2 protocol.
+* (bug) Interactive Brokers. Fix historical market data request.
+* (bug) SmartCom. Price step fixes.
+* (feature) BTCE. Domain update.
+* (bug) Positions pane open fix.
+* (bug) Indicators pane. Fix Level1 indicator use.
+* (bug) Fix single security selection.
+* (bug) Big interval task fix.
+* (bug) Convert task fixes.
+* (bug) Alor candles fix.
+
+## v4.3.27.1:
+* (feature) Multiple securities support for data panes.
+* (bug) FIX server. Fix depths subscription for ALL security.
+* (feature) FIX connector. Candle state support.
+* (feature) QuikLua. Send candle states.
+* (bug) Fix security remove.
+* (feature) Auto fix corrupted data.
+* (bug) Level1 panel fix (default visible columns).
+* (bug) News quick open pane fix.
+* (feature) FXCM. Masked as x64 bit only.
+* (bug) Expression fix http://stocksharp.ru/forum/8586/skleennye-fyuchersy-s-finama/
+* (feature) Plaza. 5.3.1 support.
+* (feature) Micex. Stock28 interface.
+* (bug) Position binary storage fix.
+* (feature) SmartCOM. Removed V2 support.
+* (bug) Option desk minor fixes.
+* (bug) Empty date bounds loading fix.
+* (bug) AlfaDirect. Security lookup fixes.
+* (feature) Support paired indicators.
+
+## v4.3.27:
+* (bug) QuikLua. Candles fix.
+* (feature) Analytics refactoring.
+* (bug) Build from composites fix.
+* (feature) Add saving wait into securities downloading.
+* (bug) FixServer. Fix processing real time subscriptions.
+* (bug) Export task upper date bound fix.
+* (feature) Save/load ribbon state.
+* (feature) QuikLua. Ignore case for security lookup.
+* (feature) Level1 storage. Support IssueSize, Duration, BuyBackPrice, BuyBackDate. http://stocksharp.ru/posts/m/40757/
+* (bug) Level1CsvSerializer fix.
+
+## v4.3.26.4:
+* (bug) Index build fix.
+* (bug) Select drive window. Fix OK enable.
+* (bug) SecurityPickerButton. Fix content with special characters.
+* (bug) Indicator pane fixes.
+* (bug) Remove security fix.
+
+## v4.3.26.3:
 * (feature) QuantFEED.
+* (feature) Quik lua. Candle history support.
+* (feature) RSS. Disabled security lookup.
+* (bug) Indicators fixes + usability improved.
 
 ## v4.3.26.1:
 * (feature) Finam. Ticks origin side as optional.

@@ -32,8 +32,8 @@ namespace StockSharp.Algo.Testing
 	{
 		private readonly Random _volumeRandom = new Random(TimeHelper.Now.Millisecond);
 		private readonly Random _priceRandom = new Random(TimeHelper.Now.Millisecond);
-		private readonly SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> _bids;
-		private readonly SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> _asks;
+		private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _bids;
+		private readonly SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> _asks;
 		private decimal _currSpreadPrice;
 		private readonly MarketEmulatorSettings _settings;
 		private readonly Func<DateTimeOffset, DateTimeOffset> _getServerTime;
@@ -55,8 +55,8 @@ namespace StockSharp.Algo.Testing
 		private decimal? _prevAskVolume;
 
 		public ExecutionLogConverter(SecurityId securityId,
-			SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> bids,
-			SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> asks,
+			SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> bids,
+			SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> asks,
 			MarketEmulatorSettings settings, Func<DateTimeOffset, DateTimeOffset> getServerTime)
 		{
 			if (bids == null)
@@ -126,13 +126,10 @@ namespace StockSharp.Algo.Testing
 
 		private IEnumerable<ExecutionMessage> ProcessQuoteChange(DateTimeOffset time, DateTimeOffset serverTime, QuoteChange[] newBids, QuoteChange[] newAsks)
 		{
-			decimal bestBidPrice;
-			decimal bestAskPrice;
-
 			var diff = new List<ExecutionMessage>();
 
-			GetDiff(diff, time, serverTime, _bids, newBids, Sides.Buy, out bestBidPrice);
-			GetDiff(diff, time, serverTime, _asks, newAsks, Sides.Sell, out bestAskPrice);
+			GetDiff(diff, time, serverTime, _bids, newBids, Sides.Buy, out var bestBidPrice);
+			GetDiff(diff, time, serverTime, _asks, newAsks, Sides.Sell, out var bestAskPrice);
 
 			var spreadPrice = bestAskPrice == 0
 				? bestBidPrice
@@ -154,7 +151,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private void GetDiff(List<ExecutionMessage> diff, DateTimeOffset time, DateTimeOffset serverTime, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> from, IEnumerable<QuoteChange> to, Sides side, out decimal newBestPrice)
+		private void GetDiff(List<ExecutionMessage> diff, DateTimeOffset time, DateTimeOffset serverTime, SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> from, IEnumerable<QuoteChange> to, Sides side, out decimal newBestPrice)
 		{
 			newBestPrice = 0;
 
@@ -484,7 +481,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private void ProcessMarketOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTimeOffset time, DateTimeOffset localTime, Sides orderSide, decimal tradePrice, decimal volume)
+		private void ProcessMarketOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes, DateTimeOffset time, DateTimeOffset localTime, Sides orderSide, decimal tradePrice, decimal volume)
 		{
 			// вычисляем объем заявки по рынку, который смог бы пробить текущие котировки.
 
@@ -540,7 +537,7 @@ namespace StockSharp.Algo.Testing
 				retVal.Add(CreateMessage(localTime, time, orderSide.Invert(), tradePrice, volume));
 		}
 
-		private void TryCreateOppositeOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTimeOffset localTime, DateTimeOffset serverTime, decimal tradePrice, decimal volume, Sides originSide)
+		private void TryCreateOppositeOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes, DateTimeOffset localTime, DateTimeOffset serverTime, decimal tradePrice, decimal volume, Sides originSide)
 		{
 			if (HasDepth(localTime))
 				return;
@@ -554,7 +551,7 @@ namespace StockSharp.Algo.Testing
 				retVal.Add(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, volume));
 		}
 
-		private void CancelWorstQuote(List<ExecutionMessage> retVal, DateTimeOffset time, DateTimeOffset serverTime, Sides side, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes)
+		private void CancelWorstQuote(List<ExecutionMessage> retVal, DateTimeOffset time, DateTimeOffset serverTime, Sides side, SortedDictionary<decimal, RefPair<LevelQuotes, QuoteChange>> quotes)
 		{
 			if (quotes.Count <= _settings.MaxDepth)
 				return;

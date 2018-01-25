@@ -669,9 +669,7 @@ namespace StockSharp.BusinessEntities
 
 						if (UseAggregatedQuotes)
 						{
-							var aggQuote = existedQuote as AggregatedQuote;
-
-							if (aggQuote == null)
+							if (!(existedQuote is AggregatedQuote aggQuote))
 							{
 								aggQuote = new AggregatedQuote
 								{
@@ -843,9 +841,7 @@ namespace StockSharp.BusinessEntities
 
 					if (UseAggregatedQuotes)
 					{
-						var aggQuote = quote as AggregatedQuote;
-
-						if (aggQuote != null)
+						if (quote is AggregatedQuote aggQuote)
 						{
 							while (volume > 0)
 							{
@@ -991,8 +987,9 @@ namespace StockSharp.BusinessEntities
 			if (quote.Security == null)
 				quote.Security = Security;
 
-			if (quote.Price <= 0)
-				throw new ArgumentOutOfRangeException(nameof(quote), quote.Price, LocalizedStrings.Str488);
+			// quotes for indecies may have zero prices
+			//if (quote.Price <= 0)
+			//	throw new ArgumentOutOfRangeException(nameof(quote), quote.Price, LocalizedStrings.Str488);
 
 			if (quote.Volume < 0)
 				throw new ArgumentOutOfRangeException(nameof(quote), quote.Volume, LocalizedStrings.Str489);

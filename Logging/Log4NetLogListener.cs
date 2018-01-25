@@ -25,6 +25,8 @@ namespace StockSharp.Logging
 	using log4net;
 	using log4net.Config;
 
+	using StockSharp.Localization;
+
 	/// <summary>
 	/// Helper class for messages logging based on log4net.
 	/// </summary>
@@ -143,7 +145,7 @@ namespace StockSharp.Logging
 					_log.Debug(str);
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(message));
+					throw new ArgumentOutOfRangeException(nameof(message), message.Level, LocalizedStrings.Str1219);
 			}
 		}
 	}

@@ -33,29 +33,15 @@ namespace StockSharp.Algo.Export.Database
 
 		private static Type GetDbType(Level1Fields field)
 		{
-			switch (field)
-			{
-				case Level1Fields.LastTrade:
-				case Level1Fields.BestBid:
-				case Level1Fields.BestAsk:
-					return null;
-				case Level1Fields.Decimals:
-				case Level1Fields.BidsCount:
-				case Level1Fields.AsksCount:
-				case Level1Fields.TradesCount:
-				case Level1Fields.State:
-					return typeof(int);
-				case Level1Fields.LastTradeId:
-					return typeof(long);
-				case Level1Fields.LastTradeOrigin:
-					return typeof(int?);
-				case Level1Fields.BestBidTime:
-				case Level1Fields.BestAskTime:
-				case Level1Fields.LastTradeTime:
-					return typeof(DateTimeOffset);
-				default:
-					return typeof(decimal);
-			}
+			var type = field.ToType();
+
+			if (type == null)
+				return null;
+
+			if (type.IsEnum)
+				type = type.GetEnumUnderlyingType();
+
+			return typeof(Nullable<>).Make(type);
 		}
 
 		private static IEnumerable<ColumnDescription> CreateColumns(Security security)

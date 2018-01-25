@@ -5,7 +5,7 @@
 		  <steps class="ordered">
 			  <step>
 				  <content>
-		  				<para>Для установки <token>designer</token> необходимо перейти на страницу <token>download</token>:</para>
+		  				<para>To install <token>designer</token> go to the <token>download</token> page:</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Installation_00"/>
 </mediaLink>
@@ -13,12 +13,13 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Скачать дистрибутив <token>designer</token>.</para>
+		  				<para>Download the <token>designer</token> installation package.</para>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Разблокировать (правая кнопка мышки на файле, свойства) и распаковать <legacyBold>designer.zip</legacyBold> в пустую директорию (например, c:\S#Designer\)</para>
+		  				<para>Unlock (right click the file, properties) and 
+		  				unpack <legacyBold>designer.zip</legacyBold> in an empty directory (for example, c:\S#Designer \)</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="Designer_Installation_01"/>
 </mediaLink>
@@ -26,7 +27,8 @@
 			  </step>
 			  			  <step>
 				  <content>
-		  				<para>Затем запустить <legacyBold>Designer.Update.exe</legacyBold> и нажать кнопку <legacyBold>Обновить</legacyBold>.</para>
+		  				<para>Then run <legacyBold>Designer.Update.exe</legacyBold> and 
+		  				click the <legacyBold>Update</legacyBold> button.</para>
 		  				<mediaLink>
 <image placement="center" xlink:href="Designer_Installation_02"/>
 </mediaLink>

@@ -18,7 +18,8 @@ namespace StockSharp.Algo.Candles.Compression
 	using System;
 	using System.Diagnostics;
 
-	using StockSharp.BusinessEntities;
+	using Ecng.Collections;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -30,6 +31,11 @@ namespace StockSharp.Algo.Candles.Compression
 		///// The instrument identifier by which data has been created.
 		///// </summary>
 		//SecurityId SecurityId { get; }
+
+		/// <summary>
+		/// Is empty value.
+		/// </summary>
+		bool IsEmpty { get; }
 
 		/// <summary>
 		/// The time of new data occurrence.
@@ -52,36 +58,38 @@ namespace StockSharp.Algo.Candles.Compression
 		Sides? OrderDirection { get; }
 	}
 
-	/// <summary>
-	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="Trade"/>.
-	/// </summary>
-	[DebuggerDisplay("{" + nameof(Trade) + "}")]
-	public class TradeCandleBuilderSourceValue : ICandleBuilderSourceValue
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TradeCandleBuilderSourceValue"/>.
-		/// </summary>
-		/// <param name="trade">Tick trade.</param>
-		public TradeCandleBuilderSourceValue(Trade trade)
-		{
-			Trade = trade;
-		}
+	///// <summary>
+	///// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="Trade"/>.
+	///// </summary>
+	//[DebuggerDisplay("{" + nameof(Trade) + "}")]
+	//public class TradeCandleBuilderSourceValue : ICandleBuilderSourceValue
+	//{
+	//	/// <summary>
+	//	/// Initializes a new instance of the <see cref="TradeCandleBuilderSourceValue"/>.
+	//	/// </summary>
+	//	/// <param name="trade">Tick trade.</param>
+	//	public TradeCandleBuilderSourceValue(Trade trade)
+	//	{
+	//		Trade = trade;
+	//	}
 
-		/// <summary>
-		/// Tick trade.
-		/// </summary>
-		public Trade Trade { get; }
+	//	/// <summary>
+	//	/// Tick trade.
+	//	/// </summary>
+	//	public Trade Trade { get; }
 
-		//SecurityId ICandleBuilderSourceValue.SecurityId => Trade.Security.ToSecurityId();
+	//	//SecurityId ICandleBuilderSourceValue.SecurityId => Trade.Security.ToSecurityId();
 
-		DateTimeOffset ICandleBuilderSourceValue.Time => Trade.Time;
+	//	bool ICandleBuilderSourceValue.IsEmpty => false;
 
-		decimal ICandleBuilderSourceValue.Price => Trade.Price;
+	//	DateTimeOffset ICandleBuilderSourceValue.Time => Trade.Time;
 
-		decimal? ICandleBuilderSourceValue.Volume => Trade.Volume == 0 ? (decimal?)null : Trade.Volume;
+	//	decimal ICandleBuilderSourceValue.Price => Trade.Price;
 
-		Sides? ICandleBuilderSourceValue.OrderDirection => Trade.OrderDirection;
-	}
+	//	decimal? ICandleBuilderSourceValue.Volume => Trade.Volume == 0 ? (decimal?)null : Trade.Volume;
+
+	//	Sides? ICandleBuilderSourceValue.OrderDirection => Trade.OrderDirection;
+	//}
 
 	/// <summary>
 	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="ExecutionMessage"/>.
@@ -108,6 +116,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 		//SecurityId ICandleBuilderSourceValue.SecurityId => Tick.SecurityId;
 
+		bool ICandleBuilderSourceValue.IsEmpty => Tick.TradePrice == null;
+
 		DateTimeOffset ICandleBuilderSourceValue.Time => Tick.ServerTime;
 
 		decimal ICandleBuilderSourceValue.Price => Tick.TradePrice ?? 0;
@@ -117,102 +127,83 @@ namespace StockSharp.Algo.Candles.Compression
 		Sides? ICandleBuilderSourceValue.OrderDirection => Tick.OriginSide;
 	}
 
-	/// <summary>
-	/// Types of candle depth based data.
-	/// </summary>
-	public enum DepthCandleSourceTypes
-	{
-		/// <summary>
-		/// Best bid.
-		/// </summary>
-		BestBid,
+	///// <summary>
+	///// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="MarketDepth"/>.
+	///// </summary>
+	//[DebuggerDisplay("{" + nameof(Depth) + "}")]
+	//public class DepthCandleBuilderSourceValue : ICandleBuilderSourceValue
+	//{
+	//	private readonly decimal? _price;
+	//	private readonly decimal? _volume;
 
-		/// <summary>
-		/// Best ask.
-		/// </summary>
-		BestAsk,
+	//	/// <summary>
+	//	/// Initializes a new instance of the <see cref="DepthCandleBuilderSourceValue"/>.
+	//	/// </summary>
+	//	/// <param name="depth">Market depth.</param>
+	//	/// <param name="type">Type of candle depth based data.</param>
+	//	public DepthCandleBuilderSourceValue(MarketDepth depth, Level1Fields type)
+	//	{
+	//		Depth = depth;
+	//		Type = type;
 
-		/// <summary>
-		/// Spread middle.
-		/// </summary>
-		Middle,
-	}
+	//		var pair = Depth.BestPair;
 
-	/// <summary>
-	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="MarketDepth"/>.
-	/// </summary>
-	[DebuggerDisplay("{" + nameof(Depth) + "}")]
-	public class DepthCandleBuilderSourceValue : ICandleBuilderSourceValue
-	{
-		private readonly decimal _price;
-		private readonly decimal? _volume;
+	//		if (pair != null)
+	//		{
+	//			switch (Type)
+	//			{
+	//				case Level1Fields.BestBidPrice:
+	//					var bid = pair.Bid;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DepthCandleBuilderSourceValue"/>.
-		/// </summary>
-		/// <param name="depth">Market depth.</param>
-		/// <param name="type">Type of candle depth based data.</param>
-		public DepthCandleBuilderSourceValue(MarketDepth depth, DepthCandleSourceTypes type)
-		{
-			Depth = depth;
-			Type = type;
+	//					if (bid != null)
+	//					{
+	//						_price = bid.Price;
+	//						_volume = bid.Volume;
+	//					}
 
-			var pair = Depth.BestPair;
+	//					break;
+	//				case Level1Fields.BestAskPrice:
+	//					var ask = pair.Ask;
 
-			if (pair != null)
-			{
-				switch (Type)
-				{
-					case DepthCandleSourceTypes.BestBid:
-						var bid = pair.Bid;
+	//					if (ask != null)
+	//					{
+	//						_price = ask.Price;
+	//						_volume = ask.Volume;
+	//					}
 
-						if (bid != null)
-						{
-							_price = bid.Price;
-							_volume = bid.Volume;
-						}
+	//					break;
+	//				case Level1Fields.SpreadMiddle:
+	//					_price = pair.MiddlePrice;
+	//					//_volume = pair.Bid.Volume;
+	//					break;
+	//				default:
+	//					throw new ArgumentOutOfRangeException();
+	//			}
+	//		}
+	//	}
 
-						break;
-					case DepthCandleSourceTypes.BestAsk:
-						var ask = pair.Ask;
+	//	/// <summary>
+	//	/// Market depth.
+	//	/// </summary>
+	//	public MarketDepth Depth { get; }
 
-						if (ask != null)
-						{
-							_price = ask.Price;
-							_volume = ask.Volume;
-						}
+	//	/// <summary>
+	//	/// Type of candle depth based data.
+	//	/// </summary>
+	//	public Level1Fields Type { get; }
 
-						break;
-					case DepthCandleSourceTypes.Middle:
-						_price = pair.MiddlePrice ?? 0;
-						//_volume = pair.Bid.Volume;
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-		}
+	//	bool ICandleBuilderSourceValue.IsEmpty => _price == null;
 
-		/// <summary>
-		/// Market depth.
-		/// </summary>
-		public MarketDepth Depth { get; }
+	//	//SecurityId ICandleBuilderSourceValue.SecurityId => Depth.Security.ToSecurityId();
 
-		/// <summary>
-		/// Type of candle depth based data.
-		/// </summary>
-		public DepthCandleSourceTypes Type { get; }
+	//	DateTimeOffset ICandleBuilderSourceValue.Time => Depth.LastChangeTime;
 
-		//SecurityId ICandleBuilderSourceValue.SecurityId => Depth.Security.ToSecurityId();
+	//	decimal ICandleBuilderSourceValue.Price => _price ?? 0;
 
-		DateTimeOffset ICandleBuilderSourceValue.Time => Depth.LastChangeTime;
+	//	decimal? ICandleBuilderSourceValue.Volume => _volume;
 
-		decimal ICandleBuilderSourceValue.Price => _price;
-
-		decimal? ICandleBuilderSourceValue.Volume => _volume;
-
-		Sides? ICandleBuilderSourceValue.OrderDirection => null;
-	}
+	//	Sides? ICandleBuilderSourceValue.OrderDirection => null;
+	//}
 
 	/// <summary>
 	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="QuoteChangeMessage"/>.
@@ -220,22 +211,22 @@ namespace StockSharp.Algo.Candles.Compression
 	[DebuggerDisplay("{" + nameof(QuoteChange) + "}")]
 	public class QuoteCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
-		private readonly decimal _price;
+		private readonly decimal? _price;
 		private readonly decimal? _volume;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DepthCandleBuilderSourceValue"/>.
+		/// Initializes a new instance of the <see cref="QuoteCandleBuilderSourceValue"/>.
 		/// </summary>
 		/// <param name="message">Messages containing quotes.</param>
 		/// <param name="type">Type of candle depth based data.</param>
-		public QuoteCandleBuilderSourceValue(QuoteChangeMessage message, DepthCandleSourceTypes type)
+		public QuoteCandleBuilderSourceValue(QuoteChangeMessage message, Level1Fields type)
 		{
 			QuoteChange = message;
 			Type = type;
 
 			switch (Type)
 			{
-				case DepthCandleSourceTypes.BestBid:
+				case Level1Fields.BestBidPrice:
 				{
 					var bid = message.GetBestBid();
 
@@ -248,7 +239,7 @@ namespace StockSharp.Algo.Candles.Compression
 					break;
 				}
 
-				case DepthCandleSourceTypes.BestAsk:
+				case Level1Fields.BestAskPrice:
 				{
 					var ask = message.GetBestAsk();
 
@@ -262,7 +253,7 @@ namespace StockSharp.Algo.Candles.Compression
 				}
 
 
-				case DepthCandleSourceTypes.Middle:
+				case Level1Fields.SpreadMiddle:
 				{
 					var bid = message.GetBestBid();
 					var ask = message.GetBestAsk();
@@ -289,13 +280,96 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Type of candle depth based data.
 		/// </summary>
-		public DepthCandleSourceTypes Type { get; }
+		public Level1Fields Type { get; }
 
 		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
 
+		bool ICandleBuilderSourceValue.IsEmpty => _price == null;
+
 		DateTimeOffset ICandleBuilderSourceValue.Time => QuoteChange.ServerTime;
 
-		decimal ICandleBuilderSourceValue.Price => _price;
+		decimal ICandleBuilderSourceValue.Price => _price ?? 0;
+
+		decimal? ICandleBuilderSourceValue.Volume => _volume;
+
+		Sides? ICandleBuilderSourceValue.OrderDirection => null;
+	}
+
+	/// <summary>
+	/// The <see cref="ICandleBuilder"/> source data is created on basis of <see cref="Level1ChangeMessage"/>.
+	/// </summary>
+	[DebuggerDisplay("{" + nameof(QuoteChange) + "}")]
+	public class Level1ChangeCandleBuilderSourceValue : ICandleBuilderSourceValue
+	{
+		private readonly decimal? _price;
+		private readonly decimal? _volume;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Level1ChangeCandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="message">The message containing the level1 market data.</param>
+		/// <param name="field">Level one market-data field, which is used as an candle value.</param>
+		public Level1ChangeCandleBuilderSourceValue(Level1ChangeMessage message, Level1Fields field)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			Level1Change = message;
+			Field = field;
+
+			_volume = null;
+
+			switch (field)
+			{
+				case Level1Fields.BestBidPrice:
+				case Level1Fields.BestAskPrice:
+				{
+					var price = GetValue(message, field);
+
+					if (price != null)
+						_price = price.Value;
+
+					break;
+				}
+
+				case Level1Fields.SpreadMiddle:
+				{
+					var bid = GetValue(message, Level1Fields.BestBidPrice);
+					var ask = GetValue(message, Level1Fields.BestAskPrice);
+
+					if (bid != null && ask != null)
+						_price = (ask.Value + bid.Value) / 2;
+
+					break;
+				}
+
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		private static decimal? GetValue(Level1ChangeMessage message, Level1Fields field)
+		{
+			return (decimal?)message.Changes.TryGetValue(field);
+		}
+
+		/// <summary>
+		/// Messages containing quotes.
+		/// </summary>
+		public Level1ChangeMessage Level1Change { get; }
+
+		/// <summary>
+		/// Level one market-data field, which is used as an candle value.
+		/// </summary>
+		public Level1Fields Field { get; }
+
+		//SecurityId ICandleBuilderSourceValue.SecurityId => QuoteChange.SecurityId;
+
+		bool ICandleBuilderSourceValue.IsEmpty => _price == null;
+
+		DateTimeOffset ICandleBuilderSourceValue.Time => Level1Change.ServerTime;
+
+		decimal ICandleBuilderSourceValue.Price => _price ?? 0;
 
 		decimal? ICandleBuilderSourceValue.Volume => _volume;
 

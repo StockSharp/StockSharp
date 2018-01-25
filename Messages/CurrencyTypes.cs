@@ -1033,6 +1033,12 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		CNT,
+
+		/// <summary>
+		/// Ethereum.
+		/// </summary>
+		[EnumMember]
+		ETH,
 // ReSharper restore InconsistentNaming
 	}
 }

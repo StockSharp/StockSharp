@@ -54,6 +54,16 @@
             Alert processing service.
             </summary>
     </member>
+    <member name="E:StockSharp.Alerts.AlertProcessingService.Registered">
+      <summary>
+            Schema registerating event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Alerts.AlertProcessingService.UnRegistered">
+      <summary>
+            Schema unregistering event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Alerts.AlertProcessingService.Register(StockSharp.Alerts.AlertSchema)">
       <summary>
             Register schema.
@@ -70,7 +80,7 @@
             Initializes a new instance of the <see cref="T:StockSharp.Alerts.AlertRule" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Alerts.AlertRule.Property">
+    <member name="P:StockSharp.Alerts.AlertRule.Field">
       <summary>
             Message property, which will be made a comparison with the value of <see cref="P:StockSharp.Alerts.AlertRule.Value" /> based on the criterion <see cref="P:StockSharp.Alerts.AlertRule.Operator" />.
             </summary>
@@ -84,6 +94,82 @@
       <summary>
             Comparison value.
             </summary>
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRule.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRule.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.Alerts.AlertRuleField">
+      <summary>
+            Tracking field info.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRuleField.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Alerts.AlertRuleField" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRuleField.#ctor(System.Reflection.PropertyInfo,System.Object)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Alerts.AlertRuleField" />.
+            </summary>
+      <param name="property">Tracking property.</param>
+      <param name="extraField">Extra info for <see cref="P:StockSharp.Alerts.AlertRuleField.Property" />.</param>
+    </member>
+    <member name="P:StockSharp.Alerts.AlertRuleField.DisplayName">
+      <summary>
+            Display name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Alerts.AlertRuleField.Property">
+      <summary>
+            Tracking property.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Alerts.AlertRuleField.ExtraField">
+      <summary>
+            Extra info for <see cref="P:StockSharp.Alerts.AlertRuleField.Property" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRuleField.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRuleField.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRuleField.ToString">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRuleField.GetHashCode">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRuleField.OnEquals(StockSharp.Alerts.AlertRuleField)">
+      <summary>
+            Compare <see cref="T:StockSharp.Alerts.AlertRuleField" /> on the equivalence.
+            </summary>
+      <param name="other">Another value with which to compare.</param>
+      <returns>
+        <see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Alerts.AlertRuleField.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Alerts.AlertRuleField" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.Alerts.AlertSchema">
       <summary>
@@ -186,9 +272,9 @@
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Alerts.AlertSettingsPanel.MessageType" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Alerts.AlertSettingsPanel.PropertyProperty">
+    <member name="F:StockSharp.Alerts.AlertSettingsPanel.FieldProperty">
       <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Alerts.AlertSettingsPanel.Property" />.
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Alerts.AlertSettingsPanel.Field" />.
             </summary>
     </member>
     <member name="F:StockSharp.Alerts.AlertSettingsPanel.OperatorProperty">
@@ -206,7 +292,7 @@
             Message type.
             </summary>
     </member>
-    <member name="P:StockSharp.Alerts.AlertSettingsPanel.Property">
+    <member name="P:StockSharp.Alerts.AlertSettingsPanel.Field">
       <summary>
             Message property, which will be made a comparison with the value of <see cref="P:StockSharp.Alerts.AlertSettingsPanel.Value" /> based on the criterion <see cref="P:StockSharp.Alerts.AlertSettingsPanel.Operator" />.
             </summary>
@@ -301,6 +387,16 @@
     <member name="T:StockSharp.Alerts.IAlertProcessingService">
       <summary>
             Defines an alert processing service.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Alerts.IAlertProcessingService.Registered">
+      <summary>
+            Schema registerating event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Alerts.IAlertProcessingService.UnRegistered">
+      <summary>
+            Schema unregistering event.
             </summary>
     </member>
     <member name="M:StockSharp.Alerts.IAlertProcessingService.Register(StockSharp.Alerts.AlertSchema)">

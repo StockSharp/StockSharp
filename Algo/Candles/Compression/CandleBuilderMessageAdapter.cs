@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			public MarketDataMessage MarketDataMessage { get; set; }
 
-			public MarketDataTypes? DataType { get; set; }
+			public ICandleBuilderValueTransform Transform { get; set; }
 
 			public DateTimeOffset? LastTime { get; set; }
 
@@ -70,6 +70,28 @@ namespace StockSharp.Algo.Candles.Compression
 			public ExchangeBoard Board { get; set; }
 
 			public CandleMessage CurrentCandleMessage { get; set; }
+
+			private MarketDataTypes[] _supportedMarketDataTypes = ArrayHelper.Empty<MarketDataTypes>();
+
+			public MarketDataTypes[] SupportedMarketDataTypes
+			{
+				get => _supportedMarketDataTypes;
+				set
+				{
+					if (value == null)
+						throw new ArgumentNullException(nameof(value));
+
+					_supportedMarketDataTypes = value;
+				}
+			}
+		}
+
+		private class DummyCandleBuilderValueTransform : BaseCandleBuilderValueTransform
+		{
+			public DummyCandleBuilderValueTransform(MarketDataTypes buildFrom)
+				: base(buildFrom)
+			{
+			}
 		}
 
 		private readonly Dictionary<SecurityId, List<SeriesInfo>> _seriesInfos = new Dictionary<SecurityId, List<SeriesInfo>>();
@@ -79,35 +101,6 @@ namespace StockSharp.Algo.Candles.Compression
 		private readonly SyncObject _sync = new SyncObject();
 
 		private readonly CandleBuildersList _candleBuilders;
-
-		private MarketDataTypes _buildCandlesFrom;
-
-		/// <summary>
-		/// Build candles from.
-		/// </summary>
-		public MarketDataTypes BuildCandlesFrom
-		{
-			get => _buildCandlesFrom;
-			set
-			{
-				switch (value)
-				{
-					//case MarketDataTypes.Level1:
-					case MarketDataTypes.MarketDepth:
-					case MarketDataTypes.Trades:
-						_buildCandlesFrom = value;
-						break;
-
-					default:
-						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str721);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Type of candle depth based data.
-		/// </summary>
-		public DepthCandleSourceTypes DepthCandleSourceType { get; set; }
 
 		/// <summary>
 		/// Candles builders.
@@ -126,9 +119,6 @@ namespace StockSharp.Algo.Candles.Compression
 				throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 			_exchangeInfoProvider = exchangeInfoProvider;
-
-			BuildCandlesFrom = MarketDataTypes.Trades;
-			DepthCandleSourceType = DepthCandleSourceTypes.Middle;
 
 			_candleBuilders = new CandleBuildersList
 			{
@@ -175,7 +165,6 @@ namespace StockSharp.Algo.Candles.Compression
 							base.SendInMessage(message);
 							break;
 						}
-
 					}
 
 					break;
@@ -218,15 +207,12 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					base.OnInnerAdapterNewOutMessage(message);
 					
-					if (!CheckCanBuildCandlesFrom(MarketDataTypes.Trades))
-						break;
-
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType != ExecutionTypes.Tick)
+					if (execMsg.ExecutionType != ExecutionTypes.Tick && execMsg.ExecutionType != ExecutionTypes.OrderLog)
 						break;
 
-					ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, MarketDataTypes.Trades, () => new TickCandleBuilderSourceValue(execMsg));
+					ProcessValue(execMsg.SecurityId, execMsg.OriginalTransactionId, execMsg);
 					break;
 				}
 
@@ -234,23 +220,21 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					base.OnInnerAdapterNewOutMessage(message);
 
-					if (!CheckCanBuildCandlesFrom(MarketDataTypes.MarketDepth))
-						break;
-
 					var quoteMsg = (QuoteChangeMessage)message;
 
-					ProcessValue(quoteMsg.SecurityId, 0, MarketDataTypes.MarketDepth, () => new QuoteCandleBuilderSourceValue(quoteMsg, DepthCandleSourceType));
+					ProcessValue(quoteMsg.SecurityId, 0, quoteMsg);
 					break;
 				}
 
-				//case MessageTypes.Level1Change:
-				//{
-				//	if (!CheckCanBuildCandlesFrom(MarketDataTypes.Level1))
-				//		break;
+				case MessageTypes.Level1Change:
+				{
+					base.OnInnerAdapterNewOutMessage(message);
 
-				//	var l1Msg = (Level1ChangeMessage)message;
-				//	break;
-				//}
+					var l1Msg = (Level1ChangeMessage)message;
+					
+					ProcessValue(l1Msg.SecurityId, 0, l1Msg);
+					break;
+				}
 
 				case MessageTypes.CandleTimeFrame:
 				case MessageTypes.CandlePnF:
@@ -329,7 +313,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 				var pair = _seriesInfosByDates.Peek();
 
-				while (pair.Key <= InnerAdapter.CurrentTime)
+				while (pair.Key <= CurrentTime)
 				{
 					_seriesInfosByDates.Dequeue();
 
@@ -346,13 +330,14 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void ProcessMarketDataResponse(MarketDataMessage mdMsg)
 		{
+			RaiseNewOutMessage(mdMsg);
+
 			var info = _seriesInfosByTransactions.TryGetValue(mdMsg.OriginalTransactionId);
 
 			if (info == null)
-			{
-				RaiseNewOutMessage(mdMsg);
-                return;
-			}
+				return;
+
+			SetAvailableMarketDataType(info, mdMsg);
 
 			if (!mdMsg.IsNotSupported && mdMsg.Error == null)
 			{
@@ -364,11 +349,12 @@ namespace StockSharp.Algo.Candles.Compression
 
 			_seriesInfosByTransactions.Remove(mdMsg.OriginalTransactionId);
 
-			switch (info.DataType)
+			switch (info.Transform.BuildFrom)
 			{
 				case MarketDataTypes.Level1:
 				case MarketDataTypes.MarketDepth:
 				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
 				{
 					SendNotSupported(info);
 					break;
@@ -407,20 +393,23 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				if (!info.MarketDataMessage.IsHistory)
 					return;
+				
+				//RemoveSeriesInfo(info);
+				//RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = info.MarketDataMessage.TransactionId, IsHistory = true });
 
-				RemoveSeriesInfo(info);
-				RaiseNewOutMessage(new MarketDataFinishedMessage { OriginalTransactionId = info.MarketDataMessage.TransactionId, IsHistory = true });
-
-				return;
+				//return;
 			}
+
+			SetAvailableMarketDataType(info, message);
 
 			_seriesInfosByTransactions.Remove(message.OriginalTransactionId);
 
-			switch (info.DataType)
+			switch (info.Transform.BuildFrom)
 			{
 				case MarketDataTypes.Level1:
 				case MarketDataTypes.MarketDepth:
 				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
 				{
 					SendMarketDataFinished(info);
 					break;
@@ -445,29 +434,22 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		private bool CheckCanBuildCandlesFrom(MarketDataTypes marketDataType)
-		{
-			return BuildCandlesFrom == marketDataType;
-		}
-
 		private void Subscribe(SeriesInfo info, bool isBack)
 		{
-			info.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
-			info.DataType = GetCurrentDataType(info);
+			info.TransactionId = TransactionIdGenerator.GetNextId();
+			info.Transform = GetCurrentDataType(info);
 
 			var msg = (MarketDataMessage)info.MarketDataMessage.Clone();
 			msg.TransactionId = info.TransactionId;
 			msg.From = info.LastTime;
 
-			if (msg.DataType != info.DataType.Value)
-			{
-				msg.DataType = info.DataType.Value;
-				msg.Arg = null;
-			}
+			var reseted = ResetMarketDataMessageArg(info, msg);
 
 			_seriesInfosByTransactions.Add(info.TransactionId, info);
 
-			if (isBack)
+			msg.ValidateBounds();
+
+			if (isBack || reseted)
 			{
 				msg.IsBack = true;
 				msg.Adapter = this;
@@ -479,17 +461,18 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void UnSubscribe(SeriesInfo info, bool isBack)
 		{
-			RemoveSeriesInfo(info);
+			SendMarketDataFinished(info);
 
-			if (info.DataType == null)
+			if (info.Transform == null)
 				return;
 
 			var mdMsg = (MarketDataMessage)info.MarketDataMessage.Clone();
 			mdMsg.OriginalTransactionId = info.TransactionId;
-			mdMsg.DataType = info.DataType.Value;
 			mdMsg.IsSubscribe = false;
 
-			if (isBack)
+			var reseted = ResetMarketDataMessageArg(info, mdMsg);
+
+			if (isBack || reseted)
 			{
 				mdMsg.IsBack = true;
 				RaiseNewOutMessage(mdMsg);
@@ -498,22 +481,113 @@ namespace StockSharp.Algo.Candles.Compression
 				base.SendInMessage(mdMsg);
 		}
 
-		private MarketDataTypes GetCurrentDataType(SeriesInfo info)
+		private static bool ResetMarketDataMessageArg(SeriesInfo info, MarketDataMessage msg)
 		{
+			var buildFrom = info.Transform.BuildFrom;
+
+			if (msg.DataType == buildFrom)
+				return false;
+
+			if (buildFrom.IsCandleDataType())
+				throw new InvalidOperationException(buildFrom.ToString());
+
+			msg.DataType = buildFrom;
+			msg.Arg = null;
+
+			return true;
+		}
+
+		private static ICandleBuilderValueTransform GetCurrentDataType(SeriesInfo info)
+		{
+			var dataType = info.MarketDataMessage.DataType;
+
 			switch (info.MarketDataMessage.BuildCandlesMode)
 			{
 				case BuildCandlesModes.LoadAndBuild:
-					return info.DataType == null ? info.MarketDataMessage.DataType : BuildCandlesFrom;
+					return info.Transform == null ? CreateTransform(dataType, null) : CreateTransform(info);
 
 				case BuildCandlesModes.Load:
-					return info.MarketDataMessage.DataType;
+					return CreateTransform(dataType, null);
 
 				case BuildCandlesModes.Build:
-					return BuildCandlesFrom;
+					return CreateTransform(info);
 
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
+
+		private static ICandleBuilderValueTransform CreateTransform(SeriesInfo info)
+		{
+			if (info.MarketDataMessage.BuildCandlesFrom != null)
+				return CreateTransform(info.MarketDataMessage.BuildCandlesFrom.Value, info.MarketDataMessage.BuildCandlesField);
+
+			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.Trades))
+				return CreateTransform(MarketDataTypes.Trades, null);
+
+			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.MarketDepth))
+				return CreateTransform(MarketDataTypes.MarketDepth, null);
+
+			if (info.SupportedMarketDataTypes.Contains(MarketDataTypes.Level1))
+				return CreateTransform(MarketDataTypes.Level1, null);
+
+			return CreateTransform(MarketDataTypes.Trades, null);
+		}
+
+		private static ICandleBuilderValueTransform CreateTransform(MarketDataTypes dataType, Level1Fields? field)
+		{
+			switch (dataType)
+			{
+				case MarketDataTypes.Trades:
+					return new TickCandleBuilderValueTransform();
+
+				case MarketDataTypes.MarketDepth:
+				{
+					var t = new QuoteCandleBuilderValueTransform();
+
+					if (field != null)
+						t.Type = field.Value;
+
+					return t;
+				}
+
+				case MarketDataTypes.Level1:
+				{
+					var t = new Level1CandleBuilderValueTransform();
+
+					if (field != null)
+						t.Type = field.Value;
+
+					return t;
+				}
+
+				case MarketDataTypes.OrderLog:
+				{
+					var t = new OrderLogCandleBuilderValueTransform();
+
+					if (field != null)
+						t.Type = field.Value;
+
+					return t;
+				}
+
+				case MarketDataTypes.CandleTimeFrame:
+				case MarketDataTypes.CandleTick:
+				case MarketDataTypes.CandleVolume:
+				case MarketDataTypes.CandleRange:
+				case MarketDataTypes.CandlePnF:
+				case MarketDataTypes.CandleRenko:
+					return new DummyCandleBuilderValueTransform(dataType);
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+			}
+		}
+
+		private static void SetAvailableMarketDataType(SeriesInfo info, Message msg)
+		{
+			if (info.SupportedMarketDataTypes.IsEmpty() && msg.Adapter != null)
+				info.SupportedMarketDataTypes = msg.Adapter.SupportedMarketDataTypes;
 		}
 
 		private void SendNotSupported(SeriesInfo info)
@@ -543,6 +617,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private void SendCandle(SeriesInfo info, CandleMessage candleMsg)
 		{
+			//if (info.LastTime > candleMsg.OpenTime)
+			//	return;
+
 			info.LastTime = candleMsg.OpenTime;
 
 			var clone = (CandleMessage)candleMsg.Clone();
@@ -606,27 +683,25 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		private void ProcessValue(SecurityId securityId, long transactionId, MarketDataTypes dataType, Func<ICandleBuilderSourceValue> getValue)
+		private void ProcessValue<TMessage>(SecurityId securityId, long transactionId, TMessage message)
+			where TMessage : Message
 		{
 			var infos = _seriesInfos.TryGetValue(securityId);
 
 			if (infos == null)
 				return;
 
-			ICandleBuilderSourceValue value = null;
-
 			foreach (var info in infos)
 			{
-				if (info.DataType != dataType)
+				var transform = info.Transform;
+
+				if (transform?.Process(message) != true)
 					continue;
 
 				if (info.TransactionId != transactionId && (transactionId != 0 || info.IsHistory))
 					continue;
 
-				if (value == null)
-					value = getValue();
-
-				if (!CheckTime(info, value))
+				if (!CheckTime(info, transform.Time))
 					continue;
 
 				var mdMsg = info.MarketDataMessage;
@@ -635,9 +710,9 @@ namespace StockSharp.Algo.Candles.Compression
 				if (builder == null)
 					throw new InvalidOperationException($"Builder for {mdMsg.DataType} not found.");
 
-				info.LastTime = value.Time;
+				info.LastTime = transform.Time;
 
-				var result = builder.Process(mdMsg, info.CurrentCandleMessage, value);
+				var result = builder.Process(mdMsg, info.CurrentCandleMessage, transform);
 
 				foreach (var candleMessage in result)
 				{
@@ -647,36 +722,35 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		private static bool CheckTime(SeriesInfo info, ICandleBuilderSourceValue v)
-		{
-			var time = v.Time;
+		//private static bool CheckTime(SeriesInfo info, DateTimeOffset time)
+		//{
+		//	if (info.LastTime > time)
+		//		return false;
 
-			if (info.LastTime > time)
-				return false;
+		//	if (!((info.MarketDataMessage.From == null || time >= info.MarketDataMessage.From) && (info.MarketDataMessage.To == null || time < info.MarketDataMessage.To)))
+		//		return false;
 
-			if (!((info.MarketDataMessage.From == null || time >= info.MarketDataMessage.From) && (info.MarketDataMessage.To == null || time < info.MarketDataMessage.To)))
-				return false;
+		//	if (info.CurrentPeriod == null || info.CurrentPeriod.Item1.Date.Date != time.Date.Date)
+		//		return CheckTime(info, time);
 
-			if (info.CurrentPeriod == null || info.CurrentPeriod.Item1.Date.Date != time.Date.Date)
-				return CheckTime(info, time);
+		//	var exchangeTime = time.ToLocalTime(info.Board.TimeZone);
+		//	var tod = exchangeTime.TimeOfDay;
+		//	var period = info.CurrentPeriod.Item2;
 
-			var exchangeTime = time.ToLocalTime(info.Board.TimeZone);
-			var tod = exchangeTime.TimeOfDay;
-			var period = info.CurrentPeriod.Item2;
+		//	var res = period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
 
-			var res = period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
+		//	if (res)
+		//		return true;
 
-			if (res)
-				return true;
-
-			return CheckTime(info, time);
-		}
+		//	return CheckTime(info, time);
+		//}
 
 		private static bool CheckTime(SeriesInfo info, DateTimeOffset time)
 		{
-			WorkingTimePeriod period;
+			if (info.LastTime > time)
+				return false;
 
-			var res = info.Board.IsTradeTime(time, out period);
+			var res = info.Board.IsTradeTime(time, out var period);
 			info.CurrentPeriod = Tuple.Create(time, period);
 
 			return res;

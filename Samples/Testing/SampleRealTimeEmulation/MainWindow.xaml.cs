@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleRealTimeEmulation
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Windows;
@@ -271,9 +270,9 @@ namespace SampleRealTimeEmulation
 				_connector.RegisterOrder(newOrder.Order);
 		}
 
-		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
+		private void OrderGrid_OnOrderCanceling(Order order)
 		{
-			orders.ForEach(_connector.CancelOrder);
+			_connector.CancelOrder(order);
 		}
 
 		private void OrderGrid_OnOrderReRegistering(Order order)

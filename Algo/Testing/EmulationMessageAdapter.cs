@@ -118,8 +118,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Reset:
 					ProcessedMessageCount = 0;
 
-					var incGen = TransactionIdGenerator as IncrementalIdGenerator;
-					if (incGen != null)
+					if (TransactionIdGenerator is IncrementalIdGenerator incGen)
 						incGen.Current = Emulator.Settings.InitialTransactionId;
 
 					_currentTime = default(DateTimeOffset);

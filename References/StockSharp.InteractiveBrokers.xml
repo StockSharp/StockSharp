@@ -105,6 +105,9 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.TimeFrames">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition">
       <summary>
             Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
@@ -154,7 +157,7 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.MarketDataType">
       <summary>
-            Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
+            Whether to use <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.RealTime" /> data or <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.Frozen" /> on the broker server. By default, the <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.RealTime" /> data is used.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ServerLogLevel">
@@ -170,11 +173,6 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTime">
       <summary>
             The connection time.
-            </summary>
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTimeZone">
-      <summary>
-            The time zone for <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ConnectedTime" />.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.ExtraAuth">
@@ -215,34 +213,34 @@
             Financial reports types.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Overview">
+    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.CompanyOverview">
       <summary>
-            Overview.
+            Company overview.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Statements">
+    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialStatements">
       <summary>
-            Statements.
+            Financial statements.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Summary">
+    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialSummary">
       <summary>
-            Summary.
+            Financial summary.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Ratio">
+    <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.FinancialRatio">
       <summary>
-            Ratio.
+            Financial ratios.
             </summary>
     </member>
     <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Estimates">
       <summary>
-            Estimates.
+            Analyst estimates.
             </summary>
     </member>
     <member name="F:StockSharp.InteractiveBrokers.FundamentalReports.Calendar">
       <summary>
-            Chart.
+            Company calendar from Wall Street Horizons.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.GenericFieldTypes">
@@ -1547,6 +1545,26 @@
             Extra conditions.
             </summary>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionMaker">
+      <summary>
+            Identifies a person as the responsible party for investment decisions within the firm. Orders covered by MiFID 2 (Markets in Financial Instruments Directive 2) must include either <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionMaker" /> or <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionAlgo" /> field (but not both).
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionAlgo">
+      <summary>
+            Identifies the algorithm responsible for investment decisions within the firm. Orders covered under MiFID 2 must include either <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionMaker" /> or <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2DecisionAlgo" />, but cannot have both.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2ExecutionTrader">
+      <summary>
+            For MiFID 2 reporting: identifies a person as the responsible party for the execution of a transaction within the firm.
+            </summary>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Mifid2ExecutionAlgo">
+      <summary>
+            For MiFID 2 reporting: identifies the algorithm responsible for the execution of a transaction within the firm.
+            </summary>
+    </member>
     <member name="T:StockSharp.InteractiveBrokers.ExchangeNewsTypes">
       <summary>
             News types.
@@ -1768,7 +1786,7 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.MarketDataType">
       <summary>
-            Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
+            Whether to use <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.RealTime" /> data or <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.Frozen" /> on the broker server. By default, the <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersMarketDataTypes.RealTime" /> data is used.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UseV100Plus">
@@ -2397,6 +2415,11 @@
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Tick">
+      <summary>
+            Tick candle.
+            </summary>
+    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second1">
       <summary>
             One second time frame.
@@ -2467,11 +2490,6 @@
             Monthly time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Year">
-      <summary>
-            Annual time frame.
-            </summary>
-    </member>
     <member name="T:StockSharp.InteractiveBrokers.SoftDollarTier">
       <summary>
             Soft Dollar Tier information.
@@ -2520,6 +2538,31 @@
     <member name="P:StockSharp.InteractiveBrokers.SoftDollarTierMessage.Tiers">
       <summary>
             Tiers.
+            </summary>
+    </member>
+    <member name="T:StockSharp.InteractiveBrokers.TickByTickDataTypes">
+      <summary>
+            Tick-by-tick data types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Last">
+      <summary>
+            Last trade.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.TickByTickDataTypes.Midpoint">
+      <summary>
+            Spread middle.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.TickByTickDataTypes.BidAsk">
+      <summary>
+            Best pair quotes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.InteractiveBrokers.TickByTickDataTypes.AllLast">
+      <summary>
+            All last trades.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.Web.Market">

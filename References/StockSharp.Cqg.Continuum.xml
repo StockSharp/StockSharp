@@ -62,10 +62,13 @@
             Server address.
             </summary>
     </member>
-    <member name="F:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.TimeFrames">
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.AllTimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+    </member>
+    <member name="P:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.TimeFrames">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -87,7 +90,7 @@
     </member>
     <member name="T:StockSharp.Cqg.Continuum.CqgContinuumTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the CQG Continuum.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.Cqg.Continuum" />.
             </summary>
     </member>
     <member name="M:StockSharp.Cqg.Continuum.CqgContinuumTrader.#ctor">

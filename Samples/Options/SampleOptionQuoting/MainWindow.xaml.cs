@@ -46,11 +46,15 @@ namespace SampleOptionQuoting
 
 	public partial class MainWindow
 	{
-		private class DummyProvider : CollectionSecurityProvider, IMarketDataProvider
+		private class DummyProvider : CollectionSecurityProvider, IMarketDataProvider, IPositionProvider
 		{
-			public DummyProvider(IEnumerable<Security> securities)
+			public DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> positions)
 				: base(securities)
 			{
+				if (positions == null)
+					throw new ArgumentNullException(nameof(positions));
+
+				_positions = positions;
 			}
 
 			event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> IMarketDataProvider.ValuesChanged
@@ -118,6 +122,22 @@ namespace SampleOptionQuoting
 					Level1Fields.BestAskVolume
 				};
 			}
+
+			private readonly IEnumerable<Position> _positions;
+
+			IEnumerable<Position> IPositionProvider.Positions => _positions;
+
+			event Action<Position> IPositionProvider.NewPosition
+			{
+				add { }
+				remove { }
+			}
+
+			event Action<Position> IPositionProvider.PositionChanged
+			{
+				add { }
+				remove { }
+			}
 		}
 
 		private const string _settingsFile = "connection.xml";
@@ -138,7 +158,6 @@ namespace SampleOptionQuoting
 		private bool _isConnected;
 
 		private Security SelectedOption => (Security)Options.SelectedItem;
-
 		private Security SelectedAsset => (Security)Assets.SelectedItem;
 
 		public static MainWindow Instance { get; private set; }
@@ -206,93 +225,101 @@ namespace SampleOptionQuoting
 		private void DrawTestData()
 		{
 			//
-			// draw test data on the pos chart
+			// prepare test data
 
 			var asset = new Security
 			{
-				Id = "RIM4@FORTS"
+				Id = "RIM4@FORTS",
+				PriceStep = 10,
 			};
 
-			var dummyProvider = new DummyProvider(new[] {asset});
-
-			PosChart.AssetPosition = new Position
+			asset.LastTrade = new Trade
 			{
 				Security = asset,
-				CurrentValue = -1,
+				Price = 130000,
 			};
+
+			var expiryDate = new DateTime(2014, 09, 15);
+			var currDate = new DateTime(2014, 08, 15);
+
+			var securities = new List<Security>
+			{
+				asset,
+
+				CreateStrike(105000, 10, 60, OptionTypes.Call, expiryDate, asset, 100),
+				CreateStrike(110000, 10, 53, OptionTypes.Call, expiryDate, asset, 343),
+				CreateStrike(115000, 10, 47, OptionTypes.Call, expiryDate, asset, 3454),
+				CreateStrike(120000, 78, 42, OptionTypes.Call, expiryDate, asset, null),
+				CreateStrike(125000, 32, 35, OptionTypes.Call, expiryDate, asset, 100),
+				CreateStrike(130000, 3245, 32, OptionTypes.Call, expiryDate, asset, 55),
+				CreateStrike(135000, 3454, 37, OptionTypes.Call, expiryDate, asset, 456),
+				CreateStrike(140000, 34, 45, OptionTypes.Call, expiryDate, asset, 4),
+				CreateStrike(145000, 3566, 51, OptionTypes.Call, expiryDate, asset, 67),
+				CreateStrike(150000, 454, 57, OptionTypes.Call, expiryDate, asset, null),
+				CreateStrike(155000, 10, 59, OptionTypes.Call, expiryDate, asset, 334),
+
+				CreateStrike(105000, 10, 50, OptionTypes.Put, expiryDate, asset, 100),
+				CreateStrike(110000, 10, 47, OptionTypes.Put, expiryDate, asset, 343),
+				CreateStrike(115000, 6788, 42, OptionTypes.Put, expiryDate, asset, 3454),
+				CreateStrike(120000, 10, 37, OptionTypes.Put, expiryDate, asset, null),
+				CreateStrike(125000, 567, 32, OptionTypes.Put, expiryDate, asset, 100),
+				CreateStrike(130000, 4577, 30, OptionTypes.Put, expiryDate, asset, 55),
+				CreateStrike(135000, 67835, 32, OptionTypes.Put, expiryDate, asset, 456),
+				CreateStrike(140000, 13245, 35, OptionTypes.Put, expiryDate, asset, 4),
+				CreateStrike(145000, 10, 37, OptionTypes.Put, expiryDate, asset, 67),
+				CreateStrike(150000, 454, 39, OptionTypes.Put, expiryDate, asset, null),
+				CreateStrike(155000, 10, 41, OptionTypes.Put, expiryDate, asset, 334)
+			};
+
+			var dummyProvider = new DummyProvider(securities, new[]
+			{
+				new Position
+				{
+					Security = asset,
+					CurrentValue = -1,
+				},
+
+				new Position
+				{
+					Security = securities.First(s => s.OptionType == OptionTypes.Call),
+					CurrentValue = 10,
+				},
+
+				new Position
+				{
+					Security = securities.First(s => s.OptionType == OptionTypes.Put),
+					CurrentValue = -3,
+				}
+			});
+
+			//
+			// draw test data on the pos chart
 
 			PosChart.MarketDataProvider = dummyProvider;
 			PosChart.SecurityProvider = dummyProvider;
+			PosChart.PositionProvider = dummyProvider;
 
-			var expDate = new DateTime(2014, 6, 14);
+			PosChart.UnderlyingAsset = asset;
+			PosChart.Options.Add(securities.First(s => s.OptionType == OptionTypes.Call));
+			PosChart.Options.Add(securities.First(s => s.OptionType == OptionTypes.Put));
 
-			PosChart.Positions.Add(new Position
-			{
-				Security = new Security
-				{
-					Code = "RI C 110000",
-					Strike = 110000,
-					ImpliedVolatility = 45,
-					OptionType = OptionTypes.Call,
-					ExpiryDate = expDate,
-					Board = ExchangeBoard.Forts,
-					UnderlyingSecurityId = asset.Id
-				},
-				CurrentValue = 10,
-			});
-			PosChart.Positions.Add(new Position
-			{
-				Security = new Security
-				{
-					Code = "RI P 95000",
-					Strike = 95000,
-					ImpliedVolatility = 30,
-					OptionType = OptionTypes.Put,
-					ExpiryDate = expDate,
-					Board = ExchangeBoard.Forts,
-					UnderlyingSecurityId = asset.Id
-				},
-				CurrentValue = -3,
-			});
-
-			PosChart.Refresh(100000, 10, new DateTime(2014, 5, 5), expDate);
+			PosChart.Refresh(null, currDate, expiryDate);
 
 			//
 			// draw test data on the desk
 
-			var expiryDate = new DateTime(2014, 09, 15);
-
 			_model.MarketDataProvider = dummyProvider;
 			_model.UnderlyingAsset = asset;
 
-			_model.Add(CreateStrike(05000, 10, 60, OptionTypes.Call, expiryDate, asset, 100));
-			_model.Add(CreateStrike(10000, 10, 53, OptionTypes.Call, expiryDate, asset, 343));
-			_model.Add(CreateStrike(15000, 10, 47, OptionTypes.Call, expiryDate, asset, 3454));
-			_model.Add(CreateStrike(20000, 78, 42, OptionTypes.Call, expiryDate, asset, null));
-			_model.Add(CreateStrike(25000, 32, 35, OptionTypes.Call, expiryDate, asset, 100));
-			_model.Add(CreateStrike(30000, 3245, 32, OptionTypes.Call, expiryDate, asset, 55));
-			_model.Add(CreateStrike(35000, 3454, 37, OptionTypes.Call, expiryDate, asset, 456));
-			_model.Add(CreateStrike(40000, 34, 45, OptionTypes.Call, expiryDate, asset, 4));
-			_model.Add(CreateStrike(45000, 3566, 51, OptionTypes.Call, expiryDate, asset, 67));
-			_model.Add(CreateStrike(50000, 454, 57, OptionTypes.Call, expiryDate, asset, null));
-			_model.Add(CreateStrike(55000, 10, 59, OptionTypes.Call, expiryDate, asset, 334));
-
-			_model.Add(CreateStrike(05000, 10, 50, OptionTypes.Put, expiryDate, asset, 100));
-			_model.Add(CreateStrike(10000, 10, 47, OptionTypes.Put, expiryDate, asset, 343));
-			_model.Add(CreateStrike(15000, 6788, 42, OptionTypes.Put, expiryDate, asset, 3454));
-			_model.Add(CreateStrike(20000, 10, 37, OptionTypes.Put, expiryDate, asset, null));
-			_model.Add(CreateStrike(25000, 567, 32, OptionTypes.Put, expiryDate, asset, 100));
-			_model.Add(CreateStrike(30000, 4577, 30, OptionTypes.Put, expiryDate, asset, 55));
-			_model.Add(CreateStrike(35000, 67835, 32, OptionTypes.Put, expiryDate, asset, 456));
-			_model.Add(CreateStrike(40000, 13245, 35, OptionTypes.Put, expiryDate, asset, 4));
-			_model.Add(CreateStrike(45000, 10, 37, OptionTypes.Put, expiryDate, asset, 67));
-			_model.Add(CreateStrike(50000, 454, 39, OptionTypes.Put, expiryDate, asset, null));
-			_model.Add(CreateStrike(55000, 10, 41, OptionTypes.Put, expiryDate, asset, 334));
+			foreach (var option in securities.Where(s => s.Type == SecurityTypes.Option))
+			{
+				_model.Add(option);
+			}
 
 			//
 			// draw test data on the smile chart
 
-			RefreshSmile(new DateTime(2014, 08, 15));
+			RefreshSmile(currDate);
 		}
 
 		private static Security CreateStrike(decimal strike, decimal oi, decimal iv, OptionTypes type, DateTime expiryDate, Security asset, decimal? lastTrade)
@@ -377,18 +404,18 @@ namespace SampleOptionQuoting
 				if (!assetPos && !newPos)
 					return;
 
-				if (assetPos)
-					PosChart.AssetPosition = position;
+				//if (assetPos)
+				//	PosChart.AssetPosition = position;
 
-				if (newPos)
-					PosChart.Positions.Add(position);
+				//if (newPos)
+				//	PosChart.Positions.Add(position);
 
 				RefreshChart();
 			});
 
 			Connector.PositionChanged += position => this.GuiAsync(() =>
 			{
-				if ((PosChart.AssetPosition != null && PosChart.AssetPosition == position) || PosChart.Positions.Cache.Contains(position))
+				if ((PosChart.UnderlyingAsset != null && PosChart.UnderlyingAsset == position.Security) || PosChart.Options.Contains(position.Security))
 					RefreshChart();
 			});
 
@@ -441,14 +468,16 @@ namespace SampleOptionQuoting
 
 				ClearSmiles();
 
-				PosChart.Positions.Clear();
-				PosChart.AssetPosition = null;
-				PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
+				PosChart.UnderlyingAsset = null;
+				//PosChart.Positions.Clear();
+				//PosChart.AssetPosition = null;
+				//PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
 
 				Portfolio.Portfolios = new PortfolioDataSource(Connector);
 
 				PosChart.MarketDataProvider = Connector;
 				PosChart.SecurityProvider = Connector;
+				PosChart.PositionProvider = Connector;
 
 				Connector.Connect();
 			}
@@ -462,7 +491,7 @@ namespace SampleOptionQuoting
 			var trade = asset.LastTrade;
 
 			if (trade != null)
-				PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.NowWithOffset, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
+				PosChart.Refresh(trade.Price);
 		}
 
 		private void RefreshSmile(DateTimeOffset? time = null)
@@ -542,10 +571,10 @@ namespace SampleOptionQuoting
 			if (portfolio == null)
 				return;
 
-			PosChart.Positions.AddRange(_model.Options.Select(s => Connector.GetPosition(portfolio, s)));
+			//PosChart.Positions.AddRange(_model.Options.Select(s => Connector.GetPosition(portfolio, s)));
 
-			if (SelectedAsset != null)
-				PosChart.AssetPosition = Connector.GetPosition(portfolio, SelectedAsset);
+			//if (SelectedAsset != null)
+			//	PosChart.AssetPosition = Connector.GetPosition(portfolio, SelectedAsset);
 
 			RefreshChart();
 		}

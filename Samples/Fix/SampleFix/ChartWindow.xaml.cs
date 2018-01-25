@@ -56,7 +56,7 @@
 				IsSubscribe = true,
 				From = from,
 				To = to,
-			});
+			}.ValidateBounds());
 		}
 
 		private void ProcessNewMessage(Message message)

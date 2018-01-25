@@ -27,8 +27,7 @@ namespace XMLCommToHTM
 	{
 		static string Generate(NamespaceDom ns)
 		{
-			XElement body;
-			var doc = GetDoc(out body);
+			var doc = GetDoc(out var body);
 			body.Add(
 				x("h1", ns.Name + Names[Strings.SuffixDelimeter] + Names[Strings.Namespace])
 				);

@@ -386,12 +386,14 @@ namespace StockSharp.Algo.Derivatives
 			if (underlyingAsset == null)
 				throw new ArgumentNullException(nameof(underlyingAsset));
 
+			allStrikes = allStrikes.ToArray();
+
 			var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
 			if (cs == null)
 				return Enumerable.Empty<Security>();
 
-			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike);
+			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike);
 		}
 
 		/// <summary>
@@ -418,12 +420,14 @@ namespace StockSharp.Algo.Derivatives
 			if (underlyingAsset == null)
 				throw new ArgumentNullException(nameof(underlyingAsset));
 
+			allStrikes = allStrikes.ToArray();
+
 			var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
 			if (cs == null)
 				return Enumerable.Empty<Security>();
 
-			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike > cs.Strike : s.Strike < cs.Strike);
+			return allStrikes.Where(s => s.Strike != null && s.OptionType == OptionTypes.Call ? s.Strike < cs.Strike : s.Strike > cs.Strike);
 		}
 
 		/// <summary>
@@ -449,6 +453,8 @@ namespace StockSharp.Algo.Derivatives
 		{
 			if (underlyingAsset == null)
 				throw new ArgumentNullException(nameof(underlyingAsset));
+
+			allStrikes = allStrikes.ToArray();
 
 			var centralStrikes = new List<Security>();
 
@@ -650,14 +656,14 @@ namespace StockSharp.Algo.Derivatives
 			if (model == null)
 				throw new ArgumentNullException(nameof(model));
 
-			Func<Quote, Quote> convert = quote =>
+			Quote Convert(Quote quote)
 			{
 				quote = quote.Clone();
 				quote.Price = model.ImpliedVolatility(currentTime, quote.Price) ?? 0;
 				return quote;
-			};
+			}
 
-			return new MarketDepth(depth.Security).Update(depth.Bids.Select(convert), depth.Asks.Select(convert), true, depth.LastChangeTime);
+			return new MarketDepth(depth.Security).Update(depth.Bids.Select(Convert), depth.Asks.Select(Convert), true, depth.LastChangeTime);
 		}
 
 		/// <summary>

@@ -18,16 +18,19 @@ namespace SampleQuik
 	using System;
 	using System.Linq;
 	using System.Windows;
+	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Quik.Lua;
 
 	public partial class SecuritiesWindow
 	{
@@ -37,6 +40,9 @@ namespace SampleQuik
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
+
+			CandlesPeriods.ItemsSource = LuaFixMarketDataMessageAdapter.AllTimeFrames;
+			CandlesPeriods.SelectedIndex = 1;
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -61,6 +67,8 @@ namespace SampleQuik
 		{
 			NewStopOrder.IsEnabled = NewOrder.IsEnabled =
 			Level1.IsEnabled = Depth.IsEnabled = security != null;
+
+			TryEnableCandles();
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -135,8 +143,8 @@ namespace SampleQuik
 					//{
 					//	SecurityId = new SecurityId
 					//	{
-					//		SecurityCode = "ALL",
-					//		BoardCode = "ALL"
+					//		SecurityCode = MessageAdapter.DefaultAssociatedBoardCode,
+					//		BoardCode = MessageAdapter.DefaultAssociatedBoardCode
 					//	},
 					//	IsSubscribe = true,
 					//	DataType = MarketDataTypes.MarketDepth,
@@ -181,6 +189,27 @@ namespace SampleQuik
 				return;
 
 			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
+		}
+
+		private void CandlesClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
+
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 10000)), DateTime.Now).Show();
+			}
+		}
+
+		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			TryEnableCandles();
+		}
+
+		private void TryEnableCandles()
+		{
+			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
 		}
 	}
 }

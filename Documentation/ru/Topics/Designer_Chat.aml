@@ -5,8 +5,8 @@
     <introduction>
 
       <para>Для работы в команде удобно использовать встроенный <legacyBold>Чат</legacyBold>, 
-      который из себя представляет популярный мессенджер <legacyBold>Telegram</legacyBold> в Web интерфейсе.</para>
-      <para>Использование чата <token>designer</token> на базе мессенджера <legacyBold>Telegram</legacyBold> имее следующие плюсы:</para>
+      который представляет из себя  популярный мессенджер <legacyBold>Telegram</legacyBold> в Web интерфейсе.</para>
+      <para>Использование чата <token>designer</token> на базе мессенджера <legacyBold>Telegram</legacyBold> имеет следующие плюсы:</para>
 
 <list class="bullet">
   <listItem><para>Защита от несанкционированного чтения осуществляется благодаря 
@@ -20,8 +20,8 @@
   Есть онлайн и десктоп-версии. Существует возможность синхронизации между устройствами.</para></listItem>
     <listItem><para>Создание больших чатов – до 5000 участников.</para></listItem>
 </list>
-<para>При первом открытии <legacyBold>Чата</legacyBold> появляется страница авторизации, где нужно ввести 
-свой номер телефон и дождаться СМС с кодом активации. После авторизации вы 
+<para>При первом открытии <legacyBold>Чата</legacyBold> появляется страница 
+авторизации, где нужно ввести свой номер телефона и дождаться СМС с кодом активации. После авторизации вы 
 получаете полноценный мессенджер <legacyBold>Telegram</legacyBold> прямо в <token>designer</token>.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Chat"/>

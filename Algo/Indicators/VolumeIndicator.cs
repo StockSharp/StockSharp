@@ -25,6 +25,8 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("Volume")]
 	[DescriptionLoc(LocalizedStrings.Str756Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
+	[IndicatorOut(typeof(CandleIndicatorValue))]
 	public class VolumeIndicator : BaseIndicator
 	{
 		/// <summary>

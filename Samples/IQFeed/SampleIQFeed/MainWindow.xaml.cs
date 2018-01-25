@@ -121,8 +121,8 @@ namespace SampleIQFeed
 				Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-				Trader.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-				Trader.NewNews += news => _newsWindow.NewsGrid.News.Add(news);
+				Trader.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+				Trader.NewNews += _newsWindow.NewsGrid.News.Add;
 
 				// set market data provider
 				_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;

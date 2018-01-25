@@ -170,9 +170,6 @@ namespace StockSharp.BusinessEntities
 
 				_time = value;
 				NotifyChanged(nameof(Time));
-
-				if (LastChangeTime.IsDefault())
-					LastChangeTime = value;
 			}
 		}
 

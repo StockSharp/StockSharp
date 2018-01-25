@@ -97,7 +97,7 @@ namespace StockSharp.Algo
 			if (!criteria.Id.IsEmpty())
 				securities = securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id));
 
-			return securities;
+			return securities.Filter(criteria);
 		}
 
 		private void AddSecurities(IEnumerable<Security> securities)

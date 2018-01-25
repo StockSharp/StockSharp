@@ -27,6 +27,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("TR")]
 	[DescriptionLoc(LocalizedStrings.Str775Key)]
+	[IndicatorIn(typeof(CandleIndicatorValue))]
 	public class TrueRange : BaseIndicator
 	{
 		private Candle _prevCandle;

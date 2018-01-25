@@ -113,9 +113,9 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			LongMa.LoadNotNull(settings, "LongMa");
-			ShortMa.LoadNotNull(settings, "ShortMa");
-			MedianPrice.LoadNotNull(settings, "MedianPrice");
+			LongMa.LoadNotNull(settings, nameof(LongMa));
+			ShortMa.LoadNotNull(settings, nameof(ShortMa));
+			MedianPrice.LoadNotNull(settings, nameof(MedianPrice));
 		}
 
 		/// <summary>
@@ -126,9 +126,9 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("LongMa", LongMa.Save());
-			settings.SetValue("ShortMa", ShortMa.Save());
-			settings.SetValue("MedianPrice", MedianPrice.Save());
+			settings.SetValue(nameof(LongMa), LongMa.Save());
+			settings.SetValue(nameof(ShortMa), ShortMa.Save());
+			settings.SetValue(nameof(MedianPrice), MedianPrice.Save());
 		}
 	}
 }

@@ -42,8 +42,8 @@ namespace SampleCQG
 
 		public bool IsConnected
 		{
-			get { return (bool)GetValue(IsConnectedProperty); }
-			set { SetValue(IsConnectedProperty, value); }
+			get => (bool)GetValue(IsConnectedProperty);
+			set => SetValue(IsConnectedProperty, value);
 		}
 
 		public Connector Connector { get; private set; }
@@ -165,19 +165,13 @@ namespace SampleCQG
 					Connector.MarketDataSubscriptionFailed += (security, msg, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
-					Connector.NewSecurity += security => _securitiesWindow.SecurityPicker.Securities.Add(security);
-					Connector.NewMyTrade += trade => _myTradesWindow.TradeGrid.Trades.Add(trade);
-					Connector.NewTrade += trade => _tradesWindow.TradeGrid.Trades.Add(trade);
-					Connector.NewOrder += order => _ordersWindow.OrderGrid.Orders.Add(order);
-					Connector.NewStopOrder += order => _stopOrdersWindow.OrderGrid.Orders.Add(order);
-					Connector.NewPortfolio += portfolio =>
-					{
-						_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-
-						// subscribe on portfolio updates
-						Connector.RegisterPortfolio(portfolio);
-					};
-					Connector.NewPosition += position => _portfoliosWindow.PortfolioGrid.Positions.Add(position);
+					Connector.NewSecurity += _securitiesWindow.SecurityPicker.Securities.Add;
+					Connector.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
+					Connector.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
+					Connector.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+					Connector.NewStopOrder += _stopOrdersWindow.OrderGrid.Orders.Add;
+					Connector.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
+					Connector.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
 
 					// subscribe on error of order registration event
 					Connector.OrderRegisterFailed += _ordersWindow.OrderGrid.AddRegistrationFail;

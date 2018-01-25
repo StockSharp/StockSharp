@@ -139,7 +139,11 @@ namespace StockSharp.Algo.Derivatives
 		/// <summary>
 		/// Underlying asset.
 		/// </summary>
-		public virtual Security UnderlyingAsset => _underlyingAsset ?? (_underlyingAsset = Option.GetUnderlyingAsset(SecurityProvider));
+		public virtual Security UnderlyingAsset
+		{
+			get => _underlyingAsset ?? (_underlyingAsset = Option.GetUnderlyingAsset(SecurityProvider));
+			set => _underlyingAsset = value;
+		}
 
 		/// <summary>
 		/// The standard deviation by default.

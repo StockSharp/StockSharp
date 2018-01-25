@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Import
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException(nameof(value));
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1219);
 
 				_skipFromHeader = value;
 			}
@@ -165,18 +165,12 @@ namespace StockSharp.Algo.Import
 						}
 					}
 
-					var secMsg = instance as SecurityMessage;
-
-					if (secMsg == null)
+					if (!(instance is SecurityMessage secMsg))
 					{
-						var execMsg = instance as ExecutionMessage;
-
-						if (execMsg != null)
+						if (instance is ExecutionMessage execMsg)
 							execMsg.ExecutionType = (ExecutionTypes)DataType.Arg;
 
-						var candleMsg = instance as CandleMessage;
-
-						if (candleMsg != null)
+						if (instance is CandleMessage candleMsg)
 							candleMsg.State = CandleStates.Finished;
 					}
 					else if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())

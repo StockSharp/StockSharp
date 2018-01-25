@@ -57,10 +57,13 @@
             Write log messages only for transaction stream.
             </summary>
     </member>
-    <member name="P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames">
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.AllTimeFrames">
       <summary>
-            Available time frames.
+            Possible time-frames.
             </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -136,7 +139,7 @@
     </member>
     <member name="T:StockSharp.Oanda.OandaTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the OANDA.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.Oanda" />.
             </summary>
     </member>
     <member name="M:StockSharp.Oanda.OandaTrader.#ctor">

@@ -23,8 +23,8 @@
 <mediaLink><image placement="center" xlink:href="Designer_Quick_start_02"/></mediaLink>
 <para>После получения исторических данных выберем одну из демонстрационных стратегий. 
 На панели <token>SchemeDis</token> в папке <legacyBold>Стратегии</legacyBold> двойным нажатием 
-выбираем пример-стратегию <legacyBold>SMA</legacyBold>, после чего в рабочей область появится вкладка <legacyBold>Sma</legacyBold>. 
-Перейдя на стратегию в ленте автоматически откроется вкладка <legacyBold>Эмуляция</legacyBold>, на которой расположены основные элементы по 
+выбираем пример-стратегию <legacyBold>SMA</legacyBold>, после чего в рабочей области появится вкладка <legacyBold>Sma</legacyBold>. 
+После перехода на стратегию в ленте в ленте автоматически откроется вкладка <legacyBold>Эмуляция</legacyBold>, на которой расположены основные элементы по 
 созданию стратегии, отладке, тестированию стратегий (<link xlink:href="76d048f0-3d09-46a0-80d0-a681b3a2cb2d" />, 
 <link xlink:href="664a3969-2b3c-4688-a3c9-8034e38cddfd" />)</para>
 <mediaLink><image placement="center" xlink:href="Designer_Quick_start_03"/></mediaLink>

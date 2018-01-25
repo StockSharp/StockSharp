@@ -63,12 +63,12 @@ namespace SampleSmartSMA
 			_logManager.Listeners.Add(new GuiLogListener(LogControl));
 
 			_area = new ChartArea();
-			_chart.Areas.Add(_area);
+			Chart.Areas.Add(_area);
 		}
 
 		private void OrdersOrderSelected()
 		{
-			CancelOrders.IsEnabled = !_orders.SelectedOrders.IsEmpty();
+			CancelOrders.IsEnabled = !OrdersGrid.SelectedOrders.IsEmpty();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -145,7 +145,7 @@ namespace SampleSmartSMA
 							{
 								// найти те сделки, которые совершила стратегия скользящей средней
 								if (_strategy.Orders.Contains(trade.Order))
-									_trades.Trades.Add(trade);
+									TradesGrid.Trades.Add(trade);
 							}
 						};
 
@@ -226,7 +226,7 @@ namespace SampleSmartSMA
 
 		private void CancelOrdersClick(object sender, RoutedEventArgs e)
 		{
-			_orders.SelectedOrders.ForEach(_trader.CancelOrder);
+			OrdersGrid.SelectedOrders.ForEach(_trader.CancelOrder);
 		}
 
 		private void StartClick(object sender, RoutedEventArgs e)
@@ -314,7 +314,7 @@ namespace SampleSmartSMA
 					.Add(_longMaElem, longValue)
 					.Add(_shortMaElem, shortValue);
 
-			_chart.Draw(chartData);
+			Chart.Draw(chartData);
 		}
 
 		private void ReportClick(object sender, RoutedEventArgs e)

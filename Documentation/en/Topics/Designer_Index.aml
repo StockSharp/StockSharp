@@ -5,27 +5,28 @@
 <mediaLink>
 <image xlink:href="Designer_Index_00"/>
 </mediaLink>
-<para>Кубик используется для создания собственного индекса.
+<para>The cube is used to create your own index.
 </para>
 <definitionTable>
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – вычисленный индекс, представленный как <legacyBold>Инструмент</legacyBold>.</para></listItem>
+  <listItem><para><legacyBold>Security</legacyBold> - the calculated index, represented as an <legacyBold>Security</legacyBold>.</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Индекс</legacyBold> – математическая формула комбинации нескольких инструментов  (например, (AAPL@NASDAQ+10)*(abs(20/GOOG@NYSE)).</para></listItem>
-  <listItem><para><legacyBold>Игнорировать ошибки</legacyBold> – установленный флаг 
-  обозначает, что при расчете индекса будут игнорироваться ошибки;</para></listItem>
-  <listItem><para><legacyBold>Вычислять расширенную информацию</legacyBold> - установленный флаг обозначает, 
-  что при расчете индекса помимо основной информации (Общий объем, Цена открытия, 
-  Цена закрытия, Цена наивысшая, Цена наименьшая) будет вычисляться расширенная 
-  информация (Суммарный оборот по сделкам, Объем открытия, Объем закрытия, 
-  Максимальный объем, Объем закрытия);</para></listItem>
+  <listItem><para><legacyBold>Index</legacyBold> - the mathematical formula of a 
+  combination of several instruments (for example, (AAPL@NASDAQ+10)*(abs(20/GOOG@NYSE)).</para></listItem>
+  <listItem><para><legacyBold>Ignore errors</legacyBold> - the set flag indicates 
+  that errors will be ignored when calculating the index.</para></listItem>
+  <listItem><para><legacyBold>Calculate extended information</legacyBold> - the 
+  set flag indicates that in calculating the index, in addition to the basic 
+  information (Total volume, Opening price, Closing price, Highest price, Lowest 
+  price), the extended information (Total trade turnover, Opening volume, Closing 
+  volume, Maximum volume , Minimum volume) will be calculated.</para></listItem>
   </list>
   </definition>
 </definitionTable>
@@ -33,27 +34,27 @@
 
 
 
-<para>Совместно со стандартными математическими операторами можно использовать следующие 
-функции:</para>
+<para>Together with the standard mathematical operators, you can use the 
+following functions:</para>
 <list class="bullet">
-  <listItem><para><legacyBold>abs(a)</legacyBold> - Возвращает абсолютное значение числа.</para></listItem>
-  <listItem><para><legacyBold>acos(a)</legacyBold> - Возвращает угол, косинус которого равен указанному числу.</para></listItem>
-  <listItem><para><legacyBold>asin(a)</legacyBold> - Возвращает угол, синус которого равен указанному числу.</para></listItem>
-  <listItem><para><legacyBold>atan(a)</legacyBold> - Возвращает угол, тангенс которого равен указанному числу.</para></listItem>
-  <listItem><para><legacyBold>ceiling(a)</legacyBold> - Возвращает наименьшее целое число, которое больше или равно заданному числу.</para></listItem>
-  <listItem><para><legacyBold>cos(a)</legacyBold> - Возвращает косинус указанного угла.</para></listItem>
-  <listItem><para><legacyBold>exp(a)</legacyBold> - Возвращает значение <legacyBold>e</legacyBold>, возведенное в указанную степень.</para></listItem>
-  <listItem><para><legacyBold>floor(a)</legacyBold> - Возвращает наибольшее целое число, которое меньше или равно указанному числу.</para></listItem>
-  <listItem><para><legacyBold>log(a)</legacyBold> - Возвращает натуральный логарифм (с основанием <legacyBold>e</legacyBold>) указанного числа.</para></listItem>
-  <listItem><para><legacyBold>log10(a)</legacyBold> - Возвращает логарифм с основанием 10 указанного числа.</para></listItem>
-  <listItem><para><legacyBold>max (a, b)</legacyBold>- Возвращает большее из двух десятичных чисел.</para></listItem>
-  <listItem><para><legacyBold>min(a, b)</legacyBold> - Возвращает меньшее из двух десятичных чисел.</para></listItem>
-  <listItem><para><legacyBold>pow(a, b)</legacyBold> - Возвращает указанное число, возведенное в указанную степень.</para></listItem>
-  <listItem><para><legacyBold>sign(a)</legacyBold> - Возвращает целое число, указывающее знак указанного числа.</para></listItem>
-  <listItem><para><legacyBold>sin(a)</legacyBold> - Возвращает синус указанного угла.</para></listItem>
-  <listItem><para><legacyBold>sqrt (a)</legacyBold>- Возвращает квадратный корень из указанного числа.</para></listItem>
-  <listItem><para><legacyBold>tan(a)</legacyBold> - Возвращает тангенс указанного угла.</para></listItem>
-  <listItem><para><legacyBold>truncat(a)</legacyBold> - Вычисляет целую часть заданного указанного числа.</para></listItem>
+<listItem><para><legacyBold>abs(a)</legacyBold> - returns the absolute value of a number.</para></listItem>
+<listItem><para><legacyBold>acos(a)</legacyBold> - returns the angle which cosine is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>asin(a)</legacyBold> - returns the angle which sine is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>atan(a)</legacyBold> - returns the angle which tangent is equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>ceiling(a)</legacyBold> - returns the smallest integer that is greater than or equal to a specified number.</para></listItem>
+<listItem><para><legacyBold>cos(a)</legacyBold> - returns the cosine of the specified angle.</para></listItem>
+<listItem><para><legacyBold>exp(a)</legacyBold> - returns the value of <legacyBold>e</legacyBold> raised to the specified power.</para></listItem>
+<listItem><para><legacyBold>floor(a)</legacyBold> - returns the largest integer that is less than or equal to the specified number.</para></listItem>
+<listItem><para><legacyBold>log(a)</legacyBold> - returns the natural logarithm (with base <legacyBold>e</legacyBold>) of the specified number.</para></listItem>
+<listItem><para><legacyBold>log10(a)</legacyBold> - returns the logarithm with base 10 of the specified number.</para></listItem>
+<listItem><para><legacyBold>max(a, b)</legacyBold> - returns the larger of two decimal numbers.</para></listItem>
+<listItem><para><legacyBold>min(a, b)</legacyBold> - returns the smaller of two decimal numbers.</para></listItem>
+<listItem><para><legacyBold>pow(a, b)</legacyBold> - returns the specified number raised to the specified power.</para></listItem>
+<listItem><para><legacyBold>sign(a)</legacyBold> - returns an integer indicating the sign of the specified number.</para></listItem>
+<listItem><para><legacyBold>sin(a)</legacyBold> - returns the sine of the specified angle.</para></listItem>
+<listItem><para><legacyBold>sqrt(a)</legacyBold> - returns the square root of the specified number.</para></listItem>
+<listItem><para><legacyBold>tan(a)</legacyBold> - returns the tangent of the specified angle.</para></listItem>
+<listItem><para><legacyBold>truncat(a)</legacyBold> - calculates the integer part of the specified number.</para></listItem>
 </list>
     </introduction>
     <relatedTopics>

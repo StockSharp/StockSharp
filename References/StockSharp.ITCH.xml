@@ -88,11 +88,6 @@
             Information about the time zone where the exchange is located.
             </summary>
         </member>
-        <member name="P:StockSharp.ITCH.ItchMessageAdapter.IsValid">
-            <summary>
-            The parameters validity check.
-            </summary>
-        </member>
         <member name="M:StockSharp.ITCH.ItchMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.
@@ -142,7 +137,7 @@
         </member>
         <member name="T:StockSharp.ITCH.ItchTrader">
             <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the ITCH (LSE or NASDAQ).
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.ITCH"/>.
             </summary>
         </member>
         <member name="M:StockSharp.ITCH.ItchTrader.#ctor">

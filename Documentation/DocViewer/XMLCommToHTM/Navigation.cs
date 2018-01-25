@@ -121,12 +121,13 @@ namespace XMLCommToHTM
 		{
 			var tuple = GetTypeHref(m.Type.Type);
 			var ret = tuple.Item1 + "/" + m.Name;
-			if (m is MethodDom)
+			
+			if (m is MethodDom method)
 			{
-				var meth = (MethodDom) m;
-				if (meth.OverloadIndex.HasValue)
-					ret += "/" + meth.OverloadIndex.ToString();
+				if (method.OverloadIndex.HasValue)
+					ret += "/" + method.OverloadIndex;
 			}
+
 			return ret;
 		}
 		static Type GetTypeForRef(Type type)

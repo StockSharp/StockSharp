@@ -1,5 +1,174 @@
 StockSharp API Change log
 ========================
+## current:
+* (bug) Charting. Envelope indicator rendering fix.
+* (feature) Charting. Painters lookup refactoring.
+* (feature) Quik. Removed obsolete QuikOrderConditionResults.
+* (bug) OrderRegMsg.TillDate usage fix.
+* (bug) InteractiveBrokers. Resubscribe fix.
+* (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
+
+## v4.4.4:
+* (feature) IPositionProvider interface added.
+* (feature) IPortfolioProvider.PortfolioChanged event added.
+* (feature) Strategy. Implemented IPositionProvider interface.
+* (feature) Unit. Evaluation with nullable parts return null (was ArgNullExcp).
+* (feature) BasketBlackScholes. Uses IPositionProvider.
+* (feature) OptionPositionChart. Uses IPositionProvider.
+* (bug) OptionDesk, OptionPositionChart, OptionVolatilitySmile fixes.
+* (feature) StorageMessageAdapter. Load only curr day for order book and level1 (in case From is null).
+* (bug) Finam history. Fix security lookup. http://stocksharp.ru/posts/m/41218/
+* (bug) FIX server. Security expiration date fix http://stocksharp.ru/forum/8703/data-ehkspiratsii-optsionov-na-forts/
+* (bug) IQFeed. Level1 fix.
+* (bug) Oanda. Fix large candle's range request.
+* (bug) Alerts fixes.
+* (bug) InteractiveBrokers. Market data fixes.
+* (bug) CandleMessage.State init fix.
+* (bug) MarketDepthControl. Binding fixes.
+* (feature) Snapshot storage.
+* (feature) Security. IssueDate, IssueSize and UnderlyingSecurityType properties.
+* (bug) http://stocksharp.com/forum/8795/Binary-Storage-Corrupted/
+* (feature) Backtesting. Performance boost.
+* (feature) CurrencyTypes.ETH.
+* (bug) QuandlHistorySource. Lookup fix.
+* (bug) MfdHistorySource. Fix options lookup.
+* (bug) LMAX. Instruments file parsing fix.
+* (bug) InteractiveBrokers. Market data fixes.
+* (feature) InteractiveBrokers. v9.73.06 support.
+* (bug) SmartCOM. Position translation fix.
+* (feature) OptionDesk. Show expiration date columns.
+* (feature) Security.UnderlyingSecurityType.
+* (bug) Options OTM ITM. Fix http://stocksharp.ru/forum/8834/optsiony-itm-otm/
+* (feature) Exchange. New info for Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck.
+* (feature) QuikLua. AutoFixFutureCodes
+* (feature) Binary quotes. Allow save bid > ask.
+* (feature) QuikLua. Filter securities by type.
+* (bug) FIX server. Fix security lookup. http://stocksharp.ru/forum/8874/problemy-podklyucheniya-k-hydra-cherez-fix-/
+* (feature) FIX connector. Spectra dialect. Support nanoseconds.
+* (feature) FIX connector. ExecutionReport.LastCapacity
+* (feature) FIX connector. Otkritie microseconds support.
+* (bug) Level1 binary storage. Fix min max serialization.
+* (feature) Level1 binary storage. Use long as step counts.
+* (bug) Binary storage. Fix non adjust price steps.
+* (bug) MarketDepthGenerator fixes.
+* (feature) DevExpress v17.1.7
+* (bug) IQFeed. Symbol lookup fixes.
+* (bug) Backtesting candles fix http://stocksharp.ru/forum/8816/ne-pravilnoe-ispolnenie-sdelok-pri-testirovanii-na-svechah/ 
+* (bug) Tick and quotes binary storage. Fix store highly fractional prices.
+* (feature) Order log binary storage. Nullable volumes posibilites.
+* (bug) Quotes storage. Fix zero and negative prices store.
+* (feature) IMessageAdapter.TimeFrames
+* (bug) SampleMultiConnection. Fill time frames http://stocksharp.ru/forum/8849/primer-samplemulticonnection/
+* (bug) PositionManager events fix http://stocksharp.ru/forum/8961/sobytiya-positionmanager-newposition-i-positionchanged/
+* (bug) Connector. Stop candle series fix http://stocksharp.ru/forum/8919/povtornyi-zapusk-serii-svechek/
+* (bug) Connector. Remove RegisteredXXX fix http://stocksharp.ru/forum/8868/problemy-pri-raborte-so-takanami-pri-konnektore-trader-workstation-ot-ib/
+
+## v4.3.28:
+* (feature) SecurityGrid. PriceChartEditor. Provider is non mandatory.
+* (feature) LMAX, Oanda, IB. Uses MarketDataMessage.BuildCandlesField.
+* (bug) BitStamp. Market data fix.
+* (bug) FIX protocol. Exante market-data fix.
+* (feature) Binary storage. Support non adjust prices for order book and level1.
+* (bug) FIX connector. Position average price receive fix.
+* (bug) FIX connector. Order book gathering fix.
+* (bug) FIX connector. Check input values while logon.
+* (bug) QuikLua. Fix CurrentValue for money positions http://stocksharp.ru/posts/m/41082/
+* (feature) IQFeed. Security file parsing into separate thread.
+* (bug) Alerts fixes.
+* (bug) BTCE. Fix security price step.
+* (bug) SecurityCreateWindow fix.
+* (feature) Storage. Turned off saving active candles.
+* (bug) Storage. Fix filter first data.
+* (bug) SecurityGrid. Removed obsolete bindings and fix sorting.
+* (bug) BTCE. Fix market-data only mode.
+* (bug) IQFeed. Connection error handling fix.
+* (feature) InteractiveBrokers. Support historical ticks.
+* (feature) ChartAnnotation.
+* (bug) QuikLua. Fix candle states http://stocksharp.ru/posts/m/41144/
+
+## v4.3.27.2:
+* (feature) QuikLua. Support candles.
+* (feature) SpbExTrader.IgnoreLimits.
+* (bug) Clipboard fix.
+* (feature) IPositionManager.SecurityId filter.
+* (feature) IPortfolioProvider.LookupByPortfolioName extension method.
+* (bug) OrderGrid.OrderCanceling. Fix signature.
+* (feature) BuySellPanel, BuySellGrid controls.
+* (bug) Alerts fixes.
+* (feature) EquityChart, OptionPositionChart, OptionSmileChart. Support IPersistable.
+* (bug) PortfolioGrid. Binding State fix.
+* (bug) BasketMessageAdapter. Reconnect fix.
+* (feature) IIndicator.ResultType.
+* (feature) ThreadSafeCol{Portfolio} -> PortfolioDataSource
+* (feature) DevExpress v17.1.5
+* (feature) Newtonsoft.Json. v10.0.3
+* (feature) Strategy. Browsable=false for modified values.
+* (bug) Analytic strategies fixes.
+* (feature) Heatmap, Bubble, Histogram charts.
+* (feature) OfflineMessageAdapter. Remove subscription while disconnected state.
+* (feature) SubscriptionMessageAdapter. Set PortfolioMessage.OriginalTransactionId if empty.
+* (feature) Security. Initialize Id, Name, Code, Class as null (prev was empty string).
+* (feature) MessageAdapter. Init ServerTime (if not set) for position messages.
+* (feature) OfflineMessageAdapter. Cancel previously sent orders.
+* (feature) Level1 storage. Support IssueSize, Duration, BuyBackPrice, BuyBackDate. http://stocksharp.ru/posts/m/40757/
+* (feature) Level1Field.ToType extension method.
+* (bug) Level1CsvSerializer fix.
+* (feature) Analytics. Reduced UI logic.
+* (feature) Chart controls. Track current DevExp theme.
+* (feature) FIX server. Accept date bounds for market data requests.
+* (bug) FIX server. Fix async sending.
+* (feature) QuikLua. Support official prices. http://stocksharp.ru/forum/8534/nelikvidnye-instrumenty---kak-luchshe-organizovat-rabotu-s-nimi/
+* (feature) QuikLua. Ignore case for security lookup.
+* (feature) Strategy.Parameters. From Set to Dictionary.
+* (feature) Connector.AutoPortfoliosSubscribe.
+* (feature) MarketDepthControl.IsBidsOnTop is dependency property.
+* (feature) MathDiagramElement.
+* (feature) Chart. Save/Load refactoring.
+* (feature) Micex. Stock28 interface.
+* (feature) Plaza. 5.3.1 support.
+* (bug) BasketMessageAdapter. Fix disconnect for broken connection.
+* (bug) TraderHelper.CancelOrders. Fix canceling failed orders.
+* (feature) IConnector. SendInMessage, SendOutMessage.
+* (feature) Strategy. Start/Stop processing from connector's thread.
+* (bug) PositionBinarySerializer fix.
+* (feature) SmartCOM. Removed V2 support.
+* (bug) Expression fix http://stocksharp.ru/forum/8586/skleennye-fyuchersy-s-finama/
+* (feature) FIX connector. ExecutionReport.LastLiquidityInd
+* (feature) FIX connector. TransactTime for OrderCancelReject
+* (feature) FIX connector. Handle order register errors.
+* (bug) FIX connector. SpectraFixDialect cancel orders fix.
+* (feature) IIndicator.InputType
+* (bug) FIX server. Fix depths subscription for ALL security.
+* (feature) FIX connector. Candle state support.
+* (feature) FXCM. Masked as x64 bit only.
+* (bug) Storage. Fix data bounds validation.
+* (feature) CandleBuilder. Build from level1.
+* (feature) FIX connector. ASTS. Microseconds.
+* (feature) Level1 binary storage. Support unknown types.
+* (feature) ICandleBuilderSourceValue -> ICandleBuilderValueTransform.
+* (feature) Algo.Candles.Compression. Removed sources.
+* (bug) AlfaDirect. Security lookup fixes.
+* (feature) SecurityStorage. Load empty strings as null.
+* (feature) CandleBuilder. Support OI.
+* (feature) Connector.UpdateSecurityByDefinition.
+* (feature) QuoteChangeMessage.GetSpreadMiddle extension.
+* (feature) Level1ChangeMessage.GetSpreadMiddle extension.
+* (bug) Copy security info fix.
+* (feature) IMessageAdapter.IsValid removed.
+* (feature) SecurityGrid. Close price mini chart column.
+* (feature) StrategiesDashboard. P&L mini chart column.
+* (feature) StrategiesStatisticsPanel. P&L mini chart column.
+* (feature) BitStamp. V2 protocol.
+* (feature) SecurityGrid. Days till expiry column.
+* (bug) SecurityGrid. ExpiryDate, Strike columns sorting fix.
+* (feature) Interactive Brokers. v9.73.04
+* (bug) Interactive Brokers. Fix historical market data request.
+* (feature) Transaq. Initial init candle periods.
+* (bug) SmartCom. Price step fixes.
+* (feature) BTCE. Domain update.
+* (bug) Oanda. Fill ExecMsg.TradePrice
+* (feature) MarketDepthControl. Process order with specified state and balance (in async mode).
+
 ## v4.3.26.2:
 * (feature) Position tracking storage.
 * (feature) MarketDepthControl. Show histogram for volumes.

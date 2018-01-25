@@ -17,7 +17,7 @@
 		</Grid.RowDefinitions>
 		<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr592}" />
 		<TextBox x:Name="Path" Text="" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" />
-		<Button x:Name="FindPath" Grid.Column="4" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
+		<Button x:Name="FindPath" Grid.Column="3" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		<Button x:Name="ExportDde" Background="LightPink" Grid.Column="1" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr850}" Click="ExportDdeClick" />

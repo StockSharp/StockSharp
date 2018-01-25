@@ -164,15 +164,13 @@
             Override dll file from resources. Turned on by default.
             </summary>
     </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsValid">
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.AllTimeFrames">
       <summary>
-            The parameters validity check.
+            Possible time-frames.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames">
-      <summary>
-            Available time frames.
-            </summary>
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -369,7 +367,7 @@
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the Blackwood (Fusion) DMA.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.Blackwood" />.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.#ctor">

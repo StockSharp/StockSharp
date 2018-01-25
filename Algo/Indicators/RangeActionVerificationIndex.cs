@@ -82,8 +82,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			ShortSma.LoadNotNull(settings, "ShortSma");
-			LongSma.LoadNotNull(settings, "LongSma");
+			ShortSma.LoadNotNull(settings, nameof(ShortSma));
+			LongSma.LoadNotNull(settings, nameof(LongSma));
 		}
 
 		/// <summary>
@@ -94,8 +94,8 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("ShortSma", ShortSma.Save());
-			settings.SetValue("LongSma", LongSma.Save());
+			settings.SetValue(nameof(ShortSma), ShortSma.Save());
+			settings.SetValue(nameof(LongSma), LongSma.Save());
 		}
 	}
 }

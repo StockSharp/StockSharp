@@ -109,11 +109,6 @@
             Verification code, received by user in browser, after confirming program's permission to work.
             </summary>
     </member>
-    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsValid">
-      <summary>
-            The parameters validity check.
-            </summary>
-    </member>
     <member name="M:StockSharp.ETrade.ETradeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
@@ -169,7 +164,7 @@
     </member>
     <member name="T:StockSharp.ETrade.ETradeTrader">
       <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the ETrade.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.ETrade" />.
             </summary>
     </member>
     <member name="P:StockSharp.ETrade.ETradeTrader.ConsumerKey">

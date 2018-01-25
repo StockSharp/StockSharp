@@ -5,33 +5,37 @@
 <mediaLink>
 <image xlink:href="Designer_Hedging_00"/>
 </mediaLink>
-<para>Кубик используется для защиты позиции по опционным стратегиям.</para>
+<para>The cube is used to protect the position on option strategies.</para>
 <definitionTable>
-  <definedTerm>Входящие сокеты</definedTerm>
+  <definedTerm>Incoming sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Инструмент</legacyBold> – инструмент, базовый актив.</para></listItem>
-   <listItem><para><legacyBold>Объем</legacyBold> – числовое значение объема.</para></listItem>
-   <listItem><para><legacyBold>Позиция по базовому активу</legacyBold> – позиция по базовому активу.</para></listItem>
+  <listItem><para><legacyBold>Instrument</legacyBold> – the instrument, the 
+  underlying asset.</para></listItem>
+   <listItem><para><legacyBold>Volume</legacyBold> - the numerical value of the 
+   volume.</para></listItem>
+   <listItem><para><legacyBold>Position by underlying asset</legacyBold> – the 
+   position by the underlying asset.</para></listItem>
 
-  <listItem><para><legacyBold>Флаг</legacyBold> – сигнал (флаг), который инициирует процесс хеджирования.</para></listItem>
+  <listItem><para><legacyBold>Flag</legacyBold> – the signal (flag) that initiates 
+  the hedging process.</para></listItem>
 </list>
   </definition>
 
-  <definedTerm>Исходящие сокеты</definedTerm>
+  <definedTerm>Outgoing sockets</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Заявка</legacyBold> – выставленная заявка, 
-которая может использоваться для получения сделок по ней с помощью элемента 
-<legacyBold>Сделки</legacyBold> по заявке и отображения на графике с помощью 
-кубика <legacyBold>Панель графика</legacyBold></para></listItem>
+  <listItem><para><legacyBold>Order</legacyBold> – the registered order that can 
+  be used to obtain trades on it by using the Trades element by the order and 
+  displaying it on the chart using the Chart panel cube</para></listItem>
 </list>
   </definition>
   
-    <definedTerm>Параметры</definedTerm>
+    <definedTerm>Parameters</definedTerm>
   <definition>
 <list class="bullet">
-  <listItem><para><legacyBold>Тип хеджирования</legacyBold> - тип хеджирования, может принимать значения Дельта, Гамма, Вега, Тета, Ро.</para></listItem>
+  <listItem><para><legacyBold>Hedging type</legacyBold> - the hedging type, it 
+  can take the values of Delta, Gamma, Vega, Theta, Po.</para></listItem>
 </list>
   </definition>
 </definitionTable>

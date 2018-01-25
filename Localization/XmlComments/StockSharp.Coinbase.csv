@@ -1,0 +1,16 @@
+T:StockSharp.Coinbase.CoinbaseMessageAdapter/summary;DocStr2538
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+P:StockSharp.Coinbase.CoinbaseMessageAdapter.Key/summary;Str3304
+P:StockSharp.Coinbase.CoinbaseMessageAdapter.Secret/summary;DocStr3146
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.ToString/summary;DocStr49
+M:StockSharp.Coinbase.CoinbaseMessageAdapter.ToString/returns;DocStr50
+T:StockSharp.Coinbase.CoinbaseTrader/summary;DocStr2539
+M:StockSharp.Coinbase.CoinbaseTrader.#ctor/summary;DocStr1
+P:StockSharp.Coinbase.CoinbaseTrader.Key/summary;Str3304
+P:StockSharp.Coinbase.CoinbaseTrader.Secret/summary;DocStr3146

@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Storages.Binary
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
-	class PositionMetaInfo : BinaryMetaInfo<PositionMetaInfo>
+	class PositionMetaInfo : BinaryMetaInfo
 	{
 		public PositionMetaInfo(DateTime date)
 			: base(date)
@@ -128,30 +128,32 @@ namespace StockSharp.Algo.Storages.Binary
 			return RefTuple.Create(stream.Read<decimal>(), stream.Read<decimal>());
 		}
 
-		public override void CopyFrom(PositionMetaInfo src)
+		public override void CopyFrom(BinaryMetaInfo src)
 		{
 			base.CopyFrom(src);
 
-			BeginValue = Clone(src.BeginValue);
-			CurrentValue = Clone(src.CurrentValue);
-			BlockedValue = Clone(src.BlockedValue);
-			CurrentPrice = Clone(src.CurrentPrice);
-			AveragePrice = Clone(src.AveragePrice);
-			UnrealizedPnL = Clone(src.UnrealizedPnL);
-			RealizedPnL = Clone(src.RealizedPnL);
-			VariationMargin = Clone(src.VariationMargin);
-			Leverage = Clone(src.Leverage);
-			Commission = Clone(src.Commission);
-			CurrentValueInLots = Clone(src.CurrentValueInLots);
+			var posInfo = (PositionMetaInfo)src;
+
+			BeginValue = Clone(posInfo.BeginValue);
+			CurrentValue = Clone(posInfo.CurrentValue);
+			BlockedValue = Clone(posInfo.BlockedValue);
+			CurrentPrice = Clone(posInfo.CurrentPrice);
+			AveragePrice = Clone(posInfo.AveragePrice);
+			UnrealizedPnL = Clone(posInfo.UnrealizedPnL);
+			RealizedPnL = Clone(posInfo.RealizedPnL);
+			VariationMargin = Clone(posInfo.VariationMargin);
+			Leverage = Clone(posInfo.Leverage);
+			Commission = Clone(posInfo.Commission);
+			CurrentValueInLots = Clone(posInfo.CurrentValueInLots);
 			
 			Portfolios.Clear();
-			Portfolios.AddRange(src.Portfolios);
+			Portfolios.AddRange(posInfo.Portfolios);
 
 			ClientCodes.Clear();
-			ClientCodes.AddRange(src.ClientCodes);
+			ClientCodes.AddRange(posInfo.ClientCodes);
 
 			DepoNames.Clear();
-			DepoNames.AddRange(src.DepoNames);
+			DepoNames.AddRange(posInfo.DepoNames);
 		}
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
@@ -376,8 +378,8 @@ namespace StockSharp.Algo.Storages.Binary
 
 		private static void SerializeChange(BitArrayWriter writer, RefPair<decimal, decimal> info, decimal price)
 		{
-			if (price == 0)
-				throw new ArgumentOutOfRangeException(nameof(price));
+			//if (price == 0)
+			//	throw new ArgumentOutOfRangeException(nameof(price));
 
 			if (info.First == 0)
 				info.First = info.Second = price;

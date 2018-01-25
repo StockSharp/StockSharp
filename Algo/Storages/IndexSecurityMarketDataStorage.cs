@@ -166,6 +166,7 @@ namespace StockSharp.Algo.Storages
 
 			Security = security;
 			SecurityId = security.ToSecurityId();
+			SecurityId.EnsureHashCode();
 
 			var index = 0;
 
