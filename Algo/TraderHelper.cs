@@ -4503,5 +4503,19 @@ namespace StockSharp.Algo
 
 			return messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
 		}
+
+		/// <summary>
+		/// Is specified security id asssociated with the board.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="board">Board info.</param>
+		/// <returns><see langword="true" />, if asssociated, otherwise, <see langword="false"/>.</returns>
+		public static bool IsAssociated(this SecurityId securityId, ExchangeBoard board)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			return securityId.BoardCode.CompareIgnoreCase(board.Code);
+		}
 	}
 }
