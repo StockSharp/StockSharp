@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleQuikStartStop
 {
 	using System;
+
 	using StockSharp.Quik;
 	using StockSharp.Localization;
 

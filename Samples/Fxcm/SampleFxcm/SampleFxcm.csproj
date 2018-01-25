@@ -247,7 +247,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Fxcm\Fxcm.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Fxcm\Fxcm.csproj">
       <Project>{358B4D44-CB92-4DED-AFD4-3DAC72D167E5}</Project>
       <Name>Fxcm</Name>
     </ProjectReference>

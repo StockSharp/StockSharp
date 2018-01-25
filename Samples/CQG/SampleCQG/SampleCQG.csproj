@@ -196,11 +196,11 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Cqg.Com\Cqg.Com.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Cqg.Com\Cqg.Com.csproj">
       <Project>{34984b57-9200-47b9-ac78-0d93fdfa437a}</Project>
       <Name>Cqg.Com</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Cqg.Continuum\Cqg.Continuum.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Cqg.Continuum\Cqg.Continuum.csproj">
       <Project>{3EDD3BF7-3F1E-4192-87AA-54DFAA17340C}</Project>
       <Name>Cqg.Continuum</Name>
     </ProjectReference>

@@ -45,6 +45,9 @@
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="StockSharp.AlfaDirect">
+      <HintPath>..\..\..\References\StockSharp.AlfaDirect.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="PresentationFramework" />
@@ -195,10 +198,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\AlfaDirect\AlfaDirect.csproj">
-      <Project>{AAA445E0-AA85-4B49-AD45-EDD1B4839137}</Project>
-      <Name>AlfaDirect</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
       <Name>Xaml</Name>

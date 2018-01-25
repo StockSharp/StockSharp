@@ -84,6 +84,12 @@
     <Reference Include="DevExpress.Xpf.LayoutControl.v17.2">
       <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.2.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Cqg.Com">
+      <HintPath>..\..\..\References\StockSharp.Cqg.Com.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Cqg.Continuum">
+      <HintPath>..\..\..\References\StockSharp.Cqg.Continuum.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -196,14 +202,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Cqg.Com\Cqg.Com.csproj">
-      <Project>{34984b57-9200-47b9-ac78-0d93fdfa437a}</Project>
-      <Name>Cqg.Com</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Cqg.Continuum\Cqg.Continuum.csproj">
-      <Project>{3EDD3BF7-3F1E-4192-87AA-54DFAA17340C}</Project>
-      <Name>Cqg.Continuum</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>
