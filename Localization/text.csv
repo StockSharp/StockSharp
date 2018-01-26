@@ -4687,6 +4687,19 @@ HitBtc;HitBTC;HitBTC
 Kraken;Kraken;Kraken
 Okcoin;OKCoin;OKCoin
 Poloniex;Poloniex;Poloniex
+RestorePositions;Restore positions;Восстанавливать позиции
+RestorePositionsWhenStrategyStarts;Restore positions when strategy starts;Восстанавливать позиции при старте стратегии
+WarrantyProvisions;Warranty provisions;Гарантийное обеспечения
+WarrantyOnOneContractForTesting;Warranty on one contract for testing;Гарантийное обеспечения на один контракт для тестирования
+MinimumSizeSpreadPriceSteps;The minimum size of the spread in the price steps for placing orders;Минимальный размер спреда в шагах цены для выставления ордеров
+IndentThePriceSteps;Indent in the price steps from the edge of the order glass. > 0 - far from the spread, <0 - the spread of the spread;Отступ в шагах цены от края стакана для ордеров. > 0 - вдаль от спреда, < 0 - вглубь спреда
+StopSecondsOpenPosition;Stop in seconds how much to keep open position;Стоп в секундах сколько держать открытой позицию
+StopClosingOrderType;Stop order closing order type;Тип ордеров закрытия позиций по стопу
+ShiftThePriceStepsFromTheEdge;A shift in the price steps from the edge of the spread in price steps. To buy at a value of> 0 shifts the spread inside, <0 away from the spread.;Сдвиг в шагах цены от края спреда в шагах цены. Для покупки при значении> 0 сдвигает внутрь спреда, при < 0 вдаль от спреда.
+TimeOutSecond;Timeout (sec);Таймаут (сек)
+IntervalInSeconds;The interval in seconds, not more than which you can rearrange orders.;Интервал в секундах, не чаще которого можно переставлять заявки.
+StopAndClosePositions;Stop and close positions;Остановить и закрыть позиции
+StrategyAdded;Strategy added;Добавлена стратегия
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
