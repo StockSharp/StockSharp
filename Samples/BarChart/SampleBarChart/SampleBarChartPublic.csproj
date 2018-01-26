@@ -216,7 +216,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\BarChart\BarChart.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\BarChart\BarChart.csproj">
       <Project>{99B84E0C-D035-4BD9-8A42-8232ED6BA3F4}</Project>
       <Name>BarChart</Name>
     </ProjectReference>

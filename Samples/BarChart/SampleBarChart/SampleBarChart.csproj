@@ -228,7 +228,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\BarChart\BarChart.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\BarChart\BarChart.csproj">
       <Project>{99b84e0c-d035-4bd9-8a42-8232ed6ba3f4}</Project>
       <Name>BarChart</Name>
     </ProjectReference>

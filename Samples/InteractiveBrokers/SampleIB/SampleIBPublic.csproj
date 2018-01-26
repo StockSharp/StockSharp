@@ -44,6 +44,9 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.InteractiveBrokers">
+      <HintPath>..\..\..\References\StockSharp.InteractiveBrokers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -222,10 +225,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
-      <Project>{F17D780E-6F82-40FD-84E1-C4EB09853BBD}</Project>
-      <Name>InteractiveBrokers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>

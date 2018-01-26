@@ -271,7 +271,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Blackwood\Blackwood.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Blackwood\Blackwood.csproj">
       <Project>{C0D530DD-1E5A-4BE4-9AC6-FF11E5FC9B26}</Project>
       <Name>Blackwood</Name>
     </ProjectReference>

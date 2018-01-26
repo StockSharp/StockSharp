@@ -250,7 +250,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\BitStamp\BitStamp.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\BitStamp\BitStamp.csproj">
       <Project>{90B93AF4-3168-4415-B916-9E078F192696}</Project>
       <Name>BitStamp</Name>
     </ProjectReference>

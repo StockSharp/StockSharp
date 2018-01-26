@@ -60,6 +60,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.BitStamp">
+      <HintPath>..\..\..\References\StockSharp.BitStamp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -239,10 +242,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\BitStamp\BitStamp.csproj">
-      <Project>{90B93AF4-3168-4415-B916-9E078F192696}</Project>
-      <Name>BitStamp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
       <Name>Xaml</Name>

@@ -63,6 +63,9 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Oanda">
+      <HintPath>..\..\..\References\StockSharp.Oanda.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -248,10 +251,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Oanda\Oanda.csproj">
-      <Project>{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0}</Project>
-      <Name>Oanda</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>

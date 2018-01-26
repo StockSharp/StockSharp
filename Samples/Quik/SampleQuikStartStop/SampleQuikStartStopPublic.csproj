@@ -42,6 +42,9 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.Quik">
+      <HintPath>..\..\..\References\StockSharp.Quik.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Ecng.Localization">
@@ -64,10 +67,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Quik\QuikPublic.csproj">
-      <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
-      <Name>QuikPublic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>

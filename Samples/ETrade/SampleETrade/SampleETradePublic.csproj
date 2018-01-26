@@ -43,6 +43,9 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.ETrade">
+      <HintPath>..\..\..\References\StockSharp.ETrade.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Security" />
@@ -177,10 +180,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\ETrade\ETrade.csproj">
-      <Project>{480539A8-CA30-4B87-B038-6AD854DA0C6A}</Project>
-      <Name>ETrade</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>

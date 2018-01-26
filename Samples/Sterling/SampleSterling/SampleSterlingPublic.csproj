@@ -84,6 +84,9 @@
     <Reference Include="DevExpress.Xpf.LayoutControl.v17.2">
       <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v17.2.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Sterling">
+      <HintPath>..\..\..\References\StockSharp.Sterling.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -196,10 +199,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Sterling\Sterling.csproj">
-      <Project>{9ADD140B-1C43-4077-B32E-0EBA81648C4D}</Project>
-      <Name>Sterling</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
       <Name>Xaml</Name>

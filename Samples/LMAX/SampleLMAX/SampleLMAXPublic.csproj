@@ -63,6 +63,9 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.LMAX">
+      <HintPath>..\..\..\References\StockSharp.LMAX.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -248,10 +251,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\LMAX\LMAX.csproj">
-      <Project>{4B37342E-9A01-499B-9E32-2E9948A6D0C4}</Project>
-      <Name>LMAX</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>

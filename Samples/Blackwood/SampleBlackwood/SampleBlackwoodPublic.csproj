@@ -60,6 +60,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.Blackwood">
+      <HintPath>..\..\..\References\StockSharp.Blackwood.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -260,10 +263,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Blackwood\Blackwood.csproj">
-      <Project>{C0D530DD-1E5A-4BE4-9AC6-FF11E5FC9B26}</Project>
-      <Name>Blackwood</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{C449D618-DEA4-41C3-BA86-9F827C7421DC}</Project>
       <Name>Xaml.Charting</Name>
