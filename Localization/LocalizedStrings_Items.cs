@@ -46496,5 +46496,135 @@ namespace StockSharp.Localization
 		/// Poloniex
 		/// </summary>
 		public static string Poloniex => GetString(PoloniexKey);
+		
+		/// <summary>
+		/// Restore positions
+		/// </summary>
+		public const string RestorePositionsKey = nameof(RestorePositions);
+
+		/// <summary>
+		/// Restore positions
+		/// </summary>
+		public static string RestorePositions => GetString(RestorePositionsKey);
+		
+		/// <summary>
+		/// Restore positions when strategy starts
+		/// </summary>
+		public const string RestorePositionsWhenStrategyStartsKey = nameof(RestorePositionsWhenStrategyStarts);
+
+		/// <summary>
+		/// RRestore positions when strategy starts
+		/// </summary>
+		public static string RestorePositionsWhenStrategyStarts => GetString(RestorePositionsWhenStrategyStartsKey);
+	
+		/// <summary>
+		/// Warranty provisions
+		/// </summary>
+		public const string WarrantyProvisionsKey = nameof(WarrantyProvisions);
+
+		/// <summary>
+		/// Warranty provisions
+		/// </summary>
+		public static string WarrantyProvisions => GetString(WarrantyProvisionsKey);
+		
+		/// <summary>
+		/// Warranty on one contract for testing
+		/// </summary>
+		public const string WarrantyOnOneContractForTestingKey = nameof(WarrantyOnOneContractForTesting);
+
+		/// <summary>
+		/// Warranty on one contract for testing
+		/// </summary>
+		public static string WarrantyOnOneContractForTesting => GetString(WarrantyOnOneContractForTestingKey);
+		
+		/// <summary>
+		/// The minimum size of the spread in the price steps for placing orders
+		/// </summary>
+		public const string MinimumSizeSpreadPriceStepsKey = nameof(MinimumSizeSpreadPriceSteps);
+
+		/// <summary>
+		/// The minimum size of the spread in the price steps for placing orders
+		/// </summary>
+		public static string MinimumSizeSpreadPriceSteps => GetString(MinimumSizeSpreadPriceStepsKey);
+
+		/// <summary>
+		/// Indent in the price steps from the edge of the order glass. more 0 - far from the spread, less 0 - the spread of the spread
+		/// </summary>
+		public const string IndentThePriceStepsKey = nameof(IndentThePriceSteps);
+
+		/// <summary>
+		/// Indent in the price steps from the edge of the order glass. more 0 - far from the spread, less0 - the spread of the spread
+		/// </summary>
+		public static string IndentThePriceSteps => GetString(IndentThePriceStepsKey);
+		
+		/// <summary>
+		/// Stop in seconds how much to keep open position
+		/// </summary>
+		public const string StopSecondsOpenPositionKey = nameof(StopSecondsOpenPosition);
+
+		/// <summary>
+		/// Stop in seconds how much to keep open position
+		/// </summary>
+		public static string StopSecondsOpenPosition => GetString(StopSecondsOpenPositionKey);
+		
+		/// <summary>
+		/// Stop order closing order type
+		/// </summary>
+		public const string StopClosingOrderTypeKey = nameof(StopClosingOrderType);
+
+		/// <summary>
+		/// Stop order closing order type
+		/// </summary>
+		public static string StopClosingOrderType => GetString(StopClosingOrderTypeKey);
+
+		/// <summary>
+		/// A shift in the price steps from the edge of the spread in price steps. To buy at a value of more 0 shifts the spread inside, less 0 away from the spread.
+		/// </summary>
+		public const string ShiftThePriceStepsFromTheEdgeKey = nameof(ShiftThePriceStepsFromTheEdge);
+
+		/// <summary>
+		/// A shift in the price steps from the edge of the spread in price steps. To buy at a value of more 0 shifts the spread inside, less0 away from the spread.
+		/// </summary>
+		public static string ShiftThePriceStepsFromTheEdge => GetString(ShiftThePriceStepsFromTheEdgeKey);
+		
+		/// <summary>
+		/// Timeout (sec)
+		/// </summary>
+		public const string TimeOutSecondKey = nameof(TimeOutSecond);
+
+		/// <summary>
+		/// Timeout (sec)
+		/// </summary>
+		public static string TimeOutSecond => GetString(TimeOutSecondKey);
+		
+		/// <summary>
+		/// The interval in seconds, not more than which you can rearrange orders.
+		/// </summary>
+		public const string IntervalInSecondsKey = nameof(IntervalInSeconds);
+
+		/// <summary>
+		/// The interval in seconds, not more than which you can rearrange orders.
+		/// </summary>
+		public static string IntervalInSeconds => GetString(IntervalInSecondsKey);
+		
+		/// <summary>
+		/// Stop and close positions
+		/// </summary>
+		public const string StopAndClosePositionsKey = nameof(StopAndClosePositions);
+
+		/// <summary>
+		/// Stop and close positions
+		/// </summary>
+		public static string StopAndClosePositions => GetString(StopAndClosePositionsKey);
+
+		/// <summary>
+		/// Strategy added
+		/// </summary>
+		public const string StrategyAddedKey = nameof(StrategyAdded);
+
+		/// <summary>
+		/// Strategy added
+		/// </summary>
+		public static string StrategyAdded => GetString(StrategyAddedKey);
 	}
 }
