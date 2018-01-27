@@ -113,12 +113,7 @@ namespace StockSharp.Algo
 					var mdMsg = (MarketDataMessage)message;
 					var security = GetSecurity(mdMsg.SecurityId);
 
-					if (mdMsg.IsSubscribe)
-					{
-						SubscribeMarketData(security, mdMsg);
-					}
-					else
-						UnSubscribeMarketData(security, mdMsg);
+					_subscriptionManager.ProcessRequest(security, mdMsg, true);
 				}
 				else
 					SendInMessage(message);

@@ -67,12 +67,26 @@ namespace StockSharp.Algo
 
 			public IEnumerable<Portfolio> RegisteredPortfolios => _registeredPortfolios.Cache;
 
-			public void SubscribeUnSubscribe(Security security, MarketDataMessage message)
+			public void ProcessRequest(Security security, MarketDataMessage message, bool tryAdd)
 			{
 				if (security == null)
 					throw new ArgumentNullException(nameof(security));
 
-				_pendingSubscriptions.Add(message.TransactionId, Tuple.Create((MarketDataMessage)message.Clone(), security));
+				if (message == null)
+					throw new ArgumentNullException(nameof(message));
+
+				if (message.TransactionId == 0)
+					message.TransactionId = _connector.TransactionIdGenerator.GetNextId();
+
+				message.FillSecurityInfo(_connector, security);
+
+				var value = Tuple.Create((MarketDataMessage)message.Clone(), security);
+
+				if (tryAdd)
+					_pendingSubscriptions.TryAdd(message.TransactionId, value);
+				else
+					_pendingSubscriptions.Add(message.TransactionId, value);
+
 				_connector.SendInMessage(message);
 			}
 
@@ -173,18 +187,7 @@ namespace StockSharp.Algo
 		/// <param name="message">The message that contain subscribe info.</param>
 		public virtual void SubscribeMarketData(Security security, MarketDataMessage message)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (message.TransactionId == 0)
-				message.TransactionId = TransactionIdGenerator.GetNextId();
-
-			message.FillSecurityInfo(this, security);
-
-			_subscriptionManager.SubscribeUnSubscribe(security, message);
+			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 
 		/// <summary>
@@ -194,18 +197,7 @@ namespace StockSharp.Algo
 		/// <param name="message">The message that contain unsubscribe info.</param>
 		public virtual void UnSubscribeMarketData(Security security, MarketDataMessage message)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (message.TransactionId == 0)
-				message.TransactionId = TransactionIdGenerator.GetNextId();
-
-			message.FillSecurityInfo(this, security);
-
-			_subscriptionManager.SubscribeUnSubscribe(security, message);
+			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 
 		private void SubscribeMarketData(Security security, MarketDataTypes type)
