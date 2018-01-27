@@ -83,7 +83,10 @@ namespace StockSharp.Algo
 				var value = Tuple.Create((MarketDataMessage)message.Clone(), security);
 
 				if (tryAdd)
+				{
+					// if the message was looped back via IsBack=true
 					_pendingSubscriptions.TryAdd(message.TransactionId, value);
+				}
 				else
 					_pendingSubscriptions.Add(message.TransactionId, value);
 

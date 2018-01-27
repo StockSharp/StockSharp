@@ -7,6 +7,7 @@ StockSharp API Change log
 * (bug) OrderRegMsg.TillDate usage fix.
 * (bug) InteractiveBrokers. Resubscribe fix.
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
+* (bug) BasketMessageAdapter. Fix subscription for not yet connected adapters.
 
 ## v4.4.4:
 * (feature) IPositionProvider interface added.
