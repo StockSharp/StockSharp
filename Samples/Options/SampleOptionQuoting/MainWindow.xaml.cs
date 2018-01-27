@@ -586,7 +586,7 @@ namespace SampleOptionQuoting
 			if (option != null)
 			{
 				ImpliedVolatility.Text = option.ImpliedVolatility.To<string>();
-				ImpliedVolatilityMin.Value = ImpliedVolatilityMax.Value = option.ImpliedVolatility;
+				ImpliedVolatilityMin.EditValue = ImpliedVolatilityMax.EditValue = option.ImpliedVolatility;
 			}
 
 			Start.IsEnabled = option != null;
@@ -610,7 +610,7 @@ namespace SampleOptionQuoting
 
 			// create option quoting for 20 contracts
 			var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
-					new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
+					new Range<decimal>((decimal?)ImpliedVolatilityMin.EditValue ?? 0, (decimal?)ImpliedVolatilityMax.EditValue ?? 100))
 			{
 				// working size is 1 contract
 				Volume = 1,

@@ -5,9 +5,9 @@
 		Title="{x:Static loc:LocalizedStrings.XamlStr562}" Height="520" Width="834"
 		xmlns:sx="http://schemas.stocksharp.com/xaml"
 		xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
-        xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml">
+        xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
 
 	<Window.Resources>
 		<ex:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseVisibilityValue="Hidden" />
@@ -72,8 +72,8 @@
 
 					<TextBox x:Name="SecId" />
 					<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-						<xctk:DateTimePicker x:Name="From" Width="180" />
-						<xctk:DateTimePicker x:Name="To"  Width="180" />
+						<dxe:DateEdit x:Name="From" Width="180" />
+						<dxe:DateEdit x:Name="To"  Width="180" />
 
 						<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr117}" VerticalAlignment="Center" Name="DebugLogCheckBox" Click="CheckBoxClick" />
 					</StackPanel>

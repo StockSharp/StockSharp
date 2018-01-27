@@ -43,8 +43,8 @@ namespace SampleBarChart
 			TimeFramePicker.ItemsSource = BarChartMessageAdapter.AllTimeFrames;
 			TimeFramePicker.SelectedIndex = 0;
 
-			DateFromPicker.Value = DateTime.Today.AddDays(-7);
-			DateToPicker.Value = DateTime.Today;
+			From.EditValue = DateTime.Today.AddDays(-7);
+			To.EditValue = DateTime.Today;
 
 			var area = new ChartArea();
 			_candlesElem = new ChartCandleElement();
@@ -55,13 +55,13 @@ namespace SampleBarChart
 
 		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
 		{
-			if (DateFromPicker.Value == null || DateToPicker.Value == null)
+			if (From.EditValue == null || To.EditValue == null)
 			{
 				MessageBox.Show(LocalizedStrings.Str3748, Title, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
 
-			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandleMessage), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out bool isSuccess);
+			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandleMessage), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)From.EditValue, (DateTime)To.EditValue, out var _);
 
 			Chart.Reset(new[] { _candlesElem });
 

@@ -35,19 +35,19 @@ namespace SampleBarChart
 			InitializeComponent();
 			Title = _security.Code + " ticks history";
 
-			DateFromPicker.Value = DateTime.Today.AddDays(-7);
-			DateToPicker.Value = DateTime.Today;
+			DateFromPicker.EditValue = DateTime.Today.AddDays(-7);
+			DateToPicker.EditValue = DateTime.Today;
 		}
 
 		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
 		{
-			if (DateFromPicker.Value == null || DateToPicker.Value == null)
+			if (DateFromPicker.EditValue == null || DateToPicker.EditValue == null)
 			{
 				MessageBox.Show(LocalizedStrings.Str3748, Title, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
 
-			var ticks = MainWindow.Instance.Trader.GetHistoricalTicks(_security, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out var _);
+			var ticks = MainWindow.Instance.Trader.GetHistoricalTicks(_security, (DateTime)DateFromPicker.EditValue, (DateTime)DateToPicker.EditValue, out var _);
 
 			Ticks.Messages.Clear();
 			Ticks.Messages.AddRange(ticks);

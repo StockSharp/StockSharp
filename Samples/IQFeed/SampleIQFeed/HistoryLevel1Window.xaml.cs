@@ -39,18 +39,18 @@ namespace SampleIQFeed
 			InitializeComponent();
 			Title = _security.Code + LocalizedStrings.Str3749;
 
-			DatePicker.Value = DateTime.Today.AddDays(-7);
+			DatePicker.EditValue = DateTime.Today.AddDays(-7);
 		}
 
 		private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
 		{
-			if (DatePicker.Value == null)
+			if (DatePicker.EditValue == null)
 			{
 				MessageBox.Show(LocalizedStrings.Str3750, Title, MessageBoxButton.OK, MessageBoxImage.Information);
 				return;
 			}
 
-			var date = ((DateTime)DatePicker.Value).Date;
+			var date = ((DateTime)DatePicker.EditValue).Date;
 
 			BusyIndicator.IsBusy = true;
 

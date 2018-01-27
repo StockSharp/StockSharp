@@ -3,8 +3,8 @@
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 		xmlns:sx="http://schemas.stocksharp.com/xaml"
+		xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
 		Title="{x:Static loc:LocalizedStrings.XamlStr568}" Height="260" Width="350"
 		WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
@@ -40,10 +40,10 @@
 		<ComboBox x:Name="HistoryInterval" Grid.Column="1" Grid.Row="4" Margin="5"/>
 
 		<Label Content="{x:Static loc:LocalizedStrings.XamlStr341}" Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-		<xctk:DateTimePicker x:Name="From" Grid.Column="1" Grid.Row="5" Margin="5" />
+		<dxe:DateEdit x:Name="From" Grid.Column="1" Grid.Row="5" Margin="5" />
 
 		<Label Content="{x:Static loc:LocalizedStrings.XamlStr254}" Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-		<xctk:DateTimePicker x:Name="To" Grid.Column="1" Grid.Row="6" Margin="5"/>
+		<dxe:DateEdit x:Name="To" Grid.Column="1" Grid.Row="6" Margin="5"/>
 
 		<TextBlock Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Right">
 			<Run Text="{x:Static loc:LocalizedStrings.RealTime}" />:

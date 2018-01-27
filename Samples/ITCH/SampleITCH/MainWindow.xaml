@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="600" Width="800">
     <Grid>
 		<Grid.ColumnDefinitions>
@@ -18,11 +18,9 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<xctk:DropDownButton Content="{x:Static loc:LocalizedStrings.Settings}">
-			<xctk:DropDownButton.DropDownContent>
-				<xaml:PropertyGridEx x:Name="Settings" Width="300" />
-			</xctk:DropDownButton.DropDownContent>
-		</xctk:DropDownButton>
+		<dx:DropDownButton Content="{x:Static loc:LocalizedStrings.Settings}">
+			<xaml:PropertyGridEx x:Name="Settings" Width="300" />
+		</dx:DropDownButton>
 
 		<!--<TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
 		<TextBox Grid.Column="1" Grid.Row="0" x:Name="Login" Text="" />
@@ -80,3 +78,6 @@
 		<xaml:Monitor x:Name="Monitor" Grid.Row="1" Grid.ColumnSpan="5" Grid.Column="0" ShowStrategies="False" />
 	</Grid>
 </Window>
+
+
+

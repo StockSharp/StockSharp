@@ -15,8 +15,9 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleIQFeed
 {
-	using System;
 	using System.Windows;
+
+	using DevExpress.Xpf.Editors;
 
 	public partial class NewsWindow
 	{
@@ -27,12 +28,12 @@ namespace SampleIQFeed
 
 		private void HistoryNews_OnClick(object sender, RoutedEventArgs e)
 		{
-			MainWindow.Instance.Trader.RequestNews((DateTime)DatePicker.Value);
+			MainWindow.Instance.Trader.RequestNews(DatePicker.DateTime);
 		}
 
-		private void DatePicker_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		private void DatePicker_OnValueChanged(object sender, EditValueChangedEventArgs e)
 		{
-			HistoryNews.IsEnabled = DatePicker.Value != null;
+			HistoryNews.IsEnabled = e.NewValue != null;
 		}
 	}
 }

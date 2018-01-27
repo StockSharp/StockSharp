@@ -42,8 +42,8 @@ namespace SampleAlfaCandles
 			HistoryInterval.ItemsSource = AlfaTimeFrames.AllTimeFrames;
 
 			HistoryInterval.SelectedIndex = 2;
-			From.Value = DateTime.Today - TimeSpan.FromDays(7);
-			To.Value = DateTime.Now;
+			From.EditValue = DateTime.Today - TimeSpan.FromDays(7);
+			To.EditValue = DateTime.Now;
 
 			_logManager.Listeners.Add(new FileLogListener());
 		}
@@ -107,8 +107,8 @@ namespace SampleAlfaCandles
 
 			var timeFrame = (TimeSpan)HistoryInterval.SelectedItem;
 
-			var from = (DateTimeOffset?)From.Value;
-			var to = RealTime.IsChecked == true ? null : (DateTimeOffset?)To.Value;
+			var from = (DateTime?)From.EditValue;
+			var to = RealTime.IsChecked == true ? null : (DateTime?)To.EditValue;
 
 			if (from > to)
 			{

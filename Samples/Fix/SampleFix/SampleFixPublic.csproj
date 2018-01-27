@@ -96,9 +96,6 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
     <Reference Include="DevExpress.Data.v17.2">
       <HintPath>..\..\..\References\DevExpress.Data.v17.2.dll</HintPath>
     </Reference>

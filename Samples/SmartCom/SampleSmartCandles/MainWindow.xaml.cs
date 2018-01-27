@@ -45,8 +45,8 @@ namespace SampleSmartCandles
 			HistoryInterval.ItemsSource = SmartComTimeFrames.AllTimeFrames;
 
 			HistoryInterval.SelectedIndex = 2;
-			From.Value = DateTime.Today - TimeSpan.FromDays(7);
-			To.Value = DateTime.Now;
+			From.EditValue = DateTime.Today - TimeSpan.FromDays(7);
+			To.EditValue = DateTime.Now;
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
@@ -148,7 +148,7 @@ namespace SampleSmartCandles
 			if (IsRealTime.IsChecked == true)
 				_candleManager.Start(series, DateTime.Today, null);
 			else
-				_candleManager.Start(series, From.Value, To.Value);
+				_candleManager.Start(series, (DateTime?)From.EditValue, (DateTime?)To.EditValue);
 		}
 
 		private void OnSecuritySelected()

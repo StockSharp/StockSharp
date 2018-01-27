@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         Title="{x:Static loc:LocalizedStrings.XamlStr539}" Height="430" Width="630">
 	<Grid Margin="5">
 		<Grid.ColumnDefinitions>
@@ -48,10 +48,10 @@
 		<TextBox x:Name="ImpliedVolatility" Grid.Column="1" Grid.Row="5" IsReadOnly="True" />
 
 		<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr64}" Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
-		<xctk:DecimalUpDown x:Name="ImpliedVolatilityMin" Grid.Column="3" Grid.Row="5" IsReadOnly="True" />
+		<dxe:SpinEdit x:Name="ImpliedVolatilityMin" IsFloatValue="True" Grid.Column="3" Grid.Row="5" IsReadOnly="True" />
 
 		<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr63}" Grid.Column="4" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
-		<xctk:DecimalUpDown x:Name="ImpliedVolatilityMax" Grid.Column="5" Grid.Row="5" IsReadOnly="True" />
+		<dxe:SpinEdit x:Name="ImpliedVolatilityMax" IsFloatValue="True" Grid.Column="5" Grid.Row="5" IsReadOnly="True" />
 
 		<TabControl Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
 			<TabItem Header="Position">

@@ -130,8 +130,8 @@ namespace SampleHistoryTesting
 			{
 				SecId.Text = "RIZ2@FORTS";
 
-				From.Value = new DateTime(2012, 10, 1);
-				To.Value = new DateTime(2012, 10, 25);
+				From.EditValue = new DateTime(2012, 10, 1);
+				To.EditValue = new DateTime(2012, 10, 25);
 
 				TimeFrame.SelectedIndex = 1;
 			}
@@ -139,8 +139,8 @@ namespace SampleHistoryTesting
 			{
 				SecId.Text = "@ES#@CMEMINI";
 
-				From.Value = new DateTime(2015, 8, 1);
-				To.Value = new DateTime(2015, 8, 31);
+				From.EditValue = new DateTime(2015, 8, 1);
+				To.EditValue = new DateTime(2015, 8, 31);
 
 				TimeFrame.SelectedIndex = 0;
 			}
@@ -323,8 +323,8 @@ namespace SampleHistoryTesting
 				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
 			};
 
-			var startTime = ((DateTime)From.Value).ChangeKind(DateTimeKind.Utc);
-			var stopTime = ((DateTime)To.Value).ChangeKind(DateTimeKind.Utc);
+			var startTime = ((DateTime)From.EditValue).ChangeKind(DateTimeKind.Utc);
+			var stopTime = ((DateTime)To.EditValue).ChangeKind(DateTimeKind.Utc);
 
 			// (ru only) ОЛ необходимо загружать с 18.45 пред дня, чтобы стаканы строились правильно
 			if (OrderLogCheckBox.IsChecked == true)

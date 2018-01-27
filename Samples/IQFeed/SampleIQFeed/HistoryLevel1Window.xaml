@@ -1,9 +1,10 @@
 <Window x:Class="SampleIQFeed.HistoryLevel1Window"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
         xmlns:xaml1="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         Title="{x:Static loc:LocalizedStrings.XamlStr220}" Height="300" Width="Auto">
 	
 	<xaml1:BusyIndicator x:Name="BusyIndicator">
@@ -20,7 +21,7 @@
 			</Grid.ColumnDefinitions>
 
 			<Label Grid.Column="0" Margin="2" Content="{x:Static loc:LocalizedStrings.XamlStr116}" />
-			<xctk:DateTimePicker Grid.Row="0" Grid.Column="1" Margin="2" ShowButtonSpinner="False" x:Name="DatePicker" />
+			<dxe:DateEdit Grid.Row="0" Grid.Column="1" Margin="2" x:Name="DatePicker" />
 
 			<Button Content="{x:Static loc:LocalizedStrings.XamlStr655}" Grid.Row="0" Grid.Column="2" Click="ButtonBase_OnClick"/>
 

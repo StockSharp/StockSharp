@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         mc:Ignorable="d" Title="{x:Static loc:LocalizedStrings.News}" Height="300" Width="400">
 	<Grid>
 		<Grid.RowDefinitions>
@@ -15,7 +15,7 @@
 		
 		<StackPanel Orientation="Horizontal">
 			<Label Margin="2" Content="{x:Static loc:LocalizedStrings.XamlStr116}" />
-			<xctk:DateTimePicker Margin="2" ShowButtonSpinner="False" x:Name="DatePicker" Width="170" ValueChanged="DatePicker_OnValueChanged" />
+			<dxe:DateEdit Margin="2" x:Name="DatePicker" Width="170" EditValueChanged="DatePicker_OnValueChanged" />
 
 			<Button x:Name="HistoryNews" Content="{x:Static loc:LocalizedStrings.XamlStr500}" Click="HistoryNews_OnClick" IsEnabled="False" />
 		</StackPanel>
