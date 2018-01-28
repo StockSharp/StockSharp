@@ -970,7 +970,7 @@ namespace StockSharp.Algo.Strategies
 			Description = LocalizedStrings.Str1376Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 4)]
-		public decimal Volume
+		public virtual decimal Volume
 		{
 			get => _volume.Value;
 			set
