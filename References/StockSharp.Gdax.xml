@@ -9,15 +9,6 @@
             The message adapter for <see cref="N:StockSharp.Gdax"/>.
             </summary>
         </member>
-        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Gdax.GdaxMessageAdapter"/>.
-            </summary>
-            <param name="transactionIdGenerator">Transaction id generator.</param>
-        </member>
-        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Gdax.GdaxMessageAdapter.Key">
             <summary>
             Key.
@@ -50,6 +41,30 @@
             Returns a string that represents the current object.
             </summary>
             <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Gdax.GdaxMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Gdax.GdaxOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Gdax"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Gdax.GdaxOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Gdax.GdaxOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Gdax.GdaxOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
         </member>
         <member name="T:StockSharp.Gdax.GdaxTrader">
             <summary>

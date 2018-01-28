@@ -1,7 +1,4 @@
 T:StockSharp.Bitfinex.BitfinexMessageAdapter/summary;DocStr2538
-M:StockSharp.Bitfinex.BitfinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Bitfinex.BitfinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Bitfinex.BitfinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bitfinex.BitfinexMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -10,6 +7,12 @@ M:StockSharp.Bitfinex.BitfinexMessageAdapter.Load(Ecng.Serialization.SettingsSto
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Bitfinex.BitfinexMessageAdapter.ToString/returns;DocStr50
+M:StockSharp.Bitfinex.BitfinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Bitfinex.BitfinexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Bitfinex.BitfinexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.Bitfinex.BitfinexOrderCondition/summary;DocStr60
+M:StockSharp.Bitfinex.BitfinexOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Bitfinex.BitfinexOrderCondition.StopPrice/summary;Str3460
 T:StockSharp.Bitfinex.BitfinexTrader/summary;DocStr2539
 M:StockSharp.Bitfinex.BitfinexTrader.#ctor/summary;DocStr1
 P:StockSharp.Bitfinex.BitfinexTrader.Key/summary;Str3304

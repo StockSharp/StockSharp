@@ -1,7 +1,4 @@
 T:StockSharp.Gdax.GdaxMessageAdapter/summary;DocStr2538
-M:StockSharp.Gdax.GdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Gdax.GdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Gdax.GdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Gdax.GdaxMessageAdapter.Key/summary;Str3304
 P:StockSharp.Gdax.GdaxMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Gdax.GdaxMessageAdapter.Passphrase/summary;Passphrase
@@ -11,6 +8,12 @@ M:StockSharp.Gdax.GdaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/su
 M:StockSharp.Gdax.GdaxMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Gdax.GdaxMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Gdax.GdaxMessageAdapter.ToString/returns;DocStr50
+M:StockSharp.Gdax.GdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Gdax.GdaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Gdax.GdaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.Gdax.GdaxOrderCondition/summary;DocStr60
+M:StockSharp.Gdax.GdaxOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Gdax.GdaxOrderCondition.StopPrice/summary;Str3460
 T:StockSharp.Gdax.GdaxTrader/summary;DocStr2539
 M:StockSharp.Gdax.GdaxTrader.#ctor/summary;DocStr1
 P:StockSharp.Gdax.GdaxTrader.Key/summary;Str3304

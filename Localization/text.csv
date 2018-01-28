@@ -14622,3 +14622,8 @@ DocStr10247;Middle line color;Цвет средней линии
 DocStr10248;Upper line color;Цвет верхней линии
 DocStr10249;Lower line color;Цвет нижний линии
 DocStr10250;Attribute, applied to indicator's painter, to provide information about type of {0};Атрибут, применяющийся к отрисовщику индикатора для предоставления информации о типе {0}
+DocStr10251;Is specified security id asssociated with the board;Принадлежит ли указанный идентификатор инструмента площадку
+DocStr10252;{0}, if asssociated, otherwise, {1};{0}, если принадлежит, иначе, {1}
+DocStr10253;Stop order types;Тип стоп-заявок
+DocStr10254;Stop-loss and take-profit;Стоп-лосс и тейк-профит
+DocStr10255;Order flags;Флаги заявки

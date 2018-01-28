@@ -6412,10 +6412,6 @@
             Менеджер транзакций.
             </summary>
     </member>
-    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.TransactionSynchronizer">
-      <summary>
-      </summary>
-    </member>
     <member name="T:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder">
       <summary>
             Построитель стакана из лога заявок Plaza 2.

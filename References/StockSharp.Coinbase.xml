@@ -9,15 +9,6 @@
             The message adapter for <see cref="N:StockSharp.Coinbase"/>.
             </summary>
         </member>
-        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Coinbase.CoinbaseMessageAdapter"/>.
-            </summary>
-            <param name="transactionIdGenerator">Transaction id generator.</param>
-        </member>
-        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Coinbase.CoinbaseMessageAdapter.Key">
             <summary>
             Key.
@@ -45,6 +36,30 @@
             Returns a string that represents the current object.
             </summary>
             <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Coinbase.CoinbaseMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Coinbase.CoinbaseOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Coinbase"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Coinbase.CoinbaseOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Coinbase.CoinbaseOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
         </member>
         <member name="T:StockSharp.Coinbase.CoinbaseTrader">
             <summary>

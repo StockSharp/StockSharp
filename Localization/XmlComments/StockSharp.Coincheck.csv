@@ -1,7 +1,4 @@
 T:StockSharp.Coincheck.CoincheckMessageAdapter/summary;DocStr2538
-M:StockSharp.Coincheck.CoincheckMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Coincheck.CoincheckMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Coincheck.CoincheckMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Coincheck.CoincheckMessageAdapter.Key/summary;Str3304
 P:StockSharp.Coincheck.CoincheckMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Coincheck.CoincheckMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -10,6 +7,12 @@ M:StockSharp.Coincheck.CoincheckMessageAdapter.Load(Ecng.Serialization.SettingsS
 M:StockSharp.Coincheck.CoincheckMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Coincheck.CoincheckMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Coincheck.CoincheckMessageAdapter.ToString/returns;DocStr50
+M:StockSharp.Coincheck.CoincheckMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Coincheck.CoincheckMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Coincheck.CoincheckMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.Coincheck.CoincheckOrderCondition/summary;DocStr60
+M:StockSharp.Coincheck.CoincheckOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Coincheck.CoincheckOrderCondition.StopPrice/summary;Str3460
 T:StockSharp.Coincheck.CoincheckTrader/summary;DocStr2539
 M:StockSharp.Coincheck.CoincheckTrader.#ctor/summary;DocStr1
 P:StockSharp.Coincheck.CoincheckTrader.Key/summary;Str3304

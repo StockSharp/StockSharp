@@ -9,15 +9,6 @@
             The message adapter for <see cref="N:StockSharp.HitBtc"/>.
             </summary>
         </member>
-        <member name="M:StockSharp.HitBtc.HitBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.HitBtc.HitBtcMessageAdapter"/>.
-            </summary>
-            <param name="transactionIdGenerator">Transaction id generator.</param>
-        </member>
-        <member name="M:StockSharp.HitBtc.HitBtcMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.HitBtc.HitBtcMessageAdapter.Key">
             <summary>
             Key.
@@ -45,6 +36,30 @@
             Returns a string that represents the current object.
             </summary>
             <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.HitBtc.HitBtcMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.HitBtc.HitBtcMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.HitBtc.HitBtcMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.HitBtc.HitBtcOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.HitBtc"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.HitBtc.HitBtcOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.HitBtc.HitBtcOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.HitBtc.HitBtcOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
         </member>
         <member name="T:StockSharp.HitBtc.HitBtcTrader">
             <summary>

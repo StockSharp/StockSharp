@@ -1,7 +1,4 @@
 T:StockSharp.Poloniex.PoloniexMessageAdapter/summary;DocStr2538
-M:StockSharp.Poloniex.PoloniexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Poloniex.PoloniexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Poloniex.PoloniexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Poloniex.PoloniexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Poloniex.PoloniexMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Poloniex.PoloniexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -10,6 +7,9 @@ M:StockSharp.Poloniex.PoloniexMessageAdapter.Load(Ecng.Serialization.SettingsSto
 M:StockSharp.Poloniex.PoloniexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Poloniex.PoloniexMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Poloniex.PoloniexMessageAdapter.ToString/returns;DocStr50
+M:StockSharp.Poloniex.PoloniexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Poloniex.PoloniexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Poloniex.PoloniexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Poloniex.PoloniexTrader/summary;DocStr2539
 M:StockSharp.Poloniex.PoloniexTrader.#ctor/summary;DocStr1
 P:StockSharp.Poloniex.PoloniexTrader.Key/summary;Str3304

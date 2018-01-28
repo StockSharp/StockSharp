@@ -9,15 +9,6 @@
             The message adapter for <see cref="N:StockSharp.Bithumb"/>.
             </summary>
         </member>
-        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Bithumb.BithumbMessageAdapter"/>.
-            </summary>
-            <param name="transactionIdGenerator">Transaction id generator.</param>
-        </member>
-        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <inheritdoc />
-        </member>
         <member name="P:StockSharp.Bithumb.BithumbMessageAdapter.Key">
             <summary>
             Key.
@@ -45,6 +36,15 @@
             Returns a string that represents the current object.
             </summary>
             <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bithumb.BithumbMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
         </member>
         <member name="T:StockSharp.Bithumb.BithumbTrader">
             <summary>

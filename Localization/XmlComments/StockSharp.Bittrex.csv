@@ -1,7 +1,4 @@
 T:StockSharp.Bittrex.BittrexMessageAdapter/summary;DocStr2538
-M:StockSharp.Bittrex.BittrexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
-M:StockSharp.Bittrex.BittrexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Bittrex.BittrexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Bittrex.BittrexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bittrex.BittrexMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Bittrex.BittrexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -10,6 +7,9 @@ M:StockSharp.Bittrex.BittrexMessageAdapter.Load(Ecng.Serialization.SettingsStora
 M:StockSharp.Bittrex.BittrexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Bittrex.BittrexMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Bittrex.BittrexMessageAdapter.ToString/returns;DocStr50
+M:StockSharp.Bittrex.BittrexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.Bittrex.BittrexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+M:StockSharp.Bittrex.BittrexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Bittrex.BittrexTrader/summary;DocStr2539
 M:StockSharp.Bittrex.BittrexTrader.#ctor/summary;DocStr1
 P:StockSharp.Bittrex.BittrexTrader.Key/summary;Str3304
