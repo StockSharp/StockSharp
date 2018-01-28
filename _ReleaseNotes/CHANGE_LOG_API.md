@@ -11,6 +11,7 @@ StockSharp API Change log
 * (feature) WEX (BTCE). Pusher support.
 * (bug) OrderLogGrid. Binding fix for TIF and Expiry date.
 * (bug) Bitstamp fixes.
+* (bug) MarketDataMessage. Do not set From value for real-time subscriptions.
 
 ## v4.4.4:
 * (feature) IPositionProvider interface added.

@@ -447,7 +447,14 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var msg = (MarketDataMessage)info.MarketDataMessage.Clone();
 			msg.TransactionId = info.TransactionId;
-			msg.From = info.LastTime;
+
+			if (!isBack && !msg.IsRealTimeSubscription())
+			{
+				msg.From = info.LastTime;
+
+				if (msg.To != null && msg.From >= msg.To)
+					return;
+			}
 
 			var reseted = ResetMarketDataMessageArg(info, msg);
 

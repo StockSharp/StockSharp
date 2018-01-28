@@ -692,6 +692,19 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Is specified message id real-time subscription.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns><see langword="true" />, if real-time, otherwise, <see langword="false"/>.</returns>
+		public static bool IsRealTimeSubscription(this MarketDataMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.From == null && message.To == null;
+		}
+
+		/// <summary>
 		/// Validate <see cref="MarketDataMessage.From"/> and <see cref="MarketDataMessage.To"/> values.
 		/// </summary>
 		/// <param name="message">Message.</param>
