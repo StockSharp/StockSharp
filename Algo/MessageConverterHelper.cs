@@ -1672,8 +1672,8 @@ namespace StockSharp.Algo
 			if (message.Currency != null)
 				portfolio.Currency = message.Currency;
 
-			if (message.State != null)
-				portfolio.State = message.State;
+			//if (message.State != null)
+			//	portfolio.State = message.State;
 
 			message.CopyExtensionInfo(portfolio);
 

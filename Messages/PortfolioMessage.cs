@@ -76,17 +76,17 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string BoardCode { get; set; }
 
-		/// <summary>
-		/// Portfolio state.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.StateKey)]
-		[DescriptionLoc(LocalizedStrings.Str252Key)]
-		[MainCategory]
-		public PortfolioStates? State { get; set; }
+		///// <summary>
+		///// Portfolio state.
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.StateKey)]
+		//[DescriptionLoc(LocalizedStrings.Str252Key)]
+		//[MainCategory]
+		//public PortfolioStates? State { get; set; }
 
 		/// <summary>
-		/// ID of the original message <see cref="PortfolioMessage.TransactionId"/> for which this message is a response.
+		/// ID of the original message <see cref="TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
@@ -153,7 +153,7 @@ namespace StockSharp.Messages
 			destination.BoardCode = BoardCode;
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.IsSubscribe = IsSubscribe;
-			destination.State = State;
+			//destination.State = State;
 			destination.TransactionId = TransactionId;
 
 			this.CopyExtensionInfo(destination);
