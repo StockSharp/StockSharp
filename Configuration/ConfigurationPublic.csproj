@@ -64,14 +64,29 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="StockSharp.AlfaDirect">
+      <HintPath>..\References\StockSharp.AlfaDirect.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BarChart">
+      <HintPath>..\References\StockSharp.BarChart.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Bitfinex">
       <HintPath>..\References\StockSharp.Bitfinex.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Bithumb">
       <HintPath>..\References\StockSharp.Bithumb.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.BitStamp">
+      <HintPath>..\References\StockSharp.BitStamp.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Bittrex">
       <HintPath>..\References\StockSharp.Bittrex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Blackwood">
+      <HintPath>..\References\StockSharp.Blackwood.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Btce">
+      <HintPath>..\References\StockSharp.Btce.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Coinbase">
       <HintPath>..\References\StockSharp.Coinbase.dll</HintPath>
@@ -79,8 +94,20 @@
     <Reference Include="StockSharp.Coincheck">
       <HintPath>..\References\StockSharp.Coincheck.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Cqg.Com">
+      <HintPath>..\References\StockSharp.Cqg.Com.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Cqg.Continuum">
+      <HintPath>..\References\StockSharp.Cqg.Continuum.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.ETrade">
+      <HintPath>..\References\StockSharp.ETrade.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Fix">
       <HintPath>..\References\StockSharp.Fix.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Fxcm">
+      <HintPath>..\References\StockSharp.Fxcm.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Gdax">
       <HintPath>..\References\StockSharp.Gdax.dll</HintPath>
@@ -88,17 +115,32 @@
     <Reference Include="StockSharp.HitBtc">
       <HintPath>..\References\StockSharp.HitBtc.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.InteractiveBrokers">
+      <HintPath>..\References\StockSharp.InteractiveBrokers.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.IQFeed">
+      <HintPath>..\References\StockSharp.IQFeed.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.ITCH">
       <HintPath>..\References\StockSharp.ITCH.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Kraken">
       <HintPath>..\References\StockSharp.Kraken.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.LMAX">
+      <HintPath>..\References\StockSharp.LMAX.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Micex">
       <HintPath>..\References\StockSharp.Micex.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Oanda">
+      <HintPath>..\References\StockSharp.Oanda.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Okcoin">
       <HintPath>..\References\StockSharp.Okcoin.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.OpenECry">
+      <HintPath>..\References\StockSharp.OpenECry.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Plaza">
       <HintPath>..\References\StockSharp.Plaza.dll</HintPath>
@@ -109,8 +151,26 @@
     <Reference Include="StockSharp.QuantHouse">
       <HintPath>..\References\StockSharp.QuantHouse.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Quik">
+      <HintPath>..\References\StockSharp.Quik.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Rithmic">
+      <HintPath>..\References\StockSharp.Rithmic.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Rss">
+      <HintPath>..\References\StockSharp.Rss.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.SmartCom">
+      <HintPath>..\References\StockSharp.SmartCom.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.SpbEx">
       <HintPath>..\References\StockSharp.SpbEx.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Sterling">
+      <HintPath>..\References\StockSharp.Sterling.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Transaq">
+      <HintPath>..\References\StockSharp.Transaq.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Twime">
       <HintPath>..\References\StockSharp.Twime.dll</HintPath>
@@ -142,78 +202,6 @@
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj">
-      <Project>{AAA445E0-AA85-4B49-AD45-EDD1B4839137}</Project>
-      <Name>AlfaDirect</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BarChart\BarChart.csproj">
-      <Project>{99B84E0C-D035-4BD9-8A42-8232ED6BA3F4}</Project>
-      <Name>BarChart</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitStamp\BitStamp.csproj">
-      <Project>{90B93AF4-3168-4415-B916-9E078F192696}</Project>
-      <Name>BitStamp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Blackwood\Blackwood.csproj">
-      <Project>{C0D530DD-1E5A-4BE4-9AC6-FF11E5FC9B26}</Project>
-      <Name>Blackwood</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Btce\Btce.csproj">
-      <Project>{AF225452-1CF1-48A2-B381-C02BEBE643D7}</Project>
-      <Name>Btce</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cqg.Com\Cqg.Com.csproj">
-      <Project>{34984b57-9200-47b9-ac78-0d93fdfa437a}</Project>
-      <Name>Cqg.Com</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Cqg.Continuum\Cqg.Continuum.csproj">
-      <Project>{3edd3bf7-3f1e-4192-87aa-54dfaa17340c}</Project>
-      <Name>Cqg.Continuum</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ETrade\ETrade.csproj">
-      <Project>{480539A8-CA30-4B87-B038-6AD854DA0C6A}</Project>
-      <Name>ETrade</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
-      <Project>{F17D780E-6F82-40FD-84E1-C4EB09853BBD}</Project>
-      <Name>InteractiveBrokers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IQFeed\IQFeed.csproj">
-      <Project>{F3068408-9764-432E-8FB4-596B308EDB4F}</Project>
-      <Name>IQFeed</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LMAX\LMAX.csproj">
-      <Project>{4B37342E-9A01-499B-9E32-2E9948A6D0C4}</Project>
-      <Name>LMAX</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Oanda\Oanda.csproj">
-      <Project>{9188d051-7faa-4cf7-9d93-6d59e2faedd0}</Project>
-      <Name>Oanda</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\OpenECry\OpenECry.csproj">
-      <Project>{17eae926-c9a9-40c7-8d54-3545077b4ab7}</Project>
-      <Name>OpenECry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj">
-      <Project>{ffbc7740-0d2b-49ba-8f95-59e4fc915d06}</Project>
-      <Name>Rithmic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rss\Rss.csproj">
-      <Project>{fbc5be61-e6d9-47df-9515-900184ddeba0}</Project>
-      <Name>Rss</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SmartCom\SmartCom.csproj">
-      <Project>{3ebec334-3476-4f65-81c4-bc9d217550c1}</Project>
-      <Name>SmartCom</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Sterling\Sterling.csproj">
-      <Project>{9add140b-1c43-4077-b32e-0eba81648c4d}</Project>
-      <Name>Sterling</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Transaq\Transaq.csproj">
-      <Project>{a00e5a4b-cb24-474a-8f2b-06a2e370c4f6}</Project>
-      <Name>Transaq</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>
@@ -234,10 +222,6 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Quik\QuikPublic.csproj">
-      <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
-      <Name>QuikPublic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Localization\Localization.csproj">
       <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
       <Name>Localization</Name>
@@ -249,10 +233,6 @@
     <ProjectReference Include="..\Messages\Messages.csproj">
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Fxcm\Fxcm.csproj">
-      <Project>{358B4D44-CB92-4DED-AFD4-3DAC72D167E5}</Project>
-      <Name>Fxcm</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

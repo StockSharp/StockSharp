@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SampleBarChart</RootNamespace>
     <AssemblyName>SampleBarChart</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -62,6 +62,9 @@
   <ItemGroup>
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BarChart">
+      <HintPath>..\..\..\References\StockSharp.BarChart.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -213,10 +216,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\BarChart\BarChart.csproj">
-      <Project>{99B84E0C-D035-4BD9-8A42-8232ED6BA3F4}</Project>
-      <Name>BarChart</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{C449D618-DEA4-41C3-BA86-9F827C7421DC}</Project>
       <Name>Xaml.Charting</Name>
