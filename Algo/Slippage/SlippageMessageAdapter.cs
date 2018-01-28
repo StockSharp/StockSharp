@@ -72,14 +72,17 @@ namespace StockSharp.Algo.Slippage
 		/// <param name="message">The message.</param>
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			var slippage = SlippageManager.ProcessMessage(message);
-
-			if (slippage != null)
+			if (!message.IsBack)
 			{
-				var execMsg = (ExecutionMessage)message;
+				var slippage = SlippageManager.ProcessMessage(message);
 
-				if (execMsg.Slippage == null)
-					execMsg.Slippage = slippage;
+				if (slippage != null)
+				{
+					var execMsg = (ExecutionMessage)message;
+
+					if (execMsg.Slippage == null)
+						execMsg.Slippage = slippage;
+				}	
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);

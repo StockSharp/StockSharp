@@ -75,7 +75,8 @@ namespace StockSharp.Algo.Latency
 		/// <param name="message">The message.</param>
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			ProcessExecution(message);
+			if (!message.IsBack)
+				ProcessExecution(message);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

@@ -76,7 +76,8 @@ namespace StockSharp.Algo.Risk
 		/// <param name="message">The message.</param>
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			ProcessRisk(message);
+			if (!message.IsBack)
+				ProcessRisk(message);
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

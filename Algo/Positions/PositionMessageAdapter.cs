@@ -72,10 +72,13 @@ namespace StockSharp.Algo.Positions
 		/// <param name="message">The message.</param>
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			var position = PositionManager.ProcessMessage(message);
+			if (!message.IsBack)
+			{
+				var position = PositionManager.ProcessMessage(message);
 
-			if (position != null)
-				((ExecutionMessage)message).Position = position;
+				if (position != null)
+					((ExecutionMessage)message).Position = position;	
+			}
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}

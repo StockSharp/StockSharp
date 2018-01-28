@@ -75,6 +75,12 @@ namespace StockSharp.Algo
 		/// <param name="message">The message.</param>
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				base.OnInnerAdapterNewOutMessage(message);
+				return;
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:

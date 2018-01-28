@@ -72,10 +72,13 @@ namespace StockSharp.Algo.PnL
 		/// <param name="message">The message.</param>
 		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
-			var info = PnLManager.ProcessMessage(message);
+			if (!message.IsBack)
+			{
+				var info = PnLManager.ProcessMessage(message);
 
-			if (info != null && info.PnL != 0)
-				((ExecutionMessage)message).PnL = info.PnL;
+				if (info != null && info.PnL != 0)
+					((ExecutionMessage)message).PnL = info.PnL;	
+			}
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}
