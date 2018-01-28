@@ -1,104 +1,80 @@
 <?xml version="1.0"?>
 <doc>
-  <assembly>
-    <name>StockSharp.BitStamp</name>
-  </assembly>
-  <members>
-    <member name="T:StockSharp.BitStamp.BitStampMessageAdapter">
-      <summary>
-            The message adapter for <see cref="N:StockSharp.BitStamp" />.
+    <assembly>
+        <name>StockSharp.BitStamp</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.BitStamp.BitStampMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.BitStamp"/>.
             </summary>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.BitStamp.BitStampMessageAdapter" />.
+        </member>
+        <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitStamp.BitStampMessageAdapter"/>.
             </summary>
-      <param name="transactionIdGenerator">Transaction id generator.</param>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativeSecurityLookup">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativePortfolioLookup">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.CreateOrderCondition">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <inheritdoc />
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.Key">
-      <summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.Key">
+            <summary>
             Key.
             </summary>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.Secret">
-      <summary>
+        </member>
+        <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.Secret">
+            <summary>
             Secret.
             </summary>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.ClientId">
-      <summary>
+        </member>
+        <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.ClientId">
+            <summary>
             Client ID.
             </summary>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
+        </member>
+        <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
             Save settings.
             </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
             Load settings.
             </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.ToString">
-      <summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.ToString">
+            <summary>
             Returns a string that represents the current object.
             </summary>
-      <returns>A string that represents the current object.</returns>
-    </member>
-    <member name="T:StockSharp.BitStamp.BitStampOrderCondition">
-      <summary>
-        <see cref="N:StockSharp.BitStamp" /> order condition.
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.BitStamp.BitStampTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.BitStamp"/>.
             </summary>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampOrderCondition.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.BitStamp.BitStampOrderCondition" />.
+        </member>
+        <member name="M:StockSharp.BitStamp.BitStampTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.BitStamp.BitStampTrader"/>.
             </summary>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampOrderCondition.StopPrice">
-      <summary>
-            Activation price, when reached an order will be placed.
-            </summary>
-    </member>
-    <member name="T:StockSharp.BitStamp.BitStampTrader">
-      <summary>
-            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the <see cref="N:StockSharp.BitStamp" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampTrader.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.BitStamp.BitStampTrader" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampTrader.Key">
-      <summary>
+        </member>
+        <member name="P:StockSharp.BitStamp.BitStampTrader.Key">
+            <summary>
             Key.
             </summary>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampTrader.Secret">
-      <summary>
+        </member>
+        <member name="P:StockSharp.BitStamp.BitStampTrader.Secret">
+            <summary>
             Secret.
             </summary>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampTrader.ClientId">
-      <summary>
+        </member>
+        <member name="P:StockSharp.BitStamp.BitStampTrader.ClientId">
+            <summary>
             Client ID.
             </summary>
-    </member>
-  </members>
+        </member>
+    </members>
 </doc>
