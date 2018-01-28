@@ -9,6 +9,7 @@ StockSharp API Change log
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
 * (bug) BasketMessageAdapter. Fix subscription for not yet connected adapters.
 * (feature) WEX (BTCE). Pusher support.
+* (bug) OrderLogGrid. Binding fix for TIF and Expiry date.
 
 ## v4.4.4:
 * (feature) IPositionProvider interface added.
