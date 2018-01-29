@@ -3364,7 +3364,7 @@ namespace StockSharp.Algo
 
 			var folderName = id;
 
-			if (_reservedDos.Any(d => folderName.StartsWith(d, StringComparison.InvariantCultureIgnoreCase)))
+			if (_reservedDos.Any(d => folderName.StartsWithIgnoreCase(d)))
 				folderName = "_" + folderName;
 
 			return _securitySeparators
@@ -3384,7 +3384,7 @@ namespace StockSharp.Algo
 
 			var id = folderName.ToUpperInvariant();
 
-			if (id[0] == '_' && _reservedDos.Any(d => id.StartsWith("_" + d, StringComparison.InvariantCultureIgnoreCase)))
+			if (id[0] == '_' && _reservedDos.Any(d => id.StartsWithIgnoreCase("_" + d)))
 				id = id.Substring(1);
 
 			return _securitySeparators

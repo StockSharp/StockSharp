@@ -109,12 +109,12 @@ namespace XMLCommToHTM
 			return Tuple.Create((isMsdn
 				? MsdnUrlPrefix.Put(GenerateHtml.IsRussian ? "ru" : "en") + tagHref
 				: UrlPrefix + tagHref.Replace('.', '/'))
-					, tagHref.StartsWith("stocksharp", StringComparison.InvariantCultureIgnoreCase));
+					, tagHref.StartsWithIgnoreCase("stocksharp"));
 		}
 
 		private static bool IsMsdn(string name)
 		{
-			return name.StartsWith("system.", StringComparison.InvariantCultureIgnoreCase); //ToDo: усовершенcтвовать
+			return name.StartsWithIgnoreCase("system."); //ToDo: усовершенcтвовать
 		}
 
 		public string GetMemberHref(MemberDom m)
