@@ -2071,13 +2071,15 @@ Str2193;During source work a maximum number of errors occurred. Source will be s
 Str2197Params;Next start at {0}.;Следующий запуск в {0}.
 Str2198Params;For {0} impossible to save {1} {2} because '{3}'.;Для {0} невозможно сохранить {1} {2} по причине '{3}'.
 Str2199;Price is less than or equal to zero.;Цена меньше или равна нулю.
-Str2200;Trade price is not a multiple of security price step. Price step is '{0}', trade is '{1}'.;Цена сделки не кратна шагу цены инструмента. Шаг цены '{0}', сделка '{1}'.
+TradePriceNotMultiple;Trade price is not a multiple of security price step. Price step is '{0}', trade is '{1}'.;Цена сделки не кратна шагу цены инструмента. Шаг цены '{0}', сделка '{1}'.
+TradeVolumeNotMultiple;Trade volume is not a multiple of security volume step. Volume step is '{0}', trade is '{1}'.;Объем сделки не кратен шагу объема инструмента. Шаг объема '{0}', сделка '{1}'.
 Str2201;Best bid price is greater than best ask price.;Цена лучшего бида больше цены лучшего оффера.
 Str2202;Some quotes in the market depth have zero or negative price.;Некоторые котировки в стакане имеют нулевую или отрицательную цену.
 Str2203;Open price is not a multiple of security price step. Price step is '{0}', O is '{1}'.;Цена открытия не кратна шагу цены инструмента. Шаг цены '{0}', O '{1}'.
 Str2204;High price is not a multiple of security price step. Price step is '{0}', H is '{1}'.;Максимальная цена не кратна шагу цены инструмента. Шаг цены '{0}', H '{1}'.
 Str2205;Low price is not a multiple of security price step. Price step is '{0}', L is '{1}'.;Минимальная цена не кратна шагу цены инструмента. Шаг цены '{0}', L '{1}'.
 Str2206;Close price in not a multiple of security price step. Price step is '{0}', C is '{1}'.;Цена закрытия не кратна шагу цены инструмента. Шаг цены '{0}', C '{1}'.
+CandleVolumeNotMultiple;Candle volume is not a multiple of security volume step. Volume step is '{0}', candle is '{1}'.;Объем свечи не кратен шагу объема инструмента. Шаг объема '{0}', свеча '{1}'.
 Str2207Params;Loaded {0} {1}.;Загружено {0} {1}.
 Str2208Params;For {0} {1} {2} ({3}) were loaded.;Для {0} загружено {1} {2} ({3}).
 Str2209;New connection...;Новое подключение...

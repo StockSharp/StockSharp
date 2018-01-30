@@ -20710,12 +20710,22 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Trade price is not a multiple of security price step. Price step is '{0}', trade is '{1}'.
 		/// </summary>
-		public const string Str2200Key = nameof(Str2200);
+		public const string TradePriceNotMultipleKey = nameof(TradePriceNotMultiple);
 
 		/// <summary>
 		/// Trade price is not a multiple of security price step. Price step is '{0}', trade is '{1}'.
 		/// </summary>
-		public static string Str2200 => GetString(Str2200Key);
+		public static string TradePriceNotMultiple => GetString(TradePriceNotMultipleKey);
+
+		/// <summary>
+		/// Trade volume is not a multiple of security volume step. Volume step is '{0}', trade is '{1}'.
+		/// </summary>
+		public const string TradeVolumeNotMultipleKey = nameof(TradeVolumeNotMultiple);
+
+		/// <summary>
+		/// Trade volume is not a multiple of security volume step. Volume step is '{0}', trade is '{1}'.
+		/// </summary>
+		public static string TradeVolumeNotMultiple => GetString(TradeVolumeNotMultipleKey);
 
 		/// <summary>
 		/// Best bid price is greater than best ask price.
@@ -20776,6 +20786,16 @@ namespace StockSharp.Localization
 		/// Close price is not a multiple of security price step. Price step is '{0}', H is '{1}'.
 		/// </summary>
 		public static string Str2206 => GetString(Str2206Key);
+
+		/// <summary>
+		/// Candle volume is not a multiple of security volume step. Volume step is '{0}', candle is '{1}'.
+		/// </summary>
+		public const string CandleVolumeNotMultipleKey = nameof(CandleVolumeNotMultiple);
+
+		/// <summary>
+		/// Candle volume is not a multiple of security volume step. Volume step is '{0}', candle is '{1}'.
+		/// </summary>
+		public static string CandleVolumeNotMultiple => GetString(CandleVolumeNotMultipleKey);
 
 		/// <summary>
 		/// Loaded {0} {1}.
