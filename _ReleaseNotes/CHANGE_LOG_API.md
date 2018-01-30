@@ -13,7 +13,8 @@ StockSharp API Change log
 * (bug) Bitstamp fixes.
 * (bug) MarketDataMessage. Do not set From value for real-time subscriptions.
 * (feature) PortfolioMessage. Removed State property.
-* (feature) MarketRuleHelper. OrderProfitMoreRule
+* (feature) MarketRuleHelper. OrderProfitMoreRule.
+* (feature) QuotesBinarySnapshotSerializer. MaxDepth property.
 
 ## v4.4.4:
 * (feature) IPositionProvider interface added.
