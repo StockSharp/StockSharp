@@ -362,6 +362,97 @@ namespace StockSharp.Algo
 			}
 		}
 
+		class OrderProfitMoreRule : OrderRule<Order>
+		{
+			private readonly Unit _profitOffset;
+			private decimal? _bestBidPrice;
+			private decimal? _bestAskPrice;
+			private decimal _averagePrice;
+
+			private readonly List<Tuple<decimal, decimal>> _trades = new List<Tuple<decimal, decimal>>();
+
+			public OrderProfitMoreRule(Order order, Unit profitOffset, IConnector connector)
+				: base(order, connector)
+			{
+				if (profitOffset == null)
+					throw new ArgumentNullException(nameof(profitOffset));
+
+				if (profitOffset.Value <= 0)
+					throw new ArgumentOutOfRangeException(nameof(profitOffset));
+
+				_profitOffset = profitOffset;
+				// TODO
+				//Name = LocalizedStrings.Str1033;
+				TrySubscribe();
+			}
+
+			protected override void Subscribe()
+			{
+				Connector.MarketDepthChanged += OnMarketDepthChanged;
+				Connector.NewMyTrade += OnNewMyTrade;
+			}
+
+			protected override void UnSubscribe()
+			{
+				Connector.MarketDepthChanged -= OnMarketDepthChanged;
+				Connector.NewMyTrade -= OnNewMyTrade;
+			}
+
+			private void OnMarketDepthChanged(MarketDepth depth)
+			{
+				if (depth.Security != Order.Security)
+					return;
+
+				_bestBidPrice = depth.BestBid?.Price;
+				_bestAskPrice = depth.BestAsk?.Price;
+
+				TryActivate();
+			}
+
+			private void OnNewMyTrade(MyTrade trade)
+			{
+				if (trade.Order != Order)
+					return;
+
+				_trades.Add(Tuple.Create(trade.Trade.Price, trade.Trade.Volume));
+
+				var numerator = 0m;
+				var denominator = 0m;
+
+				foreach (var t in _trades)
+				{
+					if (t.Item2 == 0)
+						continue;
+
+					numerator += t.Item1 * t.Item2;
+					denominator += t.Item2;
+				}
+
+				if (denominator == 0)
+					return;
+
+				_averagePrice = numerator / denominator;
+
+				TryActivate();
+			}
+
+			private void TryActivate()
+			{
+				if (_trades.Count == 0)
+					return;
+
+				bool isActivate;
+
+				if (Order.Direction == Sides.Buy)
+					isActivate = _bestAskPrice >= (_averagePrice + _profitOffset);
+				else
+					isActivate = _bestBidPrice <= (_averagePrice - _profitOffset);
+
+				if (isActivate)
+					Activate(Order);
+			}
+		}
+
 		/// <summary>
 		/// To create a rule for the event of successful order registration on exchange.
 		/// </summary>
@@ -497,6 +588,18 @@ namespace StockSharp.Algo
 		public static MarketRule<Order, IEnumerable<MyTrade>> WhenAllTrades(this Order order, IConnector connector)
 		{
 			return new AllTradesOrderRule(order, connector);
+		}
+
+		/// <summary>
+		/// To create a rule for the order's profit more on offset.
+		/// </summary>
+		/// <param name="order">The order to be traced for profit.</param>
+		/// <param name="profitOffset">Profit offset.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, IConnector connector)
+		{
+			return new OrderProfitMoreRule(order, profitOffset, connector);
 		}
 
 		#endregion
