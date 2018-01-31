@@ -528,6 +528,9 @@ M:StockSharp.Messages.Extensions.IsObsolete(StockSharp.Messages.Level1Fields)/re
 M:StockSharp.Messages.Extensions.TryInitLocalTime(StockSharp.Messages.Message,StockSharp.Logging.ILogSource)/summary;DocStr10110
 M:StockSharp.Messages.Extensions.TryInitLocalTime(StockSharp.Messages.Message,StockSharp.Logging.ILogSource)/param/message;Str3166
 M:StockSharp.Messages.Extensions.TryInitLocalTime(StockSharp.Messages.Message,StockSharp.Logging.ILogSource)/param/source;Str213
+M:StockSharp.Messages.Extensions.IsRealTimeSubscription(StockSharp.Messages.MarketDataMessage)/summary;DocStr10260
+M:StockSharp.Messages.Extensions.IsRealTimeSubscription(StockSharp.Messages.MarketDataMessage)/param/message;Str3166
+M:StockSharp.Messages.Extensions.IsRealTimeSubscription(StockSharp.Messages.MarketDataMessage)/returns;DocStr10261
 M:StockSharp.Messages.Extensions.ValidateBounds(StockSharp.Messages.MarketDataMessage)/summary;DocStr10111
 M:StockSharp.Messages.Extensions.ValidateBounds(StockSharp.Messages.MarketDataMessage)/param/message;Str3166
 M:StockSharp.Messages.Extensions.ValidateBounds(StockSharp.Messages.MarketDataMessage)/returns;Str3166
@@ -1008,7 +1011,6 @@ T:StockSharp.Messages.PortfolioMessage/summary;DocStr4432
 P:StockSharp.Messages.PortfolioMessage.PortfolioName/summary;Str247
 P:StockSharp.Messages.PortfolioMessage.Currency/summary;Str251
 P:StockSharp.Messages.PortfolioMessage.BoardCode/summary;DocStr4375
-P:StockSharp.Messages.PortfolioMessage.State/summary;Str265
 P:StockSharp.Messages.PortfolioMessage.OriginalTransactionId/summary;DocStr4056
 P:StockSharp.Messages.PortfolioMessage.TransactionId/summary;DocStr4433
 P:StockSharp.Messages.PortfolioMessage.IsSubscribe/summary;DocStr4434

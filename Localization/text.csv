@@ -14629,3 +14629,9 @@ DocStr10252;{0}, if asssociated, otherwise, {1};{0}, если принадлеж
 DocStr10253;Stop order types;Тип стоп-заявок
 DocStr10254;Stop-loss and take-profit;Стоп-лосс и тейк-профит
 DocStr10255;Order flags;Флаги заявки
+DocStr10256;The maximum depth of order book. The default value is 100;Максимальная глубина стакана. По-умолчанию равно 100
+DocStr10257;To create a rule for the order's profit more on offset;Создать правило для отслеживания прибыльности заявки более чем на указанный уровень
+DocStr10258;The order to be traced for profit;Заявка, которую необходимо отслеживать на прибыльность
+DocStr10259;Profit offset;Уровень прибыли
+DocStr10260;Is specified message id real-time subscription;Является ли указанное сообщение подпиской реального времени
+DocStr10261;{0}, if real-time, otherwise, {1};{0}, если является подпиской реального времени, иначе, {1}
