@@ -1,5 +1,14 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.5:
+* (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
+* (feature) Show ALL checked for security lookup window.
+* (feature) Check volume step.
+* (bug) InteractiveBrokers. Resubscribe fix.
+* (bug) Fix data bounds.
+* (bug) Fix chart drawing stop while error occurred.
+* (feature) Envelope painter.
+
 ## v4.4.3:
 * (bug) FIX server. Fix security lookup. http://stocksharp.ru/forum/8874/problemy-podklyucheniya-k-hydra-cherez-fix-/
 * (bug) Level1 binary storage. Fixes.
