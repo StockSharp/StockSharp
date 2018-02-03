@@ -43,6 +43,18 @@ namespace StockSharp.Algo.Import
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.VolumeStep), LocalizedStrings.VolumeStep, LocalizedStrings.Str366, (i, v) => i.VolumeStep = v));
 				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.Multiplier), LocalizedStrings.Str330, LocalizedStrings.LotVolume, (i, v) => i.Multiplier = v));
 				fields.Add(new FieldMapping<SecurityMessage, SecurityTypes>(nameof(SecurityMessage.SecurityType), LocalizedStrings.Type, LocalizedStrings.Str360, (i, v) => i.SecurityType = v));
+				fields.Add(new FieldMapping<SecurityMessage, CurrencyTypes>(nameof(SecurityMessage.Currency), LocalizedStrings.Currency, LocalizedStrings.Str382, (i, v) => i.Currency = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.UnderlyingSecurityCode), LocalizedStrings.UnderlyingAsset, LocalizedStrings.UnderlyingAssetCode, (i, v) => i.UnderlyingSecurityCode = v));
+				fields.Add(new FieldMapping<SecurityMessage, SecurityTypes>(nameof(SecurityMessage.UnderlyingSecurityType), LocalizedStrings.UnderlyingSecurityType, LocalizedStrings.UnderlyingSecurityType, (i, v) => i.UnderlyingSecurityType = v));
+				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.Strike), LocalizedStrings.Strike, LocalizedStrings.OptionStrikePrice, (i, v) => i.Strike = v));
+				fields.Add(new FieldMapping<SecurityMessage, OptionTypes>(nameof(SecurityMessage.OptionType), LocalizedStrings.OptionsContract, LocalizedStrings.OptionContractType, (i, v) => i.OptionType = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.BinaryOptionType), LocalizedStrings.BinaryOption, LocalizedStrings.TypeBinaryOption, (i, v) => i.BinaryOptionType = v));
+				fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.ExpiryDate), LocalizedStrings.ExpiryDate, LocalizedStrings.Str371, (i, v) => i.ExpiryDate = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.Class), LocalizedStrings.Class, LocalizedStrings.SecurityClass, (i, v) => i.Class = v));
+				fields.Add(new FieldMapping<SecurityMessage, decimal>(nameof(SecurityMessage.IssueSize), LocalizedStrings.IssueSize, LocalizedStrings.IssueSize, (i, v) => i.IssueSize = v));
+				fields.Add(new FieldMapping<SecurityMessage, DateTimeOffset>(nameof(SecurityMessage.IssueDate), LocalizedStrings.IssueDate, LocalizedStrings.IssueDate, (i, v) => i.IssueDate = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.CfiCode), LocalizedStrings.CfiCode, LocalizedStrings.CfiCodeDesc, (i, v) => i.CfiCode = v));
+				fields.Add(new FieldMapping<SecurityMessage, string>(nameof(SecurityMessage.ShortName), LocalizedStrings.Str363, LocalizedStrings.Str364, (i, v) => i.ShortName = v));
 			}
 			else if (msgType == typeof(ExecutionMessage))
 			{
