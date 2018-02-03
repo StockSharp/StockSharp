@@ -1,5 +1,8 @@
 StockSharp Data (Hydra) Change log
 ========================
+## current:
+* (bug) PropertyGrid. Fix SecureString editor.
+
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
 * (feature) Show ALL checked for security lookup window.

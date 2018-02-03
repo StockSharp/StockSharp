@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+## current:
+* (bug) PropertyGrid. Fix SecureString editor.
+
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
 * (bug) Charting. Envelope indicator rendering fix.
