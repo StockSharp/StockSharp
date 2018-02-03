@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Import
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Linq;
 
@@ -17,6 +18,8 @@ namespace StockSharp.Algo.Import
 
 		private FastDateTimeParser _dateParser;
 		private FastTimeSpanParser _timeParser;
+
+		private readonly HashSet<string> _enumNames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FieldMapping"/>.
@@ -58,6 +61,9 @@ namespace StockSharp.Algo.Import
 				Format = "yyyyMMdd";
 			else if (Type == typeof(TimeSpan))
 				Format = "hh:mm:ss";
+
+			if (Type.IsEnum)
+				_enumNames.AddRange(Type.GetNames());
 		}
 
 		//public int Number { get; set; }
@@ -160,6 +166,12 @@ namespace StockSharp.Algo.Import
 					ApplyValue(instance, v.ValueStockSharp);
 					return;
 				}
+			}
+			
+			if (_enumNames.Contains(value))
+			{
+				ApplyValue(instance, value.To(Type));
+				return;
 			}
 
 			ApplyValue(instance, value);

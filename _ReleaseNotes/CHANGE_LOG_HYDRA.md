@@ -3,6 +3,7 @@ StockSharp Data (Hydra) Change log
 ## current:
 * (bug) PropertyGrid. Fix SecureString editor.
 * (feature) Importing securities. More fields.
+* (feature) Importing. Enum fields has default mapping.
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
