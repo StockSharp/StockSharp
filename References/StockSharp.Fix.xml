@@ -215,6 +215,11 @@
             Support portfolio subscriptions.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportMarketDataResponse">
+      <summary>
+            Support market-data response.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SecurityExtendedFields">
       <summary>
             Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
@@ -601,6 +606,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSubscriptionByPortfolio">
       <summary>
             Support portfolio subscriptions.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportMarketDataResponse">
+      <summary>
+            Support market-data response.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames">
@@ -4783,6 +4793,11 @@
     <member name="F:StockSharp.Fix.Native.FixMessages.MarketDataRequestReject">
       <summary>
             The response with error to <see cref="F:StockSharp.Fix.Native.FixMessages.MarketDataRequest" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.MarketDataRequestResponse">
+      <summary>
+            The response with success to <see cref="F:StockSharp.Fix.Native.FixMessages.MarketDataRequest" />.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixMessages.SecurityList">

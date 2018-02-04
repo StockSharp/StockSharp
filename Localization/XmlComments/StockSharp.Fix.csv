@@ -49,6 +49,7 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.OrderCancelVolumeRequired/summary;DocSt
 P:StockSharp.Fix.Dialects.BaseFixDialect.StorageName/summary;DocStr9382
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportSubscriptionByPortfolio/summary;DocStr10101
+P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportMarketDataResponse/summary;DocStr10262
 P:StockSharp.Fix.Dialects.BaseFixDialect.SecurityExtendedFields/summary;DocStr9383
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
 P:StockSharp.Fix.Dialects.BaseFixDialect.TimeFrames/inheritdoc;DocStr8459
@@ -174,6 +175,7 @@ P:StockSharp.Fix.Dialects.IFixDialect.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Fix.Dialects.IFixDialect.SecurityExtendedFields/summary;DocStr9383
 P:StockSharp.Fix.Dialects.IFixDialect.IsNativeIdentifiersPersistable/summary;DocStr9388
 P:StockSharp.Fix.Dialects.IFixDialect.IsSupportSubscriptionByPortfolio/summary;DocStr10101
+P:StockSharp.Fix.Dialects.IFixDialect.IsSupportMarketDataResponse/summary;DocStr10262
 P:StockSharp.Fix.Dialects.IFixDialect.TimeFrames/summary;DocStr206
 P:StockSharp.Fix.Dialects.IFixDialect.SupportedMarketDataTypes/summary;DocStr10120
 M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)/summary;DocStr9453
@@ -1239,6 +1241,7 @@ F:StockSharp.Fix.Native.FixMessages.OrderMassCancelRequest/summary;DocStr3274
 F:StockSharp.Fix.Native.FixMessages.QuoteRequest/summary;DocStr3275
 F:StockSharp.Fix.Native.FixMessages.Quote/summary;DocStr3276
 F:StockSharp.Fix.Native.FixMessages.MarketDataRequestReject/summary;DocStr3261
+F:StockSharp.Fix.Native.FixMessages.MarketDataRequestResponse/summary;DocStr10263
 F:StockSharp.Fix.Native.FixMessages.SecurityList/summary;DocStr211
 F:StockSharp.Fix.Native.FixMessages.MarketDataRequest/summary;DocStr3277
 F:StockSharp.Fix.Native.FixMessages.MarketDataIncrementalRefresh/summary;DocStr3278
