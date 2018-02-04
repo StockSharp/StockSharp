@@ -5,6 +5,8 @@ StockSharp API Change log
 * (feature) Importing securities. More fields.
 * (feature) Importing. Enum fields has default mapping.
 * (feature) Importing. Field order.
+* (feature) FIX server. Support market data response messages.
+* (bug) QuikLua. Market data response support. Fix http://stocksharp.ru/forum/9072/tikovye-svechi-v-mesto-kastomnogo-taimfreima/
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
