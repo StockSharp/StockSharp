@@ -46646,5 +46646,25 @@ namespace StockSharp.Localization
 		/// Strategy added
 		/// </summary>
 		public static string StrategyAdded => GetString(StrategyAddedKey);
+
+		/// <summary>
+		/// Field order
+		/// </summary>
+		public const string FieldOrderKey = nameof(FieldOrder);
+
+		/// <summary>
+		/// Field order
+		/// </summary>
+		public static string FieldOrder => GetString(FieldOrderKey);
+
+		/// <summary>
+		/// Fields '{0}' has the same order {1}.
+		/// </summary>
+		public const string FieldOrderDuplicatedKey = nameof(FieldOrderDuplicated);
+
+		/// <summary>
+		/// Fields '{0}' has the same order {1}.
+		/// </summary>
+		public static string FieldOrderDuplicated => GetString(FieldOrderDuplicatedKey);
 	}
 }

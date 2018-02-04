@@ -7,12 +7,13 @@ namespace StockSharp.Algo.Import
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	/// <summary>
 	/// Importing field description.
 	/// </summary>
-	public abstract class FieldMapping : IPersistable
+	public abstract class FieldMapping : NotifiableObject, IPersistable
 	{
 		//private readonly Settings _settings;
 
@@ -66,8 +67,6 @@ namespace StockSharp.Algo.Import
 				_enumNames.AddRange(Type.GetNames());
 		}
 
-		//public int Number { get; set; }
-
 		/// <summary>
 		/// Name.
 		/// </summary>
@@ -102,11 +101,55 @@ namespace StockSharp.Algo.Import
 		/// Is field required.
 		/// </summary>
 		public bool IsRequired { get; set; }
-		
+
 		/// <summary>
 		/// Is field enabled.
 		/// </summary>
-		public bool IsEnabled { get; set; }
+		public bool IsEnabled
+		{
+			get => Order != null;
+			set
+			{
+				if (IsEnabled == value)
+					return;
+
+				if (value)
+				{
+					if (Order == null)
+						Order = 0;
+				}
+				else
+					Order = null;
+				
+				NotifyChanged(nameof(IsEnabled));
+				NotifyChanged(nameof(Order));
+			}
+		}
+
+		private int? _order;
+
+		/// <summary>
+		/// Field order.
+		/// </summary>
+		public int? Order
+		{
+			get => _order;
+			set
+			{
+				if (Order == value)
+					return;
+
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
+				_order = value;
+
+				IsEnabled = value != null;
+
+				NotifyChanged(nameof(IsEnabled));
+				NotifyChanged(nameof(Order));
+			}
+		}
 
 		/// <summary>
 		/// Mapping values.
@@ -126,22 +169,28 @@ namespace StockSharp.Algo.Import
 		{
 			Name = storage.GetValue<string>(nameof(Name));
 			IsExtended = storage.GetValue<bool>(nameof(IsExtended));
-			//Number = storage.GetValue<int>(nameof(Number));
 			Values.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>()));
 			DefaultValue = storage.GetValue<string>(nameof(DefaultValue));
 			Format = storage.GetValue<string>(nameof(Format));
-			IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);
+
+			//IsEnabled = storage.GetValue(nameof(IsEnabled), IsEnabled);
+
+			if (storage.ContainsKey(nameof(IsEnabled)))
+				IsEnabled = storage.GetValue<bool>(nameof(IsEnabled));
+			else
+				Order = storage.GetValue<int?>(nameof(Order));
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
 			storage.SetValue(nameof(Name), Name);
 			storage.SetValue(nameof(IsExtended), IsExtended);
-			//storage.SetValue(nameof(Number), Number);
 			storage.SetValue(nameof(Values), Values.Select(v => v.Save()).ToArray());
 			storage.SetValue(nameof(DefaultValue), DefaultValue);
 			storage.SetValue(nameof(Format), Format);
-			storage.SetValue(nameof(IsEnabled), IsEnabled);
+
+			//storage.SetValue(nameof(IsEnabled), IsEnabled);
+			storage.SetValue(nameof(Order), Order);
 		}
 
 		/// <summary>

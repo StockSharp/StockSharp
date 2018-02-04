@@ -4702,6 +4702,8 @@ TimeOutSecond;Timeout (sec);Таймаут (сек)
 IntervalInSeconds;The interval in seconds, not more than which you can rearrange orders.;Интервал в секундах, не чаще которого можно переставлять заявки.
 StopAndClosePositions;Stop and close positions;Остановить и закрыть позиции
 StrategyAdded;Strategy added;Добавлена стратегия
+FieldOrder;Field order;Порядок поля
+FieldOrderDuplicated;Fields '{0}' has the same order {1}.;Поля '{0}' имеют одинаковый порядок {1}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

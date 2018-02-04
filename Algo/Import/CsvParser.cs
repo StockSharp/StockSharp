@@ -117,9 +117,9 @@ namespace StockSharp.Algo.Import
 
 				var skipLines = SkipFromHeader;
 				var lineIndex = 0;
-				var fields = Fields.ToArray();
 
-				var enabledFields = fields.Where(f => f.IsEnabled).ToArray();
+				var fields = Fields.ToArray();
+				//var enabledFields = fields.Where(f => f.IsEnabled).ToArray();
 
 				fields.ForEach(f => f.Reset());
 
@@ -144,24 +144,24 @@ namespace StockSharp.Algo.Import
 
 					foreach (var field in fields)
 					{
-						var number = enabledFields.IndexOf(field);
+						//var number = enabledFields.IndexOf(field);
 
-						if (number >= cells.Length)
-							throw new InvalidOperationException(LocalizedStrings.Str2869Params.Put(field.DisplayName, number, cells.Length));
+						if (field.Order >= cells.Length)
+							throw new InvalidOperationException(LocalizedStrings.Str2869Params.Put(field.DisplayName, field.Order, cells.Length));
 
 						try
 						{
-							if (number == -1)
+							if (field.Order == null)
 							{
 								if (field.IsRequired)
 									field.ApplyDefaultValue(instance);
 							}
 							else
-								field.ApplyFileValue(instance, cells[number]);
+								field.ApplyFileValue(instance, cells[field.Order.Value]);
 						}
 						catch (Exception ex)
 						{
-							throw new InvalidOperationException(LocalizedStrings.CsvImportError.Put(lineIndex, number, cells[number], field.DisplayName), ex);
+							throw new InvalidOperationException(LocalizedStrings.CsvImportError.Put(lineIndex, field.Order, field.Order == null ? "NULL" : cells[field.Order.Value], field.DisplayName), ex);
 						}
 					}
 
