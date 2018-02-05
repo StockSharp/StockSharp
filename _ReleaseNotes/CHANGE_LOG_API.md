@@ -9,6 +9,7 @@ StockSharp API Change log
 * (bug) QuikLua. Market data response support. Fix http://stocksharp.ru/forum/9072/tikovye-svechi-v-mesto-kastomnogo-taimfreima/
 * (bug) InteractiveBrokers. Expiry date parse fix.
 * (bug) Samples for crypto. Retargeted to 4.6.
+* (feature) CsvParser. Support quotes.
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.

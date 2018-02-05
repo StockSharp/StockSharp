@@ -5,6 +5,7 @@ StockSharp Data (Hydra) Change log
 * (feature) Importing securities. More fields.
 * (feature) Importing. Enum fields has default mapping.
 * (feature) Importing. Field order.
+* (bug) Csv importing. Fix quoted lines parsing.
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.

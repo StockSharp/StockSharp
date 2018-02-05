@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Import
 {
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -110,25 +109,24 @@ namespace StockSharp.Algo.Import
 		/// <returns>Parsed instances.</returns>
 		public IEnumerable<dynamic> Parse(string fileName, Func<bool> isCancelled = null)
 		{
-			using (new Scope<TimeZoneInfo>(TimeZone))
-			using (var reader = new StreamReader(fileName))
-			{
-				var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
+			var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
 
+			using (new Scope<TimeZoneInfo>(TimeZone))
+			using (var reader = new CsvFileReader(fileName) { Delimiter = columnSeparator[0] })
+			{
 				var skipLines = SkipFromHeader;
 				var lineIndex = 0;
 
 				var fields = Fields.ToArray();
-				//var enabledFields = fields.Where(f => f.IsEnabled).ToArray();
 
 				fields.ForEach(f => f.Reset());
 
-				while (!reader.EndOfStream)
+				var cells = new List<string>();
+
+				while (reader.ReadRow(cells))
 				{
 					if (isCancelled?.Invoke() == true)
 						break;
-
-					var line = reader.ReadLine();
 
 					if (skipLines > 0)
 					{
@@ -136,18 +134,14 @@ namespace StockSharp.Algo.Import
 						continue;
 					}
 
-					var cells = line.Split(columnSeparator, false);
-
 					var msgType = DataType.MessageType;
 
 					dynamic instance = CreateInstance(msgType);
 
 					foreach (var field in fields)
 					{
-						//var number = enabledFields.IndexOf(field);
-
-						if (field.Order >= cells.Length)
-							throw new InvalidOperationException(LocalizedStrings.Str2869Params.Put(field.DisplayName, field.Order, cells.Length));
+						if (field.Order >= cells.Count)
+							throw new InvalidOperationException(LocalizedStrings.Str2869Params.Put(field.DisplayName, field.Order, cells.Count));
 
 						try
 						{
@@ -176,7 +170,7 @@ namespace StockSharp.Algo.Import
 					else if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
 					{
 						if (!IgnoreNonIdSecurities)
-							this.AddErrorLog(LocalizedStrings.LineNoSecurityId.Put(line));
+							this.AddErrorLog(LocalizedStrings.LineNoSecurityId.Put(reader.CurrLine));
 
 						continue;
 					}
