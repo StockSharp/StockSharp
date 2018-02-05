@@ -4704,6 +4704,8 @@ StopAndClosePositions;Stop and close positions;Остановить и закр�
 StrategyAdded;Strategy added;Добавлена стратегия
 FieldOrder;Field order;Порядок поля
 FieldOrderDuplicated;Fields '{0}' has the same order {1}.;Поля '{0}' имеют одинаковый порядок {1}.
+CsvDirectory;CSV directory;CSV директория
+CsvDirectoryDesc;Directory with CSV files.;Директория с CSV файлами.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

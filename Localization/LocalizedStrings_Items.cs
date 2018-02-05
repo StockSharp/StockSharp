@@ -46666,5 +46666,25 @@ namespace StockSharp.Localization
 		/// Fields '{0}' has the same order {1}.
 		/// </summary>
 		public static string FieldOrderDuplicated => GetString(FieldOrderDuplicatedKey);
+
+		/// <summary>
+		/// CSV directory
+		/// </summary>
+		public const string CsvDirectoryKey = nameof(CsvDirectory);
+
+		/// <summary>
+		/// CSV directory
+		/// </summary>
+		public static string CsvDirectory => GetString(CsvDirectoryKey);
+
+		/// <summary>
+		/// Directory with CSV files.
+		/// </summary>
+		public const string CsvDirectoryDescKey = nameof(CsvDirectoryDesc);
+
+		/// <summary>
+		/// Directory with CSV files.
+		/// </summary>
+		public static string CsvDirectoryDesc => GetString(CsvDirectoryDescKey);
 	}
 }
