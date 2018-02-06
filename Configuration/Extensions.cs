@@ -154,55 +154,66 @@ namespace StockSharp.Configuration
 			return adapter.Configure(owner, ref autoConnect, ref settings);
 		}
 
-		private static readonly Lazy<Type[]> _adapters = new Lazy<Type[]>(() => new[]
+		private static readonly Lazy<Func<Type>[]> _adapters = new Lazy<Func<Type>[]>(() => new[]
 		{
-			typeof(AlfaDirectMessageAdapter),
-			typeof(BarChartMessageAdapter),
-			typeof(BitStampMessageAdapter),
-			typeof(BlackwoodMessageAdapter),
-			typeof(BtceMessageAdapter),
-			typeof(CqgComMessageAdapter),
-			typeof(CqgContinuumMessageAdapter),
-			typeof(ETradeMessageAdapter),
-			typeof(FixMessageAdapter),
-			typeof(FastMessageAdapter),
-			typeof(InteractiveBrokersMessageAdapter),
-			typeof(IQFeedMarketDataMessageAdapter),
-			typeof(ItchMessageAdapter),
-			typeof(LmaxMessageAdapter),
-			typeof(MicexMessageAdapter),
-			typeof(OandaMessageAdapter),
-			typeof(OpenECryMessageAdapter),
-			typeof(PlazaMessageAdapter),
-			typeof(LuaFixTransactionMessageAdapter),
-			typeof(LuaFixMarketDataMessageAdapter),
-			typeof(QuikTrans2QuikAdapter),
-			typeof(QuikDdeAdapter),
-			typeof(RithmicMessageAdapter),
-			typeof(RssMarketDataMessageAdapter),
-			typeof(SmartComMessageAdapter),
-			typeof(SterlingMessageAdapter),
-			typeof(TransaqMessageAdapter),
-			typeof(TwimeMessageAdapter),
-			typeof(SpbExMessageAdapter),
-			typeof(FxcmMessageAdapter),
-			typeof(QuantFeedMessageAdapter),
-			typeof(BitfinexMessageAdapter),
-			typeof(BithumbMessageAdapter),
-			typeof(BittrexMessageAdapter),
-			typeof(CoinbaseMessageAdapter),
-			typeof(CoincheckMessageAdapter),
-			typeof(GdaxMessageAdapter),
-			typeof(HitBtcMessageAdapter),
-			typeof(KrakenMessageAdapter),
-			typeof(OkcoinMessageAdapter),
-			typeof(PoloniexMessageAdapter),
+			(Func<Type>)(() => typeof(AlfaDirectMessageAdapter)),
+			() => typeof(BarChartMessageAdapter),
+			() => typeof(BitStampMessageAdapter),
+			() => typeof(BlackwoodMessageAdapter),
+			() => typeof(BtceMessageAdapter),
+			() => typeof(CqgComMessageAdapter),
+			() => typeof(CqgContinuumMessageAdapter),
+			() => typeof(ETradeMessageAdapter),
+			() => typeof(FixMessageAdapter),
+			() => typeof(FastMessageAdapter),
+			() => typeof(InteractiveBrokersMessageAdapter),
+			() => typeof(IQFeedMarketDataMessageAdapter),
+			() => typeof(ItchMessageAdapter),
+			() => typeof(LmaxMessageAdapter),
+			() => typeof(MicexMessageAdapter),
+			() => typeof(OandaMessageAdapter),
+			() => typeof(OpenECryMessageAdapter),
+			() => typeof(PlazaMessageAdapter),
+			() => typeof(LuaFixTransactionMessageAdapter),
+			() => typeof(LuaFixMarketDataMessageAdapter),
+			() => typeof(QuikTrans2QuikAdapter),
+			() => typeof(QuikDdeAdapter),
+			() => typeof(RithmicMessageAdapter),
+			() => typeof(RssMarketDataMessageAdapter),
+			() => typeof(SmartComMessageAdapter),
+			() => typeof(SterlingMessageAdapter),
+			() => typeof(TransaqMessageAdapter),
+			() => typeof(TwimeMessageAdapter),
+			() => typeof(SpbExMessageAdapter),
+			() => typeof(FxcmMessageAdapter),
+			() => typeof(QuantFeedMessageAdapter),
+			() => typeof(BitfinexMessageAdapter),
+			() => typeof(BithumbMessageAdapter),
+			() => typeof(BittrexMessageAdapter),
+			() => typeof(CoinbaseMessageAdapter),
+			() => typeof(CoincheckMessageAdapter),
+			() => typeof(GdaxMessageAdapter),
+			() => typeof(HitBtcMessageAdapter),
+			() => typeof(KrakenMessageAdapter),
+			() => typeof(OkcoinMessageAdapter),
+			() => typeof(PoloniexMessageAdapter),
 		});
 
 		/// <summary>
 		/// All avaliable adapters.
 		/// </summary>
-		public static IEnumerable<Type> Adapters => _customAdapters.Concat(_adapters.Value);
+		public static IEnumerable<Type> Adapters => _customAdapters.Concat(_adapters.Value.Select(v =>
+		{
+			try
+			{
+				return v();
+			}
+			catch (Exception e)
+			{
+				e.LogError();
+				return null;
+			}
+		}).Where(t => t != null));
 
 		/// <summary>
 		/// Configure connection using <see cref="ConnectorWindow"/>.
