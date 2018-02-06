@@ -14641,3 +14641,4 @@ DocStr10260;Is specified message id real-time subscription;Является ли
 DocStr10261;{0}, if real-time, otherwise, {1};{0}, если является подпиской реального времени, иначе, {1}
 DocStr10262;Support market-data response;Поддерживается ли ответ на подписку
 DocStr10263;The response with success to {0};Успешный ответ на {0}
+DocStr10264;Fill default {0} price and volume step by 0.00000001 value;Заполнить для {0} шаги цены и объема значением 0.00000001

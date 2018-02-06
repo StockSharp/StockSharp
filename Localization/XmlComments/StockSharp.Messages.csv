@@ -543,6 +543,12 @@ M:StockSharp.Messages.Extensions.IsBestBidField(StockSharp.Messages.Level1Fields
 M:StockSharp.Messages.Extensions.IsBestAskField(StockSharp.Messages.Level1Fields)/summary;DocStr10216
 M:StockSharp.Messages.Extensions.IsBestAskField(StockSharp.Messages.Level1Fields)/param/field;Str748
 M:StockSharp.Messages.Extensions.IsBestAskField(StockSharp.Messages.Level1Fields)/returns;DocStr8659
+M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityId)/summary;DocStr10264
+M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityId)/param/secId;SecurityId
+M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityId)/returns;DocStr4378
+M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityMessage)/summary;DocStr10264
+M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityMessage)/param/message;DocStr4378
+M:StockSharp.Messages.Extensions.FillDefaultCryptoFields(StockSharp.Messages.SecurityMessage)/returns;DocStr4378
 T:StockSharp.Messages.IDailyInfoSoap/summary;DocStr2073
 M:StockSharp.Messages.IDailyInfoSoap.GetCursOnDate(System.DateTime)/summary;DocStr2074
 M:StockSharp.Messages.IDailyInfoSoap.GetCursOnDate(System.DateTime)/param/date;DocStr2075
