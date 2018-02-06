@@ -12,6 +12,8 @@ StockSharp API Change log
 * (feature) CsvParser. Support quotes.
 * (feature) Configuration. Try/catch missed adapter's files.
 * (feature) FillDefaultCryptoFields.
+* (bug) Fix Samples.sln
+* (bug) Fix missed DevExpress files http://stocksharp.ru/forum/9095/tehpodderzhka-biblioteka-devexpresspdfv172core/
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
