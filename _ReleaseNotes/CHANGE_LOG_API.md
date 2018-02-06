@@ -11,6 +11,7 @@ StockSharp API Change log
 * (bug) Samples for crypto. Retargeted to 4.6.
 * (feature) CsvParser. Support quotes.
 * (feature) Configuration. Try/catch missed adapter's files.
+* (feature) FillDefaultCryptoFields.
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
