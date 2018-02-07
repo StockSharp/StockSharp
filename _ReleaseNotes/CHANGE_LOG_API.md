@@ -17,6 +17,7 @@ StockSharp API Change log
 * (feature) BitStamp. ClientId. int->string http://stocksharp.ru/posts/m/42535/
 * (bug) BitStamp. Fix http://stocksharp.ru/posts/m/42474/
 * (bug) Kraken. FIX NRE, ticks subscription.
+* (bug) InteractiveBrokers. Greenwich time zone parsing fix.
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
