@@ -14,6 +14,7 @@ StockSharp API Change log
 * (feature) FillDefaultCryptoFields.
 * (bug) Fix Samples.sln
 * (bug) Fix missed DevExpress files http://stocksharp.ru/forum/9095/tehpodderzhka-biblioteka-devexpresspdfv172core/
+* (feature) BitStamp. ClientId. int->string http://stocksharp.ru/posts/m/42535/
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.

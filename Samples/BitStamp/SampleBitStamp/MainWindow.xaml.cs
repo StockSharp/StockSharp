@@ -173,7 +173,7 @@ namespace SampleBitStamp
 					ShowPortfolios.IsEnabled = ShowOrdersLog.IsEnabled = true;
 				}
 
-				Trader.ClientId = ClientId.Text.To<int>();
+				Trader.ClientId = ClientId.Text;
 				Trader.Key = Key.Text;
 				Trader.Secret = Secret.Password;
 
