@@ -7,6 +7,7 @@ StockSharp Data (Hydra) Change log
 * (feature) Importing. Field order.
 * (bug) Csv importing. Fix quoted lines parsing.
 * (feature) BitStamp. ClientId. int->string http://stocksharp.ru/posts/m/42535/
+* (bug) Kraken. FIX NRE, ticks subscription.
 
 ## v4.4.5:
 * (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
