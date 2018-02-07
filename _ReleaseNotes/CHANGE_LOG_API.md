@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.5.1:
 * (bug) PropertyGrid. Fix SecureString editor.
 * (feature) Importing securities. More fields.
 * (feature) Importing. Enum fields has default mapping.
