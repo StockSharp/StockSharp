@@ -46686,5 +46686,25 @@ namespace StockSharp.Localization
 		/// Directory with CSV files.
 		/// </summary>
 		public static string CsvDirectoryDesc => GetString(CsvDirectoryDescKey);
+
+		/// <summary>
+		/// Heartbeat
+		/// </summary>
+		public const string HeartbeatKey = nameof(Heartbeat);
+
+		/// <summary>
+		/// Heartbeat
+		/// </summary>
+		public static string Heartbeat => GetString(HeartbeatKey);
+
+		/// <summary>
+		/// Heartbeat interval
+		/// </summary>
+		public const string HeartbeatIntervalKey = nameof(HeartbeatInterval);
+
+		/// <summary>
+		/// Heartbeat interval
+		/// </summary>
+		public static string HeartbeatInterval => GetString(HeartbeatIntervalKey);
 	}
 }
