@@ -444,9 +444,9 @@ namespace StockSharp.Algo
 				bool isActivate;
 
 				if (Order.Direction == Sides.Buy)
-					isActivate = _bestAskPrice >= (_averagePrice + _profitOffset);
+					isActivate = _bestAskPrice != null && _bestAskPrice.Value >= (_averagePrice + _profitOffset);
 				else
-					isActivate = _bestBidPrice <= (_averagePrice - _profitOffset);
+					isActivate = _bestBidPrice != null && _bestBidPrice.Value <= (_averagePrice - _profitOffset);
 
 				if (isActivate)
 					Activate(Order);

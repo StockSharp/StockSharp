@@ -463,6 +463,15 @@ namespace StockSharp.Messages
 		/// <param name="message">Message.</param>
 		public virtual void SendOutMessage(Message message)
 		{
+			// do not process empty change msgs
+			if (!message.IsBack)
+			{
+				if (message is Level1ChangeMessage l1Msg && l1Msg.Changes.Count == 0)
+					return;
+				else if (message is BaseChangeMessage<PositionChangeTypes> posMsg && posMsg.Changes.Count == 0)
+					return;
+			}
+
 			InitMessageLocalTime(message);
 
 			if (/*message.IsBack && */message.Adapter == null)

@@ -1,5 +1,11 @@
 StockSharp API Change log
 ========================
+## current:
+* (bug) OrderProfitMoreRule fix.
+* (bug) Change milliseconds for TimeSpanEditor fixes.
+* (feature) SampleGdax. OrderLogWindow.
+* (feature) MessageAdapter. Do not process empty change messages.
+
 ## v4.4.5.1:
 * (bug) PropertyGrid. Fix SecureString editor.
 * (feature) Importing securities. More fields.

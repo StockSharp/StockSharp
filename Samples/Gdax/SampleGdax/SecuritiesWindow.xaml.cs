@@ -43,7 +43,7 @@ namespace SampleGdax
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
+			Quotes.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = OrderLog.IsEnabled = security != null;
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -111,6 +111,23 @@ namespace SampleGdax
 				{
 					trader.RegisterSecurity(security);
 					trader.RegisterTrades(security);
+				}
+			}
+		}
+
+		private void OrderLogClick(object sender, RoutedEventArgs e)
+		{
+			var trader = MainWindow.Instance.Trader;
+
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				if (trader.RegisteredOrderLogs.Contains(security))
+				{
+					trader.UnRegisterOrderLog(security);
+				}
+				else
+				{
+					trader.RegisterOrderLog(security);
 				}
 			}
 		}
