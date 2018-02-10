@@ -3,6 +3,7 @@ StockSharp API Change log
 ## current:
 * (bug) OrderProfitMoreRule fix.
 * (bug) Change milliseconds for TimeSpanEditor fixes.
+* (feature) SampleGdax. OrderLogWindow.
 
 ## v4.4.5.1:
 * (bug) PropertyGrid. Fix SecureString editor.

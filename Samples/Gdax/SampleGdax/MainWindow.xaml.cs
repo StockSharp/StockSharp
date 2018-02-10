@@ -23,6 +23,7 @@ namespace SampleGdax
 		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
+		private readonly OrdersLogWindow _ordersLogWindow = new OrdersLogWindow();
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -33,6 +34,7 @@ namespace SampleGdax
 			Title = Title.Put("Gdax");
 
 			_ordersWindow.MakeHideable();
+			_ordersLogWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
@@ -47,12 +49,14 @@ namespace SampleGdax
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			_ordersWindow.DeleteHideable();
+			_ordersLogWindow.DeleteHideable();
 			_myTradesWindow.DeleteHideable();
 			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
 			_portfoliosWindow.DeleteHideable();
 			
 			_securitiesWindow.Close();
+			_ordersLogWindow.Close();
 			_tradesWindow.Close();
 			_myTradesWindow.Close();
 			_ordersWindow.Close();
@@ -127,6 +131,7 @@ namespace SampleGdax
 					Trader.NewMyTrade += _myTradesWindow.TradeGrid.Trades.Add;
 					Trader.NewTrade += _tradesWindow.TradeGrid.Trades.Add;
 					Trader.NewOrder += _ordersWindow.OrderGrid.Orders.Add;
+					Trader.NewOrderLogItem += _ordersLogWindow.OrderLogGrid.LogItems.Add;
 
 					Trader.NewPortfolio += _portfoliosWindow.PortfolioGrid.Portfolios.Add;
 					Trader.NewPosition += _portfoliosWindow.PortfolioGrid.Positions.Add;
@@ -144,7 +149,7 @@ namespace SampleGdax
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
 					ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = 
-					ShowPortfolios.IsEnabled = true;
+					ShowPortfolios.IsEnabled = ShowOrdersLog.IsEnabled = true;
 				}
 
 				Trader.Key = Key.Text;
@@ -198,6 +203,11 @@ namespace SampleGdax
 		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_portfoliosWindow);
+		}
+
+		private void ShowOrdersLogClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_ordersLogWindow);
 		}
 
 		private static void ShowOrHide(Window window)
