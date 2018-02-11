@@ -9,6 +9,11 @@
             The messages adapter for BTC-e.
             </summary>
         </member>
+        <member name="F:StockSharp.Btce.BtceMessageAdapter.DefaultHeartbeatInterval">
+            <summary>
+            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval"/>.
+            </summary>
+        </member>
         <member name="P:StockSharp.Btce.BtceMessageAdapter.Key">
             <summary>
             Key.

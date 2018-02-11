@@ -15,16 +15,16 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="F:StockSharp.Rss.RssMarketDataMessageAdapter.DefaultHeartbeatInterval">
-            <summary>
-            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval"/>.
-            </summary>
-        </member>
         <member name="M:StockSharp.Rss.RssMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <summary>
             Send message.
             </summary>
             <param name="message">Message.</param>
+        </member>
+        <member name="F:StockSharp.Rss.RssMarketDataMessageAdapter.DefaultHeartbeatInterval">
+            <summary>
+            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval"/>.
+            </summary>
         </member>
         <member name="P:StockSharp.Rss.RssMarketDataMessageAdapter.Address">
             <summary>

@@ -1578,7 +1578,6 @@ F:StockSharp.Fix.FixFormats.Binary/summary;DocStr3324
 T:StockSharp.Fix.FixMessageAdapter/summary;DocStr3325
 M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-F:StockSharp.Fix.FixMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition/returns;DocStr45
 P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired/summary;DocStr451
@@ -1596,6 +1595,7 @@ M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/
 M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/summary;DocStr8804
 M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/param/dialect;DocStr9454
 M:StockSharp.Fix.FixMessageAdapter.CreateDialect(StockSharp.Fix.FixDialects)/returns;DocStr8805
+F:StockSharp.Fix.FixMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Fix.FixMessageAdapter.Address/summary;ServerAddress
 P:StockSharp.Fix.FixMessageAdapter.Dialect/summary;DocStr8806
 P:StockSharp.Fix.FixMessageAdapter.SenderCompId/summary;Str1665

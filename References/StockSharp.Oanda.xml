@@ -15,11 +15,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="F:StockSharp.Oanda.OandaMessageAdapter.DefaultHeartbeatInterval">
-      <summary>
-            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
-            </summary>
-    </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition">
       <summary>
             Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
@@ -41,6 +36,11 @@
             Send message.
             </summary>
       <param name="message">Message.</param>
+    </member>
+    <member name="F:StockSharp.Oanda.OandaMessageAdapter.DefaultHeartbeatInterval">
+      <summary>
+            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
+            </summary>
     </member>
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.Server">
       <summary>

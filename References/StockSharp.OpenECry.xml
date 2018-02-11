@@ -15,11 +15,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultHeartbeatInterval">
-      <summary>
-            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
-            </summary>
-    </member>
     <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultUuid">
       <summary>
             Default unique software ID.
@@ -55,6 +50,11 @@
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityExtendedFields">
       <summary>
             Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultHeartbeatInterval">
+      <summary>
+            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Address">

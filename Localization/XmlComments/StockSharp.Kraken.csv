@@ -1,4 +1,5 @@
 T:StockSharp.Kraken.KrakenMessageAdapter/summary;DocStr2538
+F:StockSharp.Kraken.KrakenMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Kraken.KrakenMessageAdapter.Key/summary;Str3304
 P:StockSharp.Kraken.KrakenMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Kraken.KrakenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

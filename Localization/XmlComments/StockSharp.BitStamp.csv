@@ -1,4 +1,5 @@
 T:StockSharp.BitStamp.BitStampMessageAdapter/summary;DocStr2538
+F:StockSharp.BitStamp.BitStampMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.BitStamp.BitStampMessageAdapter.Key/summary;Str3304
 P:StockSharp.BitStamp.BitStampMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.BitStamp.BitStampMessageAdapter.ClientId/summary;Str3308

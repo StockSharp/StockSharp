@@ -1,9 +1,9 @@
 T:StockSharp.Rss.RssMarketDataMessageAdapter/summary;DocStr7418
 M:StockSharp.Rss.RssMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Rss.RssMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-F:StockSharp.Rss.RssMarketDataMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 M:StockSharp.Rss.RssMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Rss.RssMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+F:StockSharp.Rss.RssMarketDataMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Rss.RssMarketDataMessageAdapter.Address/summary;Str3505
 P:StockSharp.Rss.RssMarketDataMessageAdapter.CustomDateFormat/summary;Str3507
 M:StockSharp.Rss.RssMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

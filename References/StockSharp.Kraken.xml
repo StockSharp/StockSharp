@@ -9,6 +9,11 @@
             The message adapter for <see cref="N:StockSharp.Kraken"/>.
             </summary>
         </member>
+        <member name="F:StockSharp.Kraken.KrakenMessageAdapter.DefaultHeartbeatInterval">
+            <summary>
+            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval"/>.
+            </summary>
+        </member>
         <member name="P:StockSharp.Kraken.KrakenMessageAdapter.Key">
             <summary>
             Key.

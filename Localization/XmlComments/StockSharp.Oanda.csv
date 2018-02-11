@@ -1,13 +1,13 @@
 T:StockSharp.Oanda.OandaMessageAdapter/summary;DocStr5923
 M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-F:StockSharp.Oanda.OandaMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition/returns;DocStr45
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
 M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+F:StockSharp.Oanda.OandaMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Oanda.OandaMessageAdapter.Server/summary;Str3416
 P:StockSharp.Oanda.OandaMessageAdapter.Token/summary;DocStr3145
 P:StockSharp.Oanda.OandaMessageAdapter.UseCompression/summary;Str3423

@@ -1,4 +1,5 @@
 T:StockSharp.Bithumb.BithumbMessageAdapter/summary;DocStr2538
+F:StockSharp.Bithumb.BithumbMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Bithumb.BithumbMessageAdapter.Key/summary;Str3304
 P:StockSharp.Bithumb.BithumbMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Bithumb.BithumbMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

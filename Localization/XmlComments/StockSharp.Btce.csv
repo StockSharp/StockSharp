@@ -1,4 +1,5 @@
 T:StockSharp.Btce.BtceMessageAdapter/summary;DocStr2581
+F:StockSharp.Btce.BtceMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 P:StockSharp.Btce.BtceMessageAdapter.Key/summary;Str3304
 P:StockSharp.Btce.BtceMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Btce.BtceMessageAdapter.Domain/summary;Str3486

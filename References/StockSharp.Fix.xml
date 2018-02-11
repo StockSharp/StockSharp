@@ -6110,11 +6110,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="F:StockSharp.Fix.FixMessageAdapter.DefaultHeartbeatInterval">
-      <summary>
-            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
-            </summary>
-    </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition">
       <summary>
             Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
@@ -6181,6 +6176,11 @@
             </summary>
       <param name="dialect">The FIX dialect.</param>
       <returns>The dialect.</returns>
+    </member>
+    <member name="F:StockSharp.Fix.FixMessageAdapter.DefaultHeartbeatInterval">
+      <summary>
+            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
+            </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.Address">
       <summary>

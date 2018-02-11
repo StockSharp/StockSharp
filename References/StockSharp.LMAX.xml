@@ -15,11 +15,6 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
-    <member name="F:StockSharp.LMAX.LmaxMessageAdapter.DefaultHeartbeatInterval">
-      <summary>
-            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
-            </summary>
-    </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition">
       <summary>
             Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
@@ -35,6 +30,11 @@
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.SecurityLookupRequired">
       <summary>
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
+            </summary>
+    </member>
+    <member name="F:StockSharp.LMAX.LmaxMessageAdapter.DefaultHeartbeatInterval">
+      <summary>
+            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
             </summary>
     </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.Login">
