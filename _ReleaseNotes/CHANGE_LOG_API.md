@@ -5,6 +5,8 @@ StockSharp API Change log
 * (bug) Change milliseconds for TimeSpanEditor fixes.
 * (feature) SampleGdax. OrderLogWindow.
 * (feature) MessageAdapter. Do not process empty change messages.
+* (bug) CandleHelper.ToTrades fix.
+* (feature) SampleBitfinex. OrderLogWindow.
 
 ## v4.4.5.1:
 * (bug) PropertyGrid. Fix SecureString editor.
