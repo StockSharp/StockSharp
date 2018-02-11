@@ -241,6 +241,8 @@ namespace StockSharp.Algo.Testing
 			PnLManager = null;
 			SlippageManager = null;
 
+			SupportSubscriptionTracking = true;
+
 			HistoryMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
 
 			InMessageChannel = new HistoryEmulationMessageChannel(HistoryMessageAdapter, SendOutError);
