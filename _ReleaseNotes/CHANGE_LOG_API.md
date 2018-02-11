@@ -6,6 +6,7 @@ StockSharp API Change log
 * (feature) SampleGdax. OrderLogWindow.
 * (bug) CandleHelper.ToTrades fix.
 * (feature) SampleBitfinex. OrderLogWindow.
+* (feature) OrderLogGrid. Security column added.
 
 ## v4.4.5.1:
 * (bug) PropertyGrid. Fix SecureString editor.
