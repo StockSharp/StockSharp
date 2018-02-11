@@ -1,5 +1,12 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.5.2:
+* (feature) Do not store empty Level1 and Pos change messages.
+* (feature) Transaq. Logging settings.
+* (feature) Connectors plugin. Heartbeat interval option.
+* (feature) OrderLog. Security column added.
+* (bug) Crypto connectors fixes.
+
 ## v4.4.5.1:
 * (bug) PropertyGrid. Fix SecureString editor.
 * (feature) Importing securities. More fields.

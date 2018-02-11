@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.5.2:
 * (bug) OrderProfitMoreRule fix.
 * (bug) Change milliseconds for TimeSpanEditor fixes.
 * (feature) SampleGdax. OrderLogWindow.
@@ -8,6 +8,7 @@ StockSharp API Change log
 * (feature) SampleBitfinex. OrderLogWindow.
 * (feature) OrderLogGrid. Security column added.
 * (feature) Connectors. DefaultHeartbeatInterval
+* (bug) Crypto connectors fixes.
 
 ## v4.4.5.1:
 * (bug) PropertyGrid. Fix SecureString editor.
