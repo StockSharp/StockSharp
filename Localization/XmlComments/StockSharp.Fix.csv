@@ -37,7 +37,7 @@ P:StockSharp.Fix.Dialects.BaseFixDialect.TimeStampParser/summary;DocStr9462
 P:StockSharp.Fix.Dialects.BaseFixDialect.TimeParser/summary;DocStr9463
 P:StockSharp.Fix.Dialects.BaseFixDialect.DateParser/summary;DocStr9464
 P:StockSharp.Fix.Dialects.BaseFixDialect.IsResetCounter/summary;DocStr3313
-P:StockSharp.Fix.Dialects.BaseFixDialect.HeartbeatInterval/summary;DocStr8746
+P:StockSharp.Fix.Dialects.BaseFixDialect.HeartbeatInterval/summary;HeartbeatInterval
 P:StockSharp.Fix.Dialects.BaseFixDialect.TimeZone/summary;Str68
 P:StockSharp.Fix.Dialects.BaseFixDialect.ExchangeBoard/summary;Str1671
 P:StockSharp.Fix.Dialects.BaseFixDialect.HasPosition/summary;DocStr9079
@@ -163,7 +163,7 @@ P:StockSharp.Fix.Dialects.IFixDialect.TimeStampParser/summary;DocStr9462
 P:StockSharp.Fix.Dialects.IFixDialect.TimeParser/summary;DocStr9463
 P:StockSharp.Fix.Dialects.IFixDialect.DateParser/summary;DocStr9464
 P:StockSharp.Fix.Dialects.IFixDialect.IsResetCounter/summary;DocStr3313
-P:StockSharp.Fix.Dialects.IFixDialect.HeartbeatInterval/summary;DocStr8746
+P:StockSharp.Fix.Dialects.IFixDialect.HeartbeatInterval/summary;HeartbeatInterval
 P:StockSharp.Fix.Dialects.IFixDialect.TimeZone/summary;Str68
 P:StockSharp.Fix.Dialects.IFixDialect.ExchangeBoard/summary;Str1671
 P:StockSharp.Fix.Dialects.IFixDialect.SecurityLookup/summary;DocStr8750
@@ -1578,6 +1578,7 @@ F:StockSharp.Fix.FixFormats.Binary/summary;DocStr3324
 T:StockSharp.Fix.FixMessageAdapter/summary;DocStr3325
 M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+F:StockSharp.Fix.FixMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition/returns;DocStr45
 P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired/summary;DocStr451

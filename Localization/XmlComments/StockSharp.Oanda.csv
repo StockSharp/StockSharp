@@ -1,6 +1,7 @@
 T:StockSharp.Oanda.OandaMessageAdapter/summary;DocStr5923
 M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+F:StockSharp.Oanda.OandaMessageAdapter.DefaultHeartbeatInterval/summary;DocStr9884
 M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition/summary;DocStr44
 M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition/returns;DocStr45
 P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52

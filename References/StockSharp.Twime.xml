@@ -15,6 +15,11 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
+    <member name="F:StockSharp.Twime.TwimeMessageAdapter.DefaultHeartbeatInterval">
+      <summary>
+            Значение по умолчанию для <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsSupportNativePortfolioLookup">
       <inheritdoc />
     </member>

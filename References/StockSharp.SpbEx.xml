@@ -155,6 +155,11 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
+    <member name="F:StockSharp.SpbEx.SpbExMessageAdapter.DefaultHeartbeatInterval">
+      <summary>
+            Default value for <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.SpbEx.SpbExMessageAdapter.IsNativeIdentifiers">
       <inheritdoc />
     </member>

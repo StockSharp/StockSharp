@@ -50,6 +50,11 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
+    <member name="F:StockSharp.Micex.MicexMessageAdapter.DefaultHeartbeatInterval">
+      <summary>
+            Значение по умолчанию для <see cref="P:StockSharp.Messages.MessageAdapter.HeartbeatInterval" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Micex.MicexMessageAdapter.IsConnectionAlive">
       <summary>
             Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.

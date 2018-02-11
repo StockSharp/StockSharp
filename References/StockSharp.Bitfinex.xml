@@ -61,6 +61,11 @@
             Activation price, when reached an order will be placed.
             </summary>
         </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.IsTrailing">
+            <summary>
+            Trailing stop-loss.
+            </summary>
+        </member>
         <member name="T:StockSharp.Bitfinex.BitfinexTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bitfinex"/>.

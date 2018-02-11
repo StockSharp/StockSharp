@@ -13,6 +13,7 @@ M:StockSharp.Bitfinex.BitfinexMessageAdapter.OnSendInMessage(StockSharp.Messages
 T:StockSharp.Bitfinex.BitfinexOrderCondition/summary;DocStr60
 M:StockSharp.Bitfinex.BitfinexOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Bitfinex.BitfinexOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.Bitfinex.BitfinexOrderCondition.IsTrailing/summary;Str3446
 T:StockSharp.Bitfinex.BitfinexTrader/summary;DocStr2539
 M:StockSharp.Bitfinex.BitfinexTrader.#ctor/summary;DocStr1
 P:StockSharp.Bitfinex.BitfinexTrader.Key/summary;Str3304

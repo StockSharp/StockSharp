@@ -7,6 +7,7 @@ StockSharp API Change log
 * (bug) CandleHelper.ToTrades fix.
 * (feature) SampleBitfinex. OrderLogWindow.
 * (feature) OrderLogGrid. Security column added.
+* (feature) Connectors. DefaultHeartbeatInterval
 
 ## v4.4.5.1:
 * (bug) PropertyGrid. Fix SecureString editor.
