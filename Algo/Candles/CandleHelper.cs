@@ -596,7 +596,6 @@ namespace StockSharp.Algo.Candles
 					_volumeStep = volumeStep;
 					_decimals = volumeStep.GetCachedDecimals();
 					_valuesEnumerator = candles.GetEnumerator();
-					_valuesEnumerator.MoveNext();
 				}
 
 				private IEnumerator<ExecutionMessage> CreateEnumerator(CandleMessage candleMsg)
