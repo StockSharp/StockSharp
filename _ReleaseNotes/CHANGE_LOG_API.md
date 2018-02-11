@@ -4,7 +4,6 @@ StockSharp API Change log
 * (bug) OrderProfitMoreRule fix.
 * (bug) Change milliseconds for TimeSpanEditor fixes.
 * (feature) SampleGdax. OrderLogWindow.
-* (feature) MessageAdapter. Do not process empty change messages.
 * (bug) CandleHelper.ToTrades fix.
 * (feature) SampleBitfinex. OrderLogWindow.
 
