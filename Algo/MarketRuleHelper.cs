@@ -362,27 +362,30 @@ namespace StockSharp.Algo
 			}
 		}
 
-		class OrderProfitMoreRule : OrderRule<Order>
+		class OrderTakeProfitStopLossRule : OrderRule<Order>
 		{
-			private readonly Unit _profitOffset;
+			private readonly Unit _offset;
+			private readonly bool _isTake;
 			private decimal? _bestBidPrice;
 			private decimal? _bestAskPrice;
 			private decimal _averagePrice;
 
 			private readonly List<Tuple<decimal, decimal>> _trades = new List<Tuple<decimal, decimal>>();
 
-			public OrderProfitMoreRule(Order order, Unit profitOffset, IConnector connector)
+			public OrderTakeProfitStopLossRule(Order order, Unit offset, bool isTake, IConnector connector)
 				: base(order, connector)
 			{
-				if (profitOffset == null)
-					throw new ArgumentNullException(nameof(profitOffset));
+				if (offset == null)
+					throw new ArgumentNullException(nameof(offset));
 
-				if (profitOffset.Value <= 0)
-					throw new ArgumentOutOfRangeException(nameof(profitOffset));
+				if (offset.Value <= 0)
+					throw new ArgumentOutOfRangeException(nameof(offset));
 
-				_profitOffset = profitOffset;
-				// TODO
-				//Name = LocalizedStrings.Str1033;
+				_offset = offset;
+				_isTake = isTake;
+
+				Name = _isTake ? LocalizedStrings.TakeProfit : LocalizedStrings.StopLoss;
+
 				TrySubscribe();
 			}
 
@@ -443,10 +446,20 @@ namespace StockSharp.Algo
 
 				bool isActivate;
 
-				if (Order.Direction == Sides.Buy)
-					isActivate = _bestAskPrice != null && _bestAskPrice.Value >= (_averagePrice + _profitOffset);
+				if (_isTake)
+				{
+					if (Order.Direction == Sides.Buy)
+						isActivate = _bestAskPrice != null && _bestAskPrice.Value >= (_averagePrice + _offset);
+					else
+						isActivate = _bestBidPrice != null && _bestBidPrice.Value <= (_averagePrice - _offset);
+				}
 				else
-					isActivate = _bestBidPrice != null && _bestBidPrice.Value <= (_averagePrice - _profitOffset);
+				{
+					if (Order.Direction == Sides.Buy)
+						isActivate = _bestAskPrice != null && _bestAskPrice.Value <= (_averagePrice - _offset);
+					else
+						isActivate = _bestBidPrice != null && _bestBidPrice.Value >= (_averagePrice + _offset);
+				}
 
 				if (isActivate)
 					Activate(Order);
@@ -599,7 +612,19 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenProfitMore(this Order order, Unit profitOffset, IConnector connector)
 		{
-			return new OrderProfitMoreRule(order, profitOffset, connector);
+			return new OrderTakeProfitStopLossRule(order, profitOffset, true, connector);
+		}
+
+		/// <summary>
+		/// To create a rule for the order's loss more on offset.
+		/// </summary>
+		/// <param name="order">The order to be traced for loss.</param>
+		/// <param name="profitOffset">Loss offset.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<Order, Order> WhenLossMore(this Order order, Unit profitOffset, IConnector connector)
+		{
+			return new OrderTakeProfitStopLossRule(order, profitOffset, false, connector);
 		}
 
 		#endregion

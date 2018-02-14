@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) OrderLossMoreRule.
+
 ## v4.4.5.2:
 * (bug) OrderProfitMoreRule fix.
 * (bug) Change milliseconds for TimeSpanEditor fixes.

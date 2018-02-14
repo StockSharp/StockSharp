@@ -5927,6 +5927,11 @@ M:StockSharp.Algo.MarketRuleHelper.WhenProfitMore(StockSharp.BusinessEntities.Or
 M:StockSharp.Algo.MarketRuleHelper.WhenProfitMore(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.BusinessEntities.IConnector)/param/profitOffset;DocStr10259
 M:StockSharp.Algo.MarketRuleHelper.WhenProfitMore(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
 M:StockSharp.Algo.MarketRuleHelper.WhenProfitMore(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.BusinessEntities.IConnector)/returns;DocStr14
+M:StockSharp.Algo.MarketRuleHelper.WhenLossMore(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.BusinessEntities.IConnector)/summary;DocStr10265
+M:StockSharp.Algo.MarketRuleHelper.WhenLossMore(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.BusinessEntities.IConnector)/param/order;DocStr10266
+M:StockSharp.Algo.MarketRuleHelper.WhenLossMore(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.BusinessEntities.IConnector)/param/profitOffset;DocStr10267
+M:StockSharp.Algo.MarketRuleHelper.WhenLossMore(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
+M:StockSharp.Algo.MarketRuleHelper.WhenLossMore(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.BusinessEntities.IConnector)/returns;DocStr14
 M:StockSharp.Algo.MarketRuleHelper.WhenChanged(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.IConnector)/summary;DocStr9623
 M:StockSharp.Algo.MarketRuleHelper.WhenChanged(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.IConnector)/param/portfolio;DocStr9624
 M:StockSharp.Algo.MarketRuleHelper.WhenChanged(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398
