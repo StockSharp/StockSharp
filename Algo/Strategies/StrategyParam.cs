@@ -31,6 +31,11 @@ namespace StockSharp.Algo.Strategies
 	public interface IStrategyParam : IPersistable
 	{
 		/// <summary>
+		/// Parameter identifier.
+		/// </summary>
+		string Id { get; }
+
+		/// <summary>
 		/// Parameter name.
 		/// </summary>
 		string Name { get; }
@@ -70,7 +75,18 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="name">Parameter name.</param>
 		public StrategyParam(Strategy strategy, string name)
-			: this(strategy, name, default(T))
+			: this(strategy, name, name, default(T))
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="id">Parameter identifier.</param>
+		/// <param name="name">Parameter name.</param>
+		public StrategyParam(Strategy strategy, string id, string name)
+			: this(strategy, id, name, default(T))
 		{
 		}
 
@@ -81,20 +97,41 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="name">Parameter name.</param>
 		/// <param name="initialValue">The initial value.</param>
 		public StrategyParam(Strategy strategy, string name, T initialValue)
+			: this(strategy, name, name, initialValue)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="id">Parameter identifier.</param>
+		/// <param name="name">Parameter name.</param>
+		/// <param name="initialValue">The initial value.</param>
+		public StrategyParam(Strategy strategy, string id, string name, T initialValue)
 		{
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
+
+			if (id == null)
+				throw new ArgumentNullException(nameof(id));
 
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
 			_strategy = strategy;
+			Id = id;
 			Name = name;
 			_value = initialValue;
 
-			if (!_strategy.Parameters.TryAdd(name, this))
+			if (!_strategy.Parameters.TryAdd(id, this))
 				throw new ArgumentException(LocalizedStrings.CompositionAlreadyExistParams.Put(name, string.Empty), nameof(name));
 		}
+
+		/// <summary>
+		/// Parameter identifier.
+		/// </summary>
+		public string Id { get; private set; }
 
 		/// <summary>
 		/// Parameter name.
@@ -166,6 +203,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
+			Id = storage.GetValue<string>(nameof(Id));
 			Name = storage.GetValue<string>(nameof(Name));
 			Value = storage.GetValue<T>(nameof(Value));
 			OptimizeFrom = storage.GetValue<T>(nameof(OptimizeFrom));
@@ -179,6 +217,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
+			storage.SetValue(nameof(Id), Id);
 			storage.SetValue(nameof(Name), Name);
 			storage.SetValue(nameof(Value), Value);
 			storage.SetValue(nameof(OptimizeFrom), OptimizeFrom);
