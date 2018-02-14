@@ -2,6 +2,7 @@ StockSharp API Change log
 ========================
 ## current:
 * (feature) OrderLossMoreRule.
+* (feature) KrakenMessageAdapter.IsMarginEnabled.
 
 ## v4.4.5.2:
 * (bug) OrderProfitMoreRule fix.
