@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Strategies
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			if (id == null)
+			if (id.IsEmpty())
 				throw new ArgumentNullException(nameof(id));
 
 			if (name.IsEmpty())
