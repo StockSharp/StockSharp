@@ -136,14 +136,16 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetLevel1())
 					{
+						var messages = pair.Value.Where(m => m.Changes.Count > 0).ToArray();
+
 						if (Mode.Contains(StorageModes.Incremental))
-							GetStorage<Level1ChangeMessage>(pair.Key, null).Save(pair.Value);
+							GetStorage<Level1ChangeMessage>(pair.Key, null).Save(messages);
 						
 						if (Mode.Contains(StorageModes.Snapshot))
 						{
 							var snapshotStorage = GetSnapshotStorage(typeof(Level1ChangeMessage), null);
 
-							foreach (var message in pair.Value)
+							foreach (var message in messages)
 								snapshotStorage.Update(message);
 						}
 					}
@@ -155,14 +157,16 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var pair in GetPositionChanges())
 					{
+						var messages = pair.Value.Where(m => m.Changes.Count > 0).ToArray();
+
 						if (Mode.Contains(StorageModes.Incremental))
-							GetStorage<PositionChangeMessage>(pair.Key, null).Save(pair.Value);
+							GetStorage<PositionChangeMessage>(pair.Key, null).Save(messages);
 						
 						if (Mode.Contains(StorageModes.Snapshot))
 						{
 							var snapshotStorage = GetSnapshotStorage(typeof(PositionChangeMessage), null);
 
-							foreach (var message in pair.Value)
+							foreach (var message in messages)
 								snapshotStorage.Update(message);
 						}
 					}
