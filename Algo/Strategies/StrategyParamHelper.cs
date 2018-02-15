@@ -29,6 +29,20 @@ namespace StockSharp.Algo.Strategies
 		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
 		/// <typeparam name="T">The type of the parameter value.</typeparam>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="id">Parameter identifier.</param>
+		/// <param name="name">Parameter name.</param>
+		/// <param name="initialValue">The initial value.</param>
+		/// <returns>The strategy parameter.</returns>
+		public static StrategyParam<T> Param<T>(this Strategy strategy, string id, string name, T initialValue = default(T))
+		{
+			return new StrategyParam<T>(strategy, id, name, initialValue);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
+		/// </summary>
+		/// <typeparam name="T">The type of the parameter value.</typeparam>
 		/// <param name="param">The strategy parameter.</param>
 		/// <param name="optimizeFrom">The From value at optimization.</param>
 		/// <param name="optimizeTo">The To value at optimization.</param>
