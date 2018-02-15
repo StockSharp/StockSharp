@@ -21,8 +21,11 @@ namespace SampleChart
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Threading;
+	using System.Windows.Media;
 
 	using DevExpress.Xpf.Core;
+
+	using MoreLinq;
 
 	using Ecng.Backup;
 	using Ecng.Backup.Yandex;
@@ -125,6 +128,8 @@ namespace SampleChart
 			Chart.Draw(chartData);
 
 			_indicators.Add(element, indicator);
+
+			CustomColors_Changed(null, null);
 		}
 
 		private void Chart_OnUnSubscribeElement(IChartElement element)
@@ -382,6 +387,27 @@ namespace SampleChart
 		private void Securities_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			Draw.IsEnabled = Securities.SelectedItem != null;
+		}
+
+		private void CustomColors_Changed(object sender, RoutedEventArgs e)
+		{
+			if(_candleElement == null)
+				return;
+
+			var dd = new ChartDrawData();
+
+			if (_checkCustomColors.IsChecked == true)
+			{
+				dd.SetCustomColorer(_candleElement, (dt, isUpCandle, isLastCandle) => dt.Hour % 2 != 0 ? null : (isUpCandle ? (Color?)Colors.Chartreuse : Colors.Aqua));
+				_indicators.Keys.ForEach(el => dd.SetCustomColorer(el, (dt) => dt.Hour % 2 != 0 ? null : (Color?)Colors.Magenta));
+			}
+			else
+			{
+				dd.SetCustomColorer(_candleElement, null);
+				_indicators.Keys.ForEach(el => dd.SetCustomColorer(el, null));
+			}
+
+			Chart.Draw(dd);
 		}
 	}
 }
