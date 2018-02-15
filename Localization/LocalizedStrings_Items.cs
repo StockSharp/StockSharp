@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Area color
+		/// </summary>
+		public const string AreaColorKey = nameof(AreaColor);
+
+		/// <summary>
+		/// Area color
+		/// </summary>
+		public static string AreaColor => GetString(AreaColorKey);
+
+		/// <summary>
 		/// Buy blink color
 		/// </summary>
 		public const string BuyBlinkColorKey = nameof(BuyBlinkColor);

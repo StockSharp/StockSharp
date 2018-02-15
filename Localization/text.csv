@@ -1,4 +1,5 @@
-﻿BuyBlinkColor;Buy blink color;Цвет мерцания Buy
+﻿AreaColor;Area color;Цвет области
+BuyBlinkColor;Buy blink color;Цвет мерцания Buy
 SellBlinkColor;Sell blink color;Цвет мерцания Sell
 BuyBlinkColorDescr;Blinking color of partially filled Buy order;Цвет мерцания частично исполненной Buy заявки
 SellBlinkColorDescr;Blinking color of partially filled Sell order;Цвет мерцания частично исполненной Sell заявки
