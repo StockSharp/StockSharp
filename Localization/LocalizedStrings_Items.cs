@@ -5978,16 +5978,6 @@ namespace StockSharp.Localization
 		public static string Str633Params => GetString(Str633ParamsKey);
 
 		/// <summary>
-		/// Error registering security {0} to receive market data for {1}: {2}
-		/// </summary>
-		public const string Str634ParamsKey = nameof(Str634Params);
-
-		/// <summary>
-		/// Error registering security {0} to receive market data for {1}: {2}
-		/// </summary>
-		public static string Str634Params => GetString(Str634ParamsKey);
-
-		/// <summary>
 		/// Ending time is less or equal than beginning time {0}.
 		/// </summary>
 		public const string Str635ParamsKey = nameof(Str635Params);
@@ -6498,14 +6488,64 @@ namespace StockSharp.Localization
 		public static string Str689Params => GetString(Str689ParamsKey);
 
 		/// <summary>
-		/// Security {0} is registered to get market data for {1}
+		/// Security {0} is subscribed for {1}
 		/// </summary>
-		public const string Str690ParamsKey = nameof(Str690Params);
+		public const string SubscribedOkKey = nameof(SubscribedOk);
 
 		/// <summary>
-		/// Security {0} is registered to get market data for {1}
+		/// Security {0} is subscribed for {1}
 		/// </summary>
-		public static string Str690Params => GetString(Str690ParamsKey);
+		public static string SubscribedOk => GetString(SubscribedOkKey);
+
+		/// <summary>
+		/// Security {0} is unsubscribed for {1}
+		/// </summary>
+		public const string UnSubscribedOkKey = nameof(UnSubscribedOk);
+
+		/// <summary>
+		/// Security {0} is unsubscribed for {1}
+		/// </summary>
+		public static string UnSubscribedOk => GetString(UnSubscribedOkKey);
+
+		/// <summary>
+		/// Security {0} cannot subscribe for {1}. Error is '{0}'.
+		/// </summary>
+		public const string SubscribedErrorKey = nameof(SubscribedError);
+
+		/// <summary>
+		/// Security {0} cannot subscribe for {1}. Error is '{0}'.
+		/// </summary>
+		public static string SubscribedError => GetString(SubscribedErrorKey);
+
+		/// <summary>
+		/// Security {0} cannot unsubscribe from {1}. Error is '{0}'.
+		/// </summary>
+		public const string UnSubscribedErrorKey = nameof(UnSubscribedError);
+
+		/// <summary>
+		/// Security {0} cannot unsubscribe from {1}. Error is '{0}'.
+		/// </summary>
+		public static string UnSubscribedError => GetString(UnSubscribedErrorKey);
+
+		/// <summary>
+		/// Security {0} is subscribing for {1}
+		/// </summary>
+		public const string SubscriptionSentKey = nameof(SubscriptionSent);
+
+		/// <summary>
+		/// Security {0} is subscribing for {1}
+		/// </summary>
+		public static string SubscriptionSent => GetString(SubscriptionSentKey);
+
+		/// <summary>
+		/// Security {0} is unsubscribing from {1}
+		/// </summary>
+		public const string UnSubscriptionSentKey = nameof(UnSubscriptionSent);
+
+		/// <summary>
+		/// Security {0} is unsubscribing from {1}
+		/// </summary>
+		public static string UnSubscriptionSent => GetString(UnSubscriptionSentKey);
 
 		/// <summary>
 		/// from {0} till {1}

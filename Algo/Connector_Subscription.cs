@@ -26,6 +26,8 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	partial class Connector
@@ -190,6 +192,14 @@ namespace StockSharp.Algo
 		/// <param name="message">The message that contain subscribe info.</param>
 		public virtual void SubscribeMarketData(Security security, MarketDataMessage message)
 		{
+			var msg = LocalizedStrings.SubscriptionSent.Put(security.Id,
+				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
+
+			if (message.From != null && message.To != null)
+				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
+
+			this.AddDebugLog(msg + ".");
+
 			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 
@@ -200,6 +210,14 @@ namespace StockSharp.Algo
 		/// <param name="message">The message that contain unsubscribe info.</param>
 		public virtual void UnSubscribeMarketData(Security security, MarketDataMessage message)
 		{
+			var msg = LocalizedStrings.UnSubscriptionSent.Put(security.Id,
+				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
+
+			if (message.From != null && message.To != null)
+				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
+
+			this.AddDebugLog(msg + ".");
+
 			_subscriptionManager.ProcessRequest(security, message, false);
 		}
 

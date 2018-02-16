@@ -8,7 +8,7 @@
 
 StockSharp (shortly S#) – are free set of programs for trading at any markets of the world (American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
 
-**Available connections**: FIX/FAST, LMAX, Rithmic, Fusion/Blackwood, Interactive Brokers, OpenECry, Sterling, IQFeed, ITCH, FXCM, QuantHouse, E*Trade, BTCE, BitStamp and many other. Any broker or [partner broker (benefits)][6].
+**Available connections**: FIX/FAST, LMAX, Rithmic, Fusion/Blackwood, Interactive Brokers, OpenECry, Sterling, IQFeed, ITCH, FXCM, QuantHouse, E*Trade, BTCE, BitStamp, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck and many other. Any broker or [partner broker (benefits)][6].
 
 ## S#.Terminal
 
