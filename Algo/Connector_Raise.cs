@@ -648,30 +648,39 @@ namespace StockSharp.Algo
 
 		private void RaiseMarketDataSubscriptionSucceeded(Security security, MarketDataMessage message)
 		{
-			var msg = LocalizedStrings.Str690Params.Put(security.Id,
+			var msg = LocalizedStrings.SubscribedOk.Put(security.Id,
 				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
 
 			if (message.From != null && message.To != null)
 				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
 
-			this.AddInfoLog(msg + ".");
+			this.AddDebugLog(msg + ".");
 
 			MarketDataSubscriptionSucceeded?.Invoke(security, message);
 		}
 
 		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
 		{
-			this.AddErrorLog(LocalizedStrings.Str634Params, security.Id, message.DataType, message.Error);
+			this.AddErrorLog(LocalizedStrings.SubscribedError, security.Id, message.DataType, message.Error);
 			MarketDataSubscriptionFailed?.Invoke(security, message, error);
 		}
 
 		private void RaiseMarketDataUnSubscriptionSucceeded(Security security, MarketDataMessage message)
 		{
+			var msg = LocalizedStrings.UnSubscribedOk.Put(security.Id,
+				message.DataType + (message.DataType.IsCandleDataType() ? " " + message.Arg : string.Empty));
+
+			if (message.From != null && message.To != null)
+				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
+
+			this.AddDebugLog(msg + ".");
+
 			MarketDataUnSubscriptionSucceeded?.Invoke(security, message);
 		}
 
 		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
 		{
+			this.AddErrorLog(LocalizedStrings.UnSubscribedError, security.Id, message.DataType, message.Error);
 			MarketDataUnSubscriptionFailed?.Invoke(security, message, error);
 		}
 
