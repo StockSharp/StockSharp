@@ -323,6 +323,9 @@ namespace StockSharp.Logging
 
 			if (storage.Contains(nameof(LocalTimeZone)))
 				LocalTimeZone = storage.GetValue<TimeZoneInfo>(nameof(LocalTimeZone));
+
+			if (storage.Contains(nameof(Application)) && Application is IPersistable appPers)
+				appPers.Load(storage.GetValue<SettingsStorage>(nameof(Application)));
 		}
 
 		/// <summary>
@@ -337,6 +340,9 @@ namespace StockSharp.Logging
 
 			if (LocalTimeZone != null)
 				storage.SetValue(nameof(LocalTimeZone), LocalTimeZone);
+
+			if (Application is IPersistable appPers)
+				storage.SetValue(nameof(Application), appPers.Save());
 		}
 	}
 }
