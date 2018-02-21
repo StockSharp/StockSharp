@@ -15,6 +15,11 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		///
+		/// </summary>
+		public static string AreaColorDot => AppendDot(AreaColor);
+
+		/// <summary>
 		/// 
 		/// </summary>
 		public static string LineColorDot => AppendDot(LineColor);
