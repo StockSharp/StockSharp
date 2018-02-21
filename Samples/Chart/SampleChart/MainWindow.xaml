@@ -56,6 +56,8 @@
 				</ComboBox>
 
                 <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center"/>
+
+                <CheckBox Content="Custom colors" Margin="10,0,0,0" x:Name="_checkCustomColors" Checked="CustomColors_Changed" Unchecked="CustomColors_Changed" VerticalAlignment="Center"/>
             </StackPanel>
 
             <sx:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="1"/>
