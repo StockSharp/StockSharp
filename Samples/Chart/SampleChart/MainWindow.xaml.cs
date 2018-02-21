@@ -401,8 +401,6 @@ namespace SampleChart
 			if(_candleElement == null)
 				return;
 
-			var dd = new ChartDrawData();
-
 			if (CustomColors.IsChecked == true)
 			{
 				_candleElement.Colorer = (dt, isUpCandle, isLastCandle) => dt.Hour % 2 != 0 ? null : (isUpCandle ? (Color?)Colors.Chartreuse : Colors.Aqua);
@@ -414,7 +412,8 @@ namespace SampleChart
 				_indicators.Keys.ForEach(el => el.Colorer = null);
 			}
 
-			Chart.Draw(dd);
+			// refresh prev painted elements
+			Chart.Draw(new ChartDrawData());
 		}
 	}
 }
