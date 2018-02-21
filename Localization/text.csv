@@ -4713,6 +4713,7 @@ CsvDirectory;CSV directory;CSV директория
 CsvDirectoryDesc;Directory with CSV files.;Директория с CSV файлами.
 Heartbeat;Heartbeat;Heartbeat
 HeartbeatInterval;Heartbeat interval;Heartbeat интервал
+CustomColors;Custom colors;Произвольные цвета
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14651,3 +14652,6 @@ DocStr10265;To create a rule for the order's loss more on offset;Создать 
 DocStr10266;The order to be traced for loss;Заявка, которую необходимо отслеживать на убыточность
 DocStr10267;Loss offset;Уровень убытка
 DocStr10268;Is margin enabled;Включена ли маржинальность
+DocStr10269;Parameter identifier;Идентификатор параметра
+DocStr10270;Area color for {0} set as {1};Цвет области при {0} установленного в {1}
+DocStr10273;Custom elements colorer;Произвольный раскрасчик элементов

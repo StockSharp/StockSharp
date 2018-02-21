@@ -941,9 +941,19 @@
             Line color for <see cref="P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle" /> Line*.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.AreaColor">
+      <summary>
+            Area color for <see cref="P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle" /> set as <see cref="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.Area" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker">
       <summary>
             Show Y-axis market.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Colorer">
+      <summary>
+            Custom elements colorer.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Multiplier">
@@ -1506,6 +1516,11 @@
     <member name="P:StockSharp.Xaml.Charting.ChartIndicatorElement.ParentElement">
       <summary>
             Parent <see cref="T:StockSharp.Xaml.Charting.ChartIndicatorElement" />. It is used when indicators drawing using <see cref="T:StockSharp.Xaml.Charting.IChartIndicatorPainter" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartIndicatorElement.Colorer">
+      <summary>
+            Custom elements colorer.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.SettingsStorage)">

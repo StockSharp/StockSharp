@@ -227,7 +227,9 @@ P:StockSharp.Xaml.Charting.ChartCandleElement.UpBorderColor/summary;Str1955
 P:StockSharp.Xaml.Charting.ChartCandleElement.StrokeThickness/summary;Str1957
 P:StockSharp.Xaml.Charting.ChartCandleElement.AntiAliasing/summary;Str1960
 P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor/summary;DocStr8858
+P:StockSharp.Xaml.Charting.ChartCandleElement.AreaColor/summary;DocStr10270
 P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker/summary;Str1962
+P:StockSharp.Xaml.Charting.ChartCandleElement.Colorer/summary;DocStr10273
 P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Multiplier/summary;DocStr8859
 P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe3Multiplier/summary;DocStr8860
 P:StockSharp.Xaml.Charting.ChartCandleElement.FontColor/summary;FontColor
@@ -408,6 +410,7 @@ P:StockSharp.Xaml.Charting.ChartIndicatorElement.DrawTemplate/summary;DocStr7797
 P:StockSharp.Xaml.Charting.ChartIndicatorElement.AntiAliasing/summary;DocStr7798
 P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker/summary;Str1962
 P:StockSharp.Xaml.Charting.ChartIndicatorElement.ParentElement/summary;DocStr7799
+P:StockSharp.Xaml.Charting.ChartIndicatorElement.Colorer/summary;DocStr10273
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

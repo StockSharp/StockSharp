@@ -46756,5 +46756,15 @@ namespace StockSharp.Localization
 		/// Heartbeat interval
 		/// </summary>
 		public static string HeartbeatInterval => GetString(HeartbeatIntervalKey);
+
+		/// <summary>
+		/// Custom colors
+		/// </summary>
+		public const string CustomColorsKey = nameof(CustomColors);
+
+		/// <summary>
+		/// Custom colors
+		/// </summary>
+		public static string CustomColors => GetString(CustomColorsKey);
 	}
 }

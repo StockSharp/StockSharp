@@ -403,15 +403,15 @@ namespace SampleChart
 
 			var dd = new ChartDrawData();
 
-			if (_checkCustomColors.IsChecked == true)
+			if (CustomColors.IsChecked == true)
 			{
-				dd.SetCustomColorer(_candleElement, (dt, isUpCandle, isLastCandle) => dt.Hour % 2 != 0 ? null : (isUpCandle ? (Color?)Colors.Chartreuse : Colors.Aqua));
-				_indicators.Keys.ForEach(el => dd.SetCustomColorer(el, (dt) => dt.Hour % 2 != 0 ? null : (Color?)Colors.Magenta));
+				_candleElement.Colorer = (dt, isUpCandle, isLastCandle) => dt.Hour % 2 != 0 ? null : (isUpCandle ? (Color?)Colors.Chartreuse : Colors.Aqua);
+				_indicators.Keys.ForEach(el => el.Colorer = dt => dt.Hour % 2 != 0 ? null : (Color?)Colors.Magenta);
 			}
 			else
 			{
-				dd.SetCustomColorer(_candleElement, null);
-				_indicators.Keys.ForEach(el => dd.SetCustomColorer(el, null));
+				_candleElement.Colorer = null;
+				_indicators.Keys.ForEach(el => el.Colorer = null);
 			}
 
 			Chart.Draw(dd);
