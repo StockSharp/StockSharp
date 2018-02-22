@@ -4,6 +4,12 @@ StockSharp API Change log
 * (feature) OrderLossMoreRule.
 * (feature) KrakenMessageAdapter.IsMarginEnabled.
 * (feature) LogManager. Save/Load Application settings.
+* (bug) Chart. Tooltip format fix http://stocksharp.ru/posts/m/42383/ 
+* (feature) Chart. Custom candle colors.
+* (bug) Chart. Area style fix.
+* (bug) Chart. Indicator is ahead of candles.
+* (feature) Chart. Overview mouse scrolling support.
+* (feature) MarketRuleHelper. Connector state handling rules.
 
 ## v4.4.5.2:
 * (bug) OrderProfitMoreRule fix.
