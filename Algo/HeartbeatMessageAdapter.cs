@@ -42,7 +42,7 @@ namespace StockSharp.Algo
 		}
 
 		// дополнительные состояния для ConnectionStates
-		private const ConnectionStates _none = (ConnectionStates)0 - 1;
+		private const ConnectionStates _none = (ConnectionStates)(-1);
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
 		//private const ConnectionStates _reStartingExport = (ConnectionStates)11;
 
@@ -92,11 +92,21 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						lock (_timeSync)
-							_prevState = _currState = ConnectionStates.Failed;
-
 						_connectionTimeOut = _reConnectionSettings.Interval;
 						_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
+
+						lock (_timeSync)
+						{
+							if (_reConnectionSettings.ReAttemptCount != 0)
+							{
+								if (_currState == ConnectionStates.Connected)
+									_prevState = _reConnecting;
+
+								_currState = _reConnecting;
+							}
+							else
+								_prevState = _currState = ConnectionStates.Failed;
+						}
 					}
 
 					if (isReconnecting)
@@ -117,13 +127,13 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						lock (_timeSync)
-						{
-							if (_currState == ConnectionStates.Connected)
-								_prevState = _reConnecting;
+						//lock (_timeSync)
+						//{
+						//	if (_currState == ConnectionStates.Connected)
+						//		_prevState = _reConnecting;
 
-							_currState = _reConnecting;
-						}
+						//	_currState = _reConnecting;
+						//}
 
 						_connectionTimeOut = _reConnectionSettings.Interval;
 						_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
@@ -344,7 +354,7 @@ namespace StockSharp.Algo
 				{
 					if (_connectingAttemptCount == 0)
 					{
-						this.AddWarningLog("RCM: Reconnecting attemts {0} PrevState {1}.", _connectingAttemptCount, _prevState);
+						this.AddWarningLog("RCM: Reconnecting attemts {0} PrevState {1}.", _connectingAttemptCount, FormatState(_prevState));
 
 						lock (_timeSync)
 							_currState = _none;
@@ -359,7 +369,7 @@ namespace StockSharp.Algo
 
 					if (IsTradeTime())
 					{
-						this.AddInfoLog("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", _currState, _prevState, _connectingAttemptCount);
+						this.AddInfoLog("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_currState), FormatState(_prevState), _connectingAttemptCount);
 
 						if (_connectingAttemptCount != -1)
 							_connectingAttemptCount--;
@@ -375,12 +385,27 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						this.AddWarningLog("RCM: Out of trade time. CurrState {0}.", _currState);
+						this.AddWarningLog("RCM: Out of trade time. CurrState {0}.", FormatState(_currState));
 						_connectionTimeOut = TimeSpan.FromMinutes(1);
 					}
 
 					break;
 				}
+			}
+		}
+
+		private static string FormatState(ConnectionStates state)
+		{
+			switch (state)
+			{
+				case _reConnecting:
+					return "Reconnecting";
+				
+				case _none:
+					return "None";
+
+				default:
+					return state.ToString();
 			}
 		}
 
