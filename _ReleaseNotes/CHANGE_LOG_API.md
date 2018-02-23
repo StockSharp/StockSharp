@@ -10,6 +10,8 @@ StockSharp API Change log
 * (bug) Chart. Indicator is ahead of candles.
 * (feature) Chart. Overview mouse scrolling support.
 * (feature) MarketRuleHelper. Connector state handling rules.
+* (bug) Reconnect adapter fixes.
+* (bug) Subscription adapter fixes (reply handling fix, avoid potential deadlocks).
 
 ## v4.4.5.2:
 * (bug) OrderProfitMoreRule fix.
