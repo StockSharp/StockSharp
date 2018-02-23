@@ -6131,6 +6131,15 @@ M:StockSharp.Algo.MarketRuleHelper.WhenNewMyTrade(StockSharp.BusinessEntities.IC
 M:StockSharp.Algo.MarketRuleHelper.WhenNewOrder(StockSharp.BusinessEntities.IConnector)/summary;DocStr2017
 M:StockSharp.Algo.MarketRuleHelper.WhenNewOrder(StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2018
 M:StockSharp.Algo.MarketRuleHelper.WhenNewOrder(StockSharp.BusinessEntities.IConnector)/returns;DocStr14
+M:StockSharp.Algo.MarketRuleHelper.WhenConnected(StockSharp.BusinessEntities.IConnector)/summary;DocStr10274
+M:StockSharp.Algo.MarketRuleHelper.WhenConnected(StockSharp.BusinessEntities.IConnector)/param/connector;DocStr10275
+M:StockSharp.Algo.MarketRuleHelper.WhenConnected(StockSharp.BusinessEntities.IConnector)/returns;DocStr14
+M:StockSharp.Algo.MarketRuleHelper.WhenDisconnected(StockSharp.BusinessEntities.IConnector)/summary;DocStr10276
+M:StockSharp.Algo.MarketRuleHelper.WhenDisconnected(StockSharp.BusinessEntities.IConnector)/param/connector;DocStr10275
+M:StockSharp.Algo.MarketRuleHelper.WhenDisconnected(StockSharp.BusinessEntities.IConnector)/returns;DocStr14
+M:StockSharp.Algo.MarketRuleHelper.WhenConnectionLost(StockSharp.BusinessEntities.IConnector)/summary;DocStr10277
+M:StockSharp.Algo.MarketRuleHelper.WhenConnectionLost(StockSharp.BusinessEntities.IConnector)/param/connector;DocStr10275
+M:StockSharp.Algo.MarketRuleHelper.WhenConnectionLost(StockSharp.BusinessEntities.IConnector)/returns;DocStr14
 M:StockSharp.Algo.MarketRuleHelper.Apply(StockSharp.Algo.IMarketRule)/summary;DocStr2019
 M:StockSharp.Algo.MarketRuleHelper.Apply(StockSharp.Algo.IMarketRule)/param/rule;DocStr14
 M:StockSharp.Algo.MarketRuleHelper.Apply(StockSharp.Algo.IMarketRule)/returns;DocStr14

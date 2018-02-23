@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.5.3:
 * (feature) OrderLossMoreRule.
 * (feature) KrakenMessageAdapter.IsMarginEnabled.
 * (feature) LogManager. Save/Load Application settings.
@@ -12,6 +12,15 @@ StockSharp API Change log
 * (feature) MarketRuleHelper. Connector state handling rules.
 * (bug) Reconnect adapter fixes.
 * (bug) Subscription adapter fixes (reply handling fix, avoid potential deadlocks).
+* (feature) BTCE. Turned off book snapshot.
+* (feature) Poloniex. Reduce get trades invokes.
+* (bug) AlfaDirect. Fix double field parsing.
+* (bug) HitBTC. Market order fixes.
+* (bug) Bitstamp. Fix transaction reply parsing.
+* (bug) SecurityGrid. LastTrade.Volume display as empty when it 0.
+* (feature) MyTradeGrid. TransactionId column.
+* (bug) Monitor. Fix empty log source processing.
+* (feature) OrderLogGrid. Security column added.
 
 ## v4.4.5.2:
 * (bug) OrderProfitMoreRule fix.

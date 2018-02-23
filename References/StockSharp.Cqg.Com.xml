@@ -62,12 +62,6 @@
             </summary>
             <param name="storage">Settings storage.</param>
         </member>
-        <member name="M:StockSharp.Cqg.Com.CqgComMessageAdapter.ToString">
-            <summary>
-            Returns a string that represents the current object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
-        </member>
         <member name="T:StockSharp.Cqg.Com.CqgComOrderCondition">
             <summary>
             <see cref="N:CQG"/> order condition.
