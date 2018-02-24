@@ -85,9 +85,7 @@ namespace StockSharp.Algo.Strategies
 					throw new ArgumentException(LocalizedStrings.Str1356);
 
 				item.Parent = _parent;
-
-				if (item.Connector == null)
-					item.Connector = _parent.Connector;
+				item.Connector = _parent.Connector;
 
 				if (item.Portfolio == null)
 					item.Portfolio = _parent.Portfolio;
@@ -381,10 +379,7 @@ namespace StockSharp.Algo.Strategies
 				}
 
 				foreach (var strategy in ChildStrategies)
-				{
-					if (strategy.Connector == null || value == null)
-						strategy.Connector = value;
-				}
+					strategy.Connector = value;
 
 				ConnectorChanged?.Invoke();
 			}
