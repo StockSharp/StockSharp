@@ -818,7 +818,7 @@ namespace StockSharp.Algo
 				PortfolioName = position.Portfolio.Name,
 				SecurityId = position.Security.ToSecurityId(),
 			}
-			.TryAdd(PositionChangeTypes.BeginValue, position.CurrentValue)
+			.TryAdd(PositionChangeTypes.BeginValue, position.BeginValue)
 			.TryAdd(PositionChangeTypes.CurrentValue, position.CurrentValue)
 			.TryAdd(PositionChangeTypes.BlockedValue, position.BlockedValue);
 		}
