@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) TraderHelper.TryAdd IsZeroAcceptable.
+
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.
 * (feature) KrakenMessageAdapter.IsMarginEnabled.

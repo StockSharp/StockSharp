@@ -322,8 +322,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					.TryAdd(Level1Fields.BidsVolume, snapshot.BidsVolume)
 					.TryAdd(Level1Fields.AsksVolume, snapshot.AsksVolume)
 
-					.TryAdd(Level1Fields.BidsCount, snapshot.BidsCount)
-					.TryAdd(Level1Fields.AsksCount, snapshot.AsksCount)
+					.Add(Level1Fields.BidsCount, snapshot.BidsCount)
+					.Add(Level1Fields.AsksCount, snapshot.AsksCount)
 
 					.TryAdd(Level1Fields.HighBidPrice, snapshot.HighBidPrice)
 					.TryAdd(Level1Fields.LowAskPrice, snapshot.LowAskPrice)
@@ -359,7 +359,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 					.TryAdd(Level1Fields.Yield, snapshot.Yield)
 					.TryAdd(Level1Fields.VWAP, snapshot.VWAP)
 								
-					.TryAdd(Level1Fields.TradesCount, snapshot.TradesCount)
+					.Add(Level1Fields.TradesCount, snapshot.TradesCount)
 								
 					.TryAdd(Level1Fields.Beta, snapshot.Beta)
 					.TryAdd(Level1Fields.AverageTrueRange, snapshot.AverageTrueRange)

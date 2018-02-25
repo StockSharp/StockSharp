@@ -14662,3 +14662,4 @@ DocStr10277;To create a rule for the event of connection lost;Создать п�
 DocStr10278;Send to {0} disconnect message;Отправить в {0} сообщения отключения
 DocStr10279;Is disconnect expected;Ожидаемое ли отлключение
 DocStr10280;Extensions for {0};Расширения для {0}
+DocStr10281;Is zero value is acceptable values;Допустимо ли нулевое значение
