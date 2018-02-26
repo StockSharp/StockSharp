@@ -5235,6 +5235,8 @@ P:StockSharp.Algo.Strategies.Strategy.CommentOrders/remarks;DocStr1703
 P:StockSharp.Algo.Strategies.Strategy.Rules/summary;DocStr1370
 P:StockSharp.Algo.Strategies.Strategy.IsRulesSuspended/summary;DocStr1368
 P:StockSharp.Algo.Strategies.Strategy.IsRulesSuspended/remarks;DocStr1369
+P:StockSharp.Algo.Strategies.Strategy.StopOnChildStrategyErrors/summary;DocStr10282
+P:StockSharp.Algo.Strategies.Strategy.StopOnChildStrategyErrors/remarks;DocStr1703
 E:StockSharp.Algo.Strategies.Strategy.OrderRegistering/summary;DocStr1705
 E:StockSharp.Algo.Strategies.Strategy.OrderRegistered/summary;DocStr1706
 E:StockSharp.Algo.Strategies.Strategy.OrderRegisterFailed/summary;DocStr1707
@@ -5331,8 +5333,9 @@ M:StockSharp.Algo.Strategies.Strategy.Save(Ecng.Serialization.SettingsStorage)/p
 E:StockSharp.Algo.Strategies.Strategy.PropertyChanged/summary;DocStr1727
 M:StockSharp.Algo.Strategies.Strategy.CancelActiveOrders/summary;DocStr1674
 M:StockSharp.Algo.Strategies.Strategy.ProcessCancelActiveOrders/summary;DocStr1674
-M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)/summary;DocStr1675
-M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)/param/error;Str152
+M:StockSharp.Algo.Strategies.Strategy.OnError(StockSharp.Algo.Strategies.Strategy,System.Exception)/summary;DocStr1675
+M:StockSharp.Algo.Strategies.Strategy.OnError(StockSharp.Algo.Strategies.Strategy,System.Exception)/param/strategy;Strategy
+M:StockSharp.Algo.Strategies.Strategy.OnError(StockSharp.Algo.Strategies.Strategy,System.Exception)/param/error;Str152
 M:StockSharp.Algo.Strategies.Strategy.Clone/summary;DocStr643
 M:StockSharp.Algo.Strategies.Strategy.Clone/returns;DocStr1116
 E:StockSharp.Algo.Strategies.Strategy.ValuesChanged/summary;DocStr898
@@ -5459,9 +5462,10 @@ M:StockSharp.Algo.Strategies.StrategyHelper.WhenStopping(StockSharp.Algo.Strateg
 M:StockSharp.Algo.Strategies.StrategyHelper.WhenStopped(StockSharp.Algo.Strategies.Strategy)/summary;DocStr1815
 M:StockSharp.Algo.Strategies.StrategyHelper.WhenStopped(StockSharp.Algo.Strategies.Strategy)/param/strategy;DocStr1816
 M:StockSharp.Algo.Strategies.StrategyHelper.WhenStopped(StockSharp.Algo.Strategies.Strategy)/returns;DocStr14
-M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy)/summary;DocStr1817
-M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy)/param/strategy;DocStr1818
-M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy)/returns;DocStr14
+M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy,System.Boolean)/summary;DocStr1817
+M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/strategy;DocStr1818
+M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy,System.Boolean)/param/processChildStrategyErrors;DocStr10283
+M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy,System.Boolean)/returns;DocStr14
 M:StockSharp.Algo.Strategies.StrategyHelper.WhenWarning(StockSharp.Algo.Strategies.Strategy)/summary;DocStr1819
 M:StockSharp.Algo.Strategies.StrategyHelper.WhenWarning(StockSharp.Algo.Strategies.Strategy)/param/strategy;DocStr1820
 M:StockSharp.Algo.Strategies.StrategyHelper.WhenWarning(StockSharp.Algo.Strategies.Strategy)/returns;DocStr14

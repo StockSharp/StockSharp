@@ -14663,3 +14663,5 @@ DocStr10278;Send to {0} disconnect message;Отправить в {0} сообщ�
 DocStr10279;Is disconnect expected;Ожидаемое ли отлключение
 DocStr10280;Extensions for {0};Расширения для {0}
 DocStr10281;Is zero value is acceptable values;Допустимо ли нулевое значение
+DocStr10282;Stop strategy when child strategies causes errors;Останавливать стратегию когда дочерная стратегия вызывает ошибку
+DocStr10283;Process the child strategies errors;Обработать ошибки от дочерних стратегий
