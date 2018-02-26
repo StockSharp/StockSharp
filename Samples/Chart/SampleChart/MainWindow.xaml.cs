@@ -160,7 +160,9 @@ namespace SampleChart
 			_security = new Security
 			{
 				Id = id.ToStringId(),
-				PriceStep = id.SecurityCode.StartsWith("RI", StringComparison.InvariantCultureIgnoreCase) ? 10 : 0.01m,
+				PriceStep = id.SecurityCode.StartsWith("RI", StringComparison.InvariantCultureIgnoreCase) ? 10 : 
+							id.SecurityCode.Contains("ES") ? 0.25m : 
+							0.01m,
 				Board = ExchangeBoard.Associated
 			};
 
