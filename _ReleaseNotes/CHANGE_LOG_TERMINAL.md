@@ -1,5 +1,9 @@
 StockSharp Terminal Change log
 ========================
+## v4.4.5.3:
+* (feature) Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck connectors.
+* (bug) Many bug fixes.
+
 ## v4.4.0:
 * (feature) Performance improved.
 * (bug) Options fixes.
