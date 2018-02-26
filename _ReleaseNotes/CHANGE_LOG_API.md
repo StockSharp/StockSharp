@@ -2,6 +2,8 @@ StockSharp API Change log
 ========================
 ## current:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
+* (bug) Connector. Lookup messages sending fix.
+* (bug) Child strategies. Fix set Connector for child strategies.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.
