@@ -3113,11 +3113,12 @@ namespace StockSharp.Algo
 		/// <param name="message">Change message.</param>
 		/// <param name="type">Change type.</param>
 		/// <param name="value">Change value.</param>
+		/// <param name="isZeroAcceptable">Is zero value is acceptable values.</param>
 		/// <returns>Change message.</returns>
-		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, decimal value)
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, decimal value, bool isZeroAcceptable = false)
 			where TMessage : BaseChangeMessage<TChange>
 		{
-			if (value == 0)
+			if (value == 0 && !isZeroAcceptable)
 				return message;
 
 			return message.Add(type, value);
@@ -3131,14 +3132,15 @@ namespace StockSharp.Algo
 		/// <param name="message">Change message.</param>
 		/// <param name="type">Change type.</param>
 		/// <param name="value">Change value.</param>
+		/// <param name="isZeroAcceptable">Is zero value is acceptable values.</param>
 		/// <returns>Change message.</returns>
-		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, decimal? value)
+		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, decimal? value, bool isZeroAcceptable = false)
 			where TMessage : BaseChangeMessage<TChange>
 		{
-			if (value == null || value == 0)
+			if (value == null)
 				return message;
 
-			return message.Add(type, value.Value);
+			return message.TryAdd(type, value.Value, isZeroAcceptable);
 		}
 
 		/// <summary>
@@ -3153,8 +3155,8 @@ namespace StockSharp.Algo
 		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, int value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
-			if (value == 0)
-				return message;
+			//if (value == 0)
+			//	return message;
 
 			return message.Add(type, value);
 		}
@@ -3171,7 +3173,7 @@ namespace StockSharp.Algo
 		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, int? value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
-			if (value == null || value == 0)
+			if (value == null/* || value == 0*/)
 				return message;
 
 			return message.Add(type, value.Value);
@@ -4465,7 +4467,7 @@ namespace StockSharp.Algo
 			.Add(Level1Fields.LowPrice, message.LowPrice)
 			.Add(Level1Fields.ClosePrice, message.ClosePrice)
 			.Add(Level1Fields.Volume, message.TotalVolume)
-			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest);
+			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true);
 
 			return level1;
 		}
@@ -4483,9 +4485,9 @@ namespace StockSharp.Algo
 				ServerTime = message.ServerTime,
 			}
 			.TryAdd(Level1Fields.LastTradeId, message.TradeId)
-			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice)
-			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume)
-			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest)
+			.TryAdd(Level1Fields.LastTradePrice, message.TradePrice, false)
+			.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume, false)
+			.TryAdd(Level1Fields.OpenInterest, message.OpenInterest, true)
 			.TryAdd(Level1Fields.LastTradeOrigin, message.OriginSide);
 
 			return level1;

@@ -718,20 +718,6 @@
       <param name="field">Level1 field.</param>
       <returns>Price items collection.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.GridControl.IPriceChartDataProvider.Subscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
-      <summary>
-            Subscribe for changes.
-            </summary>
-      <param name="security">Security.</param>
-      <param name="field">Level1 field.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.IPriceChartDataProvider.UnSubscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
-      <summary>
-            Unsubscribe from changes.
-            </summary>
-      <param name="security">Security.</param>
-      <param name="field">Level1 field.</param>
-    </member>
     <member name="T:StockSharp.Xaml.GridControl.PriceChartDataProvider">
       <summary>
             Price chart data provider.
@@ -740,6 +726,11 @@
     <member name="P:StockSharp.Xaml.GridControl.PriceChartDataProvider.RefreshPeriod">
       <summary>
             Refresh chart data period.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.PriceChartDataProvider.Fields">
+      <summary>
+            Level1 fields.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.#ctor(StockSharp.BusinessEntities.IMarketDataProvider)">
@@ -756,38 +747,12 @@
     <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.Get(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
       <inheritdoc />
     </member>
-    <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.Subscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
-      <inheritdoc />
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.UnSubscribe(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
-      <inheritdoc />
-    </member>
     <member name="T:StockSharp.Xaml.GridControl.PriceChartEditor">
       <summary>
             Price chart editor.
             </summary>
       <summary>
             PriceChartEditor
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.GridControl.PriceChartEditor.SecurityProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.PriceChartEditor.Security" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.PriceChartEditor.Security">
-      <summary>
-            Security.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.GridControl.PriceChartEditor.Level1FieldProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.GridControl.PriceChartEditor.Level1Field" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.PriceChartEditor.Level1Field">
-      <summary>
-            Level1 field.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.PriceChartEditor.#ctor">
@@ -826,6 +791,30 @@
       </param>
       <param name="text">
       </param>
+    </member>
+    <member name="T:StockSharp.Xaml.GridControl.TreeListNodeHelper">
+      <summary>
+            Extensions for <see cref="T:DevExpress.Xpf.Grid.TreeListNode" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.GridControl.TreeListNodeHelper.IsExpandedProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="!:TreeListNode.IsExpanded" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.TreeListNodeHelper.GetIsExpanded(System.Windows.DependencyObject)">
+      <summary>
+            To get the value for <see cref="!:TreeListNode.IsExpanded" />.
+            </summary>
+      <param name="obj">Object <see cref="T:StockSharp.Xaml.LogControl" />.</param>
+      <returns>The value of <see cref="!:TreeListNode.IsExpanded" />.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.TreeListNodeHelper.SetIsExpanded(System.Windows.DependencyObject,System.Boolean)">
+      <summary>
+            To set the value for <see cref="!:TreeListNode.IsExpanded" />.
+            </summary>
+      <param name="obj">Object <see cref="T:StockSharp.Xaml.LogControl" />.</param>
+      <param name="value">New value for <see cref="!:TreeListNode.IsExpanded" />.</param>
     </member>
     <member name="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs">
       <summary>

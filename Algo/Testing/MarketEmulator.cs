@@ -1599,7 +1599,7 @@ namespace StockSharp.Algo.Testing
 					PortfolioName = _name,
 				}
 				.Add(PositionChangeTypes.RealizedPnL, realizedPnL)
-				.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL)
+				.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL, true)
 				.Add(PositionChangeTypes.VariationMargin, totalPnL)
 				.Add(PositionChangeTypes.CurrentValue, _currentMoney)
 				.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)

@@ -370,14 +370,28 @@ namespace StockSharp.Algo
 					if (_hearbeatAdapters.Count == 0)
 						throw new InvalidOperationException(LocalizedStrings.Str3650);
 
-					_hearbeatAdapters.Values.ForEach(a => a.SendInMessage(message));
+					_hearbeatAdapters.Values.ForEach(a =>
+					{
+						var u = GetUnderlyingAdapter(a);
+						this.AddInfoLog("Connecting '{0}'.", u);
+
+						a.SendInMessage(message);
+					});
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
 					lock (_connectedResponseLock)
-						_connectedAdapters.ForEach(a => a.SendInMessage(message));
+					{
+						_connectedAdapters.ForEach(a =>
+						{
+							var u = GetUnderlyingAdapter(a);
+							this.AddInfoLog("Disconnecting '{0}'.", u);
+
+							a.SendInMessage(message);
+						});
+					}
 
 					break;
 				}
@@ -628,7 +642,9 @@ namespace StockSharp.Algo
 			Message[] pendingMessages;
 
 			if (isError)
-				this.AddErrorLog(LocalizedStrings.Str625Params, underlyingAdapter.GetType().Name, message.Error);
+				this.AddErrorLog(LocalizedStrings.Str625Params, underlyingAdapter, message.Error);
+			else
+				this.AddInfoLog("Connected from '{0}'.", underlyingAdapter);
 
 			lock (_connectedResponseLock)
 			{
@@ -681,8 +697,10 @@ namespace StockSharp.Algo
 			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
 			var heartbeatAdapter = _hearbeatAdapters[underlyingAdapter];
 
-			if (message.Error != null)
-				this.AddErrorLog(LocalizedStrings.Str627Params, underlyingAdapter.GetType().Name, message.Error);
+			if (message.Error == null)
+				this.AddInfoLog("Connected from '{0}'.", underlyingAdapter);
+			else
+				this.AddErrorLog(LocalizedStrings.Str627Params, underlyingAdapter, message.Error);
 
 			lock (_connectedResponseLock)
 			{

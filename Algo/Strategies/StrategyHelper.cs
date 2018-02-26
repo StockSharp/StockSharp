@@ -641,15 +641,22 @@ namespace StockSharp.Algo.Strategies
 
 		private sealed class ErrorStrategyRule : StrategyRule<Exception>
 		{
-			public ErrorStrategyRule(Strategy strategy)
+			private readonly bool _processChildStrategyErrors;
+
+			public ErrorStrategyRule(Strategy strategy, bool processChildStrategyErrors)
 				: base(strategy)
 			{
+				_processChildStrategyErrors = processChildStrategyErrors;
+
 				Name = strategy + LocalizedStrings.Str1254;
 				Strategy.Error += OnError;
 			}
 
-			private void OnError(Exception error)
+			private void OnError(Strategy strategy, Exception error)
 			{
+				if (!_processChildStrategyErrors && !Equals(Strategy, strategy))
+					return;
+
 				Activate(error);
 			}
 
@@ -841,10 +848,11 @@ namespace StockSharp.Algo.Strategies
 		/// To create a rule for event of strategy error (transition of state <see cref="Strategy.ErrorState"/> into <see cref="LogLevels.Error"/>).
 		/// </summary>
 		/// <param name="strategy">The strategy, based on which error will be expected.</param>
+		/// <param name="processChildStrategyErrors">Process the child strategies errors.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Strategy, Exception> WhenError(this Strategy strategy)
+		public static MarketRule<Strategy, Exception> WhenError(this Strategy strategy, bool processChildStrategyErrors = false)
 		{
-			return new ErrorStrategyRule(strategy);
+			return new ErrorStrategyRule(strategy, processChildStrategyErrors);
 		}
 
 		/// <summary>

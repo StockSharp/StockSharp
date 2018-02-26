@@ -782,6 +782,8 @@ M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)
 M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Messages.MessageAdapter.InitMessageLocalTime(StockSharp.Messages.Message)/summary;DocStr4331
 M:StockSharp.Messages.MessageAdapter.InitMessageLocalTime(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.Messages.MessageAdapter.SendOutDisconnectMessage(System.Boolean)/summary;DocStr10278
+M:StockSharp.Messages.MessageAdapter.SendOutDisconnectMessage(System.Boolean)/param/expected;DocStr10279
 M:StockSharp.Messages.MessageAdapter.SendOutError(System.String)/summary;DocStr4332
 M:StockSharp.Messages.MessageAdapter.SendOutError(System.String)/param/description;DocStr325
 M:StockSharp.Messages.MessageAdapter.SendOutError(System.Exception)/summary;DocStr4332

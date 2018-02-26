@@ -1,9 +1,31 @@
 StockSharp API Change log
 ========================
 ## current:
+* (feature) TraderHelper.TryAdd IsZeroAcceptable.
+* (bug) Connector. Lookup messages sending fix.
+* (bug) Child strategies. Fix set Connector for child strategies.
+
+## v4.4.5.3:
 * (feature) OrderLossMoreRule.
 * (feature) KrakenMessageAdapter.IsMarginEnabled.
 * (feature) LogManager. Save/Load Application settings.
+* (bug) Chart. Tooltip format fix http://stocksharp.ru/posts/m/42383/ 
+* (feature) Chart. Custom candle colors.
+* (bug) Chart. Area style fix.
+* (bug) Chart. Indicator is ahead of candles.
+* (feature) Chart. Overview mouse scrolling support.
+* (feature) MarketRuleHelper. Connector state handling rules.
+* (bug) Reconnect adapter fixes.
+* (bug) Subscription adapter fixes (reply handling fix, avoid potential deadlocks).
+* (feature) BTCE. Turned off book snapshot.
+* (feature) Poloniex. Reduce get trades invokes.
+* (bug) AlfaDirect. Fix double field parsing.
+* (bug) HitBTC. Market order fixes.
+* (bug) Bitstamp. Fix transaction reply parsing.
+* (bug) SecurityGrid. LastTrade.Volume display as empty when it 0.
+* (feature) MyTradeGrid. TransactionId column.
+* (bug) Monitor. Fix empty log source processing.
+* (feature) OrderLogGrid. Security column added.
 
 ## v4.4.5.2:
 * (bug) OrderProfitMoreRule fix.

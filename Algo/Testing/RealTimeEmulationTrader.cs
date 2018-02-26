@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Testing
 				TransactionAdapter.SendInMessage(new PortfolioChangeMessage
 				{
 					PortfolioName = _portfolio.Name
-				}.TryAdd(PositionChangeTypes.BeginValue, _portfolio.BeginValue));
+				}.TryAdd(PositionChangeTypes.BeginValue, _portfolio.BeginValue, true));
 			}
 			else if (message.Adapter == MarketDataAdapter || message.Adapter?.Parent == MarketDataAdapter)
 			{

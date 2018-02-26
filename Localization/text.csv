@@ -14655,3 +14655,13 @@ DocStr10268;Is margin enabled;Включена ли маржинальность
 DocStr10269;Parameter identifier;Идентификатор параметра
 DocStr10270;Area color for {0} set as {1};Цвет области при {0} установленного в {1}
 DocStr10273;Custom elements colorer;Произвольный раскрасчик элементов
+DocStr10274;To create a rule for the event of connection established;Создать правило для отслеживания события подключения
+DocStr10275;The connection to be traced for state;Подключение для отслеживания состояния
+DocStr10276;To create a rule for the event of disconnection;Создать правило для отслеживания события отключения
+DocStr10277;To create a rule for the event of connection lost;Создать правило для отслеживания события разрыва подключения
+DocStr10278;Send to {0} disconnect message;Отправить в {0} сообщения отключения
+DocStr10279;Is disconnect expected;Ожидаемое ли отлключение
+DocStr10280;Extensions for {0};Расширения для {0}
+DocStr10281;Is zero value is acceptable values;Допустимо ли нулевое значение
+DocStr10282;Stop strategy when child strategies causes errors;Останавливать стратегию когда дочерная стратегия вызывает ошибку
+DocStr10283;Process the child strategies errors;Обработать ошибки от дочерних стратегий

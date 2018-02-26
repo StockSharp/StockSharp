@@ -85,9 +85,7 @@ namespace StockSharp.Algo.Strategies
 					throw new ArgumentException(LocalizedStrings.Str1356);
 
 				item.Parent = _parent;
-
-				if (item.Connector == null)
-					item.Connector = _parent.Connector;
+				item.Connector = _parent.Connector;
 
 				if (item.Portfolio == null)
 					item.Portfolio = _parent.Portfolio;
@@ -110,6 +108,7 @@ namespace StockSharp.Algo.Strategies
 				item.OrderReRegistering += _parent.OnOrderReRegistering;
 				item.StopOrderReRegistering += _parent.OnStopOrderReRegistering;
 				item.ProcessStateChanged += OnChildProcessStateChanged;
+				item.Error += _parent.OnError;
 
 				item.StopOrders.ForEach(_parent.ProcessOrder);
 				item.Orders.ForEach(_parent.ProcessOrder);
@@ -172,6 +171,7 @@ namespace StockSharp.Algo.Strategies
 				item.OrderReRegistering -= _parent.OnOrderReRegistering;
 				item.StopOrderReRegistering -= _parent.OnStopOrderReRegistering;
 				item.ProcessStateChanged -= OnChildProcessStateChanged;
+				item.Error -= _parent.OnError;
 
 				var rule = _childStrategyRules.TryGetValue(item);
 
@@ -261,6 +261,7 @@ namespace StockSharp.Algo.Strategies
 			_commentOrders = this.Param<bool>(nameof(CommentOrders));
 			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1));
 			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
+			_stopOnChildStrategyErrors = this.Param(nameof(StopOnChildStrategyErrors), false);
 
 			InitMaxOrdersKeepTime();
 
@@ -378,10 +379,7 @@ namespace StockSharp.Algo.Strategies
 				}
 
 				foreach (var strategy in ChildStrategies)
-				{
-					if (strategy.Connector == null || value == null)
-						strategy.Connector = value;
-				}
+					strategy.Connector = value;
 
 				ConnectorChanged?.Invoke();
 			}
@@ -809,7 +807,7 @@ namespace StockSharp.Algo.Strategies
 				}
 				catch (Exception error)
 				{
-					OnError(error);
+					OnError(this, error);
 				}
 
 				try
@@ -819,7 +817,7 @@ namespace StockSharp.Algo.Strategies
 				}
 				catch (Exception error)
 				{
-					OnError(error);
+					OnError(this, error);
 				}
 				
 				if (ProcessState == ProcessStates.Stopping)
@@ -1122,6 +1120,21 @@ namespace StockSharp.Algo.Strategies
 		[Browsable(false)]
 		public bool IsRulesSuspended => _rulesSuspendCount > 0;
 
+		private readonly StrategyParam<bool> _stopOnChildStrategyErrors;
+
+		/// <summary>
+		/// Stop strategy when child strategies causes errors.
+		/// </summary>
+		/// <remarks>
+		/// It is disabled by default.
+		/// </remarks>
+		[Browsable(false)]
+		public bool StopOnChildStrategyErrors
+		{
+			get => _stopOnChildStrategyErrors.Value;
+			set => _stopOnChildStrategyErrors.Value = value;
+		}
+
 		/// <summary>
 		/// The event of sending order for registration.
 		/// </summary>
@@ -1220,7 +1233,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The event of error occurrence in the strategy.
 		/// </summary>
-		public event Action<Exception> Error;
+		public event Action<Strategy, Exception> Error;
 
 		/// <summary>
 		/// The method is called when the <see cref="Start"/> method has been called and the <see cref="ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
@@ -1863,7 +1876,7 @@ namespace StockSharp.Algo.Strategies
 			}
 			catch (Exception error)
 			{
-				OnError(error);
+				OnError(this, error);
 			}
 			finally
 			{
@@ -2570,11 +2583,15 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Processing of error, occurred as result of strategy operation.
 		/// </summary>
+		/// <param name="strategy">Strategy.</param>
 		/// <param name="error">Error.</param>
-		protected virtual void OnError(Exception error)
+		protected virtual void OnError(Strategy strategy, Exception error)
 		{
 			ErrorCount++;
-			Error?.Invoke(error);
+			Error?.Invoke(strategy, error);
+
+			if (!StopOnChildStrategyErrors && !Equals(this, strategy))
+				return;
 
 			this.AddErrorLog(error.ToString());
 

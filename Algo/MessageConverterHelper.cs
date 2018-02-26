@@ -778,8 +778,8 @@ namespace StockSharp.Algo
 				LocalTime = portfolio.LocalTime,
 				ServerTime = portfolio.LastChangeTime,
 			}
-			.TryAdd(PositionChangeTypes.BeginValue, portfolio.BeginValue)
-			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.CurrentValue);
+			.TryAdd(PositionChangeTypes.BeginValue, portfolio.BeginValue, true)
+			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.CurrentValue, true);
 		}
 
 		///// <summary>
@@ -818,9 +818,9 @@ namespace StockSharp.Algo
 				PortfolioName = position.Portfolio.Name,
 				SecurityId = position.Security.ToSecurityId(),
 			}
-			.TryAdd(PositionChangeTypes.BeginValue, position.CurrentValue)
-			.TryAdd(PositionChangeTypes.CurrentValue, position.CurrentValue)
-			.TryAdd(PositionChangeTypes.BlockedValue, position.BlockedValue);
+			.TryAdd(PositionChangeTypes.BeginValue, position.BeginValue, true)
+			.TryAdd(PositionChangeTypes.CurrentValue, position.CurrentValue, true)
+			.TryAdd(PositionChangeTypes.BlockedValue, position.BlockedValue, true);
 		}
 
 		/// <summary>

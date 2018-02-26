@@ -2175,6 +2175,69 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private class ConnectedRule : ConnectorRule<IMessageAdapter>
+		{
+			public ConnectedRule(IConnector connector)
+				: base(connector)
+			{
+				Name = "Connected rule";
+				Connector.ConnectedEx += OnConnectedEx;
+			}
+
+			private void OnConnectedEx(IMessageAdapter adapter)
+			{
+				Activate(adapter);
+			}
+
+			protected override void DisposeManaged()
+			{
+				Connector.ConnectedEx -= OnConnectedEx;
+				base.DisposeManaged();
+			}
+		}
+
+		private class DisconnectedRule : ConnectorRule<IMessageAdapter>
+		{
+			public DisconnectedRule(IConnector connector)
+				: base(connector)
+			{
+				Name = "Disconnected rule";
+				Connector.DisconnectedEx += OnDisconnectedEx;
+			}
+
+			private void OnDisconnectedEx(IMessageAdapter adapter)
+			{
+				Activate(adapter);
+			}
+
+			protected override void DisposeManaged()
+			{
+				Connector.DisconnectedEx -= OnDisconnectedEx;
+				base.DisposeManaged();
+			}
+		}
+
+		private class ConnectionLostRule : ConnectorRule<Tuple<IMessageAdapter, Exception>>
+		{
+			public ConnectionLostRule(IConnector connector)
+				: base(connector)
+			{
+				Name = "Connection lost rule";
+				Connector.ConnectionErrorEx += OnConnectionErrorEx;
+			}
+
+			private void OnConnectionErrorEx(IMessageAdapter adapter, Exception error)
+			{
+				Activate(Tuple.Create(adapter, error));
+			}
+
+			protected override void DisposeManaged()
+			{
+				Connector.ConnectionErrorEx -= OnConnectionErrorEx;
+				base.DisposeManaged();
+			}
+		}
+
 		/// <summary>
 		/// To create a rule for the event <see cref="IConnector.MarketTimeChanged"/>, activated after expiration of <paramref name="interval" />.
 		/// </summary>
@@ -2209,6 +2272,36 @@ namespace StockSharp.Algo
 		public static MarketRule<IConnector, Order> WhenNewOrder(this IConnector connector)
 		{
 			return new NewOrderTraderRule(connector);
+		}
+
+		/// <summary>
+		/// To create a rule for the event of connection established.
+		/// </summary>
+		/// <param name="connector">The connection to be traced for state.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<IConnector, IMessageAdapter> WhenConnected(this IConnector connector)
+		{
+			return new ConnectedRule(connector);
+		}
+
+		/// <summary>
+		/// To create a rule for the event of disconnection.
+		/// </summary>
+		/// <param name="connector">The connection to be traced for state.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<IConnector, IMessageAdapter> WhenDisconnected(this IConnector connector)
+		{
+			return new DisconnectedRule(connector);
+		}
+
+		/// <summary>
+		/// To create a rule for the event of connection lost.
+		/// </summary>
+		/// <param name="connector">The connection to be traced for state.</param>
+		/// <returns>Rule.</returns>
+		public static MarketRule<IConnector, Tuple<IMessageAdapter, Exception>> WhenConnectionLost(this IConnector connector)
+		{
+			return new ConnectionLostRule(connector);
 		}
 
 		#endregion
