@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Show hidden axes
+		/// </summary>
+		public const string ShowHiddenAxesKey = nameof(ShowHiddenAxes);
+
+		/// <summary>
+		/// Show hidden axes
+		/// </summary>
+		public static string ShowHiddenAxes => GetString(ShowHiddenAxesKey);
+
+		/// <summary>
+		/// Reset time zone
+		/// </summary>
+		public const string ResetTimeZoneKey = nameof(ResetTimeZone);
+
+		/// <summary>
+		/// Reset time zone
+		/// </summary>
+		public static string ResetTimeZone => GetString(ResetTimeZoneKey);
+
+		/// <summary>
 		/// Area color
 		/// </summary>
 		public const string AreaColorKey = nameof(AreaColor);

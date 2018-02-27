@@ -160,7 +160,9 @@ namespace SampleChart
 			_security = new Security
 			{
 				Id = id.ToStringId(),
-				PriceStep = id.SecurityCode.StartsWith("RI", StringComparison.InvariantCultureIgnoreCase) ? 10 : 0.01m,
+				PriceStep = id.SecurityCode.StartsWith("RI", StringComparison.InvariantCultureIgnoreCase) ? 10 : 
+							id.SecurityCode.Contains("ES") ? 0.25m : 
+							0.01m,
 				Board = ExchangeBoard.Associated
 			};
 
@@ -403,8 +405,8 @@ namespace SampleChart
 
 			if (CustomColors.IsChecked == true)
 			{
-				_candleElement.Colorer = (dt, isUpCandle, isLastCandle) => dt.Hour % 2 != 0 ? null : (isUpCandle ? (Color?)Colors.Chartreuse : Colors.Aqua);
-				_indicators.Keys.ForEach(el => el.Colorer = dt => dt.Hour % 2 != 0 ? null : (Color?)Colors.Magenta);
+				_candleElement.Colorer = (dto, isUpCandle, isLastCandle) => dto.Hour % 2 != 0 ? null : (isUpCandle ? (Color?)Colors.Chartreuse : Colors.Aqua);
+				_indicators.Keys.ForEach(el => el.Colorer = dto => dto.Hour % 2 != 0 ? null : (Color?)Colors.Magenta);
 			}
 			else
 			{
