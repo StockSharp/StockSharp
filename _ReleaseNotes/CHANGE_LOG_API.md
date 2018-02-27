@@ -4,6 +4,10 @@ StockSharp API Change log
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
 * (bug) Connector. Lookup messages sending fix.
 * (bug) Child strategies. Fix set Connector for child strategies.
+* (feature) Charting. Reset Y axis range on double click.
+* (feature) Charting. Time zone settings for each axis.
+* (feature) Charting. Draw lines on mouse down event.
+* (bug) Charting. X axis scaling fix.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

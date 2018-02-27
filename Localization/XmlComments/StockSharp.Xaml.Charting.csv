@@ -179,6 +179,7 @@ F:StockSharp.Xaml.Charting.ChartAxisType.Numeric/summary;Str1916
 T:StockSharp.Xaml.Charting.ChartAxis/summary;DocStr7763
 P:StockSharp.Xaml.Charting.ChartAxis.ChartArea/summary;Str1903
 P:StockSharp.Xaml.Charting.ChartAxis.Id/summary;Str1917
+P:StockSharp.Xaml.Charting.ChartAxis.IsVisible/summary;DocStr10284
 P:StockSharp.Xaml.Charting.ChartAxis.Title/summary;Str215
 P:StockSharp.Xaml.Charting.ChartAxis.Group/summary;Group
 P:StockSharp.Xaml.Charting.ChartAxis.AxisAlignment/summary;Str1922
@@ -192,6 +193,7 @@ P:StockSharp.Xaml.Charting.ChartAxis.DrawMinorGridLines/summary;Str1935
 P:StockSharp.Xaml.Charting.ChartAxis.DrawLabels/summary;Str1937
 P:StockSharp.Xaml.Charting.ChartAxis.TextFormatting/summary;Str1938
 P:StockSharp.Xaml.Charting.ChartAxis.SubDayTextFormatting/summary;DocStr7764
+P:StockSharp.Xaml.Charting.ChartAxis.TimeZone/summary;DocStr10285
 M:StockSharp.Xaml.Charting.ChartAxis.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.ChartAxis.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartAxis.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -484,6 +486,7 @@ P:StockSharp.Xaml.Charting.ChartPanel.IsInteracted/summary;DocStr7734
 P:StockSharp.Xaml.Charting.ChartPanel.OrderCreationMode/summary;DocStr7739
 P:StockSharp.Xaml.Charting.ChartPanel.MinimumRange/summary;DocStr7730
 P:StockSharp.Xaml.Charting.ChartPanel.ShowOverview/summary;DocStr7733
+P:StockSharp.Xaml.Charting.ChartPanel.TimeZone/summary;DocStr8855
 P:StockSharp.Xaml.Charting.ChartPanel.IndicatorTypes/summary;DocStr7740
 M:StockSharp.Xaml.Charting.ChartPanel.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Charting.ChartPanel.ReSubscribeElements/summary;DocStr7810

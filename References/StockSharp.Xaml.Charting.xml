@@ -725,6 +725,11 @@
             Unique ID.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartAxis.IsVisible">
+      <summary>
+            Axis visibility.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartAxis.Title">
       <summary>
             Header.
@@ -788,6 +793,11 @@
     <member name="P:StockSharp.Xaml.Charting.ChartAxis.SubDayTextFormatting">
       <summary>
             The format of X-axis labels within the day.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartAxis.TimeZone">
+      <summary>
+            Time zone for this axis.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartAxis.Load(Ecng.Serialization.SettingsStorage)">
@@ -1773,6 +1783,11 @@
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.ShowOverview">
       <summary>
             To show the preview area.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.TimeZone">
+      <summary>
+            Local time zone for all <see cref="T:System.DateTimeOffset" /> values conversion.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.IndicatorTypes">
