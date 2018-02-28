@@ -60,6 +60,7 @@ namespace SampleChart
 		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 		private RandomWalkTradeGenerator _tradeGenerator;
 		private readonly CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator>();
+		private readonly object _lock = new object();
 
 		private TimeSpan _timeframe;
 
@@ -314,12 +315,12 @@ namespace SampleChart
 				if (chartData == null)
 					chartData = new ChartDrawData();
 
-				if(needToFinish)
+				if(needToFinish && candle.State != CandleStates.Finished)
 					candle.State = CandleStates.Finished;
 
 				var chartGroup = chartData.Group(candle.OpenTime);
 
-				lock(candle.PriceLevels)
+				lock(_lock)
 					chartGroup.Add(_candleElement, candle);
 
 				foreach (var pair in _indicators.CachedPairs)
@@ -377,7 +378,7 @@ namespace SampleChart
 
 			_candle.TotalVolume += tick.TradeVolume ?? 0;
 
-			lock(_volumeProfile.PriceLevels)
+			lock(_lock)
 				_volumeProfile.Update(tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide);
 
 			lock (_updatedCandles.SyncRoot)
