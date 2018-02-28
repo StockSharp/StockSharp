@@ -5,6 +5,7 @@ namespace StockSharp.Algo
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using MoreLinq;
 
@@ -22,8 +23,7 @@ namespace StockSharp.Algo
 
 		private sealed class FilteredMarketDepthInfo
 		{
-			private readonly Dictionary<Tuple<Sides, decimal>, Dictionary<long, decimal>> _executions = new Dictionary<Tuple<Sides, decimal>, Dictionary<long, decimal>>();
-			private readonly Dictionary<Tuple<Sides, decimal>, decimal> _ownVolumes = new Dictionary<Tuple<Sides, decimal>, decimal>();
+			private readonly Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>> _executions = new Dictionary<Tuple<Sides, decimal>, RefPair<Dictionary<long, decimal>, decimal>>();
 
 			public FilteredMarketDepthInfo(IEnumerable<ExecutionMessage> orders)
 			{
@@ -41,7 +41,7 @@ namespace StockSharp.Algo
 						var res = quote.Clone();
 						var key = Tuple.Create(res.Side, res.Price);
 
-						var own = _ownVolumes.TryGetValue2(key);
+						var own = _executions.TryGetValue(key)?.Second;
 						if (own != null)
 							res.Volume -= own.Value;
 
@@ -74,6 +74,14 @@ namespace StockSharp.Algo
 				if (!message.HasOrderInfo())
 					throw new ArgumentException(nameof(message));
 
+				// ignore market orders
+				if (message.OrderPrice == 0)
+					return;
+
+				// ignore unknown orders
+				if (message.OriginalTransactionId == 0)
+					return;
+
 				var key = Tuple.Create(message.Side, message.OrderPrice);
 
 				switch (message.OrderState)
@@ -81,32 +89,38 @@ namespace StockSharp.Algo
 					case OrderStates.Done:
 					case OrderStates.Failed:
 					{
-						var items = _executions.TryGetValue(key);
+						var pair = _executions.TryGetValue(key);
 
-						if (items == null)
+						if (pair == null)
 							break;
 
-						items.Remove(message.OriginalTransactionId);
+						var balance = pair.First.TryGetAndRemove(message.OriginalTransactionId);
 
-						if (items.Count == 0)
+						if (pair.First.Count == 0)
 							_executions.Remove(key);
+						else
+							pair.Second -= balance;
 
 						break;
 					}
 
 					case OrderStates.Active:
 					{
-						if (message.Balance != null)
-							_executions.SafeAdd(key)[message.OriginalTransactionId] = message.Balance.Value;
+						var balance = message.Balance;
+
+						if (balance != null)
+						{
+							var pair = _executions.SafeAdd(key, k => RefTuple.Create(new Dictionary<long, decimal>(), 0M));
+
+							var prev = pair.First.TryGetValue(message.OriginalTransactionId);
+
+							pair.First[message.OriginalTransactionId] = balance.Value;
+							pair.Second += balance.Value - prev;
+						}
 
 						break;
 					}
 				}
-
-				if (_executions.ContainsKey(key))
-					_ownVolumes[key] = _executions[key].Sum(o => o.Value);
-				else
-					_ownVolumes.Remove(key);
 			}
 		}
 
@@ -129,6 +143,10 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+					_filteredMarketDepths.Clear();
+					break;
+
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
