@@ -8,6 +8,8 @@ StockSharp API Change log
 * (feature) Charting. Time zone settings for each axis.
 * (feature) Charting. Draw lines on mouse down event.
 * (bug) Charting. X axis scaling fix.
+* (bug) Charting. Chart annotation editor related fixes.
+* (bug) Charting. Tooltip fix for chart line display style.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.
