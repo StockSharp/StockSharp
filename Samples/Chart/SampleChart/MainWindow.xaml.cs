@@ -13,6 +13,7 @@ Created: 2015, 12, 2, 8:18 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace SampleChart
 {
 	using System;
@@ -176,7 +177,7 @@ namespace SampleChart
 				_security,
 				_timeframe);
 
-			_candleElement = new ChartCandleElement { FullTitle = "Candles" };
+			_candleElement = new ChartCandleElement { FullTitle = "Candles", XOBoxSize = _security.PriceStep.To<double>() };
 			Chart.AddElement(_areaComb, _candleElement, series);
 
 			LoadData(_security);

@@ -18,6 +18,26 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// XO candles
+		/// </summary>
+		public const string PnFCandleKey = nameof(PnFCandle);
+
+		/// <summary>
+		/// XO candles
+		/// </summary>
+		public static string PnFCandle => GetString(PnFCandleKey);
+
+		/// <summary>
+		/// XO box size
+		/// </summary>
+		public const string XOBoxSizeKey = nameof(XOBoxSize);
+
+		/// <summary>
+		/// XO box size
+		/// </summary>
+		public static string XOBoxSize => GetString(XOBoxSizeKey);
+
+		/// <summary>
 		/// Show hidden axes
 		/// </summary>
 		public const string ShowHiddenAxesKey = nameof(ShowHiddenAxes);
