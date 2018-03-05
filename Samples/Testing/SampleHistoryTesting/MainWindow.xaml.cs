@@ -568,7 +568,7 @@ namespace SampleHistoryTesting
 
 				var equity = set.Item6;
 
-				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, emulationInfo.CurveColor, LineChartStyles.Area);
+				var pnlCurve = equity.CreateCurve(LocalizedStrings.PnL + " " + emulationInfo.StrategyName, Colors.Green, Colors.Red, LineChartStyles.Area);
 				var unrealizedPnLCurve = equity.CreateCurve(LocalizedStrings.PnLUnreal + " " + emulationInfo.StrategyName, Colors.Black);
 				var commissionCurve = equity.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, LineChartStyles.DashedLine);
 				var posItems = set.Item7.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
