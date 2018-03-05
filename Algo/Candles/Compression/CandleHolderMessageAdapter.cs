@@ -33,36 +33,36 @@ namespace StockSharp.Algo.Candles.Compression
 			switch (message.Type)
 			{
 				case MessageTypes.MarketData:
-					ProcessMarketData((MarketDataMessage)message);
-					break;
-			}
-
-			base.SendInMessage(message);
-		}
-
-		private void ProcessMarketData(MarketDataMessage message)
-		{
-			if (!message.IsSubscribe)
-			{
-				_infos.Remove(message.TransactionId);
-				return;
-			}
-
-			switch (message.DataType)
-			{
-				case MarketDataTypes.CandleTimeFrame:
-				case MarketDataTypes.CandleTick:
-				case MarketDataTypes.CandleVolume:
-				case MarketDataTypes.CandleRange:
-				case MarketDataTypes.CandlePnF:
-				case MarketDataTypes.CandleRenko:
 				{
-					var info = _infos.SafeAdd(message.TransactionId, k => message.DataType.ToCandleMessage().CreateInstance<CandleMessage>());
-					info.SecurityId = message.SecurityId;
-					info.Arg = message.Arg;
+					var mdMsg = (MarketDataMessage)message;
+
+					if (!mdMsg.IsSubscribe)
+					{
+						_infos.Remove(mdMsg.OriginalTransactionId);
+						break;
+					}
+
+					switch (mdMsg.DataType)
+					{
+						case MarketDataTypes.CandleTimeFrame:
+						case MarketDataTypes.CandleTick:
+						case MarketDataTypes.CandleVolume:
+						case MarketDataTypes.CandleRange:
+						case MarketDataTypes.CandlePnF:
+						case MarketDataTypes.CandleRenko:
+						{
+							var info = _infos.SafeAdd(mdMsg.TransactionId, k => mdMsg.DataType.ToCandleMessage().CreateInstance<CandleMessage>());
+							info.SecurityId = mdMsg.SecurityId;
+							info.Arg = mdMsg.Arg;
+							break;
+						}
+					}
+
 					break;
 				}
 			}
+
+			base.SendInMessage(message);
 		}
 
 		/// <summary>
