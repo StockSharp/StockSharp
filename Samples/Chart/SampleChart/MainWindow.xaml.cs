@@ -177,7 +177,7 @@ namespace SampleChart
 				_security,
 				_timeframe);
 
-			_candleElement = new ChartCandleElement { FullTitle = "Candles", XOBoxSize = _security.PriceStep.To<double>() };
+			_candleElement = new ChartCandleElement { FullTitle = "Candles", PnFBoxSize = _security.PriceStep.To<double>() };
 			Chart.AddElement(_areaComb, _candleElement, series);
 
 			LoadData(_security);

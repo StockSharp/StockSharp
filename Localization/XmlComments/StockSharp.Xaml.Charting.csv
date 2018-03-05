@@ -218,6 +218,7 @@ F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineClose/summary;LineClose
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.BoxVolume/summary;DocStr8857
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.ClusterProfile/summary;ClusterProfile
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.Area/summary;Area
+F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.PnF/summary;PnFCandle
 T:StockSharp.Xaml.Charting.ChartCandleElement/summary;DocStr7766
 M:StockSharp.Xaml.Charting.ChartCandleElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Charting.ChartCandleElement.Title/summary;Str1945
@@ -231,6 +232,7 @@ P:StockSharp.Xaml.Charting.ChartCandleElement.AntiAliasing/summary;Str1960
 P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor/summary;DocStr8858
 P:StockSharp.Xaml.Charting.ChartCandleElement.AreaColor/summary;DocStr10270
 P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker/summary;Str1962
+P:StockSharp.Xaml.Charting.ChartCandleElement.PnFBoxSize/summary;PnFBoxSize
 P:StockSharp.Xaml.Charting.ChartCandleElement.Colorer/summary;DocStr10273
 P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Multiplier/summary;DocStr8859
 P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe3Multiplier/summary;DocStr8860

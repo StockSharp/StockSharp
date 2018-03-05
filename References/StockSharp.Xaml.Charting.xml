@@ -896,6 +896,11 @@
             Area.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.PnF">
+      <summary>
+            X0 candle.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartCandleElement">
       <summary>
             The chart element representing a candle.
@@ -959,6 +964,11 @@
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker">
       <summary>
             Show Y-axis market.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.PnFBoxSize">
+      <summary>
+            Range of price above which increase the candle body.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Colorer">
