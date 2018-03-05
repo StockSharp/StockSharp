@@ -18,26 +18,6 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
-		/// XO candles
-		/// </summary>
-		public const string PnFCandleKey = nameof(PnFCandle);
-
-		/// <summary>
-		/// XO candles
-		/// </summary>
-		public static string PnFCandle => GetString(PnFCandleKey);
-
-		/// <summary>
-		/// XO box size
-		/// </summary>
-		public const string XOBoxSizeKey = nameof(XOBoxSize);
-
-		/// <summary>
-		/// XO box size
-		/// </summary>
-		public static string XOBoxSize => GetString(XOBoxSizeKey);
-
-		/// <summary>
 		/// Show hidden axes
 		/// </summary>
 		public const string ShowHiddenAxesKey = nameof(ShowHiddenAxes);
@@ -46806,5 +46786,35 @@ namespace StockSharp.Localization
 		/// Custom colors
 		/// </summary>
 		public static string CustomColors => GetString(CustomColorsKey);
+
+		/// <summary>
+		/// Range of price above which increase the candle body
+		/// </summary>
+		public const string PnFBoxSizeKey = nameof(PnFBoxSize);
+
+		/// <summary>
+		/// Range of price above which increase the candle body
+		/// </summary>
+		public static string PnFBoxSize => GetString(PnFBoxSizeKey);
+
+		/// <summary>
+		/// X0 candle
+		/// </summary>
+		public const string PnFCandleKey = nameof(PnFCandle);
+
+		/// <summary>
+		/// X0 candle
+		/// </summary>
+		public static string PnFCandle => GetString(PnFCandleKey);
+
+		/// <summary>
+		/// The candle of point-and-figure chart (tac-toe chart).
+		/// </summary>
+		public const string PnFCandleDescKey = nameof(PnFCandleDesc);
+
+		/// <summary>
+		/// The candle of point-and-figure chart (tac-toe chart).
+		/// </summary>
+		public static string PnFCandleDesc => GetString(PnFCandleDescKey);
 	}
 }

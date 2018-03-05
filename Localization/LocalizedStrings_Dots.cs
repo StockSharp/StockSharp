@@ -508,5 +508,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string LowerLineDot => AppendDot(LowerLine);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string PnFBoxSizeDot => AppendDot(PnFBoxSize);
 	}
 }

@@ -601,7 +601,7 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// The message contains information about the XO candle.
+	/// The message contains information about the X0 candle.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]

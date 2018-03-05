@@ -77,7 +77,7 @@ M:StockSharp.Messages.RangeCandleMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.RangeCandleMessage.Clone/returns;DocStr1116
 P:StockSharp.Messages.RangeCandleMessage.Arg/summary;DocStr548
 T:StockSharp.Messages.PnFArg/summary;DocStr4065
-P:StockSharp.Messages.PnFArg.BoxSize/summary;DocStr4069
+P:StockSharp.Messages.PnFArg.BoxSize/summary;PnFBoxSize
 P:StockSharp.Messages.PnFArg.ReversalAmount/summary;DocStr4070
 M:StockSharp.Messages.PnFArg.ToString/summary;DocStr49
 M:StockSharp.Messages.PnFArg.ToString/returns;DocStr50

@@ -525,7 +525,7 @@ P:StockSharp.Algo.Candles.RangeCandle.PriceRange/summary;DocStr651
 P:StockSharp.Algo.Candles.RangeCandle.Arg/summary;DocStr548
 M:StockSharp.Algo.Candles.RangeCandle.Clone/summary;DocStr643
 M:StockSharp.Algo.Candles.RangeCandle.Clone/returns;DocStr1116
-T:StockSharp.Algo.Candles.PnFCandle/summary;DocStr652
+T:StockSharp.Algo.Candles.PnFCandle/summary;PnFCandleDesc
 P:StockSharp.Algo.Candles.PnFCandle.PnFArg/summary;DocStr653
 P:StockSharp.Algo.Candles.PnFCandle.Arg/summary;DocStr548
 M:StockSharp.Algo.Candles.PnFCandle.Clone/summary;DocStr643

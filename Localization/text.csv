@@ -1,5 +1,4 @@
-﻿XOBoxSize;XO box size;Размер бокса XO
-ResetTimeZone;Reset axis time zone;Сбросить часовой пояс оси
+﻿ResetTimeZone;Reset axis time zone;Сбросить часовой пояс оси
 ShowHiddenAxes;Show hidden axes;Показать скрытые оси
 AreaColor;Area color;Цвет области
 BuyBlinkColor;Buy blink color;Цвет мерцания Buy
@@ -4234,7 +4233,7 @@ TimeFrameCandle;Timeframe candle;Таймфрейм свечи
 TickCandle;Tick candle;Тиковые свечи
 VolumeCandle;Volume candle;Объемные свечи
 RangeCandle;Range candle;Рейндж свечи
-PnFCandle;XO candle;XO свечи
+PnFCandle;X0 candle;X0 свечи
 RenkoCandle;Renko candle;Ренко свечи
 UnknownCandleType;Unknown candle type '{0}'.;Неизвестный тип '{0}' свечи.
 InvalidArgumentValue;Invalid argument value.;Неправильное значение.
@@ -4717,6 +4716,8 @@ CsvDirectoryDesc;Directory with CSV files.;Директория с CSV файл�
 Heartbeat;Heartbeat;Heartbeat
 HeartbeatInterval;Heartbeat interval;Heartbeat интервал
 CustomColors;Custom colors;Произвольные цвета
+PnFBoxSize;Range of price above which increase the candle body;Изменение цены, при превышении которого увеличивается тело свечи
+PnFCandleDesc;The candle of point-and-figure chart (tac-toe chart).;Свеча пункто-цифрового графика (график крестики-нолики).
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5345,7 +5346,6 @@ DocStr648;Volume candle;Свеча, группируемая по количес
 DocStr649;Maximum volume;Максимальное количество контрактов, которое может содержать свеча
 DocStr650;Range candle;Свеча, группируемая по ценовому диапазону
 DocStr651;Range of price;Дельта цены, в рамках которой свеча может содержать сделки
-DocStr652;The candle of point-and-figure chart (tac-toe chart);Свеча пункто-цифрового графика (график крестики-нолики)
 DocStr653;Value of arguments;Значение параметров
 DocStr654;Type of symbols;Тип символов
 DocStr655;Renko candle;Свеча Рэнко графика
@@ -8673,9 +8673,8 @@ DocStr4063;X (price up);X (цена растет)
 DocStr4064;0 (price down);0 (цена падает)
 DocStr4065;Point in figure (X0) candle arg;Значение параметров пункто-цифрового графика (график X0)
 DocStr4068;{0}, если значения равны. Иначе, {1};{0}, если значения равны. Иначе, {1}
-DocStr4069;Range of price above which increase the candle body;Изменение цены, при превышении которого увеличивается тело свечи
 DocStr4070;The number of boxes required to cause a reversal;Величина противоположного движения цены
-DocStr4071;The message contains information about the XO candle;Сообщение, содержащее данные о свече пункто-цифрового графика (график крестики-нолики)
+DocStr4071;The message contains information about the X0 candle;Сообщение, содержащее данные о свече пункто-цифрового графика (график крестики-нолики)
 DocStr4072;The message contains information about the renko candle;Сообщение, содержащее данные о Рэнко свече
 DocStr4073;Change password error info;Информация об ошибке смены пароля
 DocStr4074;Base message adapter interface which convert messages {0} to native commands and back;Интерфейс, описывающий адаптер, конвертирующий сообщения {0} в команды торговой системы и обратно
