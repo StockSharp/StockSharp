@@ -62,6 +62,7 @@ namespace SampleChart
 		private RandomWalkTradeGenerator _tradeGenerator;
 		private readonly CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new CachedSynchronizedDictionary<ChartIndicatorElement, IIndicator>();
 		private readonly object _lock = new object();
+		private bool _drawXOChart;
 
 		private TimeSpan _timeframe;
 
@@ -177,7 +178,7 @@ namespace SampleChart
 				_security,
 				_timeframe);
 
-			_candleElement = new ChartCandleElement { FullTitle = "Candles", PnFBoxSize = _security.PriceStep.To<double>() };
+			_candleElement = new ChartCandleElement { FullTitle = "Candles" };
 			Chart.AddElement(_areaComb, _candleElement, series);
 
 			LoadData(_security);
@@ -192,6 +193,7 @@ namespace SampleChart
 		{
 			_candle = null;
 			_lastPrice = 0m;
+			_drawXOChart = DrawXOChart.IsChecked == true;
 			_allCandles.Clear();
 
 			Chart.Reset(new IChartElement[] { _candleElement });
@@ -308,6 +310,22 @@ namespace SampleChart
 
 			ChartDrawData chartData = null;
 
+			PnFCandle GetXOCandle(TimeFrameCandle c)
+			{
+				return new PnFCandle
+				{
+					Security = _security,
+					PnFArg = new PnFArg { BoxSize = (_security.PriceStep ?? 1) * 3 },
+					OpenTime = c.OpenTime,
+					CloseTime = c.CloseTime,
+					OpenPrice = c.OpenPrice,
+					HighPrice = c.HighPrice,
+					LowPrice = c.LowPrice,
+					ClosePrice = c.ClosePrice,
+					TotalVolume = c.TotalVolume,
+				};
+			}
+
 			foreach (var tuple in candlesToUpdate)
 			{
 				var candle = tuple.Item1;
@@ -321,8 +339,13 @@ namespace SampleChart
 
 				var chartGroup = chartData.Group(candle.OpenTime);
 
-				lock(_lock)
-					chartGroup.Add(_candleElement, candle);
+				lock (_lock)
+				{
+					if(!_drawXOChart)
+						chartGroup.Add(_candleElement, candle);
+					else
+						chartGroup.Add(_candleElement, GetXOCandle(candle));
+				}
 
 				foreach (var pair in _indicators.CachedPairs)
 				{

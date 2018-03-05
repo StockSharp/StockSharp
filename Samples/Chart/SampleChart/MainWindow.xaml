@@ -59,6 +59,8 @@
 
 				<CheckBox Content="{x:Static loc:LocalizedStrings.CustomColors}" Margin="10,0,0,0" x:Name="CustomColors" Checked="CustomColors_Changed" Unchecked="CustomColors_Changed" VerticalAlignment="Center"/>
 
+				<CheckBox Content="{x:Static loc:LocalizedStrings.PnFCandle}" Margin="10,0,0,0" x:Name="DrawXOChart" VerticalAlignment="Center"/>
+
 				<xaml:TimeZoneComboBox Margin="5,0,0,0" SelectedTimeZone="{Binding TimeZone, Mode=TwoWay, ElementName=Chart}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="150" ToolTip="Chart time zone"/>
             </StackPanel>
 
