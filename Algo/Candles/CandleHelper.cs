@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Candles
 
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -268,6 +269,32 @@ namespace StockSharp.Algo.Candles
 			return manager;
 		}
 
+		/// <summary>
+		/// Create candle builder.
+		/// </summary>
+		/// <param name="dataType">Market data type.</param>
+		/// <returns>Candle builder.</returns>
+		public static ICandleBuilder CreateCandleBuilder(this MarketDataTypes dataType)
+		{
+			switch (dataType)
+			{
+				case MarketDataTypes.CandleTimeFrame:
+					return new TimeFrameCandleBuilder();
+				case MarketDataTypes.CandleTick:
+					return new TickCandleBuilder();
+				case MarketDataTypes.CandleVolume:
+					return new VolumeCandleBuilder();
+				case MarketDataTypes.CandleRange:
+					return new RangeCandleBuilder();
+				case MarketDataTypes.CandlePnF:
+					return new PnFCandleBuilder();
+				case MarketDataTypes.CandleRenko:
+					return new RenkoCandleBuilder();
+				default:
+					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1219);
+			}
+		}
+
 		private sealed class CandleMessageEnumerable : SimpleEnumerable<CandleMessage>
 		{
 			private sealed class CandleMessageEnumerator : SimpleEnumerator<CandleMessage>
@@ -290,30 +317,7 @@ namespace StockSharp.Algo.Candles
 					_messages = messages;
 
 					_messagesEnumerator = _messages.GetEnumerator();
-
-					switch (mdMsg.DataType)
-					{
-						case MarketDataTypes.CandleTimeFrame:
-							_candleBuilder = new TimeFrameCandleBuilder();
-							break;
-						case MarketDataTypes.CandleTick:
-							_candleBuilder = new TickCandleBuilder();
-							break;
-						case MarketDataTypes.CandleVolume:
-							_candleBuilder = new VolumeCandleBuilder();
-							break;
-						case MarketDataTypes.CandleRange:
-							_candleBuilder = new RangeCandleBuilder();
-							break;
-						case MarketDataTypes.CandlePnF:
-							_candleBuilder = new PnFCandleBuilder();
-							break;
-						case MarketDataTypes.CandleRenko:
-							_candleBuilder = new RenkoCandleBuilder();
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
+					_candleBuilder = mdMsg.DataType.CreateCandleBuilder();
 				}
 
 				public override void Reset()

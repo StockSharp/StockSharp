@@ -18,24 +18,7 @@
                 <GroupBox Padding="5">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}" VerticalAlignment="Center"/>
-                        <ComboBox x:Name="Timeframe" Width="80" Margin="3,0" IsEditable="False" IsReadOnly="True">
-                            <ComboBoxItem Content="1 minute" IsSelected="True" Tag="1"/>
-                            <ComboBoxItem Content="2 minute" Tag="2"/>
-                            <ComboBoxItem Content="3 minute" Tag="3"/>
-                            <ComboBoxItem Content="4 minute" Tag="4"/>
-                            <ComboBoxItem Content="5 minute" Tag="5"/>
-                            <ComboBoxItem Content="6 minute" Tag="6"/>
-                            <ComboBoxItem Content="9 minute" Tag="9"/>
-                            <ComboBoxItem Content="10 minute" Tag="10"/>
-                            <ComboBoxItem Content="12 minute" Tag="12"/>
-                            <ComboBoxItem Content="15 minute" Tag="15"/>
-                            <ComboBoxItem Content="30 minute" Tag="30"/>
-                            <ComboBoxItem Content="1 hour" Tag="600"/>
-                            <ComboBoxItem Content="2 hour" Tag="120"/>
-                            <ComboBoxItem Content="4 hour" Tag="240"/>
-                            <ComboBoxItem Content="day" Tag="1440"/>
-                            <ComboBoxItem Content="week" Tag="10080"/>
-                        </ComboBox>
+						<sx:CandleSettingsEditor x:Name="SeriesEditor" Margin="3,0" />
 						<CheckBox x:Name="BuildFromTicks" Content="Build from ticks" IsChecked="True" VerticalAlignment="Center"/>
 
                         <xaml:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" FolderChanged="HistoryPath_OnFolderChanged" />
@@ -58,8 +41,6 @@
                 <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center"/>
 
 				<CheckBox Content="{x:Static loc:LocalizedStrings.CustomColors}" Margin="10,0,0,0" x:Name="CustomColors" Checked="CustomColors_Changed" Unchecked="CustomColors_Changed" VerticalAlignment="Center"/>
-
-				<CheckBox Content="{x:Static loc:LocalizedStrings.PnFCandle}" Margin="10,0,0,0" x:Name="DrawXOChart" VerticalAlignment="Center"/>
 
 				<xaml:TimeZoneComboBox Margin="5,0,0,0" SelectedTimeZone="{Binding TimeZone, Mode=TwoWay, ElementName=Chart}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="150" ToolTip="Chart time zone"/>
             </StackPanel>
