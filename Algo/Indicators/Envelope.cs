@@ -85,10 +85,10 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		private decimal _shift = 0.25m;
+		private decimal _shift = 0.01m;
 
 		/// <summary>
-		/// The shift width. Specified as percentage from 0 to 1. The default equals to 0.25.
+		/// The shift width. Specified as percentage from 0 to 1. The default equals to 0.01.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str783Key)]
 		[DescriptionLoc(LocalizedStrings.Str784Key)]
