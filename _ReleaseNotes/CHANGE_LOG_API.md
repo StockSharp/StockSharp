@@ -11,6 +11,7 @@ StockSharp API Change log
 * (bug) Charting. Chart annotation editor related fixes.
 * (bug) Charting. Tooltip fix for chart line display style.
 * (feature) Charting. X0 style support.
+* (bug) BasketMessageAdapter. Disconnect message processing fix.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

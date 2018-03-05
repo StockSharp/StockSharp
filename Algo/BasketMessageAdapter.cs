@@ -708,13 +708,16 @@ namespace StockSharp.Algo
 				{
 					var list = _messageTypeAdapters.TryGetValue(supportedMessage);
 
+					if (list == null)
+						continue;
+
 					list.Remove(heartbeatAdapter);
 
 					if (list.Count == 0)
 						_messageTypeAdapters.Remove(supportedMessage);
 				}
 
-				_connectedAdapters.Add(heartbeatAdapter);
+				_connectedAdapters.Remove(heartbeatAdapter);
 			}
 
 			message.Adapter = underlyingAdapter;
