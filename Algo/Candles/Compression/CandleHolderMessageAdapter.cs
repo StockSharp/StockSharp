@@ -38,7 +38,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 					if (!mdMsg.IsSubscribe)
 					{
-						_infos.Remove(mdMsg.OriginalTransactionId);
+						// NOTE candles can be received during unsubscription process
+						//_infos.Remove(mdMsg.OriginalTransactionId);
 						break;
 					}
 
