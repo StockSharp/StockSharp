@@ -384,7 +384,7 @@ namespace StockSharp.Algo
 				{
 					lock (_connectedResponseLock)
 					{
-						_connectedAdapters.ForEach(a =>
+						_connectedAdapters.ToArray().ForEach(a =>
 						{
 							var u = GetUnderlyingAdapter(a);
 							this.AddInfoLog("Disconnecting '{0}'.", u);
