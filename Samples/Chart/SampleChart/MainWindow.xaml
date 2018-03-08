@@ -7,45 +7,45 @@
 		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
 		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="1000">
-    <xctk:BusyIndicator x:Name="BusyIndicator">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+	<xctk:BusyIndicator x:Name="BusyIndicator">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal">
-                <GroupBox Padding="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}" VerticalAlignment="Center"/>
+			<StackPanel Orientation="Horizontal">
+				<GroupBox Padding="5">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}" VerticalAlignment="Center"/>
 						<sx:CandleSettingsEditor x:Name="SeriesEditor" Margin="3,0" />
 						<CheckBox x:Name="BuildFromTicks" Content="Build from ticks" IsChecked="True" VerticalAlignment="Center"/>
 
-                        <xaml:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" FolderChanged="HistoryPath_OnFolderChanged" />
+						<xaml:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" FolderChanged="HistoryPath_OnFolderChanged" />
 						
 						<ComboBox x:Name="Securities" Width="150" SelectionChanged="Securities_OnSelectionChanged" />
 
 						<sx:StorageFormatComboBox x:Name="Format" Margin="10,0,0,0"/>
 
-                        <Button x:Name="Draw" Content="{x:Static loc:LocalizedStrings.Str3200}" Margin="10,0,10,0" IsEnabled="False" Click="Draw_Click"/>
-                    </StackPanel>
-                </GroupBox>
+						<Button x:Name="Draw" Content="{x:Static loc:LocalizedStrings.Str3200}" Margin="10,0,10,0" IsEnabled="False" Click="Draw_Click"/>
+					</StackPanel>
+				</GroupBox>
 
-                <ComboBox Margin="10,0,0,0" x:Name="Theme" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="150">
+				<ComboBox Margin="10,0,0,0" x:Name="Theme" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="150">
 					<ComboBoxItem Content="{x:Static dx:Theme.Office2016BlackName}"/>
 					<ComboBoxItem Content="{x:Static dx:Theme.Office2016WhiteName}"/>
 					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisDarkName}"/>
 					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisLightName}"/>
 				</ComboBox>
 
-                <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center"/>
+				<CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center" Checked="IsRealtime_OnChecked" Unchecked="IsRealtime_OnChecked" />
 
 				<CheckBox Content="{x:Static loc:LocalizedStrings.CustomColors}" Margin="10,0,0,0" x:Name="CustomColors" Checked="CustomColors_Changed" Unchecked="CustomColors_Changed" VerticalAlignment="Center"/>
 
 				<xaml:TimeZoneComboBox Margin="5,0,0,0" SelectedTimeZone="{Binding TimeZone, Mode=TwoWay, ElementName=Chart}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="150" ToolTip="Chart time zone"/>
-            </StackPanel>
+			</StackPanel>
 
-            <sx:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="1"/>
-        </Grid>
-    </xctk:BusyIndicator>
+			<sx:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="1"/>
+		</Grid>
+	</xctk:BusyIndicator>
 </dx:DXWindow>

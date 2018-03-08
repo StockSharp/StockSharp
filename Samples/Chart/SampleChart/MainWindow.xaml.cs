@@ -13,15 +13,16 @@ Created: 2015, 12, 2, 8:18 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-
 namespace SampleChart
 {
 	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Linq;
+	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Windows.Controls;
-	using System.Windows.Threading;
 	using System.Windows.Media;
 
 	using DevExpress.Xpf.Core;
@@ -52,9 +53,8 @@ namespace SampleChart
 		private ChartArea _areaComb;
 		private ChartCandleElement _candleElement;
 		private CandleMessage _currCandle;
-		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
-		private readonly SynchronizedDictionary<DateTimeOffset, Tuple<CandleMessage, bool>> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, Tuple<CandleMessage, bool>>();
-		private readonly CachedSynchronizedList<Candle> _allCandles = new CachedSynchronizedList<Candle>();
+		private readonly SynchronizedList<CandleMessage> _updatedCandles = new SynchronizedList<CandleMessage>();
+		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle> _allCandles = new CachedSynchronizedOrderedDictionary<DateTimeOffset, Candle>();
 		private Security _security;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 		private RandomWalkTradeGenerator _tradeGenerator;
@@ -64,6 +64,14 @@ namespace SampleChart
 		private MarketDataMessage _mdMsg;
 		private readonly ICandleBuilderValueTransform _candleTransform = new TickCandleBuilderValueTransform();
 		private bool _historyLoaded;
+		private bool _isRealTime;
+		private DateTimeOffset _lastTime;
+		private readonly Timer _realTimeTimer;
+		private readonly Timer _drawingTimer;
+		private bool _isDrawing;
+		private readonly SyncObject _drawingLock = new SyncObject();
+		private bool _isRealTiming;
+		private readonly SyncObject _realTimingLock = new SyncObject();
 
 		public MainWindow()
 		{
@@ -73,9 +81,13 @@ namespace SampleChart
 
 			Loaded += OnLoaded;
 
-			_chartUpdateTimer.Interval = TimeSpan.FromMilliseconds(1);
-			_chartUpdateTimer.Tick += ChartUpdateTimerOnTick;
-			_chartUpdateTimer.Start();
+			_realTimeTimer = ThreadingHelper
+				.Timer(OnRealTimeCandles)
+				.Interval(TimeSpan.FromMilliseconds(1));
+
+			_drawingTimer = ThreadingHelper
+				.Timer(OnDrawingCandles)
+				.Interval(TimeSpan.FromMilliseconds(100));
 
 			Theme.SelectedIndex = 1;
 
@@ -112,6 +124,14 @@ namespace SampleChart
 			RefreshCharts();
 		}
 
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			_drawingTimer.Dispose();
+			_realTimeTimer.Dispose();
+
+			base.OnClosing(e);
+		}
+
 		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var theme = (string)((ComboBoxItem)Theme.SelectedValue).Content;
@@ -125,7 +145,7 @@ namespace SampleChart
 		{
 			var chartData = new ChartDrawData();
 
-			foreach (var candle in _allCandles.Cache)
+			foreach (var candle in _allCandles.CachedValues)
 			{
 				//if (candle.State != CandleStates.Finished)
 				//	candle.State = CandleStates.Finished;
@@ -193,9 +213,12 @@ namespace SampleChart
 
 		private void LoadData(CandleSeries series)
 		{
-			_currCandle = null;
-			_historyLoaded = false;
-			_allCandles.Clear();
+			lock (_lock)
+			{
+				_currCandle = null;
+				_historyLoaded = false;
+				_allCandles.Clear();
+			}
 
 			_candleTransform.Process(new ResetMessage());
 			_candleBuilder = series.CandleType.ToCandleMessageType().ToCandleMarketDataType().CreateCandleBuilder();
@@ -235,8 +258,8 @@ namespace SampleChart
 								foreach (var candle in candles)
 								{
 									_currCandle = candle;
-									_updatedCandles[candle.OpenTime] = Tuple.Create(candle, candle.State == CandleStates.Finished);
-								}	
+									_updatedCandles.Add((CandleMessage)candle.Clone());
+								}
 							}
 						}
 
@@ -262,8 +285,11 @@ namespace SampleChart
 					{
 						lock (_updatedCandles.SyncRoot)
 						{
+							if (candleMsg.State != CandleStates.Finished)
+								candleMsg.State = CandleStates.Finished;
+
 							_currCandle = candleMsg;
-							_updatedCandles[candleMsg.OpenTime] = Tuple.Create(candleMsg, true);
+							_updatedCandles.Add(candleMsg);
 						}
 
 						_lastTime = candleMsg.OpenTime;
@@ -294,7 +320,8 @@ namespace SampleChart
 					}
 				}
 
-				_historyLoaded = true;
+				lock (_lock)
+					_historyLoaded = true;
 			})
 			.ContinueWith(t =>
 			{
@@ -311,72 +338,119 @@ namespace SampleChart
 			}, TaskScheduler.FromCurrentSynchronizationContext());
 		}
 
-		private DateTimeOffset _lastTime;
-
-		private void ChartUpdateTimerOnTick(object sender, EventArgs eventArgs)
+		private void OnRealTimeCandles()
 		{
-			if (_historyLoaded && IsRealtime.IsChecked == true)
+			lock (_realTimingLock)
 			{
-				var nextTick = (ExecutionMessage)_tradeGenerator.Process(new TimeMessage { ServerTime = _lastTime });
+				if (_isRealTiming)
+					return;
 
-				if (nextTick != null)
-				{
-					if (_candleTransform.Process(nextTick))
-					{
-						var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform);
-
-						lock (_lock)
-						{
-							foreach (var candle in candles)
-							{
-								_currCandle = candle;
-								_updatedCandles[candle.OpenTime] = Tuple.Create(candle, candle.State == CandleStates.Finished);
-							}	
-						}
-					}
-				}
-				
-				_lastTime += TimeSpan.FromSeconds(RandomGen.GetInt(1, 10));
+				_isRealTiming = true;
 			}
 
-			Tuple<Candle, bool>[] candlesToUpdate;
-			lock (_updatedCandles.SyncRoot)
+			try
 			{
-				candlesToUpdate = _updatedCandles.OrderBy(p => p.Key).Select(p => Tuple.Create(p.Value.Item1.ToCandle(_security), p.Value.Item2)).ToArray();
-				_updatedCandles.Clear();
-			}
-
-			var lastCandle = _allCandles.LastOrDefault();
-			_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.Item1.OpenTime != lastCandle.OpenTime).Select(t => t.Item1));
-
-			ChartDrawData chartData = null;
-
-			foreach (var tuple in candlesToUpdate)
-			{
-				var candle = tuple.Item1;
-				var needToFinish = tuple.Item2;
-
-				if (chartData == null)
-					chartData = new ChartDrawData();
-
-				if (needToFinish && candle.State != CandleStates.Finished)
-					candle.State = CandleStates.Finished;
-
-				var chartGroup = chartData.Group(candle.OpenTime);
-
 				lock (_lock)
 				{
-					chartGroup.Add(_candleElement, candle);
-				}
+					if (!_historyLoaded || !_isRealTime)
+						return;
 
-				foreach (var pair in _indicators.CachedPairs)
-				{
-					chartGroup.Add(pair.Key, pair.Value.Process(candle));
+					var nextTick = (ExecutionMessage)_tradeGenerator.Process(new TimeMessage { ServerTime = _lastTime });
+
+					if (nextTick != null)
+					{
+						if (_candleTransform.Process(nextTick))
+						{
+							var candles = _candleBuilder.Process(_mdMsg, _currCandle, _candleTransform);
+
+							lock (_lock)
+							{
+								foreach (var candle in candles)
+								{
+									_currCandle = candle;
+									_updatedCandles.Add((CandleMessage)candle.Clone());
+								}
+							}
+						}
+					}
+				
+					_lastTime += TimeSpan.FromSeconds(RandomGen.GetInt(1, 10));
 				}
 			}
+			finally
+			{
+				lock (_realTimingLock)
+					_isRealTiming = false;
+			}
+		}
 
-			if (chartData != null)
-				Chart.Draw(chartData);
+		private void OnDrawingCandles()
+		{
+			lock (_drawingLock)
+			{
+				if (_isDrawing)
+					return;
+
+				_isDrawing = true;
+			}
+
+			try
+			{
+				var candlesToUpdate = new List<Candle>();
+
+				lock (_updatedCandles.SyncRoot)
+				{
+					if (_updatedCandles.Count == 0)
+						return;
+
+					var lastTime = DateTimeOffset.MinValue;
+
+					foreach (var message in _updatedCandles.Reverse())
+					{
+						if (lastTime == message.OpenTime)
+							continue;
+
+						lastTime = message.OpenTime;
+
+						candlesToUpdate.Add(message.ToCandle(_security));
+					}
+
+					_updatedCandles.Clear();
+				}
+
+				candlesToUpdate.Reverse();
+
+				foreach (var candle in candlesToUpdate)
+					_allCandles[candle.OpenTime] = candle;
+			
+				ChartDrawData chartData = null;
+
+				foreach (var candle in candlesToUpdate)
+				{
+					if (chartData == null)
+						chartData = new ChartDrawData();
+
+					var chartGroup = chartData.Group(candle.OpenTime);
+
+					lock (_lock)
+					{
+						chartGroup.Add(_candleElement, candle);
+					}
+
+					foreach (var pair in _indicators.CachedPairs)
+					{
+						chartGroup.Add(pair.Key, pair.Value.Process(candle));
+					}
+				}
+
+				if (chartData != null)
+					Chart.Draw(chartData);
+			}
+			finally
+			{
+				lock (_drawingLock)
+					_isDrawing = false;
+			}
 		}
 
 		private void Error(string msg)
@@ -395,7 +469,7 @@ namespace SampleChart
 
 		private void CustomColors_Changed(object sender, RoutedEventArgs e)
 		{
-			if(_candleElement == null)
+			if (_candleElement == null)
 				return;
 
 			if (CustomColors.IsChecked == true)
@@ -411,6 +485,12 @@ namespace SampleChart
 
 			// refresh prev painted elements
 			Chart.Draw(new ChartDrawData());
+		}
+
+		private void IsRealtime_OnChecked(object sender, RoutedEventArgs e)
+		{
+			lock (_lock)
+				_isRealTime = IsRealtime.IsChecked == true;
 		}
 	}
 }
