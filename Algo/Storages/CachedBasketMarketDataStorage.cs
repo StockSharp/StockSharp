@@ -115,6 +115,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
+		/// Check loading dates are they tradable.
+		/// </summary>
+		public bool CheckTradableDates { get; set; } = true;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="CachedBasketMarketDataStorage{T}"/>.
 		/// </summary>
 		public CachedBasketMarketDataStorage()
@@ -289,10 +294,11 @@ namespace StockSharp.Algo.Storages
 					var boards = Boards.ToArray();
 					var loadDate = _currentTime != DateTimeOffset.MinValue ? _currentTime.Date : StartDate;
 					var startTime = _currentTime;
+					var checkDates = CheckTradableDates && boards.Length > 0;
 
 					while (loadDate.Date <= StopDate.Date && !_isChanged && !token.IsCancellationRequested)
 					{
-						if (boards.Length == 0 || boards.Any(b => b.IsTradeDate(loadDate, true)))
+						if (!checkDates || boards.Any(b => b.IsTradeDate(loadDate, true)))
 						{
 							this.AddInfoLog("Loading {0}", loadDate.Date);
 

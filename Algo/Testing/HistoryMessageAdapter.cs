@@ -194,6 +194,15 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// Check loading dates are they tradable.
+		/// </summary>
+		public bool CheckTradableDates
+		{
+			get => BasketStorage.CheckTradableDates;
+			set => BasketStorage.CheckTradableDates = value;
+		}
+
+		/// <summary>
 		/// Order book builders.
 		/// </summary>
 		public IDictionary<SecurityId, IOrderLogMarketDepthBuilder> OrderLogMarketDepthBuilders { get; } = new Dictionary<SecurityId, IOrderLogMarketDepthBuilder>();

@@ -13,6 +13,7 @@ StockSharp API Change log
 * (feature) Charting. X0 style support.
 * (bug) BasketMessageAdapter. Disconnect message processing fix.
 * (bug) CandleHolderMessageAdapter. Unsubscribe fix.
+* (feature) HistoryMessageAdapter.CheckTradableDates.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

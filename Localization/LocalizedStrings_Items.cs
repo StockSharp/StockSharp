@@ -10768,12 +10768,12 @@ namespace StockSharp.Localization
 		public static string Str1126Params => GetString(Str1126ParamsKey);
 
 		/// <summary>
-		/// Emulator (from {0} to {1})
+		/// History (from {0} to {1})
 		/// </summary>
 		public const string Str1127ParamsKey = nameof(Str1127Params);
 
 		/// <summary>
-		/// Emulator (from {0} to {1})
+		/// History (from {0} to {1})
 		/// </summary>
 		public static string Str1127Params => GetString(Str1127ParamsKey);
 
@@ -46816,5 +46816,25 @@ namespace StockSharp.Localization
 		/// The candle of point-and-figure chart (tac-toe chart).
 		/// </summary>
 		public static string PnFCandleDesc => GetString(PnFCandleDescKey);
+
+		/// <summary>
+		/// Check dates
+		/// </summary>
+		public const string CheckDatesKey = nameof(CheckDates);
+
+		/// <summary>
+		/// Check dates
+		/// </summary>
+		public static string CheckDates => GetString(CheckDatesKey);
+
+		/// <summary>
+		/// Check loading dates are they tradable.
+		/// </summary>
+		public const string CheckDatesDescKey = nameof(CheckDatesDesc);
+
+		/// <summary>
+		/// Check loading dates are they tradable.
+		/// </summary>
+		public static string CheckDatesDesc => GetString(CheckDatesDescKey);
 	}
 }

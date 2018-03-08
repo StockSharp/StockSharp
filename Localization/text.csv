@@ -1078,7 +1078,7 @@ Str1123;Security does not contain neither code nor ID.;Инструмент не
 Str1124Params;Security with code {0} does not contain the board.;Инструмент с кодом {0} не содержит площадку.
 Str1125;Emulator;Эмулятор
 Str1126Params;Current time {0} must be in the interval from {1} to {2}.;Текущее время {0} должно быть в интервале от {1} до {2}.
-Str1127Params;Emulator (from {0} to {1});Эмулятор (c {0} по {1})
+Str1127Params;History (from {0} to {1});История (c {0} по {1})
 Str1128;Stopped;Остановлен
 Str1129;Starting;Запускается
 Str1130;Working;Работает
@@ -4718,6 +4718,8 @@ HeartbeatInterval;Heartbeat interval;Heartbeat интервал
 CustomColors;Custom colors;Произвольные цвета
 PnFBoxSize;Range of price above which increase the candle body;Изменение цены, при превышении которого увеличивается тело свечи
 PnFCandleDesc;The candle of point-and-figure chart (tac-toe chart).;Свеча пункто-цифрового графика (график крестики-нолики).
+CheckDates;Check dates;Проверять дни
+CheckDatesDesc;Check loading dates are they tradable.;Проверять загружаемые дни, что они торговые.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
