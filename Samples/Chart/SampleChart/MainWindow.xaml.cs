@@ -18,6 +18,7 @@ namespace SampleChart
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Diagnostics;
 	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -377,6 +378,10 @@ namespace SampleChart
 					_lastTime += TimeSpan.FromSeconds(RandomGen.GetInt(1, 10));
 				}
 			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine(ex);
+			}
 			finally
 			{
 				lock (_realTimingLock)
@@ -422,7 +427,7 @@ namespace SampleChart
 
 				foreach (var candle in candlesToUpdate)
 					_allCandles[candle.OpenTime] = candle;
-			
+
 				ChartDrawData chartData = null;
 
 				foreach (var candle in candlesToUpdate)
@@ -445,6 +450,10 @@ namespace SampleChart
 
 				if (chartData != null)
 					Chart.Draw(chartData);
+			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine(ex);
 			}
 			finally
 			{
