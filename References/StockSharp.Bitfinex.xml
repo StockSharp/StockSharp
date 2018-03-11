@@ -66,6 +66,16 @@
             Trailing stop-loss.
             </summary>
         </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitfinex.BitfinexOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
         <member name="T:StockSharp.Bitfinex.BitfinexTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bitfinex"/>.

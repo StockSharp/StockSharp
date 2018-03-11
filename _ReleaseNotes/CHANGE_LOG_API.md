@@ -14,6 +14,7 @@ StockSharp API Change log
 * (bug) BasketMessageAdapter. Disconnect message processing fix.
 * (bug) CandleHolderMessageAdapter. Unsubscribe fix.
 * (feature) HistoryMessageAdapter.CheckTradableDates.
+* (feature) Crypto connectors. Withdraw support.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

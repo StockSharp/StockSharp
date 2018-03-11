@@ -13,6 +13,8 @@ M:StockSharp.HitBtc.HitBtcMessageAdapter.OnSendInMessage(StockSharp.Messages.Mes
 T:StockSharp.HitBtc.HitBtcOrderCondition/summary;DocStr60
 M:StockSharp.HitBtc.HitBtcOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.HitBtc.HitBtcOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.HitBtc.HitBtcOrderCondition.IsWithdraw/summary;Withdraw
+P:StockSharp.HitBtc.HitBtcOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.HitBtc.HitBtcTrader/summary;DocStr2539
 M:StockSharp.HitBtc.HitBtcTrader.#ctor/summary;DocStr1
 P:StockSharp.HitBtc.HitBtcTrader.Key/summary;Str3304

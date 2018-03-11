@@ -18,6 +18,8 @@ M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages
 T:StockSharp.BitStamp.BitStampOrderCondition/summary;DocStr60
 M:StockSharp.BitStamp.BitStampOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.BitStamp.BitStampOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.BitStamp.BitStampOrderCondition.IsWithdraw/summary;Withdraw
+P:StockSharp.BitStamp.BitStampOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.BitStamp.BitStampTrader/summary;DocStr2539
 M:StockSharp.BitStamp.BitStampTrader.#ctor/summary;DocStr1
 P:StockSharp.BitStamp.BitStampTrader.Key/summary;Str3304

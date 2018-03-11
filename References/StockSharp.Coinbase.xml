@@ -56,9 +56,14 @@
             Initializes a new instance of the <see cref="T:StockSharp.Coinbase.CoinbaseOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Coinbase.CoinbaseOrderCondition.StopPrice">
+        <member name="P:StockSharp.Coinbase.CoinbaseOrderCondition.IsWithdraw">
             <summary>
-            Activation price, when reached an order will be placed.
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Coinbase.CoinbaseOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
             </summary>
         </member>
         <member name="T:StockSharp.Coinbase.CoinbaseTrader">

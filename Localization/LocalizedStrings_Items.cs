@@ -32018,16 +32018,6 @@ namespace StockSharp.Localization
 		public static string Str3445 => GetString(Str3445Key);
 
 		/// <summary>
-		/// Trailing stop-loss
-		/// </summary>
-		public const string Str3446Key = nameof(Str3446);
-
-		/// <summary>
-		/// Trailing stop-loss
-		/// </summary>
-		public static string Str3446 => GetString(Str3446Key);
-
-		/// <summary>
 		/// Offset of a trailing stop-loss.
 		/// </summary>
 		public const string Str3447Key = nameof(Str3447);
@@ -32466,16 +32456,6 @@ namespace StockSharp.Localization
 		/// Activation price for order {0} not specified.
 		/// </summary>
 		public static string Str3494Params => GetString(Str3494ParamsKey);
-
-		/// <summary>
-		/// Transaction {0} contains unsupported type of order {1}.
-		/// </summary>
-		public const string Str3495ParamsKey = nameof(Str3495Params);
-
-		/// <summary>
-		/// Transaction {0} contains unsupported type of order {1}.
-		/// </summary>
-		public static string Str3495Params => GetString(Str3495ParamsKey);
 
 		/// <summary>
 		/// Order was not cancelled.
@@ -43678,6 +43658,16 @@ namespace StockSharp.Localization
 		public static string Deposit => GetString(DepositKey);
 
 		/// <summary>
+		/// Withdraw
+		/// </summary>
+		public const string WithdrawKey = nameof(Withdraw);
+
+		/// <summary>
+		/// Withdraw
+		/// </summary>
+		public static string Withdraw => GetString(WithdrawKey);
+
+		/// <summary>
 		/// Start date (candles)
 		/// </summary>
 		public const string StartDateCandlesKey = nameof(StartDateCandles);
@@ -46836,5 +46826,305 @@ namespace StockSharp.Localization
 		/// Check loading dates are they tradable.
 		/// </summary>
 		public static string CheckDatesDesc => GetString(CheckDatesDescKey);
+
+		/// <summary>
+		/// Order flags
+		/// </summary>
+		public const string OrderFlagsKey = nameof(OrderFlags);
+
+		/// <summary>
+		/// Order flags
+		/// </summary>
+		public static string OrderFlags => GetString(OrderFlagsKey);
+
+		/// <summary>
+		/// Bank wire
+		/// </summary>
+		public const string BankWireKey = nameof(BankWire);
+
+		/// <summary>
+		/// Bank wire
+		/// </summary>
+		public static string BankWire => GetString(BankWireKey);
+
+		/// <summary>
+		/// Bank card
+		/// </summary>
+		public const string BankCardKey = nameof(BankCard);
+
+		/// <summary>
+		/// Bank card
+		/// </summary>
+		public static string BankCard => GetString(BankCardKey);
+
+		/// <summary>
+		/// Bank account
+		/// </summary>
+		public const string BankAccountKey = nameof(BankAccount);
+
+		/// <summary>
+		/// Bank account
+		/// </summary>
+		public static string BankAccount => GetString(BankAccountKey);
+
+		/// <summary>
+		/// Bank
+		/// </summary>
+		public const string BankKey = nameof(Bank);
+
+		/// <summary>
+		/// Bank
+		/// </summary>
+		public static string Bank => GetString(BankKey);
+
+		/// <summary>
+		/// SWIFT
+		/// </summary>
+		public const string SwiftKey = nameof(Swift);
+
+		/// <summary>
+		/// SWIFT
+		/// </summary>
+		public static string Swift => GetString(SwiftKey);
+
+		/// <summary>
+		/// Bank SWIFT.
+		/// </summary>
+		public const string BankSwiftKey = nameof(BankSwift);
+
+		/// <summary>
+		/// Bank SWIFT.
+		/// </summary>
+		public static string BankSwift => GetString(BankSwiftKey);
+
+		/// <summary>
+		/// Withdraw type.
+		/// </summary>
+		public const string WithdrawTypeKey = nameof(WithdrawType);
+
+		/// <summary>
+		/// Withdraw type.
+		/// </summary>
+		public static string WithdrawType => GetString(WithdrawTypeKey);
+
+		/// <summary>
+		/// Crypto address
+		/// </summary>
+		public const string CryptoAddressKey = nameof(CryptoAddress);
+
+		/// <summary>
+		/// Crypto address
+		/// </summary>
+		public static string CryptoAddress => GetString(CryptoAddressKey);
+
+		/// <summary>
+		/// Payment id
+		/// </summary>
+		public const string PaymentIdKey = nameof(PaymentId);
+
+		/// <summary>
+		/// Payment id
+		/// </summary>
+		public static string PaymentId => GetString(PaymentIdKey);
+
+		/// <summary>
+		/// Bank details.
+		/// </summary>
+		public const string BankDetailsKey = nameof(BankDetails);
+
+		/// <summary>
+		/// Bank details.
+		/// </summary>
+		public static string BankDetails => GetString(BankDetailsKey);
+
+		/// <summary>
+		/// Intermediary bank
+		/// </summary>
+		public const string IntermediaryBankKey = nameof(IntermediaryBank);
+
+		/// <summary>
+		/// Intermediary bank
+		/// </summary>
+		public static string IntermediaryBank => GetString(IntermediaryBankKey);
+
+		/// <summary>
+		/// Intermediary bank details.
+		/// </summary>
+		public const string IntermediaryBankDetailsKey = nameof(IntermediaryBankDetails);
+
+		/// <summary>
+		/// Intermediary bank details.
+		/// </summary>
+		public static string IntermediaryBankDetails => GetString(IntermediaryBankDetailsKey);
+
+		/// <summary>
+		/// Bank card number.
+		/// </summary>
+		public const string BankCardNumberKey = nameof(BankCardNumber);
+
+		/// <summary>
+		/// Bank card number.
+		/// </summary>
+		public static string BankCardNumber => GetString(BankCardNumberKey);
+
+		/// <summary>
+		/// IBAN
+		/// </summary>
+		public const string IbanKey = nameof(Iban);
+
+		/// <summary>
+		/// IBAN
+		/// </summary>
+		public static string Iban => GetString(IbanKey);
+
+		/// <summary>
+		/// BIC
+		/// </summary>
+		public const string BicKey = nameof(Bic);
+
+		/// <summary>
+		/// BIC
+		/// </summary>
+		public static string Bic => GetString(BicKey);
+
+		/// <summary>
+		/// Bank BIC.
+		/// </summary>
+		public const string BankBicKey = nameof(BankBic);
+
+		/// <summary>
+		/// Bank BIC.
+		/// </summary>
+		public static string BankBic => GetString(BankBicKey);
+
+		/// <summary>
+		/// Withdraw info
+		/// </summary>
+		public const string WithdrawInfoKey = nameof(WithdrawInfo);
+
+		/// <summary>
+		/// Withdraw info
+		/// </summary>
+		public static string WithdrawInfo => GetString(WithdrawInfoKey);
+
+		/// <summary>
+		/// Account name
+		/// </summary>
+		public const string AccountNameKey = nameof(AccountName);
+
+		/// <summary>
+		/// Account name
+		/// </summary>
+		public static string AccountName => GetString(AccountNameKey);
+
+		/// <summary>
+		/// Bank account name.
+		/// </summary>
+		public const string BankAccountNameKey = nameof(BankAccountName);
+
+		/// <summary>
+		/// Bank account name.
+		/// </summary>
+		public static string BankAccountName => GetString(BankAccountNameKey);
+
+		/// <summary>
+		/// Comment of bank transaction.
+		/// </summary>
+		public const string BankCommentKey = nameof(BankComment);
+
+		/// <summary>
+		/// Comment of bank transaction.
+		/// </summary>
+		public static string BankComment => GetString(BankCommentKey);
+
+		/// <summary>
+		/// Bank details is missing.
+		/// </summary>
+		public const string BankDetailsIsMissingKey = nameof(BankDetailsIsMissing);
+
+		/// <summary>
+		/// Bank details is missing.
+		/// </summary>
+		public static string BankDetailsIsMissing => GetString(BankDetailsIsMissingKey);
+
+		/// <summary>
+		/// Withdraw type '{0}' not supported.
+		/// </summary>
+		public const string WithdrawTypeNotSupportedKey = nameof(WithdrawTypeNotSupported);
+
+		/// <summary>
+		/// Withdraw type '{0}' not supported.
+		/// </summary>
+		public static string WithdrawTypeNotSupported => GetString(WithdrawTypeNotSupportedKey);
+
+		/// <summary>
+		/// Company
+		/// </summary>
+		public const string CompanyKey = nameof(Company);
+
+		/// <summary>
+		/// Company
+		/// </summary>
+		public static string Company => GetString(CompanyKey);
+
+		/// <summary>
+		/// Company details.
+		/// </summary>
+		public const string CompanyDetailsKey = nameof(CompanyDetails);
+
+		/// <summary>
+		/// Company details.
+		/// </summary>
+		public static string CompanyDetails => GetString(CompanyDetailsKey);
+
+		/// <summary>
+		/// Express
+		/// </summary>
+		public const string ExpressKey = nameof(Express);
+
+		/// <summary>
+		/// Express
+		/// </summary>
+		public static string Express => GetString(ExpressKey);
+
+		/// <summary>
+		/// Express withdraw.
+		/// </summary>
+		public const string ExpressWithdrawKey = nameof(ExpressWithdraw);
+
+		/// <summary>
+		/// Express withdraw.
+		/// </summary>
+		public static string ExpressWithdraw => GetString(ExpressWithdrawKey);
+
+		/// <summary>
+		/// Postal code
+		/// </summary>
+		public const string PostalCodeKey = nameof(PostalCode);
+
+		/// <summary>
+		/// Postal code
+		/// </summary>
+		public static string PostalCode => GetString(PostalCodeKey);
+
+		/// <summary>
+		/// Charge fee
+		/// </summary>
+		public const string ChargeFeeKey = nameof(ChargeFee);
+
+		/// <summary>
+		/// Charge fee
+		/// </summary>
+		public static string ChargeFee => GetString(ChargeFeeKey);
+
+		/// <summary>
+		/// Administrative password.
+		/// </summary>
+		public const string AdminPasswordKey = nameof(AdminPassword);
+
+		/// <summary>
+		/// Administrative password.
+		/// </summary>
+		public static string AdminPassword => GetString(AdminPasswordKey);
 	}
 }

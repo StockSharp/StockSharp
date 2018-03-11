@@ -18,12 +18,14 @@ F:StockSharp.Kraken.KrakenOrderConditionTypes.TakeProfit/summary;TakeProfit
 F:StockSharp.Kraken.KrakenOrderConditionTypes.StopLossTakeProfit/summary;DocStr10254
 T:StockSharp.Kraken.KrakenOrderCondition/summary;DocStr60
 M:StockSharp.Kraken.KrakenOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Kraken.KrakenOrderCondition.StopPrice/summary;Str3460
 P:StockSharp.Kraken.KrakenOrderCondition.Type/summary;Str1963
+P:StockSharp.Kraken.KrakenOrderCondition.StopPrice/summary;Str3460
 P:StockSharp.Kraken.KrakenOrderCondition.IsTrailing/summary;Str3446
 P:StockSharp.Kraken.KrakenOrderCondition.Leverage/summary;Leverage
-P:StockSharp.Kraken.KrakenOrderCondition.OrderFlags/summary;DocStr10255
+P:StockSharp.Kraken.KrakenOrderCondition.OrderFlags/summary;OrderFlags
 P:StockSharp.Kraken.KrakenOrderCondition.StartTime/summary;StartTime
+P:StockSharp.Kraken.KrakenOrderCondition.IsWithdraw/summary;Withdraw
+P:StockSharp.Kraken.KrakenOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Kraken.KrakenTrader/summary;DocStr2539
 M:StockSharp.Kraken.KrakenTrader.#ctor/summary;DocStr1
 P:StockSharp.Kraken.KrakenTrader.Key/summary;Str3304

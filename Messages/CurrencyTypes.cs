@@ -1039,6 +1039,234 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		ETH,
+
+		/// <summary>
+		/// Litecoin.
+		/// </summary>
+		[EnumMember]
+		LTC,
+		
+		/// <summary>
+		/// Ethereum Classic.
+		/// </summary>
+		[EnumMember]
+		ETC,
+		
+		/// <summary>
+		/// Tether USD.
+		/// </summary>
+		[EnumMember]
+		USDT,
+		
+		/// <summary>
+		/// Zcash.
+		/// </summary>
+		[EnumMember]
+		ZEC,
+		
+		/// <summary>
+		/// Monero.
+		/// </summary>
+		[EnumMember]
+		XMR,
+
+		/// <summary>
+		/// Cardano.
+		/// </summary>
+		[EnumMember]
+		ADA,
+		
+		/// <summary>
+		/// IOTA.
+		/// </summary>
+		[EnumMember]
+		MIOTA,
+		
+		/// <summary>
+		/// Ripple.
+		/// </summary>
+		[EnumMember]
+		XRP,
+		
+		/// <summary>
+		/// Dash.
+		/// </summary>
+		[EnumMember]
+		DASH,
+		
+		/// <summary>
+		/// EOS.
+		/// </summary>
+		[EnumMember]
+		EOS,
+		
+		/// <summary>
+		/// Santiment.
+		/// </summary>
+		[EnumMember]
+		SAN,
+		
+		/// <summary>
+		/// Omisego.
+		/// </summary>
+		[EnumMember]
+		OMG,
+		
+		/// <summary>
+		/// Bitcoin Cash.
+		/// </summary>
+		[EnumMember]
+		BCH,
+		
+		/// <summary>
+		/// Neo.
+		/// </summary>
+		[EnumMember]
+		NEO,
+		
+		/// <summary>
+		/// Metaverse.
+		/// </summary>
+		[EnumMember]
+		ETP,
+		
+		/// <summary>
+		/// Qtum.
+		/// </summary>
+		[EnumMember]
+		QTUM,
+		
+		/// <summary>
+		/// Aventus.
+		/// </summary>
+		[EnumMember]
+		AVT,
+		
+		/// <summary>
+		/// Eidoo.
+		/// </summary>
+		[EnumMember]
+		EDO,
+		
+		/// <summary>
+		/// Datacoin.
+		/// </summary>
+		[EnumMember]
+		DTC,
+		
+		/// <summary>
+		/// Bitcoin Gold.
+		/// </summary>
+		[EnumMember]
+		BTG,
+		
+		/// <summary>
+		/// QASH.
+		/// </summary>
+		[EnumMember]
+		QASH,
+		
+		/// <summary>
+		/// Yoyow.
+		/// </summary>
+		[EnumMember]
+		YOYOW,
+		
+		/// <summary>
+		/// Golem.
+		/// </summary>
+		[EnumMember]
+		GNT,
+		
+		/// <summary>
+		/// Status.
+		/// </summary>
+		[EnumMember]
+		SNT,
+		
+		/// <summary>
+		/// Tether EUR.
+		/// </summary>
+		[EnumMember]
+		EURT,
+		
+		/// <summary>
+		/// Basic Attention Token.
+		/// </summary>
+		[EnumMember]
+		BAT,
+		
+		/// <summary>
+		/// MNA.
+		/// </summary>
+		[EnumMember]
+		MNA,
+		
+		/// <summary>
+		/// FunFair.
+		/// </summary>
+		[EnumMember]
+		FUN,
+		
+		/// <summary>
+		/// ZRX.
+		/// </summary>
+		[EnumMember]
+		ZRX,
+		
+		/// <summary>
+		/// Time New Bank.
+		/// </summary>
+		[EnumMember]
+		TNB,
+		
+		/// <summary>
+		/// Sparks.
+		/// </summary>
+		[EnumMember]
+		SPK,
+		
+		/// <summary>
+		/// TRON.
+		/// </summary>
+		[EnumMember]
+		TRX,
+		
+		/// <summary>
+		/// Ripio Credit Network.
+		/// </summary>
+		[EnumMember]
+		RCN,
+		
+		/// <summary>
+		/// iExec.
+		/// </summary>
+		[EnumMember]
+		RLC,
+		
+		/// <summary>
+		/// AidCoin.
+		/// </summary>
+		[EnumMember]
+		AID,
+		
+		/// <summary>
+		/// SnowGem.
+		/// </summary>
+		[EnumMember]
+		SNG,
+
+		/// <summary>
+		/// Augur.
+		/// </summary>
+		[EnumMember]
+		REP,
+
+		/// <summary>
+		/// Aelf.
+		/// </summary>
+		[EnumMember]
+		ELF
 // ReSharper restore InconsistentNaming
 	}
 }

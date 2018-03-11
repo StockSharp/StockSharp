@@ -86,14 +86,14 @@
             Initializes a new instance of the <see cref="T:StockSharp.Kraken.KrakenOrderCondition"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Kraken.KrakenOrderCondition.StopPrice">
-            <summary>
-            Activation price, when reached an order will be placed.
-            </summary>
-        </member>
         <member name="P:StockSharp.Kraken.KrakenOrderCondition.Type">
             <summary>
             Type.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kraken.KrakenOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
             </summary>
         </member>
         <member name="P:StockSharp.Kraken.KrakenOrderCondition.IsTrailing">
@@ -114,6 +114,16 @@
         <member name="P:StockSharp.Kraken.KrakenOrderCondition.StartTime">
             <summary>
             Start time.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kraken.KrakenOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kraken.KrakenOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
             </summary>
         </member>
         <member name="T:StockSharp.Kraken.KrakenTrader">

@@ -12,7 +12,8 @@ M:StockSharp.Coincheck.CoincheckMessageAdapter.#ctor(Ecng.Common.IdGenerator)/pa
 M:StockSharp.Coincheck.CoincheckMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Coincheck.CoincheckOrderCondition/summary;DocStr60
 M:StockSharp.Coincheck.CoincheckOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Coincheck.CoincheckOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.Coincheck.CoincheckOrderCondition.IsWithdraw/summary;Withdraw
+P:StockSharp.Coincheck.CoincheckOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Coincheck.CoincheckTrader/summary;DocStr2539
 M:StockSharp.Coincheck.CoincheckTrader.#ctor/summary;DocStr1
 P:StockSharp.Coincheck.CoincheckTrader.Key/summary;Str3304

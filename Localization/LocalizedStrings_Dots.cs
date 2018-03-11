@@ -513,5 +513,80 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string PnFBoxSizeDot => AppendDot(PnFBoxSize);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string TrailingStopLossDot => AppendDot(TrailingStopLoss);
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str261Dot => AppendDot(Str261);
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string OrderFlagsDot => AppendDot(OrderFlags);
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3400Dot => AppendDot(Str3400);
+				
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string CryptoAddressDot => AppendDot(CryptoAddress);
+				
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string PaymentIdDot => AppendDot(PaymentId);
+						
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string IbanDot => AppendDot(Iban);
+						
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string WithdrawDot => AppendDot(Withdraw);
+								
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string WithdrawInfoDot => AppendDot(WithdrawInfo);
+										
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string CurrencyDot => AppendDot(Currency);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string CountryDot => AppendDot(Country);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string CityDot => AppendDot(City);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string PostalCodeDot => AppendDot(PostalCode);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string NameDot => AppendDot(Name);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string ChargeFeeDot => AppendDot(ChargeFee);
 	}
 }

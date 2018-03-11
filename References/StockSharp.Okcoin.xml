@@ -19,6 +19,11 @@
             Secret.
             </summary>
         </member>
+        <member name="P:StockSharp.Okcoin.OkcoinMessageAdapter.AdminPassword">
+            <summary>
+            Administrative password.
+            </summary>
+        </member>
         <member name="M:StockSharp.Okcoin.OkcoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.

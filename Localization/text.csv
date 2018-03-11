@@ -1613,7 +1613,7 @@ Str1683;Transactions (copy);Транзакции (копия)
 Str1684;Transactional session (copy, used with MICEX to receive orders and trades, registered for connections).;Транзакционная сессия (копия, используется в случае ММВБ для получения заявок и сделок, зарегистрированных под подключения).
 Str1685Params;Transaction = {0} Market-data = {1};Транзакции = {0} Маркет-дата = {1}
 StopLoss;Stop-loss;Стоп-лосс
-TrailingStopLoss;Trailing stop-loss;Скользящий стоп
+TrailingStopLoss;Trailing stop-loss;Скользящий стоп-лосс
 TakeProfit;Take-profit;Тейк-профит
 TrailingTakeProfit;Trailing take-profit;Скользящий тейк
 Str1691;Stop-order type.;Тип стоп-заявки.
@@ -3253,7 +3253,6 @@ Str3491;Broker address.;Адрес брокера.
 Str3492;Log (address);Лог (адрес)
 Str3493;Logger address.;Адрес логгера.
 Str3494Params;Activation price for order {0} not specified.;Цена активации для заявки {0} не установлена.
-Str3495Params;Transaction {0} contains unsupported type of order {1}.;Транзакция {0} содержит неподдерживаемый тип заявки {1}.
 Str3496;Order was not cancelled.;Заявка не была отменена.
 Str3497;Order was not changed.;Заявка не была изменена.
 Str3498;Order was not registered.;Заявка не была зарегистрирована.
@@ -4402,6 +4401,7 @@ Skype;Skype;Skype
 City;City;Город
 Gender;Gender;Пол
 Deposit;Deposit;Депозит
+Withdraw;Withdraw;Вывод
 ZipCode;Zip code;Почтовый индекс
 StartDateCandles;Start date (candles);Дата начала (свечи)
 StartDateTicks;Start date (ticks);Дата начала (тики)
@@ -4720,6 +4720,36 @@ PnFBoxSize;Range of price above which increase the candle body;Изменени�
 PnFCandleDesc;The candle of point-and-figure chart (tac-toe chart).;Свеча пункто-цифрового графика (график крестики-нолики).
 CheckDates;Check dates;Проверять дни
 CheckDatesDesc;Check loading dates are they tradable.;Проверять загружаемые дни, что они торговые.
+OrderFlags;Order flags;Флаги заявки
+BankWire;Bank wire;Банковский перевод
+BankCard;Bank card;Банковская карта
+BankAccount;Bank account;Банковский счет
+Bank;Bank;Банк
+Swift;SWIFT;СВИФТ
+BankSwift;Bank SWIFT.;СВИФТ банка.
+WithdrawType;Withdraw type.;Тип вывода.
+CryptoAddress;Crypto address;Адрес криптовалюты
+PaymentId;Payment id;Идентификатор платежа
+BankDetails;Bank details.;Детали банка.
+IntermediaryBank;Intermediary bank;Банк-посредник.
+IntermediaryBankDetails;Intermediary bank details.;Детали банка-посредника.
+BankCardNumber;Bank card number.;Номер банковской карты.
+Iban;IBAN;ИБАН
+Bic;BIC;БИК
+BankBic;Bank BIC.;БИК банка
+WithdrawInfo;Withdraw info;Детали вывода
+BankComment;Comment of bank transaction.;Комментарий к банковской транзакции.
+AccountName;Account name;Имя счета
+BankAccountName;Bank account name.;Имя банковского счета.
+BankDetailsIsMissing;Bank details is missing.;Детали банка не указаны.
+WithdrawTypeNotSupported;Withdraw type '{0}' not supported.;Тип вывода '{0}' не поддерживается.
+Company;Company;Компания
+CompanyDetails;Company details.;Детали компании.
+Express;Express;Экспресс
+ExpressWithdraw;Express withdraw.;Экспресс вывод.
+PostalCode;Postal code;Почтовый индекс
+ChargeFee;Charge fee;Комиссия за перевод
+AdminPassword;Administrative password.;Пароль администратора.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5890,7 +5920,7 @@ DocStr1196;Lower band -;Нижняя полоса-
 DocStr1197;Double Exponential Moving Average;Double Exponential Moving Average
 DocStr1198;((2 * EMA) – EMA of EMA);((2 * EMA) – EMA of EMA)
 DocStr1199;Envelope;Envelope
-DocStr1202;The shift width. Specified as percentage from 0 to 1. The default equals to 0.25;Ширина сдвига. Задается в процентах от 0 до 1. По умолчанию равно 0.25
+DocStr1202;The shift width. Specified as percentage from 0 to 1. The default equals to 0.01;Ширина сдвига. Задается в процентах от 0 до 1. По умолчанию равно 0.01
 DocStr1203;Hull Moving Average;Скользящая средняя Халла (Hull Moving Average)
 DocStr1204;Variables initial initialization;Начальная инициализация переменных
 DocStr1205;'Rapid' EMA period. The default value is 2;"Период ""быстрой"" EMA. Значение по умолчанию 2"
@@ -14642,7 +14672,6 @@ DocStr10251;Is specified security id asssociated with the board;Принадле
 DocStr10252;{0}, if asssociated, otherwise, {1};{0}, если принадлежит, иначе, {1}
 DocStr10253;Stop order types;Тип стоп-заявок
 DocStr10254;Stop-loss and take-profit;Стоп-лосс и тейк-профит
-DocStr10255;Order flags;Флаги заявки
 DocStr10256;The maximum depth of order book. The default value is 100;Максимальная глубина стакана. По-умолчанию равно 100
 DocStr10257;To create a rule for the order's profit more on offset;Создать правило для отслеживания прибыльности заявки более чем на указанный уровень
 DocStr10258;The order to be traced for profit;Заявка, которую необходимо отслеживать на прибыльность
@@ -14671,3 +14700,43 @@ DocStr10282;Stop strategy when child strategies causes errors;Останавли
 DocStr10283;Process the child strategies errors;Обработать ошибки от дочерних стратегий
 DocStr10284;Axis visibility;Видимость оси
 DocStr10285;Time zone for this axis;Временная зона оси
+DocStr10286;Create candles builder;Создать построитель свечей
+DocStr10289;Litecoin;Litecoin
+DocStr10290;Ethereum Classic;Ethereum Classic
+DocStr10291;Tether USD;Tether USD
+DocStr10292;Zcash;Zcash
+DocStr10293;Monero;Monero
+DocStr10294;Cardano;Cardano
+DocStr10295;IOTA;IOTA
+DocStr10296;Ripple;Ripple
+DocStr10297;Dash;Dash
+DocStr10298;EOS;EOS
+DocStr10299;Santiment;Santiment
+DocStr10300;Omisego;Omisego
+DocStr10301;Bitcoin Cash;Bitcoin Cash
+DocStr10302;Neo;Neo
+DocStr10303;Metaverse;Metaverse
+DocStr10304;Qtum;Qtum
+DocStr10305;Aventus;Aventus
+DocStr10306;Eidoo;Eidoo
+DocStr10307;Datacoin;Datacoin
+DocStr10308;Bitcoin Gold;Bitcoin Gold
+DocStr10309;QASH;QASH
+DocStr10310;Yoyow;Yoyow
+DocStr10311;Golem;Golem
+DocStr10312;Tether EUR;Tether EUR
+DocStr10313;Basic Attention Token;Basic Attention Token
+DocStr10314;MNA;MNA
+DocStr10315;FunFair;FunFair
+DocStr10316;ZRX;ZRX
+DocStr10317;Time New Bank;Time New Bank
+DocStr10318;Sparks;Sparks
+DocStr10319;TRON;TRON
+DocStr10320;Ripio Credit Network;Ripio Credit Network
+DocStr10321;iExec;iExec
+DocStr10322;AidCoin;AidCoin
+DocStr10323;SnowGem;SnowGem
+DocStr10324;Augur;Augur
+DocStr10325;Aelf;Aelf
+DocStr10326;Withdraw types;Withdraw types
+DocStr10327;Crypto;Crypto

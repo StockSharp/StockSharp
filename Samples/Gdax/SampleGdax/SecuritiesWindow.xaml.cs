@@ -12,6 +12,7 @@ namespace SampleGdax
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class SecuritiesWindow
 	{
@@ -43,7 +44,7 @@ namespace SampleGdax
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = OrderLog.IsEnabled = security != null;
+			Quotes.IsEnabled = NewOrder.IsEnabled = NewStopOrder.IsEnabled = Depth.IsEnabled = OrderLog.IsEnabled = security != null;
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -54,6 +55,25 @@ namespace SampleGdax
 				SecurityProvider = MainWindow.Instance.Trader,
 				MarketDataProvider = MainWindow.Instance.Trader,
 				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+			};
+
+			if (newOrder.ShowModal(this))
+				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+		}
+
+		private void NewStopOrderClick(object sender, RoutedEventArgs e)
+		{
+			var newOrder = new OrderConditionalWindow
+			{
+				Order = new Order
+				{
+					Security = SecurityPicker.SelectedSecurity,
+					Type = OrderTypes.Conditional,
+				},
+				SecurityProvider = MainWindow.Instance.Trader,
+				MarketDataProvider = MainWindow.Instance.Trader,
+				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+				Adapter = MainWindow.Instance.Trader.TransactionAdapter
 			};
 
 			if (newOrder.ShowModal(this))

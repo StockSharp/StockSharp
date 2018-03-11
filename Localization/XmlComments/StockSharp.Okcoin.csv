@@ -1,6 +1,7 @@
 T:StockSharp.Okcoin.OkcoinMessageAdapter/summary;DocStr2538
 P:StockSharp.Okcoin.OkcoinMessageAdapter.Key/summary;Str3304
 P:StockSharp.Okcoin.OkcoinMessageAdapter.Secret/summary;DocStr3146
+P:StockSharp.Okcoin.OkcoinMessageAdapter.AdminPassword/summary;AdminPassword
 M:StockSharp.Okcoin.OkcoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Okcoin.OkcoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Okcoin.OkcoinMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2

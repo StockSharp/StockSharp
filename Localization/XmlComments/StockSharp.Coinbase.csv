@@ -12,7 +12,8 @@ M:StockSharp.Coinbase.CoinbaseMessageAdapter.#ctor(Ecng.Common.IdGenerator)/para
 M:StockSharp.Coinbase.CoinbaseMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 T:StockSharp.Coinbase.CoinbaseOrderCondition/summary;DocStr60
 M:StockSharp.Coinbase.CoinbaseOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Coinbase.CoinbaseOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.Coinbase.CoinbaseOrderCondition.IsWithdraw/summary;Withdraw
+P:StockSharp.Coinbase.CoinbaseOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Coinbase.CoinbaseTrader/summary;DocStr2539
 M:StockSharp.Coinbase.CoinbaseTrader.#ctor/summary;DocStr1
 P:StockSharp.Coinbase.CoinbaseTrader.Key/summary;Str3304
