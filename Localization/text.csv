@@ -14738,5 +14738,13 @@ DocStr10322;AidCoin;AidCoin
 DocStr10323;SnowGem;SnowGem
 DocStr10324;Augur;Augur
 DocStr10325;Aelf;Aelf
-DocStr10326;Withdraw types;Withdraw types
-DocStr10327;Crypto;Crypto
+DocStr10326;Withdraw types;Типы вывода
+DocStr10328;Candles series holder to create {0} instancies;Кэш серий свечей для создания объектов {0}
+DocStr10329;Update candle by new message;Обновить свечу новым сообщением
+DocStr10330;Updated candle;Обновленная свеча
+DocStr10331;Candles holder to create {0} instancies;Кэш свечей для создания объектов {0}
+DocStr10332;Create new series tracking;Создать новое отслеживание серии
+DocStr10333;Remove series tracking;Удалить отслеживание серии
+DocStr10334;Get request identifier by series;Получить идентификатор запроса по серии
+DocStr10335;Get series by request identifier;Получить серию по идентификатору запроса
+DocStr10336;Candles series or {0} if identifier is non exist;Серия свечей или {0} если идентификатор не существует
