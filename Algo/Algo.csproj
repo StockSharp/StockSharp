@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="AssociatedSecurityAdapter.cs" />
     <Compile Include="BasketSecurity.cs" />
+    <Compile Include="Candles\CandlesHolder.cs" />
     <Compile Include="Candles\Compression\CandleBuilderMessageAdapter.cs" />
     <Compile Include="Candles\Compression\CandleHolderMessageAdapter.cs" />
     <Compile Include="Candles\Compression\ICandleBuilderValueTransform.cs" />

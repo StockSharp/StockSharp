@@ -479,11 +479,14 @@ namespace StockSharp.Algo
 		/// <param name="series">Candles series.</param>
 		public virtual void UnSubscribeCandles(CandleSeries series)
 		{
-			var mdMsg = _entityCache.TryGetCandleSeriesMarketDataMessage(series, TransactionIdGenerator.GetNextId);
+			var originalTransId = _entityCache.TryGetTransactionId(series);
 
-			if (mdMsg == null)
+			if (originalTransId == 0)
 				return;
 
+			var mdMsg = series.ToMarketDataMessage(false);
+			mdMsg.TransactionId = TransactionIdGenerator.GetNextId();
+			mdMsg.OriginalTransactionId = originalTransId;
 			UnSubscribeMarketData(series.Security, mdMsg);
 		}
 	}

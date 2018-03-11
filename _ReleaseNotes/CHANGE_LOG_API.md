@@ -15,6 +15,7 @@ StockSharp API Change log
 * (bug) CandleHolderMessageAdapter. Unsubscribe fix.
 * (feature) HistoryMessageAdapter.CheckTradableDates.
 * (feature) Crypto connectors. Withdraw support.
+* (feature) CandlesHolder.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

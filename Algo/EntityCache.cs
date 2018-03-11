@@ -191,28 +191,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<string, News> _newsById = new SynchronizedDictionary<string, News>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly SynchronizedList<News> _newsWithoutId = new SynchronizedList<News>();
 
-		private sealed class CandleSeriesInfo
-		{
-			public CandleSeries Series { get; }
-
-			public MarketDataMessage Message { get; }
-
-			public Candle CurrentCandle { get; set; }
-
-			public CandleSeriesInfo(CandleSeries series, MarketDataMessage message)
-			{
-				if (series == null)
-					throw new ArgumentNullException(nameof(series));
-
-				if (message == null)
-					throw new ArgumentNullException(nameof(message));
-
-				Series = series;
-				Message = message;
-			}
-		}
-
-		private readonly SynchronizedDictionary<long, CandleSeriesInfo> _candleSeriesInfos = new SynchronizedDictionary<long, CandleSeriesInfo>();
+		private readonly CandlesHolder _candlesHolder = new CandlesHolder();
 
 		public IEnumerable<News> News
 		{
@@ -375,7 +354,7 @@ namespace StockSharp.Algo
 
 			_positions.Clear();
 
-			_candleSeriesInfos.Clear();
+			_candlesHolder.Clear();
 		}
 
 		public void AddOrderStatusTransactionId(long transactionId)
@@ -1158,79 +1137,19 @@ namespace StockSharp.Algo
 			if (mdMsg == null)
 				throw new ArgumentNullException(nameof(mdMsg));
 
-			if (series == null)
-				throw new ArgumentNullException(nameof(series));
-
-			if (mdMsg.TransactionId == 0)
-				throw new ArgumentException(nameof(mdMsg));
-
-			_candleSeriesInfos.Add(mdMsg.TransactionId, new CandleSeriesInfo(series, mdMsg));
+			_candlesHolder.CreateCandleSeries(mdMsg.TransactionId, series);
 		}
 
 		public CandleSeries RemoveCandleSeries(long transactionId)
-		{
-			CandleSeriesInfo info;
+			=> _candlesHolder.RemoveCandleSeries(transactionId);
 
-			lock (_candleSeriesInfos.SyncRoot)
-				info = _candleSeriesInfos.TryGetAndRemove(transactionId);
-
-			return info?.Series;
-		}
-
-		public MarketDataMessage TryGetCandleSeriesMarketDataMessage(CandleSeries series, Func<long> getTransactionId)
-		{
-			if (series == null)
-				throw new ArgumentNullException(nameof(series));
-
-			if (getTransactionId == null)
-				throw new ArgumentNullException(nameof(getTransactionId));
-
-			long transactionId;
-
-			lock (_candleSeriesInfos.SyncRoot)
-				transactionId = _candleSeriesInfos.FirstOrDefault(p => p.Value.Series == series).Key;
-
-			if (transactionId == 0)
-				return null;
-
-			var mdMsg = series.ToMarketDataMessage(false);
-			mdMsg.TransactionId = getTransactionId();
-			mdMsg.OriginalTransactionId = transactionId;
-
-			return mdMsg;
-		}
-
-		private CandleSeriesInfo TryGetCandleSeriesInfo(long transactionId)
-		{
-			return _candleSeriesInfos.TryGetValue(transactionId);
-		}
+		public long TryGetTransactionId(CandleSeries series)
+			=> _candlesHolder.TryGetTransactionId(series);
 
 		public CandleSeries TryGetCandleSeries(long transactionId)
-		{
-			return TryGetCandleSeriesInfo(transactionId)?.Series;
-		}
+			=> _candlesHolder.TryGetCandleSeries(transactionId);
 
 		public CandleSeries UpdateCandle(CandleMessage message, out Candle candle)
-		{
-			var info = TryGetCandleSeriesInfo(message.OriginalTransactionId);
-
-			candle = null;
-
-			if (info == null)
-				return null;
-
-			if (info.CurrentCandle != null && info.CurrentCandle.OpenTime == message.OpenTime)
-			{
-				if (info.CurrentCandle.State == CandleStates.Finished)
-					return null;
-
-				info.CurrentCandle.Update(message);
-			}
-			else
-				info.CurrentCandle = message.ToCandle(info.Series);
-
-			candle = info.CurrentCandle;
-			return info.Series;
-		}
+			=> _candlesHolder.UpdateCandle(message, out candle);
 	}
 }
