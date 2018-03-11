@@ -370,6 +370,9 @@ M:StockSharp.Algo.Candles.CandleHelper.GetSeries``1(StockSharp.Algo.Candles.ICan
 M:StockSharp.Algo.Candles.CandleHelper.GetSeries``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.BusinessEntities.Security,System.Object)/param/security;DocStr547
 M:StockSharp.Algo.Candles.CandleHelper.GetSeries``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.BusinessEntities.Security,System.Object)/param/arg;DocStr548
 M:StockSharp.Algo.Candles.CandleHelper.GetSeries``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.BusinessEntities.Security,System.Object)/returns;DocStr549
+M:StockSharp.Algo.Candles.CandleHelper.CreateCandleBuilder(StockSharp.Messages.MarketDataTypes)/summary;DocStr10286
+M:StockSharp.Algo.Candles.CandleHelper.CreateCandleBuilder(StockSharp.Messages.MarketDataTypes)/param/dataType;DocStr774
+M:StockSharp.Algo.Candles.CandleHelper.CreateCandleBuilder(StockSharp.Messages.MarketDataTypes)/returns;DocStr9669
 M:StockSharp.Algo.Candles.CandleHelper.ToCandles``1(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Trade},System.Object,System.Boolean)/summary;DocStr550
 M:StockSharp.Algo.Candles.CandleHelper.ToCandles``1(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Trade},System.Object,System.Boolean)/typeparam/TCandle;DocStr537
 M:StockSharp.Algo.Candles.CandleHelper.ToCandles``1(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Trade},System.Object,System.Boolean)/param/trades;DocStr551
@@ -2600,6 +2603,7 @@ P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.StopDate/summary;DocS
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.PostTradeMarketTimeChangedCount/summary;DocStr2107
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.PostTradeMarketTimeChangedCount/remarks;DocStr2108
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.MarketTimeChangedInterval/summary;DocStr2111
+P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.CheckTradableDates/summary;CheckDatesDesc
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor/summary;DocStr1
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.BasketMarketDataStorage{`0})/summary;DocStr1
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.BasketMarketDataStorage{`0})/param/basketStorage;DocStr2093
@@ -5587,6 +5591,7 @@ P:StockSharp.Algo.Strategies.Testing.EmulationSettings.TradeDataMode/summary;Str
 P:StockSharp.Algo.Strategies.Testing.EmulationSettings.DepthDataMode/summary;Str1415
 P:StockSharp.Algo.Strategies.Testing.EmulationSettings.OrderLogDataMode/summary;Str1417
 P:StockSharp.Algo.Strategies.Testing.EmulationSettings.BatchSize/summary;Str1419
+P:StockSharp.Algo.Strategies.Testing.EmulationSettings.CheckTradableDates/summary;CheckDatesDesc
 P:StockSharp.Algo.Strategies.Testing.EmulationSettings.LogLevel/summary;Str9
 M:StockSharp.Algo.Strategies.Testing.EmulationSettings.#ctor/summary;DocStr1
 M:StockSharp.Algo.Strategies.Testing.EmulationSettings.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr1884
@@ -5661,6 +5666,7 @@ M:StockSharp.Algo.Testing.HistoryMessageAdapter.#ctor(Ecng.Common.IdGenerator,St
 M:StockSharp.Algo.Testing.HistoryMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.BusinessEntities.ISecurityProvider)/param/securityProvider;DocStr972
 P:StockSharp.Algo.Testing.HistoryMessageAdapter.StartDate/summary;DocStr1902
 P:StockSharp.Algo.Testing.HistoryMessageAdapter.StopDate/summary;DocStr1903
+P:StockSharp.Algo.Testing.HistoryMessageAdapter.CheckTradableDates/summary;CheckDatesDesc
 P:StockSharp.Algo.Testing.HistoryMessageAdapter.OrderLogMarketDepthBuilders/summary;DocStr8631
 M:StockSharp.Algo.Testing.HistoryMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
 P:StockSharp.Algo.Testing.HistoryMessageAdapter.CurrentTime/summary;DocStr955

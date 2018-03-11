@@ -966,11 +966,6 @@
             Show Y-axis market.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.PnFBoxSize">
-      <summary>
-            Range of price above which increase the candle body.
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Colorer">
       <summary>
             Custom elements colorer.

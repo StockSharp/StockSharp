@@ -232,7 +232,6 @@ P:StockSharp.Xaml.Charting.ChartCandleElement.AntiAliasing/summary;Str1960
 P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor/summary;DocStr8858
 P:StockSharp.Xaml.Charting.ChartCandleElement.AreaColor/summary;DocStr10270
 P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker/summary;Str1962
-P:StockSharp.Xaml.Charting.ChartCandleElement.PnFBoxSize/summary;PnFBoxSize
 P:StockSharp.Xaml.Charting.ChartCandleElement.Colorer/summary;DocStr10273
 P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Multiplier/summary;DocStr8859
 P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe3Multiplier/summary;DocStr8860

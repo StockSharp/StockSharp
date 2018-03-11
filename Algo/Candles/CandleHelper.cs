@@ -270,10 +270,10 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Create candle builder.
+		/// Create candles builder.
 		/// </summary>
 		/// <param name="dataType">Market data type.</param>
-		/// <returns>Candle builder.</returns>
+		/// <returns>Candles builder.</returns>
 		public static ICandleBuilder CreateCandleBuilder(this MarketDataTypes dataType)
 		{
 			switch (dataType)
