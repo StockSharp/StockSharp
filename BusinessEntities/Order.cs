@@ -599,6 +599,14 @@ namespace StockSharp.BusinessEntities
 		public bool? IsMarketMaker { get; set; }
 
 		/// <summary>
+		/// Is margin enabled.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MarginKey)]
+		[DescriptionLoc(LocalizedStrings.IsMarginKey)]
+		public bool? IsMargin { get; set; }
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>

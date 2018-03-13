@@ -514,6 +514,14 @@ namespace StockSharp.Messages
 		public bool? IsMarketMaker { get; set; }
 
 		/// <summary>
+		/// Is margin enabled.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MarginKey)]
+		[DescriptionLoc(LocalizedStrings.IsMarginKey)]
+		public bool? IsMargin { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -592,7 +600,8 @@ namespace StockSharp.Messages
 				HasTradeInfo = HasTradeInfo,
 				HasOrderInfo = HasOrderInfo,
 
-				IsMarketMaker = IsMarketMaker
+				IsMarketMaker = IsMarketMaker,
+				IsMargin = IsMargin,
 			};
 
 			this.CopyExtensionInfo(clone);

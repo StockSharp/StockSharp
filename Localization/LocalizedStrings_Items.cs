@@ -47126,5 +47126,25 @@ namespace StockSharp.Localization
 		/// Administrative password.
 		/// </summary>
 		public static string AdminPassword => GetString(AdminPasswordKey);
+
+		/// <summary>
+		/// Margin
+		/// </summary>
+		public const string MarginKey = nameof(Margin);
+
+		/// <summary>
+		/// Margin
+		/// </summary>
+		public static string Margin => GetString(MarginKey);
+
+		/// <summary>
+		/// Is margin enabled.
+		/// </summary>
+		public const string IsMarginKey = nameof(IsMargin);
+
+		/// <summary>
+		/// Is margin enabled.
+		/// </summary>
+		public static string IsMargin => GetString(IsMarginKey);
 	}
 }

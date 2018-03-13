@@ -528,6 +528,7 @@ namespace StockSharp.Algo
 					o.ClientCode = message.ClientCode;
 					o.BrokerCode = message.BrokerCode;
 					o.IsMarketMaker = message.IsMarketMaker;
+					o.IsMargin = message.IsMargin;
 
 					if (message.PortfolioName.IsEmpty())
 						o.Portfolio = _portfolios.FirstOrDefault().Value;

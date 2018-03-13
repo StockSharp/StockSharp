@@ -452,6 +452,7 @@ namespace StockSharp.Algo
 				ClientCode = order.ClientCode,
 				Currency = order.Currency,
 				IsMarketMaker = order.IsMarketMaker,
+				IsMargin = order.IsMargin,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -1286,6 +1287,7 @@ namespace StockSharp.Algo
 			order.Commission = message.Commission;
 			order.Currency = message.Currency;
 			order.IsMarketMaker = message.IsMarketMaker;
+			order.IsMargin = message.IsMargin;
 
 			if (message.OrderState != null)
 				order.State = order.State.CheckModification((OrderStates)message.OrderState);

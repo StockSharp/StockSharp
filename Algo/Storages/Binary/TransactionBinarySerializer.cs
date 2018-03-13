@@ -243,7 +243,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider)
-			: base(securityId, 200, MarketDataVersions.Version61, exchangeInfoProvider)
+			: base(securityId, 200, MarketDataVersions.Version62, exchangeInfoProvider)
 		{
 		}
 
@@ -445,6 +445,14 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (msg.IsMarketMaker != null)
 					writer.Write(msg.IsMarketMaker.Value);
+
+				if (metaInfo.Version < MarketDataVersions.Version62)
+					continue;
+
+				writer.Write(msg.IsMargin != null);
+
+				if (msg.IsMargin != null)
+					writer.Write(msg.IsMargin.Value);
 			}
 		}
 
@@ -597,16 +605,22 @@ namespace StockSharp.Algo.Storages.Binary
 			if (reader.Read())
 				msg.OriginSide = reader.Read() ? Sides.Buy : Sides.Sell;
 
-			if (metaInfo.Version >= MarketDataVersions.Version59)
-			{
-				msg.LocalTime = ReadItemLocalTime(reader, metaInfo, isTickPrecision);
+			if (metaInfo.Version < MarketDataVersions.Version59)
+				return msg;
 
-				if (metaInfo.Version >= MarketDataVersions.Version61)
-				{
-					if (reader.Read())
-						msg.IsMarketMaker = reader.Read();	
-				}
-			}
+			msg.LocalTime = ReadItemLocalTime(reader, metaInfo, isTickPrecision);
+
+			if (metaInfo.Version < MarketDataVersions.Version61)
+				return msg;
+
+			if (reader.Read())
+				msg.IsMarketMaker = reader.Read();
+
+			if (metaInfo.Version < MarketDataVersions.Version62)
+				return msg;
+
+			if (reader.Read())
+				msg.IsMargin = reader.Read();
 
 			return msg;
 		}

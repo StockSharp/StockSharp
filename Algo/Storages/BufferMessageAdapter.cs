@@ -306,6 +306,7 @@ namespace StockSharp.Algo.Storages
 						LocalTime = regMsg.LocalTime,
 						TransactionId = regMsg.TransactionId,
 						IsMarketMaker = regMsg.IsMarketMaker,
+						IsMargin = regMsg.IsMargin,
 						OrderType = regMsg.OrderType,
 						UserOrderId = regMsg.UserOrderId,
 						//RepoInfo = regMsg.RepoInfo?.Clone(),

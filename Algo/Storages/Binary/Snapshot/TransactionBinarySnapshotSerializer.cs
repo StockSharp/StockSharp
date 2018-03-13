@@ -97,6 +97,8 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 			public decimal OpenInterest;
 			public long OriginalTransactionId;
 			public long TransactionId;
+
+			public bool? IsMargin;
 		}
 
 		Version ISnapshotSerializer<ExecutionMessage>.Version { get; } = new Version(1, 0);
@@ -132,6 +134,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 				ExpiryDate = message.ExpiryDate?.To<long>() ?? 0,
 				PortfolioName = message.PortfolioName,
 				IsMarketMaker = message.IsMarketMaker,
+				IsMargin = message.IsMargin,
 				Side = (byte)message.Side,
 				OrderStringId = message.OrderStringId,
 				OrderBoardId = message.OrderBoardId,
@@ -192,6 +195,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot
 
 					ExpiryDate = snapshot.ExpiryDate == 0 ? (DateTimeOffset?)null : snapshot.ExpiryDate.To<DateTimeOffset>(),
 					IsMarketMaker = snapshot.IsMarketMaker,
+					IsMargin = snapshot.IsMargin,
 					Side = (Sides)snapshot.Side,
 					OrderStringId = snapshot.OrderStringId,
 					OrderBoardId = snapshot.OrderBoardId,

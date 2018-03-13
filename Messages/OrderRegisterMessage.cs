@@ -122,6 +122,15 @@ namespace StockSharp.Messages
 		public bool? IsMarketMaker { get; set; }
 
 		/// <summary>
+		/// Is margin enabled.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.MarginKey)]
+		[DescriptionLoc(LocalizedStrings.IsMarginKey)]
+		[MainCategory]
+		public bool? IsMargin { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
@@ -165,7 +174,8 @@ namespace StockSharp.Messages
 				UserOrderId = UserOrderId,
 				ClientCode = ClientCode,
 				BrokerCode = BrokerCode,
-				IsMarketMaker = IsMarketMaker
+				IsMarketMaker = IsMarketMaker,
+				IsMargin = IsMargin,
 			};
 
 			CopyTo(clone);
