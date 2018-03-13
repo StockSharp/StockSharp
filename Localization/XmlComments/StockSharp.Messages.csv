@@ -453,6 +453,7 @@ P:StockSharp.Messages.ExecutionMessage.Currency/summary;Str382
 P:StockSharp.Messages.ExecutionMessage.PnL/summary;DocStr8684
 P:StockSharp.Messages.ExecutionMessage.Position/summary;DocStr8832
 P:StockSharp.Messages.ExecutionMessage.IsMarketMaker/summary;MarketMakerOrder
+P:StockSharp.Messages.ExecutionMessage.IsMargin/summary;IsMargin
 M:StockSharp.Messages.ExecutionMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.ExecutionMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.ExecutionMessage.ToString/returns;DocStr50
@@ -972,6 +973,7 @@ P:StockSharp.Messages.OrderRegisterMessage.TimeInForce/summary;Str232
 P:StockSharp.Messages.OrderRegisterMessage.RepoInfo/summary;Str234
 P:StockSharp.Messages.OrderRegisterMessage.RpsInfo/summary;Str236
 P:StockSharp.Messages.OrderRegisterMessage.IsMarketMaker/summary;MarketMakerOrder
+P:StockSharp.Messages.OrderRegisterMessage.IsMargin/summary;IsMargin
 M:StockSharp.Messages.OrderRegisterMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
@@ -1569,7 +1571,7 @@ M:StockSharp.Messages.CandleMessageVolumeProfile.Update(StockSharp.Messages.Cand
 M:StockSharp.Messages.CandleMessageVolumeProfile.Update(StockSharp.Messages.CandlePriceLevel)/param/priceLevel;Str3099
 M:StockSharp.Messages.CandleMessageVolumeProfile.Calculate/summary;DocStr716
 T:StockSharp.Messages.WithdrawTypes/summary;DocStr10326
-F:StockSharp.Messages.WithdrawTypes.Crypto/summary;DocStr10327
+F:StockSharp.Messages.WithdrawTypes.Crypto/summary;Cryptocurrency
 F:StockSharp.Messages.WithdrawTypes.BankWire/summary;BankWire
 F:StockSharp.Messages.WithdrawTypes.BankCard/summary;BankCard
 T:StockSharp.Messages.BankDetails/summary;BankDetails

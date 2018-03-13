@@ -15,7 +15,7 @@ namespace StockSharp.Messages
 	public enum WithdrawTypes
 	{
 		/// <summary>
-		/// Crypto.
+		/// Cryptocurrency.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.CryptocurrencyKey)]
 		Crypto,
