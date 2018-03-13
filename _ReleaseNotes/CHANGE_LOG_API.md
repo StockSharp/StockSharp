@@ -17,6 +17,7 @@ StockSharp API Change log
 * (feature) Crypto connectors. Withdraw support.
 * (feature) CandlesHolder.
 * (feature) Order. IsMargin property.
+* (feature) Order. Slippage property.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

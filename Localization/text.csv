@@ -14748,3 +14748,14 @@ DocStr10333;Remove series tracking;Удалить отслеживание се�
 DocStr10334;Get request identifier by series;Получить идентификатор запроса по серии
 DocStr10335;Get series by request identifier;Получить серию по идентификатору запроса
 DocStr10336;Candles series or {0} if identifier is non exist;Серия свечей или {0} если идентификатор не существует
+DocStr10337;Identifies whether an order is a margin order or a non-margin order;Определяет является ли заявка маржинальной или нет
+DocStr10338;Cash;Наличные
+DocStr10339;Margin open;Маржинальность открыта
+DocStr10340;Margin close;Маржинальность закрыта
+DocStr10341;The request the following purposes in markets that employ tradeable or restricted tradeable quotes;Запрос для получения торгуемых или ограниченных котировок
+DocStr10342;Dukascopy;Dukascopy
+DocStr10343;InteractiveBrokers FIX CTCI;InteractiveBrokers FIX CTCI
+DocStr10344;Thomson Reuters;Thomson Reuters
+DocStr10345;{0} if incomming messages was processed successfully, otherwise, {1};{0} if incomming messages was processed successfully, otherwise, {1}
+DocStr10346;Use ssl encryption to establish connect;Use ssl encryption to establish connect
+DocStr10347;SSL certificate;SSL certificate

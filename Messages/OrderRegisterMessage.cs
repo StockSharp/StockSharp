@@ -131,6 +131,14 @@ namespace StockSharp.Messages
 		public bool? IsMargin { get; set; }
 
 		/// <summary>
+		/// Slippage in trade price.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str163Key)]
+		[DescriptionLoc(LocalizedStrings.Str164Key)]
+		public decimal? Slippage { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
@@ -176,6 +184,7 @@ namespace StockSharp.Messages
 				BrokerCode = BrokerCode,
 				IsMarketMaker = IsMarketMaker,
 				IsMargin = IsMargin,
+				Slippage = Slippage,
 			};
 
 			CopyTo(clone);

@@ -673,6 +673,7 @@ P:StockSharp.BusinessEntities.Order.ClientCode/summary;ClientCodeDesc
 P:StockSharp.BusinessEntities.Order.Currency/summary;Str382
 P:StockSharp.BusinessEntities.Order.IsMarketMaker/summary;MarketMakerOrder
 P:StockSharp.BusinessEntities.Order.IsMargin/summary;IsMargin
+P:StockSharp.BusinessEntities.Order.Slippage/summary;Str164
 M:StockSharp.BusinessEntities.Order.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Order.ToString/returns;DocStr50
 T:StockSharp.BusinessEntities.OrderFail/summary;DocStr2924

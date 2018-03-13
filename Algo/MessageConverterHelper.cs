@@ -453,6 +453,7 @@ namespace StockSharp.Algo
 				Currency = order.Currency,
 				IsMarketMaker = order.IsMarketMaker,
 				IsMargin = order.IsMargin,
+				Slippage = order.Slippage,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg, false);
@@ -1288,6 +1289,7 @@ namespace StockSharp.Algo
 			order.Currency = message.Currency;
 			order.IsMarketMaker = message.IsMarketMaker;
 			order.IsMargin = message.IsMargin;
+			order.Slippage = message.Slippage;
 
 			if (message.OrderState != null)
 				order.State = order.State.CheckModification((OrderStates)message.OrderState);

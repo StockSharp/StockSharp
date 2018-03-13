@@ -307,6 +307,7 @@ namespace StockSharp.Algo.Storages
 						TransactionId = regMsg.TransactionId,
 						IsMarketMaker = regMsg.IsMarketMaker,
 						IsMargin = regMsg.IsMargin,
+						Slippage = regMsg.Slippage,
 						OrderType = regMsg.OrderType,
 						UserOrderId = regMsg.UserOrderId,
 						//RepoInfo = regMsg.RepoInfo?.Clone(),

@@ -974,6 +974,7 @@ P:StockSharp.Messages.OrderRegisterMessage.RepoInfo/summary;Str234
 P:StockSharp.Messages.OrderRegisterMessage.RpsInfo/summary;Str236
 P:StockSharp.Messages.OrderRegisterMessage.IsMarketMaker/summary;MarketMakerOrder
 P:StockSharp.Messages.OrderRegisterMessage.IsMargin/summary;IsMargin
+P:StockSharp.Messages.OrderRegisterMessage.Slippage/summary;Str164
 M:StockSharp.Messages.OrderRegisterMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
