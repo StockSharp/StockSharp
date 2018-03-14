@@ -154,6 +154,7 @@ namespace SampleGdax
 
 				Trader.Key = Key.Text;
 				Trader.Secret = Secret.Password;
+				Trader.Passphrase = Passphrase.Password;
 
 				// clear password box for security reason
 				//Secret.Clear();
