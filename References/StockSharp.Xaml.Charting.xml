@@ -1121,6 +1121,21 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartCandleElement,System.Object,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Tuple{System.Decimal,System.Decimal}[],System.Nullable{System.Decimal})">
+      <summary>
+            Put the candle data.
+            </summary>
+      <param name="element">The chart element representing a candle.</param>
+      <param name="candleArg">Candle arg.</param>
+      <param name="openPrice">Opening price.</param>
+      <param name="highPrice">Highest price.</param>
+      <param name="lowPrice">Lowest price.</param>
+      <param name="closePrice">Closing price.</param>
+      <param name="priceLevels">Price levels.</param>
+      <param name="priceStep">Minimum price step.</param>
+      <returns>
+        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartIndicatorElement,StockSharp.Algo.Indicators.IIndicatorValue)">
       <summary>
             Put the indicator data.
