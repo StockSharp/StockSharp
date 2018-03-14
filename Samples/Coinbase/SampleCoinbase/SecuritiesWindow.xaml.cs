@@ -88,10 +88,10 @@ namespace SampleCoinbase
 			{
 				var window = _quotesWindows.SafeAdd(security, s =>
 				{
-					// начинаем получать котировки стакана
+					// subscribe on order book flow
 					trader.RegisterMarketDepth(security);
 
-					// создаем окно со стаканом
+					// create order book window
 					var wnd = new QuotesWindow
 					{
 						Title = security.Id + " " + LocalizedStrings.MarketDepth
