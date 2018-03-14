@@ -766,5 +766,145 @@ namespace StockSharp.BusinessEntities
 			EngName = "Coincheck",
 			RusName = "Coincheck",
 		};
+
+		/// <summary>
+		/// Information about Binance.
+		/// </summary>
+		public static Exchange Binance { get; } = new Exchange
+		{
+			Name = "BNB",
+			EngName = "Binance",
+			RusName = "Binance",
+		};
+
+		/// <summary>
+		/// Information about Bitexbook.
+		/// </summary>
+		public static Exchange Bitexbook { get; } = new Exchange
+		{
+			Name = "BTXB",
+			EngName = "Bitexbook",
+			RusName = "Bitexbook",
+		};
+
+		/// <summary>
+		/// Information about BitMEX.
+		/// </summary>
+		public static Exchange Bitmex { get; } = new Exchange
+		{
+			Name = "BMEX",
+			EngName = "BitMEX",
+			RusName = "BitMEX",
+		};
+
+		/// <summary>
+		/// Information about CEX.IO.
+		/// </summary>
+		public static Exchange Cex { get; } = new Exchange
+		{
+			Name = "CEXIO",
+			EngName = "CEX.IO",
+			RusName = "CEX.IO",
+		};
+
+		/// <summary>
+		/// Information about Cryptopia.
+		/// </summary>
+		public static Exchange Cryptopia { get; } = new Exchange
+		{
+			Name = "CRTP",
+			EngName = "Cryptopia",
+			RusName = "Cryptopia",
+		};
+
+		/// <summary>
+		/// Information about OKEx.
+		/// </summary>
+		public static Exchange Okex { get; } = new Exchange
+		{
+			Name = "OKEX",
+			EngName = "OKEx",
+			RusName = "OKEx",
+		};
+
+		/// <summary>
+		/// Information about YoBit.
+		/// </summary>
+		public static Exchange Yobit { get; } = new Exchange
+		{
+			Name = "YBIT",
+			EngName = "YoBit",
+			RusName = "YoBit",
+		};
+
+		/// <summary>
+		/// Information about CoinExchange.
+		/// </summary>
+		public static Exchange CoinExchange { get; } = new Exchange
+		{
+			Name = "CNEX",
+			EngName = "CoinExchange",
+			RusName = "CoinExchange",
+		};
+
+		/// <summary>
+		/// Information about Livecoin.
+		/// </summary>
+		public static Exchange LiveCoin { get; } = new Exchange
+		{
+			Name = "LVCN",
+			EngName = "Livecoin",
+			RusName = "Livecoin",
+		};
+
+		/// <summary>
+		/// Information about Exmo.
+		/// </summary>
+		public static Exchange Exmo { get; } = new Exchange
+		{
+			Name = "EXMO",
+			EngName = "Exmo",
+			RusName = "Exmo",
+		};
+
+		/// <summary>
+		/// Information about Deribit.
+		/// </summary>
+		public static Exchange Deribit { get; } = new Exchange
+		{
+			Name = "DRBT",
+			EngName = "Deribit",
+			RusName = "Deribit",
+		};
+
+		/// <summary>
+		/// Information about Kucoin.
+		/// </summary>
+		public static Exchange Kucoin { get; } = new Exchange
+		{
+			Name = "KUCN",
+			EngName = "Kucoin",
+			RusName = "Kucoin",
+		};
+
+		/// <summary>
+		/// Information about Liqui.
+		/// </summary>
+		public static Exchange Liqui { get; } = new Exchange
+		{
+			Name = "LIQI",
+			EngName = "Liqui",
+			RusName = "Liqui",
+		};
+
+		/// <summary>
+		/// Information about Huobi.
+		/// </summary>
+		public static Exchange Huobi { get; } = new Exchange
+		{
+			Name = "HUBI",
+			EngName = "Huobi",
+			RusName = "Huobi",
+		};
 	}
 }

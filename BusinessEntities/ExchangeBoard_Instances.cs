@@ -3120,5 +3120,131 @@ namespace StockSharp.BusinessEntities
 			Code = Exchange.Coincheck.Name,
 			Exchange = Exchange.Coincheck,
 		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Binance"/>.
+		/// </summary>
+		public static ExchangeBoard Binance { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Binance.Name,
+			Exchange = Exchange.Binance,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Bitexbook"/>.
+		/// </summary>
+		public static ExchangeBoard Bitexbook { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bitexbook.Name,
+			Exchange = Exchange.Bitexbook,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Bitmex"/>.
+		/// </summary>
+		public static ExchangeBoard Bitmex { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Bitmex.Name,
+			Exchange = Exchange.Bitmex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Cex"/>.
+		/// </summary>
+		public static ExchangeBoard Cex { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Cex.Name,
+			Exchange = Exchange.Cex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Cryptopia"/>.
+		/// </summary>
+		public static ExchangeBoard Cryptopia { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Cryptopia.Name,
+			Exchange = Exchange.Cryptopia,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Okex"/>.
+		/// </summary>
+		public static ExchangeBoard Okex { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Okex.Name,
+			Exchange = Exchange.Okex,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Yobit"/>.
+		/// </summary>
+		public static ExchangeBoard Yobit { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Yobit.Name,
+			Exchange = Exchange.Yobit,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.CoinExchange"/>.
+		/// </summary>
+		public static ExchangeBoard CoinExchange { get; } = new ExchangeBoard
+		{
+			Code = Exchange.CoinExchange.Name,
+			Exchange = Exchange.CoinExchange,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.LiveCoin"/>.
+		/// </summary>
+		public static ExchangeBoard LiveCoin { get; } = new ExchangeBoard
+		{
+			Code = Exchange.LiveCoin.Name,
+			Exchange = Exchange.LiveCoin,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Exmo"/>.
+		/// </summary>
+		public static ExchangeBoard Exmo { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Exmo.Name,
+			Exchange = Exchange.Exmo,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Deribit"/>.
+		/// </summary>
+		public static ExchangeBoard Deribit { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Deribit.Name,
+			Exchange = Exchange.Deribit,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Kucoin"/>.
+		/// </summary>
+		public static ExchangeBoard Kucoin { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Kucoin.Name,
+			Exchange = Exchange.Kucoin,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Liqui"/>.
+		/// </summary>
+		public static ExchangeBoard Liqui { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Liqui.Name,
+			Exchange = Exchange.Liqui,
+		};
+
+		/// <summary>
+		/// Information about board <see cref="BusinessEntities.Exchange.Huobi"/>.
+		/// </summary>
+		public static ExchangeBoard Huobi { get; } = new ExchangeBoard
+		{
+			Code = Exchange.Huobi.Name,
+			Exchange = Exchange.Huobi,
+		};
 	}
 }
