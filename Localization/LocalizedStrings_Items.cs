@@ -47146,5 +47146,35 @@ namespace StockSharp.Localization
 		/// Is margin enabled.
 		/// </summary>
 		public static string IsMargin => GetString(IsMarginKey);
+
+		/// <summary>
+		/// SSL
+		/// </summary>
+		public const string SslKey = nameof(Ssl);
+
+		/// <summary>
+		/// SSL
+		/// </summary>
+		public static string Ssl => GetString(SslKey);
+
+		/// <summary>
+		/// SSL protocol to establish connect.
+		/// </summary>
+		public const string SslProtocolKey = nameof(SslProtocol);
+
+		/// <summary>
+		/// SSL protocol to establish connect.
+		/// </summary>
+		public static string SslProtocol => GetString(SslProtocolKey);
+
+		/// <summary>
+		/// SSL certificate
+		/// </summary>
+		public const string SslCertificateKey = nameof(SslCertificate);
+
+		/// <summary>
+		/// SSL certificate
+		/// </summary>
+		public static string SslCertificate => GetString(SslCertificateKey);
 	}
 }

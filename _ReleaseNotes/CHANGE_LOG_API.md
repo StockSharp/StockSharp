@@ -18,6 +18,8 @@ StockSharp API Change log
 * (feature) CandlesHolder.
 * (feature) Order. IsMargin property.
 * (feature) Order. Slippage property.
+* (feature) FIX connector. SSL support.
+* (feature) FIX connector. Dukascopy support.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

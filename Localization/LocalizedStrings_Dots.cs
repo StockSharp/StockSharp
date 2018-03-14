@@ -588,5 +588,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string ChargeFeeDot => AppendDot(ChargeFee);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string SslCertificateDot => AppendDot(SslCertificate);
 	}
 }

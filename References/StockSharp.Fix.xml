@@ -195,6 +195,11 @@
             Supports <see cref="T:StockSharp.Messages.OrderStatusMessage" /> for mass orders.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.LoginAsPortfolioName">
+      <summary>
+            Use <see cref="P:StockSharp.Fix.Dialects.BaseFixDialect.Login" /> as portfolio name.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.OrderCancelVolumeRequired">
       <summary>
         <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
@@ -248,6 +253,11 @@
       <param name="writer">The recorder of data in the FIX protocol format.</param>
       <param name="reader">The reader of data recorded in the FIX protocol format.</param>
       <param name="idGenerator">Sequence id generator.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnReset">
+      <summary>
+            Reset state.
+            </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseFixDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
       <summary>
@@ -578,6 +588,11 @@
             Supports <see cref="T:StockSharp.Messages.OrderStatusMessage" /> for mass orders.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.LoginAsPortfolioName">
+      <summary>
+            Use <see cref="P:StockSharp.Fix.Dialects.IFixDialect.Login" /> as portfolio name.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.OrderCancelVolumeRequired">
       <summary>
         <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
@@ -639,11 +654,13 @@
       <returns>
         <see langword="true" /> if the specified message was processed successfully, otherwise, <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.IFixDialect.Read">
+    <member name="M:StockSharp.Fix.Dialects.IFixDialect.Read(Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
       <summary>
             Read next messages from FIX protocol.
             </summary>
-      <returns>The messages.</returns>
+      <param name="messages">The messages.</param>
+      <returns>
+        <see langword="true" /> if incomming messages was processed successfully, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="T:StockSharp.Fix.FastFeedGroup">
       <summary>
@@ -4378,6 +4395,26 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.CashMargin">
+      <summary>
+            Identifies whether an order is a margin order or a non-margin order.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.CashMargin.Cash">
+      <summary>
+            Cash.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.CashMargin.MarginOpen">
+      <summary>
+            Margin open.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.CashMargin.MarginClose">
+      <summary>
+            Margin close.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.Party">
       <summary>
             Party.
@@ -4474,6 +4511,16 @@
     <member name="P:StockSharp.Fix.Native.ExecutionReport.ExtendedTradeStatus">
       <summary>
             Extended trade status.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.CashMargin">
+      <summary>
+            Identifies whether an order is a margin order or a non-margin order.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.AvgPx">
+      <summary>
+            Calculated average price of all fills on this order.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Price">
@@ -4703,6 +4750,16 @@
     <member name="F:StockSharp.Fix.Native.FixMessages.QuoteRequestReject">
       <summary>
             The response with error to <see cref="F:StockSharp.Fix.Native.FixMessages.QuoteRequest" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.QuoteStatusRequest">
+      <summary>
+            The request the following purposes in markets that employ tradeable or restricted tradeable quotes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.QuoteStatusReport">
+      <summary>
+            The response with error to <see cref="F:StockSharp.Fix.Native.FixMessages.QuoteStatusRequest" />.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixMessages.RequestForPositions">
@@ -5336,6 +5393,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.CashMargin">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.Username">
       <summary>
       </summary>
@@ -5373,6 +5434,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MassStatusReqType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.QuoteStatusReqID">
       <summary>
       </summary>
     </member>
@@ -6237,6 +6302,16 @@
             The timeout of sending data. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Ssl">
+      <summary>
+            SSL protocol to establish connect.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.SslCertificate">
+      <summary>
+            SSL certificate.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFrames">
       <inheritdoc />
     </member>
@@ -6296,6 +6371,21 @@
     <member name="F:StockSharp.Fix.FixDialects.Exante">
       <summary>
             Exante.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.DukasCopy">
+      <summary>
+            Dukascopy.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.InteractiveBrokers">
+      <summary>
+            InteractiveBrokers FIX CTCI.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.Reuters">
+      <summary>
+            Thomson Reuters.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.FixTrader">

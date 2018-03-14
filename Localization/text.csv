@@ -4731,12 +4731,12 @@ WithdrawType;Withdraw type.;Тип вывода.
 CryptoAddress;Crypto address;Адрес криптовалюты
 PaymentId;Payment id;Идентификатор платежа
 BankDetails;Bank details.;Детали банка.
-IntermediaryBank;Intermediary bank;Банк-посредник.
+IntermediaryBank;Intermediary bank;Банк-посредник
 IntermediaryBankDetails;Intermediary bank details.;Детали банка-посредника.
 BankCardNumber;Bank card number.;Номер банковской карты.
 Iban;IBAN;ИБАН
 Bic;BIC;БИК
-BankBic;Bank BIC.;БИК банка
+BankBic;Bank BIC.;БИК банка.
 WithdrawInfo;Withdraw info;Детали вывода
 BankComment;Comment of bank transaction.;Комментарий к банковской транзакции.
 AccountName;Account name;Имя счета
@@ -4752,6 +4752,9 @@ ChargeFee;Charge fee;Комиссия за перевод
 AdminPassword;Administrative password.;Пароль администратора.
 Margin;Margin;Маржинальность
 IsMargin;Is margin enabled.;Включена ли маржинальность.
+Ssl;SSL;SSL
+SslProtocol;SSL protocol to establish connect.;SSL протокол для установления соединения.
+SslCertificate;SSL certificate;SSL сертификат
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14756,6 +14759,6 @@ DocStr10341;The request the following purposes in markets that employ tradeable 
 DocStr10342;Dukascopy;Dukascopy
 DocStr10343;InteractiveBrokers FIX CTCI;InteractiveBrokers FIX CTCI
 DocStr10344;Thomson Reuters;Thomson Reuters
-DocStr10345;{0} if incomming messages was processed successfully, otherwise, {1};{0} if incomming messages was processed successfully, otherwise, {1}
-DocStr10346;Use ssl encryption to establish connect;Use ssl encryption to establish connect
-DocStr10347;SSL certificate;SSL certificate
+DocStr10345;{0} if incomming messages was processed successfully, otherwise, {1};{0} если входящие сообщения были обработаны успешно, иначе, {1}
+DocStr10346;Use {0} as portfolio name;Использовать {0} как имя портфеля
+DocStr10347;Calculated average price of all fills on this order;Рассчитанная средняя цена всех исполнений в заявке
