@@ -1,0 +1,30 @@
+<Window x:Class="SampleBinance.SecuritiesWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+	xmlns:sx="http://schemas.stocksharp.com/xaml"
+	Title="{x:Static loc:LocalizedStrings.Securities}" Height="415" Width="1081">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<sx:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
+
+		<StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+			<Button x:Name="Quotes" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
+			<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
+			</Button>
+			<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
+			</Button>
+			<Button x:Name="NewStopOrder" Width="120" IsEnabled="False" Click="NewStopOrderClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
+			</Button>
+			<Button x:Name="Candles" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
+			<ComboBox x:Name="CandlesPeriods" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
+		</StackPanel>
+	</Grid>
+</Window>
