@@ -9,6 +9,11 @@
             The message adapter for <see cref="N:StockSharp.Okcoin"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Okcoin.OkcoinMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
         <member name="P:StockSharp.Okcoin.OkcoinMessageAdapter.Key">
             <summary>
             Key.
@@ -69,6 +74,11 @@
         <member name="P:StockSharp.Okcoin.OkcoinTrader.Secret">
             <summary>
             Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okcoin.OkcoinTrader.AdminPassword">
+            <summary>
+            Administrative password.
             </summary>
         </member>
     </members>

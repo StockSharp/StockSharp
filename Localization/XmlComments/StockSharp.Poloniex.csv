@@ -1,4 +1,5 @@
 T:StockSharp.Poloniex.PoloniexMessageAdapter/summary;DocStr2538
+P:StockSharp.Poloniex.PoloniexMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Poloniex.PoloniexMessageAdapter.Key/summary;Str3304
 P:StockSharp.Poloniex.PoloniexMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Poloniex.PoloniexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

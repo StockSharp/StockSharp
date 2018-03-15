@@ -9,6 +9,11 @@
             The message adapter for <see cref="N:StockSharp.Gdax"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Gdax.GdaxMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
         <member name="P:StockSharp.Gdax.GdaxMessageAdapter.Key">
             <summary>
             Key.

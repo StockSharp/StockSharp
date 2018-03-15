@@ -1,0 +1,8 @@
+﻿<Window x:Class="SampleKraken.ChartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="http://schemas.stocksharp.com/xaml"
+        Title="ChartWindow" Height="448" Width="758">
+
+    <charting:Chart x:Name="Chart" />
+</Window>

@@ -1,4 +1,5 @@
 T:StockSharp.HitBtc.HitBtcMessageAdapter/summary;DocStr2538
+P:StockSharp.HitBtc.HitBtcMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.HitBtc.HitBtcMessageAdapter.Key/summary;Str3304
 P:StockSharp.HitBtc.HitBtcMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.HitBtc.HitBtcMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

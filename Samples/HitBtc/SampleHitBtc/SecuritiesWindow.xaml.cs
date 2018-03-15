@@ -3,13 +3,16 @@ namespace SampleHitBtc
 	using System;
 	using System.Linq;
 	using System.Windows;
+	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.HitBtc;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -22,6 +25,9 @@ namespace SampleHitBtc
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
+
+			CandlesPeriods.ItemsSource = HitBtcMessageAdapter.AllTimeFrames;
+			CandlesPeriods.SelectedIndex = 1;
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -45,6 +51,8 @@ namespace SampleHitBtc
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
 			Quotes.IsEnabled = NewOrder.IsEnabled = NewStopOrder.IsEnabled = Depth.IsEnabled = security != null;
+
+			TryEnableCandles();
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -78,6 +86,27 @@ namespace SampleHitBtc
 
 			if (newOrder.ShowModal(this))
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+		}
+
+		private void CandlesClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var security in SecurityPicker.SelectedSecurities)
+			{
+				var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, tf);
+
+				new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now).Show();
+			}
+		}
+
+		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			TryEnableCandles();
+		}
+
+		private void TryEnableCandles()
+		{
+			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)

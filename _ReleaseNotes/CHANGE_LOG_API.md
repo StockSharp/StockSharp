@@ -20,6 +20,7 @@ StockSharp API Change log
 * (feature) Order. Slippage property.
 * (feature) FIX connector. SSL support.
 * (feature) FIX connector. Dukascopy support.
+* (feature) Samples crypto. CandleChart added.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

@@ -1,4 +1,5 @@
 T:StockSharp.Okcoin.OkcoinMessageAdapter/summary;DocStr2538
+P:StockSharp.Okcoin.OkcoinMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Okcoin.OkcoinMessageAdapter.Key/summary;Str3304
 P:StockSharp.Okcoin.OkcoinMessageAdapter.Secret/summary;DocStr3146
 P:StockSharp.Okcoin.OkcoinMessageAdapter.AdminPassword/summary;AdminPassword
@@ -15,3 +16,4 @@ T:StockSharp.Okcoin.OkcoinTrader/summary;DocStr2539
 M:StockSharp.Okcoin.OkcoinTrader.#ctor/summary;DocStr1
 P:StockSharp.Okcoin.OkcoinTrader.Key/summary;Str3304
 P:StockSharp.Okcoin.OkcoinTrader.Secret/summary;DocStr3146
+P:StockSharp.Okcoin.OkcoinTrader.AdminPassword/summary;AdminPassword

@@ -9,6 +9,11 @@
             The message adapter for <see cref="N:StockSharp.Poloniex"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.Poloniex.PoloniexMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
         <member name="P:StockSharp.Poloniex.PoloniexMessageAdapter.Key">
             <summary>
             Key.

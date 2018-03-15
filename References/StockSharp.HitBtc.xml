@@ -9,6 +9,11 @@
             The message adapter for <see cref="N:StockSharp.HitBtc"/>.
             </summary>
         </member>
+        <member name="P:StockSharp.HitBtc.HitBtcMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
         <member name="P:StockSharp.HitBtc.HitBtcMessageAdapter.Key">
             <summary>
             Key.
