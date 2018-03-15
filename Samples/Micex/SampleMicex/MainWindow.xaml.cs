@@ -27,6 +27,7 @@ namespace SampleMicex
 	using StockSharp.BusinessEntities;
 	using StockSharp.Micex;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	public partial class MainWindow
 	{
@@ -60,7 +61,11 @@ namespace SampleMicex
 
 			if (File.Exists(_settingsFile))
 			{
-				Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+				var ctx = new ContinueOnExceptionContext();
+				ctx.Error += ex => ex.LogError();
+
+				using (new Scope<ContinueOnExceptionContext> (ctx))
+					Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 			}
 
 			Settings.SelectedObject = Trader.MarketDataAdapter;
