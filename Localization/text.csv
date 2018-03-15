@@ -14762,3 +14762,17 @@ DocStr10344;Thomson Reuters;Thomson Reuters
 DocStr10345;{0} if incomming messages was processed successfully, otherwise, {1};{0} если входящие сообщения были обработаны успешно, иначе, {1}
 DocStr10346;Use {0} as portfolio name;Использовать {0} как имя портфеля
 DocStr10347;Calculated average price of all fills on this order;Рассчитанная средняя цена всех исполнений в заявке
+DocStr10348;Information about Binance;Информация о Binance
+DocStr10349;Information about Bitexbook;Информация о Bitexbook
+DocStr10350;Information about BitMEX;Информация о BitMEX
+DocStr10351;Information about CEX.IO;Информация о CEX.IO
+DocStr10352;Information about Cryptopia;Информация о Cryptopia
+DocStr10353;Information about OKEx;Информация о OKEx
+DocStr10354;Information about YoBit;Информация о YoBit
+DocStr10355;Information about CoinExchange;Информация о CoinExchange
+DocStr10356;Information about Livecoin;Информация о Livecoin
+DocStr10357;Information about Exmo;Информация о Exmo
+DocStr10358;Information about Deribit;Информация о Deribit
+DocStr10359;Information about Kucoin;Информация о Kucoin
+DocStr10360;Information about Liqui;Информация о Liqui
+DocStr10361;Information about Huobi;Информация о Huobi
