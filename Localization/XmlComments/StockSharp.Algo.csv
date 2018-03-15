@@ -3762,7 +3762,7 @@ P:StockSharp.Algo.Connector.SupportAssociatedSecurity/summary;DocStr9304
 P:StockSharp.Algo.Connector.SupportLevel1DepthBuilder/summary;DocStr9304
 P:StockSharp.Algo.Connector.SupportCandleBuilder/summary;DocStr9304
 P:StockSharp.Algo.Connector.LookupMessagesOnConnect/summary;DocStr10063
-P:StockSharp.Algo.Connector.AutoPortfoliosSubscribe/summary;DocStr10063
+P:StockSharp.Algo.Connector.AutoPortfoliosSubscribe/summary;DocStr10362
 P:StockSharp.Algo.Connector.TransactionAdapter/summary;DocStr865
 P:StockSharp.Algo.Connector.MarketDataAdapter/summary;DocStr866
 P:StockSharp.Algo.Connector.StorageAdapter/summary;DocStr8545

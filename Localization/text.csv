@@ -14776,3 +14776,4 @@ DocStr10358;Information about Deribit;Информация о Deribit
 DocStr10359;Information about Kucoin;Информация о Kucoin
 DocStr10360;Information about Liqui;Информация о Liqui
 DocStr10361;Information about Huobi;Информация о Huobi
+DocStr10362;Send subscribe messages on connect. By default is {0};Отправлять подписку при подключении. Значение по умолчанию {0}

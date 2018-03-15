@@ -479,7 +479,7 @@ namespace StockSharp.Algo
 		public bool LookupMessagesOnConnect { get; set; } = true;
 
 		/// <summary>
-		/// Send lookup messages on connect. By default is <see langword="true"/>.
+		/// Send subscribe messages on connect. By default is <see langword="true"/>.
 		/// </summary>
 		public bool AutoPortfoliosSubscribe { get; set; } = true;
 
