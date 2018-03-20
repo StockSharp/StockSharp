@@ -24,6 +24,8 @@ StockSharp API Change log
 * (bug) MarketEmulator. Emulate price limit from OrderLog trade price.
 * (feature) MarketEmulator. Check security and session states.
 * (bug) Fix live market data adapter reusing in real time emulation. http://stocksharp.ru/posts/m/42374/
+* (feature) FIX connector. FixStopOrderType -> FixStopOrderTypes.
+* (feature) ConnectorWindow. Lookup connections.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.
