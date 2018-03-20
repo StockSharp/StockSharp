@@ -5875,6 +5875,7 @@ P:StockSharp.Algo.Testing.MarketEmulatorSettings.ConvertTime/summary;DocStr1899
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.TimeZone/summary;Str68
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.PriceLimitOffset/summary;DocStr1900
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.IncreaseDepthVolume/summary;DocStr1901
+P:StockSharp.Algo.Testing.MarketEmulatorSettings.CheckTradingState/summary;CheckTradingState
 M:StockSharp.Algo.Testing.MarketEmulatorSettings.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr1884
 M:StockSharp.Algo.Testing.MarketEmulatorSettings.Save(Ecng.Serialization.SettingsStorage)/param/storage;Str1405
 M:StockSharp.Algo.Testing.MarketEmulatorSettings.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr1885
@@ -5899,6 +5900,8 @@ M:StockSharp.Algo.Testing.OrderLogGenerator.Clone/summary;DocStr643
 M:StockSharp.Algo.Testing.OrderLogGenerator.Clone/returns;DocStr1116
 T:StockSharp.Algo.Testing.IMarketEmulator/summary;DocStr2233
 P:StockSharp.Algo.Testing.IMarketEmulator.Settings/summary;DocStr2234
+T:StockSharp.Algo.Testing.IRealTimeEmulationMarketDataAdapter/summary;DocStr10363
+P:StockSharp.Algo.Testing.IRealTimeEmulationMarketDataAdapter.OwnAdapter/summary;DocStr2245
 T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1/summary;DocStr2241
 T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1/typeparam/TUnderlyingMarketDataAdapter;DocStr2242
 M:StockSharp.Algo.Testing.RealTimeEmulationTrader`1.#ctor(`0)/summary;DocStr1
