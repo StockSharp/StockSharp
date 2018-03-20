@@ -47176,5 +47176,45 @@ namespace StockSharp.Localization
 		/// SSL certificate
 		/// </summary>
 		public static string SslCertificate => GetString(SslCertificateKey);
+
+		/// <summary>
+		/// Security '{0}' is not available for trading.
+		/// </summary>
+		public const string SecurityStoppedKey = nameof(SecurityStopped);
+
+		/// <summary>
+		/// Security '{0}' is not available for trading.
+		/// </summary>
+		public static string SecurityStopped => GetString(SecurityStoppedKey);
+
+		/// <summary>
+		/// Board '{0}' has state '{1}' and not available for trading.
+		/// </summary>
+		public const string SessionStoppedKey = nameof(SessionStopped);
+
+		/// <summary>
+		/// Board '{0}' has state '{1}' and not available for trading.
+		/// </summary>
+		public static string SessionStopped => GetString(SessionStoppedKey);
+
+		/// <summary>
+		/// Session state
+		/// </summary>
+		public const string SessionStateKey = nameof(SessionState);
+
+		/// <summary>
+		/// Session state
+		/// </summary>
+		public static string SessionState => GetString(SessionStateKey);
+
+		/// <summary>
+		/// Check trading state.
+		/// </summary>
+		public const string CheckTradingStateKey = nameof(CheckTradingState);
+
+		/// <summary>
+		/// Check trading state.
+		/// </summary>
+		public static string CheckTradingState => GetString(CheckTradingStateKey);
 	}
 }

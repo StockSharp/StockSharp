@@ -1638,6 +1638,7 @@ namespace StockSharp.Algo.Testing
 		private DateTimeOffset _bufferPrevFlush;
 		private DateTimeOffset _portfoliosPrevRecalc;
 		private readonly ICommissionManager _commissionManager = new CommissionManager();
+		private readonly Dictionary<string, SessionStates> _sessionStates = new Dictionary<string, SessionStates>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarketEmulator"/>.
@@ -1704,7 +1705,40 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.OrderCancel:
 				{
 					var orderMsg = (OrderMessage)message;
-					retVal.AddRange(GetEmulator(orderMsg.SecurityId).Process(message));
+					var secId = orderMsg.SecurityId;
+
+					var canRegister = true;
+
+					if (Settings.CheckTradingState)
+					{
+						var state = _sessionStates.TryGetValue2(nameof(MarketEmulator)) ?? _sessionStates.TryGetValue2(secId.BoardCode);
+
+						switch (state)
+						{
+							case SessionStates.Paused:
+							case SessionStates.ForceStopped:
+							case SessionStates.Ended:
+							{
+								retVal.Add(new ExecutionMessage
+								{
+									ExecutionType = ExecutionTypes.Transaction,
+									HasOrderInfo = true,
+									ServerTime = orderMsg.LocalTime,
+									LocalTime = orderMsg.LocalTime,
+									OriginalTransactionId = orderMsg.TransactionId,
+									OrderState = OrderStates.Failed,
+									Error = new InvalidOperationException(LocalizedStrings.SessionStopped.Put(secId.BoardCode, state.Value)),
+								});
+
+								canRegister = false;
+								break;
+							}
+						}
+					}
+
+					if (canRegister)
+						retVal.AddRange(GetEmulator(secId).Process(message));
+
 					break;
 				}
 
@@ -1718,6 +1752,7 @@ namespace StockSharp.Algo.Testing
 
 					_portfolios.Clear();
 					_boardDefinitions.Clear();
+					_sessionStates.Clear();
 
 					_secStates.Clear();
 
@@ -1845,6 +1880,21 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
+				case MessageTypes.Session:
+					if (Settings.CheckTradingState)
+					{
+						var sessionMsg = (SessionMessage)message;
+
+						var board = sessionMsg.BoardCode;
+
+						if (board.IsEmpty())
+							board = nameof(MarketEmulator);
+
+						_sessionStates[board] = sessionMsg.State;
+					}
+
+					break;
+
 				default:
 					retVal.Add(message);
 					break;
@@ -1924,6 +1974,12 @@ namespace StockSharp.Algo.Testing
 						state[change.Key] = change.Value;
 						break;
 
+					case Level1Fields.State:
+						if (Settings.CheckTradingState)
+							state[change.Key] = change.Value;
+
+						break;
+
 					case Level1Fields.MarginBuy:
 					case Level1Fields.MarginSell:
 					{
@@ -1965,6 +2021,11 @@ namespace StockSharp.Algo.Testing
 			}
 
 			var state = _secStates.TryGetValue(execMsg.SecurityId);
+
+			var secState = (SecurityStates?)state.TryGetValue(Level1Fields.State);
+
+			if (secState == SecurityStates.Stoped)
+				return LocalizedStrings.SecurityStopped.Put(execMsg.SecurityId);
 
 			var priceStep = securityDefinition?.PriceStep;
 			var volumeStep = securityDefinition?.VolumeStep;

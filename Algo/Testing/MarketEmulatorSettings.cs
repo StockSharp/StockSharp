@@ -450,6 +450,27 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
+		private bool _checkTradingState;
+
+		/// <summary>
+		/// Check trading state.
+		/// </summary>
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SessionStateKey,
+			Description = LocalizedStrings.CheckTradingStateKey,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 216)]
+		public bool CheckTradingState
+		{
+			get => _checkTradingState;
+			set
+			{
+				_checkTradingState = value;
+				NotifyChanged(nameof(CheckTradingState));
+			}
+		}
+
 		/// <summary>
 		/// To save the state of paper trading parameters.
 		/// </summary>
@@ -473,6 +494,7 @@ namespace StockSharp.Algo.Testing
 			storage.SetValue(nameof(ConvertTime), ConvertTime);
 			storage.SetValue(nameof(PriceLimitOffset), PriceLimitOffset);
 			storage.SetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
+			storage.SetValue(nameof(CheckTradingState), CheckTradingState);
 
 			if (TimeZone != null)
 				storage.SetValue(nameof(TimeZone), TimeZone);
@@ -501,6 +523,7 @@ namespace StockSharp.Algo.Testing
 			ConvertTime = storage.GetValue(nameof(ConvertTime), ConvertTime);
 			PriceLimitOffset = storage.GetValue(nameof(PriceLimitOffset), PriceLimitOffset);
 			IncreaseDepthVolume = storage.GetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
+			CheckTradingState = storage.GetValue(nameof(CheckTradingState), CheckTradingState);
 
 			if (storage.Contains(nameof(TimeZone)))
 				TimeZone = storage.GetValue<TimeZoneInfo>(nameof(TimeZone));

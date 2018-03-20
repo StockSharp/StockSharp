@@ -22,6 +22,7 @@ StockSharp API Change log
 * (feature) FIX connector. Dukascopy support.
 * (feature) Samples crypto. CandleChart added.
 * (bug) MarketEmulator. Emulate price limit from OrderLog trade price.
+* (feature) MarketEmulator. Check security and session states.
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.
