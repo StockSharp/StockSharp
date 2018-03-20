@@ -23,6 +23,7 @@ StockSharp API Change log
 * (feature) Samples crypto. CandleChart added.
 * (bug) MarketEmulator. Emulate price limit from OrderLog trade price.
 * (feature) MarketEmulator. Check security and session states.
+* (bug) Fix live market data adapter reusing in real time emulation. http://stocksharp.ru/posts/m/42374/
 
 ## v4.4.5.3:
 * (feature) OrderLossMoreRule.

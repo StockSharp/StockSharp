@@ -27,6 +27,7 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Testing;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -629,7 +630,7 @@ namespace StockSharp.Algo
 
 		private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
 		{
-			return adapter is IMessageAdapterWrapper wrapper ? GetUnderlyingAdapter(wrapper.InnerAdapter) : adapter;
+			return adapter is IMessageAdapterWrapper wrapper ? (wrapper is IRealTimeEmulationMarketDataAdapter emuWrapper ? emuWrapper : GetUnderlyingAdapter(wrapper.InnerAdapter)) : adapter;
 		}
 
 		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)

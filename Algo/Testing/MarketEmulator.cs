@@ -1893,6 +1893,8 @@ namespace StockSharp.Algo.Testing
 						_sessionStates[board] = sessionMsg.State;
 					}
 
+					retVal.Add(message);
+
 					break;
 
 				default:

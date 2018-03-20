@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Testing
 {
 	using System;
+	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -23,7 +24,20 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
+
 	using EntityFactory = StockSharp.Algo.EntityFactory;
+
+	/// <summary>
+	/// The interface of the real time market data adapter.
+	/// </summary>
+	public interface IRealTimeEmulationMarketDataAdapter : IMessageAdapterWrapper
+	{
+		/// <summary>
+		/// Track the connection <see cref="IMessageAdapterWrapper.InnerAdapter" /> lifetime.
+		/// </summary>
+		bool OwnAdapter { get; }
+	}
 
 	/// <summary>
 	/// The simulation connection, intended for strategy testing with real connection to trading system through <see cref="RealTimeEmulationTrader{T}.UnderlyngMarketDataAdapter"/>, but without real registering orders on stock. Execution of orders and their trades are emulated by connection, using information by order books, coming from real connection.
@@ -35,23 +49,145 @@ namespace StockSharp.Algo.Testing
 		private sealed class EmulationEntityFactory : EntityFactory
 		{
 			private readonly Portfolio _portfolio;
-			//private readonly Connector _connector;
 
-			public EmulationEntityFactory(Portfolio portfolio/*, Connector connector*/)
+			public EmulationEntityFactory(Portfolio portfolio)
 			{
 				_portfolio = portfolio;
-				//_connector = connector;
 			}
 
 			public override Portfolio CreatePortfolio(string name)
 			{
 				return _portfolio.Name.CompareIgnoreCase(name) ? _portfolio : base.CreatePortfolio(name);
 			}
+		}
 
-			//public override Security CreateSecurity(string id)
-			//{
-			//	return _connector.LookupById(id);
-			//}
+		private class RealTimeEmulationMarketDataAdapter : MessageAdapterWrapper, IRealTimeEmulationMarketDataAdapter
+		{
+			private readonly RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> _connector;
+
+			public RealTimeEmulationMarketDataAdapter(RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> connector, IMessageAdapter innerAdapter)
+				: base(innerAdapter)
+			{
+				_connector = connector;
+			}
+
+			public override bool SecurityLookupRequired => _connector._ownAdapter && base.SecurityLookupRequired;
+			public override bool PortfolioLookupRequired => false;
+			public override bool OrderStatusRequired => false;
+			public override bool IsSupportSubscriptionByPortfolio => false;
+			public override OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired => null;
+			public override MessageTypes[] SupportedMessages => InnerAdapter.SupportedMessages.Except(new[] { MessageTypes.OrderStatus, MessageTypes.OrderRegister, MessageTypes.OrderCancel, MessageTypes.OrderGroupCancel, MessageTypes.OrderReplace, MessageTypes.OrderPairReplace, MessageTypes.Portfolio, MessageTypes.PortfolioLookup }).ToArray();
+
+			private ILogSource _parent;
+
+			public override ILogSource Parent
+			{
+				get => _connector._ownAdapter ? base.Parent : _parent;
+				set
+				{
+					if (_connector._ownAdapter)
+						base.Parent = value;
+					else
+						_parent = value;
+				}
+			}
+
+			public override void SendInMessage(Message message)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.Reset:
+					{
+						if (!_connector._ownAdapter)
+						{
+							RaiseNewOutMessage(new ResetMessage());
+							return;
+						}
+
+						break;
+					}
+
+					case MessageTypes.Connect:
+					{
+						if (!_connector._ownAdapter)
+						{
+							RaiseNewOutMessage(new ConnectMessage());
+							return;
+						}
+
+						break;
+					}
+
+					case MessageTypes.Disconnect:
+					{
+						if (!_connector._ownAdapter)
+						{
+							RaiseNewOutMessage(new DisconnectMessage());
+							return;
+						}
+
+						break;
+					}
+
+					case MessageTypes.ChangePassword:
+					{
+						if (!_connector._ownAdapter)
+							return;
+
+						break;
+					}
+				}
+
+				InnerAdapter.SendInMessage(message);
+			}
+
+			protected override void OnInnerAdapterNewOutMessage(Message message)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.Reset:
+					case MessageTypes.Connect:
+					case MessageTypes.Disconnect:
+					case MessageTypes.ChangePassword:
+					{
+						if (_connector._ownAdapter)
+							break;
+
+						return;
+					}
+
+					case MessageTypes.OrderStatus:
+					case MessageTypes.Portfolio:
+					case MessageTypes.PortfolioChange:
+					case MessageTypes.PortfolioLookupResult:
+					case MessageTypes.PositionChange:
+						return;
+
+					case MessageTypes.Execution:
+					{
+						var execMsg = (ExecutionMessage)message;
+
+						switch (execMsg.ExecutionType)
+						{
+							case ExecutionTypes.Transaction:
+								return;
+						}
+
+						break;
+					}
+				}
+
+				//var clone = message.Clone();
+				//clone.Adapter = this;
+				base.OnInnerAdapterNewOutMessage(message);
+			}
+
+			public override IMessageChannel Clone()
+			{
+				return new RealTimeEmulationMarketDataAdapter(_connector, InnerAdapter);
+			}
+
+			bool IRealTimeEmulationMarketDataAdapter.OwnAdapter => _connector._ownAdapter;
 		}
 
 		private readonly Portfolio _portfolio;
@@ -85,7 +221,6 @@ namespace StockSharp.Algo.Testing
 				throw new ArgumentNullException(nameof(portfolio));
 
 			UnderlyngMarketDataAdapter = underlyngMarketDataAdapter;
-			UnderlyngMarketDataAdapter.RemoveTransactionalSupport();
 
 			UpdateSecurityByLevel1 = false;
 			UpdateSecurityLastQuotes = false;
@@ -97,12 +232,11 @@ namespace StockSharp.Algo.Testing
 
 			//MarketEmulator.Settings.UseMarketDepth = true;
 
-			Adapter.InnerAdapters.Add(underlyngMarketDataAdapter);
-
-			if (_ownAdapter)
-				UnderlyngMarketDataAdapter.Log += RaiseLog;
-
+			Adapter.InnerAdapters.Add(new RealTimeEmulationMarketDataAdapter(this, underlyngMarketDataAdapter));
 			Adapter.InnerAdapters.Add(EmulationAdapter);
+		
+			//if (_ownAdapter)
+			//	UnderlyngMarketDataAdapter.Log += RaiseLog;
 		}
 
 		/// <summary>
@@ -116,29 +250,50 @@ namespace StockSharp.Algo.Testing
 		/// <param name="message">The message, containing market data.</param>
 		protected override void OnProcessMessage(Message message)
 		{
-			if (message.Type == MessageTypes.Connect && message.Adapter == TransactionAdapter)
+			if (message.Adapter == TransactionAdapter)
 			{
-				// передаем первоначальное значение размера портфеля в эмулятор
-				TransactionAdapter.SendInMessage(_portfolio.ToMessage());
-				TransactionAdapter.SendInMessage(new PortfolioChangeMessage
+				if (message.Type == MessageTypes.Connect)
 				{
-					PortfolioName = _portfolio.Name
-				}.TryAdd(PositionChangeTypes.BeginValue, _portfolio.BeginValue, true));
+					// passing into initial values
+					TransactionAdapter.SendInMessage(_portfolio.ToMessage());
+					TransactionAdapter.SendInMessage(new PortfolioChangeMessage
+					{
+						PortfolioName = _portfolio.Name
+					}.TryAdd(PositionChangeTypes.BeginValue, _portfolio.BeginValue, true));
+				}
 			}
-			else if (message.Adapter == MarketDataAdapter || message.Adapter?.Parent == MarketDataAdapter)
+			else
 			{
-				switch (message.Type)
-				{
-					case MessageTypes.Connect:
-					case MessageTypes.Disconnect:
-					case MessageTypes.MarketData:
-					case MessageTypes.SecurityLookupResult:
-					case MessageTypes.Session:
-						break;
+				var mdAdapter = (IMessageAdapter)UnderlyngMarketDataAdapter;
 
-					default:
-						TransactionAdapter.SendInMessage(message);
-						break;
+				if (message.Adapter == mdAdapter || message.Adapter?.Parent == mdAdapter)
+				{
+					switch (message.Type)
+					{
+						case MessageTypes.Connect:
+						case MessageTypes.Disconnect:
+						case MessageTypes.MarketData:
+						case MessageTypes.SecurityLookupResult:
+						//case MessageTypes.Session:
+						case MessageTypes.ChangePassword:
+							break;
+
+						case MessageTypes.Security:
+						case MessageTypes.CandleTimeFrame:
+						case MessageTypes.CandlePnF:
+						case MessageTypes.CandleRange:
+						case MessageTypes.CandleRenko:
+						case MessageTypes.CandleTick:
+						case MessageTypes.CandleVolume:
+							TransactionAdapter.SendInMessage(message);
+							break;
+
+						default:
+							TransactionAdapter.SendInMessage(message);
+
+							// ignore emu connector "raw" (without emu orders) market data
+							return;
+					}
 				}
 			}
 
@@ -154,8 +309,6 @@ namespace StockSharp.Algo.Testing
 			if (_ownAdapter)
 				UnderlyngMarketDataAdapter.Load(storage.GetValue<SettingsStorage>(nameof(UnderlyngMarketDataAdapter)));
 
-			//LagTimeout = storage.GetValue<TimeSpan>(nameof(LagTimeout));
-
 			base.Load(storage);
 		}
 
@@ -168,8 +321,6 @@ namespace StockSharp.Algo.Testing
 			if (_ownAdapter)
 				storage.SetValue(nameof(UnderlyngMarketDataAdapter), UnderlyngMarketDataAdapter.Save());
 
-			//storage.SetValue(nameof(LagTimeout), LagTimeout);
-
 			base.Save(storage);
 		}
 
@@ -178,11 +329,9 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			//UnderlyingTrader.NewMessage -= NewMessageHandler;
-
 			if (_ownAdapter)
 			{
-				UnderlyngMarketDataAdapter.Log -= RaiseLog;
+				//UnderlyngMarketDataAdapter.Log -= RaiseLog;
 				UnderlyngMarketDataAdapter.Dispose();
 			}
 
