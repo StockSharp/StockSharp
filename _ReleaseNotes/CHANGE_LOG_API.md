@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
 * (bug) Connector. Lookup messages sending fix.
 * (bug) Child strategies. Fix set Connector for child strategies.
