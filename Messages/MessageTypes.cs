@@ -70,6 +70,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Order error (registration or cancel).
 		/// </summary>
+		[Obsolete]
 		OrderError,
 
 		/// <summary>
