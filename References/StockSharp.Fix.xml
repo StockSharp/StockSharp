@@ -6398,27 +6398,27 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixTrader" />.
             </summary>
     </member>
-    <member name="T:StockSharp.Fix.FixStopOrderType">
+    <member name="T:StockSharp.Fix.FixStopOrderTypes">
       <summary>
             The stop orders types that are specific for <see cref="N:StockSharp.Fix" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.FixStopOrderType.StopLoss">
+    <member name="F:StockSharp.Fix.FixStopOrderTypes.StopLoss">
       <summary>
             Stop-loss.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.FixStopOrderType.StopLossTrailing">
+    <member name="F:StockSharp.Fix.FixStopOrderTypes.StopLossTrailing">
       <summary>
             Trailing stop-loss.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.FixStopOrderType.TakeProfit">
+    <member name="F:StockSharp.Fix.FixStopOrderTypes.TakeProfit">
       <summary>
             Take.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.FixStopOrderType.TakeProfitTrailing">
+    <member name="F:StockSharp.Fix.FixStopOrderTypes.TakeProfitTrailing">
       <summary>
             Trailing take-profit.
             </summary>

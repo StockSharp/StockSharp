@@ -1643,11 +1643,11 @@ F:StockSharp.Fix.FixDialects.InteractiveBrokers/summary;DocStr10343
 F:StockSharp.Fix.FixDialects.Reuters/summary;DocStr10344
 T:StockSharp.Fix.FixTrader/summary;DocStr3349
 M:StockSharp.Fix.FixTrader.#ctor/summary;DocStr1
-T:StockSharp.Fix.FixStopOrderType/summary;DocStr3350
-F:StockSharp.Fix.FixStopOrderType.StopLoss/summary;StopLoss
-F:StockSharp.Fix.FixStopOrderType.StopLossTrailing/summary;Str3446
-F:StockSharp.Fix.FixStopOrderType.TakeProfit/summary;DocStr3351
-F:StockSharp.Fix.FixStopOrderType.TakeProfitTrailing/summary;TrailingTakeProfit
+T:StockSharp.Fix.FixStopOrderTypes/summary;DocStr3350
+F:StockSharp.Fix.FixStopOrderTypes.StopLoss/summary;StopLoss
+F:StockSharp.Fix.FixStopOrderTypes.StopLossTrailing/summary;Str3446
+F:StockSharp.Fix.FixStopOrderTypes.TakeProfit/summary;DocStr3351
+F:StockSharp.Fix.FixStopOrderTypes.TakeProfitTrailing/summary;TrailingTakeProfit
 T:StockSharp.Fix.FixOrderCondition/summary;DocStr60
 M:StockSharp.Fix.FixOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Fix.FixOrderCondition.Type/summary;Str1737
