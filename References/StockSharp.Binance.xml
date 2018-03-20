@@ -51,6 +51,21 @@
         <member name="M:StockSharp.Binance.BinanceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
+        <member name="T:StockSharp.Binance.BinanceOrderConditionTypes">
+            <summary>
+            Stop order types.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Binance.BinanceOrderConditionTypes.StopLoss">
+            <summary>
+            Stop-loss.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Binance.BinanceOrderConditionTypes.TakeProfit">
+            <summary>
+            Take-profit.
+            </summary>
+        </member>
         <member name="T:StockSharp.Binance.BinanceOrderCondition">
             <summary>
             <see cref="N:StockSharp.Binance"/> order condition.
@@ -59,6 +74,16 @@
         <member name="M:StockSharp.Binance.BinanceOrderCondition.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Binance.BinanceOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Binance.BinanceOrderCondition.Type">
+            <summary>
+            Type.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Binance.BinanceOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
             </summary>
         </member>
         <member name="P:StockSharp.Binance.BinanceOrderCondition.IsWithdraw">

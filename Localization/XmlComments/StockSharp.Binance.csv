@@ -11,8 +11,13 @@ M:StockSharp.Binance.BinanceMessageAdapter.ToString/returns;DocStr50
 M:StockSharp.Binance.BinanceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Binance.BinanceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Binance.BinanceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.Binance.BinanceOrderConditionTypes/summary;DocStr10253
+F:StockSharp.Binance.BinanceOrderConditionTypes.StopLoss/summary;StopLoss
+F:StockSharp.Binance.BinanceOrderConditionTypes.TakeProfit/summary;TakeProfit
 T:StockSharp.Binance.BinanceOrderCondition/summary;DocStr60
 M:StockSharp.Binance.BinanceOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Binance.BinanceOrderCondition.Type/summary;Str1963
+P:StockSharp.Binance.BinanceOrderCondition.StopPrice/summary;Str3460
 P:StockSharp.Binance.BinanceOrderCondition.IsWithdraw/summary;Withdraw
 P:StockSharp.Binance.BinanceOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Binance.BinanceTrader/summary;DocStr2539
