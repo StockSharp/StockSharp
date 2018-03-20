@@ -485,7 +485,10 @@ namespace StockSharp.Algo.Testing
 						break;
 
 					case ExecutionTypes.OrderLog:
-						price = execution.OrderPrice;
+						if (execution.TradePrice == null)
+							return;
+
+						price = execution.TradePrice.Value;
 						break;
 
 					default:
