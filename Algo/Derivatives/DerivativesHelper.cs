@@ -729,7 +729,7 @@ namespace StockSharp.Algo.Derivatives
 			if (deviation < 0)
 				throw new ArgumentOutOfRangeException(nameof(deviation), deviation, LocalizedStrings.Str711);
 
-			return (((double)assetPrice / (double)strike).Log() +
+			return ((double)(assetPrice / strike).Log() +
 				(double)(riskFree - dividend + deviation * deviation / 2.0m) * timeToExp) / ((double)deviation * timeToExp.Sqrt());
 		}
 

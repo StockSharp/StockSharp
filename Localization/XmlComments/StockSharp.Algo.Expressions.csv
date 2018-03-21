@@ -45,16 +45,3 @@ M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToSerializedString/summary
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToSerializedString/returns;DocStr9586
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.FromSerializedString(System.String)/summary;DocStr9587
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.FromSerializedString(System.String)/param/text;DocStr9588
-T:StockSharp.Algo.Expressions.Xaml.IndexEditor/summary;DocStr8204
-M:StockSharp.Algo.Expressions.Xaml.IndexEditor.#ctor/summary;DocStr1
-P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Securities/summary;DocStr2513
-P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Formula/summary;DocStr1110
-P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Text/summary;Str217
-P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HasError/summary;DocStr8205
-P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HighligthFunctions/summary;DocStr8206
-P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HighligthFunctions/remarks;DocStr8207
-P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HighligthForeColor/summary;DocStr8208
-P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HighligthBackColor/summary;DocStr8209
-E:StockSharp.Algo.Expressions.Xaml.IndexEditor.SecurityClicked/summary;DocStr8210
-E:StockSharp.Algo.Expressions.Xaml.IndexEditor.TextChanged/summary;DocStr1489
-M:StockSharp.Algo.Expressions.Xaml.IndexEditor.InitializeComponent/summary;DocStr8
