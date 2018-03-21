@@ -122,8 +122,23 @@
 						{
 							var orderMsg = (OrderCancelMessage)message.Clone();
 
-							if (_sentOrders.Remove(orderMsg.OrderTransactionId))
-								_pendingMessages.Remove(orderMsg);
+							var originOrderMsg = _sentOrders.TryGetAndRemove(orderMsg.OrderTransactionId);
+
+							if (originOrderMsg == null)
+								_pendingMessages.Add(orderMsg);
+							else
+							{
+								_pendingMessages.Remove(originOrderMsg);
+
+								RaiseNewOutMessage(new ExecutionMessage
+								{
+									ExecutionType = ExecutionTypes.Transaction,
+									HasOrderInfo = true,
+									OriginalTransactionId = orderMsg.TransactionId,
+									OrderState = OrderStates.Done,
+									OrderType = originOrderMsg.OrderType,
+								});
+							}
 
 							return;
 						}
