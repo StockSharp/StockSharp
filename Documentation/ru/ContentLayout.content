@@ -146,7 +146,7 @@
         <Topic id="9978237f-cadb-4388-b334-7c293c080561" visible="True" title="Новости" />
       </Topic>
     </Topic>
-    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Коннекторы Bitcoins">
+    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Коннекторы Криптовалюты">
       <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isExpanded="true" title="BTC-E">
         <Topic id="1f8dac56-b25a-4522-9965-4461a313f93b" visible="True" title="Пример работы с BtceTrader" />
       </Topic>
@@ -163,6 +163,20 @@
       <Topic id="cabadfac-eff9-48ab-ada6-c5856778cf68" visible="True" title="Kraken" />
       <Topic id="f9ec5eb4-4237-4a2a-9663-757d3d4c0689" visible="True" title="OKCoin" />
       <Topic id="18667328-deec-46dd-8c27-fce52733e5ce" visible="True" title="Poloniex" />
+      <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" title="Binance" />
+      <Topic id="4f6d317f-8788-48cb-b8d7-5e621481181c" visible="True" title="Bitexbook" />
+      <Topic id="81f33924-b166-42c1-8ced-f7e9468f86b5" visible="True" title="BitMEX" />
+      <Topic id="418c4e3a-6129-4147-a3b6-a27701c15814" visible="True" title="CEX.IO" />
+      <Topic id="956025d9-6a39-4bf5-a143-903c7540ff58" visible="True" title="CoinExchange" />
+      <Topic id="d4fa79a6-59fd-43a9-ac61-b9b8933618c6" visible="True" title="Cryptopia" />
+      <Topic id="0b4fde09-8808-4ef8-89df-39aebcdd64a1" visible="True" title="Deribit" />
+      <Topic id="601781f1-fae7-4c82-adb4-a5e7d9394cfb" visible="True" title="EXMO" />
+      <Topic id="16eaa615-aaf7-42a5-9de7-01762a650758" visible="True" title="Huobi" />
+      <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" title="Kucoin" />
+      <Topic id="70ecf683-4336-4848-a05d-8edbcc730af4" visible="True" title="Liqui" />
+      <Topic id="8e093fe9-7b2d-47f3-a95a-ece0e0033ecc" visible="True" title="Livecoin" />
+      <Topic id="554b35f0-4110-4da0-ba30-4c450e8a996b" visible="True" title="OKEx" />
+      <Topic id="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" visible="True" title="Yobit" />
     </Topic>
     <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="Коннекторы FIX/FAST">
       <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" isExpanded="true" title="FIX">
@@ -566,7 +580,7 @@
       <Topic id="a966079a-3a89-49ef-918c-d69ea3d2b240" visible="True" title="Расширенная информация по инструменту" />
       <Topic id="085174e5-3be9-4dc3-bdeb-dcc3706b483d" visible="True" title="Скачивание данных" />
       <Topic id="4456e138-a1be-4bc2-8aab-a1f0f226759d" visible="True" title="Просмотр загруженных данных" />
-      <Topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" visible="True" isSelected="true" title="Сопоставление инструменты-подключения" />
+      <Topic id="aa54fb3f-ed47-4291-9cc6-34840bab4fff" visible="True" title="Сопоставление инструменты-подключения" />
     </Topic>
     <Topic id="ba0049f6-bb5a-4193-bb53-d74ceb187fdf" visible="True" isExpanded="true" title="Live торговля">
       <Topic id="cad29e79-36c5-4bc2-9e4d-8a1cfc6a8a31" visible="True" title="Настройки подключения" />
