@@ -6,6 +6,7 @@ StockSharp API Change log
 * (feature) IndexSecurityWindow.
 * (feature) Quik DDE turned off.
 * (bug) OfflineMessageAdapter. Cancel pending orders fix.
+* (feature) OrderGrid. Allow cancel pending orders.
 
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
