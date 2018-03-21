@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Yobit</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Yobit.YobitMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Yobit"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Yobit.YobitMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Yobit.YobitMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Yobit.YobitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Yobit.YobitMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Yobit.YobitMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Yobit.YobitMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Yobit.YobitMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Yobit.YobitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Yobit.YobitOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Yobit"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Yobit.YobitOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Yobit.YobitOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Yobit.YobitOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Yobit.YobitOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Yobit.YobitTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Yobit"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Yobit.YobitTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Yobit.YobitTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Yobit.YobitTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Yobit.YobitTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>

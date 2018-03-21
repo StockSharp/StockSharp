@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Bitmex</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Bitmex.BitmexMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Bitmex"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bitmex.BitmexMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Bitmex.BitmexOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Bitmex"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bitmex.BitmexOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bitmex.BitmexOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Bitmex.BitmexTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bitmex"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bitmex.BitmexTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bitmex.BitmexTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>

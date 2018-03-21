@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
+
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
 * (bug) Connector. Lookup messages sending fix.

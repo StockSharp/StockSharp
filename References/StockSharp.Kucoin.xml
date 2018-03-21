@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Kucoin</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Kucoin.KucoinMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Kucoin"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Kucoin.KucoinMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Kucoin.KucoinMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Kucoin.KucoinOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Kucoin"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Kucoin.KucoinOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Kucoin.KucoinOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Kucoin.KucoinTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Kucoin"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Kucoin.KucoinTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Kucoin.KucoinTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Kucoin.KucoinTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>

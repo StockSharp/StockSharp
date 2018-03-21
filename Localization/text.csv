@@ -4759,6 +4759,20 @@ SecurityStopped;Security '{0}' is not available for trading.;Инструмен�
 SessionStopped;Board '{0}' has state '{1}' and not available for trading.;Площадка '{0}' в состоянии '{1}' и не доступна для торгов.
 SessionState;Session state;Состояние торговой сессии
 CheckTradingState;Check trading state.;Проверять торговое состояние.
+Yobit;Yobit;Yobit
+Okex;OKEx;OKEx
+LiveCoin;Livecoin;Livecoin
+Liqui;Liqui;Liqui
+Kucoin;Kucoin;Kucoin
+Huobi;Huobi;Huobi
+Exmo;EXMO;EXMO
+Deribit;Deribit;Deribit
+Cryptopia;Cryptopia;Cryptopia
+CoinExchange;CoinExchange;CoinExchange
+Cex;CEX.IO;CEX.IO
+Bitmex;BitMEX;BitMEX
+Bitexbook;Bitexbook;Bitexbook
+Binance;Binance;Binance
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

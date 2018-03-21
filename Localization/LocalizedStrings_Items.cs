@@ -47216,5 +47216,145 @@ namespace StockSharp.Localization
 		/// Check trading state.
 		/// </summary>
 		public static string CheckTradingState => GetString(CheckTradingStateKey);
+
+		/// <summary>
+		/// Yobit
+		/// </summary>
+		public const string YobitKey = nameof(Yobit);
+
+		/// <summary>
+		/// Yobit
+		/// </summary>
+		public static string Yobit => GetString(YobitKey);
+
+		/// <summary>
+		/// OKEx
+		/// </summary>
+		public const string OkexKey = nameof(Okex);
+
+		/// <summary>
+		/// OKEx
+		/// </summary>
+		public static string Okex => GetString(OkexKey);
+
+		/// <summary>
+		/// Livecoin
+		/// </summary>
+		public const string LiveCoinKey = nameof(LiveCoin);
+
+		/// <summary>
+		/// Livecoin
+		/// </summary>
+		public static string LiveCoin => GetString(LiveCoinKey);
+
+		/// <summary>
+		/// Liqui
+		/// </summary>
+		public const string LiquiKey = nameof(Liqui);
+
+		/// <summary>
+		/// Liqui
+		/// </summary>
+		public static string Liqui => GetString(LiquiKey);
+
+		/// <summary>
+		/// Kucoin
+		/// </summary>
+		public const string KucoinKey = nameof(Kucoin);
+
+		/// <summary>
+		/// Kucoin
+		/// </summary>
+		public static string Kucoin => GetString(KucoinKey);
+
+		/// <summary>
+		/// Huobi
+		/// </summary>
+		public const string HuobiKey = nameof(Huobi);
+
+		/// <summary>
+		/// Huobi
+		/// </summary>
+		public static string Huobi => GetString(HuobiKey);
+
+		/// <summary>
+		/// EXMO
+		/// </summary>
+		public const string ExmoKey = nameof(Exmo);
+
+		/// <summary>
+		/// EXMO
+		/// </summary>
+		public static string Exmo => GetString(ExmoKey);
+
+		/// <summary>
+		/// Deribit
+		/// </summary>
+		public const string DeribitKey = nameof(Deribit);
+
+		/// <summary>
+		/// Deribit
+		/// </summary>
+		public static string Deribit => GetString(DeribitKey);
+
+		/// <summary>
+		/// Cryptopia
+		/// </summary>
+		public const string CryptopiaKey = nameof(Cryptopia);
+
+		/// <summary>
+		/// Cryptopia
+		/// </summary>
+		public static string Cryptopia => GetString(CryptopiaKey);
+
+		/// <summary>
+		/// CoinExchange
+		/// </summary>
+		public const string CoinExchangeKey = nameof(CoinExchange);
+
+		/// <summary>
+		/// CoinExchange
+		/// </summary>
+		public static string CoinExchange => GetString(CoinExchangeKey);
+
+		/// <summary>
+		/// CEX.IO
+		/// </summary>
+		public const string CexKey = nameof(Cex);
+
+		/// <summary>
+		/// CEX.IO
+		/// </summary>
+		public static string Cex => GetString(CexKey);
+
+		/// <summary>
+		/// BitMEX
+		/// </summary>
+		public const string BitmexKey = nameof(Bitmex);
+
+		/// <summary>
+		/// BitMEX
+		/// </summary>
+		public static string Bitmex => GetString(BitmexKey);
+
+		/// <summary>
+		/// Bitexbook
+		/// </summary>
+		public const string BitexbookKey = nameof(Bitexbook);
+
+		/// <summary>
+		/// Bitexbook
+		/// </summary>
+		public static string Bitexbook => GetString(BitexbookKey);
+
+		/// <summary>
+		/// Binance
+		/// </summary>
+		public const string BinanceKey = nameof(Binance);
+
+		/// <summary>
+		/// Binance
+		/// </summary>
+		public static string Binance => GetString(BinanceKey);
 	}
 }

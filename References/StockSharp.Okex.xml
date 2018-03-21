@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Okex</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Okex.OkexMessageAdapter">
+            <summary>
+            The message adapter for <see cref="N:StockSharp.Okex"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexMessageAdapter.AllTimeFrames">
+            <summary>
+            Possible time-frames.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Okex.OkexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Okex.OkexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Okex.OkexMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:StockSharp.Okex.OkexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Okex.OkexMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.Okex.OkexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <inheritdoc />
+        </member>
+        <member name="T:StockSharp.Okex.OkexOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Okex"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Okex.OkexOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Okex.OkexOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Okex.OkexTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Okex"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Okex.OkexTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Okex.OkexTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Okex.OkexTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>
