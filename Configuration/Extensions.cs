@@ -39,30 +39,43 @@ namespace StockSharp.Configuration
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BarChart;
+	using StockSharp.Binance;
+	using StockSharp.Bitexbook;
 	using StockSharp.Bitfinex;
 	using StockSharp.Bithumb;
+	using StockSharp.Bitmex;
 	using StockSharp.BitStamp;
 	using StockSharp.Bittrex;
 	using StockSharp.Blackwood;
 	using StockSharp.Btce;
+	using StockSharp.Cex;
 	using StockSharp.Coinbase;
 	using StockSharp.Coincheck;
+	using StockSharp.CoinExchange;
 	using StockSharp.Cqg.Continuum;
 	using StockSharp.Cqg.Com;
+	using StockSharp.Cryptopia;
+	using StockSharp.Deribit;
 	using StockSharp.ETrade;
+	using StockSharp.Exmo;
 	using StockSharp.Fix;
 	using StockSharp.Fxcm;
 	using StockSharp.Gdax;
 	using StockSharp.HitBtc;
+	using StockSharp.Huobi;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.IQFeed;
 	using StockSharp.ITCH;
 	using StockSharp.Kraken;
+	using StockSharp.Kucoin;
+	using StockSharp.Liqui;
+	using StockSharp.LiveCoin;
 	using StockSharp.LMAX;
 	using StockSharp.Logging;
 	using StockSharp.Micex;
 	using StockSharp.Oanda;
 	using StockSharp.Okcoin;
+	using StockSharp.Okex;
 	using StockSharp.OpenECry;
 	using StockSharp.Plaza;
 	using StockSharp.Poloniex;
@@ -79,6 +92,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Charting.IndicatorPainters;
+	using StockSharp.Yobit;
 
 	/// <summary>
 	/// Extension class.
@@ -197,6 +211,20 @@ namespace StockSharp.Configuration
 			() => typeof(KrakenMessageAdapter),
 			() => typeof(OkcoinMessageAdapter),
 			() => typeof(PoloniexMessageAdapter),
+			() => typeof(BinanceMessageAdapter),
+			() => typeof(BitexbookMessageAdapter),
+			() => typeof(BitmexMessageAdapter),
+			() => typeof(CexMessageAdapter),
+			() => typeof(CoinExchangeMessageAdapter),
+			() => typeof(CryptopiaMessageAdapter),
+			() => typeof(DeribitMessageAdapter),
+			() => typeof(ExmoMessageAdapter),
+			() => typeof(HuobiMessageAdapter),
+			() => typeof(KucoinMessageAdapter),
+			() => typeof(LiquiMessageAdapter),
+			() => typeof(LiveCoinMessageAdapter),
+			() => typeof(OkexMessageAdapter),
+			() => typeof(YobitMessageAdapter),
 		});
 
 		/// <summary>

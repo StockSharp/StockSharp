@@ -175,6 +175,48 @@
     <Reference Include="StockSharp.Twime">
       <HintPath>..\References\StockSharp.Twime.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Binance">
+      <HintPath>..\References\StockSharp.Binance.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bitexbook">
+      <HintPath>..\References\StockSharp.Bitexbook.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Bitmex">
+      <HintPath>..\References\StockSharp.Bitmex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Cex">
+      <HintPath>..\References\StockSharp.Cex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.CoinExchange">
+      <HintPath>..\References\StockSharp.CoinExchange.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Cryptopia">
+      <HintPath>..\References\StockSharp.Cryptopia.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Deribit">
+      <HintPath>..\References\StockSharp.Deribit.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Exmo">
+      <HintPath>..\References\StockSharp.Exmo.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Huobi">
+      <HintPath>..\References\StockSharp.Huobi.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Kucoin">
+      <HintPath>..\References\StockSharp.Kucoin.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Liqui">
+      <HintPath>..\References\StockSharp.Liqui.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.LiveCoin">
+      <HintPath>..\References\StockSharp.LiveCoin.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Okex">
+      <HintPath>..\References\StockSharp.Okex.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Yobit">
+      <HintPath>..\References\StockSharp.Yobit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
