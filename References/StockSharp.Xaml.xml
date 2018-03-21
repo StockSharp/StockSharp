@@ -921,6 +921,105 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="T:StockSharp.Xaml.IndexEditor">
+      <summary>
+            The graphic control for editing <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.
+            </summary>
+      <summary>
+            IndexEditor
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.IndexEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.IndexEditor" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexEditor.Securities">
+      <summary>
+            All available instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexEditor.Formula">
+      <summary>
+            Mathematical formula.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexEditor.Text">
+      <summary>
+            Text.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexEditor.HasError">
+      <summary>
+            The expression contains an error.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexEditor.HighligthFunctions">
+      <summary>
+            The list of highlighted features.
+            </summary>
+      <remarks>
+            By default, it includes: abs, acos, asin, atan, ceiling, cos, exp, floor, ieeeremainder, log, log10, max, min, pow, round, sign, sin, sqrt, tan, truncate.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexEditor.HighligthForeColor">
+      <summary>
+            The functions font color. The default value is <see cref="P:System.Windows.Media.Brushes.Red" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexEditor.HighligthBackColor">
+      <summary>
+            The functions background color. The default value is <see cref="P:System.Windows.Media.Brushes.White" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.IndexEditor.SecurityClicked">
+      <summary>
+            The event of click on the instrument.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.IndexEditor.TextChanged">
+      <summary>
+            The change event <see cref="P:StockSharp.Xaml.IndexEditor.Text" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.IndexEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.IndexSecurityWindow">
+      <summary>
+            The window for editing <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.
+            </summary>
+      <summary>
+            IndexSecurityWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.IndexSecurityWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.IndexSecurityWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexSecurityWindow.SecurityStorage">
+      <summary>
+            Securities meta info storage.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexSecurityWindow.ValidateId">
+      <summary>
+            The handler checking the entered identifier availability for <see cref="P:StockSharp.Xaml.IndexSecurityWindow.Security" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.IndexSecurityWindow.Security">
+      <summary>
+            Index.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.IndexSecurityWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PositionChangeGrid">
       <summary>
             The table to display a message <see cref="T:StockSharp.Messages.PositionChangeMessage" />.
