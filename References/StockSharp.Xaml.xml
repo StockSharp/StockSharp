@@ -5797,5 +5797,28 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.WithdrawWindow">
+      <summary>
+            The window for editing <see cref="P:StockSharp.Xaml.WithdrawWindow.WithdrawInfo" />.
+            </summary>
+      <summary>
+            WithdrawWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.WithdrawWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.WithdrawWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.WithdrawWindow.WithdrawInfo">
+      <summary>
+            Withdraw info.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.WithdrawWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
   </members>
 </doc>

@@ -1297,3 +1297,7 @@ F:StockSharp.Xaml.UnitEditor.ValueProperty/summary;DocStr29
 P:StockSharp.Xaml.UnitEditor.Value/summary;DocStr8436
 E:StockSharp.Xaml.UnitEditor.ValueChanged/summary;DocStr8437
 M:StockSharp.Xaml.UnitEditor.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.WithdrawWindow/summary;DocStr8182
+M:StockSharp.Xaml.WithdrawWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.WithdrawWindow.WithdrawInfo/summary;WithdrawInfo
+M:StockSharp.Xaml.WithdrawWindow.InitializeComponent/summary;DocStr8
