@@ -1,5 +1,11 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.5.4:
+* (feature) Crypto connectors Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck updates.
+* (feature) Source-stubs for Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange.
+* (feature) Heartbeat option for crypto connectors http://stocksharp.ru/forum/9089/hydra---zagruzka-dannyh-s-birzhki-kraken/
+* (bug) Interval increased fix http://stocksharp.ru/forum/9082/hydra--vo-vremya-raboty-kripto-konnektorov-inogda-voznikaet-oshibka-kol-va-zaprosov-v-ed-vremeni/
+
 ## v4.4.5.2:
 * (feature) Do not store empty Level1 and Pos change messages.
 * (feature) Transaq. Logging settings.
