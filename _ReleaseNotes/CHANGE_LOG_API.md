@@ -4,6 +4,7 @@ StockSharp API Change log
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
 * (feature) WithdrawWindow.
 * (feature) IndexSecurityWindow.
+* (feature) Quik DDE turned off.
 
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
