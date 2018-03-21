@@ -24,7 +24,7 @@
   			
   			<listItem>
   				<para>Components for creating continuous and index instruments - <codeEntityReference>T:StockSharp.Xaml.ContinuousSecurityWindow</codeEntityReference> and 
-  				<codeEntityReference>T:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow</codeEntityReference>. </para>
+  				<codeEntityReference>T:StockSharp.Xaml.IndexSecurityWindow</codeEntityReference>. </para>
   			</listItem>
   			
 		</list>

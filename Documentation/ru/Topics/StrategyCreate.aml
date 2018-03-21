@@ -346,7 +346,7 @@ private void StartClick(object sender, RoutedEventArgs e)
 	]]></code>
 			<para>
 			  В процессе работы торговой стратегии может возникнуть ошибка. В этом случае <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
-			  перехватывает ошибку через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)</codeEntityReference>,
+			  перехватывает ошибку через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(StockSharp.Algo.Strategies.Strategy,System.Exception)</codeEntityReference>,
 			  меняется значение <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ErrorState</codeEntityReference>
 			  на <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>, выводится текст ошибки через событие
 			  <codeEntityReference qualifyHint="true">E:StockSharp.Logging.ILogSource.Log</codeEntityReference> 

@@ -339,7 +339,7 @@ private void StartClick(object sender, RoutedEventArgs e)
 	]]></code>
 			<para>
 			  An error can occur in the process of trading strategy work. In this case, the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
-			  captures the error through the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)</codeEntityReference> method,
+			  captures the error through the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(StockSharp.Algo.Strategies.Strategy,System.Exception)</codeEntityReference> method,
 			  the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ErrorState</codeEntityReference> value changes on
 			  <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>, the error text is displayed through the
 			  <codeEntityReference qualifyHint="true">E:StockSharp.Logging.ILogSource.Log</codeEntityReference> 

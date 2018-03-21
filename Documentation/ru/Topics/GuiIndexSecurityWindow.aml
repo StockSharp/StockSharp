@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Algo.Expressions.Xaml.IndexEditor</codeEntityReference> -  Графический контрол для редактирования
+      	<codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference> -  Графический контрол для редактирования
       	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference>. 
       	</para>
       	<para>
@@ -28,10 +28,10 @@
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Securities</codeEntityReference> - все доступные инструменты.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Securities</codeEntityReference> - все доступные инструменты.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Formula</codeEntityReference> - математическая формула индекса.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Formula</codeEntityReference> - математическая формула индекса.</para>
   			</listItem>
 		</list>
 		
