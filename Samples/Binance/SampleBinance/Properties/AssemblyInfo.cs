@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyTitle("SampleBinance")]
 [assembly: AssemblyDescription("")]
 
-[assembly: Guid("90D74414-983D-450B-84B7-8A537DAC549C")]
+[assembly: Guid("876A54FF-67C0-4B11-AFD5-4775A7460348")]
 
 [assembly:ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
