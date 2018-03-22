@@ -51,6 +51,26 @@
         <member name="M:StockSharp.Poloniex.PoloniexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
+        <member name="T:StockSharp.Poloniex.PoloniexOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Poloniex"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Poloniex.PoloniexOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Poloniex.PoloniexOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Poloniex.PoloniexOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Poloniex.PoloniexOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
         <member name="T:StockSharp.Poloniex.PoloniexTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Poloniex"/>.

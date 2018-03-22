@@ -61,6 +61,26 @@
         <member name="M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
+        <member name="T:StockSharp.Btce.BtceOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Btce"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Btce.BtceOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Btce.BtceOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
         <member name="T:StockSharp.Btce.BtceTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Btce"/>.

@@ -51,6 +51,26 @@
         <member name="M:StockSharp.Bithumb.BithumbMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
+        <member name="T:StockSharp.Bithumb.BithumbOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.Bithumb"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Bithumb.BithumbOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Bithumb.BithumbOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bithumb.BithumbOrderCondition.IsWithdraw">
+            <summary>
+            Withdraw.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bithumb.BithumbOrderCondition.WithdrawInfo">
+            <summary>
+            Withdraw info.
+            </summary>
+        </member>
         <member name="T:StockSharp.Bithumb.BithumbTrader">
             <summary>
             The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the <see cref="N:StockSharp.Bithumb"/>.

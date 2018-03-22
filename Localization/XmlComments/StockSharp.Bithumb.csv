@@ -11,6 +11,10 @@ M:StockSharp.Bithumb.BithumbMessageAdapter.ToString/returns;DocStr50
 M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Bithumb.BithumbMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Bithumb.BithumbMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.Bithumb.BithumbOrderCondition/summary;DocStr60
+M:StockSharp.Bithumb.BithumbOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Bithumb.BithumbOrderCondition.IsWithdraw/summary;Withdraw
+P:StockSharp.Bithumb.BithumbOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Bithumb.BithumbTrader/summary;DocStr2539
 M:StockSharp.Bithumb.BithumbTrader.#ctor/summary;DocStr1
 P:StockSharp.Bithumb.BithumbTrader.Key/summary;Str3304
