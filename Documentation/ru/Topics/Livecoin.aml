@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6fe3c6a3-eec6-44e1-b526-0c1f2674da30" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		Для написания торговых роботов под торговую платформу <token>LiveCoin</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.LiveCoin.LiveCoinTrader</codeEntityReference>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="b2ee81b7-7038-4cfa-8505-702166f214eb"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

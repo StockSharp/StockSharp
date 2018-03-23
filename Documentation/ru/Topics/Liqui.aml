@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="51647de2-e0ca-4d65-b343-e3a4c97ba81a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		Для написания торговых роботов под торговую платформу <token>Liqui</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.Liqui.LiquiTrader</codeEntityReference>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="fa0a8e74-dd99-4a18-ac27-1a8db232c71b"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

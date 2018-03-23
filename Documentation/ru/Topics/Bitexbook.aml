@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b67d34fc-b094-42e6-b0fe-7e3441866453" revisionNumber="1">
+   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		Для написания торговых роботов под торговую платформу <token>Bitexbook</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.Bitexbook.BitexbookTrader</codeEntityReference>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="c06a4729-0bbb-4b09-a1a4-5a3bd1d1d893"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

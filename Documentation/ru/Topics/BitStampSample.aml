@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="7664591a-b5b5-4f96-90c3-c1b7f59d5601" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
@@ -130,7 +130,7 @@ Trader.Connect();
 				<content>
 					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
 				</content>
-				<mediaLink><image placement="center" xlink:href="BtceSecurities"/></mediaLink>
+				<mediaLink><image placement="center" xlink:href="BitStampSecurities"/></mediaLink>
 			</step>
 			<step>
 				<content>
@@ -230,7 +230,32 @@ private void NewOrderClick(object sender, RoutedEventArgs e)
 							</code>						
 						</content>
 					</step>
+					<step>
+						<content>
+							<para>Для вывода средств необходимо сформировать заявку на вывод, для этого в коде следует написать:</para>
+            				<code language="C#">
+            				<![CDATA[
+var order = new Order
+{
+	Type = OrderTypes.Conditional,
+	Condition = new BitStampOrderCondition
+	{
+		IsWithdraw = true,
+		WithdrawInfo = new WithdrawInfo
+		{
+			// заполняются необходимые реквизиты
+			Comment = "My grand profit",
+			PaymentId = "45467dyjyttR8WBiTJXptyuTx4wbSerGZ5t45",
+			CryptoAddress = "rKe5WtR8WBiTJXpXz7uTx4wbSerGZ5tbkw",
+		}
+	}
+};
 
+Trader.RegisterOrder(order);
+							]]>
+							</code>						
+						</content>
+					</step>
 				</steps>
 		</procedure>
   </developerConceptualDocument>

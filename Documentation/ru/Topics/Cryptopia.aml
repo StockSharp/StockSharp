@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8dadf9dd-9d70-4b4d-bab0-a02402b8339e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		Для написания торговых роботов под торговую платформу <token>Cryptopia</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.Cryptopia.CryptopiaTrader</codeEntityReference>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="45433ea2-0192-4296-8ff2-4963a5f1f2f5"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

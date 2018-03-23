@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="379fd50e-e6f3-49e0-9363-95b320a95dda" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		Для написания торговых роботов под торговую платформу <token>Bitmex</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.Bitmex.BitmexTrader</codeEntityReference>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="b1556c87-3d25-4d95-a10d-9ef033b75b7a"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
