@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c003db77-3e6f-4ef6-bbdd-658d14e3435d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Cex.CexTrader</codeEntityReference> should be used for trading algorithms creating for <token>Cex</token>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="1f8dac56-b25a-4522-9965-4461a313f93b"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

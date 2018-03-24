@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="379fd50e-e6f3-49e0-9363-95b320a95dda" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Bitmex.BitmexTrader</codeEntityReference> should be used for trading algorithms creating for <token>Bitmex</token>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="1f8dac56-b25a-4522-9965-4461a313f93b"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

@@ -14,6 +14,9 @@
 	   <listItem>
 	      <legacyBold>Секрет</legacyBold> - секрет.
 		</listItem>
+		<listItem>
+	      <legacyBold>Клиент</legacyBold> - идентификатор клиента.
+		</listItem>
       </list>    
 		<para><legacyBold>Основные</legacyBold></para>
 	   <list class="bullet">

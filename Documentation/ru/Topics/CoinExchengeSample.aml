@@ -2,9 +2,9 @@
 <topic id="ed0d1fca-6686-4efd-b013-9f08c5197c7f" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Coincheck.CoincheckTrader</codeEntityReference> демонстрирует приложение SampleCoincheck,
-        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Coincheck</legacyItalic>.</para>
-		<mediaLink><image placement="center" xlink:href="CoincheckSample"/></mediaLink>
+      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.CoinExchange.CoinExchangeTrader</codeEntityReference> демонстрирует приложение SampleCoinExchange,
+        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/CoinExchange</legacyItalic>.</para>
+		<mediaLink><image placement="center" xlink:href="CoinExchengeSample"/></mediaLink>
     </introduction>
     
     <procedure>
@@ -12,11 +12,11 @@
 			<step>
 				<content>
 					<para>В самом начале необходимо создать экземпляр класса шлюза 
-					<codeEntityReference qualifyHint="false">T:StockSharp.Coincheck.CoincheckTrader</codeEntityReference>:</para>
+					<codeEntityReference qualifyHint="false">T:StockSharp.CoinExchange.CoinExchangeTrader</codeEntityReference>:</para>
             		<code language="C#">
             				<![CDATA[
 // создаем подключение
-Trader = new CoincheckTrader();// { LogLevel = LogLevels.Debug };
+Trader = new CoinExchangeTrader();// { LogLevel = LogLevels.Debug };
 .....
 Trader.Key = Key.Text;
 Trader.Secret = Secret.Password;
@@ -88,7 +88,7 @@ Trader.OrderCancelFailed += OrderFailed;
 			</step>
 			<step>
 				<content>
-					<para>Далее необходимо выполнить подключение к серверу <token>Coincheck</token>:</para>
+					<para>Далее необходимо выполнить подключение к серверу <token>CoinExchange</token>:</para>
             		<code language="C#">
             				<![CDATA[
 Trader.Connect();
@@ -126,7 +126,7 @@ Trader.Connect();
 				<content>
 					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
 				</content>
-				<mediaLink><image placement="center" xlink:href="CoincheckSecurities"/></mediaLink>
+				<mediaLink><image placement="center" xlink:href="SecuritiesLookupWindow"/></mediaLink>
 			</step>
 			<step>
 				<content>
@@ -225,7 +225,7 @@ private void NewOrderClick(object sender, RoutedEventArgs e)
 var order = new Order
 {
 	Type = OrderTypes.Conditional,
-	Condition = new CoincheckOrderCondition
+	Condition = new CoinExchangeOrderCondition
 	{
 		IsWithdraw = true,
 		WithdrawInfo = new WithdrawInfo

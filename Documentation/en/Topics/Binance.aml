@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="98fdd219-37f6-48a4-8ab8-d1dae37ddcff" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+     		The <codeEntityReference qualifyHint="false">T:StockSharp.Binance.BinanceTrader</codeEntityReference> should be used for trading algorithms creating for <token>Binance</token>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="1f8dac56-b25a-4522-9965-4461a313f93b"/>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

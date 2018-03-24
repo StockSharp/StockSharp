@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -3026,6 +3026,10 @@
     <Image Include="Art\BitexbookSample.png">
       <ImageId>BitexbookSample</ImageId>
       <AlternateText>Bitexbook Sample</AlternateText>
+    </Image>
+    <Image Include="Art\SecuritiesLookupWindow.png">
+      <ImageId>SecuritiesLookupWindow</ImageId>
+      <AlternateText>Securities Lookup Window</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

@@ -126,7 +126,7 @@ Trader.Connect();
 				<content>
 					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
 				</content>
-				<mediaLink><image placement="center" xlink:href="CoinbaseSecurities"/></mediaLink>
+				<mediaLink><image placement="center" xlink:href="SecuritiesLookupWindow"/></mediaLink>
 			</step>
 			<step>
 				<content>
