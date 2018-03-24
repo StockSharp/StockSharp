@@ -24,11 +24,12 @@
 <listItem><codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> для <token>Btce</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.Cex.CexTrader</codeEntityReference> для <token>Cex</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.Coinbase.CoinbaseTrader</codeEntityReference> для <token>Coinbase</token></listItem>
-<listItem><codeEntityReference>T:StockSharp. для . для Trader</codeEntityReference> для <token>Coincheck</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Coincheck.CoincheckTrader</codeEntityReference> для <token>Coincheck</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.CoinExchange.CoinExchangeTrader</codeEntityReference> для <token>CoinExchange</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.Cryptopia.CryptopiaTrader</codeEntityReference> для <token>Cryptopia</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.Deribit.DeribitTrader</codeEntityReference> для <token>Deribit</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.Exmo.ExmoTrader</codeEntityReference> для <token>Exmo</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Gdax.GdaxTrader</codeEntityReference> для <token>Gdax</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.HitBtc.HitBtcTrader</codeEntityReference> для <token>HitBtc</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.Huobi.HuobiTrader</codeEntityReference> для <token>Huobi</token></listItem>
 <listItem><codeEntityReference>T:StockSharp.Kraken.KrakenTrader</codeEntityReference> для <token>Kraken</token></listItem>

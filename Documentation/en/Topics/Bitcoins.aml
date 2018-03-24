@@ -14,12 +14,32 @@
       <!-- <autoOutline /> -->
       <para>Currently, <token>stocksharp</token> supports the following bitcoin (or cryptocurrency) connectors:</para>
 		<list class="ordered">
-  			<listItem>
-  					<codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> for <token>btce</token>
-  			</listItem>
-  			<listItem>
-  					<codeEntityReference>T:StockSharp.BitStamp.BitStampTrader</codeEntityReference> for <token>bitstamp</token>
-  			</listItem>
+<listItem><codeEntityReference>T:StockSharp.Binance.BinanceTrader</codeEntityReference> for <token>Binance</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitexbook.BitexbookTrader</codeEntityReference> for <token>Bitexbook</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitfinex.BitfinexTrader</codeEntityReference> for <token>Bitfinex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bithumb.BithumbTrader</codeEntityReference> for <token>Bithumb</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitmex.BitmexTrader</codeEntityReference> for <token>Bitmex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.BitStamp.BitStampTrader</codeEntityReference> for <token>BitStamp</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bittrex.BittrexTrader</codeEntityReference> for <token>Bittrex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> for <token>Btce</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Cex.CexTrader</codeEntityReference> for <token>Cex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Coinbase.CoinbaseTrader</codeEntityReference> for <token>Coinbase</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Coincheck.CoincheckTrader</codeEntityReference> for <token>Coincheck</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.CoinExchange.CoinExchangeTrader</codeEntityReference> for <token>CoinExchange</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Cryptopia.CryptopiaTrader</codeEntityReference> for <token>Cryptopia</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Deribit.DeribitTrader</codeEntityReference> for <token>Deribit</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Exmo.ExmoTrader</codeEntityReference> for <token>Exmo</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Gdax.GdaxTrader</codeEntityReference> for <token>Gdax</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.HitBtc.HitBtcTrader</codeEntityReference> for <token>HitBtc</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Huobi.HuobiTrader</codeEntityReference> for <token>Huobi</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Kraken.KrakenTrader</codeEntityReference> for <token>Kraken</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Kucoin.KucoinTrader</codeEntityReference> for <token>Kucoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Liqui.LiquiTrader</codeEntityReference> for <token>Liqui</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.LiveCoin.LiveCoinTrader</codeEntityReference> for <token>LiveCoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Okcoin.OkcoinTrader</codeEntityReference> for <token>Okcoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Okex.OkexTrader</codeEntityReference> for <token>Okex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Poloniex.PoloniexTrader</codeEntityReference> for <token>Poloniex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Yobit.YobitTrader</codeEntityReference> for <token>Yobit</token></listItem>
 		</list>
 
     </introduction>
