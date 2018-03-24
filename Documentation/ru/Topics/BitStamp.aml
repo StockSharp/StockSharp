@@ -8,9 +8,7 @@
 		</para>
      </introduction>
      <relatedTopics>
-    	<link xlink:href="7664591a-b5b5-4f96-90c3-c1b7f59d5601">Пример работы с BitStampTrader</link>
-    <!--	<link xlink:href="5389994b-68d4-456d-8ea0-52d07dbc185d">Стоп-заявки</link>
-    	<link xlink:href="ad7e6528-705a-4e3f-8df6-e9b129279c08">Исторические данные</link>-->
+    	<link xlink:href="7664591a-b5b5-4f96-90c3-c1b7f59d5601"/>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

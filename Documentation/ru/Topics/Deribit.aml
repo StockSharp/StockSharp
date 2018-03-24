@@ -1,18 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="0b4fde09-8808-4ef8-89df-39aebcdd64a1" revisionNumber="1">
+<topic id="997b2670-e5f7-4159-b155-2aae76e84dcc" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
-      <para>TODO</para>
-    </introduction>
+    	<para>
+     		Для написания торговых роботов под торговую платформу <token>Deribit</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.Deribit.DeribitTrader</codeEntityReference>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="b73ce235-54b7-491a-b0bf-bfbd515a5b24"/>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>
