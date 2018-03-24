@@ -91,7 +91,8 @@ namespace XMLCommToHTM.DOM
 
 				foreach (var ns in ret.Namespaces)
 				{
-					if (comm.TryGetValue(ns.Name, out var c))
+					NamespaceComments c;
+					if (comm.TryGetValue(ns.Name, out c))
 						ns.DocInfo = c.Comments;
 				}
 			}
@@ -124,7 +125,7 @@ namespace XMLCommToHTM.DOM
 			foreach (var ns in namespaces)
 			{
 				var curNs = nsDict.SafeAdd(ns.Name, name => new NamespaceDom(name));
-				curNs.Types.AddRange(ns.Types);
+				curNs.Types.AddMany(ns.Types);
 			}
 
 			return nsDict.Values.OrderBy(_ => _.Name).ToArray();

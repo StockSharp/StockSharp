@@ -85,11 +85,12 @@ namespace XMLCommToHTM.DOM
 
 	public class GenericParameterDom : ParameterBaseDom
 	{
+		string _name;
 		public GenericParameterDom(string name)
 		{
-			Name = name;
+			_name = name;
 		}
-		public override string Name { get; }
+		public override string Name => _name;
 
 		public override Type Type => null;
 
@@ -106,7 +107,10 @@ namespace XMLCommToHTM.DOM
 		{
 			if (!mi.IsGenericMethod)
 				return null;
-			return BuildGenericParameters(mi.GetGenericMethodDefinition().GetGenericArguments(), typeDoc);
+			mi = mi.GetGenericMethodDefinition();
+			if (mi == null)
+				return null;
+			return BuildGenericParameters(mi.GetGenericArguments(), typeDoc);
 		}
 		public static GenericParameterDom[] BuildGenericParameters(Type[] genericArgs, XElement typeDoc)
 		{

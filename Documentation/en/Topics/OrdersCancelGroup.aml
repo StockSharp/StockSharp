@@ -7,7 +7,7 @@
 
     <introduction>
       <para>
-		  To cancel several orders the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes},System.Nullable{System.Int64})</codeEntityReference>
+		  To cancel several orders the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})</codeEntityReference>
 		  method used, which cancel the active orders by the parameters mask passed.
 	  </para>
     </introduction>

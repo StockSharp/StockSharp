@@ -22,7 +22,7 @@
   				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)</codeEntityReference> - to update the format for displaying prices and volumes using the instrument.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order,System.Decimal,StockSharp.Messages.OrderStates)</codeEntityReference> - to process an order.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> - to process an order.</para>
   			</listItem>
   			<listItem>
   				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)</codeEntityReference> - to refresh an order book.</para>

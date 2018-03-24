@@ -5,8 +5,29 @@
      <mediaLink>
         <image placement="left" xlink:href="hydra_settings_bitstamp" />
       </mediaLink>
-	   <para><legacyBold>Main</legacyBold></para>
+       <para><legacyBold>BitStamp</legacyBold></para>
 	   <list class="bullet">
+	   <listItem>
+	      <legacyBold>Key</legacyBold> - key.
+		</listItem>
+	   <listItem>
+	      <legacyBold>Secret</legacyBold> - secret.
+		</listItem>
+	   <listItem>
+	      <legacyBold>Client</legacyBold> - client ID.
+		</listItem>
+      </list>  
+	   <para><legacyBold>General</legacyBold></para>
+	   <list class="bullet">
+	   <listItem>
+          <legacyBold>Start date (candles)</legacyBold> - from what date to begin downloading date.
+		</listItem>
+	   <listItem>
+          <legacyBold>Header</legacyBold> - task header.
+		</listItem>
+        <listItem>
+          <legacyBold>Start date (ticks)</legacyBold> - from what date to begin downloading date.
+		</listItem>	   
         <listItem>
           <legacyBold>Work from</legacyBold> - source work start time.
 		</listItem>

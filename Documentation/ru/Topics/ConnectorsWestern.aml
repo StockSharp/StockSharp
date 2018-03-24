@@ -15,7 +15,6 @@
 			<!--<listItem><codeEntityReference>T:StockSharp.Fix.FixTrader</codeEntityReference> для <token>fix</token></listItem>-->
 			<listItem><codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> для <token>rithmic</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference> для <token>itch</token></listItem>
-			<listItem><codeEntityReference>T:StockSharp.QuantHouse.QuantFeedTrader</codeEntityReference> для <token>quantfeed</token></listItem>
 		</list>
 	</introduction>
 	</developerWalkthroughDocument>

@@ -1,18 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="16eaa615-aaf7-42a5-9de7-01762a650758" revisionNumber="1">
+<topic id="75df8571-1b69-4f71-9af8-5e486d88e6f9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
-      <para>TODO</para>
-    </introduction>
+    	<para>
+     		Для написания торговых роботов под торговую платформу <token>Huobi</token> необходимо использовать
+			<codeEntityReference qualifyHint="false">T:StockSharp.Huobi.HuobiTrader</codeEntityReference>.
+		</para>
+     </introduction>
+     <relatedTopics>
+    	<link xlink:href="bf264fc3-127d-431a-879e-46014fd9c4ed"/>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

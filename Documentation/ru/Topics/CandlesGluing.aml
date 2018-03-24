@@ -4,8 +4,8 @@
 
 	<introduction>
 		<para>Для того чтобы склеить исторические свечи с реал-тайм, надо инициализировать соответствующие 
-		хранилище торговых объектов <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.Csv.CsvEntityRegistry</codeEntityReference> и 
-		хранилище маркет-данных <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference>.</para>
+		хранилище торговых объектов <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.CsvCsvEntityRegistry</codeEntityReference> и 
+		хранилище маркет-данных <codeEntityReference qualifyHint="false">T:StockSharp.Algo.StoragesStorageRegistry</codeEntityReference>.</para>
 		<para>Рассмотрим склеивание на примере <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> 
 		с использованием тиковых данных, сохраненных с помощью <token>hydra</token>:</para>
         <code language="C#">
@@ -17,7 +17,7 @@ private CandleManager _candleManager;
 private CandleSeries _series;
 readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
 
-//объявляем хранилище торговых объектов CsvEntityRegistry и хранилище маркет-данных StorageRegistry
+//объявляем хранилище торговых объектов CsvCsvEntityRegistry и хранилище маркет-данных StoragesStorageRegistry
 private readonly CsvEntityRegistry _csvEntityRegistry;
 private readonly StorageRegistry _storageRegistry;
 
@@ -67,8 +67,8 @@ private void ProcessingCandles(CandleSeries series, Candle candle)
 		]]>
 		</code>
 <para>Если изначально создаётся <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Connector</codeEntityReference>, 
-то в инициализации StorageAdapter нет необходимости, достаточно передать хранилище торговых объектов <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.Csv.CsvEntityRegistry</codeEntityReference> и 
-хранилище маркет-данных <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference> 
+то в инициализации StorageAdapter нет необходимости, достаточно передать хранилище торговых объектов <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.CsvCsvEntityRegistry</codeEntityReference> и 
+хранилище маркет-данных <codeEntityReference qualifyHint="false">T:StockSharp.Algo.StoragesStorageRegistry</codeEntityReference> 
 в конструктор <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Connector</codeEntityReference> </para>
 
         <code language="C#">
