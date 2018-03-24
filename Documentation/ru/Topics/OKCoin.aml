@@ -1,14 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="f9ec5eb4-4237-4a2a-9663-757d3d4c0689" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
     <introduction>
-    	<para>
-     		Для написания торговых роботов под торговую платформу <token>Okcoin</token> необходимо использовать
-			<codeEntityReference qualifyHint="false">T:StockSharp.Okcoin.OkcoinTrader</codeEntityReference>.
-		</para>
-     </introduction>
-     <relatedTopics>
-    	<link xlink:href="1f8dac56-b25a-4522-9965-4461a313f93b"/>
-    </relatedTopics>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+      <para>TODO</para>
+    </introduction>
   </developerConceptualDocument>
 </topic>
