@@ -5,8 +5,33 @@
      <mediaLink>
         <image placement="left" xlink:href="hydra_settings_bitstamp" />
       </mediaLink>
-	   <para><legacyBold>Основные</legacyBold></para>
+      
+ 		<para><legacyBold>BitStamp</legacyBold></para>
 	   <list class="bullet">
+	   <listItem>
+	      <legacyBold>Ключ</legacyBold> - ключ.
+		</listItem>
+	   <listItem>
+	      <legacyBold>Секрет</legacyBold> - секрет.
+		</listItem>
+		<listItem>
+	      <legacyBold>Клиент</legacyBold> - идентификатор клиента.
+		</listItem>
+      </list>    
+		<para><legacyBold>Основные</legacyBold></para>
+	   <list class="bullet">
+	   <listItem>
+	      <legacyBold>Дата начала (свечи)</legacyBold> - с какой даты начать скачивать данные.
+		</listItem>
+        <listItem>
+          <legacyBold>Заголовок</legacyBold> - заголовок задачи.
+		</listItem>
+        <listItem>
+          <legacyBold>Дата начала (тики)</legacyBold> - с какой даты начать скачивать данные.
+		</listItem>
+        <listItem>
+          <legacyBold>Heartbeat</legacyBold> - Heartbeat интерал.
+		</listItem>
         <listItem>
           <legacyBold>Работать с</legacyBold> - время начала работы источника.
 		</listItem>
@@ -32,10 +57,13 @@
           <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
 		</listItem>
 		<listItem>
+          <legacyBold>Обновлять инструменты</legacyBold> - Обновлять инструменты при подключении.
+		</listItem>
+		<listItem>
           <legacyBold>Поля Level1</legacyBold> - поддерживаемые поля маркет-данных первого уровня.
 		</listItem>
       </list>
-      <para><legacyBold>Подключение</legacyBold> - свойства подключения (см. <link xlink:href="01a85a46-7510-4385-b81c-348ffb3dfc46">Параметры подключения.</link>) </para>
+     <para><legacyBold>Подключение</legacyBold> - свойства подключения (см. <link xlink:href="01a85a46-7510-4385-b81c-348ffb3dfc46">Параметры подключения.</link>) </para>
     </introduction>
   </developerConceptualDocument>
 </topic>
