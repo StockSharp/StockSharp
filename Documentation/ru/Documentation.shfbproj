@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -233,6 +233,54 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\HydraSettingsGDAX.aml" />
+    <None Include="Topics\HydraSettingsEXMO.aml" />
+    <None Include="Topics\HydraSettingsBitexbook.aml" />
+    <None Include="Topics\HydraSettingsBinance.aml" />
+    <None Include="Topics\HydraSettingsBitfinex.aml" />
+    <None Include="Topics\HydraSettingsCoinbase.aml" />
+    <None Include="Topics\HydraSettingsCoinExchenge.aml" />
+    <None Include="Topics\HydraSettingsCryptopia.aml" />
+    <None Include="Topics\HydraSettingsDeribit.aml" />
+    <None Include="Topics\HydraSettingsHitBTC.aml" />
+    <None Include="Topics\HydraSettingsHuobi.aml" />
+    <None Include="Topics\HydraSettingsKraken.aml" />
+    <None Include="Topics\HydraSettingsLiqui.aml" />
+    <None Include="Topics\HydraSettingsLivecoin.aml" />
+    <None Include="Topics\HydraSettingsOKCoin.aml" />
+    <None Include="Topics\HydraSettingsOKex.aml" />
+    <None Include="Topics\HydraSettingsPoloniex.aml" />
+    <None Include="Topics\HydraSettingsYobit.aml" />
+    <None Include="Topics\HydraSettingsCoincheck.aml" />
+    <None Include="Topics\HydraSettingsKucoin.aml" />
+    <None Include="Topics\HydraSettingsCEX.IO.aml" />
+    <None Include="Topics\HydraSettingsBittrex.aml" />
+    <None Include="Topics\HydraSettingsBithumb.aml" />
+    <None Include="Topics\HydraSettingsBitMEX.aml" />
+    <None Include="Topics\YobitSample.aml" />
+    <None Include="Topics\PoloniexSample.aml" />
+    <None Include="Topics\OKexSample.aml" />
+    <None Include="Topics\OKCoinSample.aml" />
+    <None Include="Topics\LivecoinSample.aml" />
+    <None Include="Topics\LiquiSample.aml" />
+    <None Include="Topics\KucoinSample.aml" />
+    <None Include="Topics\KrakenSample.aml" />
+    <None Include="Topics\HuobiSample.aml" />
+    <None Include="Topics\HitBTCSample.aml" />
+    <None Include="Topics\EXMOSample.aml" />
+    <None Include="Topics\DeribitSample.aml" />
+    <None Include="Topics\CryptopiaSample.aml" />
+    <None Include="Topics\CoinExchengeSample.aml" />
+    <None Include="Topics\GDAXSample.aml" />
+    <None Include="Topics\CoincheckSample.aml" />
+    <None Include="Topics\CoinbaseSample.aml" />
+    <None Include="Topics\CEXSample.aml" />
+    <None Include="Topics\BittrexSample.aml" />
+    <None Include="Topics\BitMEXSample.aml" />
+    <None Include="Topics\BithumbSample.aml" />
+    <None Include="Topics\BitfinexSample.aml" />
+    <None Include="Topics\BitexbookSample.aml" />
+    <None Include="Topics\BinanceSample.aml" />
     <None Include="Topics\Yobit.aml" />
     <None Include="Topics\Okex.aml" />
     <None Include="Topics\LiveCoin.aml" />
@@ -2866,6 +2914,202 @@
     <Image Include="Art\SpbExNewOrder.png">
       <ImageId>SpbExNewOrder</ImageId>
       <AlternateText>Ввод заявки Spb Ex</AlternateText>
+    </Image>
+    <Image Include="Art\SecuritiesLookupWindow.png">
+      <ImageId>SecuritiesLookupWindow</ImageId>
+      <AlternateText>Securities Lookup Window</AlternateText>
+    </Image>
+    <Image Include="Art\BinanceSample.png">
+      <ImageId>BinanceSample</ImageId>
+      <AlternateText>Binance Sample</AlternateText>
+    </Image>
+    <Image Include="Art\BitexbookSample.png">
+      <ImageId>BitexbookSample</ImageId>
+      <AlternateText>Bitexbook Sample</AlternateText>
+    </Image>
+    <Image Include="Art\BithumbSample.png">
+      <ImageId>BithumbSample</ImageId>
+      <AlternateText>Bithumb Sample</AlternateText>
+    </Image>
+    <Image Include="Art\BitMEXSample.png">
+      <ImageId>BitMEXSample</ImageId>
+      <AlternateText>BitMEXSample</AlternateText>
+    </Image>
+    <Image Include="Art\BittrexSample.png">
+      <ImageId>BittrexSample</ImageId>
+      <AlternateText>Bittrex Sample</AlternateText>
+    </Image>
+    <Image Include="Art\CEXSample.png">
+      <ImageId>CEXSample</ImageId>
+      <AlternateText>CEXSample</AlternateText>
+    </Image>
+    <Image Include="Art\CoinbaseSample.png">
+      <ImageId>CoinbaseSample</ImageId>
+      <AlternateText>Coinbase Sample</AlternateText>
+    </Image>
+    <Image Include="Art\CoincheckSample.png">
+      <ImageId>CoincheckSample</ImageId>
+      <AlternateText>Coincheck Sample</AlternateText>
+    </Image>
+    <Image Include="Art\CoinExchengeSample.png">
+      <ImageId>CoinExchengeSample</ImageId>
+      <AlternateText>Coin Exchenge Sample</AlternateText>
+    </Image>
+    <Image Include="Art\CryptopiaSample.png">
+      <ImageId>CryptopiaSample</ImageId>
+      <AlternateText>Cryptopia Sample</AlternateText>
+    </Image>
+    <Image Include="Art\DeribitSample.png">
+      <ImageId>DeribitSample</ImageId>
+      <AlternateText>Deribit Sample</AlternateText>
+    </Image>
+    <Image Include="Art\EXMOSample.png">
+      <ImageId>EXMOSample</ImageId>
+      <AlternateText>EXMOSample</AlternateText>
+    </Image>
+    <Image Include="Art\HitBTCSample.png">
+      <ImageId>HitBTCSample</ImageId>
+      <AlternateText>HitBTCSample</AlternateText>
+    </Image>
+    <Image Include="Art\HuobiSample.png">
+      <ImageId>HuobiSample</ImageId>
+      <AlternateText>Huobi Sample</AlternateText>
+    </Image>
+    <Image Include="Art\KrakenSample.png">
+      <ImageId>KrakenSample</ImageId>
+      <AlternateText>Kraken Sample</AlternateText>
+    </Image>
+    <Image Include="Art\KucoinSample.png">
+      <ImageId>KucoinSample</ImageId>
+      <AlternateText>Kucoin Sample</AlternateText>
+    </Image>
+    <Image Include="Art\LiquiSample.png">
+      <ImageId>LiquiSample</ImageId>
+      <AlternateText>Liqui Sample</AlternateText>
+    </Image>
+    <Image Include="Art\LivecoinSample.png">
+      <ImageId>LivecoinSample</ImageId>
+      <AlternateText>Livecoin Sample</AlternateText>
+    </Image>
+    <Image Include="Art\OKCoinSample.png">
+      <ImageId>OKCoinSample</ImageId>
+      <AlternateText>OKCoin Sample</AlternateText>
+    </Image>
+    <Image Include="Art\OKexSample.png">
+      <ImageId>OKexSample</ImageId>
+      <AlternateText>OKex Sample</AlternateText>
+    </Image>
+    <Image Include="Art\BitfinexSample.png">
+      <ImageId>BitfinexSample</ImageId>
+      <AlternateText>Bitfinex Sample</AlternateText>
+    </Image>
+    <Image Include="Art\PoloniexSample.png">
+      <ImageId>PoloniexSample</ImageId>
+      <AlternateText>Poloniex Sample</AlternateText>
+    </Image>
+    <Image Include="Art\YobitSample.png">
+      <ImageId>YobitSample</ImageId>
+      <AlternateText>Yobit Sample</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Yobit.png">
+      <ImageId>hydra_settings_Yobit</ImageId>
+      <AlternateText>hydra settings Yobit</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Poloniex.png">
+      <ImageId>hydra_settings_Poloniex</ImageId>
+      <AlternateText>hydra settings Poloniex</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_OKex.png">
+      <ImageId>hydra_settings_OKex</ImageId>
+      <AlternateText>hydra settings OKex</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_OKCoin.png">
+      <ImageId>hydra_settings_OKCoin</ImageId>
+      <AlternateText>hydra settings OKCoin</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Livecoin.png">
+      <ImageId>hydra_settings_Livecoin</ImageId>
+      <AlternateText>hydra settings Livecoin</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Liqui.png">
+      <ImageId>hydra_settings_Liqui</ImageId>
+      <AlternateText>hydra settings Liqui</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Kraken.png">
+      <ImageId>hydra_settings_Kraken</ImageId>
+      <AlternateText>hydra settings Kraken</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Kucoin.png">
+      <ImageId>hydra_settings_Kucoin</ImageId>
+      <AlternateText>hydra settings Kucoin</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Huobi.png">
+      <ImageId>hydra_settings_Huobi</ImageId>
+      <AlternateText>hydra settings Huobi</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_HitBTC.png">
+      <ImageId>hydra_settings_HitBTC</ImageId>
+      <AlternateText>hydra settings HitBTC</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_EXMO.png">
+      <ImageId>hydra_settings_EXMO</ImageId>
+      <AlternateText>hydra settings EXMO</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Deribit.png">
+      <ImageId>hydra_settings_Deribit</ImageId>
+      <AlternateText>hydra settings Deribit</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Cryptopia.png">
+      <ImageId>hydra_settings_Cryptopia</ImageId>
+      <AlternateText>hydra settings Cryptopia</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Coincheck.png">
+      <ImageId>hydra_settings_Coincheck</ImageId>
+      <AlternateText>hydra settings Coincheck</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Coinbase.png">
+      <ImageId>hydra_settings_Coinbase</ImageId>
+      <AlternateText>hydra settings Coinbase</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_CoinExchenge.png">
+      <ImageId>hydra_settings_CoinExchenge</ImageId>
+      <AlternateText>hydra settings Coin Exchenge</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_CEX.IO.png">
+      <ImageId>hydra_settings_CEX.IO</ImageId>
+      <AlternateText>hydra settings CEX.IO</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Bittrex.png">
+      <ImageId>hydra_settings_Bittrex</ImageId>
+      <AlternateText>hydra settings Bittrex</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Bithumb.png">
+      <ImageId>hydra_settings_Bithumb</ImageId>
+      <AlternateText>hydra settings Bithumb</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Bitfinex.png">
+      <ImageId>hydra_settings_Bitfinex</ImageId>
+      <AlternateText>hydra settings Bitfinex</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Bitexbook.png">
+      <ImageId>hydra_settings_Bitexbook</ImageId>
+      <AlternateText>hydra settings Bitexbook</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_BitMEX.png">
+      <ImageId>hydra_settings_BitMEX</ImageId>
+      <AlternateText>hydra settings BitMEX</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_Binance.png">
+      <ImageId>hydra_settings_Binance</ImageId>
+      <AlternateText>hydra settings Binance</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_GDAX.png">
+      <ImageId>hydra_settings_GDAX</ImageId>
+      <AlternateText>hydra settings GDAX</AlternateText>
+    </Image>
+    <Image Include="Art\GdaxSample.png">
+      <ImageId>GdaxSample</ImageId>
+      <AlternateText>Gdax Sample</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

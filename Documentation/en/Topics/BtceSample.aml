@@ -113,7 +113,7 @@ Trader.Connect();
 									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 							</listItem>
 							<listItem>
-								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
+								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.PortfolioChanged</codeEntityReference> – 
 									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
 							</listItem>
 						</list>
@@ -124,7 +124,7 @@ Trader.Connect();
 				<content>
 					<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
 				</content>
-				<mediaLink><image placement="center" xlink:href="BtceSecurities"/></mediaLink>
+				<mediaLink><image placement="center" xlink:href="SecuritiesLookupWindow"/></mediaLink>
 			</step>
 			<step>
 				<content>
@@ -221,7 +221,32 @@ private void NewOrderClick(object sender, RoutedEventArgs e)
 							</code>						
 						</content>
 					</step>
+					<step>
+						<content>
+							<para>To withdraw funds in code need to create a conditional order, and fill necessary requisites:</para>
+            				<code language="C#">
+            				<![CDATA[
+var order = new Order
+{
+	Type = OrderTypes.Conditional,
+	Condition = new BtceOrderCondition
+	{
+		IsWithdraw = true,
+		WithdrawInfo = new WithdrawInfo
+		{
+			// fill necessary requisites
+			Comment = "My profit",
+			PaymentId = "45467dyjyttR8WBiTJXptyuTx4wbSerGZ5t45",
+			CryptoAddress = "rKe5WtR8WBiTJXpXz7uTx4wbSerGZ5tbkw",
+		}
+	}
+};
 
+Trader.RegisterOrder(order);
+							]]>
+							</code>						
+						</content>
+					</step>
 				</steps>
 		</procedure>
     
