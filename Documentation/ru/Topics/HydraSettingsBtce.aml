@@ -5,9 +5,30 @@
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_btce" />
       </mediaLink>
-      
+       
+ 		<para><legacyBold>BTCE</legacyBold></para>
+	   <list class="bullet">
+	   <listItem>
+	      <legacyBold>Ключ</legacyBold> - ключ.
+		</listItem>
+	   <listItem>
+	      <legacyBold>Секрет</legacyBold> - секрет.
+		</listItem>
+      </list>    
 		<para><legacyBold>Основные</legacyBold></para>
 	   <list class="bullet">
+	   <listItem>
+	      <legacyBold>Дата начала (свечи)</legacyBold> - с какой даты начать скачивать данные.
+		</listItem>
+        <listItem>
+          <legacyBold>Заголовок</legacyBold> - заголовок задачи.
+		</listItem>
+        <listItem>
+          <legacyBold>Дата начала (тики)</legacyBold> - с какой даты начать скачивать данные.
+		</listItem>
+        <listItem>
+          <legacyBold>Heartbeat</legacyBold> - Heartbeat интерал.
+		</listItem>
         <listItem>
           <legacyBold>Работать с</legacyBold> - время начала работы источника.
 		</listItem>
@@ -31,6 +52,9 @@
 		</listItem>
 		<listItem>
           <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+		</listItem>
+		<listItem>
+          <legacyBold>Обновлять инструменты</legacyBold> - Обновлять инструменты при подключении.
 		</listItem>
 		<listItem>
           <legacyBold>Поля Level1</legacyBold> - поддерживаемые поля маркет-данных первого уровня.

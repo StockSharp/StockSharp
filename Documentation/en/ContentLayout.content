@@ -3,7 +3,7 @@
   <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" title="About StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="StockSharp Licensing" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Reference materials" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
@@ -60,10 +60,7 @@
       <Topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" visible="True" title="ITCH">
         <Topic id="ca67819a-60b8-42f0-a512-ad0792d544f2" visible="True" title="Getting started" />
       </Topic>
-      <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" title="BarChart" />
-      <Topic id="003e9486-6ed9-4afc-a325-6b2cbc382794" visible="True" title="QuantFEED">
-        <Topic id="733374e6-1410-468e-b2df-c7d3f2081ef3" visible="True" title="Getting started" />
-      </Topic>
+      <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" />
     </Topic>
     <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Connectors (Forex)">
       <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
@@ -83,37 +80,82 @@
         <Topic id="9978237f-cadb-4388-b334-7c293c080561" visible="True" title="News" />
       </Topic>
     </Topic>
-    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Connectors (Cryptocurrencies)">
-      <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isExpanded="true" title="BTC-E">
-        <Topic id="1f8dac56-b25a-4522-9965-4461a313f93b" visible="True" title="Getting started" />
+    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Connectors (Bitcoins)">
+      <Topic id="98fdd219-37f6-48a4-8ab8-d1dae37ddcff" visible="True" isExpanded="true">
+        <Topic id="31525854-5ff3-4219-a61c-631480c3dbbf" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="b67d34fc-b094-42e6-b0fe-7e3441866453" visible="True" isExpanded="true">
+        <Topic id="c06a4729-0bbb-4b09-a1a4-5a3bd1d1d893" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="571aaaa7-8eef-4a97-89a6-ba2b94083484" visible="True" isExpanded="true">
+        <Topic id="9d24ba61-6eef-4462-8913-2efb28cef633" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="e9c53ea1-e1ec-4d82-9663-e3c860c48bb4" visible="True" isExpanded="true">
+        <Topic id="d549da79-5872-4fb3-9a8d-19a226128a26" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="379fd50e-e6f3-49e0-9363-95b320a95dda" visible="True" isExpanded="true">
+        <Topic id="b1556c87-3d25-4d95-a10d-9ef033b75b7a" visible="True" title="Getting started" />
       </Topic>
       <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" isExpanded="true" title="BitStamp">
         <Topic id="7664591a-b5b5-4f96-90c3-c1b7f59d5601" visible="True" title="Getting started" />
       </Topic>
-      <Topic id="f49aab57-c1fd-4558-9241-5b42a2e619d7" visible="True" title="Bitfinex" />
-      <Topic id="4f431ab1-64bc-4cef-8387-c14c931f17b7" visible="True" title="Bithumb" />
-      <Topic id="0d71e2d9-6f13-435d-8697-58d41978d46b" visible="True" title="Bittrex" />
-      <Topic id="e4f12540-0650-4cf8-80a4-216b1acf37f3" visible="True" title="Coinbase" />
-      <Topic id="5bd2fb14-4391-4782-8031-55a8391d302c" visible="True" title="Coincheck" />
-      <Topic id="d941f537-602b-400f-91d4-d4b2b37b9767" visible="True" title="GDAX" />
-      <Topic id="17ebcf40-aa25-4717-83cd-d275209ff524" visible="True" title="HitBTC" />
-      <Topic id="cabadfac-eff9-48ab-ada6-c5856778cf68" visible="True" title="Kraken" />
-      <Topic id="f9ec5eb4-4237-4a2a-9663-757d3d4c0689" visible="True" title="OKCoin" />
-      <Topic id="18667328-deec-46dd-8c27-fce52733e5ce" visible="True" title="Poloniex" />
-      <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" title="Binance" />
-      <Topic id="4f6d317f-8788-48cb-b8d7-5e621481181c" visible="True" title="Bitexbook" />
-      <Topic id="81f33924-b166-42c1-8ced-f7e9468f86b5" visible="True" title="BitMEX" />
-      <Topic id="418c4e3a-6129-4147-a3b6-a27701c15814" visible="True" title="CEX.IO" />
-      <Topic id="956025d9-6a39-4bf5-a143-903c7540ff58" visible="True" title="CoinExchange" />
-      <Topic id="d4fa79a6-59fd-43a9-ac61-b9b8933618c6" visible="True" title="Cryptopia" />
-      <Topic id="0b4fde09-8808-4ef8-89df-39aebcdd64a1" visible="True" title="Deribit" />
-      <Topic id="601781f1-fae7-4c82-adb4-a5e7d9394cfb" visible="True" title="EXMO" />
-      <Topic id="16eaa615-aaf7-42a5-9de7-01762a650758" visible="True" title="Huobi" />
-      <Topic id="d2379d21-9bea-4199-8432-c25f73cb1594" visible="True" title="Kucoin" />
-      <Topic id="70ecf683-4336-4848-a05d-8edbcc730af4" visible="True" title="Liqui" />
-      <Topic id="8e093fe9-7b2d-47f3-a95a-ece0e0033ecc" visible="True" title="Livecoin" />
-      <Topic id="554b35f0-4110-4da0-ba30-4c450e8a996b" visible="True" title="OKEx" />
-      <Topic id="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" visible="True" title="Yobit" />
+      <Topic id="a718fc66-3926-4535-b2f6-a069d4055077" visible="True" isExpanded="true">
+        <Topic id="0232a65d-ef31-43de-9643-88fd9b478461" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isExpanded="true" title="BTC-E">
+        <Topic id="1f8dac56-b25a-4522-9965-4461a313f93b" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="c003db77-3e6f-4ef6-bbdd-658d14e3435d" visible="True" isExpanded="true" title="CEX.IO">
+        <Topic id="c003db77-3e6f-4ef6-bbdd-658d14e34357" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="57f6e993-94be-44ea-9c2d-41ad239763f6" visible="True" isExpanded="true">
+        <Topic id="2520dc9a-779e-49b7-9e9f-f1abaec0bfff" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="113c7194-bf76-4fb7-a139-7249dd0449ca" visible="True" isExpanded="true">
+        <Topic id="968f8291-33eb-4edb-8217-2e029b0cc887" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="aedb5166-0a7d-49e9-85b3-9567fb734cef" visible="True" isExpanded="true">
+        <Topic id="ed0d1fca-6686-4efd-b013-9f08c5197c7f" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="8dadf9dd-9d70-4b4d-bab0-a02402b8339e" visible="True" isExpanded="true">
+        <Topic id="45433ea2-0192-4296-8ff2-4963a5f1f2f5" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="997b2670-e5f7-4159-b155-2aae76e84dcc" visible="True" isExpanded="true">
+        <Topic id="b73ce235-54b7-491a-b0bf-bfbd515a5b24" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="54d56153-b1a7-4a7b-af6d-3726188669b2" visible="True" isExpanded="true">
+        <Topic id="154475d4-8b10-4181-b64f-8113f47b963f" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="a861d591-bade-40d0-b051-5b5de4e9ec9c" visible="True" isExpanded="true">
+        <Topic id="88e70b23-2b66-49e8-b77d-803697cee16d" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="75df8571-1b69-4f71-9af8-5e486d88e6f9" visible="True" isExpanded="true">
+        <Topic id="bf264fc3-127d-431a-879e-46014fd9c4ed" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="53e833a2-f9a4-49d8-8957-0e725807f829" visible="True" isExpanded="true">
+        <Topic id="ffca8f50-baa6-4719-9ad3-1efe6a9716a2" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="bc849491-354a-4785-b19f-45af5e982112" visible="True" isExpanded="true">
+        <Topic id="e237cc0e-6470-4cf0-81cf-5fd8594a567a" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="51647de2-e0ca-4d65-b343-e3a4c97ba81a" visible="True" isExpanded="true">
+        <Topic id="fa0a8e74-dd99-4a18-ac27-1a8db232c71b" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="6fe3c6a3-eec6-44e1-b526-0c1f2674da30" visible="True" isExpanded="true">
+        <Topic id="b2ee81b7-7038-4cfa-8505-702166f214eb" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="bdb79c8c-d127-47ba-b6b0-4bdede200bb0" visible="True" isExpanded="true">
+        <Topic id="553dc665-10b7-4844-8a79-e60331a3a38b" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="5ef56e51-556e-45d0-bd91-8d144939ab21" visible="True" isExpanded="true">
+        <Topic id="8abd86a7-2d85-4953-adeb-c54f245db876" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="ecabd085-3287-4d14-8725-09635b7ca7e6" visible="True" isExpanded="true">
+        <Topic id="97baac88-b5a9-4783-b381-f38c5568810e" visible="True" title="Getting started" />
+      </Topic>
+      <Topic id="de19cd76-bedc-4765-8951-c4c4b5b054de" visible="True" isExpanded="true">
+        <Topic id="cccadabe-b3fa-4afa-badd-ca0a1633ca2d" visible="True" title="Getting started" />
+      </Topic>
     </Topic>
     <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="Connectors (FIX/FAST)">
       <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX">
@@ -269,7 +311,7 @@
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Installing S#.Data" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="First start" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Sources setting up">
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Sources setting up">
       <Topic id="17f81170-86f2-4c99-b7a4-f122096038f4" visible="True" noFile="true" title="Stock, Futures and Options">
         <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
         <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" title="FinViz" />
@@ -286,7 +328,6 @@
         <Topic id="19e07661-3563-4eb2-b781-d0f0106fd769" visible="True" title="CQG COM" />
         <Topic id="f3eda329-0077-4517-99f2-aabdea2a930d" visible="True" title="CQG Continuum" />
         <Topic id="3adf98fb-fa41-46ad-93cb-583fb67c1d6b" visible="True" title="Xignite" />
-        <Topic id="eb7ea9cf-5aa5-42f8-a963-1834837ce4d4" visible="True" title="QuantFEED" />
       </Topic>
       <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" title="Forex">
         <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
@@ -299,9 +340,32 @@
         <Topic id="24a5983b-28a7-4620-b4b8-9356f683a9ba" visible="True" title="FXCM" />
         <Topic id="e81e69f8-bfcf-49f8-aefe-cd18270c1d9e" visible="True" title="FXCM (history)" />
       </Topic>
-      <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" title="Crypto currency">
+      <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" isExpanded="true" isSelected="true" title="Crypto currency">
+        <Topic id="82177082-714f-4a6c-912d-78ab1f0855fa" visible="True" title="Binance" />
+        <Topic id="85bd184e-a4de-4e9a-8efa-d3f6f316fc85" visible="True" title="Bitexbook" />
+        <Topic id="571aaaa7-8eef-4a97-89a6-ba2b94083411" visible="True" title="Bitfinex" />
+        <Topic id="e9c53ea1-e1ec-4d82-9663-e3c860c48b11" visible="True" title="Bithumb" />
+        <Topic id="5f3dbc18-06bc-47fe-91f3-034f0c04813a" visible="True" title="BitMEX" />
         <Topic id="7a11d9ff-17c9-406b-ab88-c4b9c080912d" visible="True" title="BitStamp" />
+        <Topic id="a718fc66-3926-4535-b2f6-a069d4055011" visible="True" title="Bittrex" />
         <Topic id="4e435654-38af-4ede-9987-e268a6ae3b96" visible="True" title="BTCE" />
+        <Topic id="8415990d-0d4b-41af-a4ab-586e65bf9511" visible="True" title="CEX.IO" />
+        <Topic id="57f6e993-94be-44ea-9c2d-41ad23976311" visible="True" title="Coinbase" />
+        <Topic id="113c7194-bf76-4fb7-a139-7249dd044111" visible="True" title="Coincheck" />
+        <Topic id="aedb5166-0a7d-49e9-85b3-9567fb734111" visible="True" title="CoinExchenge" />
+        <Topic id="8dadf9dd-9d70-4b4d-bab0-a02402b83111" visible="True" title="Cryptopia" />
+        <Topic id="997b2670-e5f7-4159-b155-2aae76e84111" visible="True" title="Deribit" />
+        <Topic id="57d66840-d98b-47f2-afec-5aad360aa6a9" visible="True" title="EXMO" />
+        <Topic id="a861d591-bade-40d0-b051-5b5de4e9e111" visible="True" title="HitBTC" />
+        <Topic id="75df8571-1b69-4f71-9af8-5e486d88e111" visible="True" title="Huobi" />
+        <Topic id="53e833a2-f9a4-49d8-8957-0e725807f111" visible="True" title="Kraken" />
+        <Topic id="bc849491-354a-4785-b19f-45af5e982111" visible="True" title="Kucoin" />
+        <Topic id="51647de2-e0ca-4d65-b343-e3a4c97ba111" visible="True" title="Liqui" />
+        <Topic id="6fe3c6a3-eec6-44e1-b526-0c1f2674d111" visible="True" title="Livecoin" />
+        <Topic id="bdb79c8c-d127-47ba-b6b0-4bdede200111" visible="True" title="OKCoin" />
+        <Topic id="5ef56e51-556e-45d0-bd91-8d144939a111" visible="True" title="OKex" />
+        <Topic id="ecabd085-3287-4d14-8725-09635b7ca111" visible="True" title="Poloniex" />
+        <Topic id="de19cd76-bedc-4765-8951-c4c4b5b05111" visible="True" title="Yobit" />
       </Topic>
       <Topic id="0f6a2b55-c841-45fb-96ad-a562a8cea016" visible="True" noFile="true" title="Misc">
         <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="FIX/FAST" />
@@ -349,7 +413,6 @@
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" title="Tasks">
       <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Converter" />
       <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Export (auto)" />
-      <Topic id="ec33258b-c0bb-4f2b-bef3-368e607a92a4" visible="True" title="Import (auto)" />
       <Topic id="f2b919bd-cb33-4cf1-818f-315c8f79b5ce" visible="True" title="Backup" />
     </Topic>
     <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" title="Analytics">
@@ -370,7 +433,7 @@
       </Topic>
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isExpanded="true" title="S#.Designer">
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer">
     <Topic id="840e49ea-f9e1-4704-8324-098b002f78f9" visible="True" title="Installing S#.Designer" />
     <Topic id="e8f4b412-f51f-4f50-858f-142dea0c5c7e" visible="True" title="Update S#.Designer" />
     <Topic id="a9e273cf-9daa-4f8f-80d2-d58abab23d59" visible="True" title="Quick start" />
@@ -465,7 +528,7 @@
         <Topic id="cab51564-727a-483e-8cf1-d179ebcb2944" visible="True" title="Composite elements" />
         <Topic id="3ab50c43-f441-4e60-bee6-5ca1c07e5baa" visible="True" noFile="true" isExpanded="true" title="Schema samples">
           <Topic id="c927a56f-d547-42f8-b5ad-0acb85edb6cb" visible="True" title="Display candles on chart" />
-          <Topic id="8f13421b-0ad7-47a7-80ea-b347df00f173" visible="True" isSelected="true" title="Get best price for instrument" />
+          <Topic id="8f13421b-0ad7-47a7-80ea-b347df00f173" visible="True" title="Get best price for instrument" />
           <Topic id="486b67a3-790c-48c6-87bf-045e058f2a96" visible="True" title="Get current position" />
           <Topic id="4b3ab78a-1a3d-4cd0-9e25-c52948de52ee" visible="True" title="Get order book price level" />
         </Topic>
