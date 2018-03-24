@@ -1,25 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
       <para>Currently, <token>stocksharp</token> supports the following bitcoin (or cryptocurrency) connectors:</para>
 		<list class="ordered">
-  			<listItem>
-  					<codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> for <token>btce</token>
-  			</listItem>
-  			<listItem>
-  					<codeEntityReference>T:StockSharp.BitStamp.BitStampTrader</codeEntityReference> for <token>bitstamp</token>
-  			</listItem>
+<listItem><codeEntityReference>T:StockSharp.Binance.BinanceTrader</codeEntityReference> for <token>Binance</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitexbook.BitexbookTrader</codeEntityReference> for <token>Bitexbook</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitfinex.BitfinexTrader</codeEntityReference> for <token>Bitfinex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bithumb.BithumbTrader</codeEntityReference> for <token>Bithumb</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitmex.BitmexTrader</codeEntityReference> for <token>Bitmex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.BitStamp.BitStampTrader</codeEntityReference> for <token>BitStamp</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bittrex.BittrexTrader</codeEntityReference> for <token>Bittrex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> for <token>Btce</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Cex.CexTrader</codeEntityReference> for <token>Cex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Coinbase.CoinbaseTrader</codeEntityReference> for <token>Coinbase</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Coincheck.CoincheckTrader</codeEntityReference> for <token>Coincheck</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.CoinExchange.CoinExchangeTrader</codeEntityReference> for <token>CoinExchange</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Cryptopia.CryptopiaTrader</codeEntityReference> for <token>Cryptopia</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Deribit.DeribitTrader</codeEntityReference> for <token>Deribit</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Exmo.ExmoTrader</codeEntityReference> for <token>Exmo</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.HitBtc.HitBtcTrader</codeEntityReference> for <token>HitBtc</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Huobi.HuobiTrader</codeEntityReference> for <token>Huobi</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Kraken.KrakenTrader</codeEntityReference> for <token>Kraken</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Kucoin.KucoinTrader</codeEntityReference> for <token>Kucoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Liqui.LiquiTrader</codeEntityReference> for <token>Liqui</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.LiveCoin.LiveCoinTrader</codeEntityReference> for <token>LiveCoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Okcoin.OkcoinTrader</codeEntityReference> for <token>Okcoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Okex.OkexTrader</codeEntityReference> for <token>Okex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Poloniex.PoloniexTrader</codeEntityReference> for <token>Poloniex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Yobit.YobitTrader</codeEntityReference> for <token>Yobit</token></listItem>
+
 		</list>
 
     </introduction>

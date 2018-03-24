@@ -20,7 +20,7 @@ namespace XMLCommToHTM.DOM
 {
 	public class EventDom : MemberDom
 	{
-		private readonly EventInfo _ei;
+		private EventInfo _ei;
 		public EventDom(EventInfo ei, XElement doc): base(ei, doc)
 		{
 			_ei = ei;

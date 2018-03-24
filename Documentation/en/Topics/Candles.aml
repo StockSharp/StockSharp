@@ -53,9 +53,11 @@ charts are on the following figures:</para>
 		<steps class="ordered">
 			<step>
 				<content>
-<para>First, you need to create the candles manager <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-which is by subscribing to the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference> 
-event, will receive candles:</para>
+<para>First, you need to create the candles manager 
+<codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
+which is by subscribing to the 
+<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference> 
+event, will create candles:</para>
 			
 					<code language="C#">
 					<![CDATA[
@@ -69,11 +71,11 @@ _candleManager = new CandleManager(_trader);
 					</code>
 					
 					<alert class="note">
-<para>If for candles getting the source with another procedure used instead of the <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>
-connector, you must implement the <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.IExternalCandleSource</codeEntityReference>
+<para>If for tick trades getting the source with another procedure used instead of the <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
+connector, you must implement the <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.Compression.IBuilderCandleSource</codeEntityReference>
 interface and pass the implementation to <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>.</para>
 						
-<!--<para>The following implementations of this interface are in the <token>stocksharp</token>:</para>
+<para>The following implementations of this interface are in the <token>stocksharp</token>:</para>
 						
 <list class="bullet">
 <listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder</codeEntityReference></para></listItem>
@@ -89,7 +91,7 @@ interface and pass the implementation to <codeEntityReference qualifyHint="true"
 <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>
 when the 
 <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> 
-is creating.</para>-->
+is creating.</para>
 
 					</alert>
 				</content>
@@ -121,7 +123,7 @@ To display candles the graphical component <codeEntityReference>T:StockSharp.Xam
 			<step>
 				<content>
 <para>You must declare exactly which candles are required for the algorithm and start data receiving through 
-<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})</codeEntityReference>:</para>
+<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:</para>
 
 <code language="C#">
 					<![CDATA[

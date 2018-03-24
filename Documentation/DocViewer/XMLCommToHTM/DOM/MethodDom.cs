@@ -28,15 +28,16 @@ namespace XMLCommToHTM.DOM
 	public class MethodDom: MemberDom
 	{
 		private readonly MethodInfo _mi;
+		readonly GenericParameterDom[] _genericArguments;
 		public int? OverloadIndex;
 
 		public MethodDom(MethodInfo mi, XElement doc) : base(mi, doc)
 		{
 			_mi = mi;
 			Params = ParameterDom.BuildParameters(mi.GetParameters(), doc);
-			GenericArguments = GenericParameterDom.BuildMethodGenericParameters(_mi, doc);
+			_genericArguments = GenericParameterDom.BuildMethodGenericParameters(_mi, doc);
 		}
-		public override GenericParameterDom[] GenericArguments { get; }
+		public override GenericParameterDom[] GenericArguments => _genericArguments;
 
 		public override string Name
 		{

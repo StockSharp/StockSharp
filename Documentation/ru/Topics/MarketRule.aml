@@ -264,7 +264,7 @@
 				  - правило на событие полной остановки работы стратегии.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy,System.Boolean)</codeEntityReference>
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
 				  - правило на событие ошибки стратегии.
 			  </listItem>
 			  <listItem>
@@ -399,7 +399,7 @@ public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio port
 		]]></code>
 		<para>
 			Правило <legacyItalic>PortfolioRule</legacyItalic> подписывается на событие
-			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.PortfolioChanged</codeEntityReference>
+			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfolioChanged</codeEntityReference>
 			и, как только оно вызывается, то проверяется условие на превышение текущего уровня денежных средств в портфеле выше определенного лимита.
 			Если условие возвращает <legacyBold>true</legacyBold>, то активируется правило через метод 
 			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRule`2.Activate</codeEntityReference>.

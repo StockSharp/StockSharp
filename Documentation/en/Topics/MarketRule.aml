@@ -244,7 +244,7 @@
 				  - the rule for the event of the strategy work stopped.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy,System.Boolean)</codeEntityReference>
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
 				  - the rule for the event of the strategy error.
 			  </listItem>
 			  <listItem>

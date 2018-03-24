@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<codeEntityReference>T:StockSharp.Xaml.IndexEditor</codeEntityReference> -  Graphic control for 
+      	<codeEntityReference>T:StockSharp.Algo.Expressions.Xaml.IndexEditor</codeEntityReference> -  Graphic control for 
       	<codeEntityReference>T:StockSharp.Algo.Expressions.ExpressionIndexSecurity</codeEntityReference> editing.
       	</para>
       	<para>
@@ -29,10 +29,10 @@ To calculate a mathematical expression, the
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Securities</codeEntityReference> - all available instruments.</para>
+  				<para><codeEntityReference>P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Securities</codeEntityReference> - all available instruments.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.IndexEditor.Formula</codeEntityReference> - the mathematical formula of the index.</para>
+  				<para><codeEntityReference>P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Formula</codeEntityReference> - the mathematical formula of the index.</para>
   			</listItem>
 		</list>
 		

@@ -51,7 +51,7 @@
 			<step>
 				<content>
 					<para>В самом начале необходимо создать менеджер свечей <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Connector.CandleSeriesProcessing</codeEntityReference>,
+					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrade</codeEntityReference>,
 					будет формировать свечи:</para>
 			
 					<code language="C#">
@@ -66,11 +66,11 @@ _candleManager = new CandleManager(_trader);
 					</code>
 					
 					<alert class="note">
-						<para>Если для получения свечей вместо шлюза <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> используется источник с другим механизмом,
-						то необходимо реализовать интерфейс <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.IExternalCandleSource</codeEntityReference>,
-						и передать реализацию в <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
+						<para>Если для получения тиковых сделок вместо шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> используется источник с другим механизмом, то необходимо реализовать интерфейс
+						<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.Compression.IBuilderCandleSource</codeEntityReference>, и передать реализацию в 
+						<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
 						
-						<!--<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса:</para>
+						<para>В <token>stocksharp</token> существуют следующие реализации данного интерфейса</para>
 						
 						<list class="bullet">
   							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TimeFrameCandleBuilder</codeEntityReference></para></listItem>
@@ -82,8 +82,8 @@ _candleManager = new CandleManager(_trader);
   							<listItem><para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.StorageCandleSource</codeEntityReference></para></listItem>
 						</list>
 						
-						<para>Вышеописанные реализации стандартно идут в качестве <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>
-						при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>-->
+						<para>Которые стандартно идут в качестве <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>
+						при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>.</para>
 
 					</alert>
 				</content>
@@ -116,7 +116,7 @@ private void DrawCandle(CandleSeries series, Candle candle)
 			<step>
 				<content>
 					<para>Необходимо объявить, какие именно свечи требуются для робота и запустить получение данных через 
-					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset})</codeEntityReference>:</para>
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:</para>
 
 					<code language="C#">
 					<![CDATA[

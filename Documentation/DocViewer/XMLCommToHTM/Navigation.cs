@@ -109,25 +109,24 @@ namespace XMLCommToHTM
 			return Tuple.Create((isMsdn
 				? MsdnUrlPrefix.Put(GenerateHtml.IsRussian ? "ru" : "en") + tagHref
 				: UrlPrefix + tagHref.Replace('.', '/'))
-					, tagHref.StartsWithIgnoreCase("stocksharp"));
+					, tagHref.StartsWith("stocksharp", StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		private static bool IsMsdn(string name)
 		{
-			return name.StartsWithIgnoreCase("system."); //ToDo: усовершенcтвовать
+			return name.StartsWith("system.", StringComparison.InvariantCultureIgnoreCase); //ToDo: усовершенcтвовать
 		}
 
 		public string GetMemberHref(MemberDom m)
 		{
 			var tuple = GetTypeHref(m.Type.Type);
 			var ret = tuple.Item1 + "/" + m.Name;
-			
-			if (m is MethodDom method)
+			if (m is MethodDom)
 			{
-				if (method.OverloadIndex.HasValue)
-					ret += "/" + method.OverloadIndex;
+				var meth = (MethodDom) m;
+				if (meth.OverloadIndex.HasValue)
+					ret += "/" + meth.OverloadIndex.ToString();
 			}
-
 			return ret;
 		}
 		static Type GetTypeForRef(Type type)

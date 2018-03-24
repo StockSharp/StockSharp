@@ -27,7 +27,8 @@ namespace XMLCommToHTM
 	{
 		static string Generate(MemberDom member)
 		{
-			var doc = GetDoc(out var body);
+			XElement body;
+			var doc = GetDoc(out body);
 			body.Add(
 				x("h1", member.Type.SimpleName + GetMemberName(member) + Names[Strings.SuffixDelimeter] + 
 					Names[GetMethodKindName(member)]+ " ", member.GetParametersLongSignature()),
@@ -77,7 +78,8 @@ namespace XMLCommToHTM
 		static string Generate(IGrouping<string, MethodDom> group)
 		{
 			var first = group.First();
-			var doc = GetDoc(out var body);
+			XElement body;
+			var doc = GetDoc(out body);
 			body.Add(
 				x("h1", first.Type.SimpleName + GetMemberName(first) + Names[Strings.SuffixDelimeter] +
 					Names[GetMethodKindName(first)] + " " ),
@@ -96,8 +98,9 @@ namespace XMLCommToHTM
 
 		static string GetMethodKindName(MemberDom m)
 		{
-			if (m is MethodDom meth)
+			if (m is MethodDom)
 			{
+				var meth = m as MethodDom;
 				if (meth.IsOperator)
 					return Strings.Operator;
 				else
@@ -117,7 +120,8 @@ namespace XMLCommToHTM
 
 		static XElement BuildReturns(MemberDom m)
 		{
-			if (!(m is MethodDom meth))
+			var meth= m as MethodDom;
+			if (meth == null)
 				return BuildMemberType(m);
 			if (meth.MemberType==null || meth.MemberType == typeof(void))
 				return null;

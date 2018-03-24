@@ -35,14 +35,15 @@ namespace XMLCommToHTM.DOM.Internal
 
 			foreach (var typeDom in allTypes)
 			{
-				// = dict[typeDom.Type];
-				if (!dict.TryGetValue(typeDom.Type, out var curEntry))
+				List<TypeDom> curEntry; // = dict[typeDom.Type];
+				if(!dict.TryGetValue(typeDom.Type, out curEntry))
 					continue;
 
 				foreach (Type baseType in typeDom.Type.GetBaseTypes())
 				{
 					//Извлечение и удаление из словаря, и добавление извлеченного списка к curEntry
-					if (dict.TryGetValue(baseType, out var baseEntry))
+					List<TypeDom> baseEntry;
+					if (dict.TryGetValue(baseType, out baseEntry))
 					{
 						dict.Remove(baseType);
 						curEntry.AddRange(baseEntry);

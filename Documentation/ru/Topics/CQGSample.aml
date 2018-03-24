@@ -104,7 +104,7 @@ Connector.Connect();
 				<content>
 					<para>При успешном подключении можно ожидать срабатывания события 
 					<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.NewPortfolio</codeEntityReference>. В обработчике этого события подписываемся
-					на изменения портфелей <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IPortfolioProvider.PortfolioChanged</codeEntityReference> при помощи метода 
+					на изменения портфелей <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfolioChanged</codeEntityReference> при помощи метода 
 					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
 				</content>
 			</step>

@@ -131,11 +131,6 @@
 				<p>Торговые сущности для работы с опционами.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Algo.Import">
-			<summary>
-				<p>Классы для импорта данных из CSV формата.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.Algo.Export">
 			<summary>
 				<p>Классы для экспорта данных в различные форматы.</p>
@@ -536,11 +531,6 @@
 				<p>Графический компонент PropertyGridEx.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Xaml.Code">
-			<summary>
-				<p>Графические компоненты для редактирования кода.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.SpbEx">
 			<summary>
 				<p>Коннектор прямого подключения по бинарному протоколу к SPB Exchange.</p>
@@ -554,11 +544,6 @@
 		<member name="N:StockSharp.Fxcm">
 			<summary>
 				<p>Коннектор к брокеру FXCM.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.QuantHouse">
-			<summary>
-				<p>Коннектор к сервисам QuantHouse (QuantFEED и т.д.).</p>
 			</summary>
 		</member>
 	</members>
