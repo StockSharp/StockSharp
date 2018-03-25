@@ -14,12 +14,33 @@
       <!-- <autoOutline /> -->
       <para>На текущий момент <token>stocksharp</token> поддерживает следующие коннекторы Bitcoins:</para>
 		<list class="ordered">
-  			<listItem>
-  					<codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> для <token>btce</token>
-  			</listItem>
-  			<listItem>
-  					<codeEntityReference>T:StockSharp.BitStamp.BitStampTrader</codeEntityReference> для <token>bitstamp</token>
-  			</listItem>
+<listItem><codeEntityReference>T:StockSharp.Binance.BinanceTrader</codeEntityReference> для <token>Binance</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitexbook.BitexbookTrader</codeEntityReference> для <token>Bitexbook</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitfinex.BitfinexTrader</codeEntityReference> для <token>Bitfinex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bithumb.BithumbTrader</codeEntityReference> для <token>Bithumb</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bitmex.BitmexTrader</codeEntityReference> для <token>Bitmex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.BitStamp.BitStampTrader</codeEntityReference> для <token>BitStamp</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Bittrex.BittrexTrader</codeEntityReference> для <token>Bittrex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Btce.BtceTrader</codeEntityReference> для <token>Btce</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Cex.CexTrader</codeEntityReference> для <token>Cex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Coinbase.CoinbaseTrader</codeEntityReference> для <token>Coinbase</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Coincheck.CoincheckTrader</codeEntityReference> для <token>Coincheck</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.CoinExchange.CoinExchangeTrader</codeEntityReference> для <token>CoinExchange</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Cryptopia.CryptopiaTrader</codeEntityReference> для <token>Cryptopia</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Deribit.DeribitTrader</codeEntityReference> для <token>Deribit</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Exmo.ExmoTrader</codeEntityReference> для <token>Exmo</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Gdax.GdaxTrader</codeEntityReference> для <token>Gdax</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.HitBtc.HitBtcTrader</codeEntityReference> для <token>HitBtc</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Huobi.HuobiTrader</codeEntityReference> для <token>Huobi</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Kraken.KrakenTrader</codeEntityReference> для <token>Kraken</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Kucoin.KucoinTrader</codeEntityReference> для <token>Kucoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Liqui.LiquiTrader</codeEntityReference> для <token>Liqui</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.LiveCoin.LiveCoinTrader</codeEntityReference> для <token>LiveCoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Okcoin.OkcoinTrader</codeEntityReference> для <token>Okcoin</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Okex.OkexTrader</codeEntityReference> для <token>Okex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Poloniex.PoloniexTrader</codeEntityReference> для <token>Poloniex</token></listItem>
+<listItem><codeEntityReference>T:StockSharp.Yobit.YobitTrader</codeEntityReference> для <token>Yobit</token></listItem>
+
 		</list>
 
     </introduction>
