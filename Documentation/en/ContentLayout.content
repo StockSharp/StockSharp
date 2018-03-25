@@ -3,7 +3,7 @@
   <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" title="About StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="StockSharp Licensing" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Reference materials" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
@@ -130,7 +130,7 @@
         <Topic id="154475d4-8b10-4181-b64f-8113f47b963f" visible="True" title="Getting started" />
       </Topic>
       <Topic id="d941f537-602b-400f-91d4-d4b2b37b9767" visible="True" isExpanded="true" title="GDAX">
-        <Topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" visible="False" isMSHVRoot="true" title="Getting started" />
+        <Topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" visible="True" isSelected="true" title="Getting started" />
       </Topic>
       <Topic id="17ebcf40-aa25-4717-83cd-d275209ff524" visible="True" isExpanded="true" title="HitBTC">
         <Topic id="88e70b23-2b66-49e8-b77d-803697cee16d" visible="True" title="Getting started" />
@@ -363,7 +363,7 @@
         <Topic id="8dadf9dd-9d70-4b4d-bab0-a02402b83111" visible="True" title="Cryptopia" />
         <Topic id="997b2670-e5f7-4159-b155-2aae76e84111" visible="True" title="Deribit" />
         <Topic id="57d66840-d98b-47f2-afec-5aad360aa6a9" visible="True" title="EXMO" />
-        <Topic id="0585869f-a6ef-4e75-81b1-58f4ba513882" visible="True" isSelected="true" title="GDAX" />
+        <Topic id="0585869f-a6ef-4e75-81b1-58f4ba513882" visible="True" title="GDAX" />
         <Topic id="a861d591-bade-40d0-b051-5b5de4e9e111" visible="True" title="HitBTC" />
         <Topic id="75df8571-1b69-4f71-9af8-5e486d88e111" visible="True" title="Huobi" />
         <Topic id="53e833a2-f9a4-49d8-8957-0e725807f111" visible="True" title="Kraken" />
