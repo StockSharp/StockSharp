@@ -11,13 +11,48 @@
 			<linkUri>http://stocksharp.ru/register/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
-			 Эта лицензия включает <token>designer</token>, <token>hydra</token>, <token>stocksharpapi</token> 
-			 (<token>quik</token>, <token>alfa</token>, <token>smartcom</token>, <token>transaq</token>, <token>alor</token>,
-			 <token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
+			 Эта лицензия включает: </para>
+			 		<list class="ordered">
+  			<listItem>
+<token>designer</token>
+  			</listItem>
+  			<listItem>
+<token>hydra</token>
+  			</listItem>
+  			<listItem>
+<token>stocksharpapi</token>
+			 (<token>lmax</token>, <token>oanda</token>, 
+			 <token>quik</token>, <token>alfa</token>, <token>smartcom</token>, <token>transaq</token>, <token>alor</token>,
+			 <token>openecry</token>, <token>IB</token>, <token>etrade</token>, 
 			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>, 
-			 <token>matlab</token>, <token>btce</token>, <token>bitstamp</token>, BarChart и RSS).
-		</para>
+			 <token>matlab</token>, BarChart и RSS)
+  			</listItem>
+		</list>
+
 		<para>Cм. также <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.</para>
+		<para><legacyBold>
+Крипто-трейдер
+
+</legacyBold></para>
+		<list class="ordered">
+  			<listItem>
+  				<para>Пожизненно всем участникам крауд кампаний. 
+  				Доступно:
+		<token>Bitfinex</token>,
+		<token>Bithumb</token>,
+		<token>BitStamp</token>,
+		<token>Bittrex</token>,
+		<token>Btce</token>,
+		<token>Coinbase</token>,
+		<token>Coincheck</token>,
+		<token>Gdax</token>,
+		<token>HitBtc</token>,
+		<token>Kraken</token>,
+		<token>Okcoin</token>,
+		<token>Poloniex</token>,
+  				</para>
+  			</listItem>
+		</list>
 		<para><legacyBold>Расширенная лицензия</legacyBold></para>
 		<list class="ordered">
   			<listItem>
