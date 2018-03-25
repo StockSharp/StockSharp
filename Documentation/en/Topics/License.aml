@@ -11,12 +11,44 @@
 			<linkUri>http://stocksharp.com/register/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
-			 It's include <token>designer</token>, <token>hydra</token>, <token>stocksharpapi</token> 
-			 (<token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
+			It's include: </para>
+			 		<list class="ordered">
+  			<listItem>
+<token>designer</token>
+  			</listItem>
+  			<listItem>
+<token>hydra</token>
+  			</listItem>
+  			<listItem>
+<token>stocksharpapi</token>
+			 (<token>lmax</token>, <token>oanda</token>,
+			 <token>openecry</token>, <token>IB</token>, <token>etrade</token>, 
 			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>, 
-			 <token>matlab</token>, <token>btce</token>, <token>bitstamp</token>, <token>barchart</token> and RSS).
-		</para>
+			 <token>matlab</token>, <token>barchart</token> and RSS)
+  			</listItem>
+		</list>
+
 		<para>See also <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">StockSharp installation</link>.</para>
+		<para><legacyBold>Crypto trader</legacyBold></para>
+		<list class="ordered">
+  			<listItem>
+  				<para>Perpetual license for investors of our crowd campaigns. 
+  				It's include:
+		<token>Bitfinex</token>,
+		<token>Bithumb</token>,
+		<token>BitStamp</token>,
+		<token>Bittrex</token>,
+		<token>Btce</token>,
+		<token>Coinbase</token>,
+		<token>Coincheck</token>,
+		<token>Gdax</token>,
+		<token>HitBtc</token>,
+		<token>Kraken</token>,
+		<token>Okcoin</token>,
+		<token>Poloniex</token>,
+  				</para>
+  			</listItem>
+		</list>
 		<para><legacyBold>Extended License</legacyBold></para>
 		<list class="ordered">
   			<listItem>

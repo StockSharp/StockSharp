@@ -14,14 +14,12 @@
   <item id="alor"><ddue:link xlink:href="df84be76-8798-4b96-94ea-a1b106266ad5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Алор Трейд</ddue:link></item>
   <item id="alortrader">Add token content here</item>
   <item id="barchart"><ddue:link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BarChart</ddue:link></item>
-  <item id="bitstamp"><ddue:link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BitStamp</ddue:link></item>
   <item id="blackwood"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
   <item id="blackwood_external"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
   <item id="bs"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Black–Scholes model</ddue:linkText>
 		  <ddue:linkUri>https://en.wikipedia.org/wiki/Black–Scholes_model</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="btce"><ddue:link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BTC-E</ddue:link></item>
   <item id="calendar"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Google Calendar notifications</ddue:linkText>
 		  <ddue:linkUri>https://support.google.com/calendar/answer/45351?hl=en</ddue:linkUri>
@@ -355,4 +353,30 @@
     <ddue:linkText>QuantFEED</ddue:linkText>
     <ddue:linkUri>https://www.quanthouse.com/market+data+feed</ddue:linkUri>
   </ddue:externalLink></item>
+    <item id="bitstamp"><ddue:link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Binance"><ddue:link xlink:href="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Bitexbook"><ddue:link xlink:href="4f6d317f-8788-48cb-b8d7-5e621481181c" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Bitfinex"><ddue:link xlink:href="f49aab57-c1fd-4558-9241-5b42a2e619d7" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Bithumb"><ddue:link xlink:href="4f431ab1-64bc-4cef-8387-c14c931f17b7" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Bitmex"><ddue:link xlink:href="81f33924-b166-42c1-8ced-f7e9468f86b5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Bittrex"><ddue:link xlink:href="0d71e2d9-6f13-435d-8697-58d41978d46b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Cex"><ddue:link xlink:href="418c4e3a-6129-4147-a3b6-a27701c15814" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Coinbase"><ddue:link xlink:href="57f6e993-94be-44ea-9c2d-41ad23976311" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Coincheck"><ddue:link xlink:href="5bd2fb14-4391-4782-8031-55a8391d302c" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="CoinExchange"><ddue:link xlink:href="956025d9-6a39-4bf5-a143-903c7540ff58" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Cryptopia"><ddue:link xlink:href="d4fa79a6-59fd-43a9-ac61-b9b8933618c6" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Deribit"><ddue:link xlink:href="0b4fde09-8808-4ef8-89df-39aebcdd64a1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Exmo"><ddue:link xlink:href="601781f1-fae7-4c82-adb4-a5e7d9394cfb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Gdax"><ddue:link xlink:href="d941f537-602b-400f-91d4-d4b2b37b9767" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="HitBtc"><ddue:link xlink:href="17ebcf40-aa25-4717-83cd-d275209ff524" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Huobi"><ddue:link xlink:href="16eaa615-aaf7-42a5-9de7-01762a650758" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Kraken"><ddue:link xlink:href="cabadfac-eff9-48ab-ada6-c5856778cf68" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Kucoin"><ddue:link xlink:href="d2379d21-9bea-4199-8432-c25f73cb1594" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Liqui"><ddue:link xlink:href="70ecf683-4336-4848-a05d-8edbcc730af4" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="LiveCoin"><ddue:link xlink:href="8e093fe9-7b2d-47f3-a95a-ece0e0033ecc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Okcoin"><ddue:link xlink:href="f9ec5eb4-4237-4a2a-9663-757d3d4c0689" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Okex"><ddue:link xlink:href="554b35f0-4110-4da0-ba30-4c450e8a996b" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Poloniex"><ddue:link xlink:href="18667328-deec-46dd-8c27-fce52733e5ce" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="Yobit"><ddue:link xlink:href="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
+  <item id="btce"><ddue:link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5"/></item>
 </content>
