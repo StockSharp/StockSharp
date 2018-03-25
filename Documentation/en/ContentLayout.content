@@ -83,7 +83,7 @@
         <Topic id="9978237f-cadb-4388-b334-7c293c080561" visible="True" title="News" />
       </Topic>
     </Topic>
-    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Connectors (Cryptocurrencies)">
+    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" isExpanded="true" title="Connectors (Cryptocurrencies)">
       <Topic id="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" visible="True" isExpanded="true" title="Binance">
         <Topic id="31525854-5ff3-4219-a61c-631480c3dbbf" visible="True" title="Getting started" />
       </Topic>
@@ -130,7 +130,7 @@
         <Topic id="154475d4-8b10-4181-b64f-8113f47b963f" visible="True" title="Getting started" />
       </Topic>
       <Topic id="d941f537-602b-400f-91d4-d4b2b37b9767" visible="True" isExpanded="true" title="GDAX">
-        <Topic id="8946b420-1bf5-4679-afc3-4f8c4d6b44f1" visible="True" title="Getting started" />
+        <Topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" visible="False" isMSHVRoot="true" title="Getting started" />
       </Topic>
       <Topic id="17ebcf40-aa25-4717-83cd-d275209ff524" visible="True" isExpanded="true" title="HitBTC">
         <Topic id="88e70b23-2b66-49e8-b77d-803697cee16d" visible="True" title="Getting started" />
@@ -363,14 +363,14 @@
         <Topic id="8dadf9dd-9d70-4b4d-bab0-a02402b83111" visible="True" title="Cryptopia" />
         <Topic id="997b2670-e5f7-4159-b155-2aae76e84111" visible="True" title="Deribit" />
         <Topic id="57d66840-d98b-47f2-afec-5aad360aa6a9" visible="True" title="EXMO" />
-        <Topic id="2897e191-59f1-4e12-9192-af69fb87327a" visible="True" title="GDAX" />
+        <Topic id="0585869f-a6ef-4e75-81b1-58f4ba513882" visible="True" isSelected="true" title="GDAX" />
         <Topic id="a861d591-bade-40d0-b051-5b5de4e9e111" visible="True" title="HitBTC" />
         <Topic id="75df8571-1b69-4f71-9af8-5e486d88e111" visible="True" title="Huobi" />
         <Topic id="53e833a2-f9a4-49d8-8957-0e725807f111" visible="True" title="Kraken" />
         <Topic id="bc849491-354a-4785-b19f-45af5e982111" visible="True" title="Kucoin" />
         <Topic id="51647de2-e0ca-4d65-b343-e3a4c97ba111" visible="True" title="Liqui" />
         <Topic id="6fe3c6a3-eec6-44e1-b526-0c1f2674d111" visible="True" title="LiveCoin" />
-        <Topic id="bdb79c8c-d127-47ba-b6b0-4bdede200111" visible="True" isSelected="true" title="OKCoin" />
+        <Topic id="bdb79c8c-d127-47ba-b6b0-4bdede200111" visible="True" title="OKCoin" />
         <Topic id="5ef56e51-556e-45d0-bd91-8d144939a111" visible="True" title="OKEx" />
         <Topic id="ecabd085-3287-4d14-8725-09635b7ca111" visible="True" title="Poloniex" />
         <Topic id="de19cd76-bedc-4765-8951-c4c4b5b05111" visible="True" title="Yobit" />

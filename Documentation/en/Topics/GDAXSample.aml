@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="8946b420-1bf5-4679-afc3-4f8c4d6b44f1" revisionNumber="1">
+<topic id="cddf98a2-3ec9-4e49-9757-8b0de893fb15" revisionNumber="1">
  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>The SampleGdax application shows an example of working with the <codeEntityReference qualifyHint="false">T:StockSharp.Gdax.GdaxTrader</codeEntityReference>
