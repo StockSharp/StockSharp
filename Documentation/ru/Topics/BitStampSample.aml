@@ -244,14 +244,16 @@ var order = new Order
 		WithdrawInfo = new WithdrawInfo
 		{
 			// заполняются необходимые реквизиты
-			Comment = "My grand profit",
-			PaymentId = "45467dyjyttR8WBiTJXptyuTx4wbSerGZ5t45",
-			CryptoAddress = "rKe5WtR8WBiTJXpXz7uTx4wbSerGZ5tbkw",
+			Comment = "My profit",
+			//PaymentId = "45467dyjyttR8WBiTJXptyuTx4wbSerGZ5t45", //Riple
+			CryptoAddress = "16zK3M53JBGnjs9ajTBGBfkRqoHtm4E573",
 		}
-	}
+	},
+	Security = new Security() { Code = "BTC" },
 };
 
 Trader.RegisterOrder(order);
+
 							]]>
 							</code>						
 						</content>
