@@ -156,6 +156,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Okex.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Yobit.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Yobit.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.BarChart.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.BarChart.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
