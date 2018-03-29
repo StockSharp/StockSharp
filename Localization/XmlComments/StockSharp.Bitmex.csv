@@ -11,8 +11,15 @@ M:StockSharp.Bitmex.BitmexMessageAdapter.ToString/returns;DocStr50
 M:StockSharp.Bitmex.BitmexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Bitmex.BitmexMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Bitmex.BitmexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.Bitmex.BitmexOrderTypes/summary;DocStr10253
+F:StockSharp.Bitmex.BitmexOrderTypes.Stop/summary;DocStr3138
+F:StockSharp.Bitmex.BitmexOrderTypes.StopLimit/summary;DocStr3139
+F:StockSharp.Bitmex.BitmexOrderTypes.MarketIfTouched/summary;DocStr3421
+F:StockSharp.Bitmex.BitmexOrderTypes.LimitIfTouched/summary;DocStr3422
 T:StockSharp.Bitmex.BitmexOrderCondition/summary;DocStr60
 M:StockSharp.Bitmex.BitmexOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.Bitmex.BitmexOrderCondition.StopType/summary;Str2570
+P:StockSharp.Bitmex.BitmexOrderCondition.StopPrice/summary;StopPrice
 P:StockSharp.Bitmex.BitmexOrderCondition.IsWithdraw/summary;Withdraw
 P:StockSharp.Bitmex.BitmexOrderCondition.WithdrawInfo/summary;WithdrawInfo
 T:StockSharp.Bitmex.BitmexTrader/summary;DocStr2539
