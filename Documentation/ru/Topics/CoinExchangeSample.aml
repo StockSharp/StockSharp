@@ -4,7 +4,7 @@
     <introduction>
       <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.CoinExchange.CoinExchangeTrader</codeEntityReference> демонстрирует приложение SampleCoinExchange,
         показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/CoinExchange</legacyItalic>.</para>
-		<mediaLink><image placement="center" xlink:href="CoinExchengeSample"/></mediaLink>
+		<mediaLink><image placement="center" xlink:href="CoinExchangeSample"/></mediaLink>
     </introduction>
     
     <procedure>
