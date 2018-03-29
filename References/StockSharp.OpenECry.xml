@@ -157,42 +157,42 @@
             Production server. Address is prod.gainfutures.com, port 9200.
             </summary>
     </member>
-    <member name="T:StockSharp.OpenECry.OpenECryStopType">
+    <member name="T:StockSharp.OpenECry.OpenECryStopTypes">
       <summary>
             The type of the conditional order OpenECry.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopType.StopMarket">
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.StopMarket">
       <summary>
             The market order is automatically registered after reaching the stop price.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopType.StopLimit">
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.StopLimit">
       <summary>
             The limit order is automatically registered after reaching the stop price.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket">
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopMarket">
       <summary>
             Stop price automatically follows the market, but only in a profitable direction for position, staying on specified in advance interval from market price. If the market reaches the stop price, the market order is automatically registered.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopType.TrailingStopLimit">
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopLimit">
       <summary>
-            As <see cref="F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket" />, but when it reaches the stop price the limit order is registered.
+            As <see cref="F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopMarket" />, but when it reaches the stop price the limit order is registered.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopType.MarketOnClose">
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.MarketOnClose">
       <summary>
             To match at the market price, if the closing price is higher than the expected price.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopType.MarketIfTouched">
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.MarketIfTouched">
       <summary>
             With the market price when the condition is fulfilled.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopType.MarketOnOpen">
+    <member name="F:StockSharp.OpenECry.OpenECryStopTypes.MarketOnOpen">
       <summary>
             At trading opening.
             </summary>

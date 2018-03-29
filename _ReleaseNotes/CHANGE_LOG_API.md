@@ -1,12 +1,14 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
 * (feature) WithdrawWindow.
 * (feature) IndexSecurityWindow.
 * (feature) Quik DDE turned off.
 * (bug) OfflineMessageAdapter. Cancel pending orders fix.
 * (feature) OrderGrid. Allow cancel pending orders.
+* (feature) FIX connector. Process unknown transactions option.
+* (feature) OpenECryStopType -> OpenECryStopTypes.
 
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
