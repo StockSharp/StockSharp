@@ -13,6 +13,7 @@ StockSharp API Change log
 * (feature) Crypto withdraw. Uses Order.Security instead of WithdrawInfo.Currency.
 * (feature) Level1Fields. Dividends, AfterSplit, BeforeSplit
 * (bug) YahooHistorySource restored.
+* (bug) IQFeed. Fix parse fundamental messages with empty exchange code.
 
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
