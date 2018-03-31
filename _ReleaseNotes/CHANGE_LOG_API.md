@@ -12,6 +12,7 @@ StockSharp API Change log
 * (bug) Fix http://stocksharp.ru/forum/9261/isklyuchenie-pri-popytke-podklyucheniya-k-bittrex/
 * (feature) Crypto withdraw. Uses Order.Security instead of WithdrawInfo.Currency.
 * (feature) Level1Fields. Dividends, AfterSplit, BeforeSplit
+* (bug) YahooHistorySource restored.
 
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
