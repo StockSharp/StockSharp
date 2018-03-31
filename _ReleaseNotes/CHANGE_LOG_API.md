@@ -14,6 +14,7 @@ StockSharp API Change log
 * (feature) Level1Fields. Dividends, AfterSplit, BeforeSplit
 * (bug) YahooHistorySource restored.
 * (bug) IQFeed. Fix parse fundamental messages with empty exchange code.
+* (bug) Xaml.Diagram. Fix drag n drop from palette http://stocksharp.com/forum/9268/Drag-and-Drop-S-Designer-error/
 
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.
