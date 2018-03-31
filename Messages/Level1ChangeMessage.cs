@@ -633,6 +633,27 @@ namespace StockSharp.Messages
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.SpreadKey)]
 		SpreadMiddle,
+
+		/// <summary>
+		/// The dividend amount on shares.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.DividendKey)]
+		Dividend,
+
+		/// <summary>
+		/// Price after split.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.AfterSplitKey)]
+		AfterSplit,
+
+		/// <summary>
+		/// Price before split.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.BeforeSplitKey)]
+		BeforeSplit,
 	}
 
 	/// <summary>

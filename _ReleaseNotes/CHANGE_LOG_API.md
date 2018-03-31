@@ -9,6 +9,9 @@ StockSharp API Change log
 * (feature) OrderGrid. Allow cancel pending orders.
 * (feature) FIX connector. Process unknown transactions option.
 * (feature) OpenECryStopType -> OpenECryStopTypes.
+* (bug) Fix http://stocksharp.ru/forum/9261/isklyuchenie-pri-popytke-podklyucheniya-k-bittrex/
+* (feature) Crypto withdraw. Uses Order.Security instead of WithdrawInfo.Currency.
+* (feature) Level1Fields. Dividends, AfterSplit, BeforeSplit
 
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.

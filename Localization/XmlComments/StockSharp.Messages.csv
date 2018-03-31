@@ -1231,6 +1231,9 @@ F:StockSharp.Messages.Level1Fields.BuyBackDate/summary;BuyBackDate
 F:StockSharp.Messages.Level1Fields.BuyBackPrice/summary;BuyBackPrice
 F:StockSharp.Messages.Level1Fields.Turnover/summary;Turnover
 F:StockSharp.Messages.Level1Fields.SpreadMiddle/summary;DocStr10122
+F:StockSharp.Messages.Level1Fields.Dividend/summary;DocStr971
+F:StockSharp.Messages.Level1Fields.AfterSplit/summary;DocStr10364
+F:StockSharp.Messages.Level1Fields.BeforeSplit/summary;DocStr10365
 T:StockSharp.Messages.Level1ChangeMessage/summary;DocStr4470
 P:StockSharp.Messages.Level1ChangeMessage.SecurityId/summary;SecurityId
 M:StockSharp.Messages.Level1ChangeMessage.#ctor/summary;DocStr1
