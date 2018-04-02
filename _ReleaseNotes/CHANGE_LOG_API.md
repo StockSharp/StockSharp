@@ -4,6 +4,7 @@ StockSharp API Change log
 * (bug) InteractiveBrokers. Fix historical ticks request.
 * (feature) Charting. Uses DateRangeWindow to set candle series From and To.
 * (feature) StorageCandleSource removed as obsolete.
+* (bug) Connector. IsBack MD messages for News fix.
 
 ## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.

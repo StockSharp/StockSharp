@@ -111,9 +111,15 @@ namespace StockSharp.Algo
 				if (message.Type == MessageTypes.MarketData)
 				{
 					var mdMsg = (MarketDataMessage)message;
-					var security = GetSecurity(mdMsg.SecurityId);
 
-					_subscriptionManager.ProcessRequest(security, mdMsg, true);
+					if (mdMsg.DataType == MarketDataTypes.News)
+					{
+						SendInMessage(mdMsg);
+					}
+					else
+					{
+						_subscriptionManager.ProcessRequest(GetSecurity(mdMsg.SecurityId), mdMsg, true);
+					}
 				}
 				else
 					SendInMessage(message);
