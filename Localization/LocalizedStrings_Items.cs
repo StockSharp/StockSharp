@@ -47406,5 +47406,15 @@ namespace StockSharp.Localization
 		/// Split (before)
 		/// </summary>
 		public static string BeforeSplit => GetString(BeforeSplitKey);
+
+		/// <summary>
+		/// Select dates
+		/// </summary>
+		public const string SelectDatesKey = nameof(SelectDates);
+
+		/// <summary>
+		/// Select dates
+		/// </summary>
+		public static string SelectDates => GetString(SelectDatesKey);
 	}
 }

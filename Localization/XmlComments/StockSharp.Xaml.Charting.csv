@@ -64,6 +64,7 @@ P:StockSharp.Xaml.Charting.Chart.ShowLegend/summary;DocStr7732
 P:StockSharp.Xaml.Charting.Chart.ShowOverview/summary;DocStr7733
 P:StockSharp.Xaml.Charting.Chart.ShowPerfStats/summary;DocStr8856
 P:StockSharp.Xaml.Charting.Chart.IsInteracted/summary;DocStr7734
+P:StockSharp.Xaml.Charting.Chart.IsInteractedwithDateRange/summary;DocStr10366
 P:StockSharp.Xaml.Charting.Chart.CrossHair/summary;DocStr7735
 P:StockSharp.Xaml.Charting.Chart.CrossHairTooltip/summary;DocStr7736
 P:StockSharp.Xaml.Charting.Chart.CrossHairAxisLabels/summary;DocStr7737
@@ -494,6 +495,7 @@ M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartE
 M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)/param/element;DocStr7710
 M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)/param/source;Str213
 P:StockSharp.Xaml.Charting.ChartPanel.IsInteracted/summary;DocStr7734
+P:StockSharp.Xaml.Charting.ChartPanel.IsInteractedwithDateRange/summary;DocStr10366
 P:StockSharp.Xaml.Charting.ChartPanel.OrderCreationMode/summary;DocStr7739
 P:StockSharp.Xaml.Charting.ChartPanel.MinimumRange/summary;DocStr7730
 P:StockSharp.Xaml.Charting.ChartPanel.ShowOverview/summary;DocStr7733

@@ -216,6 +216,11 @@
             The interactive mode. The default is off.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.IsInteractedwithDateRange">
+      <summary>
+            The interactive mode with dates popup. The default is off.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.CrossHair">
       <summary>
             Crosshair.
@@ -1788,6 +1793,11 @@
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsInteracted">
       <summary>
             The interactive mode. The default is off.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsInteractedwithDateRange">
+      <summary>
+            The interactive mode with dates popup. The default is off.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.OrderCreationMode">

@@ -132,6 +132,11 @@ P:StockSharp.Xaml.DataSourcePanel.SelectedItem/summary;DocStr9359
 P:StockSharp.Xaml.DataSourcePanel.Configure/summary;DocStr9360
 M:StockSharp.Xaml.DataSourcePanel.#ctor/summary;DocStr1
 M:StockSharp.Xaml.DataSourcePanel.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.DateRangeWindow/summary;DocStr10367
+M:StockSharp.Xaml.DateRangeWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.DateRangeWindow.From/summary;DocStr84
+P:StockSharp.Xaml.DateRangeWindow.To/summary;DocStr85
+M:StockSharp.Xaml.DateRangeWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.ExtendedInfoStorageWindow/summary;DocStr9769
 P:StockSharp.Xaml.ExtendedInfoStorageWindow.Storages/summary;DocStr9770
 P:StockSharp.Xaml.ExtendedInfoStorageWindow.SelectedStorage/summary;DocStr9771
