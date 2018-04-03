@@ -6,6 +6,7 @@ StockSharp API Change log
 * (feature) StorageCandleSource removed as obsolete.
 * (bug) Connector. IsBack MD messages for News fix.
 * (feature) Connector. Market data events now support News subscriptions.
+* (bug) CandleBuilderMessageAdapter. Fix build unsubscribe.
 
 ## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
