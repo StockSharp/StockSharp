@@ -125,6 +125,7 @@ namespace StockSharp.Algo
 		private readonly HashSet<HeartbeatMessageAdapter> _connectedAdapters = new HashSet<HeartbeatMessageAdapter>();
 		private bool _isFirstConnect;
 		private readonly InnerAdapterList _innerAdapters;
+		private readonly SynchronizedDictionary<long, RefPair<long, bool?>> _newsSubscriptions = new SynchronizedDictionary<long, RefPair<long, bool?>>();
 
 		/// <summary>
 		/// Adapters with which the aggregator operates.
@@ -291,6 +292,7 @@ namespace StockSharp.Algo
 			_subscriptionsById.Clear();
 			_subscriptionsByKey.Clear();
 			_subscriptionMessages.Clear();
+			_newsSubscriptions.Clear();
 		}
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -494,27 +496,56 @@ namespace StockSharp.Algo
 			return adapters;
 		}
 
-		private IMessageAdapter GetSubscriptionAdapter(MarketDataMessage mdMsg)
+		private IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg)
 		{
 			if (mdMsg.Adapter != null)
 			{
 				var wrapper = _hearbeatAdapters.TryGetValue(mdMsg.Adapter);
 
 				if (wrapper != null)
-					return wrapper;
+					return new[] { (IMessageAdapter)wrapper };
 			}
 
-			return GetAdapters(mdMsg)?.First();
+			var adapters = GetAdapters(mdMsg)?.Where(a => a.IsMarketDataTypeSupported(mdMsg.DataType)).ToArray();
+
+			if (adapters == null || adapters.Length == 0)
+				throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(mdMsg));
+
+			return adapters;
 		}
 
 		private void ProcessMarketDataRequest(MarketDataMessage mdMsg)
 		{
+			if (mdMsg.TransactionId == 0)
+				throw new InvalidOperationException("TransId == 0");
+
 			switch (mdMsg.DataType)
 			{
 				case MarketDataTypes.News:
 				{
-					var adapter = GetSubscriptionAdapter(mdMsg);
-					adapter?.SendInMessage(mdMsg);
+					var adapters = GetSubscriptionAdapters(mdMsg);
+
+					var dict = new SynchronizedDictionary<IMessageAdapter, long>();
+
+					foreach (var adapter in adapters)
+					{
+						var transId = TransactionIdGenerator.GetNextId();
+
+						dict.Add(adapter, transId);
+
+						_newsSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null));
+					}
+
+					// sending to inner adapters unique subscriptions
+					foreach (var pair in dict)
+					{
+						var clone = (MarketDataMessage)mdMsg.Clone();
+						clone.TransactionId = pair.Value;
+
+						_subscriptionMessages.Add(pair.Value, clone);
+						pair.Key.SendInMessage(clone);
+					}
+
 					break;
 				}
 
@@ -522,11 +553,8 @@ namespace StockSharp.Algo
 				{
 					var key = mdMsg.CreateKey();
 
-					if (mdMsg.TransactionId == 0)
-						throw new InvalidOperationException("TransId == 0");
-
 					var adapter = mdMsg.IsSubscribe
-							? GetSubscriptionAdapter(mdMsg)
+							? GetSubscriptionAdapters(mdMsg).First()
 							: (_subscriptionsById.TryGetValue(mdMsg.OriginalTransactionId) ?? _subscriptionsByKey.TryGetValue(key));
 
 					if (adapter == null)
@@ -736,11 +764,54 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			var key = originMsg.CreateKey();
-
 			var error = message.Error;
-
 			var isSubscribe = originMsg.IsSubscribe;
+
+			if (originMsg.DataType == MarketDataTypes.News)
+			{
+				long? transId = null;
+				var allError = true;
+
+				lock (_newsSubscriptions.SyncRoot)
+				{
+					var tuple = _newsSubscriptions.TryGetValue(originalTransactionId);
+
+					transId = tuple.First;
+					tuple.Second = error == null && !message.IsNotSupported;
+
+					foreach (var pair in _newsSubscriptions)
+					{
+						var t = pair.Value;
+
+						if (t.First == tuple.First)
+						{
+							// one of adapter still not yet response.
+							if (t.Second == null)
+							{
+								transId = null;
+								break;
+							}
+							else if (t.Second == true)
+								allError = false;
+						}
+					}
+				}
+
+				if (transId != null)
+				{
+					SendOutMessage(new MarketDataMessage
+					{
+						OriginalTransactionId = transId.Value,
+						Adapter = adapter,
+						IsSubscribe = isSubscribe,
+						Error = allError ? new InvalidOperationException(LocalizedStrings.Str629Params.Put(originMsg)) : null,
+					});
+				}
+
+				return;
+			}
+
+			var key = originMsg.CreateKey();
 
 			if (message.IsNotSupported)
 			{

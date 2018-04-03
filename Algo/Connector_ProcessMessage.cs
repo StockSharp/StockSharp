@@ -112,14 +112,8 @@ namespace StockSharp.Algo
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					if (mdMsg.DataType == MarketDataTypes.News)
-					{
-						SendInMessage(mdMsg);
-					}
-					else
-					{
-						_subscriptionManager.ProcessRequest(GetSecurity(mdMsg.SecurityId), mdMsg, true);
-					}
+					var security = mdMsg.DataType == MarketDataTypes.News ? null : GetSecurity(mdMsg.SecurityId);
+					_subscriptionManager.ProcessRequest(security, mdMsg, true);
 				}
 				else
 					SendInMessage(message);
@@ -819,7 +813,7 @@ namespace StockSharp.Algo
 
 			var security = _subscriptionManager.ProcessResponse(mdMsg.OriginalTransactionId, out var originalMsg);
 
-			if (security == null)
+			if (security == null && originalMsg?.DataType != MarketDataTypes.News)
 			{
 				if (error != null)
 					RaiseError(error);
