@@ -29,11 +29,6 @@
             Secret.
             </summary>
         </member>
-        <member name="P:StockSharp.Kraken.KrakenMessageAdapter.IsMarginEnabled">
-            <summary>
-            Is margin enabled.
-            </summary>
-        </member>
         <member name="M:StockSharp.Kraken.KrakenMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
             Save settings.

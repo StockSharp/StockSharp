@@ -10,6 +10,8 @@ StockSharp API Change log
 * (feature) IStorageRegistry.DefaultDrive setter added.
 * (bug) FileProgressWindow closing fix.
 * (bug) ConnectorWindow. Show missed column names.
+* (feature) Charting. StochasticOscillatorPainter.
+* (bug) Kraken margin position obtain fix.
 
 ## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
