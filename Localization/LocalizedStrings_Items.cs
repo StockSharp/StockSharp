@@ -47416,5 +47416,25 @@ namespace StockSharp.Localization
 		/// Select dates
 		/// </summary>
 		public static string SelectDates => GetString(SelectDatesKey);
+
+		/// <summary>
+		/// %K
+		/// </summary>
+		public const string SOKKey = nameof(SOK);
+
+		/// <summary>
+		/// %K
+		/// </summary>
+		public static string SOK => GetString(SOKKey);
+
+		/// <summary>
+		/// %D
+		/// </summary>
+		public const string SODKey = nameof(SOD);
+
+		/// <summary>
+		/// %D
+		/// </summary>
+		public static string SOD => GetString(SODKey);
 	}
 }

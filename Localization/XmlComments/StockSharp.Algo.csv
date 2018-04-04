@@ -1097,8 +1097,8 @@ M:StockSharp.Algo.Indicators.MoneyFlowIndex.OnProcess(StockSharp.Algo.Indicators
 M:StockSharp.Algo.Indicators.MoneyFlowIndex.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
 T:StockSharp.Algo.Indicators.StochasticOscillator/summary;DocStr1118
 M:StockSharp.Algo.Indicators.StochasticOscillator.#ctor/summary;DocStr1
-P:StockSharp.Algo.Indicators.StochasticOscillator.K/summary;DocStr1139
-P:StockSharp.Algo.Indicators.StochasticOscillator.D/summary;DocStr1140
+P:StockSharp.Algo.Indicators.StochasticOscillator.K/summary;SOK
+P:StockSharp.Algo.Indicators.StochasticOscillator.D/summary;SOD
 T:StockSharp.Algo.Indicators.VolumeProfileIndicator/summary;VolumeProfile
 M:StockSharp.Algo.Indicators.VolumeProfileIndicator.#ctor/summary;DocStr1
 P:StockSharp.Algo.Indicators.VolumeProfileIndicator.Step/summary;DocStr1141

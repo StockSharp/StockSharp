@@ -4779,6 +4779,8 @@ Dividend;Dividend;Дивиденды
 SelectDates;Select dates;Выберите даты
 AfterSplit;Split (after);Сплит (после)
 BeforeSplit;Split (before);Сплит (до)
+SOK;%K;%K
+SOD;%D;%D
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -5890,8 +5892,6 @@ DocStr1133;The resulting value of the indicator;Результирующее з�
 DocStr1136;The interface of indicator, built as combination of several indicators;Интерфейс индикатора, который строится в виде комбинации нескольких индикаторов
 DocStr1137;Embedded indicators;Вложенные индикаторы
 DocStr1138;Embedded indicators processing mode. The default equals to {0};Режим обработки вложенных индикаторов. По умолчанию равно {0}
-DocStr1139;%K;%K
-DocStr1140;%D;%D
 DocStr1141;The grouping increment;Шаг группировки
 DocStr1142;To use aggregate volume in calculations (when candles do not contain VolumeProfile);Использовать в расчетах суммарный объем (когда свечи не содержат VolumeProfile)
 DocStr1143;The indicator value {0}, derived in result of calculation;Значение индикатора {0}, которое получается в результате вычисления
@@ -14805,3 +14805,5 @@ DocStr10364;Price after split;Цена после разделения
 DocStr10365;Price before split;Цена до разделения
 DocStr10366;The interactive mode with dates popup. The default is off;Интерактивный режим с установкой дат в всплывающем окне. По умолчанию выключено
 DocStr10367;The window for set dates range;Окно для установки границ дат
+DocStr10368;{0} line color;{0} цвет линии
+DocStr10369;{0} dots color;{0} цвет точек
