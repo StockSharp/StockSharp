@@ -16,6 +16,7 @@ StockSharp API Change log
 * (feature) Charting. Auto and manual select candles series for indicators.
 * (bug) Charting. Fix auto select appropriate candle series.
 * (bug) FIX connector. Fix process unknown outgoing messages.
+* (bug) AlfaDirect, Transaq. PortfolioMessage processing fixes.
 
 ## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
