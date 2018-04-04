@@ -4781,6 +4781,12 @@ AfterSplit;Split (after);Сплит (после)
 BeforeSplit;Split (before);Сплит (до)
 SOK;%K;%K
 SOD;%D;%D
+SelectedElements;Selected elements;Выбранные элементы
+SelectedElement;Selected element;Выбранный элемент
+AutoSelectCandles;Auto select candles;Авто выбор свечей
+SelectCandles;Select candles;Выбрать свечи
+AssetPrice;Asset price;Цена актива
+StrikeRange;Strike range;Диапазон страйка
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12576,8 +12582,6 @@ DocStr7963;To save the diagram as an image;Сохранить схему в из
 DocStr7964;To show the review panel;Показывать панель обзора
 DocStr7965;The event of the element selection on the diagram;Событие выделения элемента на схеме
 DocStr7966;The event of the double click on the diagram element;Событие двойного клика по элементу на схеме
-DocStr7967;Selected elements;Выбранные элементы
-DocStr7968;The selected element;Выбранный элемент
 DocStr7969;To reduce the parameter value to the object {0};Привести значение параметра к объекту {0}
 DocStr7970;To call the connection property value change event;Вызвать событие изменения значения свойства соединения
 DocStr7971;The parameter value change start event;Событие начала изменения значения параметра
@@ -14807,3 +14811,4 @@ DocStr10366;The interactive mode with dates popup. The default is off;Интер
 DocStr10367;The window for set dates range;Окно для установки границ дат
 DocStr10368;{0} line color;{0} цвет линии
 DocStr10369;{0} dots color;{0} цвет точек
+DocStr10370;The window for select candle series element;The window for select candle series element

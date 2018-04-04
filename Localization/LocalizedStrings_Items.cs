@@ -47436,5 +47436,65 @@ namespace StockSharp.Localization
 		/// %D
 		/// </summary>
 		public static string SOD => GetString(SODKey);
+
+		/// <summary>
+		/// Selected elements
+		/// </summary>
+		public const string SelectedElementsKey = nameof(SelectedElements);
+
+		/// <summary>
+		/// Selected elements
+		/// </summary>
+		public static string SelectedElements => GetString(SelectedElementsKey);
+
+		/// <summary>
+		/// Selected element
+		/// </summary>
+		public const string SelectedElementKey = nameof(SelectedElement);
+
+		/// <summary>
+		/// Selected element
+		/// </summary>
+		public static string SelectedElement => GetString(SelectedElementKey);
+
+		/// <summary>
+		/// Auto select candles
+		/// </summary>
+		public const string AutoSelectCandlesKey = nameof(AutoSelectCandles);
+
+		/// <summary>
+		/// Auto select candles
+		/// </summary>
+		public static string AutoSelectCandles => GetString(AutoSelectCandlesKey);
+
+		/// <summary>
+		/// Select candles
+		/// </summary>
+		public const string SelectCandlesKey = nameof(SelectCandles);
+
+		/// <summary>
+		/// Select candles
+		/// </summary>
+		public static string SelectCandles => GetString(SelectCandlesKey);
+
+		/// <summary>
+		/// Asset price
+		/// </summary>
+		public const string AssetPriceKey = nameof(AssetPrice);
+
+		/// <summary>
+		/// Asset price
+		/// </summary>
+		public static string AssetPrice => GetString(AssetPriceKey);
+
+		/// <summary>
+		/// Strike range
+		/// </summary>
+		public const string StrikeRangeKey = nameof(StrikeRange);
+
+		/// <summary>
+		/// Strike range
+		/// </summary>
+		public static string StrikeRange => GetString(StrikeRangeKey);
 	}
 }

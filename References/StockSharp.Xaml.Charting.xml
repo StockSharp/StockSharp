@@ -1074,6 +1074,34 @@
             </summary>
       <returns>Copy.</returns>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.ChartCandleElementPicker">
+      <summary>
+            The window for select candle series element.
+            </summary>
+      <summary>
+            ChartCandleElementPicker
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartCandleElementPicker.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartCandleElementPicker" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElementPicker.Elements">
+      <summary>
+            Elements.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElementPicker.SelectedElement">
+      <summary>
+            Selected element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartCandleElementPicker.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartDrawData">
       <summary>
             Chart drawing data.
@@ -3148,6 +3176,11 @@
     <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.SelectedIndicatorType">
       <summary>
             The selected indicator type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.AutoSelectCandles">
+      <summary>
+            Auto select candles.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.IndicatorTypes">

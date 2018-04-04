@@ -256,6 +256,11 @@ M:StockSharp.Xaml.Charting.ChartCandleElement.Save(Ecng.Serialization.SettingsSt
 M:StockSharp.Xaml.Charting.ChartCandleElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartCandleElement.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.ChartCandleElement.Clone/returns;DocStr1116
+T:StockSharp.Xaml.Charting.ChartCandleElementPicker/summary;DocStr10370
+M:StockSharp.Xaml.Charting.ChartCandleElementPicker.#ctor/summary;DocStr1
+P:StockSharp.Xaml.Charting.ChartCandleElementPicker.Elements/summary;DocStr10045
+P:StockSharp.Xaml.Charting.ChartCandleElementPicker.SelectedElement/summary;SelectedElement
+M:StockSharp.Xaml.Charting.ChartCandleElementPicker.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.ChartDrawData/summary;DocStr8967
 T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem/summary;DocStr8968
 P:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.TimeStamp/summary;DocStr7780
@@ -904,6 +909,7 @@ M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeO
 T:StockSharp.Xaml.Charting.IndicatorPickerWindow/summary;DocStr9308
 M:StockSharp.Xaml.Charting.IndicatorPickerWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Charting.IndicatorPickerWindow.SelectedIndicatorType/summary;DocStr9311
+P:StockSharp.Xaml.Charting.IndicatorPickerWindow.AutoSelectCandles/summary;AutoSelectCandles
 P:StockSharp.Xaml.Charting.IndicatorPickerWindow.IndicatorTypes/summary;DocStr7740
 M:StockSharp.Xaml.Charting.IndicatorPickerWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.IndicatorType/summary;DocStr7850

@@ -13,6 +13,8 @@ StockSharp API Change log
 * (feature) Charting. StochasticOscillatorPainter.
 * (bug) Kraken margin position obtain fix.
 * (feature) IFileService.GetUploadLimit return value int -> long.
+* (feature) Charting. Auto and manual select candles series for indicators.
+* (bug) Charting. Fix auto select appropriate candle series.
 
 ## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
