@@ -12,6 +12,7 @@ StockSharp API Change log
 * (bug) ConnectorWindow. Show missed column names.
 * (feature) Charting. StochasticOscillatorPainter.
 * (bug) Kraken margin position obtain fix.
+* (feature) IFileService.GetUploadLimit return value int -> long.
 
 ## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
