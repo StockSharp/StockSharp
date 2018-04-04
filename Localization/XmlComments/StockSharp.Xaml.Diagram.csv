@@ -173,8 +173,8 @@ F:StockSharp.Xaml.Diagram.DiagramEditorControl.ScaleProperty/summary;DocStr29
 P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale/summary;Str2053
 E:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectionChanged/summary;DocStr7965
 E:StockSharp.Xaml.Diagram.DiagramEditorControl.ElementDoubleClicked/summary;DocStr7966
-P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElements/summary;DocStr7967
-P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElement/summary;DocStr7968
+P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElements/summary;SelectedElements
+P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElement/summary;SelectedElement
 P:StockSharp.Xaml.Diagram.DiagramEditorControl.IndicatorTypes/summary;DocStr7740
 M:StockSharp.Xaml.Diagram.DiagramEditorControl.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.DiagramEditorControl.GetSelectionCopyElement/summary;DocStr7962

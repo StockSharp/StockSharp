@@ -628,7 +628,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElement">
       <summary>
-            The selected element.
+            Selected element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.IndicatorTypes">
