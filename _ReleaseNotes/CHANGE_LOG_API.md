@@ -19,6 +19,7 @@ StockSharp API Change log
 * (bug) AlfaDirect, Transaq. PortfolioMessage processing fixes.
 * (bug) Charting. OptionPositionChart. Legend binding fix.
 * (bug) Charting. Options charts theme binding fix.
+* (bug) HistoryEmulationConnector. Fix external sources processing.
 
 ## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.

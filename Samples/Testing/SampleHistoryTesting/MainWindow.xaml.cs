@@ -479,6 +479,34 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(strategy);
 
+				connector.Connected += () =>
+				{
+					if (emulationInfo.HistorySource != null)
+					{
+						// passing null value as security to register the source for all securities
+
+						if (emulationInfo.UseCandleTimeFrame != null)
+						{
+							connector.RegisterHistorySource(null, MarketDataTypes.CandleTimeFrame, emulationInfo.UseCandleTimeFrame.Value, emulationInfo.HistorySource);
+						}
+
+						if (emulationInfo.UseTicks)
+						{
+							connector.RegisterHistorySource(null, MarketDataTypes.Trades, null, emulationInfo.HistorySource);
+						}
+
+						if (emulationInfo.UseLevel1)
+						{
+							connector.RegisterHistorySource(null, MarketDataTypes.Level1, null, emulationInfo.HistorySource);
+						}
+
+						if (emulationInfo.UseMarketDepth)
+						{
+							connector.RegisterHistorySource(null, MarketDataTypes.MarketDepth, null, emulationInfo.HistorySource);
+						}
+					}
+				};
+
 				connector.NewSecurity += s =>
 				{
 					if (s != security)
@@ -487,29 +515,7 @@ namespace SampleHistoryTesting
 					// fill level1 values
 					connector.HistoryMessageAdapter.SendOutMessage(level1Info);
 
-					if (emulationInfo.HistorySource != null)
-					{
-						if (emulationInfo.UseCandleTimeFrame != null)
-						{
-							connector.RegisterHistorySource(security, MarketDataTypes.CandleTimeFrame, emulationInfo.UseCandleTimeFrame.Value, emulationInfo.HistorySource);
-						}
-
-						if (emulationInfo.UseTicks)
-						{
-							connector.RegisterHistorySource(security, MarketDataTypes.Trades, null, emulationInfo.HistorySource);
-						}
-
-						if (emulationInfo.UseLevel1)
-						{
-							connector.RegisterHistorySource(security, MarketDataTypes.Level1, null, emulationInfo.HistorySource);
-						}
-
-						if (emulationInfo.UseMarketDepth)
-						{
-							connector.RegisterHistorySource(security, MarketDataTypes.MarketDepth, null, emulationInfo.HistorySource);
-						}
-					}
-					else
+					if (emulationInfo.HistorySource == null)
 					{
 						if (emulationInfo.UseMarketDepth)
 						{

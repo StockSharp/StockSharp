@@ -13260,9 +13260,9 @@ DocStr8666;Bits flag;Битовый флаг
 DocStr8667;Extract system attribute from the bits flag;Получить системные атрибуты из флага
 DocStr8668;{0} if an order is system, otherwise, {1};{0} если заявка системная, иначе, {1}
 DocStr8669;Instrument;Инструмент
-DocStr8670;Register historical data;Подписаться на исторические данные
+DocStr8670;Register historical data source;Зарегистрировать источник исторических данных
 DocStr8672;Historical data source;Источник исторических данных
-DocStr8673;Unregister the subscription, previously made by {0};Удалить подписку, сделанную ранее через {0}
+DocStr8673;Unregister historical data source, previously registeted by {0};Удалить источник исторических данных, ранее добавленный через {0}
 DocStr8674;Candle type;Тип свечи
 DocStr8675;Message type {0};Тип сообщения {0}
 DocStr8677;The candle message type;Тип сообщения свечи
