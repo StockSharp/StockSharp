@@ -1,5 +1,16 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.6.1:
+* (bug) File progress window. Closing fix.
+* (bug) StochasticOscillator draw fix.
+* (bug) InteractiveBrokers. Time zone fix.
+* (feature) Bitfinex, Okcoin. Track account subscriptions.
+* (bug) FIX connector. Fix process unknown outgoing messages.
+* (bug) Kraken. Signature calc fix.
+* (bug) InteractiveBrokers. Historical data fix.
+* (bug) Crypto. Market data loading in non EN culture fix.
+* (bug) Localization fixes.
+
 ## v4.4.6:
 * (feature) Quik DDE turned off.
 * (bug) Yahoo restored.
