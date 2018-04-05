@@ -1,5 +1,22 @@
 StockSharp Designer Change log
 ========================
+## v4.4.6.1:
+* (bug) Option position chart. Legend binding fix.
+* (bug) Options charts theme binding fix.
+* (feature) Auto and manual select candles series for indicators.
+* (feature) Autoconfig turned off by default.
+* (bug) Connector window. Show missed column names.
+* (bug) File progress window. Closing fix.
+* (bug) Alerts loading fix.
+* (bug) StochasticOscillator draw fix.
+* (bug) InteractiveBrokers. Time zone fix.
+* (feature) Bitfinex, Okcoin. Track account subscriptions.
+* (bug) FIX connector. Fix process unknown outgoing messages.
+* (bug) Kraken. Signature calc fix.
+* (bug) InteractiveBrokers. Historical data fix.
+* (bug) Crypto. Market data loading in non EN culture fix.
+* (bug) Localization fixes.
+
 ## v4.4.6:
 * (bug) Fix drag n drop from palette http://stocksharp.com/forum/9268/Drag-and-Drop-S-Designer-error/
 * (feature) Quik DDE turned off.
