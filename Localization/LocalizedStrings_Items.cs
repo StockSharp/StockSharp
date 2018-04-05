@@ -47496,5 +47496,15 @@ namespace StockSharp.Localization
 		/// Strike range
 		/// </summary>
 		public static string StrikeRange => GetString(StrikeRangeKey);
+
+		/// <summary>
+		/// Access token.
+		/// </summary>
+		public const string AccessTokenKey = nameof(AccessToken);
+
+		/// <summary>
+		/// Access token.
+		/// </summary>
+		public static string AccessToken => GetString(AccessTokenKey);
 	}
 }

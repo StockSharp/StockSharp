@@ -400,6 +400,7 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.Dialects.DefaultFixDialect" />.
             </summary>
+      <param name="adapter">Adapter.</param>
       <param name="createOrderCondition">Order condition creating handler.</param>
     </member>
     <member name="P:StockSharp.Fix.Dialects.DefaultFixDialect.ConvertToLatin">

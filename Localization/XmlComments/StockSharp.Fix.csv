@@ -122,6 +122,7 @@ M:StockSharp.Fix.Dialects.DefaultFastDialect.Open/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.DefaultFastDialect.Close/inheritdoc;DocStr8459
 T:StockSharp.Fix.Dialects.DefaultFixDialect/summary;DocStr8770
 M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Func{StockSharp.Messages.OrderCondition})/summary;DocStr1
+M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Func{StockSharp.Messages.OrderCondition})/param/adapter;DocStr929
 M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Func{StockSharp.Messages.OrderCondition})/param/createOrderCondition;DocStr8771
 P:StockSharp.Fix.Dialects.DefaultFixDialect.ConvertToLatin/summary;DocStr9080
 M:StockSharp.Fix.Dialects.DefaultFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/summary;DocStr8756

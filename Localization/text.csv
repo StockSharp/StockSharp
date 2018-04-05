@@ -4787,6 +4787,7 @@ AutoSelectCandles;Auto select candles;Авто выбор свечей
 SelectCandles;Select candles;Выбрать свечи
 AssetPrice;Asset price;Цена актива
 StrikeRange;Strike range;Диапазон страйка
+AccessToken;Access token.;Access token.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14811,4 +14812,4 @@ DocStr10366;The interactive mode with dates popup. The default is off;Интер
 DocStr10367;The window for set dates range;Окно для установки границ дат
 DocStr10368;{0} line color;{0} цвет линии
 DocStr10369;{0} dots color;{0} цвет точек
-DocStr10370;The window for select candle series element;The window for select candle series element
+DocStr10370;The window for select candle series element;Окно для выбора серии свечей
