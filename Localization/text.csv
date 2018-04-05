@@ -14813,3 +14813,5 @@ DocStr10367;The window for set dates range;Окно для установки г
 DocStr10368;{0} line color;{0} цвет линии
 DocStr10369;{0} dots color;{0} цвет точек
 DocStr10370;The window for select candle series element;Окно для выбора серии свечей
+DocStr10371;Instrument. If passed {0} the source will be applied for all subscriptions;Инструмент. Если передано {0}, источник будет применен для всех подписок
+DocStr10372;Instrument. If passed {0} the source will be removed for all subscriptions;Инструмент. Если передано {0}, источник будет удален для всех подписок
