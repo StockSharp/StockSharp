@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.6.1:
 * (bug) InteractiveBrokers. Fix historical ticks request.
 * (feature) Charting. Uses DateRangeWindow to set candle series From and To.
 * (feature) StorageCandleSource removed as obsolete.
