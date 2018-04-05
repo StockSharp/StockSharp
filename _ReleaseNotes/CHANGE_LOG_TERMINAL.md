@@ -1,5 +1,29 @@
 StockSharp Terminal Change log
 ========================
+## v4.4.6.1:
+* (bug) Option position chart. Legend binding fix.
+* (bug) Option filter design fix.
+* (bug) Options charts theme binding fix.
+* (bug) Fix indicators build for multiple candle series.
+* (feature) Auto and manual select candles series for indicators.
+* (feature) Autoconfig turned off by default.
+* (bug) Connector window. Show missed column names.
+* (bug) File progress window. Closing fix.
+* (bug) Edit security button enable fix.
+* (bug) Show existing market data fix.
+* (bug) Alerts loading fix.
+* (bug) StochasticOscillator draw fix.
+* (feature) Uses DateRangeWindow to set candle series From and To.
+* (bug) Close and revert position fix.
+* (bug) Orders conditional panel. Re register fix.
+* (bug) InteractiveBrokers. Time zone fix.
+* (feature) Bitfinex, Okcoin. Track account subscriptions.
+* (bug) FIX connector. Fix process unknown outgoing messages.
+* (bug) Kraken. Signature calc fix.
+* (bug) InteractiveBrokers. Historical data fix.
+* (bug) Crypto. Market data loading in non EN culture fix.
+* (bug) Localization fixes.
+
 ## v4.4.6:
 * (feature) Quik DDE turned off.
 * (bug) Yahoo restored.
