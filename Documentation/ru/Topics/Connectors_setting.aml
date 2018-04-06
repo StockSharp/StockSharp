@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4aae45b0-37c5-4d3c-a910-08ccfc9b63ed" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   
+    <introduction>
+ <para>Некоторые коннекторы нуждаются в предварительной настройке, ниже приведены 
+ ссылки на страници с настройками коннекторов.</para>
+	<list class="bullet">
+  		<listItem>
+<link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5" />: 
+
+ <para><link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f" />, 
+ <link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" />, 
+ <link xlink:href="b64a1826-58e3-4ac8-8923-099b52992e2e" />, 
+ <link xlink:href="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" />, 
+ <link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc" />, 
+ <link xlink:href="2bbcaa58-0092-4603-a35f-d4a9bc7cb835" />, 
+ <link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" />, 
+ <link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db" />, 
+ <link xlink:href="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" />, 
+ <link xlink:href="df84be76-8798-4b96-94ea-a1b106266ad5" /></para>
+
+  		</listItem>
+  		<listItem>
+<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e" />: 
+
+<para> <link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a" />, 
+ <link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" />, 
+ <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391" />, 
+ <link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e" />, 
+ <link xlink:href="eab815a2-65f7-46e8-9989-4ae52d234703" />, 
+ <link xlink:href="21aa8b6b-137d-4c28-87d9-dfbc5e446d95" />, 
+ <link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" />, 
+ <link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981" />, 
+ <link xlink:href="003e9486-6ed9-4afc-a325-6b2cbc382794" />, 
+<link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522" />, 
+ <link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" /></para>
+ 		</listItem>
+   		<listItem>
+<link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b" />: 	
+
+<para><link xlink:href="92073cd8-8e10-498e-8de9-47d3f77d278a" />, 
+<link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98" />, 
+<link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466" /></para>
+ 		</listItem>
+    		<listItem>
+<link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" />: 	
+
+<para><link xlink:href="9bf6d7aa-a3b8-42ba-a889-de1b2f7847f2" />, 
+<link xlink:href="4f6d317f-8788-48cb-b8d7-5e621481181c" />, 
+<link xlink:href="f49aab57-c1fd-4558-9241-5b42a2e619d7" />, 
+<link xlink:href="4f431ab1-64bc-4cef-8387-c14c931f17b7" />, 
+<link xlink:href="81f33924-b166-42c1-8ced-f7e9468f86b5" />, 
+<link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" />, 
+<link xlink:href="0d71e2d9-6f13-435d-8697-58d41978d46b" />, 
+<link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58" />, 
+<link xlink:href="418c4e3a-6129-4147-a3b6-a27701c15814" />, 
+<link xlink:href="e4f12540-0650-4cf8-80a4-216b1acf37f3" />, 
+<link xlink:href="5bd2fb14-4391-4782-8031-55a8391d302c" />, 
+<link xlink:href="956025d9-6a39-4bf5-a143-903c7540ff58" />, 
+<link xlink:href="d4fa79a6-59fd-43a9-ac61-b9b8933618c6" />, 
+<link xlink:href="0b4fde09-8808-4ef8-89df-39aebcdd64a1" />, 
+<link xlink:href="601781f1-fae7-4c82-adb4-a5e7d9394cfb" />, 
+<link xlink:href="d941f537-602b-400f-91d4-d4b2b37b9767" />, 
+<link xlink:href="17ebcf40-aa25-4717-83cd-d275209ff524" />, 
+<link xlink:href="16eaa615-aaf7-42a5-9de7-01762a650758" />, 
+<link xlink:href="cabadfac-eff9-48ab-ada6-c5856778cf68" />, 
+<link xlink:href="d2379d21-9bea-4199-8432-c25f73cb1594" />, 
+<link xlink:href="70ecf683-4336-4848-a05d-8edbcc730af4" />, 
+<link xlink:href="8e093fe9-7b2d-47f3-a95a-ece0e0033ecc" />, 
+<link xlink:href="f9ec5eb4-4237-4a2a-9663-757d3d4c0689" />, 
+<link xlink:href="554b35f0-4110-4da0-ba30-4c450e8a996b" />, 
+<link xlink:href="18667328-deec-46dd-8c27-fce52733e5ce" />, 
+<link xlink:href="ea1dbc04-3c29-4fbe-91b0-260d1ded31ae" /></para>
+
+ 		</listItem>
+     		<listItem>
+<link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310" />: 
+
+<para><link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" />, 
+<link xlink:href="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" /></para>
+ 		</listItem>
+	</list>
+
+		
+		
+    </introduction>
+
+  </developerConceptualDocument>
+</topic>

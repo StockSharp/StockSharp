@@ -4,11 +4,11 @@
     <introduction>
 
 <para>На <legacyBold>Панели быстрого доступа</legacyBold>, по умолчанию расположенной 
-в верхней части окна <token>designer</token>, находится кнопка <legacyBold>Настройки</legacyBold> 
+в верхней части окна программы, находится кнопка <legacyBold>Настройки</legacyBold> 
 <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline>. 
 При нажатии на 
 кнопку <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline> появится 
-возможность сменить режим запуска программы, язык интерфейса или полностью сбросить настройки <token>designer</token>.</para>
+возможность сменить режим запуска программы, язык интерфейса или полностью сбросить настройки.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Start_mode_00"/>
 </mediaLink>
@@ -21,7 +21,7 @@
 <mediaLink>
 <image placement="center" xlink:href="Designer_Start_mode_02"/>
 </mediaLink>
-<para>При выборе <legacyBold>Запомнить выбор</legacyBold> последующие запуски <token>designer</token> 
+<para>При выборе <legacyBold>Запомнить выбор</legacyBold> последующие запуски программы 
 будут с установленными настройками.</para>
 
     </introduction>

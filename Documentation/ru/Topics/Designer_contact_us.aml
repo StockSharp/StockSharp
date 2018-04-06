@@ -3,12 +3,12 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 <para>На <legacyBold>Панели быстрого доступа</legacyBold>, по умолчанию расположенной 
-в верхней части окна <token>designer</token>, находится кнопка <legacyBold>Справка</legacyBold> 
+в верхней части окна прграммы, находится кнопка <legacyBold>Справка</legacyBold> 
 <mediaLinkInline><image xlink:href="Designer_The_connection_settings_09"/></mediaLinkInline>. 
 При нажатии на 
 кнопку <mediaLinkInline><image xlink:href="Designer_The_connection_settings_09"/></mediaLinkInline> появится возможность 
-открыть справку по работе с  <legacyBold>S#.Designer</legacyBold>, информация о программе, отправить вопросы и предложения.</para>
-<para>При выборе <legacyBold>Справка</legacyBold> в браузере откроется страница справки <link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" />.</para>
+открыть справку по работе с  программой, информация о ней, отправить вопросы и предложения.</para>
+<para>При выборе <legacyBold>Справка</legacyBold> в браузере откроется страница справки по работе с  программой.</para>
 <para>При выборе <legacyBold>О программе</legacyBold> можно посмотреть информацию о программе, текущую версию, наличие обновлений.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_About"/>

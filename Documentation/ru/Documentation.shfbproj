@@ -233,6 +233,27 @@
     <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Topics\Terminal_Components.aml" />
+    <None Include="Topics\Connectors_setting.aml" />
+    <None Include="Topics\Connectors_setting.aml" />
+    <None Include="Topics\Terminal.aml" />
+    <None Include="Topics\Terminal_orderlog.aml" />
+    <None Include="Topics\Terminal_news.aml" />
+    <None Include="Topics\Terminal_option_desk.aml" />
+    <None Include="Topics\Terminal_options_positions.aml" />
+    <None Include="Topics\Terminal_smile_of_volatility.aml" />
+    <None Include="Topics\Terminal_Buy_Sell.aml" />
+    <None Include="Topics\Terminal_level1.aml" />
+    <None Include="Topics\Terminal_Securities.aml" />
+    <None Include="Topics\Terminal_Teamwork.aml" />
+    <None Include="Topics\Terminal_Repository_of_market_data.aml" />
+    <None Include="Topics\Terminal_Download_instruments.aml" />
+    <None Include="Topics\Terminal_Update_to_new_version.aml" />
+    <None Include="Topics\Terminal_Installation.aml" />
+    <None Include="Topics\Terminal_Depth_Panel2.aml" />
+    <None Include="Topics\Terminal_Chart.aml" />
+    <None Include="Topics\Terminal_Programs_interface.aml" />
+    <None Include="Topics\Terminal_Tape.aml" />
     <None Include="Topics\HydraSettingsGDAX.aml" />
     <None Include="Topics\HydraSettingsEXMO.aml" />
     <None Include="Topics\HydraSettingsBitexbook.aml" />
@@ -3110,6 +3131,90 @@
     <Image Include="Art\GdaxSample.png">
       <ImageId>GdaxSample</ImageId>
       <AlternateText>Gdax Sample</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_orderlog_00.png">
+      <ImageId>Terminal_orderlog_00</ImageId>
+      <AlternateText>Terminal orderlog 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_news_00.png">
+      <ImageId>Terminal_news_00</ImageId>
+      <AlternateText>Terminal news 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_option_desk_00.png">
+      <ImageId>Terminal_option_desk_00</ImageId>
+      <AlternateText>Terminal option desk 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Graph_options_positions_00.png">
+      <ImageId>Terminal_Graph_options_positions_00</ImageId>
+      <AlternateText>Terminal Graph options positions 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_smile_of_volatility_00.png">
+      <ImageId>Terminal_smile_of_volatility_00</ImageId>
+      <AlternateText>Terminal smile of volatility 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Buy_Sell_00.png">
+      <ImageId>Terminal_Buy_Sell_00</ImageId>
+      <AlternateText>Terminal Buy Sell 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_securities_00.png">
+      <ImageId>Terminal_securities_00</ImageId>
+      <AlternateText>Terminal securities 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Level1_00.png">
+      <ImageId>Terminal_Level1_00</ImageId>
+      <AlternateText>Terminal Level 1 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Connection_settings_00.png">
+      <ImageId>Designer_Connection_settings_00</ImageId>
+      <AlternateText>Designer Connection settings 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Download_the_tools_00.png">
+      <ImageId>Terminal_Download_the_tools_00</ImageId>
+      <AlternateText>Terminal Download the tools 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Panel_Market_Depth.png">
+      <ImageId>Terminal_Panel_Market_Depth</ImageId>
+      <AlternateText>Terminal Panel Market Depth</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Panel_graphics_00.png">
+      <ImageId>Terminal_Panel_graphics_00</ImageId>
+      <AlternateText>Terminal Panel graphics 00</AlternateText>
+    </Image>
+    <Image Include="Art\Designer_Quick_access_toolbar_03.png">
+      <ImageId>Designer_Quick_access_toolbar_03</ImageId>
+      <AlternateText>Designer Quick access toolbar 03</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Repository_of_historical_data_00.png">
+      <ImageId>Terminal_Repository_of_historical_data_00</ImageId>
+      <AlternateText>Terminal Repository of historical data 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Viewing_downloaded_data_00.png">
+      <ImageId>Terminal_Viewing_downloaded_data_00</ImageId>
+      <AlternateText>Terminal Viewing downloaded data 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Workspace_00.png">
+      <ImageId>Terminal_Workspace_00</ImageId>
+      <AlternateText>Terminal Workspace 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Tape_00.png">
+      <ImageId>Terminal_Tape_00</ImageId>
+      <AlternateText>Terminal Tape 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Installation_02.png">
+      <ImageId>Terminal_Installation_02</ImageId>
+      <AlternateText>Terminal Installation 02</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Installation_01.png">
+      <ImageId>Terminal_Installation_01</ImageId>
+      <AlternateText>Terminal Installation 01</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_Installation_00.png">
+      <ImageId>Terminal_Installation_00</ImageId>
+      <AlternateText>Terminal Installation 00</AlternateText>
+    </Image>
+    <Image Include="Art\Terminal_main_00.png">
+      <ImageId>Terminal_main_00</ImageId>
+      <AlternateText>Terminal main 00</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

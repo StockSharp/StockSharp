@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="fd4646ce-924c-479e-ab63-53be64d954be" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>Компонент <legacyBold>Инструменты</legacyBold> представляет собой таблицу с инструментами, в которой отображается информация о всех выбранных инструментах.</para> 
+<para>Для добавления нового инструмента необходимо нажать на кнопку <mediaLinkInline><image xlink:href="Designer_Creation_tool_00"/></mediaLinkInline>. </para>
+<para> Также имеется возможность настроить уведомления по событиям выбранных 
+инструментов <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_securities_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="8e7a5377-4c7c-41fb-bd2c-42b699d9d36e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

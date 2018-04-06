@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="238f8d14-38ce-4f26-b032-b018b2fcd3e6" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>Компонент <legacyBold>Доска опционов</legacyBold> представляет собой таблицу основных параметров выбранных опционов по базовому инструменту.</para>
+<para>Для отображения доски опционов необходимо выбрать базовый актив и необходимые опционы.</para>
+<para>Дополнительно можно указать фильтр по точной дате экспирации опционов и фильтры по минимальному/максимальному страйкам.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_option_desk_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="b38b4a67-92d4-4385-81de-772c4ee2854a" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

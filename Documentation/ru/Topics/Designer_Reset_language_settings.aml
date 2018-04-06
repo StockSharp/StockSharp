@@ -9,9 +9,9 @@
 </alert>
 
 <para>На Панели быстрого доступа по умолчанию расположенной в верхней части окна 
-<token>designer</token>, находится кнопка настройки <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline>. 
+программы, находится кнопка настройки <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline>. 
 При нажатии на кнопку <mediaLinkInline><image xlink:href="Designer_The_quick_access_toolbar_02"/></mediaLinkInline> появится 
-возможность сменить режим запуска программы, язык интерфейса, или полностью сбросить настройки <token>designer</token>.</para> 
+возможность сменить режим запуска программы, язык интерфейса, или полностью сбросить настройки.</para> 
  <mediaLink>
 <image placement="center" xlink:href="Designer_Start_mode_00"/>
 </mediaLink>
@@ -19,16 +19,16 @@
  <mediaLink>
 <image placement="center" xlink:href="Designer_Reset_language_settings_00"/>
 </mediaLink>
-<para>После нажатия кнопки <legacyBold>ОК</legacyBold> все настройки <token>designer</token> сбросятся до 
-настроек по умолчанию. Директория с настройками <token>designer</token> будут очищена 
+<para>После нажатия кнопки <legacyBold>ОК</legacyBold> все настройки сбросятся до 
+настроек по умолчанию. Директория с настройками программы будут очищена 
 полностью, <legacyBold>все созданные стратегии и скачанные инструменты и другая 
 информация, хранящаяся в директории настроек, будет УНИЧТОЖЕНА</legacyBold>. 
-После чего <token>designer</token> перезагрузится и появится окно 
+После чего программы перезагрузится и появится окно 
 выбора <link xlink:href="57dc2e39-baa6-4c67-83a9-13278370a877" />.</para>
 
     </introduction>
     <relatedTopics>
-<link xlink:href="5789f207-56f6-4ee3-8040-44913ba1f2c9" />
+<link xlink:href="07223530-00cf-45ac-8aa7-d1e0550a89ce" />
 </relatedTopics>
   </developerConceptualDocument>
 </topic>

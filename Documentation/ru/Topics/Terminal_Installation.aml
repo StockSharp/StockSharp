@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f70783b8-59e1-4ea7-9d94-c20524f3470a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <introduction>
+		  <steps class="ordered">
+			  <step>
+				  <content>
+		  				<para>Для установки <link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" /> необходимо перейти на страницу <token>download</token>:</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Installation_00"/>
+</mediaLink>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+		  				<para>Скачать дистрибутив <link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" />.</para>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+		  				<para>Разблокировать (правая кнопка мышки на файле, свойства) и распаковать <legacyBold>Terminal.zip</legacyBold> в пустую директорию (например, c:\S#Terminal\)</para>
+		  				<mediaLink>
+<image placement="center" xlink:href="Terminal_Installation_01"/>
+</mediaLink>
+				  </content>
+			  </step>
+			  			  <step>
+				  <content>
+		  				<para>Затем запустить <legacyBold>Terminal.Update.exe</legacyBold> и нажать кнопку <legacyBold>Обновить</legacyBold>.</para>
+		  				<mediaLink>
+<image placement="center" xlink:href="Terminal_Installation_02"/>
+</mediaLink>
+				  </content>
+			  </step>
+		  </steps>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="e51b9e8f-52d3-4e16-887e-1aad12db2cc8" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

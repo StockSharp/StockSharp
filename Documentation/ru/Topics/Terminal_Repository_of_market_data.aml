@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5a717b34-e3ed-45c7-934e-94d93b98ced8" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>Хранилище маркет-данных предназначено для просмотра 
+маркет-данных (инструменты, свечи, тиковые сделки и стаканы).</para>
+<para>Для открытия панели <legacyBold>Маркет-данные</legacyBold> необходимо 
+перейти на вкладку <legacyBold>Общее</legacyBold> и нажать кнопку <legacyBold>Маркет-данные</legacyBold>. 
+Панель <legacyBold>Маркет-данные</legacyBold> разделена на две зоны. 
+В зоне слева представлен список всех полученных инструментов, 
+из всех источников, которые когда-либо были подключены. По этим инструментам можно 
+просмотреть имеющуюся историю. В зоне справа отображаются 
+имеющиеся данные по инструменту.</para>
+ <mediaLink>
+<image placement="center" xlink:href="Terminal_Repository_of_historical_data_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="dc4bee68-e85c-46c2-bf32-34a1c554ab65" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

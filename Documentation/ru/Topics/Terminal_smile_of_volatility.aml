@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b38b4a67-92d4-4385-81de-772c4ee2854a" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>Компонент <legacyBold>Улыбка волатильности</legacyBold> представляет собой графическое отображение ожидаемого 
+уровня волатильности по опционам с одинаковым базовым активом и разными страйками.</para>
+<para>Для отображения улыбки волатильности необходимо выбрать базовый актив и опционы на основании цен которых будет строиться улыбка волатильности.</para>
+<para>Дополнительно можно указать фильтр по точной дате экспирации опционов и фильтры по минимальному/максимальному страйкам.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_smile_of_volatility_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="8898cea8-4229-475e-a31d-c88e09b2c46f" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

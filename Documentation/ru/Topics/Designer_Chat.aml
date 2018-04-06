@@ -6,7 +6,7 @@
 
       <para>Для работы в команде удобно использовать встроенный <legacyBold>Чат</legacyBold>, 
       который представляет из себя  популярный мессенджер <legacyBold>Telegram</legacyBold> в Web интерфейсе.</para>
-      <para>Использование чата <token>designer</token> на базе мессенджера <legacyBold>Telegram</legacyBold> имеет следующие плюсы:</para>
+      <para>Использование чата S# на базе мессенджера <legacyBold>Telegram</legacyBold> имеет следующие плюсы:</para>
 
 <list class="bullet">
   <listItem><para>Защита от несанкционированного чтения осуществляется благодаря 
@@ -22,7 +22,7 @@
 </list>
 <para>При первом открытии <legacyBold>Чата</legacyBold> появляется страница 
 авторизации, где нужно ввести свой номер телефона и дождаться СМС с кодом активации. После авторизации вы 
-получаете полноценный мессенджер <legacyBold>Telegram</legacyBold> прямо в <token>designer</token>.</para>
+получаете полноценный мессенджер <legacyBold>Telegram</legacyBold> внутри панели <legacyBold>Чат</legacyBold>.</para>
 <mediaLink>
 <image placement="center" xlink:href="Designer_Chat"/>
 </mediaLink>
