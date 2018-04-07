@@ -7,9 +7,9 @@
       от которых были получены данные портфели. В дальнейшем при <legacyBold>Live торговле</legacyBold>, выбрав портфель, автоматически
       установится подключение, через которое будет идти торговля.</para>
 <para>Посмотреть, а также изменить сопоставленые портфели и подключения, можно 
-нажав на кнопку <legacyBold>Портфели и подключения</legacyBold> вкладки <legacyBold>Торговля</legacyBold>.</para>
+нажав на кнопку <legacyBold>Портфели и подключения</legacyBold> панели быстрого доступа.</para>
 <mediaLink>
-<image placement="center" xlink:href="Designer_connection_mapping_1"/>
+<image placement="center" xlink:href="Designer_The_connection_settings_00"/>
 </mediaLink>
 <para>В появившемся окне можно удалить или добавить сопоставление портфелей и 
 подключений. Например, нажав на кнопку 

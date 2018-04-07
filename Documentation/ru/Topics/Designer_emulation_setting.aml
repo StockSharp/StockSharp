@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="31a208d0-d543-47aa-8008-389c071118d4" revisionNumber="1">
 <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 <introduction>
-<para><token>designer</token> позволяет запускать созданные стратегии в режиме <legacyBold>Симуляции</legacyBold>, 
+<para>Присутствует возможность запустить программу в режиме <legacyBold>Симуляции</legacyBold>, 
 для дополнительной настройки <legacyBold>Симуляции</legacyBold> необходимо выполнить следующие действия:</para>
    
 <para>1.	При нажатии на стрелку возле 
@@ -24,7 +24,6 @@
 <listItem><para><legacyBold>Инструменты</legacyBold> – Инструменты.</para></listItem>
 </list>
 <para>2. <legacyBold>Настройки</legacyBold></para>
-
 <list class="bullet">
 <listItem><para><legacyBold>Сводить при касании</legacyBold> – При эмулировании сведения по сделкам, производить сведение заявок, когда цена сделки коснулась цены заявки (равна цене заявки).</para></listItem>
 <listItem><para><legacyBold>Стакан (время жизни) </legacyBold> – Максимальное время, которое стакан находится в эмуляторе. Если за это время не произошло обновление, стакан стирается. Это свойство можно использовать, чтобы убирать старые стаканы при наличии дыр в данных.</para></listItem>
@@ -43,6 +42,8 @@
 <listItem><para><legacyBold>Часовой пояс</legacyBold> – Информация о временной зоне, где находится биржа.</para></listItem>
 <listItem><para><legacyBold>Сдвиг цены</legacyBold> – Сдвиг цены от последней сделки, определяющие границы максимальной и минимальной цен на следующую сессию.</para></listItem>
 <listItem><para><legacyBold>Добавлять доп. объем</legacyBold> – Добавлять дополнительный объем в стакан при выставлении заявок с большим объемом.</para></listItem>
+<listItem><para><legacyBold>Состояние торговой сессии</legacyBold> – Проверять торговое состояние.</para></listItem>
+
 
 </list>
 

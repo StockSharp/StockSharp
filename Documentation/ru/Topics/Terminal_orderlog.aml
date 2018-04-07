@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8898cea8-4229-475e-a31d-c88e09b2c46f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>Компонент <legacyBold>Лог заявок</legacyBold> представляет собой таблицу с заявками, в которой отображается полная информация о всех заявках
+по выбранным инструментам.</para> 
+<para><legacyBold>Лог заявок</legacyBold> имеет фильтр для выбора необходимых инструментов. 
+Также имеется возможность настроить уведомления по событиям выбранных 
+инструментов <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_orderlog_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="5a717b34-e3ed-45c7-934e-94d93b98ced8" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

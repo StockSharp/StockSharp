@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="beed7d94-24ec-41ee-93e7-56c56c4af77d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>Компонент <legacyBold>Позиции (опционы)</legacyBold> представляет собой графическое 
+отображение позиции по опционам.</para>
+<para>Для отображения позиции по опционам необходимо выбрать базовый актив и опционы 
+на основании цен которых будет строиться позиция.</para>
+<para>Дополнительно можно указать фильтр по точной дате экспирации опционов и фильтры по минимальному/максимальному страйкам.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Graph_options_positions_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="238f8d14-38ce-4f26-b032-b018b2fcd3e6" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

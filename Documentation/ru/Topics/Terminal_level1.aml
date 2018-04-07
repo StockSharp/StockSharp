@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8e7a5377-4c7c-41fb-bd2c-42b699d9d36e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+<introduction>
+<para>Компонент <legacyBold>Level 1</legacyBold> представляет собой таблицу с историей изменияния <legacyBold>Level 1</legacyBold> 
+по выбранным инструментам.</para> 
+<para><legacyBold>Level 1</legacyBold> имеет фильтр для выбора необходимых инструментов. 
+Также имеется возможность настроить уведомления по событиям выбранных 
+инструментов <link xlink:href="f4a4a44e-4be7-482c-9abc-5d3e57301f6b" />.</para>
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Level1_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="48a67112-c623-4227-89ad-a5d39e36be76" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

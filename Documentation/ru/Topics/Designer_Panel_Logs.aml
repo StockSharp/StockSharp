@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="d416a6d9-0a42-40c0-8f9f-0c1df29f5cda" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-<para>Для упрощения мониторинга работы в <token>designer</token> существует специальная панель <legacyBold>Логи</legacyBold>. 
-В данную панель выводятся сообщения от всех источников, стратегий, подключений, <token>designer</token>. 
+<para>Для упрощения мониторинга работы в программы существует специальная панель <legacyBold>Логи</legacyBold>. 
+В данную панель выводятся сообщения от всех источников, стратегий, подключений. 
 В панели <legacyBold>Логи</legacyBold> в виде дерева показывается вложенность источников. 
 Каждая родительская вершина содержит сообщения всех вложенных и так далее, до самого нижнего уровня.
  Для стратегий такая иерархия позволяет увидеть дочерние стратегии. 
