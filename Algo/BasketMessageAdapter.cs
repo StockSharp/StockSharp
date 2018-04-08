@@ -245,7 +245,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
-		public bool IsRestorSubscriptioneOnReconnect { get; set; }
+		public bool IsRestoreSubscriptionOnReconnect { get; set; }
 
 		/// <summary>
 		/// Suppress reconnecting errors.
@@ -312,7 +312,7 @@ namespace StockSharp.Algo
 
 			if (adapter.IsSupportSubscriptions)
 			{
-				adapter = new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestorSubscriptioneOnReconnect };
+				adapter = new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect };
 			}
 
 			return adapter;
