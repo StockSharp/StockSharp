@@ -1,5 +1,9 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors
+* (bug) HeartbeatMessageAdapter. Infinitive reconnection attempts fix.
+
 ## v4.4.6.1:
 * (bug) InteractiveBrokers. Fix historical ticks request.
 * (feature) Charting. Uses DateRangeWindow to set candle series From and To.
@@ -20,7 +24,6 @@ StockSharp API Change log
 * (bug) Charting. OptionPositionChart. Legend binding fix.
 * (bug) Charting. Options charts theme binding fix.
 * (bug) HistoryEmulationConnector. Fix external sources processing.
-* (bug) HeartbeatMessageAdapter.SuppressReconnectingErrors
 
 ## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
