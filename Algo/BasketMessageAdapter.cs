@@ -666,7 +666,7 @@ namespace StockSharp.Algo
 			if (isError)
 				this.AddErrorLog(LocalizedStrings.Str625Params, underlyingAdapter, message.Error);
 			else
-				this.AddInfoLog("Connected from '{0}'.", underlyingAdapter);
+				this.AddInfoLog("Connected to '{0}'.", underlyingAdapter);
 
 			lock (_connectedResponseLock)
 			{
@@ -720,7 +720,7 @@ namespace StockSharp.Algo
 			var heartbeatAdapter = _hearbeatAdapters[underlyingAdapter];
 
 			if (message.Error == null)
-				this.AddInfoLog("Connected from '{0}'.", underlyingAdapter);
+				this.AddInfoLog("Disconnected from '{0}'.", underlyingAdapter);
 			else
 				this.AddErrorLog(LocalizedStrings.Str627Params, underlyingAdapter, message.Error);
 
