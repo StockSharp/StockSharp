@@ -107,8 +107,9 @@ namespace StockSharp.Algo
 						{
 							if (_connectingAttemptCount != 0)
 							{
-								if (_currState == ConnectionStates.Connected)
-									_prevState = _reConnecting;
+								_prevState = _currState == ConnectionStates.Connected
+									? _reConnecting
+									: ConnectionStates.Failed;
 
 								_currState = _reConnecting;
 								isReconnecting = true;

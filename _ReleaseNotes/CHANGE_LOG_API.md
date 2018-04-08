@@ -3,6 +3,7 @@ StockSharp API Change log
 ## current:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors
 * (bug) HeartbeatMessageAdapter. Infinitive reconnection attempts fix.
+* (bug) HeartbeatMessageAdapter. Infinitive first connection attempts fix.
 
 ## v4.4.6.1:
 * (bug) InteractiveBrokers. Fix historical ticks request.
