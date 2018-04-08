@@ -2774,6 +2774,10 @@ Disconnect;Disconnect;Отключиться
 Connect;Connect;Подключиться
 Connected;Connected;Подключен
 Disconnected;Disconnected;Не подключен
+Disconnecting;Disconnecting;Отключается
+Connecting;Connecting;Подключается
+Failed;Failed;Ошибка
+Reconnecting;Reconnecting;Переподключается
 Str2965;Smart login is not specified.;Не указан логин Smart.
 Str2966;Smart password is not specified.;Не указан пароль Smart.
 Str2967;Path to Quik is not specified.;Не указан путь Quik.

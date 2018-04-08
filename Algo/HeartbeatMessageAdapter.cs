@@ -19,6 +19,7 @@ namespace StockSharp.Algo
 	using System.Threading;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -81,9 +82,10 @@ namespace StockSharp.Algo
 			{
 				case MessageTypes.Connect:
 				{
+					var connectMsg = (ConnectMessage)message;
 					var isReconnecting = false;
 
-					if (((ConnectMessage)message).Error == null)
+					if (connectMsg.Error == null)
 					{
 						isReconnecting = _prevState == _reConnecting;
 
@@ -120,7 +122,9 @@ namespace StockSharp.Algo
 				}
 				case MessageTypes.Disconnect:
 				{
-					if (((DisconnectMessage)message).Error == null)
+					var disconnectMsg = (DisconnectMessage)message;
+
+					if (disconnectMsg.Error == null)
 					{
 						lock (_timeSync)
 							_prevState = _currState = ConnectionStates.Disconnected;
@@ -399,13 +403,13 @@ namespace StockSharp.Algo
 			switch (state)
 			{
 				case _reConnecting:
-					return "Reconnecting";
+					return LocalizedStrings.Reconnecting;
 				
 				case _none:
-					return "None";
+					return LocalizedStrings.Str1658;
 
 				default:
-					return state.ToString();
+					return state.GetDisplayName();
 			}
 		}
 
@@ -440,7 +444,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new HeartbeatMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new HeartbeatMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { SuppressErrorMessages = SuppressErrorMessages };
 		}
 	}
 }

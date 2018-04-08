@@ -27708,6 +27708,46 @@ namespace StockSharp.Localization
 		public static string Disconnected => GetString(DisconnectedKey);
 
 		/// <summary>
+		/// Connecting
+		/// </summary>
+		public const string ConnectingKey = nameof(Connecting);
+
+		/// <summary>
+		/// Connecting
+		/// </summary>
+		public static string Connecting => GetString(ConnectingKey);
+
+		/// <summary>
+		/// Disconnecting
+		/// </summary>
+		public const string DisconnectingKey = nameof(Disconnecting);
+
+		/// <summary>
+		/// Disconnecting
+		/// </summary>
+		public static string Disconnecting => GetString(DisconnectingKey);
+
+		/// <summary>
+		/// Failed
+		/// </summary>
+		public const string FailedKey = nameof(Failed);
+
+		/// <summary>
+		/// Failed
+		/// </summary>
+		public static string Failed => GetString(FailedKey);
+
+		/// <summary>
+		/// Reconnecting
+		/// </summary>
+		public const string ReconnectingKey = nameof(Reconnecting);
+
+		/// <summary>
+		/// Reconnecting
+		/// </summary>
+		public static string Reconnecting => GetString(ReconnectingKey);
+
+		/// <summary>
 		/// Smart login is not specified.
 		/// </summary>
 		public const string Str2965Key = nameof(Str2965);
