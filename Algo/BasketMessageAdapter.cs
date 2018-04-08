@@ -247,29 +247,22 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool IsRestorSubscriptioneOnReconnect { get; set; }
 
+		/// <summary>
+		/// Suppress reconnecting errors.
+		/// </summary>
+		public bool SuppressReconnectingErrors { get; set; }
+
 		/// <inheritdoc />
 		public override IEnumerable<TimeSpan> TimeFrames
 		{
 			get { return GetSortedAdapters().SelectMany(a => a.TimeFrames); }
 		}
 
-		/// <summary>
-		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
-		/// </summary>
-		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
-		public override OrderCondition CreateOrderCondition()
-		{
-			throw new NotSupportedException();
-		}
+		/// <inheritdoc />
+		public override OrderCondition CreateOrderCondition() => throw new NotSupportedException();
 
-		/// <summary>
-		/// Check the connection is alive. Uses only for connected states.
-		/// </summary>
-		/// <returns><see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
-		public override bool IsConnectionAlive()
-		{
-			throw new NotSupportedException();
-		}
+		/// <inheritdoc />
+		public override bool IsConnectionAlive() => throw new NotSupportedException();
 
 		private void ProcessReset(Message message)
 		{
@@ -364,7 +357,7 @@ namespace StockSharp.Algo
 							_pendingConnectAdapters.Add(a);
 
 						var wrapper = CreateWrappers(a);
-						var hearbeatAdapter = new HeartbeatMessageAdapter(wrapper);
+						var hearbeatAdapter = new HeartbeatMessageAdapter(wrapper) { SuppressReconnectingErrors = SuppressReconnectingErrors };
 						((IMessageAdapter)hearbeatAdapter).Parent = this;
 						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(wrapper, m);
 						return hearbeatAdapter;

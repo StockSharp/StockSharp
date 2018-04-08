@@ -73,6 +73,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Suppress reconnecting errors.
+		/// </summary>
+		public bool SuppressReconnectingErrors { get; set; }
+
+		/// <summary>
 		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
 		/// </summary>
 		/// <param name="message">The message.</param>
@@ -83,11 +88,12 @@ namespace StockSharp.Algo
 				case MessageTypes.Connect:
 				{
 					var connectMsg = (ConnectMessage)message;
+					var isRestored = false;
 					var isReconnecting = false;
 
 					if (connectMsg.Error == null)
 					{
-						isReconnecting = _prevState == _reConnecting;
+						isRestored = _prevState == _reConnecting;
 
 						lock (_timeSync)
 							_prevState = _currState = ConnectionStates.Connected;
@@ -99,24 +105,29 @@ namespace StockSharp.Algo
 
 						lock (_timeSync)
 						{
-							if (_reConnectionSettings.ReAttemptCount != 0)
+							if (_connectingAttemptCount != 0)
 							{
 								if (_currState == ConnectionStates.Connected)
 									_prevState = _reConnecting;
 
 								_currState = _reConnecting;
+								isReconnecting = true;
 							}
 							else
 								_prevState = _currState = ConnectionStates.Failed;
 						}
 					}
 
-					if (isReconnecting)
+					if (isRestored)
 					{
-						RaiseNewOutMessage(new RestoredConnectMessage { Adapter = message.Adapter });
+						if (!SuppressReconnectingErrors)
+							RaiseNewOutMessage(new RestoredConnectMessage { Adapter = message.Adapter });
 					}
 					else
-						base.OnInnerAdapterNewOutMessage(message);
+					{
+						if (connectMsg.Error == null || !SuppressReconnectingErrors || !isReconnecting)
+							base.OnInnerAdapterNewOutMessage(message);
+					}
 
 					break;
 				}
@@ -444,7 +455,7 @@ namespace StockSharp.Algo
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new HeartbeatMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { SuppressErrorMessages = SuppressErrorMessages };
+			return new HeartbeatMessageAdapter((IMessageAdapter)InnerAdapter.Clone()) { SuppressReconnectingErrors = SuppressReconnectingErrors };
 		}
 	}
 }
