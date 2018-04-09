@@ -1,5 +1,9 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.6.2:
+* (bug) Reconnect fix.
+* (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
+
 ## v4.4.6.1:
 * (bug) File progress window. Closing fix.
 * (bug) StochasticOscillator draw fix.

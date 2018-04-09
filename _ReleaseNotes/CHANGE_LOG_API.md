@@ -1,9 +1,10 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors
 * (bug) HeartbeatMessageAdapter. Infinitive reconnection attempts fix.
 * (bug) HeartbeatMessageAdapter. Infinitive first connection attempts fix.
+* (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
 
 ## v4.4.6.1:
 * (bug) InteractiveBrokers. Fix historical ticks request.
