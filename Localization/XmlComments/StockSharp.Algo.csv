@@ -3702,12 +3702,11 @@ P:StockSharp.Algo.BasketMessageAdapter.OrderStatusRequired/summary;DocStr451
 P:StockSharp.Algo.BasketMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.Algo.BasketMessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
 P:StockSharp.Algo.BasketMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
-P:StockSharp.Algo.BasketMessageAdapter.IsRestorSubscriptioneOnReconnect/summary;DocStr9349
+P:StockSharp.Algo.BasketMessageAdapter.IsRestoreSubscriptionOnReconnect/summary;DocStr9349
+P:StockSharp.Algo.BasketMessageAdapter.SuppressReconnectingErrors/summary;DocStr10373
 P:StockSharp.Algo.BasketMessageAdapter.TimeFrames/inheritdoc;DocStr8459
-M:StockSharp.Algo.BasketMessageAdapter.CreateOrderCondition/summary;DocStr44
-M:StockSharp.Algo.BasketMessageAdapter.CreateOrderCondition/returns;DocStr45
-M:StockSharp.Algo.BasketMessageAdapter.IsConnectionAlive/summary;DocStr441
-M:StockSharp.Algo.BasketMessageAdapter.IsConnectionAlive/returns;DocStr442
+M:StockSharp.Algo.BasketMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+M:StockSharp.Algo.BasketMessageAdapter.IsConnectionAlive/inheritdoc;DocStr8459
 M:StockSharp.Algo.BasketMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Algo.BasketMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.BasketMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.Message)/summary;DocStr443
@@ -3973,7 +3972,7 @@ P:StockSharp.Algo.Connector.CreateAssociatedSecurity/summary;Str198
 P:StockSharp.Algo.Connector.ErrorCount/summary;DocStr926
 P:StockSharp.Algo.Connector.MarketTimeChangedInterval/summary;DocStr927
 P:StockSharp.Algo.Connector.TimeChange/summary;DocStr8562
-P:StockSharp.Algo.Connector.IsRestorSubscriptioneOnReconnect/summary;DocStr9349
+P:StockSharp.Algo.Connector.IsRestoreSubscriptionOnReconnect/summary;DocStr9349
 M:StockSharp.Algo.Connector.Connect/summary;DocStr806
 M:StockSharp.Algo.Connector.OnConnect/summary;DocStr806
 M:StockSharp.Algo.Connector.Disconnect/summary;DocStr807
@@ -4077,6 +4076,7 @@ M:StockSharp.Algo.Connector.Save(Ecng.Serialization.SettingsStorage)/param/stora
 T:StockSharp.Algo.HeartbeatMessageAdapter/summary;DocStr928
 M:StockSharp.Algo.HeartbeatMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
 M:StockSharp.Algo.HeartbeatMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr8563
+P:StockSharp.Algo.HeartbeatMessageAdapter.SuppressReconnectingErrors/summary;DocStr10373
 M:StockSharp.Algo.HeartbeatMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
 M:StockSharp.Algo.HeartbeatMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
 M:StockSharp.Algo.HeartbeatMessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
