@@ -862,7 +862,7 @@ Str895;Order volume cannot be less than zero.;Объем заявки не мо�
 Str896Params;Order already has a ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор '{0}'. Возможно, она уже была зарегистрирована.
 Str897Params;Order already has a transaction ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор транзакции '{0}'. Возможно, она уже была зарегистрирована.
 Str898Params;Order already has state '{0}'. Possibly, it was already registered.;Заявка уже имеет состояние '{0}'. Возможно, она уже была зарегистрирована.
-Str899;Order has neither identifier nor transaction ID. Possibly, it was not registered.;Заявка не имеет ни идентификатор ни идентификатор транзакции. Возможно, она не была зарегистрирована.
+Str899;Order has neither exchange identifier nor transaction ID. Possibly, it was not registered.;Заявка не имеет ни биржевой идентификатор, ни идентификатор транзакции. Возможно, она не была зарегистрирована.
 Str900Params;Wrong type {0} of security.;Неправильный тип {0} инструмента.
 Str901Params;Option {0} does not have information about expiration date.;Дата экспирации опциона {0} отсутствует.
 Str902Params;Information about the underlying security {0} is missing.;Информация о базовом инструменте {0} отсутствует.

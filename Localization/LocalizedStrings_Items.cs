@@ -8608,12 +8608,12 @@ namespace StockSharp.Localization
 		public static string Str898Params => GetString(Str898ParamsKey);
 
 		/// <summary>
-		/// Order has neither identifier nor transaction ID. Possibly, it was not registered.
+		/// Order has neither exchange identifier nor transaction ID. Possibly, it was not registered.
 		/// </summary>
 		public const string Str899Key = nameof(Str899);
 
 		/// <summary>
-		/// Order has neither identifier nor transaction ID. Possibly, it was not registered.
+		/// Order has neither exchange identifier nor transaction ID. Possibly, it was not registered.
 		/// </summary>
 		public static string Str899 => GetString(Str899Key);
 
