@@ -915,7 +915,7 @@ namespace StockSharp.Algo
 								SetAdapterFailed(adapter, message, ConnectionStates.Connecting, true);
 						}
 						else
-							SetAdapterFailed(adapter, message, ConnectionStates.Connecting, false, new InvalidOperationException(LocalizedStrings.Str683, message.Error));
+							SetAdapterFailed(adapter, message, ConnectionStates.Connecting, false);
 
 						return;
 					}
@@ -939,7 +939,7 @@ namespace StockSharp.Algo
 								SetAdapterFailed(adapter, message, ConnectionStates.Disconnecting, false);
 						}
 						else
-							SetAdapterFailed(adapter, message, ConnectionStates.Disconnecting, false, new InvalidOperationException(LocalizedStrings.Str684, message.Error));
+							SetAdapterFailed(adapter, message, ConnectionStates.Disconnecting, false);
 
 						return;
 					}
@@ -1088,11 +1088,11 @@ namespace StockSharp.Algo
 				RaiseConnected();
 		}
 
-		private void SetAdapterFailed(IMessageAdapter adapter, BaseConnectionMessage message, ConnectionStates checkState, bool raiseTimeOut, Exception error = null)
+		private void SetAdapterFailed(IMessageAdapter adapter, BaseConnectionMessage message, ConnectionStates checkState, bool raiseTimeOut)
 		{
 			_adapterStates[adapter] = ConnectionStates.Failed;
 
-			error = error ?? message.Error;
+			var error = message.Error ?? new InvalidOperationException(message is ConnectMessage ? LocalizedStrings.Str683 : LocalizedStrings.Str684);
 
 			// raise ConnectionError only one time
 			if (ConnectionState == checkState)
