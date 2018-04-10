@@ -171,6 +171,8 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
+			var isStartTimer = false;
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
@@ -207,8 +209,8 @@ namespace StockSharp.Algo
 							_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
 							_connectingAttemptCount = _reConnectionSettings.AttemptCount;
 						}
-					
-						StartTimer();
+
+						isStartTimer = true;
 					}
 
 					break;
@@ -235,6 +237,12 @@ namespace StockSharp.Algo
 			}
 
 			base.SendInMessage(message);
+
+			lock (_timeSync)
+			{
+				if (isStartTimer && _currState == ConnectionStates.Connecting)
+					StartTimer();
+			}
 
 			if (message != _timeMessage)
 				return;
