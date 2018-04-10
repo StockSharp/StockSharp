@@ -1,12 +1,47 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.6.2:
+* (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors
+* (bug) HeartbeatMessageAdapter. Infinitive reconnection attempts fix.
+* (bug) HeartbeatMessageAdapter. Infinitive first connection attempts fix.
+* (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
+
+## v4.4.6.1:
+* (bug) InteractiveBrokers. Fix historical ticks request.
+* (feature) Charting. Uses DateRangeWindow to set candle series From and To.
+* (feature) StorageCandleSource removed as obsolete.
+* (bug) Connector. IsBack MD messages for News fix.
+* (feature) Connector. Market data events now support News subscriptions.
+* (bug) CandleBuilderMessageAdapter. Fix build unsubscribe.
+* (feature) IStorageRegistry.DefaultDrive setter added.
+* (bug) FileProgressWindow closing fix.
+* (bug) ConnectorWindow. Show missed column names.
+* (feature) Charting. StochasticOscillatorPainter.
+* (bug) Kraken margin position obtain fix.
+* (feature) IFileService.GetUploadLimit return value int -> long.
+* (feature) Charting. Auto and manual select candles series for indicators.
+* (bug) Charting. Fix auto select appropriate candle series.
+* (bug) FIX connector. Fix process unknown outgoing messages.
+* (bug) AlfaDirect, Transaq. PortfolioMessage processing fixes.
+* (bug) Charting. OptionPositionChart. Legend binding fix.
+* (bug) Charting. Options charts theme binding fix.
+* (bug) HistoryEmulationConnector. Fix external sources processing.
+
+## v4.4.6:
 * (feature) Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange stubs.
 * (feature) WithdrawWindow.
 * (feature) IndexSecurityWindow.
 * (feature) Quik DDE turned off.
 * (bug) OfflineMessageAdapter. Cancel pending orders fix.
 * (feature) OrderGrid. Allow cancel pending orders.
+* (feature) FIX connector. Process unknown transactions option.
+* (feature) OpenECryStopType -> OpenECryStopTypes.
+* (bug) Fix http://stocksharp.ru/forum/9261/isklyuchenie-pri-popytke-podklyucheniya-k-bittrex/
+* (feature) Crypto withdraw. Uses Order.Security instead of WithdrawInfo.Currency.
+* (feature) Level1Fields. Dividends, AfterSplit, BeforeSplit
+* (bug) YahooHistorySource restored.
+* (bug) IQFeed. Fix parse fundamental messages with empty exchange code.
+* (bug) Xaml.Diagram. Fix drag n drop from palette http://stocksharp.com/forum/9268/Drag-and-Drop-S-Designer-error/
 
 ## v4.4.5.4:
 * (feature) TraderHelper.TryAdd IsZeroAcceptable.

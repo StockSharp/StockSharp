@@ -628,7 +628,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElement">
       <summary>
-            The selected element.
+            Selected element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.IndicatorTypes">
@@ -3445,7 +3445,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.TradeAllowedDiagramElement" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1">

@@ -24,10 +24,11 @@ M:StockSharp.Fix.Dialects.BaseFastDialect.Save(Ecng.Serialization.SettingsStorag
 M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Fix.Dialects.BaseFastDialect.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Fix.Dialects.BaseFixDialect/summary;DocStr8742
-M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/summary;DocStr93
-M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/param/encoding;Encoding
-M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/param/version;DocStr8745
-M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/param/format;FixFormat
+M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/summary;DocStr93
+M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/param/adapter;DocStr929
+M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/param/encoding;Encoding
+M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/param/version;DocStr8745
+M:StockSharp.Fix.Dialects.BaseFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Text.Encoding,System.String,StockSharp.Fix.FixFormats)/param/format;FixFormat
 P:StockSharp.Fix.Dialects.BaseFixDialect.Encoding/summary;Encoding
 P:StockSharp.Fix.Dialects.BaseFixDialect.Login/summary;Login
 P:StockSharp.Fix.Dialects.BaseFixDialect.Password/summary;Password
@@ -120,8 +121,9 @@ T:StockSharp.Fix.Dialects.DefaultFastDialect/summary;DocStr8770
 M:StockSharp.Fix.Dialects.DefaultFastDialect.Open/inheritdoc;DocStr8459
 M:StockSharp.Fix.Dialects.DefaultFastDialect.Close/inheritdoc;DocStr8459
 T:StockSharp.Fix.Dialects.DefaultFixDialect/summary;DocStr8770
-M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(System.Func{StockSharp.Messages.OrderCondition})/summary;DocStr1
-M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(System.Func{StockSharp.Messages.OrderCondition})/param/createOrderCondition;DocStr8771
+M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Func{StockSharp.Messages.OrderCondition})/summary;DocStr1
+M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Func{StockSharp.Messages.OrderCondition})/param/adapter;DocStr929
+M:StockSharp.Fix.Dialects.DefaultFixDialect.#ctor(StockSharp.Fix.FixMessageAdapter,System.Func{StockSharp.Messages.OrderCondition})/param/createOrderCondition;DocStr8771
 P:StockSharp.Fix.Dialects.DefaultFixDialect.ConvertToLatin/summary;DocStr9080
 M:StockSharp.Fix.Dialects.DefaultFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/summary;DocStr8756
 M:StockSharp.Fix.Dialects.DefaultFixDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/param/writer;DocStr8757
@@ -1624,6 +1626,7 @@ P:StockSharp.Fix.FixMessageAdapter.WriteTimeout/summary;DocStr3184
 P:StockSharp.Fix.FixMessageAdapter.Ssl/summary;SslProtocol
 P:StockSharp.Fix.FixMessageAdapter.SslCertificate/summary;SslCertificate
 P:StockSharp.Fix.FixMessageAdapter.TimeFrames/inheritdoc;DocStr8459
+P:StockSharp.Fix.FixMessageAdapter.SupportUnknownExecutions/summary;UnknownTransactonsDesc
 M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

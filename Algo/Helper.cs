@@ -66,32 +66,6 @@ namespace StockSharp.Algo
 			return security;
 		}
 
-		public static int ChangeSubscribers<T>(this CachedSynchronizedDictionary<T, int> subscribers, T subscriber, bool isSubscribe)
-		{
-			if (subscribers == null)
-				throw new ArgumentNullException(nameof(subscribers));
-
-			lock (subscribers.SyncRoot)
-			{
-				var value = subscribers.TryGetValue2(subscriber) ?? 0;
-
-				if (isSubscribe)
-					value++;
-				else
-				{
-					if (value > 0)
-						value--;
-				}
-
-				if (value > 0)
-					subscribers[subscriber] = value;
-				else
-					subscribers.Remove(subscriber);
-
-				return value;
-			}
-		}
-
 		public static long GetTradeId(this ExecutionMessage message)
 		{
 			if (message == null)

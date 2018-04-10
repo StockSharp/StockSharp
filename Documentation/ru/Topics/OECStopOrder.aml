@@ -38,18 +38,18 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 
 		<list class="bullet">
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopMarket</codeEntityReference> – после достижения стоп-цены автоматически выставляется рыночная заявка.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.StopMarket</codeEntityReference> – после достижения стоп-цены автоматически выставляется рыночная заявка.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopLimit</codeEntityReference> – после достижения стоп-цены автоматически выставляется лимитная заявка.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.StopLimit</codeEntityReference> – после достижения стоп-цены автоматически выставляется лимитная заявка.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference> – стоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, 
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopMarket</codeEntityReference> – стоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, 
 				оставаясь на заранее заявленном интервале от рыночной цены. В случае, если рынок достигает стоп-цены, автоматически выставляется рыночная заявка.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopLimit</codeEntityReference> – 
-				как <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference>, но при достижении стоп-цены выставляется лимитная заявка.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopLimit</codeEntityReference> – 
+				как <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopMarket</codeEntityReference>, но при достижении стоп-цены выставляется лимитная заявка.</para>
 			</listItem>
 		</list>
 	</introduction>

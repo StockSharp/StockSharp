@@ -2415,11 +2415,6 @@
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Tick">
-      <summary>
-            Tick candle.
-            </summary>
-    </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second1">
       <summary>
             One second time frame.
@@ -2483,11 +2478,6 @@
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Week">
       <summary>
             Weekly time frame.
-            </summary>
-    </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month">
-      <summary>
-            Monthly time frame.
             </summary>
     </member>
     <member name="T:StockSharp.InteractiveBrokers.SoftDollarTier">

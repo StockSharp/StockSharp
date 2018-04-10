@@ -216,6 +216,11 @@
             The interactive mode. The default is off.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.IsInteractedwithDateRange">
+      <summary>
+            The interactive mode with dates popup. The default is off.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.CrossHair">
       <summary>
             Crosshair.
@@ -1069,6 +1074,34 @@
             </summary>
       <returns>Copy.</returns>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.ChartCandleElementPicker">
+      <summary>
+            The window for select candle series element.
+            </summary>
+      <summary>
+            ChartCandleElementPicker
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartCandleElementPicker.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartCandleElementPicker" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElementPicker.Elements">
+      <summary>
+            Elements.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElementPicker.SelectedElement">
+      <summary>
+            Selected element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartCandleElementPicker.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartDrawData">
       <summary>
             Chart drawing data.
@@ -1790,6 +1823,11 @@
             The interactive mode. The default is off.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.IsInteractedwithDateRange">
+      <summary>
+            The interactive mode with dates popup. The default is off.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartPanel.OrderCreationMode">
       <summary>
             The order creation mode. The default is off.
@@ -2339,17 +2377,17 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.MiddleColor">
       <summary>
-            Middle line color.
+        <see cref="P:StockSharp.Algo.Indicators.Envelope.Middle" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.UpperColor">
       <summary>
-            Upper line color.
+        <see cref="P:StockSharp.Algo.Indicators.Envelope.Upper" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.LowerColor">
       <summary>
-            Lower line color.
+        <see cref="P:StockSharp.Algo.Indicators.Envelope.Lower" /> line color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.EnvelopePainter.Init">
@@ -2394,6 +2432,47 @@
             </summary>
       <param name="type">Indicator type.</param>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter">
+      <summary>
+            The renderer for <see cref="T:StockSharp.Algo.Indicators.StochasticOscillator" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.KColor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.StochasticOscillator.K" /> line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.DColor">
+      <summary>
+        <see cref="P:StockSharp.Algo.Indicators.StochasticOscillator.D" /> line color.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.Init">
+      <summary>
+            To initialize renderer.
+            </summary>
+      <returns>Graphical data.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)">
+      <summary>
+            To process new values.
+            </summary>
+      <param name="time">The time stamp of the new data generation.</param>
+      <param name="value">Indicator values.</param>
+      <param name="draw">The method of value drawing on the chart.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.StochasticOscillatorPainter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter">
       <summary>
             The renderer for <see cref="T:StockSharp.Algo.Indicators.Alligator" />.
@@ -2401,17 +2480,17 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.LipsColor">
       <summary>
-            Lips line color.
+        <see cref="P:StockSharp.Algo.Indicators.Alligator.Lips" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.TeethColor">
       <summary>
-            Teeth line color.
+        <see cref="P:StockSharp.Algo.Indicators.Alligator.Teeth" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.JawColor">
       <summary>
-            Jaw line color.
+        <see cref="P:StockSharp.Algo.Indicators.Alligator.Jaw" /> line color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Init">
@@ -2540,17 +2619,17 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.UpBandColor">
       <summary>
-            Color of the upper indicator line.
+        <see cref="P:StockSharp.Algo.Indicators.BollingerBands.UpBand" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.LowBandColor">
       <summary>
-            Color of the lower indicator line.
+        <see cref="P:StockSharp.Algo.Indicators.BollingerBands.LowBand" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.MovingAverageColor">
       <summary>
-            Color of average line.
+        <see cref="P:StockSharp.Algo.Indicators.BollingerBands.MovingAverage" /> line color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.Init">
@@ -2586,12 +2665,12 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.UpColor">
       <summary>
-            Up line color.
+        <see cref="P:StockSharp.Algo.Indicators.Fractals.Up" /> dots color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.DownColor">
       <summary>
-            Down line color.
+        <see cref="P:StockSharp.Algo.Indicators.Fractals.Down" /> dots color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.Init">
@@ -2627,27 +2706,27 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.TenkanColor">
       <summary>
-            Tenkan line color.
+        <see cref="P:StockSharp.Algo.Indicators.Ichimoku.Tenkan" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.KijunColor">
       <summary>
-            Kijun line color.
+        <see cref="P:StockSharp.Algo.Indicators.Ichimoku.Kijun" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.SenkouAColor">
       <summary>
-            SenkouA line color.
+        <see cref="P:StockSharp.Algo.Indicators.Ichimoku.SenkouA" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.SenkouBColor">
       <summary>
-            SenkouA line color.
+        <see cref="P:StockSharp.Algo.Indicators.Ichimoku.SenkouB" /> line color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.ChinkouColor">
       <summary>
-            Chinkou line color.
+        <see cref="P:StockSharp.Algo.Indicators.Ichimoku.Chinkou" /> line color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Init">
@@ -3097,6 +3176,11 @@
     <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.SelectedIndicatorType">
       <summary>
             The selected indicator type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.AutoSelectCandles">
+      <summary>
+            Auto select candles.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.IndicatorTypes">

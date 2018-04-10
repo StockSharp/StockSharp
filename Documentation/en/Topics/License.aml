@@ -32,7 +32,12 @@
 		<para><legacyBold>Crypto trader</legacyBold></para>
 		<list class="ordered">
   			<listItem>
-  				<para>Perpetual license for investors of our crowd campaigns. 
+  				<para>Perpetual license for investors of our crowd campaigns <externalLink>
+  				<linkText>crowd campaigns</linkText>
+			<linkAlternateText>crowd campaigns</linkAlternateText>
+			<linkUri>http://crowd.stocksharp.com</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink>.
   				It's include:
 		<token>Bitfinex</token>,
 		<token>Bithumb</token>,

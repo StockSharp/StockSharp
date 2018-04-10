@@ -111,8 +111,8 @@ namespace StockSharp.Algo
 				if (message.Type == MessageTypes.MarketData)
 				{
 					var mdMsg = (MarketDataMessage)message;
-					var security = GetSecurity(mdMsg.SecurityId);
 
+					var security = mdMsg.DataType == MarketDataTypes.News ? null : GetSecurity(mdMsg.SecurityId);
 					_subscriptionManager.ProcessRequest(security, mdMsg, true);
 				}
 				else
@@ -813,7 +813,7 @@ namespace StockSharp.Algo
 
 			var security = _subscriptionManager.ProcessResponse(mdMsg.OriginalTransactionId, out var originalMsg);
 
-			if (security == null)
+			if (security == null && originalMsg?.DataType != MarketDataTypes.News)
 			{
 				if (error != null)
 					RaiseError(error);

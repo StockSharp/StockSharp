@@ -15,6 +15,12 @@
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativeSecurityLookup">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativePortfolioLookup">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsNativeIdentifiers">
       <inheritdoc />
     </member>
@@ -52,6 +58,11 @@
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Pin">
       <summary>
             Pin.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.Token">
+      <summary>
+            Access token.
             </summary>
     </member>
     <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.AllTimeFrames">
@@ -272,6 +283,11 @@
     <member name="P:StockSharp.Fxcm.FxcmTrader.Pin">
       <summary>
             Pin.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fxcm.FxcmTrader.Token">
+      <summary>
+            Access token.
             </summary>
     </member>
   </members>

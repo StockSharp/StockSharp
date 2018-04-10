@@ -37,18 +37,18 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 
 		<list class="bullet">
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopMarket</codeEntityReference> – a market order is automatically executed after the stop price is reached.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.StopMarket</codeEntityReference> – a market order is automatically executed after the stop price is reached.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.StopLimit</codeEntityReference> – a limit order is automatically executed after the stop price is reached.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.StopLimit</codeEntityReference> – a limit order is automatically executed after the stop price is reached.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference> – stop price automatically follows the market,
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopMarket</codeEntityReference> – stop price automatically follows the market,
 				but only in a favorable direction for the position, remaining the stated-in-advance  distancefrom market price. If the market reaches the stop price, market order is automatically executed.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopLimit</codeEntityReference> – 
-				same as <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket</codeEntityReference>, but when stop price is reached the limit order is registered.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopLimit</codeEntityReference> – 
+				same as <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryStopTypes.TrailingStopMarket</codeEntityReference>, but when stop price is reached the limit order is registered.</para>
 			</listItem>
 		</list>
 	</introduction>

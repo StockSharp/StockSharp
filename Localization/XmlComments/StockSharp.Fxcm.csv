@@ -1,6 +1,8 @@
 T:StockSharp.Fxcm.FxcmMessageAdapter/summary;DocStr2538
 M:StockSharp.Fxcm.FxcmMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Fxcm.FxcmMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
@@ -10,6 +12,7 @@ P:StockSharp.Fxcm.FxcmMessageAdapter.IsDemo/summary;Str3388
 P:StockSharp.Fxcm.FxcmMessageAdapter.Login/summary;Login
 P:StockSharp.Fxcm.FxcmMessageAdapter.Password/summary;Password
 P:StockSharp.Fxcm.FxcmMessageAdapter.Pin/summary;Pin
+P:StockSharp.Fxcm.FxcmMessageAdapter.Token/summary;AccessToken
 P:StockSharp.Fxcm.FxcmMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Fxcm.FxcmMessageAdapter.TimeFrames/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -56,3 +59,4 @@ P:StockSharp.Fxcm.FxcmTrader.Password/summary;Password
 P:StockSharp.Fxcm.FxcmTrader.Address/summary;ServerAddress
 P:StockSharp.Fxcm.FxcmTrader.IsDemo/summary;Str3388
 P:StockSharp.Fxcm.FxcmTrader.Pin/summary;Pin
+P:StockSharp.Fxcm.FxcmTrader.Token/summary;AccessToken

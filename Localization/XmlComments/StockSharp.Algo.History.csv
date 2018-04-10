@@ -689,10 +689,12 @@ M:StockSharp.Algo.History.YahooHistorySource.#ctor(StockSharp.Algo.Storages.IExc
 P:StockSharp.Algo.History.YahooHistorySource.ExchangeInfoProvider/summary;DocStr9509
 P:StockSharp.Algo.History.YahooHistorySource.Fields/summary;DocStr279
 P:StockSharp.Algo.History.YahooHistorySource.TimeFrames/summary;DocStr135
-M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityId},System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/summary;DocStr276
-M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityId},System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/securityIds;DocStr142
-M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityId},System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/fields;DocStr277
-M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityId},System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/returns;DocStr278
+M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/summary;DocStr276
+M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/securityId;SecurityId
+M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/beginDate;Str2282
+M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/endDate;Str418
+M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/param/fields;DocStr277
+M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})/returns;DocStr278
 M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/summary;DocStr134
 M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/param/security;DocStr2831
 M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/param/timeFrame;DocStr121
