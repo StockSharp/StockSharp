@@ -6,6 +6,7 @@ StockSharp API Change log
 * (bug) HeartbeatMessageAdapter. Infinitive first connection attempts fix.
 * (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
 * (feature) SmartCOM. V4 as default.
+* (bug) Transaq. Fix locked file issue.
 
 ## v4.4.6.1:
 * (bug) InteractiveBrokers. Fix historical ticks request.
