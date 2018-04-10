@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b7809562-d829-42d2-95c9-cbca8bf5549e" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+<para>При первом запуске <link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" /> будет показано следующее окно:</para>
+<mediaLink><image placement="center" xlink:href="Terminal_Quick_start_00"/></mediaLink>
+<para>Необходимо выбрать режим запуска и нажать кнопку <legacyBold>ОК</legacyBold>.</para>
+<para>Для начала торговли в <link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" /> 
+необходимо:</para> 
+<para>1. Настроить подключение как описано в пункте <link xlink:href="0f40a3ad-c627-4552-a581-7dc048f19739" /> 
+и поключиться.</para>
+<para>2. Скачать необходимые инструменты как описано в пункте <link xlink:href="dc4bee68-e85c-46c2-bf32-34a1c554ab65" />. 
+</para>
+<para>3. Добавить и настроить необходимые компоненты (стаканы, свечи и др.). 
+Все компоненты описаны в пункте <link xlink:href="cbd63a4a-b653-4044-b4dd-7e7d42be1492" />.</para>
+<para>4. <legacyBold>Все! Можно торговать!</legacyBold></para>
+
+ <mediaLink>
+<image placement="center" xlink:href="Terminal_main_00"/>
+</mediaLink>
+    </introduction>
+    <relatedTopics>
+<link xlink:href="c74991fa-bad6-4196-98c0-8952e2a57b3e" />
+</relatedTopics>
+  </developerConceptualDocument>
+</topic>

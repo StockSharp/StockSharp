@@ -67,6 +67,18 @@
 		</listItem>
       </list>
       <para><legacyBold>Подключение</legacyBold> - свойства подключения (см. <link xlink:href="01a85a46-7510-4385-b81c-348ffb3dfc46">Параметры подключения.</link>) </para>
+      
+      <para> 	Помимо настроек источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+необходимо настроить коннектор, как это сделать описано в пункте 
+<link xlink:href="ac5713e1-b841-4ace-8e8e-6fab52fc7530" />
+.
+</para>
+
+<para>Перед запуском получения данных необходимо скачать и выбрать необходимые 
+инструменты, как это сделать описано в пункте 
+<link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9" />
+.
+</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

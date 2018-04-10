@@ -1,19 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="11e13dbe-5a49-44c2-b552-38726eade631" revisionNumber="1">
-     <introduction>
-<para><legacyBold>Рабочая область</legacyBold> является оконным интерфейсом с закреплением панелей, 
-наподобие той, что используется в Microsoft Visual Studio. 
-Нажав на заголовке панели левой кнопкой мыши, и удерживая ее, можно закрепить панель в удобном месте.
- А захватив край панели, можно регулировать высоту или ширину панели:</para>
- 
- <content>
-<mediaLink>
-<image placement="center" xlink:href="Designer_Workspace_00"/>
-</mediaLink>
-</content>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+См. 
+<link xlink:href="c74991fa-bad6-4196-98c0-8952e2a57b3e" />
     </introduction>
-    <relatedTopics>
-<link xlink:href="002dce1f-2b00-4ef1-b166-8805a98f9004" />
-</relatedTopics>
   </developerConceptualDocument>
 </topic>

@@ -2,7 +2,16 @@
 <topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    <para>Для добавления нового источника на вкладке <legacyBold>Общее</legacyBold>, нужно выбрать <legacyBold>Добавить => Источники</legacyBold>.</para>
+    				<para>
+					После чего появится окно выбора источников данных.</para>
+					<mediaLink>
+						  <image placement="left" xlink:href="hydra_source_add" />
+					</mediaLink>
+    
       <para>Для настройки источников маркет-данных необходимо нажать на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> у соответствующего источника.</para>
+      <mediaLink> <image placement="left" xlink:href="hydra_setting_source_button" /></mediaLink>
+      
       <para>На данный момент <token>hydra</token> поддерживает следующие источники:</para>
       
       

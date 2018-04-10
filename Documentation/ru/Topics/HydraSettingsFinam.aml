@@ -51,12 +51,17 @@
 		</listItem>
       </list>
       
-      
+<para>Перед запуском получения данных необходимо скачать и выбрать необходимые 
+инструменты, как это сделать описано в пункте 
+<link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9" />
+.
+</para>
       
       
       <alert class="note">
 			Данный источник поддерживает закачку в виде готовых свечей. Подробнее в <link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">Список инструментов</link>.
 	  </alert>
+	  
     </introduction>
   </developerWalkthroughDocument>
 </topic>

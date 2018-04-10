@@ -55,6 +55,17 @@
 		</listItem>
       </list>
      
+     
+     <para>Для настройки источника в <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" /> 
+вам понадобится <legacyBold>Токен (API-ключ) Quandl</legacyBold>. Его вы можете 
+получить в личном кабинете на сайте <legacyBold>Quandl</legacyBold>.
+</para>
+
+<para>Перед запуском получения данных необходимо скачать и выбрать необходимые 
+инструменты, как это сделать описано в пункте 
+<link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9" />
+.
+</para>
     </introduction>
   </developerConceptualDocument>
 </topic>
