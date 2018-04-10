@@ -10,7 +10,7 @@
      <link xlink:href="E4B5E112-BD08-4F40-8741-7514E7E4088E" /> 
      место ввода <legacyBold>Ключа</legacyBold> и <legacyBold>Секрета</legacyBold> выглядит следующим образом:</para>
      <mediaLink><image placement="center" xlink:href="APIConnectorsSettingsWindow" /></mediaLink>
-     <para>А для гидры:</para>
+     <para>А для <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" />:</para>
      <mediaLink><image placement="center" xlink:href="APIConnectorsSettingsHydraWindow" /></mediaLink>
      <para>В коде <legacyBold>Ключ</legacyBold> и <legacyBold>Секрет</legacyBold> 
      можно указать в соответствующих свойствах коннектора:</para>
