@@ -14,6 +14,7 @@
 			<!--<listItem><codeEntityReference>T:StockSharp.Fix.FixTrader</codeEntityReference> for <token>fix</token></listItem>-->
 			<listItem><codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> for <token>rithmic</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference> for <token>itch</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.BarChart.BarChartTrader</codeEntityReference> for <token>barchart</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.QuantHouse.QuantFeedTrader</codeEntityReference> for <token>quantfeed</token></listItem>
 		</list>
 	</introduction>

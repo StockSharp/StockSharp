@@ -3,10 +3,10 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <mediaLink>
-        <image placement="left" xlink:href="hydra_settings_CoinExchenge" />
+        <image placement="left" xlink:href="hydra_settings_CoinExchange" />
       </mediaLink>
        
- 		<para><legacyBold>CoinExchenge</legacyBold></para>
+ 		<para><legacyBold>CoinExchange</legacyBold></para>
 	   <list class="bullet">
 	   <listItem>
 	      <legacyBold>Key</legacyBold> - key.

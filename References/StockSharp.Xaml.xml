@@ -607,6 +607,34 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.DateRangeWindow">
+      <summary>
+            The window for set dates range.
+            </summary>
+      <summary>
+            DateRangeWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DateRangeWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.DateRangeWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DateRangeWindow.From">
+      <summary>
+            The initial date from which you need to get data.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DateRangeWindow.To">
+      <summary>
+            The final date by which you need to get data.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DateRangeWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.ExtendedInfoStorageWindow">
       <summary>
             The extended storage selection window.

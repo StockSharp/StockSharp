@@ -156,6 +156,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Okex.xml" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Yobit.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Yobit.xml" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.BarChart.dll" />
+      <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.BarChart.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
@@ -340,7 +342,7 @@
     <None Include="Topics\HydraSettingsBinance.aml" />
     <None Include="Topics\HydraSettingsBitfinex.aml" />
     <None Include="Topics\HydraSettingsCoinbase.aml" />
-    <None Include="Topics\HydraSettingsCoinExchenge.aml" />
+    <None Include="Topics\HydraSettingsCoinExchange.aml" />
     <None Include="Topics\HydraSettingsCryptopia.aml" />
     <None Include="Topics\HydraSettingsDeribit.aml" />
     <None Include="Topics\HydraSettingsHitBTC.aml" />
@@ -371,7 +373,7 @@
     <None Include="Topics\EXMOSample.aml" />
     <None Include="Topics\DeribitSample.aml" />
     <None Include="Topics\CryptopiaSample.aml" />
-    <None Include="Topics\CoinExchengeSample.aml" />
+    <None Include="Topics\CoinExchangeSample.aml" />
     <None Include="Topics\GDAXSample.aml" />
     <None Include="Topics\CoincheckSample.aml" />
     <None Include="Topics\CoinbaseSample.aml" />
@@ -3051,9 +3053,9 @@
       <ImageId>CoincheckSample</ImageId>
       <AlternateText>Coincheck Sample</AlternateText>
     </Image>
-    <Image Include="Art\CoinExchengeSample.png">
-      <ImageId>CoinExchengeSample</ImageId>
-      <AlternateText>Coin Exchenge Sample</AlternateText>
+    <Image Include="Art\CoinExchangeSample.png">
+      <ImageId>CoinExchangeSample</ImageId>
+      <AlternateText>Coin Exchange Sample</AlternateText>
     </Image>
     <Image Include="Art\CryptopiaSample.png">
       <ImageId>CryptopiaSample</ImageId>
@@ -3171,9 +3173,9 @@
       <ImageId>hydra_settings_Coinbase</ImageId>
       <AlternateText>hydra settings Coinbase</AlternateText>
     </Image>
-    <Image Include="Art\hydra_settings_CoinExchenge.png">
-      <ImageId>hydra_settings_CoinExchenge</ImageId>
-      <AlternateText>hydra settings Coin Exchenge</AlternateText>
+    <Image Include="Art\hydra_settings_CoinExchange.png">
+      <ImageId>hydra_settings_CoinExchange</ImageId>
+      <AlternateText>hydra settings Coin Exchange</AlternateText>
     </Image>
     <Image Include="Art\hydra_settings_CEX.IO.png">
       <ImageId>hydra_settings_CEX.IO</ImageId>

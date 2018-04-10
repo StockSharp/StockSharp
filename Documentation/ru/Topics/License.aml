@@ -36,7 +36,12 @@
 </legacyBold></para>
 		<list class="ordered">
   			<listItem>
-  				<para>Пожизненно всем участникам крауд кампаний. 
+  				<para>Пожизненно всем участникам <externalLink>
+  				<linkText>крауд кампаний</linkText>
+			<linkAlternateText>крауд кампаний</linkAlternateText>
+			<linkUri>http://crowd.stocksharp.ru</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink>. 
   				Доступно:
 		<token>Bitfinex</token>,
 		<token>Bithumb</token>,

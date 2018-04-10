@@ -553,7 +553,6 @@ M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Implicit(System.
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Explicit(StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames)~System.TimeSpan/summary;DocStr67
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Explicit(StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames)~System.TimeSpan/param/timeFrame;DocStr66
 M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Explicit(StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames)~System.TimeSpan/returns;DocStr65
-P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Tick/summary;DocStr645
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second1/summary;DocStr3672
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second5/summary;DocStr3673
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second15/summary;DocStr3674
@@ -567,7 +566,6 @@ P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute30/summary;Do
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour/summary;DocStr74
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Day/summary;DocStr75
 P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Week/summary;DocStr76
-P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month/summary;DocStr77
 T:StockSharp.InteractiveBrokers.SoftDollarTier/summary;DocStr9580
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Name/summary;Name2
 P:StockSharp.InteractiveBrokers.SoftDollarTier.Value/summary;Str3099

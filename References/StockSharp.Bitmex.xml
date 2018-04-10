@@ -51,6 +51,31 @@
         <member name="M:StockSharp.Bitmex.BitmexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>
+        <member name="T:StockSharp.Bitmex.BitmexOrderTypes">
+            <summary>
+            Stop order types.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderTypes.Stop">
+            <summary>
+            The market order is automatically registered after reaching the stop price.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderTypes.StopLimit">
+            <summary>
+            The limit order is automatically registered after reaching the stop price.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderTypes.MarketIfTouched">
+            <summary>
+            With the market price when the condition is fulfilled.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Bitmex.BitmexOrderTypes.LimitIfTouched">
+            <summary>
+            With the specified price when the condition is fulfilled.
+            </summary>
+        </member>
         <member name="T:StockSharp.Bitmex.BitmexOrderCondition">
             <summary>
             <see cref="N:StockSharp.Bitmex"/> order condition.
@@ -59,6 +84,16 @@
         <member name="M:StockSharp.Bitmex.BitmexOrderCondition.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Bitmex.BitmexOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.StopType">
+            <summary>
+            Stop type.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Bitmex.BitmexOrderCondition.StopPrice">
+            <summary>
+            Stop-price.
             </summary>
         </member>
         <member name="P:StockSharp.Bitmex.BitmexOrderCondition.IsWithdraw">

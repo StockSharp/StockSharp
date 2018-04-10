@@ -1733,7 +1733,7 @@
     </member>
     <member name="P:StockSharp.Algo.History.YahooHistorySource.Fields">
       <summary>
-            Available fields of market data which can be passed to <see cref="M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityId},System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})" />.
+            Available fields of market data which can be passed to <see cref="M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})" />.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.YahooHistorySource.TimeFrames">
@@ -1741,11 +1741,13 @@
             Timeframes which can be passed to <see cref="M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityId},System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})">
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})">
       <summary>
             To get level1 market data.
             </summary>
-      <param name="securityIds">IDs securities.</param>
+      <param name="securityId">Security ID.</param>
+      <param name="beginDate">Start date.</param>
+      <param name="endDate">End date.</param>
       <param name="fields">Market data fields. If <see langword="null" /> was passed, then <see cref="P:StockSharp.Algo.History.YahooHistorySource.Fields" /> value will be used.</param>
       <returns>Level1 market data.</returns>
     </member>

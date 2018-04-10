@@ -488,6 +488,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (isBack || reseted)
 			{
 				mdMsg.IsBack = true;
+				mdMsg.Adapter = this;
 				RaiseNewOutMessage(mdMsg);
 			}
 			else

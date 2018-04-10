@@ -205,7 +205,7 @@ namespace StockSharp.Community
 		/// To get a upload size limit.
 		/// </summary>
 		/// <returns>Upload size limit.</returns>
-		public int GetUploadLimit()
+		public long GetUploadLimit()
 		{
 			return Invoke(f => f.GetUploadLimit(AuthenticationClient.Instance.SessionId));
 		}

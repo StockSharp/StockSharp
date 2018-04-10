@@ -174,8 +174,6 @@
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
     <Compile Include="Candles\IndexCandleBuilder.cs" />
-    <Compile Include="Candles\IStorageCandleSource.cs" />
-    <Compile Include="Candles\StorageCandleSource.cs" />
     <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
     <Compile Include="Commissions\CommissionManager.cs" />
     <Compile Include="Commissions\CommissionRule.cs" />

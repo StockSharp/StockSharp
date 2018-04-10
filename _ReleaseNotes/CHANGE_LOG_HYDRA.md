@@ -1,5 +1,28 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.6.2:
+* (bug) Reconnect fix.
+* (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
+
+## v4.4.6.1:
+* (bug) File progress window. Closing fix.
+* (bug) StochasticOscillator draw fix.
+* (bug) InteractiveBrokers. Time zone fix.
+* (feature) Bitfinex, Okcoin. Track account subscriptions.
+* (bug) FIX connector. Fix process unknown outgoing messages.
+* (bug) Kraken. Signature calc fix.
+* (bug) InteractiveBrokers. Historical data fix.
+* (bug) Crypto. Market data loading in non EN culture fix.
+* (bug) Localization fixes.
+
+## v4.4.6:
+* (feature) Quik DDE turned off.
+* (bug) Yahoo restored.
+* (bug) IQFeed. Fix parse fundamental messages with empty exchange code.
+* (feature) Level1 fields. Dividends, AfterSplit, BeforeSplit.
+* (bug) Themes fix http://stocksharp.ru/forum/9257/v-gidre-i-v-dizainere-otsutstvuyut-biblioteki-devexpressxpfthemesvs2017/
+* (feature) Embedded links of crypto connectors documentation.
+
 ## v4.4.5.4:
 * (feature) Crypto connectors Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck updates.
 * (feature) Source-stubs for Binance, Liqui, CEX.IO, Cryptopia, OKEx, BitMEX, YoBit, Livecoin, EXMO, Deribit, Huobi, Kucoin, BITEXBOOK, CoinExchange.

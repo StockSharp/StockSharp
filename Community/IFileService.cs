@@ -112,6 +112,6 @@ namespace StockSharp.Community
 		/// <param name="sessionId">Session ID.</param>
 		/// <returns>Upload size limit.</returns>
 		[OperationContract]
-		int GetUploadLimit(Guid sessionId);
+		long GetUploadLimit(Guid sessionId);
 	}
 }

@@ -3,8 +3,8 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>The SampleCoinExchange application shows an example of working with the <codeEntityReference qualifyHint="false">T:StockSharp.CoinExchange.CoinExchangeTrader</codeEntityReference>
-      as shown in the figure below.	The example source code is in the <legacyItalic>Samples/CoinExchange</legacyItalic> folder of the installation package.</para>
-		<mediaLink><image placement="center" xlink:href="CoinExchengeSample"/></mediaLink>
+      as shown in the figure below. The example source code is in the <legacyItalic>Samples/CoinExchange</legacyItalic> folder of the installation package.</para>
+		<mediaLink><image placement="center" xlink:href="CoinExchangeSample"/></mediaLink>
     </introduction>
     
     <procedure>
