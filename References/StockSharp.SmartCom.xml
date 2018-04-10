@@ -1079,7 +1079,7 @@
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.Version">
       <summary>
-            Версия SmartCOM API. По-умолчанию равна <see cref="F:StockSharp.SmartCom.Native.SmartComVersions.V3" />.
+            Версия SmartCOM API. По-умолчанию равна <see cref="F:StockSharp.SmartCom.Native.SmartComVersions.V4" />.
             </summary>
     </member>
     <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.Login">
