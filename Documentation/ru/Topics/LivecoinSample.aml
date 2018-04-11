@@ -2,7 +2,7 @@
 <topic id="b2ee81b7-7038-4cfa-8505-702166f214eb" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.LiveCoin.OkexTrader</codeEntityReference> демонстрирует приложение SampleLiveCoin,
+      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.LiveCoin.LiveCoinTrader</codeEntityReference> демонстрирует приложение SampleLiveCoin,
         показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/LiveCoin</legacyItalic>.</para>
 		<mediaLink><image placement="center" xlink:href="LiveCoinSample"/></mediaLink>
     </introduction>

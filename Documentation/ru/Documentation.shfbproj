@@ -3392,6 +3392,10 @@
       <ImageId>Terminal_Panel_graphics_01</ImageId>
       <AlternateText>Terminal Panel graphics 01</AlternateText>
     </Image>
+    <Image Include="Art\hydra_Quick_start_01.png">
+      <ImageId>hydra_Quick_start_01</ImageId>
+      <AlternateText>hydra Quick start 01</AlternateText>
+    </Image>
     <Image Include="Topics\hydra_securitiesPanel_00.png">
       <ImageId>hydra_securitiesPanel_00</ImageId>
       <AlternateText>hydra securities Panel 00</AlternateText>
