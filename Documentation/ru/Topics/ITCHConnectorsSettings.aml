@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="35f9c7d1-741e-4721-8deb-1991102c0e28" revisionNumber="1">
-   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-     <para>Описание временно недоступно.</para>
+     <para>При работе с коннектором требуется указать <legacyBold>Логин</legacyBold> и 
+     <legacyBold>Пароль</legacyBold> для подключения
+     к торговой площадке. <legacyBold>Логин</legacyBold> и <legacyBold>Пароль</legacyBold> 
+     предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

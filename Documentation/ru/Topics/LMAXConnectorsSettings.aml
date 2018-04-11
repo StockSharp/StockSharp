@@ -2,7 +2,10 @@
 <topic id="96e186b5-a78f-4f2d-8a1b-ea1734d9ed86" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-     <para>Описание временно недоступно.</para>
+     <para>При работе с коннектором требуется указать <legacyBold>Логин</legacyBold> и 
+     <legacyBold>Пароль</legacyBold> для подключения
+     к торговой площадке. <legacyBold>Логин</legacyBold> и <legacyBold>Пароль</legacyBold> 
+     предоставляются брокером. Для получения API доступа рекомендуется обратиться к брокеру.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

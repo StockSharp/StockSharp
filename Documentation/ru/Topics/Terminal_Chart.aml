@@ -22,6 +22,15 @@
 <image placement="center" xlink:href="Designer_Schedule_02"/>
 </mediaLink>
 
+<para>Присутствует возможность выставления заявок с графика, для этого необходимо 
+предварительно указать <legacyBold>Инструмент</legacyBold> и <legacyBold>Портфель</legacyBold> 
+по которым будут выставляться заявки.</para>
+<para>Заявки покупку будут выставляться по сочетанию клавиш <legacyBold>Ctrl + ЛКМ</legacyBold>.  </para>
+<para>Заявки продажу будут выставляться по сочетанию клавиш <legacyBold>Ctrl + ПКМ</legacyBold>. </para> 
+<mediaLink>
+<image placement="center" xlink:href="Terminal_Panel_graphics_01"/>
+</mediaLink>
+
 <para>В настройках графического элемента можно установить необходимый стиль графика: 
 японские свечи, бары, боксовый график, кластерный профиль и др.</para>
  <mediaLink>
