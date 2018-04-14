@@ -499,7 +499,13 @@ namespace StockSharp.Algo
 					return new[] { (IMessageAdapter)wrapper };
 			}
 
-			var adapters = GetAdapters(mdMsg)?.Where(a => a.IsMarketDataTypeSupported(mdMsg.DataType)).ToArray();
+			var adapters = GetAdapters(mdMsg)?.Where(a =>
+			{
+				if (!a.IsMarketDataTypeSupported(mdMsg.DataType))
+					return false;
+
+				return mdMsg.DataType != MarketDataTypes.CandleTimeFrame || a.TimeFrames.Contains((TimeSpan)mdMsg.Arg);
+			}).ToArray();
 
 			if (adapters == null || adapters.Length == 0)
 				throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(mdMsg));
