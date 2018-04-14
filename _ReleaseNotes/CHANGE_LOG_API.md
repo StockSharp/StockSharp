@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) Connector.SubscribedCandleSeries.
+
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors
 * (bug) HeartbeatMessageAdapter. Infinitive reconnection attempts fix.
