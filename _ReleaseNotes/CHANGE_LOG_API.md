@@ -6,6 +6,7 @@ StockSharp API Change log
 * (feature) SmartCOM. V4 as default.
 * (bug) Transaq. Fix locked file issue.
 * (feature) LocalMarketDataDrive.GetDataType. Return null in case parsing error.
+* (feature) BasketMarketDataStorage. Initialize OriginalTransactionId.
 
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors

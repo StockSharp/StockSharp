@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Storages
 		where T : Message
 	{
 		private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
-		private readonly List<Tuple<IMarketDataStorage, bool>> _actions = new List<Tuple<IMarketDataStorage, bool>>();
+		private readonly List<Tuple<IMarketDataStorage, long>> _actions = new List<Tuple<IMarketDataStorage, long>>();
 		private readonly SyncObject _moveNextSyncRoot = new SyncObject();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
@@ -149,13 +149,14 @@ namespace StockSharp.Algo.Storages
 		/// Add inner market data storage.
 		/// </summary>
 		/// <param name="storage">Market data storage.</param>
-		public void AddStorage(IMarketDataStorage storage)
+		/// <param name="transactionId">Request identifier.</param>
+		public void AddStorage(IMarketDataStorage storage, long transactionId)
 		{
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
 
 			_isChanged = true;
-			_actions.Add(Tuple.Create(storage, true));
+			_actions.Add(Tuple.Create(storage, transactionId));
 
 			_messageQueue.Close();
 			_syncRoot.PulseSignal();
@@ -184,7 +185,7 @@ namespace StockSharp.Algo.Storages
 				return;
 
 			_isChanged = true;
-			_actions.Add(Tuple.Create((IMarketDataStorage)storage, false));
+			_actions.Add(Tuple.Create((IMarketDataStorage)storage, -1L));
 
 			_messageQueue.Close();
 			_syncRoot.PulseSignal();
@@ -200,7 +201,7 @@ namespace StockSharp.Algo.Storages
 		{
 			if (MarketTimeChangedInterval != TimeSpan.Zero && !_isTimeLineAdded)
 			{
-				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine));
+				AddStorage(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine), 0);
 
 				_isTimeLineAdded = true;
 				_moveNextSyncRoot.WaitSignal();
@@ -285,10 +286,12 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var action in _actions.CopyAndClear())
 					{
-						if (action.Item2)
-							_basketStorage.InnerStorages.Add(action.Item1);
+						var storage = action.Item1;
+
+						if (action.Item2 >= 0)
+							_basketStorage.InnerStorages.Add(storage, action.Item2);
 						else
-							_basketStorage.InnerStorages.Remove(action.Item1);
+							_basketStorage.InnerStorages.Remove(storage);
 					}
 
 					var boards = Boards.ToArray();
