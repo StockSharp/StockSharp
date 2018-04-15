@@ -1177,7 +1177,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Filter time-frame to find multiple smaller time-frames.
+		/// Filter time-frames to find multiple smaller time-frames.
 		/// </summary>
 		/// <param name="timeFrames">All time-frames.</param>
 		/// <param name="original">Original time-frame.</param>

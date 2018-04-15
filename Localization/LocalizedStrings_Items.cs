@@ -26708,6 +26708,16 @@ namespace StockSharp.Localization
 		public static string VolumeProfile => GetString(VolumeProfileKey);
 
 		/// <summary>
+		/// Calculate volume profile. Tick market data is required.
+		/// </summary>
+		public const string VolumeProfileCalcKey = nameof(VolumeProfileCalc);
+
+		/// <summary>
+		/// Calculate volume profile. Tick market data is required.
+		/// </summary>
+		public static string VolumeProfileCalc => GetString(VolumeProfileCalcKey);
+
+		/// <summary>
 		/// Import settings from CSV
 		/// </summary>
 		public const string Str2842Key = nameof(Str2842);
@@ -47546,5 +47556,15 @@ namespace StockSharp.Localization
 		/// Access token.
 		/// </summary>
 		public static string AccessToken => GetString(AccessTokenKey);
+
+		/// <summary>
+		/// Smaller time-frame
+		/// </summary>
+		public const string SmallerTimeFrameKey = nameof(SmallerTimeFrame);
+
+		/// <summary>
+		/// Smaller time-frame
+		/// </summary>
+		public static string SmallerTimeFrame => GetString(SmallerTimeFrameKey);
 	}
 }

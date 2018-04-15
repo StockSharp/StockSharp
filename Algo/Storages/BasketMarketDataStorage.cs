@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Storages
 	}
 
 	/// <summary>
-	/// The interface, describing embedded storages of market data.
+	/// The interface, describing a list of embedded storages of market data.
 	/// </summary>
 	public interface IBasketMarketDataStorageInnerList : ISynchronizedCollection<IMarketDataStorage>
 	{
