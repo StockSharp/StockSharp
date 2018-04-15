@@ -79,6 +79,14 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
+		/// Reset state.
+		/// </summary>
+		public void Reset()
+		{
+			_currentCandle = null;
+		}
+
+		/// <summary>
 		/// To process the new data.
 		/// </summary>
 		/// <param name="message">The message contains information about the time-frame candle.</param>

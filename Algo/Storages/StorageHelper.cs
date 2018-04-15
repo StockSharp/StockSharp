@@ -675,7 +675,8 @@ namespace StockSharp.Algo.Storages
 		{
 			private readonly IMarketDataStorage<CandleMessage> _original;
 			private readonly Func<TimeSpan, IMarketDataStorage<CandleMessage>> _getStorage;
-			private BiggerTimeFrameCandleCompressor _compressor;
+			private readonly BiggerTimeFrameCandleCompressor _compressor;
+			private DateTimeOffset _prevCandleTime;
 
 			public CandleMessageBuildableStorage(IStorageRegistry registry, Security security, TimeSpan timeFrame, IMarketDataDrive drive, StorageFormats format)
 			{
@@ -753,6 +754,11 @@ namespace StockSharp.Algo.Storages
 					{
 						foreach (var smallCandle in data)
 						{
+							if (smallCandle.OpenTime < _prevCandleTime)
+								_compressor.Reset();
+
+							_prevCandleTime = smallCandle.OpenTime;
+
 							foreach (var bigCandle in _compressor.Process(smallCandle))
 							{
 								if (bigCandle.State == CandleStates.Finished)
