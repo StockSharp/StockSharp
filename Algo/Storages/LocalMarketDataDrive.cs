@@ -33,6 +33,7 @@ namespace StockSharp.Algo.Storages
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// The file storage for market data.
@@ -447,14 +448,26 @@ namespace StockSharp.Algo.Storages
 			if (info != null)
 				return info;
 
-			if (!fileName.ContainsIgnoreCase("Candle"))
+			if (!fileName.ContainsIgnoreCase("candle"))
 				return null;
 
 			var parts = fileName.Split('_');
-			var type = "{0}.{1}Message, {2}".Put(typeof(CandleMessage).Namespace, parts[1], typeof(CandleMessage).Assembly.FullName).To<Type>();
-			var arg = type.ToCandleArg(parts[2]);
 
-			return DataType.Create(type, arg);
+			if (parts.Length < 2)
+				return null;
+
+			try
+			{
+				var type = "{0}.{1}Message, {2}".Put(typeof(CandleMessage).Namespace, parts[1], typeof(CandleMessage).Assembly.FullName).To<Type>();
+				var arg = type.ToCandleArg(parts[2]);
+
+				return DataType.Create(type, arg);
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+				return null;
+			}
 		}
 
 		/// <summary>

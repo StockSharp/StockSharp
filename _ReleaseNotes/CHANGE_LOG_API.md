@@ -2,14 +2,16 @@ StockSharp API Change log
 ========================
 ## current:
 * (feature) Connector.SubscribedCandleSeries.
+* (feature) CandleSeries.AllowBuildFromSmallerTimeFrame.
+* (feature) SmartCOM. V4 as default.
+* (bug) Transaq. Fix locked file issue.
+* (feature) LocalMarketDataDrive.GetDataType. Return null in case parsing error.
 
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors
 * (bug) HeartbeatMessageAdapter. Infinitive reconnection attempts fix.
 * (bug) HeartbeatMessageAdapter. Infinitive first connection attempts fix.
 * (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
-* (feature) SmartCOM. V4 as default.
-* (bug) Transaq. Fix locked file issue.
 
 ## v4.4.6.1:
 * (bug) InteractiveBrokers. Fix historical ticks request.
