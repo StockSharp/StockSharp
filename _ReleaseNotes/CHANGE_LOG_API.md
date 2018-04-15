@@ -8,6 +8,7 @@ StockSharp API Change log
 * (feature) LocalMarketDataDrive.GetDataType. Return null in case parsing error.
 * (feature) BasketMarketDataStorage. Initialize OriginalTransactionId.
 * (feature) IMessageAdapter.GetTimeFrames.
+* (feature) StorageMessageAdapter.CacheBuildableCandles.
 
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors

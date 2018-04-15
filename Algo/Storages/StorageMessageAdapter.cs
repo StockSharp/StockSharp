@@ -227,6 +227,11 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public TimeSpan CandlesTimeFrame { get; set; }
 
+		/// <summary>
+		/// Cache buildable from smaller time-frames candles.
+		/// </summary>
+		public bool CacheBuildableCandles { get; set; }
+
 		private StorageModes _mode = StorageModes.Incremental;
 
 		/// <summary>
@@ -298,6 +303,9 @@ namespace StockSharp.Algo.Storages
 				return _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, timeFrame, Drive, Format);
 
 			var storage = _storageRegistry.GetCandleMessageBuildableStorage(security, timeFrame, Drive, Format);
+
+			if (CacheBuildableCandles)
+				storage = new CacheableMarketDataStorage<CandleMessage>(storage, _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, timeFrame, Drive, Format));
 
 			return storage;
 		}
