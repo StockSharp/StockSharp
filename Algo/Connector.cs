@@ -100,9 +100,10 @@ namespace StockSharp.Algo
 		/// <param name="initManagers">Initialize managers.</param>
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
+		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
 		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false)
-			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking)
+			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
+			: this(false, true, initManagers, supportOffline, supportSubscriptionTracking, isRestoreSubscriptionOnReconnect)
 		{
 			InitializeStorage(entityRegistry, storageRegistry);
 		}
@@ -115,8 +116,9 @@ namespace StockSharp.Algo
 		/// <param name="initManagers">Initialize managers.</param>
 		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
 		/// <param name="supportSubscriptionTracking">Use <see cref="SubscriptionMessageAdapter"/>.</param>
+		/// <param name="isRestoreSubscriptionOnReconnect">Restore subscription on reconnect.</param>
 		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true,
-			bool supportOffline = false, bool supportSubscriptionTracking = false)
+			bool supportOffline = false, bool supportSubscriptionTracking = false, bool isRestoreSubscriptionOnReconnect = true)
 		{
 			_entityCache.ExchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
@@ -151,8 +153,8 @@ namespace StockSharp.Algo
 
 			if (initAdapter)
 			{
+				IsRestoreSubscriptionOnReconnect = isRestoreSubscriptionOnReconnect;
 				InitAdapter();
-				IsRestoreSubscriptionOnReconnect = true;
 			}
 		}
 
@@ -469,13 +471,21 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
+		private bool _isRestoreSubscriptionOnReconnect;
+
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
 		public bool IsRestoreSubscriptionOnReconnect
 		{
-			get => Adapter.IsRestoreSubscriptionOnReconnect;
-			set => Adapter.IsRestoreSubscriptionOnReconnect = value;
+			get => _isRestoreSubscriptionOnReconnect;
+			set
+			{
+				_isRestoreSubscriptionOnReconnect = value;
+
+				if (Adapter != null)
+					Adapter.IsRestoreSubscriptionOnReconnect = value;
+			}
 		}
 
 		/// <summary>
@@ -1454,13 +1464,13 @@ namespace StockSharp.Algo
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
 
+			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
+			
 			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
 
 			CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
 			CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
 			CreateDepthFromLevel1 = storage.GetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
-
-			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			CreateAssociatedSecurity = storage.GetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
@@ -1502,6 +1512,8 @@ namespace StockSharp.Algo
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
+			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
+
 			storage.SetValue(nameof(Adapter), Adapter.Save());
 
 			storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
@@ -1510,8 +1522,6 @@ namespace StockSharp.Algo
 
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			storage.SetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
-
-			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
 			storage.SetValue(nameof(LookupMessagesOnConnect), LookupMessagesOnConnect);
 			storage.SetValue(nameof(AutoPortfoliosSubscribe), AutoPortfoliosSubscribe);
