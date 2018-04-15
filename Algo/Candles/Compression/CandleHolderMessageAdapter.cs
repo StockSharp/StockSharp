@@ -106,16 +106,12 @@ namespace StockSharp.Algo.Candles.Compression
 				return;
 
 			if (info.SecurityId == default(SecurityId))
-			{
 				info.SecurityId = message.SecurityId;
-			}
 			else
 				message.SecurityId = info.SecurityId;
 
 			if (info.Arg == null)
-			{
 				info.Arg = message.Arg;
-			}
 			else
 				message.Arg = info.Arg;
 
@@ -149,9 +145,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var fromValue = getValue(from);
 
 			if (currentValue == 0 && fromValue != 0)
-			{
 				setValue(current, fromValue);
-			}
 			else
 				setValue(from, currentValue);
 		}
@@ -163,9 +157,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var fromValue = getValue(from);
 
 			if (currentValue == null && fromValue != null)
-			{
 				setValue(current, fromValue);
-			}
 			else
 				setValue(from, currentValue);
 		}
@@ -177,9 +169,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var fromValue = getValue(from);
 
 			if (currentValue == null && fromValue != null)
-			{
 				setValue(current, fromValue);
-			}
 			else
 				setValue(from, currentValue);
 		}
@@ -191,9 +181,7 @@ namespace StockSharp.Algo.Candles.Compression
 			var fromValue = getValue(from);
 
 			if (currentValue == default(DateTimeOffset) && fromValue != default(DateTimeOffset))
-			{
 				setValue(current, fromValue);
-			}
 			else
 				setValue(from, currentValue);
 		}

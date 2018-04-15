@@ -665,10 +665,11 @@ namespace StockSharp.Algo.Storages
 			securityStorage.DeleteBy(new Security { Id = securityId });
 		}
 
-		private class CandleMessageBuildableStorage : IMarketDataStorage<CandleMessage>
+		private class CandleMessageBuildableStorage : IMarketDataStorage<CandleMessage>, IMarketDataStorageInfo<CandleMessage>
 		{
 			private readonly IMarketDataStorage<CandleMessage> _original;
 			private readonly Func<TimeSpan, IMarketDataStorage<CandleMessage>> _getStorage;
+			private BiggerTimeFrameCandleCompressor _compressor;
 
 			public CandleMessageBuildableStorage(IStorageRegistry registry, Security security, TimeSpan timeFrame, IMarketDataDrive drive, StorageFormats format)
 			{
@@ -677,6 +678,14 @@ namespace StockSharp.Algo.Storages
 
 				_getStorage = tf => registry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, tf, drive, format);
 				_original = _getStorage(timeFrame);
+
+				_compressor = new BiggerTimeFrameCandleCompressor(new MarketDataMessage
+				{
+					SecurityId = security.ToSecurityId(),
+					DataType = MarketDataTypes.CandleTimeFrame,
+					Arg = timeFrame,
+					IsSubscribe = true,
+				});
 			}
 
 			private IEnumerable<IMarketDataStorage<CandleMessage>> GetStorages()
@@ -684,7 +693,7 @@ namespace StockSharp.Algo.Storages
 				var timeFrame = (TimeSpan)_original.Arg;
 
 				return new[] { _original }.Concat(_original.Drive.Drive
-					.GetAvailableDataTypes(_original.Security.ToSecurityId(), _original.Serializer.Format)
+					.GetAvailableDataTypes(_original.Security.ToSecurityId(), ((IMarketDataStorage<CandleMessage>)this).Serializer.Format)
 					.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
 					.Select(t => (TimeSpan)t.Arg)
 					.FilterSmallerTimeFrames(timeFrame)
@@ -708,30 +717,15 @@ namespace StockSharp.Algo.Storages
 				set => _original.AppendOnlyNew = value;
 			}
 
-			int IMarketDataStorage.Save(IEnumerable data)
-			{
-				return ((IMarketDataStorage<CandleMessage>)this).Save(data);
-			}
+			int IMarketDataStorage.Save(IEnumerable data) => ((IMarketDataStorage<CandleMessage>)this).Save(data);
 
-			void IMarketDataStorage.Delete(IEnumerable data)
-			{
-				((IMarketDataStorage<CandleMessage>)this).Delete(data);
-			}
+			void IMarketDataStorage.Delete(IEnumerable data) => ((IMarketDataStorage<CandleMessage>)this).Delete(data);
 
-			void IMarketDataStorage.Delete(DateTime date)
-			{
-				((IMarketDataStorage<CandleMessage>)this).Delete(date);
-			}
+			void IMarketDataStorage.Delete(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Delete(date);
 
-			IEnumerable IMarketDataStorage.Load(DateTime date)
-			{
-				return ((IMarketDataStorage<CandleMessage>)this).Load(date);
-			}
+			IEnumerable IMarketDataStorage.Load(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).Load(date);
 
-			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
-			{
-				return ((IMarketDataStorage<CandleMessage>)this).GetMetaInfo(date);
-			}
+			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date) =>  ((IMarketDataStorage<CandleMessage>)this).GetMetaInfo(date);
 
 			IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<CandleMessage>)this).Serializer;
 
@@ -744,25 +738,34 @@ namespace StockSharp.Algo.Storages
 
 					var data = storage.Load(date);
 
-					return storage == _original
-						? data
-						: data.Compress((TimeSpan)_original.Arg);
+					if (storage == _original)
+					{
+						foreach (var candle in data)
+							yield return candle;
+					}
+					else
+					{
+						foreach (var smallCandle in data)
+						{
+							foreach (var bigCandle in _compressor.Process(smallCandle))
+							{
+								if (bigCandle.State == CandleStates.Finished)
+									yield return bigCandle;
+							}
+						}
+					}
 				}
-
-				return Enumerable.Empty<CandleMessage>();
 			}
 
 			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => _original.Serializer;
 
-			int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data)
-			{
-				return _original.Save(data);
-			}
+			int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data) => _original.Save(data);
 
-			void IMarketDataStorage<CandleMessage>.Delete(IEnumerable<CandleMessage> data)
-			{
-				_original.Delete(data);
-			}
+			void IMarketDataStorage<CandleMessage>.Delete(IEnumerable<CandleMessage> data) => _original.Delete(data);
+
+			DateTimeOffset IMarketDataStorageInfo<CandleMessage>.GetTime(CandleMessage data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
+
+			DateTimeOffset IMarketDataStorageInfo.GetTime(object data) => ((IMarketDataStorageInfo<CandleMessage>)_original).GetTime(data);
 		}
 
 		/// <summary>

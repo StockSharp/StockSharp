@@ -291,12 +291,12 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
-			adapter = new CandleBiggerTimeFrameMessageAdapter(adapter);
-
 			if (adapter.IsFullCandlesOnly)
 			{
 				adapter = new CandleHolderMessageAdapter(adapter);
 			}
+
+			adapter = new CandleBiggerTimeFrameMessageAdapter(adapter);
 
 			if (adapter.IsNativeIdentifiers)
 			{

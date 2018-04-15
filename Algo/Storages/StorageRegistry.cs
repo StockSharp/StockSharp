@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Storages
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
@@ -175,9 +176,43 @@ namespace StockSharp.Algo.Storages
 				IMarketDataStorageInfo<CandleMessage>
 			where TCandleMessage : CandleMessage, new()
 		{
+			private class CandleSerializer : IMarketDataSerializer<CandleMessage>
+			{
+				private readonly IMarketDataSerializer<TCandleMessage> _serializer;
+
+				public CandleSerializer(IMarketDataSerializer<TCandleMessage> serializer)
+				{
+					if (serializer == null)
+						throw new ArgumentNullException(nameof(serializer));
+
+					_serializer = serializer;
+				}
+
+				StorageFormats IMarketDataSerializer.Format => _serializer.Format;
+
+				TimeSpan IMarketDataSerializer.TimePrecision => _serializer.TimePrecision;
+
+				IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date) => _serializer.CreateMetaInfo(date);
+
+				void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
+					=> _serializer.Serialize(stream, data, metaInfo);
+
+				IEnumerable<CandleMessage> IMarketDataSerializer<CandleMessage>.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+					=> _serializer.Deserialize(stream, metaInfo);
+
+				void IMarketDataSerializer<CandleMessage>.Serialize(Stream stream, IEnumerable<CandleMessage> data, IMarketDataMetaInfo metaInfo)
+					=> _serializer.Serialize(stream, data, metaInfo);
+
+				IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+					=> _serializer.Deserialize(stream, metaInfo);
+			}
+
+			private readonly CandleSerializer _serializer;
+
 			protected CandleMessageStorage(Security security, SecurityId securityId, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
 				: base(security, securityId, arg, candle => candle.OpenTime, candle => candle.SecurityId, candle => candle.OpenTime.StorageTruncate(serializer.TimePrecision), serializer, drive)
 			{
+				_serializer = new CandleSerializer(Serializer);
 			}
 
 			protected override IEnumerable<TCandleMessage> FilterNewData(IEnumerable<TCandleMessage> data, IMarketDataMetaInfo metaInfo)
@@ -204,7 +239,7 @@ namespace StockSharp.Algo.Storages
 				return Load(date);
 			}
 
-			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => throw new NotSupportedException();
+			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => _serializer;
 
 			int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data)
 			{

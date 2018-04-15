@@ -13,94 +13,82 @@ namespace StockSharp.Algo.Storages
 	/// <typeparam name="TData">Market data type.</typeparam>
 	public class CacheableMarketDataStorage<TData> : IMarketDataStorage<TData>
 	{
-		private readonly IMarketDataStorage<TData> _cacheDrive;
-		private readonly IMarketDataStorage<TData> _sourceDrive;
+		private readonly IMarketDataStorage<TData> _cacheStorage;
+		private readonly IMarketDataStorage<TData> _sourceStorage;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CacheableMarketDataStorage{TData}"/>.
 		/// </summary>
-		/// <param name="sourceDrive">The initial storage of market-data.</param>
-		/// <param name="cacheDrive">The cache-storage of market-data.</param>
-		public CacheableMarketDataStorage(IMarketDataStorage<TData> sourceDrive, IMarketDataStorage<TData> cacheDrive)
+		/// <param name="sourceStorage">The initial storage of market-data.</param>
+		/// <param name="cacheStorage">The cache-storage of market-data.</param>
+		public CacheableMarketDataStorage(IMarketDataStorage<TData> sourceStorage, IMarketDataStorage<TData> cacheStorage)
 		{
-			if (sourceDrive == null)
-				throw new ArgumentNullException(nameof(sourceDrive));
+			if (sourceStorage == null)
+				throw new ArgumentNullException(nameof(sourceStorage));
 
-			if (cacheDrive == null)
-				throw new ArgumentNullException(nameof(cacheDrive));
+			if (cacheStorage == null)
+				throw new ArgumentNullException(nameof(cacheStorage));
 
-			_sourceDrive = sourceDrive;
-			_cacheDrive = cacheDrive;
+			_sourceStorage = sourceStorage;
+			_cacheStorage = cacheStorage;
 		}
 
-		IEnumerable<DateTime> IMarketDataStorage.Dates => _sourceDrive.Dates;
+		IEnumerable<DateTime> IMarketDataStorage.Dates => _sourceStorage.Dates;
 
-		Type IMarketDataStorage.DataType => _sourceDrive.DataType;
+		Type IMarketDataStorage.DataType => _sourceStorage.DataType;
 
-		Security IMarketDataStorage.Security => _sourceDrive.Security;
+		Security IMarketDataStorage.Security => _sourceStorage.Security;
 
-		object IMarketDataStorage.Arg => _sourceDrive.Arg;
+		object IMarketDataStorage.Arg => _sourceStorage.Arg;
 
-		IMarketDataStorageDrive IMarketDataStorage.Drive => _sourceDrive.Drive;
+		IMarketDataStorageDrive IMarketDataStorage.Drive => _sourceStorage.Drive;
 
 		bool IMarketDataStorage.AppendOnlyNew
 		{
-			get => _sourceDrive.AppendOnlyNew;
-			set => _sourceDrive.AppendOnlyNew = value;
+			get => _sourceStorage.AppendOnlyNew;
+			set => _sourceStorage.AppendOnlyNew = value;
 		}
 
-		int IMarketDataStorage.Save(IEnumerable data)
-		{
-			return ((IMarketDataStorage<TData>)this).Save(data);
-		}
+		int IMarketDataStorage.Save(IEnumerable data) => ((IMarketDataStorage<TData>)this).Save(data);
 
-		void IMarketDataStorage.Delete(IEnumerable data)
-		{
-			((IMarketDataStorage<TData>)this).Delete(data);
-		}
+		void IMarketDataStorage.Delete(IEnumerable data) => ((IMarketDataStorage<TData>)this).Delete(data);
 
-		void IMarketDataStorage.Delete(DateTime date)
-		{
-			((IMarketDataStorage<TData>)this).Delete(date);
-		}
+		void IMarketDataStorage.Delete(DateTime date) => ((IMarketDataStorage<TData>)this).Delete(date);
 
-		IEnumerable IMarketDataStorage.Load(DateTime date)
-		{
-			return ((IMarketDataStorage<TData>)this).Load(date);
-		}
+		IEnumerable IMarketDataStorage.Load(DateTime date) =>  ((IMarketDataStorage<TData>)this).Load(date);
 
 		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<TData>)this).Serializer;
 
 		IEnumerable<TData> IMarketDataStorage<TData>.Load(DateTime date)
 		{
-			if (_cacheDrive.Dates.Contains(date))
-				return _cacheDrive.Load(date);
+			if (_cacheStorage.Dates.Contains(date))
+				return _cacheStorage.Load(date);
 
-			var data = _sourceDrive.Load(date);
-			_cacheDrive.Save(data);
+			var data = _sourceStorage.Load(date);
+			_cacheStorage.Save(data);
 			return data;
 		}
 
-		IMarketDataSerializer<TData> IMarketDataStorage<TData>.Serializer => _sourceDrive.Serializer;
+		IMarketDataSerializer<TData> IMarketDataStorage<TData>.Serializer => _sourceStorage.Serializer;
 
 		int IMarketDataStorage<TData>.Save(IEnumerable<TData> data)
 		{
-			_cacheDrive.Save(data);
-			return _sourceDrive.Save(data);
+			_cacheStorage.Save(data);
+			return _sourceStorage.Save(data);
 		}
 
 		void IMarketDataStorage<TData>.Delete(IEnumerable<TData> data)
 		{
-			_cacheDrive.Delete(data);
-			_sourceDrive.Delete(data);
+			_cacheStorage.Delete(data);
+			_sourceStorage.Delete(data);
 		}
 
 		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
 		{
-			if (_cacheDrive.Dates.Contains(date))
-				return _cacheDrive.GetMetaInfo(date);
+			if (_cacheStorage.Dates.Contains(date))
+				return _cacheStorage.GetMetaInfo(date);
 
-			return _sourceDrive.GetMetaInfo(date);
+			return _sourceStorage.GetMetaInfo(date);
 		}
 	}
 }
