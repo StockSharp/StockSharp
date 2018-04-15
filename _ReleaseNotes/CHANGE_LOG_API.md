@@ -9,6 +9,7 @@ StockSharp API Change log
 * (feature) BasketMarketDataStorage. Initialize OriginalTransactionId.
 * (feature) IMessageAdapter.GetTimeFrames.
 * (feature) StorageMessageAdapter.CacheBuildableCandles.
+* (bug) CandleArgToFolderName and ToCandleArg fixes.
 
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors

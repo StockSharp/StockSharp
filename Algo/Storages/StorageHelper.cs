@@ -406,11 +406,17 @@ namespace StockSharp.Algo.Storages
 			}
 			else if (messageType == typeof(RangeCandleMessage) || messageType == typeof(RenkoCandleMessage))
 			{
-				return str.To<Unit>();
+				return str.ToUnit();
 			}
 			else if (messageType == typeof(PnFCandleMessage))
 			{
-				return str.To<PnFArg>();
+				var parts = str.Split('_');
+
+				return new PnFArg
+				{
+					BoxSize = parts[0].ToUnit(),
+					ReversalAmount = parts[1].To<int>()
+				};
 			}
 			else
 				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
