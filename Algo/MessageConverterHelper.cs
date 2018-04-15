@@ -1755,6 +1755,7 @@ namespace StockSharp.Algo
 				BuildCandlesFrom = series.BuildCandlesFrom,
 				BuildCandlesField = series.BuildCandlesField,
 				IsCalcVolumeProfile = series.IsCalcVolumeProfile,
+				AllowBuildFromSmallerTimeFrame = series.AllowBuildFromSmallerTimeFrame,
 				//ExtensionInfo = extensionInfo
 			};
 

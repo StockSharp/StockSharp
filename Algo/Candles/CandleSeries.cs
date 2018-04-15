@@ -149,6 +149,14 @@ namespace StockSharp.Algo.Candles
 		public Level1Fields? BuildCandlesField { get; set; }
 
 		/// <summary>
+		/// Allow build candles from smaller timeframe.
+		/// </summary>
+		/// <remarks>
+		/// Avaible only for <see cref="TimeFrameCandle"/>.
+		/// </remarks>
+		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>
@@ -183,6 +191,7 @@ namespace StockSharp.Algo.Candles
 			BuildCandlesMode = storage.GetValue(nameof(BuildCandlesMode), BuildCandlesMode);
 			BuildCandlesFrom = storage.GetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
 			BuildCandlesField = storage.GetValue(nameof(BuildCandlesField), BuildCandlesField);
+			AllowBuildFromSmallerTimeFrame = storage.GetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
 		}
 
 		/// <summary>
@@ -211,6 +220,7 @@ namespace StockSharp.Algo.Candles
 			storage.SetValue(nameof(BuildCandlesMode), BuildCandlesMode);
 			storage.SetValue(nameof(BuildCandlesFrom), BuildCandlesFrom);
 			storage.SetValue(nameof(BuildCandlesField), BuildCandlesField);
+			storage.SetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
 		}
 	}
 }

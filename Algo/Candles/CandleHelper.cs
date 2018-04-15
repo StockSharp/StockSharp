@@ -1131,5 +1131,60 @@ namespace StockSharp.Algo.Candles
 		//	})
 		//	.Interval(interval);
 		//}
+
+		/// <summary>
+		/// Compress candles to bigger time-frame candles.
+		/// </summary>
+		/// <param name="source">Smaller time-frame candles.</param>
+		/// <param name="destination">Bigger time-frame.</param>
+		/// <returns>Bigger time-frame candles.</returns>
+		public static IEnumerable<CandleMessage> Compress(this IEnumerable<CandleMessage> source, TimeSpan destination)
+		{
+			BiggerTimeFrameCandleCompressor compressor = null;
+
+			CandleMessage lastActiveCandle = null;
+			
+			foreach (var message in source)
+			{
+				if (compressor == null)
+				{
+					compressor = new BiggerTimeFrameCandleCompressor(new MarketDataMessage
+					{
+						SecurityId = message.SecurityId,
+						DataType = MarketDataTypes.CandleTimeFrame,
+						Arg = destination,
+						IsSubscribe = true,
+					});
+				}
+
+				foreach (var candleMessage in compressor.Process(message))
+				{
+					if (candleMessage.State == CandleStates.Finished)
+					{
+						lastActiveCandle = null;
+						yield return candleMessage;
+					}
+					else
+						lastActiveCandle = candleMessage;
+				}
+			}
+
+			if (lastActiveCandle == null)
+				yield break;
+
+			lastActiveCandle.State = CandleStates.Finished;
+			yield return lastActiveCandle;
+		}
+
+		/// <summary>
+		/// Filter time-frame to find multiple smaller time-frames.
+		/// </summary>
+		/// <param name="timeFrames">All time-frames.</param>
+		/// <param name="original">Original time-frame.</param>
+		/// <returns>Multiple smaller time-frames.</returns>
+		public static IEnumerable<TimeSpan> FilterSmallerTimeFrames(this IEnumerable<TimeSpan> timeFrames, TimeSpan original)
+		{
+			return timeFrames.Where(t => t < original && (original.Ticks % t.Ticks) == 0);
+		}
 	}
 }

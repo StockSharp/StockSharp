@@ -664,5 +664,119 @@ namespace StockSharp.Algo.Storages
 
 			securityStorage.DeleteBy(new Security { Id = securityId });
 		}
+
+		private class CandleMessageBuildableStorage : IMarketDataStorage<CandleMessage>
+		{
+			private readonly IMarketDataStorage<CandleMessage> _original;
+			private readonly Func<TimeSpan, IMarketDataStorage<CandleMessage>> _getStorage;
+
+			public CandleMessageBuildableStorage(IStorageRegistry registry, Security security, TimeSpan timeFrame, IMarketDataDrive drive, StorageFormats format)
+			{
+				if (registry == null)
+					throw new ArgumentNullException(nameof(registry));
+
+				_getStorage = tf => registry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, tf, drive, format);
+				_original = _getStorage(timeFrame);
+			}
+
+			private IEnumerable<IMarketDataStorage<CandleMessage>> GetStorages()
+			{
+				var timeFrame = (TimeSpan)_original.Arg;
+
+				return new[] { _original }.Concat(_original.Drive.Drive
+					.GetAvailableDataTypes(_original.Security.ToSecurityId(), _original.Serializer.Format)
+					.Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
+					.Select(t => (TimeSpan)t.Arg)
+					.FilterSmallerTimeFrames(timeFrame)
+					.OrderByDescending()
+					.Select(_getStorage));
+			}
+
+			IEnumerable<DateTime> IMarketDataStorage.Dates => GetStorages().SelectMany(s => s.Dates).OrderBy().Distinct();
+
+			Type IMarketDataStorage.DataType => typeof(TimeFrameCandleMessage);
+
+			Security IMarketDataStorage.Security => _original.Security;
+
+			object IMarketDataStorage.Arg => _original.Arg;
+
+			IMarketDataStorageDrive IMarketDataStorage.Drive => _original.Drive;
+
+			bool IMarketDataStorage.AppendOnlyNew
+			{
+				get => _original.AppendOnlyNew;
+				set => _original.AppendOnlyNew = value;
+			}
+
+			int IMarketDataStorage.Save(IEnumerable data)
+			{
+				return ((IMarketDataStorage<CandleMessage>)this).Save(data);
+			}
+
+			void IMarketDataStorage.Delete(IEnumerable data)
+			{
+				((IMarketDataStorage<CandleMessage>)this).Delete(data);
+			}
+
+			void IMarketDataStorage.Delete(DateTime date)
+			{
+				((IMarketDataStorage<CandleMessage>)this).Delete(date);
+			}
+
+			IEnumerable IMarketDataStorage.Load(DateTime date)
+			{
+				return ((IMarketDataStorage<CandleMessage>)this).Load(date);
+			}
+
+			IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
+			{
+				return ((IMarketDataStorage<CandleMessage>)this).GetMetaInfo(date);
+			}
+
+			IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<CandleMessage>)this).Serializer;
+
+			IEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)
+			{
+				foreach (var storage in GetStorages())
+				{
+					if (!storage.Dates.Contains(date))
+						continue;
+
+					var data = storage.Load(date);
+
+					return storage == _original
+						? data
+						: data.Compress((TimeSpan)_original.Arg);
+				}
+
+				return Enumerable.Empty<CandleMessage>();
+			}
+
+			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => _original.Serializer;
+
+			int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data)
+			{
+				return _original.Save(data);
+			}
+
+			void IMarketDataStorage<CandleMessage>.Delete(IEnumerable<CandleMessage> data)
+			{
+				_original.Delete(data);
+			}
+		}
+
+		/// <summary>
+		/// To get the candles storage for the specified instrument. The storage will build candles from smaller time-frames if original time-frames is not exist.
+		/// </summary>
+		/// <param name="registry">Market-data storage.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="timeFrame">Time-frame.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The candles storage.</returns>
+		public static IMarketDataStorage<CandleMessage> GetCandleMessageBuildableStorage(this IStorageRegistry registry, Security security, TimeSpan timeFrame, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			return new CandleMessageBuildableStorage(registry, security, timeFrame, drive, format);
+		}
 	}
 }

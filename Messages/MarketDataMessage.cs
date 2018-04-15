@@ -228,6 +228,15 @@ namespace StockSharp.Messages
 		public Level1Fields? BuildCandlesField { get; set; }
 
 		/// <summary>
+		/// Allow build candles from smaller timeframe.
+		/// </summary>
+		/// <remarks>
+		/// Avaible only for <see cref="TimeFrameCandleMessage"/>.
+		/// </remarks>
+		[DataMember]
+		public bool AllowBuildFromSmallerTimeFrame { get; set; } = true;
+
+		/// <summary>
 		/// Contains history market data.
 		/// </summary>
 		[DataMember]
@@ -280,6 +289,7 @@ namespace StockSharp.Messages
 				BuildCandlesField = BuildCandlesField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
 				IsHistory = IsHistory,
+				AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame,
 			};
 
 			CopyTo(clone);

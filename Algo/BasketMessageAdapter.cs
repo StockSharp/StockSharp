@@ -516,7 +516,12 @@ namespace StockSharp.Algo
 				if (timeFrames.Contains(original))
 					return true;
 
-				return false;
+				var smaller = timeFrames
+					.FilterSmallerTimeFrames(original)
+					.OrderByDescending()
+					.FirstOr();
+
+				return smaller != null;
 			}).ToArray();
 
 			if (adapters == null || adapters.Length == 0)
