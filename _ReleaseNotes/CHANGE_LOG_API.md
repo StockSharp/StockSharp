@@ -7,6 +7,7 @@ StockSharp API Change log
 * (bug) Transaq. Fix locked file issue.
 * (feature) LocalMarketDataDrive.GetDataType. Return null in case parsing error.
 * (feature) BasketMarketDataStorage. Initialize OriginalTransactionId.
+* (feature) IMessageAdapter.GetTimeFrames.
 
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors

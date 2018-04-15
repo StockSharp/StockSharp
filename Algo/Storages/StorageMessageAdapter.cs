@@ -79,8 +79,6 @@ namespace StockSharp.Algo.Storages
 			_entityRegistry = entityRegistry;
 			_storageRegistry = storageRegistry;
 
-			Drive = _storageRegistry.DefaultDrive;
-
 			var isProcessing = false;
 			var sync = new SyncObject();
 
@@ -190,22 +188,12 @@ namespace StockSharp.Algo.Storages
 			}).Interval(TimeSpan.FromSeconds(10));
 		}
 
-		private IMarketDataDrive _drive;
-
 		/// <summary>
 		/// The storage (database, file etc.).
 		/// </summary>
-		public IMarketDataDrive Drive
-		{
-			get => _drive;
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
+		public IMarketDataDrive Drive { get; set; }
 
-				_drive = value;
-			}
-		}
+		private IMarketDataDrive DriveInternal => Drive ?? _storageRegistry.DefaultDrive;
 
 		/// <summary>
 		/// Format.
@@ -254,6 +242,38 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		/// <inheritdoc />
+		public override IEnumerable<TimeSpan> TimeFrames
+		{
+			get
+			{
+				if (DriveInternal == null)
+					return Enumerable.Empty<TimeSpan>();
+				
+				return DriveInternal
+				       .AvailableSecurities
+				       .SelectMany(GetTimeFrames)
+				       .Distinct()
+				       .OrderBy()
+				       .ToArray();
+			}
+		}
+
+		/// <inheritdoc />
+		public override IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		{
+			if (DriveInternal == null)
+				return Enumerable.Empty<TimeSpan>();
+
+			return DriveInternal
+			       .GetAvailableDataTypes(securityId, Format)
+			       .Where(t => t.MessageType == typeof(TimeFrameCandleMessage))
+			       .Select(t => (TimeSpan)t.Arg)
+			       .Distinct()
+			       .OrderBy()
+			       .ToArray();
+		}
+
 		private ISnapshotStorage GetSnapshotStorage(Type messageType, object arg)
 		{
 			return _storageRegistry.GetSnapshotStorage(messageType, arg, Drive, Format);
@@ -267,12 +287,29 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{
+			return _storageRegistry.GetStorage(GetSecurity(securityId), messageType, arg, Drive, Format);
+		}
+
+		private IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
+		{
+			var security = GetSecurity(securityId);
+
+			if (!allowBuildFromSmallerTimeFrame)
+				return _storageRegistry.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), security, timeFrame, Drive, Format);
+
+			var storage = _storageRegistry.GetCandleMessageBuildableStorage(security, timeFrame, Drive, Format);
+
+			return storage;
+		}
+
+		private Security GetSecurity(SecurityId securityId)
+		{
 			var security = _entityRegistry.Securities.ReadBySecurityId(securityId) ?? TryCreateSecurity(securityId);
 
 			if (security == null)
 				throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId));
 
-			return _storageRegistry.GetStorage(security, messageType, arg, Drive, Format);
+			return security;
 		}
 
 		/// <summary>
@@ -281,7 +318,7 @@ namespace StockSharp.Algo.Storages
 		public void Load()
 		{
 			var requiredSecurities = new List<SecurityId>();
-			var availableSecurities = Drive.AvailableSecurities.ToHashSet();
+			var availableSecurities = DriveInternal.AvailableSecurities.ToHashSet();
 
 			foreach (var board in _entityRegistry.ExchangeBoards)
 				RaiseStorageMessage(board.ToMessage());
@@ -464,7 +501,7 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
-					lastTime = LoadMessages(GetStorage<TimeFrameCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(msg.SecurityId, (TimeSpan)msg.Arg, msg.AllowBuildFromSmallerTimeFrame), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandlePnF:
@@ -842,11 +879,14 @@ namespace StockSharp.Algo.Storages
 		{
 			base.Save(storage);
 
-			storage.SetValue(nameof(Drive), Drive.SaveEntire(false));
+			if (Drive != null)
+				storage.SetValue(nameof(Drive), Drive.SaveEntire(false));
+
 			storage.SetValue(nameof(Format), Format);
 			storage.SetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
 			storage.SetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
 			storage.SetValue(nameof(DaysLoad), DaysLoad);
+			storage.SetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 		}
 
 		/// <inheritdoc />
@@ -861,6 +901,7 @@ namespace StockSharp.Algo.Storages
 			UseCandlesInsteadTrades = storage.GetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
 			CandlesTimeFrame = storage.GetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
 			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
+			CacheBuildableCandles = storage.GetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 		}
 
 		/// <summary>

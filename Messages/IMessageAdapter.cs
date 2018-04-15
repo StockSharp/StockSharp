@@ -162,5 +162,12 @@ namespace StockSharp.Messages
 		/// <param name="securityId">Security ID.</param>
 		/// <returns>Order log to market depth builder.</returns>
 		IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId);
+
+		/// <summary>
+		/// Get possible time-frames for the specified instrument.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Possible time-frames.</returns>
+		IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId);
 	}
 }

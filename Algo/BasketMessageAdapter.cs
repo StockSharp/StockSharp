@@ -25,6 +25,7 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
@@ -290,6 +291,8 @@ namespace StockSharp.Algo
 
 		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
+			adapter = new CandleBiggerTimeFrameMessageAdapter(adapter);
+
 			if (adapter.IsFullCandlesOnly)
 			{
 				adapter = new CandleHolderMessageAdapter(adapter);
@@ -504,7 +507,16 @@ namespace StockSharp.Algo
 				if (!a.IsMarketDataTypeSupported(mdMsg.DataType))
 					return false;
 
-				return mdMsg.DataType != MarketDataTypes.CandleTimeFrame || a.TimeFrames.Contains((TimeSpan)mdMsg.Arg);
+				if (mdMsg.DataType != MarketDataTypes.CandleTimeFrame)
+					return true;
+
+				var original = (TimeSpan)mdMsg.Arg;
+				var timeFrames = a.GetTimeFrames(mdMsg.SecurityId).ToArray();
+
+				if (timeFrames.Contains(original))
+					return true;
+
+				return false;
 			}).ToArray();
 
 			if (adapters == null || adapters.Length == 0)

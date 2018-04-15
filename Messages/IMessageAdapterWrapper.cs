@@ -214,7 +214,8 @@ namespace StockSharp.Messages
 		/// <inheritdoc />
 		public virtual bool OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
-		IEnumerable<TimeSpan> IMessageAdapter.TimeFrames => InnerAdapter.TimeFrames;
+		/// <inheritdoc />
+		public virtual IEnumerable<TimeSpan> TimeFrames => InnerAdapter.TimeFrames;
 
 		/// <inheritdoc />
 		public string StorageName => InnerAdapter.StorageName;
@@ -258,6 +259,12 @@ namespace StockSharp.Messages
 		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		{
 			return InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
+		}
+
+		/// <inheritdoc />
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		{
+			return InnerAdapter.GetTimeFrames(securityId);
 		}
 
 		/// <summary>

@@ -580,6 +580,12 @@ namespace StockSharp.Messages
 			throw new NotSupportedException();
 		}
 
+		/// <inheritdoc />
+		public virtual IEnumerable<TimeSpan> GetTimeFrames(SecurityId securityId)
+		{
+			return TimeFrames;
+		}
+
 		/// <summary>
 		/// Load settings.
 		/// </summary>
