@@ -47566,5 +47566,105 @@ namespace StockSharp.Localization
 		/// Smaller time-frame
 		/// </summary>
 		public static string SmallerTimeFrame => GetString(SmallerTimeFrameKey);
+
+		/// <summary>
+		/// Candles '{0}' cannot compress from smaller time frames.
+		/// </summary>
+		public const string CannotBuildFromSmallerTimeFrameKey = nameof(CannotBuildFromSmallerTimeFrame);
+
+		/// <summary>
+		/// Candles '{0}' cannot compress from smaller time frames.
+		/// </summary>
+		public static string CannotBuildFromSmallerTimeFrame => GetString(CannotBuildFromSmallerTimeFrameKey);
+
+		/// <summary>
+		/// Allow build candles from smaller timeframe.
+		/// </summary>
+		public const string SmallerTimeFrameDescKey = nameof(SmallerTimeFrameDesc);
+
+		/// <summary>
+		/// Allow build candles from smaller timeframe.
+		/// </summary>
+		public static string SmallerTimeFrameDesc => GetString(SmallerTimeFrameDescKey);
+
+		/// <summary>
+		/// Build
+		/// </summary>
+		public const string BuildKey = nameof(Build);
+
+		/// <summary>
+		/// Build
+		/// </summary>
+		public static string Build => GetString(BuildKey);
+
+		/// <summary>
+		/// Load
+		/// </summary>
+		public const string LoadKey = nameof(Load);
+
+		/// <summary>
+		/// Load
+		/// </summary>
+		public static string Load => GetString(LoadKey);
+
+		/// <summary>
+		/// Load and build
+		/// </summary>
+		public const string LoadAndBuildKey = nameof(LoadAndBuild);
+
+		/// <summary>
+		/// Load and build
+		/// </summary>
+		public static string LoadAndBuild => GetString(LoadAndBuildKey);
+
+		/// <summary>
+		/// Mode
+		/// </summary>
+		public const string ModeKey = nameof(Mode);
+
+		/// <summary>
+		/// Mode
+		/// </summary>
+		public static string Mode => GetString(ModeKey);
+
+		/// <summary>
+		/// Build candles mode.
+		/// </summary>
+		public const string CandlesBuildModeKey = nameof(CandlesBuildMode);
+
+		/// <summary>
+		/// Build candles mode.
+		/// </summary>
+		public static string CandlesBuildMode => GetString(CandlesBuildModeKey);
+
+		/// <summary>
+		/// Which market-data type is used as an candle source value.
+		/// </summary>
+		public const string BuildCandlesFromKey = nameof(BuildCandlesFrom);
+
+		/// <summary>
+		/// Which market-data type is used as an candle source value.
+		/// </summary>
+		public static string BuildCandlesFrom => GetString(BuildCandlesFromKey);
+
+		/// <summary>
+		/// Level1 field.
+		/// </summary>
+		public const string Level1FieldKey = nameof(Level1Field);
+
+		/// <summary>
+		/// Level1 field.
+		/// </summary>
+		public static string Level1Field => GetString(Level1FieldKey);
+
+		/// <summary>
+		/// Candles type
+		/// </summary>
+		public const string CandlesTypeKey = nameof(CandlesType);
+
+		/// <summary>
+		/// Candles type
+		/// </summary>
+		public static string CandlesType => GetString(CandlesTypeKey);
 	}
 }

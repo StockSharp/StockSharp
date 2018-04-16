@@ -170,7 +170,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To convert the type of candles <see cref="MarketDataTypes"/> into type of message <see cref="MessageTypes"/>.
 		/// </summary>
-		/// <param name="type">The candles type.</param>
+		/// <param name="type">Candles type.</param>
 		/// <returns>Message type.</returns>
 		public static MessageTypes ToCandleMessageType(this MarketDataTypes type)
 		{
@@ -181,7 +181,7 @@ namespace StockSharp.Algo
 		/// To convert the type of message <see cref="MessageTypes"/> into type of candles <see cref="MarketDataTypes"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>
-		/// <returns>The candles type.</returns>
+		/// <returns>Candles type.</returns>
 		public static MarketDataTypes ToCandleMarketDataType(this MessageTypes type)
 		{
 			return _candleDataTypes[type];

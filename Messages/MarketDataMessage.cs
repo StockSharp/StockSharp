@@ -105,18 +105,21 @@ namespace StockSharp.Messages
 		/// Request built candles and build the missing candles from trades, depths etc.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.LoadAndBuildKey)]
 		LoadAndBuild,
 
 		/// <summary>
 		/// Request only built candles.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.LoadKey)]
 		Load,
 
 		/// <summary>
 		/// Build from trades, depths etc.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.BuildKey)]
 		Build
 	}
 

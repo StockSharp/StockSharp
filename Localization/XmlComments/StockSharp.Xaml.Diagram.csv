@@ -654,7 +654,7 @@ M:StockSharp.Xaml.Diagram.Elements.MarketDepthGroupedDiagramElement.#ctor/summar
 T:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement/summary;DocStr9273
 P:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.IconName/summary;DocStr9214
-P:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.ValueType/summary;DocStr9731
+P:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.ValueType/summary;Level1Field
 M:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.OnStop/summary;DocStr7894

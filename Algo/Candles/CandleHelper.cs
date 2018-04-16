@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To get all candles for the <paramref name="time" /> period.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="time">The candle period.</param>
@@ -171,7 +171,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To get all candles.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Candles.</returns>
@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To get candles by date range.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="timeRange">The date range which should include candles. The <see cref="Candle.OpenTime"/> value is taken into consideration.</param>
@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To get candles by the total number.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="candleCount">The number of candles that should be returned.</param>
@@ -211,7 +211,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To get a candle by the index.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="candleIndex">The candle's position number from the end.</param>
@@ -237,7 +237,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To get the current candle.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>The found candle. If the candle does not exist, the <see langword="null" /> will be returned.</returns>
@@ -250,7 +250,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To get a candles series by the specified parameters.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="security">The instrument by which trades should be filtered for the candles creation.</param>
 		/// <param name="arg">Candle arg.</param>
@@ -415,7 +415,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// To create candles from the tick trades collection.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="arg">Candle arg.</param>
 		/// <param name="onlyFormed">Process only formed candles.</param>
@@ -676,7 +676,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Whether the grouping of candles by the specified attribute is registered.
 		/// </summary>
-		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <typeparam name="TCandle">Candles type.</typeparam>
 		/// <param name="manager">The candles manager.</param>
 		/// <param name="security">The instrument for which the grouping is registered.</param>
 		/// <param name="arg">Candle arg.</param>
