@@ -32,7 +32,6 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using SubscriptionInfo = System.Tuple<Messages.MarketDataTypes, Messages.SecurityId, object, System.DateTimeOffset?, System.DateTimeOffset?, long?, int?>;
 
 	/// <summary>
 	/// The interface describing the list of adapters to trading systems with which the aggregator operates.
@@ -117,7 +116,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<long, MarketDataMessage> _subscriptionMessages = new SynchronizedDictionary<long, MarketDataMessage>();
 		private readonly SynchronizedDictionary<long, IMessageAdapter> _subscriptionsById = new SynchronizedDictionary<long, IMessageAdapter>();
 		private readonly Dictionary<long, HashSet<IMessageAdapter>> _subscriptionNonSupportedAdapters = new Dictionary<long, HashSet<IMessageAdapter>>();
-		private readonly SynchronizedDictionary<SubscriptionInfo, IMessageAdapter> _subscriptionsByKey = new SynchronizedDictionary<SubscriptionInfo, IMessageAdapter>();
+		private readonly SynchronizedDictionary<Helper.SubscriptionKey, IMessageAdapter> _subscriptionsByKey = new SynchronizedDictionary<Helper.SubscriptionKey, IMessageAdapter>();
 		private readonly SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, HeartbeatMessageAdapter>();
 		private readonly SyncObject _connectedResponseLock = new SyncObject();
 		private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = new Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>>();
@@ -785,7 +784,7 @@ namespace StockSharp.Algo
 
 			if (originMsg.DataType == MarketDataTypes.News)
 			{
-				long? transId = null;
+				long? transId;
 				var allError = true;
 
 				lock (_newsSubscriptions.SyncRoot)

@@ -17,7 +17,6 @@ namespace StockSharp.Algo
 {
 	using System;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
@@ -196,12 +195,23 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public static Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?> CreateKey(this MarketDataMessage message, SecurityId? securityId = null)
+		public class SubscriptionKey : Tuple<MarketDataTypes, SecurityId, object, int?, Tuple<DateTimeOffset?, DateTimeOffset?, long?>>
+		{
+			public SubscriptionKey(MarketDataTypes item1, SecurityId item2, object item3, int? item4, Tuple<DateTimeOffset?, DateTimeOffset?, long?> item5)
+				: base(item1, item2, item3, item4, item5)
+			{
+			}
+		}
+
+		public static SubscriptionKey CreateKey(this MarketDataMessage message, SecurityId? securityId = null)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return Tuple.Create(message.DataType, securityId ?? message.SecurityId, message.Arg, message.From, message.To, message.Count, message.MaxDepth);
+			var isRealTime = message.To == null;
+			var range = isRealTime ? null : Tuple.Create(message.From, message.To, message.Count);
+
+			return new SubscriptionKey(message.DataType, securityId ?? message.SecurityId, message.Arg, message.MaxDepth, range);
 		}
 
 		public static bool NotRequiredSecurityId(this SecurityMessage secMsg)

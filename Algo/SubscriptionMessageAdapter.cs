@@ -37,7 +37,7 @@ namespace StockSharp.Algo
 
 		private readonly SyncObject _sync = new SyncObject();
 
-		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?>, SubscriptionInfo> _subscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object, DateTimeOffset?, DateTimeOffset?, long?, int?>, SubscriptionInfo>();
+		private readonly Dictionary<Helper.SubscriptionKey, SubscriptionInfo> _subscribers = new Dictionary<Helper.SubscriptionKey, SubscriptionInfo>();
 		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object>, SubscriptionInfo> _candleSubscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object>, SubscriptionInfo>();
 		private readonly Dictionary<string, SubscriptionInfo> _newsSubscribers = new Dictionary<string, SubscriptionInfo>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<string, RefPair<PortfolioMessage, int>> _pfSubscribers = new Dictionary<string, RefPair<PortfolioMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
