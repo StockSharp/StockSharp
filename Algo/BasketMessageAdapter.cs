@@ -845,7 +845,8 @@ namespace StockSharp.Algo
 			
 			if (error == null && isSubscribe)
 			{
-				_subscriptionsByKey.Add(key, adapter);
+				// we can initiate multiple subscriptions with unique request id and same params
+				_subscriptionsByKey.TryAdd(key, adapter);
 				_subscriptionsById.Add(originalTransactionId, adapter);
 			}
 
