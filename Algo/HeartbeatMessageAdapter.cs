@@ -240,7 +240,7 @@ namespace StockSharp.Algo
 
 			lock (_timeSync)
 			{
-				if (isStartTimer && _currState == ConnectionStates.Connecting)
+				if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
 					StartTimer();
 			}
 
