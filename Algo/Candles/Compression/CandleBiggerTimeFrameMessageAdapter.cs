@@ -69,16 +69,19 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				case MessageTypes.CandleTimeFrame:
 				{
-					var candleMsg = (CandleMessage)message;
-					var compressor = _biggerTimeFrameCandleCompressors.TryGetValue(candleMsg.OriginalTransactionId);
+					var smallCandle = (CandleMessage)message;
+					var compressor = _biggerTimeFrameCandleCompressors.TryGetValue(smallCandle.OriginalTransactionId);
 					
 					if (compressor == null)
 						break;
 
-					var candles = compressor.Process(candleMsg).Where(c => c.State == CandleStates.Finished);
+					var candles = compressor.Process(smallCandle).Where(c => c.State == CandleStates.Finished);
 
-					foreach (var candleMessage in candles)
-						base.OnInnerAdapterNewOutMessage(candleMessage);
+					foreach (var bigCandle in candles)
+					{
+						bigCandle.Adapter = smallCandle.Adapter;
+						base.OnInnerAdapterNewOutMessage(bigCandle);
+					}
 
 					return;
 				}
