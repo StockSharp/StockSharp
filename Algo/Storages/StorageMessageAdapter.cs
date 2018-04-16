@@ -25,7 +25,6 @@ namespace StockSharp.Algo.Storages
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -217,15 +216,15 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		/// <summary>
-		/// Use timeframe candles instead of trades.
-		/// </summary>
-		public bool UseCandlesInsteadTrades { get; set; }
+		///// <summary>
+		///// Use timeframe candles instead of trades.
+		///// </summary>
+		//public bool UseCandlesInsteadTrades { get; set; }
 
-		/// <summary>
-		/// Use candles with specified timeframe.
-		/// </summary>
-		public TimeSpan CandlesTimeFrame { get; set; }
+		///// <summary>
+		///// Use candles with specified timeframe.
+		///// </summary>
+		//public TimeSpan CandlesTimeFrame { get; set; }
 
 		/// <summary>
 		/// Cache buildable from smaller time-frames candles.
@@ -495,9 +494,7 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				case MarketDataTypes.Trades:
-					lastTime = !UseCandlesInsteadTrades 
-						? LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, m => SetTransactionId(m, transactionId)) 
-						: LoadTickMessages(msg.SecurityId, from, to, transactionId);
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.OrderLog:
@@ -590,48 +587,48 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private DateTimeOffset? LoadTickMessages(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
-		{
-			var tickStorage = GetStorage<ExecutionMessage>(securityId, ExecutionTypes.Tick);
+		//private DateTimeOffset? LoadTickMessages(SecurityId securityId, DateTimeOffset? from, DateTimeOffset? to, long transactionId)
+		//{
+		//	var tickStorage = GetStorage<ExecutionMessage>(securityId, ExecutionTypes.Tick);
 
-			var last = tickStorage.Dates.LastOr();
+		//	var last = tickStorage.Dates.LastOr();
 
-			if (last == null)
-				return null;
+		//	if (last == null)
+		//		return null;
 
-			if (from == null)
-				from = (to ?? last.Value) - DaysLoad;
+		//	if (from == null)
+		//		from = (to ?? last.Value) - DaysLoad;
 
-			if (to == null)
-				to = last.Value;
+		//	if (to == null)
+		//		to = last.Value;
 
-			var tickDates = tickStorage.GetDates(from.Value.Date, to.Value.Date.EndOfDay()).ToArray();
+		//	var tickDates = tickStorage.GetDates(from.Value.Date, to.Value.Date.EndOfDay()).ToArray();
 
-			var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
+		//	var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
 
-			var ticksLastDate = tickStorage.GetToDate() ?? from.Value.Date;
-			var candlesLastDate = candleStorage.GetToDate() ?? from.Value.Date;
+		//	var ticksLastDate = tickStorage.GetToDate() ?? from.Value.Date;
+		//	var candlesLastDate = candleStorage.GetToDate() ?? from.Value.Date;
 
-			var toDate = ticksLastDate.Max(candlesLastDate).Min(to.Value.Date);
-			var lastTime = from;
+		//	var toDate = ticksLastDate.Max(candlesLastDate).Min(to.Value.Date);
+		//	var lastTime = from;
 
-			for (var date = from.Value.Date; date <= toDate; date = date.AddDays(1))
-			{
-				var messages = tickDates.Contains(date)
-					? tickStorage.Load(date) 
-					: candleStorage.Load(date).ToTrades(0.001m);
+		//	for (var date = from.Value.Date; date <= toDate; date = date.AddDays(1))
+		//	{
+		//		var messages = tickDates.Contains(date)
+		//			? tickStorage.Load(date) 
+		//			: candleStorage.Load(date).ToTrades(0.001m);
 
-				foreach (var msg in messages)
-				{
-					lastTime = msg.ServerTime;
+		//		foreach (var msg in messages)
+		//		{
+		//			lastTime = msg.ServerTime;
 
-					msg.OriginalTransactionId = transactionId;
-					RaiseStorageMessage(msg);
-				}
-			}
+		//			msg.OriginalTransactionId = transactionId;
+		//			RaiseStorageMessage(msg);
+		//		}
+		//	}
 
-			return lastTime;
-		}
+		//	return lastTime;
+		//}
 
 		/// <summary>
 		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
@@ -891,8 +888,8 @@ namespace StockSharp.Algo.Storages
 				storage.SetValue(nameof(Drive), Drive.SaveEntire(false));
 
 			storage.SetValue(nameof(Format), Format);
-			storage.SetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
-			storage.SetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
+			//storage.SetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
+			//storage.SetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
 			storage.SetValue(nameof(DaysLoad), DaysLoad);
 			storage.SetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 		}
@@ -906,8 +903,8 @@ namespace StockSharp.Algo.Storages
 				Drive = storage.GetValue<SettingsStorage>(nameof(Drive)).LoadEntire<IMarketDataDrive>();
 
 			Format = storage.GetValue(nameof(Format), Format);
-			UseCandlesInsteadTrades = storage.GetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
-			CandlesTimeFrame = storage.GetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
+			//UseCandlesInsteadTrades = storage.GetValue(nameof(UseCandlesInsteadTrades), UseCandlesInsteadTrades);
+			//CandlesTimeFrame = storage.GetValue(nameof(CandlesTimeFrame), CandlesTimeFrame);
 			DaysLoad = storage.GetValue(nameof(DaysLoad), DaysLoad);
 			CacheBuildableCandles = storage.GetValue(nameof(CacheBuildableCandles), CacheBuildableCandles);
 		}
