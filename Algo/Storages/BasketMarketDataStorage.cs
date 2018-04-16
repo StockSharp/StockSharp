@@ -175,9 +175,9 @@ namespace StockSharp.Algo.Storages
 				{
 					if (message is CandleMessage candleMsg)
 						candleMsg.OriginalTransactionId = transactionId;
-					else if (message is ExecutionMessage execMsg && execMsg.ExecutionType != ExecutionTypes.Transaction)
-						execMsg.OriginalTransactionId = transactionId;
-					else if (message is ExecutionMessage newsMsg)
+					//else if (message is ExecutionMessage execMsg && execMsg.ExecutionType != ExecutionTypes.Transaction)
+					//	execMsg.OriginalTransactionId = transactionId;
+					else if (message is NewsMessage newsMsg)
 						newsMsg.OriginalTransactionId = transactionId;
 				}
 
