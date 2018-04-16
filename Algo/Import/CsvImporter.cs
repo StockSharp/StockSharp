@@ -206,11 +206,13 @@
 
 										if (timeFrame != null)
 											candle.OpenTime -= timeFrame.Value;
+									}
+									else if (candle.OpenTime.TimeOfDay.IsDefault())
+									{
+										candle.OpenTime = candle.CloseTime;
 
-										//var tfCandle = candle as TimeFrameCandle;
-
-										//if (tfCandle != null)
-										//candle.CloseTime += timeFrame;
+										if (timeFrame != null)
+											candle.OpenTime -= timeFrame.Value;
 									}
 								}
 							}
