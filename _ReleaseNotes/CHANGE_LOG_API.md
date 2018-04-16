@@ -12,6 +12,7 @@ StockSharp API Change log
 * (bug) CandleArgToFolderName and ToCandleArg fixes.
 * (bug) BasketMessageAdapter. Handle multiple subscriptions fix.
 * (bug) SubscriptionMessageAdapter. Fix multiple candles subscription handling.
+* (bug) CsvImporter. Fix candles processing.
 
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors

@@ -187,28 +187,30 @@
 
 						if (dataType.IsCandleMessage())
 						{
-							var timeFrame = (TimeSpan)DataType.Arg;
+							var timeFrame = DataType.Arg as TimeSpan?;
 							var candles = secGroup.Cast<CandleMessage>().ToArray();
 
 							foreach (var candle in candles)
 							{
 								if (candle.CloseTime < candle.OpenTime)
 								{
-									// если в файле время закрытия отсутствует
-									if (candle.CloseTime.Date == candle.CloseTime)
-										candle.CloseTime = default(DateTimeOffset);
+									// close time doesn't exist in importing file
+									candle.CloseTime = default(DateTimeOffset);
 								}
 								else if (candle.CloseTime > candle.OpenTime)
 								{
-									// если в файле время открытия отсутствует
-									if (candle.OpenTime.Date == candle.OpenTime)
+									// date component can be missed for open time
+									if (candle.OpenTime.Date.IsDefault())
 									{
 										candle.OpenTime = candle.CloseTime;
+
+										if (timeFrame != null)
+											candle.OpenTime -= timeFrame.Value;
 
 										//var tfCandle = candle as TimeFrameCandle;
 
 										//if (tfCandle != null)
-										candle.CloseTime += timeFrame;
+										//candle.CloseTime += timeFrame;
 									}
 								}
 							}
