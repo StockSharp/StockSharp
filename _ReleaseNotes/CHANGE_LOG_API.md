@@ -13,6 +13,7 @@ StockSharp API Change log
 * (bug) BasketMessageAdapter. Handle multiple subscriptions fix.
 * (bug) SubscriptionMessageAdapter. Fix multiple candles subscription handling.
 * (bug) CsvImporter. Fix candles processing.
+* (feature) DateRangeWindow renamed to CandleSettingsWindow and moved to Xaml.Charting.
 
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors

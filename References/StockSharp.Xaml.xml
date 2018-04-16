@@ -607,34 +607,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.DateRangeWindow">
-      <summary>
-            The window for set dates range.
-            </summary>
-      <summary>
-            DateRangeWindow
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.DateRangeWindow.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.DateRangeWindow" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.DateRangeWindow.From">
-      <summary>
-            The initial date from which you need to get data.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.DateRangeWindow.To">
-      <summary>
-            The final date by which you need to get data.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.DateRangeWindow.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.ExtendedInfoStorageWindow">
       <summary>
             The extended storage selection window.
@@ -827,22 +799,22 @@
     </member>
     <member name="F:StockSharp.Xaml.GridControl.TreeListNodeHelper.IsExpandedProperty">
       <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="!:TreeListNode.IsExpanded" />.
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:DevExpress.Data.TreeList.TreeListNodeBase.IsExpanded" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.TreeListNodeHelper.GetIsExpanded(System.Windows.DependencyObject)">
       <summary>
-            To get the value for <see cref="!:TreeListNode.IsExpanded" />.
+            To get the value for <see cref="P:DevExpress.Data.TreeList.TreeListNodeBase.IsExpanded" />.
             </summary>
       <param name="obj">Object <see cref="T:StockSharp.Xaml.LogControl" />.</param>
-      <returns>The value of <see cref="!:TreeListNode.IsExpanded" />.</returns>
+      <returns>The value of <see cref="P:DevExpress.Data.TreeList.TreeListNodeBase.IsExpanded" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.TreeListNodeHelper.SetIsExpanded(System.Windows.DependencyObject,System.Boolean)">
       <summary>
-            To set the value for <see cref="!:TreeListNode.IsExpanded" />.
+            To set the value for <see cref="P:DevExpress.Data.TreeList.TreeListNodeBase.IsExpanded" />.
             </summary>
       <param name="obj">Object <see cref="T:StockSharp.Xaml.LogControl" />.</param>
-      <param name="value">New value for <see cref="!:TreeListNode.IsExpanded" />.</param>
+      <param name="value">New value for <see cref="P:DevExpress.Data.TreeList.TreeListNodeBase.IsExpanded" />.</param>
     </member>
     <member name="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs">
       <summary>

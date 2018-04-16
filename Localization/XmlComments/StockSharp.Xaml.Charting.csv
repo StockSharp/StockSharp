@@ -64,7 +64,6 @@ P:StockSharp.Xaml.Charting.Chart.ShowLegend/summary;DocStr7732
 P:StockSharp.Xaml.Charting.Chart.ShowOverview/summary;DocStr7733
 P:StockSharp.Xaml.Charting.Chart.ShowPerfStats/summary;DocStr8856
 P:StockSharp.Xaml.Charting.Chart.IsInteracted/summary;DocStr7734
-P:StockSharp.Xaml.Charting.Chart.IsInteractedwithDateRange/summary;DocStr10366
 P:StockSharp.Xaml.Charting.Chart.CrossHair/summary;DocStr7735
 P:StockSharp.Xaml.Charting.Chart.CrossHairTooltip/summary;DocStr7736
 P:StockSharp.Xaml.Charting.Chart.CrossHairAxisLabels/summary;DocStr7737
@@ -500,7 +499,6 @@ M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartE
 M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)/param/element;DocStr7710
 M:StockSharp.Xaml.Charting.ChartPanel.SetSource(StockSharp.Xaml.Charting.IChartElement,System.Object)/param/source;Str213
 P:StockSharp.Xaml.Charting.ChartPanel.IsInteracted/summary;DocStr7734
-P:StockSharp.Xaml.Charting.ChartPanel.IsInteractedwithDateRange/summary;DocStr10366
 P:StockSharp.Xaml.Charting.ChartPanel.OrderCreationMode/summary;DocStr7739
 P:StockSharp.Xaml.Charting.ChartPanel.MinimumRange/summary;DocStr7730
 P:StockSharp.Xaml.Charting.ChartPanel.ShowOverview/summary;DocStr7733
@@ -596,6 +594,11 @@ M:StockSharp.Xaml.Charting.ChartTransactionElement`1.FillClone(`0)/param/elem;Do
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.FillClone(`0)/returns;DocStr1116
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Clone/returns;DocStr1116
+T:StockSharp.Xaml.Charting.CandleSettingsWindow/summary;DocStr10367
+M:StockSharp.Xaml.Charting.CandleSettingsWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.Charting.CandleSettingsWindow.Series/summary;Str1942
+P:StockSharp.Xaml.Charting.CandleSettingsWindow.SecurityProvider/summary;DocStr972
+M:StockSharp.Xaml.Charting.CandleSettingsWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.EquityCurveChart/summary;DocStr7816
 P:StockSharp.Xaml.Charting.EquityCurveChart.ChartTheme/summary;DocStr7731
 M:StockSharp.Xaml.Charting.EquityCurveChart.#ctor/summary;DocStr1
