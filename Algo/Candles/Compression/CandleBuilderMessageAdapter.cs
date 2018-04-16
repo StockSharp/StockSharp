@@ -154,7 +154,7 @@ namespace StockSharp.Algo.Candles.Compression
 						case MarketDataTypes.CandleRange:
 						case MarketDataTypes.CandlePnF:
 						case MarketDataTypes.CandleRenko:
-							ProcessMarketDataMessage(mdMsg);
+							ProcessMarketDataRequest(mdMsg);
 							break;
 
 						default:
@@ -259,7 +259,7 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		private void ProcessMarketDataMessage(MarketDataMessage msg)
+		private void ProcessMarketDataRequest(MarketDataMessage msg)
 		{
 			var securityId = msg.SecurityId;
 
