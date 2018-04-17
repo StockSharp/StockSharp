@@ -4804,6 +4804,7 @@ CandlesBuildMode;Build candles mode.;Режим построения свече�
 BuildCandlesFrom;Which market-data type is used as an candle source value.;Какой именно тип данных используется как источник свечей.
 Level1Field;Level1 field.;Поле Level1.
 CandlesType;Candles type;Тип свечей
+WaitInterval;Waiting interval. Make some pause before sending the next request.;Интервал ожидания. Делать некую паузу до отправки следующего запроса.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

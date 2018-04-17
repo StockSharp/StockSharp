@@ -47666,5 +47666,15 @@ namespace StockSharp.Localization
 		/// Candles type
 		/// </summary>
 		public static string CandlesType => GetString(CandlesTypeKey);
+
+		/// <summary>
+		/// Waiting interval. Make some pause before sending the next request.
+		/// </summary>
+		public const string WaitIntervalKey = nameof(WaitInterval);
+
+		/// <summary>
+		/// Waiting interval. Make some pause before sending the next request.
+		/// </summary>
+		public static string WaitInterval => GetString(WaitIntervalKey);
 	}
 }
