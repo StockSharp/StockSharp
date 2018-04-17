@@ -1,5 +1,12 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.7:
+* (feature) Compress candles from smaller time-frames.
+* (bug) PnF candles store fixes.
+* (bug) Csv importer. Fix candles processing.
+* (bug) Binary storage. Fix local time save http://stocksharp.ru/forum/9296/isklyuchenie-pri-sohranenii-executionmessage
+* (feature) Finam and MFD uses Pause interval to prevent ip ban.
+
 ## v4.4.6.2:
 * (bug) Reconnect fix.
 * (bug) Binance, Coinbase, Bitfinex, Bitstamp, IQFeed fixes.
