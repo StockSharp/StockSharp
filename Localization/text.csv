@@ -14847,3 +14847,4 @@ DocStr10388;To get the candles storage for the specified instrument. The storage
 DocStr10389;The interface, describing a list of embedded storages of market data;Интерфейс, описывающий список внутренних хранилищ маркет-данных
 DocStr10390;Add inner storage with the specified request id;Добавить внутреннее хранилище с указанным идентификатором запроса
 DocStr10391;Get possible time-frames for the specified instrument;Получить возможные тайм-фреймы для указанного инструмента
+DocStr10392;Support candles subscription and live updates;Поддерживается подписка на свечи и обновление в реальном времени

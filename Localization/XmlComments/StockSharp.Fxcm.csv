@@ -5,6 +5,7 @@ P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;Do
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportNativePortfolioLookup/inheritdoc;DocStr8459
 P:StockSharp.Fxcm.FxcmMessageAdapter.IsNativeIdentifiers/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 F:StockSharp.Fxcm.FxcmMessageAdapter.DefaultAddress/summary;DocStr9884
 P:StockSharp.Fxcm.FxcmMessageAdapter.Address/summary;ServerAddress

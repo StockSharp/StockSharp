@@ -21,10 +21,7 @@
             </summary>
     </member>
     <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition">
-      <summary>
-            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
-            </summary>
-      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityLookupRequired">
       <summary>
@@ -40,6 +37,9 @@
       <summary>
             Gets a value indicating whether the connector supports security lookup.
             </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>

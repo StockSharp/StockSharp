@@ -28,6 +28,7 @@ M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator
 M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecurityLookupRequired/summary;DocStr452
+P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 T:StockSharp.IQFeed.IQFeedAddresses/summary;DocStr3700

@@ -1,12 +1,11 @@
 T:StockSharp.Rithmic.RithmicMessageAdapter/summary;DocStr2538
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
-M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition/summary;DocStr44
-M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition/returns;DocStr45
-P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired/summary;DocStr452
-P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
-M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
-M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.Rithmic.RithmicMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired/inheritdoc;DocStr8459
+P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup/inheritdoc;DocStr8459
+P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
+M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.Rithmic.RithmicMessageAdapter.UserName/summary;Login
 P:StockSharp.Rithmic.RithmicMessageAdapter.Password/summary;Password
 P:StockSharp.Rithmic.RithmicMessageAdapter.CertFile/summary;Str3466

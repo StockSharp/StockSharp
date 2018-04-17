@@ -32,6 +32,9 @@
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.SupportedMarketDataTypes">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFastDialect.EnableSuspend">
       <summary>
             Enable suspend mode (enqueue non ordered messages).
@@ -240,6 +243,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.Dialects.BaseFixDialect.NewOrderSingleErrorsAsReject">
@@ -493,6 +499,11 @@
             Supported by adapter market data types.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFastDialect.IsSupportCandlesUpdates">
+      <summary>
+            Support candles subscription and live updates.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFastDialect.Dump(System.Collections.Generic.IDictionary{Ecng.Net.MulticastSourceAddress,System.String})">
       <summary>
             Test dump files.
@@ -640,6 +651,11 @@
             Supported by adapter market data types.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsSupportCandlesUpdates">
+      <summary>
+            Support candles subscription and live updates.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Init(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.Native.IFixReader,Ecng.Common.IncrementalIdGenerator)">
       <summary>
             Initialize dialect.
@@ -756,6 +772,9 @@
       <inheritdoc />
     </member>
     <member name="P:StockSharp.Fix.FastMessageAdapter.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FastMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FastMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
@@ -6229,6 +6248,9 @@
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.SupportedMarketDataTypes">
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportCandlesUpdates">
       <inheritdoc />
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

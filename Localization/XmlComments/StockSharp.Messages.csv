@@ -632,6 +632,7 @@ P:StockSharp.Messages.IMessageAdapter.IsFullCandlesOnly/summary;DocStr10012
 P:StockSharp.Messages.IMessageAdapter.IsSupportSubscriptions/summary;DocStr10013
 P:StockSharp.Messages.IMessageAdapter.IsSupportSubscriptionBySecurity/summary;DocStr10029
 P:StockSharp.Messages.IMessageAdapter.IsSupportSubscriptionByPortfolio/summary;DocStr10101
+P:StockSharp.Messages.IMessageAdapter.IsSupportCandlesUpdates/summary;DocStr10392
 P:StockSharp.Messages.IMessageAdapter.OrderCancelVolumeRequired/summary;DocStr8752
 P:StockSharp.Messages.IMessageAdapter.AssociatedBoardCode/summary;Str199
 P:StockSharp.Messages.IMessageAdapter.SecurityExtendedFields/summary;DocStr9383
@@ -707,6 +708,7 @@ P:StockSharp.Messages.MessageAdapterWrapper.IsFullCandlesOnly/inheritdoc;DocStr8
 P:StockSharp.Messages.MessageAdapterWrapper.IsSupportSubscriptions/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.IsSupportSubscriptionBySecurity/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.IsSupportSubscriptionByPortfolio/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapterWrapper.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.OrderCancelVolumeRequired/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapterWrapper.AssociatedBoardCode/inheritdoc;DocStr8459
 M:StockSharp.Messages.MessageAdapterWrapper.GetTimeFrames(StockSharp.Messages.SecurityId)/inheritdoc;DocStr8459
@@ -811,6 +813,7 @@ P:StockSharp.Messages.MessageAdapter.IsFullCandlesOnly/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportSubscriptions/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportSubscriptionBySecurity/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportSubscriptionByPortfolio/inheritdoc;DocStr8459
+P:StockSharp.Messages.MessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.StorageName/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.OrderCancelVolumeRequired/inheritdoc;DocStr8459
 P:StockSharp.Messages.MessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52

@@ -2,11 +2,11 @@ T:StockSharp.OpenECry.OpenECryMessageAdapter/summary;DocStr5926
 M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultUuid/summary;DocStr8849
-M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition/summary;DocStr44
-M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition/returns;DocStr45
+M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
 P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
 P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
+P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityExtendedFields/summary;DocStr9383

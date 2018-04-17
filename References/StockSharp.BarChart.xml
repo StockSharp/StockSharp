@@ -33,6 +33,9 @@
         <member name="P:StockSharp.BarChart.BarChartMessageAdapter.TimeFrames">
             <inheritdoc />
         </member>
+        <member name="P:StockSharp.BarChart.BarChartMessageAdapter.IsSupportCandlesUpdates">
+            <inheritdoc />
+        </member>
         <member name="M:StockSharp.BarChart.BarChartMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <inheritdoc />
         </member>

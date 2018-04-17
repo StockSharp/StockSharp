@@ -2,8 +2,8 @@ T:StockSharp.Cqg.Com.CqgComMessageAdapter/summary;DocStr3085
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsNativeIdentifiers/summary;DocStr9381
-M:StockSharp.Cqg.Com.CqgComMessageAdapter.CreateOrderCondition/summary;DocStr44
-M:StockSharp.Cqg.Com.CqgComMessageAdapter.CreateOrderCondition/returns;DocStr45
+M:StockSharp.Cqg.Com.CqgComMessageAdapter.CreateOrderCondition/inheritdoc;DocStr8459
+P:StockSharp.Cqg.Com.CqgComMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Cqg.Com.CqgComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 P:StockSharp.Cqg.Com.CqgComMessageAdapter.UserName/summary;Login

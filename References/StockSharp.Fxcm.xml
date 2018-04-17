@@ -27,6 +27,9 @@
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.CreateOrderCondition">
       <inheritdoc />
     </member>
+    <member name="P:StockSharp.Fxcm.FxcmMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
+    </member>
     <member name="M:StockSharp.Fxcm.FxcmMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <inheritdoc />
     </member>

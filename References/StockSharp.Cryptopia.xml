@@ -9,11 +9,6 @@
             The message adapter for <see cref="N:StockSharp.Cryptopia"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Cryptopia.CryptopiaMessageAdapter.AllTimeFrames">
-            <summary>
-            Possible time-frames.
-            </summary>
-        </member>
         <member name="P:StockSharp.Cryptopia.CryptopiaMessageAdapter.Key">
             <summary>
             Key.

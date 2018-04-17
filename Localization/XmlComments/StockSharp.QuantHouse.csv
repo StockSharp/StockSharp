@@ -1,6 +1,7 @@
 T:StockSharp.QuantHouse.QuantFeedMessageAdapter/summary;DocStr10022
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
+P:StockSharp.QuantHouse.QuantFeedMessageAdapter.IsSupportCandlesUpdates/inheritdoc;DocStr8459
 M:StockSharp.QuantHouse.QuantFeedMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
 P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Address/summary;ServerAddress
 P:StockSharp.QuantHouse.QuantFeedMessageAdapter.Login/summary;Login

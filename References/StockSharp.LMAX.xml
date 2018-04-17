@@ -16,16 +16,13 @@
       <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition">
-      <summary>
-            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
-            </summary>
-      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+      <inheritdoc />
+    </member>
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportCandlesUpdates">
+      <inheritdoc />
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
+      <inheritdoc />
     </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.SecurityLookupRequired">
       <summary>
