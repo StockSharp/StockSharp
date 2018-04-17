@@ -76,8 +76,7 @@ namespace StockSharp.Messages
 		/// <returns>The found adapter.</returns>
 		public virtual IMessageAdapter GetAdapter(string portfolioName)
 		{
-			lock (_adapters.SyncRoot)
-				return _adapters.TryGetValue(portfolioName);
+			return _adapters.TryGetValue(portfolioName);
 		}
 
 		/// <summary>
@@ -98,8 +97,7 @@ namespace StockSharp.Messages
 		/// <returns><see langword="true"/> if the association is successfully removed, otherwise, <see langword="false"/>.</returns>
 		public virtual bool RemoveAssociation(string portfolioName)
 		{
-			lock (_adapters.SyncRoot)
-				return _adapters.Remove(portfolioName);
+			return _adapters.Remove(portfolioName);
 		}
 	}
 }

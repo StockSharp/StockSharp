@@ -130,6 +130,11 @@ namespace StockSharp.Messages
 		bool IsSupportSubscriptionByPortfolio { get; }
 
 		/// <summary>
+		/// Support candles subscription and live updates.
+		/// </summary>
+		bool IsSupportCandlesUpdates { get; }
+
+		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
 		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }

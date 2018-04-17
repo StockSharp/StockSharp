@@ -222,6 +222,10 @@ namespace StockSharp.Messages
 
 		/// <inheritdoc />
 		[Browsable(false)]
+		public virtual bool IsSupportCandlesUpdates => false;
+
+		/// <inheritdoc />
+		[Browsable(false)]
 		public virtual string StorageName { get; }
 
 		/// <inheritdoc />

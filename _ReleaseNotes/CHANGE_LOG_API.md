@@ -15,6 +15,7 @@ StockSharp API Change log
 * (bug) CsvImporter. Fix candles processing.
 * (feature) DateRangeWindow renamed to CandleSettingsWindow and moved to Xaml.Charting.
 * (bug) Binary storage. Fix local time save http://stocksharp.ru/forum/9296/isklyuchenie-pri-sohranenii-executionmessage
+* (feature) IMessageAdapter.IsSupportCandlesUpdates
 
 ## v4.4.6.2:
 * (feature) HeartbeatMessageAdapter.SuppressReconnectingErrors
