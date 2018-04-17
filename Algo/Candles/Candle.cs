@@ -17,7 +17,6 @@ namespace StockSharp.Algo.Candles
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
@@ -416,7 +415,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayName("Time Frame")]
+	[DisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
 	public class TimeFrameCandle : Candle
 	{
 		/// <summary>
@@ -449,7 +448,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayName("Tick")]
+	[DisplayNameLoc(LocalizedStrings.TickCandleKey)]
 	public class TickCandle : Candle
 	{
 		/// <summary>
@@ -482,7 +481,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayName("Volume")]
+	[DisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
 	public class VolumeCandle : Candle
 	{
 		/// <summary>
@@ -515,7 +514,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayName("Range")]
+	[DisplayNameLoc(LocalizedStrings.RangeCandleKey)]
 	public class RangeCandle : Candle
 	{
 		/// <summary>
@@ -548,7 +547,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayName("X&0")]
+	[DisplayNameLoc(LocalizedStrings.PnFCandleKey)]
 	public class PnFCandle : Candle
 	{
 		/// <summary>
@@ -587,7 +586,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	[DisplayName("Renko")]
+	[DisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
 	public class RenkoCandle : Candle
 	{
 		/// <summary>

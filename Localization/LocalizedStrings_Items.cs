@@ -47676,5 +47676,55 @@ namespace StockSharp.Localization
 		/// Waiting interval. Make some pause before sending the next request.
 		/// </summary>
 		public static string WaitInterval => GetString(WaitIntervalKey);
+
+		/// <summary>
+		/// Timeframe candle
+		/// </summary>
+		public const string TimeFrameCandleKey = nameof(TimeFrameCandle);
+
+		/// <summary>
+		/// Timeframe candle
+		/// </summary>
+		public static string TimeFrameCandle => GetString(TimeFrameCandleKey);
+
+		/// <summary>
+		/// Tick candle
+		/// </summary>
+		public const string TickCandleKey = nameof(TickCandle);
+
+		/// <summary>
+		/// Tick candle
+		/// </summary>
+		public static string TickCandle => GetString(TickCandleKey);
+
+		/// <summary>
+		/// Volume candle
+		/// </summary>
+		public const string VolumeCandleKey = nameof(VolumeCandle);
+
+		/// <summary>
+		/// Volume candle
+		/// </summary>
+		public static string VolumeCandle => GetString(VolumeCandleKey);
+
+		/// <summary>
+		/// Range candle
+		/// </summary>
+		public const string RangeCandleKey = nameof(RangeCandle);
+
+		/// <summary>
+		/// Range candle
+		/// </summary>
+		public static string RangeCandle => GetString(RangeCandleKey);
+
+		/// <summary>
+		/// Renko candle
+		/// </summary>
+		public const string RenkoCandleKey = nameof(RenkoCandle);
+
+		/// <summary>
+		/// Renko candle
+		/// </summary>
+		public static string RenkoCandle => GetString(RenkoCandleKey);
 	}
 }

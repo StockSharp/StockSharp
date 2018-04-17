@@ -32,65 +32,77 @@ namespace StockSharp.Messages
 		/// Level 1.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.Level1Key)]
 		Level1,
 
 		/// <summary>
 		/// Market depth (order book).
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.MarketDepthKey)]
 		MarketDepth,
 
 		/// <summary>
 		/// Tick trades.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.TicksKey)]
 		Trades,
 
 		/// <summary>
 		/// Order log.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.OrderLogKey)]
 		OrderLog,
 
 		/// <summary>
 		/// News.
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.NewsKey)]
 		News,
 
 		/// <summary>
 		/// Candles (time-frame).
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.TimeFrameCandleKey)]
 		CandleTimeFrame,
 
 		/// <summary>
 		/// Candle (tick).
 		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.TickCandleKey)]
 		CandleTick,
 
 		/// <summary>
 		/// Candle (volume).
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.VolumeCandleKey)]
 		CandleVolume,
 
 		/// <summary>
 		/// Candle (range).
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.RangeCandleKey)]
 		CandleRange,
 
 		/// <summary>
 		/// Candle (X&amp;0).
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.PnFCandleKey)]
 		CandlePnF,
 
 		/// <summary>
 		/// Candle (renko).
 		/// </summary>
 		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.RenkoCandleKey)]
 		CandleRenko,
 	}
 

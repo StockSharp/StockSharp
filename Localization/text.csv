@@ -4233,12 +4233,12 @@ LoadingVariableErrorParams;Loading variable parameter error: {0}.;Ошибка �
 CancelOnDisconnect;Cancel On Disconnect;Cancel On Disconnect
 CancelOnDisconnectDesc;Heartbeat interval. Uses in Cancel On Disconnect mode.;Интервал оповещения сервера об активности. Используется в режиме Cancel On Disconnect.
 LoadHistoryDataQuestion;Open the window to download historical data?;Открыть окно для скачивания исторических данных?
-TimeFrameCandle;Timeframe candle;Таймфрейм свечи
-TickCandle;Tick candle;Тиковые свечи
-VolumeCandle;Volume candle;Объемные свечи
-RangeCandle;Range candle;Рейндж свечи
-PnFCandle;X0 candle;X0 свечи
-RenkoCandle;Renko candle;Ренко свечи
+TimeFrameCandle;Timeframe candle;Таймфрейм свеча
+TickCandle;Tick candle;Тиковая свеча
+VolumeCandle;Volume candle;Объемная свеча
+RangeCandle;Range candle;Рейндж свеча
+PnFCandle;X0 candle;X0 свеча
+RenkoCandle;Renko candle;Ренко свеча
 UnknownCandleType;Unknown candle type '{0}'.;Неизвестный тип '{0}' свечи.
 InvalidArgumentValue;Invalid argument value.;Неправильное значение.
 AlfaDirect;Alfa-Direct;Альфа-Директ
