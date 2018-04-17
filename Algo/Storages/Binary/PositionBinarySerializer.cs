@@ -186,14 +186,14 @@ namespace StockSharp.Algo.Storages.Binary
 				metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", true, true, metaInfo.ServerOffset, true, true, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
-				var hasLocalTime = !message.LocalTime.IsDefault() && message.LocalTime != message.ServerTime;
+				var hasLocalTime = message.HasLocalTime(message.ServerTime);
 
 				writer.Write(hasLocalTime);
 
 				if (hasLocalTime)
 				{
 					lastOffset = metaInfo.LastLocalOffset;
-					metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str919, true, true, metaInfo.LocalOffset, true, true, ref lastOffset);
+					metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str919, true, true, metaInfo.LocalOffset, true, true, ref lastOffset, true);
 					metaInfo.LastLocalOffset = lastOffset;
 				}
 

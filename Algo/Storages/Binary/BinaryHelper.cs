@@ -544,5 +544,10 @@ namespace StockSharp.Algo.Storages.Binary
 
 			return reader.ReadLong();
 		}
+
+		public static bool HasLocalTime(this Message msg, DateTimeOffset serverTime)
+		{
+			return !msg.LocalTime.IsDefault() && msg.LocalTime != serverTime/* && (msg.LocalTime - serverTime).TotalHours.Abs() < 1*/;
+		}
 	}
 }

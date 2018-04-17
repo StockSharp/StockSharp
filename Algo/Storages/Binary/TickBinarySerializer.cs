@@ -190,14 +190,14 @@ namespace StockSharp.Algo.Storages.Binary
 
 					if (metaInfo.Version >= MarketDataVersions.Version49)
 					{
-						hasLocalTime = !msg.LocalTime.IsDefault() && msg.LocalTime != msg.ServerTime;
+						hasLocalTime = msg.HasLocalTime(msg.ServerTime);
 						writer.Write(hasLocalTime);
 					}
 
 					if (hasLocalTime)
 					{
 						lastOffset = metaInfo.LastLocalOffset;
-						metaInfo.LastLocalTime = writer.WriteTime(msg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str1024, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset);
+						metaInfo.LastLocalTime = writer.WriteTime(msg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str1024, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, isTickPrecision, ref lastOffset, true);
 						metaInfo.LastLocalOffset = lastOffset;
 					}
 				}

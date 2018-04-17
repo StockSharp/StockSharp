@@ -473,7 +473,7 @@ namespace StockSharp.Algo.Storages.Binary
 		protected void WriteItemLocalTime(BitArrayWriter writer, TMetaInfo metaInfo, Message message, bool isTickPrecision)
 		{
 			var lastLocalOffset = metaInfo.LastItemLocalOffset;
-			metaInfo.LastItemLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastItemLocalTime, "local time", true, true, metaInfo.LocalOffset, true, isTickPrecision, ref lastLocalOffset);
+			metaInfo.LastItemLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastItemLocalTime, "local time", true, true, metaInfo.LocalOffset, true, isTickPrecision, ref lastLocalOffset, true);
 			metaInfo.LastItemLocalOffset = lastLocalOffset;
 		}
 
