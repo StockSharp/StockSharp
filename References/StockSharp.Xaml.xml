@@ -921,6 +921,142 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="T:StockSharp.Xaml.ImportDataMappingButton">
+      <summary>
+            Button to open <see cref="T:StockSharp.Xaml.ImportDataMappingWindow" />.
+            </summary>
+      <summary>
+            ImportDataMappingButton
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportDataMappingButton.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportDataMappingButton" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.ImportDataMappingButton.DataTypeProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.ImportDataMappingButton.DataType" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportDataMappingButton.DataType">
+      <summary>
+            Data type.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.ImportDataMappingButton.ValuesProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.ImportDataMappingButton.Values" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportDataMappingButton.Values">
+      <summary>
+            Mapping values.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.ImportDataMappingButton.FieldNameProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.ImportDataMappingButton.FieldName" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportDataMappingButton.FieldName">
+      <summary>
+            Field name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportDataMappingButton.OnClick">
+      <inheritdoc />
+    </member>
+    <member name="M:StockSharp.Xaml.ImportDataMappingButton.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ImportDataMappingWindow">
+      <summary>
+            The window for editing importing mapping values.
+            </summary>
+      <summary>
+            ImportDataMappingWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportDataMappingWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportDataMappingWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportDataMappingWindow.DataType">
+      <summary>
+            Data type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportDataMappingWindow.Values">
+      <summary>
+            Mapping values.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportDataMappingWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.ImportSettingsPanel">
+      <summary>
+            The visual panel to edit importing settings.
+            </summary>
+      <summary>
+            ImportSettingsPanel
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.ImportSettingsPanel.SelectFieldCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.ImportSettingsPanel.UnselectFieldCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.ImportSettingsPanel.MoveUpFieldCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.ImportSettingsPanel.MoveDownFieldCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ImportSettingsPanel" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettingsPanel.SelectedFields">
+      <summary>
+            Selected fields.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.ImportSettingsPanel.UnSelectedFields">
+      <summary>
+            All fields.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.SelectFields(System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping},System.Boolean)">
+      <summary>
+            Select fields.
+            </summary>
+      <param name="items">Fields.</param>
+      <param name="autoSetOrders">Auto set fields order.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.UnselectFields(System.Collections.Generic.IEnumerable{StockSharp.Algo.Import.FieldMapping})">
+      <summary>
+            Unselect fields.
+            </summary>
+      <param name="items">Fields.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.ImportSettingsPanel.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.IndexEditor">
       <summary>
             The graphic control for editing <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.

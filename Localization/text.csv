@@ -14848,3 +14848,14 @@ DocStr10389;The interface, describing a list of embedded storages of market data
 DocStr10390;Add inner storage with the specified request id;Добавить внутреннее хранилище с указанным идентификатором запроса
 DocStr10391;Get possible time-frames for the specified instrument;Получить возможные тайм-фреймы для указанного инструмента
 DocStr10392;Support candles subscription and live updates;Поддерживается подписка на свечи и обновление в реальном времени
+DocStr10394;Field name;Имя поля
+DocStr10395;The window for editing importing mapping values;Окно для редактирования значения преобразования
+DocStr10396;The visual panel to edit importing settings;Панель для редактирования настроек импорта
+DocStr10397;Selected fields;Выделенные поля
+DocStr10398;All fields;Все поля
+DocStr10399;Select fields;Выделить поля
+DocStr10400;Fields;Поля
+DocStr10401;Auto set fields order;Все установка порядка полей
+DocStr10402;Unselect fields;Удалить поля
+DocStr10403;Button to open {0};Кнопка для открытия {0}
+DocStr10404;USD;USD

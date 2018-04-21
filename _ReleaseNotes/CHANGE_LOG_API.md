@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) ImportSettingsPanel control.
+
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
 * (feature) CandleSeries.AllowBuildFromSmallerTimeFrame.
