@@ -1,5 +1,4 @@
 T:StockSharp.Deribit.DeribitMessageAdapter/summary;DocStr2538
-P:StockSharp.Deribit.DeribitMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.Deribit.DeribitMessageAdapter.Key/summary;Str3304
 P:StockSharp.Deribit.DeribitMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.Deribit.DeribitMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -11,10 +10,13 @@ M:StockSharp.Deribit.DeribitMessageAdapter.ToString/returns;DocStr50
 M:StockSharp.Deribit.DeribitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Deribit.DeribitMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Deribit.DeribitMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/inheritdoc;DocStr8459
+T:StockSharp.Deribit.DeribitOrderAdvancedTypes/summary;DocStr3405
+F:StockSharp.Deribit.DeribitOrderAdvancedTypes.ImpliedVolatility/summary;Str293
+F:StockSharp.Deribit.DeribitOrderAdvancedTypes.Usd/summary;DocStr10404
 T:StockSharp.Deribit.DeribitOrderCondition/summary;DocStr60
 M:StockSharp.Deribit.DeribitOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Deribit.DeribitOrderCondition.IsWithdraw/summary;Withdraw
-P:StockSharp.Deribit.DeribitOrderCondition.WithdrawInfo/summary;WithdrawInfo
+P:StockSharp.Deribit.DeribitOrderCondition.StopPrice/summary;Str3460
+P:StockSharp.Deribit.DeribitOrderCondition.Advanced/summary;Str2368
 T:StockSharp.Deribit.DeribitTrader/summary;DocStr2539
 M:StockSharp.Deribit.DeribitTrader.#ctor/summary;DocStr1
 P:StockSharp.Deribit.DeribitTrader.Key/summary;Str3304

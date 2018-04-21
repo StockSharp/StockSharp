@@ -1,5 +1,4 @@
 T:StockSharp.CoinExchange.CoinExchangeMessageAdapter/summary;DocStr2538
-P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.AllTimeFrames/summary;DocStr206
 P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.Key/summary;Str3304
 P:StockSharp.CoinExchange.CoinExchangeMessageAdapter.Secret/summary;DocStr3146
 M:StockSharp.CoinExchange.CoinExchangeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
