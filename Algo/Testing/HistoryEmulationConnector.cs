@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Testing
 
 			public EmulationEntityFactory(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios)
 			{
-				_securityProvider = securityProvider;
+				_securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 				_portfolios = portfolios.ToDictionary(p => p.Name, p => p, StringComparer.InvariantCultureIgnoreCase);
 			}
 
