@@ -32,7 +32,7 @@
 			<externalLink>
 				<linkText>Купить</linkText>
 				<linkAlternateText>Купить S#.MatLab</linkAlternateText>
-				<linkUri>http://stocksharp.ru/products/pricing/#matlab</linkUri>
+				<linkUri>https://stocksharp.ru/products/pricing/#matlab</linkUri>
 				<linkTarget>_blank</linkTarget>
 			</externalLink>
 		</para>

@@ -5,7 +5,7 @@
  <para>
 <externalLink>
 <linkText>StockSharp (кратко S#)</linkText>
-<linkUri>http://stocksharp.ru/products/</linkUri>
+<linkUri>https://stocksharp.ru/products/</linkUri>
 </externalLink>
  - <legacyBold>бесплатные</legacyBold> программы для торговли на всех площадках 
 мира (российские, американские, азиатские, акции, фьючерсы, опционы, биткоины, 
@@ -77,11 +77,11 @@
  Вы можете работать с <token>stocksharp</token> у любого брокера или 
 <externalLink>
 <linkText>брокер-партнер</linkText>
-<linkUri>http://stocksharp.ru/broker/</linkUri>
+<linkUri>https://stocksharp.ru/broker/</linkUri>
 </externalLink>
 <externalLink>
 <linkText>(преимущества).</linkText>
-<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
+<linkUri>https://stocksharp.ru/products/pricing/</linkUri>
 </externalLink>
  </para>
  <title>S#.Designer</title>
@@ -218,24 +218,24 @@ Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, HitBTC, OKCoin, Coincheck, I
   <listItem><para><link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" /> - библиотека для написания торговых роботов на языке <token>csharp</token> в Visual Studio.</para></listItem>
   <listItem><para> <externalLink>
 <linkText>S#.Terminal</linkText>
-<linkUri>http://stocksharp.ru/products/terminal/</linkUri>
+<linkUri>https://stocksharp.ru/products/terminal/</linkUri>
 </externalLink>
  - торговый терминал.</para></listItem>
   <listItem><para><link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" /> - интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.</para></listItem>
   <listItem><para><externalLink>
 <linkText>ЛЧИ Viewer</linkText>
-<linkUri>http://stocksharp.ru/products/lci/</linkUri>
+<linkUri>https://stocksharp.ru/products/lci/</linkUri>
 </externalLink>
  - графики конкурса ЛЧИ со сделками участников.</para></listItem>
 </list>
  <!--<para>
  Презентации наших продуктов в виде <externalLink>
 <linkText> pdft</linkText>
-<linkUri>http://stocksharp.ru/file/102474/stocksharp_pdf/</linkUri>
+<linkUri>https://stocksharp.ru/file/102474/stocksharp_pdf/</linkUri>
 </externalLink>
  и <externalLink>
 <linkText>PowerPoint</linkText>
-<linkUri>http://stocksharp.ru/file/102474/stocksharp_pdf/</linkUri>
+<linkUri>https://stocksharp.ru/file/102474/stocksharp_pdf/</linkUri>
 </externalLink>
  </para>-->
  <para> 

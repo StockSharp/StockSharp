@@ -35,7 +35,7 @@ or exchange API and can work with any connection. For example, it is easy to mov
 <legacyBold>Any markets and brokers</legacyBold> - NASDAQ, NYSE, CME, etc. trading by means of <token>OpenECry</token>, <token>IB</token>, <token>etrade</token> and 
 <externalLink>
 <linkText>other brokers</linkText>
-<linkUri>http://stocksharp.ru/broker/</linkUri>
+<linkUri>https://stocksharp.com/broker/</linkUri>
 <linkTarget>_blank</linkTarget>
 </externalLink>.
 </content>

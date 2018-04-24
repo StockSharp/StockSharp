@@ -8,7 +8,7 @@
 	    	 Предоставляется бесплатно и пожизненно всем желающим  Для этого необходимо только <externalLink>
 			<linkText>пройти регистрацию!</linkText>
 			<linkAlternateText>Регистрация в Stocksharp</linkAlternateText>
-			<linkUri>http://stocksharp.ru/register/</linkUri>
+			<linkUri>https://stocksharp.ru/register/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
 			 Эта лицензия включает: </para>
@@ -127,18 +127,6 @@
 	</introduction>
 	
 	 <relatedTopics>
-     		<!--<externalLink>
-			<linkText>Новые подходы к лицензированию</linkText>
-			<linkAlternateText>Лицензирование</linkAlternateText>
-			<linkUri>http://stocksharp.ru/news/264/novye-podhody-k-litsenzirovaniyu/</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
-		<externalLink>
-			<linkText>Стоимость лицензий StockSharp</linkText>
-			<linkAlternateText>Стоимость лицензий</linkAlternateText>
-			<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>-->
      	</relatedTopics>
 	</developerWalkthroughDocument>
 </topic>

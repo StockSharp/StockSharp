@@ -40,7 +40,7 @@ namespace StockSharp.Community
 		/// Initializes a new instance of the <see cref="AuthenticationClient"/>.
 		/// </summary>
 		public AuthenticationClient()
-			: this(new Uri("http://stocksharp.com/services/authenticationservice.svc"))
+			: this(new Uri("https://stocksharp.com/services/authenticationservice.svc"))
 		{
 		}
 

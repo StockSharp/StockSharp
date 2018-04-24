@@ -45,7 +45,7 @@ namespace StockSharp.Community
 		/// Initializes a new instance of the <see cref="StrategyClient"/>.
 		/// </summary>
 		public StrategyClient()
-			: this(new Uri("http://stocksharp.com/services/strategyservice.svc"))
+			: this(new Uri("https://stocksharp.com/services/strategyservice.svc"))
 		{
 		}
 

@@ -39,7 +39,7 @@ S#.API является основой всех остальных продук�
 <externalLink>
 <linkText>других</linkText>
 <linkAlternateText>Брокеры-партнеры StockSharp</linkAlternateText>
-<linkUri>http://stocksharp.ru/broker/</linkUri>
+<linkUri>https://stocksharp.ru/broker/</linkUri>
 <linkTarget>_blank</linkTarget>
 </externalLink>.
 </content>

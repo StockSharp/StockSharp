@@ -88,12 +88,12 @@ IncorrectSmsCode;Incorrect SMS code.;Неверный SMS код.
 CannotGetLicense;Cannot get a license.;Невозможно получить лицензию.
 LicenseRevoked;License revoked.;Лицензия отозвана.
 LicenseMaxRenew;License renewed max times.;Лицензия обновлена максимальное количество раз.
-SmsActivationFailed;SMS activation failed. Read more at http://stocksharp.com/profile/ .;Не пройдена активация через SMS. Подробнее в http://stocksharp.com/profile/ .
+SmsActivationFailed;SMS activation failed. Read more at https://stocksharp.com/profile/ .;Не пройдена активация через SMS. Подробнее в https://stocksharp.com/profile/ .
 MaxLicensePerMin;Maximum number of license generations per minute exceeded.;Превышено максимальное количество генераций лицензий в минуту.
 Str50Params;for '{0}' portfolio '{1}';для '{0}' портфель '{1}'
 LicenseWrong;License N{0} is wrong.;Лицензия N{0} неправильная.
 LicenseWrongHID;License N{0} contains a wrong hardware ID '{1}' instead of '{2}'.;Лицензия N{0} содержит неправильный идентификатор компьютера '{1}' вместо '{2}'.
-LicenseExpired;License N{0} has expired {1}. Visit http://stocksharp.com/ to obtain a new license.;Лицензия N{0} истекла {1}. Посетите сайт http://stocksharp.com/ чтобы приобрести новую.
+LicenseExpired;License N{0} has expired {1}. Visit https://stocksharp.com/ to obtain a new license.;Лицензия N{0} истекла {1}. Посетите сайт https://stocksharp.com/ чтобы приобрести новую.
 LicenseNotSupport;License N{0} does not support '{1}'.;Лицензия N{0} не поддерживает '{1}'.
 StockExchange;Stock exchange;Фондовая биржа
 Str56;Code of the exchange, to which the board belongs.;Код биржи, которой принадлежит площадка.
@@ -7822,7 +7822,7 @@ DocStr3070;The client for access to the StockSharp notification service;Клие
 DocStr3071;To subscribe for news;Подписаться на новости
 DocStr3072;To unsubscribe from news;Отписаться от новостей
 DocStr3073;The client for access to the registration service;Клиент для доступа к сервису регистрации
-DocStr3074;The class that contains a login and password to access the services http://stocksharp.com;Класс, хранящий в себе логин и пароль для доступа к сервисам http://stocksharp.com
+DocStr3074;The class that contains a login and password to access the services https://stocksharp.com;Класс, хранящий в себе логин и пароль для доступа к сервисам https://stocksharp.com
 DocStr3075;Strategies signed by {0};Стратегии, подписанные через {0}
 DocStr3076;The creation date;Дата создания
 DocStr3077;The identifier of a topic in the forum where the strategy is discussed;Идентификатор топика на форуме, где идет обсуждение стратегии
