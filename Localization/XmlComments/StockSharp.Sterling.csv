@@ -30,7 +30,7 @@ T:StockSharp.Sterling.SterlingOrderCondition/summary;DocStr60
 M:StockSharp.Sterling.SterlingOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Sterling.SterlingOrderCondition.StopPrice/summary;Str3460
 P:StockSharp.Sterling.SterlingOrderCondition.ExtendedOrderType/summary;Str2368
-P:StockSharp.Sterling.SterlingOrderCondition.Discretion/summary;DocStr8459
+P:StockSharp.Sterling.SterlingOrderCondition.Discretion/summary;DocStr10405
 P:StockSharp.Sterling.SterlingOrderCondition.ExecutionInstruction/summary;DocStr7574
 P:StockSharp.Sterling.SterlingOrderCondition.ExecutionBroker/summary;DocStr7575
 P:StockSharp.Sterling.SterlingOrderCondition.ExecutionPriceLimit/summary;DocStr7576
@@ -46,7 +46,7 @@ P:StockSharp.Sterling.SterlingOrderCondition.LocateTime/summary;Time
 P:StockSharp.Sterling.SterlingOrderCondition.IsOpen/summary;DocStr631
 P:StockSharp.Sterling.SterlingOrderCondition.Maturity/summary;DocStr3731
 P:StockSharp.Sterling.SterlingOrderCondition.Type/summary;Str551
-P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingCode/summary;DocStr6015
+P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingCode/summary;UnderlyingAsset
 P:StockSharp.Sterling.SterlingOrderCondition.IsCover/summary;DocStr7579
 P:StockSharp.Sterling.SterlingOrderCondition.UnderlyingType/summary;DocStr7580
 P:StockSharp.Sterling.SterlingOrderCondition.StrikePrice/summary;DocStr7581
