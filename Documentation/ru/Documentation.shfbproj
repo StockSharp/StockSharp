@@ -159,8 +159,8 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.BarChart.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.BarChart.xml" />
     </DocumentationSources>
-    <CopyrightHref>http://stocksharp.ru</CopyrightHref>
-    <CopyrightText>&amp;#169%3b 2017 - StockSharp LLC</CopyrightText>
+    <CopyrightHref>https://stocksharp.ru</CopyrightHref>
+    <CopyrightText>&amp;#169%3b 2018 - StockSharp LLC</CopyrightText>
     <FeedbackEMailAddress>info%40stocksharp.ru</FeedbackEMailAddress>
     <FeedbackEMailLinkText>отзыв</FeedbackEMailLinkText>
     <ApiFilter>
