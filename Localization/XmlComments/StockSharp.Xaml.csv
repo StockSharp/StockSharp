@@ -172,6 +172,14 @@ M:StockSharp.Xaml.GridControl.PriceChartDataProvider.#ctor(StockSharp.BusinessEn
 M:StockSharp.Xaml.GridControl.PriceChartDataProvider.#ctor(StockSharp.BusinessEntities.IMarketDataProvider)/param/provider;DocStr973
 M:StockSharp.Xaml.GridControl.PriceChartDataProvider.DisposeManaged/summary;DocStr7
 M:StockSharp.Xaml.GridControl.PriceChartDataProvider.Get(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)/inheritdoc;DocStr8459
+T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs/summary;DocStr9470
+P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Column/summary;DocStr9001
+P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row/summary;DocStr9813
+P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.ButtonArgs/summary;DocStr10407
+M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object,System.Windows.Input.MouseButtonEventArgs)/summary;DocStr1
+M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object,System.Windows.Input.MouseButtonEventArgs)/param/column;DocStr9001
+M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object,System.Windows.Input.MouseButtonEventArgs)/param/row;DocStr9813
+M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object,System.Windows.Input.MouseButtonEventArgs)/param/buttonArgs;DocStr10407
 T:StockSharp.Xaml.GridControl.PriceChartEditor/summary;DocStr10158
 M:StockSharp.Xaml.GridControl.PriceChartEditor.#ctor/summary;DocStr1
 M:StockSharp.Xaml.GridControl.PriceChartEditor.InitializeComponent/summary;DocStr8
@@ -190,12 +198,6 @@ M:StockSharp.Xaml.GridControl.TreeListNodeHelper.GetIsExpanded(System.Windows.De
 M:StockSharp.Xaml.GridControl.TreeListNodeHelper.SetIsExpanded(System.Windows.DependencyObject,System.Boolean)/summary;DocStr8345
 M:StockSharp.Xaml.GridControl.TreeListNodeHelper.SetIsExpanded(System.Windows.DependencyObject,System.Boolean)/param/obj;DocStr66
 M:StockSharp.Xaml.GridControl.TreeListNodeHelper.SetIsExpanded(System.Windows.DependencyObject,System.Boolean)/param/value;DocStr8346
-T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs/summary;DocStr9470
-P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Column/summary;DocStr9001
-P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row/summary;DocStr9813
-M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)/summary;DocStr1
-M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)/param/column;DocStr9001
-M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)/param/row;DocStr9813
 T:StockSharp.Xaml.GridControl.BaseGridControl/summary;DocStr8990
 T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder/summary;DocStr8991
 P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Count/summary;DocStr8992
@@ -725,6 +727,7 @@ F:StockSharp.Xaml.MarketDepthColumns.Volume/summary;DocStr3526
 T:StockSharp.Xaml.MarketDepthControl/summary;DocStr8243
 F:StockSharp.Xaml.MarketDepthControl.CellMouseLeftButtonUp/summary;DocStr8459
 F:StockSharp.Xaml.MarketDepthControl.CellMouseRightButtonUp/summary;DocStr8459
+F:StockSharp.Xaml.MarketDepthControl.CellMouseLeftDoubleClick/summary;DocStr8459
 M:StockSharp.Xaml.MarketDepthControl.#ctor/summary;DocStr1
 F:StockSharp.Xaml.MarketDepthControl.DefaultDepth/summary;DocStr8244
 F:StockSharp.Xaml.MarketDepthControl.MaxDepthProperty/summary;DocStr29
@@ -748,6 +751,11 @@ F:StockSharp.Xaml.MarketDepthControl.MaxSellVolumeProperty/summary;DocStr29
 P:StockSharp.Xaml.MarketDepthControl.MaxSellVolume/summary;DocStr9931
 M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)/summary;DocStr8245
 M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
+M:StockSharp.Xaml.MarketDepthControl.GetOrders(System.Decimal,System.Nullable{StockSharp.Messages.Sides},System.Nullable{StockSharp.Messages.OrderTypes})/summary;DocStr10408
+M:StockSharp.Xaml.MarketDepthControl.GetOrders(System.Decimal,System.Nullable{StockSharp.Messages.Sides},System.Nullable{StockSharp.Messages.OrderTypes})/param/price;Str1341
+M:StockSharp.Xaml.MarketDepthControl.GetOrders(System.Decimal,System.Nullable{StockSharp.Messages.Sides},System.Nullable{StockSharp.Messages.OrderTypes})/param/side;Str129
+M:StockSharp.Xaml.MarketDepthControl.GetOrders(System.Decimal,System.Nullable{StockSharp.Messages.Sides},System.Nullable{StockSharp.Messages.OrderTypes})/param/type;Str132
+M:StockSharp.Xaml.MarketDepthControl.GetOrders(System.Decimal,System.Nullable{StockSharp.Messages.Sides},System.Nullable{StockSharp.Messages.OrderTypes})/returns;DocStr10410
 M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order,System.Decimal,StockSharp.Messages.OrderStates)/summary;DocStr9310
 M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order,System.Decimal,StockSharp.Messages.OrderStates)/param/order;Str504
 M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order,System.Decimal,StockSharp.Messages.OrderStates)/param/balance;Str131

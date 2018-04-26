@@ -4,6 +4,8 @@ StockSharp API Change log
 * (feature) ImportSettingsPanel control.
 * (feature) CSV storages. Provide error details as return from Init method.
 * (feature) CsvEntityRegistry. Store UnderlyingSecurityType, CfiCode, IssueDate, IssueSize.
+* (feature) MarketDepthControl. GetOrders method
+* (feature) MarketDepthControl. CellMouseLeftDoubleClick event
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.

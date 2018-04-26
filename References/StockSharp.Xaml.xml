@@ -747,6 +747,34 @@
     <member name="M:StockSharp.Xaml.GridControl.PriceChartDataProvider.Get(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)">
       <inheritdoc />
     </member>
+    <member name="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs">
+      <summary>
+            Contains event data for <see cref="E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Column">
+      <summary>
+            Column.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row">
+      <summary>
+            Row.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.ButtonArgs">
+      <summary>
+            Provides data for mouse button related events.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object,System.Windows.Input.MouseButtonEventArgs)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs" />.
+            </summary>
+      <param name="column">Column.</param>
+      <param name="row">Row.</param>
+      <param name="buttonArgs">Provides data for mouse button related events.</param>
+    </member>
     <member name="T:StockSharp.Xaml.GridControl.PriceChartEditor">
       <summary>
             Price chart editor.
@@ -815,28 +843,6 @@
             </summary>
       <param name="obj">Object <see cref="T:StockSharp.Xaml.LogControl" />.</param>
       <param name="value">New value for <see cref="P:DevExpress.Data.TreeList.TreeListNodeBase.IsExpanded" />.</param>
-    </member>
-    <member name="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs">
-      <summary>
-            Contains event data for <see cref="E:StockSharp.Xaml.GridControl.BaseGridControl.ItemDoubleClick" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Column">
-      <summary>
-            Column.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.Row">
-      <summary>
-            Row.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs.#ctor(DevExpress.Xpf.Grid.GridColumn,System.Object)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.ItemDoubleClickEventArgs" />.
-            </summary>
-      <param name="column">Column.</param>
-      <param name="row">Row.</param>
     </member>
     <member name="T:StockSharp.Xaml.GridControl.BaseGridControl">
       <summary>
@@ -3346,6 +3352,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.CellMouseLeftDoubleClick">
+      <summary>
+      </summary>
+    </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.MarketDepthControl" />.
@@ -3456,6 +3466,15 @@
             To update <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" /> and <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
             </summary>
       <param name="security">Security.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.MarketDepthControl.GetOrders(System.Decimal,System.Nullable{StockSharp.Messages.Sides},System.Nullable{StockSharp.Messages.OrderTypes})">
+      <summary>
+            Get active orders by specified criteria.
+            </summary>
+      <param name="price">Order price.</param>
+      <param name="side">Order side (buy or sell).</param>
+      <param name="type">Order type.</param>
+      <returns>Found orders.</returns>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order,System.Decimal,StockSharp.Messages.OrderStates)">
       <summary>

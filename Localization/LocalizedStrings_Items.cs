@@ -47726,5 +47726,35 @@ namespace StockSharp.Localization
 		/// Renko candle
 		/// </summary>
 		public static string RenkoCandle => GetString(RenkoCandleKey);
+
+		/// <summary>
+		/// File '{0}' has processed with errors. Please fix it or delete the file entirely and restart the app.
+		/// </summary>
+		public const string CorruptedFileKey = nameof(CorruptedFile);
+
+		/// <summary>
+		/// File '{0}' has processed with errors. Please fix it or delete the file entirely and restart the app.
+		/// </summary>
+		public static string CorruptedFile => GetString(CorruptedFileKey);
+
+		/// <summary>
+		/// Set new limit
+		/// </summary>
+		public const string SetNewLimitKey = nameof(SetNewLimit);
+
+		/// <summary>
+		/// Set new limit
+		/// </summary>
+		public static string SetNewLimit => GetString(SetNewLimitKey);
+
+		/// <summary>
+		/// The count of loaded data has reached the value {0}. To download more, you need to increase the limit.
+		/// </summary>
+		public const string IncreaseLimitKey = nameof(IncreaseLimit);
+
+		/// <summary>
+		/// The count of loaded data has reached the value {0}. To download more, you need to increase the limit.
+		/// </summary>
+		public static string IncreaseLimit => GetString(IncreaseLimitKey);
 	}
 }

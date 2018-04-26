@@ -14864,3 +14864,6 @@ DocStr10403;Button to open {0};Кнопка для открытия {0}
 DocStr10404;USD;USD
 DocStr10405;Discretion;Дискреционная заявка
 DocStr10406;Possible errors with storage names. Empty dictionary means initialization without any issues;Возможные ошибки с названиями хранилищ. Пустой словарь означает отсутствие ошибок инициализации
+DocStr10407;Provides data for mouse button related events;Предоставляет данные для событий, связанных с кнопкой мыши
+DocStr10408;Get active orders by specified criteria;Получить активные заявки по указанному критерию
+DocStr10410;Found orders;Найденные заявки
