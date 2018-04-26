@@ -818,29 +818,30 @@ namespace StockSharp.Algo.Storages.Csv
 			_csvLists.Add(list);
 		}
 
-		/// <summary>
-		/// Initialize the storage.
-		/// </summary>
-		public void Init()
+		/// <inheritdoc />
+		public IDictionary<object, Exception> Init()
 		{
 			Directory.CreateDirectory(Path);
 
-			var errors = new List<Exception>();
+			var errors = new Dictionary<object, Exception>();
 
 			foreach (dynamic list in _csvLists)
 			{
 				try
 				{
-					list.ReadItems(errors);
+					var listErrors = new List<Exception>();
+					list.ReadItems(listErrors);
+
+					if (listErrors.Count > 0)
+						errors.Add((object)list, new AggregateException(listErrors));
 				}
 				catch (Exception ex)
 				{
-					errors.Add(ex);
+					errors.Add((object)list, ex);
 				}
 			}
 
-			if (errors.Count > 0)
-				throw new AggregateException(errors);
+			return errors;
 		}
 
 		private readonly InMemoryExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();

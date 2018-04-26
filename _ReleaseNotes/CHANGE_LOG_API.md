@@ -2,6 +2,7 @@ StockSharp API Change log
 ========================
 ## current:
 * (feature) ImportSettingsPanel control.
+* (feature) CSV storages. Provide error details as return from Init method.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.

@@ -15,6 +15,9 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Storages
 {
+	using System;
+	using System.Collections.Generic;
+
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
@@ -87,6 +90,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initialize the storage.
 		/// </summary>
-		void Init();
+		/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
+		IDictionary<object, Exception> Init();
 	}
 }

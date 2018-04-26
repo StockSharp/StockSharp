@@ -4805,6 +4805,9 @@ BuildCandlesFrom;Which market-data type is used as an candle source value.;Ка�
 Level1Field;Level1 field.;Поле Level1.
 CandlesType;Candles type;Тип свечей
 WaitInterval;Waiting interval. Make some pause before sending the next request.;Интервал ожидания. Делать некую паузу до отправки следующего запроса.
+CorruptedFile;File '{0}' has processed with errors. Please fix it or delete the file entirely and restart the app.;Файл '{0}' был обработан с ошибками. Пожалуйста, исправьте ошибки в файле или полностью удалите его и перезапустите программу.
+SetNewLimit;Set new limit;Установить новый лимит
+IncreaseLimit;The count of loaded data has reached the value {0}. To download more, you need to increase the limit.;Количество загружаемых данных достигло значения {0}. Чтобы выгрузить больше, необходимо увеличить лимит.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -14860,3 +14863,4 @@ DocStr10402;Unselect fields;Удалить поля
 DocStr10403;Button to open {0};Кнопка для открытия {0}
 DocStr10404;USD;USD
 DocStr10405;Discretion;Дискреционная заявка
+DocStr10406;Possible errors with storage names. Empty dictionary means initialization without any issues;Возможные ошибки с названиями хранилищ. Пустой словарь означает отсутствие ошибок инициализации

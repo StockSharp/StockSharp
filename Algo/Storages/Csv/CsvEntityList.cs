@@ -17,8 +17,6 @@ namespace StockSharp.Algo.Storages.Csv
 	public abstract class CsvEntityList<T> : SynchronizedList<T>, IStorageEntityList<T>
 		where T : class
 	{
-		private readonly string _fileName;
-
 		private readonly Dictionary<object, T> _items = new Dictionary<object, T>();
 
 		/// <summary>
@@ -41,8 +39,13 @@ namespace StockSharp.Algo.Storages.Csv
 
 			Registry = registry;
 
-			_fileName = Path.Combine(Registry.Path, fileName);
+			FileName = Path.Combine(Registry.Path, fileName);
 		}
+
+		/// <summary>
+		/// CSV file name.
+		/// </summary>
+		public string FileName { get; }
 
 		#region IStorageEntityList<T>
 
@@ -72,7 +75,7 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					_delayActionGroup = _delayAction.CreateGroup(() =>
 					{
-						var stream = new TransactionFileStream(_fileName, FileMode.OpenOrCreate);
+						var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
 						stream.Seek(0, SeekOrigin.End);
 						return new CsvFileWriter(stream, Registry.Encoding);
 					});
@@ -253,12 +256,12 @@ namespace StockSharp.Algo.Storages.Csv
 			if (errors == null)
 				throw new ArgumentNullException(nameof(errors));
 
-			if (!File.Exists(_fileName))
+			if (!File.Exists(FileName))
 				return;
 
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
-				using (var stream = new FileStream(_fileName, FileMode.OpenOrCreate))
+				using (var stream = new FileStream(FileName, FileMode.OpenOrCreate))
 				{
 					var reader = new FastCsvReader(stream, Registry.Encoding);
 
@@ -275,7 +278,15 @@ namespace StockSharp.Algo.Storages.Csv
 							{
 								InnerCollection.Add(item);
 								AddCache(item);
-								_items.Add(key, item);
+
+								try
+								{
+									_items.Add(key, item);
+								}
+								catch (ArgumentException ex)
+								{
+									throw new InvalidOperationException(key.ToString(), ex);
+								}
 							}
 
 							currErrors = 0;
@@ -325,6 +336,12 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="item">Item.</param>
 		protected virtual void RemoveCache(T item)
 		{
+		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return FileName;
 		}
 	}
 }

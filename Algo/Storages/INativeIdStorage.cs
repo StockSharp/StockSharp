@@ -28,7 +28,8 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initialize the storage.
 		/// </summary>
-		void Init();
+		/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
+		IDictionary<string, Exception> Init();
 
 		/// <summary>
 		/// Get native security identifiers for storage. 
@@ -108,14 +109,14 @@ namespace StockSharp.Algo.Storages
 		public event Action<string, SecurityId, object> Added;
 
 		/// <inheritdoc />
-		public void Init()
+		public IDictionary<string, Exception> Init()
 		{
 			if (!Directory.Exists(_path))
 				Directory.CreateDirectory(_path);
 
 			var files = Directory.GetFiles(_path, "*.csv");
 
-			var errors = new List<Exception>();
+			var errors = new Dictionary<string, Exception>();
 
 			foreach (var fileName in files)
 			{
@@ -125,12 +126,11 @@ namespace StockSharp.Algo.Storages
 				}
 				catch (Exception ex)
 				{
-					errors.Add(ex);
+					errors.Add(fileName, ex);
 				}
 			}
 
-			if (errors.Count > 0)
-				throw new AggregateException(errors);
+			return errors;
 		}
 
 		/// <inheritdoc />
@@ -212,7 +212,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var fileName = Path.Combine(_path, name + ".csv");
 
-				var appendHeader = !File.Exists(fileName);
+				var appendHeader = !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
 
 				using (var writer = new CsvFileWriter(new TransactionFileStream(fileName, FileMode.Append)))
 				{
@@ -345,8 +345,9 @@ namespace StockSharp.Algo.Storages
 			remove => _added -= value;
 		}
 
-		void INativeIdStorage.Init()
+		IDictionary<string, Exception> INativeIdStorage.Init()
 		{
+			return new Dictionary<string, Exception>();
 		}
 
 		bool INativeIdStorage.TryAdd(string name, SecurityId securityId, object nativeId, bool isPersistable)

@@ -79,7 +79,8 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initialize the storage.
 		/// </summary>
-		void Init();
+		/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
+		IDictionary<IExtendedInfoStorageItem, Exception> Init();
 
 		/// <summary>
 		/// To get storage for the specified name.
@@ -402,18 +403,28 @@ namespace StockSharp.Algo.Storages
 
 		IEnumerable<IExtendedInfoStorageItem> IExtendedInfoStorage.Storages => _items.CachedValues;
 
-		/// <summary>
-		/// Initialize the storage.
-		/// </summary>
-		public void Init()
+		/// <inheritdoc />
+		public IDictionary<IExtendedInfoStorageItem, Exception> Init()
 		{
+			var errors = new Dictionary<IExtendedInfoStorageItem, Exception>();
+
 			foreach (var fileName in Directory.GetFiles(_path, "*.csv"))
 			{
 				var item = new CsvExtendedInfoStorageItem(this, fileName);
+
 				_items.Add(Path.GetFileNameWithoutExtension(fileName), item);
 
-				item.Init();
+				try
+				{
+					item.Init();
+				}
+				catch (Exception ex)
+				{
+					errors.Add(item, ex);
+				}
 			}
+
+			return errors;
 		}
 	}
 }

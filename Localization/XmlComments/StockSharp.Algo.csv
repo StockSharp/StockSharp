@@ -2221,6 +2221,7 @@ P:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Registry/summary;DocStr9193
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.#ctor(StockSharp.Algo.Storages.Csv.CsvEntityRegistry,System.String)/summary;DocStr1
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.#ctor(StockSharp.Algo.Storages.Csv.CsvEntityRegistry,System.String)/param/registry;DocStr9193
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.#ctor(StockSharp.Algo.Storages.Csv.CsvEntityRegistry,System.String)/param/fileName;DocStr9396
+P:StockSharp.Algo.Storages.Csv.CsvEntityList`1.FileName/summary;DocStr9396
 P:StockSharp.Algo.Storages.Csv.CsvEntityList`1.DelayAction/summary;DocStr1335
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Save(`0)/summary;DocStr9398
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.Save(`0)/param/entity;DocStr9399
@@ -2251,6 +2252,7 @@ M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.UpdateCache(`0)/summary;DocStr977
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.UpdateCache(`0)/param/item;DocStr9776
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.RemoveCache(`0)/summary;DocStr9777
 M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.RemoveCache(`0)/param/item;DocStr9776
+M:StockSharp.Algo.Storages.Csv.CsvEntityList`1.ToString/inheritdoc;DocStr8459
 T:StockSharp.Algo.Storages.Csv.CsvEntityRegistry/summary;DocStr9193
 P:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Path/summary;DocStr9194
 P:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Storage/summary;DocStr1336
@@ -2266,7 +2268,7 @@ M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.#ctor(System.String)/param/path
 M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Add``1(StockSharp.Algo.Storages.Csv.CsvEntityList{``0})/summary;DocStr9404
 M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Add``1(StockSharp.Algo.Storages.Csv.CsvEntityList{``0})/typeparam/T;DocStr9395
 M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Add``1(StockSharp.Algo.Storages.Csv.CsvEntityList{``0})/param/list;DocStr9405
-M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Init/summary;DocStr9249
+M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Init/inheritdoc;DocStr8459
 T:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1/summary;DocStr8583
 T:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1/typeparam/TCandleMessage;DocStr9804
 M:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1.#ctor(StockSharp.Messages.SecurityId,System.Object,System.Text.Encoding)/summary;DocStr1
@@ -2439,6 +2441,7 @@ M:StockSharp.Algo.Storages.SecurityIdMapping.op_Explicit(StockSharp.Algo.Storage
 T:StockSharp.Algo.Storages.ISecurityMappingStorage/summary;DocStr9935
 E:StockSharp.Algo.Storages.ISecurityMappingStorage.Changed/summary;DocStr9687
 M:StockSharp.Algo.Storages.ISecurityMappingStorage.Init/summary;DocStr9249
+M:StockSharp.Algo.Storages.ISecurityMappingStorage.Init/returns;DocStr10406
 M:StockSharp.Algo.Storages.ISecurityMappingStorage.GetStorageNames/summary;DocStr9936
 M:StockSharp.Algo.Storages.ISecurityMappingStorage.GetStorageNames/returns;DocStr9641
 M:StockSharp.Algo.Storages.ISecurityMappingStorage.Get(System.String)/summary;DocStr9937
@@ -2531,6 +2534,7 @@ M:StockSharp.Algo.Storages.IExtendedInfoStorageItem.Delete(StockSharp.Messages.S
 T:StockSharp.Algo.Storages.IExtendedInfoStorage/summary;DocStr9374
 P:StockSharp.Algo.Storages.IExtendedInfoStorage.Storages/summary;DocStr9643
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Init/summary;DocStr9249
+M:StockSharp.Algo.Storages.IExtendedInfoStorage.Init/returns;DocStr10406
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Get(System.String)/summary;DocStr9644
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Get(System.String)/param/storageName;DocStr429
 M:StockSharp.Algo.Storages.IExtendedInfoStorage.Get(System.String)/returns;Str1405
@@ -2546,10 +2550,11 @@ T:StockSharp.Algo.Storages.CsvExtendedInfoStorage/summary;DocStr9379
 M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.#ctor(System.String)/param/path;DocStr9340
 P:StockSharp.Algo.Storages.CsvExtendedInfoStorage.DelayAction/summary;DocStr1335
-M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.Init/summary;DocStr9249
+M:StockSharp.Algo.Storages.CsvExtendedInfoStorage.Init/inheritdoc;DocStr8459
 T:StockSharp.Algo.Storages.INativeIdStorage/summary;DocStr9329
 E:StockSharp.Algo.Storages.INativeIdStorage.Added/summary;DocStr9687
 M:StockSharp.Algo.Storages.INativeIdStorage.Init/summary;DocStr9249
+M:StockSharp.Algo.Storages.INativeIdStorage.Init/returns;DocStr10406
 M:StockSharp.Algo.Storages.INativeIdStorage.Get(System.String)/summary;DocStr9330
 M:StockSharp.Algo.Storages.INativeIdStorage.Get(System.String)/param/name;DocStr429
 M:StockSharp.Algo.Storages.INativeIdStorage.Get(System.String)/returns;DocStr9331
@@ -2817,6 +2822,7 @@ P:StockSharp.Algo.Storages.IEntityRegistry.Securities/summary;DocStr1564
 P:StockSharp.Algo.Storages.IEntityRegistry.Portfolios/summary;DocStr1565
 P:StockSharp.Algo.Storages.IEntityRegistry.Positions/summary;DocStr1566
 M:StockSharp.Algo.Storages.IEntityRegistry.Init/summary;DocStr9249
+M:StockSharp.Algo.Storages.IEntityRegistry.Init/returns;DocStr10406
 T:StockSharp.Algo.Storages.IMarketDataSerializer/summary;DocStr1280
 P:StockSharp.Algo.Storages.IMarketDataSerializer.Format/summary;StorageFormat
 P:StockSharp.Algo.Storages.IMarketDataSerializer.TimePrecision/summary;DocStr9660
