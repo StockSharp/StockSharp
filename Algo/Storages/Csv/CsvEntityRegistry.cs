@@ -321,6 +321,7 @@ namespace StockSharp.Algo.Storages.Csv
 				public OptionTypes? OptionType { get; set; }
 				public CurrencyTypes? Currency { get; set; }
 				public SecurityExternalId ExternalId { get; set; }
+				public SecurityTypes? UnderlyingSecurityType { get; set; }
 
 				public Security ToSecurity(SecurityCsvList list, string id)
 				{
@@ -344,6 +345,7 @@ namespace StockSharp.Algo.Storages.Csv
 						OptionType = OptionType,
 						Currency = Currency,
 						ExternalId = ExternalId.Clone(),
+						UnderlyingSecurityType = UnderlyingSecurityType,
 					};
 				}
 
@@ -366,10 +368,28 @@ namespace StockSharp.Algo.Storages.Csv
 					OptionType = security.OptionType;
 					Currency = security.Currency;
 					ExternalId = security.ExternalId.Clone();
+					UnderlyingSecurityType = security.UnderlyingSecurityType;
 				}
 			}
 
 			private readonly Dictionary<string, LiteSecurity> _cache = new Dictionary<string, LiteSecurity>(StringComparer.InvariantCultureIgnoreCase);
+
+			private static bool IsChanged(string original, string cached)
+			{
+				if (!original.IsEmpty())
+					return cached.IsEmpty() || !cached.CompareIgnoreCase(original);
+
+				return false;
+			}
+
+			private static bool IsChanged<T>(T? original, T? cached)
+				where T : struct
+			{
+				if (original != null)
+					return cached == null || original.Value.Equals(cached.Value);
+
+				return false;
+			}
 
 			protected override bool IsChanged(Security security)
 			{
@@ -378,52 +398,55 @@ namespace StockSharp.Algo.Storages.Csv
 				if (liteSec == null)
 					throw new ArgumentOutOfRangeException(nameof(security), security.Id, LocalizedStrings.Str2736);
 
-				if (!security.Name.IsEmpty() && (liteSec.Name == null || !liteSec.Name.CompareIgnoreCase(security.Name)))
+				if (IsChanged(security.Name, liteSec.Name))
 					return true;
 
-				if (!security.Code.IsEmpty() && (liteSec.Code == null || !liteSec.Code.CompareIgnoreCase(security.Code)))
+				if (IsChanged(security.Code, liteSec.Code))
 					return true;
 
-				if (!security.Class.IsEmpty() && (liteSec.Class == null || !liteSec.Class.CompareIgnoreCase(security.Class)))
+				if (IsChanged(security.Class, liteSec.Class))
 					return true;
 
-				if (!security.ShortName.IsEmpty() && (liteSec.ShortName == null || !liteSec.ShortName.CompareIgnoreCase(security.ShortName)))
+				if (IsChanged(security.ShortName, liteSec.ShortName))
 					return true;
 
-				if (security.Board != null && (liteSec.Board == null || !liteSec.Board.CompareIgnoreCase(security.Board.Code)))
+				if (security.Board != null && (liteSec.Board.IsEmpty() || !liteSec.Board.CompareIgnoreCase(security.Board.Code)))
 					return true;
 
-				if (!security.UnderlyingSecurityId.IsEmpty() && (liteSec.UnderlyingSecurityId == null || !liteSec.UnderlyingSecurityId.CompareIgnoreCase(security.UnderlyingSecurityId)))
+				if (IsChanged(security.UnderlyingSecurityId, liteSec.UnderlyingSecurityId))
 					return true;
 
-				if (security.PriceStep != null && liteSec.PriceStep != security.PriceStep)
+				if (IsChanged(security.UnderlyingSecurityType, liteSec.UnderlyingSecurityType))
 					return true;
 
-				if (security.VolumeStep != null && liteSec.VolumeStep != security.VolumeStep)
+				if (IsChanged(security.PriceStep, liteSec.PriceStep))
 					return true;
 
-				if (security.Multiplier != null && liteSec.Multiplier != security.Multiplier)
+				if (IsChanged(security.VolumeStep, liteSec.VolumeStep))
 					return true;
 
-				if (security.Decimals != null && liteSec.Decimals != security.Decimals)
+				if (IsChanged(security.Multiplier, liteSec.Multiplier))
 					return true;
 
-				if (security.Type != null && liteSec.Type != security.Type)
+				if (IsChanged(security.Decimals, liteSec.Decimals))
 					return true;
 
-				if (security.ExpiryDate != null && liteSec.ExpiryDate != security.ExpiryDate)
+				if (IsChanged(security.Type, liteSec.Type))
 					return true;
 
-				if (security.SettlementDate != null && liteSec.SettlementDate != security.SettlementDate)
+				if (IsChanged(security.ExpiryDate, liteSec.ExpiryDate))
 					return true;
 
-				if (security.Strike != null && liteSec.Strike != security.Strike)
+				if (IsChanged(security.SettlementDate, liteSec.SettlementDate))
 					return true;
 
-				if (security.OptionType != null && liteSec.OptionType != security.OptionType)
+				if (IsChanged(security.Strike, liteSec.Strike))
 					return true;
 
-				if (security.Currency != null && liteSec.Currency != security.Currency)
+				if (IsChanged(security.OptionType, liteSec.OptionType))
+					return true;
+
+				if (IsChanged(security.Currency, liteSec.Currency))
 					return true;
 
 				if (!security.ExternalId.IsDefault() && liteSec.ExternalId != security.ExternalId)
@@ -487,8 +510,11 @@ namespace StockSharp.Algo.Storages.Csv
 						InteractiveBrokers = reader.ReadNullableInt(),
 						Plaza = reader.ReadString()
 					},
-					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
+					UnderlyingSecurityType = (reader.ColumnCurr + 1) < reader.ColumnCount ? reader.ReadNullableEnum<SecurityTypes>() : null,
 				};
+
+				if (security.UnderlyingSecurityType != null)
+					Console.WriteLine(security.Code);
 
 				return security.ToSecurity(this, id);
 			}
@@ -522,7 +548,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.ExternalId.IQFeed,
 					data.ExternalId.InteractiveBrokers.To<string>(),
 					data.ExternalId.Plaza,
-					//Serialize(data.ExtensionInfo)
+					data.UnderlyingSecurityType.To<string>(),
 				});
 			}
 
