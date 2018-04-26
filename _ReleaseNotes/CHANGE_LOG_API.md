@@ -3,7 +3,7 @@ StockSharp API Change log
 ## current:
 * (feature) ImportSettingsPanel control.
 * (feature) CSV storages. Provide error details as return from Init method.
-* (feature) CsvEntityRegistry. Store UnderlyingSecurityType.
+* (feature) CsvEntityRegistry. Store UnderlyingSecurityType, CfiCode, IssueDate, IssueSize.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.

@@ -322,6 +322,10 @@ namespace StockSharp.Algo.Storages.Csv
 				public CurrencyTypes? Currency { get; set; }
 				public SecurityExternalId ExternalId { get; set; }
 				public SecurityTypes? UnderlyingSecurityType { get; set; }
+				public string BinaryOptionType { get; set; }
+				public string CfiCode { get; set; }
+				public DateTimeOffset? IssueDate { get; set; }
+				public decimal? IssueSize { get; set; }
 
 				public Security ToSecurity(SecurityCsvList list, string id)
 				{
@@ -346,6 +350,10 @@ namespace StockSharp.Algo.Storages.Csv
 						Currency = Currency,
 						ExternalId = ExternalId.Clone(),
 						UnderlyingSecurityType = UnderlyingSecurityType,
+						BinaryOptionType = BinaryOptionType,
+						CfiCode = CfiCode,
+						IssueDate = IssueDate,
+						IssueSize = IssueSize,
 					};
 				}
 
@@ -369,6 +377,10 @@ namespace StockSharp.Algo.Storages.Csv
 					Currency = security.Currency;
 					ExternalId = security.ExternalId.Clone();
 					UnderlyingSecurityType = security.UnderlyingSecurityType;
+					BinaryOptionType = security.BinaryOptionType;
+					CfiCode = security.CfiCode;
+					IssueDate = security.IssueDate;
+					IssueSize = security.IssueSize;
 				}
 			}
 
@@ -452,6 +464,18 @@ namespace StockSharp.Algo.Storages.Csv
 				if (!security.ExternalId.IsDefault() && liteSec.ExternalId != security.ExternalId)
 					return true;
 
+				if (IsChanged(security.BinaryOptionType, liteSec.BinaryOptionType))
+					return true;
+
+				if (IsChanged(security.CfiCode, liteSec.CfiCode))
+					return true;
+
+				if (IsChanged(security.IssueDate, liteSec.IssueDate))
+					return true;
+
+				if (IsChanged(security.IssueSize, liteSec.IssueSize))
+					return true;
+
 				return false;
 			}
 
@@ -510,11 +534,16 @@ namespace StockSharp.Algo.Storages.Csv
 						InteractiveBrokers = reader.ReadNullableInt(),
 						Plaza = reader.ReadString()
 					},
-					UnderlyingSecurityType = (reader.ColumnCurr + 1) < reader.ColumnCount ? reader.ReadNullableEnum<SecurityTypes>() : null,
 				};
 
-				if (security.UnderlyingSecurityType != null)
-					Console.WriteLine(security.Code);
+				if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+				{
+					security.UnderlyingSecurityType = reader.ReadNullableEnum<SecurityTypes>();
+					security.BinaryOptionType = reader.ReadString();
+					security.CfiCode = reader.ReadString();
+					security.IssueDate = ReadNullableDateTime(reader);
+					security.IssueSize = reader.ReadNullableDecimal();
+				}
 
 				return security.ToSecurity(this, id);
 			}
@@ -549,6 +578,10 @@ namespace StockSharp.Algo.Storages.Csv
 					data.ExternalId.InteractiveBrokers.To<string>(),
 					data.ExternalId.Plaza,
 					data.UnderlyingSecurityType.To<string>(),
+					data.BinaryOptionType,
+					data.CfiCode,
+					data.IssueDate?.UtcDateTime.ToString(_dateTimeFormat),
+					data.IssueSize.To<string>(),
 				});
 			}
 
