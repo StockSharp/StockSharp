@@ -11,6 +11,7 @@ StockSharp API Change log
 * (bug) InteractiveBrokers. End date for candles request fix https://stocksharp.ru/posts/m/43390/.
 * (bug) InteractiveBrokers. SecurityLookup error response handling fix.
 * (bug) InteractiveBrokers. Candles request fix.
+* (feature) PortfolioPicker.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.

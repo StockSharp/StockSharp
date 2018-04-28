@@ -1162,6 +1162,54 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.PortfolioPicker">
+      <summary>
+            The visual component for <see cref="T:StockSharp.BusinessEntities.Portfolio" /> searching and selection.
+            </summary>
+      <summary>
+            PortfolioPicker
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PortfolioPicker.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PortfolioPicker" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PortfolioPicker.SelectedPortfolio">
+      <summary>
+            The selected portfolio.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PortfolioPicker.Portfolios">
+      <summary>
+            Available portfolios.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PortfolioPicker.PortfolioFilter">
+      <summary>
+            The current filter by the portfolio.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PortfolioPicker.PortfolioSelected">
+      <summary>
+            The selected <see cref="T:StockSharp.BusinessEntities.Portfolio" /> change events.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PortfolioPicker.PortfolioDoubleClicked">
+      <summary>
+            Event of double-clicking the mouse on the selected <see cref="T:StockSharp.BusinessEntities.Portfolio" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PortfolioPicker.GridChanged">
+      <summary>
+            The table change event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PortfolioPicker.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PositionChangeGrid">
       <summary>
             The table to display a message <see cref="T:StockSharp.Messages.PositionChangeMessage" />.
@@ -5363,7 +5411,7 @@
     </member>
     <member name="T:StockSharp.Xaml.SecurityPicker">
       <summary>
-            The visual component for instrument searching and selection.
+            The visual component for <see cref="T:StockSharp.BusinessEntities.Security" /> searching and selection.
             </summary>
       <summary>
             SecurityPicker
@@ -5406,12 +5454,12 @@
     </member>
     <member name="E:StockSharp.Xaml.SecurityPicker.SecurityDoubleClick">
       <summary>
-            Event of double-clicking the mouse on the selected instrument.
+            Event of double-clicking the mouse on the selected <see cref="T:StockSharp.BusinessEntities.Security" />.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.SecurityPicker.SecuritySelected">
       <summary>
-            The selected instrument change events.
+            The selected <see cref="T:StockSharp.BusinessEntities.Security" /> change events.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.SecurityPicker.GridChanged">
