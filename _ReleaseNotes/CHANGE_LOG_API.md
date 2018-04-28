@@ -12,6 +12,7 @@ StockSharp API Change log
 * (bug) InteractiveBrokers. SecurityLookup error response handling fix.
 * (bug) InteractiveBrokers. Candles request fix.
 * (feature) PortfolioPicker.
+* (feature) DukasCopyHistorySource.GetCandles. Sides -> Level1Fields.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.

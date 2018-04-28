@@ -165,14 +165,14 @@
       <param name="date">The time is specified up to date.</param>
       <returns>Historical ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Level1Fields)">
       <summary>
             To download historical timeframe candles.
             </summary>
       <param name="security">Security.</param>
       <param name="timeFrame">Time-frame. Possible values <see cref="P:StockSharp.Algo.History.Forex.DukasCopyHistorySource.TimeFrames" />.</param>
       <param name="date">Date.</param>
-      <param name="side">Quote type (bid or ask).</param>
+      <param name="field">Quote type (<see cref="F:StockSharp.Messages.Level1Fields.BestBidPrice" /> or <see cref="F:StockSharp.Messages.Level1Fields.BestAskPrice" />).</param>
       <returns>Historical time-frames.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Forex.DukasCopyHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
