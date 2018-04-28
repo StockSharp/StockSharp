@@ -193,7 +193,7 @@ namespace StockSharp.Algo.Candles
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.Str213Key,
-			Description = LocalizedStrings.VolumeProfileCalcKey,
+			Description = LocalizedStrings.CandlesBuildSourceKey,
 			GroupName = LocalizedStrings.BuildKey,
 			Order = 21)]
 		public MarketDataTypes? BuildCandlesFrom { get; set; }

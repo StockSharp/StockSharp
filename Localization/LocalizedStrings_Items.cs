@@ -47756,5 +47756,15 @@ namespace StockSharp.Localization
 		/// The count of loaded data has reached the value {0}. To download more, you need to increase the limit.
 		/// </summary>
 		public static string IncreaseLimit => GetString(IncreaseLimitKey);
+
+		/// <summary>
+		/// Candles build source (tick trades, order book, level1 etc.).
+		/// </summary>
+		public const string CandlesBuildSourceKey = nameof(CandlesBuildSource);
+
+		/// <summary>
+		/// Candles build source (tick trades, order book, level1 etc.).
+		/// </summary>
+		public static string CandlesBuildSource => GetString(CandlesBuildSourceKey);
 	}
 }
