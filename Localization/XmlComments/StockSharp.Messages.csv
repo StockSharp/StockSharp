@@ -996,6 +996,8 @@ M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageType
 M:StockSharp.Messages.OrderRegisterMessage.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
 M:StockSharp.Messages.OrderRegisterMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.OrderRegisterMessage.Clone/returns;DocStr1116
+M:StockSharp.Messages.OrderRegisterMessage.CopyTo(StockSharp.Messages.OrderRegisterMessage)/summary;DocStr629
+M:StockSharp.Messages.OrderRegisterMessage.CopyTo(StockSharp.Messages.OrderRegisterMessage)/param/destination;DocStr630
 M:StockSharp.Messages.OrderRegisterMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.OrderRegisterMessage.ToString/returns;DocStr50
 T:StockSharp.Messages.OrderReplaceMessage/summary;DocStr4391

@@ -1187,7 +1187,7 @@
     </member>
     <member name="P:StockSharp.Xaml.PortfolioPicker.PortfolioFilter">
       <summary>
-            The current filter by the portfolio.
+            The current filter by the portfolios.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.PortfolioPicker.PortfolioSelected">
