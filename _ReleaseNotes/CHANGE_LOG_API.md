@@ -4,8 +4,13 @@ StockSharp API Change log
 * (feature) ImportSettingsPanel control.
 * (feature) CSV storages. Provide error details as return from Init method.
 * (feature) CsvEntityRegistry. Store UnderlyingSecurityType, CfiCode, IssueDate, IssueSize.
-* (feature) MarketDepthControl. GetOrders method
-* (feature) MarketDepthControl. CellMouseLeftDoubleClick event
+* (feature) MarketDepthControl. GetOrders method.
+* (feature) MarketDepthControl. CellMouseLeftDoubleClick event.
+* (feature) InteractiveBrokers. Min10, Min 20, Hour2, Hour3, Hour4, Hour8 timeframes support.
+* (feature) InteractiveBrokers. Historical data types AdjustedLast, RebateRate, FeeRate support.
+* (bug) InteractiveBrokers. End date for candles request fix https://stocksharp.ru/posts/m/43390/.
+* (bug) InteractiveBrokers. SecurityLookup error response handling fix.
+* (bug) InteractiveBrokers. Candles request fix.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
