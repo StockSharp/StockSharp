@@ -11668,24 +11668,14 @@ namespace StockSharp.Localization
 		public static string Str1216Params => GetString(Str1216ParamsKey);
 
 		/// <summary>
-		/// Stock exchange board with code {0} not found.
+		/// Exchange board with code {0} not found.
 		/// </summary>
 		public const string Str1217ParamsKey = nameof(Str1217Params);
 
 		/// <summary>
-		/// Stock exchange board with code {0} not found.
+		/// Exchange board with code {0} not found.
 		/// </summary>
 		public static string Str1217Params => GetString(Str1217ParamsKey);
-
-		/// <summary>
-		/// Security with code {0} not found.
-		/// </summary>
-		public const string Str1218ParamsKey = nameof(Str1218Params);
-
-		/// <summary>
-		/// Security with code {0} not found.
-		/// </summary>
-		public static string Str1218Params => GetString(Str1218ParamsKey);
 
 		/// <summary>
 		/// Invalid value.

@@ -1168,7 +1168,6 @@ Str1213;Price step size is less than allowed.;Размер шага цены м�
 Str1214;Quotes collection is not equally directed.;Коллекция котировок не одинаково направлена.
 Str1216Params;Security {0} does not contain information about the exchange.;Инструмент {0} не содержит информации о бирже.
 Str1217Params;Exchange board with code {0} not found.;Биржевая площадка с кодом {0} не найдена.
-Str1218Params;Security with code {0} not found.;Инструмент с кодом {0} не найден.
 Str1219;Invalid value.;Недопустимое значение.
 Str1220Params;Change {0} threw an exception.;Изменение {0} выбросило исключение.
 Analytics;Analytics;Аналитика

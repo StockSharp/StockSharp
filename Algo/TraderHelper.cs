@@ -2179,7 +2179,7 @@ namespace StockSharp.Algo
 					if (security == null)
 					{
 						if (throwIfNotExists)
-							throw new InvalidOperationException(LocalizedStrings.Str1218Params.Put(code));
+							throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(code));
 
 						continue;
 					}
