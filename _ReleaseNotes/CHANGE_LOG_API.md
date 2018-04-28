@@ -17,6 +17,8 @@ StockSharp API Change log
 * (feature) OfflineMessageAdapter. Support replace for pending orders.
 * (bug) Real time candles subscription determine fix.
 * (bug) InteractiveBrokers. Native order ids fix.
+* (bug) Charting. Fix order creation for non first panel.
+* (feature) Charting. Auto select Security and Portfolio.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.

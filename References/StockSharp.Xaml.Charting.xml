@@ -425,6 +425,11 @@
             Do not allow user to edit the order from chart.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Element">
+      <summary>
+            The chart element representing active orders.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartActiveOrderInfo" />.

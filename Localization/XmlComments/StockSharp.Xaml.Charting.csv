@@ -109,6 +109,7 @@ P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.PriceStep/summary;DocStr4537
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.ChartX/summary;DocStr8949
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.AutoRemoveFromChart/summary;DocStr8950
 P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.IsFrozen/summary;DocStr8951
+P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Element/summary;DocStr8955
 M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.UpdateOrderState(StockSharp.BusinessEntities.Order,System.Boolean,System.Boolean)/summary;DocStr8952
 M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.UpdateOrderState(StockSharp.BusinessEntities.Order,System.Boolean,System.Boolean)/param/order;DocStr2163
