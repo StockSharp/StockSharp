@@ -13,6 +13,7 @@ StockSharp API Change log
 * (bug) InteractiveBrokers. Candles request fix.
 * (feature) PortfolioPicker.
 * (feature) DukasCopyHistorySource.GetCandles. Sides -> Level1Fields.
+* (feature) OrderRegisterMessage. CopyTo method.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
