@@ -163,6 +163,19 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// To record an error to the log.
 		/// </summary>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
+		public static void AddErrorLog(this string message, params object[] args)
+		{
+			var manager = ConfigManager.TryGetService<LogManager>();
+
+			if (manager != null)
+				manager.Application.AddMessage(LogLevels.Error, message, args);
+		}
+
+		/// <summary>
+		/// To record an error to the log.
+		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
 		/// <param name="message">Text message.</param>
 		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>

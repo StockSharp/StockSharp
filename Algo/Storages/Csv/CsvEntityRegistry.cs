@@ -712,12 +712,6 @@ namespace StockSharp.Algo.Storages.Csv
 					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
 				};
 
-				if (position.Security == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1218Params.Put(secId));
-
-				if (position.Portfolio == null)
-					throw new InvalidOperationException(LocalizedStrings.Str891);
-
 				return position;
 			}
 
