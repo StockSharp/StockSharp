@@ -16,6 +16,7 @@ StockSharp API Change log
 * (feature) OrderRegisterMessage. CopyTo method.
 * (feature) OfflineMessageAdapter. Support replace for pending orders.
 * (bug) Real time candles subscription determine fix.
+* (bug) InteractiveBrokers. Native order ids fix.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
