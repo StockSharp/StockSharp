@@ -701,7 +701,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.From == null && message.To == null;
+			return /*message.From == null && */message.To == null;
 		}
 
 		/// <summary>

@@ -452,7 +452,7 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				msg.From = info.LastTime;
 
-				if (msg.To != null && msg.From >= msg.To)
+				if (/*msg.To != null && */msg.From >= msg.To)
 					return;
 			}
 

@@ -436,7 +436,7 @@ namespace StockSharp.Algo.Storages
 					{
 						clone.From = lastTime;
 
-						if (clone.To != null && clone.From >= clone.To)
+						if (/*clone.To != null && */clone.From >= clone.To)
 							return;
 					}
 

@@ -15,6 +15,7 @@ StockSharp API Change log
 * (feature) DukasCopyHistorySource.GetCandles. Sides -> Level1Fields.
 * (feature) OrderRegisterMessage. CopyTo method.
 * (feature) OfflineMessageAdapter. Support replace for pending orders.
+* (bug) Real time candles subscription determine fix.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
