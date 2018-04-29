@@ -274,6 +274,19 @@ namespace StockSharp.Algo.Candles.Compression
 					}
 				}
 
+				if (!msg.IsRealTimeSubscription())
+				{
+					if (msg.From >= msg.To)
+					{
+						RaiseNewOutMessage(new MarketDataMessage
+						{
+							OriginalTransactionId = msg.TransactionId,
+						});
+
+						return;
+					}
+				}
+
 				var info = new SeriesInfo
 				{
 					MarketDataMessage = (MarketDataMessage)msg.Clone(),
@@ -447,14 +460,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var msg = (MarketDataMessage)info.MarketDataMessage.Clone();
 			msg.TransactionId = info.TransactionId;
-
-			if (!isBack && !msg.IsRealTimeSubscription())
-			{
-				msg.From = info.LastTime;
-
-				if (/*msg.To != null && */msg.From >= msg.To)
-					return;
-			}
 
 			var reseted = ResetMarketDataMessageArg(info, msg);
 
