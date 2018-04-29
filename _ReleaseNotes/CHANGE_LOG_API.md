@@ -23,6 +23,9 @@ StockSharp API Change log
 * (bug) SampleLogging fix. Support Verbose.
 * (feature) SampleFix. Market data adapter switch FIX<->FAST.
 * (bug) LogControl. Fix themes https://stocksharp.ru/forum/9253/kak-zapretit-izmenenie-svoistv-kontrola/
+* (bug) FIX connector. CFI code sending fix.
+* (feature) FIX connector. FixTags.Product support.
+* (feature) FIX connector. AstsFixDialect splitted on Currency and Equity dialects.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.

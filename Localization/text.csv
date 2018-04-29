@@ -14879,3 +14879,6 @@ DocStr10420;8 hour time frame;8-часовой тайм-фрейм
 DocStr10421;The method is called when the input socket is connected;Метод вызывается, когда входной сокет соединяется
 DocStr10422;The method is called when the input socket is disconnected;Метод вызывается, когда входной сокет разъединяется
 DocStr10423;The current filter by the portfolios;Текущий фильтр по портфелям
+DocStr10424;Indicates the type of product the security is associated with;Указывает тип продукта, с которым связан инструмент
+DocStr10425;ASTS (Currencies);ASTS (валютный)
+DocStr10426;ASTS (Equities);ASTS (фондовый)

@@ -4436,6 +4436,63 @@
             Margin close.
             </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.Product">
+      <summary>
+            Indicates the type of product the security is associated with.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Agency">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Commodity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Corporate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Currency">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Equity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Government">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Index">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Loan">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.MoneyMarket">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Mortgage">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Municipal">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Other">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Product.Financing">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.Party">
       <summary>
             Party.
@@ -5371,6 +5428,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.NoPartyIDs">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.Product">
       <summary>
       </summary>
     </member>
@@ -6377,9 +6438,14 @@
             CFH.
             </summary>
     </member>
-    <member name="F:StockSharp.Fix.FixDialects.ASTS">
+    <member name="F:StockSharp.Fix.FixDialects.ASTS_Currencies">
       <summary>
-            ASTS.
+            ASTS (Currencies).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.ASTS_Equities">
+      <summary>
+            ASTS (Equities).
             </summary>
     </member>
     <member name="F:StockSharp.Fix.FixDialects.Spectra">
