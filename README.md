@@ -31,7 +31,7 @@ S#.Designer is a free designer of trading strategies. The intuitive interface. S
 
 ## S#.Data
 
-S#.Data is a free application for downloading and storing market data from various sources (35+). [More info...](http://stocksharp.com/products/hydra/)
+S#.Data is a free application for downloading and storing market data from various sources (35+). [More info...](https://stocksharp.com/products/hydra/)
 
 ## S#.API
 
