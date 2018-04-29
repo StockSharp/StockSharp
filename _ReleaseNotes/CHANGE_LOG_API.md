@@ -20,6 +20,7 @@ StockSharp API Change log
 * (bug) Charting. Fix order creation for non first panel.
 * (feature) Charting. Auto select Security and Portfolio.
 * (bug) CsvEntityRegistry. Securities IsChanged fix (new empty values).
+* (bug) SampleLogging fix. Support Verbose.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
