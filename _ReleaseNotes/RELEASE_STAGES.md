@@ -1,12 +1,12 @@
 # Development stage
 
-[S#.Designer](http://stocksharp.com/products/designer/) - stable.
+[S#.Designer](https://stocksharp.com/products/designer/) - stable.
 
-[S#.Data](http://stocksharp.com/products/hydra/) - stable.
+[S#.Data](https://stocksharp.com/products/hydra/) - stable.
 
-[S#.Terminal](http://stocksharp.com/products/terminal/) - beta.
+[S#.Terminal](https://stocksharp.com/products/terminal/) - beta.
 
-[S#.API](http://stocksharp.com/products/api/) - stable.
+[S#.API](https://stocksharp.com/products/api/) - stable.
 
 # Connectors development stage
 
@@ -22,7 +22,7 @@
 | FIX/FAST | Stable |
 | IQFeed | Stable |
 | ITCH | Stable |
-| InteractiveBrokers | Beta |
+| InteractiveBrokers | Stable |
 | LMAX | Stable |
 | MatLab | Stable |
 | Oanda | Stable |
@@ -32,12 +32,36 @@
 | Sterling | Stable |
 | QuantHouse | Beta |
 
-## BitCoin
+## Crypto
 
 | Connnector | Stage |
 | --- |:---:|
 | BTCE | Stable |
-| BitStamp | Beta |
+| BitStamp | Stable |
+| Bitfinex | Stable |
+| Coinbase | Stable |
+| Kraken | Stable |
+| Poloniex | Stable |
+| GDAX | Stable |
+| Bittrex | Stable |
+| Bithumb | Stable |
+| HitBTC | Stable |
+| OKCoin | Stable |
+| Coincheck | Stable |
+| Binance | Stable |
+| Liqui | Stable |
+| CEX.IO | Stable |
+| Cryptopia | Stable |
+| OKEx | Stable |
+| BitMEX | Stable |
+| YoBit | Stable |
+| Livecoin | Stable |
+| EXMO | Stable |
+| Deribit | Stable |
+| Huobi | Stable |
+| KuCoin | Stable |
+| BITEXBOOK | Planning |
+| CoinExchange | Stable |
 
 ## Russian
 
