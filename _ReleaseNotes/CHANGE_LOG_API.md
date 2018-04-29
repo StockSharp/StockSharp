@@ -22,6 +22,7 @@ StockSharp API Change log
 * (bug) CsvEntityRegistry. Securities IsChanged fix (new empty values).
 * (bug) SampleLogging fix. Support Verbose.
 * (feature) SampleFix. Market data adapter switch FIX<->FAST.
+* (bug) LogControl. Fix themes https://stocksharp.ru/forum/9253/kak-zapretit-izmenenie-svoistv-kontrola/
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
