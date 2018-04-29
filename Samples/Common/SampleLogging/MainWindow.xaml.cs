@@ -69,6 +69,7 @@ namespace SampleLogging
 				case LogLevels.Debug:
 				case LogLevels.Info:
 				case LogLevels.Off:
+				case LogLevels.Verbose:
 					_testSource.AddInfoLog("{0} (source)!!!".Put(level));
 					break;
 				case LogLevels.Warning:
@@ -95,6 +96,7 @@ namespace SampleLogging
 				case LogLevels.Debug:
 				case LogLevels.Info:
 				case LogLevels.Off:
+				case LogLevels.Verbose:
 					Trace.TraceInformation("{0} (trace)!!!".Put(level));
 					break;
 				case LogLevels.Warning:
