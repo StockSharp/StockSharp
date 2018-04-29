@@ -21,6 +21,7 @@ StockSharp API Change log
 * (feature) Charting. Auto select Security and Portfolio.
 * (bug) CsvEntityRegistry. Securities IsChanged fix (new empty values).
 * (bug) SampleLogging fix. Support Verbose.
+* (feature) SampleFix. Market data adapter switch FIX<->FAST.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.

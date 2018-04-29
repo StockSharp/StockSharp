@@ -69,8 +69,8 @@ namespace SampleFix
 				var ctx = new ContinueOnExceptionContext();
 				ctx.Error += ex => ex.LogError();
 
-				using (new Scope<ContinueOnExceptionContext> (ctx))
-					Trader.Load(new XmlSerializer<SettingsStorage> ().Deserialize(_settingsFile));
+				using (new Scope<ContinueOnExceptionContext>(ctx))
+					Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 			}
 
 			MarketDataSessionSettings.SelectedObject = Trader.MarketDataAdapter;
@@ -197,6 +197,27 @@ namespace SampleFix
 			{
 				Trader.Disconnect();
 			}
+		}
+
+		private void SwitchMarketData_OnClick(object sender, RoutedEventArgs e)
+		{
+			var mdAdapter = Trader.MarketDataAdapter;
+			var rootAdapter = Trader.Adapter;
+			var innerAdapters = rootAdapter.InnerAdapters;
+
+			innerAdapters.Remove(mdAdapter);
+
+			if (mdAdapter is FastMessageAdapter)
+			{
+				innerAdapters.Add(mdAdapter = new FixMessageAdapter(rootAdapter.TransactionIdGenerator));
+			}
+			else
+			{
+				innerAdapters.Add(mdAdapter = new FastMessageAdapter(rootAdapter.TransactionIdGenerator));
+			}
+
+			MarketDataSessionSettings.SelectedObject = mdAdapter;
+			MarketDataSupportedMessages.Adapter = mdAdapter;
 		}
 
 		private void OrderFailed(OrderFail fail)
