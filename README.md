@@ -49,7 +49,7 @@ StockSharp code is licensed under the [Apache License 2.0](../master/LICENSE).
   [1]: https://stocksharp.com
   [2]: https://doc.stocksharp.com
   [3]: https://github.com/StockSharp/StockSharp/releases
-  [4]: https://edu.stocksharp.com
+  [4]: https://stocksharp.com/edu/
   [5]: https://stocksharp.com/forum/
   [6]: https://stocksharp.com/broker/
   [7]: https://stocksharp.com/support/
