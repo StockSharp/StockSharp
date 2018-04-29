@@ -151,11 +151,10 @@ namespace StockSharp.Algo
 				OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
 			}
 
+			IsRestoreSubscriptionOnReconnect = isRestoreSubscriptionOnReconnect;
+
 			if (initAdapter)
-			{
-				IsRestoreSubscriptionOnReconnect = isRestoreSubscriptionOnReconnect;
 				InitAdapter();
-			}
 		}
 
 		/// <summary>
@@ -1464,9 +1463,8 @@ namespace StockSharp.Algo
 			if (storage.ContainsKey(nameof(RiskManager)))
 				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
 
-			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
-			
 			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
+			IsRestoreSubscriptionOnReconnect = storage.GetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
 			CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
 			CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
@@ -1512,9 +1510,8 @@ namespace StockSharp.Algo
 			if (RiskManager != null)
 				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
-			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
-
 			storage.SetValue(nameof(Adapter), Adapter.Save());
+			storage.SetValue(nameof(IsRestoreSubscriptionOnReconnect), IsRestoreSubscriptionOnReconnect);
 
 			storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
 			storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
