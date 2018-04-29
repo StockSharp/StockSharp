@@ -388,19 +388,19 @@ namespace StockSharp.Algo.Storages.Csv
 
 			private static bool IsChanged(string original, string cached)
 			{
-				if (!original.IsEmpty())
+				if (original.IsEmpty())
+					return !cached.IsEmpty();
+				else
 					return cached.IsEmpty() || !cached.CompareIgnoreCase(original);
-
-				return false;
 			}
 
 			private static bool IsChanged<T>(T? original, T? cached)
 				where T : struct
 			{
-				if (original != null)
+				if (original == null)
+					return cached != null;
+				else
 					return cached == null || original.Value.Equals(cached.Value);
-
-				return false;
 			}
 
 			protected override bool IsChanged(Security security)
@@ -420,9 +420,6 @@ namespace StockSharp.Algo.Storages.Csv
 					return true;
 
 				if (IsChanged(security.ShortName, liteSec.ShortName))
-					return true;
-
-				if (security.Board != null && (liteSec.Board.IsEmpty() || !liteSec.Board.CompareIgnoreCase(security.Board.Code)))
 					return true;
 
 				if (IsChanged(security.UnderlyingSecurityId, liteSec.UnderlyingSecurityId))
@@ -461,9 +458,6 @@ namespace StockSharp.Algo.Storages.Csv
 				if (IsChanged(security.Currency, liteSec.Currency))
 					return true;
 
-				if (!security.ExternalId.IsDefault() && liteSec.ExternalId != security.ExternalId)
-					return true;
-
 				if (IsChanged(security.BinaryOptionType, liteSec.BinaryOptionType))
 					return true;
 
@@ -474,6 +468,20 @@ namespace StockSharp.Algo.Storages.Csv
 					return true;
 
 				if (IsChanged(security.IssueSize, liteSec.IssueSize))
+					return true;
+
+				if (security.Board == null)
+				{
+					if (!liteSec.Board.IsEmpty())
+						return true;
+				}
+				else
+				{
+					if (liteSec.Board.IsEmpty() || !liteSec.Board.CompareIgnoreCase(security.Board.Code))
+						return true;
+				}
+
+				if (security.ExternalId != liteSec.ExternalId)
 					return true;
 
 				return false;

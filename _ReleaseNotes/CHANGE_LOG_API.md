@@ -19,6 +19,7 @@ StockSharp API Change log
 * (bug) InteractiveBrokers. Native order ids fix.
 * (bug) Charting. Fix order creation for non first panel.
 * (feature) Charting. Auto select Security and Portfolio.
+* (bug) CsvEntityRegistry. Securities IsChanged fix (new empty values).
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
