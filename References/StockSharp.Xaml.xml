@@ -451,15 +451,6 @@
             Default builds.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Code.CodeExtensions.ToReference(System.String,System.Reflection.Assembly[])">
-      <summary>
-            To modify the build name to <see cref="T:StockSharp.Xaml.Code.CodeReference" />.
-            </summary>
-      <param name="referenceName">The build name.</param>
-      <param name="assemblies">Previously loaded builds.</param>
-      <returns>
-        <see cref="T:StockSharp.Xaml.Code.CodeReference" />.</returns>
-    </member>
     <member name="M:StockSharp.Xaml.Code.CodeExtensions.ToReferences(System.Collections.Generic.IEnumerable{System.String})">
       <summary>
             To modify build names to the <see cref="T:StockSharp.Xaml.Code.CodeReference" />.
@@ -487,6 +478,18 @@
       <summary>
             The path to the build.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeReference.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Code.CodeReference.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.Code.CodeReferencesWindow">
       <summary>

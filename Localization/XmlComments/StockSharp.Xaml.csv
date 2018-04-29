@@ -96,10 +96,6 @@ M:StockSharp.Xaml.Code.CodeExtensions.HasErrors(Ecng.Common.CompilationResult)/s
 M:StockSharp.Xaml.Code.CodeExtensions.HasErrors(Ecng.Common.CompilationResult)/param/result;DocStr8098
 M:StockSharp.Xaml.Code.CodeExtensions.HasErrors(Ecng.Common.CompilationResult)/returns;DocStr8116
 P:StockSharp.Xaml.Code.CodeExtensions.DefaultReferences/summary;DocStr8121
-M:StockSharp.Xaml.Code.CodeExtensions.ToReference(System.String,System.Reflection.Assembly[])/summary;DocStr8117
-M:StockSharp.Xaml.Code.CodeExtensions.ToReference(System.String,System.Reflection.Assembly[])/param/referenceName;DocStr8112
-M:StockSharp.Xaml.Code.CodeExtensions.ToReference(System.String,System.Reflection.Assembly[])/param/assemblies;DocStr8118
-M:StockSharp.Xaml.Code.CodeExtensions.ToReference(System.String,System.Reflection.Assembly[])/returns;DocStr608
 M:StockSharp.Xaml.Code.CodeExtensions.ToReferences(System.Collections.Generic.IEnumerable{System.String})/summary;DocStr8119
 M:StockSharp.Xaml.Code.CodeExtensions.ToReferences(System.Collections.Generic.IEnumerable{System.String})/param/referenceNames;DocStr8120
 M:StockSharp.Xaml.Code.CodeExtensions.ToReferences(System.Collections.Generic.IEnumerable{System.String})/returns;DocStr608
@@ -107,6 +103,10 @@ T:StockSharp.Xaml.Code.CodeReference/summary;DocStr8106
 M:StockSharp.Xaml.Code.CodeReference.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Code.CodeReference.Name/summary;DocStr8112
 P:StockSharp.Xaml.Code.CodeReference.Location/summary;DocStr8108
+M:StockSharp.Xaml.Code.CodeReference.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.Code.CodeReference.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.Code.CodeReference.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.Code.CodeReference.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Code.CodeReferencesWindow/summary;DocStr8109
 F:StockSharp.Xaml.Code.CodeReferencesWindow.OkCommand/summary;DocStr9277
 F:StockSharp.Xaml.Code.CodeReferencesWindow.AddCommand/summary;DocStr9278
