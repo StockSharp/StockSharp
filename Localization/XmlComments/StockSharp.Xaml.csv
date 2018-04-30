@@ -153,6 +153,12 @@ M:StockSharp.Xaml.Extensions.LoadDevExpressControl(System.Windows.DependencyObje
 M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)/summary;DocStr10217
 M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)/param/url;Str221
 M:StockSharp.Xaml.Extensions.TryOpenLink(System.String,System.Windows.DependencyObject)/param/owner;DocStr8719
+M:StockSharp.Xaml.Extensions.SaveLayout(DevExpress.Xpf.Docking.DockLayoutManager)/summary;DocStr8190
+M:StockSharp.Xaml.Extensions.SaveLayout(DevExpress.Xpf.Docking.DockLayoutManager)/param/manager;DocStr10427
+M:StockSharp.Xaml.Extensions.SaveLayout(DevExpress.Xpf.Docking.DockLayoutManager)/returns;DocStr8193
+M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)/summary;DocStr8194
+M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)/param/manager;DocStr10427
+M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)/param/layout;DocStr8193
 T:StockSharp.Xaml.FileProgressWindow/summary;DocStr9782
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/summary;DocStr1
 M:StockSharp.Xaml.FileProgressWindow.#ctor(System.Int64)/param/fileId;DocStr10239
@@ -542,6 +548,10 @@ M:StockSharp.Xaml.NewsMessageGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.NewsMessagePanel/summary;DocStr8148
 M:StockSharp.Xaml.NewsMessagePanel.#ctor/summary;DocStr1
 P:StockSharp.Xaml.NewsMessagePanel.NewsProvider/summary;DocStr8921
+M:StockSharp.Xaml.NewsMessagePanel.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.NewsMessagePanel.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.NewsMessagePanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.NewsMessagePanel.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 F:StockSharp.Xaml.NewsMessagePanel.NewsGrid/summary;DocStr8149
 M:StockSharp.Xaml.NewsMessagePanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.OrderConditionalGrid/summary;DocStr8150
@@ -661,6 +671,10 @@ M:StockSharp.Xaml.LogMessageCollection.RemoveRange(System.Int32,System.Int32)/re
 T:StockSharp.Xaml.NewsPanel/summary;DocStr8148
 M:StockSharp.Xaml.NewsPanel.#ctor/summary;DocStr1
 P:StockSharp.Xaml.NewsPanel.NewsProvider/summary;DocStr8921
+M:StockSharp.Xaml.NewsPanel.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
+M:StockSharp.Xaml.NewsPanel.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Xaml.NewsPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.NewsPanel.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 F:StockSharp.Xaml.NewsPanel.NewsGrid/summary;DocStr8149
 M:StockSharp.Xaml.NewsPanel.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.OptionDesk/summary;OptionDesk

@@ -678,6 +678,20 @@
       <param name="url">Link.</param>
       <param name="owner">UI thread owner.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Extensions.SaveLayout(DevExpress.Xpf.Docking.DockLayoutManager)">
+      <summary>
+            Save layout state.
+            </summary>
+      <param name="manager">Represents a container for dock and layout items.</param>
+      <returns>Layout encoded as a string.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Extensions.LoadLayout(DevExpress.Xpf.Docking.DockLayoutManager,System.String)">
+      <summary>
+            Restore layout state.
+            </summary>
+      <param name="manager">Represents a container for dock and layout items.</param>
+      <param name="layout">Layout encoded as a string.</param>
+    </member>
     <member name="T:StockSharp.Xaml.FileProgressWindow">
       <summary>
             File uploading/downloading progress bar window.
@@ -2500,6 +2514,18 @@
             The provider of information about news.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.NewsMessagePanel.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.NewsMessagePanel.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="F:StockSharp.Xaml.NewsMessagePanel.NewsGrid">
       <summary>
             NewsGrid Name Field
@@ -3052,6 +3078,18 @@
       <summary>
             The provider of information about news.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.NewsPanel.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.NewsPanel.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="F:StockSharp.Xaml.NewsPanel.NewsGrid">
       <summary>
