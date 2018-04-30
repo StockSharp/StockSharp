@@ -49,7 +49,7 @@ namespace SampleIB
 			InitializeComponent();
 
 			CandlesPeriods.ItemsSource = InteractiveBrokersTimeFrames.AllTimeFrames;
-			CandlesPeriods.SelectedItem = InteractiveBrokersTimeFrames.Hour;
+			CandlesPeriods.SelectedItem = InteractiveBrokersTimeFrames.Hour1;
 		}
 
 		protected override void OnClosed(EventArgs e)
