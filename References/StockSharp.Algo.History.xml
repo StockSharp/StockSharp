@@ -1036,6 +1036,11 @@
       <param name="format">Format type.</param>
       <returns>Data types.</returns>
     </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Login">
+      <summary>
+            To log in.
+            </summary>
+    </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Invoke``1(System.Func{StockSharp.Algo.History.Hydra.IRemoteStorage,``0})">
       <summary>
             To call the service <see cref="T:StockSharp.Algo.History.Hydra.IRemoteStorage" /> method.
