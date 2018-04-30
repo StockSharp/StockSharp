@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-## current:
+## v4.4.8:
 * (feature) ImportSettingsPanel control.
 * (feature) CSV storages. Provide error details as return from Init method.
 * (feature) CsvEntityRegistry. Store UnderlyingSecurityType, CfiCode, IssueDate, IssueSize.
@@ -26,6 +26,7 @@ StockSharp API Change log
 * (bug) FIX connector. CFI code sending fix.
 * (feature) FIX connector. FixTags.Product support.
 * (feature) FIX connector. AstsFixDialect splitted on Currency and Equity dialects.
+* (feature) NewsPanel. IPersistable support.
 
 ## v4.4.7:
 * (feature) Connector.SubscribedCandleSeries.
