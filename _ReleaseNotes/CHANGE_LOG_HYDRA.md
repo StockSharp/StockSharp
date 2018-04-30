@@ -1,5 +1,17 @@
 StockSharp Data (Hydra) Change log
 ========================
+## v4.4.8:
+* (feature) Task pane redesign.
+* (feature) Candles build from support (mostly fro FX market).
+* (bug) InteractiveBrokers. End date for candles request fix https://stocksharp.ru/posts/m/43390/.
+* (bug) InteractiveBrokers. SecurityLookup error response handling fix.
+* (bug) InteractiveBrokers. Candles request fix.
+* (feature) Change limits while downloading a lot of data.
+* (feature) Http -> Https.
+* (feature) More stable for custom plugins errors.
+* (feature) Order log. Show spread and tick charts.
+* (feature) TimeZone auto conversion while exporting.
+
 ## v4.4.7:
 * (feature) Compress candles from smaller time-frames.
 * (bug) PnF candles store fixes.
