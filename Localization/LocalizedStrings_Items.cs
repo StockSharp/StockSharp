@@ -47756,5 +47756,15 @@ namespace StockSharp.Localization
 		/// Candles build source (tick trades, order book, level1 etc.).
 		/// </summary>
 		public static string CandlesBuildSource => GetString(CandlesBuildSourceKey);
+
+		/// <summary>
+		/// Market-data time zone.
+		/// </summary>
+		public const string MarketDataTimeZoneKey = nameof(MarketDataTimeZone);
+
+		/// <summary>
+		/// Market-data time zone.
+		/// </summary>
+		public static string MarketDataTimeZone => GetString(MarketDataTimeZoneKey);
 	}
 }
