@@ -125,7 +125,7 @@ namespace StockSharp.Algo
 		private readonly HashSet<HeartbeatMessageAdapter> _connectedAdapters = new HashSet<HeartbeatMessageAdapter>();
 		private bool _isFirstConnect;
 		private readonly InnerAdapterList _innerAdapters;
-		private readonly SynchronizedDictionary<long, RefPair<long, bool?>> _newsSubscriptions = new SynchronizedDictionary<long, RefPair<long, bool?>>();
+		private readonly SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>> _newsSubscriptions = new SynchronizedDictionary<long, RefTriple<long, bool?, IMessageAdapter>>();
 
 		/// <summary>
 		/// Adapters with which the aggregator operates.
@@ -491,7 +491,7 @@ namespace StockSharp.Algo
 			return adapters;
 		}
 
-		private IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg)
+		private IEnumerable<IMessageAdapter> GetSubscriptionAdapters(MarketDataMessage mdMsg)
 		{
 			if (mdMsg.Adapter != null)
 			{
@@ -538,17 +538,39 @@ namespace StockSharp.Algo
 			{
 				case MarketDataTypes.News:
 				{
-					var adapters = GetSubscriptionAdapters(mdMsg);
+					var dict = new Dictionary<IMessageAdapter, long>();
 
-					var dict = new SynchronizedDictionary<IMessageAdapter, long>();
-
-					foreach (var adapter in adapters)
+					if (mdMsg.IsSubscribe)
 					{
-						var transId = TransactionIdGenerator.GetNextId();
+						var adapters = GetSubscriptionAdapters(mdMsg);
 
-						dict.Add(adapter, transId);
+						lock (_newsSubscriptions.SyncRoot)
+						{
+							foreach (var adapter in adapters)
+							{
+								var transId = TransactionIdGenerator.GetNextId();
 
-						_newsSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null));
+								dict.Add(adapter, transId);
+
+								_newsSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null, adapter));
+							}
+						}
+					}
+					else
+					{
+						lock (_newsSubscriptions.SyncRoot)
+						{
+							var adapters = _newsSubscriptions.Select(p => p.Value.Third).Where(a => a != null).ToArray();
+
+							foreach (var adapter in adapters)
+							{
+								var transId = TransactionIdGenerator.GetNextId();
+
+								dict.Add(adapter, transId);
+
+								_newsSubscriptions.Add(transId, RefTuple.Create(mdMsg.TransactionId, (bool?)null, adapter));
+							}
+						}
 					}
 
 					// sending to inner adapters unique subscriptions
