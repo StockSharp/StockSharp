@@ -25,6 +25,7 @@ namespace StockSharp.Algo.Storages
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -396,7 +397,7 @@ namespace StockSharp.Algo.Storages
 			switch (message.Type)
 			{
 				case MessageTypes.MarketData:
-					ProcessMarketDataMessage((MarketDataMessage)message);
+					ProcessMarketDataRequest((MarketDataMessage)message);
 					break;
 
 				default:
@@ -405,7 +406,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private void ProcessMarketDataMessage(MarketDataMessage msg)
+		private void ProcessMarketDataRequest(MarketDataMessage msg)
 		{
 			if (msg.IsBack || (msg.From == null && DaysLoad == TimeSpan.Zero))
 			{
@@ -473,7 +474,7 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 					else if (Mode.Contains(StorageModes.Incremental))
-						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, null);
+						lastTime = LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to, TimeSpan.Zero, null);
 					
 					break;
 
@@ -489,44 +490,166 @@ namespace StockSharp.Algo.Storages
 						}
 					}
 					else if (Mode.Contains(StorageModes.Incremental))
-						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, null);
+						lastTime = LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to, TimeSpan.Zero, null);
 					
 					break;
 
 				case MarketDataTypes.Trades:
-					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.OrderLog:
-					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.OrderLog), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.OrderLog), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.News:
-					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
-					lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(msg.SecurityId, (TimeSpan)msg.Arg, msg.AllowBuildFromSmallerTimeFrame), from, to, m => SetTransactionId(m, transactionId));
+					var tf = (TimeSpan)msg.Arg;
+
+					if (msg.IsCalcVolumeProfile)
+					{
+						IMarketDataStorage storage;
+
+						switch (msg.BuildCandlesFrom)
+						{
+							case null:
+							case MarketDataTypes.Trades:
+								storage = GetStorage(msg.SecurityId, typeof(ExecutionMessage), ExecutionTypes.Tick);
+								break;
+
+							case MarketDataTypes.OrderLog:
+								storage = GetStorage(msg.SecurityId, typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+								break;
+
+							case MarketDataTypes.Level1:
+								storage = GetStorage(msg.SecurityId, typeof(Level1ChangeMessage), null);
+								break;
+
+							case MarketDataTypes.MarketDepth:
+								storage = GetStorage(msg.SecurityId, typeof(QuoteChangeMessage), null);
+								break;
+
+							default:
+								throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildCandlesFrom, LocalizedStrings.Str1219);
+						}
+
+						var range = GetRange(storage, from, to, TimeSpan.FromDays(2));
+
+						if (range != null)
+						{
+							var mdMsg = (MarketDataMessage)msg.Clone();
+							mdMsg.From = mdMsg.To = null;
+
+							switch (msg.BuildCandlesFrom)
+							{
+								case null:
+								case MarketDataTypes.Trades:
+									lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										.ToCandles(mdMsg, true), range.Item1, m => SetTransactionId(m, transactionId));
+
+									break;
+
+								case MarketDataTypes.OrderLog:
+								{
+									switch (msg.BuildCandlesField)
+									{
+										case null:
+										case Level1Fields.LastTradePrice:
+											lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+											    .ToCandles(mdMsg, false), range.Item1, m => SetTransactionId(m, transactionId));
+
+											break;
+											
+										// TODO
+										//case Level1Fields.SpreadMiddle:
+										//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+										//	    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										//		.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(security.ToSecurityId()))
+										//	    .ToCandles(mdMsg, false), range.Item1, m => SetTransactionId(m, transactionId));
+										//	break;
+									}
+
+									break;
+								}
+
+								case MarketDataTypes.Level1:
+									switch (msg.BuildCandlesField)
+									{
+										case null:
+										case Level1Fields.LastTradePrice:
+											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
+												.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+												.ToTicks()
+												.ToCandles(mdMsg, false), range.Item1, m => SetTransactionId(m, transactionId));
+											break;
+
+										case Level1Fields.BestBidPrice:
+										case Level1Fields.BestAskPrice:
+										case Level1Fields.SpreadMiddle:
+											lastTime = LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
+											    .Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+											    .ToOrderBooks()
+											    .ToCandles(mdMsg, msg.BuildCandlesField.Value), range.Item1, m => SetTransactionId(m, transactionId));
+											break;
+									}
+									
+									break;
+
+								case MarketDataTypes.MarketDepth:
+									lastTime = LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
+										.Load(range.Item1.Date, range.Item2.Date.EndOfDay())
+										.ToCandles(mdMsg, msg.BuildCandlesField ?? Level1Fields.SpreadMiddle), range.Item1, m => SetTransactionId(m, transactionId));
+									break;
+
+								default:
+									throw new ArgumentOutOfRangeException(nameof(msg), msg.BuildCandlesFrom, LocalizedStrings.Str1219);
+							}
+						}
+					}
+					else
+					{
+						var days = DaysLoad;
+
+						if (tf.Ticks > 1)
+						{
+							if (tf.TotalMinutes < 15)
+								days = TimeSpan.FromTicks(tf.Ticks * 10000);
+							else if (tf.TotalHours < 2)
+								days = TimeSpan.FromTicks(tf.Ticks * 1000);
+							else if (tf.TotalDays < 2)
+								days = TimeSpan.FromTicks(tf.Ticks * 100);
+							else
+								days = TimeSpan.FromTicks(tf.Ticks * 50);	
+						}
+
+						lastTime = LoadMessages(GetTimeFrameCandleMessageStorage(msg.SecurityId, tf, msg.AllowBuildFromSmallerTimeFrame), from, to, days, m => SetTransactionId(m, transactionId));
+					}
+					
 					break;
 
 				case MarketDataTypes.CandlePnF:
-					lastTime = LoadMessages(GetStorage<PnFCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<PnFCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleRange:
-					lastTime = LoadMessages(GetStorage<RangeCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<RangeCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleRenko:
-					lastTime = LoadMessages(GetStorage<RenkoCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<RenkoCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleTick:
-					lastTime = LoadMessages(GetStorage<TickCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<TickCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				case MarketDataTypes.CandleVolume:
-					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to, m => SetTransactionId(m, transactionId));
+					lastTime = LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to, DaysLoad, m => SetTransactionId(m, transactionId));
 					break;
 
 				default:
@@ -536,46 +659,38 @@ namespace StockSharp.Algo.Storages
 			return lastTime;
 		}
 
-		private DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, Func<TMessage, DateTimeOffset> func) 
-			where TMessage : Message
+		private static Tuple<DateTimeOffset, DateTimeOffset> GetRange(IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad)
 		{
 			var last = storage.Dates.LastOr();
 
 			if (last == null)
 				return null;
 
-			if (from == null)
-			{
-				var days = DaysLoad;
-
-				if (typeof(TMessage) == typeof(TimeFrameCandleMessage))
-				{
-					var tf = (TimeSpan)storage.Arg;
-
-					if (tf.Ticks > 1)
-					{
-						if (tf.TotalMinutes < 15)
-							days = TimeSpan.FromTicks(tf.Ticks * 10000);
-						else if (tf.TotalHours < 2)
-							days = TimeSpan.FromTicks(tf.Ticks * 1000);
-						else if (tf.TotalDays < 2)
-							days = TimeSpan.FromTicks(tf.Ticks * 100);
-						else
-							days = TimeSpan.FromTicks(tf.Ticks * 50);	
-					}
-				}
-				else if (typeof(TMessage) == typeof(QuoteChangeMessage) || typeof(TMessage) == typeof(Level1ChangeMessage))
-					days = TimeSpan.Zero;
-
-				from = (to ?? last.Value) - days;
-			}
-
 			if (to == null)
 				to = last.Value;
 
-			var messages = storage.Load(from.Value.Date, to.Value.Date.EndOfDay());
-			var lastTime = from.Value;
+			if (from == null)
+				from = to.Value - daysLoad;
 
+			return Tuple.Create(from.Value, to.Value);
+		}
+
+		private DateTimeOffset? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset? from, DateTimeOffset? to, TimeSpan daysLoad, Func<TMessage, DateTimeOffset> func) 
+			where TMessage : Message
+		{
+			var range = GetRange(storage, from, to, daysLoad);
+
+			if (range == null)
+				return null;
+
+			var messages = storage.Load(range.Item1.Date, range.Item2.Date.EndOfDay());
+
+			return LoadMessages(messages, range.Item1, func);
+		}
+
+		private DateTimeOffset? LoadMessages<TMessage>(IEnumerable<TMessage> messages, DateTimeOffset lastTime, Func<TMessage, DateTimeOffset> func)
+			where TMessage : Message
+		{
 			foreach (var message in messages)
 			{
 				if (func != null)

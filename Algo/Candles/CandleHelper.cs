@@ -391,14 +391,14 @@ namespace StockSharp.Algo.Candles
 				}
 			}
 
-			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<ExecutionMessage> ticks)
-				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, ticks, new TickCandleBuilderValueTransform()))
+			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<ExecutionMessage> executions, bool isTick)
+				: base(() => new CandleMessageEnumerator(mdMsg, onlyFormed, executions, isTick ? (ICandleBuilderValueTransform)new TickCandleBuilderValueTransform() : new OrderLogCandleBuilderValueTransform()))
 			{
 				if (mdMsg == null)
 					throw new ArgumentNullException(nameof(mdMsg));
 
-				if (ticks == null)
-					throw new ArgumentNullException(nameof(ticks));
+				if (executions == null)
+					throw new ArgumentNullException(nameof(executions));
 			}
 
 			public CandleMessageEnumerable(MarketDataMessage mdMsg, bool onlyFormed, IEnumerable<QuoteChangeMessage> depths, Level1Fields type)
@@ -455,7 +455,20 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> trades, CandleSeries series, bool onlyFormed = true)
 		{
-			return new CandleMessageEnumerable(series.ToMarketDataMessage(true), onlyFormed, trades);
+			return trades.ToCandles(series.ToMarketDataMessage(true), onlyFormed);
+		}
+
+		/// <summary>
+		/// To create candles from the tick trades collection.
+		/// </summary>
+		/// <param name="executions">Tick messages.</param>
+		/// <param name="mdMsg">Market-data message.</param>
+		/// <param name="isTicks">Determine if <param name="executions"> is <see cref="ExecutionTypes.Tick"/> or <see cref="ExecutionTypes.OrderLog"/>.</param></param>
+		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <returns>Candles.</returns>
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> executions, MarketDataMessage mdMsg, bool isTicks, bool onlyFormed = true)
+		{
+			return new CandleMessageEnumerable(mdMsg, onlyFormed, executions, isTicks);
 		}
 
 		/// <summary>
@@ -484,7 +497,20 @@ namespace StockSharp.Algo.Candles
 		/// <returns>Candles.</returns>
 		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true)
 		{
-			return new CandleMessageEnumerable(series.ToMarketDataMessage(true), onlyFormed, depths, type);
+			return depths.ToCandles(series.ToMarketDataMessage(true), type, onlyFormed);
+		}
+
+		/// <summary>
+		/// To create candles from the order books collection.
+		/// </summary>
+		/// <param name="depths">Market depths.</param>
+		/// <param name="mdMsg">Market-data message.</param>
+		/// <param name="type">Type of candle depth based data.</param>
+		/// <param name="onlyFormed">Process only formed candles.</param>
+		/// <returns>Candles.</returns>
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, MarketDataMessage mdMsg, Level1Fields type = Level1Fields.SpreadMiddle, bool onlyFormed = true)
+		{
+			return new CandleMessageEnumerable(mdMsg, onlyFormed, depths, type);
 		}
 
 		/// <summary>

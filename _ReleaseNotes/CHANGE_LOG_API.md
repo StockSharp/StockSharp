@@ -4,6 +4,7 @@ StockSharp API Change log
 * (feature) Connector. ICandleManager implemented.
 * (feature) ICandleSourceList removed.
 * (bug) BasketMessageAdapter. Fix news ubsubscribe requests.
+* (feature) StorageMessageAdapter. Build candles from tick data in case IsCalcVolumeProfile=true
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
