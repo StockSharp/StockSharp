@@ -350,6 +350,8 @@ namespace StockSharp.Algo
 
 		private void RaiseNewMyTrade(MyTrade trade)
 		{
+			this.AddInfoLog("New own trade: {0}", trade);
+
 			NewMyTrade?.Invoke(trade);
 			NewMyTrades?.Invoke(new[] { trade });
 		}
@@ -390,16 +392,6 @@ namespace StockSharp.Algo
 		{
 			StopOrderChanged?.Invoke(stopOrder);
 			StopOrdersChanged?.Invoke(new[] { stopOrder });
-		}
-
-		private void RaiseStopOrdersChanged(IEnumerable<Order> stopOrders)
-		{
-			foreach (var stopOrder in stopOrders)
-			{
-				StopOrderChanged?.Invoke(stopOrder);
-			}
-
-			StopOrdersChanged?.Invoke(stopOrders);
 		}
 
 		private void RaiseOrderRegisterFailed(OrderFail fail)

@@ -1826,7 +1826,10 @@ namespace StockSharp.Algo
 			}
 
 			if (!tuple.Item2)
+			{
+				this.AddWarningLog("Duplicate own trade message: {0}", message);
 				return;
+			}
 
 			RaiseNewMyTrade(tuple.Item1);
 		}
