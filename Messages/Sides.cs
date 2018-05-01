@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -31,14 +32,14 @@ namespace StockSharp.Messages
 		/// Buy.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str403Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str403Key)]
 		Buy,
 
 		/// <summary>
 		/// Sell.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str404Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str404Key)]
 		Sell,
 	}
 }

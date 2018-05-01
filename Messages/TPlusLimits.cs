@@ -16,9 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
-
-	using Ecng.ComponentModel;
 
 	/// <summary>
 	/// Т+ limit types.
@@ -31,28 +30,28 @@ namespace StockSharp.Messages
 		/// Т+0.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("T+0")]
+		[Display(Name = "T+0")]
 		T0,
 
 		/// <summary>
 		/// Т+1.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("T+1")]
+		[Display(Name = "T+1")]
 		T1,
 
 		/// <summary>
 		/// Т+2.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("T+2")]
+		[Display(Name = "T+2")]
 		T2,
 		
 		/// <summary>
 		/// Т+x.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayName("T+x")]
+		[Display(Name = "T+x")]
 		Tx,
 	}
 }

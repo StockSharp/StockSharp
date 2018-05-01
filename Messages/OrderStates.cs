@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -34,35 +35,35 @@ namespace StockSharp.Messages
 		/// The original state of the order, when the transaction is not sent to the trading system.
 		/// </remarks>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str237Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str237Key)]
 		None,
 
 		/// <summary>
 		/// The order is accepted by the exchange and is active.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str238Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str238Key)]
 		Active,
 
 		/// <summary>
 		/// The order is no longer active on an exchange (it was fully matched or cancelled).
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str239Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str239Key)]
 		Done,
 
 		/// <summary>
 		/// The order is not accepted by the trading system.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str152Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str152Key)]
 		Failed,
 
 		/// <summary>
 		/// Pending registration.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str238Key)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.Str538Key)]
 		Pending,
 	}
 }
