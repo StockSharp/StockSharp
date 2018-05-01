@@ -1679,7 +1679,7 @@ namespace StockSharp.Algo
 
 		private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId)
 		{
-			if (message.OrderState != OrderStates.Failed)
+			if (message.OrderState != OrderStates.Failed && message.Error == null)
 			{
 				var changes = _entityCache.ProcessOrderMessage(o, security, message, transactionId, out var pfInfo);
 
