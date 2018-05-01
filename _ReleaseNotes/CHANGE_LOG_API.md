@@ -2,6 +2,7 @@ StockSharp API Change log
 ========================
 ## current:
 * (feature) Connector. ICandleManager implemented.
+* (feature) ICandleSourceList removed.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

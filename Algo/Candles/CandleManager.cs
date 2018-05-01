@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Candles
 	/// </summary>
 	public class CandleManager : BaseLogReceiver, ICandleManager
 	{
-		private sealed class CandleManagerSourceList : SynchronizedList<ICandleSource<Candle>>, ICandleSourceList
+		private sealed class CandleManagerSourceList : SynchronizedList<ICandleSource<Candle>>
 		{
 			private sealed class SourceInfo : Disposable
 			{
@@ -371,7 +371,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Candles sources.
 		/// </summary>
-		public ICandleSourceList Sources { get; }
+		public IList<ICandleSource<Candle>> Sources { get; }
 
 		/// <summary>
 		/// The source priority by speed (0 - the best).
@@ -485,7 +485,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			lock (Sources.SyncRoot)
+			lock (((CandleManagerSourceList)Sources).SyncRoot)
 			{
 				Sources.ForEach(s => s.Dispose());
 				Sources.Clear();
