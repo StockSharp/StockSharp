@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+## current:
+* (feature) Connector. ICandleManager implemented.
+
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
 * (feature) CSV storages. Provide error details as return from Init method.

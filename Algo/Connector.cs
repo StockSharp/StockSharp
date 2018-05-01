@@ -22,8 +22,10 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Latency;
 	using StockSharp.Algo.PnL;
@@ -38,7 +40,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The class to create connections to trading systems.
 	/// </summary>
-	public partial class Connector : BaseLogReceiver, IConnector
+	public partial class Connector : BaseLogReceiver, IConnector, ICandleManager
 	{
 		private static readonly MemoryStatisticsValue<Trade> _tradeStat = new MemoryStatisticsValue<Trade>(LocalizedStrings.Ticks);
 		private static readonly MemoryStatisticsValue<Connector> _connectorStat = new MemoryStatisticsValue<Connector>(LocalizedStrings.Str1093);
@@ -1525,5 +1527,37 @@ namespace StockSharp.Algo
 
 			base.Save(storage);
 		}
+
+		#region ICandleManager implementation
+
+		int ICandleSource<Candle>.SpeedPriority => 0;
+
+		event Action<CandleSeries, Candle> ICandleSource<Candle>.Processing
+		{
+			add => CandleSeriesProcessing += value;
+			remove => CandleSeriesProcessing -= value;
+		}
+
+		event Action<CandleSeries> ICandleSource<Candle>.Stopped
+		{
+			add => CandleSeriesStopped += value;
+			remove => CandleSeriesStopped -= value;
+		}
+
+		IEnumerable<Range<DateTimeOffset>> ICandleSource<Candle>.GetSupportedRanges(CandleSeries series)
+			=> Enumerable.Empty<Range<DateTimeOffset>>();
+
+		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset? from, DateTimeOffset? to)
+			=> SubscribeCandles(series, from, to);
+
+		void ICandleSource<Candle>.Stop(CandleSeries series) => UnSubscribeCandles(series);
+
+		ICandleManagerContainer ICandleManager.Container { get; } = new CandleManagerContainer();
+
+		IEnumerable<CandleSeries> ICandleManager.Series => SubscribedCandleSeries;
+
+		IList<ICandleSource<Candle>> ICandleManager.Sources => ArrayHelper.Empty<ICandleSource<Candle>>();
+
+		#endregion
 	}
 }
