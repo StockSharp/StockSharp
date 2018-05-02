@@ -253,7 +253,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Suppress reconnecting errors.
 		/// </summary>
-		public bool SuppressReconnectingErrors { get; set; }
+		public bool SuppressReconnectingErrors { get; set; } = true;
 
 		/// <summary>
 		/// Use <see cref="CandleBuilderMessageAdapter"/>.
