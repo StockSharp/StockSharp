@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 
 	using StockSharp.Localization;
@@ -31,14 +32,14 @@ namespace StockSharp.Messages
 		/// Active.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.SecurityActiveKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SecurityActiveKey)]
 		Trading,
 
 		/// <summary>
 		/// Suspended.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.SecuritySuspendedKey)]
+		[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.SecuritySuspendedKey)]
 		Stoped,
 	}
 }
