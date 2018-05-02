@@ -305,7 +305,7 @@ namespace StockSharp.Algo
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
 
 					if (SupportSubscriptionTracking)
-						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect };
+						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true/*, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect*/ };
 
 					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdaper = true };

@@ -42,6 +42,14 @@ namespace StockSharp.Algo
 			}
 		}
 
+		class RestoringSubscriptionMessage : Message
+		{
+			public RestoringSubscriptionMessage()
+				: base(ExtendedMessageTypes.RestoringSubscription)
+			{
+			}
+		}
+
 		private const ConnectionStates _none = (ConnectionStates)(-1);
 		private const ConnectionStates _reConnecting = (ConnectionStates)10;
 
@@ -121,7 +129,9 @@ namespace StockSharp.Algo
 
 					if (isRestored)
 					{
-						if (!SuppressReconnectingErrors)
+						if (SuppressReconnectingErrors)
+							RaiseNewOutMessage(new RestoringSubscriptionMessage { Adapter = message.Adapter });
+						else
 							RaiseNewOutMessage(new RestoredConnectMessage { Adapter = message.Adapter });
 					}
 					else

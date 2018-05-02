@@ -194,6 +194,28 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case ExtendedMessageTypes.RestoringSubscription:
+				{
+					if (IsRestoreOnReconnect)
+					{
+						messages = new List<Message>();
+
+						lock (_sync)
+						{
+							messages.AddRange(_subscribers.Values.Select(p => p.Message));
+							messages.AddRange(_newsSubscribers.Values.Select(p => p.Message));
+							messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
+
+							ClearSubscribers();
+						}
+
+						if (messages.Count == 0)
+							messages = null;
+					}
+
+					break;
+				}
+
 				case MessageTypes.MarketData:
 				{
 					if (ProcessOutMarketDataMessage((MarketDataMessage)message))
