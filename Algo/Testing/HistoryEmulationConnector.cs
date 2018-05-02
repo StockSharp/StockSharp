@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Testing
 			private readonly HistoryEmulationConnector _parent;
 
 			public HistoryBasketMessageAdapter(HistoryEmulationConnector parent)
-				: base(parent.TransactionIdGenerator)
+				: base(parent.TransactionIdGenerator, new InMemoryMessageAdapterProvider(), new InMemoryExchangeInfoProvider())
 			{
 				_parent = parent;
 			}
@@ -230,7 +230,7 @@ namespace StockSharp.Algo.Testing
 
 			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
 			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
-
+			
 			LatencyManager = null;
 			RiskManager = null;
 			CommissionManager = null;

@@ -41,8 +41,8 @@ namespace StockSharp.Algo.Strategies.Testing
 			private readonly EmulationSettings _settings;
 			private bool _isInitialized;
 
-			public BasketEmulationAdapter(IdGenerator transactionIdGenerator, EmulationSettings settings)
-				: base(transactionIdGenerator)
+			public BasketEmulationAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider, IExchangeInfoProvider exchangeInfoProvider, EmulationSettings settings)
+				: base(transactionIdGenerator, adapterProvider, exchangeInfoProvider)
 			{
 				_settings = settings;
 			}

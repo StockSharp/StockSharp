@@ -255,6 +255,7 @@ namespace StockSharp.Messages
 		/// Contains history market data.
 		/// </summary>
 		[DataMember]
+		[Obsolete]
 		public bool IsHistory { get; set; }
 
 		/// <summary>
@@ -303,7 +304,7 @@ namespace StockSharp.Messages
 				BuildCandlesFrom = BuildCandlesFrom,
 				BuildCandlesField = BuildCandlesField,
 				IsCalcVolumeProfile = IsCalcVolumeProfile,
-				IsHistory = IsHistory,
+				//IsHistory = IsHistory,
 				AllowBuildFromSmallerTimeFrame = AllowBuildFromSmallerTimeFrame,
 			};
 

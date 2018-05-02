@@ -5,6 +5,7 @@ StockSharp API Change log
 * (feature) ICandleSourceList removed.
 * (bug) BasketMessageAdapter. Fix news ubsubscribe requests.
 * (feature) StorageMessageAdapter. Build candles from tick data in case IsCalcVolumeProfile=true
+* (feature) Candles building refactored. Supported IsCalcVolumeProfile. Removed IsHistory usage.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.

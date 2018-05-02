@@ -175,17 +175,9 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
-		public BasketMessageAdapter(IdGenerator transactionIdGenerator)
-			: this(transactionIdGenerator, new InMemoryMessageAdapterProvider())
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		/// <param name="adapterProvider">The message adapter's provider.</param>
-		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider)
+		/// <param name="exchangeInfoProvider">The exchange boards provider.</param>
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator, IPortfolioMessageAdapterProvider adapterProvider, IExchangeInfoProvider exchangeInfoProvider)
 			: base(transactionIdGenerator)
 		{
 			if (adapterProvider == null)
@@ -193,6 +185,7 @@ namespace StockSharp.Algo
 
 			_innerAdapters = new InnerAdapterList();
 			AdapterProvider = adapterProvider;
+			ExchangeInfoProvider = exchangeInfoProvider;
 		}
 
 		/// <summary>
@@ -201,45 +194,26 @@ namespace StockSharp.Algo
 		public IPortfolioMessageAdapterProvider AdapterProvider { get; }
 
 		/// <summary>
-		/// Supported by adapter message types.
+		/// The exchange boards provider.
 		/// </summary>
-		public override MessageTypes[] SupportedMessages
-		{
-			get { return GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct().ToArray(); }
-		}
+		public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
-		/// <summary>
-		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
-		/// </summary>
-		public override bool PortfolioLookupRequired
-		{
-			get { return GetSortedAdapters().Any(a => a.PortfolioLookupRequired); }
-		}
+		/// <inheritdoc />
+		public override MessageTypes[] SupportedMessages => GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct().ToArray();
 
-		/// <summary>
-		/// <see cref="OrderStatusMessage"/> required to get orders and own trades.
-		/// </summary>
-		public override bool OrderStatusRequired
-		{
-			get { return GetSortedAdapters().Any(a => a.OrderStatusRequired); }
-		}
+		/// <inheritdoc />
+		public override bool PortfolioLookupRequired => GetSortedAdapters().Any(a => a.PortfolioLookupRequired);
 
-		/// <summary>
-		/// <see cref="SecurityLookupMessage"/> required to get securities.
-		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return GetSortedAdapters().Any(a => a.SecurityLookupRequired); }
-		}
+		/// <inheritdoc />
+		public override bool OrderStatusRequired => GetSortedAdapters().Any(a => a.OrderStatusRequired);
 
-		/// <summary>
-		/// Gets a value indicating whether the connector supports position lookup.
-		/// </summary>
+		/// <inheritdoc />
+		public override bool SecurityLookupRequired => GetSortedAdapters().Any(a => a.SecurityLookupRequired);
+
+		/// <inheritdoc />
 		protected override bool IsSupportNativePortfolioLookup => true;
 
-		/// <summary>
-		/// Gets a value indicating whether the connector supports security lookup.
-		/// </summary>
+		/// <inheritdoc />
 		protected override bool IsSupportNativeSecurityLookup => true;
 
 		/// <summary>
@@ -251,6 +225,11 @@ namespace StockSharp.Algo
 		/// Suppress reconnecting errors.
 		/// </summary>
 		public bool SuppressReconnectingErrors { get; set; }
+
+		/// <summary>
+		/// Use <see cref="CandleBuilderMessageAdapter"/>.
+		/// </summary>
+		public bool SupportCandlesCompression { get; set; } = true;
 
 		/// <inheritdoc />
 		public override IEnumerable<TimeSpan> TimeFrames
@@ -295,7 +274,10 @@ namespace StockSharp.Algo
 				adapter = new CandleHolderMessageAdapter(adapter);
 			}
 
-			adapter = new CandleBiggerTimeFrameMessageAdapter(adapter);
+			if (SupportCandlesCompression)
+			{
+				adapter = new CandleBuilderMessageAdapter(adapter, ExchangeInfoProvider);
+			}
 
 			if (adapter.IsNativeIdentifiers)
 			{
@@ -515,12 +497,20 @@ namespace StockSharp.Algo
 				if (timeFrames.Contains(original))
 					return true;
 
-				var smaller = timeFrames
-					.FilterSmallerTimeFrames(original)
-					.OrderByDescending()
-					.FirstOr();
+				if (mdMsg.AllowBuildFromSmallerTimeFrame)
+				{
+					var smaller = timeFrames
+					              .FilterSmallerTimeFrames(original)
+					              .OrderByDescending()
+					              .FirstOr();
 
-				return smaller != null;
+					if (smaller != null)
+						return true;
+				}
+
+				var buildFrom = mdMsg.BuildCandlesFrom ?? a.SupportedMarketDataTypes.Intersect(CandleHelper.CandleDataSources).FirstOr();
+
+				return buildFrom != null && a.SupportedMarketDataTypes.Contains(buildFrom.Value);
 			}).ToArray();
 
 			if (adapters == null || adapters.Length == 0)

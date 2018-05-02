@@ -1,5 +1,6 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
@@ -17,6 +18,7 @@ namespace StockSharp.Messages
 		/// Contains history market data.
 		/// </summary>
 		[DataMember]
+		[Obsolete]
 		public bool IsHistory { get; set; }
 
 		/// <summary>
@@ -37,7 +39,7 @@ namespace StockSharp.Messages
 			{
 				LocalTime = LocalTime,
 				OriginalTransactionId = OriginalTransactionId,
-				IsHistory = IsHistory,
+				//IsHistory = IsHistory,
 			};
 
 			return msg;

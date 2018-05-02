@@ -112,7 +112,6 @@
     <Compile Include="BasketSecurity.cs" />
     <Compile Include="Candles\BiggerTimeFrameCandleCompressor.cs" />
     <Compile Include="Candles\CandlesHolder.cs" />
-    <Compile Include="Candles\Compression\CandleBiggerTimeFrameMessageAdapter.cs" />
     <Compile Include="Candles\Compression\CandleBuilderMessageAdapter.cs" />
     <Compile Include="Candles\Compression\CandleHolderMessageAdapter.cs" />
     <Compile Include="Candles\Compression\ICandleBuilderValueTransform.cs" />
@@ -172,7 +171,6 @@
     <Compile Include="Candles\Compression\ICandleBuilder.cs" />
     <Compile Include="Candles\ICandleManagerContainer.cs" />
     <Compile Include="Candles\ICandleManager.cs" />
-    <Compile Include="Candles\ICandleSourceList.cs" />
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />

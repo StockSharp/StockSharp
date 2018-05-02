@@ -35,6 +35,11 @@ namespace StockSharp.Algo.Candles
 	public static class CandleHelper
 	{
 		/// <summary>
+		/// Possible data types that can be used as candles source.
+		/// </summary>
+		public static IEnumerable<MarketDataTypes> CandleDataSources { get; } = new[] { MarketDataTypes.Level1, MarketDataTypes.Trades, MarketDataTypes.MarketDepth, MarketDataTypes.OrderLog };
+
+		/// <summary>
 		/// Determines whether the specified type is derived from <see cref="Candle"/>.
 		/// </summary>
 		/// <param name="candleType">The candle type.</param>

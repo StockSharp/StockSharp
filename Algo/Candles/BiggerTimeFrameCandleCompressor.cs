@@ -61,22 +61,33 @@ namespace StockSharp.Algo.Candles
 
 		private readonly PartCandleBuilderValueTransform _transform;
 		private readonly TimeFrameCandleBuilder _builder;
-		private readonly MarketDataMessage _mdMsg;
-		private CandleMessage _currentCandle;
+		private readonly MarketDataMessage _subscription;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BiggerTimeFrameCandleCompressor"/>.
 		/// </summary>
-		/// <param name="mdMsg">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-		public BiggerTimeFrameCandleCompressor(MarketDataMessage mdMsg)
+		/// <param name="subscription">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+		public BiggerTimeFrameCandleCompressor(MarketDataMessage subscription)
 		{
-			if (mdMsg == null)
-				throw new ArgumentNullException(nameof(mdMsg));
+			if (subscription == null)
+				throw new ArgumentNullException(nameof(subscription));
 
-			_mdMsg = mdMsg;
+			_subscription = subscription;
 			_transform = new PartCandleBuilderValueTransform();
 			_builder = new TimeFrameCandleBuilder();
 		}
+
+		/// <summary>
+		/// Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
+		/// </summary>
+		public MarketDataMessage Subscription => _subscription;
+
+		private CandleMessage _currentCandle;
+
+		/// <summary>
+		/// The current candle.
+		/// </summary>
+		public CandleMessage CurrentCandle => _currentCandle;
 
 		/// <summary>
 		/// Reset state.
@@ -111,7 +122,7 @@ namespace StockSharp.Algo.Candles
 			_transform.Part = part;
 			_transform.Process(message);
 
-			foreach (var builtCandle in _builder.Process(_mdMsg, _currentCandle, _transform))
+			foreach (var builtCandle in _builder.Process(_subscription, _currentCandle, _transform))
 			{
 				_currentCandle = builtCandle;
 				yield return builtCandle;

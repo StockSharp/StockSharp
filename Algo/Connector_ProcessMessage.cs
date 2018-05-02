@@ -25,7 +25,6 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Latency;
 	using StockSharp.Algo.PnL;
@@ -318,14 +317,11 @@ namespace StockSharp.Algo
 					if (SupportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
-					if (SupportSubscriptionTracking)
-						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect };
-
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
 
-					if (SupportCandleBuilder)
-						_inAdapter = new CandleBuilderMessageAdapter(_inAdapter, _entityCache.ExchangeInfoProvider) { OwnInnerAdaper = true };
+					if (SupportSubscriptionTracking)
+						_inAdapter = new SubscriptionMessageAdapter(_inAdapter) { OwnInnerAdaper = true, IsRestoreOnReconnect = IsRestoreSubscriptionOnReconnect };
 
 					if (SupportLevel1DepthBuilder)
 						_inAdapter = new Level1DepthBuilderAdapter(_inAdapter) { OwnInnerAdaper = true };
@@ -448,28 +444,6 @@ namespace StockSharp.Algo
 					DisableAdapter<Level1DepthBuilderAdapter>();
 
 				_supportLevel1DepthBuilder = value;
-			}
-		}
-
-		private bool _supportCandleBuilder;
-
-		/// <summary>
-		/// Use <see cref="CandleBuilderMessageAdapter"/>.
-		/// </summary>
-		public bool SupportCandleBuilder
-		{
-			get => _supportCandleBuilder;
-			set
-			{
-				if (_supportCandleBuilder == value)
-					return;
-
-				if (value)
-					EnableAdapter(a => new CandleBuilderMessageAdapter(a, _entityCache.ExchangeInfoProvider) { OwnInnerAdaper = true }, typeof(StorageMessageAdapter));
-				else
-					DisableAdapter<CandleBuilderMessageAdapter>();
-
-				_supportCandleBuilder = value;
 			}
 		}
 

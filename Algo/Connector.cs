@@ -134,7 +134,6 @@ namespace StockSharp.Algo
 
 			CreateDepthFromLevel1 = true;
 			SupportFilteredMarketDepth = true;
-			SupportCandleBuilder = true;
 
 			if (initManagers)
 			{
@@ -175,14 +174,14 @@ namespace StockSharp.Algo
 			_entityRegistry = entityRegistry;
 			_storageRegistry = storageRegistry;
 
-			InitAdapter();
-
 			_entityCache.ExchangeInfoProvider = storageRegistry.ExchangeInfoProvider;
+
+			InitAdapter();
 		}
 
 		private void InitAdapter()
 		{
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
+			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new InMemoryMessageAdapterProvider(), _entityCache.ExchangeInfoProvider);
 		}
 
 		/// <summary>
