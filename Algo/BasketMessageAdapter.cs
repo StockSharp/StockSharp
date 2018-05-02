@@ -945,5 +945,24 @@ namespace StockSharp.Algo
 
 			base.DisposeManaged();
 		}
+
+		/// <summary>
+		/// Create a copy of <see cref="BasketMessageAdapter"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override IMessageChannel Clone()
+		{
+			var clone = new BasketMessageAdapter(TransactionIdGenerator, AdapterProvider, ExchangeInfoProvider)
+			{
+				ExtendedInfoStorage = ExtendedInfoStorage,
+				SupportCandlesCompression = SupportCandlesCompression,
+				SuppressReconnectingErrors = SuppressReconnectingErrors,
+				IsRestoreSubscriptionOnReconnect = IsRestoreSubscriptionOnReconnect,
+			};
+
+			clone.Load(this.Save());
+
+			return clone;
+		}
 	}
 }

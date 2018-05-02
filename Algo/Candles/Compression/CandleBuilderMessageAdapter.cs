@@ -227,11 +227,12 @@ namespace StockSharp.Algo.Candles.Compression
 								TransactionId = TransactionIdGenerator.GetNextId(),
 								OriginalTransactionId = series.Current.TransactionId,
 								IsSubscribe = false,
+								SecurityId = series.Current.SecurityId,
 							});
 
 							RaiseNewOutMessage(new MarketDataMessage
 							{
-								OriginalTransactionId = mdMsg.OriginalTransactionId,
+								OriginalTransactionId = mdMsg.TransactionId,
 							});
 							return;
 						}
@@ -362,13 +363,17 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				case MessageTypes.MarketData:
 				{
-					ProcessMarketDataResponse((MarketDataMessage)message);
+					if (ProcessMarketDataResponse((MarketDataMessage)message))
+						return;
+
 					break;
 				}
 
 				case MessageTypes.MarketDataFinished:
 				{
-					ProcessMarketDataFinished((MarketDataFinishedMessage)message);
+					if (ProcessMarketDataFinished((MarketDataFinishedMessage)message))
+						return;
+
 					break;
 				}
 
@@ -393,6 +398,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 							foreach (var bigCandle in candles)
 							{
+								bigCandle.OriginalTransactionId = series.Original.TransactionId;
 								bigCandle.Adapter = smallCandle.Adapter;
 								series.LastTime = bigCandle.CloseTime;
 								base.OnInnerAdapterNewOutMessage(bigCandle);
@@ -454,13 +460,10 @@ namespace StockSharp.Algo.Candles.Compression
 			base.OnInnerAdapterNewOutMessage(message);
 		}
 
-		private void ProcessMarketDataResponse(MarketDataMessage message)
+		private bool ProcessMarketDataResponse(MarketDataMessage message)
 		{
 			if (!_seriesByTransactionId.TryGetValue(message.OriginalTransactionId, out var series))
-			{
-				RaiseNewOutMessage(message);
-				return;
-			}
+				return false;
 
 			var isOk = !message.IsNotSupported && message.Error == null;
 
@@ -468,22 +471,20 @@ namespace StockSharp.Algo.Candles.Compression
 			{
 				if (series.Current.TransactionId == message.OriginalTransactionId)
 					RaiseNewOutMessage(message);
-
-				return;
 			}
+			else
+				UpgradeSubscription(series);
 
-			UpgradeSubscription(series);
+			return true;
 		}
 
-		private void ProcessMarketDataFinished(MarketDataFinishedMessage message)
+		private bool ProcessMarketDataFinished(MarketDataFinishedMessage message)
 		{
 			if (!_seriesByTransactionId.TryGetValue(message.OriginalTransactionId, out var series))
-			{
-				RaiseNewOutMessage(message);
-				return;
-			}
+				return false;
 
 			UpgradeSubscription(series);
+			return true;
 		}
 
 		private void UpgradeSubscription(SeriesInfo series)
