@@ -138,14 +138,21 @@ namespace StockSharp.Algo.Storages
 					{
 						var messages = pair.Value.Where(m => m.Changes.Count > 0).ToArray();
 
+						var dt = DateTime.Today;
+
+						var historical = messages.Where(m => m.ServerTime < dt).ToArray();
+						var today = messages.Where(m => m.ServerTime >= dt).ToArray();
+
+						GetStorage<Level1ChangeMessage>(pair.Key, null).Save(historical);
+
 						if (Mode.Contains(StorageModes.Incremental))
-							GetStorage<Level1ChangeMessage>(pair.Key, null).Save(messages);
+							GetStorage<Level1ChangeMessage>(pair.Key, null).Save(today);
 						
 						if (Mode.Contains(StorageModes.Snapshot))
 						{
 							var snapshotStorage = GetSnapshotStorage(typeof(Level1ChangeMessage), null);
 
-							foreach (var message in messages)
+							foreach (var message in today)
 								snapshotStorage.Update(message);
 						}
 					}

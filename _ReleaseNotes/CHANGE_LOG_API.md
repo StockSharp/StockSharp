@@ -9,6 +9,7 @@ StockSharp API Change log
 * (bug) Grids. Fix filters for enum based fields.
 * (bug) BufferMessageAdapter. Fix subscription for IsCalcVolumeProfile and AllowBuildFromSmallerTimeFrame.
 * (feature) Managers. Moved from Connector to BasketMessageAdatper.
+* (feature) StorageMessageAdapter. Store historical level1.
 
 ## v4.4.8:
 * (feature) ImportSettingsPanel control.
