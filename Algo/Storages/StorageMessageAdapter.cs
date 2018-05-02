@@ -430,14 +430,7 @@ namespace StockSharp.Algo.Storages
 
 					var lastTime = LoadMessages(msg, msg.From, msg.To, transactionId);
 
-					if (lastTime != null && msg.DataType == MarketDataTypes.CandleTimeFrame)
-					{
-						// next start will be from closing time (not open)
-
-						lastTime += (TimeSpan)msg.Arg;
-					}
-
-					if (msg.To != null && msg.To <= lastTime)
+					if (msg.To != null && lastTime != null && msg.To <= lastTime)
 					{
 						_fullyProcessedSubscriptions.Add(transactionId);
 						RaiseStorageMessage(new MarketDataFinishedMessage { OriginalTransactionId = transactionId });
@@ -953,7 +946,23 @@ namespace StockSharp.Algo.Storages
 		private static DateTimeOffset SetTransactionId(CandleMessage msg, long transactionId)
 		{
 			msg.OriginalTransactionId = transactionId;
-			return msg.OpenTime;
+
+			var lastTime = msg.CloseTime;
+
+			if (lastTime.IsDefault())
+			{
+				lastTime = msg.OpenTime;
+
+				if (msg is TimeFrameCandleMessage tfMsg)
+				{
+					if (tfMsg.TimeFrame.IsDefault())
+						throw new InvalidOperationException("tf == 0");
+
+					lastTime += tfMsg.TimeFrame;
+				}
+			}
+
+			return lastTime;
 		}
 
 		private static DateTimeOffset SetTransactionId(NewsMessage msg, long transactionId)
