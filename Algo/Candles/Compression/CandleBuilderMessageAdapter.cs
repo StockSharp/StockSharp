@@ -94,6 +94,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private readonly SynchronizedDictionary<long, SeriesInfo> _seriesByTransactionId = new SynchronizedDictionary<long, SeriesInfo>();
 		private readonly SynchronizedDictionary<SecurityId, SynchronizedList<SeriesInfo>> _seriesBySecurityId = new SynchronizedDictionary<SecurityId, SynchronizedList<SeriesInfo>>();
+		private readonly SynchronizedSet<long> _unsubscriptions = new SynchronizedSet<long>();
 		private readonly CandleBuildersList _candleBuilders;
 		private readonly IExchangeInfoProvider _exchangeInfoProvider;
 
@@ -135,6 +136,7 @@ namespace StockSharp.Algo.Candles.Compression
 				case MessageTypes.Reset:
 					_seriesByTransactionId.Clear();
 					_seriesBySecurityId.Clear();
+					_unsubscriptions.Clear();
 					break;
 
 				case MessageTypes.MarketData:
@@ -222,18 +224,24 @@ namespace StockSharp.Algo.Candles.Compression
 						{
 							RemoveSeries(series);
 
+							RaiseNewOutMessage(new MarketDataMessage
+							{
+								OriginalTransactionId = mdMsg.TransactionId,
+							});
+
+							var transactionId = TransactionIdGenerator.GetNextId();
+
+							_unsubscriptions.Add(transactionId);
+
 							base.SendInMessage(new MarketDataMessage
 							{
-								TransactionId = TransactionIdGenerator.GetNextId(),
+								TransactionId = transactionId,
 								OriginalTransactionId = series.Current.TransactionId,
 								IsSubscribe = false,
 								SecurityId = series.Current.SecurityId,
 							});
 
-							RaiseNewOutMessage(new MarketDataMessage
-							{
-								OriginalTransactionId = mdMsg.TransactionId,
-							});
+							
 							return;
 						}
 
@@ -462,6 +470,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 		private bool ProcessMarketDataResponse(MarketDataMessage message)
 		{
+			if (_unsubscriptions.Remove(message.OriginalTransactionId))
+				return true;
+
 			if (!_seriesByTransactionId.TryGetValue(message.OriginalTransactionId, out var series))
 				return false;
 
@@ -512,10 +523,11 @@ namespace StockSharp.Algo.Candles.Compression
 				{
 					if (original.AllowBuildFromSmallerTimeFrame)
 					{
-						var smaller = InnerAdapter.TimeFrames
-						                          .FilterSmallerTimeFrames((TimeSpan)original.Arg)
-						                          .OrderByDescending()
-						                          .FirstOr();
+						var smaller = InnerAdapter
+										.TimeFrames
+						                .FilterSmallerTimeFrames((TimeSpan)original.Arg)
+						                .OrderByDescending()
+						                .FirstOr();
 
 						if (smaller != null)
 						{
